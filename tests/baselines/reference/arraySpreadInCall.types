@@ -417,7 +417,7 @@ const x44 = f4(true, ...([1, 'foo']))
 >'foo' : "foo"
 >      : ^^^^^
 
-// dicovered in #52845#issuecomment-1459132562
+// discovered in #52845#issuecomment-1459132562
 interface IAction {
     run(event?: unknown): unknown;
 >run : (event?: unknown) => unknown

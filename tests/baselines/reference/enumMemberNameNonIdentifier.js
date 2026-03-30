@@ -6,7 +6,7 @@ export const enum E {
     "hyphen-member" = 1,
     "123startsWithNumber" = 2,
     "has space" = 3,
-    // Greek Capital Yot (U+037F) - valid identifier in ES2015+ but NOT in ES5
+    // Greek Capital Yacht (U+037F) - valid identifier in ES2015+ but NOT in ES5
     Ϳ = 4,
 }
 

@@ -27,8 +27,8 @@ namespace M {
     export function F2(x: number): string { return x.toString(); }
 }
 
-var aNumber = 9.9;
-throw aNumber;
+var a number = 9.9;
+throw a number;
 var aString = 'this is a string';
 throw aString;
 var aDate = new Date(12);
@@ -103,8 +103,8 @@ var M;
     function F2(x) { return x.toString(); }
     M.F2 = F2;
 })(M || (M = {}));
-var aNumber = 9.9;
-throw aNumber;
+var a number = 9.9;
+throw a number;
 var aString = 'this is a string';
 throw aString;
 var aDate = new Date(12);

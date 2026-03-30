@@ -136,7 +136,7 @@ namespace N10 {
 >a : Symbol(a, Decl(missingFunctionImplementation.ts, 66, 20))
 }
 
-// merged namespaces, duplicate defintions
+// merged namespaces, duplicate definitions
 namespace N12 {
 >N12 : Symbol(N12, Decl(missingFunctionImplementation.ts, 67, 1), Decl(missingFunctionImplementation.ts, 74, 1))
 

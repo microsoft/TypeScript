@@ -13,7 +13,7 @@ implicitAnyInAmbientDeclaration2.d.ts(13,24): error TS7006: Parameter 'publicCon
 !!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
                          ~
 !!! error TS7006: Parameter 'x' implicitly has an 'any' type.
-    declare var bar;  // this should be be an erro
+    declare var bar;  // this should be be an error
                 ~~~
 !!! error TS7005: Variable 'bar' implicitly has an 'any' type.
     declare class C {

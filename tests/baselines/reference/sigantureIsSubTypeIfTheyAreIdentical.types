@@ -8,7 +8,7 @@ interface ICache {
 >key : string
 >    : ^^^^^^
 }
-class CacheService implements ICache { // Should not error that property type of get are incomaptible
+class CacheService implements ICache { // Should not error that property type of get are incompatible
 >CacheService : CacheService
 >             : ^^^^^^^^^^^^
 

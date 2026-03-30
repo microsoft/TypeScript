@@ -22,13 +22,13 @@
 ////}
 ////var i4 = new c4();
 ////var i4_c = c4;
-/////** Class with statics*/
+/////** Class with statistics*/
 ////class c5 {
 ////    static s1: number;
 ////}
 ////var i5 = new c5();
 ////var i5_c = c5;
-/////** class with statics and constructor*/
+/////** class with statistics and constructor*/
 ////class c6 {
 ////    /** s1 comment*/
 ////    static s1: number;

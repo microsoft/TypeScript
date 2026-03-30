@@ -44,7 +44,7 @@
 ////         <MainB/*3*/utton onC/*4*/lick={()=>{}}>GO</MainButton>;
 ////     );
 //// }
-//// let componenet = <MainButton onClick={()=>{}} ext/*5*/ra-prop>GO</MainButton>;
+//// let component = <MainButton onClick={()=>{}} ext/*5*/ra-prop>GO</MainButton>;
 
 verify.quickInfos({
     1: "function MainButton(linkProps: LinkProps): JSX.Element (+1 overload)",

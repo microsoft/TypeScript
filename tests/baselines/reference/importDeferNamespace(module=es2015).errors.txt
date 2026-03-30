@@ -7,8 +7,8 @@ b.ts(1,8): error TS18060: Deferred imports are only supported when the '--module
     }
     
 ==== b.ts (1 errors) ====
-    import defer * as aNs from "./a.js";
+    import defer * as and from "./a.js";
            ~~~~~~~~~~~~~~
 !!! error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.
     
-    aNs.foo();
+    and.foo();

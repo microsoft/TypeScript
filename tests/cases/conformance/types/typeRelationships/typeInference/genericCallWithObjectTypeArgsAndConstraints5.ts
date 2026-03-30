@@ -1,5 +1,5 @@
 // @target: es2015
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 
 class C {
     x: string;

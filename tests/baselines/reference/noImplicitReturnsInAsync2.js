@@ -30,7 +30,7 @@ async function test6(isError: boolean = true): Promise<number> {
     }
 }
 
-// infered to be Promise<void>, should not be an error, currently reported correctly 
+// inferred to be Promise<void>, should not be an error, currently reported correctly 
 async function test7(isError: boolean = true) { 
     if (isError === true) {
         return;
@@ -80,7 +80,7 @@ function test6() {
         }
     });
 }
-// infered to be Promise<void>, should not be an error, currently reported correctly 
+// inferred to be Promise<void>, should not be an error, currently reported correctly 
 function test7() {
     return __awaiter(this, arguments, void 0, function* (isError = true) {
         if (isError === true) {

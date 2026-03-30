@@ -17,7 +17,7 @@ class CCC {
 >aaa : any
 >    : ^^^
 
-    static staticY: number = aaa; // This shouldnt be error
+    static staticY: number = aaa; // This shouldn't be error
 >staticY : number
 >        : ^^^^^^
 >aaa : number

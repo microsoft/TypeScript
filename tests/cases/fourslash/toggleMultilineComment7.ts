@@ -1,4 +1,4 @@
-// Cases where the cursor is inside JSX like sintax but it's actually js.
+// Cases where the cursor is inside JSX like syntax but it's actually js.
 
 //@Filename: file.tsx
 //// const a = (

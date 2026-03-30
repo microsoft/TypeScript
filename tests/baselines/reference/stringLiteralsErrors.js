@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/stringLiteralsErrors.ts] ////
 
 //// [stringLiteralsErrors.ts]
-// Srtings missing line terminator
+// Strings missing line terminator
 var es1 = "line 1
 ";
 var es2 = 'line 1
@@ -32,7 +32,7 @@ var es13 = "
 
 //// [stringLiteralsErrors.js]
 "use strict";
-// Srtings missing line terminator
+// Strings missing line terminator
 var es1 = "line 1;
 ";;
 var es2 = 'line 1;

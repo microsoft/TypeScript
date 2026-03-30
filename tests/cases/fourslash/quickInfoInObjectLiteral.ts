@@ -13,7 +13,7 @@
 ////class Foo {
 ////    static getRandomPosition() {
 ////        return {
-////            "row": v/*2*/alue
+////            "row": v/*2*/value
 ////        }
 ////  }
 ////}

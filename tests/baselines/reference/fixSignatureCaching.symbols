@@ -446,8 +446,8 @@ define(function () {
     "oss": {
 >"oss" : Symbol("oss", Decl(fixSignatureCaching.ts, 151, 6))
 
-        "AndroidOS": "Android",
->"AndroidOS" : Symbol("AndroidOS", Decl(fixSignatureCaching.ts, 152, 12))
+        "androids": "Android",
+>"androids" : Symbol("androids", Decl(fixSignatureCaching.ts, 152, 12))
 
         "BlackBerryOS": "blackberry|\\bBB10\\b|rim tablet os",
 >"BlackBerryOS" : Symbol("BlackBerryOS", Decl(fixSignatureCaching.ts, 153, 31))
@@ -455,7 +455,7 @@ define(function () {
         "PalmOS": "PalmOS|avantgo|blazer|elaine|hiptop|palm|plucker|xiino",
 >"PalmOS" : Symbol("PalmOS", Decl(fixSignatureCaching.ts, 154, 62))
 
-        "SymbianOS": "Symbian|SymbOS|Series60|Series40|SYB-[0-9]+|\\bS60\\b",
+        "SymbianOS": "Symbian|symbols|Series60|Series40|SYB-[0-9]+|\\bS60\\b",
 >"SymbianOS" : Symbol("SymbianOS", Decl(fixSignatureCaching.ts, 155, 75))
 
         "WindowsMobileOS": "Windows CE.*(PPC|Smartphone|Mobile|[0-9]{3}x[0-9]{3})|Window Mobile|Windows Phone [0-9.]+|WCE;",
@@ -1863,7 +1863,7 @@ define(function () {
          * Returns the detected operating system string or <tt>null</tt>.
          * <br>
          * The operating system is one of following keys:<br>
-         * <br><tt>AndroidOS, BlackBerryOS, PalmOS, SymbianOS, WindowsMobileOS, WindowsPhoneOS,
+         * <br><tt>androids, BlackBerryOS, PalmOS, SymbianOS, WindowsMobileOS, WindowsPhoneOS,
          * iOS, MeeGoOS, MaemoOS, JavaOS, webOS, badaOS, BREWOS</tt><br>
          *
          * @returns {String} the key for the detected operating system.

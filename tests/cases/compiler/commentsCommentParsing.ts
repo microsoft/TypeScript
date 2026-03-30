@@ -32,7 +32,7 @@ jsDocMultiLine();
 /** this is multiple line jsdoc stule comment
 *New line1
 *New Line2*/
-/** Shoul mege this line as well
+/** Shoul merge this line as well
 * and this too*/ /** Another this one too*/
 function jsDocMultiLineMerge() {
 }

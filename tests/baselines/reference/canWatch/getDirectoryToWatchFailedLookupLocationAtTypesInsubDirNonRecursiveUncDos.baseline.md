@@ -1,6 +1,6 @@
 # getDirectoryToWatchFailedLookupLocationAtTypesInsubDirNonRecursive
 
-Determines whether to watch given failed lookup location (file that didnt exist) when resolving module.
+Determines whether to watch given failed lookup location (file that didn't exist) when resolving module.
 It also determines the directory to watch and whether to watch it recursively or not.
 
 ## Testing for UncDos root: //vda1cs4850/c$

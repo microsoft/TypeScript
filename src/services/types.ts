@@ -464,7 +464,7 @@ export interface LanguageService {
     /**
      * Gets errors indicating invalid syntax in a file.
      *
-     * In English, "this cdeo have, erorrs" is syntactically invalid because it has typos,
+     * In English, "this cdeo have, errors" is syntactically invalid because it has typos,
      * grammatical errors, and misplaced punctuation. Likewise, examples of syntax
      * errors in TypeScript are missing parentheses in an `if` statement, mismatched
      * curly braces, and using a reserved keyword as a variable name.
@@ -1342,7 +1342,7 @@ export interface RenameInfoSuccess {
     displayName: string;
     /**
      * Full display name of item to be renamed.
-     * If item to be renamed is a file, then this is the original text of the module specifer
+     * If item to be renamed is a file, then this is the original text of the module specifier
      */
     fullDisplayName: string;
     kind: ScriptElementKind;
@@ -1509,7 +1509,7 @@ export interface CompletionEntry {
      */
     replacementSpan?: TextSpan;
     /**
-     * Indicates whether commiting this completion entry will require additional code actions to be
+     * Indicates whether committing this completion entry will require additional code actions to be
      * made to avoid errors. The CompletionEntryDetails will have these actions.
      */
     hasAction?: true;

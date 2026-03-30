@@ -44,10 +44,10 @@ new (<any>A());
 (<any>function foo() { })();
 (<any><number><any>-A).x; 
 
-// nested cast, should keep one pair of parenthese
+// nested cast, should keep one pair of parentheses
 (<any><number>(<any>-A)).x; 
 
-// nested parenthesized expression, should keep one pair of parenthese
+// nested parenthesized expression, should keep one pair of parentheses
 (<any>(A)) 
 
 
@@ -91,7 +91,7 @@ new (A());
 (() => { })();
 (function foo() { })();
 (-A).x;
-// nested cast, should keep one pair of parenthese
+// nested cast, should keep one pair of parentheses
 (-A).x;
-// nested parenthesized expression, should keep one pair of parenthese
+// nested parenthesized expression, should keep one pair of parentheses
 (A);

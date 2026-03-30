@@ -29,7 +29,7 @@ const I = {};
 export = I;
 
 //// [z.ts]
-// test harness is weird if the last file includs a require >:(
+// test harness is weird if the last file includes a require >:(
 
 //// [a.js]
 "use strict";
@@ -55,4 +55,4 @@ const I = {};
 module.exports = I;
 //// [z.js]
 "use strict";
-// test harness is weird if the last file includs a require >:(
+// test harness is weird if the last file includes a require >:(

@@ -1270,7 +1270,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function createImportCallExpressionAMD(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
-        // improt("./blah")
+        // import("./blah")
         // emit as
         // define(["require", "exports", "blah"], function (require, exports) {
         //     ...

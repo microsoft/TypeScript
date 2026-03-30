@@ -10,5 +10,5 @@
 goTo.marker("2");
 edit.insertLine("");
 goTo.marker("1");
-// else formating should not be affected
+// else formatting should not be affected
 verify.currentLineContentIs('    } else {');

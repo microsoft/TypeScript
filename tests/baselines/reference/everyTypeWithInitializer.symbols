@@ -58,8 +58,8 @@ namespace M {
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
-var aNumber = 9.9;
->aNumber : Symbol(aNumber, Decl(everyTypeWithInitializer.ts, 24, 3))
+var a number = 9.9;
+>a number : Symbol(a number, Decl(everyTypeWithInitializer.ts, 24, 3))
 
 var aString = 'this is a string';
 >aString : Symbol(aString, Decl(everyTypeWithInitializer.ts, 25, 3))

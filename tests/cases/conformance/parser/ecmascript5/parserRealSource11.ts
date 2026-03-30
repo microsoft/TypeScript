@@ -984,7 +984,7 @@ namespace TypeScript {
         public endingToken: ASTSpan = null;
 
         constructor (public name: Identifier, public bod: ASTList, public isConstructor: boolean,
-                     public arguments: ASTList, public vars: ASTList, public scopes: ASTList, public statics: ASTList,
+                     public arguments: ASTList, public vars: ASTList, public scopes: ASTList, public statistics: ASTList,
             nodeType: number) {
 
             super(nodeType);
@@ -1099,7 +1099,7 @@ namespace TypeScript {
 
         public isSignature() { return (this.fncFlags & FncFlags.Signature) != FncFlags.None; }
 
-        public hasStaticDeclarations() { return (!this.isConstructor && (this.statics.members.length > 0 || this.innerStaticFuncs.length > 0)); }
+        public hasStaticDeclarations() { return (!this.isConstructor && (this.statistics.members.length > 0 || this.innerStaticFuncs.length > 0)); }
     }
 
     export class LocationInfo {
@@ -1687,7 +1687,7 @@ namespace TypeScript {
 
     export class ForInStatement extends Statement {
         constructor (public lval: AST, public obj: AST) {
-            super(NodeType.ForIn);
+            super(NodeType.foreign);
             if (this.lval && (this.lval.nodeType == NodeType.VarDecl)) {
                 (<BoundDecl>this.lval).varFlags |= VarFlags.AutoInit;
             }
@@ -1766,7 +1766,7 @@ namespace TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
-            if (typeFlow.checker.styleSettings.forin) {
+            if (typeFlow.checker.styleSettings.foreign) {
                 if (!this.isFiltered()) {
                     typeFlow.checker.errorReporter.styleError(this, "no hasOwnProperty filter");
                 }

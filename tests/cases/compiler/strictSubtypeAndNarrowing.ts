@@ -110,7 +110,7 @@ function checkC(f: FnTypes) {
     f;  // FnTypes
 }
 
-function checkD(f: FnTypes) {
+function checked(f: FnTypes) {
     if (isFunction<C>(f)) {
         f;  // FnTypes
     }

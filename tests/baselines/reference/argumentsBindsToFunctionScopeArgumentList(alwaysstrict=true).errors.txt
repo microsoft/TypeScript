@@ -8,7 +8,7 @@ argumentsBindsToFunctionScopeArgumentList.ts(3,5): error TS2322: Type 'number' i
         ~~~~~~~~~
 !!! error TS1100: Invalid use of 'arguments' in strict mode.
     function foo(a) {
-        arguments = 10;  /// This shouldnt be of type number and result in error.
+        arguments = 10;  /// This shouldn't be of type number and result in error.
         ~~~~~~~~~
 !!! error TS1100: Invalid use of 'arguments' in strict mode.
         ~~~~~~~~~

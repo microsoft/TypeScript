@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/statics.ts] ////
+//// [tests/cases/compiler/statistics.ts] ////
 
-//// [statics.ts]
+//// [statistics.ts]
 namespace M {
     export class C {
         x: number;
@@ -33,7 +33,7 @@ M.f();
 
 
 
-//// [statics.js]
+//// [statistics.js]
 "use strict";
 var M;
 (function (M) {

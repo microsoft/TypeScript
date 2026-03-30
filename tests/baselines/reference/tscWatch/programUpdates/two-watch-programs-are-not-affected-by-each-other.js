@@ -3,12 +3,12 @@ Input::
 //// [/user/username/workspace/solution/projects/project/f1.ts]
 
                 export * from "../projectc/f2";
-                export * from "../projectd/f3";
+                export * from "../projected/f3";
 
 //// [/user/username/workspace/solution/projects/projectc/f2.ts]
 export let x = 1;
 
-//// [/user/username/workspace/solution/projects/projectd/f3.ts]
+//// [/user/username/workspace/solution/projects/projected/f3.ts]
 export let y = 1;
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
@@ -26,7 +26,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/TS/Lib/tsc.js --w /user/username/workspace/solution/projects/projectc/f2.ts /user/username/workspace/solution/projects/projectd/f3.ts
+/home/src/tslibs/TS/Lib/tsc.js --w /user/username/workspace/solution/projects/projectc/f2.ts /user/username/workspace/solution/projects/projected/f3.ts
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -41,7 +41,7 @@ Output::
 export let x = 1;
 
 
-//// [/user/username/workspace/solution/projects/projectd/f3.js]
+//// [/user/username/workspace/solution/projects/projected/f3.js]
 export let y = 1;
 
 
@@ -51,12 +51,12 @@ FsWatches::
   {}
 /user/username/workspace/solution/projects/projectc/f2.ts: *new*
   {}
-/user/username/workspace/solution/projects/projectd/f3.ts: *new*
+/user/username/workspace/solution/projects/projected/f3.ts: *new*
   {}
 
 Program root files: [
   "/user/username/workspace/solution/projects/projectc/f2.ts",
-  "/user/username/workspace/solution/projects/projectd/f3.ts"
+  "/user/username/workspace/solution/projects/projected/f3.ts"
 ]
 Program options: {
   "allowNonTsExtensions": true
@@ -65,21 +65,21 @@ Program structureReused: Not
 Program files::
 /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/projectc/f2.ts
-/user/username/workspace/solution/projects/projectd/f3.ts
+/user/username/workspace/solution/projects/projected/f3.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/projectc/f2.ts
-/user/username/workspace/solution/projects/projectd/f3.ts
+/user/username/workspace/solution/projects/projected/f3.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/workspace/solution/projects/projectc/f2.ts (used version)
-/user/username/workspace/solution/projects/projectd/f3.ts (used version)
+/user/username/workspace/solution/projects/projected/f3.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
-createing separate watcher
+creating separate watcher
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -89,10 +89,10 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/projectc/f2.js] file written with same contents
-//// [/user/username/workspace/solution/projects/projectd/f3.js] file written with same contents
+//// [/user/username/workspace/solution/projects/projected/f3.js] file written with same contents
 //// [/user/username/workspace/solution/projects/project/f1.js]
 export * from "../projectc/f2";
-export * from "../projectd/f3";
+export * from "../projected/f3";
 
 
 
@@ -103,7 +103,7 @@ FsWatches::
   {}
 /user/username/workspace/solution/projects/projectc/f2.ts:
   {}
-/user/username/workspace/solution/projects/projectd/f3.ts:
+/user/username/workspace/solution/projects/projected/f3.ts:
   {}
 
 Program root files: [
@@ -116,19 +116,19 @@ Program structureReused: Not
 Program files::
 /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/projectc/f2.ts
-/user/username/workspace/solution/projects/projectd/f3.ts
+/user/username/workspace/solution/projects/projected/f3.ts
 /user/username/workspace/solution/projects/project/f1.ts
 
 Semantic diagnostics in builder refreshed for::
 /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/projectc/f2.ts
-/user/username/workspace/solution/projects/projectd/f3.ts
+/user/username/workspace/solution/projects/projected/f3.ts
 /user/username/workspace/solution/projects/project/f1.ts
 
 Shape signatures in builder refreshed for::
 /home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/workspace/solution/projects/projectc/f2.ts (used version)
-/user/username/workspace/solution/projects/projectd/f3.ts (used version)
+/user/username/workspace/solution/projects/projected/f3.ts (used version)
 /user/username/workspace/solution/projects/project/f1.ts (used version)
 
 exitCode:: ExitStatus.undefined

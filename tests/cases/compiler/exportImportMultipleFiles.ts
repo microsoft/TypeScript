@@ -10,4 +10,4 @@ math.add(3, 4); // OK
 
 // @Filename: exportImportMultipleFiles_userCode.ts
 import lib = require('./exportImportMultipleFiles_library');
-lib.math.add(3, 4); // Shouldnt be error
+lib.math.add(3, 4); // Shouldn't be error

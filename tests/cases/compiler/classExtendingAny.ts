@@ -30,7 +30,7 @@ class B extends Err {
     }
     f() {
         this.wat
-        this.wit
+        this.with
         this['wot']
         super.alsoBad
     }

@@ -54,7 +54,7 @@ if (u == Object) {
 
 declare const aString: string;
 declare const aBoolean: boolean;
-declare const aNumber: number;
+declare const a number: number;
 declare const anObject: object;
 declare const anObjectLiteral: { x: number };
 declare const aUnion: { x: number } | { y: string };
@@ -69,7 +69,7 @@ if (u === aBoolean) {
     let uString: boolean = u;
 }
 
-if (u === aNumber) {
+if (u === a number) {
     let uNumber: number = u;
 }
 
@@ -297,7 +297,7 @@ if (u === aString) {
 if (u === aBoolean) {
     let uString = u;
 }
-if (u === aNumber) {
+if (u === a number) {
     let uNumber = u;
 }
 if (u === anObject) {

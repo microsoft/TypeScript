@@ -13,7 +13,7 @@ export class Test1 {
     messageHandler = () => {
         console.log(field1); // But this should be error as the field1 will resolve to var field1 
                              // but since this code would be generated inside constructor, in generated js
-                             // it would resolve to private field1 and thats not what user intended here. 
+                             // it would resolve to private field1 and that's not what user intended here. 
     };
 }
 
@@ -27,7 +27,7 @@ export class Test1 {
         this.messageHandler = () => {
             console.log(field1); // But this should be error as the field1 will resolve to var field1 
             // but since this code would be generated inside constructor, in generated js
-            // it would resolve to private field1 and thats not what user intended here. 
+            // it would resolve to private field1 and that's not what user intended here. 
         };
     }
 }

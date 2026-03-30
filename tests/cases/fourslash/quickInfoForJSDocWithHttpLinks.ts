@@ -6,7 +6,7 @@
 ////
 //// /**
 //// * @typedef {Object} Oops
-//// * @property {number} /*2*/https://wass
+//// * @property {number} /*2*/https://was
 //// */
 ////
 ////

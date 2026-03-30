@@ -29,7 +29,7 @@ class Foo2 {
 >bar : string
 >    : ^^^^^^
 
-        return 0; // should be an error - can't coerce infered return type to match setter annotated type
+        return 0; // should be an error - can't coerce inferred return type to match setter annotated type
 >0 : 0
 >  : ^
     }

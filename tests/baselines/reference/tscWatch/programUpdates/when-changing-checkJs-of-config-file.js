@@ -1,10 +1,10 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/a.js]
-export const aNumber: number = "string"
+export const a number: number = "string"
 
 //// [/user/username/projects/myproject/b.ts]
-import { aNumber } from "./a.js";
+import { a number } from "./a.js";
 
 //// [/user/username/projects/myproject/tsconfig.json]
 {
@@ -46,7 +46,7 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/b.js :: Watc
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/b.js :: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
 [96mb.ts[0m:[93m1[0m:[93m25[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module './a.js'. '/user/username/projects/myproject/a.js' implicitly has an 'any' type.
 
-[7m1[0m import { aNumber } from "./a.js";
+[7m1[0m import { a number } from "./a.js";
 [7m [0m [91m                        ~~~~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
@@ -137,7 +137,7 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.js 250 undefined Source file
 [96ma.js[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS8010: [0mType annotations can only be used in TypeScript files.
 
-[7m1[0m export const aNumber: number = "string"
+[7m1[0m export const a number: number = "string"
 [7m [0m [91m                      ~~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.

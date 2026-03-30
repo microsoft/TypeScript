@@ -31,12 +31,12 @@ declare function createStore<Store extends { [K: string]: any }>(store: Store): 
 >store : Store
 >      : ^^^^^
 
-const { Provider, useUsername, useAge, useStore } = createStore({
+const { Provider, useUsername, usage, useStore } = createStore({
 >Provider : unknown
 >         : ^^^^^^^
 >useUsername : StateHook<string>
 >            : ^^^^^^^^^^^^^^^^^
->useAge : StateHook<number>
+>usage : StateHook<number>
 >       : ^^^^^^^^^^^^^^^^^
 >useStore : StateHook<{ username: string; age: number; }>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

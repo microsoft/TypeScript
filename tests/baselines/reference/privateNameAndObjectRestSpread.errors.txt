@@ -19,8 +19,8 @@ privateNameAndObjectRestSpread.ts(14,15): error TS2339: Property '#propStatic' d
                  ~~~~~
 !!! error TS2339: Property '#prop' does not exist on type '{}'.
     
-            const statics = { ... C};
-            statics.#propStatic
+            const statistics = { ... C};
+            statistics.#propStatic
                     ~~~~~~~~~~~
 !!! error TS2339: Property '#propStatic' does not exist on type '{ prototype: C; }'.
             const { ...sRest } = C;

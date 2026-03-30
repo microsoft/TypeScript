@@ -69,8 +69,8 @@ namespace M {
 >         : ^     ^^^      ^^^^^      
 }
 
-for(var aNumber: number = 9.9;;){} 
->aNumber : number
+for(var a number: number = 9.9;;){} 
+>a number : number
 >        : ^^^^^^
 >9.9 : 9.9
 >    : ^^^

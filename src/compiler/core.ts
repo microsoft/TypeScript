@@ -1852,7 +1852,7 @@ function toLowerCase(x: string) {
 // | 7. | \u00DF   | 223       | Lower case sharp s                                                     |
 //
 // Because item 3 is special where in its lowercase character has its own
-// upper case form we cant convert its case.
+// upper case form we can't convert its case.
 // Rest special characters are either already in lower case format or
 // they have corresponding upper case character so they dont need special handling
 //
@@ -1864,10 +1864,10 @@ const fileNameLowerCaseRegExp = /[^\u0130\u0131\u00DFa-z0-9\\/:\-_. ]+/g;
  * This function is used in places where we want to make file name as a key on these systems
  * It is possible on mac to be able to refer to file name with I with dot on top as a fileName with its lower case form
  * But on windows we cannot. Windows can have fileName with I with dot on top next to its lower case and they can not each be referred with the lowercase forms
- * Technically we would want this function to be platform sepcific as well but
+ * Technically we would want this function to be platform specific as well but
  * our api has till now only taken caseSensitive as the only input and just for some characters we dont want to update API and ensure all customers use those api
  * We could use upper case and we would still need to deal with the descripencies but
- * we want to continue using lower case since in most cases filenames are lowercasewe and wont need any case changes and avoid having to store another string for the key
+ * we want to continue using lower case since in most cases filenames are lowercasewe and won't need any case changes and avoid having to store another string for the key
  * So for this function purpose, we go ahead and assume character I with dot on top it as case sensitive since its very unlikely to use lower case form of that special character
  *
  * @internal

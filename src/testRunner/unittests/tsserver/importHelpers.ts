@@ -29,7 +29,7 @@ describe("unittests:: tsserver:: importHelpers::", () => {
         baselineTsserverLogs("importHelpers", "should not crash in tsserver", session);
     });
 
-    it("import helpers sucessfully", () => {
+    it("import helpers successfully", () => {
         const type1 = {
             path: "/user/username/workspace/projects/project/type.ts",
             content: `

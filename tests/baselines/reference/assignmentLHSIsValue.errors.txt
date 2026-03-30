@@ -145,7 +145,7 @@ assignmentLHSIsValue.ts(70,1): error TS2364: The left-hand side of an assignment
     ~~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
     
-    // parentheses, the containted expression is value
+    // parentheses, the contained expression is value
     (this) = value;
     ~~~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.

@@ -650,7 +650,7 @@ testCompositeFunction('why hello there', 42);`,
         openFilesForSession([programFile], session);
 
         // Find all references for getSourceFile
-        // Shouldnt load more projects
+        // Shouldn't load more projects
         session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
             command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(programFile, "getSourceFile", { index: 1 }),

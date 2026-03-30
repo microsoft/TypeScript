@@ -24,8 +24,8 @@ interface EmailChannel {
 >type : "email"
 >     : ^^^^^^^
 
-    addres: string;
->addres : string
+    address: string;
+>address : string
 >       : ^^^^^^
 }
 

@@ -27,7 +27,7 @@ functionImplementationErrors.ts(40,1): error TS2839: This condition will always 
         }
     }
     
-    // Function implemetnation with non -void return type annotation with no return
+    // Function implementation with non -void return type annotation with no return
     function f5(): number {
                    ~~~~~~
 !!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.

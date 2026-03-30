@@ -65,5 +65,5 @@ objectRest.ts(44,53): error TS2739: Type '{}' is missing the following propertie
                                                         ~
 !!! error TS2739: Type '{}' is missing the following properties from type '{ a: number; b: string; }': a, b
     
-    var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
+    var noContextualType = ({ a number = 12, ...notEmptyObject }) => a number + notEmptyObject.anythingGoes;
     

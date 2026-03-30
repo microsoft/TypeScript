@@ -291,7 +291,7 @@ class c {
 >prop5 : Symbol(c.prop5, Decl(commentsOverloads.ts, 112, 5), Decl(commentsOverloads.ts, 114, 36), Decl(commentsOverloads.ts, 116, 36))
 >b : Symbol(b, Decl(commentsOverloads.ts, 116, 17))
 
-    /** Prop5 implementaion*/
+    /** Prop5 implementation*/
     public prop5(aorb: any) {
 >prop5 : Symbol(c.prop5, Decl(commentsOverloads.ts, 112, 5), Decl(commentsOverloads.ts, 114, 36), Decl(commentsOverloads.ts, 116, 36))
 >aorb : Symbol(aorb, Decl(commentsOverloads.ts, 118, 17))

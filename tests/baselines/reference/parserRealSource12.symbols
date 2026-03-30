@@ -948,7 +948,7 @@ namespace TypeScript {
 >ChildrenWalkers : Symbol(ChildrenWalkers, Decl(parserRealSource12.ts, 217, 5))
 >walkForStatementChildren : Symbol(ChildrenWalkers.walkForStatementChildren, Decl(parserRealSource12.ts, 330, 9))
 
-            this.childrenWalkers[NodeType.ForIn] = ChildrenWalkers.walkForInStatementChildren;
+            this.childrenWalkers[NodeType.foreign] = ChildrenWalkers.walkForInStatementChildren;
 >this.childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))
 >this : Symbol(AstWalkerFactory, Decl(parserRealSource12.ts, 67, 5))
 >childrenWalkers : Symbol(AstWalkerFactory.childrenWalkers, Decl(parserRealSource12.ts, 69, 35))

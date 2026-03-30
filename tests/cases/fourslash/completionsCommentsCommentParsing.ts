@@ -31,7 +31,7 @@
 /////** multiple line jsdoc comments no longer merge
 ////*New line1
 ////*New Line2*/
-/////** Shoul mege this line as well
+/////** Shoul merge this line as well
 ////* and this too*/ /** Another this one too*/
 ////function jsDocMultiLineMerge() {
 ////}
@@ -192,7 +192,7 @@
 ////  *                   spanning on two lines and aligned perfectly
 ////  * @param b          this is info about b
 ////  *                   spanning on two lines and aligned perfectly
-////  *                   spanning one more line alined perfectly
+////  *                   spanning one more line aligned perfectly
 ////  *                       spanning another line with more margin
 ////  * @param c          this is info about b
 ////  *  not aligned text about parameter will eat only one space

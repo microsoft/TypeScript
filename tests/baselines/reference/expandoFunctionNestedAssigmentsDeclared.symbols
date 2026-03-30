@@ -69,8 +69,8 @@ declare namespace Foo {
     var fromForOfBodyNested: number;
 >fromForOfBodyNested : Symbol(fromForOfBodyNested, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 24, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 59, 5))
 
-    var forIn: any[];
->forIn : Symbol(forIn, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 25, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 14))
+    var foreign: any[];
+>foreign : Symbol(foreign, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 25, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 14))
 
     var fromForInBody: number;
 >fromForInBody : Symbol(fromForInBody, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 26, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 32))
@@ -179,11 +179,11 @@ for(let f of (Foo.forOf = []) ){
 }
 
 
-for(let f in (Foo.forIn = []) ){
+for(let f in (Foo.foreign = []) ){
 >f : Symbol(f, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 7))
->Foo.forIn : Symbol(Foo.forIn, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 25, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 14))
+>Foo.foreign : Symbol(Foo.foreign, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 25, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 14))
 >Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
->forIn : Symbol(Foo.forIn, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 25, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 14))
+>foreign : Symbol(Foo.foreign, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 25, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 14))
 
     Foo.fromForInBody = 1;
 >Foo.fromForInBody : Symbol(Foo.fromForInBody, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 26, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 32))

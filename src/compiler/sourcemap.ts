@@ -199,7 +199,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
             ) {
                 continue;
             }
-            // Then reencode all the updated mappings into the overall map
+            // Then re-encode all the updated mappings into the overall map
             let newSourceIndex: number | undefined;
             let newSourceLine: number | undefined;
             let newSourceCharacter: number | undefined;

@@ -222,7 +222,7 @@ Resolution:: {
 }
 
 
-load as file with name starting with directory seperator
+load as file with name starting with directory separator
 Resolving "/foo" from /foo/bar/baz.ts when module has extension: .ts
 //// [/foo/bar/baz.ts]
 

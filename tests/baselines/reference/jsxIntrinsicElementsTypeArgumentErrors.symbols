@@ -16,7 +16,7 @@ const b = <div<number,>></div>; // trailing comma type args
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
-const c = <div<Missing>></div>; // nonexistant type args
+const c = <div<Missing>></div>; // nonexistent type args
 >c : Symbol(c, Decl(jsxIntrinsicElementsTypeArgumentErrors.tsx, 8, 5))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 >Missing : Symbol(Missing)
@@ -49,7 +49,7 @@ const h = <div<number,>/>; // trailing comma type args
 >h : Symbol(h, Decl(jsxIntrinsicElementsTypeArgumentErrors.tsx, 19, 5))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
-const i = <div<Missing>/>; // nonexistant type args
+const i = <div<Missing>/>; // nonexistent type args
 >i : Symbol(i, Decl(jsxIntrinsicElementsTypeArgumentErrors.tsx, 21, 5))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 >Missing : Symbol(Missing)

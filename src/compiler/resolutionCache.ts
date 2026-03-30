@@ -1682,7 +1682,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
 
         // we need to assume the directories exist to ensure that we can get all the type root directories that get included
-        // But filter directories that are at root level to say directory doesnt exist, so that we arent watching them
+        // But filter directories that are at root level to say directory doesnt exist, so that we aren't watching them
         const typeRoots = getEffectiveTypeRoots(options, { getCurrentDirectory });
         if (typeRoots) {
             mutateMap(

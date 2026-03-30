@@ -191,7 +191,7 @@ namespace TargetIsPublic {
 >e : E
 >  : ^
 
-    e = a; // errror
+    e = a; // error
 >e = a : { foo: string; }
 >      : ^^^^^^^      ^^^
 >e : E
@@ -199,7 +199,7 @@ namespace TargetIsPublic {
 >a : { foo: string; }
 >  : ^^^^^^^      ^^^
 
-    e = b; // errror
+    e = b; // error
 >e = b : Base
 >      : ^^^^
 >e : E
@@ -207,7 +207,7 @@ namespace TargetIsPublic {
 >b : Base
 >  : ^^^^
 
-    e = i; // errror
+    e = i; // error
 >e = i : I
 >      : ^
 >e : E
@@ -215,7 +215,7 @@ namespace TargetIsPublic {
 >i : I
 >  : ^
 
-    e = d; // errror
+    e = d; // error
 >e = d : D
 >      : ^
 >e : E
@@ -435,7 +435,7 @@ namespace TargetIsPublic {
 >e : E
 >  : ^
 
-    e = a; // errror
+    e = a; // error
 >e = a : { foo: string; }
 >      : ^^^^^^^      ^^^
 >e : E
@@ -443,7 +443,7 @@ namespace TargetIsPublic {
 >a : { foo: string; }
 >  : ^^^^^^^      ^^^
 
-    e = b; // errror
+    e = b; // error
 >e = b : Base
 >      : ^^^^
 >e : E
@@ -451,7 +451,7 @@ namespace TargetIsPublic {
 >b : Base
 >  : ^^^^
 
-    e = i; // errror
+    e = i; // error
 >e = i : I
 >      : ^
 >e : E
@@ -459,7 +459,7 @@ namespace TargetIsPublic {
 >i : I
 >  : ^
 
-    e = d; // errror
+    e = d; // error
 >e = d : D
 >      : ^
 >e : E

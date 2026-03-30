@@ -15,7 +15,7 @@ declare global {
 export {}
 
 === index.ts ===
-import "./extention";
+import "./extension";
 
 globalThis.tests = "a-b";
 >globalThis : Symbol(globalThis, Decl(extension.d.ts, 0, 16))

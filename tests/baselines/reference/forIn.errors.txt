@@ -1,8 +1,8 @@
-forIn.ts(2,10): error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
-forIn.ts(20,4): error TS2304: Cannot find name 'k'.
+foreign.ts(2,10): error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
+foreign.ts(20,4): error TS2304: Cannot find name 'k'.
 
 
-==== forIn.ts (2 errors) ====
+==== foreign.ts (2 errors) ====
     var arr = null;
     for (var i:number in arr) { // error
              ~

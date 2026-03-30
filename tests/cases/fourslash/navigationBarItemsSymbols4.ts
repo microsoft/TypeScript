@@ -9,7 +9,7 @@
 ////    constructor() {
 ////        // Dynamic assignment properties can't show up in navigation,
 ////        // as they're not syntactic members
-////        // Additonally, late bound members are always filtered out, besides
+////        // Additionally, late bound members are always filtered out, besides
 ////        this[_sym] = "ok";
 ////    }
 ////

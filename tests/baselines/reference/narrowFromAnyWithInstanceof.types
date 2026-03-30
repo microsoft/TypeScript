@@ -89,12 +89,12 @@ if (x instanceof Error) { // 'any' is narrowed to types other than 'Function'/'O
 >message : string
 >        : ^^^^^^
 
-    x.mesage;
->x.mesage : any
+    x.message;
+>x.message : any
 >         : ^^^
 >x : Error
 >  : ^^^^^
->mesage : any
+>message : any
 >       : ^^^
 }
 

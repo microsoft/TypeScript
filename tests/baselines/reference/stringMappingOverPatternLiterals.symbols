@@ -206,7 +206,7 @@ function f3(
 >x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 63, 37))
 >x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 62, 26))
 
-    // and this should also not be equivlent to any others
+    // and this should also not be equivalent to any others
     var x4: Lowercase<Uppercase<string>> = null as any;
 >x4 : Symbol(x4, Decl(stringMappingOverPatternLiterals.ts, 81, 7))
 >Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))

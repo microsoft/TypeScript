@@ -45,7 +45,7 @@ strOrNum = x.commonPropertyDifferenType;
 strOrNum = x.commonMethodDifferentReturnType(str); // string | union
 x.commonMethodDifferentParameterType; // No error - property exists
 x.commonMethodDifferentParameterType(strOrNum); // error - no call signatures because the type of this property is ((a: string) => string) | (a: number) => number
-                                                // and the call signatures arent identical
+                                                // and the call signatures aren't identical
 num = x.commonMethodWithTypeParameter(num);
 num = x.commonMethodWithOwnTypeParameter(num);
 str = x.commonMethodWithOwnTypeParameter(str);
@@ -65,7 +65,7 @@ strOrNum = x.commonPropertyDifferenType;
 strOrNum = x.commonMethodDifferentReturnType(str); // string | union
 x.commonMethodDifferentParameterType; // No error - property exists
 x.commonMethodDifferentParameterType(strOrNum); // error - no call signatures because the type of this property is ((a: string) => string) | (a: number) => number
-// and the call signatures arent identical
+// and the call signatures aren't identical
 num = x.commonMethodWithTypeParameter(num);
 num = x.commonMethodWithOwnTypeParameter(num);
 str = x.commonMethodWithOwnTypeParameter(str);

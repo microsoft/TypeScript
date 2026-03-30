@@ -125,12 +125,12 @@ class B extends Err {
 >wat : number
 >    : ^^^^^^
 
-        this.wit
->this.wit : any
+        this.with
+>this.with : any
 >         : ^^^
 >this : this
 >     : ^^^^
->wit : any
+>with : any
 >    : ^^^
 
         this['wot']

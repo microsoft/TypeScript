@@ -48,7 +48,7 @@ for(let f of (Foo.forOf = []) ){
 }
 
 
-for(let f in (Foo.forIn = []) ){
+for(let f in (Foo.foreign = []) ){
     Foo.fromForInBody = 1;
     {
         Foo.fromForInBodyNested = 1;

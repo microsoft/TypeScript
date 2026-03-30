@@ -2,11 +2,11 @@ index.ts(7,1): error TS2883: The inferred type of 'default' cannot be named with
 
 
 ==== node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts (0 errors) ====
-    interface Statics {
+    interface Statistics {
         "$$whatever": string;
     }
     declare namespace hoistNonReactStatics {
-        type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statics>]: T[X]}
+        type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statistics>]: T[X]}
     }
     export = hoistNonReactStatics;
 ==== node_modules/styled-components/index.d.ts (0 errors) ====

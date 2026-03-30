@@ -49,7 +49,7 @@ expandoFunctionNestedAssigments.ts(7,23): error TS2339: Property 'inNestedFuncti
     }
     
     
-    for(let f in (Foo.forIn = []) ){
+    for(let f in (Foo.foreign = []) ){
         Foo.fromForInBody = 1;
         {
             Foo.fromForInBodyNested = 1;

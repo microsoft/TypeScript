@@ -278,7 +278,7 @@ export function verifyResolutionCache(
     expected.finishCachingPerDirectoryResolution(/*newProgram*/ undefined, actualProgram);
 
     resolutionToExpected.forEach(
-        expected => ts.Debug.assert(!expected.files?.size, `${projectName}:: Shouldnt ref to any files`),
+        expected => ts.Debug.assert(!expected.files?.size, `${projectName}:: Shouldn't ref to any files`),
     );
     ts.Debug.assert(expected.resolvedFileToResolution.size === 0, `${projectName}:: resolvedFileToResolution should be released`);
     ts.Debug.assert(expected.resolutionsWithFailedLookups.size === 0, `${projectName}:: resolutionsWithFailedLookups should be released`);

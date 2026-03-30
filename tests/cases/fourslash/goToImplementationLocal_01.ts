@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-// Should return the defintion of locally defined variables
+// Should return the definition of locally defined variables
 
 //// const [|hello|] = function() {};
 //// he/*function_call*/llo();

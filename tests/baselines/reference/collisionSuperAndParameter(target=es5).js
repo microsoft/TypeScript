@@ -3,7 +3,7 @@
 //// [collisionSuperAndParameter.ts]
 class Foo {
     a() {
-        var lamda = (_super: number) => { // No Error 
+        var lambda = (_super: number) => { // No Error 
             return x => this;   // New scope.  So should inject new _this capture
         }
     }
@@ -17,7 +17,7 @@ class Foo {
 }
 class Foo2 extends Foo {
     x() {
-        var lamda = (_super: number) => { // Error 
+        var lambda = (_super: number) => { // Error 
             return x => this;   // New scope.  So should inject new _this capture
         }
     }
@@ -86,7 +86,7 @@ var Foo = /** @class */ (function () {
     }
     Foo.prototype.a = function () {
         var _this = this;
-        var lamda = function (_super) {
+        var lambda = function (_super) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
@@ -116,7 +116,7 @@ var Foo2 = /** @class */ (function (_super_1) {
     }
     Foo2.prototype.x = function () {
         var _this = this;
-        var lamda = function (_super) {
+        var lambda = function (_super) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };

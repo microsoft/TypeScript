@@ -265,7 +265,7 @@ foo() **= value;
 >value : any
 >      : ^^^
 
-// parentheses, the containted expression is value
+// parentheses, the contained expression is value
 (this) **= value;
 >(this) **= value : number
 >                 : ^^^^^^

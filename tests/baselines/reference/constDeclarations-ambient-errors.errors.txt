@@ -7,7 +7,7 @@ constDeclarations-ambient-errors.ts(8,24): error TS1039: Initializers are not al
 
 
 ==== constDeclarations-ambient-errors.ts (6 errors) ====
-    // error: no intialization expected in ambient declarations
+    // error: no initialization expected in ambient declarations
     declare const c1: boolean = true;
                                 ~~~~
 !!! error TS1039: Initializers are not allowed in ambient contexts.

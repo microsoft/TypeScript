@@ -38,7 +38,7 @@
 verify.pasteEdits({
     args: {
         pastedText: [
-            `const t = 1 + juice + p;`,`function avacado() { return sauce; }`,
+            `const t = 1 + juice + p;`,`function avocado() { return sauce; }`,
             `fig + kiwi`,
             `function k() {
             const cherry = 3 + tomato + cucumber;
@@ -57,7 +57,7 @@ function foo() {
 class bar {
     constructor() {
         function a() {
-            function avacado() { return sauce; }
+            function avocado() { return sauce; }
         }
         a();
         function b() {

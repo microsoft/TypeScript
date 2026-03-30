@@ -49,7 +49,7 @@ interface Derived4 extends Base {
 >  : ^^^^^^
 }
 
-// satisifies string indexer but not numeric indexer
+// satisfies string indexer but not numeric indexer
 interface Derived5 extends Base {
     1: { x: number } // error
 >1 : { x: number; }

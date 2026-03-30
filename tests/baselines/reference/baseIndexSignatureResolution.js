@@ -4,7 +4,7 @@
 class Base { private a: string; }
 class Derived extends Base { private b: string; }
 
-// Note - commmenting "extends Foo" prevents the error
+// Note - commenting "extends Foo" prevents the error
 interface Foo {
     [i: number]: Base;
 }

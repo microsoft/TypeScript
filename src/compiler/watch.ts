@@ -694,7 +694,7 @@ export const WatchType: WatchTypeRegistry = {
     FailedLookupLocations: "Failed Lookup Locations",
     AffectingFileLocation: "File location affecting resolution",
     TypeRoots: "Type roots",
-    ConfigFileOfReferencedProject: "Config file of referened project",
+    ConfigFileOfReferencedProject: "Config file of referenced project",
     ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
     WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
     PackageJson: "package.json file",
@@ -719,7 +719,7 @@ export interface WatchTypeRegistry {
     FailedLookupLocations: "Failed Lookup Locations";
     AffectingFileLocation: "File location affecting resolution";
     TypeRoots: "Type roots";
-    ConfigFileOfReferencedProject: "Config file of referened project";
+    ConfigFileOfReferencedProject: "Config file of referenced project";
     ExtendedConfigOfReferencedProject: "Extended config file of referenced project";
     WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project";
     PackageJson: "package.json file";
@@ -786,7 +786,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
 
 /** @internal */
 export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "createHash">, text: string): string {
-    // If text can contain the sourceMapUrl ignore sourceMapUrl for calcualting hash
+    // If text can contain the sourceMapUrl ignore sourceMapUrl for calculating hash
     if (text.match(sourceMapCommentRegExpDontCareLineStart)) {
         let lineEnd = text.length;
         let lineStart = lineEnd;

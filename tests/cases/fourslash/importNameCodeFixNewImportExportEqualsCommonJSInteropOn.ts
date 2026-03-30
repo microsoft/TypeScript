@@ -44,7 +44,7 @@ verify.importFixAtPosition([`import foo from "foo";
 
 foo`]);
 
-// 3. Importing an 'export default' doesn’t count toward the usage heursitic
+// 3. Importing an 'export default' doesn’t count toward the usage heuristic
 goTo.file('/c.ts');
 verify.importFixAtPosition([`import es from "es";
 import bar = require("bar");

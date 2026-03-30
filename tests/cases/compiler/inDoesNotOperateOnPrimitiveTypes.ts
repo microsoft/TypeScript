@@ -48,7 +48,7 @@ function union5<T extends object | string, U extends object | number>(p: T | U) 
     // and it adds a lot of complexity to distinguish between a `T | U` where
     // one constraint is non-primitive and the other is primitive and a `T | U`
     // like this where both constraints have primitive and non-primitive
-    // constitutents. Also, the strictly sound behavior would be to error
+    // constituents. Also, the strictly sound behavior would be to error
     // here, which is what's happening, so "fixing" this by suppressing the
     // error seems very low-value.
     "key" in p;
@@ -62,5 +62,5 @@ function intersection1<T extends number, U extends 0 | 1 | 2>(thing: T & U) {
 }
 
 function intersection2<T>(thing: T & (0 | 1 | 2)) {
-  "key" in thing; // Error (because all possible instantations are errors)
+  "key" in thing; // Error (because all possible instantiations are errors)
 }

@@ -1990,7 +1990,7 @@ namespace TypeScript {
 >isStatic : any
 >         : ^^^
 
-                // In the case of function-nested statics, no member list will have bee initialized for the function, so we need
+                // In the case of function-nested statistics, no member list will have bee initialized for the function, so we need
                 // to copy it over.  We don't set this by default because having a non-null member list will throw off assignment
                 // compatibility tests
                 if (outerFnc.type.members == null && container.getType().memberScope) {
@@ -2735,8 +2735,8 @@ namespace TypeScript {
 >localContainer : Symbol
 >               : ^^^^^^
 
-        var statics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
->statics : any
+        var statistics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
+>statistics : any
 >        : ^^^
 >new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null) : any
 >                                                                                                   : ^^^
@@ -2881,8 +2881,8 @@ namespace TypeScript {
 >symbol : any
 >       : ^^^
 
-                group.memberScope = statics;
->group.memberScope = statics : any
+                group.memberScope = statistics;
+>group.memberScope = statistics : any
 >                            : ^^^
 >group.memberScope : any
 >                  : ^^^
@@ -2890,15 +2890,15 @@ namespace TypeScript {
 >      : ^^^
 >memberScope : any
 >            : ^^^
->statics : any
+>statistics : any
 >        : ^^^
 
-                statics.container = group.symbol;
->statics.container = group.symbol : any
+                statistics.container = group.symbol;
+>statistics.container = group.symbol : any
 >                                 : ^^^
->statics.container : any
+>statistics.container : any
 >                  : ^^^
->statics : any
+>statistics : any
 >        : ^^^
 >container : any
 >          : ^^^
@@ -3046,8 +3046,8 @@ namespace TypeScript {
 >false : false
 >      : ^^^^^
 
-                context.typeFlow.addLocalsFromScope(statics, fgSym, funcDecl.statics,
->context.typeFlow.addLocalsFromScope(statics, fgSym, funcDecl.statics,                                                    funcStaticTable, false) : any
+                context.typeFlow.addLocalsFromScope(statistics, fgSym, funcDecl.statistics,
+>context.typeFlow.addLocalsFromScope(statistics, fgSym, funcDecl.statistics,                                                    funcStaticTable, false) : any
 >                                                                                                                                                 : ^^^
 >context.typeFlow.addLocalsFromScope : any
 >                                    : ^^^
@@ -3059,15 +3059,15 @@ namespace TypeScript {
 >         : ^^^^^^^^
 >addLocalsFromScope : any
 >                   : ^^^
->statics : any
+>statistics : any
 >        : ^^^
 >fgSym : TypeSymbol
 >      : ^^^^^^^^^^
->funcDecl.statics : any
+>funcDecl.statistics : any
 >                 : ^^^
 >funcDecl : FuncDecl
 >         : ^^^^^^^^
->statics : any
+>statistics : any
 >        : ^^^
 
                                                     funcStaticTable, false);

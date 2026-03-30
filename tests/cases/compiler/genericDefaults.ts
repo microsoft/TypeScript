@@ -30,7 +30,7 @@ f01(a);
 f01<A>();
 f01<A>(a);
 
-// function with a type paramter with a default
+// function with a type parameter with a default
 declare function f02<T = A>(a?: T): T;
 // inference
 f02();
@@ -54,7 +54,7 @@ f03<A>(a);
 f03<B>();
 f03<B>(b);
 
-// function with a type paramter without a default and a type parameter with a default
+// function with a type parameter without a default and a type parameter with a default
 declare function f04<T, U = B>(a?: T, b?: U): [T, U];
 // inference
 f04();

@@ -11,8 +11,8 @@ class C {
         const { ...rest } = other;
         rest.#prop;
 
-        const statics = { ... C};
-        statics.#propStatic
+        const statistics = { ... C};
+        statistics.#propStatic
         const { ...sRest } = C;
         sRest.#propStatic;
     }

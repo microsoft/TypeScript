@@ -690,7 +690,7 @@ const entities = new Map(Object.entries({
     iexcl: 0x00A1,
     cent: 0x00A2,
     pound: 0x00A3,
-    curren: 0x00A4,
+    current: 0x00A4,
     yen: 0x00A5,
     brvbar: 0x00A6,
     sect: 0x00A7,

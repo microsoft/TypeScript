@@ -4,7 +4,7 @@
 namespace M {
 >M : Symbol(M, Decl(declareDottedModuleName.ts, 0, 0), Decl(declareDottedModuleName.ts, 2, 1))
 
-    namespace P.Q { } // This shouldnt be emitted
+    namespace P.Q { } // This shouldn't be emitted
 >P : Symbol(P, Decl(declareDottedModuleName.ts, 0, 13))
 >Q : Symbol(Q, Decl(declareDottedModuleName.ts, 1, 16))
 }

@@ -165,7 +165,7 @@ export function getImportNeedsImportStarHelper(node: ImportDeclaration): boolean
             defaultRefCount++;
         }
     }
-    // Import star is required if there's default named refs mixed with non-default refs, or if theres non-default refs and it has a default import
+    // Import star is required if there's default named refs mixed with non-default refs, or if there's non-default refs and it has a default import
     return (defaultRefCount > 0 && defaultRefCount !== bindings.elements.length) || (!!(bindings.elements.length - defaultRefCount) && isDefaultImport(node));
 }
 
@@ -563,7 +563,7 @@ function findSuperStatementIndexPathWorker(statements: NodeArray<Statement>, sta
 /**
  * Finds a path of indices to navigate to a `super()` call, descending only through `try` statements.
  *
- * @returns An array of indicies to walk down through `try` statements, with the last element being the index of
+ * @returns An array of indices to walk down through `try` statements, with the last element being the index of
  * the statement containing `super()`. Otherwise, an empty array if `super()` was not found.
  *
  * @internal

@@ -14,7 +14,7 @@ declare global {
 globalThis.assert = chai.assert;
 {
     // chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
-    // so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
+    // so we'll just overwrite it as an alternative to migrating a bunch of code off of chai
     assert.isFalse = (expr: any, msg: string) => {
         if (expr !== false) throw new Error(msg);
     };

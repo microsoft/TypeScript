@@ -4,7 +4,7 @@ assignmentRestElementWithErrorSourceType.ts(2,10): error TS2552: Cannot find nam
 
 ==== assignmentRestElementWithErrorSourceType.ts (2 errors) ====
     var tuple: [string, number];
-    [...c] = tupel; // intentionally misspelled
+    [...c] = tuple; // intentionally misspelled
         ~
 !!! error TS2304: Cannot find name 'c'.
              ~~~~~

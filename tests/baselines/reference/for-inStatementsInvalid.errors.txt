@@ -21,8 +21,8 @@ for-inStatementsInvalid.ts(62,15): error TS2407: The right-hand side of a 'for..
 
 
 ==== for-inStatementsInvalid.ts (20 errors) ====
-    var aNumber: number;
-    for (aNumber in {}) { }
+    var a number: number;
+    for (a number in {}) { }
          ~~~~~~~
 !!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
     

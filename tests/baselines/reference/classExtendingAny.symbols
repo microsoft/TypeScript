@@ -55,7 +55,7 @@ class B extends Err {
 >this : Symbol(B, Decl(b.js, 0, 0))
 >wat : Symbol(B.wat, Decl(b.js, 2, 15))
 
-        this.wit
+        this.with
 >this : Symbol(B, Decl(b.js, 0, 0))
 
         this['wot']

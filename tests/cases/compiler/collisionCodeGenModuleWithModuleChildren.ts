@@ -25,7 +25,7 @@ namespace M {
     }
 }
 
-namespace M { // shouldnt be _M
+namespace M { // shouldn't be _M
     namespace m3 {
         interface M {
         }

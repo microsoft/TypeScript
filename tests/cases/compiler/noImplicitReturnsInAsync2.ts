@@ -31,7 +31,7 @@ async function test6(isError: boolean = true): Promise<number> {
     }
 }
 
-// infered to be Promise<void>, should not be an error, currently reported correctly 
+// inferred to be Promise<void>, should not be an error, currently reported correctly 
 async function test7(isError: boolean = true) { 
     if (isError === true) {
         return;

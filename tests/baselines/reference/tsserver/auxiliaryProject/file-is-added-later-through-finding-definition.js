@@ -32,7 +32,7 @@ export class Yargs { positional() { } }
 
 
 //// [/user/users/projects/myproject/node_modules/yargs/index.js]
-// Specifically didnt have ./callback import to ensure that resolving module sepcifier adds the file to project at later stage
+// Specifically didn't have ./callback import to ensure that resolving module specifier adds the file to project at later stage
 export function command(cmd, cb) { cb(Yargs) }
 
 
@@ -197,7 +197,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/m
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/auxiliaryProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/auxiliaryProject1*' (Auxiliary)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/user/users/projects/myproject/node_modules/yargs/index.js Text-1 "// Specifically didnt have ./callback import to ensure that resolving module sepcifier adds the file to project at later stage\nexport function command(cmd, cb) { cb(Yargs) }\n"
+	/user/users/projects/myproject/node_modules/yargs/index.js Text-1 "// Specifically didn't have ./callback import to ensure that resolving module specifier adds the file to project at later stage\nexport function command(cmd, cb) { cb(Yargs) }\n"
 	/user/users/projects/myproject/index.ts SVC-1-0 "import { command } from \"yargs\";\ncommand(\"foo\", yargs => {\n    yargs.positional();\n});\n"
 
 
@@ -211,7 +211,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/auxiliar
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/auxiliaryProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/auxiliaryProject1*' (Auxiliary)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/user/users/projects/myproject/node_modules/yargs/index.js Text-1 "// Specifically didnt have ./callback import to ensure that resolving module sepcifier adds the file to project at later stage\nexport function command(cmd, cb) { cb(Yargs) }\n"
+	/user/users/projects/myproject/node_modules/yargs/index.js Text-1 "// Specifically didn't have ./callback import to ensure that resolving module specifier adds the file to project at later stage\nexport function command(cmd, cb) { cb(Yargs) }\n"
 	/user/users/projects/myproject/index.ts SVC-1-0 "import { command } from \"yargs\";\ncommand(\"foo\", yargs => {\n    yargs.positional();\n});\n"
 	/user/users/projects/myproject/node_modules/yargs/callback.js Text-1 "export class Yargs { positional() { } }\n"
 

@@ -8,17 +8,17 @@
 ////}
 ////function fn() {
 ////    return <>
-////        <butto/*1*/
+////        <button/*1*/
 ////    </>;
 ////}
 ////function fn2() {
 ////    return <>
-////        preceding junk <butto/*2*/
+////        preceding junk <button/*2*/
 ////    </>;
 ////}
 ////function fn3() {
 ////    return <>
-////        <butto/*3*/ style=""
+////        <button/*3*/ style=""
 ////    </>;
 ////}
 

@@ -1,8 +1,8 @@
-statics.ts(6,18): error TS2339: Property 'g' does not exist on type 'C'.
-statics.ts(23,33): error TS2339: Property 'g' does not exist on type 'C'.
+statistics.ts(6,18): error TS2339: Property 'g' does not exist on type 'C'.
+statistics.ts(23,33): error TS2339: Property 'g' does not exist on type 'C'.
 
 
-==== statics.ts (2 errors) ====
+==== statistics.ts (2 errors) ====
     namespace M {
         export class C {
             x: number;

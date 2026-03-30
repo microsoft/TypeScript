@@ -9,7 +9,7 @@ import {
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: occurences:: highlight on string", () => {
+describe("unittests:: tsserver:: occurrences:: highlight on string", () => {
     it("should be marked if only on string values", () => {
         const file1: File = {
             path: "/home/src/projects/project/a/b/file1.ts",
@@ -33,6 +33,6 @@ describe("unittests:: tsserver:: occurences:: highlight on string", () => {
             command: ts.server.protocol.CommandTypes.DocumentHighlights,
             arguments: { file: file1.path, line: 4, offset: 14, filesToSearch: [file1.path] },
         });
-        baselineTsserverLogs("occurences", "should be marked if only on string values", session);
+        baselineTsserverLogs("occurrences", "should be marked if only on string values", session);
     });
 });

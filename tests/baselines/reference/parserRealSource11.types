@@ -7343,14 +7343,14 @@ namespace TypeScript {
 >isConstructor : boolean
 >              : ^^^^^^^
 
-                     public arguments: ASTList, public vars: ASTList, public scopes: ASTList, public statics: ASTList,
+                     public arguments: ASTList, public vars: ASTList, public scopes: ASTList, public statistics: ASTList,
 >arguments : ASTList
 >          : ^^^^^^^
 >vars : ASTList
 >     : ^^^^^^^
 >scopes : ASTList
 >       : ^^^^^^^
->statics : ASTList
+>statistics : ASTList
 >        : ^^^^^^^
 
             nodeType: number) {
@@ -8320,12 +8320,12 @@ namespace TypeScript {
 >None : any
 >     : ^^^
 
-        public hasStaticDeclarations() { return (!this.isConstructor && (this.statics.members.length > 0 || this.innerStaticFuncs.length > 0)); }
+        public hasStaticDeclarations() { return (!this.isConstructor && (this.statistics.members.length > 0 || this.innerStaticFuncs.length > 0)); }
 >hasStaticDeclarations : () => boolean
 >                      : ^^^^^^^^^^^^^
->(!this.isConstructor && (this.statics.members.length > 0 || this.innerStaticFuncs.length > 0)) : boolean
+>(!this.isConstructor && (this.statistics.members.length > 0 || this.innerStaticFuncs.length > 0)) : boolean
 >                                                                                               : ^^^^^^^
->!this.isConstructor && (this.statics.members.length > 0 || this.innerStaticFuncs.length > 0) : boolean
+>!this.isConstructor && (this.statistics.members.length > 0 || this.innerStaticFuncs.length > 0) : boolean
 >                                                                                             : ^^^^^^^
 >!this.isConstructor : boolean
 >                    : ^^^^^^^
@@ -8335,21 +8335,21 @@ namespace TypeScript {
 >     : ^^^^
 >isConstructor : boolean
 >              : ^^^^^^^
->(this.statics.members.length > 0 || this.innerStaticFuncs.length > 0) : boolean
+>(this.statistics.members.length > 0 || this.innerStaticFuncs.length > 0) : boolean
 >                                                                      : ^^^^^^^
->this.statics.members.length > 0 || this.innerStaticFuncs.length > 0 : boolean
+>this.statistics.members.length > 0 || this.innerStaticFuncs.length > 0 : boolean
 >                                                                    : ^^^^^^^
->this.statics.members.length > 0 : boolean
+>this.statistics.members.length > 0 : boolean
 >                                : ^^^^^^^
->this.statics.members.length : number
+>this.statistics.members.length : number
 >                            : ^^^^^^
->this.statics.members : AST[]
+>this.statistics.members : AST[]
 >                     : ^^^^^
->this.statics : ASTList
+>this.statistics : ASTList
 >             : ^^^^^^^
 >this : this
 >     : ^^^^
->statics : ASTList
+>statistics : ASTList
 >        : ^^^^^^^
 >members : AST[]
 >        : ^^^^^
@@ -12756,16 +12756,16 @@ namespace TypeScript {
 >obj : AST
 >    : ^^^
 
-            super(NodeType.ForIn);
->super(NodeType.ForIn) : void
+            super(NodeType.foreign);
+>super(NodeType.foreign) : void
 >                      : ^^^^
 >super : typeof Statement
 >      : ^^^^^^^^^^^^^^^^
->NodeType.ForIn : any
+>NodeType.foreign : any
 >               : ^^^
 >NodeType : any
 >         : ^^^
->ForIn : any
+>foreign : any
 >      : ^^^
 
             if (this.lval && (this.lval.nodeType == NodeType.VarDecl)) {
@@ -13586,8 +13586,8 @@ namespace TypeScript {
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
-            if (typeFlow.checker.styleSettings.forin) {
->typeFlow.checker.styleSettings.forin : any
+            if (typeFlow.checker.styleSettings.foreign) {
+>typeFlow.checker.styleSettings.foreign : any
 >                                     : ^^^
 >typeFlow.checker.styleSettings : any
 >                               : ^^^
@@ -13599,7 +13599,7 @@ namespace TypeScript {
 >        : ^^^
 >styleSettings : any
 >              : ^^^
->forin : any
+>foreign : any
 >      : ^^^
 
                 if (!this.isFiltered()) {

@@ -21,7 +21,7 @@ class Foo2 {
     get bar() {
 >bar : Symbol(Foo2.bar, Decl(inferSetterParamType.ts, 9, 12), Decl(inferSetterParamType.ts, 13, 5))
 
-        return 0; // should be an error - can't coerce infered return type to match setter annotated type
+        return 0; // should be an error - can't coerce inferred return type to match setter annotated type
     }
     set bar(n:string) {
 >bar : Symbol(Foo2.bar, Decl(inferSetterParamType.ts, 9, 12), Decl(inferSetterParamType.ts, 13, 5))

@@ -14,20 +14,20 @@ function n() {
 >n : () => void
 >  : ^^^^^^^^^^
 
-    util.existy // no error
->util.existy : () => void
+    util.exist // no error
+>util.exist : () => void
 >            : ^^^^^^^^^^
 >util : typeof util
 >     : ^^^^^^^^^^^
->existy : () => void
+>exist : () => void
 >       : ^^^^^^^^^^
 }
-util.existy // no error
->util.existy : () => void
+util.exist // no error
+>util.exist : () => void
 >            : ^^^^^^^^^^
 >util : typeof util
 >     : ^^^^^^^^^^^
->existy : () => void
+>exist : () => void
 >       : ^^^^^^^^^^
 
 === mod.js ===
@@ -57,14 +57,14 @@ if (!!false) {
 >false : false
 >      : ^^^^^
 
-    util.existy = function () { }
->util.existy = function () { } : () => void
+    util.exist = function () { }
+>util.exist = function () { } : () => void
 >                              : ^^^^^^^^^^
->util.existy : () => void
+>util.exist : () => void
 >            : ^^^^^^^^^^
 >util : typeof module.exports
 >     : ^^^^^^^^^^^^^^^^^^^^^
->existy : () => void
+>exist : () => void
 >       : ^^^^^^^^^^
 >function () { } : () => void
 >                : ^^^^^^^^^^

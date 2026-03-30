@@ -99,7 +99,7 @@ const overloadD = overloaded2(() => "hi", () => true);
 
 declare function overloaded3<const T>(cb: () => T): T;
 declare function overloaded3<const T, U>(cb: () => T, cb2: () => U): [T, U];
-const overloadE = overloaded3(() => 42);
+const overload = overloaded3(() => 42);
 const overloadF = overloaded3(() => "hi", () => true);
 
 declare function overloaded4<const T>(cb: () => T): T;

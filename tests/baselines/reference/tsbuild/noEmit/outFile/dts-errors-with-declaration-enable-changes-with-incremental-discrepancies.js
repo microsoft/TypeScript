@@ -41,4 +41,4 @@ IncrementalBuild:
 7:: With declaration and declarationMap noEmit
 Clean build will have declaration and declarationMap
 Incremental build will have previous buildInfo so will have declaration and declarationMap
-*** Supplied discrepancy explanation but didnt find any difference
+*** Supplied discrepancy explanation but didn't find any difference

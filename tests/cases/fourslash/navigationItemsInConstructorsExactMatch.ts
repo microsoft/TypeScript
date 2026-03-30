@@ -8,7 +8,7 @@
 ////    }
 ////}
 
-// Search for properties defined in the constructor, but not other constructor paramters
+// Search for properties defined in the constructor, but not other constructor parameters
 const [r0, r1, r2] = test.ranges();
 verify.navigateTo({
     pattern: "search",

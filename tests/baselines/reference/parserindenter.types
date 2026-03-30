@@ -120,7 +120,7 @@ namespace Formatting {
 >Dictionary_int_int : any
 >                   : ^^^
 
-            // by default the root (program) has zero indendation
+            // by default the root (program) has zero indentation
             this.tree.Root.SetIndentationOverride("");
 >this.tree.Root.SetIndentationOverride("") : any
 >                                          : ^^^
@@ -1781,7 +1781,7 @@ namespace Formatting {
                 return null;
             }
 
-            // effective identation of the block
+            // effective indentation of the block
             indentationInfo = node.GetEffectiveIndentation(this);
 >indentationInfo = node.GetEffectiveIndentation(this) : any
 >                                                     : ^^^
@@ -1844,7 +1844,7 @@ namespace Formatting {
 >                : ^^^^^^^^^^^^^^^
             }
             else {
-                // Indent all semicolons except the ones that belong to the for statement parts (initalizer, condition, itnrement)
+                // Indent all semicolons except the ones that belong to the for statement parts (initializer, condition, itnrement)
                 if (node.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkFor) {
 >node.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkFor : boolean
 >                                                            : ^^^^^^^

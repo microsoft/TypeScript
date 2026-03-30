@@ -7,8 +7,8 @@ export const fieldName = Math.random() > 0.5 ? "f1" : "f2";
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
-export const conatainer = {
->conatainer : Symbol(conatainer, Decl(declarationEmitSimpleComputedNames1.ts, 1, 12))
+export const container = {
+>container : Symbol(container, Decl(declarationEmitSimpleComputedNames1.ts, 1, 12))
 
     [fieldName]() {
 >[fieldName] : Symbol([fieldName], Decl(declarationEmitSimpleComputedNames1.ts, 1, 27))

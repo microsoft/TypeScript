@@ -83,7 +83,7 @@ namespace Formatting {
 >this : Symbol(Indenter, Decl(parserindenter.ts, 18, 22))
 >offsetIndentationDeltas : Symbol(Indenter.offsetIndentationDeltas, Decl(parserindenter.ts, 22, 51))
 
-            // by default the root (program) has zero indendation
+            // by default the root (program) has zero indentation
             this.tree.Root.SetIndentationOverride("");
 >this.tree : Symbol(Indenter.tree, Decl(parserindenter.ts, 26, 46))
 >this : Symbol(Indenter, Decl(parserindenter.ts, 18, 22))
@@ -668,7 +668,7 @@ namespace Formatting {
                 return null;
             }
 
-            // effective identation of the block
+            // effective indentation of the block
             indentationInfo = node.GetEffectiveIndentation(this);
 >indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 246, 15))
 >node : Symbol(node, Decl(parserindenter.ts, 245, 51))
@@ -704,7 +704,7 @@ namespace Formatting {
 >indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 265, 15))
             }
             else {
-                // Indent all semicolons except the ones that belong to the for statement parts (initalizer, condition, itnrement)
+                // Indent all semicolons except the ones that belong to the for statement parts (initializer, condition, itnrement)
                 if (node.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkFor) {
 >node : Symbol(node, Decl(parserindenter.ts, 264, 71))
 

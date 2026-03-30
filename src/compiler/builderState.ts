@@ -436,7 +436,7 @@ export namespace BuilderState {
         host: HostForComputeHash,
         useFileVersionAsSignature: boolean | undefined = state.useFileVersionAsSignature,
     ): boolean {
-        // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
+        // If we have cached the result for this file, that means hence forth we should assume file shape is up-to-date
         if (state.hasCalledUpdateShapeSignature?.has(sourceFile.resolvedPath)) return false;
 
         const info = state.fileInfos.get(sourceFile.resolvedPath)!;

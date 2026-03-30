@@ -28,7 +28,7 @@ const x42 = f4(true, ...[1, 'foo'])
 const x43 = f4(...([1, 'foo']))
 const x44 = f4(true, ...([1, 'foo']))
 
-// dicovered in #52845#issuecomment-1459132562
+// discovered in #52845#issuecomment-1459132562
 interface IAction {
     run(event?: unknown): unknown;
 }

@@ -113,7 +113,7 @@ strictSubtypeAndNarrowing.ts(129,26): error TS2353: Object literal may only spec
         f;  // FnTypes
     }
     
-    function checkD(f: FnTypes) {
+    function checked(f: FnTypes) {
         if (isFunction<C>(f)) {
             f;  // FnTypes
         }

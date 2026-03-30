@@ -76,7 +76,7 @@ everyTypeWithAnnotationAndInvalidInitializer.ts(52,5): error TS2322: Type '(x: n
         export function F2(x: number): string { return x.toString(); }
     }
     
-    var aNumber: number = 'this is a string';
+    var a number: number = 'this is a string';
         ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     var aString: string = 9.9;

@@ -95,7 +95,7 @@ f01<A>(a);
 >A : Symbol(A, Decl(genericDefaults.ts, 0, 0))
 >a : Symbol(a, Decl(genericDefaults.ts, 7, 13))
 
-// function with a type paramter with a default
+// function with a type parameter with a default
 declare function f02<T = A>(a?: T): T;
 >f02 : Symbol(f02, Decl(genericDefaults.ts, 28, 10))
 >T : Symbol(T, Decl(genericDefaults.ts, 31, 21))
@@ -175,7 +175,7 @@ f03<B>(b);
 >B : Symbol(B, Decl(genericDefaults.ts, 0, 26))
 >b : Symbol(b, Decl(genericDefaults.ts, 8, 13))
 
-// function with a type paramter without a default and a type parameter with a default
+// function with a type parameter without a default and a type parameter with a default
 declare function f04<T, U = B>(a?: T, b?: U): [T, U];
 >f04 : Symbol(f04, Decl(genericDefaults.ts, 52, 10))
 >T : Symbol(T, Decl(genericDefaults.ts, 55, 21))

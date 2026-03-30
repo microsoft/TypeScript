@@ -27,7 +27,7 @@ namespace M {
     }
 }
 
-namespace M { // Shouldnt bn _M
+namespace M { // Shouldn't bn _M
     class f {
         M() {
         }

@@ -153,7 +153,7 @@ strictModeReservedWord.ts(24,5): error TS2349: This expression is not callable.
 !!! error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
                ~~~~~~~~~
 !!! error TS2503: Cannot find namespace 'interface'.
-        ublic();
+        public();
         ~~~~~
 !!! error TS2552: Cannot find name 'ublic'. Did you mean 'public'?
 !!! related TS2728 strictModeReservedWord.ts:5:9: 'public' is declared here.

@@ -109,8 +109,8 @@ namespace N {
 >         : ^     ^^^      ^^^^^      
 }
 
-var aNumber: number = 'this is a string';
->aNumber : number
+var a number: number = 'this is a string';
+>a number : number
 >        : ^^^^^^
 >'this is a string' : "this is a string"
 >                   : ^^^^^^^^^^^^^^^^^^

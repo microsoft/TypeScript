@@ -599,7 +599,7 @@ export interface ConfigFileExistenceInfo {
      * It is true if there is configured project open for this file.
      * It can be either true or false if this is the config file that is being watched by inferred project
      *   to decide when to update the structure so that it knows about updating the project for its files
-     *   (config file may include the inferred project files after the change and hence may be wont need to be in inferred project)
+     *   (config file may include the inferred project files after the change and hence may be won't need to be in inferred project)
      */
     exists: boolean;
     /**
@@ -875,14 +875,14 @@ function forEachResolvedProjectReferenceProjectLoad<T>(
                     configFileExistenceInfo!.config!.parsedCommandLine : undefined :
                 project.getParsedCommandLine(childConfigName);
             if (childConfig && loadKind !== kind && loadKind > ConfiguredProjectLoadKind.CreateReplayOptimized) {
-                // If this was found using find: ensure this is uptodate if looking for creating or reloading
+                // If this was found using find: ensure this is up-to-date if looking for creating or reloading
                 childConfig = project.getParsedCommandLine(childConfigName);
             }
             if (!childConfig) return undefined;
 
             // Find the project
             const childProject = project.projectService.findConfiguredProjectByProjectName(childConfigName, allowDeferredClosed);
-            // Ignore if we couldnt find child project or config file existence info
+            // Ignore if we couldn't find child project or config file existence info
             if (
                 loadKind === ConfiguredProjectLoadKind.CreateReplayOptimized &&
                 !configFileExistenceInfo &&
@@ -1607,7 +1607,7 @@ export class ProjectService {
                 );
                 return;
             case ActionInvalidate:
-                // Do not clear resolution cache, there was changes detected in typings, so enque typing request and let it get us correct results
+                // Do not clear resolution cache, there was changes detected in typings, so enqueue typing request and let it get us correct results
                 project.enqueueInstallTypingsForProject(/*forceRefresh*/ true);
                 return;
         }
@@ -2142,7 +2142,7 @@ export class ProjectService {
         const wasDefferedClose = project?.deferredClose;
         if (eventKind === FileWatcherEventKind.Deleted) {
             // Update the cached status
-            // We arent updating or removing the cached config file presence info as that will be taken care of by
+            // We aren't updating or removing the cached config file presence info as that will be taken care of by
             // releaseParsedConfig when the project is closed or doesnt need this config any more (depending on tracking open files)
             configFileExistenceInfo.exists = false;
 
@@ -2368,9 +2368,9 @@ export class ProjectService {
             this.assignOrphanScriptInfosToInferredProject();
         }
 
-        // Cleanup script infos that arent part of any project (eg. those could be closed script infos not referenced by any project)
+        // Cleanup script infos that aren't part of any project (eg. those could be closed script infos not referenced by any project)
         // is postponed to next file open so that if file from same project is opened,
-        // we wont end up creating same script infos
+        // we won't end up creating same script infos
 
         // If the current info is being just closed - add the watcher file to track changes
         // But if file was deleted, handle that part
@@ -2412,7 +2412,7 @@ export class ProjectService {
         // In practice there will be very few scenarios where the config file gets added
         // somewhere inside the another config file directory.
         // And technically we could handle that case in configFile's directory watcher in some cases
-        // But given that its a rare scenario it seems like too much overhead. (we werent watching those directories earlier either)
+        // But given that its a rare scenario it seems like too much overhead. (we weren't watching those directories earlier either)
 
         // So what we are now watching is: configFile if the configured project corresponding to it is open
         // Or the whole chain of config files for the roots of the inferred projects
@@ -2473,7 +2473,7 @@ export class ProjectService {
             }
         }
         else {
-            // There is not a single file open thats tracking the status of this config file. Remove from cache
+            // There is not a single file open that's tracking the status of this config file. Remove from cache
             configFileExistenceInfo.watcher!.close();
             this.configFileExistenceInfoCache.delete(canonicalConfigFilePath);
         }
@@ -2504,7 +2504,7 @@ export class ProjectService {
             }
 
             // If the script info was not root of inferred project,
-            // there wont be config file watch open because of this script info
+            // there won't be config file watch open because of this script info
             if (isRootOfInferredProject) {
                 // But if it is a root, it could be the last script info that is root of inferred project
                 // and hence we would need to close the config file watcher
@@ -2683,7 +2683,7 @@ export class ProjectService {
             // Need to set value for ancestor in ConfigFileMapForOpenFile
             let configFileForOpenFile = this.configFileForOpenFiles.get(info.path)!;
             if (!configFileForOpenFile || isString(configFileForOpenFile)) {
-                // We have value for open script info in cache, make a map with that as false key and set new vlaue
+                // We have value for open script info in cache, make a map with that as false key and set new value
                 this.configFileForOpenFiles.set(
                     info.path,
                     configFileForOpenFile = new Map().set(false, configFileForOpenFile),
@@ -2962,7 +2962,7 @@ export class ProjectService {
             }
         }
 
-        // Dont update if file isnt on the disk
+        // Dont update if file isn't on the disk
         if (!configFileExistenceInfo.exists && configFileExistenceInfo.config) {
             configFileExistenceInfo.config.updateLevel = undefined;
             this.ensureConfigFileWatcherForProject(configFileExistenceInfo, forProject);
@@ -3681,7 +3681,7 @@ export class ProjectService {
             return info;
         }
 
-        // This means triple slash references wont be resolved in dynamic and unsaved files
+        // This means triple slash references won't be resolved in dynamic and unsaved files
         // which is intentional since we dont know what it means to be relative to non disk files
         return undefined;
     }
@@ -3774,7 +3774,7 @@ export class ProjectService {
 
     /** @internal */
     getDocumentPositionMapper(project: Project, generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined {
-        // Since declaration info and map file watches arent updating project's directory structure host (which can cache file structure) use host
+        // Since declaration info and map file watches aren't updating project's directory structure host (which can cache file structure) use host
         const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(
             generatedFileName,
             project.currentDirectory,
@@ -3926,7 +3926,7 @@ export class ProjectService {
         if (!info.sourceFileLike) {
             info.sourceFileLike = {
                 get text() {
-                    Debug.fail("shouldnt need text");
+                    Debug.fail("shouldn't need text");
                     return "";
                 },
                 getLineAndCharacterOfPosition: pos => {
@@ -4066,7 +4066,7 @@ export class ProjectService {
     reloadProjects(): void {
         this.logger.info("reload projects.");
         // If we want this to also reload open files from disk, we could do that,
-        // but then we need to make sure we arent calling this function
+        // but then we need to make sure we aren't calling this function
         // (and would separate out below reloading of projects to be called when immediate reload is needed)
         // as there is no need to load contents of the files from the disk
 
@@ -4160,7 +4160,7 @@ export class ProjectService {
         // a.ts is added as root to inferred project.
         // Now at time of opening c.ts, c.ts is also not aprt of any existing project,
         // so it will be added to inferred project as a root. (for sake of this example assume single inferred project is false)
-        // So at this poing a.ts is part of first inferred project and second inferred project (of which c.ts is root)
+        // So at this point a.ts is part of first inferred project and second inferred project (of which c.ts is root)
         // And hence it needs to be removed from the first inferred project.
         Debug.assert(info.containingProjects.length > 0);
         const firstProject = info.containingProjects[0];
@@ -4350,7 +4350,7 @@ export class ProjectService {
         // - external project search, which updates the project before checking if info is present in it
         // - configured project - either created or updated to ensure we know correct status of info
 
-        // At this point we need to ensure that containing projects of the info are uptodate
+        // At this point we need to ensure that containing projects of the info are up-to-date
         // This will ensure that later question of info.isOrphan() will return correct answer
         // and we correctly create inferred project for the info
         info.containingProjects.forEach(updateProjectIfDirty);
@@ -4602,7 +4602,7 @@ export class ProjectService {
                 return;
             }
 
-            // Ensure the project is uptodate and created since the file may belong to this project
+            // Ensure the project is up-to-date and created since the file may belong to this project
             const result = project ?
                 updateProjectFoundUsingFind(
                     project,
@@ -4620,7 +4620,7 @@ export class ProjectService {
                     reloadedProjects,
                 );
             if (!result) {
-                // Did no find existing project but thats ok, we will give information based on what we find
+                // Did no find existing project but that's ok, we will give information based on what we find
                 Debug.assert(kind === ConfiguredProjectLoadKind.CreateReplay);
                 return undefined;
             }
@@ -4821,7 +4821,7 @@ export class ProjectService {
         );
 
         // Remove orphan inferred projects now that we have reused projects
-        // We need to create a duplicate because we cant guarantee order after removal
+        // We need to create a duplicate because we can't guarantee order after removal
         for (const inferredProject of this.inferredProjects.slice()) {
             if (inferredProject.isOrphan()) {
                 this.removeProject(inferredProject);
@@ -5395,7 +5395,7 @@ export class ProjectService {
                 }
                 existingExternalProject.setProjectErrors(watchOptionsAndErrors?.errors);
                 // external project already exists and not config files were added - update the project and return;
-                // The graph update here isnt postponed since any file open operation needs all updated external projects
+                // The graph update here isn't postponed since any file open operation needs all updated external projects
                 this.updateRootAndOptionsOfNonInferredProject(existingExternalProject, rootFiles, externalFilePropertyReader, compilerOptions, typeAcquisition, proj.options.compileOnSave, watchOptionsAndErrors?.watchOptions);
                 existingExternalProject.updateGraph();
             }

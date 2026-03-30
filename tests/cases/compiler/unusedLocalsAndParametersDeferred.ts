@@ -5,29 +5,29 @@
 
 export { };
 
-function defered<T>(a: () => T): T {
+function deferred<T>(a: () => T): T {
     return a();
 }
 
-// function declaration paramter
+// function declaration parameter
 function f(a) {
-    defered(() => {
+    deferred(() => {
         a;
     });
 }
 f(0);
 
-// function expression paramter
+// function expression parameter
 var fexp = function (a) {
-    defered(() => {
+    deferred(() => {
         a;
     });
 };
 fexp(1);
 
-// arrow function paramter
+// arrow function parameter
 var farrow = (a) => {
-    defered(() => {
+    deferred(() => {
         a;
     });
 };
@@ -36,20 +36,20 @@ farrow(2);
 let prop1;
 
 class C {
-    // Method declaration paramter
+    // Method declaration parameter
     method(a) {
-        defered(() => {
+        deferred(() => {
             a;
         });
     }
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
-        defered(() => {
+        deferred(() => {
             v;
         });
     }
-    // in a property initalizer
-    p = defered(() => {
+    // in a property initializer
+    p = deferred(() => {
         prop1;
     });
 }
@@ -59,20 +59,20 @@ new C();
 let prop2;
 
 var E = class {
-    // Method declaration paramter
+    // Method declaration parameter
     method(a) {
-        defered(() => {
+        deferred(() => {
             a;
         });
     }
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
-        defered(() => {
+        deferred(() => {
             v;
         });
     }
-    // in a property initalizer
-    p = defered(() => {
+    // in a property initializer
+    p = deferred(() => {
         prop2;
     });
 }
@@ -81,43 +81,43 @@ new E();
 
 
 var o = {
-    // Object literal method declaration paramter
+    // Object literal method declaration parameter
     method(a) {
-        defered(() => {
+        deferred(() => {
             a;
         });
     },
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
-        defered(() => {
+        deferred(() => {
             v;
         });
     },
-    // in a property initalizer
-    p: defered(() => {
+    // in a property initializer
+    p: deferred(() => {
         prop1;
     })
 };
 
 o;
 
-// in a for..in statment
+// in a for..in statement
 for (let i in o) {
-    defered(() => {
+    deferred(() => {
         i;
     });
 }
 
-// in a for..of statment
+// in a for..of statement
 for (let i of [1,2,3]) {
-    defered(() => {
+    deferred(() => {
         i;
     });
 }
 
-// in a for. statment
+// in a for. statement
 for (let i = 0; i < 10; i++) {
-    defered(() => {
+    deferred(() => {
         i;
     });
 }
@@ -127,7 +127,7 @@ for (let i = 0; i < 10; i++) {
 const condition = false;
 if (condition) {
     const c = 0;
-    defered(() => {
+    deferred(() => {
         c;
     });
 }
@@ -135,19 +135,19 @@ if (condition) {
 // in try/catch/finally
 try {
     const a = 0;
-    defered(() => {
+    deferred(() => {
         a;
     });
 }
 catch (e) {
     const c = 1;
-    defered(() => {
+    deferred(() => {
         c;
     });
 }
 finally {
     const c = 0;
-    defered(() => {
+    deferred(() => {
         c;
     });
 }
@@ -156,7 +156,7 @@ finally {
 // in a namespace
 namespace N {
     var x;
-    defered(() => {
+    deferred(() => {
         x;
     });
 }

@@ -15,7 +15,7 @@
 ////}/*15*/
 ////}/*16*/
 ////
-////// Rule for object literal members for the "value" of the memebr to follow the indent/*17*/
+////// Rule for object literal members for the "value" of the member to follow the indent/*17*/
 ////// of the member, i.e. the relative position of the value is maintained when the member/*18*/
 ////// is indented./*19*/
 ////var x2 = {/*20*/
@@ -62,7 +62,7 @@ verify.currentLineContentIs("    }");
 goTo.marker("16");
 verify.currentLineContentIs("}");
 goTo.marker("17");
-verify.currentLineContentIs("// Rule for object literal members for the \"value\" of the memebr to follow the indent");
+verify.currentLineContentIs("// Rule for object literal members for the \"value\" of the member to follow the indent");
 goTo.marker("18");
 verify.currentLineContentIs("// of the member, i.e. the relative position of the value is maintained when the member");
 goTo.marker("19");

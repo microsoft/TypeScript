@@ -27,7 +27,7 @@
 ////}
 
 // @Filename: e.ts
-////[|Modul/*moduleReference*/e|];
+////[|Module/*moduleReference*/e|];
 
 verify.baselineGoToDefinition(
     "interfaceReference",

@@ -34,7 +34,7 @@ complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts(33,5): error TS2322
     interface EmailChannel {
         id: string;
         type: 'email';
-        addres: string;
+        address: string;
     }
     
     type Channel = TextChannel | EmailChannel;

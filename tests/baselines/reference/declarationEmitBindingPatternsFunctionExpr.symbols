@@ -12,7 +12,7 @@ let notReferenced = ({ name: alias }: Named) => { }
 >alias : Symbol(alias, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 2, 22))
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 0))
 
-// Resons we can't remove aliases that are not used in the function signature: 
+// Reasons we can't remove aliases that are not used in the function signature: 
 
 // 1.Causes duplicate identifier if we remove alias
 const duplicateIndetifiers = ({ name: alias, name: alias2 }: Named) => { }

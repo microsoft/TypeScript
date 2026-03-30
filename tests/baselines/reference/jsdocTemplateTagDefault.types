@@ -34,8 +34,8 @@ const aString = [""];
 >   : ^^
 
 /** @type {A<number>} */ // ok, `T` is provided for `A`
-const aNumber = [0];
->aNumber : A<number>
+const a number = [0];
+>a number : A<number>
 >        : ^^^^^^^^^
 >[0] : [number]
 >    : ^^^^^^^^

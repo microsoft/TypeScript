@@ -1415,7 +1415,7 @@ namespace Harness {
      *  extracts options and individual files in a multifile test
      */
     export namespace TestCaseParser {
-        /** all the necesarry information to set the right compiler settings */
+        /** all the necessary information to set the right compiler settings */
         export interface CompilerSetting {
             flag: string;
             value: string;
@@ -1876,7 +1876,7 @@ namespace Harness {
         }
 
         export function runJSString(code: string, callback: (error: Error, result: any) => void ) {
-            // List of names that get overriden by various test code we eval
+            // List of names that get overridden by various test code we eval
             var dangerNames: any = ['Array'];
 
             var globalBackup: any = {};

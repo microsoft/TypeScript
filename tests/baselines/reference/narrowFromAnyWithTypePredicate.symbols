@@ -82,7 +82,7 @@ if (isError(x)) {
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
 >message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
 
-    x.mesage;
+    x.message;
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 0, 11))
 }
 

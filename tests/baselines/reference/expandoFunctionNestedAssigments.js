@@ -46,7 +46,7 @@ for(let f of (Foo.forOf = []) ){
 }
 
 
-for(let f in (Foo.forIn = []) ){
+for(let f in (Foo.foreign = []) ){
     Foo.fromForInBody = 1;
     {
         Foo.fromForInBodyNested = 1;
@@ -88,7 +88,7 @@ for (let f of (Foo.forOf = [])) {
         Foo.fromForOfBodyNested = 1;
     }
 }
-for (let f in (Foo.forIn = [])) {
+for (let f in (Foo.foreign = [])) {
     Foo.fromForInBody = 1;
     {
         Foo.fromForInBodyNested = 1;
@@ -121,7 +121,7 @@ declare namespace Foo {
     var forOf: any[];
     var fromForOfBody: number;
     var fromForOfBodyNested: number;
-    var forIn: any[];
+    var foreign: any[];
     var fromForInBody: number;
     var fromForInBodyNested: number;
 }

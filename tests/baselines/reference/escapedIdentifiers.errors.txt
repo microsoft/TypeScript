@@ -100,7 +100,7 @@ escapedIdentifiers.ts(40,12): error TS2564: Property 'foo2' has no initializer a
     constructorTestObject.arg\u0033 = true;
     constructorTestObject.arg4 = 2;
     
-    // Lables
+    // Labels
     
     l\u0061bel1: 
         while (false)

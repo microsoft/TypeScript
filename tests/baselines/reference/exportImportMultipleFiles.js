@@ -9,7 +9,7 @@ math.add(3, 4); // OK
 
 //// [exportImportMultipleFiles_userCode.ts]
 import lib = require('./exportImportMultipleFiles_library');
-lib.math.add(3, 4); // Shouldnt be error
+lib.math.add(3, 4); // Shouldn't be error
 
 
 //// [exportImportMultipleFiles_math.js]
@@ -30,5 +30,5 @@ define(["require", "exports", "exportImportMultipleFiles_math"], function (requi
 define(["require", "exports", "./exportImportMultipleFiles_library"], function (require, exports, lib) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    lib.math.add(3, 4); // Shouldnt be error
+    lib.math.add(3, 4); // Shouldn't be error
 });

@@ -7,6 +7,6 @@ export function foo() {
 }
 
 // @filename: b.ts
-import defer * as aNs from "./a.js";
+import defer * as and from "./a.js";
 
-aNs.foo();
+and.foo();

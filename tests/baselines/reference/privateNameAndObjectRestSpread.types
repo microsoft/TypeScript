@@ -49,18 +49,18 @@ class C {
 >rest : {}
 >     : ^^
 
-        const statics = { ... C};
->statics : { prototype: C; }
+        const statistics = { ... C};
+>statistics : { prototype: C; }
 >        : ^^^^^^^^^^^^^^^^^
 >{ ... C} : { prototype: C; }
 >         : ^^^^^^^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 
-        statics.#propStatic
->statics.#propStatic : any
+        statistics.#propStatic
+>statistics.#propStatic : any
 >                    : ^^^
->statics : { prototype: C; }
+>statistics : { prototype: C; }
 >        : ^^^^^^^^^^^^^^^^^
 
         const { ...sRest } = C;

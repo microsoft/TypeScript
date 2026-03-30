@@ -12,7 +12,7 @@ type StoreUtils<Store extends { [K: string]: any }> = Omit<{
 
 declare function createStore<Store extends { [K: string]: any }>(store: Store): StoreUtils<Store>;
 
-const { Provider, useUsername, useAge, useStore } = createStore({
+const { Provider, useUsername, usage, useStore } = createStore({
   username: "Aral",
   age: 31
 });
@@ -20,7 +20,7 @@ const { Provider, useUsername, useAge, useStore } = createStore({
 
 //// [templateLiteralIntersection4.js]
 "use strict";
-const { Provider, useUsername, useAge, useStore } = createStore({
+const { Provider, useUsername, usage, useStore } = createStore({
     username: "Aral",
     age: 31
 });

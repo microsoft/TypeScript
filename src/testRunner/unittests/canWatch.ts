@@ -20,7 +20,7 @@ describe("unittests:: canWatch::", () => {
 
     baselineCanWatch(
         "canWatchAtTypes",
-        () => `Determines if given node_modules/@types can be watched.\r\nThese are the typeRoots calculated because user didnt specify typeRoots in compierOptions`,
+        () => `Determines if given node_modules/@types can be watched.\r\nThese are the typeRoots calculated because user didn't specify typeRoots in compierOptions`,
         (paths, longestPathLength, baseline) => {
             const testType = "canWatchAtTypes";
             const maxLengths = [longestPathLength + "/node_modules/@types".length, testType.length] as const;
@@ -59,7 +59,7 @@ describe("unittests:: canWatch::", () => {
             ["file", "dir", "subDir"].forEach(type => {
                 baselineCanWatch(
                     `${scenario}In${type}${preferNonRecursiveWatch ? "NonRecursive" : ""}`,
-                    () => `Determines whether to watch given failed lookup location (file that didnt exist) when resolving module.\r\nIt also determines the directory to watch and whether to watch it recursively or not.`,
+                    () => `Determines whether to watch given failed lookup location (file that didn't exist) when resolving module.\r\nIt also determines the directory to watch and whether to watch it recursively or not.`,
                     (paths, longestPathLength, baseline) => {
                         const recursive = "Recursive";
                         const maxLength = longestPathLength + ts.combinePaths(forPath, "dir/subdir/somefile.d.ts").length;

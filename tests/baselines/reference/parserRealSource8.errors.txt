@@ -502,7 +502,7 @@ parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
 !!! error TS2304: Cannot find name 'TypeSymbol'.
     
                 if (isStatic) {
-                    // In the case of function-nested statics, no member list will have bee initialized for the function, so we need
+                    // In the case of function-nested statistics, no member list will have bee initialized for the function, so we need
                     // to copy it over.  We don't set this by default because having a non-null member list will throw off assignment
                     // compatibility tests
                     if (outerFnc.type.members == null && container.getType().memberScope) {
@@ -640,7 +640,7 @@ parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
             var locals = new SymbolScopeBuilder(funcMembers, ambientFuncMembers, null, null, parentScope, localContainer);
                              ~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SymbolScopeBuilder'.
-            var statics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
+            var statistics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
                               ~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SymbolScopeBuilder'.
     
@@ -667,8 +667,8 @@ parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
                     group.containedScope = locals;
                     locals.container = group.symbol;
     
-                    group.memberScope = statics;
-                    statics.container = group.symbol;
+                    group.memberScope = statistics;
+                    statistics.container = group.symbol;
                 }
                 funcDecl.enclosingFnc = context.scopeChain.fnc;
                 group.enclosingType = isStatic ? context.scopeChain.classType : context.scopeChain.thisType;
@@ -683,7 +683,7 @@ parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
 !!! error TS2304: Cannot find name 'FncFlags'.
                     context.typeFlow.addLocalsFromScope(locals, fgSym, funcDecl.vars,
                                                         funcTable, false);
-                    context.typeFlow.addLocalsFromScope(statics, fgSym, funcDecl.statics,
+                    context.typeFlow.addLocalsFromScope(statistics, fgSym, funcDecl.statistics,
                                                         funcStaticTable, false);
                 }
                 if (signature.parameters) {

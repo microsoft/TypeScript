@@ -30,14 +30,14 @@ import { a } from "./es6ImportNamedImportMergeErrors_0";
 >a : number
 >  : ^^^^^^
 
-interface a { } // shouldnt be error
+interface a { } // shouldn't be error
 import { x as x1 } from "./es6ImportNamedImportMergeErrors_0";
 >x : number
 >  : ^^^^^^
 >x1 : number
 >   : ^^^^^^
 
-interface x1 { } // shouldnt be error
+interface x1 { } // shouldn't be error
 import { x } from "./es6ImportNamedImportMergeErrors_0"; // should be error
 >x : number
 >  : ^^^^^^

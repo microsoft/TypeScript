@@ -31,7 +31,7 @@ function fn2<T>(arg: Q2<T>) {
 fn2<string | number>(m => m(42));
 fn2<number>(m => m(42));
 
-// webidl-conversions example where substituion must occur, despite contravariance of the position
+// webidl-conversions example where substitution must occur, despite contravariance of the position
 // due to the invariant usage in `Parameters`
 
 type X<V> = V extends (...args: any[]) => any ? (...args: Parameters<V>) => void : Function;

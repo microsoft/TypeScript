@@ -3,7 +3,7 @@
 === unusedLocalsAndParameters.ts ===
 export { };
 
-// function declaration paramter
+// function declaration parameter
 function f(a) {
 >f : Symbol(f, Decl(unusedLocalsAndParameters.ts, 0, 11))
 >a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 3, 11))
@@ -11,7 +11,7 @@ function f(a) {
 f(0);
 >f : Symbol(f, Decl(unusedLocalsAndParameters.ts, 0, 11))
 
-// function expression paramter
+// function expression parameter
 var fexp = function (a) {
 >fexp : Symbol(fexp, Decl(unusedLocalsAndParameters.ts, 8, 3))
 >a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 8, 21))
@@ -21,7 +21,7 @@ var fexp = function (a) {
 fexp(0);
 >fexp : Symbol(fexp, Decl(unusedLocalsAndParameters.ts, 8, 3))
 
-// arrow function paramter
+// arrow function parameter
 var farrow = (a) => {
 >farrow : Symbol(farrow, Decl(unusedLocalsAndParameters.ts, 14, 3))
 >a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 14, 14))
@@ -31,12 +31,12 @@ var farrow = (a) => {
 class C {
 >C : Symbol(C, Decl(unusedLocalsAndParameters.ts, 15, 2))
 
-    // Method declaration paramter
+    // Method declaration parameter
     method(a) {
 >method : Symbol(C.method, Decl(unusedLocalsAndParameters.ts, 17, 9))
 >a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 19, 11))
     }
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
 >x : Symbol(C.x, Decl(unusedLocalsAndParameters.ts, 20, 5))
 >v : Symbol(v, Decl(unusedLocalsAndParameters.ts, 22, 10))
@@ -46,12 +46,12 @@ class C {
 var E = class {
 >E : Symbol(E, Decl(unusedLocalsAndParameters.ts, 26, 3))
 
-    // Method declaration paramter
+    // Method declaration parameter
     method(a) {
 >method : Symbol(E.method, Decl(unusedLocalsAndParameters.ts, 26, 15))
 >a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 28, 11))
     }
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
 >x : Symbol(E.x, Decl(unusedLocalsAndParameters.ts, 29, 5))
 >v : Symbol(v, Decl(unusedLocalsAndParameters.ts, 31, 10))
@@ -61,13 +61,13 @@ var E = class {
 var o = {
 >o : Symbol(o, Decl(unusedLocalsAndParameters.ts, 35, 3))
 
-    // Object literal method declaration paramter
+    // Object literal method declaration parameter
     method(a) {
 >method : Symbol(method, Decl(unusedLocalsAndParameters.ts, 35, 9))
 >a : Symbol(a, Decl(unusedLocalsAndParameters.ts, 37, 11))
 
     },
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
 >x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 38, 6))
 >v : Symbol(v, Decl(unusedLocalsAndParameters.ts, 40, 10))
@@ -77,18 +77,18 @@ var o = {
 o;
 >o : Symbol(o, Decl(unusedLocalsAndParameters.ts, 35, 3))
 
-// in a for..in statment
+// in a for..in statement
 for (let i in o) {
 >i : Symbol(i, Decl(unusedLocalsAndParameters.ts, 47, 8))
 >o : Symbol(o, Decl(unusedLocalsAndParameters.ts, 35, 3))
 }
 
-// in a for..of statment
+// in a for..of statement
 for (let i of [1, 2, 3]) {
 >i : Symbol(i, Decl(unusedLocalsAndParameters.ts, 51, 8))
 }
 
-// in a for. statment
+// in a for. statement
 for (let i = 0, n; i < 10; i++) {
 >i : Symbol(i, Decl(unusedLocalsAndParameters.ts, 55, 8))
 >n : Symbol(n, Decl(unusedLocalsAndParameters.ts, 55, 15))

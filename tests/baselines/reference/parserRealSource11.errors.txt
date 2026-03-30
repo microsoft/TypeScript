@@ -1982,7 +1982,7 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
             public endingToken: ASTSpan = null;
     
             constructor (public name: Identifier, public bod: ASTList, public isConstructor: boolean,
-                         public arguments: ASTList, public vars: ASTList, public scopes: ASTList, public statics: ASTList,
+                         public arguments: ASTList, public vars: ASTList, public scopes: ASTList, public statistics: ASTList,
                                 ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
                 nodeType: number) {
@@ -2189,7 +2189,7 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
                                                                                   ~~~~~~~~
 !!! error TS2304: Cannot find name 'FncFlags'.
     
-            public hasStaticDeclarations() { return (!this.isConstructor && (this.statics.members.length > 0 || this.innerStaticFuncs.length > 0)); }
+            public hasStaticDeclarations() { return (!this.isConstructor && (this.statistics.members.length > 0 || this.innerStaticFuncs.length > 0)); }
         }
     
         export class LocationInfo {
@@ -2995,7 +2995,7 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
     
         export class ForInStatement extends Statement {
             constructor (public lval: AST, public obj: AST) {
-                super(NodeType.ForIn);
+                super(NodeType.foreign);
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 if (this.lval && (this.lval.nodeType == NodeType.VarDecl)) {
@@ -3108,7 +3108,7 @@ parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
             public typeCheck(typeFlow: TypeFlow) {
                                        ~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeFlow'.
-                if (typeFlow.checker.styleSettings.forin) {
+                if (typeFlow.checker.styleSettings.foreign) {
                     if (!this.isFiltered()) {
                         typeFlow.checker.errorReporter.styleError(this, "no hasOwnProperty filter");
                     }

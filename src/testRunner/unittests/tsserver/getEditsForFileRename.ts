@@ -118,7 +118,7 @@ describe("unittests:: tsserver:: getEditsForFileRename::", () => {
         [true, false].forEach(openedBeforeChange => {
             [true, false].forEach(closedBeforeChange => {
                 if (closedBeforeChange && !openedBeforeChange) return;
-                it(`works with when file is opened ${openedBeforeChange ? "before" : "after"} seeing file existance on the disk${closedBeforeChange ? " closed before change" : ""}${withUpdateOpen ? " with updateOpen" : ""}`, () => {
+                it(`works with when file is opened ${openedBeforeChange ? "before" : "after"} seeing file existence on the disk${closedBeforeChange ? " closed before change" : ""}${withUpdateOpen ? " with updateOpen" : ""}`, () => {
                     const oldFilePath = "/home/src/projects/myproject/src/old.ts";
                     const host = TestServerHost.createServerHost({
                         "/home/src/projects/myproject/src/index.ts": `import {} from '@/old';`,
@@ -202,7 +202,7 @@ describe("unittests:: tsserver:: getEditsForFileRename::", () => {
                         session,
                         files: ["/home/src/projects/myproject/src/index.ts"],
                     });
-                    baselineTsserverLogs("getEditsForFileRename", `works with when file is opened ${openedBeforeChange ? "before" : "after"} seeing file existance on the disk${closedBeforeChange ? " closed before change" : ""}${withUpdateOpen ? " with updateOpen" : ""}`, session);
+                    baselineTsserverLogs("getEditsForFileRename", `works with when file is opened ${openedBeforeChange ? "before" : "after"} seeing file existence on the disk${closedBeforeChange ? " closed before change" : ""}${withUpdateOpen ? " with updateOpen" : ""}`, session);
                 });
             });
         })

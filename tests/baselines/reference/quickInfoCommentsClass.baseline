@@ -87,12 +87,12 @@
 // | class c4
 // | Class comment
 // | ----------------------------------------------------------------------
-// /** Class with statics*/
+// /** Class with statistics*/
 // class c5 {
 //       ^^
 // | ----------------------------------------------------------------------
 // | class c5
-// | Class with statics
+// | Class with statistics
 // | ----------------------------------------------------------------------
 //     static s1: number;
 // }
@@ -104,7 +104,7 @@
 //              ^^
 // | ----------------------------------------------------------------------
 // | constructor c5(): c5
-// | Class with statics
+// | Class with statistics
 // | ----------------------------------------------------------------------
 // var i5_c = c5;
 //     ^^^^
@@ -114,14 +114,14 @@
 //            ^^
 // | ----------------------------------------------------------------------
 // | class c5
-// | Class with statics
+// | Class with statistics
 // | ----------------------------------------------------------------------
-// /** class with statics and constructor*/
+// /** class with statistics and constructor*/
 // class c6 {
 //       ^^
 // | ----------------------------------------------------------------------
 // | class c6
-// | class with statics and constructor
+// | class with statistics and constructor
 // | ----------------------------------------------------------------------
 //     /** s1 comment*/
 //     static s1: number;
@@ -147,7 +147,7 @@
 //            ^^
 // | ----------------------------------------------------------------------
 // | class c6
-// | class with statics and constructor
+// | class with statistics and constructor
 // | ----------------------------------------------------------------------
 // 
 // class a {
@@ -847,7 +847,7 @@
       ],
       "documentation": [
         {
-          "text": "Class with statics",
+          "text": "Class with statistics",
           "kind": "text"
         }
       ]
@@ -944,7 +944,7 @@
       ],
       "documentation": [
         {
-          "text": "Class with statics",
+          "text": "Class with statistics",
           "kind": "text"
         }
       ]
@@ -1029,7 +1029,7 @@
       ],
       "documentation": [
         {
-          "text": "Class with statics",
+          "text": "Class with statistics",
           "kind": "text"
         }
       ]
@@ -1064,7 +1064,7 @@
       ],
       "documentation": [
         {
-          "text": "class with statics and constructor",
+          "text": "class with statistics and constructor",
           "kind": "text"
         }
       ]
@@ -1246,7 +1246,7 @@
       ],
       "documentation": [
         {
-          "text": "class with statics and constructor",
+          "text": "class with statistics and constructor",
           "kind": "text"
         }
       ]

@@ -41,10 +41,10 @@ declare function createStore<Store extends { [K: string]: any }>(store: Store): 
 >StoreUtils : Symbol(StoreUtils, Decl(templateLiteralIntersection4.ts, 0, 39))
 >Store : Symbol(Store, Decl(templateLiteralIntersection4.ts, 9, 29))
 
-const { Provider, useUsername, useAge, useStore } = createStore({
+const { Provider, useUsername, usage, useStore } = createStore({
 >Provider : Symbol(Provider, Decl(templateLiteralIntersection4.ts, 11, 7))
 >useUsername : Symbol(useUsername, Decl(templateLiteralIntersection4.ts, 11, 17))
->useAge : Symbol(useAge, Decl(templateLiteralIntersection4.ts, 11, 30))
+>usage : Symbol(usage, Decl(templateLiteralIntersection4.ts, 11, 30))
 >useStore : Symbol(useStore, Decl(templateLiteralIntersection4.ts, 11, 38))
 >createStore : Symbol(createStore, Decl(templateLiteralIntersection4.ts, 7, 2))
 

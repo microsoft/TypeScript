@@ -14,7 +14,7 @@ var nc_i1_i: nc_i1;
 >nc_i1_i : nc_i1
 >        : ^^^^^
 
-/** this is interface 2 with memebers*/
+/** this is interface 2 with members*/
 interface i2 {
     /** this is x*/
     x: number;

@@ -254,8 +254,8 @@ function checkC(f: FnTypes) {
 >f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 99, 16))
 }
 
-function checkD(f: FnTypes) {
->checkD : Symbol(checkD, Decl(strictSubtypeAndNarrowing.ts, 107, 1))
+function checked(f: FnTypes) {
+>checked : Symbol(checked, Decl(strictSubtypeAndNarrowing.ts, 107, 1))
 >f : Symbol(f, Decl(strictSubtypeAndNarrowing.ts, 109, 16))
 >FnTypes : Symbol(FnTypes, Decl(strictSubtypeAndNarrowing.ts, 35, 39))
 

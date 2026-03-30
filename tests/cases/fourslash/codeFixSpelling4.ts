@@ -2,6 +2,6 @@
 
 //// export declare const despite: { the: any };
 ////
-//// [|dispite.the|]
+//// [|despite.the|]
 
 verify.rangeAfterCodeFix(`despite.the`);

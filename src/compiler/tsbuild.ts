@@ -9,7 +9,7 @@ import {
 /** @internal */
 export enum UpToDateStatusType {
     Unbuildable,
-    UpToDate,
+    up-to-date,
     /**
      * The project appears out of date because its upstream inputs are newer than its outputs,
      * but all of its outputs are actually newer than the previous identical outputs of its (.d.ts) inputs.
@@ -40,7 +40,7 @@ export enum UpToDateStatusType {
 /** @internal */
 export type UpToDateStatus =
     | Status.Unbuildable
-    | Status.UpToDate
+    | Status.up-to-date
     | Status.OutputMissing
     | Status.ErrorReadingFile
     | Status.OutOfDateWithSelf
@@ -76,9 +76,9 @@ export namespace Status {
      * The project is up to date with respect to its inputs.
      * We track what the newest input file is.
      */
-    export interface UpToDate {
+    export interface up-to-date {
         type:
-            | UpToDateStatusType.UpToDate
+            | UpToDateStatusType.up-to-date
             | UpToDateStatusType.UpToDateWithUpstreamTypes
             | UpToDateStatusType.UpToDateWithInputFileText;
         newestInputFileTime?: Date;

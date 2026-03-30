@@ -3,59 +3,59 @@
 //// [unusedLocalsAndParameters.ts]
 export { };
 
-// function declaration paramter
+// function declaration parameter
 function f(a) {
 }
 f(0);
 
-// function expression paramter
+// function expression parameter
 var fexp = function (a) {
 };
 
 fexp(0);
 
-// arrow function paramter
+// arrow function parameter
 var farrow = (a) => {
 };
 
 class C {
-    // Method declaration paramter
+    // Method declaration parameter
     method(a) {
     }
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
     }
 }
 
 var E = class {
-    // Method declaration paramter
+    // Method declaration parameter
     method(a) {
     }
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
     }
 }
 
 var o = {
-    // Object literal method declaration paramter
+    // Object literal method declaration parameter
     method(a) {
     },
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
     }
 };
 
 o;
 
-// in a for..in statment
+// in a for..in statement
 for (let i in o) {
 }
 
-// in a for..of statment
+// in a for..of statement
 for (let i of [1, 2, 3]) {
 }
 
-// in a for. statment
+// in a for. statement
 for (let i = 0, n; i < 10; i++) {
 }
 
@@ -89,49 +89,49 @@ for (let x: y) {
 
 
 //// [unusedLocalsAndParameters.js]
-// function declaration paramter
+// function declaration parameter
 function f(a) {
 }
 f(0);
-// function expression paramter
+// function expression parameter
 var fexp = function (a) {
 };
 fexp(0);
-// arrow function paramter
+// arrow function parameter
 var farrow = (a) => {
 };
 class C {
-    // Method declaration paramter
+    // Method declaration parameter
     method(a) {
     }
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v) {
     }
 }
 var E = class {
-    // Method declaration paramter
+    // Method declaration parameter
     method(a) {
     }
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v) {
     }
 };
 var o = {
-    // Object literal method declaration paramter
+    // Object literal method declaration parameter
     method(a) {
     },
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v) {
     }
 };
 o;
-// in a for..in statment
+// in a for..in statement
 for (let i in o) {
 }
-// in a for..of statment
+// in a for..of statement
 for (let i of [1, 2, 3]) {
 }
-// in a for. statment
+// in a for. statement
 for (let i = 0, n; i < 10; i++) {
 }
 // in a block

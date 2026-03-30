@@ -75,11 +75,11 @@ new (<any>A());
 (<any><number><any>-A).x; 
 >A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
 
-// nested cast, should keep one pair of parenthese
+// nested cast, should keep one pair of parentheses
 (<any><number>(<any>-A)).x; 
 >A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
 
-// nested parenthesized expression, should keep one pair of parenthese
+// nested parenthesized expression, should keep one pair of parentheses
 (<any>(A)) 
 >A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
 

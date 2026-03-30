@@ -225,7 +225,7 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
             return item;
 >item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 77, 11))
         }
-        // it seems like the compiler asumes the above condition is always
+        // it seems like the compiler assumes the above condition is always
         // truthy
 
         item.get();

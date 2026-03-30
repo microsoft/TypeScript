@@ -1,7 +1,7 @@
 // @target: es2015
 // @strict: false
-var aNumber: number;
-for (aNumber in {}) { }
+var a number: number;
+for (a number in {}) { }
 
 var aBoolean: boolean;
 for (aBoolean in {}) { }

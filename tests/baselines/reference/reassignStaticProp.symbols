@@ -7,7 +7,7 @@ class foo {
     static bar = 1;
 >bar : Symbol(foo.bar, Decl(reassignStaticProp.ts, 0, 11), Decl(reassignStaticProp.ts, 2, 19))
  
-    static bar:string; // errror - duplicate id
+    static bar:string; // error - duplicate id
 >bar : Symbol(foo.bar, Decl(reassignStaticProp.ts, 0, 11), Decl(reassignStaticProp.ts, 2, 19))
  
 }

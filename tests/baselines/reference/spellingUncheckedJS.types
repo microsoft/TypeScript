@@ -59,8 +59,8 @@ class Classe {
 >'oui' : "oui"
 >      : ^^^^^
 
-    methode() {
->methode : () => any
+    method() {
+>method : () => any
 >        : ^^^^^^^^^
 
         // no error on 'this' references
@@ -78,8 +78,8 @@ class Derivee extends Classe {
 >Classe : Classe
 >       : ^^^^^^
 
-    methode() {
->methode : () => any
+    method() {
+>method : () => any
 >        : ^^^^^^^^^
 
         // no error on 'super' references

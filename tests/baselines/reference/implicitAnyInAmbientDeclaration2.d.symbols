@@ -5,7 +5,7 @@ declare function foo(x);  // this should be an error
 >foo : Symbol(foo, Decl(implicitAnyInAmbientDeclaration2.d.ts, 0, 0))
 >x : Symbol(x, Decl(implicitAnyInAmbientDeclaration2.d.ts, 0, 21))
 
-declare var bar;  // this should be be an erro
+declare var bar;  // this should be be an error
 >bar : Symbol(bar, Decl(implicitAnyInAmbientDeclaration2.d.ts, 1, 11))
 
 declare class C {

@@ -3,7 +3,7 @@
 //// [declarationEmitBindingPatternsUnused.ts]
 type Named = { name: string }
 
-// Resons we can't remove aliases that are not used in the function signature: 
+// Reasons we can't remove aliases that are not used in the function signature: 
 
 // 1.Causes duplicate identifier if we remove alias
 function duplicateIndetifiers({ name: alias, name: alias2 }: Named) { }
@@ -125,7 +125,7 @@ interface ReferencedInSignartureInterface {
 
 //// [declarationEmitBindingPatternsUnused.js]
 "use strict";
-// Resons we can't remove aliases that are not used in the function signature: 
+// Reasons we can't remove aliases that are not used in the function signature: 
 // 1.Causes duplicate identifier if we remove alias
 function duplicateIndetifiers({ name: alias, name: alias2 }) { }
 function duplicateIndetifiers2(name, { name: alias }) { }

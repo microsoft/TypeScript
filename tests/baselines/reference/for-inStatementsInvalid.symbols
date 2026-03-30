@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts] ////
 
 === for-inStatementsInvalid.ts ===
-var aNumber: number;
->aNumber : Symbol(aNumber, Decl(for-inStatementsInvalid.ts, 0, 3))
+var a number: number;
+>a number : Symbol(a number, Decl(for-inStatementsInvalid.ts, 0, 3))
 
-for (aNumber in {}) { }
->aNumber : Symbol(aNumber, Decl(for-inStatementsInvalid.ts, 0, 3))
+for (a number in {}) { }
+>a number : Symbol(a number, Decl(for-inStatementsInvalid.ts, 0, 3))
 
 var aBoolean: boolean;
 >aBoolean : Symbol(aBoolean, Decl(for-inStatementsInvalid.ts, 3, 3))

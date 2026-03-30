@@ -33,7 +33,7 @@ function f4() {
     let x: boolean;
     ({ x } = 0);  // Error
     ({ ["x"]: x } = 0);  // Error
-    ({ ["x" + ""]: x } = 0);  // Errpr
+    ({ ["x" + ""]: x } = 0);  // Error
 }
 
 // Repro from #31770
@@ -74,7 +74,7 @@ function f4() {
     let x;
     ({ x } = 0); // Error
     ({ ["x"]: x } = 0); // Error
-    ({ ["x" + ""]: x } = 0); // Errpr
+    ({ ["x" + ""]: x } = 0); // Error
 }
 let [key, value] = ["foo"];
 value.toUpperCase(); // Error

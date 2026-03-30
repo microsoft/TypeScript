@@ -283,7 +283,7 @@ namespace TypeScript {
 
         public isBodyOfForIn(): boolean {
             return this.count() >= 2 &&
-                this.asts[this.top - 1].nodeType === TypeScript.NodeType.ForIn &&
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.foreign &&
                 (<TypeScript.ForInStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
         }
 
@@ -454,7 +454,7 @@ namespace TypeScript {
         // If we ask for the AST at the position after the "r" character, we won't see we are 
         // inside a comment, because the "class" AST node has a limChar corresponding to the position of 
         // the "{" character, meaning we don't traverse the tree down to the stmt list of the class, meaning
-        // we don't find the "precomment" attached to the errorneous empty stmt.
+        // we don't find the "precomment" attached to the erroneous empty stmt.
         //TODO: It would be nice to be able to get rid of this.
         DontPruneSearchBasedOnPosition = 1 << 1,
     }
@@ -817,7 +817,7 @@ var TypeScript;
         }
         isBodyOfForIn() {
             return this.count() >= 2 &&
-                this.asts[this.top - 1].nodeType === TypeScript.NodeType.ForIn &&
+                this.asts[this.top - 1].nodeType === TypeScript.NodeType.foreign &&
                 this.asts[this.top - 1].body == this.asts[this.top - 0];
         }
         isBodyOfWith() {
@@ -967,7 +967,7 @@ var TypeScript;
         // If we ask for the AST at the position after the "r" character, we won't see we are 
         // inside a comment, because the "class" AST node has a limChar corresponding to the position of 
         // the "{" character, meaning we don't traverse the tree down to the stmt list of the class, meaning
-        // we don't find the "precomment" attached to the errorneous empty stmt.
+        // we don't find the "precomment" attached to the erroneous empty stmt.
         //TODO: It would be nice to be able to get rid of this.
         GetAstPathOptions[GetAstPathOptions["DontPruneSearchBasedOnPosition"] = 2] = "DontPruneSearchBasedOnPosition";
     })(GetAstPathOptions = TypeScript.GetAstPathOptions || (TypeScript.GetAstPathOptions = {}));

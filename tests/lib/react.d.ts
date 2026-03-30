@@ -245,7 +245,7 @@ declare namespace __React {
 
     interface Mixin<P, S> extends ComponentLifecycle<P, S> {
         mixins?: Mixin<P, S>;
-        statics?: {
+        statistics?: {
             [key: string]: any;
         };
 
@@ -1858,7 +1858,7 @@ declare namespace __React {
         whiteSpaceTreatment?: any;
 
         /**
-         * In paged media, this property defines the mimimum number of lines
+         * In paged media, this property defines the minimum number of lines
          * that must be left at the top of the second page.
          */
         widows?: number;

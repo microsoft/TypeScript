@@ -31,8 +31,8 @@ enum foo {
 >private : foo.private
 >        : ^^^^^^^^^^^
 
-    pacakge
->pacakge : foo.pacakge
+    package
+>package : foo.package
 >        : ^^^^^^^^^^^
 }
 
@@ -48,8 +48,8 @@ const enum private {
 >private : private.private
 >        : ^^^^^^^^^^^^^^^
 
-    pacakge
->pacakge : private.pacakge
+    package
+>package : private.package
 >        : ^^^^^^^^^^^^^^^
 }
 
@@ -65,8 +65,8 @@ const enum bar {
 >private : bar.private
 >        : ^^^^^^^^^^^
 
-    pacakge
->pacakge : bar.pacakge
+    package
+>package : bar.package
 >        : ^^^^^^^^^^^
 }
 

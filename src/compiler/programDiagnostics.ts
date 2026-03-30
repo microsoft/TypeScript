@@ -274,9 +274,9 @@ export function createProgramDiagnostics(getCompilerOptionsObjectLiteralSyntax: 
         //   - File is in program because:
         //      - Files reasons listed
         //      - extra reason if its not already processed - this happens in case sensitive file system where files differ in casing and we are giving reasons for two files so reason is not in file's reason
-        //     fyi above whole secton is ommited if we have single reason and we are reporting at that reason's location
+        //     fyi above whole section is omitted if we have single reason and we are reporting at that reason's location
         //   - redirect and additional information about file
-        // So cache result if we havent ommited file include reasons
+        // So cache result if we haven't omitted file include reasons
         if (file) {
             if (cachedChain) {
                 // Cache new fileIncludeDetails if we have update
@@ -288,7 +288,7 @@ export function createProgramDiagnostics(getCompilerOptionsObjectLiteralSyntax: 
             else {
                 (fileReasonsToChain ??= new Map()).set(file.path, cachedChain = { fileIncludeReasonDetails, redirectInfo });
             }
-            // If we didnt compute extra file include reason , cache the details to use directly
+            // If we didn't compute extra file include reason , cache the details to use directly
             if (!cachedChain.details && !processedExtraReason) cachedChain.details = chain.next;
         }
 

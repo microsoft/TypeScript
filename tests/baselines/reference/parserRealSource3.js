@@ -89,7 +89,7 @@ namespace TypeScript {
         Continue,
         Throw,
         For,
-        ForIn,
+        foreign,
         If,
         While,
         DoWhile,
@@ -211,7 +211,7 @@ var TypeScript;
         NodeType[NodeType["Continue"] = 77] = "Continue";
         NodeType[NodeType["Throw"] = 78] = "Throw";
         NodeType[NodeType["For"] = 79] = "For";
-        NodeType[NodeType["ForIn"] = 80] = "ForIn";
+        NodeType[NodeType["foreign"] = 80] = "foreign";
         NodeType[NodeType["If"] = 81] = "If";
         NodeType[NodeType["While"] = 82] = "While";
         NodeType[NodeType["DoWhile"] = 83] = "DoWhile";

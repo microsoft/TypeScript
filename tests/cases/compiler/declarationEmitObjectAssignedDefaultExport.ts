@@ -2,11 +2,11 @@
 // @module: commonjs
 // @declaration: true
 // @filename: node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts
-interface Statics {
+interface Statistics {
     "$$whatever": string;
 }
 declare namespace hoistNonReactStatics {
-    type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statics>]: T[X]}
+    type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statistics>]: T[X]}
 }
 export = hoistNonReactStatics;
 // @filename: node_modules/styled-components/index.d.ts

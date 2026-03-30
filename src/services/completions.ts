@@ -640,7 +640,7 @@ function resolvingModuleSpecifiers<TReturn>(
     // Import statement completions always need specifier resolution because the module specifier is
     // part of their `insertText`, not the `codeActions` creating edits away from the cursor.
     // Finally, `autoImportSpecifierExcludeRegexes` necessitates eagerly resolving module specifiers
-    // because completion items are being explcitly filtered out by module specifier.
+    // because completion items are being explicitly filtered out by module specifier.
     const needsFullResolution = isForImportStatementCompletion
         || getResolvePackageJsonExports(program.getCompilerOptions())
         || preferences.autoImportSpecifierExcludeRegexes?.length;
@@ -3566,7 +3566,7 @@ function getCompletionData(
                         case SyntaxKind.Identifier:
                             isJsxIdentifierExpected = true;
                             // For `<div x=[|f/**/|]`, `parent` will be `x` and `previousToken.parent` will be `f` (which is its own JsxAttribute)
-                            // Note for `<div someBool f>` we don't want to treat this as a jsx inializer, instead it's the attribute name.
+                            // Note for `<div someBool f>` we don't want to treat this as a jsx initializer, instead it's the attribute name.
                             if (
                                 parent !== previousToken.parent &&
                                 !(parent as JsxAttribute).initializer &&
@@ -3742,7 +3742,7 @@ function getCompletionData(
                         }
                     }
 
-                    // If the module is merged with a value, we must get the type of the class and add its propertes (for inherited static methods).
+                    // If the module is merged with a value, we must get the type of the class and add its properties (for inherited static methods).
                     if (
                         !isTypeLocation &&
                         !insideJsDocTagTypeExpression &&
@@ -5023,7 +5023,7 @@ function getCompletionData(
             // constructor parameter completion is available only if
             // - its modifier of the constructor parameter or
             // - its name of the parameter and not being edited
-            // eg. constructor(a |<- this shouldnt show completion
+            // eg. constructor(a |<- this shouldn't show completion
             if (
                 !isIdentifier(contextToken) ||
                 isParameterPropertyModifier(keywordForNode(contextToken)) ||
@@ -5236,7 +5236,7 @@ function getCompletionData(
     /**
      * Filters out completion suggestions for class elements.
      *
-     * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
+     * @returns Symbols to be suggested in an class element depending on existing members and symbol flags
      */
     function filterClassMembersList(baseSymbols: readonly Symbol[], existingMembers: readonly ClassElement[], currentClassElementModifierFlags: ModifierFlags): Symbol[] {
         const existingMemberNames = new Set<__String>();

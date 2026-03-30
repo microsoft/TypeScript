@@ -40,7 +40,7 @@ var x = 70; /* multiline trailing comment
 >   : ^^
 
 this is multiline trailing comment */
-/** Triple slash comment on the assignment shouldnt be in .d.ts file*/
+/** Triple slash comment on the assignment shouldn't be in .d.ts file*/
 x = myVariable;
 >x = myVariable : number
 >               : ^^^^^^

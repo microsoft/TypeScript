@@ -10,5 +10,5 @@
 goTo.marker("1");
 edit.insertLine("");
 goTo.marker("2");
-// The formating of the close curly should not be affected
+// The formatting of the close curly should not be affected
 verify.currentLineContentIs('    }');

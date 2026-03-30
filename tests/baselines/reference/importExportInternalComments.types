@@ -23,7 +23,7 @@ declare module "foo";
 /*1*/ import /*2*/ * /*3*/ as /*4*/ foo /*5*/ from /*6*/ "foo";
 >foo : any
 
-void D, A, C, foo; // Use the variables to prevent ellision
+void D, A, C, foo; // Use the variables to prevent elision
 >void D, A, C, foo : any
 >void D, A, C : any
 >void D, A : any

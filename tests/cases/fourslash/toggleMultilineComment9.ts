@@ -1,4 +1,4 @@
-// When there's is only whitespace, insert comment. If there is whitespace but theres a comment in bewteen, then uncomment.
+// When there's is only whitespace, insert comment. If there is whitespace but there's a comment in between, then uncomment.
 
 //// /*let var1[| = 1;*/
 ////     |]

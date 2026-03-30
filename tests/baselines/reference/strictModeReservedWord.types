@@ -137,10 +137,10 @@ function foo() {
 >implements : any
 >           : ^^^
 
-    ublic();
->ublic() : any
+    public();
+>public() : any
 >        : ^^^
->ublic : any
+>public : any
 >      : ^^^
 
     static();

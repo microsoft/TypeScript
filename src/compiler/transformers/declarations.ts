@@ -978,7 +978,7 @@ export function transformDeclarations(context: TransformationContext): Transform
         }
 
         // And lastly, we need to get the final form of all those indetermine import declarations from before and add them to the output list
-        // (and remove them from the set to examine for outter declarations)
+        // (and remove them from the set to examine for outer declarations)
         return visitNodes(statements, visitLateVisibilityMarkedStatements, isStatement);
 
         function visitLateVisibilityMarkedStatements(statement: Statement) {

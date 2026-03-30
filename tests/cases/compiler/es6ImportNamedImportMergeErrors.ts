@@ -9,9 +9,9 @@ export var z1 = a;
 
 // @filename: es6ImportNamedImportMergeErrors_1.ts
 import { a } from "./es6ImportNamedImportMergeErrors_0";
-interface a { } // shouldnt be error
+interface a { } // shouldn't be error
 import { x as x1 } from "./es6ImportNamedImportMergeErrors_0";
-interface x1 { } // shouldnt be error
+interface x1 { } // shouldn't be error
 import { x } from "./es6ImportNamedImportMergeErrors_0"; // should be error
 var x = 10; 
 import { x as x44 } from "./es6ImportNamedImportMergeErrors_0"; // should be error

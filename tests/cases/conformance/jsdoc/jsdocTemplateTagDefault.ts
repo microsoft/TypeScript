@@ -18,7 +18,7 @@ const aDefault2 = [0];
 /** @type {A<string>} */ // ok, `T` is provided for `A`
 const aString = [""];
 /** @type {A<number>} */ // ok, `T` is provided for `A`
-const aNumber = [0];
+const a number = [0];
 
 /**
  * @template T

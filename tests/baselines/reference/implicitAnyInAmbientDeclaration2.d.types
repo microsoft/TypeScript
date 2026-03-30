@@ -7,7 +7,7 @@ declare function foo(x);  // this should be an error
 >x : any
 >  : ^^^
 
-declare var bar;  // this should be be an erro
+declare var bar;  // this should be be an error
 >bar : any
 >    : ^^^
 

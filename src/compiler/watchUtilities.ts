@@ -61,7 +61,7 @@ import {
 } from "./_namespaces/ts.js";
 
 /**
- * Partial interface of the System thats needed to support the caching of directory structure
+ * Partial interface of the System that's needed to support the caching of directory structure
  *
  * @internal
  */
@@ -507,7 +507,7 @@ export interface WildcardDirectoryWatcher<T extends FileWatcher = FileWatcher> {
  * Updates the existing wild card directory watches with the new set of wild card directories from the config file
  * after new program is created because the config file was reloaded or program was created first time from the config file
  * Note that there is no need to call this function when the program is updated with additional files without reloading config files,
- * as wildcard directories wont change unless reloading config file
+ * as wildcard directories won't change unless reloading config file
  *
  * @internal
  */
@@ -523,7 +523,7 @@ export function updateWatchingWildcardDirectories<T extends FileWatcher>(
             {
                 // Create new watch and recursive info
                 createNewValue: createWildcardDirectoryWatcher,
-                // Close existing watch thats not needed any more
+                // Close existing watch that's not needed any more
                 onDeleteValue: closeFileWatcherOf,
                 // Close existing watch that doesnt match in the flags
                 onExistingValue: updateWildcardDirectoryWatcher,

@@ -23,8 +23,8 @@ interface EmailChannel {
     type: 'email';
 >type : Symbol(EmailChannel.type, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 7, 15))
 
-    addres: string;
->addres : Symbol(EmailChannel.addres, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 8, 18))
+    address: string;
+>address : Symbol(EmailChannel.address, Decl(complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts, 8, 18))
 }
 
 type Channel = TextChannel | EmailChannel;

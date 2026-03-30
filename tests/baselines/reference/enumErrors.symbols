@@ -34,7 +34,7 @@ enum E9 {
 >A : Symbol(E9.A, Decl(enumErrors.ts, 11, 9))
 }
 
-//Enum with computed member intializer of different enum type
+//Enum with computed member initializer of different enum type
 // Bug 707850: This should be allowed
 enum E10 {
 >E10 : Symbol(E10, Decl(enumErrors.ts, 14, 1))
@@ -52,7 +52,7 @@ enum E10 {
 >B : Symbol(E9.B, Decl(enumErrors.ts, 12, 6))
 }
 
-// Enum with computed member intializer of other types
+// Enum with computed member initializer of other types
 enum E11 {
 >E11 : Symbol(E11, Decl(enumErrors.ts, 21, 1))
 

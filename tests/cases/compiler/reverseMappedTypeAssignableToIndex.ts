@@ -1,5 +1,5 @@
 // @target: es2015
-// Simple mapped type and inferrence
+// Simple mapped type and inference
 type Mapped<T> = { [K in keyof T]: { name: T[K] } };
 type InferFromMapped<T> = T extends Mapped<infer R> ? R : never;
 

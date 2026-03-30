@@ -64,7 +64,7 @@ class MyClassOk {
 >foo : Symbol(foo, Decl(index.ts, 34, 16))
 }
 
-// Note for implementors: This should not be an error
+// Note for implementers: This should not be an error
 // as this entire namespace block is fully erased
 namespace NotInstantiated {
 >NotInstantiated : Symbol(NotInstantiated, Decl(index.ts, 35, 1))

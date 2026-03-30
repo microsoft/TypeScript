@@ -14,7 +14,7 @@ interface EnableA {
 >enableA : Symbol(EnableA.enableA, Decl(contextuallyTypedByDiscriminableUnion2.ts, 4, 19))
 
   // this introduces a conflicting property with some of the other members of MyComponentProps
-  // making relevant final union members reduced nevers
+  // making relevant final union members reduced never
   readonly enableB: true;
 >enableB : Symbol(EnableA.enableB, Decl(contextuallyTypedByDiscriminableUnion2.ts, 5, 25))
 }

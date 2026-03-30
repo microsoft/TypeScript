@@ -15,8 +15,8 @@ class A {
     public pb: number = 2;
 >pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
 
-    protected ptd: number = 1;
->ptd : Symbol(A.ptd, Decl(mixinPrivateAndProtected.ts, 5, 26))
+    protected pdf: number = 1;
+>pdf : Symbol(A.pdf, Decl(mixinPrivateAndProtected.ts, 5, 26))
 
     private pvt: number = 0;
 >pvt : Symbol(A.pvt, Decl(mixinPrivateAndProtected.ts, 6, 30))
@@ -32,8 +32,8 @@ function mixB<T extends Constructor<{}>>(Cls: T) {
     return class extends Cls {
 >Cls : Symbol(Cls, Decl(mixinPrivateAndProtected.ts, 10, 41))
 
-        protected ptd: number = 10;
->ptd : Symbol((Anonymous class).ptd, Decl(mixinPrivateAndProtected.ts, 11, 30))
+        protected pdf: number = 10;
+>pdf : Symbol((Anonymous class).pdf, Decl(mixinPrivateAndProtected.ts, 11, 30))
 
         private pvt: number = 0;
 >pvt : Symbol((Anonymous class).pvt, Decl(mixinPrivateAndProtected.ts, 12, 35))
@@ -52,8 +52,8 @@ function mixB2<T extends Constructor<A>>(Cls: T) {
     return class extends Cls {
 >Cls : Symbol(Cls, Decl(mixinPrivateAndProtected.ts, 17, 41))
 
-        protected ptd: number = 10;
->ptd : Symbol((Anonymous class).ptd, Decl(mixinPrivateAndProtected.ts, 18, 30))
+        protected pdf: number = 10;
+>pdf : Symbol((Anonymous class).pdf, Decl(mixinPrivateAndProtected.ts, 18, 30))
 
     };
 }
@@ -79,8 +79,8 @@ function mixC<T extends Constructor<{}>>(Cls: T) {
     return class extends Cls {
 >Cls : Symbol(Cls, Decl(mixinPrivateAndProtected.ts, 27, 41))
 
-        protected ptd: number = 100;
->ptd : Symbol((Anonymous class).ptd, Decl(mixinPrivateAndProtected.ts, 28, 30))
+        protected pdf: number = 100;
+>pdf : Symbol((Anonymous class).pdf, Decl(mixinPrivateAndProtected.ts, 28, 30))
 
         private pvt: number = 0;
 >pvt : Symbol((Anonymous class).pvt, Decl(mixinPrivateAndProtected.ts, 29, 36))
@@ -123,11 +123,11 @@ a.pb.toFixed();
 >pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
 >toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
-a.ptd.toFixed();    // Error
->a.ptd.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->a.ptd : Symbol(A.ptd, Decl(mixinPrivateAndProtected.ts, 5, 26))
+a.pdf.toFixed();    // Error
+>a.pdf.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a.pdf : Symbol(A.pdf, Decl(mixinPrivateAndProtected.ts, 5, 26))
 >a : Symbol(a, Decl(mixinPrivateAndProtected.ts, 38, 5))
->ptd : Symbol(A.ptd, Decl(mixinPrivateAndProtected.ts, 5, 26))
+>pdf : Symbol(A.pdf, Decl(mixinPrivateAndProtected.ts, 5, 26))
 >toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 a.pvt.toFixed();    // Error
@@ -140,7 +140,7 @@ a.pvt.toFixed();    // Error
 ab.pb.toFixed();
 >ab : Symbol(ab, Decl(mixinPrivateAndProtected.ts, 39, 16))
 
-ab.ptd.toFixed();   // Error
+ab.pdf.toFixed();   // Error
 >ab : Symbol(ab, Decl(mixinPrivateAndProtected.ts, 39, 16))
 
 ab.pvt.toFixed();   // Error
@@ -149,7 +149,7 @@ ab.pvt.toFixed();   // Error
 abc.pb.toFixed();
 >abc : Symbol(abc, Decl(mixinPrivateAndProtected.ts, 40, 18))
 
-abc.ptd.toFixed();  // Error
+abc.pdf.toFixed();  // Error
 >abc : Symbol(abc, Decl(mixinPrivateAndProtected.ts, 40, 18))
 
 abc.pvt.toFixed();  // Error
@@ -158,7 +158,7 @@ abc.pvt.toFixed();  // Error
 ab2c.pb.toFixed();
 >ab2c : Symbol(ab2c, Decl(mixinPrivateAndProtected.ts, 41, 20))
 
-ab2c.ptd.toFixed(); // Error
+ab2c.pdf.toFixed(); // Error
 >ab2c : Symbol(ab2c, Decl(mixinPrivateAndProtected.ts, 41, 20))
 
 ab2c.pvt.toFixed(); // Error

@@ -110,7 +110,7 @@ class SuperChild extends SuperParent {
     }
 }
 
-class Statics {
+class Statistics {
     static foo = 1;
     static bar: string;
 
@@ -119,7 +119,7 @@ class Statics {
     }
 }
 
-var stat = new Statics();
+var stat = new Statistics();
 
 interface IFoo {
     x: number;

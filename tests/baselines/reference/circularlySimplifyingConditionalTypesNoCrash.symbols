@@ -12,7 +12,7 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 >T : Symbol(T, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 10))
 >K : Symbol(K, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 12))
 
-type Shared< // Circularly self constraining type, defered thanks to mapping
+type Shared< // Circularly self constraining type, deferred thanks to mapping
 >Shared : Symbol(Shared, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 63))
 
     InjectedProps,

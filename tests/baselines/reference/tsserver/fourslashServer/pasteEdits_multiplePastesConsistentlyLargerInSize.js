@@ -251,7 +251,7 @@ Info seq  [hh:mm:ss:mss] request:
         "file": "/home/src/workspaces/project/a.ts",
         "pastedText": [
           "const t = 1 + juice + p;",
-          "function avacado() { return sauce; }",
+          "function avocado() { return sauce; }",
           "fig + kiwi",
           "function k() {\n            const cherry = 3 + tomato + cucumber;\n        }"
         ],
@@ -307,7 +307,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/a.ts SVC-1-1 "function foo() {\n   const p = 1;\n   const t = 1 + juice + p;\n}\nclass bar {\n    constructor() {\n        function a() {\n            function avacado() { return sauce; }\n        }\n        a();\n        function b() {\n           function c() {\n               const test = fig + kiwi + 3;\n           }  \n        }\n        b();\n    }\n    c() {\n        console.log(\"hello again\");\n        function k() {\n            const cherry = 3 + tomato + cucumber;\n        }\n    }\n}"
+	/home/src/workspaces/project/a.ts SVC-1-1 "function foo() {\n   const p = 1;\n   const t = 1 + juice + p;\n}\nclass bar {\n    constructor() {\n        function a() {\n            function avocado() { return sauce; }\n        }\n        a();\n        function b() {\n           function c() {\n               const test = fig + kiwi + 3;\n           }  \n        }\n        b();\n    }\n    c() {\n        console.log(\"hello again\");\n        function k() {\n            const cherry = 3 + tomato + cucumber;\n        }\n    }\n}"
 	/home/src/workspaces/project/b.ts Text-1 "export const juice = 1;\nexport const sauce = 2;\nexport const fig = 3;\nexport const tomato = 4;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -357,7 +357,7 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 8,
                   "offset": 44
                 },
-                "newText": "function avacado() { return sauce; }"
+                "newText": "function avocado() { return sauce; }"
               },
               {
                 "start": {

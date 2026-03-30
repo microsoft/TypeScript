@@ -70,7 +70,7 @@ class Widget<TValue> {
 >Widget : Symbol(Widget, Decl(infinitelyExpandingOverloads.ts, 17, 1))
 >TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 18, 13))
 
-    constructor(viewModelType: new () => ViewModel<TValue>); // Shouldnt error on this overload
+    constructor(viewModelType: new () => ViewModel<TValue>); // Shouldn't error on this overload
 >viewModelType : Symbol(viewModelType, Decl(infinitelyExpandingOverloads.ts, 19, 16))
 >ViewModel : Symbol(ViewModel, Decl(infinitelyExpandingOverloads.ts, 14, 1))
 >TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 18, 13))

@@ -9,15 +9,15 @@ const util = require('./mod')
 function n() {
 >n : Symbol(n, Decl(use.js, 0, 29))
 
-    util.existy // no error
->util.existy : Symbol(util.existy, Decl(mod.js, 1, 14))
+    util.exist // no error
+>util.exist : Symbol(util.exist, Decl(mod.js, 1, 14))
 >util : Symbol(util, Decl(use.js, 0, 5))
->existy : Symbol(util.existy, Decl(mod.js, 1, 14))
+>exist : Symbol(util.exist, Decl(mod.js, 1, 14))
 }
-util.existy // no error
->util.existy : Symbol(util.existy, Decl(mod.js, 1, 14))
+util.exist // no error
+>util.exist : Symbol(util.exist, Decl(mod.js, 1, 14))
 >util : Symbol(util, Decl(use.js, 0, 5))
->existy : Symbol(util.existy, Decl(mod.js, 1, 14))
+>exist : Symbol(util.exist, Decl(mod.js, 1, 14))
 
 === mod.js ===
 const util = exports = module.exports = {}
@@ -28,9 +28,9 @@ const util = exports = module.exports = {}
 >exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 
 if (!!false) {
-    util.existy = function () { }
->util.existy : Symbol(existy, Decl(mod.js, 1, 14))
+    util.exist = function () { }
+>util.exist : Symbol(exist, Decl(mod.js, 1, 14))
 >util : Symbol(util, Decl(mod.js, 0, 5))
->existy : Symbol(existy, Decl(mod.js, 1, 14))
+>exist : Symbol(exist, Decl(mod.js, 1, 14))
 }
 

@@ -214,7 +214,7 @@ var n = ExpandoExpr2.prop + ExpandoExpr2.m(12) + ExpandoExpr2(101).length
 >ExpandoExpr2 : Symbol(ExpandoExpr2, Decl(typeFromPropertyAssignment29.ts, 56, 3), Decl(typeFromPropertyAssignment29.ts, 58, 1), Decl(typeFromPropertyAssignment29.ts, 59, 21))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
-// Should not work in typescript -- classes already have statics
+// Should not work in typescript -- classes already have statistics
 class ExpandoClass {
 >ExpandoClass : Symbol(ExpandoClass, Decl(typeFromPropertyAssignment29.ts, 63, 73))
 

@@ -92,7 +92,7 @@ parserRealSource3.ts(4,21): error TS6053: File 'typescript.ts' not found.
             Continue,
             Throw,
             For,
-            ForIn,
+            foreign,
             If,
             While,
             DoWhile,

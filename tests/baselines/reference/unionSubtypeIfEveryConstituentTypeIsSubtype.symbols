@@ -46,7 +46,7 @@ interface I3 {
     [x: string]: string;
 >x : Symbol(x, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 19, 5))
 
-    foo: string | number; // error numer is not subtype of string
+    foo: string | number; // error number is not subtype of string
 >foo : Symbol(I3.foo, Decl(unionSubtypeIfEveryConstituentTypeIsSubtype.ts, 19, 24))
 
     foo2: e | number; // error e and number both not subtype of string

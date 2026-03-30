@@ -25,12 +25,12 @@ for (const x of aString) {
 >x : Symbol(x, Decl(arrayIterationLibES5TargetDifferent.ts, 8, 10))
 }
 
-declare const aNumber: number;
->aNumber : Symbol(aNumber, Decl(arrayIterationLibES5TargetDifferent.ts, 12, 13))
+declare const a number: number;
+>a number : Symbol(a number, Decl(arrayIterationLibES5TargetDifferent.ts, 12, 13))
 
-for (const x of aNumber) {
+for (const x of a number) {
 >x : Symbol(x, Decl(arrayIterationLibES5TargetDifferent.ts, 14, 10))
->aNumber : Symbol(aNumber, Decl(arrayIterationLibES5TargetDifferent.ts, 12, 13))
+>a number : Symbol(a number, Decl(arrayIterationLibES5TargetDifferent.ts, 12, 13))
 
     log(x);
 >log : Symbol(log, Decl(arrayIterationLibES5TargetDifferent.ts, 0, 0))

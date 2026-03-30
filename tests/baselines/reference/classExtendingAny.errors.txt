@@ -30,7 +30,7 @@ a.ts(3,5): error TS2564: Property 'payload' has no initializer and is not defini
         }
         f() {
             this.wat
-            this.wit
+            this.with
             this['wot']
             super.alsoBad
         }

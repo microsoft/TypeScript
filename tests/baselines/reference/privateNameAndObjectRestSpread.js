@@ -11,8 +11,8 @@ class C {
         const { ...rest } = other;
         rest.#prop;
 
-        const statics = { ... C};
-        statics.#propStatic
+        const statistics = { ... C};
+        statistics.#propStatic
         const { ...sRest } = C;
         sRest.#propStatic;
     }
@@ -46,8 +46,8 @@ class C {
         __classPrivateFieldGet(obj, _C_prop, "f");
         const rest = __rest(other, []);
         __classPrivateFieldGet(rest, _C_prop, "f");
-        const statics = Object.assign({}, _a);
-        __classPrivateFieldGet(statics, _a, "f", _C_propStatic);
+        const statistics = Object.assign({}, _a);
+        __classPrivateFieldGet(statistics, _a, "f", _C_propStatic);
         const sRest = __rest(_a, []);
         __classPrivateFieldGet(sRest, _a, "f", _C_propStatic);
     }

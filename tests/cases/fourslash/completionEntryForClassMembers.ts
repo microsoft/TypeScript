@@ -200,13 +200,13 @@ verify.completions(
         isNewIdentifierLocation: true,
     },
     {
-        // instance memebers in D1 and base class are shown
+        // instance members in D1 and base class are shown
         marker: "classThatExtendsClassExtendingAnotherClass",
         unsorted: ["getValue1", "protectedMethod", "getValue", ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
     {
-        // instance memebers in D2 and base class are shown
+        // instance members in D2 and base class are shown
         marker: "classThatExtendsClassExtendingAnotherClassWithOverridingMember",
         unsorted: [
             { name: "protectedMethod", text: "(method) D2.protectedMethod(): void" },

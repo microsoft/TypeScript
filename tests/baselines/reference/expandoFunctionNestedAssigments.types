@@ -300,18 +300,18 @@ for(let f of (Foo.forOf = []) ){
 }
 
 
-for(let f in (Foo.forIn = []) ){
+for(let f in (Foo.foreign = []) ){
 >f : string
 >  : ^^^^^^
->(Foo.forIn = []) : undefined[]
+>(Foo.foreign = []) : undefined[]
 >                 : ^^^^^^^^^^^
->Foo.forIn = [] : undefined[]
+>Foo.foreign = [] : undefined[]
 >               : ^^^^^^^^^^^
->Foo.forIn : any[]
+>Foo.foreign : any[]
 >          : ^^^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->forIn : any[]
+>foreign : any[]
 >      : ^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^

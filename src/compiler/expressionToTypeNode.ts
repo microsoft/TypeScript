@@ -226,7 +226,7 @@ export function createSyntacticTypeNodeBuilder(
             //  the position information if the node comes from a different file than the one the node builder
             //  is set to build for (even though we are reusing the node structure, the position information
             //  would make the printer print invalid spans for literals and identifiers, and the formatter would
-            //  choke on the mismatched positonal spans between a parent and an injected child from another file).
+            //  choke on the mismatched positional spans between a parent and an injected child from another file).
             return result ? resolver.markNodeReuse(context, result, node) : undefined;
         }
 
@@ -693,7 +693,7 @@ export function createSyntacticTypeNodeBuilder(
             case SyntaxKind.ShorthandPropertyAssignment:
                 return typeFromPropertyAssignment(node, symbol, context);
             default:
-                Debug.assertNever(node, `Node needs to be an inferrable node, found ${Debug.formatSyntaxKind((node as Node).kind)}`);
+                Debug.assertNever(node, `Node needs to be an inferable node, found ${Debug.formatSyntaxKind((node as Node).kind)}`);
         }
     }
 
@@ -735,7 +735,7 @@ export function createSyntacticTypeNodeBuilder(
             case SyntaxKind.JSDocSignature:
                 return createReturnFromSignature(node, symbol, context);
             default:
-                Debug.assertNever(node, `Node needs to be an inferrable node, found ${Debug.formatSyntaxKind((node as Node).kind)}`);
+                Debug.assertNever(node, `Node needs to be an inferable node, found ${Debug.formatSyntaxKind((node as Node).kind)}`);
         }
     }
     function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode | undefined {

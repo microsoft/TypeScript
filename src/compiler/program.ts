@@ -1302,7 +1302,7 @@ export function isProgramUptoDate(
             // Add to seen before checking the referenced paths of this config file
             (seenResolvedRefs || (seenResolvedRefs = [])).push(oldResolvedRef);
 
-            // If child project references are upto date, this project reference is uptodate
+            // If child project references are upto date, this project reference is up-to-date
             return !forEach(
                 oldResolvedRef.references,
                 (childResolvedRef, index) =>
@@ -1314,7 +1314,7 @@ export function isProgramUptoDate(
         }
 
         // In old program, not able to resolve project reference path,
-        // so if config file doesnt exist, it is uptodate.
+        // so if config file doesnt exist, it is up-to-date.
         const refPath = resolveProjectReferencePath(oldRef);
         return !getParsedCommandLine(refPath);
     }
@@ -2107,12 +2107,12 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         const redirect = getRedirectFromSourceFile(file.originalFileName);
         if (redirect || !isDeclarationFileName(file.originalFileName)) return redirect?.resolvedRef;
 
-        // The originalFileName could not be actual source file name if file found was d.ts from referecned project
+        // The originalFileName could not be actual source file name if file found was d.ts from referenced project
         // So in this case try to look up if this is output from referenced project, if it is use the redirected project in that case
         const resultFromDts = getRedirectFromOutput(file.path)?.resolvedRef;
         if (resultFromDts) return resultFromDts;
 
-        // If preserveSymlinks is true, module resolution wont jump the symlink
+        // If preserveSymlinks is true, module resolution won't jump the symlink
         // but the resolved real path may be the .d.ts from project reference
         // Note:: Currently we try the real path only if the
         // file is from node_modules to avoid having to run real path on all file paths
@@ -2335,7 +2335,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                 }
             },
             (oldProjectReferences, parent) => {
-                // If array of references is changed, we cant resue old program
+                // If array of references is changed, we can't resue old program
                 const newReferences = parent ? getResolvedProjectReferenceByPath(parent.sourceFile.path)!.commandLine.projectReferences : projectReferences;
                 return !arrayIsEqualTo(oldProjectReferences, newReferences, projectReferenceIsEqualTo);
             },
@@ -2373,8 +2373,8 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         const modifiedSourceFiles: SourceFile[] = [];
         structureIsReused = StructureIsReused.Completely;
 
-        // If the missing file paths are now present, it can change the progam structure,
-        // and hence cant reuse the structure.
+        // If the missing file paths are now present, it can change the program structure,
+        // and hence can't reuse the structure.
         // This is same as how we dont reuse the structure if one of the file from old program is now missing
         if (forEachEntry(oldProgram.getMissingFilePaths(), missingFileName => host.fileExists(missingFileName))) {
             return StructureIsReused.Not;
@@ -2423,7 +2423,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                 fileChanged = newSourceFile !== oldSourceFile;
             }
 
-            // Since the project references havent changed, its right to set originalFileName and resolvedPath here
+            // Since the project references haven't changed, its right to set originalFileName and resolvedPath here
             newSourceFile.path = oldSourceFile.path;
             newSourceFile.originalFileName = oldSourceFile.originalFileName;
             newSourceFile.resolvedPath = oldSourceFile.resolvedPath;
@@ -3234,7 +3234,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             }
 
             // Since these are syntactic diagnostics, parent might not have been set
-            // this means the sourceFile cannot be infered from the node
+            // this means the sourceFile cannot be inferred from the node
             function createDiagnosticForNode(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
                 return createDiagnosticForNodeInSourceFile(sourceFile, node, message, ...args);
             }
@@ -3546,7 +3546,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         const path = toPath(fileName);
         if (useSourceOfProjectReferenceRedirect) {
             let source = getRedirectFromOutput(path);
-            // If preserveSymlinks is true, module resolution wont jump the symlink
+            // If preserveSymlinks is true, module resolution won't jump the symlink
             // but the resolved real path may be the .d.ts from project reference
             // Note:: Currently we try the real path only if the
             // file is from node_modules to avoid having to run real path on all file paths
@@ -3617,7 +3617,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             const redirectProject = getRedirectFromSourceFile(fileName);
             if (redirectProject?.outputDts) {
                 if (redirectProject.resolvedRef.commandLine.options.outFile) {
-                    // Shouldnt create many to 1 mapping file in --out scenario
+                    // Shouldn't create many to 1 mapping file in --out scenario
                     return undefined;
                 }
                 fileName = redirectProject.outputDts;
@@ -4121,7 +4121,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         verifyDeprecatedCompilerOptions();
         verifyProjectReferences();
 
-        // List of collected files is complete; validate exhautiveness if this is a project with a file list
+        // List of collected files is complete; validate exhaustiveness if this is a project with a file list
         if (options.composite) {
             const rootPaths = new Set(rootNames.map(toPath));
             for (const file of files) {
@@ -4935,7 +4935,7 @@ function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSource
 
     if (originalGetDirectories) {
         // Call getDirectories only if directory actually present on the host
-        // This is needed to ensure that we arent getting directories that we fake about presence for
+        // This is needed to ensure that we aren't getting directories that we fake about presence for
         host.compilerHost.getDirectories = path =>
             !host.getResolvedProjectReferences() || (originalDirectoryExists && originalDirectoryExists.call(host.compilerHost, path)) ?
                 originalGetDirectories.call(host.compilerHost, path) :

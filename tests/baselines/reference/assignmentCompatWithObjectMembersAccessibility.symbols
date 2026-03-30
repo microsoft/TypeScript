@@ -119,19 +119,19 @@ namespace TargetIsPublic {
 >d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 24, 15))
 >e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 15))
 
-    e = a; // errror
+    e = a; // error
 >e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 15))
 >a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 12, 15))
 
-    e = b; // errror
+    e = b; // error
 >e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 15))
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 13, 15))
 
-    e = i; // errror
+    e = i; // error
 >e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 15))
 >i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 15))
 
-    e = d; // errror
+    e = d; // error
 >e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 15))
 >d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 24, 15))
 
@@ -264,19 +264,19 @@ namespace TargetIsPublic {
 >d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 77, 15))
 >e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 15))
 
-    e = a; // errror
+    e = a; // error
 >e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 15))
 >a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 64, 15))
 
-    e = b; // errror
+    e = b; // error
 >e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 15))
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 15))
 
-    e = i; // errror
+    e = i; // error
 >e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 15))
 >i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 15))
 
-    e = d; // errror
+    e = d; // error
 >e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 15))
 >d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 77, 15))
 

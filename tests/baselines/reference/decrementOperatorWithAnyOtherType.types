@@ -195,7 +195,7 @@ var ResultIsNumber13 = M.n--;
 >n : any
 >  : ^^^
 
-// miss assignment opertors
+// miss assignment operators
 --ANY;
 >--ANY : number
 >      : ^^^^^^

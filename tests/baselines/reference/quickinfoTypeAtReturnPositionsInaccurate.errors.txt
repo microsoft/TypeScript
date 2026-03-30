@@ -88,7 +88,7 @@ quickinfoTypeAtReturnPositionsInaccurate.ts(33,15): error TS2339: Property 'numE
             if (isNumClass(item)) {
                 return item;
             }
-            // it seems like the compiler asumes the above condition is always
+            // it seems like the compiler assumes the above condition is always
             // truthy
     
             item.get();

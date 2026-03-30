@@ -10,7 +10,7 @@ interface Contextual {
 >  : ^^^^^^
 }
 
-interface Ellement {
+interface Element {
     dummy;
 >dummy : any
 
@@ -22,19 +22,19 @@ var c: Contextual;
 >c : Contextual
 >  : ^^^^^^^^^^
 
-var e: Ellement;
->e : Ellement
+var e: Element;
+>e : Element
 >  : ^^^^^^^^
 
 (c || e).dummy;
 >(c || e).dummy : any
->(c || e) : Contextual | Ellement
+>(c || e) : Contextual | Element
 >         : ^^^^^^^^^^^^^^^^^^^^^
->c || e : Contextual | Ellement
+>c || e : Contextual | Element
 >       : ^^^^^^^^^^^^^^^^^^^^^
 >c : Contextual
 >  : ^^^^^^^^^^
->e : Ellement
+>e : Element
 >  : ^^^^^^^^
 >dummy : any
 >      : ^^^

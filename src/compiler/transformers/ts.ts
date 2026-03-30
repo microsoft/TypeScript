@@ -2344,7 +2344,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
         }
 
         if (!node.exportClause || isNamespaceExport(node.exportClause)) {
-            // never elide `export <whatever> from <whereever>` declarations -
+            // never elide `export <whatever> from <wherever>` declarations -
             // they should be kept for sideffects/untyped exports, even when the
             // type checker doesn't know about any exports
             return factory.updateExportDeclaration(
@@ -2688,7 +2688,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
     function trySubstituteNamespaceExportedName(node: Identifier): Expression | undefined {
         // If this is explicitly a local name, do not substitute.
         if (enabledSubstitutions & applicableSubstitutions && !isGeneratedIdentifier(node) && !isLocalName(node)) {
-            // If we are nested within a namespace declaration, we may need to qualifiy
+            // If we are nested within a namespace declaration, we may need to qualify
             // an identifier that is exported from a merged namespace.
             const container = resolver.getReferencedExportContainer(node, /*prefixLocals*/ false);
             if (container && container.kind !== SyntaxKind.SourceFile) {

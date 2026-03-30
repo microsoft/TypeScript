@@ -16,6 +16,6 @@ classMemberInitializerWithLamdaScoping3_1.ts(8,21): error TS2301: Initializer of
                         ~~~~~~
 !!! error TS2301: Initializer of instance member variable 'messageHandler' cannot reference identifier 'field1' declared in the constructor.
                                  // but since this code would be generated inside constructor, in generated js
-                                 // it would resolve to private field1 and thats not what user intended here. 
+                                 // it would resolve to private field1 and that's not what user intended here. 
         };
     }

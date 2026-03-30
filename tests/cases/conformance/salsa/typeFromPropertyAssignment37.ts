@@ -6,12 +6,12 @@
 // @Filename: mod.js
 const util = exports = module.exports = {}
 if (!!false) {
-    util.existy = function () { }
+    util.exist = function () { }
 }
 
 // @Filename: use.js
 const util = require('./mod')
 function n() {
-    util.existy // no error
+    util.exist // no error
 }
-util.existy // no error
+util.exist // no error

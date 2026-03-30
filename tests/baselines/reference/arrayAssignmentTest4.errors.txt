@@ -10,7 +10,7 @@ arrayAssignmentTest4.ts(23,1): error TS2740: Type 'C3' is missing the following 
     
     /*
     
-    This behaves unexpectedly with teh following types:
+    This behaves unexpectedly with the following types:
     
     Type 1 of any[]:
     

@@ -93,7 +93,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >o2 : Symbol(o2, Decl(spreadInvalidArgumentType.ts, 29, 7))
 >p2 : Symbol(p2, Decl(spreadInvalidArgumentType.ts, 2, 42))
 
-    var o3 = { ...t };   // OK, generic type paramter
+    var o3 = { ...t };   // OK, generic type parameter
 >o3 : Symbol(o3, Decl(spreadInvalidArgumentType.ts, 30, 7))
 >t : Symbol(t, Decl(spreadInvalidArgumentType.ts, 3, 7))
 

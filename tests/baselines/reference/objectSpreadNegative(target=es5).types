@@ -298,7 +298,7 @@ let combinedNested: { a: number, b: boolean, c: string, d: string } =
 >      : ^^^^^
 >c : string
 >  : ^^^^^^
->'overriden' : "overriden"
+>'overridden' : "overridden"
 >            : ^^^^^^^^^^^
 >d : string
 >  : ^^^^^^

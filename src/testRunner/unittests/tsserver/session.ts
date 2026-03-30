@@ -275,7 +275,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
     });
 
     describe("send", () => {
-        it("is an overrideable handle which sends protocol messages over the wire", () => {
+        it("is an overridable handle which sends protocol messages over the wire", () => {
             const msg: ts.server.protocol.Request = { seq: 0, type: "request", command: "" };
             const strmsg = JSON.stringify(msg);
             const len = 1 + Buffer.byteLength(strmsg, "utf8");

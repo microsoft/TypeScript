@@ -135,7 +135,7 @@
 ////    public /*105*/prop5(a: number): number;
 ////    /** prop5 2*/
 ////    public /*106*/prop5(b: string): number;
-////    /** Prop5 implementaion*/
+////    /** Prop5 implementation*/
 ////    public /*107*/prop5(aorb: any) {
 ////        return 10;
 ////    }

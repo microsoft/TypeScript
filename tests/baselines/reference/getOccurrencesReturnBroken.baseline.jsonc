@@ -125,7 +125,7 @@
 
 // --- (line: 14) skipped ---
 // 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+//     var unused = [1, 2, 3, 4].map(x => { return 4 })
 // 
 //     [|{| kind: "none" |}return|];
 //     [|{| kind: "none" |}return|] true;

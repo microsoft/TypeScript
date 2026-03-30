@@ -36,7 +36,7 @@ noImplicitReturnsInAsync2.ts(24,48): error TS7030: Not all code paths return a v
         }
     }
     
-    // infered to be Promise<void>, should not be an error, currently reported correctly 
+    // inferred to be Promise<void>, should not be an error, currently reported correctly 
     async function test7(isError: boolean = true) { 
         if (isError === true) {
             return;

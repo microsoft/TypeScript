@@ -18,5 +18,5 @@
 //// }
 
 goTo.marker();
-// We've had some invalidation errors where adding a member to a generic type with statics could cause a crash to occur
+// We've had some invalidation errors where adding a member to a generic type with statistics could cause a crash to occur
 edit.insert("someNewProperty = 0;");

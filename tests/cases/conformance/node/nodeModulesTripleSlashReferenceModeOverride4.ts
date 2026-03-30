@@ -23,6 +23,6 @@ declare global {
 }
 // @filename: /index.ts
 /// <reference types="pkg" resolution-mode="import" />
-foo; // foo should resolve while bar should not, since even though index.js is cjs, the refernce is esm
+foo; // foo should resolve while bar should not, since even though index.js is cjs, the reference is esm
 bar;
 export {};

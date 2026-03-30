@@ -1675,7 +1675,7 @@ export class TestState {
                                 // Marker is ok to skip over
                                 if (textStartDetail.span) break;
                             }
-                            // Skip contextId on span thats surrounded by context span immediately
+                            // Skip contextId on span that's surrounded by context span immediately
                             if (!isAfterContextStart) {
                                 text = `contextId: ${contextId}` + (text ? `, ${text}` : "");
                             }

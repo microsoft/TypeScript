@@ -21,8 +21,8 @@ class Foo {
     y() {
 >y : Symbol(Foo.y, Decl(collisionThisExpressionAndParameter.ts, 6, 5))
 
-        var lamda = (_this: number) => { // Error 
->lamda : Symbol(lamda, Decl(collisionThisExpressionAndParameter.ts, 8, 11))
+        var lambda = (_this: number) => { // Error 
+>lambda : Symbol(lambda, Decl(collisionThisExpressionAndParameter.ts, 8, 11))
 >_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 8, 21))
 
             return x => this;   // New scope.  So should inject new _this capture
@@ -57,8 +57,8 @@ class Foo {
     y1() {
 >y1 : Symbol(Foo.y1, Decl(collisionThisExpressionAndParameter.ts, 22, 5))
 
-        var lamda = (_this: number) => { // No Error 
->lamda : Symbol(lamda, Decl(collisionThisExpressionAndParameter.ts, 24, 11))
+        var lambda = (_this: number) => { // No Error 
+>lambda : Symbol(lambda, Decl(collisionThisExpressionAndParameter.ts, 24, 11))
 >_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 24, 21))
         }
     }

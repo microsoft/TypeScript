@@ -3,7 +3,7 @@
 // interface Gen {
 //     x: number
 //     /*FIND ALL REFS*/<|[|{| isDefinition: true |}parent|]: Gen;|>
-//     millenial: string;
+//     millennial: string;
 // }
 // let t: Gen;
 // var { x, ...rest } = t;
@@ -14,7 +14,7 @@
   // interface Gen {
   //     x: number
   //     /*FIND ALL REFS*/<|[|parent|]: Gen;|>
-  //     millenial: string;
+  //     millennial: string;
   // }
   // let t: Gen;
   // var { x, ...rest } = t;
@@ -79,7 +79,7 @@
 // interface Gen {
 //     x: number
 //     <|[|parent|]: Gen;|>
-//     millenial: string;
+//     millennial: string;
 // }
 // let t: Gen;
 // var { x, ...rest } = t;
@@ -90,7 +90,7 @@
   // interface Gen {
   //     x: number
   //     <|[|parent|]: Gen;|>
-  //     millenial: string;
+  //     millennial: string;
   // }
   // let t: Gen;
   // var { x, ...rest } = t;

@@ -85,7 +85,7 @@ namespace M {
     }
 }
 
-namespace M { // shouldnt be _M
+namespace M { // shouldn't be _M
 >M : typeof M
 >  : ^^^^^^^^
 

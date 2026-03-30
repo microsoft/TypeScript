@@ -81,7 +81,7 @@ function f3(
     x3 = x1;
     x3 = x2;
 
-    // and this should also not be equivlent to any others
+    // and this should also not be equivalent to any others
     var x4: Lowercase<Uppercase<string>> = null as any;
     x1 = x4;
     x2 = x4;
@@ -199,7 +199,7 @@ function f3(x1, x2, x3) {
     // which then uppercases to SS), so arbitrary nestings of mappings make differing sets!
     x3 = x1;
     x3 = x2;
-    // and this should also not be equivlent to any others
+    // and this should also not be equivalent to any others
     var x4 = null;
     x1 = x4;
     x2 = x4;

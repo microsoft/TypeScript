@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithObjectTypeArgsAndConstraints.ts] ////
 
 //// [genericClassWithObjectTypeArgsAndConstraints.ts]
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 // No errors expected
 
 class C {
@@ -64,7 +64,7 @@ namespace Interface {
 
 //// [genericClassWithObjectTypeArgsAndConstraints.js]
 "use strict";
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 // No errors expected
 class C {
 }

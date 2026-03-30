@@ -259,7 +259,7 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Emit with emitOnlyDts shouldnt emit anything
+Change:: Emit with emitOnlyDts shouldn't emit anything
 
 Input::
 
@@ -281,7 +281,7 @@ BuilderProgram: Same as old builder program
 
 exitCode:: ExitStatus.undefined
 
-Change:: Emit with emitOnlyDts shouldnt emit anything
+Change:: Emit with emitOnlyDts shouldn't emit anything
 
 Input::
 

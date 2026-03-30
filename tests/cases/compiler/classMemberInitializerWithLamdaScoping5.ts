@@ -8,6 +8,6 @@ class Greeter {
     }
 
     messageHandler = (message: string) => {
-        console.log(message); // This shouldnt be error
+        console.log(message); // This shouldn't be error
     }
 }

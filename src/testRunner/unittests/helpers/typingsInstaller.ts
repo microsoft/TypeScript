@@ -184,7 +184,7 @@ export class TestTypingsInstallerAdapter extends ts.server.TypingsInstallerAdapt
             options.host,
             options.host.globalTypingsCacheLocation,
             (...args) => this.session.event(...args),
-            // Some large number so requests arent throttled
+            // Some large number so requests aren't throttled
             options.throttledRequests === undefined ? 10 : options.throttledRequests,
         );
         this.throttleLimit = options.throttleLimit || 5;

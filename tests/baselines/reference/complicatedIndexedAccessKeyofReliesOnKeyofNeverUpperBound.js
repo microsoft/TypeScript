@@ -10,7 +10,7 @@ interface TextChannel {
 interface EmailChannel {
     id: string;
     type: 'email';
-    addres: string;
+    address: string;
 }
 
 type Channel = TextChannel | EmailChannel;

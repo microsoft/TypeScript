@@ -51,10 +51,10 @@ describe("unittests:: tsserver:: projectReferenceErrors:: with project reference
             });
         });
 
-        describe("when the depedency file is open", () => {
+        describe("when the dependency file is open", () => {
             verifyGetErrScenario({
                 scenario: "projectReferenceErrors",
-                subScenario: `${scenario} when the depedency file is open`,
+                subScenario: `${scenario} when the dependency file is open`,
                 allFiles: () => [dependencyTs, dependencyConfig, usageTs, usageConfig],
                 openFiles: () => [usageTs, dependencyTs],
                 getErrRequest: () => [usageTs, dependencyTs],

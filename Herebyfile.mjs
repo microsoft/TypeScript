@@ -649,13 +649,13 @@ const copyBuiltLocalDiagnosticMessages = task({
 
 export const otherOutputs = task({
     name: "other-outputs",
-    description: "Builds miscelaneous scripts and documents distributed with the LKG",
+    description: "Builds miscellaneous scripts and documents distributed with the LKG",
     dependencies: [typingsInstaller, watchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
 export const watchOtherOutputs = task({
     name: "watch-other-outputs",
-    description: "Builds miscelaneous scripts and documents distributed with the LKG",
+    description: "Builds miscellaneous scripts and documents distributed with the LKG",
     hiddenFromTaskList: true,
     dependencies: [watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
@@ -704,7 +704,7 @@ export const runTestsAndWatch = task({
     dependencies: [watchTests],
     run: async () => {
         if (!cmdLineOptions.tests && !cmdLineOptions.failed) {
-            console.log(pc.redBright(`You must specifiy either --tests/-t or --failed to use 'runtests-watch'.`));
+            console.log(pc.redBright(`You must specify either --tests/-t or --failed to use 'runtests-watch'.`));
             return;
         }
 

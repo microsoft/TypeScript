@@ -629,13 +629,13 @@ namespace TypeScript {
 >0 : 0
 >  : ^
 
-        ExplicitSemicolon = 1, // statment terminated by an explicit semicolon
+        ExplicitSemicolon = 1, // statement terminated by an explicit semicolon
 >ExplicitSemicolon : ASTFlags.ExplicitSemicolon
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
-        AutomaticSemicolon = 1 << 1, // statment terminated by an automatic semicolon
+        AutomaticSemicolon = 1 << 1, // statement terminated by an automatic semicolon
 >AutomaticSemicolon : ASTFlags.AutomaticSemicolon
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 << 1 : number

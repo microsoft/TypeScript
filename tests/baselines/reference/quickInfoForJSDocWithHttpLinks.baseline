@@ -9,11 +9,11 @@
 // 
 // /**
 // * @typedef {Object} Oops
-// * @property {number} https://wass
+// * @property {number} https://was
 //                      ^^^^^
 // | ----------------------------------------------------------------------
 // | (property) https: number
-// | ://wass
+// | ://was
 // | ----------------------------------------------------------------------
 // */
 // 
@@ -150,7 +150,7 @@
       ],
       "documentation": [
         {
-          "text": "://wass",
+          "text": "://was",
           "kind": "text"
         }
       ]

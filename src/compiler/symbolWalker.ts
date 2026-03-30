@@ -79,7 +79,7 @@ export function createGetSymbolWalker(
             visitedTypes[type.id] = type;
 
             // Reuse visitSymbol to visit the type's symbol,
-            //  but be sure to bail on recuring into the type if accept declines the symbol.
+            //  but be sure to bail on recurring into the type if accept declines the symbol.
             const shouldBail = visitSymbol(type.symbol);
             if (shouldBail) return;
 

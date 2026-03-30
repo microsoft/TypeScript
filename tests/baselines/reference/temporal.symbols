@@ -2061,7 +2061,7 @@
 >day : Symbol(day, Decl(temporal.ts, 591, 70))
 >const : Symbol(const)
 
-    zdt.toLocaleString("de-DE", options); // => 'Sonntag, 1. Dezember 2019'
+    zdt.toLocaleString("de-DE", options); // => 'Sonntag, 1. December 2019'
 >zdt.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
 >zdt : Symbol(zdt, Decl(temporal.ts, 588, 9))
 >toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))

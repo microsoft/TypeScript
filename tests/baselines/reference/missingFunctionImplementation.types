@@ -177,7 +177,7 @@ namespace N10 {
 >  : ^^^
 }
 
-// merged namespaces, duplicate defintions
+// merged namespaces, duplicate definitions
 namespace N12 {
 >N12 : typeof N12
 >    : ^^^^^^^^^^

@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// Should define spans for replacement that appear after the last directory seperator in dynamic import statements
+// Should define spans for replacement that appear after the last directory separator in dynamic import statements
 
 // @typeRoots: my_typings
 

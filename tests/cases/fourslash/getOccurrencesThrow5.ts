@@ -35,7 +35,7 @@
 ////
 ////    throw 10;
 ////
-////    var unusued = [1, 2, 3, 4].map(x => { [|thr/**/ow|] 4 })
+////    var unused = [1, 2, 3, 4].map(x => { [|thr/**/ow|] 4 })
 ////
 ////    return;
 ////    return true;

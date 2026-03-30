@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: remoteGetReferences_1.ts
-////// Comment Refence Test: globalVar
+////// Comment Reference Test: globalVar
 ////var globalVar: number = 2;
 ////
 ////class fooCls {

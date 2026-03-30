@@ -52,7 +52,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A '{0}' parameter must be the first parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} musí být prvním parametrem.]]></Val>
+            <Val><![CDATA[Parameter {0} musí být prvním parametrem.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -106,7 +106,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A binding pattern parameter cannot be optional in an implementation signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr vzoru vazby nemůže být u podpisu implementace nepovinný.]]></Val>
+            <Val><![CDATA[Parameter vzoru vazby nemůže být u podpisu implementace nepovinný.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -217,7 +217,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name cannot reference a type parameter from its containing type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Název počítané vlastnosti nemůže odkazovat na parametr typu z jeho nadřazeného typu.]]></Val>
+            <Val><![CDATA[Název počítané vlastnosti nemůže odkazovat na parameter typu z jeho nadřazeného typu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -319,7 +319,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A constructor cannot have a 'this' parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Konstruktor nemůže mít parametr this.]]></Val>
+            <Val><![CDATA[Konstruktor nemůže mít parameter this.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -382,7 +382,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A default export can only be used in an ECMAScript-style module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[V modulu ve stylu ECMAScriptu se dá použít jenom výchozí export.]]></Val>
+            <Val><![CDATA[V modulo ve stylu ECMAScriptu se dá použít jenom výchozí export.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -391,7 +391,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A default export must be at the top level of a file or module declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Výchozí export musí být na nejvyšší úrovni deklarace souboru nebo modulu.]]></Val>
+            <Val><![CDATA[Výchozí export musí být na nejvyšší úrovni deklarace souboru nebo modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -484,7 +484,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'get' accessor cannot have parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přístupový objekt get nemůže obsahovat parametry.]]></Val>
+            <Val><![CDATA[Přístupový object get nemůže obsahovat parametry.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -493,7 +493,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A get accessor must be at least as accessible as the setter]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přístupový objekt get musí být alespoň tak přístupný jako metoda setter.]]></Val>
+            <Val><![CDATA[Přístupový object get musí být alespoň tak přístupný jako metoda setter.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -502,7 +502,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'get' accessor must return a value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přístupový objekt get musí vracet hodnotu.]]></Val>
+            <Val><![CDATA[Přístupový object get musí vracet hodnotu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -577,7 +577,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A module cannot have multiple default exports.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul nemůže mít víc výchozích exportů.]]></Val>
+            <Val><![CDATA[Module nemůže mít víc výchozích exportů.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -610,7 +610,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A namespace declaration is only allowed at the top level of a namespace or module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklarace oboru názvů je povolená pouze na nejvyšší úrovni oboru názvů nebo v modulu.]]></Val>
+            <Val><![CDATA[Deklarace oboru názvů je povolená pouze na nejvyšší úrovni oboru názvů nebo v modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -727,7 +727,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A required parameter cannot follow an optional parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Povinný parametr nemůže následovat po nepovinném parametru.]]></Val>
+            <Val><![CDATA[Povinný parameter nemůže následovat po nepovinném parametru.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -793,7 +793,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter cannot be optional.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest nemůže být nepovinný.]]></Val>
+            <Val><![CDATA[Parameter rest nemůže být nepovinný.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -802,7 +802,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter cannot have an initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest nemůže obsahovat inicializátor.]]></Val>
+            <Val><![CDATA[Parameter rest nemůže obsahovat inicializátor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -811,7 +811,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter must be last in a parameter list.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest musí být posledním v seznamu parametrů.]]></Val>
+            <Val><![CDATA[Parameter rest musí být posledním v seznamu parametrů.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -820,7 +820,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter must be of an array type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest musí být typu pole.]]></Val>
+            <Val><![CDATA[Parameter rest musí být typu pole.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -829,7 +829,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter or binding pattern may not have a trailing comma.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest nebo vzor vazby nesmí mít na konci čárku.]]></Val>
+            <Val><![CDATA[Parameter rest nebo vzor vazby nesmí mít na konci čárku.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -865,7 +865,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'set' accessor cannot have a return type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přístupový objekt set nemůže obsahovat anotaci návratového typu.]]></Val>
+            <Val><![CDATA[Přístupový object set nemůže obsahovat anotaci návratového typu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -874,7 +874,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'set' accessor cannot have an optional parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přístupový objekt set nemůže obsahovat nepovinný parametr.]]></Val>
+            <Val><![CDATA[Přístupový object set nemůže obsahovat nepovinný parameter.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -883,7 +883,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'set' accessor cannot have rest parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přístupový objekt get nemůže obsahovat parametr rest.]]></Val>
+            <Val><![CDATA[Přístupový object get nemůže obsahovat parameter rest.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -892,7 +892,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'set' accessor must have exactly one parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přístupový objekt set musí obsahovat přesně jeden parametr.]]></Val>
+            <Val><![CDATA[Přístupový object set musí obsahovat přesně jeden parameter.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -901,7 +901,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'set' accessor parameter cannot have an initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr přístupového objektu set nemůže obsahovat inicializátor.]]></Val>
+            <Val><![CDATA[Parameter přístupového objektu set nemůže obsahovat inicializátor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -955,7 +955,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modifikátor „export“ nejvyšší úrovně nelze použít pro deklarace hodnot v modulu CommonJS, když je povolený modifikátor „verbatimModuleSyntax“.]]></Val>
+            <Val><![CDATA[Modifikátor „export“ nejvyšší úrovně nelze použít pro deklarace hodnot v modulo CommonJS, když je povolený modifikátor „verbatimModuleSyntax“.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1018,7 +1018,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A type predicate cannot reference a rest parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Predikát typu nemůže odkazovat na parametr rest.]]></Val>
+            <Val><![CDATA[Predikát typu nemůže odkazovat na parameter rest.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1036,7 +1036,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A type predicate is only allowed in return type position for functions and methods.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Predikát typu je povolený jenom na pozici návratového typu funkcí a metod.]]></Val>
+            <Val><![CDATA[Predikát typu je povolený jenom na pozici návratového typu funkcí a method.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1441,7 +1441,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přidat export {}, aby se tento soubor převedl na modul]]></Val>
+            <Val><![CDATA[Přidat export {}, aby se tento soubor převedl na module]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1570,7 +1570,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add missing parameter to '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přidejte chybějící parametr do „{0}“.]]></Val>
+            <Val><![CDATA[Přidejte chybějící parameter do „{0}“.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1627,7 +1627,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add optional parameter to '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přidejte volitelný parametr do „{0}“]]></Val>
+            <Val><![CDATA[Přidejte volitelný parameter do „{0}“]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1681,7 +1681,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'resolution-mode' import attribute]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přidat atribut importu resolution-mode]]></Val>
+            <Val><![CDATA[Přidat attribute importu resolution-mode]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1690,7 +1690,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'resolution-mode' import attribute to all type-only imports that need it]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přidat atribut importu resolution-mode do všech importů, při kterých se importuje pouze typ, které ho potřebují]]></Val>
+            <Val><![CDATA[Přidat attribute importu resolution-mode do všech importů, při kterých se importuje pouze typ, které ho potřebují]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1930,7 +1930,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Allow 'import x from y' when a module doesn't have a default export.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pokud modul nemá výchozí export, povolte import X z Y.]]></Val>
+            <Val><![CDATA[Pokud module nemá výchozí export, povolte import X z Y.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1984,7 +1984,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Ambient module declaration cannot specify relative module name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklarace ambientního modulu nemůže uvádět relativní název modulu.]]></Val>
+            <Val><![CDATA[Deklarace ambientního modulo nemůže uvádět relativní název modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2002,7 +2002,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An AMD module cannot have multiple name assignments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul AMD nemůže obsahovat víc přiřazení názvů.]]></Val>
+            <Val><![CDATA[Module AMD nemůže obsahovat víc přiřazení názvů.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2011,7 +2011,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An abstract accessor cannot have an implementation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Abstraktní přístupový objekt nemůže mít implementaci.]]></Val>
+            <Val><![CDATA[Abstraktní přístupový object nemůže mít implementaci.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2029,7 +2029,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An accessor cannot have type parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přístupový objekt nemůže obsahovat parametry typu.]]></Val>
+            <Val><![CDATA[Přístupový object nemůže obsahovat parametry typu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2047,7 +2047,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An ambient module declaration is only allowed at the top level in a file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklarace ambientního modulu je povolená jenom na nejvyšší úrovni v souboru.]]></Val>
+            <Val><![CDATA[Deklarace ambientního modulo je povolená jenom na nejvyšší úrovni v souboru.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2083,7 +2083,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An arrow function cannot have a 'this' parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Funkce šipky nemůže mít parametr this.]]></Val>
+            <Val><![CDATA[Funkce šipky nemůže mít parameter this.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2167,7 +2167,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export assignment cannot be used in a module with other exported elements.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přiřazení exportu se nedá použít v modulu s jinými exportovanými elementy.]]></Val>
+            <Val><![CDATA[Přiřazení exportu se nedá použít v modulo s jinými exportovanými elementy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2194,7 +2194,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export assignment must be at the top level of a file or module declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přiřazení exportu musí být na nejvyšší úrovni deklarace souboru nebo modulu.]]></Val>
+            <Val><![CDATA[Přiřazení exportu musí být na nejvyšší úrovni deklarace souboru nebo modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2203,7 +2203,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export declaration can only be used at the top level of a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklarace exportu se dá použít pouze na nejvyšší úrovni modulu.]]></Val>
+            <Val><![CDATA[Deklarace exportu se dá použít pouze na nejvyšší úrovni modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2212,7 +2212,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export declaration can only be used at the top level of a namespace or module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklarace exportu se dá použít pouze na nejvyšší úrovni oboru názvů nebo modulu.]]></Val>
+            <Val><![CDATA[Deklarace exportu se dá použít pouze na nejvyšší úrovni oboru názvů nebo modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2341,7 +2341,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An import declaration can only be used at the top level of a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklarace importu se dá použít pouze na nejvyšší úrovni modulu.]]></Val>
+            <Val><![CDATA[Deklarace importu se dá použít pouze na nejvyšší úrovni modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2350,7 +2350,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An import declaration can only be used at the top level of a namespace or module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklarace importu se dá použít pouze na nejvyšší úrovni oboru názvů nebo modulu.]]></Val>
+            <Val><![CDATA[Deklarace importu se dá použít pouze na nejvyšší úrovni oboru názvů nebo modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2377,7 +2377,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature cannot have a rest parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Signatura indexu indexu nemůže obsahovat parametr rest.]]></Val>
+            <Val><![CDATA[Signatura indexu indexu nemůže obsahovat parameter rest.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2404,7 +2404,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature must have exactly one parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Signatura indexu musí mít právě jeden parametr.]]></Val>
+            <Val><![CDATA[Signatura indexu musí mít právě jeden parameter.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2548,7 +2548,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An object literal cannot have property and accessor with the same name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Literál objektu nemůže obsahovat vlastnost a přístupový objekt se stejným názvem.]]></Val>
+            <Val><![CDATA[Literál objektu nemůže obsahovat vlastnost a přístupový object se stejným názvem.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2731,7 +2731,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Arguments for the rest parameter '{0}' were not provided.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nezadaly se argumenty pro parametr rest {0}.]]></Val>
+            <Val><![CDATA[Nezadaly se argumenty pro parameter rest {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2794,7 +2794,7 @@
         <Str Cat="Text">
           <Val><![CDATA[At least one accessor must have an explicit type annotation with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Minimálně jeden přistupující objekt musí mít explicitní anotaci typu s možností --isolatedDeclarations.]]></Val>
+            <Val><![CDATA[Minimálně jeden přistupující object musí mít explicitní anotaci typu s možností --isolatedDeclarations.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2803,7 +2803,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Rozšíření pro globální rozsah může být jenom přímo vnořené v externích modulech nebo deklaracích ambientního modulu.]]></Val>
+            <Val><![CDATA[Rozšíření pro globální rozsah může být jenom přímo vnořené v externích modulech nebo deklaracích ambientního modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2821,7 +2821,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Auto discovery for typings is enabled in project '{0}'. Running extra resolution pass for module '{1}' using cache location '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Automatické zjišťování pro psaní je povolené v projektu {0}. Spouští se speciální průchod řešení pro modul {1} prostřednictvím umístění mezipaměti {2}.]]></Val>
+            <Val><![CDATA[Automatické zjišťování pro psaní je povolené v projektu {0}. Spouští se speciální průchod řešení pro module {1} prostřednictvím umístění mezipaměti {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3214,7 +3214,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot assign to private method '{0}'. Private methods are not writable.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Není možné přiřazovat hodnoty do privátní metody {0}. Do privátních metod se nedá zapisovat.]]></Val>
+            <Val><![CDATA[Není možné přiřazovat hodnoty do privátní metody {0}. Do privátních method se nedá zapisovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3223,7 +3223,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot augment module '{0}' because it resolves to a non-module entity.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} se nedá rozšířit, protože se překládá do entity, která není modul.]]></Val>
+            <Val><![CDATA[Module {0} se nedá rozšířit, protože se překládá do entity, která není module.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3232,7 +3232,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot augment module '{0}' with value exports because it resolves to a non-module entity.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} se nedá rozšířit, protože se překládá na entitu, která není modul.]]></Val>
+            <Val><![CDATA[Module {0} se nedá rozšířit, protože se překládá na entitu, která není module.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3268,7 +3268,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot export '{0}'. Only local declarations can be exported from a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} se nedá exportovat. Z modulu je možné exportovat jenom místní deklarace.]]></Val>
+            <Val><![CDATA[{0} se nedá exportovat. Z modulo je možné exportovat jenom místní deklarace.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3352,7 +3352,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nepovedlo se najít modul {0}. Zvažte možnost importovat modul s příponou .json pomocí --resolveJsonModule.]]></Val>
+            <Val><![CDATA[Nepovedlo se najít module {0}. Zvažte možnost importovat module s příponou .json pomocí --resolveJsonModule.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension]]></Val>
@@ -3364,7 +3364,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nepovedlo se najít modul „{0}“. Nechtěli jste nastavit možnost „moduleResolution“ na „nodenext“ nebo přidat do možnosti „paths“ aliasy?]]></Val>
+            <Val><![CDATA[Nepovedlo se najít module „{0}“. Nechtěli jste nastavit možnost „moduleResolution“ na „nodenext“ nebo přidat do možnosti „paths“ aliasy?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3373,7 +3373,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find module '{0}' or its corresponding type declarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nepovedlo se najít modul {0} nebo jeho odpovídající deklarace typů.]]></Val>
+            <Val><![CDATA[Nepovedlo se najít module {0} nebo jeho odpovídající deklarace typů.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3382,7 +3382,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find module or type declarations for side-effect import of '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nelze najít deklarace modulu nebo typu pro import vedlejšího efektu {0}.]]></Val>
+            <Val><![CDATA[Nelze najít deklarace modulo nebo typu pro import vedlejšího efektu {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3559,7 +3559,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find parameter '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nenašel se parametr {0}.]]></Val>
+            <Val><![CDATA[Nenašel se parameter {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3604,7 +3604,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot invoke an object which is possibly 'null'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nejde vyvolat objekt, který může být null.]]></Val>
+            <Val><![CDATA[Nejde vyvolat object, který může být null.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3613,7 +3613,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot invoke an object which is possibly 'null' or 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nejde vyvolat objekt, který může být null nebo nedefinovaný.]]></Val>
+            <Val><![CDATA[Nejde vyvolat object, který může být null nebo nedefinovaný.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3622,7 +3622,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot invoke an object which is possibly 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nejde vyvolat objekt, který může být nedefinovaný.]]></Val>
+            <Val><![CDATA[Nejde vyvolat object, který může být nedefinovaný.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3754,7 +3754,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot use imports, exports, or module augmentations when '--module' is 'none'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nejde používat importy, exporty nebo rozšíření modulu, pokud má příznak --module hodnotu none.]]></Val>
+            <Val><![CDATA[Nejde používat importy, exporty nebo rozšíření modulo, pokud má příznak --module hodnotu none.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3916,7 +3916,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zkontrolujte, jestli argumenty metod bind, call a apply odpovídají původní funkci.]]></Val>
+            <Val><![CDATA[Zkontrolujte, jestli argumenty method bind, call a apply odpovídají původní funkci.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Check that the arguments for `bind`, `call`, and `apply` methods match the original function.]]></Val>
@@ -3964,7 +3964,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member function.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Třída {0} definuje členský přístupový objekt instance {1}, ale rozšířená třída {2} ho definuje jako členskou funkci instance.]]></Val>
+            <Val><![CDATA[Třída {0} definuje členský přístupový object instance {1}, ale rozšířená třída {2} ho definuje jako členskou funkci instance.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3973,7 +3973,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member accessor.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Třída {0} definuje členskou funkci instance {1}, ale rozšířená třída {2} ji definuje jako členský přístupový objekt instance.]]></Val>
+            <Val><![CDATA[Třída {0} definuje členskou funkci instance {1}, ale rozšířená třída {2} ji definuje jako členský přístupový object instance.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4036,7 +4036,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class constructor may not be an accessor.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Konstruktor třídy nemůže být přístupový objekt.]]></Val>
+            <Val><![CDATA[Konstruktor třídy nemůže být přístupový object.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4177,7 +4177,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler option '{0}' expects an argument.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr kompilátoru {0} očekává argument.]]></Val>
+            <Val><![CDATA[Parameter kompilátoru {0} očekává argument.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4213,7 +4213,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler option '{0}' requires a value of type {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr kompilátoru {0} vyžaduje hodnotu typu {1}.]]></Val>
+            <Val><![CDATA[Parameter kompilátoru {0} vyžaduje hodnotu typu {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4471,7 +4471,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Control what method is used to detect module-format JS files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Určete, která metoda se používá k detekci souborů JS ve formátu modulu.]]></Val>
+            <Val><![CDATA[Určete, která metoda se používá k detekci souborů JS ve formátu modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4705,7 +4705,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert parameters to destructured object]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Převést parametry na destrukturovaný objekt]]></Val>
+            <Val><![CDATA[Převést parametry na destrukturovaný object]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4723,7 +4723,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert to ES module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Převést na modul ES]]></Val>
+            <Val><![CDATA[Převést na module ES]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4876,7 +4876,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not find a declaration file for module '{0}'. '{1}' implicitly has an 'any' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nenašel se soubor deklarací pro modul {0}. {1} má implicitně typ any.]]></Val>
+            <Val><![CDATA[Nenašel se soubor deklarací pro module {0}. {1} má implicitně typ any.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4939,7 +4939,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not find property for which to generate accessor]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nepovedlo se najít vlastnost, pro kterou se má vygenerovat přístupový objekt.]]></Val>
+            <Val><![CDATA[Nepovedlo se najít vlastnost, pro kterou se má vygenerovat přístupový object.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5059,7 +5059,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this file requires using private name '{0}' from module '{1}'. An explicit type annotation may unblock declaration emit.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Generování deklarací pro tento soubor vyžaduje, aby se použil privátní název {0} z modulu {1}. Explicitní anotace typu může generování deklarací odblokovat.]]></Val>
+            <Val><![CDATA[Generování deklarací pro tento soubor vyžaduje, aby se použil privátní název {0} z modulo {1}. Explicitní anotace typu může generování deklarací odblokovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5068,7 +5068,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Generování deklarace pro tento parametr vyžaduje implicitní přidání možnosti „undefined“ do jeho typu. Není podporováno s možností „--isolatedDeclarations“.]]></Val>
+            <Val><![CDATA[Generování deklarace pro tento parameter vyžaduje implicitní přidání možnosti „undefined“ do jeho typu. Není podporováno s možností „--isolatedDeclarations“.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5281,7 +5281,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Výchozí export modulu má nebo používá privátní název {0}.]]></Val>
+            <Val><![CDATA[Výchozí export modulo má nebo používá privátní název {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5392,7 +5392,7 @@
         <Str Cat="Text">
           <Val><![CDATA[[Deprecated]5D; Use '--jsxFactory' instead. Specify the object invoked for createElement when targeting 'react' JSX emit]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[[Zastaralé]5D; Použijte místo toho --jsxFactory. Určí objekt vyvolaný pro createElement při cílení na generování JSX react.]]></Val>
+            <Val><![CDATA[[Zastaralé]5D; Použijte místo toho --jsxFactory. Určí object vyvolaný pro createElement při cílení na generování JSX react.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5476,7 +5476,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Neměli jste v úmyslu použít znak :? Znak = může následovat pouze po názvu vlastnosti, když je obsahující objekt literálu součástí vzoru destrukturalizace.]]></Val>
+            <Val><![CDATA[Neměli jste v úmyslu použít znak :? Znak = může následovat pouze po názvu vlastnosti, když je obsahující object literálu součástí vzoru destrukturalizace.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5698,7 +5698,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Disable strict checking of generic signatures in function types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zakáže striktní kontroly generických signatur v typech funkcí.]]></Val>
+            <Val><![CDATA[Zakáže striktní kontroly generických signature v typech funkcí.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5785,7 +5785,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Do not allow runtime constructs that are not part of ECMAScript.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nepovolit konstruktory modulu runtime, které nejsou součástí ECMAScriptu]]></Val>
+            <Val><![CDATA[Nepovolit konstruktory modulo runtime, které nejsou součástí ECMAScriptu]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5830,7 +5830,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Do not emit 'use strict' directives in module output.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Negenerujte direktivy use strict ve výstupu modulu.]]></Val>
+            <Val><![CDATA[Negenerujte direktivy use strict ve výstupu modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5929,7 +5929,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Duplicitní identifikátor {0}. Kompilátor si vyhrazuje název {1} v oboru nejvyšší úrovně pro daný modul.]]></Val>
+            <Val><![CDATA[Duplicitní identifikátor {0}. Kompilátor si vyhrazuje název {1} v oboru nejvyšší úrovně pro daný module.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5938,7 +5938,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of a module containing async functions.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Duplicitní identifikátor {0}. Kompilátor rezervuje název {1} v oboru nejvyšší úrovně modulu, který obsahuje asynchronní funkce.]]></Val>
+            <Val><![CDATA[Duplicitní identifikátor {0}. Kompilátor rezervuje název {1} v oboru nejvyšší úrovně modulo, který obsahuje asynchronní funkce.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6061,7 +6061,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Dynamic imports can only accept a module specifier and an optional set of attributes as arguments]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dynamické importy můžou jako argumenty přijímat jenom specifikátor modulu a volitelnou sadu atributů.]]></Val>
+            <Val><![CDATA[Dynamické importy můžou jako argumenty přijímat jenom specifikátor modulo a volitelnou sadu atributů.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6100,7 +6100,7 @@
         <Str Cat="Text">
           <Val><![CDATA[ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Syntaxe modulu ECMAScript není v modulu CommonJS povolená, pokud je možnost module nastavená na preserve.]]></Val>
+            <Val><![CDATA[Syntax modulo ECMAScript není v modulo CommonJS povolená, pokud je možnost module nastavená na preserve.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6118,7 +6118,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Each member of the union type '{0}' has construct signatures, but none of those signatures are compatible with each other.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Každý člen typu sjednocení {0} má signatury konstruktu, ale žádná z těchto signatur není kompatibilní s jinou signaturou.]]></Val>
+            <Val><![CDATA[Každý člen typu sjednocení {0} má signatury konstruktu, ale žádná z těchto signature není kompatibilní s jinou signaturou.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6127,7 +6127,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Each member of the union type '{0}' has signatures, but none of those signatures are compatible with each other.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Každý člen typu sjednocení {0} má signatury, ale žádná z těchto signatur není kompatibilní s jinou signaturou.]]></Val>
+            <Val><![CDATA[Každý člen typu sjednocení {0} má signatury, ale žádná z těchto signature není kompatibilní s jinou signaturou.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6466,7 +6466,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enable tracing of the name resolution process.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Povolte trasování procesu překladu IP adres.]]></Val>
+            <Val><![CDATA[Povolte trasování procesu překladu IP address.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6505,7 +6505,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enables experimental support for emitting type metadata for decorators.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Povolí experimentální podporu pro generování metadat typu pro dekorátory.]]></Val>
+            <Val><![CDATA[Povolí experimentální podporu pro generování metadata typu pro dekorátory.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6763,7 +6763,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Očekával se tento počet argumentů: {0}, ale byl přijat tento počet: {1}. Nezapomněli jste zahrnout void do argumentu typu pro objekt Promise?]]></Val>
+            <Val><![CDATA[Očekával se tento počet argumentů: {0}, ale byl přijat tento počet: {1}. Nezapomněli jste zahrnout void do argumentu typu pro object Promise?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6790,7 +6790,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected 1 argument, but got 0. 'new Promise()' needs a JSDoc hint to produce a 'resolve' that can be called without arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Očekával se 1 argument, ale bylo jich 0. New Promise() potřebuje pomocný parametr JSDoc k vytvoření resolve, který se dá volat bez argumentů.]]></Val>
+            <Val><![CDATA[Očekával se 1 argument, ale bylo jich 0. New Promise() potřebuje pomocný parameter JSDoc k vytvoření resolve, který se dá volat bez argumentů.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6889,7 +6889,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Explicitly specified module resolution kind: '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Explicitně zadaný druh překladu modulu: {0}.]]></Val>
+            <Val><![CDATA[Explicitně zadaný druh překladu modulo: {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6907,7 +6907,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Export '{0}' from module '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Exportovat {0} z modulu {1}]]></Val>
+            <Val><![CDATA[Exportovat {0} z modulo {1}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6925,7 +6925,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přiřazení exportu nelze použít, pokud jsou cílem moduly ECMAScript. Zkuste místo toho použít export default nebo jiný formát modulu.]]></Val>
+            <Val><![CDATA[Přiřazení exportu nelze použít, pokud jsou cílem moduly ECMAScript. Zkuste místo toho použít export default nebo jiný formát modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6982,7 +6982,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported type alias '{0}' has or is using private name '{1}' from module {2}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Alias exportovaného typu {0} má nebo používá privátní název {1} z modulu {2}.]]></Val>
+            <Val><![CDATA[Alias exportovaného typu {0} má nebo používá privátní název {1} z modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6991,7 +6991,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported variable '{0}' has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Exportovaná proměnná {0} má nebo používá název {1} z externího modulu {2}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Exportovaná proměnná {0} má nebo používá název {1} z externího modulo {2}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7000,7 +7000,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported variable '{0}' has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Exportovaná proměnná {0} má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Exportovaná proměnná {0} má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7315,7 +7315,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File '{0}' exists - use it as a name resolution result.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Soubor „{0}“ existuje – použijte ho jako výsledek překladu IP adres.]]></Val>
+            <Val><![CDATA[Soubor „{0}“ existuje – použijte ho jako výsledek překladu IP address.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7342,7 +7342,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File '{0}' is not a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Soubor {0} není modul.]]></Val>
+            <Val><![CDATA[Soubor {0} není module.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7414,7 +7414,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File is CommonJS module because '{0}' does not have field "type"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Soubor je modul CommonJS, protože {0} nemá pole type]]></Val>
+            <Val><![CDATA[Soubor je module CommonJS, protože {0} nemá pole type]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7423,7 +7423,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File is CommonJS module because '{0}' has field "type" whose value is not "module"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Soubor je modul CommonJS, protože {0} má pole type, jehož hodnota není module]]></Val>
+            <Val><![CDATA[Soubor je module CommonJS, protože {0} má pole type, jehož hodnota není module]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7432,7 +7432,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File is CommonJS module because 'package.json' was not found]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Soubor je modul CommonJS, protože se nenašel package.json]]></Val>
+            <Val><![CDATA[Soubor je module CommonJS, protože se nenašel package.json]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7441,7 +7441,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File is ECMAScript module because '{0}' has field "type" with value "module"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Soubor je modul ECMAScript, protože {0} má pole type s hodnotou module]]></Val>
+            <Val><![CDATA[Soubor je module ECMAScript, protože {0} má pole type s hodnotou module]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7450,7 +7450,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File is a CommonJS module; it may be converted to an ES module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Soubor je modul CommonJS; může být převeden na modul ES.]]></Val>
+            <Val><![CDATA[Soubor je module CommonJS; může být převeden na module ES.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8023,7 +8023,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Global module exports may only appear at top level.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Exporty globálního modulu se můžou objevit jenom na nejvyšší úrovni.]]></Val>
+            <Val><![CDATA[Exporty globálního modulo se můžou objevit jenom na nejvyšší úrovni.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8032,7 +8032,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Global module exports may only appear in declaration files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Exporty globálního modulu se můžou objevit jenom v souborech deklarací.]]></Val>
+            <Val><![CDATA[Exporty globálního modulo se můžou objevit jenom v souborech deklarací.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8041,7 +8041,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Global module exports may only appear in module files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Exporty globálního modulu se můžou objevit jenom v souborech modulů.]]></Val>
+            <Val><![CDATA[Exporty globálního modulo se můžou objevit jenom v souborech modulů.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8098,7 +8098,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Identifier expected. '{0}' is a reserved word at the top-level of a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Očekával se identifikátor. {0} je vyhrazené slovo na nejvyšší úrovni modulu.]]></Val>
+            <Val><![CDATA[Očekával se identifikátor. {0} je vyhrazené slovo na nejvyšší úrovni modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8182,7 +8182,7 @@
         <Str Cat="Text">
           <Val><![CDATA[If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pokud balíček ‚{0}‘ ve skutečnosti zveřejňuje tento modul, zvažte možnost poslat žádost o přijetí změn, aby se připojila adresa ‚https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}‘]]></Val>
+            <Val><![CDATA[Pokud balíček ‚{0}‘ ve skutečnosti zveřejňuje tento module, zvažte možnost poslat žádost o přijetí změn, aby se připojila adresa ‚https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}‘]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`]]></Val>
@@ -8194,7 +8194,7 @@
         <Str Cat="Text">
           <Val><![CDATA[If the '{0}' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module '{1}';`]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pokud balíček {0} skutečně zpřístupňuje tento modul, zkuste přidat nový soubor deklarace (.d.ts), který obsahuje declare module {1};]]></Val>
+            <Val><![CDATA[Pokud balíček {0} skutečně zpřístupňuje tento module, zkuste přidat nový soubor deklarace (.d.ts), který obsahuje declare module {1};]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8368,7 +8368,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přiřazení importu nelze použít, pokud jsou cílem moduly ECMAScript. Zkuste místo toho použít import * as ns from "mod", import {a} from "mod", import d from "mod" nebo jiný formát modulu.]]></Val>
+            <Val><![CDATA[Přiřazení importu nelze použít, pokud jsou cílem moduly ECMAScript. Zkuste místo toho použít import * as ns from "mod", import {a} from "mod", import d from "mod" nebo jiný formát modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8434,7 +8434,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import declarations in a namespace cannot reference a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklarace importu v oboru názvů nemůžou odkazovat na modul.]]></Val>
+            <Val><![CDATA[Deklarace importu v oboru názvů nemůžou odkazovat na module.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8473,7 +8473,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import or export declaration in an ambient module declaration cannot reference module through relative module name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklarace importu nebo exportu v deklaraci ambientního modulu nemůže odkazovat na modul pomocí jeho relativního názvu.]]></Val>
+            <Val><![CDATA[Deklarace importu nebo exportu v deklaraci ambientního modulo nemůže odkazovat na module pomocí jeho relativního názvu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8545,7 +8545,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Import souboru JSON do modulu ECMAScript vyžaduje atribut importu type: "json", pokud je možnost module nastavená na {0}.]]></Val>
+            <Val><![CDATA[Import souboru JSON do modulo ECMAScript vyžaduje attribute importu type: "json", pokud je možnost module nastavená na {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8554,7 +8554,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importy nejsou povolené v rozšířeních modulů. Zvažte jejich přesunutí do uzavírajícího externího modulu.]]></Val>
+            <Val><![CDATA[Importy nejsou povolené v rozšířeních modulů. Zvažte jejich přesunutí do uzavírajícího externího modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8911,7 +8911,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Invalid module name in augmentation. Module '{0}' resolves to an untyped module at '{1}', which cannot be augmented.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Neplatný název modulu v rozšíření. Modul {0} se převede na netypový modul v {1}, který se nedá rozšířit.]]></Val>
+            <Val><![CDATA[Neplatný název modulo v rozšíření. Module {0} se převede na netypový module v {1}, který se nedá rozšířit.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8920,7 +8920,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Invalid module name in augmentation, module '{0}' cannot be found.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[V rozšíření je neplatný název modulu, modul {0} se nedá najít.]]></Val>
+            <Val><![CDATA[V rozšíření je neplatný název modulo, module {0} se nedá najít.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8938,7 +8938,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Invalid 'reference' directive syntax.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Neplatná syntaxe direktivy reference]]></Val>
+            <Val><![CDATA[Neplatná syntax direktivy reference]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8947,7 +8947,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Invalid syntax in decorator.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Neplatná syntaxe v dekoratéru]]></Val>
+            <Val><![CDATA[Neplatná syntax v dekoratéru]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9091,7 +9091,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@param' tag has name '{0}', but there is no parameter with that name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Značka JSDoc @param má název {0}, ale neexistuje žádný parametr s tímto názvem.]]></Val>
+            <Val><![CDATA[Značka JSDoc @param má název {0}, ale neexistuje žádný parameter s tímto názvem.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9100,7 +9100,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@param' tag has name '{0}', but there is no parameter with that name. It would match 'arguments' if it had an array type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Značka JSDoc @param má název {0}, ale žádný parametr s tímto názvem neexistuje. Musí odpovídat hodnotě arguments, pokud má typ pole.]]></Val>
+            <Val><![CDATA[Značka JSDoc @param má název {0}, ale žádný parameter s tímto názvem neexistuje. Musí odpovídat hodnotě arguments, pokud má typ pole.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9262,7 +9262,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSX spread child must be an array type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Podřízený objekt JSX spread musí být typu pole.]]></Val>
+            <Val><![CDATA[Podřízený object JSX spread musí být typu pole.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9370,7 +9370,7 @@
         <Str Cat="Text">
           <Val><![CDATA[List of file name suffixes to search when resolving a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Seznam přípon názvů souborů, které se mají vyhledat při překladu modulu]]></Val>
+            <Val><![CDATA[Seznam přípon názvů souborů, které se mají vyhledat při překladu modulo]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9409,7 +9409,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Loading module '{0}' from 'node_modules' folder, target file types: {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Načítá se modul „{0}“ ze složky node_modules. Cílové typy souborů: {1}.]]></Val>
+            <Val><![CDATA[Načítá se module „{0}“ ze složky node_modules. Cílové typy souborů: {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9418,7 +9418,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Loading module as file / folder, candidate module location '{0}', target file types: {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Načítá se modul jako soubor/složka, umístění kandidátského modulu: „{0}“, cílové typy souborů: {1}.]]></Val>
+            <Val><![CDATA[Načítá se module jako soubor/složka, umístění kandidátského modulo: „{0}“, cílové typy souborů: {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9601,7 +9601,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Method '{0}' of exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Metoda {0} z exportovaného rozhraní má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Metoda {0} z exportovaného rozhraní má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9646,7 +9646,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' can only be default-imported using the '{1}' flag]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} se dá importovat podle výchozího nastavení jen pomocí příznaku {1}.]]></Val>
+            <Val><![CDATA[Module {0} se dá importovat podle výchozího nastavení jen pomocí příznaku {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9655,7 +9655,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} nejde importovat pomocí této konstrukce. Specifikátor se převede jenom na modul ES, který se nedá importovat s příkazem require. Místo toho použijte import ECMAScript.]]></Val>
+            <Val><![CDATA[Module {0} nejde importovat pomocí této konstrukce. Specifikátor se převede jenom na module ES, který se nedá importovat s příkazem require. Místo toho použijte import ECMAScript.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
@@ -9667,7 +9667,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' declares '{1}' locally, but it is exported as '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} deklaruje {1} místně, ale exportuje se jako {2}.]]></Val>
+            <Val><![CDATA[Module {0} deklaruje {1} místně, ale exportuje se jako {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9676,7 +9676,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' declares '{1}' locally, but it is not exported.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} deklaruje {1} místně, ale neexportuje se.]]></Val>
+            <Val><![CDATA[Module {0} deklaruje {1} místně, ale neexportuje se.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9685,7 +9685,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' does not refer to a type, but is used as a type here. Did you mean 'typeof import('{0}')'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} neodkazuje na typ, ale používá se tady jako typ. Měli jste na mysli typeof import('{0}')?]]></Val>
+            <Val><![CDATA[Module {0} neodkazuje na typ, ale používá se tady jako typ. Měli jste na mysli typeof import('{0}')?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9694,7 +9694,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' does not refer to a value, but is used as a value here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} neodkazuje na hodnotu, ale používá se tady jako hodnota.]]></Val>
+            <Val><![CDATA[Module {0} neodkazuje na hodnotu, ale používá se tady jako hodnota.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9703,7 +9703,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module {0} has already exported a member named '{1}'. Consider explicitly re-exporting to resolve the ambiguity.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} už exportoval člena s názvem {1}. Zvažte možnost vyřešení nejednoznačnosti explicitním opakováním exportu.]]></Val>
+            <Val><![CDATA[Module {0} už exportoval člena s názvem {1}. Zvažte možnost vyřešení nejednoznačnosti explicitním opakováním exportu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9712,7 +9712,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' has no default export.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} nemá žádný výchozí export.]]></Val>
+            <Val><![CDATA[Module {0} nemá žádný výchozí export.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9721,7 +9721,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' has no default export. Did you mean to use 'import { {1} } from {0}' instead?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} nemá žádný výchozí export. Nechtěli jste místo toho použít import { {1} } from {0}?]]></Val>
+            <Val><![CDATA[Module {0} nemá žádný výchozí export. Nechtěli jste místo toho použít import { {1} } from {0}?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9730,7 +9730,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' has no exported member '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[V modulu {0} není žádný exportovaný člen {1}.]]></Val>
+            <Val><![CDATA[V modulo {0} není žádný exportovaný člen {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9739,7 +9739,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} nemá žádný exportovaný člen {1}. Nechtěli jste místo toho použít import { {1} } from {0}?]]></Val>
+            <Val><![CDATA[Module {0} nemá žádný exportovaný člen {1}. Nechtěli jste místo toho použít import { {1} } from {0}?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9748,7 +9748,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' is hidden by a local declaration with the same name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} je skrytý místní deklarací se stejným názvem.]]></Val>
+            <Val><![CDATA[Module {0} je skrytý místní deklarací se stejným názvem.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Module '{0}' is hidden by a local declaration with the same name]]></Val>
@@ -9760,7 +9760,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' uses 'export =' and cannot be used with 'export *'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} používá export = a nedá se použít s možností export *.]]></Val>
+            <Val><![CDATA[Module {0} používá export = a nedá se použít s možností export *.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9769,7 +9769,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' was resolved as locally declared ambient module in file '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} se převedl jako lokálně deklarovaný ambientní modul v souboru {1}.]]></Val>
+            <Val><![CDATA[Module {0} se převedl jako lokálně deklarovaný ambientní module v souboru {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9778,7 +9778,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' was resolved to '{1}', but '--allowArbitraryExtensions' is not set.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul „{0}“ byl přeložen na „{1}“, ale není nastavena možnost „--allowArbitraryExtensions“.]]></Val>
+            <Val><![CDATA[Module „{0}“ byl přeložen na „{1}“, ale není nastavena možnost „--allowArbitraryExtensions“.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9787,7 +9787,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' was resolved to '{1}', but '--jsx' is not set.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} se přeložil na {1}, není ale nastavená možnost --jsx.]]></Val>
+            <Val><![CDATA[Module {0} se přeložil na {1}, není ale nastavená možnost --jsx.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9796,7 +9796,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' was resolved to '{1}', but '--resolveJsonModule' is not used.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul {0} se přeložil na {1}, ale nepoužívá se --resolveJsonModule.]]></Val>
+            <Val><![CDATA[Module {0} se přeložil na {1}, ale nepoužívá se --resolveJsonModule.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9814,7 +9814,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module name '{0}', matched pattern '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Název modulu {0}, odpovídající vzor {1}]]></Val>
+            <Val><![CDATA[Název modulo {0}, odpovídající vzor {1}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9823,7 +9823,7 @@
         <Str Cat="Text">
           <Val><![CDATA[======== Module name '{0}' was not resolved. ========]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[======== Název modulu {0} nebyl přeložen. ========]]></Val>
+            <Val><![CDATA[======== Název modulo {0} nebyl přeložen. ========]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9832,7 +9832,7 @@
         <Str Cat="Text">
           <Val><![CDATA[======== Module name '{0}' was successfully resolved to '{1}'. ========]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[======== Název modulu {0} byl úspěšně přeložen na {1}. ========]]></Val>
+            <Val><![CDATA[======== Název modulo {0} byl úspěšně přeložen na {1}. ========]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9841,7 +9841,7 @@
         <Str Cat="Text">
           <Val><![CDATA[======== Module name '{0}' was successfully resolved to '{1}' with Package ID '{2}'. ========]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[======== Název modulu {0} se úspěšně přeložil na {1} s ID balíčku {2}. ========]]></Val>
+            <Val><![CDATA[======== Název modulo {0} se úspěšně přeložil na {1} s ID balíčku {2}. ========]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9850,7 +9850,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module resolution kind is not specified, using '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Druh překladu modulu nebyl určen, použije se {0}.]]></Val>
+            <Val><![CDATA[Druh překladu modulo nebyl určen, použije se {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9859,7 +9859,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module resolution using 'rootDirs' has failed.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Překlad modulu pomocí rootDirs se nepovedl.]]></Val>
+            <Val><![CDATA[Překlad modulo pomocí rootDirs se nepovedl.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Module resolution using 'rootDirs' has failed]]></Val>
@@ -9979,7 +9979,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pojmenované importy ze souboru JSON do modulu ECMAScript nejsou povolené, když je možnost module nastavená na {0}.]]></Val>
+            <Val><![CDATA[Pojmenované importy ze souboru JSON do modulo ECMAScript nejsou povolené, když je možnost module nastavená na {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10216,7 +10216,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Non-simple parameter declared here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklaroval se tady parametr, který není jednoduchý.]]></Val>
+            <Val><![CDATA[Deklaroval se tady parameter, který není jednoduchý.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10279,7 +10279,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Object is of type 'unknown'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Objekt je typu Neznámý.]]></Val>
+            <Val><![CDATA[Object je typu Neznámý.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10288,7 +10288,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Object is possibly 'null'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Objekt je pravděpodobně null.]]></Val>
+            <Val><![CDATA[Object je pravděpodobně null.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10297,7 +10297,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Object is possibly 'null' or 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Objekt je pravděpodobně null nebo undefined.]]></Val>
+            <Val><![CDATA[Object je pravděpodobně null nebo undefined.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10306,7 +10306,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Object is possibly 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Objekt je pravděpodobně undefined.]]></Val>
+            <Val><![CDATA[Object je pravděpodobně undefined.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10585,7 +10585,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Možnost „{0}“ se dá použít jenom v případě, že je možnost „modul“ nastavená na „preserve“, „commonjs“ nebo na „es2015“ a novější.]]></Val>
+            <Val><![CDATA[Možnost „{0}“ se dá použít jenom v případě, že je možnost „module“ nastavená na „preserve“, „commonjs“ nebo na „es2015“ a novější.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10903,7 +10903,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} nemůže odkazovat na identifikátor {1} deklarovaný za ním.]]></Val>
+            <Val><![CDATA[Parameter {0} nemůže odkazovat na identifikátor {1} deklarovaný za ním.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10912,7 +10912,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} nemůže odkazovat sám na sebe.]]></Val>
+            <Val><![CDATA[Parameter {0} nemůže odkazovat sám na sebe.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10921,7 +10921,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' implicitly has an '{1}' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} má implicitně typ {1}.]]></Val>
+            <Val><![CDATA[Parameter {0} má implicitně typ {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10930,7 +10930,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} má implicitně typ {1}, ale je možné, že lepší typ by se vyvodil z použití.]]></Val>
+            <Val><![CDATA[Parameter {0} má implicitně typ {1}, ale je možné, že lepší typ by se vyvodil z použití.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10939,7 +10939,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' is not in the same position as parameter '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} není na stejné pozici jako parametr {1}.]]></Val>
+            <Val><![CDATA[Parameter {0} není na stejné pozici jako parameter {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10948,7 +10948,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of accessor has or is using name '{1}' from external module '{2}' but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} přístupového objektu má nebo používá název {1} z externího modulu {2}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Parameter {0} přístupového objektu má nebo používá název {1} z externího modulo {2}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10957,7 +10957,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of accessor has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} přístupového objektu má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Parameter {0} přístupového objektu má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10966,7 +10966,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of accessor has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} přístupového objektu má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter {0} přístupového objektu má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10975,7 +10975,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} signatury volání z exportovaného rozhraní má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Parameter {0} signatury volání z exportovaného rozhraní má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10984,7 +10984,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of call signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} signatury volání z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter {0} signatury volání z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10993,7 +10993,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} konstruktoru z exportované třídy má nebo používá název {1} z externího modulu {2}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Parameter {0} konstruktoru z exportované třídy má nebo používá název {1} z externího modulo {2}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11002,7 +11002,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} konstruktoru z exportované třídy má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Parameter {0} konstruktoru z exportované třídy má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11011,7 +11011,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} konstruktoru z exportované třídy má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter {0} konstruktoru z exportované třídy má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11020,7 +11020,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} signatury konstruktoru z exportovaného rozhraní má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Parameter {0} signatury konstruktoru z exportovaného rozhraní má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11029,7 +11029,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} signatury konstruktoru z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter {0} signatury konstruktoru z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11038,7 +11038,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} exportované funkce má nebo používá název {1} z externího modulu {2}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Parameter {0} exportované funkce má nebo používá název {1} z externího modulo {2}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11047,7 +11047,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} exportované funkce má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Parameter {0} exportované funkce má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11056,7 +11056,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} exportované funkce má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter {0} exportované funkce má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11065,7 +11065,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} signatury indexu z exportovaného rozhraní má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Parameter {0} signatury indexu z exportovaného rozhraní má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11074,7 +11074,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of index signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} signatury indexu z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter {0} signatury indexu z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11083,7 +11083,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} metody z exportovaného rozhraní má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Parameter {0} metody z exportovaného rozhraní má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11092,7 +11092,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of method from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} metody z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter {0} metody z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11101,7 +11101,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} veřejné metody z exportované třídy má nebo používá název {1} z externího modulu {2}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Parameter {0} veřejné metody z exportované třídy má nebo používá název {1} z externího modulo {2}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11110,7 +11110,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} veřejné metody z exportované třídy má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Parameter {0} veřejné metody z exportované třídy má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11119,7 +11119,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} veřejné metody z exportované třídy má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter {0} veřejné metody z exportované třídy má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11128,7 +11128,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} veřejné statické metody z exportované třídy má nebo používá název {1} z externího modulu {2}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Parameter {0} veřejné statické metody z exportované třídy má nebo používá název {1} z externího modulo {2}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11137,7 +11137,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} veřejné statické metody z exportované třídy má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Parameter {0} veřejné statické metody z exportované třídy má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11146,7 +11146,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr {0} veřejné statické metody z exportované třídy má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter {0} veřejné statické metody z exportované třídy má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11155,7 +11155,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter cannot have question mark and initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr nemůže obsahovat otazník a inicializátor.]]></Val>
+            <Val><![CDATA[Parameter nemůže obsahovat otazník a inicializátor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11173,7 +11173,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter has a name but no type. Did you mean '{0}: {1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr má název, ale žádný typ. Měli jste na mysli {0}: {1}?]]></Val>
+            <Val><![CDATA[Parameter má název, ale žádný typ. Měli jste na mysli {0}: {1}?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11191,7 +11191,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter must have an explicit type annotation with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr musí mít explicitní anotaci typu s možností „--isolatedDeclarations“.]]></Val>
+            <Val><![CDATA[Parameter musí mít explicitní anotaci typu s možností „--isolatedDeclarations“.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11200,7 +11200,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typ parametru veřejné metody setter {0} z exportované třídy má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Typ parametru veřejné metody setter {0} z exportované třídy má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11218,7 +11218,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typ parametru veřejné statické metody setter {0} z exportované třídy má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Typ parametru veřejné statické metody setter {0} z exportované třídy má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11425,7 +11425,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Private accessor was defined without a getter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Privátní přístupový objekt se definoval bez metody getter.]]></Val>
+            <Val><![CDATA[Privátní přístupový object se definoval bez metody getter.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11773,7 +11773,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' implicitly has type 'any', because its get accessor lacks a return type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Vlastnost {0} má implicitně typ any, protože její přistupující objekt get nemá anotaci návratového typu.]]></Val>
+            <Val><![CDATA[Vlastnost {0} má implicitně typ any, protože její přistupující object get nemá anotaci návratového typu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11782,7 +11782,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' implicitly has type 'any', because its set accessor lacks a parameter type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Vlastnost {0} má implicitně typ any, protože její přistupující objekt set nemá anotaci parametrového typu.]]></Val>
+            <Val><![CDATA[Vlastnost {0} má implicitně typ any, protože její přistupující object set nemá anotaci parametrového typu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11791,7 +11791,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' implicitly has type 'any', but a better type for its get accessor may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Vlastnost {0} má implicitně typ any, ale je možné, že lepší typ pro jeho přístupový objekt get by se vyvodil z použití.]]></Val>
+            <Val><![CDATA[Vlastnost {0} má implicitně typ any, ale je možné, že lepší typ pro jeho přístupový object get by se vyvodil z použití.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11800,7 +11800,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' implicitly has type 'any', but a better type for its set accessor may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Vlastnost {0} má implicitně typ any, ale je možné, že lepší typ pro jeho přístupový objekt set by se vyvodil z použití.]]></Val>
+            <Val><![CDATA[Vlastnost {0} má implicitně typ any, ale je možné, že lepší typ pro jeho přístupový object set by se vyvodil z použití.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11992,7 +11992,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' of exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Vlastnost {0} exportovaného rozhraní má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Vlastnost {0} exportovaného rozhraní má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12091,7 +12091,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Veřejná metoda {0} z exportované třídy má nebo používá název {1} z externího modulu {2}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Veřejná metoda {0} z exportované třídy má nebo používá název {1} z externího modulo {2}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12100,7 +12100,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public method '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Veřejná metoda {0} z exportované třídy má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Veřejná metoda {0} z exportované třídy má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12118,7 +12118,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Veřejná vlastnost {0} exportované třídy má nebo používá název {1} z externího modulu {2}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Veřejná vlastnost {0} exportované třídy má nebo používá název {1} z externího modulo {2}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12127,7 +12127,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public property '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Veřejná vlastnost {0} exportované třídy má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Veřejná vlastnost {0} exportované třídy má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12145,7 +12145,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Veřejná statická metoda {0} z exportované třídy má nebo používá název {1} z externího modulu {2}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Veřejná statická metoda {0} z exportované třídy má nebo používá název {1} z externího modulo {2}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12154,7 +12154,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static method '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Veřejná statická metoda {0} z exportované třídy má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Veřejná statická metoda {0} z exportované třídy má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12172,7 +12172,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Veřejná statická vlastnost {0} exportované třídy má nebo používá název {1} z externího modulu {2}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Veřejná statická vlastnost {0} exportované třídy má nebo používá název {1} z externího modulo {2}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12181,7 +12181,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static property '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Veřejná statická vlastnost {0} exportované třídy má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Veřejná statická vlastnost {0} exportované třídy má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12208,7 +12208,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Raise an error when a function parameter isn't read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Když se parametr funkce nepřečte, nahlaste chybu.]]></Val>
+            <Val><![CDATA[Když se parameter funkce nepřečte, nahlaste chybu.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Raise an error when a function parameter isn't read]]></Val>
@@ -12652,7 +12652,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Require undeclared properties from index signatures to use element accesses.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Vyžadovat, aby nedeklarované vlastnosti ze signatur indexů používaly přístupy k elementům]]></Val>
+            <Val><![CDATA[Vyžadovat, aby nedeklarované vlastnosti ze signature indexů používaly přístupy k elementům]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12670,7 +12670,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Resolution for module '{0}' was found in cache from location '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Překlad pro modul {0} se našel v mezipaměti umístění {1}.]]></Val>
+            <Val><![CDATA[Překlad pro module {0} se našel v mezipaměti umístění {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12733,7 +12733,7 @@
         <Str Cat="Text">
           <Val><![CDATA[======== Resolving module '{0}' from '{1}'. ========]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[======== Překládá se modul {0} z {1}. ========]]></Val>
+            <Val><![CDATA[======== Překládá se module {0} z {1}. ========]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12742,7 +12742,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Resolving module name '{0}' relative to base url '{1}' - '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Překládá se název modulu {0} relativní k základní adrese URL {1}–{2}.]]></Val>
+            <Val><![CDATA[Překládá se název modulo {0} relativní k základní adrese URL {1}–{2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12829,7 +12829,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Rest parameter '{0}' implicitly has an 'any[]5D;' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest {0} implicitně obsahuje typ any[]5D;.]]></Val>
+            <Val><![CDATA[Parameter rest {0} implicitně obsahuje typ any[]5D;.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12838,7 +12838,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Rest parameter '{0}' implicitly has an 'any[]5D;' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest {0} má implicitně typ any[]5D;, ale je možné, že lepší typ by se vyvodil z použití.]]></Val>
+            <Val><![CDATA[Parameter rest {0} má implicitně typ any[]5D;, ale je možné, že lepší typ by se vyvodil z použití.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12874,7 +12874,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of call signature from exported interface has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ signatury volání z exportovaného rozhraní má nebo používá název {0} z privátního modulu {1}.]]></Val>
+            <Val><![CDATA[Návratový typ signatury volání z exportovaného rozhraní má nebo používá název {0} z privátního modulo {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12892,7 +12892,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of constructor signature from exported interface has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ signatury konstruktoru z exportovaného rozhraní má nebo používá název {0} z privátního modulu {1}.]]></Val>
+            <Val><![CDATA[Návratový typ signatury konstruktoru z exportovaného rozhraní má nebo používá název {0} z privátního modulo {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12922,7 +12922,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of exported function has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ exportované funkce má nebo používá název {0} z externího modulu {1}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Návratový typ exportované funkce má nebo používá název {0} z externího modulo {1}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12931,7 +12931,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of exported function has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ exportované funkce má nebo používá název {0} z privátního modulu {1}.]]></Val>
+            <Val><![CDATA[Návratový typ exportované funkce má nebo používá název {0} z privátního modulo {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12949,7 +12949,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of index signature from exported interface has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ signatury indexu z exportovaného rozhraní má nebo používá název {0} z privátního modulu {1}.]]></Val>
+            <Val><![CDATA[Návratový typ signatury indexu z exportovaného rozhraní má nebo používá název {0} z privátního modulo {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12967,7 +12967,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of method from exported interface has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ metody z exportovaného rozhraní má nebo používá název {0} z privátního modulu {1}.]]></Val>
+            <Val><![CDATA[Návratový typ metody z exportovaného rozhraní má nebo používá název {0} z privátního modulo {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12985,7 +12985,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ veřejné metody getter {0} z exportované třídy má nebo používá název {1} z externího modulu {2}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Návratový typ veřejné metody getter {0} z exportované třídy má nebo používá název {1} z externího modulo {2}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12994,7 +12994,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ veřejné metody getter {0} z exportované třídy má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Návratový typ veřejné metody getter {0} z exportované třídy má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13012,7 +13012,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public method from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ veřejné metody z exportované třídy má nebo používá název {0} z externího modulu {1}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Návratový typ veřejné metody z exportované třídy má nebo používá název {0} z externího modulo {1}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13021,7 +13021,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public method from exported class has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ veřejné metody z exportované třídy má nebo používá název {0} z privátního modulu {1}.]]></Val>
+            <Val><![CDATA[Návratový typ veřejné metody z exportované třídy má nebo používá název {0} z privátního modulo {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13039,7 +13039,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ veřejné statické metody getter {0} z exportované třídy má nebo používá název {1} z externího modulu {2}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Návratový typ veřejné statické metody getter {0} z exportované třídy má nebo používá název {1} z externího modulo {2}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13048,7 +13048,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ veřejné statické metody getter {0} z exportované třídy má nebo používá název {1} z privátního modulu {2}.]]></Val>
+            <Val><![CDATA[Návratový typ veřejné statické metody getter {0} z exportované třídy má nebo používá název {1} z privátního modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13066,7 +13066,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static method from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ veřejné statické metody z exportované třídy má nebo používá název {0} z externího modulu {1}, ale nedá se pojmenovat.]]></Val>
+            <Val><![CDATA[Návratový typ veřejné statické metody z exportované třídy má nebo používá název {0} z externího modulo {1}, ale nedá se pojmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13075,7 +13075,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static method from exported class has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Návratový typ veřejné statické metody z exportované třídy má nebo používá název {0} z privátního modulu {1}.]]></Val>
+            <Val><![CDATA[Návratový typ veřejné statické metody z exportované třídy má nebo používá název {0} z privátního modulo {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13093,7 +13093,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Reusing resolution of module '{0}' from '{1}' found in cache from location '{2}', it was not resolved.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Opětovné použití překladu modulu {0} z {1} nalezeného v mezipaměti z umístění {2} se nevyřešilo.]]></Val>
+            <Val><![CDATA[Opětovné použití překladu modulo {0} z {1} nalezeného v mezipaměti z umístění {2} se nevyřešilo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13102,7 +13102,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Reusing resolution of module '{0}' from '{1}' found in cache from location '{2}', it was successfully resolved to '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Opětovné použití překladu modulu {0} z {1} nalezeného v mezipaměti z umístění {2} bylo úspěšně vyřešeno na {3}.]]></Val>
+            <Val><![CDATA[Opětovné použití překladu modulo {0} z {1} nalezeného v mezipaměti z umístění {2} bylo úspěšně vyřešeno na {3}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13111,7 +13111,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Reusing resolution of module '{0}' from '{1}' found in cache from location '{2}', it was successfully resolved to '{3}' with Package ID '{4}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Opětovné použití překladu modulu {0} z {1} nalezeného v mezipaměti z umístění {2} bylo úspěšně vyřešeno na {3} s ID balíčku {4}.]]></Val>
+            <Val><![CDATA[Opětovné použití překladu modulo {0} z {1} nalezeného v mezipaměti z umístění {2} bylo úspěšně vyřešeno na {3} s ID balíčku {4}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13120,7 +13120,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Reusing resolution of module '{0}' from '{1}' of old program, it was not resolved.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Opětovné použití překladu modulu {0} z {1} starého programu se nevyřešilo.]]></Val>
+            <Val><![CDATA[Opětovné použití překladu modulo {0} z {1} starého programu se nevyřešilo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13129,7 +13129,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Reusing resolution of module '{0}' from '{1}' of old program, it was successfully resolved to '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Opětovné použití překladu modulu {0} z {1} starého programu bylo úspěšně vyřešeno na {2}.]]></Val>
+            <Val><![CDATA[Opětovné použití překladu modulo {0} z {1} starého programu bylo úspěšně vyřešeno na {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13138,7 +13138,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Reusing resolution of module '{0}' from '{1}' of old program, it was successfully resolved to '{2}' with Package ID '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Opětovné použití překladu modulu {0} z {1} starého programu bylo úspěšně vyřešeno na {2} s ID balíčku {3}.]]></Val>
+            <Val><![CDATA[Opětovné použití překladu modulo {0} z {1} starého programu bylo úspěšně vyřešeno na {2} s ID balíčku {3}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13438,7 +13438,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Signature declarations can only be used in TypeScript files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklarace signatur se dají používat jen v typescriptových souborech.]]></Val>
+            <Val><![CDATA[Deklarace signature se dají používat jen v typescriptových souborech.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13501,7 +13501,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Skipping module '{0}' that looks like an absolute URI, target file types: {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přeskakuje se modul „{0}“, který vypadá jako absolutní identifikátor URI. Cílové typy souborů: {1}.]]></Val>
+            <Val><![CDATA[Přeskakuje se module „{0}“, který vypadá jako absolutní identifikátor URI. Cílové typy souborů: {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13669,7 +13669,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify how TypeScript looks up a file from a given module specifier.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zadejte, jak TypeScript v daném specifikátoru modulu najde soubor.]]></Val>
+            <Val><![CDATA[Zadejte, jak TypeScript v daném specifikátoru modulo najde soubor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13705,7 +13705,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify module code generation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Určete generování kódu modulu.]]></Val>
+            <Val><![CDATA[Určete generování kódu modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13714,7 +13714,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zadejte specifikátor modulu, který se použije k naimportování továrních funkcí JSX při použití „jsx: react-jsx“.]]></Val>
+            <Val><![CDATA[Zadejte specifikátor modulo, který se použije k naimportování továrních funkcí JSX při použití „jsx: react-jsx“.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.`]]></Val>
@@ -13879,7 +13879,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify the module specifier to be used to import the 'jsx' and 'jsxs' factory functions from. eg, react]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zadejte specifikátor modulu, který se má použít k importu továrních funkcí ‚jsx‘ a ‚jsxs‘ např. z funkce react.]]></Val>
+            <Val><![CDATA[Zadejte specifikátor modulo, který se má použít k importu továrních funkcí ‚jsx‘ a ‚jsxs‘ např. z funkce react.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react]]></Val>
@@ -13891,7 +13891,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify the object invoked for 'createElement'. This only applies when targeting 'react' JSX emit.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zadejte objekt vyvolaný pro createElement. To platí pouze při cílení na generování JSX react.]]></Val>
+            <Val><![CDATA[Zadejte object vyvolaný pro createElement. To platí pouze při cílení na generování JSX react.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.]]></Val>
@@ -13966,7 +13966,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify what approach the watcher should use if the system runs out of native file watchers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zadejte, jak má sledovací proces postupovat, když systému dojdou nativní sledovací procesy souborů.]]></Val>
+            <Val><![CDATA[Zadejte, jak má sledovací process postupovat, když systému dojdou nativní sledovací procesy souborů.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13975,7 +13975,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify what module code is generated.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Určete, pro jaký modul se kód generuje.]]></Val>
+            <Val><![CDATA[Určete, pro jaký module se kód generuje.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14212,7 +14212,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Suppress noImplicitAny errors for indexing objects lacking index signatures.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Potlačit chyby noImplicitAny u objektů indexování bez signatur indexu]]></Val>
+            <Val><![CDATA[Potlačit chyby noImplicitAny u objektů indexování bez signature indexu]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14251,7 +14251,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Syntax: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Syntaxe: {0}]]></Val>
+            <Val><![CDATA[Syntax: {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14260,7 +14260,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Značka {0} očekává určitý minimální počet argumentů ({1}), ale objekt pro vytváření JSX {2} jich poskytuje maximálně {3}.]]></Val>
+            <Val><![CDATA[Značka {0} očekává určitý minimální počet argumentů ({1}), ale object pro vytváření JSX {2} jich poskytuje maximálně {3}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14368,7 +14368,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Funkce s šipkou v ES5 nemůže odkazovat na objekt „arguments“. Zvažte použití standardního výrazu funkce.]]></Val>
+            <Val><![CDATA[Funkce s šipkou v ES5 nemůže odkazovat na object „arguments“. Zvažte použití standardního výrazu funkce.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14377,7 +14377,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[V ES5 se na objekt „arguments“ nedá odkazovat v asynchronní funkci nebo metodě. Zvažte možnost použít standardní funkci nebo metodu.]]></Val>
+            <Val><![CDATA[V ES5 se na object „arguments“ nedá odkazovat v asynchronní funkci nebo metodě. Zvažte možnost použít standardní funkci nebo metodu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14422,7 +14422,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The containing function or module body is too large for control flow analysis.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Text obsahující funkce nebo modulu je pro analýzu toku řízení příliš dlouhý.]]></Val>
+            <Val><![CDATA[Text obsahující funkce nebo modulo je pro analýzu toku řízení příliš dlouhý.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14431,7 +14431,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The current file is a CommonJS module and cannot use 'await' at the top level.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aktuální soubor je modul CommonJS a na nejvyšší úrovni nemůže používat await.]]></Val>
+            <Val><![CDATA[Aktuální soubor je module CommonJS a na nejvyšší úrovni nemůže používat await.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14440,7 +14440,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("{0}")' call instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Aktuální soubor je modul CommonJS, jehož importy vytvoří volání require. Odkazovaný soubor je však modul ECMAScript a nelze ho importovat pomocí příkazu require. Raději zvažte vytvoření dynamického volání import("{0}").]]></Val>
+            <Val><![CDATA[Aktuální soubor je module CommonJS, jehož importy vytvoří volání require. Odkazovaný soubor je však module ECMAScript a nelze ho importovat pomocí příkazu require. Raději zvažte vytvoření dynamického volání import("{0}").]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14539,7 +14539,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The first parameter of the 'then' method of a promise must be a callback.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[První parametr metody then příslibu musí být zpětné volání.]]></Val>
+            <Val><![CDATA[První parameter metody then příslibu musí být zpětné volání.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14626,7 +14626,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The initializer of a 'using' declaration must be either an object with a '[Symbol.dispose]5D;()' method, or be 'null' or 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inicializátor deklarace „using“ musí být buď objekt s metodou „[Symbol.dispose]5D;()“, nebo musí mít hodnotu „null“ nebo „undefined“.]]></Val>
+            <Val><![CDATA[Inicializátor deklarace „using“ musí být buď object s metodou „[Symbol.dispose]5D;()“, nebo musí mít hodnotu „null“ nebo „undefined“.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14635,7 +14635,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The initializer of an 'await using' declaration must be either an object with a '[Symbol.asyncDispose]5D;()' or '[Symbol.dispose]5D;()' method, or be 'null' or 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inicializátor deklarace „await using“ musí být buď objekt s metodou „[Symbol.asyncDispose]5D;()“ nebo „[Symbol.dispose]5D;()“, nebo musí mít hodnotu „null“ nebo „undefined“.]]></Val>
+            <Val><![CDATA[Inicializátor deklarace „await using“ musí být buď object s metodou „[Symbol.asyncDispose]5D;()“ nebo „[Symbol.dispose]5D;()“, nebo musí mít hodnotu „null“ nebo „undefined“.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15040,7 +15040,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The root value of a '{0}' file must be an object.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kořenová hodnota souboru {0} musí být objekt.]]></Val>
+            <Val><![CDATA[Kořenová hodnota souboru {0} musí být object.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15049,7 +15049,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The runtime will invoke the decorator with {1} arguments, but the decorator expects {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul runtime vyvolá dekoratér s {1} argumenty, ale dekoratér očekává {0}.]]></Val>
+            <Val><![CDATA[Module runtime vyvolá dekoratér s {1} argumenty, ale dekoratér očekává {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15058,7 +15058,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The runtime will invoke the decorator with {1} arguments, but the decorator expects at least {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modul runtime vyvolá dekoratér s {1} argumenty, ale dekoratér očekává alespoň {0}.]]></Val>
+            <Val><![CDATA[Module runtime vyvolá dekoratér s {1} argumenty, ale dekoratér očekává alespoň {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15133,7 +15133,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The 'this' types of each signature are incompatible.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typy this jednotlivých signatur nejsou kompatibilní.]]></Val>
+            <Val><![CDATA[Typy this jednotlivých signature nejsou kompatibilní.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15295,7 +15295,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag requires '{0}' to be in scope, but it could not be found.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tato značka JSX vyžaduje, aby objekt pro vytváření fragmentů {0} byl v oboru, ale nepovedlo se ho najít.]]></Val>
+            <Val><![CDATA[Tato značka JSX vyžaduje, aby object pro vytváření fragmentů {0} byl v oboru, ale nepovedlo se ho najít.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15304,7 +15304,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag requires the module path '{0}' to exist, but none could be found. Make sure you have types for the appropriate package installed.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tato značka JSX vyžaduje, aby existovala cesta k modulu {0}, ale žádná nebyla nalezena. Ujistěte se, že máte nainstalované typy pro příslušný balíček.]]></Val>
+            <Val><![CDATA[Tato značka JSX vyžaduje, aby existovala cesta k modulo {0}, ale žádná nebyla nalezena. Ujistěte se, že máte nainstalované typy pro příslušný balíček.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15313,7 +15313,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag's '{0}' prop expects a single child of type '{1}', but multiple children were provided.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Vlastnost {0} této značky JSX očekává jeden podřízený objekt typu {1}, ale poskytlo se jich více.]]></Val>
+            <Val><![CDATA[Vlastnost {0} této značky JSX očekává jeden podřízený object typu {1}, ale poskytlo se jich více.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15448,7 +15448,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tento výraz se nedá volat, protože je to přístupový objekt get. Nechtěli jste ho použít bez ()?]]></Val>
+            <Val><![CDATA[Tento výraz se nedá volat, protože je to přístupový object get. Nechtěli jste ho použít bez ()?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15628,7 +15628,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This module can only be referenced with ECMAScript imports/exports by turning on the '{0}' flag and referencing its default export.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Na tento modul je možné se pomocí importů nebo exportů ECMAScript odkazovat jen tak, že se zapne příznak {0} a odkáže se na výchozí export.]]></Val>
+            <Val><![CDATA[Na tento module je možné se pomocí importů nebo exportů ECMAScript odkazovat jen tak, že se zapne příznak {0} a odkáže se na výchozí export.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15637,7 +15637,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This module is declared with 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tento modul se deklaroval pomocí export =, a dá se použít jenom s výchozím importem při použití příznaku {0}.]]></Val>
+            <Val><![CDATA[Tento module se deklaroval pomocí export =, a dá se použít jenom s výchozím importem při použití příznaku {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15673,7 +15673,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This parameter is not allowed with 'use strict' directive.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tento parametr se nepodporuje s direktivou use strict.]]></Val>
+            <Val><![CDATA[Tento parameter se nepodporuje s direktivou use strict.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15736,7 +15736,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This syntax is not allowed when 'erasableSyntaxOnly' is enabled.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tato syntaxe není povolená, pokud je povolená možnost erasableSyntaxOnly.]]></Val>
+            <Val><![CDATA[Tato syntax není povolená, pokud je povolená možnost erasableSyntaxOnly.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15745,7 +15745,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tato syntaxe je vyhrazená pro soubory s příponou .mts nebo .cts. Přidejte koncovou čárku nebo explicitní omezení.]]></Val>
+            <Val><![CDATA[Tato syntax je vyhrazená pro soubory s příponou .mts nebo .cts. Přidejte koncovou čárku nebo explicitní omezení.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15754,7 +15754,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tato syntaxe je vyhrazená pro soubory s příponou .mts nebo .cts. Místo toho použijte výraz „as“.]]></Val>
+            <Val><![CDATA[Tato syntax je vyhrazená pro soubory s příponou .mts nebo .cts. Místo toho použijte výraz „as“.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15763,7 +15763,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper but module '{0}' cannot be found.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tato syntaxe vyžaduje importovanou podpůrnou aplikaci, ale modul {0} se nenašel.]]></Val>
+            <Val><![CDATA[Tato syntax vyžaduje importovanou podpůrnou aplikaci, ale module {0} se nenašel.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15772,7 +15772,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper named '{1}' which does not exist in '{0}'. Consider upgrading your version of '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tato syntaxe vyžaduje importovanou pomocnou rutinu s názvem {1}, která v {0} neexistuje. Zvažte možnost upgradovat verzi {0}.]]></Val>
+            <Val><![CDATA[Tato syntax vyžaduje importovanou pomocnou rutinu s názvem {1}, která v {0} neexistuje. Zvažte možnost upgradovat verzi {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15781,7 +15781,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper named '{1}' with {2} parameters, which is not compatible with the one in '{0}'. Consider upgrading your version of '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tato syntaxe vyžaduje importovanou pomocnou rutinu s názvem {1} a parametry {2}, která není kompatibilní s tou v {0}. Zvažte upgrade verze {0}.]]></Val>
+            <Val><![CDATA[Tato syntax vyžaduje importovanou pomocnou rutinu s názvem {1} a parametry {2}, která není kompatibilní s tou v {0}. Zvažte upgrade verze {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15790,7 +15790,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This type parameter might need an `extends {0}` constraint.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tento parametr typu může potřebovat omezení extends {0}.]]></Val>
+            <Val><![CDATA[Tento parameter typu může potřebovat omezení extends {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15808,7 +15808,7 @@
         <Str Cat="Text">
           <Val><![CDATA[To convert this file to an ECMAScript module, add the field `"type": "module"` to '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pokud chcete tento soubor převést na modul ECMAScript, přidejte pole "type": "module" do {0}.]]></Val>
+            <Val><![CDATA[Pokud chcete tento soubor převést na module ECMAScript, přidejte pole "type": "module" do {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15817,7 +15817,7 @@
         <Str Cat="Text">
           <Val><![CDATA[To convert this file to an ECMAScript module, change its file extension to '{0}', or add the field `"type": "module"` to '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pokud chcete tento soubor převést na modul ECMAScript, změňte jeho příponu na {0}" nebo přidejte pole "type": "module" do {1}.]]></Val>
+            <Val><![CDATA[Pokud chcete tento soubor převést na module ECMAScript, změňte jeho příponu na {0}" nebo přidejte pole "type": "module" do {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15826,7 +15826,7 @@
         <Str Cat="Text">
           <Val><![CDATA[To convert this file to an ECMAScript module, change its file extension to '{0}' or create a local package.json file with `{ "type": "module" }`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pokud chcete tento soubor převést na modul ECMAScript, změňte jeho příponu na {0} nebo vytvořte místní soubor package.json s {"type": "module"}.]]></Val>
+            <Val><![CDATA[Pokud chcete tento soubor převést na module ECMAScript, změňte jeho příponu na {0} nebo vytvořte místní soubor package.json s {"type": "module"}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15835,7 +15835,7 @@
         <Str Cat="Text">
           <Val><![CDATA[To convert this file to an ECMAScript module, create a local package.json file with `{ "type": "module" }`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pokud chcete tento soubor převést na modul ECMAScript, vytvořte místní soubor package.json s { "type": "module" }.]]></Val>
+            <Val><![CDATA[Pokud chcete tento soubor převést na module ECMAScript, vytvořte místní soubor package.json s { "type": "module" }.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15898,7 +15898,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Transpile each file as a separate module (similar to 'ts.transpileModule').]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Transpiluje každý soubor jako samostatný modul (podobné jako ts.transpileModule).]]></Val>
+            <Val><![CDATA[Transpiluje každý soubor jako samostatný module (podobné jako ts.transpileModule).]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15928,7 +15928,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Trying substitution '{0}', candidate module location: '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zkouší se nahrazení {0}, umístění modulu kandidáta: {1}.]]></Val>
+            <Val><![CDATA[Zkouší se nahrazení {0}, umístění modulo kandidáta: {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16429,7 +16429,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Import typu modulu ECMAScript z modulu CommonJS musí mít atribut resolution-mode.]]></Val>
+            <Val><![CDATA[Import typu modulo ECMAScript z modulo CommonJS musí mít attribute resolution-mode.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16528,7 +16528,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Import, při kterém se importuje pouze typ modulu ECMAScript z modulu CommonJS, musí mít atribut resolution-mode.]]></Val>
+            <Val><![CDATA[Import, při kterém se importuje pouze typ modulo ECMAScript z modulo CommonJS, musí mít attribute resolution-mode.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16546,7 +16546,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' has a circular constraint.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu {0} má cyklické omezení.]]></Val>
+            <Val><![CDATA[Parameter typu {0} má cyklické omezení.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16555,7 +16555,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' has a circular default.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu {0} má cyklickou výchozí hodnotu.]]></Val>
+            <Val><![CDATA[Parameter typu {0} má cyklickou výchozí hodnotu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16564,7 +16564,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of call signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu {0} signatury volání z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter typu {0} signatury volání z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16573,7 +16573,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu {0} signatury konstruktoru z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter typu {0} signatury konstruktoru z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16582,7 +16582,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu {0} exportované třídy má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter typu {0} exportované třídy má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16591,7 +16591,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported function has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu {0} exportované funkce má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter typu {0} exportované funkce má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16600,7 +16600,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu {0} exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter typu {0} exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16609,7 +16609,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported mapped object type is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu {0} exportovaného typu namapovaného objektu typu má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter typu {0} exportovaného typu namapovaného objektu typu má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16618,7 +16618,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported type alias has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu {0} exportovaného aliasu typu má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter typu {0} exportovaného aliasu typu má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16627,7 +16627,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of method from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu {0} metody z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter typu {0} metody z exportovaného rozhraní má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16636,7 +16636,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of public method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu {0} veřejné metody z exportované třídy má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter typu {0} veřejné metody z exportované třídy má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16645,7 +16645,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of public static method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu {0} veřejné statické metody z exportované třídy má nebo používá privátní název {1}.]]></Val>
+            <Val><![CDATA[Parameter typu {0} veřejné statické metody z exportované třídy má nebo používá privátní název {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16783,7 +16783,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Types of construct signatures are incompatible.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typy signatur konstruktorů nejsou kompatibilní.]]></Val>
+            <Val><![CDATA[Typy signature konstruktorů nejsou kompatibilní.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16900,7 +16900,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unexpected token. A constructor, method, accessor, or property was expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Neočekávaný token. Očekával se konstruktor, metoda, přístupový objekt nebo vlastnost.]]></Val>
+            <Val><![CDATA[Neočekávaný token. Očekával se konstruktor, metoda, přístupový object nebo vlastnost.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17314,7 +17314,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Using JSX fragments requires fragment factory '{0}' to be in scope, but it could not be found.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Použití fragmentů JSX vyžaduje, aby objekt pro vytváření fragmentů {0} byl v oboru, ale nepovedlo se ho najít.]]></Val>
+            <Val><![CDATA[Použití fragmentů JSX vyžaduje, aby object pro vytváření fragmentů {0} byl v oboru, ale nepovedlo se ho najít.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17548,7 +17548,7 @@
         <Str Cat="Text">
           <Val><![CDATA[We can only write a type for '{0}' by adding a type for the entire parameter here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pro {0} můžeme napsat typ jenom tak, že sem přidáme typ pro celý parametr.]]></Val>
+            <Val><![CDATA[Pro {0} můžeme napsat typ jenom tak, že sem přidáme typ pro celý parameter.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17668,7 +17668,7 @@
         <Str Cat="Text">
           <Val><![CDATA[You cannot rename a module via a global import.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Přes globální import se modul nedá přejmenovat.]]></Val>
+            <Val><![CDATA[Přes globální import se module nedá přejmenovat.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17713,7 +17713,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@{0}()'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Objekt {0} přijímá málo argumentů k tomu, aby se dal použít jako dekoratér. Nechtěli jste ho nejprve volat a napsat @{0}()?]]></Val>
+            <Val><![CDATA[Object {0} přijímá málo argumentů k tomu, aby se dal použít jako dekoratér. Nechtěli jste ho nejprve volat a napsat @{0}()?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17740,7 +17740,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' are specified twice. The attribute named '{0}' will be overwritten.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Položka {0} je zadána dvakrát. Atribut s názvem {0} se přepíše.]]></Val>
+            <Val><![CDATA[Položka {0} je zadána dvakrát. Attribute s názvem {0} se přepíše.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17749,7 +17749,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' at the end of a type is not valid TypeScript syntax. Did you mean to write '{1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[„{0}“ na konci typu není platná syntaxe TypeScriptu. Nechtěli jste napsat „{1}“?]]></Val>
+            <Val><![CDATA[„{0}“ na konci typu není platná syntax TypeScriptu. Nechtěli jste napsat „{1}“?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17758,7 +17758,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' at the start of a type is not valid TypeScript syntax. Did you mean to write '{1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[„{0}“ na začátku typu není platná syntaxe TypeScriptu. Nechtěli jste napsat „{1}“?]]></Val>
+            <Val><![CDATA[„{0}“ na začátku typu není platná syntax TypeScriptu. Nechtěli jste napsat „{1}“?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17974,7 +17974,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} je primitivum, ale {1} je obálkový objekt. Pokud je to možné, použijte raději {0}.]]></Val>
+            <Val><![CDATA[{0} je primitivum, ale {1} je obálkový object. Pokud je to možné, použijte raději {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18055,7 +18055,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is defined as a property in class '{1}', but is overridden here in '{2}' as an accessor.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} je definované jako vlastnost ve třídě {1}, ale v {2} se tady přepisuje jako přístupový objekt.]]></Val>
+            <Val><![CDATA[{0} je definované jako vlastnost ve třídě {1}, ale v {2} se tady přepisuje jako přístupový object.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18064,7 +18064,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is defined as an accessor in class '{1}', but is overridden here in '{2}' as an instance property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} je definované jako přístupový objekt ve třídě {1}, ale v {2} se tady přepisuje jako vlastnost instance.]]></Val>
+            <Val><![CDATA[{0} je definované jako přístupový object ve třídě {1}, ale v {2} se tady přepisuje jako vlastnost instance.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18229,7 +18229,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' modifier cannot appear on a module or namespace element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modifikátor {0} se nemůže objevit v elementu modulu nebo oboru názvů.]]></Val>
+            <Val><![CDATA[Modifikátor {0} se nemůže objevit v elementu modulo nebo oboru názvů.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18406,7 +18406,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' refers to a UMD global, but the current file is a module. Consider adding an import instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} odkazuje na globální UMD, ale aktuální soubor je modul. Zvažte raději přidání importu.]]></Val>
+            <Val><![CDATA[{0} odkazuje na globální UMD, ale aktuální soubor je module. Zvažte raději přidání importu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18607,7 +18607,7 @@
         <Str Cat="Text">
           <Val><![CDATA['await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Výrazy await se tady povolují jen na nejvyšší úrovni souboru, když je daný soubor modul, ale tento soubor nemá žádné importy ani exporty. Zvažte možnost přidat export {}, aby se tento soubor převedl na modul.]]></Val>
+            <Val><![CDATA[Výrazy await se tady povolují jen na nejvyšší úrovni souboru, když je daný soubor module, ale tento soubor nemá žádné importy ani exporty. Zvažte možnost přidat export {}, aby se tento soubor převedl na module.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18661,7 +18661,7 @@
         <Str Cat="Text">
           <Val><![CDATA['await using' statements are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Příkazy „await using“ jsou povoleny jen na nejvyšší úrovni souboru, když je daný soubor modul, ale tento soubor nemá žádné importy ani exporty. Zvažte možnost přidat „export {}“, aby se tento soubor převedl na modul.]]></Val>
+            <Val><![CDATA[Příkazy „await using“ jsou povoleny jen na nejvyšší úrovni souboru, když je daný soubor module, ale tento soubor nemá žádné importy ani exporty. Zvažte možnost přidat „export {}“, aby se tento soubor převedl na module.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18688,7 +18688,7 @@
         <Str Cat="Text">
           <Val><![CDATA['baseUrl' option is set to '{0}', using this value to resolve non-relative module name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Možnost baseUrl je nastavená na {0}, pomocí této hodnoty se přeloží název modulu {1}, který není relativní.]]></Val>
+            <Val><![CDATA[Možnost baseUrl je nastavená na {0}, pomocí této hodnoty se přeloží název modulo {1}, který není relativní.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA['baseUrl' option is set to '{0}', using this value to resolve non-relative module name '{1}']]></Val>
@@ -18919,7 +18919,7 @@
         <Str Cat="Text">
           <Val><![CDATA['for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Smyčky for await se tady povolují jen na nejvyšší úrovni souboru, když je daný soubor modul, ale tento soubor nemá žádné importy ani exporty. Zvažte možnost přidat export {}, aby se tento soubor převedl na modul.]]></Val>
+            <Val><![CDATA[Smyčky for await se tady povolují jen na nejvyšší úrovni souboru, když je daný soubor module, ale tento soubor nemá žádné importy ani exporty. Zvažte možnost přidat export {}, aby se tento soubor převedl na module.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19144,7 +19144,7 @@
         <Str Cat="Text">
           <Val><![CDATA['package.json' has a 'typesVersions' entry '{0}' that matches compiler version '{1}', looking for a pattern to match module name '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[package.json má položku typesVersions {0}, která odpovídá verzi kompilátoru {1}. Hledá se vzor, který bude odpovídat názvu modulu {2}.]]></Val>
+            <Val><![CDATA[package.json má položku typesVersions {0}, která odpovídá verzi kompilátoru {1}. Hledá se vzor, který bude odpovídat názvu modulo {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19189,7 +19189,7 @@
         <Str Cat="Text">
           <Val><![CDATA['paths' option is specified, looking for a pattern to match module name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Je zadaná možnost paths, hledá se vzor, který odpovídá názvu modulu {0}.]]></Val>
+            <Val><![CDATA[Je zadaná možnost paths, hledá se vzor, který odpovídá názvu modulo {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19279,7 +19279,7 @@
         <Str Cat="Text">
           <Val><![CDATA['rootDirs' option is set, using it to resolve relative module name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Je nastavená možnost rootDirs, použije se k překladu relativního názvu modulu {0}.]]></Val>
+            <Val><![CDATA[Je nastavená možnost rootDirs, použije se k překladu relativního názvu modulo {0}.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA['rootDirs' option is set, using it to resolve relative module name '{0}']]></Val>
@@ -19390,7 +19390,7 @@
         <Str Cat="Text">
           <Val><![CDATA['this' cannot be referenced in a module or namespace body.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Na vlastnost this se nedá odkazovat v modulu nebo těle oboru názvů.]]></Val>
+            <Val><![CDATA[Na vlastnost this se nedá odkazovat v modulo nebo těle oboru názvů.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

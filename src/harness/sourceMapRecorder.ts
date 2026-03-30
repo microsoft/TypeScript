@@ -318,7 +318,7 @@ export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitR
                 SourceMapSpanWriter.recordSourceMapSpan(decodedSourceMapping);
             }
         }
-        SourceMapSpanWriter.close(); // If the last spans werent emitted, emit them
+        SourceMapSpanWriter.close(); // If the last spans weren't emitted, emit them
     }
     sourceMapRecorder.Close();
     return sourceMapRecorder.lines.join("\r\n");
@@ -353,7 +353,7 @@ export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: stri
                 SourceMapSpanWriter.recordSourceMapSpan(decodedSourceMapping);
             }
         }
-        SourceMapSpanWriter.close(); // If the last spans werent emitted, emit them
+        SourceMapSpanWriter.close(); // If the last spans weren't emitted, emit them
     }
     sourceMapRecorder.Close();
     return sourceMapRecorder.lines.join("\r\n");

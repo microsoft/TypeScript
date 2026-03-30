@@ -2,7 +2,7 @@
 
 //// [binderBinaryExpressionStress.ts]
 // regression test for https://github.com/microsoft/TypeScript/issues/35633
-// If we need to emit comments or subsitutions for a node, we have to skip the trampoline
+// If we need to emit comments or substitutions for a node, we have to skip the trampoline
 // that allows us to handle emitting arbitrarily complex binary expressions
 // so we simplify the emit as much as possible to allow us to emit. In addition,
 // we disable the type & symbol baselines just because they're _way too big_

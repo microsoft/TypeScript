@@ -43,7 +43,7 @@ C.doIt() ? exprString1 : exprString2;
 condObject.valueOf() ? exprIsObject1 : exprIsObject2;
 new Date() ? exprString1 : exprBoolean1; // union
 
-//Results shoud be same as Expr1 and Expr2
+//Results should be same as Expr1 and Expr2
 var resultIsAny1 = condObject ? exprAny1 : exprAny2;
 var resultIsBoolean1 = condObject ? exprBoolean1 : exprBoolean2;
 var resultIsNumber1 = condObject ? exprNumber1 : exprNumber2;
@@ -94,7 +94,7 @@ new C() ? exprNumber1 : exprNumber2;
 C.doIt() ? exprString1 : exprString2;
 condObject.valueOf() ? exprIsObject1 : exprIsObject2;
 new Date() ? exprString1 : exprBoolean1; // union
-//Results shoud be same as Expr1 and Expr2
+//Results should be same as Expr1 and Expr2
 var resultIsAny1 = condObject ? exprAny1 : exprAny2;
 var resultIsBoolean1 = condObject ? exprBoolean1 : exprBoolean2;
 var resultIsNumber1 = condObject ? exprNumber1 : exprNumber2;

@@ -3921,7 +3921,7 @@ const wildcardDirectoryPattern = /^[^*?]*(?=\/[^/]*[*?])/;
  * @param basePath The base path for any relative file specifications.
  * @param options Compiler options.
  * @param host The host used to resolve files and directories.
- * @param extraFileExtensions optionaly file extra file extension information from host
+ * @param extraFileExtensions optionally file extra file extension information from host
  *
  * @internal
  */
@@ -4116,7 +4116,7 @@ function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExclu
     //
     //  /a/b/**/d   - Watch /a/b recursively to catch changes to any d in any subfolder recursively
     //  /a/b/*/d    - Watch /a/b recursively to catch any d in any immediate subfolder, even if a new subfolder is added
-    //  /a/b        - Watch /a/b recursively to catch changes to anything in any recursive subfoler
+    //  /a/b        - Watch /a/b recursively to catch changes to anything in any recursive subfolder
     //
     // We watch a directory without recursion if it contains a wildcard in the file segment of
     // the pattern:

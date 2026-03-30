@@ -81,7 +81,7 @@ function testFunction1(): Foo<{ x: V }> { return null; } // error: could not fin
 >V : Symbol(V)
 
 
-// in paramter types
+// in parameter types
 function testFunction2(p: Foo<{ x: V }>) { }// error: could not find symbol V
 >testFunction2 : Symbol(testFunction2, Decl(errorsInGenericTypeReference.ts, 29, 56))
 >p : Symbol(p, Decl(errorsInGenericTypeReference.ts, 33, 23))

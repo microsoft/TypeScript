@@ -107,7 +107,7 @@ var ResultIsNumber13 = M.n++;
 >M : Symbol(M, Decl(incrementOperatorWithAnyOtherType.ts, 8, 1))
 >n : Symbol(M.n, Decl(incrementOperatorWithAnyOtherType.ts, 10, 14))
 
-// miss assignment opertors
+// miss assignment operators
 ++ANY;
 >ANY : Symbol(ANY, Decl(incrementOperatorWithAnyOtherType.ts, 2, 3))
 

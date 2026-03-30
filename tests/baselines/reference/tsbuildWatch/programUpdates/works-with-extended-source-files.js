@@ -693,7 +693,7 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-Change:: update aplha config
+Change:: update alpha config
 
 Input::
 //// [/user/username/projects/project/alpha.tsconfig.json]

@@ -3,8 +3,8 @@
 === unusedLocalsAndParametersDeferred.ts ===
 export { };
 
-function defered<T>(a: () => T): T {
->defered : <T>(a: () => T) => T
+function deferred<T>(a: () => T): T {
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >a : () => T
 >  : ^^^^^^ 
@@ -16,16 +16,16 @@ function defered<T>(a: () => T): T {
 >  : ^^^^^^ 
 }
 
-// function declaration paramter
+// function declaration parameter
 function f(a) {
 >f : (a: any) => void
 >  : ^ ^^^^^^^^^^^^^^
 >a : any
 
-    defered(() => {
->defered(() => {        a;    }) : void
+    deferred(() => {
+>deferred(() => {        a;    }) : void
 >                                : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        a;    } : () => void
 >                       : ^^^^^^^^^^
@@ -43,18 +43,18 @@ f(0);
 >0 : 0
 >  : ^
 
-// function expression paramter
+// function expression parameter
 var fexp = function (a) {
 >fexp : (a: any) => void
 >     : ^ ^^^^^^^^^^^^^^
->function (a) {    defered(() => {        a;    });} : (a: any) => void
+>function (a) {    deferred(() => {        a;    });} : (a: any) => void
 >                                                    : ^ ^^^^^^^^^^^^^^
 >a : any
 
-    defered(() => {
->defered(() => {        a;    }) : void
+    deferred(() => {
+>deferred(() => {        a;    }) : void
 >                                : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        a;    } : () => void
 >                       : ^^^^^^^^^^
@@ -72,18 +72,18 @@ fexp(1);
 >1 : 1
 >  : ^
 
-// arrow function paramter
+// arrow function parameter
 var farrow = (a) => {
 >farrow : (a: any) => void
 >       : ^ ^^^^^^^^^^^^^^
->(a) => {    defered(() => {        a;    });} : (a: any) => void
+>(a) => {    deferred(() => {        a;    });} : (a: any) => void
 >                                              : ^ ^^^^^^^^^^^^^^
 >a : any
 
-    defered(() => {
->defered(() => {        a;    }) : void
+    deferred(() => {
+>deferred(() => {        a;    }) : void
 >                                : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        a;    } : () => void
 >                       : ^^^^^^^^^^
@@ -108,16 +108,16 @@ class C {
 >C : C
 >  : ^
 
-    // Method declaration paramter
+    // Method declaration parameter
     method(a) {
 >method : (a: any) => void
 >       : ^ ^^^^^^^^^^^^^^
 >a : any
 
-        defered(() => {
->defered(() => {            a;        }) : void
+        deferred(() => {
+>deferred(() => {            a;        }) : void
 >                                        : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {            a;        } : () => void
 >                               : ^^^^^^^^^^
@@ -127,17 +127,17 @@ class C {
 
         });
     }
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
 >x : number
 >  : ^^^^^^
 >v : number
 >  : ^^^^^^
 
-        defered(() => {
->defered(() => {            v;        }) : void
+        deferred(() => {
+>deferred(() => {            v;        }) : void
 >                                        : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {            v;        } : () => void
 >                               : ^^^^^^^^^^
@@ -148,13 +148,13 @@ class C {
 
         });
     }
-    // in a property initalizer
-    p = defered(() => {
+    // in a property initializer
+    p = deferred(() => {
 >p : void
 >  : ^^^^
->defered(() => {        prop1;    }) : void
+>deferred(() => {        prop1;    }) : void
 >                                    : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        prop1;    } : () => void
 >                           : ^^^^^^^^^^
@@ -177,19 +177,19 @@ let prop2;
 var E = class {
 >E : typeof E
 >  : ^^^^^^^^
->class {    // Method declaration paramter    method(a) {        defered(() => {            a;        });    }    // Accessor declaration paramter    set x(v: number) {        defered(() => {            v;        });    }    // in a property initalizer    p = defered(() => {        prop2;    });} : typeof E
+>class {    // Method declaration parameter    method(a) {        deferred(() => {            a;        });    }    // Accessor declaration parameter    set x(v: number) {        deferred(() => {            v;        });    }    // in a property initializer    p = deferred(() => {        prop2;    });} : typeof E
 >                                                                                                                                                                                                                                                                                                         : ^^^^^^^^
 
-    // Method declaration paramter
+    // Method declaration parameter
     method(a) {
 >method : (a: any) => void
 >       : ^ ^^^^^^^^^^^^^^
 >a : any
 
-        defered(() => {
->defered(() => {            a;        }) : void
+        deferred(() => {
+>deferred(() => {            a;        }) : void
 >                                        : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {            a;        } : () => void
 >                               : ^^^^^^^^^^
@@ -199,17 +199,17 @@ var E = class {
 
         });
     }
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
 >x : number
 >  : ^^^^^^
 >v : number
 >  : ^^^^^^
 
-        defered(() => {
->defered(() => {            v;        }) : void
+        deferred(() => {
+>deferred(() => {            v;        }) : void
 >                                        : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {            v;        } : () => void
 >                               : ^^^^^^^^^^
@@ -220,13 +220,13 @@ var E = class {
 
         });
     }
-    // in a property initalizer
-    p = defered(() => {
+    // in a property initializer
+    p = deferred(() => {
 >p : void
 >  : ^^^^
->defered(() => {        prop2;    }) : void
+>deferred(() => {        prop2;    }) : void
 >                                    : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        prop2;    } : () => void
 >                           : ^^^^^^^^^^
@@ -247,19 +247,19 @@ new E();
 var o = {
 >o : { method(a: any): void; x: number; p: void; }
 >  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
->{    // Object literal method declaration paramter    method(a) {        defered(() => {            a;        });    },    // Accessor declaration paramter    set x(v: number) {        defered(() => {            v;        });    },    // in a property initalizer    p: defered(() => {        prop1;    })} : { method(a: any): void; x: number; p: void; }
+>{    // Object literal method declaration parameter    method(a) {        deferred(() => {            a;        });    },    // Accessor declaration parameter    set x(v: number) {        deferred(() => {            v;        });    },    // in a property initializer    p: deferred(() => {        prop1;    })} : { method(a: any): void; x: number; p: void; }
 >                                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
 
-    // Object literal method declaration paramter
+    // Object literal method declaration parameter
     method(a) {
 >method : (a: any) => void
 >       : ^ ^^^^^^^^^^^^^^
 >a : any
 
-        defered(() => {
->defered(() => {            a;        }) : void
+        deferred(() => {
+>deferred(() => {            a;        }) : void
 >                                        : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {            a;        } : () => void
 >                               : ^^^^^^^^^^
@@ -269,17 +269,17 @@ var o = {
 
         });
     },
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
 >x : number
 >  : ^^^^^^
 >v : number
 >  : ^^^^^^
 
-        defered(() => {
->defered(() => {            v;        }) : void
+        deferred(() => {
+>deferred(() => {            v;        }) : void
 >                                        : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {            v;        } : () => void
 >                               : ^^^^^^^^^^
@@ -290,13 +290,13 @@ var o = {
 
         });
     },
-    // in a property initalizer
-    p: defered(() => {
+    // in a property initializer
+    p: deferred(() => {
 >p : void
 >  : ^^^^
->defered(() => {        prop1;    }) : void
+>deferred(() => {        prop1;    }) : void
 >                                    : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        prop1;    } : () => void
 >                           : ^^^^^^^^^^
@@ -311,17 +311,17 @@ o;
 >o : { method(a: any): void; x: number; p: void; }
 >  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
 
-// in a for..in statment
+// in a for..in statement
 for (let i in o) {
 >i : string
 >  : ^^^^^^
 >o : { method(a: any): void; x: number; p: void; }
 >  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
 
-    defered(() => {
->defered(() => {        i;    }) : void
+    deferred(() => {
+>deferred(() => {        i;    }) : void
 >                                : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        i;    } : () => void
 >                       : ^^^^^^^^^^
@@ -333,7 +333,7 @@ for (let i in o) {
     });
 }
 
-// in a for..of statment
+// in a for..of statement
 for (let i of [1,2,3]) {
 >i : number
 >  : ^^^^^^
@@ -346,10 +346,10 @@ for (let i of [1,2,3]) {
 >3 : 3
 >  : ^
 
-    defered(() => {
->defered(() => {        i;    }) : void
+    deferred(() => {
+>deferred(() => {        i;    }) : void
 >                                : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        i;    } : () => void
 >                       : ^^^^^^^^^^
@@ -361,7 +361,7 @@ for (let i of [1,2,3]) {
     });
 }
 
-// in a for. statment
+// in a for. statement
 for (let i = 0; i < 10; i++) {
 >i : number
 >  : ^^^^^^
@@ -378,10 +378,10 @@ for (let i = 0; i < 10; i++) {
 >i : number
 >  : ^^^^^^
 
-    defered(() => {
->defered(() => {        i;    }) : void
+    deferred(() => {
+>deferred(() => {        i;    }) : void
 >                                : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        i;    } : () => void
 >                       : ^^^^^^^^^^
@@ -411,10 +411,10 @@ if (condition) {
 >0 : 0
 >  : ^
 
-    defered(() => {
->defered(() => {        c;    }) : void
+    deferred(() => {
+>deferred(() => {        c;    }) : void
 >                                : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        c;    } : () => void
 >                       : ^^^^^^^^^^
@@ -434,10 +434,10 @@ try {
 >0 : 0
 >  : ^
 
-    defered(() => {
->defered(() => {        a;    }) : void
+    deferred(() => {
+>deferred(() => {        a;    }) : void
 >                                : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        a;    } : () => void
 >                       : ^^^^^^^^^^
@@ -457,10 +457,10 @@ catch (e) {
 >1 : 1
 >  : ^
 
-    defered(() => {
->defered(() => {        c;    }) : void
+    deferred(() => {
+>deferred(() => {        c;    }) : void
 >                                : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        c;    } : () => void
 >                       : ^^^^^^^^^^
@@ -478,10 +478,10 @@ finally {
 >0 : 0
 >  : ^
 
-    defered(() => {
->defered(() => {        c;    }) : void
+    deferred(() => {
+>deferred(() => {        c;    }) : void
 >                                : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        c;    } : () => void
 >                       : ^^^^^^^^^^
@@ -502,10 +502,10 @@ namespace N {
     var x;
 >x : any
 
-    defered(() => {
->defered(() => {        x;    }) : void
+    deferred(() => {
+>deferred(() => {        x;    }) : void
 >                                : ^^^^
->defered : <T>(a: () => T) => T
+>deferred : <T>(a: () => T) => T
 >        : ^ ^^ ^^       ^^^^^ 
 >() => {        x;    } : () => void
 >                       : ^^^^^^^^^^

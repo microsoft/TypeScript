@@ -6,14 +6,14 @@ export function foo() {
 }
 
 //// [b.ts]
-import defer * as aNs from "./a.js";
+import defer * as and from "./a.js";
 
-aNs.foo();
+and.foo();
 
 //// [a.js]
 export function foo() {
     console.log("foo from a");
 }
 //// [b.js]
-import defer * as aNs from "./a.js";
-aNs.foo();
+import defer * as and from "./a.js";
+and.foo();

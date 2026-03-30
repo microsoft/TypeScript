@@ -48,7 +48,7 @@ interface I3 {
 >x : string
 >  : ^^^^^^
 
-    foo: string | number; // error numer is not subtype of string
+    foo: string | number; // error number is not subtype of string
 >foo : string | number
 >    : ^^^^^^^^^^^^^^^
 

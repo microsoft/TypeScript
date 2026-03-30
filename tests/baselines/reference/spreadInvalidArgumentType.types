@@ -120,7 +120,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >p2 : T[]
 >   : ^^^
 
-    var o3 = { ...t };   // OK, generic type paramter
+    var o3 = { ...t };   // OK, generic type parameter
 >o3 : T
 >   : ^
 >{ ...t } : T

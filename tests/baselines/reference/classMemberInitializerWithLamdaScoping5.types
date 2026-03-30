@@ -25,12 +25,12 @@ class Greeter {
     messageHandler = (message: string) => {
 >messageHandler : (message: string) => void
 >               : ^       ^^      ^^^^^^^^^
->(message: string) => {        console.log(message); // This shouldnt be error    } : (message: string) => void
+>(message: string) => {        console.log(message); // This shouldn't be error    } : (message: string) => void
 >                                                                                   : ^       ^^      ^^^^^^^^^
 >message : string
 >        : ^^^^^^
 
-        console.log(message); // This shouldnt be error
+        console.log(message); // This shouldn't be error
 >console.log(message) : void
 >                     : ^^^^
 >console.log : (message?: any, ...optionalParams: any[]) => void

@@ -679,7 +679,7 @@ describe("unittests:: tscWatch:: watchAPI:: when builder emit occurs with emitOn
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
-                        caption: "Emit with emitOnlyDts shouldnt emit anything",
+                        caption: "Emit with emitOnlyDts shouldn't emit anything",
                         edit: () => {
                             const program = watch.getCurrentProgram();
                             program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
@@ -697,7 +697,7 @@ describe("unittests:: tscWatch:: watchAPI:: when builder emit occurs with emitOn
                         timeouts: ts.noop,
                     },
                     {
-                        caption: "Emit with emitOnlyDts shouldnt emit anything",
+                        caption: "Emit with emitOnlyDts shouldn't emit anything",
                         edit: () => {
                             const program = watch.getCurrentProgram();
                             program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);

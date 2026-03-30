@@ -20,13 +20,13 @@
 ////}
 ////var i/*12*/4 = new c/*30*/4();
 ////var i4/*14*/_c = c/*15*/4;
-/////** Class with statics*/
+/////** Class with statistics*/
 ////class c/*16*/5 {
 ////    static s1: number;
 ////}
 ////var i/*17*/5 = new c/*31*/5();
 ////var i5_/*19*/c = c/*20*/5;
-/////** class with statics and constructor*/
+/////** class with statistics and constructor*/
 ////class c/*21*/6 {
 ////    /** s1 comment*/
 ////    static s1: number;

@@ -255,7 +255,7 @@ describe("unittests:: tsserver:: autoImportProvider::", () => {
         baselineTsserverLogs("autoImportProvider", "Responds to manual changes in node_modules", session);
     });
 
-    it("Recovers from an unparseable package.json", () => {
+    it("Recovers from an unparsable package.json", () => {
         const { session, host } = setup([
             angularFormsDts,
             angularFormsPackageJson,
@@ -272,7 +272,7 @@ describe("unittests:: tsserver:: autoImportProvider::", () => {
         session.host.baselineHost("Before getAutoImportProvider");
         assert.ok(session.getProjectService().configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
         session.host.baselineHost("After getAutoImportProvider");
-        baselineTsserverLogs("autoImportProvider", "Recovers from an unparseable package_json", session);
+        baselineTsserverLogs("autoImportProvider", "Recovers from an unparsable package_json", session);
     });
 
     it("Does not create an auto import provider if there are too many dependencies", () => {

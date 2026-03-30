@@ -3,7 +3,7 @@
 // @declaration: true
 
 export const fieldName = Math.random() > 0.5 ? "f1" : "f2";
-export const conatainer = {
+export const container = {
     [fieldName]() {
         return "result";
     }

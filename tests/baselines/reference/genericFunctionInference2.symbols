@@ -58,8 +58,8 @@ const myReducer2 = combineReducers({
 
 // Repro from #30942
 
-declare function withH<T, U>(handlerCreators: HandleCreatorsFactory<T, U>): U;
->withH : Symbol(withH, Decl(genericFunctionInference2.ts, 14, 3))
+declare function with<T, U>(handlerCreators: HandleCreatorsFactory<T, U>): U;
+>with : Symbol(with, Decl(genericFunctionInference2.ts, 14, 3))
 >T : Symbol(T, Decl(genericFunctionInference2.ts, 18, 23))
 >U : Symbol(U, Decl(genericFunctionInference2.ts, 18, 25))
 >handlerCreators : Symbol(handlerCreators, Decl(genericFunctionInference2.ts, 18, 29))
@@ -85,9 +85,9 @@ type HandleCreatorsFactory<T, U> = (initialProps: T) => { [P in keyof U]: (props
 >U : Symbol(U, Decl(genericFunctionInference2.ts, 22, 29))
 >P : Symbol(P, Decl(genericFunctionInference2.ts, 22, 59))
 
-const enhancer4 = withH((props: Props) => ({
+const enhancer4 = with((props: Props) => ({
 >enhancer4 : Symbol(enhancer4, Decl(genericFunctionInference2.ts, 24, 5))
->withH : Symbol(withH, Decl(genericFunctionInference2.ts, 14, 3))
+>with : Symbol(with, Decl(genericFunctionInference2.ts, 14, 3))
 >props : Symbol(props, Decl(genericFunctionInference2.ts, 24, 25))
 >Props : Symbol(Props, Decl(genericFunctionInference2.ts, 18, 78))
 

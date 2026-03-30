@@ -1537,7 +1537,7 @@ type ResolutionKindSpecificLoader = (extensions: Extensions, candidate: string, 
  *                                              // it is rooted so it will be final candidate location
  * }
  *
- * 'rootDirs' allows the project to be spreaded across multiple locations and resolve modules with relative names as if
+ * 'rootDirs' allows the project to be spread across multiple locations and resolve modules with relative names as if
  * they were in the same location. For example lets say there are two files
  * '/local/src/content/file1.ts'
  * '/shared/components/contracts/src/content/protocols/file2.ts'
@@ -2947,7 +2947,7 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                     for (const candidateDir of candidateDirectories) {
                         if (containsPath(candidateDir, finalPath, !useCaseSensitiveFileNames(state))) {
                             // The matched export is looking up something in either the out declaration or js dir, now map the written path back into the source dir and source extension
-                            const pathFragment = finalPath.slice(candidateDir.length + 1); // +1 to also remove directory seperator
+                            const pathFragment = finalPath.slice(candidateDir.length + 1); // +1 to also remove directory separator
                             const possibleInputBase = combinePaths(commonSourceDirGuess, pathFragment);
                             const jsAndDtsExtensions = [Extension.Mjs, Extension.Cjs, Extension.Js, Extension.Json, Extension.Dmts, Extension.Dcts, Extension.Dts];
                             for (const ext of jsAndDtsExtensions) {
@@ -2969,7 +2969,7 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
             return undefined;
 
             function getOutputDirectoriesForBaseDirectory(commonSourceDirGuess: string) {
-                // Config file ouput paths are processed to be relative to the host's current directory, while
+                // Config file output paths are processed to be relative to the host's current directory, while
                 // otherwise the paths are resolved relative to the common source dir the compiler puts together
                 const currentDir = state.compilerOptions.configFile ? state.host.getCurrentDirectory?.() || "" : commonSourceDirGuess;
                 const candidateDirectories = [];
@@ -3357,7 +3357,7 @@ export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions
 
 /**
  * A host may load a module from a global cache of typings.
- * This is the minumum code needed to expose that functionality; the rest is in the host.
+ * This is the minimum code needed to expose that functionality; the rest is in the host.
  *
  * @internal
  */

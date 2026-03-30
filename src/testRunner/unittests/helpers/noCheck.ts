@@ -32,8 +32,8 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p"): void {
         const noChangeRunWithCheckPendingDiscrepancy: TestTscEdit = {
             ...noChangeRun,
             discrepancyExplanation: () => [
-                "Clean build will have check pending since it didnt type check",
-                "Incremental build has typechecked before this so wont have checkPending",
+                "Clean build will have check pending since it didn't type check",
+                "Incremental build has typechecked before this so won't have checkPending",
             ],
         };
 

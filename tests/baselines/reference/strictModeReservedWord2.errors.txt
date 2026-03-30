@@ -35,7 +35,7 @@ strictModeReservedWord2.ts(13,12): error TS1212: Identifier expected. 'private' 
     enum foo {
         public,
         private,
-        pacakge
+        package
     }
     
     const enum private {
@@ -43,12 +43,12 @@ strictModeReservedWord2.ts(13,12): error TS1212: Identifier expected. 'private' 
 !!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
         public,
         private,
-        pacakge
+        package
     }
     
     const enum bar {
         public,
         private,
-        pacakge
+        package
     }
     

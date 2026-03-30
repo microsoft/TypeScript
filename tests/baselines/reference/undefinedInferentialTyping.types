@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/undefinedInferentialTyping.ts] ////
 
 === undefinedInferentialTyping.ts ===
-function f<T>(arr: T[], elemnt: T): T {
->f : <T>(arr: T[], elemnt: T) => T
+function f<T>(arr: T[], element: T): T {
+>f : <T>(arr: T[], element: T) => T
 >  : ^ ^^   ^^   ^^      ^^ ^^^^^ 
 >arr : T[]
 >    : ^^^
->elemnt : T
+>element : T
 >       : ^
 
     return null;
@@ -17,7 +17,7 @@ var a = f([], 3); // should be number
 >  : ^^^^^^
 >f([], 3) : 3
 >         : ^
->f : <T>(arr: T[], elemnt: T) => T
+>f : <T>(arr: T[], element: T) => T
 >  : ^ ^^   ^^   ^^      ^^ ^^^^^ 
 >[] : never[]
 >   : ^^^^^^^

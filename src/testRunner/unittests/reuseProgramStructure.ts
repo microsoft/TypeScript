@@ -270,7 +270,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
         runBaseline("resolution cache follows imports", baselines);
     });
 
-    it("set the resolvedImports after re-using an ambient external module declaration", () => {
+    it("set the resolvedImports after reusing an ambient external module declaration", () => {
         const files = [
             { name: "/home/src/workspaces/project/a.ts", text: SourceText.New("", "", 'import * as a from "a";') },
             { name: "/home/src/workspaces/project/types/zzz/index.d.ts", text: SourceText.New("", "", 'declare module "a" { }') },
@@ -283,7 +283,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
             files[0].text = files[0].text.updateProgram('import * as aa from "a";');
         });
         baselineProgram(baselines, program2);
-        runBaseline("resolvedImports after re-using an ambient external module declaration", baselines);
+        runBaseline("resolvedImports after reusing an ambient external module declaration", baselines);
     });
 
     it("works with updated SourceFiles", () => {
@@ -568,7 +568,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
         });
     });
 
-    it("forceConsistentCasingInFileNames:: handles file preprocessing dignostics", () => {
+    it("forceConsistentCasingInFileNames:: handles file preprocessing diagnostics", () => {
         const files = [
             {
                 name: "/home/src/workspaces/project/src/project/src/struct.d.ts",
@@ -650,10 +650,10 @@ describe("unittests:: reuseProgramStructure:: General", () => {
             /*useCaseSensitiveFileNames*/ false,
         );
         baselineProgram(baselines, program3);
-        runBaseline("handles file preprocessing dignostics", baselines);
+        runBaseline("handles file preprocessing diagnostics", baselines);
     });
 
-    it("forceConsistentCasingInFileNames:: handles file preprocessing dignostics when diagnostics are not queried", () => {
+    it("forceConsistentCasingInFileNames:: handles file preprocessing diagnostics when diagnostics are not queried", () => {
         const files = [
             {
                 name: "/home/src/workspaces/project/src/project/src/struct.d.ts",
@@ -767,7 +767,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
         );
         baselineProgram(baselines, program5);
         baselineDiagnostics(baselines, program4);
-        runBaseline("handles file preprocessing dignostics when diagnostics are not queried", baselines);
+        runBaseline("handles file preprocessing diagnostics when diagnostics are not queried", baselines);
     });
 
     it("isSourceFileDefaultLibrary is preserved after program reuse", () => {

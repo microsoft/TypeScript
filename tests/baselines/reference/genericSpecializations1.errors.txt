@@ -14,7 +14,7 @@ genericSpecializations1.ts(14,23): error TS2322: Type 'null' is not assignable t
 
 ==== genericSpecializations1.ts (5 errors) ====
     interface IFoo<T> {
-        foo<T>(x: T): T; // no error on implementors because IFoo's T is different from foo's T
+        foo<T>(x: T): T; // no error on implementers because IFoo's T is different from foo's T
     }
     
     class IntFooBad implements IFoo<number> {

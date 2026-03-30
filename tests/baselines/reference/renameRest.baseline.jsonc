@@ -3,7 +3,7 @@
 // interface Gen {
 //     x: number;
 //     /*RENAME*/<|[|parentRENAME|]: Gen;|>
-//     millenial: string;
+//     millennial: string;
 // }
 // let t: Gen;
 // var { x, ...rest } = t;
@@ -16,7 +16,7 @@
 // interface Gen {
 //     x: number;
 //     <|[|parentRENAME|]: Gen;|>
-//     millenial: string;
+//     millennial: string;
 // }
 // let t: Gen;
 // var { x, ...rest } = t;

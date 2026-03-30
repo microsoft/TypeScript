@@ -6,7 +6,7 @@
 //     [|{| kind: "none" |}case|] 4:
 //     [|{| kind: "none" |}case|] 8:
 //     [|{| kind: "none" |}case|] 0xBEEF:
-//     defult:
+//     default:
 //         [|{| kind: "none" |}break|];
 //     cas 16:
 //     [|{| kind: "none" |}case|] 12:
@@ -25,7 +25,7 @@
 //     [|{| kind: "none" |}c/*HIGHLIGHTS*/ase|] 4:
 //     [|{| kind: "none" |}case|] 8:
 //     [|{| kind: "none" |}case|] 0xBEEF:
-//     defult:
+//     default:
 //         [|{| kind: "none" |}break|];
 //     cas 16:
 //     [|{| kind: "none" |}case|] 12:
@@ -55,7 +55,7 @@
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefaultBroken.ts ===
 // --- (line: 5) skipped ---
 //     case 0xBEEF:
-//     defult:
+//     default:
 //         break;
 //     /*HIGHLIGHTS*/cas 16:
 //     case 12:
@@ -73,7 +73,7 @@
 //     [|{| kind: "none" |}case|] 4:
 //     [|{| kind: "none" |}case|] 8:
 //     [|{| kind: "none" |}case|] 0xBEEF:
-//     defult:
+//     default:
 //         [|{| kind: "none" |}break|];
 //     cas 16:
 //     [|{| kind: "none" |}c/*HIGHLIGHTS*/ase|] 12:

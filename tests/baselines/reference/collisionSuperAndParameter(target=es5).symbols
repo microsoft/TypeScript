@@ -7,8 +7,8 @@ class Foo {
     a() {
 >a : Symbol(Foo.a, Decl(collisionSuperAndParameter.ts, 0, 11))
 
-        var lamda = (_super: number) => { // No Error 
->lamda : Symbol(lamda, Decl(collisionSuperAndParameter.ts, 2, 11))
+        var lambda = (_super: number) => { // No Error 
+>lambda : Symbol(lambda, Decl(collisionSuperAndParameter.ts, 2, 11))
 >_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 2, 21))
 
             return x => this;   // New scope.  So should inject new _this capture
@@ -40,8 +40,8 @@ class Foo2 extends Foo {
     x() {
 >x : Symbol(Foo2.x, Decl(collisionSuperAndParameter.ts, 14, 24))
 
-        var lamda = (_super: number) => { // Error 
->lamda : Symbol(lamda, Decl(collisionSuperAndParameter.ts, 16, 11))
+        var lambda = (_super: number) => { // Error 
+>lambda : Symbol(lambda, Decl(collisionSuperAndParameter.ts, 16, 11))
 >_super : Symbol(_super, Decl(collisionSuperAndParameter.ts, 16, 21))
 
             return x => this;   // New scope.  So should inject new _this capture

@@ -17,7 +17,7 @@
 
 const [N0Def, N0, x0Def, x0, N1Def, N1, a0Def, a0, a1Def, a1, b0Def, b0, b1, x1] = test.ranges();
 const nRanges = [N0, N1];
-const aRanges = [a0, a1];
+const arranges = [a0, a1];
 const bRanges = [b0, b1];
 const xRanges = [x0, x1];
 

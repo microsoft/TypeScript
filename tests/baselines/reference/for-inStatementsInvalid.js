@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts] ////
 
 //// [for-inStatementsInvalid.ts]
-var aNumber: number;
-for (aNumber in {}) { }
+var a number: number;
+for (a number in {}) { }
 
 var aBoolean: boolean;
 for (aBoolean in {}) { }
@@ -67,8 +67,8 @@ for (var x in i[42]) { }
 
 //// [for-inStatementsInvalid.js]
 "use strict";
-var aNumber;
-for (aNumber in {}) { }
+var a number;
+for (a number in {}) { }
 var aBoolean;
 for (aBoolean in {}) { }
 var aRegExp;

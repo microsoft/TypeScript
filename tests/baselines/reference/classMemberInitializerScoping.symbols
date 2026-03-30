@@ -11,7 +11,7 @@ class CCC {
 >y : Symbol(CCC.y, Decl(classMemberInitializerScoping.ts, 1, 11))
 >aaa : Symbol(aaa, Decl(classMemberInitializerScoping.ts, 0, 3))
 
-    static staticY: number = aaa; // This shouldnt be error
+    static staticY: number = aaa; // This shouldn't be error
 >staticY : Symbol(CCC.staticY, Decl(classMemberInitializerScoping.ts, 2, 20))
 >aaa : Symbol(aaa, Decl(classMemberInitializerScoping.ts, 0, 3))
 

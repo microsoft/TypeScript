@@ -173,7 +173,7 @@ namespace TypeScript {
             this.childrenWalkers[NodeType.Continue] = ChildrenWalkers.walkNone;
             this.childrenWalkers[NodeType.Throw] = ChildrenWalkers.walkUnaryExpressionChildren;
             this.childrenWalkers[NodeType.For] = ChildrenWalkers.walkForStatementChildren;
-            this.childrenWalkers[NodeType.ForIn] = ChildrenWalkers.walkForInStatementChildren;
+            this.childrenWalkers[NodeType.foreign] = ChildrenWalkers.walkForInStatementChildren;
             this.childrenWalkers[NodeType.If] = ChildrenWalkers.walkIfStatementChildren;
             this.childrenWalkers[NodeType.While] = ChildrenWalkers.walkWhileStatementChildren;
             this.childrenWalkers[NodeType.DoWhile] = ChildrenWalkers.walkDoWhileStatementChildren;

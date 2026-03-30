@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// Regresion tests for GH#46854
+// Regression tests for GH#46854
 
 // @allowJs: true
 

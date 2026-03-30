@@ -57,7 +57,7 @@ namespace M {
     }
 }
 
-namespace M { // shouldnt be _M
+namespace M { // shouldn't be _M
 >M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 15, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 24, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 33, 1))
 
     namespace m3 {

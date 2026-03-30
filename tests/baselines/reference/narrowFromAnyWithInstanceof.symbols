@@ -41,7 +41,7 @@ if (x instanceof Error) { // 'any' is narrowed to types other than 'Function'/'O
 >x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
 >message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
 
-    x.mesage;
+    x.message;
 >x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
 }
 

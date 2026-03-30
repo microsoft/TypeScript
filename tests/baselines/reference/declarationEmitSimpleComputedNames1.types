@@ -23,8 +23,8 @@ export const fieldName = Math.random() > 0.5 ? "f1" : "f2";
 >"f2" : "f2"
 >     : ^^^^
 
-export const conatainer = {
->conatainer : { [fieldName]: () => string; }
+export const container = {
+>container : { [fieldName]: () => string; }
 >           : ^^             ^^^^^^^^^^^^ ^^
 >{    [fieldName]() {        return "result";    }} : { [fieldName]: () => string; }
 >                                                   : ^^             ^^^^^^^^^^^^ ^^

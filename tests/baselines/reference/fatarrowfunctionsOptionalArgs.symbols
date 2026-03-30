@@ -98,7 +98,7 @@ arg => 2;
 (((((arg) => { return 32; }))));
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 50, 5))
 
-// in ternary exression
+// in ternary expression
 false ? () => 41 : null;
 false ? (arg) => 42 : null;
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 54, 9))
@@ -121,7 +121,7 @@ false ? (arg?: number = 0) => 47 : null;
 false ? (...arg: number[]) => 48 : null;
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 60, 9))
 
-// in ternary exression within paren
+// in ternary expression within paren
 false ? (() => 51) : null;
 false ? ((arg) => 52) : null;
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 64, 10))

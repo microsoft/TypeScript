@@ -370,7 +370,7 @@ export declare const m: typeof mod;
 }
 
 
-Project should still be upto date: UpToDate
+Project should still be upto date: up-to-date
 non Dts change to logic:: After rebuilding logicConfig
 //// [/user/username/projects/sample1/logic/index.ts]
 import * as c from '../core/index';

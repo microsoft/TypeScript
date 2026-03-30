@@ -267,7 +267,7 @@ function hasCommentsBeforeLineBreak(text: string, start: number) {
  * Usually leading trivia of the variable declaration 'y' should not include trailing trivia (whitespace, comment 'this is x' and newline) from the preceding
  * variable declaration and trailing trivia for 'y' should include (whitespace, comment 'this is y', newline).
  * By default when removing nodes we adjust start and end positions to respect specification of the trivia above.
- * If pos\end should be interpreted literally (that is, withouth including leading and trailing trivia), `leadingTriviaOption` should be set to `LeadingTriviaOption.Exclude`
+ * If pos\end should be interpreted literally (that is, without including leading and trailing trivia), `leadingTriviaOption` should be set to `LeadingTriviaOption.Exclude`
  * and `trailingTriviaOption` to `TrailingTriviaOption.Exclude`.
  *
  * @internal
@@ -417,7 +417,7 @@ function getEndPositionOfMultilineTrailingComment(sourceFile: SourceFile, node: 
             const nodeEndLine = getLineOfLocalPosition(sourceFile, node.end);
             for (const comment of comments) {
                 // Single line can break the loop as trivia will only be this line.
-                // Comments on subsequest lines are also ignored.
+                // Comments on subsequent lines are also ignored.
                 if (comment.kind === SyntaxKind.SingleLineCommentTrivia || getLineOfLocalPosition(sourceFile, comment.pos) > nodeEndLine) {
                     break;
                 }

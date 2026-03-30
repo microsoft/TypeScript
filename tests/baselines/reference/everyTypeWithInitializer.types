@@ -69,8 +69,8 @@ namespace M {
 >         : ^     ^^^      ^^^^^      
 }
 
-var aNumber = 9.9;
->aNumber : number
+var a number = 9.9;
+>a number : number
 >        : ^^^^^^
 >9.9 : 9.9
 >    : ^^^

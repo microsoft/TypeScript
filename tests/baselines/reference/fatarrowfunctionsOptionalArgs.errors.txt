@@ -131,7 +131,7 @@ fatarrowfunctionsOptionalArgs.ts(130,24): error TS7006: Parameter 'b' implicitly
          ~~~
 !!! error TS7006: Parameter 'arg' implicitly has an 'any' type.
     
-    // in ternary exression
+    // in ternary expression
     false ? () => 41 : null;
     false ? (arg) => 42 : null;
              ~~~
@@ -145,7 +145,7 @@ fatarrowfunctionsOptionalArgs.ts(130,24): error TS7006: Parameter 'b' implicitly
     false ? (arg?: number = 0) => 47 : null;
     false ? (...arg: number[]) => 48 : null;
     
-    // in ternary exression within paren
+    // in ternary expression within paren
     false ? (() => 51) : null;
     false ? ((arg) => 52) : null;
               ~~~

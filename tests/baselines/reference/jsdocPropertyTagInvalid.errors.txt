@@ -4,7 +4,7 @@
 ==== /a.js (1 errors) ====
     /**
      * @typedef MyType
-     * @property {sting} [x]
+     * @property {string} [x]
                   ~~~~~
 !!! error TS2552: Cannot find name 'sting'. Did you mean 'string'?
      */

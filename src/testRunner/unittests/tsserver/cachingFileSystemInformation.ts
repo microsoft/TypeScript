@@ -243,7 +243,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
         openFilesForSession([clientFile], session);
         const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
-        // Get definitions shouldnt make host requests
+        // Get definitions shouldn't make host requests
         session.executeCommandSeq<ts.server.protocol.DefinitionRequest>({
             command: ts.server.protocol.CommandTypes.Definition,
             arguments: {

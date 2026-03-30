@@ -29,5 +29,5 @@ verify.syntacticClassificationsAre(
     c.punctuation("}"),
     c.comment(" "),
     c.parameterName("wid"),
-    c.comment(""), // syntatic classification verification always just uses input text, so the edits don't appear
+    c.comment(""), // syntactic classification verification always just uses input text, so the edits don't appear
 );

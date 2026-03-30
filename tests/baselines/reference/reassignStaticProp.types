@@ -11,7 +11,7 @@ class foo {
 >1 : 1
 >  : ^
  
-    static bar:string; // errror - duplicate id
+    static bar:string; // error - duplicate id
 >bar : number
 >    : ^^^^^^
  

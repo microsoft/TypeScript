@@ -41,7 +41,7 @@ derivedInterfaceIncompatibleWithBaseIndexer.ts(24,5): error TS2411: Property '1'
 !!! error TS2411: Property 'foo' of type '() => { x: number; }' is not assignable to 'string' index type '{ x: number; }'.
     }
     
-    // satisifies string indexer but not numeric indexer
+    // satisfies string indexer but not numeric indexer
     interface Derived5 extends Base {
         1: { x: number } // error
         ~

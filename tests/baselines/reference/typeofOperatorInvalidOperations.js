@@ -3,7 +3,7 @@
 //// [typeofOperatorInvalidOperations.ts]
 // Unary operator typeof
 
-// opreand before typeof
+// operand before typeof
 var ANY = ANY typeof ;    //expect error
 
 // miss an operand
@@ -12,7 +12,7 @@ var ANY1 = typeof ;
 //// [typeofOperatorInvalidOperations.js]
 "use strict";
 // Unary operator typeof
-// opreand before typeof
+// operand before typeof
 var ANY = ANY;
 typeof ; //expect error
 // miss an operand

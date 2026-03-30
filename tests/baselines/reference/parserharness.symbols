@@ -4221,7 +4221,7 @@ namespace Harness {
     export namespace TestCaseParser {
 >TestCaseParser : Symbol(TestCaseParser, Decl(parserharness.ts, 1408, 5))
 
-        /** all the necesarry information to set the right compiler settings */
+        /** all the necessary information to set the right compiler settings */
         export interface CompilerSetting {
 >CompilerSetting : Symbol(CompilerSetting, Decl(parserharness.ts, 1413, 37))
 
@@ -5711,7 +5711,7 @@ namespace Harness {
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(parserharness.ts, 1874, 74))
 
-            // List of names that get overriden by various test code we eval
+            // List of names that get overridden by various test code we eval
             var dangerNames: any = ['Array'];
 >dangerNames : Symbol(dangerNames, Decl(parserharness.ts, 1876, 15))
 

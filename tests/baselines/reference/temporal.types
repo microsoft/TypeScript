@@ -4449,7 +4449,7 @@ Type Count: 2,500
 >"numeric" : "numeric"
 >          : ^^^^^^^^^
 
-    zdt.toLocaleString("de-DE", options); // => 'Sonntag, 1. Dezember 2019'
+    zdt.toLocaleString("de-DE", options); // => 'Sonntag, 1. December 2019'
 >zdt.toLocaleString("de-DE", options) : string
 >                                     : ^^^^^^
 >zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string

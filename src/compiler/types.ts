@@ -838,7 +838,7 @@ export const enum NodeFlags {
     TypeExcludesFlags = YieldContext | AwaitContext,
 
     // Represents all flags that are potentially set once and
-    // never cleared on SourceFiles which get re-used in between incremental parses.
+    // never cleared on SourceFiles which get reused in between incremental parses.
     // See the comment above on `PossiblyContainsDynamicImport` and `PossiblyContainsImportMeta`.
     /** @internal */ PermanentlySetIncrementalFlags = PossiblyContainsDynamicImport | PossiblyContainsImportMeta,
 
@@ -4381,7 +4381,7 @@ export interface SourceFile extends Declaration, LocalsContainer {
      *
      * Note that this field is only set by the module resolution process when
      * `moduleResolution` is `Node16` or `NodeNext`, which is implied by the `module` setting
-     * of `Node16` or `NodeNext`, respectively, but may be overriden (eg, by a `moduleResolution`
+     * of `Node16` or `NodeNext`, respectively, but may be overridden (eg, by a `moduleResolution`
      * of `node`). If so, this field will be unset and source files will be considered to be
      * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
      */
@@ -5983,7 +5983,7 @@ export const enum SymbolFlags {
     // same name, or any other value that is not a variable, e.g. ValueModule or Class
     FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,
 
-    // Block-scoped declarations are not allowed to be re-declared
+    // Block-scoped declarations are not allowed to be redeclared
     // they can not merge with anything in the value space
     BlockScopedVariableExcludes = Value,
 
@@ -7757,7 +7757,7 @@ export interface CommandLineOptionBase {
     isFilePath?: boolean;                                   // True if option value is a path or fileName
     shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
     description?: DiagnosticMessage;                        // The message describing what the command line switch does.
-    defaultValueDescription?: string | number | boolean | DiagnosticMessage | undefined;   // The message describing what the dafault value is. string type is prepared for fixed chosen like "false" which do not need I18n.
+    defaultValueDescription?: string | number | boolean | DiagnosticMessage | undefined;   // The message describing what the default value is. string type is prepared for fixed chosen like "false" which do not need I18n.
     paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
     isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
     isCommandLineOnly?: boolean;

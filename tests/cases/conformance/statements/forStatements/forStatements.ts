@@ -25,7 +25,7 @@ namespace M {
     export function F2(x: number): string { return x.toString(); }
 }
 
-for(var aNumber: number = 9.9;;){} 
+for(var a number: number = 9.9;;){} 
 for(var aString: string = 'this is a string';;){}
 for(var aDate: Date = new Date(12);;){}
 for(var anObject: Object = new Object();;){}

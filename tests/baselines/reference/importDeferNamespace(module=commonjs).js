@@ -6,9 +6,9 @@ export function foo() {
 }
 
 //// [b.ts]
-import defer * as aNs from "./a.js";
+import defer * as and from "./a.js";
 
-aNs.foo();
+and.foo();
 
 //// [a.js]
 "use strict";
@@ -53,5 +53,5 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const aNs = __importStar(require("./a.js"));
-aNs.foo();
+const and = __importStar(require("./a.js"));
+and.foo();

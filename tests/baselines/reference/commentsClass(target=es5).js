@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/commentsClass.ts] ////
 
 //// [commentsClass.ts]
-/** This is class c2 without constuctor*/
+/** This is class c2 without constructor*/
 class c2 {
 } // trailing comment1
 var i2 = new c2();
@@ -21,15 +21,15 @@ class c4 {
 }
 var i4 = new c4();
 var i4_c = c4;
-/** Class with statics*/
+/** Class with statistics*/
 class c5 {
     static s1: number;
 }
 var i5 = new c5();
 var i5_c = c5;
 
-/// class with statics and constructor
-class c6 { /// class with statics and constructor2
+/// class with statistics and constructor
+class c6 { /// class with statistics and constructor2
     /// s1 comment
     static s1: number; /// s1 comment2
     /// constructor comment
@@ -39,7 +39,7 @@ class c6 { /// class with statics and constructor2
 var i6 = new c6();
 var i6_c = c6;
 
-// class with statics and constructor
+// class with statistics and constructor
 class c7 {
     // s1 comment
     static s1: number;
@@ -50,7 +50,7 @@ class c7 {
 var i7 = new c7();
 var i7_c = c7;
 
-/** class with statics and constructor
+/** class with statistics and constructor
  */
 class c8 {
     /** s1 comment */
@@ -76,7 +76,7 @@ class c9 {
 
 //// [commentsClass.js]
 "use strict";
-/** This is class c2 without constuctor*/
+/** This is class c2 without constructor*/
 var c2 = /** @class */ (function () {
     function c2() {
     }
@@ -101,7 +101,7 @@ var c4 = /** @class */ (function () {
 }());
 var i4 = new c4();
 var i4_c = c4;
-/** Class with statics*/
+/** Class with statistics*/
 var c5 = /** @class */ (function () {
     function c5() {
     }
@@ -109,7 +109,7 @@ var c5 = /** @class */ (function () {
 }());
 var i5 = new c5();
 var i5_c = c5;
-/// class with statics and constructor
+/// class with statistics and constructor
 var c6 = /** @class */ (function () {
     /// constructor comment
     function c6() {
@@ -118,7 +118,7 @@ var c6 = /** @class */ (function () {
 }());
 var i6 = new c6();
 var i6_c = c6;
-// class with statics and constructor
+// class with statistics and constructor
 var c7 = /** @class */ (function () {
     // constructor comment
     function c7() {
@@ -127,7 +127,7 @@ var c7 = /** @class */ (function () {
 }());
 var i7 = new c7();
 var i7_c = c7;
-/** class with statics and constructor
+/** class with statistics and constructor
  */
 var c8 = /** @class */ (function () {
     /** constructor comment
@@ -150,7 +150,7 @@ var c9 = /** @class */ (function () {
 
 
 //// [commentsClass.d.ts]
-/** This is class c2 without constuctor*/
+/** This is class c2 without constructor*/
 declare class c2 {
 }
 declare var i2: c2;
@@ -168,7 +168,7 @@ declare class c4 {
 }
 declare var i4: c4;
 declare var i4_c: typeof c4;
-/** Class with statics*/
+/** Class with statistics*/
 declare class c5 {
     static s1: number;
 }
@@ -186,7 +186,7 @@ declare class c7 {
 }
 declare var i7: c7;
 declare var i7_c: typeof c7;
-/** class with statics and constructor
+/** class with statistics and constructor
  */
 declare class c8 {
     /** s1 comment */

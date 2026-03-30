@@ -2,7 +2,7 @@
 // @strict: true
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-type Shared< // Circularly self constraining type, defered thanks to mapping
+type Shared< // Circularly self constraining type, deferred thanks to mapping
     InjectedProps,
     DecorationTargetProps extends Shared<InjectedProps, DecorationTargetProps>
     > = {

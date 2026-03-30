@@ -9622,7 +9622,7 @@ namespace Harness {
 >TestCaseParser : typeof TestCaseParser
 >               : ^^^^^^^^^^^^^^^^^^^^^
 
-        /** all the necesarry information to set the right compiler settings */
+        /** all the necessary information to set the right compiler settings */
         export interface CompilerSetting {
             flag: string;
 >flag : string
@@ -12827,7 +12827,7 @@ namespace Harness {
 >result : any
 >       : ^^^
 
-            // List of names that get overriden by various test code we eval
+            // List of names that get overridden by various test code we eval
             var dangerNames: any = ['Array'];
 >dangerNames : any
 >            : ^^^

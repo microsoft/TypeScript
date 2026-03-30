@@ -242,7 +242,7 @@ namespace TypeScript {
             var fgSym: TypeSymbol = null;
 
             if (isStatic) {
-                // In the case of function-nested statics, no member list will have bee initialized for the function, so we need
+                // In the case of function-nested statistics, no member list will have bee initialized for the function, so we need
                 // to copy it over.  We don't set this by default because having a non-null member list will throw off assignment
                 // compatibility tests
                 if (outerFnc.type.members == null && container.getType().memberScope) {
@@ -322,7 +322,7 @@ namespace TypeScript {
         funcDecl.unitIndex = context.typeFlow.checker.locationInfo.unitIndex;
 
         var locals = new SymbolScopeBuilder(funcMembers, ambientFuncMembers, null, null, parentScope, localContainer);
-        var statics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
+        var statistics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
 
         if (funcDecl.isConstructor && context.scopeChain.thisType) {
             context.scopeChain.thisType.constructorScope = locals;
@@ -347,8 +347,8 @@ namespace TypeScript {
                 group.containedScope = locals;
                 locals.container = group.symbol;
 
-                group.memberScope = statics;
-                statics.container = group.symbol;
+                group.memberScope = statistics;
+                statistics.container = group.symbol;
             }
             funcDecl.enclosingFnc = context.scopeChain.fnc;
             group.enclosingType = isStatic ? context.scopeChain.classType : context.scopeChain.thisType;
@@ -357,7 +357,7 @@ namespace TypeScript {
             if (((funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None) && funcDecl.vars) {
                 context.typeFlow.addLocalsFromScope(locals, fgSym, funcDecl.vars,
                                                     funcTable, false);
-                context.typeFlow.addLocalsFromScope(statics, fgSym, funcDecl.statics,
+                context.typeFlow.addLocalsFromScope(statistics, fgSym, funcDecl.statistics,
                                                     funcStaticTable, false);
             }
             if (signature.parameters) {
@@ -676,7 +676,7 @@ var TypeScript;
             var nameText = funcDecl.name ? funcDecl.name.actualText : null;
             var fgSym = null;
             if (isStatic) {
-                // In the case of function-nested statics, no member list will have bee initialized for the function, so we need
+                // In the case of function-nested statistics, no member list will have bee initialized for the function, so we need
                 // to copy it over.  We don't set this by default because having a non-null member list will throw off assignment
                 // compatibility tests
                 if (outerFnc.type.members == null && container.getType().memberScope) {
@@ -743,7 +743,7 @@ var TypeScript;
         // REVIEW: Is it a problem that this is being set twice for properties and constructors?
         funcDecl.unitIndex = context.typeFlow.checker.locationInfo.unitIndex;
         var locals = new SymbolScopeBuilder(funcMembers, ambientFuncMembers, null, null, parentScope, localContainer);
-        var statics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
+        var statistics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
         if (funcDecl.isConstructor && context.scopeChain.thisType) {
             context.scopeChain.thisType.constructorScope = locals;
         }
@@ -762,8 +762,8 @@ var TypeScript;
             if (!funcDecl.isConstructor) {
                 group.containedScope = locals;
                 locals.container = group.symbol;
-                group.memberScope = statics;
-                statics.container = group.symbol;
+                group.memberScope = statistics;
+                statistics.container = group.symbol;
             }
             funcDecl.enclosingFnc = context.scopeChain.fnc;
             group.enclosingType = isStatic ? context.scopeChain.classType : context.scopeChain.thisType;
@@ -771,7 +771,7 @@ var TypeScript;
             var fgSym = ast.type.symbol;
             if (((funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None) && funcDecl.vars) {
                 context.typeFlow.addLocalsFromScope(locals, fgSym, funcDecl.vars, funcTable, false);
-                context.typeFlow.addLocalsFromScope(statics, fgSym, funcDecl.statics, funcStaticTable, false);
+                context.typeFlow.addLocalsFromScope(statistics, fgSym, funcDecl.statistics, funcStaticTable, false);
             }
             if (signature.parameters) {
                 var len = signature.parameters.length;

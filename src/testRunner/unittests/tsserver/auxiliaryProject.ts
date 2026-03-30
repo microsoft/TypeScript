@@ -13,7 +13,7 @@ import {
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: auxiliaryProject::", () => {
-    it("AuxiliaryProject does not remove scrips from InferredProject", () => {
+    it("AuxiliaryProject does not remove scripts from InferredProject", () => {
         const aTs: File = {
             path: "/user/username/projects/project/a.ts",
             content: `import { B } from "./b";`,
@@ -56,7 +56,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
         assert(!bJsScriptInfo.isOrphan());
         assert(ts.server.scriptInfoIsContainedByBackgroundProject(bJsScriptInfo));
         assert.equal(bJsScriptInfo.getDefaultProject().projectKind, ts.server.ProjectKind.Inferred);
-        baselineTsserverLogs("auxiliaryProject", "does not remove scrips from InferredProject", session);
+        baselineTsserverLogs("auxiliaryProject", "does not remove scripts from InferredProject", session);
     });
 
     it("file is added later through finding definition", () => {
@@ -91,7 +91,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 export class Yargs { positional() { } }
             `,
             "/user/users/projects/myproject/node_modules/yargs/index.js": dedent`
-                // Specifically didnt have ./callback import to ensure that resolving module sepcifier adds the file to project at later stage
+                // Specifically didn't have ./callback import to ensure that resolving module specifier adds the file to project at later stage
                 export function command(cmd, cb) { cb(Yargs) }
             `,
             [indexFile.path]: indexFile.content,
@@ -146,7 +146,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 export class Yargs { positional() { } }
             `,
             "/user/users/projects/myproject/node_modules/yargs/index.js": dedent`
-                // Specifically didnt have ./callback import to ensure that resolving module sepcifier adds the file to project at later stage
+                // Specifically didn't have ./callback import to ensure that resolving module specifier adds the file to project at later stage
                 export function command(cmd, cb) { cb(Yargs) }
             `,
             "/user/users/projects/myproject/folder/random.ts": dedent`

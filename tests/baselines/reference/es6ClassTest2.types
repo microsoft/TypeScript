@@ -459,8 +459,8 @@ class SuperChild extends SuperParent {
     }
 }
 
-class Statics {
->Statics : Statics
+class Statistics {
+>Statistics : Statistics
 >        : ^^^^^^^
 
     static foo = 1;
@@ -483,12 +483,12 @@ class Statics {
     }
 }
 
-var stat = new Statics();
->stat : Statics
+var stat = new Statistics();
+>stat : Statistics
 >     : ^^^^^^^
->new Statics() : Statics
+>new Statistics() : Statistics
 >              : ^^^^^^^
->Statics : typeof Statics
+>Statistics : typeof Statistics
 >        : ^^^^^^^^^^^^^^
 
 interface IFoo {

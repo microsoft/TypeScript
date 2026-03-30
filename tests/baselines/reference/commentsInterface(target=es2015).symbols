@@ -16,7 +16,7 @@ var nc_i1_i: nc_i1;
 >nc_i1_i : Symbol(nc_i1_i, Decl(commentsInterface.ts, 6, 3))
 >nc_i1 : Symbol(nc_i1, Decl(commentsInterface.ts, 3, 13))
 
-/** this is interface 2 with memebers*/
+/** this is interface 2 with members*/
 interface i2 {
 >i2 : Symbol(i2, Decl(commentsInterface.ts, 6, 19))
 

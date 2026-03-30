@@ -38,7 +38,7 @@ class MyClassOk {
     constructor(foo: string) { }
 }
 
-// Note for implementors: This should not be an error
+// Note for implementers: This should not be an error
 // as this entire namespace block is fully erased
 namespace NotInstantiated {
     export interface JustAType { }

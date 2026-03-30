@@ -8,7 +8,7 @@
 ////    export var x: number;
 ////}
 ////Foo/*c1*/; // should get "x", "prototype"
-////var s: Foo/*c2*/; // no types, in Foo, so shouldnt have anything
+////var s: Foo/*c2*/; // no types, in Foo, so shouldn't have anything
 ////var f = new Foo();
 ////f/*c3*/;
 

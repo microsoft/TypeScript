@@ -1,7 +1,7 @@
 // @target: es2015
 // @declaration: true
 namespace M {
-    namespace P.Q { } // This shouldnt be emitted
+    namespace P.Q { } // This shouldn't be emitted
 }
 
 namespace M {

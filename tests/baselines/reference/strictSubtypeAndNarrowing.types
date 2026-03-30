@@ -377,8 +377,8 @@ function checkC(f: FnTypes) {
 >  : ^^^^^^^
 }
 
-function checkD(f: FnTypes) {
->checkD : (f: FnTypes) => void
+function checked(f: FnTypes) {
+>checked : (f: FnTypes) => void
 >       : ^ ^^       ^^^^^^^^^
 >f : FnTypes
 >  : ^^^^^^^

@@ -41,7 +41,7 @@ foo() ? exprString1 : exprString2;
 array[1] ? exprIsObject1 : exprIsObject2;
 foo() ? exprString1 : exprBoolean1; // union
 
-//Results shoud be same as Expr1 and Expr2
+//Results should be same as Expr1 and Expr2
 var resultIsAny1 = condString ? exprAny1 : exprAny2;
 var resultIsBoolean1 = condString ? exprBoolean1 : exprBoolean2;
 var resultIsNumber1 = condString ? exprNumber1 : exprNumber2;

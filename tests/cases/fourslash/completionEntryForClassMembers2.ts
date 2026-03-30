@@ -391,7 +391,7 @@ const tests: ReadonlyArray<{ readonly marker: string | ReadonlyArray<string>, re
             "extendsB0AndImplementsI5ThatExtendsB0TypesStatic",
             "extendsB0AndImplementsI6ThatExtendsB0AndHasStaticMethodOfB0TypesStatic",
         ],
-        // statics of base B but nothing from instance side
+        // statistics of base B but nothing from instance side
         members: validStaticMembersOfBaseClassB0,
     },
 ];

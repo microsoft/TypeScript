@@ -120,7 +120,7 @@ null === undefined ? exprString1 : exprBoolean1; // union
 >exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsBooleanType.ts, 6, 3))
 >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsBooleanType.ts, 4, 3))
 
-//Results shoud be same as Expr1 and Expr2
+//Results should be same as Expr1 and Expr2
 var resultIsAny1 = condBoolean ? exprAny1 : exprAny2;
 >resultIsAny1 : Symbol(resultIsAny1, Decl(conditionalOperatorConditionIsBooleanType.ts, 40, 3))
 >condBoolean : Symbol(condBoolean, Decl(conditionalOperatorConditionIsBooleanType.ts, 1, 3))

@@ -21,31 +21,31 @@ var justElement5 = <a:element attr={"value"}>{"text"}</a:element>;
 >justElement5 : Symbol(justElement5, Decl(jsxNamespacePrefixInNameReact.tsx, 6, 3))
 >attr : Symbol(attr, Decl(jsxNamespacePrefixInNameReact.tsx, 6, 29))
 
-var tooManySeparators1 = <a:ele:ment />;
+var tooManySeparators1 = <a:ele:meant />;
 >tooManySeparators1 : Symbol(tooManySeparators1, Decl(jsxNamespacePrefixInNameReact.tsx, 8, 3))
->ment : Symbol(ment, Decl(jsxNamespacePrefixInNameReact.tsx, 8, 32))
+>meant : Symbol(meant, Decl(jsxNamespacePrefixInNameReact.tsx, 8, 32))
 
-var tooManySeparators2 = <a:ele:ment></a:ele:ment>;
+var tooManySeparators2 = <a:ele:meant></a:ele:meant>;
 >tooManySeparators2 : Symbol(tooManySeparators2, Decl(jsxNamespacePrefixInNameReact.tsx, 9, 3))
->ment : Symbol(ment, Decl(jsxNamespacePrefixInNameReact.tsx, 9, 32))
->ment : Symbol(ment, Decl(jsxNamespacePrefixInNameReact.tsx, 9, 45), Decl(jsxNamespacePrefixInNameReact.tsx, 10, 60), Decl(jsxNamespacePrefixInNameReact.tsx, 11, 53), Decl(jsxNamespacePrefixInNameReact.tsx, 12, 68))
+>meant : Symbol(meant, Decl(jsxNamespacePrefixInNameReact.tsx, 9, 32))
+>meant : Symbol(meant, Decl(jsxNamespacePrefixInNameReact.tsx, 9, 45), Decl(jsxNamespacePrefixInNameReact.tsx, 10, 60), Decl(jsxNamespacePrefixInNameReact.tsx, 11, 53), Decl(jsxNamespacePrefixInNameReact.tsx, 12, 68))
 
-var tooManySeparators3 = <a:ele:ment attr={"value"}></a:ele:ment>;
+var tooManySeparators3 = <a:ele:meant attr={"value"}></a:ele:meant>;
 >tooManySeparators3 : Symbol(tooManySeparators3, Decl(jsxNamespacePrefixInNameReact.tsx, 10, 3))
->ment : Symbol(ment, Decl(jsxNamespacePrefixInNameReact.tsx, 10, 32))
+>meant : Symbol(meant, Decl(jsxNamespacePrefixInNameReact.tsx, 10, 32))
 >attr : Symbol(attr, Decl(jsxNamespacePrefixInNameReact.tsx, 10, 36))
->ment : Symbol(ment, Decl(jsxNamespacePrefixInNameReact.tsx, 9, 45), Decl(jsxNamespacePrefixInNameReact.tsx, 10, 60), Decl(jsxNamespacePrefixInNameReact.tsx, 11, 53), Decl(jsxNamespacePrefixInNameReact.tsx, 12, 68))
+>meant : Symbol(meant, Decl(jsxNamespacePrefixInNameReact.tsx, 9, 45), Decl(jsxNamespacePrefixInNameReact.tsx, 10, 60), Decl(jsxNamespacePrefixInNameReact.tsx, 11, 53), Decl(jsxNamespacePrefixInNameReact.tsx, 12, 68))
 
-var tooManySeparators4 = <a:ele:ment>{"text"}</a:ele:ment>;
+var tooManySeparators4 = <a:ele:meant>{"text"}</a:ele:meant>;
 >tooManySeparators4 : Symbol(tooManySeparators4, Decl(jsxNamespacePrefixInNameReact.tsx, 11, 3))
->ment : Symbol(ment, Decl(jsxNamespacePrefixInNameReact.tsx, 11, 32))
->ment : Symbol(ment, Decl(jsxNamespacePrefixInNameReact.tsx, 9, 45), Decl(jsxNamespacePrefixInNameReact.tsx, 10, 60), Decl(jsxNamespacePrefixInNameReact.tsx, 11, 53), Decl(jsxNamespacePrefixInNameReact.tsx, 12, 68))
+>meant : Symbol(meant, Decl(jsxNamespacePrefixInNameReact.tsx, 11, 32))
+>meant : Symbol(meant, Decl(jsxNamespacePrefixInNameReact.tsx, 9, 45), Decl(jsxNamespacePrefixInNameReact.tsx, 10, 60), Decl(jsxNamespacePrefixInNameReact.tsx, 11, 53), Decl(jsxNamespacePrefixInNameReact.tsx, 12, 68))
 
-var tooManySeparators5 = <a:ele:ment attr={"value"}>{"text"}</a:ele:ment>;
+var tooManySeparators5 = <a:ele:meant attr={"value"}>{"text"}</a:ele:meant>;
 >tooManySeparators5 : Symbol(tooManySeparators5, Decl(jsxNamespacePrefixInNameReact.tsx, 12, 3))
->ment : Symbol(ment, Decl(jsxNamespacePrefixInNameReact.tsx, 12, 32))
+>meant : Symbol(meant, Decl(jsxNamespacePrefixInNameReact.tsx, 12, 32))
 >attr : Symbol(attr, Decl(jsxNamespacePrefixInNameReact.tsx, 12, 36))
->ment : Symbol(ment, Decl(jsxNamespacePrefixInNameReact.tsx, 9, 45), Decl(jsxNamespacePrefixInNameReact.tsx, 10, 60), Decl(jsxNamespacePrefixInNameReact.tsx, 11, 53), Decl(jsxNamespacePrefixInNameReact.tsx, 12, 68))
+>meant : Symbol(meant, Decl(jsxNamespacePrefixInNameReact.tsx, 9, 45), Decl(jsxNamespacePrefixInNameReact.tsx, 10, 60), Decl(jsxNamespacePrefixInNameReact.tsx, 11, 53), Decl(jsxNamespacePrefixInNameReact.tsx, 12, 68))
 
 var justAttribute1 = <element a:attr={"value"} />;
 >justAttribute1 : Symbol(justAttribute1, Decl(jsxNamespacePrefixInNameReact.tsx, 14, 3))
@@ -90,6 +90,6 @@ var beginOfIdent2 = <a :attr={"value"} />;
 var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
 >upcaseComponent1 : Symbol(upcaseComponent1, Decl(jsxNamespacePrefixInNameReact.tsx, 28, 3))
 
-var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
+var upcaseComponent2 = <Upcase:element />;  // Parsed as intrinsic
 >upcaseComponent2 : Symbol(upcaseComponent2, Decl(jsxNamespacePrefixInNameReact.tsx, 29, 3))
 

@@ -11,7 +11,7 @@ declare global {
 export {}
 
 // @filename: index.ts
-import "./extention";
+import "./extension";
 
 globalThis.tests = "a-b";
 console.log(globalThis.test.split("-"));

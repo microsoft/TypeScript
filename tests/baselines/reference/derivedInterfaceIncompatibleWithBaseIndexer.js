@@ -22,7 +22,7 @@ interface Derived4 extends Base {
     foo(): { x: number } // error
 }
 
-// satisifies string indexer but not numeric indexer
+// satisfies string indexer but not numeric indexer
 interface Derived5 extends Base {
     1: { x: number } // error
 }

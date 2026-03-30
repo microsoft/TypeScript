@@ -340,7 +340,7 @@ function createBuilderProgramState(
     let canCopySemanticDiagnostics = useOldState &&
         !compilerOptionsAffectSemanticDiagnostics(compilerOptions, oldCompilerOptions!);
     // We can only reuse emit signatures (i.e. .d.ts signatures) if the .d.ts file is unchanged,
-    // which will eg be depedent on change in options like declarationDir and outDir options are unchanged.
+    // which will eg be dependent on change in options like declarationDir and outDir options are unchanged.
     // We need to look in oldState.compilerOptions, rather than oldCompilerOptions (i.e.we need to disregard useOldState) because
     // oldCompilerOptions can be undefined if there was change in say module from None to some other option
     // which would make useOldState as false since we can now use reference maps that are needed to track what to emit, what to check etc
@@ -359,7 +359,7 @@ function createBuilderProgramState(
         }
         state.programEmitPending = oldState!.programEmitPending;
         // If there is changeSet with --outFile, cannot copy semantic diagnsotics or emitDiagnostics
-        // as they all need to be calculated again all together since we dont know whats the affected file set because of the way d.ts works
+        // as they all need to be calculated again all together since we dont know what's the affected file set because of the way d.ts works
         if (outFilePath && state.changedFilesSet.size) {
             canCopySemanticDiagnostics = false;
             canCopyEmitDiagnostics = false;
@@ -367,7 +367,7 @@ function createBuilderProgramState(
         state.hasErrorsFromOldState = oldState!.hasErrors;
     }
     else {
-        // We arent using old state, so atleast emit buildInfo with current information
+        // We aren't using old state, so at least emit buildInfo with current information
         state.buildInfoEmitPending = isIncrementalCompilation(compilerOptions);
     }
 
@@ -489,7 +489,7 @@ function createBuilderProgramState(
         state.changedFilesSet.add(path);
         if (outFilePath) {
             // If there is changeSet with --outFile, cannot copy semantic diagnsotics or emitDiagnostics
-            // as they all need to be calculated again all together since we dont know whats the affected file set because of the way d.ts works
+            // as they all need to be calculated again all together since we dont know what's the affected file set because of the way d.ts works
             canCopySemanticDiagnostics = false;
             canCopyEmitDiagnostics = false;
             state.semanticDiagnosticsFromOldState = undefined;
@@ -620,7 +620,7 @@ function releaseCache(state: BuilderProgramState) {
 }
 
 /**
- * Verifies that source file is ok to be used in calls that arent handled by next
+ * Verifies that source file is ok to be used in calls that aren't handled by next
  */
 function assertSourceFileOkWithoutNextAffectedCall(state: BuilderProgramState, sourceFile: SourceFile | undefined) {
     Debug.assert(!sourceFile || !state.affectedFiles || state.affectedFiles[state.affectedFilesIndex! - 1] !== sourceFile || !state.semanticDiagnosticsPerFile.has(sourceFile.resolvedPath));
@@ -1063,7 +1063,7 @@ function getBinderAndCheckerDiagnosticsOfFile(
         return filterSemanticDiagnostics(cachedDiagnostics, state.compilerOptions);
     }
 
-    // Diagnostics werent cached, get them from program, and cache the result
+    // Diagnostics weren't cached, get them from program, and cache the result
     const diagnostics = state.program.getBindAndCheckDiagnostics(sourceFile, cancellationToken);
     semanticDiagnosticsPerFile.set(path, diagnostics);
     state.buildInfoEmitPending = true;
@@ -1105,7 +1105,7 @@ export type IncrementalMultiFileEmitBuildInfoBuilderStateFileInfo = Omit<Builder
 };
 /**
  * [fileId, signature] if different from file's signature
- * fileId if file wasnt emitted
+ * fileId if file wasn't emitted
  *
  * @internal
  */
@@ -1254,7 +1254,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
     const root: IncrementalBuildInfoRoot[] = [];
     if (state.compilerOptions.outFile) {
         // Copy all fileInfo, version and impliedFormat
-        // Affects global scope and signature doesnt matter because with --out they arent calculated or needed to determine upto date ness
+        // Affects global scope and signature doesnt matter because with --out they aren't calculated or needed to determine upto date ness
         const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): IncrementalBundleEmitBuildInfoFileInfo => {
             // Ensure fileId
             const fileId = toFileId(key);
@@ -1277,7 +1277,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
             pendingEmit: !state.programEmitPending ?
                 undefined : // Pending is undefined or None is encoded as undefined
                 state.programEmitPending === getBuilderFileEmit(state.compilerOptions) ?
-                false : // Pending emit is same as deteremined by compilerOptions
+                false : // Pending emit is same as determined by compilerOptions
                 state.programEmitPending, // Actual value
             errors: state.hasErrors ? true : undefined,
             checkPending: state.checkPending,
@@ -1319,7 +1319,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
                 value.version :
             actualSignature !== undefined ? // If signature is not same as version, encode signature in the fileInfo
             oldSignature === undefined ?
-                // If we havent computed signature, use fileInfo as is
+                // If we haven't computed signature, use fileInfo as is
                 value :
                 // Serialize fileInfo with new updated signature
                 { version: value.version, signature: actualSignature, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat } :
@@ -1685,7 +1685,7 @@ export function createBuilderProgram(
     const state = createBuilderProgramState(newProgram, oldState);
     newProgram.getBuildInfo = () => getBuildInfo(toBuilderProgramStateWithDefinedProgram(state));
 
-    // To ensure that we arent storing any references to old program or new program without state
+    // To ensure that we aren't storing any references to old program or new program without state
     newProgram = undefined!;
     oldProgram = undefined;
     oldState = undefined;
@@ -1968,7 +1968,7 @@ export function createBuilderProgram(
 
             /**
              * Compare to existing computed signature and store it or handle the changes in d.ts map option from before
-             * returning undefined means that, we dont need to emit this d.ts file since its contents didnt change
+             * returning undefined means that, we dont need to emit this d.ts file since its contents didn't change
              */
             function handleNewSignature(oldSignatureFormat: EmitSignature | undefined, newSignature: string | undefined) {
                 const oldSignature = !oldSignatureFormat || isString(oldSignatureFormat) ? oldSignatureFormat : oldSignatureFormat[0];

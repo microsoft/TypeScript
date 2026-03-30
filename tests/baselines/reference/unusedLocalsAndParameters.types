@@ -3,7 +3,7 @@
 === unusedLocalsAndParameters.ts ===
 export { };
 
-// function declaration paramter
+// function declaration parameter
 function f(a) {
 >f : (a: any) => void
 >  : ^ ^^^^^^^^^^^^^^
@@ -18,7 +18,7 @@ f(0);
 >0 : 0
 >  : ^
 
-// function expression paramter
+// function expression parameter
 var fexp = function (a) {
 >fexp : (a: any) => void
 >     : ^ ^^^^^^^^^^^^^^
@@ -37,7 +37,7 @@ fexp(0);
 >0 : 0
 >  : ^
 
-// arrow function paramter
+// arrow function parameter
 var farrow = (a) => {
 >farrow : (a: any) => void
 >       : ^ ^^^^^^^^^^^^^^
@@ -52,14 +52,14 @@ class C {
 >C : C
 >  : ^
 
-    // Method declaration paramter
+    // Method declaration parameter
     method(a) {
 >method : (a: any) => void
 >       : ^ ^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
     }
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
 >x : number
 >  : ^^^^^^
@@ -71,17 +71,17 @@ class C {
 var E = class {
 >E : typeof E
 >  : ^^^^^^^^
->class {    // Method declaration paramter    method(a) {    }    // Accessor declaration paramter    set x(v: number) {    }} : typeof E
+>class {    // Method declaration parameter    method(a) {    }    // Accessor declaration parameter    set x(v: number) {    }} : typeof E
 >                                                                                                                              : ^^^^^^^^
 
-    // Method declaration paramter
+    // Method declaration parameter
     method(a) {
 >method : (a: any) => void
 >       : ^ ^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
     }
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
 >x : number
 >  : ^^^^^^
@@ -93,10 +93,10 @@ var E = class {
 var o = {
 >o : { method(a: any): void; x: number; }
 >  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^
->{    // Object literal method declaration paramter    method(a) {    },    // Accessor declaration paramter    set x(v: number) {    }} : { method(a: any): void; x: number; }
+>{    // Object literal method declaration parameter    method(a) {    },    // Accessor declaration parameter    set x(v: number) {    }} : { method(a: any): void; x: number; }
 >                                                                                                                                        : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^
 
-    // Object literal method declaration paramter
+    // Object literal method declaration parameter
     method(a) {
 >method : (a: any) => void
 >       : ^ ^^^^^^^^^^^^^^
@@ -104,7 +104,7 @@ var o = {
 >  : ^^^
 
     },
-    // Accessor declaration paramter
+    // Accessor declaration parameter
     set x(v: number) {
 >x : number
 >  : ^^^^^^
@@ -117,7 +117,7 @@ o;
 >o : { method(a: any): void; x: number; }
 >  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^
 
-// in a for..in statment
+// in a for..in statement
 for (let i in o) {
 >i : string
 >  : ^^^^^^
@@ -125,7 +125,7 @@ for (let i in o) {
 >  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^
 }
 
-// in a for..of statment
+// in a for..of statement
 for (let i of [1, 2, 3]) {
 >i : number
 >  : ^^^^^^
@@ -139,7 +139,7 @@ for (let i of [1, 2, 3]) {
 >  : ^
 }
 
-// in a for. statment
+// in a for. statement
 for (let i = 0, n; i < 10; i++) {
 >i : number
 >  : ^^^^^^

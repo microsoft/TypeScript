@@ -39,7 +39,7 @@ namespace Formatting {
             this.scriptBlockBeginLineNumber = -1;
             this.offsetIndentationDeltas = new Dictionary_int_int();     // text offset -> indentation delta
 
-            // by default the root (program) has zero indendation
+            // by default the root (program) has zero indentation
             this.tree.Root.SetIndentationOverride("");
 
             this.ApplyScriptBlockIndentation(this.languageHostIndentation, this.tree);
@@ -260,7 +260,7 @@ namespace Formatting {
                 return null;
             }
 
-            // effective identation of the block
+            // effective indentation of the block
             indentationInfo = node.GetEffectiveIndentation(this);
             return indentationInfo;
         }
@@ -273,7 +273,7 @@ namespace Formatting {
                 return indentationInfo;
             }
             else {
-                // Indent all semicolons except the ones that belong to the for statement parts (initalizer, condition, itnrement)
+                // Indent all semicolons except the ones that belong to the for statement parts (initializer, condition, itnrement)
                 if (node.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkFor) {
                     // The passed node is actually either the program or the list because semicolon doesn't belong
                     // to any statement in the tree, though the statement extends up to the semicolon position.
@@ -774,7 +774,7 @@ var Formatting;
             this.indentationBag = new IndentationBag(this.snapshot);
             this.scriptBlockBeginLineNumber = -1;
             this.offsetIndentationDeltas = new Dictionary_int_int(); // text offset -> indentation delta
-            // by default the root (program) has zero indendation
+            // by default the root (program) has zero indentation
             this.tree.Root.SetIndentationOverride("");
             this.ApplyScriptBlockIndentation(this.languageHostIndentation, this.tree);
             this.FillInheritedIndentation(this.tree);
@@ -954,7 +954,7 @@ var Formatting;
                 // if the open curly belongs to a non-indented object, do nothing here.
                 return null;
             }
-            // effective identation of the block
+            // effective indentation of the block
             indentationInfo = node.GetEffectiveIndentation(this);
             return indentationInfo;
         }
@@ -965,7 +965,7 @@ var Formatting;
                 return indentationInfo;
             }
             else {
-                // Indent all semicolons except the ones that belong to the for statement parts (initalizer, condition, itnrement)
+                // Indent all semicolons except the ones that belong to the for statement parts (initializer, condition, itnrement)
                 if (node.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkFor) {
                     // The passed node is actually either the program or the list because semicolon doesn't belong
                     // to any statement in the tree, though the statement extends up to the semicolon position.

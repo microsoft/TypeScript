@@ -35,7 +35,7 @@
 ////
 ////    [|th/**/row|] 10;
 ////
-////    var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+////    var unused = [1, 2, 3, 4].map(x => { throw 4 })
 ////
 ////    [|return|];
 ////    [|return|] true;

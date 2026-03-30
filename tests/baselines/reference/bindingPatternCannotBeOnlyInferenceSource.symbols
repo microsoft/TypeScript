@@ -103,7 +103,7 @@ const {} = useReduxDispatch1(
 >d : Symbol(d, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 5))
 >f : Symbol(f, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 7))
 
-        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable
+        funcA: (...p) => d(f.funcA(...p)), // p should be inferable
 >funcA : Symbol(funcA, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 16))
 >p : Symbol(p, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 20, 16))
 >d : Symbol(d, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 5))

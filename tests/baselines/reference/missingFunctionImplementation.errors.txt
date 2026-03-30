@@ -119,7 +119,7 @@ missingFunctionImplementation.ts(77,19): error TS2393: Duplicate function implem
       export function m(a): void { }
     }
     
-    // merged namespaces, duplicate defintions
+    // merged namespaces, duplicate definitions
     namespace N12 {
       export function m(a): void;
                       ~

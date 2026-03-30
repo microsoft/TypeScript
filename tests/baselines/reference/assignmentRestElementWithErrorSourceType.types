@@ -5,8 +5,8 @@ var tuple: [string, number];
 >tuple : [string, number]
 >      : ^^^^^^^^^^^^^^^^
 
-[...c] = tupel; // intentionally misspelled
->[...c] = tupel : any
+[...c] = tuple; // intentionally misspelled
+>[...c] = tuple : any
 >               : ^^^
 >[...c] : any[]
 >       : ^^^^^
@@ -14,6 +14,6 @@ var tuple: [string, number];
 >     : ^^^
 >c : any
 >  : ^^^
->tupel : any
+>tuple : any
 >      : ^^^
 

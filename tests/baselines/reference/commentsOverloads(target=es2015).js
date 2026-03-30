@@ -118,7 +118,7 @@ class c {
     public prop5(a: number): number;
     /** prop5 2*/
     public prop5(b: string): number;
-    /** Prop5 implementaion*/
+    /** Prop5 implementation*/
     public prop5(aorb: any) {
         return 10;
     }
@@ -215,7 +215,7 @@ class c {
     prop4(aorb) {
         return 10;
     }
-    /** Prop5 implementaion*/
+    /** Prop5 implementation*/
     prop5(aorb) {
         return 10;
     }

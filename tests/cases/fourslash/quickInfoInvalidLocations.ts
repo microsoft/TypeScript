@@ -26,7 +26,7 @@
 ////
 ////
 ////mod/*invalid10*/ule m1 {
-////    va/*invalid11*/r varibale = 0;
+////    va/*invalid11*/r variable = 0;
 ////
 ////    function foo(arg1: number) {
 ////        ret/*invalid13*/urn string;

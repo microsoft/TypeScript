@@ -3,7 +3,7 @@
 // interface Gen {
 //     x: number;
 //     <|[|parent|]: Gen;|>
-//     millenial: string;
+//     millennial: string;
 // }
 // let t: Gen;
 // var { x, ...rest } = t;

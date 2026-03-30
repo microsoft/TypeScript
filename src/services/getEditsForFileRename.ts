@@ -271,7 +271,7 @@ function getSourceFileToImportFromResolved(importLiteral: StringLiteralLike, res
         || pathIsRelative(importLiteral.text) && forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJson);
     if (result) return result;
 
-    // If nothing changed, then result is resolved module file thats not updated
+    // If nothing changed, then result is resolved module file that's not updated
     return resolved.resolvedModule && { newFileName: resolved.resolvedModule.resolvedFileName, updated: false };
 
     function tryChangeWithIgnoringPackageJsonExisting(oldFileName: string) {

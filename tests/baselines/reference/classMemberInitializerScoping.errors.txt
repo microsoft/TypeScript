@@ -8,7 +8,7 @@ classMemberInitializerScoping.ts(6,9): error TS2322: Type 'string' is not assign
         y: number = aaa;
                     ~~~
 !!! error TS2301: Initializer of instance member variable 'y' cannot reference identifier 'aaa' declared in the constructor.
-        static staticY: number = aaa; // This shouldnt be error
+        static staticY: number = aaa; // This shouldn't be error
         constructor(aaa) {
             this.y = ''; // was: error, cannot assign string to number
             ~~~~~~

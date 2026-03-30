@@ -39,12 +39,12 @@ namespace MsPortalFx.ViewModels {
     export import ReExportedEnum = Dialogs.DialogResult;
 
     /**
-     * Not exported to show difference. No javascript is emmitted (as expected)
+     * Not exported to show difference. No javascript is emitted (as expected)
      */
     import DialogButtons = Dialogs.MessageBoxButtons;
 
     /**
-     * Re-exporting a function type to show difference. No javascript is emmitted (as expected)
+     * Re-exporting a function type to show difference. No javascript is emitted (as expected)
      */
     export import Callback = Dialogs.DialogResultCallback;
 
@@ -122,7 +122,7 @@ declare namespace MsPortalFx.ViewModels {
      */
     export import ReExportedEnum = Dialogs.DialogResult;
     /**
-     * Re-exporting a function type to show difference. No javascript is emmitted (as expected)
+     * Re-exporting a function type to show difference. No javascript is emitted (as expected)
      */
     export import Callback = Dialogs.DialogResultCallback;
     class SomeUsagesOfTheseConsts {

@@ -97,7 +97,7 @@ const x44 = f4(true, ...([1, 'foo']))
 >x44 : Symbol(x44, Decl(arraySpreadInCall.ts, 24, 5))
 >f4 : Symbol(f4, Decl(arraySpreadInCall.ts, 18, 37))
 
-// dicovered in #52845#issuecomment-1459132562
+// discovered in #52845#issuecomment-1459132562
 interface IAction {
 >IAction : Symbol(IAction, Decl(arraySpreadInCall.ts, 24, 37))
 

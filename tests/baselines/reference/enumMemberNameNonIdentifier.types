@@ -29,7 +29,7 @@ export const enum E {
 >3 : 3
 >  : ^
 
-    // Greek Capital Yot (U+037F) - valid identifier in ES2015+ but NOT in ES5
+    // Greek Capital Yacht (U+037F) - valid identifier in ES2015+ but NOT in ES5
     Ϳ = 4,
 >Ϳ : E.Ϳ
 >  : ^^^

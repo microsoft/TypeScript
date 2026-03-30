@@ -215,10 +215,10 @@ fixSignatureCaching.ts(983,44): error TS2339: Property 'MobileDetect' does not e
             "GenericTablet": "Android.*\\b97D\\b|Tablet(?!.*PC)|BNTV250A|MID-WCDMA|LogicPD Zoom2|\\bA7EB\\b|CatNova8|A1_07|CT704|CT1002|\\bM721\\b|rk30sdk|\\bEVOTAB\\b|M758A|ET904|ALUMIUM10|Smartfren Tab|Endeavour 1010|Tablet-PC-4|Tagi Tab|\\bM6pro\\b|CT1020W|arc 10HD|\\bJolla\\b|\\bTP750\\b"
         },
         "oss": {
-            "AndroidOS": "Android",
+            "androids": "Android",
             "BlackBerryOS": "blackberry|\\bBB10\\b|rim tablet os",
             "PalmOS": "PalmOS|avantgo|blazer|elaine|hiptop|palm|plucker|xiino",
-            "SymbianOS": "Symbian|SymbOS|Series60|Series40|SYB-[0-9]+|\\bS60\\b",
+            "SymbianOS": "Symbian|symbols|Series60|Series40|SYB-[0-9]+|\\bS60\\b",
             "WindowsMobileOS": "Windows CE.*(PPC|Smartphone|Mobile|[0-9]{3}x[0-9]{3})|Window Mobile|Windows Phone [0-9.]+|WCE;",
             "WindowsPhoneOS": "Windows Phone 10.0|Windows Phone 8.1|Windows Phone 8.0|Windows Phone OS|XBLWP7|ZuneWP7|Windows NT 6.[23]; ARM;",
             "iOS": "\\biPhone.*Mobile|\\biPod|\\biPad",
@@ -989,7 +989,7 @@ fixSignatureCaching.ts(983,44): error TS2339: Property 'MobileDetect' does not e
              * Returns the detected operating system string or <tt>null</tt>.
              * <br>
              * The operating system is one of following keys:<br>
-             * <br><tt>AndroidOS, BlackBerryOS, PalmOS, SymbianOS, WindowsMobileOS, WindowsPhoneOS,
+             * <br><tt>androids, BlackBerryOS, PalmOS, SymbianOS, WindowsMobileOS, WindowsPhoneOS,
              * iOS, MeeGoOS, MaemoOS, JavaOS, webOS, badaOS, BREWOS</tt><br>
              *
              * @returns {String} the key for the detected operating system.

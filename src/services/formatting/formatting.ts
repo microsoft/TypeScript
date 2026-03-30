@@ -138,7 +138,7 @@ interface DynamicIndentation {
      */
     getIndentation(): number;
     /**
-     * Prefered relative indentation for child nodes.
+     * Preferred relative indentation for child nodes.
      * Delta is used to carry the indentation info
      * foo(bar({
      *     $
@@ -1272,9 +1272,9 @@ function formatSpanWorker(
      * Trimming will be done for lines after the previous range.
      * Exclude comments as they had been previously processed.
      */
-    function trimTrailingWhitespacesForRemainingRange(trivias: TextRangeWithKind<SyntaxKind>[]) {
+    function trimTrailingWhitespacesForRemainingRange(trivia: TextRangeWithKind<SyntaxKind>[]) {
         let startPos = previousRange ? previousRange.end : originalRange.pos;
-        for (const trivia of trivias) {
+        for (const trivia of trivia) {
             if (isComment(trivia.kind)) {
                 if (startPos < trivia.pos) {
                     trimTrailingWitespacesForPositions(startPos, trivia.pos - 1, previousRange);

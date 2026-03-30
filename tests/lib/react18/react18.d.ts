@@ -342,7 +342,7 @@ declare namespace React {
     // However, we have no way of telling the JSX parser that it's a JSX element type or its props other than
     // by pretending to be a normal component.
     //
-    // We don't just use ComponentType or FunctionComponent types because you are not supposed to attach statics to this
+    // We don't just use ComponentType or FunctionComponent types because you are not supposed to attach statistics to this
     // object, but rather to the original function.
     interface ExoticComponent<P = {}> {
         /**
@@ -454,7 +454,7 @@ declare namespace React {
         static contextType?: Context<any> | undefined;
 
         /**
-         * If using the new style context, re-declare this in your class to be the
+         * If using the new style context, redeclare this in your class to be the
          * `React.ContextType` of your `static contextType`.
          * Should be used with type annotation or static contextType.
          *
@@ -750,7 +750,7 @@ declare namespace React {
 
     interface Mixin<P, S> extends ComponentLifecycle<P, S> {
         mixins?: Array<Mixin<P, S>> | undefined;
-        statics?: {
+        statistics?: {
             [key: string]: any;
         } | undefined;
 

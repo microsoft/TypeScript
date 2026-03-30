@@ -23,7 +23,7 @@ namespace M {
     export function F2(x: number): string { return x.toString(); }
 }
 
-var aNumber: number = 9.9;
+var a number: number = 9.9;
 var aString: string = 'this is a string';
 var aDate: Date = new Date(12);
 var anObject: Object = new Object();

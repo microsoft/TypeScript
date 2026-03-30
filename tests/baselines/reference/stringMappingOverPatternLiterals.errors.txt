@@ -158,7 +158,7 @@ stringMappingOverPatternLiterals.ts(149,5): error TS2322: Type 'Uncapitalize<str
 !!! error TS2322: Type 'Uppercase<string>' is not assignable to type 'Uppercase<Lowercase<string>>'.
 !!! error TS2322:   Type 'string' is not assignable to type 'Lowercase<string>'.
     
-        // and this should also not be equivlent to any others
+        // and this should also not be equivalent to any others
         var x4: Lowercase<Uppercase<string>> = null as any;
         x1 = x4;
         ~~

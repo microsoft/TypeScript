@@ -467,7 +467,7 @@ function replaceImportUseSites<T extends Node>(nodeOrNodes: T | NodeArray<T>, us
         : getSynthesizedDeepCloneWithReplacements(nodeOrNodes, /*includeTrivia*/ true, replaceNode);
 
     function replaceNode(original: Node) {
-        // We are replacing `mod.SomeExport` wih `SomeExport`, so we only need to look at PropertyAccessExpressions
+        // We are replacing `mod.SomeExport` with `SomeExport`, so we only need to look at PropertyAccessExpressions
         if (original.kind === SyntaxKind.PropertyAccessExpression) {
             const replacement = useSitesToUnqualify!.get(original);
             // Remove entry from `useSitesToUnqualify` so the refactor knows it's taken care of by the parent statement we're replacing

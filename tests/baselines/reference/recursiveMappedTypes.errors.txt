@@ -96,7 +96,7 @@ recursiveMappedTypes.ts(73,13): error TS2615: Type of property '"each"' circular
         "type": "list",
         "minimum_count": number,
         "maximum_count": number,
-        "collapsable"?: boolean, //default to false, means all expanded
+        "collapsible"?: boolean, //default to false, means all expanded
         "each": Child<ListWidget>;
         ~~~~~~
 !!! error TS2502: '"each"' is referenced directly or indirectly in its own type annotation.

@@ -32,7 +32,7 @@ namespace N {
     export function F2(x: number): string { return x.toString(); }
 }
 
-var aNumber: number = 'this is a string';
+var a number: number = 'this is a string';
 var aString: string = 9.9;
 var aDate: Date = 9.9;
 

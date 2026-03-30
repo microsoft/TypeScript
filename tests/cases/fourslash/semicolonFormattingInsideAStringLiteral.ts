@@ -5,6 +5,6 @@
 
 goTo.marker();
 edit.insert(';');
-// Semicolon Formating should not be triggered inside an unterminated string literal
+// Semicolon Formatting should not be triggered inside an unterminated string literal
 verify.currentLineContentIs('   var x = "string;');
 

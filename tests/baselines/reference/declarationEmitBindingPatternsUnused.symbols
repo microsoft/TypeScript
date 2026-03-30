@@ -5,7 +5,7 @@ type Named = { name: string }
 >Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
 >name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
 
-// Resons we can't remove aliases that are not used in the function signature: 
+// Reasons we can't remove aliases that are not used in the function signature: 
 
 // 1.Causes duplicate identifier if we remove alias
 function duplicateIndetifiers({ name: alias, name: alias2 }: Named) { }

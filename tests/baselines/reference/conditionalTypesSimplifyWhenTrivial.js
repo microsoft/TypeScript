@@ -19,7 +19,7 @@ function fn4<T>(x: Extract<T, T>) {
     x = y;
 }
 
-declare var x: Extract<number | string, any>; // Should be `numebr | string` and not `any`
+declare var x: Extract<number | string, any>; // Should be `number | string` and not `any`
 
 type ExtractWithDefault<T, U, D = never> = T extends U ? T : D;
 

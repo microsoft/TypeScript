@@ -89,12 +89,12 @@ jsxNamespacePrefixInName.tsx(28,24): error TS7026: JSX element implicitly has ty
                                                          ~~~~~~~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
-    var tooManySeparators1 = <a:ele:ment />;
+    var tooManySeparators1 = <a:ele:meant />;
                              ~~~~~~~~~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                    ~
 !!! error TS1003: Identifier expected.
-    var tooManySeparators2 = <a:ele:ment></a:ele:ment>;
+    var tooManySeparators2 = <a:ele:meant></a:ele:meant>;
                              ~~~~~~~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                    ~
@@ -107,7 +107,7 @@ jsxNamespacePrefixInName.tsx(28,24): error TS7026: JSX element implicitly has ty
 !!! error TS1005: ',' expected.
                                                       ~
 !!! error TS1109: Expression expected.
-    var tooManySeparators3 = <a:ele:ment attr={"value"}></a:ele:ment>;
+    var tooManySeparators3 = <a:ele:meant attr={"value"}></a:ele:meant>;
                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                    ~
@@ -120,7 +120,7 @@ jsxNamespacePrefixInName.tsx(28,24): error TS7026: JSX element implicitly has ty
 !!! error TS1005: ',' expected.
                                                                      ~
 !!! error TS1109: Expression expected.
-    var tooManySeparators4 = <a:ele:ment>{"text"}</a:ele:ment>;
+    var tooManySeparators4 = <a:ele:meant>{"text"}</a:ele:meant>;
                              ~~~~~~~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                    ~
@@ -133,7 +133,7 @@ jsxNamespacePrefixInName.tsx(28,24): error TS7026: JSX element implicitly has ty
 !!! error TS1005: ',' expected.
                                                               ~
 !!! error TS1109: Expression expected.
-    var tooManySeparators5 = <a:ele:ment attr={"value"}>{"text"}</a:ele:ment>;
+    var tooManySeparators5 = <a:ele:meant attr={"value"}>{"text"}</a:ele:meant>;
                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                    ~
@@ -218,7 +218,7 @@ jsxNamespacePrefixInName.tsx(28,24): error TS7026: JSX element implicitly has ty
     var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
                            ~~~~~~~~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-    var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
+    var upcaseComponent2 = <Upcase:element />;  // Parsed as intrinsic
                            ~~~~~~~~~~~~~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     

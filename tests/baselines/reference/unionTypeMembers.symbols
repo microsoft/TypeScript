@@ -141,7 +141,7 @@ x.commonMethodDifferentParameterType(strOrNum); // error - no call signatures be
 >commonMethodDifferentParameterType : Symbol(commonMethodDifferentParameterType, Decl(unionTypeMembers.ts, 2, 31), Decl(unionTypeMembers.ts, 17, 31))
 >strOrNum : Symbol(strOrNum, Decl(unionTypeMembers.ts, 35, 11))
 
-                                                // and the call signatures arent identical
+                                                // and the call signatures aren't identical
 num = x.commonMethodWithTypeParameter(num);
 >num : Symbol(num, Decl(unionTypeMembers.ts, 34, 11))
 >x.commonMethodWithTypeParameter : Symbol(commonMethodWithTypeParameter, Decl(unionTypeMembers.ts, 6, 39), Decl(unionTypeMembers.ts, 21, 39))

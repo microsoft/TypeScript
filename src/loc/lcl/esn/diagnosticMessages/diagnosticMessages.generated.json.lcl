@@ -52,7 +52,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A '{0}' parameter must be the first parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El parámetro "{0}" debe ser el primer parámetro.]]></Val>
+            <Val><![CDATA[El parámetro "{0}" debe set el primer parámetro.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -70,7 +70,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A JSDoc '@typedef' comment may not contain multiple '@type' tags.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un comentario "@typedef" de JSDoc no puede contener varias etiquetas "@type".]]></Val>
+            <Val><![CDATA[Un comentario "@typedef" de JSDoc no puede container varias etiquetas "@type".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -97,7 +97,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A bigint literal must be an integer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un literal bigint debe ser un entero.]]></Val>
+            <Val><![CDATA[Un literal bigint debe set un entero.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -106,7 +106,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A binding pattern parameter cannot be optional in an implementation signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un parámetro de patrón de enlace no puede ser opcional en una signatura de implementación.]]></Val>
+            <Val><![CDATA[Un parámetro de patrón de enlace no puede set opcional en una signatura de implementación.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -133,7 +133,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A character class must not contain a reserved double punctuator. Did you mean to escape it with backslash?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una clase de caracteres no debe contener un signo de puntuación doble reservado. ¿Querías escaparlo con barra diagonal inversa?]]></Val>
+            <Val><![CDATA[Una clase de characters no debe container un signo de puntuación double reservado. ¿Querías escaparlo con barra diagonal inversa?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -142,7 +142,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A character class range must not be bounded by another character class.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un rango de clases de caracteres no debe estar limitado por otra clase de caracteres.]]></Val>
+            <Val><![CDATA[Un rango de clases de characters no debe estar limitado por otra clase de characters.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -151,7 +151,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A class can only implement an identifier/qualified-name with optional type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una clase solo puede implementar un identificador o nombre completo con argumentos de tipo opcional.]]></Val>
+            <Val><![CDATA[Una clase solo puede implementar un identificador o nombre completo con arguments de tipo opcional.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -271,7 +271,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name must be of type 'string', 'number', 'symbol', or 'any'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un nombre de propiedad calculada debe ser de tipo "string", "number", "symbol" o "any".]]></Val>
+            <Val><![CDATA[Un nombre de propiedad calculada debe set de tipo "string", "number", "symbol" o "any".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -298,7 +298,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un inicializador "const" en un contexto de ambiente debe ser un literal de cadena o numérico o bien una referencia de enumeración de literal.]]></Val>
+            <Val><![CDATA[Un inicializador "const" en un contexto de ambiente debe set un literal de cadena o numérico o bien una referencia de enumeración de literal.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -307,7 +307,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A constructor cannot contain a 'super' call when its class extends 'null'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un constructor no puede contener una llamada a "super" si su clase extiende "null".]]></Val>
+            <Val><![CDATA[Un constructor no puede container una llamada a "super" si su clase extiende "null".]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[A constructor cannot contain a 'super' call when its class extends 'null']]></Val>
@@ -418,7 +418,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una llamada de importación dinámica en ES5 requiere el constructor "Promise".  Asegúrese de que tiene una declaración para el constructor "Promise" o incluya "ES2015" en su opción "--lib".]]></Val>
+            <Val><![CDATA[Una llamada de importación dinámica en ES5 require el constructor "Promise".  Asegúrese de que tiene una declaración para el constructor "Promise" o incluya "ES2015" en su opción "--lib".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -493,7 +493,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A get accessor must be at least as accessible as the setter]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un descriptor de acceso get debe ser al menos tan accesible como el establecedor]]></Val>
+            <Val><![CDATA[Un descriptor de acceso get debe set al menos tan accessible como el establecedor]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -700,7 +700,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una propiedad de una clase cuyo tipo sea "unique symbol" debe ser "static" y "readonly".]]></Val>
+            <Val><![CDATA[Una propiedad de una clase cuyo tipo sea "unique symbol" debe set "static" y "readonly".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -709,7 +709,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una propiedad de una interfaz o un literal de tipo cuyo tipo sea "unique symbol" debe ser "readonly".]]></Val>
+            <Val><![CDATA[Una propiedad de una interfaz o un literal de tipo cuyo tipo sea "unique symbol" debe set "readonly".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -736,7 +736,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest element cannot contain a binding pattern.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un elemento rest no puede contener un patrón de enlace.]]></Val>
+            <Val><![CDATA[Un elemento rest no puede container un patrón de enlace.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -772,7 +772,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest element must be last in a destructuring pattern.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un elemento rest debe ser el último en un patrón de desestructuración.]]></Val>
+            <Val><![CDATA[Un elemento rest debe set el último en un patrón de desestructuración.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[A rest element must be last in a destructuring pattern]]></Val>
@@ -784,7 +784,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest element type must be an array type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un tipo de elemento rest debe ser un tipo de matriz.]]></Val>
+            <Val><![CDATA[Un tipo de elemento rest debe set un tipo de matriz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -793,7 +793,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter cannot be optional.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un parámetro rest no puede ser opcional.]]></Val>
+            <Val><![CDATA[Un parámetro rest no puede set opcional.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -811,7 +811,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter must be last in a parameter list.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un parámetro rest debe ser el último de una lista de parámetros.]]></Val>
+            <Val><![CDATA[Un parámetro rest debe set el último de una lista de parámetros.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -820,7 +820,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter must be of an array type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un parámetro rest debe ser de un tipo de matriz.]]></Val>
+            <Val><![CDATA[Un parámetro rest debe set de un tipo de matriz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -856,7 +856,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A series of entries which re-map imports to lookup locations relative to the 'baseUrl'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Serie de entradas que reasigna las importaciones a ubicaciones de búsqueda relativas a "baseUrl".]]></Val>
+            <Val><![CDATA[Series de entradas que reasigna las importaciones a ubicaciones de búsqueda relativas a "baseUrl".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -919,7 +919,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una llamada "super" debe ser una instrucción de nivel raíz dentro de un constructor de una clase derivada que contiene propiedades inicializadas, propiedades de parámetros o identificadores privados.]]></Val>
+            <Val><![CDATA[Una llamada "super" debe set una instrucción de nivel raíz dentro de un constructor de una clase derivada que contiene propiedades inicializadas, propiedades de parámetros o identificadores privados.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -928,7 +928,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una llamada "super" debe ser la primera instrucción del constructor para hacer referencia a "super" o "this" cuando una clase derivada contiene propiedades inicializadas, propiedades de parámetro o identificadores privados.]]></Val>
+            <Val><![CDATA[Una llamada "super" debe set la primera instrucción del constructor para hacer referencia a "super" o "this" cuando una clase derivada contiene propiedades inicializadas, propiedades de parámetro o identificadores privados.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -973,7 +973,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A tuple member cannot be both optional and rest.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un miembro de tupla no puede ser tanto opcional como REST.]]></Val>
+            <Val><![CDATA[Un miembro de tupla no puede set tanto opcional como REST.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1054,7 +1054,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un tipo al que se hace referencia en una firma representativo debe importarse con "import type" o una importación de espacio de nombres cuando están habilitados "isolatedModules" y "emitDecoratorMetadata".]]></Val>
+            <Val><![CDATA[Un tipo al que se have referencia en una firma representativo debe importarse con "import type" o una importación de espacio de nombres cuando están habilitados "isolatedModules" y "emitDecoratorMetadata".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1063,7 +1063,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A variable whose type is a 'unique symbol' type must be 'const'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una variable cuyo tipo sea "unique symbol" debe ser "const".]]></Val>
+            <Val><![CDATA[Una variable cuyo tipo sea "unique symbol" debe set "const".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1135,7 +1135,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Accessors must both be abstract or non-abstract.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los descriptores de acceso deben ser los dos abstractos o los dos no abstractos.]]></Val>
+            <Val><![CDATA[Los descriptores de acceso deben set los dos abstractos o los dos no abstractos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1858,7 +1858,7 @@
         <Str Cat="Text">
           <Val><![CDATA[All declarations of an abstract method must be consecutive.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Todas las declaraciones de un método abstracto deben ser consecutivas.]]></Val>
+            <Val><![CDATA[Todas las declaraciones de un método abstracto deben set consecutivas.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1906,7 +1906,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Permitir que los archivos JavaScript formen parte del programa. Use la opción "checkJS" para obtener errores de estos archivos.]]></Val>
+            <Val><![CDATA[Permitir que los archivos JavaScript foremen parte del programa. Use la opción "checkJS" para obtener errores de estos archivos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1951,7 +1951,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Allow imports to include TypeScript file extensions. Requires '--moduleResolution bundler' and either '--noEmit' or '--emitDeclarationOnly' to be set.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Permitir que las importaciones incluyan extensiones de archivo TypeScript. Requiere que se establezca "--moduleResolution bundler" y "--noEmit" o "--emitDeclarationOnly".]]></Val>
+            <Val><![CDATA[Permitir que las importaciones incluyan extensions de archivo TypeScript. Require que se establezca "--moduleResolution bundler" y "--noEmit" o "--emitDeclarationOnly".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1969,7 +1969,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Allow multiple folders to be treated as one when resolving modules.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Permita que varias carpetas se consideren como una al resolver módulos.]]></Val>
+            <Val><![CDATA[Permita que varias carpetas se considered como una al resolver módulos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2077,7 +2077,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un operando aritmético debe ser de tipo "any", "number", "bigint" o un tipo de enumeración.]]></Val>
+            <Val><![CDATA[Un operando aritmético debe set de tipo "any", "number", "bigint" o un tipo de enumeración.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2095,7 +2095,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una función o un método de asincronía en ES5 requiere el constructor "Promise".  Asegúrese de que tiene una declaración para el constructor "Promise" o incluya "ES2015" en su opción "--lib".]]></Val>
+            <Val><![CDATA[Una función o un método de asincronía en ES5 require el constructor "Promise".  Asegúrese de que tiene una declaración para el constructor "Promise" o incluya "ES2015" en su opción "--lib".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2242,7 +2242,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but '{0}' only refers to a type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una declaración 'export =' debe hacer referencia a un valor cuando 'verbatimModuleSyntax' está habilitado, pero '{0}' solo hace referencia a un tipo.]]></Val>
+            <Val><![CDATA[Una declaración 'export =' debe hacer referencia a un valor cuando 'verbatimModuleSyntax' está habilitado, pero '{0}' solo have referencia a un tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2260,7 +2260,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An 'export default' must reference a value when 'verbatimModuleSyntax' is enabled, but '{0}' only refers to a type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una declaración 'export default' debe hacer referencia a un valor cuando 'verbatimModuleSyntax' está habilitado, pero '{0}' solo hace referencia a un tipo.]]></Val>
+            <Val><![CDATA[Una declaración 'export default' debe hacer referencia a un valor cuando 'verbatimModuleSyntax' está habilitado, pero '{0}' solo have referencia a un tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2452,7 +2452,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un tipo de parámetro de signatura de índice no puede ser un tipo literal o un tipo genérico. Considere la posibilidad de usar, en su lugar, uno de los tipos de objeto asignados.]]></Val>
+            <Val><![CDATA[Un tipo de parámetro de signatura de índice no puede set un tipo literal o un tipo genérico. Considere la posibilidad de usar, en su lugar, uno de los tipos de objeto asignados.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2461,7 +2461,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo de parámetro de la signatura de índice debe ser "string", "number", "symbol" o un tipo literal de plantilla.]]></Val>
+            <Val><![CDATA[El tipo de parámetro de la signatura de índice debe set "string", "number", "symbol" o un tipo literal de plantilla.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2479,7 +2479,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An interface can only extend an identifier/qualified-name with optional type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una interfaz solo puede extender un identificador o nombre completo con argumentos de tipo opcional.]]></Val>
+            <Val><![CDATA[Una interfaz solo puede extender un identificador o nombre completo con arguments de tipo opcional.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2533,7 +2533,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An object literal cannot have multiple get/set accessors with the same name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un literal de objeto no puede tener varios descriptores de acceso get o set con el mismo nombre.]]></Val>
+            <Val><![CDATA[Un literal de objeto no puede tener various descriptores de acceso get o set con el mismo nombre.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2578,7 +2578,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An optional chain cannot contain private identifiers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una cadena opcional no puede contener identificadores privados.]]></Val>
+            <Val><![CDATA[Una cadena opcional no puede container identificadores privados.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2668,7 +2668,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Anything that would possibly match more than a single character is invalid inside a negated character class.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Todo lo que posiblemente coincida con más de un carácter no es válido dentro de una clase de caracteres negada.]]></Val>
+            <Val><![CDATA[Todo lo que posiblemente coincida con más de un carácter no es válido dentro de una clase de characters negada.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2695,7 +2695,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Argument for '{0}' option must be: {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El argumento para la opción "{0}" debe ser {1}.]]></Val>
+            <Val><![CDATA[El argumento para la opción "{0}" debe set {1}.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Argument for '{0}' option must be: {1}]]></Val>
@@ -2707,7 +2707,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Argument of dynamic import cannot be spread element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El argumento de importación dinámica no puede ser un elemento de propagación.]]></Val>
+            <Val><![CDATA[El argumento de importación dinámica no puede set un elemento de propagación.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2734,7 +2734,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Arguments for the rest parameter '{0}' were not provided.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se proporcionaron argumentos para el parámetro rest "{0}".]]></Val>
+            <Val><![CDATA[No se proporcionaron arguments para el parámetro rest "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2953,7 +2953,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Build one or more projects and their dependencies, if out of date]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Generar uno o varios proyectos y sus dependencias, si no están actualizados]]></Val>
+            <Val><![CDATA[Generar uno o various proyectos y sus dependencias, si no están actualizados]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2962,7 +2962,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Build option '{0}' requires a value of type {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La opción de compilación "{0}" requiere un valor de tipo {1}.]]></Val>
+            <Val><![CDATA[La opción de compilación "{0}" require un valor de tipo {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2989,7 +2989,7 @@
         <Str Cat="Text">
           <Val><![CDATA[COMMAND LINE FLAGS]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[MARCAS DE LÍNEA DE COMANDOS]]></Val>
+            <Val><![CDATA[MARCAS DE LÍNEA DE COMMANDOS]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2998,7 +2998,7 @@
         <Str Cat="Text">
           <Val><![CDATA[COMMON COMMANDS]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[COMANDOS COMUNES]]></Val>
+            <Val><![CDATA[COMMANDOS COMUNES]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3046,7 +3046,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Call signatures with no arguments have incompatible return types '{0}' and '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las signaturas de llamada sin argumentos tienen los tipos de valor devuelto "{0}" y "{1}" no compatibles.]]></Val>
+            <Val><![CDATA[Las signaturas de llamada sin arguments tienen los tipos de valor devuelto "{0}" y "{1}" no compatibles.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3244,7 +3244,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot compile modules using option '{0}' unless the '--module' flag is 'amd' or 'system'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se pueden compilar los módulos con la opción '{0}' a no ser que la marca "--module" sea "amd" o "system".]]></Val>
+            <Val><![CDATA[No se pueden compilar los módulos con la opción '{0}' a no set que la marca "--module" sea "amd" o "system".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3793,7 +3793,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot write file '{0}' because it will overwrite '.tsbuildinfo' file generated by referenced project '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se puede escribir en el archivo "{0}" porque este sobrescribirá el archivo ".tsbuildinfo" que el proyecto "{1}" al que se hace referencia ha generado.]]></Val>
+            <Val><![CDATA[No se puede escribir en el archivo "{0}" porque este sobrescribirá el archivo ".tsbuildinfo" que el proyecto "{1}" al que se have referencia ha generado.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3802,7 +3802,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot write file '{0}' because it would be overwritten by multiple input files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se puede escribir en el archivo '{0}' porque se sobrescribiría con varios archivos de entrada.]]></Val>
+            <Val><![CDATA[No se puede escribir en el archivo '{0}' porque se sobrescribiría con various archivos de entrada.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3829,7 +3829,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Catch clause variable type annotation must be 'any' or 'unknown' if specified.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La anotación de tipo de variable de la cláusula catch debe ser "any" o "unknown" si se especifica.]]></Val>
+            <Val><![CDATA[La anotación de tipo de variable de la cláusula catch debe set "any" o "unknown" si se especifica.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3919,7 +3919,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Compruebe que los argumentos de los métodos 'bind', 'call' y 'apply' coinciden con la función original.]]></Val>
+            <Val><![CDATA[Compruebe que los arguments de los métodos 'bind', 'call' y 'apply' coinciden con la función original.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Check that the arguments for `bind`, `call`, and `apply` methods match the original function.]]></Val>
@@ -4030,7 +4030,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class constructor may not be a generator.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El constructor de clase no puede ser un generador.]]></Val>
+            <Val><![CDATA[El constructor de clase no puede set un generador.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4039,7 +4039,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class constructor may not be an accessor.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El constructor de clase no puede ser un descriptor de acceso.]]></Val>
+            <Val><![CDATA[El constructor de clase no puede set un descriptor de acceso.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4078,7 +4078,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class field '{0}' defined by the parent class is not accessible in the child class via super.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El campo de clase '{0}' definido por la clase primaria no es accesible en la clase secundaria a través de super.]]></Val>
+            <Val><![CDATA[El campo de clase '{0}' definido por la clase primaria no es accessible en la clase secundaria a través de super.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4087,7 +4087,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class name cannot be '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El nombre de la clase no puede ser "{0}".]]></Val>
+            <Val><![CDATA[El nombre de la clase no puede set "{0}".]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Class name cannot be '{0}']]></Val>
@@ -4099,7 +4099,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class name cannot be 'Object' when targeting ES5 and above with module {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El nombre de clase no puede ser 'Object' cuando el destino es ES5 y versiones posteriores con el módulo {0}.]]></Val>
+            <Val><![CDATA[El nombre de clase no puede set 'Object' cuando el destino es ES5 y versiones posteriores con el módulo {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4144,7 +4144,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Command-line Options]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Opciones de la línea de comandos]]></Val>
+            <Val><![CDATA[Opciones de la línea de commandos]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4216,7 +4216,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler option '{0}' requires a value of type {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La opción '{0}' del compilador requiere un valor de tipo {1}.]]></Val>
+            <Val><![CDATA[La opción '{0}' del compilador require un valor de tipo {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4303,7 +4303,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las propiedades calculadas deben ser literales de número o cadena, variables o expresiones de puntos con --isolatedDeclarations.]]></Val>
+            <Val><![CDATA[Las propiedades calculadas deben set literales de número o cadena, variables o expresiones de puntos con --isolatedDeclarations.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4393,7 +4393,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Construct signatures with no arguments have incompatible return types '{0}' and '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las signaturas de construcción sin argumentos tienen los tipos de valor devuelto "{0}" y "{1}" no compatibles.]]></Val>
+            <Val><![CDATA[Las signaturas de construcción sin arguments tienen los tipos de valor devuelto "{0}" y "{1}" no compatibles.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4411,7 +4411,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Constructor of class '{0}' is private and only accessible within the class declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El constructor de la clase '{0}' es privado y solo es accesible desde la declaración de la clase.]]></Val>
+            <Val><![CDATA[El constructor de la clase '{0}' es privado y solo es accessible desde la declaración de la clase.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4420,7 +4420,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Constructor of class '{0}' is protected and only accessible within the class declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El constructor de la clase '{0}' está protegido y solo es accesible desde la declaración de la clase.]]></Val>
+            <Val><![CDATA[El constructor de la clase '{0}' está protegido y solo es accessible desde la declaración de la clase.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4447,7 +4447,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Constructors for derived classes must contain a 'super' call.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los constructores de las clases derivadas deben contener una llamada a "super".]]></Val>
+            <Val><![CDATA[Los constructores de las clases derivadas deben container una llamada a "super".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4483,7 +4483,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Conversion of type '{0}' to type '{1}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La conversión del tipo "{0}" al tipo "{1}" puede ser un error, porque ninguno de los tipos se superpone suficientemente al otro. Si esto era intencionado, convierta primero la expresión en "unknown".]]></Val>
+            <Val><![CDATA[La conversión del tipo "{0}" al tipo "{1}" puede set un error, porque ninguno de los tipos se superpone suficientemente al otro. Si esto era intencionado, convierta primero la expresión en "unknown".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4528,7 +4528,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert all invalid characters to HTML entity code]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Convertir todos los caracteres no válidos al código de entidad HTML]]></Val>
+            <Val><![CDATA[Convertir todos los characters no válidos al código de entidad HTML]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4960,7 +4960,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not resolve the path '{0}' with the extensions: {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se pudo resolver la ruta de acceso "{0}" con las extensiones: {1}.]]></Val>
+            <Val><![CDATA[No se pudo resolver la ruta de acceso "{0}" con las extensions: {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5017,7 +5017,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Decimal escape sequences and backreferences are not allowed in a character class.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se permiten secuencias de escape decimales ni referencias inversas en una clase de caracteres.]]></Val>
+            <Val><![CDATA[No se permiten secuencias de escape decimales ni referencias inversas en una clase de characters.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5044,7 +5044,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this file requires preserving this import for augmentations. This is not supported with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La emisión de declaración para este archivo requiere conservar esta importación para aumentos. Esto no se admite con --isolatedDeclarations.]]></Val>
+            <Val><![CDATA[La emisión de declaración para este archivo require conservar esta importación para aumentos. Esto no se admite con --isolatedDeclarations.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5053,7 +5053,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La emisión de declaración para este archivo requiere el uso del nombre privado "{0}". Una anotación de tipo explícito puede desbloquear la emisión de declaración.]]></Val>
+            <Val><![CDATA[La emisión de declaración para este archivo require el uso del nombre privado "{0}". Una anotación de tipo explícito puede desbloquear la emisión de declaración.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5062,7 +5062,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this file requires using private name '{0}' from module '{1}'. An explicit type annotation may unblock declaration emit.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La emisión de declaración para este archivo requiere el uso del nombre privado "{0}" del módulo "{1}". Una anotación de tipo explícito puede desbloquear la emisión de declaración.]]></Val>
+            <Val><![CDATA[La emisión de declaración para este archivo require el uso del nombre privado "{0}" del módulo "{1}". Una anotación de tipo explícito puede desbloquear la emisión de declaración.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5071,7 +5071,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La emisión de declaración para este parámetro requiere agregar implícitamente un elemento no definido a su tipo. Esto no se admite con --isolatedDeclarations.]]></Val>
+            <Val><![CDATA[La emisión de declaración para este parámetro require agregar implícitamente un elemento no definido a su tipo. Esto no se admite con --isolatedDeclarations.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5248,7 +5248,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Decorators cannot be applied to multiple get/set accessors of the same name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se pueden aplicar elementos Decorator a varios descriptores de acceso get o set con el mismo nombre.]]></Val>
+            <Val><![CDATA[No se pueden aplicar elementos Decorator a various descriptores de acceso get o set con el mismo nombre.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5644,7 +5644,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Disable loading referenced projects.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deshabilite la carga de proyectos a los que se hace referencia.]]></Val>
+            <Val><![CDATA[Deshabilite la carga de proyectos a los que se have referencia.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5728,7 +5728,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Disable use of source files instead of declaration files from referenced projects.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deshabilite el uso de los archivos de código fuente en lugar de los archivos de declaración de los proyectos a los que se hace referencia.]]></Val>
+            <Val><![CDATA[Deshabilite el uso de los archivos de código fuente en lugar de los archivos de declaración de los proyectos a los que se have referencia.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5788,7 +5788,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Do not allow runtime constructs that are not part of ECMAScript.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No permitir construcciones en tiempo de ejecución que no formen parte de ECMAScript.]]></Val>
+            <Val><![CDATA[No permitir construcciones en tiempo de ejecución que no foremen parte de ECMAScript.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5869,7 +5869,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Do not report errors on unreachable code.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No notificar los errores del código inaccesible.]]></Val>
+            <Val><![CDATA[No notificar los errores del código inaccessible.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6043,7 +6043,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Dynamic import's specifier must be of type 'string', but here has type '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El especificador de la importación dinámica debe ser de tipo "string", pero aquí tiene el tipo "{0}".]]></Val>
+            <Val><![CDATA[El especificador de la importación dinámica debe set de tipo "string", pero aquí tiene el tipo "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6064,7 +6064,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Dynamic imports can only accept a module specifier and an optional set of attributes as arguments]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las importaciones dinámicas solo pueden aceptar un especificador de módulo y un set de atributos opcional como argumentos]]></Val>
+            <Val><![CDATA[Las importaciones dinámicas solo pueden aceptar un especificador de módulo y un set de atributos opcional como arguments]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6268,7 +6268,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Emitir el origen junto a los mapas de origen en un solo archivo; requiere que se establezca "--inlineSourceMap" o "--sourceMap".]]></Val>
+            <Val><![CDATA[Emitir el origen junto a los mapas de origen en un solo archivo; require que se establezca "--inlineSourceMap" o "--sourceMap".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6628,7 +6628,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum declarations must all be const or non-const.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Todas las declaraciones de enumeración deben ser de tipo const o no const.]]></Val>
+            <Val><![CDATA[Todas las declaraciones de enumeración deben set de tipo const o no const.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6673,7 +6673,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum name cannot be '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El nombre de la enumeración no puede ser "{0}".]]></Val>
+            <Val><![CDATA[El nombre de la enumeración no puede set "{0}".]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enum name cannot be '{0}']]></Val>
@@ -6748,7 +6748,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0}-{1} type arguments; provide these with an '@extends' tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se esperaban argumentos de tipo {0}-{1}; proporciónelos con una etiqueta "@extends".]]></Val>
+            <Val><![CDATA[Se esperaban arguments de tipo {0}-{1}; proporciónelos con una etiqueta "@extends".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6757,7 +6757,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} arguments, but got {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se esperaban {0} argumentos, pero se obtuvieron {1}.]]></Val>
+            <Val><![CDATA[Se esperaban {0} arguments, pero se obtuvieron {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6766,7 +6766,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se esperaban {0} argumentos, pero se obtuvo un total de {1}. ¿Olvidó incluir "void" en el argumento de tipo para "Promise"?]]></Val>
+            <Val><![CDATA[Se esperaban {0} arguments, pero se obtuvo un total de {1}. ¿Olvidó incluir "void" en el argumento de tipo para "Promise"?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6775,7 +6775,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} type arguments, but got {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se esperaban {0} argumentos de tipo, pero se obtuvieron {1}.]]></Val>
+            <Val><![CDATA[Se esperaban {0} arguments de tipo, pero se obtuvieron {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6784,7 +6784,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} type arguments; provide these with an '@extends' tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se esperaban argumentos de tipo {0}; proporciónelos con una etiqueta "@extends".]]></Val>
+            <Val><![CDATA[Se esperaban arguments de tipo {0}; proporciónelos con una etiqueta "@extends".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6793,7 +6793,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected 1 argument, but got 0. 'new Promise()' needs a JSDoc hint to produce a 'resolve' that can be called without arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se esperaba 1 argumento, pero se obtuvo 0. "new Promise()" necesita una pista de JSDoc para producir un "resolve" que pueda llamarse sin argumentos.]]></Val>
+            <Val><![CDATA[Se esperaba 1 argumento, pero se obtuvo 0. "new Promise()" necesita una pista de JSDoc para producir un "resolve" que pueda llamarse sin arguments.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6847,7 +6847,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected at least {0} arguments, but got {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se esperaban al menos {0} argumentos, pero se obtuvieron {1}.]]></Val>
+            <Val><![CDATA[Se esperaban al menos {0} arguments, pero se obtuvieron {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6919,7 +6919,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Export all referenced locals]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Exportar todas las variables locales a las que se hace referencia]]></Val>
+            <Val><![CDATA[Exportar todas las variables locales a las que se have referencia]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7111,7 +7111,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extends clause can't contain an expression with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La cláusula Extends no puede contener una expresión con --isolatedDeclarations.]]></Val>
+            <Val><![CDATA[La cláusula Extends no puede container una expresión con --isolatedDeclarations.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7327,7 +7327,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File '{0}' has an unsupported extension. The only supported extensions are {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El archivo "{0}" tiene una extensión no compatible. Las únicas extensiones compatibles son {1}.]]></Val>
+            <Val><![CDATA[El archivo "{0}" tiene una extensión no compatible. Las únicas extensions compatibles son {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7543,7 +7543,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File is output from referenced project specified here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El archivo es la salida del proyecto al que se hace referencia especificado aquí.]]></Val>
+            <Val><![CDATA[El archivo es la salida del proyecto al que se have referencia especificado aquí.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7561,7 +7561,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File is source from referenced project specified here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El archivo es el origen del proyecto al que se hace referencia especificado aquí.]]></Val>
+            <Val><![CDATA[El archivo es el origen del proyecto al que se have referencia especificado aquí.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7612,7 +7612,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La especificación del archivo no puede contener un directorio primario ('..') que aparezca después de un comodín de directorios recursivo ('**'): '{0}'.]]></Val>
+            <Val><![CDATA[La especificación del archivo no puede container un directorio primario ('..') que aparezca después de un comodín de directorios recursivo ('**'): '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7819,7 +7819,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Function implementation name must be '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El nombre de la implementación de función debe ser '{0}'.]]></Val>
+            <Val><![CDATA[El nombre de la implementación de función debe set '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7828,7 +7828,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La función tiene el tipo de valor devuelto "any" implícitamente porque no tiene una anotación de tipo de valor devuelto y se hace referencia a ella directa o indirectamente en una de sus expresiones return.]]></Val>
+            <Val><![CDATA[La función tiene el tipo de valor devuelto "any" implícitamente porque no tiene una anotación de tipo de valor devuelto y se have referencia a ella directa o indirectamente en una de sus expresiones return.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7864,7 +7864,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Function overload must be static.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La sobrecarga de función debe ser estática.]]></Val>
+            <Val><![CDATA[La sobrecarga de función debe set estática.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7873,7 +7873,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Function overload must not be static.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La sobrecarga de función no debe ser estática.]]></Val>
+            <Val><![CDATA[La sobrecarga de función no debe set estática.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8008,7 +8008,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Generic type '{0}' requires {1} type argument(s).]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo genérico '{0}' requiere los siguientes argumentos de tipo: {1}.]]></Val>
+            <Val><![CDATA[El tipo genérico '{0}' require los siguientes arguments de tipo: {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8017,7 +8017,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Generic type '{0}' requires between {1} and {2} type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo genérico "{0}" requiere entre {1} y {2} argumentos de tipo.]]></Val>
+            <Val><![CDATA[El tipo genérico "{0}" require entre {1} y {2} arguments de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8053,7 +8053,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Global type '{0}' must be a class or interface type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo global '{0}' debe ser un tipo de clase o de interfaz.]]></Val>
+            <Val><![CDATA[El tipo global '{0}' debe set un tipo de clase o de interfaz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8071,7 +8071,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Al volver a compilar en "--incremental" y "--watch" se asume que los cambios en un archivo solo afectarán a los archivos que dependan de este directamente.]]></Val>
+            <Val><![CDATA[Al volver a compilar en "--incremental" y "--watch" se assume que los cambios en un archivo solo afectarán a los archivos que dependan de este directamente.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8206,7 +8206,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Ignore the tsconfig found and build with commandline options and files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Omita la configuración tsconfig encontrada y compile con archivos y opciones de línea de comandos.]]></Val>
+            <Val><![CDATA[Omita la configuración tsconfig encontrada y compile con archivos y opciones de línea de commandos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8227,7 +8227,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ignora tsconfig.json y se compilan los archivos especificados con las opciones predeterminadas del compilador.]]></Val>
+            <Val><![CDATA[Ignore tsconfig.json y se compilan los archivos especificados con las opciones predeterminadas del compilador.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options]]></Val>
@@ -8326,7 +8326,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import assertion values must be string literal expressions.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los valores de aserción de importación deben ser expresiones literales de cadena.]]></Val>
+            <Val><![CDATA[Los valores de aserción de importación deben set expresiones literales de cadena.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8380,7 +8380,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import attribute values must be string literal expressions.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los valores de atributo de importación deben ser expresiones literales de cadena.]]></Val>
+            <Val><![CDATA[Los valores de atributo de importación deben set expresiones literales de cadena.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8464,7 +8464,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import name cannot be '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El nombre de importación no puede ser "{0}".]]></Val>
+            <Val><![CDATA[El nombre de importación no puede set "{0}".]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Import name cannot be '{0}']]></Val>
@@ -8548,7 +8548,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La importación de un archivo JSON en un módulo ECMAScript requiere un atributo de importación "type: "json"" cuando "module" se establece en "{0}".]]></Val>
+            <Val><![CDATA[La importación de un archivo JSON en un módulo ECMAScript require un atributo de importación "type: "json"" cuando "module" se establece en "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8566,7 +8566,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In ambient enum declarations member initializer must be constant expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[En las declaraciones de enumeración de ambiente, el inicializador de miembro debe ser una expresión constante.]]></Val>
+            <Val><![CDATA[En las declaraciones de enumeración de ambiente, el inicializador de miembro debe set una expresión constante.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8620,7 +8620,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Includes imports of types referenced by '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Incluye importaciones de tipos a los que hace referencia "{0}"]]></Val>
+            <Val><![CDATA[Incluye importaciones de tipos a los que have referencia "{0}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8665,7 +8665,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Individual declarations in merged declaration '{0}' must be all exported or all local.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las declaraciones individuales de la declaración '{0}' combinada deben ser todas exportadas o todas locales.]]></Val>
+            <Val><![CDATA[Las declaraciones individuales de la declaración '{0}' combinada deben set todas exportadas o todas locales.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8803,7 +8803,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Insert command line options and files from a file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inserte opciones de la línea de comandos y archivos desde un archivo.]]></Val>
+            <Val><![CDATA[Inserte opciones de la línea de commandos y archivos desde un archivo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8866,7 +8866,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Interface name cannot be '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El nombre de la interfaz no puede ser "{0}".]]></Val>
+            <Val><![CDATA[El nombre de la interfaz no puede set "{0}".]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Interface name cannot be '{0}']]></Val>
@@ -8887,7 +8887,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Interpret optional property types as written, rather than adding 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Interprete los tipos de propiedad opcionales como escritos en lugar de agregar "undefined".]]></Val>
+            <Val><![CDATA[Interpret los tipos de propiedad opcionales como escritos en lugar de agregar "undefined".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9217,7 +9217,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSX elements cannot have multiple attributes with the same name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los elementos JSX no pueden tener varios atributos con el mismo nombre.]]></Val>
+            <Val><![CDATA[Los elementos JSX no pueden tener various atributos con el mismo nombre.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9265,7 +9265,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSX spread child must be an array type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El elemento secundario de propagación JSX debe ser de tipo matriz.]]></Val>
+            <Val><![CDATA[El elemento secundario de propagación JSX debe set de tipo matriz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9301,7 +9301,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Keywords cannot contain escape characters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las palabras clave no pueden contener caracteres de escape.]]></Val>
+            <Val><![CDATA[Las palabras clave no pueden container characters de escape.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9346,7 +9346,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Library referenced via '{0}' from file '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Biblioteca a la que se hace referencia mediante "{0}" desde el archivo "{1}"]]></Val>
+            <Val><![CDATA[Biblioteca a la que se have referencia mediante "{0}" desde el archivo "{1}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9688,7 +9688,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' does not refer to a type, but is used as a type here. Did you mean 'typeof import('{0}')'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El módulo "{0}" no hace referencia a un tipo, pero aquí se usa como tipo. ¿Quiso decir "typeof import('{0}')"?]]></Val>
+            <Val><![CDATA[El módulo "{0}" no have referencia a un tipo, pero aquí se usa como tipo. ¿Quiso decir "typeof import('{0}')"?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9697,7 +9697,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' does not refer to a value, but is used as a value here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El módulo "{0}" no hace referencia a un valor, pero aquí se usa como valor.]]></Val>
+            <Val><![CDATA[El módulo "{0}" no have referencia a un valor, pero aquí se usa como valor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9919,7 +9919,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se permiten varios separadores numéricos consecutivos.]]></Val>
+            <Val><![CDATA[No se permiten various separadores numéricos consecutivos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9964,7 +9964,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Named capturing groups with the same name must be mutually exclusive to each other.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los grupos de captura con nombre que tengan el mismo nombre deben ser mutuamente excluyentes entre sí.]]></Val>
+            <Val><![CDATA[Los grupos de captura con nombre que tengan el mismo nombre deben set mutuamente excluyentes entre sí.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10018,7 +10018,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Namespace name cannot be '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El nombre de espacio no puede ser "{0}".]]></Val>
+            <Val><![CDATA[El nombre de espacio no puede set "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10027,7 +10027,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Namespaces are not allowed in global script files when '{0}' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se permiten espacios de nombres en archivos de script globales cuando “{0}” está habilitado. Si este archivo no está pensado para ser un script global, establezca “moduleDetection” en “force” o agregue una instrucción “export {}” vacía.]]></Val>
+            <Val><![CDATA[No se permiten espacios de nombres en archivos de script globales cuando “{0}” está habilitado. Si este archivo no está pensado para set un script global, establezca “moduleDetection” en “force” o agregue una instrucción “export {}” vacía.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10045,7 +10045,7 @@
         <Str Cat="Text">
           <Val><![CDATA[No base constructor has the specified number of type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No hay ningún constructor base con el número especificado de argumentos de tipo.]]></Val>
+            <Val><![CDATA[No hay ningún constructor base con el número especificado de arguments de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10099,7 +10099,7 @@
         <Str Cat="Text">
           <Val><![CDATA[No overload expects {0} arguments, but overloads do exist that expect either {1} or {2} arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ninguna sobrecarga espera argumentos {0}, pero existen sobrecargas que esperan argumentos {1} o {2}.]]></Val>
+            <Val><![CDATA[Ninguna sobrecarga espera arguments {0}, pero existen sobrecargas que esperan arguments {1} o {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10108,7 +10108,7 @@
         <Str Cat="Text">
           <Val><![CDATA[No overload expects {0} type arguments, but overloads do exist that expect either {1} or {2} type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ninguna sobrecarga espera argumentos de tipo {0}, pero existen sobrecargas que esperan argumentos de tipo {1} o {2}.]]></Val>
+            <Val><![CDATA[Ninguna sobrecarga espera arguments de tipo {0}, pero existen sobrecargas que esperan arguments de tipo {1} o {2}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10372,7 +10372,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '{0}' instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se permiten secuencias de escape decimales ni referencias inversas en una clase de caracteres. Si la intención era una secuencia de escape, use la sintaxis “{0}” en su lugar.]]></Val>
+            <Val><![CDATA[No se permiten secuencias de escape decimales ni referencias inversas en una clase de characters. Si la intención era una secuencia de escape, use la sintaxis “{0}” en su lugar.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10480,7 +10480,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Solo es posible tener acceso a los métodos públicos y protegidos de la clase base mediante la palabra clave "super".]]></Val>
+            <Val><![CDATA[Solo es possible tener acceso a los métodos públicos y protegidos de la clase base mediante la palabra clave "super".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10507,7 +10507,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Operators must not be mixed within a character class. Wrap it in a nested class instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los operadores no deben mezclarse dentro de una clase de caracteres. Envuelve en una clase anidada en su lugar.]]></Val>
+            <Val><![CDATA[Los operadores no deben mezclarse dentro de una clase de characters. Envuelve en una clase anidada en su lugar.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10516,7 +10516,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Opt a project out of multi-project reference checking when editing.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Opte por excluir un proyecto de la comprobación de referencias de varios proyectos al editar.]]></Val>
+            <Val><![CDATA[Opte por excluir un proyecto de la comprobación de referencias de various proyectos al editar.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10543,7 +10543,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La opción "{0}" solo puede especificarse en el archivo "tsconfig.json" o establecerse en "false" o "null" en la línea de comandos.]]></Val>
+            <Val><![CDATA[La opción "{0}" solo puede especificarse en el archivo "tsconfig.json" o establecerse en "false" o "null" en la línea de commandos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10552,7 +10552,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La opción "{0}" solo puede especificarse en el archivo "tsconfig.json" o establecerse en "null" en la línea de comandos.]]></Val>
+            <Val><![CDATA[La opción "{0}" solo puede especificarse en el archivo "tsconfig.json" o establecerse en "null" en la línea de commandos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10561,7 +10561,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' can only be specified on command line.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La opción “{0}” solo se puede especificar en la línea de comandos.]]></Val>
+            <Val><![CDATA[La opción “{0}” solo se puede especificar en la línea de commandos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10669,7 +10669,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '--build' must be the first command line argument.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La opción "--build" debe ser el primer argumento de la línea de comandos.]]></Val>
+            <Val><![CDATA[La opción "--build" debe set el primer argumento de la línea de commandos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10726,7 +10726,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option 'project' cannot be mixed with source files on a command line.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La opción "project" no se puede combinar con archivos de origen en una línea de comandos.]]></Val>
+            <Val><![CDATA[La opción "project" no se puede combinar con archivos de origen en una línea de commandos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10825,7 +10825,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Output from referenced project '{0}' included because '{1}' specified]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La salida del proyecto "{0}" al que se hace referencia se ha incluido porque se ha especificado "{1}".]]></Val>
+            <Val><![CDATA[La salida del proyecto "{0}" al que se have referencia se ha incluido porque se ha especificado "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10834,7 +10834,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Output from referenced project '{0}' included because '--module' is specified as 'none']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La salida del proyecto "{0}" al que se hace referencia se ha incluido porque "--module" se ha especificado como "none".]]></Val>
+            <Val><![CDATA[La salida del proyecto "{0}" al que se have referencia se ha incluido porque "--module" se ha especificado como "none".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10861,7 +10861,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload signatures must all be abstract or non-abstract.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las signaturas de sobrecarga deben ser todas abstractas o no abstractas.]]></Val>
+            <Val><![CDATA[Las signaturas de sobrecarga deben set todas abstractas o no abstractas.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10870,7 +10870,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload signatures must all be ambient or non-ambient.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las signaturas de sobrecarga deben ser todas de ambiente o de no ambiente.]]></Val>
+            <Val><![CDATA[Las signaturas de sobrecarga deben set todas de ambiente o de no ambiente.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10879,7 +10879,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload signatures must all be exported or non-exported.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las signaturas de sobrecarga deben ser todas exportadas o no exportadas.]]></Val>
+            <Val><![CDATA[Las signaturas de sobrecarga deben set todas exportadas o no exportadas.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10888,7 +10888,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload signatures must all be optional or required.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las signaturas de sobrecarga deben ser todas opcionales u obligatorias.]]></Val>
+            <Val><![CDATA[Las signaturas de sobrecarga deben set todas opcionales u obligatorias.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10897,7 +10897,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Overload signatures must all be public, private or protected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las signaturas de sobrecarga deben ser todas públicas, privadas o protegidas.]]></Val>
+            <Val><![CDATA[Las signaturas de sobrecarga deben set todas públicas, privadas o protegidas.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11311,7 +11311,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Prefix all unused declarations with '_' where possible]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Agregar "_" como prefijo a todas las declaraciones sin usar, cuando sea posible]]></Val>
+            <Val><![CDATA[Agregar "_" como prefijo a todas las declaraciones sin usar, cuando sea possible]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11833,7 +11833,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' in type '{1}' refers to a different member that cannot be accessed from within type '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La propiedad "{0}" del tipo "{1}" hace referencia a un miembro distinto al que no se puede acceder desde el tipo "{2}".]]></Val>
+            <Val><![CDATA[La propiedad "{0}" del tipo "{1}" have referencia a un miembro distinto al que no se puede acceder desde el tipo "{2}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11986,7 +11986,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' of exported anonymous class type may not be private or protected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La propiedad “{0}” del tipo de clase anónima exportada no puede ser privada ni estar protegida.]]></Val>
+            <Val><![CDATA[La propiedad “{0}” del tipo de clase anónima exportada no puede set privada ni estar protegida.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12076,7 +12076,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El valor de la propiedad puede ser solo un literal de cadena, literal numérico, 'true', 'false', 'null', literal de objeto o literal de matriz.]]></Val>
+            <Val><![CDATA[El valor de la propiedad puede set solo un literal de cadena, literal numérico, 'true', 'false', 'null', literal de objeto o literal de matriz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12241,7 +12241,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Range out of order in character class.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Rango desordenado en la clase de caracteres.]]></Val>
+            <Val><![CDATA[Rango desordenado en la clase de characters.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12250,7 +12250,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Re-exporting a type when '{0}' is enabled requires using 'export type'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Volver a exportar un tipo cuando “{0}” está habilitado requiere el uso de “export type”.]]></Val>
+            <Val><![CDATA[Volver a exportar un tipo cuando “{0}” está habilitado require el uso de “export type”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12259,7 +12259,7 @@
         <Str Cat="Text">
           <Val><![CDATA[React components cannot include JSX namespace names]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los componentes de React no pueden incluir nombres de espacio de nombres JSX]]></Val>
+            <Val><![CDATA[Los components de React no pueden incluir nombres de espacio de nombres JSX]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12295,7 +12295,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Referenced project '{0}' may not disable emit.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El proyecto "{0}" al que se hace referencia no puede deshabilitar la emisión.]]></Val>
+            <Val><![CDATA[El proyecto "{0}" al que se have referencia no puede deshabilitar la emisión.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12304,7 +12304,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Referenced project '{0}' must have setting "composite": true.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El proyecto "{0}" al que se hace referencia debe tener el valor "composite": true.]]></Val>
+            <Val><![CDATA[El proyecto "{0}" al que se have referencia debe tener el valor "composite": true.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12313,7 +12313,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Referenced via '{0}' from file '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se hace referencia mediante "{0}" desde el archivo "{1}".]]></Val>
+            <Val><![CDATA[Se have referencia mediante "{0}" desde el archivo "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12322,7 +12322,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las rutas de acceso de importación relativas necesitan extensiones de archivo explícitas en las importaciones ECMAScript cuando “--moduleResolution” es “node16” o “nodenext”. Considere la posibilidad de agregar una extensión a la ruta de acceso de importación.]]></Val>
+            <Val><![CDATA[Las rutas de acceso de importación relativas necesitan extensions de archivo explícitas en las importaciones ECMAScript cuando “--moduleResolution” es “node16” o “nodenext”. Considere la posibilidad de agregar una extensión a la ruta de acceso de importación.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12331,7 +12331,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '{0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las rutas de acceso de importación relativas necesitan extensiones de archivo explícitas en las importaciones ECMAScript cuando “--moduleResolution” es “node16” o “nodenext”. ¿Quiso decir “{0}”?]]></Val>
+            <Val><![CDATA[Las rutas de acceso de importación relativas necesitan extensions de archivo explícitas en las importaciones ECMAScript cuando “--moduleResolution” es “node16” o “nodenext”. ¿Quiso decir “{0}”?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12376,7 +12376,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove all unreachable code]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Quitar todo el código inaccesible]]></Val>
+            <Val><![CDATA[Quitar todo el código inaccessible]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12502,7 +12502,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unreachable code]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Quitar el código inaccesible]]></Val>
+            <Val><![CDATA[Quitar el código inaccessible]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12646,7 +12646,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Require sufficient annotation on exports so other tools can trivially generate declaration files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Requiere una anotación suficiente en las exportaciones para que otras herramientas puedan generar archivos de declaración de forma trivial.]]></Val>
+            <Val><![CDATA[Require una anotación suficiente en las exportaciones para que otras herramientas puedan generar archivos de declaración de forma trivial.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12859,7 +12859,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type annotation circularly references itself.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La anotación de tipo de valor devuelto se hace referencia a sí misma de forma circular.]]></Val>
+            <Val><![CDATA[La anotación de tipo de valor devuelto se have referencia a sí misma de forma circular.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13225,7 +13225,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Vuelva a escribir las extensiones de archivo ".ts", ".tsx", ".mts" y ".cts" en rutas de acceso de importación relativas a su equivalente de JavaScript en los archivos de salida.]]></Val>
+            <Val><![CDATA[Vuelva a escribir las extensions de archivo ".ts", ".tsx", ".mts" y ".cts" en rutas de acceso de importación relativas a su equivalente de JavaScript en los archivos de salida.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13234,7 +13234,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Right operand of ?? is unreachable because the left operand is never nullish.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El operando derecho de ?? es inaccesible porque el operando izquierdo nunca es nulo.]]></Val>
+            <Val><![CDATA[El operando derecho de ?? es inaccessible porque el operando izquierdo nunca es nulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13297,7 +13297,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Searching all ancestor node_modules directories for fallback extensions: {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Buscando extensiones de reserva en todos los directorios de node_modules antecesores: {0}.]]></Val>
+            <Val><![CDATA[Buscando extensions de reserva en todos los directorios de node_modules antecesores: {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13306,7 +13306,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Searching all ancestor node_modules directories for preferred extensions: {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Buscando extensiones preferidas en todos los directorios de node_modules antecesores: {0}.]]></Val>
+            <Val><![CDATA[Buscando extensions preferidas en todos los directorios de node_modules antecesores: {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13513,7 +13513,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Source from referenced project '{0}' included because '{1}' specified]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El origen del proyecto "{0}" al que se hace referencia se ha incluido porque se ha especificado "{1}".]]></Val>
+            <Val><![CDATA[El origen del proyecto "{0}" al que se have referencia se ha incluido porque se ha especificado "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13522,7 +13522,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Source from referenced project '{0}' included because '--module' is specified as 'none']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El origen del proyecto "{0}" al que se hace referencia se ha incluido porque "--module" se ha especificado como "none".]]></Val>
+            <Val><![CDATA[El origen del proyecto "{0}" al que se have referencia se ha incluido porque "--module" se ha especificado como "none".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13540,7 +13540,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Source has {0} element(s) but target requires {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El origen tiene {0} elemento(s), pero el destino requiere {1}.]]></Val>
+            <Val><![CDATA[El origen tiene {0} elemento(s), pero el destino require {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13951,7 +13951,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify type package names to be included without being referenced in a source file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Especifique los nombres de los paquetes de tipo que se incluyen sin ser referenciados en un archivo fuente.]]></Val>
+            <Val><![CDATA[Especifique los nombres de los paquetes de tipo que se incluyen sin set referenciados en un archivo fuente.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14095,7 +14095,7 @@
         <Str Cat="Text">
           <Val><![CDATA[String literal with double quotes expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se esperaba un literal de cadena entre comillas dobles.]]></Val>
+            <Val><![CDATA[Se esperaba un literal de cadena entre comillas doubles.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14134,7 +14134,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Subsequent property declarations must have the same type.  Property '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las declaraciones de propiedad subsiguientes deben tener el mismo tipo. La propiedad "{0}" debe ser de tipo "{1}", pero aquí tiene el tipo "{2}".]]></Val>
+            <Val><![CDATA[Las declaraciones de propiedad subsiguientes deben tener el mismo tipo. La propiedad "{0}" debe set de tipo "{1}", pero aquí tiene el tipo "{2}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14143,7 +14143,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las declaraciones de variable subsiguientes deben tener el mismo tipo. La variable '{0}' debe ser de tipo '{1}', pero aquí tiene el tipo '{2}'.]]></Val>
+            <Val><![CDATA[Las declaraciones de variable subsiguientes deben tener el mismo tipo. La variable '{0}' debe set de tipo '{1}', pero aquí tiene el tipo '{2}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14170,7 +14170,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Substitutions for pattern '{0}' should be an array.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las sustituciones para el patrón '{0}' deben ser una matriz.]]></Val>
+            <Val><![CDATA[Las sustituciones para el patrón '{0}' deben set una matriz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14179,7 +14179,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Substitutions for pattern '{0}' shouldn't be an empty array.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las sustituciones para el patrón '{0}' no deben ser una matriz vacía.]]></Val>
+            <Val><![CDATA[Las sustituciones para el patrón '{0}' no deben set una matriz vacía.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14263,7 +14263,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La etiqueta "{0}" espera al menos "{1}" argumentos, pero el generador de JSX "{2}" proporciona como máximo "{3}".]]></Val>
+            <Val><![CDATA[La etiqueta "{0}" espera al menos "{1}" arguments, pero el generador de JSX "{2}" proporciona como máximo "{3}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14290,7 +14290,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Target requires {0} element(s) but source may have fewer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El destino requiere {0} elemento(s), pero el origen puede tener menos.]]></Val>
+            <Val><![CDATA[El destino require {0} elemento(s), pero el origen puede tener menos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14299,7 +14299,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Target signature provides too few arguments. Expected {0} or more, but got {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La firma de destino proporciona muy pocos argumentos. Se esperaba {0} o más, pero se obtuvo {1}.]]></Val>
+            <Val><![CDATA[La firma de destino proporciona muy pocos arguments. Se esperaba {0} o más, pero se obtuvo {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14335,7 +14335,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The '{0}' property of an async iterator must be a method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La propiedad "{0}" de un iterador de asincronía debe ser un método.]]></Val>
+            <Val><![CDATA[La propiedad "{0}" de un iterador de asincronía debe set un método.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14344,7 +14344,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The '{0}' property of an iterator must be a method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La propiedad "{0}" de un iterador debe ser un método.]]></Val>
+            <Val><![CDATA[La propiedad "{0}" de un iterador debe set un método.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14389,7 +14389,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The body of an 'if' statement cannot be the empty statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El cuerpo de una instrucción "if" no puede ser la instrucción vacía.]]></Val>
+            <Val><![CDATA[El cuerpo de una instrucción "if" no puede set la instrucción vacía.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14398,7 +14398,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La llamada se llevaría a cabo sin problemas en esta implementación, pero las signaturas de implementación de las sobrecargas no están visibles externamente.]]></Val>
+            <Val><![CDATA[La llamada se llevaría a cabo sin problemas en esta implementación, pero las signaturas de implementación de las sobrecargas no están visible externamente.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14407,7 +14407,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The character set of the input files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Conjunto de caracteres de los archivos de entrada.]]></Val>
+            <Val><![CDATA[Conjunto de characters de los archivos de entrada.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14443,7 +14443,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("{0}")' call instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El archivo actual es un módulo CommonJS cuyas importaciones generarán llamadas "require"; sin embargo, el archivo al que se hace referencia es un módulo ECMAScript y no se puede importar con "require". Considere la posibilidad de escribir una llamada dinámica "import("{0}")" en su lugar.]]></Val>
+            <Val><![CDATA[El archivo actual es un módulo CommonJS cuyas importaciones generarán llamadas "require"; sin embargo, el archivo al que se have referencia es un módulo ECMAScript y no se puede importar con "require". Considere la posibilidad de escribir una llamada dinámica "import("{0}")" en su lugar.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14506,7 +14506,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The expression of an export assignment must be an identifier or qualified name in an ambient context.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La expresión de una asignación de exportación debe ser un identificador o un nombre completo en un contexto de ambiente.]]></Val>
+            <Val><![CDATA[La expresión de una asignación de exportación debe set un identificador o un nombre completo en un contexto de ambiente.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14542,7 +14542,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The first parameter of the 'then' method of a promise must be a callback.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El primer parámetro del método "then" de una promesa debe ser una devolución de llamada.]]></Val>
+            <Val><![CDATA[El primer parámetro del método "then" de una promesa debe set una devolución de llamada.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14593,7 +14593,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The inferred type of '{0}' cannot be named without a reference to '{1}'. This is likely not portable. A type annotation is necessary.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se puede asignar un nombre al tipo inferido de "{0}" sin una referencia a "{1}". Es probable que no sea portable. Se requiere una anotación de tipo.]]></Val>
+            <Val><![CDATA[No se puede asignar un nombre al tipo inferido de "{0}" sin una referencia a "{1}". Es probable que no sea portable. Se require una anotación de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14602,7 +14602,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo deducido de "{0}" hace referencia a un tipo con una estructura cíclica que no se puede serializar trivialmente. Es necesaria una anotación de tipo.]]></Val>
+            <Val><![CDATA[El tipo deducido de "{0}" have referencia a un tipo con una estructura cíclica que no se puede serializar trivialmente. Es necesaria una anotación de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14611,7 +14611,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The inferred type of '{0}' references an inaccessible '{1}' type. A type annotation is necessary.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo inferido de "{0}" hace referencia a un tipo "{1}" no accesible. Se requiere una anotación de tipo.]]></Val>
+            <Val><![CDATA[El tipo inferido de "{0}" have referencia a un tipo "{1}" no accessible. Se require una anotación de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14629,7 +14629,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The initializer of a 'using' declaration must be either an object with a '[Symbol.dispose]5D;()' method, or be 'null' or 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El inicializador de una declaración “using” debe ser un objeto con un método “[Symbol.dispose]5D;()”, o ser “null” o “undefined”.]]></Val>
+            <Val><![CDATA[El inicializador de una declaración “using” debe set un objeto con un método “[Symbol.dispose]5D;()”, o set “null” o “undefined”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14638,7 +14638,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The initializer of an 'await using' declaration must be either an object with a '[Symbol.asyncDispose]5D;()' or '[Symbol.dispose]5D;()' method, or be 'null' or 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El inicializador de una declaración “await using” debe ser un objeto con un método “[Symbol.asyncDispose]5D;()” o “[Symbol.dispose]5D;()”, o ser “null” o “undefined”.]]></Val>
+            <Val><![CDATA[El inicializador de una declaración “await using” debe set un objeto con un método “[Symbol.asyncDispose]5D;()” o “[Symbol.dispose]5D;()”, o set “null” o “undefined”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14647,7 +14647,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' exists in multiple constituents and is private in some.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La intersección "{0}" se redujo a "never" porque la propiedad "{1}" existe en varios constituyentes y es privada en algunos de ellos.]]></Val>
+            <Val><![CDATA[La intersección "{0}" se redujo a "never" porque la propiedad "{1}" existe en various constituyentes y es privada en algunos de ellos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14701,7 +14701,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of a 'for...in' statement cannot be a destructuring pattern.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte izquierda de una instrucción "for...in" no puede ser un patrón de desestructuración.]]></Val>
+            <Val><![CDATA[La parte izquierda de una instrucción "for...in" no puede set un patrón de desestructuración.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14710,7 +14710,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of a 'for...in' statement cannot be a 'using' declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El lado izquierdo de un “for...in” no puede ser una declaración “using”.]]></Val>
+            <Val><![CDATA[El lado izquierdo de un “for...in” no puede set una declaración “using”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14719,7 +14719,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of a 'for...in' statement cannot be an 'await using' declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El lado izquierdo de una instrucción “for...in” no puede ser una declaración “await using”.]]></Val>
+            <Val><![CDATA[El lado izquierdo de una instrucción “for...in” no puede set una declaración “await using”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14737,7 +14737,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of a 'for...in' statement may not be an optional property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte izquierda de una instrucción "for...in" no puede ser un acceso de propiedad opcional.]]></Val>
+            <Val><![CDATA[La parte izquierda de una instrucción "for...in" no puede set un acceso de propiedad opcional.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14746,7 +14746,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of a 'for...in' statement must be a variable or a property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte izquierda de una instrucción 'for...in' debe ser una variable o el acceso a una propiedad.]]></Val>
+            <Val><![CDATA[La parte izquierda de una instrucción 'for...in' debe set una variable o el acceso a una propiedad.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14755,7 +14755,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte izquierda de una instrucción "for...in" debe ser de tipo "string" o "any".]]></Val>
+            <Val><![CDATA[La parte izquierda de una instrucción "for...in" debe set de tipo "string" o "any".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14773,7 +14773,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of a 'for...of' statement may not be an optional property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte izquierda de una instrucción "for...of" no puede ser un acceso de propiedad opcional.]]></Val>
+            <Val><![CDATA[La parte izquierda de una instrucción "for...of" no puede set un acceso de propiedad opcional.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14782,7 +14782,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of a 'for...of' statement may not be 'async'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El lado izquierdo de una instrucción de "para... de" puede no ser "async".]]></Val>
+            <Val><![CDATA[El lado izquierdo de una instrucción de "para... de" puede no set "async".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14791,7 +14791,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of a 'for...of' statement must be a variable or a property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte izquierda de una instrucción 'for...of' debe ser una variable o el acceso a una propiedad.]]></Val>
+            <Val><![CDATA[La parte izquierda de una instrucción 'for...of' debe set una variable o el acceso a una propiedad.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14800,7 +14800,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte izquierda de una operación aritmética debe ser de tipo "any", "number", "bigint" o un tipo de enumeración.]]></Val>
+            <Val><![CDATA[La parte izquierda de una operación aritmética debe set de tipo "any", "number", "bigint" o un tipo de enumeración.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14809,7 +14809,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an assignment expression may not be an optional property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte izquierda de una expresión de asignación no puede ser un acceso de propiedad opcional.]]></Val>
+            <Val><![CDATA[La parte izquierda de una expresión de asignación no puede set un acceso de propiedad opcional.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14818,7 +14818,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an assignment expression must be a variable or a property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte izquierda de una expresión de asignación debe ser una variable o el acceso a una propiedad.]]></Val>
+            <Val><![CDATA[La parte izquierda de una expresión de asignación debe set una variable o el acceso a una propiedad.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14836,7 +14836,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte izquierda de una expresión "instanceof" debe ser de tipo "any", un tipo de objeto o un parámetro de tipo.]]></Val>
+            <Val><![CDATA[La parte izquierda de una expresión "instanceof" debe set de tipo "any", un tipo de objeto o un parámetro de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14866,7 +14866,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The operand of a 'delete' operator cannot be a private identifier.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El operando de un operador "delete" no puede ser un identificador privado.]]></Val>
+            <Val><![CDATA[El operando de un operador "delete" no puede set un identificador privado.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14875,7 +14875,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The operand of a 'delete' operator cannot be a read-only property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El operando de un operador "delete" no puede ser una propiedad de solo lectura.]]></Val>
+            <Val><![CDATA[El operando de un operador "delete" no puede set una propiedad de solo lectura.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[The operand of a delete operator cannot be a read-only property.]]></Val>
@@ -14887,7 +14887,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The operand of a 'delete' operator must be a property reference.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El operando de un operador "delete" debe ser una referencia de propiedad.]]></Val>
+            <Val><![CDATA[El operando de un operador "delete" debe set una referencia de propiedad.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[The operand of a delete operator must be a property reference.]]></Val>
@@ -14899,7 +14899,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El operando de un operador "delete" debe ser opcional.]]></Val>
+            <Val><![CDATA[El operando de un operador "delete" debe set opcional.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14908,7 +14908,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The operand of an increment or decrement operator may not be an optional property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El operando de un operador de incremento o decremento no puede ser un acceso de propiedad opcional.]]></Val>
+            <Val><![CDATA[El operando de un operador de incremento o decremento no puede set un acceso de propiedad opcional.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14917,7 +14917,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The operand of an increment or decrement operator must be a variable or a property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El operando de un operador de incremento o decremento debe ser una variable o el acceso a una propiedad.]]></Val>
+            <Val><![CDATA[El operando de un operador de incremento o decremento debe set una variable o el acceso a una propiedad.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14962,7 +14962,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The return type of a parameter decorator function must be either 'void' or 'any'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo de valor devuelto de una función Decorator de parámetro debe ser "void" o "any".]]></Val>
+            <Val><![CDATA[El tipo de valor devuelto de una función Decorator de parámetro debe set "void" o "any".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14971,7 +14971,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The return type of a property decorator function must be either 'void' or 'any'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo de valor devuelto de una función Decorator de propiedad debe ser "void" o "any".]]></Val>
+            <Val><![CDATA[El tipo de valor devuelto de una función Decorator de propiedad debe set "void" o "any".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14980,7 +14980,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The return type of an async function must either be a valid promise or must not contain a callable 'then' member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo de valor devuelto de una función asincrónica debe ser una promesa válida o no debe contener un miembro "then" invocable.]]></Val>
+            <Val><![CDATA[El tipo de valor devuelto de una función asincrónica debe set una promesa válida o no debe container un miembro "then" invocable.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14989,7 +14989,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The return type of an async function or method must be the global Promise<T> type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo de valor devuelto de una función o un método asincrónicos debe ser el tipo Promise<T> global.]]></Val>
+            <Val><![CDATA[El tipo de valor devuelto de una función o un método asincrónicos debe set el tipo Promise<T> global.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14998,7 +14998,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<{0}>'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo de valor devuelto de una función o un método asincrónicos debe ser el tipo Promise<T> global. ¿Pretendía escribir "Promise<{0}>"?]]></Val>
+            <Val><![CDATA[El tipo de valor devuelto de una función o un método asincrónicos debe set el tipo Promise<T> global. ¿Pretendía escribir "Promise<{0}>"?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15007,7 +15007,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte derecha de una instrucción "for...in" debe ser de tipo "any", un tipo de objeto o un parámetro de tipo, pero aquí tiene el tipo "{0}".]]></Val>
+            <Val><![CDATA[La parte derecha de una instrucción "for...in" debe set de tipo "any", un tipo de objeto o un parámetro de tipo, pero aquí tiene el tipo "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15016,7 +15016,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte derecha de una operación aritmética debe ser de tipo "any", "number", "bigint" o un tipo de enumeración.]]></Val>
+            <Val><![CDATA[La parte derecha de una operación aritmética debe set de tipo "any", "number", "bigint" o un tipo de enumeración.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15025,7 +15025,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El lado derecho de una expresión “instanceof” debe ser de tipo “any”, una clase, función u otro tipo asignable al tipo de interfaz “Function”, o un tipo de objeto con un método “Symbol.hasInstance”.]]></Val>
+            <Val><![CDATA[El lado derecho de una expresión “instanceof” debe set de tipo “any”, una clase, función u otro tipo asignable al tipo de interfaz “Function”, o un tipo de objeto con un método “Symbol.hasInstance”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15034,7 +15034,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of an 'instanceof' expression must not be an instantiation expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El lado derecho de una expresión “instanceof” no debe ser una expresión de creación de instancias.]]></Val>
+            <Val><![CDATA[El lado derecho de una expresión “instanceof” no debe set una expresión de creación de instancias.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15043,7 +15043,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The root value of a '{0}' file must be an object.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El valor raíz de un archivo "{0}" debe ser un objeto.]]></Val>
+            <Val><![CDATA[El valor raíz de un archivo "{0}" debe set un objeto.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15052,7 +15052,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The runtime will invoke the decorator with {1} arguments, but the decorator expects {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El runtime invocará el decorador con argumentos {1}, pero el decorador espera {0}.]]></Val>
+            <Val><![CDATA[El runtime invocará el decorador con arguments {1}, pero el decorador espera {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15061,7 +15061,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The runtime will invoke the decorator with {1} arguments, but the decorator expects at least {0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El runtime invocará el decorador con argumentos {1}, pero el decorador espera al menos {0}.]]></Val>
+            <Val><![CDATA[El runtime invocará el decorador con arguments {1}, pero el decorador espera al menos {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15109,7 +15109,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The target of an object rest assignment may not be an optional property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El destino de una asignación rest de objeto no puede ser un acceso de propiedad opcional.]]></Val>
+            <Val><![CDATA[El destino de una asignación rest de objeto no puede set un acceso de propiedad opcional.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15118,7 +15118,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The target of an object rest assignment must be a variable or a property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El destino de una asignación de reposo de objetos debe ser una variable o un acceso a propiedad.]]></Val>
+            <Val><![CDATA[El destino de una asignación de reposo de objetos debe set una variable o un acceso a propiedad.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15190,7 +15190,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The type returned by the '{0}()' method of an async iterator must be a promise for a type with a 'value' property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo devuelto por el método "{0}()" de un iterador de asincronía debe ser una promesa para un tipo con una propiedad "value".]]></Val>
+            <Val><![CDATA[El tipo devuelto por el método "{0}()" de un iterador de asincronía debe set una promesa para un tipo con una propiedad "value".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15271,7 +15271,7 @@
         <Str Cat="Text">
           <Val><![CDATA[There are types at '{0}', but this result could not be resolved when respecting package.json "exports". The '{1}' library may need to update its package.json or typings.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Hay tipos en “{0}”, pero este resultado no se pudo resolver al respetar "exports" de package.json. Es posible que la biblioteca “{1}” necesite actualizar sus package.json o tipos.]]></Val>
+            <Val><![CDATA[Hay tipos en “{0}”, pero este resultado no se pudo resolver al respetar "exports" de package.json. Es possible que la biblioteca “{1}” necesite actualizar sus package.json o tipos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15298,7 +15298,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag requires '{0}' to be in scope, but it could not be found.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Esta etiqueta JSX requiere que "{0}" esté en el ámbito, pero no se encontró.]]></Val>
+            <Val><![CDATA[Esta etiqueta JSX require que "{0}" esté en el ámbito, pero no se encontró.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15307,7 +15307,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag requires the module path '{0}' to exist, but none could be found. Make sure you have types for the appropriate package installed.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Esta etiqueta JSX requiere que exista la ruta de acceso del módulo "{0}", pero no se encontró ninguna. Asegúrese de que tiene instalados los tipos para el paquete adecuado.]]></Val>
+            <Val><![CDATA[Esta etiqueta JSX require que exista la ruta de acceso del módulo "{0}", pero no se encontró ninguna. Asegúrese de que tiene instalados los tipos para el paquete adecuado.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15316,7 +15316,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag's '{0}' prop expects a single child of type '{1}', but multiple children were provided.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La propiedad "{0}" de esta etiqueta de JSX espera un solo elemento secundario de tipo "{1}", pero se han proporcionado varios elementos secundarios.]]></Val>
+            <Val><![CDATA[La propiedad "{0}" de esta etiqueta de JSX espera un solo elemento secundario de tipo "{1}", pero se han proporcionado various elementos secundarios.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15325,7 +15325,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag's '{0}' prop expects type '{1}' which requires multiple children, but only a single child was provided.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La propiedad "{0}" de esta etiqueta de JSX espera el tipo "{1}", que requiere varios elementos secundarios, pero solo se ha proporcionado un elemento secundario.]]></Val>
+            <Val><![CDATA[La propiedad "{0}" de esta etiqueta de JSX espera el tipo "{1}", que require various elementos secundarios, pero solo se ha proporcionado un elemento secundario.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15334,7 +15334,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Esta referencia inversa hace referencia a un grupo que no existe. No hay grupos de captura en esta expresión regular.]]></Val>
+            <Val><![CDATA[Esta referencia inversa have referencia a un grupo que no existe. No hay grupos de captura en esta expresión regular.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15343,7 +15343,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This backreference refers to a group that does not exist. There are only {0} capturing groups in this regular expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Esta referencia inversa hace referencia a un grupo que no existe. Solo hay {0} grupos de captura en esta expresión regular.]]></Val>
+            <Val><![CDATA[Esta referencia inversa have referencia a un grupo que no existe. Solo hay {0} grupos de captura en esta expresión regular.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15505,7 +15505,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This kind of expression is always falsy.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Este tipo de expresión siempre es falso.]]></Val>
+            <Val><![CDATA[Este tipo de expresión siempre es false.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15766,7 +15766,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper but module '{0}' cannot be found.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Esta sintaxis requiere un asistente importado, pero no se puede encontrar el módulo "{0}".]]></Val>
+            <Val><![CDATA[Esta sintaxis require un asistente importado, pero no se puede encontrar el módulo "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15775,7 +15775,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper named '{1}' which does not exist in '{0}'. Consider upgrading your version of '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Esta sintaxis requiere una aplicación auxiliar importada denominada "{1}", que no existe en "{0}". Considere la posibilidad de actualizar la versión de "{0}".]]></Val>
+            <Val><![CDATA[Esta sintaxis require una aplicación auxiliary importada denominada "{1}", que no existe en "{0}". Considere la posibilidad de actualizar la versión de "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15784,7 +15784,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper named '{1}' with {2} parameters, which is not compatible with the one in '{0}'. Consider upgrading your version of '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Esta sintaxis requiere un asistente importado denominado "{1}" con parámetros de {2}, que no es compatible con el de "{0}". Pruebe a actualizar la versión de "{0}".]]></Val>
+            <Val><![CDATA[Esta sintaxis require un asistente importado denominado "{1}" con parámetros de {2}, que no es compatible con el de "{0}". Pruebe a actualizar la versión de "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15802,7 +15802,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Este uso de "import" no es válido. Se pueden escribir llamadas "import()", pero deben tener paréntesis y no pueden tener argumentos de tipo.]]></Val>
+            <Val><![CDATA[Este uso de "import" no es válido. Se pueden escribir llamadas "import()", pero deben tener paréntesis y no pueden tener arguments de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15949,7 +15949,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Tuple type arguments circularly reference themselves.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los argumentos de tipo de tupla se hacen referencia a sí mismos de forma circular.]]></Val>
+            <Val><![CDATA[Los arguments de tipo de tupla se hacen referencia a sí mismos de forma circular.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16039,7 +16039,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' has no signatures for which the type argument list is applicable.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo "{0}" no tiene firmas para las que sea aplicable la lista de argumentos de tipo.]]></Val>
+            <Val><![CDATA[El tipo "{0}" no tiene firmas para las que sea applicable la lista de arguments de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16084,7 +16084,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo “{0}” no es un tipo de valor devuelto válido para una función asincrónica en ES5, porque no hace referencia a un valor de constructor compatible con promesas.]]></Val>
+            <Val><![CDATA[El tipo “{0}” no es un tipo de valor devuelto válido para una función asincrónica en ES5, porque no have referencia a un valor de constructor compatible con promesas.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16249,7 +16249,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' recursively references itself as a base type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo '{0}' se hace referencia a sí mismo de forma recursiva como tipo base.]]></Val>
+            <Val><![CDATA[El tipo '{0}' se have referencia a sí mismo de forma recursiva como tipo base.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16267,7 +16267,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type alias '{0}' circularly references itself.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El alias de tipo '{0}' se hace referencia a sí mismo de forma circular.]]></Val>
+            <Val><![CDATA[El alias de tipo '{0}' se have referencia a sí mismo de forma circular.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16285,7 +16285,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type alias name cannot be '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El nombre del alias de tipo no puede ser "{0}".]]></Val>
+            <Val><![CDATA[El nombre del alias de tipo no puede set "{0}".]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Type alias name cannot be '{0}']]></Val>
@@ -16333,7 +16333,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type argument list cannot be empty.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La lista de argumentos de tipo no puede estar vacía.]]></Val>
+            <Val><![CDATA[La lista de arguments de tipo no puede estar vacía.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16342,7 +16342,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type arguments can only be used in TypeScript files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los argumentos de tipo solo se pueden usar en los archivos TypeScript.]]></Val>
+            <Val><![CDATA[Los arguments de tipo solo se pueden usar en los archivos TypeScript.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16351,7 +16351,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type arguments for '{0}' circularly reference themselves.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los argumentos de tipo de "{0}" se hacen referencia a sí mismos de forma circular.]]></Val>
+            <Val><![CDATA[Los arguments de tipo de "{0}" se hacen referencia a sí mismos de forma circular.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16450,7 +16450,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se hace referencia al tipo directa o indirectamente en la devolución de llamada de entrega de su propio método "then".]]></Val>
+            <Val><![CDATA[Se have referencia al tipo directa o indirectamente en la devolución de llamada de entrega de su propio método "then".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16459,7 +16459,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type library referenced via '{0}' from file '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Biblioteca de tipos a la que se hace referencia mediante "{0}" desde el archivo "{1}"]]></Val>
+            <Val><![CDATA[Biblioteca de tipos a la que se have referencia mediante "{0}" desde el archivo "{1}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16468,7 +16468,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type library referenced via '{0}' from file '{1}' with packageId '{2}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Biblioteca de tipos a la que se hace referencia mediante "{0}" desde el archivo "{1}" con el valor packageId "{2}"]]></Val>
+            <Val><![CDATA[Biblioteca de tipos a la que se have referencia mediante "{0}" desde el archivo "{1}" con el valor packageId "{2}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16477,7 +16477,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo de operando "await" debe ser una promesa válida o no debe contener un miembro "then" invocable.]]></Val>
+            <Val><![CDATA[El tipo de operando "await" debe set una promesa válida o no debe container un miembro "then" invocable.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16504,7 +16504,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo de elementos iterados de un operando "yield*" debe ser una promesa válida o no debe contener un miembro "then" invocable.]]></Val>
+            <Val><![CDATA[El tipo de elementos iterados de un operando "yield*" debe set una promesa válida o no debe container un miembro "then" invocable.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16513,7 +16513,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type of property '{0}' circularly references itself in mapped type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo de propiedad "{0}" hace referencia circular a sí misma en el tipo asignado "{1}".]]></Val>
+            <Val><![CDATA[El tipo de propiedad "{0}" have referencia circular a sí misma en el tipo asignado "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16522,7 +16522,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo de operando "yield" en un generador asincrónico debe ser una promesa válida o no debe contener un miembro "then" invocable.]]></Val>
+            <Val><![CDATA[El tipo de operando "yield" en un generador asincrónico debe set una promesa válida o no debe container un miembro "then" invocable.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16693,7 +16693,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter name cannot be '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El nombre del parámetro de tipo no puede ser "{0}".]]></Val>
+            <Val><![CDATA[El nombre del parámetro de tipo no puede set "{0}".]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Type parameter name cannot be '{0}']]></Val>
@@ -16858,7 +16858,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Undetermined character escape.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Escape de caracteres no determinado.]]></Val>
+            <Val><![CDATA[Escape de characters no determinado.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17101,7 +17101,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unreachable code detected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se ha detectado código inaccesible.]]></Val>
+            <Val><![CDATA[Se ha detectado código inaccessible.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17155,7 +17155,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Untyped function calls may not accept type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las llamadas a función sin tipo no pueden aceptar argumentos de tipo.]]></Val>
+            <Val><![CDATA[Las llamadas a función sin tipo no pueden aceptar arguments de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17317,7 +17317,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Using JSX fragments requires fragment factory '{0}' to be in scope, but it could not be found.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El uso de fragmentos JSX requiere que el generador de fragmentos "{0}" esté en el ámbito, pero no se encontró.]]></Val>
+            <Val><![CDATA[El uso de fragmentos JSX require que el generador de fragmentos "{0}" esté en el ámbito, pero no se encontró.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17542,7 +17542,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Watch option '{0}' requires a value of type {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La opción "{0}" de inspección requiere un valor de tipo {1}.]]></Val>
+            <Val><![CDATA[La opción "{0}" de inspección require un valor de tipo {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17590,7 +17590,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Wrap all invalid characters in an expression container]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Encapsular todos los caracteres no válidos en un contenedor de expresiones]]></Val>
+            <Val><![CDATA[Encapsular todos los characters no válidos en un contenedor de expresiones]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17653,7 +17653,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Wrap the following body with parentheses which should be an object literal]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Encapsular el cuerpo siguiente entre paréntesis, lo cual debe ser un literal de objeto]]></Val>
+            <Val><![CDATA[Encapsular el cuerpo siguiente entre paréntesis, lo cual debe set un literal de objeto]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17716,7 +17716,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@{0}()'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["{0}" no acepta suficientes argumentos para utilizarse como decorador aquí. ¿Pretendía llamar primero y escribir "@{0}()"?]]></Val>
+            <Val><![CDATA["{0}" no acepta suficientes arguments para utilizarse como decorador aquí. ¿Pretendía llamar primero y escribir "@{0}()"?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17851,7 +17851,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of '{1}' is '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los componentes "{0}" no aceptan el texto como elemento secundario. El texto de JSX tiene el tipo "string", pero el tipo que se esperaba de "{1}" es "{2}".]]></Val>
+            <Val><![CDATA[Los components "{0}" no aceptan el texto como elemento secundario. El texto de JSX tiene el tipo "string", pero el tipo que se esperaba de "{1}" es "{2}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17941,7 +17941,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' tiene el tipo de valor devuelto "any" implícitamente porque no tiene una anotación de tipo de valor devuelto y se hace referencia a este directa o indirectamente en una de sus expresiones return.]]></Val>
+            <Val><![CDATA['{0}' tiene el tipo de valor devuelto "any" implícitamente porque no tiene una anotación de tipo de valor devuelto y se have referencia a este directa o indirectamente en una de sus expresiones return.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17950,7 +17950,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' tiene el tipo de valor devuelto "any" implícitamente porque no tiene una anotación de tipo y se hace referencia a este directa o indirectamente en su propio inicializador.]]></Val>
+            <Val><![CDATA['{0}' tiene el tipo de valor devuelto "any" implícitamente porque no tiene una anotación de tipo y se have referencia a este directa o indirectamente en su propio inicializador.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17977,7 +17977,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' es un elemento primitivo, pero '{1}' es un objeto contenedor. Use '{0}' preferentemente cuando sea posible.]]></Val>
+            <Val><![CDATA['{0}' es un elemento primitivo, pero '{1}' es un objeto contenedor. Use '{0}' preferentemente cuando sea possible.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18040,7 +18040,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is declared but never used.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["{0}" se declara pero nunca se utiliza.]]></Val>
+            <Val><![CDATA["{0}" se declara pero nunca se utilize.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18160,7 +18160,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is referenced directly or indirectly in its own base expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se hace referencia a '{0}' directa o indirectamente en su propia expresión base.]]></Val>
+            <Val><![CDATA[Se have referencia a '{0}' directa o indirectamente en su propia expresión base.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18169,7 +18169,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is referenced directly or indirectly in its own type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se hace referencia a '{0}' directa o indirectamente en su propia anotación de tipo.]]></Val>
+            <Val><![CDATA[Se have referencia a '{0}' directa o indirectamente en su propia anotación de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18370,7 +18370,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' only refers to a type, but is being used as a namespace here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' solo hace referencia a un tipo, pero aquí se usa como espacio de nombres.]]></Val>
+            <Val><![CDATA['{0}' solo have referencia a un tipo, pero aquí se usa como espacio de nombres.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18379,7 +18379,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' only refers to a type, but is being used as a value here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' solo hace referencia a un tipo, pero aquí se usa como valor.]]></Val>
+            <Val><![CDATA['{0}' solo have referencia a un tipo, pero aquí se usa como valor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18388,7 +18388,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["{0}" solo hace referencia a un tipo, pero aquí se usa como valor. ¿Pretendía usar "{1} en {0}"?]]></Val>
+            <Val><![CDATA["{0}" solo have referencia a un tipo, pero aquí se usa como valor. ¿Pretendía usar "{1} en {0}"?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18397,7 +18397,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["{0}" solo hace referencia a un tipo, pero aquí se usa como valor. ¿Necesita cambiar la biblioteca de destino? Pruebe a cambiar la opción del compilador "lib" a es2015 o posterior.]]></Val>
+            <Val><![CDATA["{0}" solo have referencia a un tipo, pero aquí se usa como valor. ¿Necesita cambiar la biblioteca de destino? Pruebe a cambiar la opción del compilador "lib" a es2015 o posterior.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.]]></Val>
@@ -18409,7 +18409,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' refers to a UMD global, but the current file is a module. Consider adding an import instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' hace referencia a un elemento UMD global, pero el archivo actual es un módulo. Puede agregar una importación en su lugar.]]></Val>
+            <Val><![CDATA['{0}' have referencia a un elemento UMD global, pero el archivo actual es un módulo. Puede agregar una importación en su lugar.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18418,7 +18418,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["{0}" hace referencia a un valor, pero aquí se usa como tipo. ¿Quiso decir "typeof {0}"?]]></Val>
+            <Val><![CDATA["{0}" have referencia a un valor, pero aquí se usa como tipo. ¿Quiso decir "typeof {0}"?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18757,7 +18757,7 @@
         <Str Cat="Text">
           <Val><![CDATA[const enum member initializers must be constant expressions.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Los inicializadores de miembro de enumeración const deben ser expresiones constantes.]]></Val>
+            <Val><![CDATA[Los inicializadores de miembro de enumeración const deben set expresiones constantes.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18832,7 +18832,7 @@
         <Str Cat="Text">
           <Val><![CDATA['export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El modificador 'export' no se puede aplicar a módulos de ambiente ni aumentos de módulos, porque siempre están visibles.]]></Val>
+            <Val><![CDATA[El modificador 'export' no se puede aplicar a módulos de ambiente ni aumentos de módulos, porque siempre están visible.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19120,7 +19120,7 @@
         <Str Cat="Text">
           <Val><![CDATA['package.json' has '{0}' field '{1}' that references '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['package.json' tiene el campo '{1}' de '{0}' que hace referencia a '{2}'.]]></Val>
+            <Val><![CDATA['package.json' tiene el campo '{1}' de '{0}' que have referencia a '{2}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19201,7 +19201,7 @@
         <Str Cat="Text">
           <Val><![CDATA['\q' is only available inside character class.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[“\q” solo está disponible dentro de la clase de caracteres.]]></Val>
+            <Val><![CDATA[“\q” solo está disponible dentro de la clase de characters.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19273,7 +19273,7 @@
         <Str Cat="Text">
           <Val><![CDATA[`resolution-mode` should be either `require` or `import`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["modo de resolución" debe ser "requerir" o "importar".]]></Val>
+            <Val><![CDATA["modo de resolución" debe set "requerir" o "importar".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19321,7 +19321,7 @@
         <Str Cat="Text">
           <Val><![CDATA['super' cannot be referenced in constructor arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se puede hacer referencia a "super" en argumentos de constructor.]]></Val>
+            <Val><![CDATA[No se puede hacer referencia a "super" en arguments de constructor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19339,7 +19339,7 @@
         <Str Cat="Text">
           <Val><![CDATA['super' may not use type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["super" no puede usar argumentos de tipo.]]></Val>
+            <Val><![CDATA["super" no puede usar arguments de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19366,7 +19366,7 @@
         <Str Cat="Text">
           <Val><![CDATA['super' must be followed by an argument list or member access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["super" debe estar seguido de una lista de argumentos o un acceso a miembros.]]></Val>
+            <Val><![CDATA["super" debe estar seguido de una lista de arguments o un acceso a miembros.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19393,7 +19393,7 @@
         <Str Cat="Text">
           <Val><![CDATA['this' cannot be referenced in a module or namespace body.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se puede hace referencia a "this" en el cuerpo de un módulo o de un espacio de nombres.]]></Val>
+            <Val><![CDATA[No se puede have referencia a "this" en el cuerpo de un módulo o de un espacio de nombres.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19465,7 +19465,7 @@
         <Str Cat="Text">
           <Val><![CDATA[tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[tsconfig.json está presente, pero no se cargará si se especifican archivos en la línea de comandos. Use '--ignoreConfig' para omitir este error.]]></Val>
+            <Val><![CDATA[tsconfig.json está presente, pero no se cargará si se especifican archivos en la línea de commandos. Use '--ignoreConfig' para omitir este error.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

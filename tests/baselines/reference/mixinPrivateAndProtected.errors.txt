@@ -28,20 +28,20 @@ mixinPrivateAndProtected.ts(85,2): error TS2564: Property 'accountBalance' has n
     
     class A {
         public pb: number = 2;
-        protected ptd: number = 1;
+        protected pdf: number = 1;
         private pvt: number = 0;
     }
     
     function mixB<T extends Constructor<{}>>(Cls: T) {
         return class extends Cls {
-            protected ptd: number = 10;
+            protected pdf: number = 10;
             private pvt: number = 0;
         };
     }
     
     function mixB2<T extends Constructor<A>>(Cls: T) {
         return class extends Cls {
-            protected ptd: number = 10;
+            protected pdf: number = 10;
         };
     }
     
@@ -51,7 +51,7 @@ mixinPrivateAndProtected.ts(85,2): error TS2564: Property 'accountBalance' has n
     
     function mixC<T extends Constructor<{}>>(Cls: T) {
         return class extends Cls {
-            protected ptd: number = 100;
+            protected pdf: number = 100;
             private pvt: number = 0;
         };
     }
@@ -67,7 +67,7 @@ mixinPrivateAndProtected.ts(85,2): error TS2564: Property 'accountBalance' has n
         ab2c = new AB2C();
     
     a.pb.toFixed();
-    a.ptd.toFixed();    // Error
+    a.pdf.toFixed();    // Error
       ~~~
 !!! error TS2445: Property 'ptd' is protected and only accessible within class 'A' and its subclasses.
     a.pvt.toFixed();    // Error
@@ -78,7 +78,7 @@ mixinPrivateAndProtected.ts(85,2): error TS2564: Property 'accountBalance' has n
        ~~
 !!! error TS2339: Property 'pb' does not exist on type 'never'.
 !!! error TS2339:   The intersection 'mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-    ab.ptd.toFixed();   // Error
+    ab.pdf.toFixed();   // Error
        ~~~
 !!! error TS2339: Property 'ptd' does not exist on type 'never'.
 !!! error TS2339:   The intersection 'mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
@@ -91,7 +91,7 @@ mixinPrivateAndProtected.ts(85,2): error TS2564: Property 'accountBalance' has n
         ~~
 !!! error TS2339: Property 'pb' does not exist on type 'never'.
 !!! error TS2339:   The intersection 'mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-    abc.ptd.toFixed();  // Error
+    abc.pdf.toFixed();  // Error
         ~~~
 !!! error TS2339: Property 'ptd' does not exist on type 'never'.
 !!! error TS2339:   The intersection 'mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
@@ -104,7 +104,7 @@ mixinPrivateAndProtected.ts(85,2): error TS2564: Property 'accountBalance' has n
          ~~
 !!! error TS2339: Property 'pb' does not exist on type 'never'.
 !!! error TS2339:   The intersection 'mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
-    ab2c.ptd.toFixed(); // Error
+    ab2c.pdf.toFixed(); // Error
          ~~~
 !!! error TS2339: Property 'ptd' does not exist on type 'never'.
 !!! error TS2339:   The intersection 'mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.

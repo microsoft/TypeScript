@@ -171,7 +171,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                 command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                 arguments: { file: moduleFile1.path, projectFileName: configFile.path },
             });
-            baselineTsserverLogs("compileOnSave", "configProjects uptodate with reference map changes", session);
+            baselineTsserverLogs("compileOnSave", "configProjects up-to-date with reference map changes", session);
         });
 
         it("should be up-to-date with changes made in non-open files", () => {
@@ -204,7 +204,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                 command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                 arguments: { file: moduleFile1.path, projectFileName: configFile.path },
             });
-            baselineTsserverLogs("compileOnSave", "configProjects uptodate with changes in non open files", session);
+            baselineTsserverLogs("compileOnSave", "configProjects up-to-date with changes in non open files", session);
         });
 
         it("should be up-to-date with deleted files", () => {
@@ -235,7 +235,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                 command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                 arguments: { file: moduleFile1.path, projectFileName: configFile.path },
             });
-            baselineTsserverLogs("compileOnSave", "configProjects uptodate with deleted files", session);
+            baselineTsserverLogs("compileOnSave", "configProjects up-to-date with deleted files", session);
         });
 
         it("should be up-to-date with newly created files", () => {
@@ -270,7 +270,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                 command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                 arguments: { file: moduleFile1.path, projectFileName: configFile.path },
             });
-            baselineTsserverLogs("compileOnSave", "configProjects uptodate with new files", session);
+            baselineTsserverLogs("compileOnSave", "configProjects up-to-date with new files", session);
         });
 
         it("should detect changes in non-root files", () => {
@@ -784,7 +784,7 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
         baselineTsserverLogs("compileOnSave", "emit specified file", session);
     });
 
-    it("shoud not emit js files in external projects", () => {
+    it("should not emit js files in external projects", () => {
         const file1 = {
             path: "/home/src/workspace/projects/b/file1.ts",
             content: "consonle.log('file1');",
@@ -851,7 +851,7 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
         it("with rich Response set to false", () => {
             verify(/*richResponse*/ false);
         });
-        it("with rich Repsonse", () => {
+        it("with rich Response", () => {
             verify(/*richResponse*/ true);
         });
 

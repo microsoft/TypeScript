@@ -10,7 +10,7 @@ class Derived extends Base { private b: string; }
 >Base : Symbol(Base, Decl(baseIndexSignatureResolution.ts, 0, 0))
 >b : Symbol(Derived.b, Decl(baseIndexSignatureResolution.ts, 1, 28))
 
-// Note - commmenting "extends Foo" prevents the error
+// Note - commenting "extends Foo" prevents the error
 interface Foo {
 >Foo : Symbol(Foo, Decl(baseIndexSignatureResolution.ts, 1, 49))
 

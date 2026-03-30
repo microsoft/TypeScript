@@ -13,7 +13,7 @@ const aDefault2 = [0];
 /** @type {A<string>} */ // ok, `T` is provided for `A`
 const aString = [""];
 /** @type {A<number>} */ // ok, `T` is provided for `A`
-const aNumber = [0];
+const a number = [0];
 
 /**
  * @template T
@@ -81,7 +81,7 @@ const aDefault2 = [0];
 /** @type {A<string>} */ // ok, `T` is provided for `A`
 const aString = [""];
 /** @type {A<number>} */ // ok, `T` is provided for `A`
-const aNumber = [0];
+const a number = [0];
 /**
  * @template T
  * @template [U=T] - ok: default can reference earlier type parameter
@@ -180,7 +180,7 @@ declare function f3<T = U, U = T>(a: T, b: U): void;
 /** @type {A} */ declare const aDefault1: A;
 /** @type {A} */ declare const aDefault2: A;
 /** @type {A<string>} */ declare const aString: A<string>;
-/** @type {A<number>} */ declare const aNumber: A<number>;
+/** @type {A<number>} */ declare const a number: A<number>;
 type B<T, U = T> = [T, U];
 type C<T extends string | number = any> = [T];
 type D<T extends string | number = any> = [T];

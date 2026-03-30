@@ -890,7 +890,7 @@ declare namespace ts {
                 kind: HighlightSpanKind;
             }
             /**
-             * Represents a set of highligh spans for a give name
+             * Represents a set of highlight spans for a give name
              */
             export interface DocumentHighlightsItem {
                 /**
@@ -1852,7 +1852,7 @@ declare namespace ts {
                 includeLinePosition?: boolean;
             }
             /**
-             * Response object for synchronous sematic diagnostics request.
+             * Response object for synchronous semantic diagnostics request.
              */
             export interface SemanticDiagnosticsSyncResponse extends Response {
                 body?: Diagnostic[] | DiagnosticWithLinePosition[];
@@ -2051,7 +2051,7 @@ declare namespace ts {
             }
             export interface ConfigFileDiagnosticEventBody {
                 /**
-                 * The file which trigged the searching and error-checking of the config file
+                 * The file which triggered the searching and error-checking of the config file
                  */
                 triggerFile: string;
                 /**
@@ -5945,7 +5945,7 @@ declare namespace ts {
          *
          * Note that this field is only set by the module resolution process when
          * `moduleResolution` is `Node16` or `NodeNext`, which is implied by the `module` setting
-         * of `Node16` or `NodeNext`, respectively, but may be overriden (eg, by a `moduleResolution`
+         * of `Node16` or `NodeNext`, respectively, but may be overridden (eg, by a `moduleResolution`
          * of `node`). If so, this field will be unset and source files will be considered to be
          * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
          */
@@ -9659,7 +9659,7 @@ declare namespace ts {
     function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): EmitAndSemanticDiagnosticsBuilderProgram;
     function createEmitAndSemanticDiagnosticsBuilderProgram(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): EmitAndSemanticDiagnosticsBuilderProgram;
     /**
-     * Creates a builder thats just abstraction over program and can be used with watch
+     * Creates a builder that's just abstraction over program and can be used with watch
      */
     function createAbstractBuilder(newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): BuilderProgram;
     function createAbstractBuilder(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): BuilderProgram;
@@ -9829,12 +9829,12 @@ declare namespace ts {
         createHash?(data: string): string;
         /**
          * Use to check file presence for source files and
-         * if resolveModuleNames is not provided (complier is in charge of module resolution) then module files as well
+         * if resolveModuleNames is not provided (compiler is in charge of module resolution) then module files as well
          */
         fileExists(path: string): boolean;
         /**
          * Use to read file text for source files and
-         * if resolveModuleNames is not provided (complier is in charge of module resolution) then module files as well
+         * if resolveModuleNames is not provided (compiler is in charge of module resolution) then module files as well
          */
         readFile(path: string, encoding?: string): string | undefined;
         /** If provided, used for module resolution as well as to handle directory structure */
@@ -9903,7 +9903,7 @@ declare namespace ts {
         extraFileExtensions?: readonly FileExtensionInfo[];
         /**
          * Used to generate source file names from the config file and its include, exclude, files rules
-         * and also to cache the directory stucture
+         * and also to cache the directory structure
          */
         readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
     }
@@ -9926,7 +9926,7 @@ declare namespace ts {
         updateRootFileNames(fileNames: string[]): void;
     }
     /**
-     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     * Create a function that reports watch status by writing to the system and handles the formatting of the diagnostic
      */
     function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter;
     function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system?: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary): SolutionBuilderHost<T>;
@@ -10015,7 +10015,7 @@ declare namespace ts {
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
     }
     type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T>;
-    /** Returns true if commandline is --build and needs to be parsed useing parseBuildCommand */
+    /** Returns true if commandline is --build and needs to be parsed using parseBuildCommand */
     function isBuildCommand(commandLineArgs: readonly string[]): boolean;
     function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;
     /**
@@ -10125,7 +10125,7 @@ declare namespace ts {
         /**
          * Gets errors indicating invalid syntax in a file.
          *
-         * In English, "this cdeo have, erorrs" is syntactically invalid because it has typos,
+         * In English, "this cdeo have, errors" is syntactically invalid because it has typos,
          * grammatical errors, and misplaced punctuation. Likewise, examples of syntax
          * errors in TypeScript are missing parentheses in an `if` statement, mismatched
          * curly braces, and using a reserved keyword as a variable name.
@@ -10818,7 +10818,7 @@ declare namespace ts {
         displayName: string;
         /**
          * Full display name of item to be renamed.
-         * If item to be renamed is a file, then this is the original text of the module specifer
+         * If item to be renamed is a file, then this is the original text of the module specifier
          */
         fullDisplayName: string;
         kind: ScriptElementKind;
@@ -10969,7 +10969,7 @@ declare namespace ts {
          */
         replacementSpan?: TextSpan;
         /**
-         * Indicates whether commiting this completion entry will require additional code actions to be
+         * Indicates whether committing this completion entry will require additional code actions to be
          * made to avoid errors. The CompletionEntryDetails will have these actions.
          */
         hasAction?: true;

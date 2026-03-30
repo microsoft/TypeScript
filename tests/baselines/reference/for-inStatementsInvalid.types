@@ -1,12 +1,12 @@
 //// [tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts] ////
 
 === for-inStatementsInvalid.ts ===
-var aNumber: number;
->aNumber : number
+var a number: number;
+>a number : number
 >        : ^^^^^^
 
-for (aNumber in {}) { }
->aNumber : number
+for (a number in {}) { }
+>a number : number
 >        : ^^^^^^
 >{} : {}
 >   : ^^

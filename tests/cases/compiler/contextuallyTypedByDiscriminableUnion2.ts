@@ -9,7 +9,7 @@ type Identifiable = { id: string };
 interface EnableA {
   readonly enableA: true;
   // this introduces a conflicting property with some of the other members of MyComponentProps
-  // making relevant final union members reduced nevers
+  // making relevant final union members reduced never
   readonly enableB: true;
 }
 

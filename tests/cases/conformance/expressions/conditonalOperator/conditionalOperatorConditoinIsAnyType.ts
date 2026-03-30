@@ -39,7 +39,7 @@ x("x") ? exprString1 : exprString2;
 x.doSomeThing() ? exprIsObject1 : exprIsObject2;
 x.doSomeThing() ? exprString1 : exprBoolean1; // union
 
-//Results shoud be same as Expr1 and Expr2
+//Results should be same as Expr1 and Expr2
 var resultIsAny1 = condAny ? exprAny1 : exprAny2;
 var resultIsBoolean1 = condAny ? exprBoolean1 : exprBoolean2;
 var resultIsNumber1 = condAny ? exprNumber1 : exprNumber2;

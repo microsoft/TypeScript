@@ -591,19 +591,19 @@ class SessionServerHost implements ts.server.ServerHost {
     }
 
     setTimeout(_callback: (...args: any[]) => void, _ms: number, ..._args: any[]): any {
-        // Currently none of the tests use this and we would want something thats deterministic like unittests where we tell which callbacks to invoke
+        // Currently none of the tests use this and we would want something that's deterministic like unittests where we tell which callbacks to invoke
     }
 
     clearTimeout(_timeoutId: any): void {
-        // Currently none of the tests use this and we would want something thats deterministic like unittests where we tell which callbacks to invoke
+        // Currently none of the tests use this and we would want something that's deterministic like unittests where we tell which callbacks to invoke
     }
 
     setImmediate(_callback: (...args: any[]) => void, ..._args: any[]): any {
-        // Currently none of the tests use this and we would want something thats deterministic like unittests where we tell which callbacks to invoke
+        // Currently none of the tests use this and we would want something that's deterministic like unittests where we tell which callbacks to invoke
     }
 
     clearImmediate(_timeoutId: any): void {
-        // Currently none of the tests use this and we would want something thats deterministic like unittests where we tell which callbacks to invoke
+        // Currently none of the tests use this and we would want something that's deterministic like unittests where we tell which callbacks to invoke
     }
 
     createHash(s: string) {

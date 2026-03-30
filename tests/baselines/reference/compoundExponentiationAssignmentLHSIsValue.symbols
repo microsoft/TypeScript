@@ -136,7 +136,7 @@ foo() **= value;
 >foo : Symbol(foo, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 14, 1))
 >value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))
 
-// parentheses, the containted expression is value
+// parentheses, the contained expression is value
 (this) **= value;
 >this : Symbol(globalThis)
 >value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsValue.ts, 1, 3))

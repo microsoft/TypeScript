@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/commentInMethodCall.ts] ////
 
 //// [commentInMethodCall.ts]
-//commment here
+//comment here
 var s: string[];
 s.map(// do something
     function () { });
@@ -9,7 +9,7 @@ s.map(// do something
 
 //// [commentInMethodCall.js]
 "use strict";
-//commment here
+//comment here
 var s;
 s.map(// do something
 function () { });

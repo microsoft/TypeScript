@@ -82,7 +82,7 @@ registerCodeFix({
 
 function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBase, errorCode: number): { node: Node; suggestedSymbol: Symbol; } | undefined {
     // This is the identifier of the misspelled word. eg:
-    // this.speling = 1;
+    // this.spelling = 1;
     //      ^^^^^^^
     const node = getTokenAtPosition(sourceFile, pos);
     const parent = node.parent;

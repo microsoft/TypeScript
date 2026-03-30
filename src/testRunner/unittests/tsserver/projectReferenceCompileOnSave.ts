@@ -269,7 +269,7 @@ fn2();
                     command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path },
                 });
-                baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and change to depenedency", session);
+                baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and change to dependency", session);
             });
             it("with change to dependency, with specifying project file", () => {
                 const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
@@ -299,7 +299,7 @@ fn2();
                     command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path },
                 });
-                baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and change to depenedency", session);
+                baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and change to dependency", session);
             });
             it("with change to usage, without specifying project file", () => {
                 const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);
@@ -721,7 +721,7 @@ fn2();
         });
     });
 
-    describe("when the depedency file is open", () => {
+    describe("when the dependency file is open", () => {
         describe("Of usageTs", () => {
             it("with initial file open, without specifying project file", () => {
                 const host = TestServerHost.createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig]);

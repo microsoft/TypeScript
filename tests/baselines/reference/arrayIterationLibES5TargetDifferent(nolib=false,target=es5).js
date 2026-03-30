@@ -13,9 +13,9 @@ for (const x of aString) {
     log(x);
 }
 
-declare const aNumber: number;
+declare const a number: number;
 
-for (const x of aNumber) {
+for (const x of a number) {
     log(x);
 }
 
@@ -35,7 +35,7 @@ for (var _b = 0, aString_1 = aString; _b < aString_1.length; _b++) {
     var x = aString_1[_b];
     log(x);
 }
-for (var _c = 0, aNumber_1 = aNumber; _c < aNumber_1.length; _c++) {
+for (var _c = 0, aNumber_1 = a number; _c < aNumber_1.length; _c++) {
     var x = aNumber_1[_c];
     log(x);
 }

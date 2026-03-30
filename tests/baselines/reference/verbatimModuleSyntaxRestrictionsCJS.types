@@ -9,8 +9,8 @@ export default esmy;
 >esmy : () => void
 >     : ^^^^^^    
 
-export declare function funciton(): void;
->funciton : () => void
+export declare function function(): void;
+>function : () => void
 >         : ^^^^^^    
 
 === /ambient.d.ts ===
@@ -36,12 +36,12 @@ import * as esmy2 from "./decl"; // error
 >esmy2 : typeof esmy2
 >      : ^^^^^^^^^^^^
 
-import { funciton } from "./decl"; // error
->funciton : () => void
+import { function } from "./decl"; // error
+>function : () => void
 >         : ^^^^^^    
 
-import type { funciton as funciton2 } from "./decl"; // ok I guess?
->funciton : () => void
+import type { function as funciton2 } from "./decl"; // ok I guess?
+>function : () => void
 >         : ^^^^^^    
 >funciton2 : any
 >          : ^^^

@@ -148,7 +148,7 @@ export interface MyType<T = any> extends Function {
 
 
 //// [D:/Work/pkg1/dist/src/utils/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/utils/index.ts"],"names":[],"mappings":";;AAEA,kCAMC;AAND,SAAgB,WAAW,CAAI,QAAmB;IAC9C,MAAe,gBAAgB;QAC3B,gBAAe,CAAC;KACnB;IAED,OAAO,gBAAgC,CAAC;AAC5C,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/utils/index.ts"],"names":[],"mappings":";;AAEA,kCAMC;AND,SAAgB,WAAW,CAAI,QAAmB;IAC9C,MAAe,gBAAgB;QAC3B,gBAAe,CAAC;KACnB;IAED,OAAO,gBAAgC,CAAC;AAC5C,CAAC"}
 
 //// [D:/Work/pkg1/dist/src/utils/index.js]
 "use strict";

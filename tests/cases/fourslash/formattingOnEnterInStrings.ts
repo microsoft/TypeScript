@@ -6,5 +6,5 @@ goTo.marker("2");
 edit.insertLine("");
 edit.insertLine("");
 goTo.marker("1");
-// Enter in open string literals should not affect formating
+// Enter in open string literals should not affect formatting
 verify.currentLineContentIs('var x = "unclosed string literal\\');

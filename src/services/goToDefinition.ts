@@ -147,7 +147,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
     }
 
-    // for switch statments
+    // for switch statements
     switch (node.kind) {
         case SyntaxKind.DefaultKeyword:
             if (!isDefaultClause(node.parent)) {

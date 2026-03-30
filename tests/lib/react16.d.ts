@@ -603,7 +603,7 @@ declare module "react" {
 
         interface Mixin<P, S> extends ComponentLifecycle<P, S> {
             mixins?: Array<Mixin<P, S>>;
-            statics?: {
+            statistics?: {
                 [key: string]: any;
             };
 

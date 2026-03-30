@@ -24,8 +24,8 @@ class Classe {
     non = 'oui'
 >non : Symbol(Classe.non, Decl(spellingUncheckedJS.js, 11, 14))
 
-    methode() {
->methode : Symbol(Classe.methode, Decl(spellingUncheckedJS.js, 12, 15))
+    method() {
+>method : Symbol(Classe.method, Decl(spellingUncheckedJS.js, 12, 15))
 
         // no error on 'this' references
         return this.none
@@ -36,8 +36,8 @@ class Derivee extends Classe {
 >Derivee : Symbol(Derivee, Decl(spellingUncheckedJS.js, 17, 1))
 >Classe : Symbol(Classe, Decl(spellingUncheckedJS.js, 10, 1))
 
-    methode() {
->methode : Symbol(Derivee.methode, Decl(spellingUncheckedJS.js, 18, 30))
+    method() {
+>method : Symbol(Derivee.method, Decl(spellingUncheckedJS.js, 18, 30))
 
         // no error on 'super' references
         return super.none

@@ -2,7 +2,7 @@
 
 //// [declarationEmitSimpleComputedNames1.ts]
 export const fieldName = Math.random() > 0.5 ? "f1" : "f2";
-export const conatainer = {
+export const container = {
     [fieldName]() {
         return "result";
     }
@@ -36,9 +36,9 @@ export const instanceLookup = (new Holder())["some" + "thing"];
 //// [declarationEmitSimpleComputedNames1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.instanceLookup = exports.staticLookup = exports.Holder = exports.conatainer = exports.fieldName = void 0;
+exports.instanceLookup = exports.staticLookup = exports.Holder = exports.container = exports.fieldName = void 0;
 exports.fieldName = Math.random() > 0.5 ? "f1" : "f2";
-exports.conatainer = {
+exports.container = {
     [exports.fieldName]() {
         return "result";
     }
@@ -70,7 +70,7 @@ exports.instanceLookup = (new Holder())["some" + "thing"];
 
 //// [declarationEmitSimpleComputedNames1.d.ts]
 export declare const fieldName: string;
-export declare const conatainer: {
+export declare const container: {
     [fieldName]: () => string;
 };
 declare const classFieldName: string;

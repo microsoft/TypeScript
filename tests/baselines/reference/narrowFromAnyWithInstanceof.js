@@ -17,7 +17,7 @@ if (x instanceof Object) { // 'any' is not narrowed when target type is 'Object'
 
 if (x instanceof Error) { // 'any' is narrowed to types other than 'Function'/'Object'
     x.message;
-    x.mesage;
+    x.message;
 }
 
 if (x instanceof Date) {
@@ -40,7 +40,7 @@ if (x instanceof Object) { // 'any' is not narrowed when target type is 'Object'
 }
 if (x instanceof Error) { // 'any' is narrowed to types other than 'Function'/'Object'
     x.message;
-    x.mesage;
+    x.message;
 }
 if (x instanceof Date) {
     x.getDate();

@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/forIn.ts] ////
+//// [tests/cases/compiler/foreign.ts] ////
 
-//// [forIn.ts]
+//// [foreign.ts]
 var arr = null;
 for (var i:number in arr) { // error
     var x1 = arr[i];
@@ -23,7 +23,7 @@ for (var l in arr) {
    k[l] = 1;
 }
 
-//// [forIn.js]
+//// [foreign.js]
 "use strict";
 var arr = null;
 for (var i in arr) { // error

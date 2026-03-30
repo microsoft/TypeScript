@@ -15,13 +15,13 @@ function f() {
 }
 class Classe {
     non = 'oui'
-    methode() {
+    method() {
         // no error on 'this' references
         return this.none
     }
 }
 class Derivee extends Classe {
-    methode() {
+    method() {
         // no error on 'super' references
         return super.none
     }

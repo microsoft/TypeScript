@@ -29,12 +29,12 @@ class C {
         rest.#prop;
 >rest : Symbol(rest, Decl(privateNameAndObjectRestSpread.ts, 7, 15))
 
-        const statics = { ... C};
->statics : Symbol(statics, Decl(privateNameAndObjectRestSpread.ts, 10, 13))
+        const statistics = { ... C};
+>statistics : Symbol(statistics, Decl(privateNameAndObjectRestSpread.ts, 10, 13))
 >C : Symbol(C, Decl(privateNameAndObjectRestSpread.ts, 0, 0))
 
-        statics.#propStatic
->statics : Symbol(statics, Decl(privateNameAndObjectRestSpread.ts, 10, 13))
+        statistics.#propStatic
+>statistics : Symbol(statistics, Decl(privateNameAndObjectRestSpread.ts, 10, 13))
 
         const { ...sRest } = C;
 >sRest : Symbol(sRest, Decl(privateNameAndObjectRestSpread.ts, 12, 15))

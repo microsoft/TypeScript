@@ -2,7 +2,7 @@
 // @strict: false
 // Unary operator typeof
 
-// opreand before typeof
+// operand before typeof
 var ANY = ANY typeof ;    //expect error
 
 // miss an operand

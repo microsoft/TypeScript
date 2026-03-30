@@ -419,7 +419,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         basePath: "/foo.bar",
     }]);
 
-    baselineWildcards("correctly parses wild card directories from implicit glob when two keys differ only in directory seperator", () => [{
+    baselineWildcards("correctly parses wild card directories from implicit glob when two keys differ only in directory separator", () => [{
         configFileName: "/foo.bar/tsconfig.json",
         jsonText: jsonToReadableText({
             include: ["./", "./**/*.json"],

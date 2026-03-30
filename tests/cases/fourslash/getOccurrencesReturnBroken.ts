@@ -15,7 +15,7 @@
 ////        })() || true;
 ////    }
 ////
-////    var unusued = [1, 2, 3, 4].map(x => { return 4 })
+////    var unused = [1, 2, 3, 4].map(x => { return 4 })
 ////
 ////    return;
 ////    return true;

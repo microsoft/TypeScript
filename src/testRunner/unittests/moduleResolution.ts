@@ -70,7 +70,7 @@ describe("unittests:: moduleResolution:: Node module resolution - relative paths
         const baselines: string[] = [];
         testLoadAsFile("load as file with relative name in current directory", "/foo/bar/baz.ts", "/foo/bar/foo", "./foo");
         testLoadAsFile("load as file with relative name in parent directory", "/foo/bar/baz.ts", "/foo/foo", "../foo");
-        testLoadAsFile("load as file with name starting with directory seperator", "/foo/bar/baz.ts", "/foo", "/foo");
+        testLoadAsFile("load as file with name starting with directory separator", "/foo/bar/baz.ts", "/foo", "/foo");
         testLoadAsFile("load as file with name starting with window root", "c:/foo/bar/baz.ts", "c:/foo", "c:/foo");
         runBaseline("relative module name as file", baselines);
         function testLoadAsFile(scenario: string, containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {

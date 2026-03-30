@@ -24,7 +24,7 @@ type T = number;
 foo<T>();
 
 // @Filename: /new.ts
-import { Foo } from "unkown";
+import { Foo } from "unknown";
 type T = number;
 new Foo<T>();
 

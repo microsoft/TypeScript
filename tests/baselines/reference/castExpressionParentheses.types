@@ -285,7 +285,7 @@ new (<any>A());
 >x : any
 >  : ^^^
 
-// nested cast, should keep one pair of parenthese
+// nested cast, should keep one pair of parentheses
 (<any><number>(<any>-A)).x; 
 >(<any><number>(<any>-A)).x : any
 >(<any><number>(<any>-A)) : any
@@ -301,7 +301,7 @@ new (<any>A());
 >x : any
 >  : ^^^
 
-// nested parenthesized expression, should keep one pair of parenthese
+// nested parenthesized expression, should keep one pair of parentheses
 (<any>(A)) 
 >(<any>(A)) : any
 ><any>(A) : any

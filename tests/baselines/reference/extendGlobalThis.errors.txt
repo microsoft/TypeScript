@@ -11,7 +11,7 @@ index.ts(1,8): error TS2882: Cannot find module or type declarations for side-ef
     export {}
     
 ==== index.ts (1 errors) ====
-    import "./extention";
+    import "./extension";
            ~~~~~~~~~~~~~
 !!! error TS2882: Cannot find module or type declarations for side-effect import of './extention'.
     

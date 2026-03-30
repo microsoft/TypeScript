@@ -305,7 +305,7 @@ function createDynamicPriorityPollingWatchFile(host: {
         // Finally do the actual polling of the queue
         pollPollingIntervalQueue(_timeoutType, queue);
         // Schedule poll if there are files in changedFilesInLastPoll but no files in the actual queue
-        // as pollPollingIntervalQueue wont schedule for next poll
+        // as pollPollingIntervalQueue won't schedule for next poll
         if (!queue.pollScheduled && changedFilesInLastPoll.length) {
             scheduleNextPoll(PollingInterval.Low);
         }
@@ -512,7 +512,7 @@ function createSingleWatcherPerName<T extends FileWatcherCallback | FsWatchCallb
         cache.set(path, {
             watcher: createWatcher(
                 (
-                    // Cant infer types correctly so lets satisfy checker
+                    // Can't infer types correctly so lets satisfy checker
                     (param1: any, param2: never, param3: any) => cache.get(path)?.callbacks.slice().forEach(cb => cb(param1, param2, param3))
                 ) as T,
             ),
@@ -835,7 +835,7 @@ function createDirectoryWatcherSupportingRecursive({
             hasChanges = enumerateInsertsAndDeletes<string, ChildDirectoryWatcher>(
                 fileSystemEntryExists(parentDir, FileSystemEntryKind.Directory) ? mapDefined(getAccessibleSortedChildDirectories(parentDir), child => {
                     const childFullName = getNormalizedAbsolutePath(child, parentDir);
-                    // Filter our the symbolic link directories since those arent included in recursive watch
+                    // Filter our the symbolic link directories since those aren't included in recursive watch
                     // which is same behaviour when recursive: true is passed to fs.watch
                     return !isIgnoredPath(childFullName, options) && filePathComparer(childFullName, normalizePath(realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
                 }) : emptyArray,
@@ -1287,7 +1287,7 @@ export function createSystemWatchFunctions({
             // In some scenarios, file save operation fires event with fileName.ext~ instead of fileName.ext
             // To ensure we see the file going missing and coming back up (file delete and then recreated)
             // and watches being updated correctly we are calling back with fileName.ext as well as fileName.ext~
-            // The worst is we have fired event that was not needed but we wont miss any changes
+            // The worst is we have fired event that was not needed but we won't miss any changes
             // especially in cases where file goes missing and watches wrong inode
             let originalRelativeName: string | undefined;
             if (relativeName && endsWith(relativeName, "~")) {
@@ -1724,7 +1724,7 @@ export let sys: System = (() => {
             if (platform === "win32" || platform === "win64") {
                 return false;
             }
-            // If this file exists under a different case, we must be case-insensitve.
+            // If this file exists under a different case, we must be case-insensitive.
             return !fileExists(swapCase(__filename));
         }
 
@@ -1744,7 +1744,7 @@ export let sys: System = (() => {
             };
 
             function fileChanged(curr: import("fs").Stats, prev: import("fs").Stats) {
-                // previous event kind check is to ensure we recongnize the file as previously also missing when it is restored or renamed twice (that is it disappears and reappears)
+                // previous event kind check is to ensure we recognize the file as previously also missing when it is restored or renamed twice (that is it disappears and reappears)
                 // In such case, prevTime returned is same as prev time of event when file was deleted as per node documentation
                 const isPreviouslyDeleted = +prev.mtime === 0 || eventKind === FileWatcherEventKind.Deleted;
                 if (+curr.mtime === 0) {

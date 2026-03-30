@@ -119,8 +119,8 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
         baseline.push("Dependencies for::");
         for (const file of builderProgram.getSourceFiles()) {
             baseline.push(`${file.fileName}:`);
-            for (const depenedency of builderProgram.getAllDependencies(file)) {
-                baseline.push(`  ${depenedency}`);
+            for (const dependency of builderProgram.getAllDependencies(file)) {
+                baseline.push(`  ${dependency}`);
             }
         }
     }

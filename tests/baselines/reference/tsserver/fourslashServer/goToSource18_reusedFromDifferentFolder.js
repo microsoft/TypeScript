@@ -48,7 +48,7 @@ export declare function command(command: string, cb: (yargs: Yargs) => void): vo
 export class Yargs { positional() { } }
 
 //// [/home/src/workspaces/project/node_modules/yargs/index.js]
-// Specifically didnt have ./callback import to ensure that resolving module sepcifier adds the file to project at later stage
+// Specifically didn't have ./callback import to ensure that resolving module specifier adds the file to project at later stage
 export function command(cmd, cb) { cb(Yargs) }
 
 //// [/home/src/workspaces/project/node_modules/yargs/package.json]
@@ -396,7 +396,7 @@ Info seq  [hh:mm:ss:mss] Project '/dev/null/auxiliaryProject1*' (Auxiliary)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/workspaces/project/node_modules/yargs/callback.js Text-1 "export class Yargs { positional() { } }"
 	/home/src/workspaces/project/folder/random.ts Text-1 "import { Yargs } from \"yargs/callback\";"
-	/home/src/workspaces/project/node_modules/yargs/index.js Text-1 "// Specifically didnt have ./callback import to ensure that resolving module sepcifier adds the file to project at later stage\nexport function command(cmd, cb) { cb(Yargs) }"
+	/home/src/workspaces/project/node_modules/yargs/index.js Text-1 "// Specifically didn't have ./callback import to ensure that resolving module specifier adds the file to project at later stage\nexport function command(cmd, cb) { cb(Yargs) }"
 	/home/src/workspaces/project/some/index.ts SVC-1-0 "import { random } from \"../folder/random\";\nimport { command } from \"yargs\";\ncommand(\"foo\", yargs => {\n    yargs.positional();\n});"
 
 

@@ -36,7 +36,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A '{0}' parameter must be the first parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bir '{0}' parametresi ilk parametre olmalıdır.]]></Val>
+            <Val><![CDATA[Bir '{0}' parametresi ilk parameter olmalıdır.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -639,7 +639,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A parameter initializer is only allowed in a function or constructor implementation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametre başlatıcısına yalnızca bir işlevde veya oluşturucu uygulamasında izin verilir.]]></Val>
+            <Val><![CDATA[Parameter başlatıcısına yalnızca bir işlevde veya oluşturucu uygulamasında izin verilir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -648,7 +648,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A parameter property cannot be declared using a rest parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametre özelliği, rest parametresi kullanılarak bildirilemez.]]></Val>
+            <Val><![CDATA[Parameter özelliği, rest parametresi kullanılarak bildirilemez.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -657,7 +657,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A parameter property is only allowed in a constructor implementation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametre özelliğine yalnızca bir oluşturucu uygulamasında izin verilir.]]></Val>
+            <Val><![CDATA[Parameter özelliğine yalnızca bir oluşturucu uygulamasında izin verilir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -666,7 +666,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A parameter property may not be declared using a binding pattern.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametre özelliği, bağlama deseni kullanılarak bildirilemez.]]></Val>
+            <Val><![CDATA[Parameter özelliği, bağlama deseni kullanılarak bildirilemez.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -711,7 +711,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A required parameter cannot follow an optional parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Gerekli parametre, isteğe bağlı parametreden sonra gelemez.]]></Val>
+            <Val><![CDATA[Gerekli parameter, isteğe bağlı parametreden sonra gelemez.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -795,7 +795,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter must be last in a parameter list.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[rest parametresi, parametre listesinin sonunda bulunmalıdır.]]></Val>
+            <Val><![CDATA[rest parametresi, parameter listesinin sonunda bulunmalıdır.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -903,7 +903,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['super' çağrısı, başlatılmış özellikleri, parametre özelliklerini veya özel tanımlayıcıları içeren türetilmiş bir sınıfın oluşturucusu içinde kök düzeyinde bir deyim olmalıdır.]]></Val>
+            <Val><![CDATA['super' çağrısı, başlatılmış özellikleri, parameter özelliklerini veya özel tanımlayıcıları içeren türetilmiş bir sınıfın oluşturucusu içinde kök düzeyinde bir deyim olmalıdır.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -912,7 +912,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bir türetilmiş sınıf başlatılmış özellikler, parametre özellikleri veya özel tanımlayıcılar içerdiğinde 'super' çağrısı, 'super' veya 'this' öğesine başvurmak için oluşturucudaki ilk deyim olmalıdır.]]></Val>
+            <Val><![CDATA[Bir türetilmiş sınıf başlatılmış özellikler, parameter özellikleri veya özel tanımlayıcılar içerdiğinde 'super' çağrısı, 'super' veya 'this' öğesine başvurmak için oluşturucudaki ilk deyim olmalıdır.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -921,7 +921,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'this'-based type guard is not compatible with a parameter-based type guard.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['This' tabanlı tür koruması, parametre tabanlı tür koruması ile uyumlu değildir.]]></Val>
+            <Val><![CDATA['This' tabanlı tür koruması, parameter tabanlı tür koruması ile uyumlu değildir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1611,7 +1611,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add optional parameter to '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' öğesine isteğe bağlı parametre ekleme]]></Val>
+            <Val><![CDATA['{0}' öğesine isteğe bağlı parameter ekleme]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1647,7 +1647,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add parameter name]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametre adı ekleyin]]></Val>
+            <Val><![CDATA[Parameter adı ekleyin]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2433,7 +2433,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dizin imzası parametre türü sabit değer veya genel tür olamaz. Bunun yerine eşlenen nesne türü kullanabilirsiniz.]]></Val>
+            <Val><![CDATA[Dizin imzası parameter türü sabit değer veya genel tür olamaz. Bunun yerine eşlenen nesne türü kullanabilirsiniz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2442,7 +2442,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dizin imzası parametre türü 'dize', 'sayı', 'sembol' veya şablon sabit değeri olmalıdır.]]></Val>
+            <Val><![CDATA[Dizin imzası parameter türü 'dize', 'sayı', 'sembol' veya şablon sabit değeri olmalıdır.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5052,7 +5052,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bu parametre için bildirim gösterme, türüne örtülü olarak tanımsız eklenmesini gerektirir. Bu, --isolatedDeclarations ile desteklenmez.]]></Val>
+            <Val><![CDATA[Bu parameter için bildirim gösterme, türüne örtülü olarak tanımsız eklenmesini gerektirir. Bu, --isolatedDeclarations ile desteklenmez.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6564,7 +6564,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Entry point for implicit type library '{0}' with packageId '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{1}' paket kimliğine sahip '{0}' örtük tür kitaplığı için giriş noktası]]></Val>
+            <Val><![CDATA['{1}' packet kimliğine sahip '{0}' örtük tür kitaplığı için giriş noktası]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6582,7 +6582,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Entry point of type library '{0}' specified in compilerOptions with packageId '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{1}' paket kimliğine sahip compilerOptions içinde belirtilen '{0}' tür kitaplığının giriş noktası]]></Val>
+            <Val><![CDATA['{1}' packet kimliğine sahip compilerOptions içinde belirtilen '{0}' tür kitaplığının giriş noktası]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8043,7 +8043,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Global type '{0}' must have {1} type parameter(s).]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' genel türü, {1} türünde parametre içermelidir.]]></Val>
+            <Val><![CDATA['{0}' genel türü, {1} türünde parameter içermelidir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8502,7 +8502,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Imported via {0} from file '{1}' with packageId '{2}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{2}' paket kimliğine sahip '{1}' dosyasından {0} aracılığıyla içeri aktarıldı]]></Val>
+            <Val><![CDATA['{2}' packet kimliğine sahip '{1}' dosyasından {0} aracılığıyla içeri aktarıldı]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8511,7 +8511,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Imported via {0} from file '{1}' with packageId '{2}' to import 'importHelpers' as specified in compilerOptions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[compilerOptions içinde belirtildiği gibi 'importHelpers' öğesini içeri aktarmak için '{2}' paket kimliğine sahip '{1}' dosyasından {0} aracılığıyla içeri aktarıldı]]></Val>
+            <Val><![CDATA[compilerOptions içinde belirtildiği gibi 'importHelpers' öğesini içeri aktarmak için '{2}' packet kimliğine sahip '{1}' dosyasından {0} aracılığıyla içeri aktarıldı]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8520,7 +8520,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Imported via {0} from file '{1}' with packageId '{2}' to import 'jsx' and 'jsxs' factory functions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['jsx' ve 'jsxs' fabrika işlevlerini içeri aktarmak için '{2}' paket kimliğine sahip '{1}' dosyasından {0} aracılığıyla içeri aktarıldı]]></Val>
+            <Val><![CDATA['jsx' ve 'jsxs' fabrika işlevlerini içeri aktarmak için '{2}' packet kimliğine sahip '{1}' dosyasından {0} aracılığıyla içeri aktarıldı]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8673,7 +8673,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Infer parameter types from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametre türleri için kullanımdan çıkarım yap]]></Val>
+            <Val><![CDATA[Parameter türleri için kullanımdan çıkarım yap]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Infer parameter types from usage.]]></Val>
@@ -9075,7 +9075,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@param' tag has name '{0}', but there is no parameter with that name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSDoc '@param' etiketinin adı '{0}' ancak bu ada sahip bir parametre yok.]]></Val>
+            <Val><![CDATA[JSDoc '@param' etiketinin adı '{0}' ancak bu ada sahip bir parameter yok.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9084,7 +9084,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@param' tag has name '{0}', but there is no parameter with that name. It would match 'arguments' if it had an array type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSDoc '@param' etiketi '{0}' adına sahip ancak bu ada sahip bir parametre yok. Bir dizi türü olsaydı 'arguments' ile eşleşirdi.]]></Val>
+            <Val><![CDATA[JSDoc '@param' etiketi '{0}' adına sahip ancak bu ada sahip bir parameter yok. Bir dizi türü olsaydı 'arguments' ile eşleşirdi.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9825,7 +9825,7 @@
         <Str Cat="Text">
           <Val><![CDATA[======== Module name '{0}' was successfully resolved to '{1}' with Package ID '{2}'. ========]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[======== '{0}' modül adı '{2}' Paket Kimliğiyle '{1}' olarak başarıyla çözümlendi. ========]]></Val>
+            <Val><![CDATA[======== '{0}' modül adı '{2}' Packet Kimliğiyle '{1}' olarak başarıyla çözümlendi. ========]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10200,7 +10200,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Non-simple parameter declared here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Basit olmayan parametre burada bildirildi.]]></Val>
+            <Val><![CDATA[Basit olmayan parameter burada bildirildi.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11139,7 +11139,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter cannot have question mark and initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametre soru işareti ve başlatıcı içeremez.]]></Val>
+            <Val><![CDATA[Parameter soru işareti ve başlatıcı içeremez.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11148,7 +11148,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter declaration expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametre bildirimi bekleniyor.]]></Val>
+            <Val><![CDATA[Parameter bildirimi bekleniyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11166,7 +11166,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter modifiers can only be used in TypeScript files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametre değiştiricileri yalnızca TypeScript dosyalarında kullanılabilir.]]></Val>
+            <Val><![CDATA[Parameter değiştiricileri yalnızca TypeScript dosyalarında kullanılabilir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11184,7 +11184,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel ayarlayıcı '{0}' için parametre türü, '{2}' özel modülündeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel ayarlayıcı '{0}' için parameter türü, '{2}' özel modülündeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11193,7 +11193,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel ayarlayıcı '{0}' için parametre türü, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel ayarlayıcı '{0}' için parameter türü, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11202,7 +11202,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik ayarlayıcı '{0}' için parametre türü, '{2}' özel modülündeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik ayarlayıcı '{0}' için parameter türü, '{2}' özel modülündeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11211,7 +11211,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik ayarlayıcı '{0}' için parametre türü, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik ayarlayıcı '{0}' için parameter türü, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11262,7 +11262,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Platform specific]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Platforma özel]]></Val>
+            <Val><![CDATA[Platforms özel]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11463,7 +11463,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Private identifiers cannot be used as parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Özel tanımlayıcılar parametre olarak kullanılamaz.]]></Val>
+            <Val><![CDATA[Özel tanımlayıcılar parameter olarak kullanılamaz.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Private identifiers cannot be used as parameters]]></Val>
@@ -11766,7 +11766,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' implicitly has type 'any', because its set accessor lacks a parameter type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' özelliği, set erişimcisinin parametre türü ek açıklaması olmadığı için örtük olarak 'any' türü içeriyor.]]></Val>
+            <Val><![CDATA['{0}' özelliği, set erişimcisinin parameter türü ek açıklaması olmadığı için örtük olarak 'any' türü içeriyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13095,7 +13095,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Reusing resolution of module '{0}' from '{1}' found in cache from location '{2}', it was successfully resolved to '{3}' with Package ID '{4}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{2}' konumundaki önbellekte bulunan '{1}' üzerindeki '{0}' modülünün çözümlemesinin yeniden kullanılması, başarıyla Paket Kimliği '{4}' ile '{3}' olarak çözüldü.]]></Val>
+            <Val><![CDATA['{2}' konumundaki önbellekte bulunan '{1}' üzerindeki '{0}' modülünün çözümlemesinin yeniden kullanılması, başarıyla Packet Kimliği '{4}' ile '{3}' olarak çözüldü.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13122,7 +13122,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Reusing resolution of module '{0}' from '{1}' of old program, it was successfully resolved to '{2}' with Package ID '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Eski programın '{1}' üzerindeki '{0}' modülünün çözümlemesinin yeniden kullanılması, başarıyla Paket Kimliği '{3}' ile '{2}' olarak çözüldü.]]></Val>
+            <Val><![CDATA[Eski programın '{1}' üzerindeki '{0}' modülünün çözümlemesinin yeniden kullanılması, başarıyla Packet Kimliği '{3}' ile '{2}' olarak çözüldü.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13149,7 +13149,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Reusing resolution of type reference directive '{0}' from '{1}' found in cache from location '{2}', it was successfully resolved to '{3}' with Package ID '{4}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{2}' konumundaki önbellekte bulunan '{1}' üzerindeki '{0}' tür başvuru yönergesi çözümlemesinin yeniden kullanılması, başarıyla Paket Kimliği '{4}' ile '{3}' olarak çözüldü.]]></Val>
+            <Val><![CDATA['{2}' konumundaki önbellekte bulunan '{1}' üzerindeki '{0}' tür başvuru yönergesi çözümlemesinin yeniden kullanılması, başarıyla Packet Kimliği '{4}' ile '{3}' olarak çözüldü.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13176,7 +13176,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Reusing resolution of type reference directive '{0}' from '{1}' of old program, it was successfully resolved to '{2}' with Package ID '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Eski programın '{1}' üzerindeki '{0}' tür başvuru yönergesi çözümlemesinin yeniden kullanılması, başarıyla Paket Kimliği '{3}' ile '{2}' olarak çözüldü.]]></Val>
+            <Val><![CDATA[Eski programın '{1}' üzerindeki '{0}' tür başvuru yönergesi çözümlemesinin yeniden kullanılması, başarıyla Packet Kimliği '{3}' ile '{2}' olarak çözüldü.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13269,7 +13269,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Scoped package detected, looking in '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kapsamlı paket algılandı, '{0}' içinde aranıyor]]></Val>
+            <Val><![CDATA[Kapsamlı packet algılandı, '{0}' içinde aranıyor]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13596,7 +13596,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify a set of bundled library declaration files that describe the target runtime environment.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Hedef çalışma zamanı ortamını açıklayan bir paket kitaplık bildirim dosyası kümesi belirtin.]]></Val>
+            <Val><![CDATA[Hedef çalışma zamanı ortamını açıklayan bir packet kitaplık bildirim dosyası kümesi belirtin.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14085,7 +14085,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Style Options]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Stil Seçenekleri]]></Val>
+            <Val><![CDATA[Still Seçenekleri]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14352,7 +14352,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ES5'te bulunan bir ok işlevinde 'arguments' nesnesine başvurulamaz. Standart bir işlev ifadesi kullanmayı göz önünde bulundurun.]]></Val>
+            <Val><![CDATA[ES5'te bulunan bir ok işlevinde 'arguments' nesnesine başvurulamaz. Standard bir işlev ifadesi kullanmayı göz önünde bulundurun.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14361,7 +14361,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['arguments' nesnesine ES5'teki asenkron bir işlev veya metotta başvurulamaz. Standart bir işlev veya metot kullanmayı düşünün.]]></Val>
+            <Val><![CDATA['arguments' nesnesine ES5'teki asenkron bir işlev veya metotta başvurulamaz. Standard bir işlev veya metot kullanmayı düşünün.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14943,7 +14943,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The return type of a parameter decorator function must be either 'void' or 'any'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametre dekoratör işlevine ait dönüş türü 'void' veya 'any' olmalıdır.]]></Val>
+            <Val><![CDATA[Parameter dekoratör işlevine ait dönüş türü 'void' veya 'any' olmalıdır.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15288,7 +15288,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag requires the module path '{0}' to exist, but none could be found. Make sure you have types for the appropriate package installed.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bu JSX etiketi, '{0}' modül yolunun mevcut olmasını gerektiriyor, ancak hiçbiri bulunamadı. Uygun paket için türlerin yüklü olduğundan emin olun.]]></Val>
+            <Val><![CDATA[Bu JSX etiketi, '{0}' modül yolunun mevcut olmasını gerektiriyor, ancak hiçbiri bulunamadı. Uygun packet için türlerin yüklü olduğundan emin olun.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15666,7 +15666,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This parameter property must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[' {0}' temel sınıfındaki bir üyeyi geçersiz kıldığından, bu parametre özelliğinin '@override' etiketi olan bir JSDoc yorumu olmalıdır.]]></Val>
+            <Val><![CDATA[' {0}' temel sınıfındaki bir üyeyi geçersiz kıldığından, bu parameter özelliğinin '@override' etiketi olan bir JSDoc yorumu olmalıdır.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15675,7 +15675,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This parameter property must have an 'override' modifier because it overrides a member in base class '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bu parametre özelliği, '{0}' temel sınıfındaki bir üyeyi geçersiz kıldığından bir 'override' değiştiricisi içermelidir.]]></Val>
+            <Val><![CDATA[Bu parameter özelliği, '{0}' temel sınıfındaki bir üyeyi geçersiz kıldığından bir 'override' değiştiricisi içermelidir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16449,7 +16449,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type library referenced via '{0}' from file '{1}' with packageId '{2}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{2}' paket kimliğine sahip '{1}' dosyasından '{0}' aracılığıyla başvurulan tür kitaplığı]]></Val>
+            <Val><![CDATA['{2}' packet kimliğine sahip '{1}' dosyasından '{0}' aracılığıyla başvurulan tür kitaplığı]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16731,7 +16731,7 @@
         <Str Cat="Text">
           <Val><![CDATA[======== Type reference directive '{0}' was successfully resolved to '{1}' with Package ID '{2}', primary: {3}. ========]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[======== '{0}' tür başvuru yönergesi '{2}' Paket Kimliğine sahip '{1}' olarak başarıyla çözümlendi, birincil: {3}. ========]]></Val>
+            <Val><![CDATA[======== '{0}' tür başvuru yönergesi '{2}' Packet Kimliğine sahip '{1}' olarak başarıyla çözümlendi, birincil: {3}. ========]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16776,7 +16776,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Types of parameters '{0}' and '{1}' are incompatible.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' ve '{1}' parametre türleri uyumsuz.]]></Val>
+            <Val><![CDATA['{0}' ve '{1}' parameter türleri uyumsuz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16821,7 +16821,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unable to resolve signature of parameter decorator when called as an expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bir ifade olarak çağrıldığında parametre dekoratörünün imzası çözümlenemez.]]></Val>
+            <Val><![CDATA[Bir ifade olarak çağrıldığında parameter dekoratörünün imzası çözümlenemez.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17262,7 +17262,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Use the package.json 'exports' field when resolving package imports.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Paket içe aktarmalarını çözümlerken package.json 'exports' alanını kullanın.]]></Val>
+            <Val><![CDATA[Packet içe aktarmalarını çözümlerken package.json 'exports' alanını kullanın.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17532,7 +17532,7 @@
         <Str Cat="Text">
           <Val><![CDATA[We can only write a type for '{0}' by adding a type for the entire parameter here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' için bir türü yalnızca tüm parametre için buraya bir tür ekleyerek yazabiliriz.]]></Val>
+            <Val><![CDATA['{0}' için bir türü yalnızca tüm parameter için buraya bir tür ekleyerek yazabiliriz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17679,7 +17679,7 @@
         <Str Cat="Text">
           <Val><![CDATA[You cannot rename elements that are defined in the standard TypeScript library.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Standart TypeScript kitaplığında tanımlanmış öğeleri yeniden adlandıramazsınız.]]></Val>
+            <Val><![CDATA[Standard TypeScript kitaplığında tanımlanmış öğeleri yeniden adlandıramazsınız.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18087,7 +18087,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' is not allowed as a parameter name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' öğesine parametre adı olarak izin verilmiyor.]]></Val>
+            <Val><![CDATA['{0}' öğesine parameter adı olarak izin verilmiyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18609,7 +18609,7 @@
         <Str Cat="Text">
           <Val><![CDATA['await' expressions cannot be used in a parameter initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['await' ifadeleri bir parametre başlatıcısında kullanılamaz.]]></Val>
+            <Val><![CDATA['await' ifadeleri bir parameter başlatıcısında kullanılamaz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -18759,7 +18759,7 @@
         <Str Cat="Text">
           <Val><![CDATA['constructor' cannot be used as a parameter property name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['constructor', parametre özellik adı olarak kullanılamaz.]]></Val>
+            <Val><![CDATA['constructor', parameter özellik adı olarak kullanılamaz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19491,7 +19491,7 @@
         <Str Cat="Text">
           <Val><![CDATA['use strict' directive cannot be used with non-simple parameter list.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['use strict' yönergesi, basit olmayan parametre listesiyle birlikte kullanılamıyor.]]></Val>
+            <Val><![CDATA['use strict' yönergesi, basit olmayan parameter listesiyle birlikte kullanılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19554,7 +19554,7 @@
         <Str Cat="Text">
           <Val><![CDATA['yield' expressions cannot be used in a parameter initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['yield' ifadeleri bir parametre başlatıcısında kullanılamaz.]]></Val>
+            <Val><![CDATA['yield' ifadeleri bir parameter başlatıcısında kullanılamaz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

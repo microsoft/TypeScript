@@ -50,7 +50,7 @@ interface Derived4 extends Base {
 >x : Symbol(x, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 18, 12))
 }
 
-// satisifies string indexer but not numeric indexer
+// satisfies string indexer but not numeric indexer
 interface Derived5 extends Base {
 >Derived5 : Symbol(Derived5, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 19, 1), Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 24, 1))
 >Base : Symbol(Base, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 0, 0))

@@ -256,7 +256,7 @@ describe("unittests:: tscWatch:: programUpdates::", () => {
 
     verifyTscWatch({
         scenario,
-        subScenario: "works correctly when config file is changed but its content havent",
+        subScenario: "works correctly when config file is changed but its content haven't",
         commandLineArgs: ["-w"],
         sys: () => {
             const configFile: File = {
@@ -684,14 +684,14 @@ export class A {
             path: "/user/username/workspace/solution/projects/project/f1.ts",
             content: `
                 export * from "../projectc/f2";
-                export * from "../projectd/f3";`,
+                export * from "../projected/f3";`,
         };
         const file2 = {
             path: "/user/username/workspace/solution/projects/projectc/f2.ts",
             content: "export let x = 1;",
         };
         const file3 = {
-            path: "/user/username/workspace/solution/projects/projectd/f3.ts",
+            path: "/user/username/workspace/solution/projects/projected/f3.ts",
             content: "export let y = 1;",
         };
         const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem(
@@ -715,7 +715,7 @@ export class A {
         });
 
         const { cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys);
-        baseline.push("createing separate watcher");
+        baseline.push("creating separate watcher");
         ts.createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [file1.path],
             system: sys,
@@ -791,7 +791,7 @@ export class A {
 
     verifyTscWatch({
         scenario,
-        subScenario: "correctly parses wild card directories from implicit glob when two keys differ only in directory seperator",
+        subScenario: "correctly parses wild card directories from implicit glob when two keys differ only in directory separator",
         commandLineArgs: ["-w", "--extendedDiagnostics"],
         sys: () => {
             const file1 = {
@@ -1465,7 +1465,7 @@ declare const eval: any`,
 
     verifyTscWatch({
         scenario,
-        subScenario: "shouldnt report error about unused function incorrectly when file changes from global to module",
+        subScenario: "shouldn't report error about unused function incorrectly when file changes from global to module",
         commandLineArgs: ["-w", "/user/username/workspace/solution/projects/project/file.ts", "--noUnusedLocals"],
         sys: () => {
             const file: File = {
@@ -2414,11 +2414,11 @@ import { x } from "../b";`,
         sys: () => {
             const module1: File = {
                 path: `/user/username/projects/myproject/a.js`,
-                content: `export const aNumber: number = "string"`,
+                content: `export const a number: number = "string"`,
             };
             const module2: File = {
                 path: `/user/username/projects/myproject/b.ts`,
-                content: `import { aNumber } from "./a.js";`,
+                content: `import { a number } from "./a.js";`,
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,

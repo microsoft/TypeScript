@@ -433,7 +433,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         // when resolving exports local exported entries/indirect exported entries in the module
         // should always win over entries with similar names that were added via star exports
         // to support this we store names of local/indirect exported entries in a set.
-        // this set is used to filter names brought by star expors.
+        // this set is used to filter names brought by star exports.
 
         // local names set should only be added if we have anything exported
         if (!some(moduleInfo.exportedNames) && moduleInfo.exportedFunctions.size === 0 && moduleInfo.exportSpecifiers.size === 0) {

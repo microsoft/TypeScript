@@ -83,34 +83,34 @@ var justElement5 = <a:element attr={"value"}>{"text"}</a:element>;
 >element : any
 >        : ^^^
 
-var tooManySeparators1 = <a:ele:ment />;
+var tooManySeparators1 = <a:ele:meant />;
 >tooManySeparators1 : any
 >                   : ^^^
-><a:ele:ment /> : any
+><a:ele:meant /> : any
 >               : ^^^
 >a : any
 >  : ^^^
 >ele : any
 >    : ^^^
->ment : true
+>meant : true
 >     : ^^^^
 
-var tooManySeparators2 = <a:ele:ment></a:ele:ment>;
+var tooManySeparators2 = <a:ele:meant></a:ele:meant>;
 >tooManySeparators2 : any
 >                   : ^^^
-><a:ele:ment></a:ele : any
+><a:ele:meant></a:ele : any
 >                    : ^^^
 >a : any
 >  : ^^^
 >ele : any
 >    : ^^^
->ment : true
+>meant : true
 >     : ^^^^
 >a : any
 >  : ^^^
 >ele : any
 >    : ^^^
->ment : any
+>meant : any
 >     : ^^^
 >> : boolean
 >  : ^^^^^^^
@@ -119,16 +119,16 @@ var tooManySeparators2 = <a:ele:ment></a:ele:ment>;
 > : any
 > : ^^^
 
-var tooManySeparators3 = <a:ele:ment attr={"value"}></a:ele:ment>;
+var tooManySeparators3 = <a:ele:meant attr={"value"}></a:ele:meant>;
 >tooManySeparators3 : any
 >                   : ^^^
-><a:ele:ment attr={"value"}></a:ele : any
+><a:ele:meant attr={"value"}></a:ele : any
 >                                   : ^^^
 >a : any
 >  : ^^^
 >ele : any
 >    : ^^^
->ment : true
+>meant : true
 >     : ^^^^
 >attr : string
 >     : ^^^^^^
@@ -138,7 +138,7 @@ var tooManySeparators3 = <a:ele:ment attr={"value"}></a:ele:ment>;
 >  : ^^^
 >ele : any
 >    : ^^^
->ment : any
+>meant : any
 >     : ^^^
 >> : boolean
 >  : ^^^^^^^
@@ -147,16 +147,16 @@ var tooManySeparators3 = <a:ele:ment attr={"value"}></a:ele:ment>;
 > : any
 > : ^^^
 
-var tooManySeparators4 = <a:ele:ment>{"text"}</a:ele:ment>;
+var tooManySeparators4 = <a:ele:meant>{"text"}</a:ele:meant>;
 >tooManySeparators4 : any
 >                   : ^^^
-><a:ele:ment>{"text"}</a:ele : any
+><a:ele:meant>{"text"}</a:ele : any
 >                            : ^^^
 >a : any
 >  : ^^^
 >ele : any
 >    : ^^^
->ment : true
+>meant : true
 >     : ^^^^
 >"text" : "text"
 >       : ^^^^^^
@@ -164,7 +164,7 @@ var tooManySeparators4 = <a:ele:ment>{"text"}</a:ele:ment>;
 >  : ^^^
 >ele : any
 >    : ^^^
->ment : any
+>meant : any
 >     : ^^^
 >> : boolean
 >  : ^^^^^^^
@@ -173,16 +173,16 @@ var tooManySeparators4 = <a:ele:ment>{"text"}</a:ele:ment>;
 > : any
 > : ^^^
 
-var tooManySeparators5 = <a:ele:ment attr={"value"}>{"text"}</a:ele:ment>;
+var tooManySeparators5 = <a:ele:meant attr={"value"}>{"text"}</a:ele:meant>;
 >tooManySeparators5 : any
 >                   : ^^^
-><a:ele:ment attr={"value"}>{"text"}</a:ele : any
+><a:ele:meant attr={"value"}>{"text"}</a:ele : any
 >                                           : ^^^
 >a : any
 >  : ^^^
 >ele : any
 >    : ^^^
->ment : true
+>meant : true
 >     : ^^^^
 >attr : string
 >     : ^^^^^^
@@ -194,7 +194,7 @@ var tooManySeparators5 = <a:ele:ment attr={"value"}>{"text"}</a:ele:ment>;
 >  : ^^^
 >ele : any
 >    : ^^^
->ment : any
+>meant : any
 >     : ^^^
 >> : boolean
 >  : ^^^^^^^
@@ -399,7 +399,7 @@ var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
 >Upcase : any
 >       : ^^^
 
-var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
+var upcaseComponent2 = <Upcase:element />;  // Parsed as intrinsic
 >upcaseComponent2 : any
 >                 : ^^^
 ><Upcase:element /> : any

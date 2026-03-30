@@ -252,25 +252,25 @@ class SuperChild extends SuperParent {
     }
 }
 
-class Statics {
->Statics : Symbol(Statics, Decl(es6ClassTest2.ts, 108, 1))
+class Statistics {
+>Statistics : Symbol(Statistics, Decl(es6ClassTest2.ts, 108, 1))
 
     static foo = 1;
->foo : Symbol(Statics.foo, Decl(es6ClassTest2.ts, 110, 15))
+>foo : Symbol(Statistics.foo, Decl(es6ClassTest2.ts, 110, 15))
 
     static bar: string;
->bar : Symbol(Statics.bar, Decl(es6ClassTest2.ts, 111, 19))
+>bar : Symbol(Statistics.bar, Decl(es6ClassTest2.ts, 111, 19))
 
     static baz() {
->baz : Symbol(Statics.baz, Decl(es6ClassTest2.ts, 112, 23))
+>baz : Symbol(Statistics.baz, Decl(es6ClassTest2.ts, 112, 23))
 
         return "";
     }
 }
 
-var stat = new Statics();
+var stat = new Statistics();
 >stat : Symbol(stat, Decl(es6ClassTest2.ts, 119, 3))
->Statics : Symbol(Statics, Decl(es6ClassTest2.ts, 108, 1))
+>Statistics : Symbol(Statistics, Decl(es6ClassTest2.ts, 108, 1))
 
 interface IFoo {
 >IFoo : Symbol(IFoo, Decl(es6ClassTest2.ts, 119, 25))

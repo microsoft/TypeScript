@@ -193,16 +193,16 @@ namespace GenericSignaturesValid {
     }
 
     interface I2 extends Base2 {
-        a: <T>(x?: T) => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+        a: <T>(x?: T) => T; // error, not identical and contextual signature instantiation can't make inference from T to T
     }
 
     interface I3 extends Base2 {
-        a: <T>(x: T) => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+        a: <T>(x: T) => T; // error, not identical and contextual signature instantiation can't make inference from T to T
     }
 
 
     interface I4 extends Base2 {
-        a2: <T>() => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+        a2: <T>() => T; // error, not identical and contextual signature instantiation can't make inference from T to T
     }
 
     interface I5 extends Base2 {
@@ -232,7 +232,7 @@ namespace GenericSignaturesValid {
 
 
     interface I11 extends Base2 {
-        a4: <T>() => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+        a4: <T>() => T; // error, not identical and contextual signature instantiation can't make inference from T to T
     }
 
     interface I12 extends Base2 {
@@ -249,7 +249,7 @@ namespace GenericSignaturesValid {
 
 
     interface I15 extends Base2 {
-        a5: <T>() => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+        a5: <T>() => T; // error, not identical and contextual signature instantiation can't make inference from T to T
     }
 
     interface I16 extends Base2 {

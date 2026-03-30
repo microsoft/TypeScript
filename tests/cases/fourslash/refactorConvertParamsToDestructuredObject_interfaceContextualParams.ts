@@ -12,7 +12,7 @@ When there are no type annotations on the params in the implementation, we ultim
 would like to handle them like we do for calls resulting in `method({x, y}) {}`.
 
 Note that simply adding the annotations from the signature can fail as the implementation 
-can take more paramters than the signatures.
+can take more parameters than the signatures.
 */
 goTo.select("a", "b");
 edit.applyRefactor({

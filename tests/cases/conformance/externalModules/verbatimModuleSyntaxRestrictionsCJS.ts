@@ -7,7 +7,7 @@
 // @Filename: /decl.d.ts
 declare function esmy(): void;
 export default esmy;
-export declare function funciton(): void;
+export declare function function(): void;
 
 // @Filename: /ambient.d.ts
 declare module "ambient" {
@@ -18,8 +18,8 @@ declare module "ambient" {
 // @Filename: /main.ts
 import esmy from "./decl"; // error
 import * as esmy2 from "./decl"; // error
-import { funciton } from "./decl"; // error
-import type { funciton as funciton2 } from "./decl"; // ok I guess?
+import { function } from "./decl"; // error
+import type { function as funciton2 } from "./decl"; // ok I guess?
 import("./decl"); // error
 type T = typeof import("./decl"); // ok
 export {}; // error

@@ -197,7 +197,7 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
                                                    ~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'Dictionary_int_int'.
     
-                // by default the root (program) has zero indendation
+                // by default the root (program) has zero indentation
                 this.tree.Root.SetIndentationOverride("");
     
                 this.ApplyScriptBlockIndentation(this.languageHostIndentation, this.tree);
@@ -506,7 +506,7 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
                     return null;
                 }
     
-                // effective identation of the block
+                // effective indentation of the block
                 indentationInfo = node.GetEffectiveIndentation(this);
                 return indentationInfo;
             }
@@ -527,7 +527,7 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
                     return indentationInfo;
                 }
                 else {
-                    // Indent all semicolons except the ones that belong to the for statement parts (initalizer, condition, itnrement)
+                    // Indent all semicolons except the ones that belong to the for statement parts (initializer, condition, itnrement)
                     if (node.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkFor) {
                                                         ~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'AuthorParseNodeKind'.

@@ -111,8 +111,8 @@ if (aFoo.bar && aFoo.nested.b) {
 >baz : string
 >    : ^^^^^^
 
-  const aAgain: number = a;
->aAgain : number
+  const again: number = a;
+>again : number
 >       : ^^^^^^
 >a : number
 >  : ^^^^^^
@@ -234,8 +234,8 @@ if (bBar.elem2 && bBar.elem2.bar && bBar.elem2.nested.b) {
 >baz : string
 >    : ^^^^^^
 
-  const aAgain: number = a;
->aAgain : number
+  const again: number = a;
+>again : number
 >       : ^^^^^^
 >a : number
 >  : ^^^^^^

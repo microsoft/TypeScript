@@ -151,7 +151,7 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
         options.declarationMap = false;
     }
 
-    // When transpiling declartions, we need libs.
+    // When transpiling declarations, we need libs.
     // getDefaultLibFileName will cause barebonesLib to be used.
     options.noLib = !declaration;
 

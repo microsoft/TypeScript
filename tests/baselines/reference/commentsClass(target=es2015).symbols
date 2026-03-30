@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/commentsClass.ts] ////
 
 === commentsClass.ts ===
-/** This is class c2 without constuctor*/
+/** This is class c2 without constructor*/
 class c2 {
 >c2 : Symbol(c2, Decl(commentsClass.ts, 0, 0))
 
@@ -45,7 +45,7 @@ var i4_c = c4;
 >i4_c : Symbol(i4_c, Decl(commentsClass.ts, 19, 3))
 >c4 : Symbol(c4, Decl(commentsClass.ts, 11, 14))
 
-/** Class with statics*/
+/** Class with statistics*/
 class c5 {
 >c5 : Symbol(c5, Decl(commentsClass.ts, 19, 14))
 
@@ -60,8 +60,8 @@ var i5_c = c5;
 >i5_c : Symbol(i5_c, Decl(commentsClass.ts, 25, 3))
 >c5 : Symbol(c5, Decl(commentsClass.ts, 19, 14))
 
-/// class with statics and constructor
-class c6 { /// class with statics and constructor2
+/// class with statistics and constructor
+class c6 { /// class with statistics and constructor2
 >c6 : Symbol(c6, Decl(commentsClass.ts, 25, 14))
 
     /// s1 comment
@@ -80,7 +80,7 @@ var i6_c = c6;
 >i6_c : Symbol(i6_c, Decl(commentsClass.ts, 36, 3))
 >c6 : Symbol(c6, Decl(commentsClass.ts, 25, 14))
 
-// class with statics and constructor
+// class with statistics and constructor
 class c7 {
 >c7 : Symbol(c7, Decl(commentsClass.ts, 36, 14))
 
@@ -100,7 +100,7 @@ var i7_c = c7;
 >i7_c : Symbol(i7_c, Decl(commentsClass.ts, 47, 3))
 >c7 : Symbol(c7, Decl(commentsClass.ts, 36, 14))
 
-/** class with statics and constructor
+/** class with statistics and constructor
  */
 class c8 {
 >c8 : Symbol(c8, Decl(commentsClass.ts, 47, 14))

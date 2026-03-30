@@ -2,7 +2,7 @@
 
 //@Filename: file.tsx
 //// const a = <div>
-////     Som[||]e{/* T */}ext
+////     Some[||]e{/* T */}ext
 //// </div>;
 
 verify.toggleLineComment(

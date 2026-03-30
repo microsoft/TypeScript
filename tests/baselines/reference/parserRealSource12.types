@@ -2399,10 +2399,10 @@ namespace TypeScript {
 >walkForStatementChildren : (preAst: ForStatement, parent: AST, walker: IAstWalker) => void
 >                         : ^      ^^            ^^      ^^   ^^      ^^          ^^^^^    
 
-            this.childrenWalkers[NodeType.ForIn] = ChildrenWalkers.walkForInStatementChildren;
->this.childrenWalkers[NodeType.ForIn] = ChildrenWalkers.walkForInStatementChildren : (preAst: ForInStatement, parent: AST, walker: IAstWalker) => void
+            this.childrenWalkers[NodeType.foreign] = ChildrenWalkers.walkForInStatementChildren;
+>this.childrenWalkers[NodeType.foreign] = ChildrenWalkers.walkForInStatementChildren : (preAst: ForInStatement, parent: AST, walker: IAstWalker) => void
 >                                                                                  : ^      ^^              ^^      ^^   ^^      ^^          ^^^^^    
->this.childrenWalkers[NodeType.ForIn] : IAstWalkChildren
+>this.childrenWalkers[NodeType.foreign] : IAstWalkChildren
 >                                     : ^^^^^^^^^^^^^^^^
 >this.childrenWalkers : IAstWalkChildren[]
 >                     : ^^^^^^^^^^^^^^^^^^
@@ -2410,11 +2410,11 @@ namespace TypeScript {
 >     : ^^^^
 >childrenWalkers : IAstWalkChildren[]
 >                : ^^^^^^^^^^^^^^^^^^
->NodeType.ForIn : any
+>NodeType.foreign : any
 >               : ^^^
 >NodeType : any
 >         : ^^^
->ForIn : any
+>foreign : any
 >      : ^^^
 >ChildrenWalkers.walkForInStatementChildren : (preAst: ForInStatement, parent: AST, walker: IAstWalker) => void
 >                                           : ^      ^^              ^^      ^^   ^^      ^^          ^^^^^    

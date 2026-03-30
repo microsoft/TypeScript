@@ -1,6 +1,6 @@
 5:: no-change-run
-Clean build will have check pending since it didnt type check
-Incremental build has typechecked before this so wont have checkPending
+Clean build will have check pending since it didn't type check
+Incremental build has typechecked before this so won't have checkPending
 TsBuild info text without affectedFilesPendingEmit:: /home/src/workspaces/outfile.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
@@ -22,8 +22,8 @@ IncrementalBuild:
   "version": "FakeTSVersion"
 }
 15:: no-change-run
-Clean build will have check pending since it didnt type check
-Incremental build has typechecked before this so wont have checkPending
+Clean build will have check pending since it didn't type check
+Incremental build has typechecked before this so won't have checkPending
 TsBuild info text without affectedFilesPendingEmit:: /home/src/workspaces/outfile.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {

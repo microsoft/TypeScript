@@ -2,7 +2,7 @@
 
 === /index.ts ===
 /// <reference types="pkg" resolution-mode="import" />
-foo; // foo should resolve while bar should not, since even though index.js is cjs, the refernce is esm
+foo; // foo should resolve while bar should not, since even though index.js is cjs, the reference is esm
 >foo : Symbol(foo, Decl(import.d.ts, 2, 7))
 
 bar;

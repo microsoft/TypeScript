@@ -7,7 +7,7 @@ type Named = { name: string }
 // Tempting to remove alias if unused 
 let notReferenced = ({ name: alias }: Named) => { }
 
-// Resons we can't remove aliases that are not used in the function signature: 
+// Reasons we can't remove aliases that are not used in the function signature: 
 
 // 1.Causes duplicate identifier if we remove alias
 const duplicateIndetifiers = ({ name: alias, name: alias2 }: Named) => { }

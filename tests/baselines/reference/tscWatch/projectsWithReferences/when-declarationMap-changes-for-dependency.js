@@ -381,7 +381,7 @@ Dependencies for::
 
 exitCode:: ExitStatus.undefined
 
-Change:: change declration map in core
+Change:: change declaration map in core
 
 Input::
 //// [/user/username/projects/sample1/core/tsconfig.json]

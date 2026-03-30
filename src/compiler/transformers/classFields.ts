@@ -2045,7 +2045,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             else {
                 temp ??= createClassTempVar();
                 if (isClassWithConstructorReference) {
-                    // record an alias as the class name is not in scope for statics.
+                    // record an alias as the class name is not in scope for statistics.
                     enableSubstitutionForClassAliases();
                     const alias = factory.cloneNode(temp) as GeneratedIdentifier;
                     alias.emitNode.autoGenerate.flags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
@@ -3296,7 +3296,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
-                // Also, when emitting statics for class expressions, we must substitute a class alias for
+                // Also, when emitting statistics for class expressions, we must substitute a class alias for
                 // constructor references in static property initializers.
                 const declaration = resolver.getReferencedValueDeclaration(node);
                 if (declaration) {

@@ -142,7 +142,7 @@ enum E8 {
 >B : Symbol(E8.B, Decl(enumBasics.ts, 59, 9))
 }
 
-//Enum with computed member intializer of same enum type
+//Enum with computed member initializer of same enum type
 enum E9 {
 >E9 : Symbol(E9, Decl(enumBasics.ts, 61, 1))
 

@@ -7,7 +7,7 @@
 ////    }
 ////}
 
-// Running formatting multiple times should not affect the formating of try/catch blocks
+// Running formatting multiple times should not affect the formatting of try/catch blocks
 format.document();
 format.document();
 format.document();

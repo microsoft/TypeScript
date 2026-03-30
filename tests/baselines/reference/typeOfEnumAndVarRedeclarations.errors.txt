@@ -12,7 +12,7 @@ typeOfEnumAndVarRedeclarations.ts(10,70): error TS2374: Duplicate index signatur
         b = 1
     }
     var x = E;
-    var x: { readonly a: E; readonly b: E; readonly [x: number]: string; }; // Shouldnt error
+    var x: { readonly a: E; readonly b: E; readonly [x: number]: string; }; // Shouldn't error
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'typeof E', but here has type '{ readonly [x: number]: string; readonly a: E; readonly b: E; }'.
 !!! related TS6203 typeOfEnumAndVarRedeclarations.ts:7:5: 'x' was also declared here.

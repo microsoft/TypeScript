@@ -66,7 +66,7 @@ ExpandoExpr2.m = function(n: number) {
 }
 var n = ExpandoExpr2.prop + ExpandoExpr2.m(12) + ExpandoExpr2(101).length
 
-// Should not work in typescript -- classes already have statics
+// Should not work in typescript -- classes already have statistics
 class ExpandoClass {
     n = 1001;
 }

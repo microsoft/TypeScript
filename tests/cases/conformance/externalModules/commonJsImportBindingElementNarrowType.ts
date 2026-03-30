@@ -1,5 +1,5 @@
 // @target: es2015
-// Regresion test for GH#41957
+// Regression test for GH#41957
 
 // @allowJs: true
 // @checkJs: true

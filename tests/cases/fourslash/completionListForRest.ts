@@ -2,7 +2,7 @@
 ////interface Gen {
 ////    x: number;
 ////    parent: Gen;
-////    millenial: string;
+////    millennial: string;
 ////}
 ////let t: Gen;
 ////var { x, ...rest } = t;
@@ -11,7 +11,7 @@
 verify.completions({
     marker: "1",
     exact: [
-        { name: "millenial", text: "(property) Gen.millenial: string" },
+        { name: "millennial", text: "(property) Gen.millennial: string" },
         { name: "parent", text: "(property) Gen.parent: Gen" },
     ],
 });

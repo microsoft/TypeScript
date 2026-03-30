@@ -14,7 +14,7 @@
 ==== /decl.d.ts (0 errors) ====
     declare function esmy(): void;
     export default esmy;
-    export declare function funciton(): void;
+    export declare function function(): void;
     
 ==== /ambient.d.ts (0 errors) ====
     declare module "ambient" {
@@ -29,10 +29,10 @@
     import * as esmy2 from "./decl"; // error
                 ~~~~~
 !!! error TS1295: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.
-    import { funciton } from "./decl"; // error
+    import { function } from "./decl"; // error
              ~~~~~~~~
 !!! error TS1295: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.
-    import type { funciton as funciton2 } from "./decl"; // ok I guess?
+    import type { function as funciton2 } from "./decl"; // ok I guess?
     import("./decl"); // error
     ~~~~~~~~~~~~~~~~
 !!! error TS1295: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.

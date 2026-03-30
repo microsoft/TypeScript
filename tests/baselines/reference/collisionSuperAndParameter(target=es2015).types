@@ -9,8 +9,8 @@ class Foo {
 >a : () => void
 >  : ^^^^^^^^^^
 
-        var lamda = (_super: number) => { // No Error 
->lamda : (_super: number) => (x: any) => this
+        var lambda = (_super: number) => { // No Error 
+>lambda : (_super: number) => (x: any) => this
 >      : ^      ^^      ^^^^^^   ^^^^^^^^^^^^
 >(_super: number) => { // No Error             return x => this;   // New scope.  So should inject new _this capture        } : (_super: number) => (x: any) => this
 >                                                                                                                             : ^      ^^      ^^^^^^   ^^^^^^^^^^^^
@@ -62,8 +62,8 @@ class Foo2 extends Foo {
 >x : () => void
 >  : ^^^^^^^^^^
 
-        var lamda = (_super: number) => { // Error 
->lamda : (_super: number) => (x: any) => this
+        var lambda = (_super: number) => { // Error 
+>lambda : (_super: number) => (x: any) => this
 >      : ^      ^^      ^^^^^^   ^^^^^^^^^^^^
 >(_super: number) => { // Error             return x => this;   // New scope.  So should inject new _this capture        } : (_super: number) => (x: any) => this
 >                                                                                                                          : ^      ^^      ^^^^^^   ^^^^^^^^^^^^

@@ -22,7 +22,7 @@ file.js(60,17): error TS2744: Type parameter defaults can only reference previou
     /** @type {A<string>} */ // ok, `T` is provided for `A`
     const aString = [""];
     /** @type {A<number>} */ // ok, `T` is provided for `A`
-    const aNumber = [0];
+    const a number = [0];
     
     /**
      * @template T

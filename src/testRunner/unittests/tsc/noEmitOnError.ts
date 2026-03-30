@@ -30,7 +30,7 @@ describe("unittests:: tsc:: noEmitOnError::", () => {
                 commandLineArgs: ["--declarationMap"],
                 discrepancyExplanation: () => [
                     `Clean build does not emit any file so will have emitSignatures with all files since they are not emitted`,
-                    `Incremental build has emitSignatures from before, so it will have a.ts with signature since file.version isnt same`,
+                    `Incremental build has emitSignatures from before, so it will have a.ts with signature since file.version isn't same`,
                     `Incremental build will also have emitSignatureDtsMapDiffers for both files since the emitSignatures were without declarationMap but currentOptions have declrationMap`,
                 ],
             },

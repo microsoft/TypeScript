@@ -194,7 +194,7 @@ export * from "./unittests/tsserver/metadataInResponse.js";
 export * from "./unittests/tsserver/moduleResolution.js";
 export * from "./unittests/tsserver/moduleSpecifierCache.js";
 export * from "./unittests/tsserver/navTo.js";
-export * from "./unittests/tsserver/occurences.js";
+export * from "./unittests/tsserver/occurrences.js";
 export * from "./unittests/tsserver/openFile.js";
 export * from "./unittests/tsserver/packageJsonInfo.js";
 export * from "./unittests/tsserver/partialSemanticServer.js";

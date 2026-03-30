@@ -231,7 +231,7 @@ constructorTestObject.arg4 = 2;
 >constructorTestObject : Symbol(constructorTestObject, Decl(escapedIdentifiers.ts, 84, 3))
 >arg4 : Symbol(constructorTestClass.arg4, Decl(escapedIdentifiers.ts, 81, 88))
 
-// Lables
+// Labels
 
 l\u0061bel1: 
     while (false)

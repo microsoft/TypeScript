@@ -108,7 +108,7 @@ namespace MsPortalFx.ViewModels {
 >             : ^^^^^^^^^^^^^^
 
     /**
-     * Not exported to show difference. No javascript is emmitted (as expected)
+     * Not exported to show difference. No javascript is emitted (as expected)
      */
     import DialogButtons = Dialogs.MessageBoxButtons;
 >DialogButtons : typeof DialogButtons
@@ -119,7 +119,7 @@ namespace MsPortalFx.ViewModels {
 >                  : ^^^^^^^^^^^^^
 
     /**
-     * Re-exporting a function type to show difference. No javascript is emmitted (as expected)
+     * Re-exporting a function type to show difference. No javascript is emitted (as expected)
      */
     export import Callback = Dialogs.DialogResultCallback;
 >Callback : any

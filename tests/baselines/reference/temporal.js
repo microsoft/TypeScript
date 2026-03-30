@@ -593,7 +593,7 @@
     zdt.toLocaleString(); // example output: 12/1/2019, 12:00:00 PM
     zdt.toLocaleString("de-DE"); // => '1.12.2019, 12:00:00 MEZ'
     const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" } as const;
-    zdt.toLocaleString("de-DE", options); // => 'Sonntag, 1. Dezember 2019'
+    zdt.toLocaleString("de-DE", options); // => 'Sonntag, 1. December 2019'
     /* WRONG */ zdt.toLocaleString("de-DE", { timeZone: "Pacific/Auckland" });
     // => RangeError: Time zone option Pacific/Auckland does not match actual time zone Europe/Berlin
     zdt.withTimeZone("Pacific/Auckland").toLocaleString("de-DE"); // => '2.12.2019, 0:00:00 GMT+13'
@@ -2334,7 +2334,7 @@
     zdt.toLocaleString(); // example output: 12/1/2019, 12:00:00 PM
     zdt.toLocaleString("de-DE"); // => '1.12.2019, 12:00:00 MEZ'
     const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-    zdt.toLocaleString("de-DE", options); // => 'Sonntag, 1. Dezember 2019'
+    zdt.toLocaleString("de-DE", options); // => 'Sonntag, 1. December 2019'
     /* WRONG */ zdt.toLocaleString("de-DE", { timeZone: "Pacific/Auckland" });
     // => RangeError: Time zone option Pacific/Auckland does not match actual time zone Europe/Berlin
     zdt.withTimeZone("Pacific/Auckland").toLocaleString("de-DE"); // => '2.12.2019, 0:00:00 GMT+13'

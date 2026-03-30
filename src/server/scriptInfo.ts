@@ -84,7 +84,7 @@ export class TextStorage {
     private fileSize: number | undefined;
 
     /**
-     * True if the text is for the file thats open in the editor
+     * True if the text is for the file that's open in the editor
      */
     public isOpen = false;
     /**
@@ -162,7 +162,7 @@ export class TextStorage {
         if (this.text !== newText) {
             // Update the text
             this.useText(newText);
-            // We cant guarantee new text is own file text
+            // We can't guarantee new text is own file text
             this.ownFileText = false;
             return true;
         }
@@ -546,7 +546,7 @@ export class ScriptInfo {
                 }
                 break;
             default:
-                // We use first configured project as default so we shouldnt change the order of the containing projects
+                // We use first configured project as default so we shouldn't change the order of the containing projects
                 if (orderedRemoveItem(this.containingProjects, project)) {
                     project.onFileAddedOrRemoved(this.isSymlink());
                 }
@@ -596,7 +596,7 @@ export class ScriptInfo {
                     if (isConfiguredProject(project)) {
                         if (project.deferredClose) continue;
                         if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) {
-                            // If we havent found default configuredProject and
+                            // If we haven't found default configuredProject and
                             // its not the last one, find it and use that one if there
                             if (
                                 defaultConfiguredProject === undefined &&

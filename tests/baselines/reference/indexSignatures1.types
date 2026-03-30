@@ -1266,7 +1266,7 @@ plugins[system][SomeSytePlugin] = () => console.log('awsome');
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->'awsome' : "awsome"
+>'awesome' : "awesome"
 >         : ^^^^^^^^
 
 plugins[system][SomeSytePlugin]();

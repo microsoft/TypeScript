@@ -37,9 +37,9 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         log(x);
     }
     
-    declare const aNumber: number;
+    declare const a number: number;
     
-    for (const x of aNumber) {
+    for (const x of a number) {
         log(x);
     }
     

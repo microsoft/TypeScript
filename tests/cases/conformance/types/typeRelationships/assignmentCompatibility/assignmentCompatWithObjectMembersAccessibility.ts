@@ -47,10 +47,10 @@ namespace TargetIsPublic {
     d = i;
     d = e; // error
 
-    e = a; // errror
-    e = b; // errror
-    e = i; // errror
-    e = d; // errror
+    e = a; // error
+    e = b; // error
+    e = i; // error
+    e = d; // error
     e = e; 
 
 }
@@ -102,10 +102,10 @@ namespace TargetIsPublic {
     d = i; // error
     d = e; // error
 
-    e = a; // errror
-    e = b; // errror
-    e = i; // errror
-    e = d; // errror
+    e = a; // error
+    e = b; // error
+    e = i; // error
+    e = d; // error
     e = e;
 
 }

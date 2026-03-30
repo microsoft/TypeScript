@@ -81,7 +81,7 @@ export function shimNoopTestInterface(global: Mocha.MochaGlobals): void {
     global.beforeEach = ts.noop;
     global.afterEach = ts.noop;
     global.describe = global.context = ((_: any, __: any) => {/*empty*/}) as Mocha.SuiteFunction;
-    global.describe.skip = global.xdescribe = global.xcontext = ts.noop as Mocha.PendingSuiteFunction;
+    global.describe.skip = global.describe = global.xcontext = ts.noop as Mocha.PendingSuiteFunction;
     global.describe.only = ts.noop as Mocha.ExclusiveSuiteFunction;
     global.it = global.specify = ((_: any, __: any) => {/*empty*/}) as Mocha.TestFunction;
     global.it.skip = global.xit = global.xspecify = ts.noop as Mocha.PendingTestFunction;

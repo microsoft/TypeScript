@@ -3,7 +3,7 @@
 var aaa = 1;
 class CCC {
     y: number = aaa;
-    static staticY: number = aaa; // This shouldnt be error
+    static staticY: number = aaa; // This shouldn't be error
     constructor(aaa) {
         this.y = ''; // was: error, cannot assign string to number
     }

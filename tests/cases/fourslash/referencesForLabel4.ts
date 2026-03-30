@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-// References to a label outside function bounderies
+// References to a label outside function boundaries
 
 /////*1*/label: function foo(label) {
 ////    while (true) {

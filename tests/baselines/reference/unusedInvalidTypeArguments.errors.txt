@@ -39,7 +39,7 @@
     foo<T>();
     
 ==== /new.ts (1 errors) ====
-    import { Foo } from "unkown";
+    import { Foo } from "unknown";
                         ~~~~~~~~
 !!! error TS2307: Cannot find module 'unkown' or its corresponding type declarations.
     type T = number;

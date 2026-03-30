@@ -136,8 +136,8 @@ declare const aString: string;
 declare const aBoolean: boolean;
 >aBoolean : Symbol(aBoolean, Decl(unknownType2.ts, 52, 13))
 
-declare const aNumber: number;
->aNumber : Symbol(aNumber, Decl(unknownType2.ts, 53, 13))
+declare const a number: number;
+>a number : Symbol(a number, Decl(unknownType2.ts, 53, 13))
 
 declare const anObject: object;
 >anObject : Symbol(anObject, Decl(unknownType2.ts, 54, 13))
@@ -177,9 +177,9 @@ if (u === aBoolean) {
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
 }
 
-if (u === aNumber) {
+if (u === a number) {
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
->aNumber : Symbol(aNumber, Decl(unknownType2.ts, 53, 13))
+>a number : Symbol(a number, Decl(unknownType2.ts, 53, 13))
 
     let uNumber: number = u;
 >uNumber : Symbol(uNumber, Decl(unknownType2.ts, 69, 7))

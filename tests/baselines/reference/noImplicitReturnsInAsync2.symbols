@@ -55,7 +55,7 @@ async function test6(isError: boolean = true): Promise<number> {
     }
 }
 
-// infered to be Promise<void>, should not be an error, currently reported correctly 
+// inferred to be Promise<void>, should not be an error, currently reported correctly 
 async function test7(isError: boolean = true) { 
 >test7 : Symbol(test7, Decl(noImplicitReturnsInAsync2.ts, 27, 1))
 >isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 30, 21))

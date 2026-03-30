@@ -130,7 +130,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 25
 DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/b 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/b 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Wild card directory
 FileWatcher:: Added:: WatchInfo: /user/username/workspace/project/tsconfig.base.json 2000 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Extended config file
-FileWatcher:: Added:: WatchInfo: /user/username/workspace/project/tsconfig.A.json 2000 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Config file of referened project
+FileWatcher:: Added:: WatchInfo: /user/username/workspace/project/tsconfig.A.json 2000 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Config file of referenced project
 DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/a 1 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Wild card directory of referenced project
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/a 1 {"excludeDirectories":["/user/username/workspace/project/**/excludes_by_A"]} Wild card directory of referenced project
 

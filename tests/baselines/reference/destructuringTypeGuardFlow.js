@@ -17,7 +17,7 @@ if (aFoo.bar && aFoo.nested.b) {
   const right: number = aFoo.bar;
   const wrong: number = bar;
   const another: string = baz;
-  const aAgain: number = a;
+  const again: number = a;
   const bAgain: string = text;
 }
 
@@ -33,7 +33,7 @@ if (bBar.elem2 && bBar.elem2.bar && bBar.elem2.nested.b) {
   const right: number = bBar.elem2.bar;
   const wrong: number = bar;
   const another: string = baz;
-  const aAgain: number = a;
+  const again: number = a;
   const bAgain: string = text;
 }
 
@@ -46,7 +46,7 @@ if (aFoo.bar && aFoo.nested.b) {
     const right = aFoo.bar;
     const wrong = bar;
     const another = baz;
-    const aAgain = a;
+    const again = a;
     const bAgain = text;
 }
 const bBar = { elem1: 7, elem2: aFoo };
@@ -55,6 +55,6 @@ if (bBar.elem2 && bBar.elem2.bar && bBar.elem2.nested.b) {
     const right = bBar.elem2.bar;
     const wrong = bar;
     const another = baz;
-    const aAgain = a;
+    const again = a;
     const bAgain = text;
 }

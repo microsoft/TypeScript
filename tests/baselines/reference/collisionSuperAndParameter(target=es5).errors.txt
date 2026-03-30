@@ -5,7 +5,7 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
 ==== collisionSuperAndParameter.ts (0 errors) ====
     class Foo {
         a() {
-            var lamda = (_super: number) => { // No Error 
+            var lambda = (_super: number) => { // No Error 
                 return x => this;   // New scope.  So should inject new _this capture
             }
         }
@@ -19,7 +19,7 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
     }
     class Foo2 extends Foo {
         x() {
-            var lamda = (_super: number) => { // Error 
+            var lambda = (_super: number) => { // Error 
                 return x => this;   // New scope.  So should inject new _this capture
             }
         }

@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: localGetReferences_1.ts
-////// Comment Refence Test: g/*43*/lobalVar
+////// Comment Reference Test: g/*43*/lobalVar
 ////// References to a variable declared in global.
 /////*1*/var /*2*/globalVar: number = 2;
 ////

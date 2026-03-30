@@ -54,7 +54,7 @@ type SplitWithAllPossibleCombinations<S extends string, D extends string> =
 
 
 /**
- * This function will return all possibile keys that can be expanded on T, only to the N deep level
+ * This function will return all possible keys that can be expanded on T, only to the N deep level
  */
 type KeysCanBeExpanded_<T, N extends number, Depth extends number[]> = N extends Depth['length'] ? never :
     T extends CanBeExpanded ?

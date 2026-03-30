@@ -11,11 +11,11 @@ export function foo() {
 }
 
 === b.ts ===
-import defer * as aNs from "./a.js";
->aNs : Symbol(aNs, Decl(b.ts, 0, 12))
+import defer * as and from "./a.js";
+>and : Symbol(and, Decl(b.ts, 0, 12))
 
-aNs.foo();
->aNs.foo : Symbol(aNs.foo, Decl(a.ts, 0, 0))
->aNs : Symbol(aNs, Decl(b.ts, 0, 12))
->foo : Symbol(aNs.foo, Decl(a.ts, 0, 0))
+and.foo();
+>and.foo : Symbol(and.foo, Decl(a.ts, 0, 0))
+>and : Symbol(and, Decl(b.ts, 0, 12))
+>foo : Symbol(and.foo, Decl(a.ts, 0, 0))
 

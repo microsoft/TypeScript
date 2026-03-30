@@ -71,7 +71,7 @@ namespace M {
     }
 }
 
-namespace M { // Shouldnt be _M
+namespace M { // Shouldn't be _M
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -125,7 +125,7 @@ namespace M {
     }
 }
 
-namespace M { // Shouldnt be _M
+namespace M { // Shouldn't be _M
 >M : typeof M
 >  : ^^^^^^^^
 

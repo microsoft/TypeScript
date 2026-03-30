@@ -21,7 +21,7 @@ type T = number;
 foo<T>();
 
 //// [new.ts]
-import { Foo } from "unkown";
+import { Foo } from "unknown";
 type T = number;
 new Foo<T>();
 
@@ -58,7 +58,7 @@ export {};
 import { foo } from "unknown";
 foo();
 //// [new.js]
-import { Foo } from "unkown";
+import { Foo } from "unknown";
 new Foo();
 //// [callAny.js]
 "use strict";

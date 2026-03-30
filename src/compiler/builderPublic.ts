@@ -234,7 +234,7 @@ export function createEmitAndSemanticDiagnosticsBuilderProgram(
 }
 
 /**
- * Creates a builder thats just abstraction over program and can be used with watch
+ * Creates a builder that's just abstraction over program and can be used with watch
  */
 export function createAbstractBuilder(
     newProgram: Program,

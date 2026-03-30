@@ -8,7 +8,7 @@ describe("unittests:: convertToBase64", () => {
     }
 
     if (Buffer) {
-        it("Converts ASCII charaters correctly", () => {
+        it("Converts ASCII characters correctly", () => {
             runTest(" !\"#$ %&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
         });
 

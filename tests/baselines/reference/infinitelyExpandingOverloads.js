@@ -20,7 +20,7 @@ class ViewModel<TValue> {
     public validationPlacements: Array<ValidationPlacement2<TValue>> = new Array<ValidationPlacement2<TValue>>();
 }
 class Widget<TValue> {
-    constructor(viewModelType: new () => ViewModel<TValue>); // Shouldnt error on this overload
+    constructor(viewModelType: new () => ViewModel<TValue>); // Shouldn't error on this overload
     constructor(viewModelType: new () => ViewModel<TValue>) {
     }
     public get options(): ViewModel<TValue> {

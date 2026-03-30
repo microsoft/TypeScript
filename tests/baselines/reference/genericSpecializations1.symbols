@@ -5,7 +5,7 @@ interface IFoo<T> {
 >IFoo : Symbol(IFoo, Decl(genericSpecializations1.ts, 0, 0))
 >T : Symbol(T, Decl(genericSpecializations1.ts, 0, 15))
 
-    foo<T>(x: T): T; // no error on implementors because IFoo's T is different from foo's T
+    foo<T>(x: T): T; // no error on implementers because IFoo's T is different from foo's T
 >foo : Symbol(IFoo.foo, Decl(genericSpecializations1.ts, 0, 19))
 >T : Symbol(T, Decl(genericSpecializations1.ts, 1, 8))
 >x : Symbol(x, Decl(genericSpecializations1.ts, 1, 11))

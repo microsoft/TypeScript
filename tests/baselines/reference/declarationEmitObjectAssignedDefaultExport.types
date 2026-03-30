@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/declarationEmitObjectAssignedDefaultExport.ts] ////
 
 === node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts ===
-interface Statics {
+interface Statistics {
     "$$whatever": string;
 >"$$whatever" : string
 >             : ^^^^^^
 }
 declare namespace hoistNonReactStatics {
-    type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statics>]: T[X]}
+    type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statistics>]: T[X]}
 >NonReactStatics : NonReactStatics<T>
 >                : ^^^^^^^^^^^^^^^^^^
 }

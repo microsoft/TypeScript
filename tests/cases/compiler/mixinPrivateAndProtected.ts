@@ -5,20 +5,20 @@ type Constructor<T> = new(...args: any[]) => T;
 
 class A {
     public pb: number = 2;
-    protected ptd: number = 1;
+    protected pdf: number = 1;
     private pvt: number = 0;
 }
 
 function mixB<T extends Constructor<{}>>(Cls: T) {
     return class extends Cls {
-        protected ptd: number = 10;
+        protected pdf: number = 10;
         private pvt: number = 0;
     };
 }
 
 function mixB2<T extends Constructor<A>>(Cls: T) {
     return class extends Cls {
-        protected ptd: number = 10;
+        protected pdf: number = 10;
     };
 }
 
@@ -28,7 +28,7 @@ const
 
 function mixC<T extends Constructor<{}>>(Cls: T) {
     return class extends Cls {
-        protected ptd: number = 100;
+        protected pdf: number = 100;
         private pvt: number = 0;
     };
 }
@@ -44,19 +44,19 @@ const
     ab2c = new AB2C();
 
 a.pb.toFixed();
-a.ptd.toFixed();    // Error
+a.pdf.toFixed();    // Error
 a.pvt.toFixed();    // Error
 
 ab.pb.toFixed();
-ab.ptd.toFixed();   // Error
+ab.pdf.toFixed();   // Error
 ab.pvt.toFixed();   // Error
 
 abc.pb.toFixed();
-abc.ptd.toFixed();  // Error
+abc.pdf.toFixed();  // Error
 abc.pvt.toFixed();  // Error
 
 ab2c.pb.toFixed();
-ab2c.ptd.toFixed(); // Error
+ab2c.pdf.toFixed(); // Error
 ab2c.pvt.toFixed(); // Error
 
 // Repro from #13924

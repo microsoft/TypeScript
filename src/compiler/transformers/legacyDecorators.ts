@@ -826,7 +826,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
-                // Also, when emitting statics for class expressions, we must substitute a class alias for
+                // Also, when emitting statistics for class expressions, we must substitute a class alias for
                 // constructor references in static property initializers.
                 const declaration = resolver.getReferencedValueDeclaration(node);
                 if (declaration) {

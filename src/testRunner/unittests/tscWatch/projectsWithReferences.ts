@@ -394,7 +394,7 @@ X;`,
         commandLineArgs: ["-w", "-p", "logic", "--traceResolution", "--explainFiles"],
         edits: [
             {
-                caption: "change declration map in core",
+                caption: "change declaration map in core",
                 edit: sys => {
                     sys.replaceFileText("/user/username/projects/sample1/core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`);
                     const solutionBuilder = createSolutionBuilder(sys, ["core"]);

@@ -674,7 +674,7 @@ createSomeObject().message;`,
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project2
             },
             {
-                caption: "update aplha config",
+                caption: "update alpha config",
                 edit: sys => sys.writeFile("/user/username/projects/project/alpha.tsconfig.json", "{}"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build project1
             },

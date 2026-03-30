@@ -9,7 +9,7 @@
 
 // @Filename: typeof.ts
 //// class Foo { static a: number; }
-//// function doSomethingWithTypes(...statics: (typeof Foo)[]) {}
+//// function doSomethingWithTypes(...statistics: (typeof Foo)[]) {}
 ////
 //// const /*2*/utilityFunctions = {
 ////   doSomethingWithTypes
@@ -17,5 +17,5 @@
 
 verify.quickInfos({
     1: "const utilityFunctions: {\n    doSomethingWithKeys: <T>(...keys: (keyof T)[]) => void;\n}",
-    2: "const utilityFunctions: {\n    doSomethingWithTypes: (...statics: (typeof Foo)[]) => void;\n}"
+    2: "const utilityFunctions: {\n    doSomethingWithTypes: (...statistics: (typeof Foo)[]) => void;\n}"
 });

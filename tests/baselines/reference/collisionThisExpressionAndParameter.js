@@ -9,7 +9,7 @@ class Foo {
         }
     }
     y() {
-        var lamda = (_this: number) => { // Error 
+        var lambda = (_this: number) => { // Error 
             return x => this;   // New scope.  So should inject new _this capture
         }
     }
@@ -25,7 +25,7 @@ class Foo {
         }
     }
     y1() {
-        var lamda = (_this: number) => { // No Error 
+        var lambda = (_this: number) => { // No Error 
         }
     }
     z1(_this: number) { // No Error 
@@ -105,7 +105,7 @@ class Foo {
         }
     }
     y() {
-        var lamda = (_this) => {
+        var lambda = (_this) => {
             return x => this; // New scope.  So should inject new _this capture
         };
     }
@@ -120,7 +120,7 @@ class Foo {
         }
     }
     y1() {
-        var lamda = (_this) => {
+        var lambda = (_this) => {
         };
     }
     z1(_this) {

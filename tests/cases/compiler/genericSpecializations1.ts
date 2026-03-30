@@ -1,6 +1,6 @@
 // @target: es2015
 interface IFoo<T> {
-    foo<T>(x: T): T; // no error on implementors because IFoo's T is different from foo's T
+    foo<T>(x: T): T; // no error on implementers because IFoo's T is different from foo's T
 }
 
 class IntFooBad implements IFoo<number> {

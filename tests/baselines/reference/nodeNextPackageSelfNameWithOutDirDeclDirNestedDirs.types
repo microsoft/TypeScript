@@ -11,7 +11,7 @@ export {srcthing as thing} from "./src/thing.js";
 // The following import should cause `index.ts`
 // to be included in the build, which will,
 // in turn, cause the common src directory to not be `src`
-// (the harness is wierd here in that noImplicitReferences makes only
+// (the harness is weird here in that noImplicitReferences makes only
 // this file get loaded as an entrypoint and emitted, while on the
 // real command-line we'll crawl the imports for that set - a limitation
 // of the harness, I suppose)

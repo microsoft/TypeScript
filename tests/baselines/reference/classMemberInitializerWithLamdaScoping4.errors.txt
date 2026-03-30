@@ -12,7 +12,7 @@ classMemberInitializerWithLamdaScoping3_1.ts(8,21): error TS2663: Cannot find na
         constructor(private field1: string) {
         }
         messageHandler = () => {
-            console.log(field1); // Should be error that couldnt find symbol field1
+            console.log(field1); // Should be error that couldn't find symbol field1
                         ~~~~~~
 !!! error TS2663: Cannot find name 'field1'. Did you mean the instance member 'this.field1'?
         };

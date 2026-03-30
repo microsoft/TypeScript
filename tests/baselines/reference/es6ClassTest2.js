@@ -111,7 +111,7 @@ class SuperChild extends SuperParent {
     }
 }
 
-class Statics {
+class Statistics {
     static foo = 1;
     static bar: string;
 
@@ -120,7 +120,7 @@ class Statics {
     }
 }
 
-var stat = new Statics();
+var stat = new Statistics();
 
 interface IFoo {
     x: number;
@@ -249,13 +249,13 @@ class SuperChild extends SuperParent {
         super.c();
     }
 }
-class Statics {
+class Statistics {
     static baz() {
         return "";
     }
 }
-Statics.foo = 1;
-var stat = new Statics();
+Statistics.foo = 1;
+var stat = new Statistics();
 class ImplementsInterface {
     constructor() {
         this.x = 1;

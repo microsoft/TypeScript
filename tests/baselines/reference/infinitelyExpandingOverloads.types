@@ -55,7 +55,7 @@ class Widget<TValue> {
 >Widget : Widget<TValue>
 >       : ^^^^^^^^^^^^^^
 
-    constructor(viewModelType: new () => ViewModel<TValue>); // Shouldnt error on this overload
+    constructor(viewModelType: new () => ViewModel<TValue>); // Shouldn't error on this overload
 >viewModelType : new () => ViewModel<TValue>
 >              : ^^^^^^^^^^                 
 

@@ -22,10 +22,10 @@
 
 verify.noErrors();
 const [a0Def, a0, a1Def, a1, a2Def, a2, b0Def, b0, b1, b2, c0Def, c0, c1, c2] = test.ranges();
-const aRanges = [a0, a1, a2];
+const arranges = [a0, a1, a2];
 const bRanges = [b0, b1, b2];
 const cRanges = [c0, c1, c2];
 verify.baselineFindAllReferences('a0', 'a1', 'a2', 'b0', 'b1', 'c0', 'c1', 'c2');
-verify.baselineRename(aRanges);
+verify.baselineRename(arranges);
 verify.baselineRename(bRanges);
 verify.baselineRename(cRanges);

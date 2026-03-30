@@ -146,7 +146,7 @@ function tryCatch1() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
+                    _a.tries.push([0, 2, , 3]);
                     return [4 /*yield*/, x];
                 case 1:
                     _a.sent();
@@ -166,7 +166,7 @@ function tryCatch2() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 1, , 3]);
+                    _a.tries.push([0, 1, , 3]);
                     x;
                     return [3 /*break*/, 3];
                 case 1:
@@ -186,7 +186,7 @@ function tryCatch3() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
+                    _a.tries.push([0, 2, , 3]);
                     return [4 /*yield*/, x];
                 case 1:
                     _a.sent();
@@ -219,7 +219,7 @@ function tryFinally1() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, , 2, 3]);
+                    _a.tries.push([0, , 2, 3]);
                     return [4 /*yield*/, x];
                 case 1:
                     _a.sent();
@@ -238,7 +238,7 @@ function tryFinally2() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, , 1, 3]);
+                    _a.tries.push([0, , 1, 3]);
                     x;
                     return [3 /*break*/, 3];
                 case 1: return [4 /*yield*/, y];
@@ -273,7 +273,7 @@ function tryCatchFinally1() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, 3, 4]);
+                    _a.tries.push([0, 2, 3, 4]);
                     return [4 /*yield*/, x];
                 case 1:
                     _a.sent();
@@ -296,7 +296,7 @@ function tryCatchFinally2() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 1, 3, 4]);
+                    _a.tries.push([0, 1, 3, 4]);
                     x;
                     return [3 /*break*/, 4];
                 case 1:
@@ -319,7 +319,7 @@ function tryCatchFinally3() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 1, 2, 4]);
+                    _a.tries.push([0, 1, 2, 4]);
                     x;
                     return [3 /*break*/, 4];
                 case 1:

@@ -335,8 +335,8 @@ namespace TypeScript {
 >For : NodeType.For
 >    : ^^^^^^^^^^^^
 
-        ForIn,
->ForIn : NodeType.ForIn
+        foreign,
+>foreign : NodeType.foreign
 >      : ^^^^^^^^^^^^^^
 
         If,

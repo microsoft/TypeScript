@@ -115,7 +115,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >p2 : T[]
 >   : ^^^
 
-    var {...r3} = t;   // Error, generic type paramter
+    var {...r3} = t;   // Error, generic type parameter
 >r3 : T
 >   : ^
 >t : T

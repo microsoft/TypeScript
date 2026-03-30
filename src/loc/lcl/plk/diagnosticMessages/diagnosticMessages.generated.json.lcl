@@ -36,7 +36,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A '{0}' parameter must be the first parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” musi być pierwszym parametrem.]]></Val>
+            <Val><![CDATA[Parameter „{0}” musi być pierwszym parametrem.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -90,7 +90,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A binding pattern parameter cannot be optional in an implementation signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr wzorca wiązania nie może być opcjonalny w sygnaturze implementacji.]]></Val>
+            <Val><![CDATA[Parameter wzorca wiązania nie może być opcjonalny w sygnaturze implementacji.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -525,7 +525,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A mapped type may not declare properties or methods.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zmapowany typ nie może deklarować właściwości ani metod.]]></Val>
+            <Val><![CDATA[Zmapowany typ nie może deklarować właściwości ani method.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -711,7 +711,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A required parameter cannot follow an optional parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Wymagany parametr nie może występować po opcjonalnym parametrze.]]></Val>
+            <Val><![CDATA[Wymagany parameter nie może występować po opcjonalnym parametrze.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -774,7 +774,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter cannot be optional.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest nie może być opcjonalny.]]></Val>
+            <Val><![CDATA[Parameter rest nie może być opcjonalny.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -783,7 +783,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter cannot have an initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest nie może mieć inicjatora.]]></Val>
+            <Val><![CDATA[Parameter rest nie może mieć inicjatora.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -792,7 +792,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter must be last in a parameter list.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest musi występować na końcu listy parametrów.]]></Val>
+            <Val><![CDATA[Parameter rest musi występować na końcu listy parametrów.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -801,7 +801,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter must be of an array type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest musi być typu tablicowego.]]></Val>
+            <Val><![CDATA[Parameter rest musi być typu tablicowego.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -810,7 +810,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter or binding pattern may not have a trailing comma.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest ani wzorzec wiązania nie może mieć końcowego przecinka.]]></Val>
+            <Val><![CDATA[Parameter rest ani wzorzec wiązania nie może mieć końcowego przecinka.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -873,7 +873,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'set' accessor must have exactly one parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Metoda dostępu „set” musi mieć dokładnie jeden parametr.]]></Val>
+            <Val><![CDATA[Metoda dostępu „set” musi mieć dokładnie jeden parameter.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -882,7 +882,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'set' accessor parameter cannot have an initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr metody dostępu „set” nie może mieć inicjatora.]]></Val>
+            <Val><![CDATA[Parameter metody dostępu „set” nie może mieć inicjatora.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1017,7 +1017,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A type predicate is only allowed in return type position for functions and methods.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Predykat typów jest dozwolony tylko w położeniu zwracanego typu dla funkcji i metod.]]></Val>
+            <Val><![CDATA[Predykat typów jest dozwolony tylko w położeniu zwracanego typu dla funkcji i method.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1551,7 +1551,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add missing parameter to '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dodaj brakujący parametr do elementu „{0}”]]></Val>
+            <Val><![CDATA[Dodaj brakujący parameter do elementu „{0}”]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1608,7 +1608,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add optional parameter to '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dodaj opcjonalny parametr do elementu „{0}"]]></Val>
+            <Val><![CDATA[Dodaj opcjonalny parameter do elementu „{0}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2385,7 +2385,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature must have exactly one parameter.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Sygnatura indeksu musi mieć dokładnie jeden parametr.]]></Val>
+            <Val><![CDATA[Sygnatura indeksu musi mieć dokładnie jeden parameter.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2394,7 +2394,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter cannot have a question mark.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr sygnatury indeksu nie może zawierać znaku zapytania.]]></Val>
+            <Val><![CDATA[Parameter sygnatury indeksu nie może zawierać znaku zapytania.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2403,7 +2403,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter cannot have an accessibility modifier.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr sygnatury indeksu nie może mieć modyfikatora dostępności.]]></Val>
+            <Val><![CDATA[Parameter sygnatury indeksu nie może mieć modyfikatora dostępności.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2412,7 +2412,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter cannot have an initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr sygnatury indeksu nie może mieć inicjatora.]]></Val>
+            <Val><![CDATA[Parameter sygnatury indeksu nie może mieć inicjatora.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2421,7 +2421,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter must have a type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr sygnatury indeksu musi mieć adnotację typu.]]></Val>
+            <Val><![CDATA[Parameter sygnatury indeksu musi mieć adnotację typu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2439,7 +2439,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr sygnatury indeksu musi mieć typ „string”, „number” lub „symbol” albo typ literału szablonu.]]></Val>
+            <Val><![CDATA[Parameter sygnatury indeksu musi mieć typ „string”, „number” lub „symbol” albo typ literału szablonu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2511,7 +2511,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An object literal cannot have multiple get/set accessors with the same name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Literał obiektu nie może mieć wielu metod dostępu pobierania/ustawiania o takiej samej nazwie.]]></Val>
+            <Val><![CDATA[Literał obiektu nie może mieć wielu method dostępu pobierania/ustawiania o takiej samej nazwie.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3897,7 +3897,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Sprawdź, czy argumenty dla metod „bind”, „call” i „apply” są zgodne z oryginalną funkcją.]]></Val>
+            <Val><![CDATA[Sprawdź, czy argumenty dla method „bind”, „call” i „apply” są zgodne z oryginalną funkcją.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Check that the arguments for `bind`, `call`, and `apply` methods match the original function.]]></Val>
@@ -5226,7 +5226,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Decorators cannot be applied to multiple get/set accessors of the same name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można stosować elementów Decorator do wielu metod dostępu pobierania/ustawiania o takiej samej nazwie.]]></Val>
+            <Val><![CDATA[Nie można stosować elementów Decorator do wielu method dostępu pobierania/ustawiania o takiej samej nazwie.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6495,7 +6495,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Wymuszaj używanie indeksowanych metod dostępu dla kluczy deklarowanych przy użyciu typu indeksowanego.]]></Val>
+            <Val><![CDATA[Wymuszaj używanie indeksowanych method dostępu dla kluczy deklarowanych przy użyciu typu indeksowanego.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type]]></Val>
@@ -8526,7 +8526,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importowanie pliku JSON do modułu ECMAScript wymaga atrybutu importu „type: „json””, gdy parametr „module” ma wartość „{0}”.]]></Val>
+            <Val><![CDATA[Importowanie pliku JSON do modułu ECMAScript wymaga atrybutu importu „type: „json””, gdy parameter „module” ma wartość „{0}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9081,7 +9081,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@param' tag has name '{0}', but there is no parameter with that name. It would match 'arguments' if it had an array type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tag JSDoc „@param” ma nazwę „{0}”, ale nie istnieje parametr o tej nazwie. Byłby on zgodny z elementem „arguments”, gdyby miał typ tablicy.]]></Val>
+            <Val><![CDATA[Tag JSDoc „@param” ma nazwę „{0}”, ale nie istnieje parameter o tej nazwie. Byłby on zgodny z elementem „arguments”, gdyby miał typ tablicy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9960,7 +9960,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nazwane importy z pliku JSON do modułu ECMAScript są niedozwolone, gdy parametr „module” ma wartość „{0}”.]]></Val>
+            <Val><![CDATA[Nazwane importy z pliku JSON do modułu ECMAScript są niedozwolone, gdy parameter „module” ma wartość „{0}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10005,7 +10005,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Namespaces are not allowed in global script files when '{0}' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Przestrzenie nazw są niedozwolone w globalnych plikach skryptów, gdy włączona jest opcja „{0}”. Jeśli ten plik nie jest przeznaczony do bycia skryptem globalnym, ustaw parametr „moduleDetection” na wartość „force” lub dodaj pustą instrukcję „export {}”.]]></Val>
+            <Val><![CDATA[Przestrzenie nazw są niedozwolone w globalnych plikach skryptów, gdy włączona jest opcja „{0}”. Jeśli ten plik nie jest przeznaczony do bycia skryptem globalnym, ustaw parameter „moduleDetection” na wartość „force” lub dodaj pustą instrukcję „export {}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10197,7 +10197,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Non-simple parameter declared here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[W tym miejscu zadeklarowano parametr inny niż prosty.]]></Val>
+            <Val><![CDATA[W tym miejscu zadeklarowano parameter inny niż prosty.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10512,7 +10512,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}={1}' is deprecated and will stop functioning in TypeScript {2}. Specify compilerOption '"ignoreDeprecations": "{3}"' to silence this error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Opcja „{0}={1}” jest przestarzała i przestanie działać w języku TypeScript {2}. Określ parametr compilerOption „ignoreDeprecations”: „{3}”, aby wyciszyć ten błąd.]]></Val>
+            <Val><![CDATA[Opcja „{0}={1}” jest przestarzała i przestanie działać w języku TypeScript {2}. Określ parameter compilerOption „ignoreDeprecations”: „{3}”, aby wyciszyć ten błąd.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10557,7 +10557,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Opcji „{0}” można używać tylko wtedy, gdy parametr „moduleResolution” ma wartość „node16”, „nodenext” lub „bundler”.]]></Val>
+            <Val><![CDATA[Opcji „{0}” można używać tylko wtedy, gdy parameter „moduleResolution” ma wartość „node16”, „nodenext” lub „bundler”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10620,7 +10620,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify compilerOption '"ignoreDeprecations": "{2}"' to silence this error.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Opcja „{0}” jest przestarzała i przestanie działać w języku TypeScript {1}. Określ parametr compilerOption „ignoreDeprecations”: „{2}”, aby wyciszyć ten błąd.]]></Val>
+            <Val><![CDATA[Opcja „{0}” jest przestarzała i przestanie działać w języku TypeScript {1}. Określ parameter compilerOption „ignoreDeprecations”: „{2}”, aby wyciszyć ten błąd.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10713,7 +10713,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można określić opcji „--resolveJsonModule”, gdy parametr „moduleResolution” ma wartość „classic”.]]></Val>
+            <Val><![CDATA[Nie można określić opcji „--resolveJsonModule”, gdy parameter „moduleResolution” ma wartość „classic”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10722,7 +10722,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można określić opcji „--resolveJsonModule”, gdy parametr „module” ma wartość „none”, „system” lub „umd”.]]></Val>
+            <Val><![CDATA[Nie można określić opcji „--resolveJsonModule”, gdy parameter „module” ma wartość „none”, „system” lub „umd”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10731,7 +10731,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można użyć opcji „verbatimModuleSyntax”, gdy parametr „module” ma wartość „UMD”, „AMD” lub „System”.]]></Val>
+            <Val><![CDATA[Nie można użyć opcji „verbatimModuleSyntax”, gdy parameter „module” ma wartość „UMD”, „AMD” lub „System”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10884,7 +10884,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” nie może przywoływać identyfikatora „{1}” zadeklarowanego po nim.]]></Val>
+            <Val><![CDATA[Parameter „{0}” nie może przywoływać identyfikatora „{1}” zadeklarowanego po nim.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10893,7 +10893,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” nie może odwoływać się do siebie samego.]]></Val>
+            <Val><![CDATA[Parameter „{0}” nie może odwoływać się do siebie samego.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10911,7 +10911,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” niejawnie ma typ „{1}”, ale lepszy typ można wywnioskować na podstawie użycia.]]></Val>
+            <Val><![CDATA[Parameter „{0}” niejawnie ma typ „{1}”, ale lepszy typ można wywnioskować na podstawie użycia.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10920,7 +10920,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' is not in the same position as parameter '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” nie znajduje się w tym samym położeniu co parametr „{1}”.]]></Val>
+            <Val><![CDATA[Parameter „{0}” nie znajduje się w tym samym położeniu co parameter „{1}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10929,7 +10929,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of accessor has or is using name '{1}' from external module '{2}' but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” metody dostępu ma nazwę „{1}” z modułu zewnętrznego „{2}” lub używa tej nazwy, ale nie można go nazwać.]]></Val>
+            <Val><![CDATA[Parameter „{0}” metody dostępu ma nazwę „{1}” z modułu zewnętrznego „{2}” lub używa tej nazwy, ale nie można go nazwać.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10938,7 +10938,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of accessor has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” metody dostępu ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” metody dostępu ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10947,7 +10947,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of accessor has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” metody dostępu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” metody dostępu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10956,7 +10956,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” sygnatury wywołania z wyeksportowanego interfejsu ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” sygnatury wywołania z wyeksportowanego interfejsu ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10965,7 +10965,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of call signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” sygnatury wywołania z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” sygnatury wywołania z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10974,7 +10974,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” konstruktora z wyeksportowanej klasy ma nazwę „{1}” z modułu zewnętrznego {2} lub używa tej nazwy, ale nie można go nazwać.]]></Val>
+            <Val><![CDATA[Parameter „{0}” konstruktora z wyeksportowanej klasy ma nazwę „{1}” z modułu zewnętrznego {2} lub używa tej nazwy, ale nie można go nazwać.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10983,7 +10983,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” konstruktora z wyeksportowanej klasy ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” konstruktora z wyeksportowanej klasy ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10992,7 +10992,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” konstruktora z wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” konstruktora z wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11001,7 +11001,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” sygnatury konstruktora z wyeksportowanego interfejsu ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” sygnatury konstruktora z wyeksportowanego interfejsu ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11010,7 +11010,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” sygnatury konstruktora z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” sygnatury konstruktora z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11019,7 +11019,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” wyeksportowanej funkcji ma nazwę „{1}” z modułu zewnętrznego {2} lub używa tej nazwy, ale nie można go nazwać.]]></Val>
+            <Val><![CDATA[Parameter „{0}” wyeksportowanej funkcji ma nazwę „{1}” z modułu zewnętrznego {2} lub używa tej nazwy, ale nie można go nazwać.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11028,7 +11028,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” wyeksportowanej funkcji ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” wyeksportowanej funkcji ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11037,7 +11037,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” wyeksportowanej funkcji ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” wyeksportowanej funkcji ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11046,7 +11046,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” sygnatury indeksu z wyeksportowanego interfejsu ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” sygnatury indeksu z wyeksportowanego interfejsu ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11055,7 +11055,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of index signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” sygnatury indeksu z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” sygnatury indeksu z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11064,7 +11064,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” metody z wyeksportowanego interfejsu ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” metody z wyeksportowanego interfejsu ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11073,7 +11073,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of method from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” metody z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” metody z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11082,7 +11082,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” metody publicznej z wyeksportowanej klasy ma nazwę „{1}” z modułu zewnętrznego {2} lub używa tej nazwy, ale nie można go nazwać.]]></Val>
+            <Val><![CDATA[Parameter „{0}” metody publicznej z wyeksportowanej klasy ma nazwę „{1}” z modułu zewnętrznego {2} lub używa tej nazwy, ale nie można go nazwać.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11091,7 +11091,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” metody publicznej z wyeksportowanej klasy ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” metody publicznej z wyeksportowanej klasy ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11100,7 +11100,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” metody publicznej z wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” metody publicznej z wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11109,7 +11109,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” publicznej metody statycznej z wyeksportowanej klasy ma nazwę „{1}” z modułu zewnętrznego {2} lub używa tej nazwy, ale nie można go nazwać.]]></Val>
+            <Val><![CDATA[Parameter „{0}” publicznej metody statycznej z wyeksportowanej klasy ma nazwę „{1}” z modułu zewnętrznego {2} lub używa tej nazwy, ale nie można go nazwać.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11118,7 +11118,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” publicznej metody statycznej z wyeksportowanej klasy ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” publicznej metody statycznej z wyeksportowanej klasy ma nazwę „{1}” z modułu prywatnego „{2}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11127,7 +11127,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr „{0}” publicznej metody statycznej z wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter „{0}” publicznej metody statycznej z wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11136,7 +11136,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter cannot have question mark and initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr nie może mieć znaku zapytania i inicjatora.]]></Val>
+            <Val><![CDATA[Parameter nie może mieć znaku zapytania i inicjatora.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11154,7 +11154,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter has a name but no type. Did you mean '{0}: {1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr ma nazwę, ale nie ma typu. Czy chodziło Ci o „{0}: {1}”?]]></Val>
+            <Val><![CDATA[Parameter ma nazwę, ale nie ma typu. Czy chodziło Ci o „{0}: {1}”?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11172,7 +11172,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter must have an explicit type annotation with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr musi mieć jawną adnotację typu z wyrażeniem --isolatedDeclarations.]]></Val>
+            <Val><![CDATA[Parameter musi mieć jawną adnotację typu z wyrażeniem --isolatedDeclarations.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11724,7 +11724,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Try changing the 'lib' compiler option to include 'dom'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Właściwość "{0}" nie istnieje w typie "{1}". Spróbuj zmienić opcję kompilatora "lib", aby uwzględnić parametr "dom".]]></Val>
+            <Val><![CDATA[Właściwość "{0}" nie istnieje w typie "{1}". Spróbuj zmienić opcję kompilatora "lib", aby uwzględnić parameter "dom".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12186,7 +12186,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Raise an error when a function parameter isn't read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zgłoś błąd, gdy parametr funkcji nie zostanie odczytany.]]></Val>
+            <Val><![CDATA[Zgłoś błąd, gdy parameter funkcji nie zostanie odczytany.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Raise an error when a function parameter isn't read]]></Val>
@@ -12684,7 +12684,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Rozwiązuj elementy „keyof” tylko do nazw właściwości mających jako wartość ciągi (nie liczby czy symbole).]]></Val>
+            <Val><![CDATA[Rozwiązuj elementy „keyof” tylko do nazw właściwości mających jako wartość ciągi (nie liczby czy symbol).]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12816,7 +12816,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Rest parameter '{0}' implicitly has an 'any[]5D;' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr rest „{0}” niejawnie ma typ „any[]5D;”, ale lepszy typ można wywnioskować na podstawie użycia.]]></Val>
+            <Val><![CDATA[Parameter rest „{0}” niejawnie ma typ „any[]5D;”, ale lepszy typ można wywnioskować na podstawie użycia.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13827,7 +13827,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify the location where debugger should locate TypeScript files instead of source locations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Określ lokalizację, w której debuger ma szukać plików TypeScript zamiast szukania w lokalizacjach źródłowych.]]></Val>
+            <Val><![CDATA[Określ lokalizację, w której debugger ma szukać plików TypeScript zamiast szukania w lokalizacjach źródłowych.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13836,7 +13836,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Specify the location where debugger should locate map files instead of generated locations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Określ lokalizację, w której debuger ma szukać plików map zamiast szukania w wygenerowanych lokalizacjach.]]></Val>
+            <Val><![CDATA[Określ lokalizację, w której debugger ma szukać plików map zamiast szukania w wygenerowanych lokalizacjach.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14982,7 +14982,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Prawa strona instrukcji „for...in” musi zawierać typ „any”, typ obiektu lub parametr typu, a tutaj ma typ „{0}”.]]></Val>
+            <Val><![CDATA[Prawa strona instrukcji „for...in” musi zawierać typ „any”, typ obiektu lub parameter typu, a tutaj ma typ „{0}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15228,7 +15228,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Instrukcja „with” nie jest obsługiwana. Wszystkie symbole w bloku „with” będą mieć typ „any”.]]></Val>
+            <Val><![CDATA[Instrukcja „with” nie jest obsługiwana. Wszystkie symbol w bloku „with” będą mieć typ „any”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15309,7 +15309,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[To odwołanie wsteczne odwołuje się do grupy, która nie istnieje. W tym wyrażeniu regularnym nie ma żadnych grup przechwytywania.]]></Val>
+            <Val><![CDATA[To odwołanie wsteczne odwołuje się do grupy, która nie istnieje. W tym wyrażeniu regularnym nie ma żadnych group przechwytywania.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15318,7 +15318,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This backreference refers to a group that does not exist. There are only {0} capturing groups in this regular expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[To odwołanie wsteczne odwołuje się do grupy, która nie istnieje. W tym wyrażeniu regularnym jest tylko następująca liczba grup przechwytywania: {0}.]]></Val>
+            <Val><![CDATA[To odwołanie wsteczne odwołuje się do grupy, która nie istnieje. W tym wyrażeniu regularnym jest tylko następująca liczba group przechwytywania: {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15651,7 +15651,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This parameter is not allowed with 'use strict' directive.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ten parametr nie jest dozwolony w dyrektywie „use strict”.]]></Val>
+            <Val><![CDATA[Ten parameter nie jest dozwolony w dyrektywie „use strict”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15768,7 +15768,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This type parameter might need an `extends {0}` constraint.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ten parametr typu może wymagać ograniczenia „rozszerzeń{0}”.]]></Val>
+            <Val><![CDATA[Ten parameter typu może wymagać ograniczenia „rozszerzeń{0}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15933,7 +15933,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Po typie „{0}” można iterować tylko wtedy, gdy jest używana flaga „--downlevelIteration” lub parametr „--target” ma wartość „es2015” lub wyższą.]]></Val>
+            <Val><![CDATA[Po typie „{0}” można iterować tylko wtedy, gdy jest używana flaga „--downlevelIteration” lub parameter „--target” ma wartość „es2015” lub wyższą.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16524,7 +16524,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' has a circular constraint.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu „{0}” zawiera ograniczenie cykliczne.]]></Val>
+            <Val><![CDATA[Parameter typu „{0}” zawiera ograniczenie cykliczne.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16533,7 +16533,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' has a circular default.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu „{0}” ma cykliczną wartość domyślną.]]></Val>
+            <Val><![CDATA[Parameter typu „{0}” ma cykliczną wartość domyślną.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16542,7 +16542,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of call signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu „{0}” sygnatury wywołania z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter typu „{0}” sygnatury wywołania z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16551,7 +16551,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu „{0}” sygnatury konstruktora z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter typu „{0}” sygnatury konstruktora z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16560,7 +16560,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu „{0}” wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter typu „{0}” wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16569,7 +16569,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported function has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu „{0}” wyeksportowanej funkcji ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter typu „{0}” wyeksportowanej funkcji ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16578,7 +16578,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu „{0}” wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter typu „{0}” wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16587,7 +16587,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported mapped object type is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu „{0}” wyeksportowanego mapowanego typu obiektu używa nazwy prywatnej „{1}”.]]></Val>
+            <Val><![CDATA[Parameter typu „{0}” wyeksportowanego mapowanego typu obiektu używa nazwy prywatnej „{1}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16596,7 +16596,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported type alias has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu „{0}” wyeksportowanego aliasu typu ma nazwę prywatną „{1}” lub jej używa.]]></Val>
+            <Val><![CDATA[Parameter typu „{0}” wyeksportowanego aliasu typu ma nazwę prywatną „{1}” lub jej używa.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16605,7 +16605,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of method from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu „{0}” metody z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter typu „{0}” metody z wyeksportowanego interfejsu ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16614,7 +16614,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of public method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu „{0}” metody publicznej z wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter typu „{0}” metody publicznej z wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16623,7 +16623,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of public static method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu „{0}” publicznej metody statycznej z wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
+            <Val><![CDATA[Parameter typu „{0}” publicznej metody statycznej z wyeksportowanej klasy ma nazwę prywatną „{1}” lub używa tej nazwy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16668,7 +16668,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter name cannot be '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parametr typu nie może mieć nazwy „{0}”.]]></Val>
+            <Val><![CDATA[Parameter typu nie może mieć nazwy „{0}”.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Type parameter name cannot be '{0}']]></Val>
@@ -17826,7 +17826,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of '{1}' is '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Składniki „{0}” nie akceptują tekstu jako elementów podrzędnych. Tekst w JSX ma typ „string”, ale oczekiwany typ elementu „{1}” to „{2}”.]]></Val>
+            <Val><![CDATA[Składniki „{0}” nie akceptują tekstu jako elementów podrzędnych. Text w JSX ma typ „string”, ale oczekiwany typ elementu „{1}” to „{2}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

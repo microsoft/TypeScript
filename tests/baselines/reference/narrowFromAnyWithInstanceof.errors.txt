@@ -19,7 +19,7 @@ narrowFromAnyWithInstanceof.ts(22,7): error TS2551: Property 'getHuors' does not
     
     if (x instanceof Error) { // 'any' is narrowed to types other than 'Function'/'Object'
         x.message;
-        x.mesage;
+        x.message;
           ~~~~~~
 !!! error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
 !!! related TS2728 lib.es5.d.ts:--:--: 'message' is declared here.

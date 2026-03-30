@@ -20,7 +20,7 @@ namespace M {
     }
 }
 
-namespace M { // Shouldnt be _M
+namespace M { // Shouldn't be _M
     class e {
         private y;
         set M(p) {
@@ -38,7 +38,7 @@ namespace M {
     }
 }
 
-namespace M { // Shouldnt be _M
+namespace M { // Shouldn't be _M
     class e {
         get M() {
             return x;

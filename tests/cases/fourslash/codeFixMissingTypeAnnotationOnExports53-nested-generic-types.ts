@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-// Our current heursitic to avoid overly verbose generic types
+// Our current heuristic to avoid overly verbose generic types
 // doesn't handle generic types nested inside other types.
 
 // @isolatedDeclarations: true

@@ -740,7 +740,7 @@ namespace TypeScript {
             if (isStatic) {
 >isStatic : Symbol(isStatic, Decl(parserRealSource8.ts, 184, 11))
 
-                // In the case of function-nested statics, no member list will have bee initialized for the function, so we need
+                // In the case of function-nested statistics, no member list will have bee initialized for the function, so we need
                 // to copy it over.  We don't set this by default because having a non-null member list will throw off assignment
                 // compatibility tests
                 if (outerFnc.type.members == null && container.getType().memberScope) {
@@ -939,8 +939,8 @@ namespace TypeScript {
 >parentScope : Symbol(parentScope, Decl(parserRealSource8.ts, 187, 11))
 >localContainer : Symbol(localContainer, Decl(parserRealSource8.ts, 179, 11))
 
-        var statics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
->statics : Symbol(statics, Decl(parserRealSource8.ts, 321, 11))
+        var statistics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
+>statistics : Symbol(statistics, Decl(parserRealSource8.ts, 321, 11))
 >funcStaticMembers : Symbol(funcStaticMembers, Decl(parserRealSource8.ts, 313, 11))
 >ambientFuncStaticMembers : Symbol(ambientFuncStaticMembers, Decl(parserRealSource8.ts, 315, 11))
 >parentScope : Symbol(parentScope, Decl(parserRealSource8.ts, 187, 11))
@@ -993,12 +993,12 @@ namespace TypeScript {
 >locals : Symbol(locals, Decl(parserRealSource8.ts, 320, 11))
 >group : Symbol(group, Decl(parserRealSource8.ts, 339, 15))
 
-                group.memberScope = statics;
+                group.memberScope = statistics;
 >group : Symbol(group, Decl(parserRealSource8.ts, 339, 15))
->statics : Symbol(statics, Decl(parserRealSource8.ts, 321, 11))
+>statistics : Symbol(statistics, Decl(parserRealSource8.ts, 321, 11))
 
-                statics.container = group.symbol;
->statics : Symbol(statics, Decl(parserRealSource8.ts, 321, 11))
+                statistics.container = group.symbol;
+>statistics : Symbol(statistics, Decl(parserRealSource8.ts, 321, 11))
 >group : Symbol(group, Decl(parserRealSource8.ts, 339, 15))
             }
             funcDecl.enclosingFnc = context.scopeChain.fnc;
@@ -1038,11 +1038,11 @@ namespace TypeScript {
                                                     funcTable, false);
 >funcTable : Symbol(funcTable, Decl(parserRealSource8.ts, 308, 11))
 
-                context.typeFlow.addLocalsFromScope(statics, fgSym, funcDecl.statics,
+                context.typeFlow.addLocalsFromScope(statistics, fgSym, funcDecl.statistics,
 >context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
 >context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
 >typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
->statics : Symbol(statics, Decl(parserRealSource8.ts, 321, 11))
+>statistics : Symbol(statistics, Decl(parserRealSource8.ts, 321, 11))
 >fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
 >funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
 

@@ -897,7 +897,7 @@ export function emitFiles(
         const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
         // Setup and perform the transformation to retrieve declarations from the input files
         const inputListOrBundle = compilerOptions.outFile ? [factory.createBundle(filesForEmit)] : filesForEmit;
-        // Checker wont collect the linked aliases since thats only done when declaration is enabled and checking is performed.
+        // Checker won't collect the linked aliases since that's only done when declaration is enabled and checking is performed.
         // Do that here when emitting only dts files
         filesForEmit.forEach(sourceFile => {
             if (
@@ -982,7 +982,7 @@ export function emitFiles(
     }
 
     function markLinkedReferences(file: SourceFile) {
-        if (ts.isSourceFileJS(file)) return; // JS files don't use reference calculations as they don't do import ellision, no need to calculate it
+        if (ts.isSourceFileJS(file)) return; // JS files don't use reference calculations as they don't do import elision, no need to calculate it
         ts.forEachChildRecursively(file, n => {
             if (isImportEqualsDeclaration(n) && !(ts.getSyntacticModifierFlags(n) & ts.ModifierFlags.Export)) return "skip"; // These are deferred and marked in a chain when referenced
             if (ts.isImportDeclaration(n)) return "skip"; // likewise, these are ultimately what get marked by calls on other nodes - we want to skip them

@@ -289,7 +289,7 @@ constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or 
             }
     
             /// <summary>
-            /// Test different statements. Including if-else,swith,foreach,(un)checked,lock,using,try-catch-finally
+            /// Test different statements. Including if-else,switch,foreach,(un)checked,lock,using,try-catch-finally
             /// </summary>
             /// <param name="i"></param>
             /// <returns></returns>

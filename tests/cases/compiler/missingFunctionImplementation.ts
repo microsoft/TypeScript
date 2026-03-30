@@ -70,7 +70,7 @@ namespace N10 {
   export function m(a): void { }
 }
 
-// merged namespaces, duplicate defintions
+// merged namespaces, duplicate definitions
 namespace N12 {
   export function m(a): void;
   export function m(): void;

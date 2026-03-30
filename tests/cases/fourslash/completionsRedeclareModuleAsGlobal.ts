@@ -21,7 +21,7 @@
 
 // @Filename: /index.ts
 /////// <reference path="./ambient.d.ts" />
-////asser/**/;
+////assert/**/;
 
 verify.completions({
   marker: "",

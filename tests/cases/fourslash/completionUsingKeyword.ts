@@ -1,19 +1,19 @@
 /// <reference path="fourslash.ts" />
 
 ////function foo() {
-////    usin/*1*/
+////    using/*1*/
 ////}
 ////async function bar() {
-////    await usin/*2*/
+////    await using/*2*/
 ////}
 ////
 ////class C {
 ////    foo() {
-////        usin/*3*/
+////        using/*3*/
 ////    }
 ////
 ////    async bar() {
-////        await usin/*4*/
+////        await using/*4*/
 ////    }
 ////}
 

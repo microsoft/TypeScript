@@ -15,9 +15,9 @@ for (const x of aString) {
     log(x);
 }
 
-declare const aNumber: number;
+declare const a number: number;
 
-for (const x of aNumber) {
+for (const x of a number) {
     log(x);
 }
 

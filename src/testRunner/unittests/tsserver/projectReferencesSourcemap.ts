@@ -483,7 +483,7 @@ fn5();
         });
     });
 
-    describe("when opening depedency and usage project: goToDef and rename", () => {
+    describe("when opening dependency and usage project: goToDef and rename", () => {
         verifyScenario({
             scenarioLocation: "dependencyAndUsage",
             scenario: "goToDef and rename locations",

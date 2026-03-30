@@ -6,7 +6,7 @@
 // @Filename: /a.js
 /**
  * @typedef MyType
- * @property {sting} [x]
+ * @property {string} [x]
  */
 
 /** @param {MyType} p  */

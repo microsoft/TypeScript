@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/commentsClass.ts] ////
 
 === commentsClass.ts ===
-/** This is class c2 without constuctor*/
+/** This is class c2 without constructor*/
 class c2 {
 >c2 : c2
 >   : ^^
@@ -66,7 +66,7 @@ var i4_c = c4;
 >c4 : typeof c4
 >   : ^^^^^^^^^
 
-/** Class with statics*/
+/** Class with statistics*/
 class c5 {
 >c5 : c5
 >   : ^^
@@ -89,8 +89,8 @@ var i5_c = c5;
 >c5 : typeof c5
 >   : ^^^^^^^^^
 
-/// class with statics and constructor
-class c6 { /// class with statics and constructor2
+/// class with statistics and constructor
+class c6 { /// class with statistics and constructor2
 >c6 : c6
 >   : ^^
 
@@ -117,7 +117,7 @@ var i6_c = c6;
 >c6 : typeof c6
 >   : ^^^^^^^^^
 
-// class with statics and constructor
+// class with statistics and constructor
 class c7 {
 >c7 : c7
 >   : ^^
@@ -145,7 +145,7 @@ var i7_c = c7;
 >c7 : typeof c7
 >   : ^^^^^^^^^
 
-/** class with statics and constructor
+/** class with statistics and constructor
  */
 class c8 {
 >c8 : c8

@@ -130,7 +130,7 @@ let nested: { a: number, b: boolean, c: string } =
 >      : ^^^^^
 >c : string
 >  : ^^^^^^
->'overriden' : "overriden"
+>'overridden' : "overridden"
 >            : ^^^^^^^^^^^
 >c : string
 >  : ^^^^^^
@@ -204,7 +204,7 @@ let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >      : ^^^^^
 >c : string
 >  : ^^^^^^
->'overriden' : "overriden"
+>'overridden' : "overridden"
 >            : ^^^^^^^^^^^
 >c : number
 >  : ^^^^^^

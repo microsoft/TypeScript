@@ -660,7 +660,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
 
     verifyTscWatch({
         scenario,
-        subScenario: `fsWatch/when using file watching thats when rename occurs when file is still on the disk`,
+        subScenario: `fsWatch/when using file watching that's when rename occurs when file is still on the disk`,
         commandLineArgs: ["-w", "--extendedDiagnostics"],
         sys: () =>
             TestServerHost.createWatchedSystem(
@@ -697,7 +697,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
     describe("with fsWatch on inodes", () => {
         verifyTscWatch({
             scenario,
-            subScenario: `fsWatch/when using file watching thats on inode`,
+            subScenario: `fsWatch/when using file watching that's on inode`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
             sys: () =>
                 TestServerHost.createWatchedSystem(
@@ -727,7 +727,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
 
         verifyTscWatch({
             scenario,
-            subScenario: `fsWatch/when using file watching thats on inode when rename event ends with tilde`,
+            subScenario: `fsWatch/when using file watching that's on inode when rename event ends with tilde`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
             sys: () =>
                 TestServerHost.createWatchedSystem(
@@ -757,7 +757,7 @@ describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different pol
 
         verifyTscWatch({
             scenario,
-            subScenario: `fsWatch/when using file watching thats on inode when rename occurs when file is still on the disk`,
+            subScenario: `fsWatch/when using file watching that's on inode when rename occurs when file is still on the disk`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
             sys: () =>
                 TestServerHost.createWatchedSystem(

@@ -72,7 +72,7 @@ export interface ListWidget {
     "type": "list",
     "minimum_count": number,
     "maximum_count": number,
-    "collapsable"?: boolean, //default to false, means all expanded
+    "collapsible"?: boolean, //default to false, means all expanded
     "each": Child<ListWidget>;
 }
 
@@ -118,7 +118,7 @@ export interface ListWidget {
     "type": "list";
     "minimum_count": number;
     "maximum_count": number;
-    "collapsable"?: boolean;
+    "collapsible"?: boolean;
     "each": Child<ListWidget>;
 }
 export type TV<T, K extends keyof T> = T[K] extends Record<infer E, any> ? E : never;

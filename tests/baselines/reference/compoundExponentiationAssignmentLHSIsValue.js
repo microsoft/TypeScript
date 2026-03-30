@@ -71,7 +71,7 @@ function bar1() { } **= value;
 // function calls
 foo() **= value;
 
-// parentheses, the containted expression is value
+// parentheses, the contained expression is value
 (this) **= value;
 (M) **= value;
 (C) **= value;
@@ -155,7 +155,7 @@ value;
 value;
 // function calls
 foo() = Math.pow(foo(), value);
-// parentheses, the containted expression is value
+// parentheses, the contained expression is value
 (this) = Math.pow((this), value);
 (M) = Math.pow((M), value);
 (C) = Math.pow((C), value);

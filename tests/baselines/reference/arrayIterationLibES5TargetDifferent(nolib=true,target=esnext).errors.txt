@@ -35,9 +35,9 @@ error TS5053: Option 'lib' cannot be specified with option 'noLib'.
         log(x);
     }
     
-    declare const aNumber: number;
+    declare const a number: number;
     
-    for (const x of aNumber) {
+    for (const x of a number) {
         log(x);
     }
     

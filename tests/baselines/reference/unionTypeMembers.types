@@ -196,7 +196,7 @@ x.commonMethodDifferentParameterType(strOrNum); // error - no call signatures be
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
 
-                                                // and the call signatures arent identical
+                                                // and the call signatures aren't identical
 num = x.commonMethodWithTypeParameter(num);
 >num = x.commonMethodWithTypeParameter(num) : number
 >                                           : ^^^^^^

@@ -282,7 +282,7 @@ export interface SolutionBuilder<T extends BuilderProgram> {
 }
 
 /**
- * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+ * Create a function that reports watch status by writing to the system and handles the formatting of the diagnostic
  */
 export function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter {
     return diagnostic => {
@@ -872,9 +872,9 @@ export interface BuildInvalidedProject<T extends BuilderProgram> extends Invalid
      * Calling emit directly with targetSourceFile and emitOnlyDtsFiles set to true is not advised since
      * emit in build system is responsible in updating status of the project
      * If called with targetSourceFile and emitOnlyDtsFiles set to true, the emit just passes to underlying builder and
-     * wont reflect the status of file as being emitted in the builder
+     * won't reflect the status of file as being emitted in the builder
      * (if that emit of that source file is required it would be emitted again when making sure invalidated project is completed)
-     * This emit is not considered actual emit (and hence uptodate status is not reflected if
+     * This emit is not considered actual emit (and hence up-to-date status is not reflected if
      */
     emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
     // TODO(shkamat):: investigate later if we can emit even when there are declaration diagnostics
@@ -1145,7 +1145,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
         if (!diagnostics.length) {
             state.diagnostics.delete(projectPath);
             state.projectStatus.set(projectPath, {
-                type: UpToDateStatusType.UpToDate,
+                type: UpToDateStatusType.up-to-date,
                 oldestOutputFileName: firstOrUndefinedIterator(emittedOutputs.values()) ?? getFirstProjectOutput(config, !host.useCaseSensitiveFileNames()),
             });
         }
@@ -1250,7 +1250,7 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
 
         const status = getUpToDateStatus(state, config, projectPath);
         if (!options.force) {
-            if (status.type === UpToDateStatusType.UpToDate) {
+            if (status.type === UpToDateStatusType.up-to-date) {
                 verboseReportProjectStatus(state, project, status);
                 reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                 projectPendingBuild.delete(projectPath);
@@ -1684,7 +1684,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     }
 
     // Now see if all outputs are newer than the newest input
-    // Dont check output timestamps if we have buildinfo telling us output is uptodate
+    // Dont check output timestamps if we have buildinfo telling us output is up-to-date
     if (!isIncremental) {
         // Collect the expected outputs of this project
         const outputs = getAllProjectOutputs(project, !host.useCaseSensitiveFileNames());
@@ -1715,7 +1715,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 };
             }
 
-            // No need to get newestDeclarationFileContentChangedTime since thats needed only for composite projects
+            // No need to get newestDeclarationFileContentChangedTime since that's needed only for composite projects
             // And composite projects are the only ones that can be referenced
             if (outputTime < oldestOutputFileTime) {
                 oldestOutputFileTime = outputTime;
@@ -1730,7 +1730,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         for (const { ref, refStatus, resolvedConfig, resolvedRefPath } of referenceStatuses) {
             // If the upstream project's newest file is older than our oldest output, we
             // can't be out of date because of it
-            if ((refStatus as Status.UpToDate).newestInputFileTime && (refStatus as Status.UpToDate).newestInputFileTime! <= oldestOutputFileTime) {
+            if ((refStatus as Status.up-to-date).newestInputFileTime && (refStatus as Status.up-to-date).newestInputFileTime! <= oldestOutputFileTime) {
                 continue;
             }
 
@@ -1744,7 +1744,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             }
 
             // If the upstream project has only change .d.ts files, and we've built
-            // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
+            // *after* those files, then we're "pseudo up to date" and eligible for a fast rebuild
             const newestDeclarationFileContentChangedTime = getLatestChangedDtsTime(state, resolvedConfig.options, resolvedRefPath);
             if (newestDeclarationFileContentChangedTime && newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
                 pseudoUpToDate = true;
@@ -1783,7 +1783,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             UpToDateStatusType.UpToDateWithUpstreamTypes :
             pseudoInputUpToDate ?
             UpToDateStatusType.UpToDateWithInputFileText :
-            UpToDateStatusType.UpToDate,
+            UpToDateStatusType.up-to-date,
         newestInputFileTime,
         newestInputFileName,
         oldestOutputFileName,
@@ -1882,7 +1882,7 @@ function updateOutputTimestamps<T extends BuilderProgram>(state: SolutionBuilder
     }
     updateOutputTimestampsWorker(state, proj, resolvedPath, Diagnostics.Updating_output_timestamps_of_project_0);
     state.projectStatus.set(resolvedPath, {
-        type: UpToDateStatusType.UpToDate,
+        type: UpToDateStatusType.up-to-date,
         oldestOutputFileName: getFirstProjectOutput(proj, !state.host.useCaseSensitiveFileNames()),
     });
 }
@@ -1916,7 +1916,7 @@ function queueReferencingProjects<T extends BuilderProgram>(
             const status = state.projectStatus.get(nextProjectPath);
             if (status) {
                 switch (status.type) {
-                    case UpToDateStatusType.UpToDate:
+                    case UpToDateStatusType.up-to-date:
                         if (buildResult & BuildResultFlags.DeclarationOutputUnchanged) {
                             status.type = UpToDateStatusType.UpToDateWithUpstreamTypes;
                             break;
@@ -2037,7 +2037,7 @@ function cleanWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, p
 }
 
 function invalidateProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFilePath, updateLevel: ProgramUpdateLevel) {
-    // If host implements getParsedCommandLine, we cant get list of files from parseConfigFileHost
+    // If host implements getParsedCommandLine, we can't get list of files from parseConfigFileHost
     if (state.host.getParsedCommandLine && updateLevel === ProgramUpdateLevel.RootNamesAndUpdate) {
         updateLevel = ProgramUpdateLevel.Full;
     }
@@ -2411,7 +2411,7 @@ function reportUpToDateStatus<T extends BuilderProgram>(state: SolutionBuilderSt
                 relName(state, status.buildInfoFile),
                 relName(state, status.inputFile),
             );
-        case UpToDateStatusType.UpToDate:
+        case UpToDateStatusType.up-to-date:
             if (status.newestInputFileTime !== undefined) {
                 return reportStatus(
                     state,

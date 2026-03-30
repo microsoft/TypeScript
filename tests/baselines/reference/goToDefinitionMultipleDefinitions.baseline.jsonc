@@ -63,7 +63,7 @@
 // }|>
 
 // === /tests/cases/fourslash/e.ts ===
-// [|Modul/*GOTO DEF*/e|];
+// [|Module/*GOTO DEF*/e|];
 
   // === Details ===
   [

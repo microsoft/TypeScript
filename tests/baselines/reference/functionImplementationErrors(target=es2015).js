@@ -24,7 +24,7 @@ var f4 = function () {
     }
 }
 
-// Function implemetnation with non -void return type annotation with no return
+// Function implementation with non -void return type annotation with no return
 function f5(): number {
 }
 
@@ -99,7 +99,7 @@ var f4 = function () {
         return [1];
     }
 };
-// Function implemetnation with non -void return type annotation with no return
+// Function implementation with non -void return type annotation with no return
 function f5() {
 }
 // Function signature with parameter initializer referencing in scope local variable

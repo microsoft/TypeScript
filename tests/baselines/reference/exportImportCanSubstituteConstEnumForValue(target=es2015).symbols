@@ -83,7 +83,7 @@ namespace MsPortalFx.ViewModels {
 >DialogResult : Symbol(ReExportedEnum, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 41))
 
     /**
-     * Not exported to show difference. No javascript is emmitted (as expected)
+     * Not exported to show difference. No javascript is emitted (as expected)
      */
     import DialogButtons = Dialogs.MessageBoxButtons;
 >DialogButtons : Symbol(DialogButtons, Decl(exportImportCanSubstituteConstEnumForValue.ts, 35, 56))
@@ -91,7 +91,7 @@ namespace MsPortalFx.ViewModels {
 >MessageBoxButtons : Symbol(DialogButtons, Decl(exportImportCanSubstituteConstEnumForValue.ts, 17, 5))
 
     /**
-     * Re-exporting a function type to show difference. No javascript is emmitted (as expected)
+     * Re-exporting a function type to show difference. No javascript is emitted (as expected)
      */
     export import Callback = Dialogs.DialogResultCallback;
 >Callback : Symbol(Callback, Decl(exportImportCanSubstituteConstEnumForValue.ts, 40, 53))

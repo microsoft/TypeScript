@@ -63,8 +63,8 @@ if (aFoo.bar && aFoo.nested.b) {
 >another : Symbol(another, Decl(destructuringTypeGuardFlow.ts, 15, 7))
 >baz : Symbol(baz, Decl(destructuringTypeGuardFlow.ts, 12, 14))
 
-  const aAgain: number = a;
->aAgain : Symbol(aAgain, Decl(destructuringTypeGuardFlow.ts, 16, 7))
+  const again: number = a;
+>again : Symbol(again, Decl(destructuringTypeGuardFlow.ts, 16, 7))
 >a : Symbol(a, Decl(destructuringTypeGuardFlow.ts, 12, 29))
 
   const bAgain: string = text;
@@ -134,8 +134,8 @@ if (bBar.elem2 && bBar.elem2.bar && bBar.elem2.nested.b) {
 >another : Symbol(another, Decl(destructuringTypeGuardFlow.ts, 31, 7))
 >baz : Symbol(baz, Decl(destructuringTypeGuardFlow.ts, 28, 14))
 
-  const aAgain: number = a;
->aAgain : Symbol(aAgain, Decl(destructuringTypeGuardFlow.ts, 32, 7))
+  const again: number = a;
+>again : Symbol(again, Decl(destructuringTypeGuardFlow.ts, 32, 7))
 >a : Symbol(a, Decl(destructuringTypeGuardFlow.ts, 28, 29))
 
   const bAgain: string = text;

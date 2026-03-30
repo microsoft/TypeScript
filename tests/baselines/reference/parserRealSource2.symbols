@@ -223,10 +223,10 @@ namespace TypeScript {
         None = 0,
 >None : Symbol(ASTFlags.None, Decl(parserRealSource2.ts, 77, 26))
 
-        ExplicitSemicolon = 1, // statment terminated by an explicit semicolon
+        ExplicitSemicolon = 1, // statement terminated by an explicit semicolon
 >ExplicitSemicolon : Symbol(ASTFlags.ExplicitSemicolon, Decl(parserRealSource2.ts, 78, 17))
 
-        AutomaticSemicolon = 1 << 1, // statment terminated by an automatic semicolon
+        AutomaticSemicolon = 1 << 1, // statement terminated by an automatic semicolon
 >AutomaticSemicolon : Symbol(ASTFlags.AutomaticSemicolon, Decl(parserRealSource2.ts, 79, 30))
 
         Writeable = 1 << 2,  // node is lhs that can be modified

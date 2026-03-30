@@ -359,7 +359,7 @@ interface ConvertedLoopState {
     loopParameters: ParameterDeclaration[];
 
     /**
-     * List of loop out parameters - detailed descripion can be found in the comment to LoopOutParameter
+     * List of loop out parameters - detailed description can be found in the comment to LoopOutParameter
      */
     loopOutParameters: LoopOutParameter[];
 }

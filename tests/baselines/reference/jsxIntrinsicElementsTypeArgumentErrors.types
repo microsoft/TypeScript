@@ -33,7 +33,7 @@ const b = <div<number,>></div>; // trailing comma type args
 >div : any
 >    : ^^^
 
-const c = <div<Missing>></div>; // nonexistant type args
+const c = <div<Missing>></div>; // nonexistent type args
 >c : JSX.Element
 >  : ^^^^^^^^^^^
 ><div<Missing>></div> : JSX.Element
@@ -90,7 +90,7 @@ const h = <div<number,>/>; // trailing comma type args
 >div : any
 >    : ^^^
 
-const i = <div<Missing>/>; // nonexistant type args
+const i = <div<Missing>/>; // nonexistent type args
 >i : JSX.Element
 >  : ^^^^^^^^^^^
 ><div<Missing>/> : JSX.Element

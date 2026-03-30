@@ -128,7 +128,7 @@ const bar: Bar = {
         // so `babel-loader` is still a containing project of `loading-indicator` file.
         assert(loadingIndicatorScriptInfo.containingProjects.find(p => p.projectName === "/home/src/projects/project/packages/babel-loader/tsconfig.json"));
         // When calling find all references,
-        // we shouldn't crash due to using outdated information on a file's containig projects.
+        // we shouldn't crash due to using outdated information on a file's containing projects.
         session.executeCommandSeq<protocol.ReferencesRequest>({
             command: protocol.CommandTypes.References,
             arguments: {

@@ -29,7 +29,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var {...r1} = p1;   // Error, generic type paramterre
     var {...r2} = p2;   // OK
-    var {...r3} = t;   // Error, generic type paramter
+    var {...r3} = t;   // Error, generic type parameter
     var {...r4} = i;   // Error, index access
     var {...r5} = k;   // Error, index
 
@@ -96,7 +96,7 @@ function f(p1, p2) {
     var a = 0;
     var r1 = __rest(p1, []); // Error, generic type paramterre
     var r2 = __rest(p2, []); // OK
-    var r3 = __rest(t, []); // Error, generic type paramter
+    var r3 = __rest(t, []); // Error, generic type parameter
     var r4 = __rest(i, []); // Error, index access
     var r5 = __rest(k, []); // Error, index
     var r6 = __rest(mapped_generic, []); // Error, generic mapped object type

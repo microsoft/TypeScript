@@ -34,7 +34,7 @@ namespace N {
     export function F2(x: number): string { return x.toString(); }
 }
 
-var aNumber: number = 'this is a string';
+var a number: number = 'this is a string';
 var aString: string = 9.9;
 var aDate: Date = 9.9;
 
@@ -80,7 +80,7 @@ var N;
     function F2(x) { return x.toString(); }
     N.F2 = F2;
 })(N || (N = {}));
-var aNumber = 'this is a string';
+var a number = 'this is a string';
 var aString = 9.9;
 var aDate = 9.9;
 var aVoid = 9.9;

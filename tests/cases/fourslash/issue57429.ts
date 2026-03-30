@@ -13,7 +13,7 @@
 ////
 //// Builder<IThing>({
 ////   doThing(args: { value: object }) {
-////     const { v/*1*/alue } = this.[|args|]
+////     const { v/*1*/value } = this.[|args|]
 ////     return `${value}`
 ////   },
 ////   doAnotherThing() { },

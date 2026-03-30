@@ -38,7 +38,7 @@ narrowFromAnyWithTypePredicate.ts(33,7): error TS2551: Property 'getHuors' does 
     
     if (isError(x)) { 
         x.message;
-        x.mesage;
+        x.message;
           ~~~~~~
 !!! error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
 !!! related TS2728 lib.es5.d.ts:--:--: 'message' is declared here.

@@ -25,8 +25,8 @@ enum foo {
     private,
 >private : Symbol(foo.private, Decl(strictModeReservedWord2.ts, 7, 11))
 
-    pacakge
->pacakge : Symbol(foo.pacakge, Decl(strictModeReservedWord2.ts, 8, 12))
+    package
+>package : Symbol(foo.package, Decl(strictModeReservedWord2.ts, 8, 12))
 }
 
 const enum private {
@@ -38,8 +38,8 @@ const enum private {
     private,
 >private : Symbol(private.private, Decl(strictModeReservedWord2.ts, 13, 11))
 
-    pacakge
->pacakge : Symbol(private.pacakge, Decl(strictModeReservedWord2.ts, 14, 12))
+    package
+>package : Symbol(private.package, Decl(strictModeReservedWord2.ts, 14, 12))
 }
 
 const enum bar {
@@ -51,7 +51,7 @@ const enum bar {
     private,
 >private : Symbol(bar.private, Decl(strictModeReservedWord2.ts, 19, 11))
 
-    pacakge
->pacakge : Symbol(bar.pacakge, Decl(strictModeReservedWord2.ts, 20, 12))
+    package
+>package : Symbol(bar.package, Decl(strictModeReservedWord2.ts, 20, 12))
 }
 

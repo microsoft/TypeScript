@@ -19,8 +19,8 @@ const aString = [""];
 >aString : Symbol(aString, Decl(file.js, 10, 5))
 
 /** @type {A<number>} */ // ok, `T` is provided for `A`
-const aNumber = [0];
->aNumber : Symbol(aNumber, Decl(file.js, 12, 5))
+const a number = [0];
+>a number : Symbol(a number, Decl(file.js, 12, 5))
 
 /**
  * @template T

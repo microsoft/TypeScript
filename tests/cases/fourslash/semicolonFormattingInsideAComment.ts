@@ -4,6 +4,6 @@
 
 goTo.marker();
 edit.insert(';');
-// Semicolon Formating should not be triggered inside comments
+// Semicolon Formatting should not be triggered inside comments
 verify.currentLineContentIs('   //;');
 

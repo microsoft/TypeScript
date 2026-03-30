@@ -697,14 +697,14 @@ describe("unittests:: tsserver:: projects::", () => {
 
         // Specify .html extension as mixed content in a configure host request
         const extraFileExtensions = [{ extension: ".html", scriptKind: ts.ScriptKind.JS, isMixedContent: true }];
-        verfiy(config1, TestServerHost.createServerHost([file1, file2, config1]));
+        verify(config1, TestServerHost.createServerHost([file1, file2, config1]));
 
         //  #2. Ensure no errors when allowJs is false
         const config2 = {
             path: "/user/username/projects/project/tsconfig.json",
             content: jsonToReadableText({ compilerOptions: { allowJs: false } }),
         };
-        verfiy(config2, TestServerHost.createServerHost([file1, file2, config2]));
+        verify(config2, TestServerHost.createServerHost([file1, file2, config2]));
 
         //  #3. Ensure no errors when compiler options aren't specified
         const config3 = {
@@ -712,7 +712,7 @@ describe("unittests:: tsserver:: projects::", () => {
             content: jsonToReadableText({}),
         };
 
-        verfiy(config3, TestServerHost.createServerHost([file1, file2, config3]));
+        verify(config3, TestServerHost.createServerHost([file1, file2, config3]));
 
         //  #4. Ensure no errors when files are explicitly specified in tsconfig
         const config4 = {
@@ -720,7 +720,7 @@ describe("unittests:: tsserver:: projects::", () => {
             content: jsonToReadableText({ compilerOptions: { allowJs: true }, files: [file1.path, file2.path] }),
         };
 
-        verfiy(config4, TestServerHost.createServerHost([file1, file2, config4]));
+        verify(config4, TestServerHost.createServerHost([file1, file2, config4]));
 
         //  #4. Ensure no errors when files are explicitly excluded in tsconfig
         const config5 = {
@@ -728,10 +728,10 @@ describe("unittests:: tsserver:: projects::", () => {
             content: jsonToReadableText({ compilerOptions: { allowJs: true }, exclude: [file2.path] }),
         };
 
-        const session = verfiy(config5, TestServerHost.createServerHost([file1, file2, config5]));
+        const session = verify(config5, TestServerHost.createServerHost([file1, file2, config5]));
         baselineTsserverLogs("projects", "no tsconfig script block diagnostic errors", session);
 
-        function verfiy(config: File, host: TestServerHost) {
+        function verify(config: File, host: TestServerHost) {
             logger.host = host;
             const session = new TestSession({ host, logger });
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({

@@ -116,7 +116,7 @@ f01<A>(a);
 >a : A
 >  : ^
 
-// function with a type paramter with a default
+// function with a type parameter with a default
 declare function f02<T = A>(a?: T): T;
 >f02 : <T = A>(a?: T) => T
 >    : ^ ^^^^^^ ^^^ ^^^^^ 
@@ -234,7 +234,7 @@ f03<B>(b);
 >b : B
 >  : ^
 
-// function with a type paramter without a default and a type parameter with a default
+// function with a type parameter without a default and a type parameter with a default
 declare function f04<T, U = B>(a?: T, b?: U): [T, U];
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
 >    : ^ ^^ ^^^^^^ ^^^ ^^ ^^^ ^^^^^      

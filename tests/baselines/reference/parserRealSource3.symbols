@@ -253,8 +253,8 @@ namespace TypeScript {
         For,
 >For : Symbol(NodeType.For, Decl(parserRealSource3.ts, 86, 14))
 
-        ForIn,
->ForIn : Symbol(NodeType.ForIn, Decl(parserRealSource3.ts, 87, 12))
+        foreign,
+>foreign : Symbol(NodeType.foreign, Decl(parserRealSource3.ts, 87, 12))
 
         If,
 >If : Symbol(NodeType.If, Decl(parserRealSource3.ts, 88, 14))

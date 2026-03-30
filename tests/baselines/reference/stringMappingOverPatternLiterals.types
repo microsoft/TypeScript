@@ -322,7 +322,7 @@ function f3(
 >x2 : Uppercase<string>
 >   : ^^^^^^^^^^^^^^^^^
 
-    // and this should also not be equivlent to any others
+    // and this should also not be equivalent to any others
     var x4: Lowercase<Uppercase<string>> = null as any;
 >x4 : Lowercase<Uppercase<string>>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -54,7 +54,7 @@ foo<T>();
 >    : ^^^
 
 === /new.ts ===
-import { Foo } from "unkown";
+import { Foo } from "unknown";
 >Foo : any
 >    : ^^^
 

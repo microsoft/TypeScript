@@ -11,6 +11,6 @@ export class Test1 {
     constructor(private field1: string) {
     }
     messageHandler = () => {
-        console.log(field1); // Should be error that couldnt find symbol field1
+        console.log(field1); // Should be error that couldn't find symbol field1
     };
 }

@@ -27,7 +27,7 @@ if (isAnything(x)) { // 'any' is narrowed to types other than 'Function'/'Object
 
 if (isError(x)) { 
     x.message;
-    x.mesage;
+    x.message;
 }
 
 if (isDate(x)) {

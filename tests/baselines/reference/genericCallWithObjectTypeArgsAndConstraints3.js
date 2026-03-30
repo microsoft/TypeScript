@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts] ////
 
 //// [genericCallWithObjectTypeArgsAndConstraints3.ts]
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 
 class Base {
     x: string;
@@ -41,7 +41,7 @@ var r6 = f3(x => x, null);
 
 //// [genericCallWithObjectTypeArgsAndConstraints3.js]
 "use strict";
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 class Base {
 }
 class Derived extends Base {

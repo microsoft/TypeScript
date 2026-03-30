@@ -8,7 +8,7 @@ const a = <div<>></div>; // empty type args
 
 const b = <div<number,>></div>; // trailing comma type args
 
-const c = <div<Missing>></div>; // nonexistant type args
+const c = <div<Missing>></div>; // nonexistent type args
 
 const d = <div<Missing<AlsoMissing>>></div>; // nested missing type args
 
@@ -21,7 +21,7 @@ const g = <div<>/>; // empty type args
 
 const h = <div<number,>/>; // trailing comma type args
 
-const i = <div<Missing>/>; // nonexistant type args
+const i = <div<Missing>/>; // nonexistent type args
 
 const j = <div<Missing<AlsoMissing>>/>; // nested missing type args
 

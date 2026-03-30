@@ -84,7 +84,7 @@ function foo() {
 >implements : Symbol(interface.package.implements)
 >B : Symbol(interface.package.implements.B)
 
-    ublic();
+    public();
     static();
 >static : Symbol(static, Decl(strictModeReservedWord.ts, 5, 7))
 }

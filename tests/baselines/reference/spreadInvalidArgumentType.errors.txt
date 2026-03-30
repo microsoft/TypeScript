@@ -42,7 +42,7 @@ spreadInvalidArgumentType.ts(54,17): error TS2698: Spread types may only be crea
     
         var o1 = { ...p1 };  // OK, generic type paramterre
         var o2 = { ...p2 };  // OK
-        var o3 = { ...t };   // OK, generic type paramter
+        var o3 = { ...t };   // OK, generic type parameter
         var o4 = { ...i };   // Error, index access
                    ~~~~
 !!! error TS2698: Spread types may only be created from object types.

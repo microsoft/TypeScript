@@ -120,7 +120,7 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         public prop5(a: number): number;
         /** prop5 2*/
         public prop5(b: string): number;
-        /** Prop5 implementaion*/
+        /** Prop5 implementation*/
         public prop5(aorb: any) {
             return 10;
         }

@@ -68,7 +68,7 @@ errorsInGenericTypeReference.ts(68,24): error TS2304: Cannot find name 'V'.
 !!! error TS2304: Cannot find name 'V'.
     
     
-    // in paramter types
+    // in parameter types
     function testFunction2(p: Foo<{ x: V }>) { }// error: could not find symbol V
                                        ~
 !!! error TS2304: Cannot find name 'V'.

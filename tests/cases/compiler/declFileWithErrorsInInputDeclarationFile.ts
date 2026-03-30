@@ -14,4 +14,4 @@ declare namespace M {
 
 // @Filename: client.ts
 ///<reference path="declFile.d.ts" preserve="true"/>
-var x = new M.C(); // Declaration file wont get emitted because there are errors in declaration file
+var x = new M.C(); // Declaration file won't get emitted because there are errors in declaration file

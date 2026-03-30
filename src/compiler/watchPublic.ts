@@ -187,12 +187,12 @@ export interface ProgramHost<T extends BuilderProgram> {
 
     /**
      * Use to check file presence for source files and
-     * if resolveModuleNames is not provided (complier is in charge of module resolution) then module files as well
+     * if resolveModuleNames is not provided (compiler is in charge of module resolution) then module files as well
      */
     fileExists(path: string): boolean;
     /**
      * Use to read file text for source files and
-     * if resolveModuleNames is not provided (complier is in charge of module resolution) then module files as well
+     * if resolveModuleNames is not provided (compiler is in charge of module resolution) then module files as well
      */
     readFile(path: string, encoding?: string): string | undefined;
 
@@ -317,7 +317,7 @@ export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends
 
     /**
      * Used to generate source file names from the config file and its include, exclude, files rules
-     * and also to cache the directory stucture
+     * and also to cache the directory structure
      */
     readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
 }
@@ -544,7 +544,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         (() => resolutionCache.getModuleResolutionCache());
     const userProvidedResolution = !!host.resolveModuleNameLiterals || !!host.resolveTypeReferenceDirectiveReferences ||
         !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
-    // All resolutions are invalid if user provided resolutions and didnt supply hasInvalidatedResolutions
+    // All resolutions are invalid if user provided resolutions and didn't supply hasInvalidatedResolutions
     const customHasInvalidatedResolutions = userProvidedResolution ?
         maybeBind(host, host.hasInvalidatedResolutions) || returnTrue :
         returnFalse;
@@ -709,7 +709,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
         if (missingFilePathsRequestedForRelease) {
             // These are the paths that program creater told us as not in use any more but were missing on the disk.
-            // We didnt remove the entry for them from sourceFiles cache so that we dont have to do File IO,
+            // We didn't remove the entry for them from sourceFiles cache so that we dont have to do File IO,
             // if there is already watcher for it (for missing files)
             // At this point our watches were updated, hence now we know that these paths are not tracked and need to be removed
             // so that at later time we have correct result of their presence
@@ -821,12 +821,12 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
     function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions, hasSourceFileByPath: boolean) {
         const hostSourceFileInfo = sourceFilesCache.get(oldSourceFile.resolvedPath);
-        // If this is the source file thats in the cache and new program doesnt need it,
+        // If this is the source file that's in the cache and new program doesnt need it,
         // remove the cached entry.
-        // Note we arent deleting entry if file became missing in new program or
+        // Note we aren't deleting entry if file became missing in new program or
         // there was version update and new source file was created.
         if (hostSourceFileInfo !== undefined) {
-            // record the missing file paths so they can be removed later if watchers arent tracking them
+            // record the missing file paths so they can be removed later if watchers aren't tracking them
             if (isFileMissingOnHost(hostSourceFileInfo)) {
                 (missingFilePathsRequestedForRelease || (missingFilePathsRequestedForRelease = [])).push(oldSourceFile.path);
             }
@@ -985,7 +985,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         let config = parsedConfigs?.get(configPath);
         if (config) {
             if (!config.updateLevel) return config.parsedCommandLine;
-            // With host implementing getParsedCommandLine we cant just update file names
+            // With host implementing getParsedCommandLine we can't just update file names
             if (config.parsedCommandLine && config.updateLevel === ProgramUpdateLevel.RootNamesAndUpdate && !host.getParsedCommandLine) {
                 writeLog("Reloading new file names and options");
                 Debug.assert(compilerOptions);

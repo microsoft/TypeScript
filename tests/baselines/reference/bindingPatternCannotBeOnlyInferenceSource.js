@@ -21,7 +21,7 @@ type TFuncs1 = typeof funcs1;
 declare function useReduxDispatch1<T extends IDestructuring<TFuncs1>>(destructuring: Destructuring<TFuncs1, T>): T;
 const {} = useReduxDispatch1(
     (d, f) => ({
-        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable
+        funcA: (...p) => d(f.funcA(...p)), // p should be inferable
         funcB: (...p) => d(f.funcB(...p)),
         funcC: (...p) => d(f.funcC(...p)),
     })
@@ -40,7 +40,7 @@ const funcs1 = {
     funcC: (c, cc, ccc) => { },
 };
 const {} = useReduxDispatch1((d, f) => ({
-    funcA: (...p) => d(f.funcA(...p)), // p should be inferrable
+    funcA: (...p) => d(f.funcA(...p)), // p should be inferable
     funcB: (...p) => d(f.funcB(...p)),
     funcC: (...p) => d(f.funcC(...p)),
 }));

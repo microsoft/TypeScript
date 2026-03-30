@@ -37,7 +37,7 @@ jsxIntrinsicElementsTypeArgumentErrors.tsx(28,16): error TS2558: Expected 0 type
                          ~
 !!! error TS1009: Trailing comma not allowed.
     
-    const c = <div<Missing>></div>; // nonexistant type args
+    const c = <div<Missing>></div>; // nonexistent type args
                    ~~~~~~~
 !!! error TS2304: Cannot find name 'Missing'.
                    ~~~~~~~
@@ -72,7 +72,7 @@ jsxIntrinsicElementsTypeArgumentErrors.tsx(28,16): error TS2558: Expected 0 type
                          ~
 !!! error TS1009: Trailing comma not allowed.
     
-    const i = <div<Missing>/>; // nonexistant type args
+    const i = <div<Missing>/>; // nonexistent type args
                    ~~~~~~~
 !!! error TS2304: Cannot find name 'Missing'.
                    ~~~~~~~

@@ -200,7 +200,7 @@ function verifyTscEditDiscrepancies(
             const { buildInfo: cleanBuildInfo, readableBuildInfo: cleanReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(cleanBuildText);
             const dtsSignatures = result.dtsSignatures?.get(outputFile);
             verifyTextEqual(incrementalBuildInfo, cleanBuildInfo, `TsBuild info text without affectedFilesPendingEmit:: ${outputFile}::`);
-            // Verify file info sigantures
+            // Verify file info signatures
             verifyMapLike(
                 (incrementalReadableBuildInfo as ReadableIncrementalMultiFileEmitBuildInfo)?.fileInfos,
                 (cleanReadableBuildInfo as ReadableIncrementalMultiFileEmitBuildInfo)?.fileInfos,
@@ -344,7 +344,7 @@ function verifyTscEditDiscrepancies(
             });
         }
     }
-    if (!headerAdded && input.edits![index].discrepancyExplanation) addBaseline("*** Supplied discrepancy explanation but didnt find any difference");
+    if (!headerAdded && input.edits![index].discrepancyExplanation) addBaseline("*** Supplied discrepancy explanation but didn't find any difference");
     return baselines;
 
     function verifyTextEqual(incrementalText: string | undefined, cleanText: string | undefined, message: string) {
@@ -426,7 +426,7 @@ function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): {
                     fileNames: undefined,
                     fileIdsList: undefined,
                     fileInfos: sanitizedFileInfos,
-                    // Ignore noEmit since that shouldnt be reason to emit the tsbuild info and presence of it in the buildinfo file does not matter
+                    // Ignore noEmit since that shouldn't be reason to emit the tsbuild info and presence of it in the buildinfo file does not matter
                     options: readableBuildInfo.options && {
                         ...readableBuildInfo.options,
                         noEmit: undefined,

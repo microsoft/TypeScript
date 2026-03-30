@@ -58,8 +58,8 @@ namespace M {
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
-for(var aNumber: number = 9.9;;){} 
->aNumber : Symbol(aNumber, Decl(forStatements.ts, 24, 7))
+for(var a number: number = 9.9;;){} 
+>a number : Symbol(a number, Decl(forStatements.ts, 24, 7))
 
 for(var aString: string = 'this is a string';;){}
 >aString : Symbol(aString, Decl(forStatements.ts, 25, 7))

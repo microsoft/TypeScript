@@ -132,7 +132,7 @@ x.doSomeThing() ? exprString1 : exprBoolean1; // union
 >exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 11))
 >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 11))
 
-//Results shoud be same as Expr1 and Expr2
+//Results should be same as Expr1 and Expr2
 var resultIsAny1 = condAny ? exprAny1 : exprAny2;
 >resultIsAny1 : Symbol(resultIsAny1, Decl(conditionalOperatorConditoinIsAnyType.ts, 41, 3))
 >condAny : Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 11))

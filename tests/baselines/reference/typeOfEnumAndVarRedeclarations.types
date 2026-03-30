@@ -25,7 +25,7 @@ var x = E;
 >E : typeof E
 >  : ^^^^^^^^
 
-var x: { readonly a: E; readonly b: E; readonly [x: number]: string; }; // Shouldnt error
+var x: { readonly a: E; readonly b: E; readonly [x: number]: string; }; // Shouldn't error
 >x : typeof E
 >  : ^^^^^^^^
 >a : E

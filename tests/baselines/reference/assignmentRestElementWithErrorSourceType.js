@@ -2,9 +2,9 @@
 
 //// [assignmentRestElementWithErrorSourceType.ts]
 var tuple: [string, number];
-[...c] = tupel; // intentionally misspelled
+[...c] = tuple; // intentionally misspelled
 
 //// [assignmentRestElementWithErrorSourceType.js]
 "use strict";
 var tuple;
-[...c] = tupel; // intentionally misspelled
+[...c] = tuple; // intentionally misspelled

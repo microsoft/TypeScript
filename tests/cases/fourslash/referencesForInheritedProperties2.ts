@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-// extends statement in a diffrent declaration
+// extends statement in a different declaration
 
 ////interface interface1 {
 ////    /*1*/doStuff(): void;

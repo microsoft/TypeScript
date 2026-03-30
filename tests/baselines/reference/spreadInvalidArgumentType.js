@@ -31,7 +31,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var o1 = { ...p1 };  // OK, generic type paramterre
     var o2 = { ...p2 };  // OK
-    var o3 = { ...t };   // OK, generic type paramter
+    var o3 = { ...t };   // OK, generic type parameter
     var o4 = { ...i };   // Error, index access
     var o5 = { ...k };   // Error, index
     var o6 = { ...mapped_generic }; // OK, generic mapped object type
@@ -86,7 +86,7 @@ function f(p1, p2) {
     var e;
     var o1 = Object.assign({}, p1); // OK, generic type paramterre
     var o2 = Object.assign({}, p2); // OK
-    var o3 = Object.assign({}, t); // OK, generic type paramter
+    var o3 = Object.assign({}, t); // OK, generic type parameter
     var o4 = Object.assign({}, i); // Error, index access
     var o5 = Object.assign({}, k); // Error, index
     var o6 = Object.assign({}, mapped_generic); // OK, generic mapped object type

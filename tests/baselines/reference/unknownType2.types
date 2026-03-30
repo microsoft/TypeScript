@@ -243,8 +243,8 @@ declare const aBoolean: boolean;
 >aBoolean : boolean
 >         : ^^^^^^^
 
-declare const aNumber: number;
->aNumber : number
+declare const a number: number;
+>a number : number
 >        : ^^^^^^
 
 declare const anObject: object;
@@ -307,12 +307,12 @@ if (u === aBoolean) {
 >  : ^^^^^^^
 }
 
-if (u === aNumber) {
->u === aNumber : boolean
+if (u === a number) {
+>u === a number : boolean
 >              : ^^^^^^^
 >u : unknown
 >  : ^^^^^^^
->aNumber : number
+>a number : number
 >        : ^^^^^^
 
     let uNumber: number = u;

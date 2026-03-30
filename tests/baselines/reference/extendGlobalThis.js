@@ -10,7 +10,7 @@ declare global {
 export {}
 
 //// [index.ts]
-import "./extention";
+import "./extension";
 
 globalThis.tests = "a-b";
 console.log(globalThis.test.split("-"));
@@ -19,6 +19,6 @@ console.log(globalThis.test.split("-"));
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./extention");
+require("./extension");
 globalThis.tests = "a-b";
 console.log(globalThis.test.split("-"));

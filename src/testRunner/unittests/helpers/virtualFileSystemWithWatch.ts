@@ -1099,7 +1099,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return sys.createSHA256Hash!(s);
     }
 
-    // TOOD: record and invoke callbacks to simulate timer events
+    // TODO: record and invoke callbacks to simulate timer events
     setTimeout(callback: TimeOutCallback, ms: number, ...args: any[]): number {
         return this.timeoutCallbacks.register(callback, args, ms);
     }

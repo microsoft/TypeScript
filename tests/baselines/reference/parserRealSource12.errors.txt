@@ -571,7 +571,7 @@ parserRealSource12.ts(524,30): error TS2304: Cannot find name 'ASTList'.
                 this.childrenWalkers[NodeType.For] = ChildrenWalkers.walkForStatementChildren;
                                      ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
-                this.childrenWalkers[NodeType.ForIn] = ChildrenWalkers.walkForInStatementChildren;
+                this.childrenWalkers[NodeType.foreign] = ChildrenWalkers.walkForInStatementChildren;
                                      ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.If] = ChildrenWalkers.walkIfStatementChildren;

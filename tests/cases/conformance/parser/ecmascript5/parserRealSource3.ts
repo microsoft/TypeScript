@@ -87,7 +87,7 @@ namespace TypeScript {
         Continue,
         Throw,
         For,
-        ForIn,
+        foreign,
         If,
         While,
         DoWhile,

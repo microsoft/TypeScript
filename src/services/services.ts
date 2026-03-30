@@ -1946,7 +1946,7 @@ export function createLanguageService(
                         return documentRegistry.updateDocumentWithKey(fileName, path, host, documentRegistryBucketKey, scriptSnapshot, scriptVersion, scriptKind, languageVersionOrOptions);
                     }
                     else {
-                        // Release old source file and fall through to aquire new file with new script kind
+                        // Release old source file and fall through to acquire new file with new script kind
                         documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions()), oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
                         releasedScriptKinds!.add(oldSourceFile.resolvedPath);
                     }
@@ -2532,7 +2532,7 @@ export function createLanguageService(
             case SyntaxKind.Identifier:
                 break;
 
-            // Cant create the text span
+            // Can't create the text span
             default:
                 return undefined;
         }

@@ -424,7 +424,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      */
     private lastReportedVersion = 0;
     /**
-     * Current project's program version. (incremented everytime new program is created that is not complete reuse from the old one)
+     * Current project's program version. (incremented every time new program is created that is not complete reuse from the old one)
      * This property is changed in 'updateGraph' based on the set of files in program
      * @internal
      */
@@ -1123,7 +1123,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         if (this.typingsCache) this.projectService.typingsInstaller.onProjectClosed(this);
         this.typingsCache = undefined;
         this.closeWatchingTypingLocations();
-        // if we have a program - release all files that are enlisted in program but arent root
+        // if we have a program - release all files that are enlisted in program but aren't root
         // The releasing of the roots happens later
         // The project could have pending update remaining and hence the info could be in the files but not in program graph
         this.cleanupProgram();
@@ -2449,7 +2449,7 @@ export class InferredProject extends Project {
     readonly projectRootPath: string | undefined;
 
     /**
-     * stored only if their is no projectRootPath and this isnt single inferred project
+     * stored only if their is no projectRootPath and this isn't single inferred project
      *
      * @internal
      */
@@ -3035,7 +3035,7 @@ export class ConfiguredProject extends Project {
             this.triggerFileForConfigFileDiag = undefined;
         }
         else if (!this.triggerFileForConfigFileDiag) {
-            // If we arent tracking to send configFileDiag, send event if diagnostics presence has changed
+            // If we aren't tracking to send configFileDiag, send event if diagnostics presence has changed
             this.projectService.sendConfigFileDiagEvent(this, /*triggerFile*/ undefined, /*force*/ false);
         }
         return result;

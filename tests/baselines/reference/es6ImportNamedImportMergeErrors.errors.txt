@@ -12,9 +12,9 @@ es6ImportNamedImportMergeErrors_1.ts(10,16): error TS2300: Duplicate identifier 
     
 ==== es6ImportNamedImportMergeErrors_1.ts (4 errors) ====
     import { a } from "./es6ImportNamedImportMergeErrors_0";
-    interface a { } // shouldnt be error
+    interface a { } // shouldn't be error
     import { x as x1 } from "./es6ImportNamedImportMergeErrors_0";
-    interface x1 { } // shouldnt be error
+    interface x1 { } // shouldn't be error
     import { x } from "./es6ImportNamedImportMergeErrors_0"; // should be error
              ~
 !!! error TS2440: Import declaration conflicts with local declaration of 'x'.

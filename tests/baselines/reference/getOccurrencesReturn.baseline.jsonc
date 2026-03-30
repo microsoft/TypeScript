@@ -10,7 +10,7 @@
 
 // --- (line: 12) skipped ---
 // 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+//     var unused = [1, 2, 3, 4].map(x => { return 4 })
 // 
 //     [|{| kind: "none" |}return|];
 //     [|{| kind: "none" |}return|] true;
@@ -30,7 +30,7 @@
 
 // --- (line: 12) skipped ---
 // 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+//     var unused = [1, 2, 3, 4].map(x => { return 4 })
 // 
 //     /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
 //     [|{| kind: "none" |}return|] true;
@@ -50,7 +50,7 @@
 
 // --- (line: 12) skipped ---
 // 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+//     var unused = [1, 2, 3, 4].map(x => { return 4 })
 // 
 //     [|{| kind: "none" |}return|];
 //     /*HIGHLIGHTS*/[|{| kind: "none" |}return|] true;

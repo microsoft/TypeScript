@@ -38,7 +38,7 @@ null === undefined ? exprString1 : exprString2;
 true || false ? exprIsObject1 : exprIsObject2;
 null === undefined ? exprString1 : exprBoolean1; // union
 
-//Results shoud be same as Expr1 and Expr2
+//Results should be same as Expr1 and Expr2
 var resultIsAny1 = condBoolean ? exprAny1 : exprAny2;
 var resultIsBoolean1 = condBoolean ? exprBoolean1 : exprBoolean2;
 var resultIsNumber1 = condBoolean ? exprNumber1 : exprNumber2;

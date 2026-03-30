@@ -22,7 +22,7 @@ export class Test1 {
     messageHandler = () => {
 >messageHandler : Symbol(Test1.messageHandler, Decl(classMemberInitializerWithLamdaScoping3_1.ts, 5, 5))
 
-        console.log(field1); // Should be error that couldnt find symbol field1
+        console.log(field1); // Should be error that couldn't find symbol field1
 >console.log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping3_1.ts, 0, 22))
 >console : Symbol(console, Decl(classMemberInitializerWithLamdaScoping3_1.ts, 0, 11))
 >log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping3_1.ts, 0, 22))

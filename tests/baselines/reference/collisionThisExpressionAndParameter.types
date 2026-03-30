@@ -32,8 +32,8 @@ class Foo {
 >y : () => void
 >  : ^^^^^^^^^^
 
-        var lamda = (_this: number) => { // Error 
->lamda : (_this: number) => (x: any) => this
+        var lambda = (_this: number) => { // Error 
+>lambda : (_this: number) => (x: any) => this
 >      : ^     ^^      ^^^^^^   ^^^^^^^^^^^^
 >(_this: number) => { // Error             return x => this;   // New scope.  So should inject new _this capture        } : (_this: number) => (x: any) => this
 >                                                                                                                         : ^     ^^      ^^^^^^   ^^^^^^^^^^^^
@@ -90,8 +90,8 @@ class Foo {
 >y1 : () => void
 >   : ^^^^^^^^^^
 
-        var lamda = (_this: number) => { // No Error 
->lamda : (_this: number) => void
+        var lambda = (_this: number) => { // No Error 
+>lambda : (_this: number) => void
 >      : ^     ^^      ^^^^^^^^^
 >(_this: number) => { // No Error         } : (_this: number) => void
 >                                           : ^     ^^      ^^^^^^^^^

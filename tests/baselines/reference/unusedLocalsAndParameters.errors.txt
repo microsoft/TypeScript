@@ -28,14 +28,14 @@ unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
 ==== unusedLocalsAndParameters.ts (25 errors) ====
     export { };
     
-    // function declaration paramter
+    // function declaration parameter
     function f(a) {
                ~
 !!! error TS6133: 'a' is declared but its value is never read.
     }
     f(0);
     
-    // function expression paramter
+    // function expression parameter
     var fexp = function (a) {
                          ~
 !!! error TS6133: 'a' is declared but its value is never read.
@@ -43,7 +43,7 @@ unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
     
     fexp(0);
     
-    // arrow function paramter
+    // arrow function parameter
     var farrow = (a) => {
         ~~~~~~
 !!! error TS6133: 'farrow' is declared but its value is never read.
@@ -54,12 +54,12 @@ unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
     class C {
           ~
 !!! error TS6196: 'C' is declared but never used.
-        // Method declaration paramter
+        // Method declaration parameter
         method(a) {
                ~
 !!! error TS6133: 'a' is declared but its value is never read.
         }
-        // Accessor declaration paramter
+        // Accessor declaration parameter
         set x(v: number) {
               ~
 !!! error TS6133: 'v' is declared but its value is never read.
@@ -69,12 +69,12 @@ unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
     var E = class {
         ~
 !!! error TS6133: 'E' is declared but its value is never read.
-        // Method declaration paramter
+        // Method declaration parameter
         method(a) {
                ~
 !!! error TS6133: 'a' is declared but its value is never read.
         }
-        // Accessor declaration paramter
+        // Accessor declaration parameter
         set x(v: number) {
               ~
 !!! error TS6133: 'v' is declared but its value is never read.
@@ -82,12 +82,12 @@ unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
     }
     
     var o = {
-        // Object literal method declaration paramter
+        // Object literal method declaration parameter
         method(a) {
                ~
 !!! error TS6133: 'a' is declared but its value is never read.
         },
-        // Accessor declaration paramter
+        // Accessor declaration parameter
         set x(v: number) {
               ~
 !!! error TS6133: 'v' is declared but its value is never read.
@@ -96,19 +96,19 @@ unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
     
     o;
     
-    // in a for..in statment
+    // in a for..in statement
     for (let i in o) {
              ~
 !!! error TS6133: 'i' is declared but its value is never read.
     }
     
-    // in a for..of statment
+    // in a for..of statement
     for (let i of [1, 2, 3]) {
              ~
 !!! error TS6133: 'i' is declared but its value is never read.
     }
     
-    // in a for. statment
+    // in a for. statement
     for (let i = 0, n; i < 10; i++) {
                     ~
 !!! error TS6133: 'n' is declared but its value is never read.

@@ -28,13 +28,13 @@
 
 //---------------------------------------
 // For API editors:
-// When editting this file, and only while editing this file, enable the reference comments
+// When editing this file, and only while editing this file, enable the reference comments
 // and comment out the declarations in this section to get proper type information.
 // Undo these changes before compiling/committing/editing any other fourslash tests.
 // The test suite will likely crash if you try 'jake runtests' with reference comments enabled.
 //
 // Explanation:
-// We want type-completion while we edit this file, but at compile time/while editting fourslash tests,
+// We want type-completion while we edit this file, but at compile time/while editing fourslash tests,
 // we don't want to include the following reference because we are compiling this file in "--out" mode and don't want to rope
 // in the entire codebase into the compilation each fourslash test. Additionally, we don't want to expose the
 // src/harness/fourslash.ts API's (or the rest of the compiler) because they are unstable and complicate the

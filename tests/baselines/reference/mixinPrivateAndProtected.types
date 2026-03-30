@@ -19,8 +19,8 @@ class A {
 >2 : 2
 >  : ^
 
-    protected ptd: number = 1;
->ptd : number
+    protected pdf: number = 1;
+>pdf : number
 >    : ^^^^^^
 >1 : 1
 >  : ^
@@ -39,13 +39,13 @@ function mixB<T extends Constructor<{}>>(Cls: T) {
 >    : ^
 
     return class extends Cls {
->class extends Cls {        protected ptd: number = 10;        private pvt: number = 0;    } : { new (...args: any[]): (Anonymous class); prototype: mixB<any>.(Anonymous class); } & T
+>class extends Cls {        protected pdf: number = 10;        private pvt: number = 0;    } : { new (...args: any[]): (Anonymous class); prototype: mixB<any>.(Anonymous class); } & T
 >                                                                                            : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Cls : {}
 >    : ^^
 
-        protected ptd: number = 10;
->ptd : number
+        protected pdf: number = 10;
+>pdf : number
 >    : ^^^^^^
 >10 : 10
 >   : ^^
@@ -66,13 +66,13 @@ function mixB2<T extends Constructor<A>>(Cls: T) {
 >    : ^
 
     return class extends Cls {
->class extends Cls {        protected ptd: number = 10;    } : { new (...args: any[]): (Anonymous class); prototype: mixB2<any>.(Anonymous class); } & T
+>class extends Cls {        protected pdf: number = 10;    } : { new (...args: any[]): (Anonymous class); prototype: mixB2<any>.(Anonymous class); } & T
 >                                                            : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Cls : A
 >    : ^
 
-        protected ptd: number = 10;
->ptd : number
+        protected pdf: number = 10;
+>pdf : number
 >    : ^^^^^^
 >10 : 10
 >   : ^^
@@ -108,13 +108,13 @@ function mixC<T extends Constructor<{}>>(Cls: T) {
 >    : ^
 
     return class extends Cls {
->class extends Cls {        protected ptd: number = 100;        private pvt: number = 0;    } : { new (...args: any[]): (Anonymous class); prototype: mixC<any>.(Anonymous class); } & T
+>class extends Cls {        protected pdf: number = 100;        private pvt: number = 0;    } : { new (...args: any[]): (Anonymous class); prototype: mixC<any>.(Anonymous class); } & T
 >                                                                                             : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Cls : {}
 >    : ^^
 
-        protected ptd: number = 100;
->ptd : number
+        protected pdf: number = 100;
+>pdf : number
 >    : ^^^^^^
 >100 : 100
 >    : ^^^
@@ -196,16 +196,16 @@ a.pb.toFixed();
 >toFixed : (fractionDigits?: number) => string
 >        : ^              ^^^      ^^^^^      
 
-a.ptd.toFixed();    // Error
->a.ptd.toFixed() : string
+a.pdf.toFixed();    // Error
+>a.pdf.toFixed() : string
 >                : ^^^^^^
->a.ptd.toFixed : (fractionDigits?: number) => string
+>a.pdf.toFixed : (fractionDigits?: number) => string
 >              : ^              ^^^      ^^^^^      
->a.ptd : number
+>a.pdf : number
 >      : ^^^^^^
 >a : A
 >  : ^
->ptd : number
+>pdf : number
 >    : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
 >        : ^              ^^^      ^^^^^      
@@ -238,16 +238,16 @@ ab.pb.toFixed();
 >toFixed : any
 >        : ^^^
 
-ab.ptd.toFixed();   // Error
->ab.ptd.toFixed() : any
+ab.pdf.toFixed();   // Error
+>ab.pdf.toFixed() : any
 >                 : ^^^
->ab.ptd.toFixed : any
+>ab.pdf.toFixed : any
 >               : ^^^
->ab.ptd : any
+>ab.pdf : any
 >       : ^^^
 >ab : never
 >   : ^^^^^
->ptd : any
+>pdf : any
 >    : ^^^
 >toFixed : any
 >        : ^^^
@@ -280,16 +280,16 @@ abc.pb.toFixed();
 >toFixed : any
 >        : ^^^
 
-abc.ptd.toFixed();  // Error
->abc.ptd.toFixed() : any
+abc.pdf.toFixed();  // Error
+>abc.pdf.toFixed() : any
 >                  : ^^^
->abc.ptd.toFixed : any
+>abc.pdf.toFixed : any
 >                : ^^^
->abc.ptd : any
+>abc.pdf : any
 >        : ^^^
 >abc : never
 >    : ^^^^^
->ptd : any
+>pdf : any
 >    : ^^^
 >toFixed : any
 >        : ^^^
@@ -322,16 +322,16 @@ ab2c.pb.toFixed();
 >toFixed : any
 >        : ^^^
 
-ab2c.ptd.toFixed(); // Error
->ab2c.ptd.toFixed() : any
+ab2c.pdf.toFixed(); // Error
+>ab2c.pdf.toFixed() : any
 >                   : ^^^
->ab2c.ptd.toFixed : any
+>ab2c.pdf.toFixed : any
 >                 : ^^^
->ab2c.ptd : any
+>ab2c.pdf : any
 >         : ^^^
 >ab2c : never
 >     : ^^^^^
->ptd : any
+>pdf : any
 >    : ^^^
 >toFixed : any
 >        : ^^^

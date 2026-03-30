@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// Regresion test for GH#45436
+// Regression test for GH#45436
 
 // @allowNonTsExtensions: true
 // @Filename: file.js

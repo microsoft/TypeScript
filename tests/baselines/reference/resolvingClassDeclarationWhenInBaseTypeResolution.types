@@ -54,12 +54,12 @@ namespace rionegrensis {
 >x : lavali.xanthognathus
 >  : ^^^^^^^^^^^^^^^^^^^^
 
-    raffrayana() : lavali.otion { var x : lavali.otion; () => { var y = this; }; return x; }
->raffrayana : () => lavali.otion
+    raffrayana() : lavali.option { var x : lavali.option; () => { var y = this; }; return x; }
+>raffrayana : () => lavali.option
 >           : ^^^^^^            
 >lavali : any
 >       : ^^^
->x : lavali.otion
+>x : lavali.option
 >  : ^^^^^^^^^^^^
 >lavali : any
 >       : ^^^
@@ -69,7 +69,7 @@ namespace rionegrensis {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : lavali.otion
+>x : lavali.option
 >  : ^^^^^^^^^^^^
 
     Uranium() : minutus.inez<minutus.inez<sagitta.stolzmanni, dammermani.melanops>, trivirgatus.falconeri> { var x : minutus.inez<minutus.inez<sagitta.stolzmanni, dammermani.melanops>, trivirgatus.falconeri>; () => { var y = this; }; return x; }
@@ -425,12 +425,12 @@ namespace julianae {
 >x : panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    rueppellii() : ruatanica.americanus { var x : ruatanica.americanus; () => { var y = this; }; return x; }
->rueppellii : () => ruatanica.americanus
+    rueppellii() : ruatanica.americans { var x : ruatanica.americans; () => { var y = this; }; return x; }
+>rueppellii : () => ruatanica.americans
 >           : ^^^^^^                    
 >ruatanica : any
 >          : ^^^
->x : ruatanica.americanus
+>x : ruatanica.americans
 >  : ^^^^^^^^^^^^^^^^^^^^
 >ruatanica : any
 >          : ^^^
@@ -440,7 +440,7 @@ namespace julianae {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : ruatanica.americanus
+>x : ruatanica.americans
 >  : ^^^^^^^^^^^^^^^^^^^^
 
     peregusna() : dogramacii.kaiseri { var x : dogramacii.kaiseri; () => { var y = this; }; return x; }
@@ -677,12 +677,12 @@ namespace julianae {
 >x : howi.marcanoi
 >  : ^^^^^^^^^^^^^
 
-    porcellus() : ruatanica.americanus { var x : ruatanica.americanus; () => { var y = this; }; return x; }
->porcellus : () => ruatanica.americanus
+    porcellus() : ruatanica.americans { var x : ruatanica.americans; () => { var y = this; }; return x; }
+>porcellus : () => ruatanica.americans
 >          : ^^^^^^                    
 >ruatanica : any
 >          : ^^^
->x : ruatanica.americanus
+>x : ruatanica.americans
 >  : ^^^^^^^^^^^^^^^^^^^^
 >ruatanica : any
 >          : ^^^
@@ -692,7 +692,7 @@ namespace julianae {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : ruatanica.americanus
+>x : ruatanica.americans
 >  : ^^^^^^^^^^^^^^^^^^^^
   }
   export class oralis<T0, T1> extends caurinus.psilurus {
@@ -949,12 +949,12 @@ namespace julianae {
 >x : howi.angulatus<howi.coludo<quasiater.carolinensis, minutus.portoricensis>, petrophilus.minutilla>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    leucippe() : lavali.otion { var x : lavali.otion; () => { var y = this; }; return x; }
->leucippe : () => lavali.otion
+    leucippe() : lavali.option { var x : lavali.option; () => { var y = this; }; return x; }
+>leucippe : () => lavali.option
 >         : ^^^^^^            
 >lavali : any
 >       : ^^^
->x : lavali.otion
+>x : lavali.option
 >  : ^^^^^^^^^^^^
 >lavali : any
 >       : ^^^
@@ -964,7 +964,7 @@ namespace julianae {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : lavali.otion
+>x : lavali.option
 >  : ^^^^^^^^^^^^
 
     ordii() : daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni> { var x : daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni>; () => { var y = this; }; return x; }
@@ -1439,8 +1439,8 @@ namespace julianae {
 >x : lavali.lepturus
 >  : ^^^^^^^^^^^^^^^
 
-    minous() : argurus.dauricus<quasiater.carolinensis, lavali.otion> { var x : argurus.dauricus<quasiater.carolinensis, lavali.otion>; () => { var y = this; }; return x; }
->minous : () => argurus.dauricus<quasiater.carolinensis, lavali.otion>
+    minous() : argurus.dauricus<quasiater.carolinensis, lavali.option> { var x : argurus.dauricus<quasiater.carolinensis, lavali.option>; () => { var y = this; }; return x; }
+>minous : () => argurus.dauricus<quasiater.carolinensis, lavali.option>
 >       : ^^^^^^                                                      
 >argurus : any
 >        : ^^^
@@ -1448,7 +1448,7 @@ namespace julianae {
 >          : ^^^
 >lavali : any
 >       : ^^^
->x : argurus.dauricus<quasiater.carolinensis, lavali.otion>
+>x : argurus.dauricus<quasiater.carolinensis, lavali.option>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >argurus : any
 >        : ^^^
@@ -1462,11 +1462,11 @@ namespace julianae {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : argurus.dauricus<quasiater.carolinensis, lavali.otion>
+>x : argurus.dauricus<quasiater.carolinensis, lavali.option>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    cinereiventer() : panamensis.setulosus<sagitta.walkeri, lavali.otion> { var x : panamensis.setulosus<sagitta.walkeri, lavali.otion>; () => { var y = this; }; return x; }
->cinereiventer : () => panamensis.setulosus<sagitta.walkeri, lavali.otion>
+    cinereiventer() : panamensis.setulosus<sagitta.walkeri, lavali.option> { var x : panamensis.setulosus<sagitta.walkeri, lavali.option>; () => { var y = this; }; return x; }
+>cinereiventer : () => panamensis.setulosus<sagitta.walkeri, lavali.option>
 >              : ^^^^^^                                                   
 >panamensis : any
 >           : ^^^
@@ -1474,7 +1474,7 @@ namespace julianae {
 >        : ^^^
 >lavali : any
 >       : ^^^
->x : panamensis.setulosus<sagitta.walkeri, lavali.otion>
+>x : panamensis.setulosus<sagitta.walkeri, lavali.option>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >panamensis : any
 >           : ^^^
@@ -1488,11 +1488,11 @@ namespace julianae {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : panamensis.setulosus<sagitta.walkeri, lavali.otion>
+>x : panamensis.setulosus<sagitta.walkeri, lavali.option>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    longicaudatus() : macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<nudicaudus, lavali.otion>> { var x : macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<nudicaudus, lavali.otion>>; () => { var y = this; }; return x; }
->longicaudatus : () => macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<nudicaudus, lavali.otion>>
+    longicaudatus() : macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<nudicaudus, lavali.option>> { var x : macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<nudicaudus, lavali.option>>; () => { var y = this; }; return x; }
+>longicaudatus : () => macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<nudicaudus, lavali.option>>
 >              : ^^^^^^                                                                                         
 >macrorhinos : any
 >            : ^^^
@@ -1502,7 +1502,7 @@ namespace julianae {
 >         : ^^^
 >lavali : any
 >       : ^^^
->x : macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<nudicaudus, lavali.otion>>
+>x : macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<nudicaudus, lavali.option>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >macrorhinos : any
 >            : ^^^
@@ -1518,7 +1518,7 @@ namespace julianae {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<nudicaudus, lavali.otion>>
+>x : macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<nudicaudus, lavali.option>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     baeodon() : argurus.netscheri<dammermani.siberu<lutreolus.foina, samarensis.pallidus>, argurus.luctuosa> { var x : argurus.netscheri<dammermani.siberu<lutreolus.foina, samarensis.pallidus>, argurus.luctuosa>; () => { var y = this; }; return x; }
@@ -2089,8 +2089,8 @@ namespace Lanthanum {
 >x : argurus.netscheri<dogramacii.aurata, dogramacii.aurata>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    silvatica() : rendalli.moojeni<dogramacii.aurata, lavali.otion> { var x : rendalli.moojeni<dogramacii.aurata, lavali.otion>; () => { var y = this; }; return x; }
->silvatica : () => rendalli.moojeni<dogramacii.aurata, lavali.otion>
+    silvatica() : rendalli.moojeni<dogramacii.aurata, lavali.option> { var x : rendalli.moojeni<dogramacii.aurata, lavali.option>; () => { var y = this; }; return x; }
+>silvatica : () => rendalli.moojeni<dogramacii.aurata, lavali.option>
 >          : ^^^^^^                                                 
 >rendalli : any
 >         : ^^^
@@ -2098,7 +2098,7 @@ namespace Lanthanum {
 >           : ^^^
 >lavali : any
 >       : ^^^
->x : rendalli.moojeni<dogramacii.aurata, lavali.otion>
+>x : rendalli.moojeni<dogramacii.aurata, lavali.option>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rendalli : any
 >         : ^^^
@@ -2112,7 +2112,7 @@ namespace Lanthanum {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : rendalli.moojeni<dogramacii.aurata, lavali.otion>
+>x : rendalli.moojeni<dogramacii.aurata, lavali.option>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     midas() : lavali.xanthognathus { var x : lavali.xanthognathus; () => { var y = this; }; return x; }
@@ -2425,14 +2425,14 @@ namespace Lanthanum {
 >x : sagitta.stolzmanni
 >  : ^^^^^^^^^^^^^^^^^^
 
-    talpinus() : nitidus<ruatanica.americanus, sagitta.stolzmanni> { var x : nitidus<ruatanica.americanus, sagitta.stolzmanni>; () => { var y = this; }; return x; }
->talpinus : () => nitidus<ruatanica.americanus, sagitta.stolzmanni>
+    talpinus() : nitidus<ruatanica.americans, sagitta.stolzmanni> { var x : nitidus<ruatanica.americans, sagitta.stolzmanni>; () => { var y = this; }; return x; }
+>talpinus : () => nitidus<ruatanica.americans, sagitta.stolzmanni>
 >         : ^^^^^^                                                 
 >ruatanica : any
 >          : ^^^
 >sagitta : any
 >        : ^^^
->x : nitidus<ruatanica.americanus, sagitta.stolzmanni>
+>x : nitidus<ruatanica.americans, sagitta.stolzmanni>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ruatanica : any
 >          : ^^^
@@ -2444,7 +2444,7 @@ namespace Lanthanum {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : nitidus<ruatanica.americanus, sagitta.stolzmanni>
+>x : nitidus<ruatanica.americans, sagitta.stolzmanni>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     stramineus() : gabriellae.amicus { var x : gabriellae.amicus; () => { var y = this; }; return x; }
@@ -2802,12 +2802,12 @@ namespace rendalli {
 >x : panglima.abidi<dogramacii.robustulus, lutreolus.foina>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    griseoflavus() : ruatanica.americanus { var x : ruatanica.americanus; () => { var y = this; }; return x; }
->griseoflavus : () => ruatanica.americanus
+    griseoflavus() : ruatanica.americans { var x : ruatanica.americans; () => { var y = this; }; return x; }
+>griseoflavus : () => ruatanica.americans
 >             : ^^^^^^                    
 >ruatanica : any
 >          : ^^^
->x : ruatanica.americanus
+>x : ruatanica.americans
 >  : ^^^^^^^^^^^^^^^^^^^^
 >ruatanica : any
 >          : ^^^
@@ -2817,7 +2817,7 @@ namespace rendalli {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : ruatanica.americanus
+>x : ruatanica.americans
 >  : ^^^^^^^^^^^^^^^^^^^^
 
     thar() : argurus.oreas { var x : argurus.oreas; () => { var y = this; }; return x; }
@@ -2882,8 +2882,8 @@ namespace rendalli {
 >x : sagitta.stolzmanni
 >  : ^^^^^^^^^^^^^^^^^^
 
-    gordonorum() : howi.angulatus<ruatanica.americanus, argurus.germaini> { var x : howi.angulatus<ruatanica.americanus, argurus.germaini>; () => { var y = this; }; return x; }
->gordonorum : () => howi.angulatus<ruatanica.americanus, argurus.germaini>
+    gordonorum() : howi.angulatus<ruatanica.americans, argurus.germaini> { var x : howi.angulatus<ruatanica.americans, argurus.germaini>; () => { var y = this; }; return x; }
+>gordonorum : () => howi.angulatus<ruatanica.americans, argurus.germaini>
 >           : ^^^^^^                                                      
 >howi : any
 >     : ^^^
@@ -2891,7 +2891,7 @@ namespace rendalli {
 >          : ^^^
 >argurus : any
 >        : ^^^
->x : howi.angulatus<ruatanica.americanus, argurus.germaini>
+>x : howi.angulatus<ruatanica.americans, argurus.germaini>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >howi : any
 >     : ^^^
@@ -2905,7 +2905,7 @@ namespace rendalli {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : howi.angulatus<ruatanica.americanus, argurus.germaini>
+>x : howi.angulatus<ruatanica.americans, argurus.germaini>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ruber() : dammermani.siberu<lutreolus.punicus, julianae.acariensis> { var x : dammermani.siberu<lutreolus.punicus, julianae.acariensis>; () => { var y = this; }; return x; }
@@ -3000,12 +3000,12 @@ namespace rendalli {
 >moojeni : moojeni<T0, T1>
 >        : ^^^^^^^^^^^^^^^
 
-    floweri() : lavali.otion { var x : lavali.otion; () => { var y = this; }; return x; }
->floweri : () => lavali.otion
+    floweri() : lavali.option { var x : lavali.option; () => { var y = this; }; return x; }
+>floweri : () => lavali.option
 >        : ^^^^^^            
 >lavali : any
 >       : ^^^
->x : lavali.otion
+>x : lavali.option
 >  : ^^^^^^^^^^^^
 >lavali : any
 >       : ^^^
@@ -3015,7 +3015,7 @@ namespace rendalli {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : lavali.otion
+>x : lavali.option
 >  : ^^^^^^^^^^^^
 
     montosa() : imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla> { var x : imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>; () => { var y = this; }; return x; }
@@ -3284,12 +3284,12 @@ namespace rendalli {
 >x : howi.coludo<howi.marcanoi, rionegrensis.caniventer>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    maritimus() : ruatanica.americanus { var x : ruatanica.americanus; () => { var y = this; }; return x; }
->maritimus : () => ruatanica.americanus
+    maritimus() : ruatanica.americans { var x : ruatanica.americans; () => { var y = this; }; return x; }
+>maritimus : () => ruatanica.americans
 >          : ^^^^^^                    
 >ruatanica : any
 >          : ^^^
->x : ruatanica.americanus
+>x : ruatanica.americans
 >  : ^^^^^^^^^^^^^^^^^^^^
 >ruatanica : any
 >          : ^^^
@@ -3299,7 +3299,7 @@ namespace rendalli {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : ruatanica.americanus
+>x : ruatanica.americans
 >  : ^^^^^^^^^^^^^^^^^^^^
 
     edax() : lutreolus.cor<imperfecta.lasiurus<howi.marcanoi, imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>>, rionegrensis.caniventer> { var x : lutreolus.cor<imperfecta.lasiurus<howi.marcanoi, imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>>, rionegrensis.caniventer>; () => { var y = this; }; return x; }
@@ -3865,8 +3865,8 @@ namespace trivirgatus {
 >x : nigra.dolichurus<imperfecta.lasiurus<julianae.acariensis, howi.coludo<argurus.oreas, howi.marcanoi>>, patas.uralensis>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    fuscicollis() : samarensis.pelurus<dammermani.melanops, Lanthanum.nitidus<ruatanica.americanus, sagitta.stolzmanni>> { var x : samarensis.pelurus<dammermani.melanops, Lanthanum.nitidus<ruatanica.americanus, sagitta.stolzmanni>>; () => { var y = this; }; return x; }
->fuscicollis : () => samarensis.pelurus<dammermani.melanops, Lanthanum.nitidus<ruatanica.americanus, sagitta.stolzmanni>>
+    fuscicollis() : samarensis.pelurus<dammermani.melanops, Lanthanum.nitidus<ruatanica.americans, sagitta.stolzmanni>> { var x : samarensis.pelurus<dammermani.melanops, Lanthanum.nitidus<ruatanica.americans, sagitta.stolzmanni>>; () => { var y = this; }; return x; }
+>fuscicollis : () => samarensis.pelurus<dammermani.melanops, Lanthanum.nitidus<ruatanica.americans, sagitta.stolzmanni>>
 >            : ^^^^^^                                                                                                    
 >samarensis : any
 >           : ^^^
@@ -3878,7 +3878,7 @@ namespace trivirgatus {
 >          : ^^^
 >sagitta : any
 >        : ^^^
->x : samarensis.pelurus<dammermani.melanops, Lanthanum.nitidus<ruatanica.americanus, sagitta.stolzmanni>>
+>x : samarensis.pelurus<dammermani.melanops, Lanthanum.nitidus<ruatanica.americans, sagitta.stolzmanni>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >samarensis : any
 >           : ^^^
@@ -3896,11 +3896,11 @@ namespace trivirgatus {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : samarensis.pelurus<dammermani.melanops, Lanthanum.nitidus<ruatanica.americanus, sagitta.stolzmanni>>
+>x : samarensis.pelurus<dammermani.melanops, Lanthanum.nitidus<ruatanica.americans, sagitta.stolzmanni>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    martiensseni() : sagitta.cinereus<imperfecta.ciliolabrum<lavali.otion, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>, dogramacii.koepckeae> { var x : sagitta.cinereus<imperfecta.ciliolabrum<lavali.otion, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>, dogramacii.koepckeae>; () => { var y = this; }; return x; }
->martiensseni : () => sagitta.cinereus<imperfecta.ciliolabrum<lavali.otion, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>, dogramacii.koepckeae>
+    martiensseni() : sagitta.cinereus<imperfecta.ciliolabrum<lavali.option, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>, dogramacii.koepckeae> { var x : sagitta.cinereus<imperfecta.ciliolabrum<lavali.option, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>, dogramacii.koepckeae>; () => { var y = this; }; return x; }
+>martiensseni : () => sagitta.cinereus<imperfecta.ciliolabrum<lavali.option, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>, dogramacii.koepckeae>
 >             : ^^^^^^                                                                                                                                           
 >sagitta : any
 >        : ^^^
@@ -3916,7 +3916,7 @@ namespace trivirgatus {
 >         : ^^^
 >dogramacii : any
 >           : ^^^
->x : sagitta.cinereus<imperfecta.ciliolabrum<lavali.otion, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>, dogramacii.koepckeae>
+>x : sagitta.cinereus<imperfecta.ciliolabrum<lavali.option, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>, dogramacii.koepckeae>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sagitta : any
 >        : ^^^
@@ -3938,7 +3938,7 @@ namespace trivirgatus {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : sagitta.cinereus<imperfecta.ciliolabrum<lavali.otion, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>, dogramacii.koepckeae>
+>x : sagitta.cinereus<imperfecta.ciliolabrum<lavali.option, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>, dogramacii.koepckeae>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     gaoligongensis() : dogramacii.koepckeae { var x : dogramacii.koepckeae; () => { var y = this; }; return x; }
@@ -4457,8 +4457,8 @@ namespace ruatanica {
 >ruatanica : typeof ruatanica
 >          : ^^^^^^^^^^^^^^^^
 
-  export class americanus extends imperfecta.ciliolabrum<argurus.germaini, lutreolus.foina> {
->americanus : americanus
+  export class americans extends imperfecta.ciliolabrum<argurus.germaini, lutreolus.foina> {
+>americans : americans
 >           : ^^^^^^^^^^
 >imperfecta.ciliolabrum : imperfecta.ciliolabrum<argurus.germaini, lutreolus.foina>
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -4856,8 +4856,8 @@ namespace lavali {
 >beisa : beisa
 >      : ^^^^^
   }
-  export class otion extends howi.coludo<argurus.oreas, howi.marcanoi> {
->otion : otion
+  export class option extends howi.coludo<argurus.oreas, howi.marcanoi> {
+>option : option
 >      : ^^^^^
 >howi.coludo : howi.coludo<argurus.oreas, howi.marcanoi>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -5362,8 +5362,8 @@ namespace lavali {
 >x : panamensis.setulosus<xanthognathus, beisa>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    euryotis() : rendalli.moojeni<julianae.steerii, samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>> { var x : rendalli.moojeni<julianae.steerii, samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>>; () => { var y = this; }; return x; }
->euryotis : () => rendalli.moojeni<julianae.steerii, samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>>
+    euryotis() : rendalli.moojeni<julianae.steerii, samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>> { var x : rendalli.moojeni<julianae.steerii, samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>>; () => { var y = this; }; return x; }
+>euryotis : () => rendalli.moojeni<julianae.steerii, samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>>
 >         : ^^^^^^                                                                                                 
 >rendalli : any
 >         : ^^^
@@ -5375,7 +5375,7 @@ namespace lavali {
 >          : ^^^
 >ruatanica : any
 >          : ^^^
->x : rendalli.moojeni<julianae.steerii, samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>>
+>x : rendalli.moojeni<julianae.steerii, samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rendalli : any
 >         : ^^^
@@ -5393,7 +5393,7 @@ namespace lavali {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : rendalli.moojeni<julianae.steerii, samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>>
+>x : rendalli.moojeni<julianae.steerii, samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     maurisca() : Lanthanum.suillus<rionegrensis.caniventer, imperfecta.subspinosus> { var x : Lanthanum.suillus<rionegrensis.caniventer, imperfecta.subspinosus>; () => { var y = this; }; return x; }
@@ -5656,8 +5656,8 @@ namespace lavali {
 >x : argurus.luctuosa
 >  : ^^^^^^^^^^^^^^^^
 
-    paramicrus() : imperfecta.ciliolabrum<otion, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>> { var x : imperfecta.ciliolabrum<otion, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>; () => { var y = this; }; return x; }
->paramicrus : () => imperfecta.ciliolabrum<otion, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>
+    paramicrus() : imperfecta.ciliolabrum<option, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>> { var x : imperfecta.ciliolabrum<option, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>; () => { var y = this; }; return x; }
+>paramicrus : () => imperfecta.ciliolabrum<option, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>
 >           : ^^^^^^                                                                                            
 >imperfecta : any
 >           : ^^^
@@ -5667,7 +5667,7 @@ namespace lavali {
 >            : ^^^
 >caurinus : any
 >         : ^^^
->x : imperfecta.ciliolabrum<otion, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>
+>x : imperfecta.ciliolabrum<option, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >imperfecta : any
 >           : ^^^
@@ -5683,7 +5683,7 @@ namespace lavali {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : imperfecta.ciliolabrum<otion, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>
+>x : imperfecta.ciliolabrum<option, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   }
   export class lepturus extends Lanthanum.suillus<dammermani.melanops, quasiater.carolinensis> {
@@ -6299,12 +6299,12 @@ namespace dogramacii {
 >x : julianae.nudicaudus
 >  : ^^^^^^^^^^^^^^^^^^^
 
-    ater() : ruatanica.americanus { var x : ruatanica.americanus; () => { var y = this; }; return x; }
->ater : () => ruatanica.americanus
+    ater() : ruatanica.americans { var x : ruatanica.americans; () => { var y = this; }; return x; }
+>ater : () => ruatanica.americans
 >     : ^^^^^^                    
 >ruatanica : any
 >          : ^^^
->x : ruatanica.americanus
+>x : ruatanica.americans
 >  : ^^^^^^^^^^^^^^^^^^^^
 >ruatanica : any
 >          : ^^^
@@ -6314,15 +6314,15 @@ namespace dogramacii {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : ruatanica.americanus
+>x : ruatanica.americans
 >  : ^^^^^^^^^^^^^^^^^^^^
   }
   export class aurata {
 >aurata : aurata
 >       : ^^^^^^
 
-    grunniens() : nigra.gracilis<samarensis.pelurus<daubentonii.arboreus<kaiseri, lutreolus.punicus>, julianae.sumatrana>, ruatanica.americanus> { var x : nigra.gracilis<samarensis.pelurus<daubentonii.arboreus<kaiseri, lutreolus.punicus>, julianae.sumatrana>, ruatanica.americanus>; () => { var y = this; }; return x; }
->grunniens : () => nigra.gracilis<samarensis.pelurus<daubentonii.arboreus<kaiseri, lutreolus.punicus>, julianae.sumatrana>, ruatanica.americanus>
+    grunniens() : nigra.gracilis<samarensis.pelurus<daubentonii.arboreus<kaiseri, lutreolus.punicus>, julianae.sumatrana>, ruatanica.americans> { var x : nigra.gracilis<samarensis.pelurus<daubentonii.arboreus<kaiseri, lutreolus.punicus>, julianae.sumatrana>, ruatanica.americans>; () => { var y = this; }; return x; }
+>grunniens : () => nigra.gracilis<samarensis.pelurus<daubentonii.arboreus<kaiseri, lutreolus.punicus>, julianae.sumatrana>, ruatanica.americans>
 >          : ^^^^^^                                                                                                                              
 >nigra : any
 >      : ^^^
@@ -6336,7 +6336,7 @@ namespace dogramacii {
 >         : ^^^
 >ruatanica : any
 >          : ^^^
->x : nigra.gracilis<samarensis.pelurus<daubentonii.arboreus<kaiseri, lutreolus.punicus>, julianae.sumatrana>, ruatanica.americanus>
+>x : nigra.gracilis<samarensis.pelurus<daubentonii.arboreus<kaiseri, lutreolus.punicus>, julianae.sumatrana>, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nigra : any
 >      : ^^^
@@ -6356,15 +6356,15 @@ namespace dogramacii {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : nigra.gracilis<samarensis.pelurus<daubentonii.arboreus<kaiseri, lutreolus.punicus>, julianae.sumatrana>, ruatanica.americanus>
+>x : nigra.gracilis<samarensis.pelurus<daubentonii.arboreus<kaiseri, lutreolus.punicus>, julianae.sumatrana>, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    howensis() : ruatanica.americanus { var x : ruatanica.americanus; () => { var y = this; }; return x; }
->howensis : () => ruatanica.americanus
+    howensis() : ruatanica.americans { var x : ruatanica.americans; () => { var y = this; }; return x; }
+>howensis : () => ruatanica.americans
 >         : ^^^^^^                    
 >ruatanica : any
 >          : ^^^
->x : ruatanica.americanus
+>x : ruatanica.americans
 >  : ^^^^^^^^^^^^^^^^^^^^
 >ruatanica : any
 >          : ^^^
@@ -6374,7 +6374,7 @@ namespace dogramacii {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : ruatanica.americanus
+>x : ruatanica.americans
 >  : ^^^^^^^^^^^^^^^^^^^^
 
     karlkoopmani() : caurinus.psilurus { var x : caurinus.psilurus; () => { var y = this; }; return x; }
@@ -6435,8 +6435,8 @@ namespace dogramacii {
 >x : aurata
 >  : ^^^^^^
 
-    landeri() : samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus> { var x : samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>; () => { var y = this; }; return x; }
->landeri : () => samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>
+    landeri() : samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans> { var x : samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>; () => { var y = this; }; return x; }
+>landeri : () => samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>
 >        : ^^^^^^                                                             
 >samarensis : any
 >           : ^^^
@@ -6444,7 +6444,7 @@ namespace dogramacii {
 >          : ^^^
 >ruatanica : any
 >          : ^^^
->x : samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>
+>x : samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >samarensis : any
 >           : ^^^
@@ -6458,7 +6458,7 @@ namespace dogramacii {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>
+>x : samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     sonomae() : trivirgatus.lotor<panglima.abidi<lavali.lepturus, caurinus.psilurus>, koepckeae> { var x : trivirgatus.lotor<panglima.abidi<lavali.lepturus, caurinus.psilurus>, koepckeae>; () => { var y = this; }; return x; }
@@ -6584,8 +6584,8 @@ namespace lutreolus {
 >x : dogramacii.robustulus
 >  : ^^^^^^^^^^^^^^^^^^^^^
 
-    culionensis() : argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer> { var x : argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>; () => { var y = this; }; return x; }
->culionensis : () => argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>
+    culionensis() : argurus.dauricus<ruatanica.americans, rionegrensis.caniventer> { var x : argurus.dauricus<ruatanica.americans, rionegrensis.caniventer>; () => { var y = this; }; return x; }
+>culionensis : () => argurus.dauricus<ruatanica.americans, rionegrensis.caniventer>
 >            : ^^^^^^                                                               
 >argurus : any
 >        : ^^^
@@ -6593,7 +6593,7 @@ namespace lutreolus {
 >          : ^^^
 >rionegrensis : any
 >             : ^^^
->x : argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>
+>x : argurus.dauricus<ruatanica.americans, rionegrensis.caniventer>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >argurus : any
 >        : ^^^
@@ -6607,7 +6607,7 @@ namespace lutreolus {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>
+>x : argurus.dauricus<ruatanica.americans, rionegrensis.caniventer>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     scrofa() : petrophilus.sodyi<gabriellae.amicus, julianae.sumatrana> { var x : petrophilus.sodyi<gabriellae.amicus, julianae.sumatrana>; () => { var y = this; }; return x; }
@@ -6868,8 +6868,8 @@ namespace lutreolus {
 >x : julianae.gerbillus<rionegrensis.caniventer, rendalli.crenulata<rendalli.zuluensis, dogramacii.robustulus>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    andamanensis() : julianae.oralis<ruatanica.americanus, rendalli.zuluensis> { var x : julianae.oralis<ruatanica.americanus, rendalli.zuluensis>; () => { var y = this; }; return x; }
->andamanensis : () => julianae.oralis<ruatanica.americanus, rendalli.zuluensis>
+    andamanensis() : julianae.oralis<ruatanica.americans, rendalli.zuluensis> { var x : julianae.oralis<ruatanica.americans, rendalli.zuluensis>; () => { var y = this; }; return x; }
+>andamanensis : () => julianae.oralis<ruatanica.americans, rendalli.zuluensis>
 >             : ^^^^^^                                                         
 >julianae : any
 >         : ^^^
@@ -6877,7 +6877,7 @@ namespace lutreolus {
 >          : ^^^
 >rendalli : any
 >         : ^^^
->x : julianae.oralis<ruatanica.americanus, rendalli.zuluensis>
+>x : julianae.oralis<ruatanica.americans, rendalli.zuluensis>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >julianae : any
 >         : ^^^
@@ -6891,7 +6891,7 @@ namespace lutreolus {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : julianae.oralis<ruatanica.americanus, rendalli.zuluensis>
+>x : julianae.oralis<ruatanica.americans, rendalli.zuluensis>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     dispar() : panamensis.linulus<dogramacii.kaiseri, minutus.portoricensis> { var x : panamensis.linulus<dogramacii.kaiseri, minutus.portoricensis>; () => { var y = this; }; return x; }
@@ -8396,8 +8396,8 @@ namespace caurinus {
 >macrorhinos : any
 >            : ^^^
 
-        martiniquensis(): ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<julianae.nudicaudus, lavali.otion>>> { var x: ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<julianae.nudicaudus, lavali.otion>>>; () => { var y = this; }; return x; }
->martiniquensis : () => ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<julianae.nudicaudus, lavali.otion>>>
+        martiniquensis(): ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<julianae.nudicaudus, lavali.option>>> { var x: ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<julianae.nudicaudus, lavali.option>>>; () => { var y = this; }; return x; }
+>martiniquensis : () => ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<julianae.nudicaudus, lavali.option>>>
 >               : ^^^^^^                                                                                                                                        
 >ruatanica : any
 >          : ^^^
@@ -8413,7 +8413,7 @@ namespace caurinus {
 >         : ^^^
 >lavali : any
 >       : ^^^
->x : ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, mahaganus<julianae.nudicaudus, lavali.otion>>>
+>x : ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, mahaganus<julianae.nudicaudus, lavali.option>>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ruatanica : any
 >          : ^^^
@@ -8435,7 +8435,7 @@ namespace caurinus {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, mahaganus<julianae.nudicaudus, lavali.otion>>>
+>x : ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, mahaganus<julianae.nudicaudus, lavali.option>>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         devius(): samarensis.pelurus<dogramacii.aurata, minutus.inez<minutus.inez<sagitta.stolzmanni, dammermani.melanops>, trivirgatus.falconeri>> { var x: samarensis.pelurus<dogramacii.aurata, minutus.inez<minutus.inez<sagitta.stolzmanni, dammermani.melanops>, trivirgatus.falconeri>>; () => { var y = this; }; return x; }
@@ -8904,8 +8904,8 @@ namespace nigra {
 >x : argurus.luctuosa
 >  : ^^^^^^^^^^^^^^^^
 
-        brucei(): chrysaeolus.sarasinorum<julianae.steerii, ruatanica.americanus> { var x: chrysaeolus.sarasinorum<julianae.steerii, ruatanica.americanus>; () => { var y = this; }; return x; }
->brucei : () => chrysaeolus.sarasinorum<julianae.steerii, ruatanica.americanus>
+        brucei(): chrysaeolus.sarasinorum<julianae.steerii, ruatanica.americans> { var x: chrysaeolus.sarasinorum<julianae.steerii, ruatanica.americans>; () => { var y = this; }; return x; }
+>brucei : () => chrysaeolus.sarasinorum<julianae.steerii, ruatanica.americans>
 >       : ^^^^^^                                                               
 >chrysaeolus : any
 >            : ^^^
@@ -8913,7 +8913,7 @@ namespace nigra {
 >         : ^^^
 >ruatanica : any
 >          : ^^^
->x : chrysaeolus.sarasinorum<julianae.steerii, ruatanica.americanus>
+>x : chrysaeolus.sarasinorum<julianae.steerii, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chrysaeolus : any
 >            : ^^^
@@ -8927,7 +8927,7 @@ namespace nigra {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : chrysaeolus.sarasinorum<julianae.steerii, ruatanica.americanus>
+>x : chrysaeolus.sarasinorum<julianae.steerii, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
@@ -8945,8 +8945,8 @@ namespace sagitta {
 >portoricensis : typeof minutus.portoricensis
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-        maracajuensis(): samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americanus> { var x: samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americanus>; () => { var y = this; }; return x; }
->maracajuensis : () => samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americanus>
+        maracajuensis(): samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americans> { var x: samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americans>; () => { var y = this; }; return x; }
+>maracajuensis : () => samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americans>
 >              : ^^^^^^                                                               
 >samarensis : any
 >           : ^^^
@@ -8954,7 +8954,7 @@ namespace sagitta {
 >          : ^^^
 >ruatanica : any
 >          : ^^^
->x : samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americanus>
+>x : samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >samarensis : any
 >           : ^^^
@@ -8968,7 +8968,7 @@ namespace sagitta {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americanus>
+>x : samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
@@ -10200,8 +10200,8 @@ namespace samarensis {
 >x : sagitta.stolzmanni
 >  : ^^^^^^^^^^^^^^^^^^
 
-        imaizumii(): minutus.inez<julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.otion>, macrorhinos.konganensis> { var x: minutus.inez<julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.otion>, macrorhinos.konganensis>; () => { var y = this; }; return x; }
->imaizumii : () => minutus.inez<julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.otion>, macrorhinos.konganensis>
+        imaizumii(): minutus.inez<julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.option>, macrorhinos.konganensis> { var x: minutus.inez<julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.option>, macrorhinos.konganensis>; () => { var y = this; }; return x; }
+>imaizumii : () => minutus.inez<julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.option>, macrorhinos.konganensis>
 >          : ^^^^^^                                                                                                                                                                                                              
 >minutus : any
 >        : ^^^
@@ -10225,7 +10225,7 @@ namespace samarensis {
 >       : ^^^
 >macrorhinos : any
 >            : ^^^
->x : minutus.inez<julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.otion>, macrorhinos.konganensis>
+>x : minutus.inez<julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.option>, macrorhinos.konganensis>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >minutus : any
 >        : ^^^
@@ -10255,7 +10255,7 @@ namespace samarensis {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : minutus.inez<julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.otion>, macrorhinos.konganensis>
+>x : minutus.inez<julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.option>, macrorhinos.konganensis>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         colocolo(): quasiater.bobrinskoi { var x: quasiater.bobrinskoi; () => { var y = this; }; return x; }
@@ -10430,8 +10430,8 @@ namespace samarensis {
 >cahirinus : cahirinus<T0, T1>
 >          : ^^^^^^^^^^^^^^^^^
 
-        alashanicus(): nigra.caucasica<ruatanica.americanus, argurus.peninsulae> { var x: nigra.caucasica<ruatanica.americanus, argurus.peninsulae>; () => { var y = this; }; return x; }
->alashanicus : () => nigra.caucasica<ruatanica.americanus, argurus.peninsulae>
+        alashanicus(): nigra.caucasica<ruatanica.americans, argurus.peninsulae> { var x: nigra.caucasica<ruatanica.americans, argurus.peninsulae>; () => { var y = this; }; return x; }
+>alashanicus : () => nigra.caucasica<ruatanica.americans, argurus.peninsulae>
 >            : ^^^^^^                                                         
 >nigra : any
 >      : ^^^
@@ -10439,7 +10439,7 @@ namespace samarensis {
 >          : ^^^
 >argurus : any
 >        : ^^^
->x : nigra.caucasica<ruatanica.americanus, argurus.peninsulae>
+>x : nigra.caucasica<ruatanica.americans, argurus.peninsulae>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nigra : any
 >      : ^^^
@@ -10453,7 +10453,7 @@ namespace samarensis {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : nigra.caucasica<ruatanica.americanus, argurus.peninsulae>
+>x : nigra.caucasica<ruatanica.americans, argurus.peninsulae>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         flaviventer(): trivirgatus.tumidifrons<lavali.thaeleri, daubentonii.arboreus<petrophilus.minutilla, argurus.peninsulae>> { var x: trivirgatus.tumidifrons<lavali.thaeleri, daubentonii.arboreus<petrophilus.minutilla, argurus.peninsulae>>; () => { var y = this; }; return x; }
@@ -10703,8 +10703,8 @@ namespace sagitta {
 >x : lavali.wilsoni
 >  : ^^^^^^^^^^^^^^
 
-        bolami(): trivirgatus.tumidifrons<lutreolus.schlegeli, ruatanica.americanus> { var x: trivirgatus.tumidifrons<lutreolus.schlegeli, ruatanica.americanus>; () => { var y = this; }; return x; }
->bolami : () => trivirgatus.tumidifrons<lutreolus.schlegeli, ruatanica.americanus>
+        bolami(): trivirgatus.tumidifrons<lutreolus.schlegeli, ruatanica.americans> { var x: trivirgatus.tumidifrons<lutreolus.schlegeli, ruatanica.americans>; () => { var y = this; }; return x; }
+>bolami : () => trivirgatus.tumidifrons<lutreolus.schlegeli, ruatanica.americans>
 >       : ^^^^^^                                                                  
 >trivirgatus : any
 >            : ^^^
@@ -10712,7 +10712,7 @@ namespace sagitta {
 >          : ^^^
 >ruatanica : any
 >          : ^^^
->x : trivirgatus.tumidifrons<lutreolus.schlegeli, ruatanica.americanus>
+>x : trivirgatus.tumidifrons<lutreolus.schlegeli, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >trivirgatus : any
 >            : ^^^
@@ -10726,7 +10726,7 @@ namespace sagitta {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : trivirgatus.tumidifrons<lutreolus.schlegeli, ruatanica.americanus>
+>x : trivirgatus.tumidifrons<lutreolus.schlegeli, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
@@ -11376,8 +11376,8 @@ namespace daubentonii {
 >arboreus : arboreus<T0, T1>
 >         : ^^^^^^^^^^^^^^^^
 
-        capreolus(): rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni> { var x: rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni>; () => { var y = this; }; return x; }
->capreolus : () => rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni>
+        capreolus(): rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>, lavali.wilsoni> { var x: rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>, lavali.wilsoni>; () => { var y = this; }; return x; }
+>capreolus : () => rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>, lavali.wilsoni>
 >          : ^^^^^^                                                                                                 
 >rendalli : any
 >         : ^^^
@@ -11389,7 +11389,7 @@ namespace daubentonii {
 >          : ^^^
 >lavali : any
 >       : ^^^
->x : rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni>
+>x : rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>, lavali.wilsoni>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rendalli : any
 >         : ^^^
@@ -11407,7 +11407,7 @@ namespace daubentonii {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni>
+>x : rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americans>, lavali.wilsoni>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         moreni(): panglima.abidi<julianae.galapagoensis, dogramacii.koepckeae> { var x: panglima.abidi<julianae.galapagoensis, dogramacii.koepckeae>; () => { var y = this; }; return x; }
@@ -11855,8 +11855,8 @@ namespace patas {
 >x : ruatanica.hector<lutreolus.punicus, gabriellae.amicus>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-        attenuata(): macrorhinos.marmosurus<ruatanica.americanus, argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>> { var x: macrorhinos.marmosurus<ruatanica.americanus, argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>>; () => { var y = this; }; return x; }
->attenuata : () => macrorhinos.marmosurus<ruatanica.americanus, argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>>
+        attenuata(): macrorhinos.marmosurus<ruatanica.americans, argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>> { var x: macrorhinos.marmosurus<ruatanica.americans, argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>>; () => { var y = this; }; return x; }
+>attenuata : () => macrorhinos.marmosurus<ruatanica.americans, argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>>
 >          : ^^^^^^                                                                                                           
 >macrorhinos : any
 >            : ^^^
@@ -11868,7 +11868,7 @@ namespace patas {
 >          : ^^^
 >dogramacii : any
 >           : ^^^
->x : macrorhinos.marmosurus<ruatanica.americanus, argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>>
+>x : macrorhinos.marmosurus<ruatanica.americans, argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >macrorhinos : any
 >            : ^^^
@@ -11886,7 +11886,7 @@ namespace patas {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : macrorhinos.marmosurus<ruatanica.americanus, argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>>
+>x : macrorhinos.marmosurus<ruatanica.americans, argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         megalura(): howi.marcanoi { var x: howi.marcanoi; () => { var y = this; }; return x; }
@@ -12060,8 +12060,8 @@ namespace provocax {
 >x : macrorhinos.marmosurus<petrophilus.sodyi<trivirgatus.falconeri, quasiater.bobrinskoi>, lutreolus.foina>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-        baeri(): imperfecta.lasiurus<lavali.lepturus, ruatanica.americanus> { var x: imperfecta.lasiurus<lavali.lepturus, ruatanica.americanus>; () => { var y = this; }; return x; }
->baeri : () => imperfecta.lasiurus<lavali.lepturus, ruatanica.americanus>
+        baeri(): imperfecta.lasiurus<lavali.lepturus, ruatanica.americans> { var x: imperfecta.lasiurus<lavali.lepturus, ruatanica.americans>; () => { var y = this; }; return x; }
+>baeri : () => imperfecta.lasiurus<lavali.lepturus, ruatanica.americans>
 >      : ^^^^^^                                                          
 >imperfecta : any
 >           : ^^^
@@ -12069,7 +12069,7 @@ namespace provocax {
 >       : ^^^
 >ruatanica : any
 >          : ^^^
->x : imperfecta.lasiurus<lavali.lepturus, ruatanica.americanus>
+>x : imperfecta.lasiurus<lavali.lepturus, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >imperfecta : any
 >           : ^^^
@@ -12083,7 +12083,7 @@ namespace provocax {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : imperfecta.lasiurus<lavali.lepturus, ruatanica.americanus>
+>x : imperfecta.lasiurus<lavali.lepturus, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
@@ -12813,8 +12813,8 @@ namespace argurus {
 >x : minutus.portoricensis
 >  : ^^^^^^^^^^^^^^^^^^^^^
 
-        amurensis(): daubentonii.arboreus<lavali.otion, macrorhinos.konganensis> { var x: daubentonii.arboreus<lavali.otion, macrorhinos.konganensis>; () => { var y = this; }; return x; }
->amurensis : () => daubentonii.arboreus<lavali.otion, macrorhinos.konganensis>
+        amurensis(): daubentonii.arboreus<lavali.option, macrorhinos.konganensis> { var x: daubentonii.arboreus<lavali.option, macrorhinos.konganensis>; () => { var y = this; }; return x; }
+>amurensis : () => daubentonii.arboreus<lavali.option, macrorhinos.konganensis>
 >          : ^^^^^^                                                           
 >daubentonii : any
 >            : ^^^
@@ -12822,7 +12822,7 @@ namespace argurus {
 >       : ^^^
 >macrorhinos : any
 >            : ^^^
->x : daubentonii.arboreus<lavali.otion, macrorhinos.konganensis>
+>x : daubentonii.arboreus<lavali.option, macrorhinos.konganensis>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >daubentonii : any
 >            : ^^^
@@ -12836,7 +12836,7 @@ namespace argurus {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : daubentonii.arboreus<lavali.otion, macrorhinos.konganensis>
+>x : daubentonii.arboreus<lavali.option, macrorhinos.konganensis>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
@@ -12883,8 +12883,8 @@ namespace lutreolus {
 >x : gabriellae.klossii<Lanthanum.jugularis, Lanthanum.jugularis>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-        lar(): caurinus.mahaganus<julianae.nudicaudus, lavali.otion> { var x: caurinus.mahaganus<julianae.nudicaudus, lavali.otion>; () => { var y = this; }; return x; }
->lar : () => caurinus.mahaganus<julianae.nudicaudus, lavali.otion>
+        lar(): caurinus.mahaganus<julianae.nudicaudus, lavali.option> { var x: caurinus.mahaganus<julianae.nudicaudus, lavali.option>; () => { var y = this; }; return x; }
+>lar : () => caurinus.mahaganus<julianae.nudicaudus, lavali.option>
 >    : ^^^^^^                                                     
 >caurinus : any
 >         : ^^^
@@ -12892,7 +12892,7 @@ namespace lutreolus {
 >         : ^^^
 >lavali : any
 >       : ^^^
->x : caurinus.mahaganus<julianae.nudicaudus, lavali.otion>
+>x : caurinus.mahaganus<julianae.nudicaudus, lavali.option>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >caurinus : any
 >         : ^^^
@@ -12906,7 +12906,7 @@ namespace lutreolus {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : caurinus.mahaganus<julianae.nudicaudus, lavali.otion>
+>x : caurinus.mahaganus<julianae.nudicaudus, lavali.option>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         erica(): dogramacii.koepckeae { var x: dogramacii.koepckeae; () => { var y = this; }; return x; }
@@ -13192,8 +13192,8 @@ namespace macrorhinos {
 >x : howi.coludo<argurus.oreas, howi.marcanoi>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-        hammondi(): julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.otion> { var x: julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.otion>; () => { var y = this; }; return x; }
->hammondi : () => julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.otion>
+        hammondi(): julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.option> { var x: julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.option>; () => { var y = this; }; return x; }
+>hammondi : () => julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.option>
 >         : ^^^^^^                                                                                                                                                                       
 >julianae : any
 >         : ^^^
@@ -13213,7 +13213,7 @@ namespace macrorhinos {
 >           : ^^^
 >lavali : any
 >       : ^^^
->x : julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.otion>
+>x : julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.option>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >julianae : any
 >         : ^^^
@@ -13239,7 +13239,7 @@ namespace macrorhinos {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.otion>
+>x : julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.option>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         aureocollaris(): quasiater.carolinensis { var x: quasiater.carolinensis; () => { var y = this; }; return x; }
@@ -14036,8 +14036,8 @@ namespace imperfecta {
 >x : panglima.abidi<dogramacii.aurata, chrysaeolus.sarasinorum<caurinus.megaphyllus, lavali.xanthognathus>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-        schreibersii(): nigra.gracilis<argurus.luctuosa, ruatanica.americanus> { var x: nigra.gracilis<argurus.luctuosa, ruatanica.americanus>; () => { var y = this; }; return x; }
->schreibersii : () => nigra.gracilis<argurus.luctuosa, ruatanica.americanus>
+        schreibersii(): nigra.gracilis<argurus.luctuosa, ruatanica.americans> { var x: nigra.gracilis<argurus.luctuosa, ruatanica.americans>; () => { var y = this; }; return x; }
+>schreibersii : () => nigra.gracilis<argurus.luctuosa, ruatanica.americans>
 >             : ^^^^^^                                                      
 >nigra : any
 >      : ^^^
@@ -14045,7 +14045,7 @@ namespace imperfecta {
 >        : ^^^
 >ruatanica : any
 >          : ^^^
->x : nigra.gracilis<argurus.luctuosa, ruatanica.americanus>
+>x : nigra.gracilis<argurus.luctuosa, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nigra : any
 >      : ^^^
@@ -14059,7 +14059,7 @@ namespace imperfecta {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : nigra.gracilis<argurus.luctuosa, ruatanica.americanus>
+>x : nigra.gracilis<argurus.luctuosa, ruatanica.americans>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         orii(): dogramacii.kaiseri { var x: dogramacii.kaiseri; () => { var y = this; }; return x; }
@@ -16863,8 +16863,8 @@ namespace ruatanica {
 >gabriellae : any
 >           : ^^^
 
-        clara(): panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>> { var x: panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>>; () => { var y = this; }; return x; }
->clara : () => panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>>
+        clara(): panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<ruatanica.americans, rionegrensis.caniventer>> { var x: panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<ruatanica.americans, rionegrensis.caniventer>>; () => { var y = this; }; return x; }
+>clara : () => panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<ruatanica.americans, rionegrensis.caniventer>>
 >      : ^^^^^^                                                                                                                                                 
 >panglima : any
 >         : ^^^
@@ -16880,7 +16880,7 @@ namespace ruatanica {
 >          : ^^^
 >rionegrensis : any
 >             : ^^^
->x : panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<americanus, rionegrensis.caniventer>>
+>x : panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<americans, rionegrensis.caniventer>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >panglima : any
 >         : ^^^
@@ -16902,7 +16902,7 @@ namespace ruatanica {
 >  : ^^^^
 >this : this
 >     : ^^^^
->x : panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<americanus, rionegrensis.caniventer>>
+>x : panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<americans, rionegrensis.caniventer>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         spectabilis(): petrophilus.sodyi<rionegrensis.caniventer, quasiater.carolinensis> { var x: petrophilus.sodyi<rionegrensis.caniventer, quasiater.carolinensis>; () => { var y = this; }; return x; }

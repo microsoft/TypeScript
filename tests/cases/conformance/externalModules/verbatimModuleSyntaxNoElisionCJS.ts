@@ -31,4 +31,4 @@ const I = {};
 export = I;
 
 // @Filename: /z.ts
-// test harness is weird if the last file includs a require >:(
+// test harness is weird if the last file includes a require >:(

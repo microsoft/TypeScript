@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/statics.ts] ////
+//// [tests/cases/compiler/statistics.ts] ////
 
-=== statics.ts ===
+=== statistics.ts ===
 namespace M {
 >M : typeof M
 >  : ^^^^^^^^

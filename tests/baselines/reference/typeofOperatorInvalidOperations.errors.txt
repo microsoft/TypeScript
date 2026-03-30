@@ -6,7 +6,7 @@ typeofOperatorInvalidOperations.ts(7,19): error TS1109: Expression expected.
 ==== typeofOperatorInvalidOperations.ts (3 errors) ====
     // Unary operator typeof
     
-    // opreand before typeof
+    // operand before typeof
     var ANY = ANY typeof ;    //expect error
                   ~~~~~~
 !!! error TS1005: ',' expected.

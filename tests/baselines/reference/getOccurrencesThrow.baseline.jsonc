@@ -29,7 +29,7 @@
 // 
 //     [|{| kind: "none" |}throw|] 10;
 // 
-//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+//     var unused = [1, 2, 3, 4].map(x => { throw 4 })
 // 
 //     [|{| kind: "none" |}return|];
 //     [|{| kind: "none" |}return|] true;
@@ -69,7 +69,7 @@
 // 
 //     [|{| kind: "none" |}throw|] 10;
 // 
-//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+//     var unused = [1, 2, 3, 4].map(x => { throw 4 })
 // 
 //     [|{| kind: "none" |}return|];
 //     [|{| kind: "none" |}return|] true;
@@ -109,7 +109,7 @@
 // 
 //     [|{| kind: "none" |}throw|] 10;
 // 
-//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+//     var unused = [1, 2, 3, 4].map(x => { throw 4 })
 // 
 //     [|{| kind: "none" |}return|];
 //     [|{| kind: "none" |}return|] true;
@@ -149,7 +149,7 @@
 // 
 //     [|{| kind: "none" |}throw|] 10;
 // 
-//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+//     var unused = [1, 2, 3, 4].map(x => { throw 4 })
 // 
 //     [|{| kind: "none" |}return|];
 //     [|{| kind: "none" |}return|] true;
@@ -189,7 +189,7 @@
 // 
 //     /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 10;
 // 
-//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+//     var unused = [1, 2, 3, 4].map(x => { throw 4 })
 // 
 //     [|{| kind: "none" |}return|];
 //     [|{| kind: "none" |}return|] true;
@@ -229,7 +229,7 @@
 // 
 //     [|{| kind: "none" |}throw|] 10;
 // 
-//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+//     var unused = [1, 2, 3, 4].map(x => { throw 4 })
 // 
 //     /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
 //     [|{| kind: "none" |}return|] true;
@@ -269,7 +269,7 @@
 // 
 //     [|{| kind: "none" |}throw|] 10;
 // 
-//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+//     var unused = [1, 2, 3, 4].map(x => { throw 4 })
 // 
 //     [|{| kind: "none" |}return|];
 //     /*HIGHLIGHTS*/[|{| kind: "none" |}return|] true;
@@ -309,7 +309,7 @@
 // 
 //     [|{| kind: "none" |}throw|] 10;
 // 
-//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+//     var unused = [1, 2, 3, 4].map(x => { throw 4 })
 // 
 //     [|{| kind: "none" |}return|];
 //     [|{| kind: "none" |}return|] true;

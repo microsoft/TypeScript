@@ -9,9 +9,9 @@
 { "main": "oof" }
 
 // @filename: /node_modules/foo/oof/package.json
-{ "main": "ofo" }
+{ "main": "of" }
 
-// @filename: /node_modules/foo/oof/ofo.js
+// @filename: /node_modules/foo/oof/of.js
 module.exports = 0;
 
 // @filename: /a.ts

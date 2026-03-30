@@ -339,8 +339,8 @@ declare function overloaded3<const T, U>(cb: () => T, cb2: () => U): [T, U];
 >T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 96, 29))
 >U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 96, 37))
 
-const overloadE = overloaded3(() => 42);
->overloadE : Symbol(overloadE, Decl(typeParameterConstModifiersReturnsAndYields.ts, 97, 5))
+const overload = overloaded3(() => 42);
+>overload : Symbol(overload, Decl(typeParameterConstModifiersReturnsAndYields.ts, 97, 5))
 >overloaded3 : Symbol(overloaded3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 93, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 95, 54))
 
 const overloadF = overloaded3(() => "hi", () => true);

@@ -4,9 +4,9 @@
 { "main": "oof" }
 
 //// [package.json]
-{ "main": "ofo" }
+{ "main": "of" }
 
-//// [ofo.js]
+//// [of.js]
 module.exports = 0;
 
 //// [a.ts]

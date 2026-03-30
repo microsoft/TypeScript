@@ -111,10 +111,10 @@ import {
 //  .mark LABEL                     - Mark the location of a label.
 //  .br LABEL                       - Jump to a label. If jumping out of a protected
 //                                    region, all .finally blocks are executed.
-//  .brtrue LABEL, (x)              - Jump to a label IIF the expression `x` is truthy.
+//  .brtrue LABEL, (x)              - Jump to a label IF the expression `x` is truthy.
 //                                    If jumping out of a protected region, all .finally
 //                                    blocks are executed.
-//  .brfalse LABEL, (x)             - Jump to a label IIF the expression `x` is falsey.
+//  .brfalse LABEL, (x)             - Jump to a label IF the expression `x` is falsey.
 //                                    If jumping out of a protected region, all .finally
 //                                    blocks are executed.
 //  .yield (x)                      - Yield the value of the optional expression `x`.
@@ -196,11 +196,11 @@ import {
 //  .endwith                      |
 // -------------------------------|----------------------------------------------
 //                                | case 0:
-//                                |     state.trys = [];
+//                                |     state.tries = [];
 //                                | ...
 //  .try TRY, CATCH, FINALLY, END |
 //  .mark TRY                     | case TRY:
-//                                |     state.trys.push([TRY, CATCH, FINALLY, END]);
+//                                |     state.tries.push([TRY, CATCH, FINALLY, END]);
 //  .nop                          |
 //      a();                      |     a();
 //  .br END                       |     return [3 /*break*/, END];
@@ -2889,7 +2889,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                 statements.unshift(
                     factory.createExpressionStatement(
                         factory.createCallExpression(
-                            factory.createPropertyAccessExpression(factory.createPropertyAccessExpression(state, "trys"), "push"),
+                            factory.createPropertyAccessExpression(factory.createPropertyAccessExpression(state, "tries"), "push"),
                             /*typeArguments*/ undefined,
                             [
                                 factory.createArrayLiteralExpression([

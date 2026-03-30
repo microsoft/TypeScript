@@ -2,7 +2,7 @@
 
 // @lib: es5
 // @moduleResolution: bundler
-// This is just made up repro where the js file will be added to auxillary project because its not already part of the project
+// This is just made up repro where the js file will be added to auxiliary project because its not already part of the project
 // Where in js file doesnt already have import to the corresponding js file hence will be added to project at later on stage
 
 // @Filename: /home/src/workspaces/project/node_modules/@types/yargs/package.json
@@ -30,7 +30,7 @@
 //// export class Yargs { positional() { } }
 
 // @Filename: /home/src/workspaces/project/node_modules/yargs/index.js
-//// // Specifically didnt have ./callback import to ensure that resolving module sepcifier adds the file to project at later stage
+//// // Specifically didn't have ./callback import to ensure that resolving module specifier adds the file to project at later stage
 //// export function command(cmd, cb) { cb(Yargs) }
 
 // @Filename: /home/src/workspaces/project/index.ts

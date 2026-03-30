@@ -16,7 +16,7 @@ export const enum E {
     "has space" = 3,
 >"has space" : Symbol(E["has space"], Decl(enumMemberNameNonIdentifier.ts, 3, 30))
 
-    // Greek Capital Yot (U+037F) - valid identifier in ES2015+ but NOT in ES5
+    // Greek Capital Yacht (U+037F) - valid identifier in ES2015+ but NOT in ES5
     Ϳ = 4,
 >Ϳ : Symbol(E.Ϳ, Decl(enumMemberNameNonIdentifier.ts, 4, 20))
 }

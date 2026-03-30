@@ -47,14 +47,14 @@ for (const x of aString) {
 >  : ^^^^^^
 }
 
-declare const aNumber: number;
->aNumber : number
+declare const a number: number;
+>a number : number
 >        : ^^^^^^
 
-for (const x of aNumber) {
+for (const x of a number) {
 >x : any
 >  : ^^^
->aNumber : number
+>a number : number
 >        : ^^^^^^
 
     log(x);

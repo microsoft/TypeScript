@@ -33,7 +33,7 @@ function f4() {
     let x: boolean;
     ({ x } = 0);  // Error
     ({ ["x"]: x } = 0);  // Error
-    ({ ["x" + ""]: x } = 0);  // Errpr
+    ({ ["x" + ""]: x } = 0);  // Error
 }
 
 // Repro from #31770

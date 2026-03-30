@@ -41,7 +41,7 @@ destructuringControlFlow.ts(40,1): error TS18048: 'value' is possibly 'undefined
         ({ ["x"]: x } = 0);  // Error
             ~~~
 !!! error TS2339: Property 'x' does not exist on type 'Number'.
-        ({ ["x" + ""]: x } = 0);  // Errpr
+        ({ ["x" + ""]: x } = 0);  // Error
             ~~~~~~~~
 !!! error TS2537: Type 'Number' has no matching index signature for type 'string'.
     }

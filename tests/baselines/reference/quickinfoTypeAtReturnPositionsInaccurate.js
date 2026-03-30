@@ -83,7 +83,7 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
         if (isNumClass(item)) {
             return item;
         }
-        // it seems like the compiler asumes the above condition is always
+        // it seems like the compiler assumes the above condition is always
         // truthy
 
         item.get();
@@ -164,7 +164,7 @@ class ComplexStore {
         if (isNumClass(item)) {
             return item;
         }
-        // it seems like the compiler asumes the above condition is always
+        // it seems like the compiler assumes the above condition is always
         // truthy
         item.get();
         return item; // type is never

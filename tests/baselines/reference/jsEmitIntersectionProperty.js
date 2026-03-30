@@ -3,14 +3,14 @@
 //// [globals.d.ts]
 declare class CoreObject {
   static extend<
-    Statics,
+    Statistics,
     Instance extends B1,
     T1,
     B1
   >(
-    this: Statics & { new(): Instance },
+    this: Statistics & { new(): Instance },
     arg1: T1
-  ): Readonly<Statics> & { new(): T1 & Instance };
+  ): Readonly<Statistics> & { new(): T1 & Instance };
 
   toString(): string;
 }

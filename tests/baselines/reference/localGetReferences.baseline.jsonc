@@ -1,6 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
+// // Comment Reference Test: globalVar
 // // References to a variable declared in global.
 // /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}globalVar|]: number = 2;|>
 // 
@@ -70,7 +70,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/localGetReferences_1.ts ===
-  // // Comment Refence Test: globalVar
+  // // Comment Reference Test: globalVar
   // // References to a variable declared in global.
   // /*FIND ALL REFS*/<|var [|globalVar|]: number = 2;|>
   // 
@@ -118,7 +118,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
+// // Comment Reference Test: globalVar
 // // References to a variable declared in global.
 // <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}globalVar|]: number = 2;|>
 // 
@@ -188,7 +188,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/localGetReferences_1.ts ===
-  // // Comment Refence Test: globalVar
+  // // Comment Reference Test: globalVar
   // // References to a variable declared in global.
   // <|var /*FIND ALL REFS*/[|globalVar|]: number = 2;|>
   // 
@@ -739,7 +739,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
+// // Comment Reference Test: globalVar
 // // References to a variable declared in global.
 // <|var [|{| isWriteAccess: true |}globalVar|]: number = 2;|>
 // 
@@ -809,7 +809,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/localGetReferences_1.ts ===
-  // // Comment Refence Test: globalVar
+  // // Comment Reference Test: globalVar
   // // References to a variable declared in global.
   // <|var [|globalVar|]: number = 2;|>
   // 
@@ -1853,7 +1853,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
+// // Comment Reference Test: globalVar
 // // References to a variable declared in global.
 // <|var [|{| isWriteAccess: true |}globalVar|]: number = 2;|>
 // 
@@ -1923,7 +1923,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/localGetReferences_1.ts ===
-  // // Comment Refence Test: globalVar
+  // // Comment Reference Test: globalVar
   // // References to a variable declared in global.
   // <|var [|globalVar|]: number = 2;|>
   // 
@@ -2153,7 +2153,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
+// // Comment Reference Test: globalVar
 // // References to a variable declared in global.
 // <|var [|{| isWriteAccess: true |}globalVar|]: number = 2;|>
 // 
@@ -2223,7 +2223,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/localGetReferences_1.ts ===
-  // // Comment Refence Test: globalVar
+  // // Comment Reference Test: globalVar
   // // References to a variable declared in global.
   // <|var [|globalVar|]: number = 2;|>
   // 
@@ -2743,7 +2743,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
+// // Comment Reference Test: globalVar
 // // References to a variable declared in global.
 // <|var [|{| isWriteAccess: true |}globalVar|]: number = 2;|>
 // 
@@ -2813,7 +2813,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/localGetReferences_1.ts ===
-  // // Comment Refence Test: globalVar
+  // // Comment Reference Test: globalVar
   // // References to a variable declared in global.
   // <|var [|globalVar|]: number = 2;|>
   // 
@@ -3170,7 +3170,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
+// // Comment Reference Test: globalVar
 // // References to a variable declared in global.
 // <|var [|{| isWriteAccess: true |}globalVar|]: number = 2;|>
 // 
@@ -3240,7 +3240,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/localGetReferences_1.ts ===
-  // // Comment Refence Test: globalVar
+  // // Comment Reference Test: globalVar
   // // References to a variable declared in global.
   // <|var [|globalVar|]: number = 2;|>
   // 
@@ -3461,7 +3461,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
+// // Comment Reference Test: globalVar
 // // References to a variable declared in global.
 // <|var [|{| isWriteAccess: true |}globalVar|]: number = 2;|>
 // 
@@ -3531,7 +3531,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/localGetReferences_1.ts ===
-  // // Comment Refence Test: globalVar
+  // // Comment Reference Test: globalVar
   // // References to a variable declared in global.
   // <|var [|globalVar|]: number = 2;|>
   // 
@@ -3725,7 +3725,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
+// // Comment Reference Test: globalVar
 // // References to a variable declared in global.
 // <|var [|{| isWriteAccess: true |}globalVar|]: number = 2;|>
 // 
@@ -3795,7 +3795,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/localGetReferences_1.ts ===
-  // // Comment Refence Test: globalVar
+  // // Comment Reference Test: globalVar
   // // References to a variable declared in global.
   // <|var [|globalVar|]: number = 2;|>
   // 
@@ -3853,7 +3853,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
+// // Comment Reference Test: globalVar
 // // References to a variable declared in global.
 // <|var [|{| isWriteAccess: true |}globalVar|]: number = 2;|>
 // 
@@ -3923,7 +3923,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/localGetReferences_1.ts ===
-  // // Comment Refence Test: globalVar
+  // // Comment Reference Test: globalVar
   // // References to a variable declared in global.
   // <|var [|globalVar|]: number = 2;|>
   // 
@@ -3981,7 +3981,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
+// // Comment Reference Test: globalVar
 // // References to a variable declared in global.
 // <|var [|{| isWriteAccess: true |}globalVar|]: number = 2;|>
 // 
@@ -4051,7 +4051,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/localGetReferences_1.ts ===
-  // // Comment Refence Test: globalVar
+  // // Comment Reference Test: globalVar
   // // References to a variable declared in global.
   // <|var [|globalVar|]: number = 2;|>
   // 
@@ -4109,7 +4109,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
+// // Comment Reference Test: globalVar
 // // References to a variable declared in global.
 // <|var [|{| isWriteAccess: true |}globalVar|]: number = 2;|>
 // 
@@ -4179,7 +4179,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/localGetReferences_1.ts ===
-  // // Comment Refence Test: globalVar
+  // // Comment Reference Test: globalVar
   // // References to a variable declared in global.
   // <|var [|globalVar|]: number = 2;|>
   // 
@@ -4936,7 +4936,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/localGetReferences_1.ts ===
-// // Comment Refence Test: g/*FIND ALL REFS*/lobalVar
+// // Comment Reference Test: g/*FIND ALL REFS*/lobalVar
 // // References to a variable declared in global.
 // var globalVar: number = 2;
 // 

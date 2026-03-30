@@ -10,7 +10,7 @@ genericCallWithObjectTypeArgsAndConstraints5.ts(22,24): error TS2345: Argument o
 
 
 ==== genericCallWithObjectTypeArgsAndConstraints5.ts (6 errors) ====
-    // Generic call with constraints infering type parameter from object member properties
+    // Generic call with constraints inferring type parameter from object member properties
     
     class C {
         x: string;
