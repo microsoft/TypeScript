@@ -346,6 +346,7 @@ func (ch *PseudoChecker) typeFromObjectLiteral(node *ast.ObjectLiteralExpression
 					e,
 					e.Name(),
 					optional,
+					ch.cloneTypeParameters(e.AsMethodDeclaration().TypeParameters),
 					ch.cloneParameters(e.ParameterList()),
 					ch.createReturnFromSignature(e),
 				))

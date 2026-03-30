@@ -253,16 +253,18 @@ func newPseudoObjectElement(kind PseudoObjectElementKind, name *ast.Node, option
 
 type PseudoObjectMethod struct {
 	PseudoObjectElement
-	Signature  *ast.Node
-	Parameters []*PseudoParameter
-	ReturnType *PseudoType
+	Signature      *ast.Node
+	TypeParameters []*ast.TypeParameterDeclaration
+	Parameters     []*PseudoParameter
+	ReturnType     *PseudoType
 }
 
-func NewPseudoObjectMethod(signature *ast.Node, name *ast.Node, optional bool, parameters []*PseudoParameter, returnType *PseudoType) *PseudoObjectElement {
+func NewPseudoObjectMethod(signature *ast.Node, name *ast.Node, optional bool, typeParameters []*ast.TypeParameterDeclaration, parameters []*PseudoParameter, returnType *PseudoType) *PseudoObjectElement {
 	return newPseudoObjectElement(PseudoObjectElementKindMethod, name, optional, &PseudoObjectMethod{
-		Signature:  signature,
-		Parameters: parameters,
-		ReturnType: returnType,
+		Signature:      signature,
+		TypeParameters: typeParameters,
+		Parameters:     parameters,
+		ReturnType:     returnType,
 	})
 }
 
