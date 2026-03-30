@@ -8661,6 +8661,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, overrideTypeArguments?: readonly TypeNode[]): TypeNode {
+            // Prevent infinite recursion when a function's return type references itself (e.g., ReturnType<typeof clone>)
+            if (!context.visitedSymbols) {
+                context.visitedSymbols = new Set();
+            }
+            const symbolKey = `${getSymbolId(symbol)}|${meaning}`;
+            if (context.visitedSymbols.has(symbolKey)) {
+                // Detected recursive symbol reference, return never type to avoid crash
+                return factory.createKeywordTypeNode(SyntaxKind.NeverKeyword);
+            }
+            context.visitedSymbols.add(symbolKey);
+
             const chain = lookupSymbolChain(symbol, context, meaning, !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope)); // If we're using aliases outside the current scope, dont bother with the module
 
             const isTypeOf = meaning === SymbolFlags.Value;
@@ -8723,33 +8734,39 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const lit = factory.createLiteralTypeNode(factory.createStringLiteral(specifier));
                 context.approximateLength += specifier.length + 10; // specifier + import("")
+                let result: TypeNode;
                 if (!nonRootParts || isEntityName(nonRootParts)) {
                     if (nonRootParts) {
                         const lastId = isIdentifier(nonRootParts) ? nonRootParts : nonRootParts.right;
                         setIdentifierTypeArguments(lastId, /*typeArguments*/ undefined);
                     }
-                    return factory.createImportTypeNode(lit, attributes, nonRootParts as EntityName, typeParameterNodes as readonly TypeNode[], isTypeOf);
+                    result = factory.createImportTypeNode(lit, attributes, nonRootParts as EntityName, typeParameterNodes as readonly TypeNode[], isTypeOf);
                 }
                 else {
                     const splitNode = getTopmostIndexedAccessType(nonRootParts);
                     const qualifier = (splitNode.objectType as TypeReferenceNode).typeName;
-                    return factory.createIndexedAccessTypeNode(factory.createImportTypeNode(lit, attributes, qualifier, typeParameterNodes as readonly TypeNode[], isTypeOf), splitNode.indexType);
+                    result = factory.createIndexedAccessTypeNode(factory.createImportTypeNode(lit, attributes, qualifier, typeParameterNodes as readonly TypeNode[], isTypeOf), splitNode.indexType);
                 }
+                context.visitedSymbols.delete(symbolKey);
+                return result;
             }
 
             const entityName = createAccessFromSymbolChain(chain, chain.length - 1, 0);
+            let result: TypeNode;
             if (isIndexedAccessTypeNode(entityName)) {
-                return entityName; // Indexed accesses can never be `typeof`
+                result = entityName; // Indexed accesses can never be `typeof`
             }
-            if (isTypeOf) {
-                return factory.createTypeQueryNode(entityName);
+            else if (isTypeOf) {
+                result = factory.createTypeQueryNode(entityName);
             }
             else {
                 const lastId = isIdentifier(entityName) ? entityName : entityName.right;
                 const lastTypeArgs = getIdentifierTypeArguments(lastId);
                 setIdentifierTypeArguments(lastId, /*typeArguments*/ undefined);
-                return factory.createTypeReferenceNode(entityName, lastTypeArgs as NodeArray<TypeNode>);
+                result = factory.createTypeReferenceNode(entityName, lastTypeArgs as NodeArray<TypeNode>);
             }
+            context.visitedSymbols.delete(symbolKey);
+            return result;
 
             function createAccessFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName | IndexedAccessTypeNode {
                 const typeParameterNodes = index === (chain.length - 1) ? overrideTypeArguments : lookupTypeParameterNodes(chain, index, context);
@@ -54300,6 +54317,7 @@ interface NodeBuilderContext extends SyntacticTypeNodeBuilderContext {
     reportedDiagnostic: boolean;
     trackedSymbols: TrackedSymbol[] | undefined;
     visitedTypes: Set<number> | undefined;
+    visitedSymbols: Set<string> | undefined;
     symbolDepth: Map<string, number> | undefined;
     inferTypeParameters: TypeParameter[] | undefined;
     approximateLength: number;
