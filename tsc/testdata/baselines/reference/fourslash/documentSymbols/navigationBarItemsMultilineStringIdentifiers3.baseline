@@ -1,6 +1,6 @@
 // === Document Symbols ===
 // === /navigationBarItemsMultilineStringIdentifiers3.ts ===
-// <|declare module [|{| name: "MoreThanOneHundredAndFiftyCharactersMoreThanOneHundredAndFiftyCharactersMoreThanOneHundredAndFiftyCharactersMoreThanOneHundredAndFiftyCharactersMore..., kind: Namespace |}'MoreThanOneHundredAndFiftyCharacters\
+// <|declare module [|{| name: "MoreThanOneHundredAndFiftyCharactersMoreThanOneHundredAndFiftyCharactersMoreThanOneHundredAndFiftyCharactersMoreThanOneHundredAndFiftyCharactersMoreT..., kind: Namespace |}'MoreThanOneHundredAndFiftyCharacters\
 // MoreThanOneHundredAndFiftyCharacters\
 // MoreThanOneHundredAndFiftyCharacters\
 // MoreThanOneHundredAndFiftyCharacters\
@@ -9,4 +9,4 @@
 // MoreThanOneHundredAndFiftyCharacters'|] { }|>
 
 // === Details ===
-(Namespace) "MoreThanOneHundredAndFiftyCharactersMoreThanOneHundredAndFiftyCharactersMoreThanOneHundredAndFiftyCharactersMoreThanOneHundredAndFiftyCharactersMore...
+(Namespace) "MoreThanOneHundredAndFiftyCharactersMoreThanOneHundredAndFiftyCharactersMoreThanOneHundredAndFiftyCharactersMoreThanOneHundredAndFiftyCharactersMoreT...

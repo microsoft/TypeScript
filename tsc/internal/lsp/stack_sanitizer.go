@@ -24,7 +24,7 @@ func sanitizeStackTrace(stack string) string {
 
 		i := 0
 		// Skip whitespace
-		for range line {
+		for i < len(line) {
 			if line[i] != ' ' && line[i] != '\t' {
 				break
 			}

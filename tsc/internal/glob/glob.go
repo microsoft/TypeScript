@@ -283,7 +283,7 @@ func match(elems []element, input string) (ok bool) {
 			// Backtracking: advance characters until remaining subpattern elements
 			// match.
 			matched := false
-			for i := range segInput {
+			for i := range len(segInput) {
 				if match(segElems, segInput[i:]) {
 					matched = true
 					break

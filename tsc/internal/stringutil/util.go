@@ -262,7 +262,7 @@ func TruncateByRunes(str string, maxLength int) string {
 	var runeCount int
 	for i := range str {
 		runeCount++
-		if runeCount >= maxLength {
+		if runeCount > maxLength {
 			return str[:i]
 		}
 	}
