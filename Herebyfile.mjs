@@ -649,13 +649,13 @@ const copyBuiltLocalDiagnosticMessages = task({
 
 export const otherOutputs = task({
     name: "other-outputs",
-    description: "Builds miscelaneous scripts and documents distributed with the LKG",
+    description: "Builds miscellaneous scripts and documents distributed with the LKG",
     dependencies: [typingsInstaller, watchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
 export const watchOtherOutputs = task({
     name: "watch-other-outputs",
-    description: "Builds miscelaneous scripts and documents distributed with the LKG",
+    description: "Builds miscellaneous scripts and documents distributed with the LKG",
     hiddenFromTaskList: true,
     dependencies: [watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
