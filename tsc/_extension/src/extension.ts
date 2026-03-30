@@ -1,6 +1,9 @@
 import * as vscode from "vscode";
 
-import { registerEnablementCommands } from "./commands";
+import {
+    registerEnablementCommands,
+    updateUseTsgoSetting,
+} from "./commands";
 import {
     aiConnectionString,
     getUseTsgo,
@@ -61,6 +64,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     }));
     context.subscriptions.push({ dispose: () => clearTimeout(configChangeTimeout) });
 
+    const hasOnboardedTsgoStateKey = "hasOnboardedTsgo";
+    const shouldOnboardTsgo = !context.globalState.get<boolean>(hasOnboardedTsgoStateKey);
+    if (shouldOnboardTsgo) {
+        await context.globalState.update(hasOnboardedTsgoStateKey, true);
+    }
+
     const useTsgo = getUseTsgo();
 
     if (context.extensionMode === vscode.ExtensionMode.Development) {
@@ -86,7 +95,16 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
             });
         }
     }
-    else if (!useTsgo) {
+    else if (useTsgo === false) {
+        output.appendLine("TypeScript Native Preview is disabled. Select 'Enable TypeScript Native Preview (Experimental)' in the command palette to enable it.");
+        return;
+    }
+    else if (useTsgo === undefined) {
+        if (shouldOnboardTsgo) {
+            // First run after install: enable by default.
+            updateUseTsgoSetting(true);
+            return;
+        }
         output.appendLine("TypeScript Native Preview is disabled. Select 'Enable TypeScript Native Preview (Experimental)' in the command palette to enable it.");
         return;
     }
