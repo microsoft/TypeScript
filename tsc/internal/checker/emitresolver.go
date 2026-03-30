@@ -807,7 +807,7 @@ func (r *EmitResolver) getReferenceResolver() binder.ReferenceResolver {
 	if r.referenceResolver == nil {
 		r.referenceResolver = binder.NewReferenceResolver(r.checker.compilerOptions, binder.ReferenceResolverHooks{
 			ResolveName:                            r.checker.resolveName,
-			GetResolvedSymbol:                      r.checker.getResolvedSymbolNoDiagnostics,
+			GetResolvedSymbol:                      r.checker.getResolvedSymbolOrNil,
 			GetMergedSymbol:                        r.checker.getMergedSymbol,
 			GetParentOfSymbol:                      r.checker.getParentOfSymbol,
 			GetSymbolOfDeclaration:                 r.checker.getSymbolOfDeclaration,
@@ -843,7 +843,11 @@ func (r *EmitResolver) GetReferencedImportDeclaration(node *ast.IdentifierNode) 
 		return r.jsxLinks.Get(node).importRef
 	}
 
-	return r.getReferenceResolver().GetReferencedImportDeclaration(node)
+	symbol := r.checker.getReferencedValueOrAliasSymbol(node)
+	if ast.IsNonLocalAlias(symbol, ast.SymbolFlagsValue) && r.checker.getTypeOnlyAliasDeclarationEx(symbol, ast.SymbolFlagsValue) == nil {
+		return r.checker.getDeclarationOfAliasSymbol(symbol)
+	}
+	return nil
 }
 
 func (r *EmitResolver) GetReferencedValueDeclaration(node *ast.IdentifierNode) *ast.Declaration {

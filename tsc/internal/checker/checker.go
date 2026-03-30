@@ -13438,20 +13438,12 @@ func (c *Checker) getResolvedSymbolOrNil(node *ast.Node) *ast.Symbol {
 	return c.symbolNodeLinks.Get(node).resolvedSymbol
 }
 
-func (c *Checker) getResolvedSymbolNoDiagnostics(node *ast.Node) *ast.Symbol {
-	links := c.symbolNodeLinks.Get(node)
-	if links.resolvedSymbol != nil {
-		return links.resolvedSymbol
+func (c *Checker) getReferencedValueOrAliasSymbol(reference *ast.Node) *ast.Symbol {
+	resolvedSymbol := c.symbolNodeLinks.Get(reference).resolvedSymbol
+	if resolvedSymbol != nil && resolvedSymbol != c.unknownSymbol {
+		return resolvedSymbol
 	}
-	if links.resolvedSymbolNoDiagnostics == nil {
-		var symbol *ast.Symbol
-		if !ast.NodeIsMissing(node) {
-			symbol = c.resolveName(node, node.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue,
-				nil, !ast.IsWriteOnlyAccess(node), false /*excludeGlobals*/)
-		}
-		links.resolvedSymbolNoDiagnostics = core.OrElse(symbol, c.unknownSymbol)
-	}
-	return links.resolvedSymbolNoDiagnostics
+	return c.resolveName(reference, reference.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue|ast.SymbolFlagsAlias, nil, true /*isUse*/, false /*excludeGlobals*/)
 }
 
 func (c *Checker) getCannotFindNameDiagnosticForName(node *ast.Node) *diagnostics.Message {
