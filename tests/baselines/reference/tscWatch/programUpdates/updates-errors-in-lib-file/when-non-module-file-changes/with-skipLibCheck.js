@@ -114,12 +114,10 @@ Program files::
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -169,11 +167,9 @@ Program files::
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
