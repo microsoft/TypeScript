@@ -248,6 +248,24 @@ compiler/contextuallyTypeArgumentsKeyword.types.diff
 compiler/contextualReturnTypeOfIIFE2.errors.txt.diff
 compiler/contextualReturnTypeOfIIFE2.symbols.diff
 compiler/contextualReturnTypeOfIIFE2.types.diff
+compiler/controlFlowInstanceof.errors.txt.diff
+compiler/controlFlowInstanceof.symbols.diff
+compiler/controlFlowInstanceof.types.diff
+compiler/ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.errors.txt.diff
+compiler/ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.symbols.diff
+compiler/ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.types.diff
+compiler/expandoFunctionContextualTypesJs.symbols.diff
+compiler/expandoFunctionContextualTypesJs.types.diff
+compiler/expressionWithJSDocTypeArguments.errors.txt.diff
+compiler/expressionWithJSDocTypeArguments.js.diff
+compiler/expressionWithJSDocTypeArguments.symbols.diff
+compiler/expressionWithJSDocTypeArguments.types.diff
+compiler/genericDefaultsJs.types.diff
+compiler/importAssertionsDeprecatedIgnored.errors.txt.diff
+compiler/importTypeAssertionDeprecationIgnored.errors.txt.diff
+compiler/inexistentPropertyInsideToStringType.errors.txt.diff
+compiler/inexistentPropertyInsideToStringType.symbols.diff
+compiler/inexistentPropertyInsideToStringType.types.diff
 
 ## more accurate types/symbols ##
 compiler/allowJscheckJsTypeParameterNoCrash.symbols.diff
@@ -287,6 +305,50 @@ compiler/computedPropertiesInDestructuring1_ES6.types.diff
 compiler/computedPropertiesInDestructuring1.types.diff
 compiler/conditionalTypeContextualTypeSimplificationsSuceeds.types.diff
 compiler/contravariantInferenceAndTypeGuard.types.diff
+compiler/declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.js.diff
+compiler/declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.types.diff
+compiler/defaultPropsEmptyCurlyBecomesAnyForJs.symbols.diff
+compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes(exactoptionalpropertytypes=false).symbols.diff
+compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes(exactoptionalpropertytypes=true).symbols.diff
+compiler/deleteExpressionMustBeOptional(strict=false).symbols.diff
+compiler/deleteExpressionMustBeOptional(strict=true).symbols.diff
+compiler/duplicateObjectLiteralProperty_computedNameNegative1.types.diff
+compiler/duplicateOverloadInTypeAugmentation1.types.diff
+compiler/duplicateStringNamedProperty1.errors.txt.diff
+compiler/expandoFunctionBlockShadowing.symbols.diff
+compiler/expandoFunctionBlockShadowing.types.diff
+compiler/expandoFunctionContextualTypes.symbols.diff
+compiler/expandoFunctionContextualTypes.types.diff
+compiler/expandoFunctionContextualTypesJSDocInTs.symbols.diff
+compiler/expandoFunctionContextualTypesJSDocInTs.types.diff
+compiler/expandoFunctionContextualTypesNoValue.symbols.diff
+compiler/expandoFunctionContextualTypesNoValue.types.diff
+compiler/expandoFunctionExpressionsWithDynamicNames.js.diff
+compiler/expandoFunctionExpressionsWithDynamicNames.symbols.diff
+compiler/expandoFunctionExpressionsWithDynamicNames2.symbols.diff
+compiler/expandoFunctionNestedAssigmentsDeclared.symbols.diff
+compiler/fixingTypeParametersRepeatedly2.types.diff
+compiler/fixingTypeParametersRepeatedly3.types.diff
+compiler/functionOverloadsOnGenericArity2.types.diff
+compiler/functionOverloadsRecursiveGenericReturnType.types.diff
+compiler/genericCallOnMemberReturningClosedOverObject.types.diff
+compiler/genericCombinators2.types.diff
+compiler/genericFunctionInference1.types.diff
+compiler/genericFunctions3.types.diff
+compiler/genericFunctionSpecializations1.types.diff
+compiler/genericMemberFunction.types.diff
+compiler/genericOverloadSignatures.types.diff
+compiler/genericSpecializationToTypeLiteral1.types.diff
+compiler/gettersAndSettersErrors.symbols.diff
+compiler/gettersAndSettersErrors.types.diff
+compiler/indexTypeNoSubstitutionTemplateLiteral.symbols.diff
+compiler/indexTypeNoSubstitutionTemplateLiteral.types.diff
+compiler/inferenceDoesNotAddUndefinedOrNull.types.diff
+compiler/inferenceFromIncompleteSource.errors.txt.diff
+compiler/infinitelyExpandingTypes5.types.diff
+compiler/ipromise2.types.diff
+compiler/ipromise3.types.diff
+compiler/ipromise4.types.diff
 
 ## more concise errors ##
 compiler/arrayBestCommonTypes.errors.txt.diff
@@ -306,6 +368,29 @@ compiler/computedPropertyBindingElementDeclarationNoCrash1.errors.txt.diff
 compiler/conditionalTypeDoesntSpinForever.errors.txt.diff
 compiler/constraints0.errors.txt.diff
 compiler/constructorOverloads1.errors.txt.diff
+compiler/destructuringTuple.errors.txt.diff
+compiler/differentTypesWithSameName.errors.txt.diff
+compiler/dissallowSymbolAsWeakType.errors.txt.diff
+compiler/es5-asyncFunctionObjectLiterals(target=es2015).types.diff
+compiler/excessPropertiesInOverloads.errors.txt.diff
+compiler/excessPropertyCheckWithUnions.errors.txt.diff
+compiler/exportDefaultStripsFreshness.errors.txt.diff
+compiler/functionOverloads2.errors.txt.diff
+compiler/functionOverloads40.errors.txt.diff
+compiler/functionOverloads41.errors.txt.diff
+compiler/genericCallAtYieldExpressionInGenericCall1.errors.txt.diff
+compiler/genericConstraint2.errors.txt.diff
+compiler/generics1.errors.txt.diff
+compiler/generics2.errors.txt.diff
+compiler/generics5.errors.txt.diff
+compiler/genericTypeConstraints.errors.txt.diff
+compiler/heterogeneousArrayAndOverloads.errors.txt.diff
+compiler/incompatibleTypes.errors.txt.diff
+compiler/inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.errors.txt.diff
+compiler/inferTypePredicates.errors.txt.diff
+compiler/inheritedConstructorWithRestParams2.errors.txt.diff
+compiler/intTypeCheck.errors.txt.diff
+compiler/invariantGenericErrorElaboration.errors.txt.diff
 
 ## different error order ##
 compiler/arrayIterationLibES5TargetDifferent(nolib=true,target=es2015).errors.txt.diff
@@ -316,6 +401,28 @@ compiler/assignmentToInstantiationExpression.js.diff
 compiler/asyncArrowInClassES5(target=es2015).js.diff
 compiler/augmentedTypesVar.js.diff
 compiler/constructorWithIncompleteTypeAnnotation.js.diff
+compiler/declarationEmitClassAccessorsJs1.js.diff
+compiler/declarationEmitClassSetAccessorParamNameInJs.js.diff
+compiler/declarationEmitClassSetAccessorParamNameInJs2.js.diff
+compiler/declarationEmitClassSetAccessorParamNameInJs3.js.diff
+compiler/declarationEmitDefaultExportWithStaticAssignment.js.diff
+compiler/declarationEmitDefaultExportWithStaticAssignment.symbols.diff
+compiler/declarationEmitDefaultExportWithStaticAssignment.types.diff
+compiler/decoratorMetadataTypeOnlyExport.symbols.diff
+compiler/decoratorMetadataTypeOnlyImport.symbols.diff
+compiler/emitMethodCalledNew.js.diff
+compiler/es6ImportWithJsDocTags.symbols.diff
+compiler/es2018ObjectAssign.types.diff
+compiler/expandoFunctionSymbolPropertyJs.js.diff
+compiler/gettersAndSettersErrors.js.diff
+compiler/importDeclFromTypeNodeInJsSource.js.diff
+compiler/importTypeGenericArrowTypeParenthesized.js.diff
+compiler/importTypeGenericArrowTypeParenthesized.types.diff
+compiler/instanceofOnInstantiationExpression.js.diff
+
+## type/symbol differences of no consequence ##
+compiler/exportDefaultWithJSDoc1.types.diff
+compiler/exportInFunction.types.diff
 
 ## better error spans/suggestions ##
 compiler/awaitInNonAsyncFunction.errors.txt.diff
@@ -327,6 +434,48 @@ compiler/classWithDuplicateIdentifier.symbols.diff
 compiler/classWithDuplicateIdentifier.types.diff
 compiler/commonMissingSemicolons.errors.txt.diff
 compiler/constructorWithIncompleteTypeAnnotation.errors.txt.diff
+compiler/duplicateClassElements.errors.txt.diff
+compiler/duplicateClassElements.symbols.diff
+compiler/duplicateClassElements.types.diff
+compiler/duplicateIdentifierComputedName.errors.txt.diff
+compiler/duplicateIdentifierDifferentSpelling.errors.txt.diff
+compiler/duplicateIdentifierRelatedSpans_moduleAugmentation.errors.txt.diff
+compiler/duplicateIdentifierRelatedSpans1.errors.txt.diff
+compiler/duplicateIdentifierRelatedSpans2.errors.txt.diff
+compiler/duplicateIdentifierRelatedSpans3.errors.txt.diff
+compiler/duplicateIdentifierRelatedSpans4.errors.txt.diff
+compiler/duplicateIdentifierRelatedSpans5.errors.txt.diff
+compiler/duplicateIdentifierRelatedSpans6.errors.txt.diff
+compiler/duplicateIdentifierRelatedSpans7.errors.txt.diff
+compiler/dynamicNamesErrors.errors.txt.diff
+compiler/elidedJSImport1.errors.txt.diff
+compiler/exportAsNamespace_augment.errors.txt.diff
+compiler/exportAsNamespaceConflict.errors.txt.diff
+compiler/extendsUntypedModule.errors.txt.diff
+compiler/gettersAndSettersErrors.errors.txt.diff
+compiler/importTypeAssertionDeprecation.errors.txt.diff
+compiler/invalidUnicodeEscapeSequance.errors.txt.diff
+compiler/invalidUnicodeEscapeSequance2.errors.txt.diff
+compiler/invalidUnicodeEscapeSequance3.errors.txt.diff
+compiler/invalidUnicodeEscapeSequance4.errors.txt.diff
 
 ## wrong errors ##
 compiler/classFieldSuperAccessibleJs1.errors.txt.diff
+
+## deprecated errors ##
+compiler/declarationFileNoCrashOnExtraExportModifier.errors.txt.diff
+compiler/declarationFileNoCrashOnExtraExportModifier.symbols.diff
+compiler/es6ExportEqualsInterop.errors.txt.diff
+compiler/es6ExportEqualsInterop.symbols.diff
+compiler/es6ExportEqualsInterop.types.diff
+compiler/es6ImportEqualsExportModuleCommonJsError.errors.txt.diff
+compiler/es6ImportEqualsExportModuleEs2015Error.errors.txt.diff
+compiler/importNonExportedMember5.errors.txt.diff
+compiler/importNonExportedMember7.errors.txt.diff
+compiler/importNonExportedMember11.errors.txt.diff
+
+## merging of exports and export assignments ##
+compiler/importDeclWithExportModifierAndExportAssignmentInAmbientContext.errors.txt.diff
+compiler/importDeclWithExportModifierAndExportAssignmentInAmbientContext.types.diff
+compiler/incompatibleExports1.errors.txt.diff
+compiler/incompatibleExports2.errors.txt.diff
