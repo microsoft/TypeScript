@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/classPropertyInferenceFromBroaderTypeConst.ts] ////
+
+=== classPropertyInferenceFromBroaderTypeConst.ts ===
+// Repro from GH#62264
+// Class property should infer the wider declared type (AB), not the narrowed literal type ("A")
+
+type AB = 'A' | 'B';
+>AB : Symbol(AB, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 0, 0))
+
+const DEFAULT: AB = 'A';
+>DEFAULT : Symbol(DEFAULT, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 5, 5))
+>AB : Symbol(AB, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 0, 0))
+
+class C {
+>C : Symbol(C, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 5, 24))
+
+    D = DEFAULT;
+>D : Symbol(C.D, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 7, 9))
+>DEFAULT : Symbol(DEFAULT, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 5, 5))
+
+    method() {
+>method : Symbol(C.method, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 8, 16))
+
+        switch (this.D) {
+>this.D : Symbol(C.D, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 7, 9))
+>this : Symbol(C, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 5, 24))
+>D : Symbol(C.D, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 7, 9))
+
+            case 'A': break;
+            case 'B': break; // should not error
+        }
+    }
+}
+
+// D should be AB, not "A"
+declare const c: C;
+>c : Symbol(c, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 19, 13))
+>C : Symbol(C, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 5, 24))
+
+declare function expectAB(x: AB): void;
+>expectAB : Symbol(expectAB, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 19, 19))
+>x : Symbol(x, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 20, 26))
+>AB : Symbol(AB, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 0, 0))
+
+expectAB(c.D); // ok
+>expectAB : Symbol(expectAB, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 19, 19))
+>c.D : Symbol(C.D, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 7, 9))
+>c : Symbol(c, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 19, 13))
+>D : Symbol(C.D, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 7, 9))
+
+c.D = 'B'; // ok
+>c.D : Symbol(C.D, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 7, 9))
+>c : Symbol(c, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 19, 13))
+>D : Symbol(C.D, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 7, 9))
+
+// Static property should work the same way
+class D {
+>D : Symbol(D, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 22, 10))
+
+    static SD = DEFAULT;
+>SD : Symbol(D.SD, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 25, 9))
+>DEFAULT : Symbol(DEFAULT, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 5, 5))
+}
+D.SD = 'B'; // ok
+>D.SD : Symbol(D.SD, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 25, 9))
+>D : Symbol(D, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 22, 10))
+>SD : Symbol(D.SD, Decl(classPropertyInferenceFromBroaderTypeConst.ts, 25, 9))
+
