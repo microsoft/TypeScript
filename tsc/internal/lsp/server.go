@@ -207,10 +207,9 @@ func (s *Server) WatchFiles(ctx context.Context, id project.WatcherID, watchers 
 	_, err := sendClientRequest(ctx, s, lsproto.ClientRegisterCapabilityInfo, &lsproto.RegistrationParams{
 		Registrations: []*lsproto.Registration{
 			{
-				Id:     string(id),
-				Method: string(lsproto.MethodWorkspaceDidChangeWatchedFiles),
+				Id: string(id),
 				RegisterOptions: &lsproto.RegisterOptions{
-					DidChangeWatchedFiles: &lsproto.DidChangeWatchedFilesRegistrationOptions{
+					WorkspaceDidChangeWatchedFiles: &lsproto.DidChangeWatchedFilesRegistrationOptions{
 						Watchers: watchers,
 					},
 				},
@@ -1122,10 +1121,9 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 	_, err = sendClientRequest(ctx, s, lsproto.ClientRegisterCapabilityInfo, &lsproto.RegistrationParams{
 		Registrations: []*lsproto.Registration{
 			{
-				Id:     "typescript-config-watch-id",
-				Method: string(lsproto.MethodWorkspaceDidChangeConfiguration),
+				Id: "typescript-config-watch-id",
 				RegisterOptions: &lsproto.RegisterOptions{
-					DidChangeConfiguration: &lsproto.DidChangeConfigurationRegistrationOptions{
+					WorkspaceDidChangeConfiguration: &lsproto.DidChangeConfigurationRegistrationOptions{
 						Section: &lsproto.StringOrStrings{
 							Strings: &[]string{"js/ts", "typescript", "javascript", "editor"},
 						},

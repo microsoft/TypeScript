@@ -426,8 +426,15 @@ const customTypeAliases: TypeAlias[] = [
 // Track which custom Data structures were declared explicitly
 const explicitDataStructures = new Set(customStructures.map(s => s.name));
 
-// Global variable to track the RegisterOptions union type for special naming
-let registerOptionsUnionType: OrType | undefined;
+// Map from registration method → { fieldName, optionsTypeName }
+// Built during patchAndPreprocessModel, used during code generation.
+interface RegistrationMethodInfo {
+    registrationMethod: string;
+    fieldName: string;
+    optionsTypeName: string;
+    isRegistrationOnly?: boolean;
+}
+let registrationMethods: RegistrationMethodInfo[] = [];
 
 // Patch and preprocess the model
 function patchAndPreprocessModel() {
@@ -479,6 +486,8 @@ function patchAndPreprocessModel() {
 
             // Replace the "and" type with a reference to the synthetic structure
             registrationOptionTypes[i] = { kind: "reference", name: structureName };
+            // Also update the model so the request/notification has the resolved type
+            owner.registrationOptions = registrationOptionTypes[i];
         }
     }
 
@@ -500,13 +509,11 @@ function patchAndPreprocessModel() {
                 }
             }
 
-            // Replace registerOptions type with a custom RegisterOptions type
-            if (prop.name === "registerOptions" && prop.type.kind === "reference" && prop.type.name === "LSPAny") {
-                // Create a union type and save it for special naming
-                if (registrationOptionTypes.length > 0) {
-                    registerOptionsUnionType = { kind: "or", items: registrationOptionTypes };
-                    prop.type = registerOptionsUnionType;
-                }
+            // Registration.registerOptions and Registration.method are handled specially:
+            // registerOptions becomes a custom struct, and method is derived from it.
+            // Remove both from the structure so the normal generator skips them.
+            if (structure.name === "Registration" && (prop.name === "registerOptions" || prop.name === "method")) {
+                // Will be filtered out below
             }
 
             // Replace ProgressParams.value with a proper union type
@@ -595,10 +602,136 @@ function patchAndPreprocessModel() {
         if (structure.name === "ServerCapabilities" || structure.name === "ClientCapabilities") {
             structure.properties = structure.properties.filter(p => p.name !== "experimental");
         }
+
+        // Remove method and registerOptions from Registration (handled by custom codegen)
+        if (structure.name === "Registration") {
+            structure.properties = structure.properties.filter(p => p.name !== "method" && p.name !== "registerOptions");
+        }
     }
 
     // Remove _InitializeParams structure after flattening (it was only needed for inheritance)
     model.structures = model.structures.filter(s => s.name !== "_InitializeParams");
+
+    // Remove all notebook-related features from the model
+    function isNotebookRelatedName(name: string): boolean {
+        const lower = name.toLowerCase();
+        return lower.includes("notebook");
+    }
+
+    function isNotebookRelatedMethod(method: string): boolean {
+        return method.toLowerCase().startsWith("notebookdocument/");
+    }
+
+    function typeReferencesNotebook(type: Type): boolean {
+        if (type.kind === "reference") return isNotebookRelatedName(type.name);
+        if (type.kind === "array") return typeReferencesNotebook(type.element);
+        if (type.kind === "or" || type.kind === "and") return type.items.some(typeReferencesNotebook);
+        if (type.kind === "map") return typeReferencesNotebook(type.key) || typeReferencesNotebook(type.value);
+        return false;
+    }
+
+    function isEntirelyNotebookType(type: Type): boolean {
+        if (type.kind === "reference") return isNotebookRelatedName(type.name);
+        if (type.kind === "array") return isEntirelyNotebookType(type.element);
+        if (type.kind === "or" || type.kind === "and") return type.items.every(isEntirelyNotebookType);
+        return false;
+    }
+
+    function removeNotebookFromType(type: Type): Type {
+        if (type.kind === "or") {
+            const filtered = type.items.filter(item => !typeReferencesNotebook(item)).map(removeNotebookFromType);
+            if (filtered.length === 1) return filtered[0];
+            if (filtered.length < type.items.length) {
+                return { ...type, items: filtered };
+            }
+        }
+        if (type.kind === "and") {
+            const filtered = type.items.filter(item => !typeReferencesNotebook(item)).map(removeNotebookFromType);
+            if (filtered.length === 1) return filtered[0];
+            if (filtered.length < type.items.length) {
+                return { ...type, items: filtered };
+            }
+        }
+        return type;
+    }
+
+    // Filter out notebook structures (and notebook-only structures like ExecutionSummary)
+    const notebookOnlyStructures = new Set(["ExecutionSummary"]);
+    model.structures = model.structures.filter(s => !isNotebookRelatedName(s.name) && !notebookOnlyStructures.has(s.name));
+
+    // Remove notebook properties from remaining structures
+    for (const structure of model.structures) {
+        structure.properties = structure.properties.filter(p => {
+            if (isNotebookRelatedName(p.name)) return false;
+            // Only remove properties whose type is entirely notebook-related
+            if (isEntirelyNotebookType(p.type)) return false;
+            return true;
+        });
+        // Clean up union types in remaining properties to remove notebook members
+        for (const prop of structure.properties) {
+            prop.type = removeNotebookFromType(prop.type);
+        }
+    }
+
+    // Filter out notebook notifications and requests
+    model.notifications = model.notifications.filter(n => !isNotebookRelatedMethod(n.method));
+    model.requests = model.requests.filter(r => !isNotebookRelatedMethod(r.method));
+
+    // Filter out notebook enumerations
+    model.enumerations = model.enumerations.filter(e => !isNotebookRelatedName(e.name));
+
+    // Remove notebook-related values from remaining enumerations
+    for (const enumeration of model.enumerations) {
+        enumeration.values = enumeration.values.filter(v => !isNotebookRelatedName(v.name));
+    }
+
+    // Filter out notebook type aliases
+    model.typeAliases = model.typeAliases.filter(ta => !isNotebookRelatedName(ta.name));
+
+    // Clean up type aliases that reference notebook types (e.g., DocumentFilter)
+    for (const ta of model.typeAliases) {
+        if (ta.type.kind === "or") {
+            ta.type.items = ta.type.items.filter(item => !typeReferencesNotebook(item));
+            // If only one item remains, unwrap the union
+            if (ta.type.items.length === 1) {
+                ta.type = ta.type.items[0];
+            }
+        }
+    }
+
+    // Build the registration method map (after notebook filtering).
+    // Each unique registration method gets a field in the generated RegisterOptions struct.
+    const regMethodSeen = new Set<string>();
+    for (const request of [...model.requests, ...model.notifications]) {
+        if (!request.registrationOptions) continue;
+        const regMethod = (request as any).registrationMethod || request.method;
+
+        if (regMethodSeen.has(regMethod)) continue;
+        regMethodSeen.add(regMethod);
+
+        // Resolve the options type name
+        const ro = request.registrationOptions;
+        let optionsTypeName: string;
+        if (ro.kind === "reference") {
+            optionsTypeName = ro.name;
+        }
+        else {
+            throw new Error(`Unexpected registrationOptions kind '${ro.kind}' for ${request.method}; expected all to be resolved to references`);
+        }
+
+        registrationMethods.push({
+            registrationMethod: regMethod,
+            fieldName: methodNameIdentifier(regMethod),
+            optionsTypeName,
+        });
+    }
+
+    // Identify registration-only methods (not also a request/notification method).
+    // These need their own Method constant emitted.
+    const allRequestMethods = new Set([...model.requests, ...model.notifications].map(r => r.method));
+    for (const reg of registrationMethods) {
+        (reg as any).isRegistrationOnly = !allRequestMethods.has(reg.registrationMethod);
+    }
 
     // Merge LSPErrorCodes into ErrorCodes and remove LSPErrorCodes
     const errorCodesEnum = model.enumerations.find(e => e.name === "ErrorCodes");
@@ -922,20 +1055,6 @@ function handleOrType(orType: OrType): GoType {
         unionTypeName = memberNames.join("Or");
     }
 
-    // Special case: if this is the RegisterOptions union, use a custom name
-    // and slice off the common suffix "RegistrationOptions" from member names
-    if (orType === registerOptionsUnionType) {
-        unionTypeName = "RegisterOptions";
-
-        // Remove the common suffix "RegistrationOptions" from all member names
-        memberNames = memberNames.map(name => {
-            if (name.endsWith("RegistrationOptions")) {
-                return name.slice(0, -"RegistrationOptions".length);
-            }
-            return name;
-        });
-    }
-
     if (containedNull) {
         unionTypeName += "OrNull";
     }
@@ -984,9 +1103,7 @@ function collectTypeDefinitions() {
         "Location",
         "Color",
         "TextDocumentIdentifier",
-        "NotebookDocumentIdentifier",
         "PreviousResultId",
-        "VersionedNotebookDocumentIdentifier",
         "VersionedTextDocumentIdentifier",
         "OptionalVersionedTextDocumentIdentifier",
         "ExportInfoMapKey",
@@ -1047,6 +1164,199 @@ function methodNameIdentifier(name: string) {
 }
 
 /**
+ * Returns the JSON token kind ("string", "number", "object", "array", "boolean")
+ * for a given meta model Type, or undefined if the kind cannot be statically determined.
+ */
+function jsonKindForType(type: Type): string | undefined {
+    switch (type.kind) {
+        case "base":
+            switch (type.name) {
+                case "integer":
+                case "uinteger":
+                case "decimal":
+                    return "number";
+                case "string":
+                case "URI":
+                case "DocumentUri":
+                    return "string";
+                case "boolean":
+                    return "boolean";
+                default:
+                    return undefined;
+            }
+        case "reference": {
+            if (typeAliasOverrides.has(type.name)) {
+                return undefined;
+            }
+            if (model.structures.some(s => s.name === type.name)) {
+                return "object";
+            }
+            const enumeration = model.enumerations.find(e => e.name === type.name);
+            if (enumeration) {
+                switch (enumeration.type.name) {
+                    case "string":
+                        return "string";
+                    case "integer":
+                    case "uinteger":
+                        return "number";
+                    default:
+                        return undefined;
+                }
+            }
+            const aliasType = typeInfo.typeAliasMap.get(type.name);
+            if (aliasType) return jsonKindForType(aliasType);
+            return undefined;
+        }
+        case "array":
+            return "array";
+        case "map":
+            return "object";
+        case "tuple":
+            return "array";
+        case "stringLiteral":
+            return "string";
+        case "integerLiteral":
+            return "number";
+        case "booleanLiteral":
+            return "boolean";
+        case "literal":
+            return "object";
+        case "or": {
+            const kinds = new Set(type.items.map(item => jsonKindForType(item)).filter(Boolean));
+            return kinds.size === 1 ? kinds.values().next().value : undefined;
+        }
+        default:
+            return undefined;
+    }
+}
+
+function goKindCasesForJsonKind(kind: string): string {
+    switch (kind) {
+        case "string":
+            return `case '"':`;
+        case "number":
+            return `case '0':`;
+        case "object":
+            return `case '{':`;
+        case "array":
+            return `case '[':`;
+        case "boolean":
+            return `case 't', 'f':`;
+        default:
+            return "";
+    }
+}
+
+/**
+ * For a group of union entries that share the same JSON kind (e.g., all objects),
+ * find a discriminator field — a JSON property whose string literal type differs
+ * across variants — enabling efficient O(1) dispatch instead of try-each.
+ */
+function findDiscriminatorField(entries: { fieldName: string; typeName: string; originalType: Type; }[]): {
+    fieldName: string;
+    mapping: Map<string, { fieldName: string; typeName: string; originalType: Type; }>;
+    unmapped: { fieldName: string; typeName: string; originalType: Type; }[];
+} | null {
+    // For each entry, find string literal fields and build candidate discriminators.
+    // A valid discriminator is a field name that appears on multiple variants with
+    // different string literal values.
+    const fieldCandidates = new Map<string, Map<string, typeof entries[0] | undefined>>();
+
+    for (const entry of entries) {
+        if (entry.originalType.kind !== "reference") continue;
+        const structure = model.structures.find(s => s.name === (entry.originalType as ReferenceType).name);
+        if (!structure) continue;
+
+        for (const prop of structure.properties) {
+            if (prop.type.kind === "stringLiteral") {
+                if (!fieldCandidates.has(prop.name)) {
+                    fieldCandidates.set(prop.name, new Map());
+                }
+                const mapping = fieldCandidates.get(prop.name)!;
+                if (!mapping.has(prop.type.value)) {
+                    mapping.set(prop.type.value, entry);
+                }
+                else {
+                    // Two entries share the same literal value; invalidate this candidate.
+                    mapping.set(prop.type.value, undefined);
+                }
+            }
+        }
+    }
+
+    // Pick the discriminator field that covers the most entries.
+    let bestField: string | null = null;
+    let bestMapping: Map<string, typeof entries[0]> | null = null;
+
+    for (const [fieldName, mapping] of fieldCandidates) {
+        const validMapping = new Map<string, typeof entries[0]>();
+        for (const [value, entry] of mapping) {
+            if (entry !== undefined) validMapping.set(value, entry);
+        }
+        if (validMapping.size >= 2 && (!bestMapping || validMapping.size > bestMapping.size)) {
+            bestField = fieldName;
+            bestMapping = validMapping;
+        }
+    }
+
+    if (!bestField || !bestMapping) return null;
+
+    const mappedEntries = new Set(bestMapping.values());
+    const unmapped = entries.filter(e => !mappedEntries.has(e));
+
+    return { fieldName: bestField, mapping: bestMapping, unmapped };
+}
+
+/**
+ * For a group of union entries that share the same JSON kind, find fields whose
+ * presence/absence in the JSON uniquely identifies a variant. A "presence discriminator"
+ * for variant X is a required field on X that does not appear in any other variant's
+ * property set at all.
+ */
+function findPresenceDiscriminator(entries: { fieldName: string; typeName: string; originalType: Type; }[]): {
+    checks: { jsonFieldName: string; entry: { fieldName: string; typeName: string; originalType: Type; }; }[];
+    unmapped: { fieldName: string; typeName: string; originalType: Type; }[];
+} | null {
+    // Collect all property names for each variant
+    const variantProps = new Map<typeof entries[0], { required: Property[]; allNames: Set<string>; }>();
+    for (const entry of entries) {
+        if (entry.originalType.kind !== "reference") continue;
+        const structure = model.structures.find(s => s.name === (entry.originalType as ReferenceType).name);
+        if (!structure) continue;
+        const required = structure.properties.filter(p => !p.optional && !p.omitzeroValue);
+        const allNames = new Set(structure.properties.map(p => p.name));
+        variantProps.set(entry, { required, allNames });
+    }
+
+    const checks: { jsonFieldName: string; entry: typeof entries[0]; }[] = [];
+    const handled = new Set<typeof entries[0]>();
+
+    for (const entry of entries) {
+        const info = variantProps.get(entry);
+        if (!info) continue;
+
+        const otherEntries = entries.filter(e => e !== entry);
+        for (const field of info.required) {
+            const absentFromAllOthers = otherEntries.every(other => {
+                const otherInfo = variantProps.get(other);
+                if (!otherInfo) return false;
+                return !otherInfo.allNames.has(field.name);
+            });
+            if (absentFromAllOthers) {
+                checks.push({ jsonFieldName: field.name, entry });
+                handled.add(entry);
+                break;
+            }
+        }
+    }
+
+    if (checks.length === 0) return null;
+
+    const unmapped = entries.filter(e => !handled.has(e));
+    return { checks, unmapped };
+}
+
+/**
  * Generate the Go code
  */
 function generateCode() {
@@ -1058,6 +1368,129 @@ function generateCode() {
 
     function writeLine(s = "") {
         parts.push(s + "\n");
+    }
+
+    /**
+     * Generate Go code for discriminator-based union dispatch.
+     * Assumes a variable named `data` of type `json.Value` is in scope.
+     * Returns true if all switch branches return (exhaustive).
+     */
+    function generateDiscriminatorDispatch(
+        disc: NonNullable<ReturnType<typeof findDiscriminatorField>>,
+        indent: string,
+    ): boolean {
+        writeLine(`${indent}switch string(jsonObjectRawField(data, ${JSON.stringify(disc.fieldName)})) {`);
+        for (const [value, entry] of disc.mapping) {
+            writeLine(`${indent}case \`"${value}"\`:`);
+            writeLine(`${indent}\to.${entry.fieldName} = new(${entry.typeName})`);
+            writeLine(`${indent}\treturn json.Unmarshal(data, o.${entry.fieldName})`);
+        }
+        let exhaustive = false;
+        if (disc.unmapped.length > 0) {
+            writeLine(`${indent}default:`);
+            exhaustive = generateUnmappedFallback(disc.unmapped, indent + "\t");
+        }
+        writeLine(`${indent}}`);
+        return exhaustive;
+    }
+
+    /**
+     * Generate try-each fallback code for unmapped entries, chaining into
+     * presence dispatch if possible before falling back to raw try-each.
+     * Assumes a variable named `data` of type `json.Value` is in scope.
+     * Returns true if all generated paths return (exhaustive).
+     */
+    function generateUnmappedFallback(
+        unmapped: { fieldName: string; typeName: string; originalType: Type; }[],
+        indent: string,
+    ): boolean {
+        if (unmapped.length <= 1) {
+            // Exactly 1 entry: it's the only remaining variant after dispatch,
+            // so use a hard error return instead of speculative err == nil.
+            for (const entry of unmapped) {
+                writeLine(`${indent}o.${entry.fieldName} = new(${entry.typeName})`);
+                writeLine(`${indent}return json.Unmarshal(data, o.${entry.fieldName})`);
+            }
+            return unmapped.length === 1;
+        }
+        // Try chaining presence dispatch on the remaining subset
+        const pres = findPresenceDiscriminator(unmapped);
+        if (pres) {
+            return generatePresenceDispatch(pres, indent);
+        }
+        else {
+            for (const entry of unmapped) {
+                writeLine(`${indent}var v${entry.fieldName} ${entry.typeName}`);
+                writeLine(`${indent}if err := json.Unmarshal(data, &v${entry.fieldName}); err == nil {`);
+                writeLine(`${indent}\to.${entry.fieldName} = &v${entry.fieldName}`);
+                writeLine(`${indent}\treturn nil`);
+                writeLine(`${indent}}`);
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Iteratively collect all presence discriminator checks across multiple
+     * passes, so they can be emitted as a single flat switch with one scan.
+     */
+    function collectAllPresenceChecks(
+        pres: NonNullable<ReturnType<typeof findPresenceDiscriminator>>,
+    ): {
+        allChecks: { jsonFieldName: string; entry: { fieldName: string; typeName: string; originalType: Type; }; }[];
+        finalUnmapped: { fieldName: string; typeName: string; originalType: Type; }[];
+    } {
+        const allChecks = [...pres.checks];
+        let remaining = pres.unmapped;
+        while (remaining.length > 1) {
+            const next = findPresenceDiscriminator(remaining);
+            if (!next) break;
+            allChecks.push(...next.checks);
+            remaining = next.unmapped;
+        }
+        return { allChecks, finalUnmapped: remaining };
+    }
+
+    /**
+     * Generate Go code for presence-based union dispatch.
+     * Assumes a variable named `data` of type `json.Value` is in scope.
+     * Collects all presence checks iteratively, then emits a single flat
+     * switch jsonObjectHasKey(data, key1, key2, ...) so data is scanned once.
+     * Returns true if all switch branches return (exhaustive).
+     */
+    function generatePresenceDispatch(
+        pres: NonNullable<ReturnType<typeof findPresenceDiscriminator>>,
+        indent: string,
+    ): boolean {
+        const { allChecks, finalUnmapped } = collectAllPresenceChecks(pres);
+        const args = allChecks.map(c => JSON.stringify(c.jsonFieldName)).join(", ");
+        writeLine(`${indent}switch jsonObjectHasKey(data, ${args}) {`);
+        for (let i = 0; i < allChecks.length; i++) {
+            writeLine(`${indent}case ${i}: // ${allChecks[i].jsonFieldName}`);
+            writeLine(`${indent}\to.${allChecks[i].entry.fieldName} = new(${allChecks[i].entry.typeName})`);
+            writeLine(`${indent}\treturn json.Unmarshal(data, o.${allChecks[i].entry.fieldName})`);
+        }
+        if (finalUnmapped.length > 0) {
+            writeLine(`${indent}default:`);
+            if (finalUnmapped.length === 1) {
+                // Only one variant left after dispatch — use hard error return.
+                const entry = finalUnmapped[0];
+                writeLine(`${indent}\to.${entry.fieldName} = new(${entry.typeName})`);
+                writeLine(`${indent}\treturn json.Unmarshal(data, o.${entry.fieldName})`);
+            }
+            else {
+                for (const entry of finalUnmapped) {
+                    writeLine(`${indent}\tvar v${entry.fieldName} ${entry.typeName}`);
+                    writeLine(`${indent}\tif err := json.Unmarshal(data, &v${entry.fieldName}); err == nil {`);
+                    writeLine(`${indent}\t\to.${entry.fieldName} = &v${entry.fieldName}`);
+                    writeLine(`${indent}\t\treturn nil`);
+                    writeLine(`${indent}\t}`);
+                }
+            }
+        }
+        writeLine(`${indent}}`);
+        // Exhaustive if the default case has a single hard-returning entry
+        return finalUnmapped.length === 1;
     }
 
     function generateResolvedStruct(structure: Structure, indent: string = "\t"): string[] {
@@ -1240,6 +1673,13 @@ function generateCode() {
                 }
             }
 
+            // Special: add RegisterOptions field to Registration
+            if (structure.name === "Registration") {
+                writeLine("");
+                writeLine(`\t// Options necessary for the registration. Determines the method.`);
+                writeLine(`\tRegisterOptions *RegisterOptions \`json:"-"\``);
+            }
+
             writeLine("}");
             writeLine("");
         }
@@ -1267,22 +1707,28 @@ function generateCode() {
         if (locationUriProperty) {
             // Generate Location method
             writeLine(`func (s ${structure.name}) GetLocation() Location {`);
-            writeLine(`\treturn Location{`);
-            writeLine(`\t\tUri:   s.${locationUriProperty},`);
-            writeLine(`\t\tRange: s.${locationUriProperty.replace(/Uri$/, "Range")},`);
-            writeLine(`\t}`);
+            if (locationUriProperty === "Uri" && structure.name === "Location") {
+                writeLine(`\treturn s`);
+            }
+            else {
+                writeLine(`\treturn Location{`);
+                writeLine(`\t\tUri:   s.${locationUriProperty},`);
+                writeLine(`\t\tRange: s.${locationUriProperty.replace(/Uri$/, "Range")},`);
+                writeLine(`\t}`);
+            }
             writeLine(`}`);
             writeLine("");
         }
 
         // Generate UnmarshalJSONFrom method for structure validation
+        // Skip Registration (has custom marshal/unmarshal generated separately)
         // Skip properties marked with omitzeroValue since they're optional by nature
         const requiredProps = structure.properties?.filter(p => {
             if (p.optional) return false;
             if (p.omitzeroValue) return false;
             return true;
         }) || [];
-        if (requiredProps.length > 0) {
+        if (requiredProps.length > 0 && structure.name !== "Registration") {
             writeLine(`\tvar _ json.UnmarshalerFrom = (*${structure.name})(nil)`);
             writeLine("");
 
@@ -1307,7 +1753,7 @@ function generateCode() {
             writeLine("");
 
             writeLine(`\tfor dec.PeekKind() != '}' {`);
-            writeLine("name, err := dec.ReadValue()");
+            writeLine(`\t\tname, err := dec.ReadValue()`);
             writeLine(`\t\tif err != nil {`);
             writeLine(`\t\t\treturn err`);
             writeLine(`\t\t}`);
@@ -1324,7 +1770,9 @@ function generateCode() {
             }
 
             writeLine(`\t\tdefault:`);
-            writeLine(`\t\t// Ignore unknown properties.`);
+            writeLine(`\t\t\tif err := dec.SkipValue(); err != nil {`);
+            writeLine(`\t\t\t\treturn err`);
+            writeLine(`\t\t\t}`);
             writeLine(`\t\t}`);
             writeLine(`\t}`);
             writeLine("");
@@ -1344,6 +1792,152 @@ function generateCode() {
             writeLine(`\t\treturn fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))`);
             writeLine(`\t}`);
 
+            writeLine("");
+            writeLine(`\treturn nil`);
+            writeLine(`}`);
+            writeLine("");
+        }
+
+        // Generate RegisterOptions struct and custom Registration marshal/unmarshal
+        // right after the Registration struct definition.
+        if (structure.name === "Registration") {
+            // RegisterOptions struct
+            writeLine(`// RegisterOptions is an externally-tagged union representing the options for a capability registration.`);
+            writeLine(`// Exactly one field should be set. The set field determines the method for the registration.`);
+            writeLine(`type RegisterOptions struct {`);
+            for (const reg of registrationMethods) {
+                writeLine(`\t${reg.fieldName} *${reg.optionsTypeName}`);
+            }
+            writeLine(`}`);
+            writeLine("");
+
+            // MarshalJSONTo for Registration
+            writeLine(`var _ json.MarshalerTo = (*Registration)(nil)`);
+            writeLine("");
+            writeLine(`func (s *Registration) MarshalJSONTo(enc *json.Encoder) error {`);
+
+            // Assert RegisterOptions is set and exactly one field is set
+            writeLine(`\tif s.RegisterOptions == nil {`);
+            writeLine(`\t\tpanic("RegisterOptions must be set")`);
+            writeLine(`\t}`);
+            const regParts = registrationMethods.map(r => `boolToInt(s.RegisterOptions.${r.fieldName} != nil)`);
+            const regSum = regParts.join(" +\n\t\t");
+            writeLine(`\tassertOnlyOne("exactly one element of RegisterOptions should be set", ${regSum})`);
+            writeLine("");
+
+            writeLine(`\tif err := enc.WriteToken(json.BeginObject); err != nil {`);
+            writeLine(`\t\treturn err`);
+            writeLine(`\t}`);
+            writeLine(`\tif err := enc.WriteValue(json.Value(\`"id"\`)); err != nil {`);
+            writeLine(`\t\treturn err`);
+            writeLine(`\t}`);
+            writeLine(`\tif err := json.MarshalEncode(enc, s.Id); err != nil {`);
+            writeLine(`\t\treturn err`);
+            writeLine(`\t}`);
+            writeLine(`\tif err := enc.WriteValue(json.Value(\`"method"\`)); err != nil {`);
+            writeLine(`\t\treturn err`);
+            writeLine(`\t}`);
+            writeLine(`\tvar method json.Value`);
+            writeLine(`\tvar opts any`);
+            writeLine(`\tswitch {`);
+            for (const reg of registrationMethods) {
+                writeLine(`\tcase s.RegisterOptions.${reg.fieldName} != nil:`);
+                writeLine(`\t\tmethod = json.Value(\`"${reg.registrationMethod}"\`)`);
+                writeLine(`\t\topts = s.RegisterOptions.${reg.fieldName}`);
+            }
+            writeLine(`\t}`);
+            writeLine(`\tif err := enc.WriteValue(method); err != nil {`);
+            writeLine(`\t\treturn err`);
+            writeLine(`\t}`);
+            writeLine(`\tif err := enc.WriteValue(json.Value(\`"registerOptions"\`)); err != nil {`);
+            writeLine(`\t\treturn err`);
+            writeLine(`\t}`);
+            writeLine(`\tif err := json.MarshalEncode(enc, opts); err != nil {`);
+            writeLine(`\t\treturn err`);
+            writeLine(`\t}`);
+            writeLine(`\treturn enc.WriteToken(json.EndObject)`);
+            writeLine(`}`);
+            writeLine("");
+
+            // UnmarshalJSONFrom for Registration
+            writeLine(`var _ json.UnmarshalerFrom = (*Registration)(nil)`);
+            writeLine("");
+            writeLine(`func (s *Registration) UnmarshalJSONFrom(dec *json.Decoder) error {`);
+            writeLine(`\t*s = Registration{}`);
+            writeLine(`\tconst (`);
+            writeLine(`\t\tmissingId uint = 1 << iota`);
+            writeLine(`\t\tmissingMethod`);
+            writeLine(`\t\t_missingLast`);
+            writeLine(`\t)`);
+            writeLine(`\tmissing := _missingLast - 1`);
+            writeLine("");
+            writeLine(`\tif k := dec.PeekKind(); k != '{' {`);
+            writeLine(`\t\treturn fmt.Errorf("expected object start, but encountered %v", k)`);
+            writeLine(`\t}`);
+            writeLine(`\tif _, err := dec.ReadToken(); err != nil {`);
+            writeLine(`\t\treturn err`);
+            writeLine(`\t}`);
+            writeLine("");
+            writeLine(`\tvar method string`);
+            writeLine(`\tvar rawRegisterOptions json.Value`);
+            writeLine("");
+            writeLine(`\tfor dec.PeekKind() != '}' {`);
+            writeLine(`\t\tname, err := dec.ReadValue()`);
+            writeLine(`\t\tif err != nil {`);
+            writeLine(`\t\t\treturn err`);
+            writeLine(`\t\t}`);
+            writeLine(`\t\tswitch string(name) {`);
+            writeLine(`\t\tcase \`"id"\`:`);
+            writeLine(`\t\t\tmissing &^= missingId`);
+            writeLine(`\t\t\tif err := json.UnmarshalDecode(dec, &s.Id); err != nil {`);
+            writeLine(`\t\t\t\treturn err`);
+            writeLine(`\t\t\t}`);
+            writeLine(`\t\tcase \`"method"\`:`);
+            writeLine(`\t\t\tmissing &^= missingMethod`);
+            writeLine(`\t\t\tif err := json.UnmarshalDecode(dec, &method); err != nil {`);
+            writeLine(`\t\t\t\treturn err`);
+            writeLine(`\t\t\t}`);
+            writeLine(`\t\tcase \`"registerOptions"\`:`);
+            writeLine(`\t\t\tv, err := dec.ReadValue()`);
+            writeLine(`\t\t\tif err != nil {`);
+            writeLine(`\t\t\t\treturn err`);
+            writeLine(`\t\t\t}`);
+            writeLine(`\t\t\trawRegisterOptions = v`);
+            writeLine(`\t\tdefault:`);
+            writeLine(`\t\t\tif err := dec.SkipValue(); err != nil {`);
+            writeLine(`\t\t\t\treturn err`);
+            writeLine(`\t\t\t}`);
+            writeLine(`\t\t}`);
+            writeLine(`\t}`);
+            writeLine("");
+            writeLine(`\tif _, err := dec.ReadToken(); err != nil {`);
+            writeLine(`\t\treturn err`);
+            writeLine(`\t}`);
+            writeLine("");
+            writeLine(`\tif missing != 0 {`);
+            writeLine(`\t\tvar missingProps []string`);
+            writeLine(`\t\tif missing&missingId != 0 {`);
+            writeLine(`\t\t\tmissingProps = append(missingProps, "id")`);
+            writeLine(`\t\t}`);
+            writeLine(`\t\tif missing&missingMethod != 0 {`);
+            writeLine(`\t\t\tmissingProps = append(missingProps, "method")`);
+            writeLine(`\t\t}`);
+            writeLine(`\t\treturn fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))`);
+            writeLine(`\t}`);
+            writeLine("");
+            writeLine(`\tif len(rawRegisterOptions) > 0 {`);
+            writeLine(`\t\ts.RegisterOptions = &RegisterOptions{}`);
+            writeLine(`\t\tswitch Method(method) {`);
+            for (const reg of registrationMethods) {
+                writeLine(`\t\tcase Method${reg.fieldName}:`);
+                writeLine(`\t\t\tvar v ${reg.optionsTypeName}`);
+                writeLine(`\t\t\tif err := json.Unmarshal(rawRegisterOptions, &v); err != nil {`);
+                writeLine(`\t\t\t\treturn err`);
+                writeLine(`\t\t\t}`);
+                writeLine(`\t\t\ts.RegisterOptions.${reg.fieldName} = &v`);
+            }
+            writeLine(`\t\t}`);
+            writeLine(`\t}`);
             writeLine("");
             writeLine(`\treturn nil`);
             writeLine(`}`);
@@ -1687,6 +2281,13 @@ function generateCode() {
 
         writeLine(`\tMethod${methodName} Method = "${request.method}"`);
     }
+    // Emit constants for registration-only methods (not also a request/notification)
+    for (const reg of registrationMethods) {
+        if (reg.isRegistrationOnly) {
+            writeLine(`\t// Registration-only method for ${reg.registrationMethod}.`);
+            writeLine(`\tMethod${reg.fieldName} Method = "${reg.registrationMethod}"`);
+        }
+    }
     writeLine(")");
     writeLine("");
 
@@ -1754,6 +2355,7 @@ function generateCode() {
     for (const [name, members] of typeInfo.unionTypes.entries()) {
         writeLine(`type ${name} struct {`);
         const uniqueTypeFields = new Map(); // Maps type name -> field name
+        const uniqueTypeToOriginal = new Map<string, Type>(); // Maps type name -> original meta model Type
 
         let hasLocations = false;
         for (const member of members) {
@@ -1764,6 +2366,7 @@ function generateCode() {
             if (!uniqueTypeFields.has(memberType)) {
                 const fieldName = titleCase(member.name);
                 uniqueTypeFields.set(memberType, fieldName);
+                uniqueTypeToOriginal.set(memberType, member.type);
                 writeLine(`\t${fieldName} *${memberType}`);
                 if (fieldName === "Locations" && memberType === "[]Location") {
                     hasLocations = true;
@@ -1775,7 +2378,11 @@ function generateCode() {
         writeLine("");
 
         // Get the field names and types for marshal/unmarshal methods
-        const fieldEntries = Array.from(uniqueTypeFields.entries()).map(([typeName, fieldName]) => ({ fieldName, typeName }));
+        const fieldEntries = Array.from(uniqueTypeFields.entries()).map(([typeName, fieldName]) => ({
+            fieldName,
+            typeName,
+            originalType: uniqueTypeToOriginal.get(typeName)!,
+        }));
 
         // Marshal method
         writeLine(`var _ json.MarshalerTo = (*${name})(nil)`);
@@ -1785,22 +2392,18 @@ function generateCode() {
 
         // Determine if this union contained null (check if any member has containedNull = true)
         const unionContainedNull = members.some(member => member.containedNull);
-        if (unionContainedNull) {
-            write(`\tassertAtMostOne("more than one element of ${name} is set", `);
+        // Always assert for non-nullable unions; for nullable unions, only when there are multiple fields.
+        if (!unionContainedNull || fieldEntries.length > 1) {
+            const parts = fieldEntries.map(e => `boolToInt(o.${e.fieldName} != nil)`);
+            const sum = parts.length > 3 ? parts.join(" +\n\t\t") : parts.join(" + ");
+            if (unionContainedNull) {
+                writeLine(`\tassertAtMostOne("more than one element of ${name} is set", ${sum})`);
+            }
+            else {
+                writeLine(`\tassertOnlyOne("exactly one element of ${name} should be set", ${sum})`);
+            }
+            writeLine("");
         }
-        else {
-            write(`\tassertOnlyOne("exactly one element of ${name} should be set", `);
-        }
-
-        // Create assertion to ensure at most one field is set at a time
-
-        // Write the assertion conditions
-        for (let i = 0; i < fieldEntries.length; i++) {
-            if (i > 0) write(", ");
-            write(`o.${fieldEntries[i].fieldName} != nil`);
-        }
-        writeLine(`)`);
-        writeLine("");
 
         for (const entry of fieldEntries) {
             writeLine(`\tif o.${entry.fieldName} != nil {`);
@@ -1826,28 +2429,311 @@ function generateCode() {
         writeLine(`\t*o = ${name}{}`);
         writeLine("");
 
-        writeLine("\tdata, err := dec.ReadValue()");
-        writeLine("\tif err != nil {");
-        writeLine("\t\treturn err");
-        writeLine("\t}");
-
-        if (unionContainedNull) {
-            writeLine(`\tif string(data) == "null" {`);
-            writeLine(`\t\treturn nil`);
-            writeLine(`\t}`);
-            writeLine("");
-        }
-
+        // Group field entries by their expected JSON token kind for optimized dispatch.
+        const kindMap = new Map<string, typeof fieldEntries>();
+        const unknownKindEntries: typeof fieldEntries = [];
         for (const entry of fieldEntries) {
-            writeLine(`\tvar v${entry.fieldName} ${entry.typeName}`);
-            writeLine(`\tif err := json.Unmarshal(data, &v${entry.fieldName}); err == nil {`);
-            writeLine(`\t\to.${entry.fieldName} = &v${entry.fieldName}`);
-            writeLine(`\t\treturn nil`);
-            writeLine(`\t}`);
+            const kind = jsonKindForType(entry.originalType);
+            if (!kind) {
+                unknownKindEntries.push(entry);
+            }
+            else {
+                if (!kindMap.has(kind)) kindMap.set(kind, []);
+                kindMap.get(kind)!.push(entry);
+            }
         }
 
-        // Match the error format from the original script
-        writeLine(`\treturn fmt.Errorf("invalid ${name}: %s", data)`);
+        // Sort ambiguous variants (same JSON kind) by number of required fields
+        // descending, so more specific variants are tried first. This prevents
+        // a less specific variant from greedily matching inputs intended for
+        // a more specific one.
+        function countRequiredFields(entry: typeof fieldEntries[0]): number {
+            if (entry.originalType.kind !== "reference") return 0;
+            const structure = model.structures.find(s => s.name === (entry.originalType as ReferenceType).name);
+            if (!structure) return 0;
+            return structure.properties.filter(p => !p.optional && !p.omitzeroValue).length;
+        }
+
+        for (const [, entries] of kindMap) {
+            if (entries.length > 1) {
+                entries.sort((a, b) => countRequiredFields(b) - countRequiredFields(a));
+            }
+        }
+
+        // Also sort the flat fieldEntries to match (for the fallback path)
+        // We need to sort only within groups of the same kind.
+        {
+            const sorted: typeof fieldEntries = [];
+            const seen = new Set<string>();
+            for (const [, entries] of kindMap) {
+                for (const entry of entries) {
+                    sorted.push(entry);
+                    seen.add(entry.fieldName);
+                }
+            }
+            for (const entry of unknownKindEntries) {
+                if (!seen.has(entry.fieldName)) {
+                    sorted.push(entry);
+                }
+            }
+            // Replace fieldEntries contents with sorted order
+            fieldEntries.length = 0;
+            fieldEntries.push(...sorted);
+        }
+
+        // Validate that ambiguous union variants (same JSON kind) don't have
+        // order-dependent overlap. Two struct variants overlap if one's required
+        // fields are a subset of the other's, meaning any valid input for the
+        // superset also successfully parses as the subset (since unknown properties
+        // are ignored). This would make the unmarshal result depend on try order.
+        //
+        // Exception: variants discriminated by literal field values (e.g., a "kind"
+        // field with different string literal types) are safe because the literal
+        // unmarshaler rejects mismatched values.
+        for (const [kind, entries] of kindMap) {
+            if (entries.length <= 1) continue;
+
+            // Get required fields with their types for each variant
+            const variantInfo = entries.map(entry => {
+                if (entry.originalType.kind !== "reference") return null;
+                const structure = model.structures.find(s => s.name === (entry.originalType as ReferenceType).name);
+                if (!structure) return null;
+                const requiredFields = new Map<string, Type>();
+                for (const p of structure.properties) {
+                    if (!p.optional && !p.omitzeroValue) {
+                        requiredFields.set(p.name, p.type);
+                    }
+                }
+                return { entry, requiredFields };
+            }).filter((v): v is NonNullable<typeof v> => v !== null);
+
+            // Check if two variants are discriminated by literal field values.
+            // Returns true if they share a field where both sides have different
+            // literal types (stringLiteral, integerLiteral, booleanLiteral).
+            function isDiscriminatedByLiteral(
+                a: Map<string, Type>,
+                b: Map<string, Type>,
+            ): boolean {
+                for (const [fieldName, aType] of a) {
+                    const bType = b.get(fieldName);
+                    if (!bType) continue;
+                    const aLiteral = aType.kind === "stringLiteral" || aType.kind === "integerLiteral" || aType.kind === "booleanLiteral";
+                    const bLiteral = bType.kind === "stringLiteral" || bType.kind === "integerLiteral" || bType.kind === "booleanLiteral";
+                    if (aLiteral && bLiteral) {
+                        // Both are literals for the same field — check if values differ
+                        if (aType.kind === bType.kind && (aType as any).value !== (bType as any).value) {
+                            return true;
+                        }
+                        // Different literal kinds on same field also discriminates
+                        if (aType.kind !== bType.kind) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            // Check each pair for subset relationships
+            for (let i = 0; i < variantInfo.length; i++) {
+                for (let j = 0; j < variantInfo.length; j++) {
+                    if (i === j) continue;
+                    const a = variantInfo[i];
+                    const b = variantInfo[j];
+                    const aNames = new Set(a.requiredFields.keys());
+                    const bNames = new Set(b.requiredFields.keys());
+
+                    const aSubsetOfB = [...aNames].every(f => bNames.has(f));
+                    if (!aSubsetOfB) continue;
+
+                    // Skip if discriminated by literal values
+                    if (isDiscriminatedByLiteral(a.requiredFields, b.requiredFields)) continue;
+
+                    if (aNames.size < bNames.size) {
+                        // a is a strict subset of b
+                        const aIdx = entries.indexOf(a.entry);
+                        const bIdx = entries.indexOf(b.entry);
+                        if (aIdx < bIdx) {
+                            console.warn(
+                                `Warning: In union ${name} (${kind} variants), ` +
+                                    `${a.entry.fieldName} (required: [${[...aNames]}]) is tried before ` +
+                                    `${b.entry.fieldName} (required: [${[...bNames]}]), but ` +
+                                    `${a.entry.fieldName}'s required fields are a strict subset — ` +
+                                    `it will greedily match inputs intended for ${b.entry.fieldName}. ` +
+                                    `Reorder so the more specific variant is tried first.`,
+                            );
+                        }
+                    }
+                    else if (aNames.size === bNames.size && i < j) {
+                        // Identical required fields — truly ambiguous
+                        console.warn(
+                            `Warning: In union ${name} (${kind} variants), ` +
+                                `${a.entry.fieldName} and ${b.entry.fieldName} have identical ` +
+                                `required fields [${[...aNames]}] — they are structurally ` +
+                                `indistinguishable and the unmarshal result is order-dependent.`,
+                        );
+                    }
+                }
+            }
+        }
+
+        // Determine if we can use PeekKind-based dispatch:
+        // - Every entry must have a known kind (no `any` etc.)
+        // - There must be at least 2 distinct cases (kind groups + null) for a switch to be worthwhile
+        const hasUnknownKinds = unknownKindEntries.length > 0;
+        const distinctKinds = kindMap.size + (unionContainedNull ? 1 : 0);
+        const canDispatch = !hasUnknownKinds && distinctKinds >= 2;
+
+        // Check if all kind groups are unambiguous (exactly 1 entry each).
+        // When unambiguous, we can UnmarshalDecode directly without buffering.
+        const allUnambiguous = canDispatch && Array.from(kindMap.values()).every(entries => entries.length === 1);
+
+        let fallbackExhaustive = false;
+        const hasBooleanKind = kindMap.has("boolean");
+        if (canDispatch && allUnambiguous) {
+            // Best case: PeekKind + UnmarshalDecode directly, no ReadValue buffer needed.
+            if (hasBooleanKind) {
+                writeLine(`\tswitch kind := dec.PeekKind(); kind {`);
+            }
+            else {
+                writeLine(`\tswitch dec.PeekKind() {`);
+            }
+
+            if (unionContainedNull) {
+                writeLine(`\tcase 'n':`);
+                writeLine(`\t\t_, err := dec.ReadToken()`);
+                writeLine(`\t\treturn err`);
+            }
+
+            for (const [kind, entries] of kindMap) {
+                writeLine(`\t${goKindCasesForJsonKind(kind)}`);
+                const entry = entries[0];
+                if (kind === "boolean") {
+                    writeLine(`\t\to.${entry.fieldName} = new(kind == 't')`);
+                    writeLine(`\t\t_, err := dec.ReadToken()`);
+                    writeLine(`\t\treturn err`);
+                }
+                else {
+                    writeLine(`\t\to.${entry.fieldName} = new(${entry.typeName})`);
+                    writeLine(`\t\treturn json.UnmarshalDecode(dec, o.${entry.fieldName})`);
+                }
+            }
+
+            writeLine(`\tdefault:`);
+            writeLine(`\t\treturn fmt.Errorf("invalid ${name}: expected ${[...(unionContainedNull ? ["null"] : []), ...kindMap.keys()].join(", ")}, got %v", dec.PeekKind())`);
+            writeLine(`\t}`);
+        }
+        else if (canDispatch) {
+            // Mixed case: some kind groups have multiple entries.
+            // Use PeekKind to dispatch, then ReadValue + try-each within ambiguous groups,
+            // or UnmarshalDecode directly for unambiguous groups.
+            if (hasBooleanKind) {
+                writeLine(`\tswitch kind := dec.PeekKind(); kind {`);
+            }
+            else {
+                writeLine(`\tswitch dec.PeekKind() {`);
+            }
+
+            if (unionContainedNull) {
+                writeLine(`\tcase 'n':`);
+                writeLine(`\t\t_, err := dec.ReadToken()`);
+                writeLine(`\t\treturn err`);
+            }
+
+            for (const [kind, entries] of kindMap) {
+                writeLine(`\t${goKindCasesForJsonKind(kind)}`);
+                if (entries.length === 1) {
+                    // Unambiguous: decode directly
+                    const entry = entries[0];
+                    if (kind === "boolean") {
+                        writeLine(`\t\to.${entry.fieldName} = new(kind == 't')`);
+                        writeLine(`\t\t_, err := dec.ReadToken()`);
+                        writeLine(`\t\treturn err`);
+                    }
+                    else {
+                        writeLine(`\t\to.${entry.fieldName} = new(${entry.typeName})`);
+                        writeLine(`\t\treturn json.UnmarshalDecode(dec, o.${entry.fieldName})`);
+                    }
+                }
+                else {
+                    // Ambiguous: buffer and dispatch
+                    writeLine(`\t\tdata, err := dec.ReadValue()`);
+                    writeLine(`\t\tif err != nil {`);
+                    writeLine(`\t\t\treturn err`);
+                    writeLine(`\t\t}`);
+                    let exhaustive = false;
+                    const disc = findDiscriminatorField(entries);
+                    if (disc) {
+                        exhaustive = generateDiscriminatorDispatch(disc, "\t\t");
+                    }
+                    else {
+                        const pres = findPresenceDiscriminator(entries);
+                        if (pres) {
+                            exhaustive = generatePresenceDispatch(pres, "\t\t");
+                        }
+                        else {
+                            for (const entry of entries) {
+                                writeLine(`\t\tvar v${entry.fieldName} ${entry.typeName}`);
+                                writeLine(`\t\tif err := json.Unmarshal(data, &v${entry.fieldName}); err == nil {`);
+                                writeLine(`\t\t\to.${entry.fieldName} = &v${entry.fieldName}`);
+                                writeLine(`\t\t\treturn nil`);
+                                writeLine(`\t\t}`);
+                            }
+                        }
+                    }
+                    if (!exhaustive) {
+                        writeLine(`\t\treturn fmt.Errorf("invalid ${name}: %s", data)`);
+                    }
+                }
+            }
+
+            writeLine(`\tdefault:`);
+            writeLine(`\t\treturn fmt.Errorf("invalid ${name}: expected ${[...(unionContainedNull ? ["null"] : []), ...kindMap.keys()].join(", ")}, got %v", dec.PeekKind())`);
+            writeLine(`\t}`);
+        }
+        else {
+            // Fallback: unknown kinds present (e.g. `any`), use ReadValue + try-each.
+            writeLine("\tdata, err := dec.ReadValue()");
+            writeLine("\tif err != nil {");
+            writeLine("\t\treturn err");
+            writeLine("\t}");
+
+            if (unionContainedNull) {
+                writeLine(`\tif string(data) == "null" {`);
+                writeLine(`\t\treturn nil`);
+                writeLine(`\t}`);
+                writeLine("");
+            }
+
+            let exhaustive = false;
+            const disc = findDiscriminatorField(fieldEntries);
+            if (disc) {
+                exhaustive = generateDiscriminatorDispatch(disc, "\t");
+            }
+            else {
+                const pres = findPresenceDiscriminator(fieldEntries);
+                if (pres) {
+                    exhaustive = generatePresenceDispatch(pres, "\t");
+                }
+                else {
+                    for (const entry of fieldEntries) {
+                        writeLine(`\tvar v${entry.fieldName} ${entry.typeName}`);
+                        writeLine(`\tif err := json.Unmarshal(data, &v${entry.fieldName}); err == nil {`);
+                        writeLine(`\t\to.${entry.fieldName} = &v${entry.fieldName}`);
+                        writeLine(`\t\treturn nil`);
+                        writeLine(`\t}`);
+                    }
+                }
+            }
+            fallbackExhaustive = exhaustive;
+        }
+
+        if (canDispatch) {
+            // Dispatch paths have an exhaustive switch with default, nothing after the switch.
+        }
+        else if (!fallbackExhaustive) {
+            // Fallback paths: the final error references `data` which is in scope.
+            writeLine(`\treturn fmt.Errorf("invalid ${name}: %s", data)`);
+        }
         writeLine(`}`);
         writeLine("");
 
