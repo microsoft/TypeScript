@@ -44,6 +44,7 @@ type ServerOptions struct {
 	TypingsLocation    string
 	ParseCache         *project.ParseCache
 	NpmInstall         func(cwd string, args []string) ([]byte, error)
+	ProgressDelay      time.Duration // delay before showing progress UI; 0 means no delay
 }
 
 func NewServer(opts *ServerOptions) *Server {
@@ -66,6 +67,7 @@ func NewServer(opts *ServerOptions) *Server {
 		parseCache:            opts.ParseCache,
 		npmInstall:            opts.NpmInstall,
 		initComplete:          make(chan struct{}),
+		progressDelay:         opts.ProgressDelay,
 	}
 	s.logger = newLogger(s)
 
@@ -189,6 +191,7 @@ type Server struct {
 
 	cpuProfiler pprof.CPUProfiler
 
+	progressDelay   time.Duration
 	projectProgress *projectLoadingProgress
 }
 
@@ -935,7 +938,7 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 	s.initializeParams = params
 	s.clientCapabilities = lsproto.ResolveClientCapabilities(params.Capabilities)
 	if s.clientCapabilities.Window.WorkDoneProgress {
-		s.projectProgress = newProjectLoadingProgress(s)
+		s.projectProgress = newProjectLoadingProgress(s, s.progressDelay)
 	}
 
 	capabilitiesJSON, err := json.MarshalIndent(&s.clientCapabilities, "", "\t")

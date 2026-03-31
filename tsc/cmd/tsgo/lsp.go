@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -56,6 +57,7 @@ func runLSP(args []string) int {
 			cmd.Dir = cwd
 			return cmd.Output()
 		},
+		ProgressDelay: 250 * time.Millisecond,
 	})
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
