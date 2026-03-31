@@ -695,6 +695,7 @@ func (v *View) tryAddToExistingImport(
 
 	addAsTypeOnly := getAddAsTypeOnly(isValidTypeOnlyUseSite, export, v.program.Options())
 
+	var best *Fix
 	for _, existingImport := range matchingDeclarations {
 		if existingImport.node.Kind == ast.KindImportEqualsDeclaration {
 			continue
@@ -702,7 +703,7 @@ func (v *View) tryAddToExistingImport(
 
 		if existingImport.node.Kind == ast.KindVariableDeclaration {
 			if (importKind == lsproto.ImportKindNamed || importKind == lsproto.ImportKindDefault) && existingImport.node.Name().Kind == ast.KindObjectBindingPattern {
-				return &Fix{
+				fix := &Fix{
 					AutoImportFix: &lsproto.AutoImportFix{
 						Kind:            lsproto.AutoImportFixKindAddToExisting,
 						Name:            export.Name(),
@@ -711,6 +712,15 @@ func (v *View) tryAddToExistingImport(
 						ModuleSpecifier: existingImport.moduleSpecifier,
 						AddAsTypeOnly:   addAsTypeOnly,
 					},
+				}
+				// Variable declarations are never type-only.
+				// Give preference to putting types in existing type-only imports and avoiding conversions
+				// of import statements to/from type-only.
+				if addAsTypeOnly == lsproto.AddAsTypeOnlyNotAllowed {
+					return fix
+				}
+				if best == nil {
+					best = fix
 				}
 			}
 			continue
@@ -730,8 +740,9 @@ func (v *View) tryAddToExistingImport(
 			continue
 		}
 
-		if importKind == lsproto.ImportKindDefault && importClause.Name() != nil {
-			// Cannot add a default import to a declaration that already has one
+		if importKind == lsproto.ImportKindDefault && (importClause.Name() != nil ||
+			// Cannot add a default import as type-only if the import already has named bindings
+			addAsTypeOnly == lsproto.AddAsTypeOnlyRequired && namedBindings != nil) {
 			continue
 		}
 
@@ -740,7 +751,7 @@ func (v *View) tryAddToExistingImport(
 			continue
 		}
 
-		return &Fix{
+		fix := &Fix{
 			AutoImportFix: &lsproto.AutoImportFix{
 				Kind:            lsproto.AutoImportFixKindAddToExisting,
 				Name:            export.Name(),
@@ -750,9 +761,20 @@ func (v *View) tryAddToExistingImport(
 				AddAsTypeOnly:   addAsTypeOnly,
 			},
 		}
+
+		isTypeOnly := importClause.IsTypeOnly()
+		// Give preference to putting types in existing type-only imports and avoiding conversions
+		// of import statements to/from type-only.
+		if (addAsTypeOnly != lsproto.AddAsTypeOnlyNotAllowed && isTypeOnly) ||
+			(addAsTypeOnly == lsproto.AddAsTypeOnlyNotAllowed && !isTypeOnly) {
+			return fix
+		}
+		if best == nil {
+			best = fix
+		}
 	}
 
-	return nil
+	return best
 }
 
 func getImportKind(importingFile *ast.SourceFile, export *Export, program *compiler.Program) lsproto.ImportKind {
