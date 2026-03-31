@@ -28,8 +28,12 @@ test("", async function () {
 {"compilerOptions": {"allowJs": true, "composite": true}}
 
 tsgo --noEmit
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
+[91merror[0m[90m TS2318: [0mCannot find global type 'Promise'.
+
+Found 1 error.
+
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -54,7 +58,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.es2025.full.d.ts","./index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a2c0c261f400e90f1ff304dbe3da7a53-test(\"\", async function () {\n  ;(/** @type {typeof import(\"a\")} */ ({}))\n})\n\ntest(\"\", async function () {\n  ;(/** @type {typeof import(\"a\")} */ a)\n})\n\ntest(\"\", async function () {\n  (/** @type {typeof import(\"a\")} */ ({}))\n  ;(/** @type {typeof import(\"a\")} */ ({}))\n})\n\ntest(\"\", async function () {\n  (/** @type {typeof import(\"a\")} */ a)\n  ;(/** @type {typeof import(\"a\")} */ a)\n})\n\ntest(\"\", async function () {\n  (/** @type {typeof import(\"a\")} */ ({}))\n  ;(/** @type {typeof import(\"a\")} */ ({}))\n})","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"allowJs":true,"composite":true},"affectedFilesPendingEmit":[[2,17]],"emitSignatures":[2]}
+{"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.es2025.full.d.ts","./index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"a2c0c261f400e90f1ff304dbe3da7a53-test(\"\", async function () {\n  ;(/** @type {typeof import(\"a\")} */ ({}))\n})\n\ntest(\"\", async function () {\n  ;(/** @type {typeof import(\"a\")} */ a)\n})\n\ntest(\"\", async function () {\n  (/** @type {typeof import(\"a\")} */ ({}))\n  ;(/** @type {typeof import(\"a\")} */ ({}))\n})\n\ntest(\"\", async function () {\n  (/** @type {typeof import(\"a\")} */ a)\n  ;(/** @type {typeof import(\"a\")} */ a)\n})\n\ntest(\"\", async function () {\n  (/** @type {typeof import(\"a\")} */ ({}))\n  ;(/** @type {typeof import(\"a\")} */ ({}))\n})","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"allowJs":true,"composite":true},"affectedFilesPendingEmit":[2],"emitSignatures":[2]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -104,11 +108,8 @@ declare const console: { log(msg: any): void; };
   "affectedFilesPendingEmit": [
     [
       "./index.js",
-      "Js|DtsEmit",
-      [
-        2,
-        17
-      ]
+      "Js|Dts",
+      2
     ]
   ],
   "emitSignatures": [
@@ -117,7 +118,7 @@ declare const console: { log(msg: any): void; };
       "original": 2
     }
   ],
-  "size": 1633
+  "size": 1628
 }
 
 tsconfig.json::

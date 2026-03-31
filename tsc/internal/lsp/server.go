@@ -780,6 +780,9 @@ func registerLanguageServiceDocumentRequestHandler[Req lsproto.HasTextDocumentUR
 		return func() error {
 			defer s.recover(req)
 			resp, lsErr := fn(s, ctx, ls, params)
+			// After any language service request, check if new global diagnostics were
+			// discovered during checking and push updated tsconfig diagnostics if so.
+			s.session.EnqueuePublishGlobalDiagnostics()
 			if lsErr != nil {
 				return lsErr
 			}

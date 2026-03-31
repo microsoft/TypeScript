@@ -3,6 +3,7 @@ package project
 import (
 	"context"
 	"fmt"
+	"slices"
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -15,35 +16,37 @@ type CheckerPool struct {
 	maxCheckers int
 	program     *compiler.Program
 
-	mu                  sync.Mutex
-	cond                *sync.Cond
-	createCheckersOnce  sync.Once
-	checkers            []*checker.Checker
-	locks               []sync.Mutex
-	inUse               map[*checker.Checker]bool
-	fileAssociations    map[*ast.SourceFile]int
-	requestAssociations map[string]int
-	log                 func(msg string)
+	mu                     sync.Mutex
+	cond                   *sync.Cond
+	createCheckersOnce     sync.Once
+	checkers               []*checker.Checker
+	inUse                  map[*checker.Checker]bool
+	fileAssociations       map[*ast.SourceFile]int
+	requestAssociations    map[string]int
+	log                    func(msg string)
+	globalDiagAccumulated  []*ast.Diagnostic
+	globalDiagChanged      bool
+	globalDiagCheckerCount []int // per-checker count of globals last seen
 }
 
 var _ compiler.CheckerPool = (*CheckerPool)(nil)
 
 func newCheckerPool(maxCheckers int, program *compiler.Program, log func(msg string)) *CheckerPool {
 	pool := &CheckerPool{
-		program:             program,
-		maxCheckers:         maxCheckers,
-		checkers:            make([]*checker.Checker, maxCheckers),
-		locks:               make([]sync.Mutex, maxCheckers),
-		inUse:               make(map[*checker.Checker]bool),
-		requestAssociations: make(map[string]int),
-		log:                 log,
+		program:                program,
+		maxCheckers:            maxCheckers,
+		checkers:               make([]*checker.Checker, maxCheckers),
+		inUse:                  make(map[*checker.Checker]bool),
+		requestAssociations:    make(map[string]int),
+		log:                    log,
+		globalDiagCheckerCount: make([]int, maxCheckers),
 	}
 
 	pool.cond = sync.NewCond(&pool.mu)
 	return pool
 }
 
-func (p *CheckerPool) GetCheckerForFile(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func()) {
+func (p *CheckerPool) GetChecker(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func()) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
@@ -54,39 +57,33 @@ func (p *CheckerPool) GetCheckerForFile(ctx context.Context, file *ast.SourceFil
 		}
 	}
 
-	if p.fileAssociations == nil {
-		p.fileAssociations = make(map[*ast.SourceFile]int)
-	}
+	if file != nil {
+		if p.fileAssociations == nil {
+			p.fileAssociations = make(map[*ast.SourceFile]int)
+		}
 
-	if index, ok := p.fileAssociations[file]; ok {
-		checker := p.checkers[index]
-		if checker != nil {
-			if inUse := p.inUse[checker]; !inUse {
-				p.inUse[checker] = true
-				if requestID != "" {
-					p.requestAssociations[requestID] = index
+		if index, ok := p.fileAssociations[file]; ok {
+			checker := p.checkers[index]
+			if checker != nil {
+				if inUse := p.inUse[checker]; !inUse {
+					p.inUse[checker] = true
+					if requestID != "" {
+						p.requestAssociations[requestID] = index
+					}
+					return checker, p.createRelease(requestID, index, checker)
 				}
-				return checker, p.createRelease(requestID, index, checker)
 			}
 		}
 	}
 
 	checker, index := p.getCheckerLocked(requestID)
-	p.fileAssociations[file] = index
+	if file != nil {
+		if p.fileAssociations == nil {
+			p.fileAssociations = make(map[*ast.SourceFile]int)
+		}
+		p.fileAssociations[file] = index
+	}
 	return checker, p.createRelease(requestID, index, checker)
-}
-
-// GetCheckerForFileExclusive is the same as GetCheckerForFile but also locks a mutex associated with the checker.
-// Call `done` to free the lock.
-func (p *CheckerPool) GetCheckerForFileExclusive(ctx context.Context, file *ast.SourceFile) (*checker.Checker, func()) {
-	return p.GetCheckerForFile(ctx, file)
-}
-
-func (p *CheckerPool) GetChecker(ctx context.Context) (*checker.Checker, func()) {
-	p.mu.Lock()
-	defer p.mu.Unlock()
-	checker, index := p.getCheckerLocked(core.GetRequestID(ctx))
-	return checker, p.createRelease(core.GetRequestID(ctx), index, checker)
 }
 
 func (p *CheckerPool) getCheckerLocked(requestID string) (*checker.Checker, int) {
@@ -166,11 +163,47 @@ func (p *CheckerPool) createRelease(requestId string, index int, checker *checke
 			p.log(fmt.Sprintf("checkerpool: Checker for request %s was canceled, disposing it", requestId))
 			p.checkers[index] = nil
 			delete(p.inUse, checker)
+			p.globalDiagCheckerCount[index] = 0
 		} else {
+			p.mergeGlobalDiagnosticsFromCheckerLocked(index, checker)
 			p.inUse[checker] = false
 		}
 		p.cond.Signal()
 	}
+}
+
+// mergeGlobalDiagnosticsFromCheckerLocked checks if the given checker has produced new global
+// diagnostics since the last time we looked, and if so merges them into the accumulated set.
+// Must be called with p.mu held.
+func (p *CheckerPool) mergeGlobalDiagnosticsFromCheckerLocked(index int, c *checker.Checker) {
+	globals := c.GetGlobalDiagnostics()
+	if len(globals) == p.globalDiagCheckerCount[index] {
+		return
+	}
+	p.globalDiagCheckerCount[index] = len(globals)
+	before := len(p.globalDiagAccumulated)
+	p.globalDiagAccumulated = compiler.SortAndDeduplicateDiagnostics(append(p.globalDiagAccumulated, globals...))
+	if len(p.globalDiagAccumulated) != before {
+		p.globalDiagChanged = true
+	}
+}
+
+// GetGlobalDiagnostics returns the accumulated global diagnostics collected from
+// all checkers that have been used so far in this pool's lifetime.
+func (p *CheckerPool) GetGlobalDiagnostics() []*ast.Diagnostic {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	return slices.Clone(p.globalDiagAccumulated)
+}
+
+// TakeNewGlobalDiagnostics reports whether new global diagnostics have been
+// accumulated since the last call, and resets the flag.
+func (p *CheckerPool) TakeNewGlobalDiagnostics() bool {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	changed := p.globalDiagChanged
+	p.globalDiagChanged = false
+	return changed
 }
 
 func (p *CheckerPool) isFullLocked() bool {
@@ -191,31 +224,6 @@ func (p *CheckerPool) createCheckerLocked() (*checker.Checker, int) {
 		}
 	}
 	panic("called createCheckerLocked when pool is full")
-}
-
-func (p *CheckerPool) isRequestCheckerInUse(requestID string) bool {
-	p.mu.Lock()
-	defer p.mu.Unlock()
-
-	if index, ok := p.requestAssociations[requestID]; ok {
-		checker := p.checkers[index]
-		if checker != nil {
-			return p.inUse[checker]
-		}
-	}
-	return false
-}
-
-func (p *CheckerPool) size() int {
-	p.mu.Lock()
-	defer p.mu.Unlock()
-	size := 0
-	for _, checker := range p.checkers {
-		if checker != nil {
-			size++
-		}
-	}
-	return size
 }
 
 func noop() {}

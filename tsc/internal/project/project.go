@@ -1,10 +1,12 @@
 package project
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"sync"
 
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -205,6 +207,20 @@ func (p *Project) Id() tspath.Path {
 
 func (p *Project) GetProgram() *compiler.Program {
 	return p.Program
+}
+
+// GetProjectDiagnostics returns program diagnostics combined with any global
+// diagnostics discovered during checking. These are the diagnostics reported on
+// the tsconfig.json file.
+func (p *Project) GetProjectDiagnostics(ctx context.Context) []*ast.Diagnostic {
+	var globalDiags []*ast.Diagnostic
+	if p.checkerPool != nil {
+		globalDiags = p.checkerPool.GetGlobalDiagnostics()
+	}
+	return compiler.SortAndDeduplicateDiagnostics(core.Concatenate(
+		p.Program.GetProgramDiagnostics(),
+		globalDiags,
+	))
 }
 
 func (p *Project) HasFile(fileName string) bool {

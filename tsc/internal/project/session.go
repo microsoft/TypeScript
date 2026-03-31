@@ -140,6 +140,11 @@ type Session struct {
 	// are using each glob.
 	watches   map[fileSystemWatcherKey]*fileSystemWatcherValue
 	watchesMu sync.Mutex
+
+	// globalDiagPublishPending is set to true when a global diagnostics publish
+	// task should be enqueued. It is reset when the task runs, coalescing multiple
+	// requests into a single background task.
+	globalDiagPublishPending atomic.Bool
 }
 
 func NewSession(init *SessionInit) *Session {
@@ -1084,7 +1089,7 @@ func (s *Session) publishProgramDiagnostics(oldSnapshot *Snapshot, newSnapshot *
 			if !shouldPublishProgramDiagnostics(addedProject, newSnapshot.ID()) {
 				return
 			}
-			s.publishProjectDiagnostics(ctx, string(configFilePath), addedProject.Program.GetProgramDiagnostics(), newSnapshot.converters)
+			s.publishProjectDiagnostics(ctx, string(configFilePath), addedProject.GetProjectDiagnostics(ctx), newSnapshot.converters)
 		},
 		func(configFilePath tspath.Path, removedProject *Project) {
 			if removedProject.Kind != KindConfigured {
@@ -1096,7 +1101,7 @@ func (s *Session) publishProgramDiagnostics(oldSnapshot *Snapshot, newSnapshot *
 			if !shouldPublishProgramDiagnostics(newProject, newSnapshot.ID()) {
 				return
 			}
-			s.publishProjectDiagnostics(ctx, string(configFilePath), newProject.Program.GetProgramDiagnostics(), newSnapshot.converters)
+			s.publishProjectDiagnostics(ctx, string(configFilePath), newProject.GetProjectDiagnostics(ctx), newSnapshot.converters)
 		},
 	)
 }
@@ -1119,6 +1124,37 @@ func (s *Session) publishProjectDiagnostics(ctx context.Context, configFilePath 
 		Diagnostics: lspDiagnostics,
 	}); err != nil && s.options.LoggingEnabled {
 		s.logger.Logf("Error publishing diagnostics: %v", err)
+	}
+}
+
+// EnqueuePublishGlobalDiagnostics schedules a background check for new accumulated
+// global diagnostics from checker pools, re-publishing tsconfig diagnostics if changed.
+// Multiple calls are coalesced into a single background task.
+func (s *Session) EnqueuePublishGlobalDiagnostics() {
+	if !s.options.PushDiagnosticsEnabled {
+		return
+	}
+	if s.globalDiagPublishPending.CompareAndSwap(false, true) {
+		s.backgroundQueue.Enqueue(s.backgroundCtx, s.publishGlobalDiagnostics)
+	}
+}
+
+func (s *Session) publishGlobalDiagnostics(ctx context.Context) {
+	defer s.globalDiagPublishPending.Store(false)
+
+	s.snapshotMu.RLock()
+	snapshot := s.snapshot
+	snapshot.ref()
+	s.snapshotMu.RUnlock()
+	defer snapshot.Deref(s)
+
+	for _, project := range snapshot.ProjectCollection.Projects() {
+		if project.Kind != KindConfigured || project.checkerPool == nil {
+			continue
+		}
+		if project.checkerPool.TakeNewGlobalDiagnostics() {
+			s.publishProjectDiagnostics(ctx, string(project.configFilePath), project.GetProjectDiagnostics(ctx), snapshot.converters)
+		}
 	}
 }
 
