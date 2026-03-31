@@ -13,7 +13,8 @@
         },
         "ghcr.io/devcontainers-extra/features/dprint-asdf:2": {
             "version": "latest"
-        }
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {}
     },
 
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
