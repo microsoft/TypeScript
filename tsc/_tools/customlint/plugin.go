@@ -16,6 +16,7 @@ type plugin struct{}
 func (f *plugin) BuildAnalyzers() ([]*analysis.Analyzer, error) {
 	return []*analysis.Analyzer{
 		bitclearAnalyzer,
+		cleanupAnalyzer,
 		emptyCaseAnalyzer,
 		forbidParentAccessAnalyzer,
 		shadowAnalyzer,

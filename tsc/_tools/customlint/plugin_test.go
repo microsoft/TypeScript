@@ -33,7 +33,7 @@ func TestPlugin(t *testing.T) {
 	var plugin plugin
 
 	config := &packages.Config{
-		Mode: packages.LoadSyntax,
+		Mode: packages.LoadAllSyntax,
 		Dir:  testdataDir,
 		Env:  append(os.Environ(), "GO111MODULE=on", "GOPROXY=off", "GOWORK=off"),
 	}

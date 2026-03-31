@@ -37,7 +37,7 @@ func initProjectInfoClient(t *testing.T, files map[string]string) *lsptestutil.L
 		FS:                 fs,
 		DefaultLibraryPath: bundled.LibPath(),
 	}, onServerRequest)
-	t.Cleanup(func() { assert.NilError(t, closeClient()) })
+	t.Cleanup(func() { _ = closeClient() })
 
 	initMsg, _, ok := lsptestutil.SendRequest(t, client, lsproto.InitializeInfo, &lsproto.InitializeParams{
 		Capabilities: &lsproto.ClientCapabilities{},
