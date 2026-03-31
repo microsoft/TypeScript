@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/discriminatedUnionFlatMap.ts] ////
+
+=== discriminatedUnionFlatMap.ts ===
+// https://github.com/microsoft/typescript-go/issues/1057
+
+export type InputOp = { op: "add" } | { op: "remove"; value?: Array<unknown> };
+>InputOp : Symbol(InputOp, Decl(discriminatedUnionFlatMap.ts, 0, 0))
+>op : Symbol(op, Decl(discriminatedUnionFlatMap.ts, 2, 23))
+>op : Symbol(op, Decl(discriminatedUnionFlatMap.ts, 2, 39))
+>value : Symbol(value, Decl(discriminatedUnionFlatMap.ts, 2, 53))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+
+export type OutputOp = { op: "add" | "remove" };
+>OutputOp : Symbol(OutputOp, Decl(discriminatedUnionFlatMap.ts, 2, 79))
+>op : Symbol(op, Decl(discriminatedUnionFlatMap.ts, 3, 24))
+
+export function f(operations: InputOp[]): OutputOp[] {
+>f : Symbol(f, Decl(discriminatedUnionFlatMap.ts, 3, 48))
+>operations : Symbol(operations, Decl(discriminatedUnionFlatMap.ts, 5, 18))
+>InputOp : Symbol(InputOp, Decl(discriminatedUnionFlatMap.ts, 0, 0))
+>OutputOp : Symbol(OutputOp, Decl(discriminatedUnionFlatMap.ts, 2, 79))
+
+    return operations.flatMap((operation) => {
+>operations.flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>operations : Symbol(operations, Decl(discriminatedUnionFlatMap.ts, 5, 18))
+>flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>operation : Symbol(operation, Decl(discriminatedUnionFlatMap.ts, 6, 31))
+
+        if (operation.op === "remove" && operation.value) {
+>operation.op : Symbol(op, Decl(discriminatedUnionFlatMap.ts, 2, 23), Decl(discriminatedUnionFlatMap.ts, 2, 39))
+>operation : Symbol(operation, Decl(discriminatedUnionFlatMap.ts, 6, 31))
+>op : Symbol(op, Decl(discriminatedUnionFlatMap.ts, 2, 23), Decl(discriminatedUnionFlatMap.ts, 2, 39))
+>operation.value : Symbol(value, Decl(discriminatedUnionFlatMap.ts, 2, 53))
+>operation : Symbol(operation, Decl(discriminatedUnionFlatMap.ts, 6, 31))
+>value : Symbol(value, Decl(discriminatedUnionFlatMap.ts, 2, 53))
+
+            return [].map(() => ({ op: "remove" }));
+>[].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>op : Symbol(op, Decl(discriminatedUnionFlatMap.ts, 8, 34))
+
+        } else {
+            return [operation];
+>operation : Symbol(operation, Decl(discriminatedUnionFlatMap.ts, 6, 31))
+        }
+    });
+}
+

@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/discriminatedUnionFlatMap.ts] ////
+
+=== discriminatedUnionFlatMap.ts ===
+// https://github.com/microsoft/typescript-go/issues/1057
+
+export type InputOp = { op: "add" } | { op: "remove"; value?: Array<unknown> };
+>InputOp : InputOp
+>        : ^^^^^^^
+>op : "add"
+>   : ^^^^^
+>op : "remove"
+>   : ^^^^^^^^
+>value : unknown[] | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^
+
+export type OutputOp = { op: "add" | "remove" };
+>OutputOp : OutputOp
+>         : ^^^^^^^^
+>op : "add" | "remove"
+>   : ^^^^^^^^^^^^^^^^
+
+export function f(operations: InputOp[]): OutputOp[] {
+>f : (operations: InputOp[]) => OutputOp[]
+>  : ^          ^^         ^^^^^          
+>operations : InputOp[]
+>           : ^^^^^^^^^
+
+    return operations.flatMap((operation) => {
+>operations.flatMap((operation) => {        if (operation.op === "remove" && operation.value) {            return [].map(() => ({ op: "remove" }));        } else {            return [operation];        }    }) : InputOp[]
+>                                                                                                                                                                                                                 : ^^^^^^^^^
+>operations.flatMap : <U, This = undefined>(callback: (this: This, value: InputOp, index: number, array: InputOp[]) => U | readonly U[], thisArg?: This | undefined) => U[]
+>                   : ^ ^^    ^^^^^^^^^^^^^^        ^^^    ^^^^^^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>operations : InputOp[]
+>           : ^^^^^^^^^
+>flatMap : <U, This = undefined>(callback: (this: This, value: InputOp, index: number, array: InputOp[]) => U | readonly U[], thisArg?: This | undefined) => U[]
+>        : ^ ^^    ^^^^^^^^^^^^^^        ^^^    ^^^^^^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(operation) => {        if (operation.op === "remove" && operation.value) {            return [].map(() => ({ op: "remove" }));        } else {            return [operation];        }    } : (this: undefined, operation: InputOp) => InputOp[] | { op: "remove"; }[]
+>                                                                                                                                                                                             : ^    ^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>operation : InputOp
+>          : ^^^^^^^
+
+        if (operation.op === "remove" && operation.value) {
+>operation.op === "remove" && operation.value : false | unknown[] | undefined
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>operation.op === "remove" : boolean
+>                          : ^^^^^^^
+>operation.op : "add" | "remove"
+>             : ^^^^^^^^^^^^^^^^
+>operation : InputOp
+>          : ^^^^^^^
+>op : "add" | "remove"
+>   : ^^^^^^^^^^^^^^^^
+>"remove" : "remove"
+>         : ^^^^^^^^
+>operation.value : unknown[] | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>operation : { op: "remove"; value?: Array<unknown>; }
+>          : ^^^^^^        ^^^^^^^^^^              ^^^
+>value : unknown[] | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^
+
+            return [].map(() => ({ op: "remove" }));
+>[].map(() => ({ op: "remove" })) : { op: "remove"; }[]
+>                                 : ^^^^^^^^^^^^^^^^^^^
+>[].map : <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
+>       : ^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+>map : <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>() => ({ op: "remove" }) : () => { op: "remove"; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^
+>({ op: "remove" }) : { op: "remove"; }
+>                   : ^^^^^^^^^^^^^^^^^
+>{ op: "remove" } : { op: "remove"; }
+>                 : ^^^^^^^^^^^^^^^^^
+>op : "remove"
+>   : ^^^^^^^^
+>"remove" : "remove"
+>         : ^^^^^^^^
+
+        } else {
+            return [operation];
+>[operation] : InputOp[]
+>            : ^^^^^^^^^
+>operation : InputOp
+>          : ^^^^^^^
+        }
+    });
+}
+
