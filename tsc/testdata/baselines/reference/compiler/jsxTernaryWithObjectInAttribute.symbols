@@ -1,0 +1,100 @@
+//// [tests/cases/compiler/jsxTernaryWithObjectInAttribute.tsx] ////
+
+=== jsxTernaryWithObjectInAttribute.tsx ===
+declare function memo<T>(f: T): T;
+>memo : Symbol(memo, Decl(jsxTernaryWithObjectInAttribute.tsx, 0, 0))
+>T : Symbol(T, Decl(jsxTernaryWithObjectInAttribute.tsx, 0, 22))
+>f : Symbol(f, Decl(jsxTernaryWithObjectInAttribute.tsx, 0, 25))
+>T : Symbol(T, Decl(jsxTernaryWithObjectInAttribute.tsx, 0, 22))
+>T : Symbol(T, Decl(jsxTernaryWithObjectInAttribute.tsx, 0, 22))
+
+declare const HoverCardText: (p: { label: any; text: any; className?: string }) => null;
+>HoverCardText : Symbol(HoverCardText, Decl(jsxTernaryWithObjectInAttribute.tsx, 1, 13))
+>p : Symbol(p, Decl(jsxTernaryWithObjectInAttribute.tsx, 1, 30))
+>label : Symbol(label, Decl(jsxTernaryWithObjectInAttribute.tsx, 1, 34))
+>text : Symbol(text, Decl(jsxTernaryWithObjectInAttribute.tsx, 1, 46))
+>className : Symbol(className, Decl(jsxTernaryWithObjectInAttribute.tsx, 1, 57))
+
+declare const DEFAULT_NULL_VALUE: string;
+>DEFAULT_NULL_VALUE : Symbol(DEFAULT_NULL_VALUE, Decl(jsxTernaryWithObjectInAttribute.tsx, 2, 13))
+
+declare function t(key: string, params?: Record<string, any>): string;
+>t : Symbol(t, Decl(jsxTernaryWithObjectInAttribute.tsx, 2, 41))
+>key : Symbol(key, Decl(jsxTernaryWithObjectInAttribute.tsx, 3, 19))
+>params : Symbol(params, Decl(jsxTernaryWithObjectInAttribute.tsx, 3, 31))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+declare function nf(v: any, opts: { precision: number; rounding: string }): string;
+>nf : Symbol(nf, Decl(jsxTernaryWithObjectInAttribute.tsx, 3, 70))
+>v : Symbol(v, Decl(jsxTernaryWithObjectInAttribute.tsx, 4, 20))
+>opts : Symbol(opts, Decl(jsxTernaryWithObjectInAttribute.tsx, 4, 27))
+>precision : Symbol(precision, Decl(jsxTernaryWithObjectInAttribute.tsx, 4, 35))
+>rounding : Symbol(rounding, Decl(jsxTernaryWithObjectInAttribute.tsx, 4, 54))
+
+export const Example = memo(function Example() {
+>Example : Symbol(Example, Decl(jsxTernaryWithObjectInAttribute.tsx, 6, 12))
+>memo : Symbol(memo, Decl(jsxTernaryWithObjectInAttribute.tsx, 0, 0))
+>Example : Symbol(Example, Decl(jsxTernaryWithObjectInAttribute.tsx, 6, 28))
+
+  const isLogin = true;
+>isLogin : Symbol(isLogin, Decl(jsxTernaryWithObjectInAttribute.tsx, 7, 7))
+
+  return (
+    <div>
+      <div>{t('label')}</div>
+>t : Symbol(t, Decl(jsxTernaryWithObjectInAttribute.tsx, 2, 41))
+
+      {!isLogin ? (
+>isLogin : Symbol(isLogin, Decl(jsxTernaryWithObjectInAttribute.tsx, 7, 7))
+
+        DEFAULT_NULL_VALUE
+>DEFAULT_NULL_VALUE : Symbol(DEFAULT_NULL_VALUE, Decl(jsxTernaryWithObjectInAttribute.tsx, 2, 13))
+
+      ) : (
+        <HoverCardText
+>HoverCardText : Symbol(HoverCardText, Decl(jsxTernaryWithObjectInAttribute.tsx, 1, 13))
+
+          className="test"
+>className : Symbol(className, Decl(jsxTernaryWithObjectInAttribute.tsx, 15, 22))
+
+          label={
+>label : Symbol(label, Decl(jsxTernaryWithObjectInAttribute.tsx, 16, 26))
+
+            <div>
+              {t('some.key', {
+>t : Symbol(t, Decl(jsxTernaryWithObjectInAttribute.tsx, 2, 41))
+
+                s1: nf(1, { precision: 2, rounding: 'down' }),
+>s1 : Symbol(s1, Decl(jsxTernaryWithObjectInAttribute.tsx, 19, 30))
+>nf : Symbol(nf, Decl(jsxTernaryWithObjectInAttribute.tsx, 3, 70))
+>precision : Symbol(precision, Decl(jsxTernaryWithObjectInAttribute.tsx, 20, 27))
+>rounding : Symbol(rounding, Decl(jsxTernaryWithObjectInAttribute.tsx, 20, 41))
+
+                s2: nf(2, { precision: 2, rounding: 'down' }),
+>s2 : Symbol(s2, Decl(jsxTernaryWithObjectInAttribute.tsx, 20, 62))
+>nf : Symbol(nf, Decl(jsxTernaryWithObjectInAttribute.tsx, 3, 70))
+>precision : Symbol(precision, Decl(jsxTernaryWithObjectInAttribute.tsx, 21, 27))
+>rounding : Symbol(rounding, Decl(jsxTernaryWithObjectInAttribute.tsx, 21, 41))
+
+              })}
+            </div>
+          }
+          text={
+>text : Symbol(text, Decl(jsxTernaryWithObjectInAttribute.tsx, 24, 11))
+
+            <div>
+              {nf(0, { precision: 2, rounding: 'down' })} USDT
+>nf : Symbol(nf, Decl(jsxTernaryWithObjectInAttribute.tsx, 3, 70))
+>precision : Symbol(precision, Decl(jsxTernaryWithObjectInAttribute.tsx, 27, 22))
+>rounding : Symbol(rounding, Decl(jsxTernaryWithObjectInAttribute.tsx, 27, 36))
+
+            </div>
+          }
+        ></HoverCardText>
+>HoverCardText : Symbol(HoverCardText, Decl(jsxTernaryWithObjectInAttribute.tsx, 1, 13))
+
+      )}
+    </div>
+  );
+});
+

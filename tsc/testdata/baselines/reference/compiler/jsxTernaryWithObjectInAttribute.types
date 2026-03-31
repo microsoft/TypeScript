@@ -1,0 +1,143 @@
+//// [tests/cases/compiler/jsxTernaryWithObjectInAttribute.tsx] ////
+
+=== jsxTernaryWithObjectInAttribute.tsx ===
+declare function memo<T>(f: T): T;
+>memo : <T>(f: T) => T
+>f : T
+
+declare const HoverCardText: (p: { label: any; text: any; className?: string }) => null;
+>HoverCardText : (p: { label: any; text: any; className?: string; }) => null
+>p : { label: any; text: any; className?: string; }
+>label : any
+>text : any
+>className : string | undefined
+
+declare const DEFAULT_NULL_VALUE: string;
+>DEFAULT_NULL_VALUE : string
+
+declare function t(key: string, params?: Record<string, any>): string;
+>t : (key: string, params?: Record<string, any>) => string
+>key : string
+>params : Record<string, any> | undefined
+
+declare function nf(v: any, opts: { precision: number; rounding: string }): string;
+>nf : (v: any, opts: { precision: number; rounding: string; }) => string
+>v : any
+>opts : { precision: number; rounding: string; }
+>precision : number
+>rounding : string
+
+export const Example = memo(function Example() {
+>Example : () => any
+>memo(function Example() {  const isLogin = true;  return (    <div>      <div>{t('label')}</div>      {!isLogin ? (        DEFAULT_NULL_VALUE      ) : (        <HoverCardText          className="test"          label={            <div>              {t('some.key', {                s1: nf(1, { precision: 2, rounding: 'down' }),                s2: nf(2, { precision: 2, rounding: 'down' }),              })}            </div>          }          text={            <div>              {nf(0, { precision: 2, rounding: 'down' })} USDT            </div>          }        ></HoverCardText>      )}    </div>  );}) : () => any
+>memo : <T>(f: T) => T
+>function Example() {  const isLogin = true;  return (    <div>      <div>{t('label')}</div>      {!isLogin ? (        DEFAULT_NULL_VALUE      ) : (        <HoverCardText          className="test"          label={            <div>              {t('some.key', {                s1: nf(1, { precision: 2, rounding: 'down' }),                s2: nf(2, { precision: 2, rounding: 'down' }),              })}            </div>          }          text={            <div>              {nf(0, { precision: 2, rounding: 'down' })} USDT            </div>          }        ></HoverCardText>      )}    </div>  );} : () => any
+>Example : () => any
+
+  const isLogin = true;
+>isLogin : true
+>true : true
+
+  return (
+>(    <div>      <div>{t('label')}</div>      {!isLogin ? (        DEFAULT_NULL_VALUE      ) : (        <HoverCardText          className="test"          label={            <div>              {t('some.key', {                s1: nf(1, { precision: 2, rounding: 'down' }),                s2: nf(2, { precision: 2, rounding: 'down' }),              })}            </div>          }          text={            <div>              {nf(0, { precision: 2, rounding: 'down' })} USDT            </div>          }        ></HoverCardText>      )}    </div>  ) : any
+
+    <div>
+><div>      <div>{t('label')}</div>      {!isLogin ? (        DEFAULT_NULL_VALUE      ) : (        <HoverCardText          className="test"          label={            <div>              {t('some.key', {                s1: nf(1, { precision: 2, rounding: 'down' }),                s2: nf(2, { precision: 2, rounding: 'down' }),              })}            </div>          }          text={            <div>              {nf(0, { precision: 2, rounding: 'down' })} USDT            </div>          }        ></HoverCardText>      )}    </div> : any
+>div : any
+
+      <div>{t('label')}</div>
+><div>{t('label')}</div> : any
+>div : any
+>t('label') : string
+>t : (key: string, params?: Record<string, any>) => string
+>'label' : "label"
+>div : any
+
+      {!isLogin ? (
+>!isLogin ? (        DEFAULT_NULL_VALUE      ) : (        <HoverCardText          className="test"          label={            <div>              {t('some.key', {                s1: nf(1, { precision: 2, rounding: 'down' }),                s2: nf(2, { precision: 2, rounding: 'down' }),              })}            </div>          }          text={            <div>              {nf(0, { precision: 2, rounding: 'down' })} USDT            </div>          }        ></HoverCardText>      ) : any
+>!isLogin : false
+>isLogin : true
+>(        DEFAULT_NULL_VALUE      ) : string
+
+        DEFAULT_NULL_VALUE
+>DEFAULT_NULL_VALUE : string
+
+      ) : (
+>(        <HoverCardText          className="test"          label={            <div>              {t('some.key', {                s1: nf(1, { precision: 2, rounding: 'down' }),                s2: nf(2, { precision: 2, rounding: 'down' }),              })}            </div>          }          text={            <div>              {nf(0, { precision: 2, rounding: 'down' })} USDT            </div>          }        ></HoverCardText>      ) : any
+
+        <HoverCardText
+><HoverCardText          className="test"          label={            <div>              {t('some.key', {                s1: nf(1, { precision: 2, rounding: 'down' }),                s2: nf(2, { precision: 2, rounding: 'down' }),              })}            </div>          }          text={            <div>              {nf(0, { precision: 2, rounding: 'down' })} USDT            </div>          }        ></HoverCardText> : any
+>HoverCardText : (p: { label: any; text: any; className?: string; }) => null
+
+          className="test"
+>className : string
+
+          label={
+>label : any
+
+            <div>
+><div>              {t('some.key', {                s1: nf(1, { precision: 2, rounding: 'down' }),                s2: nf(2, { precision: 2, rounding: 'down' }),              })}            </div> : any
+>div : any
+
+              {t('some.key', {
+>t('some.key', {                s1: nf(1, { precision: 2, rounding: 'down' }),                s2: nf(2, { precision: 2, rounding: 'down' }),              }) : string
+>t : (key: string, params?: Record<string, any>) => string
+>'some.key' : "some.key"
+>{                s1: nf(1, { precision: 2, rounding: 'down' }),                s2: nf(2, { precision: 2, rounding: 'down' }),              } : { s1: string; s2: string; }
+
+                s1: nf(1, { precision: 2, rounding: 'down' }),
+>s1 : string
+>nf(1, { precision: 2, rounding: 'down' }) : string
+>nf : (v: any, opts: { precision: number; rounding: string; }) => string
+>1 : 1
+>{ precision: 2, rounding: 'down' } : { precision: number; rounding: string; }
+>precision : number
+>2 : 2
+>rounding : string
+>'down' : "down"
+
+                s2: nf(2, { precision: 2, rounding: 'down' }),
+>s2 : string
+>nf(2, { precision: 2, rounding: 'down' }) : string
+>nf : (v: any, opts: { precision: number; rounding: string; }) => string
+>2 : 2
+>{ precision: 2, rounding: 'down' } : { precision: number; rounding: string; }
+>precision : number
+>2 : 2
+>rounding : string
+>'down' : "down"
+
+              })}
+            </div>
+>div : any
+          }
+          text={
+>text : any
+
+            <div>
+><div>              {nf(0, { precision: 2, rounding: 'down' })} USDT            </div> : any
+>div : any
+
+              {nf(0, { precision: 2, rounding: 'down' })} USDT
+>nf(0, { precision: 2, rounding: 'down' }) : string
+>nf : (v: any, opts: { precision: number; rounding: string; }) => string
+>0 : 0
+>{ precision: 2, rounding: 'down' } : { precision: number; rounding: string; }
+>precision : number
+>2 : 2
+>rounding : string
+>'down' : "down"
+
+            </div>
+>div : any
+          }
+        ></HoverCardText>
+>HoverCardText : (p: { label: any; text: any; className?: string; }) => null
+
+      )}
+    </div>
+>div : any
+
+  );
+});
+
