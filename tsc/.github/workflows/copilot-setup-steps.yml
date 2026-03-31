@@ -29,8 +29,6 @@ jobs:
         with:
           node-version: '>=22.16.0'
       - uses: ./.github/actions/setup-go
-        with:
-          lint-cache: 'true'
       - run: npm i -g @playwright/mcp@0.0.28
       - run: go install golang.org/x/tools/gopls@latest
       - run: npm ci
