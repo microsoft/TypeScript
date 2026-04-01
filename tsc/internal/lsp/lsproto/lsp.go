@@ -122,6 +122,30 @@ func boolToInt(b bool) int {
 	return 0
 }
 
+func errNotObject(k json.Kind) error {
+	return fmt.Errorf("expected object start, but encountered %v", k)
+}
+
+func errNull(field string) error {
+	return fmt.Errorf("null value is not allowed for field %q", field)
+}
+
+func errMissing(props []string) error {
+	return fmt.Errorf("missing required properties: %s", strings.Join(props, ", "))
+}
+
+func errInvalidKind(typeName string, got json.Kind) error {
+	return fmt.Errorf("invalid %s: got %v", typeName, got)
+}
+
+func errInvalidValue(typeName string, data []byte) error {
+	return fmt.Errorf("invalid %s: %s", typeName, data)
+}
+
+func errLiteralMismatch(typeName string, expected string, got []byte) error {
+	return fmt.Errorf("expected %s value %s, got %s", typeName, expected, got)
+}
+
 func assertOnlyOne(message string, count int) {
 	if count != 1 {
 		panic(message)

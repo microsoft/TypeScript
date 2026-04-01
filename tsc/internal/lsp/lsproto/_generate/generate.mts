@@ -1248,6 +1248,40 @@ function goKindCasesForJsonKind(kind: string): string {
 }
 
 /**
+ * Checks if a meta model Type can represent a JSON null value.
+ * Used to determine whether to reject explicit JSON `null` for any field
+ * that can otherwise decode `null` without a type error.
+ */
+function typeCanBeNull(type: Type): boolean {
+    switch (type.kind) {
+        case "base":
+            return type.name === "null";
+        case "reference": {
+            const override = typeAliasOverrides.get(type.name);
+            if (override) {
+                return override.name === "any";
+            }
+            // A bare "any" reference resolves to Go's `any` (interface), which can hold null.
+            if (type.name === "any") {
+                return true;
+            }
+            if (nonResolvedAliases.has(type.name)) {
+                const customAlias = customTypeAliases.find(t => t.name === type.name);
+                if (customAlias) return typeCanBeNull(customAlias.type);
+                return false;
+            }
+            const aliased = typeInfo.typeAliasMap.get(type.name);
+            if (aliased) return typeCanBeNull(aliased);
+            return false;
+        }
+        case "or":
+            return type.items.some(item => typeCanBeNull(item));
+        default:
+            return false;
+    }
+}
+
+/**
  * For a group of union entries that share the same JSON kind (e.g., all objects),
  * find a discriminator field — a JSON property whose string literal type differs
  * across variants — enabling efficient O(1) dispatch instead of try-each.
@@ -1728,24 +1762,33 @@ function generateCode() {
             if (p.omitzeroValue) return false;
             return true;
         }) || [];
-        if (requiredProps.length > 0 && structure.name !== "Registration") {
+        // Check if any fields need null rejection
+        const hasNullRejectableFields = structure.properties?.some(p => {
+            if (p.omitzeroValue) return false;
+            if (typeCanBeNull(p.type)) return false;
+            const resolved = resolveType(p.type);
+            return p.optional || resolved.needsPointer || resolved.name.startsWith("[]") || resolved.name.startsWith("map[");
+        }) || false;
+        if ((requiredProps.length > 0 || hasNullRejectableFields) && structure.name !== "Registration") {
             writeLine(`\tvar _ json.UnmarshalerFrom = (*${structure.name})(nil)`);
             writeLine("");
 
             writeLine(`func (s *${structure.name}) UnmarshalJSONFrom(dec *json.Decoder) error {`);
-            writeLine(`\tconst (`);
-            for (let i = 0; i < requiredProps.length; i++) {
-                const prop = requiredProps[i];
-                const iotaPrefix = i === 0 ? " uint = 1 << iota" : "";
-                writeLine(`\t\tmissing${titleCase(prop.name)}${iotaPrefix}`);
+            if (requiredProps.length > 0) {
+                writeLine(`\tconst (`);
+                for (let i = 0; i < requiredProps.length; i++) {
+                    const prop = requiredProps[i];
+                    const iotaPrefix = i === 0 ? " uint = 1 << iota" : "";
+                    writeLine(`\t\tmissing${titleCase(prop.name)}${iotaPrefix}`);
+                }
+                writeLine(`\t\t_missingLast`);
+                writeLine(`\t)`);
+                writeLine(`\tmissing := _missingLast - 1`);
+                writeLine("");
             }
-            writeLine(`\t\t_missingLast`);
-            writeLine(`\t)`);
-            writeLine(`\tmissing := _missingLast - 1`);
-            writeLine("");
 
             writeLine(`\tif k := dec.PeekKind(); k != '{' {`);
-            writeLine(`\t\treturn fmt.Errorf("expected object start, but encountered %v", k)`);
+            writeLine(`\t\treturn errNotObject(k)`);
             writeLine(`\t}`);
             writeLine(`\tif _, err := dec.ReadToken(); err != nil {`);
             writeLine(`\t\treturn err`);
@@ -1763,6 +1806,15 @@ function generateCode() {
                 writeLine(`\t\tcase \`"${prop.name}"\`:`);
                 if (!prop.optional && !prop.omitzeroValue) {
                     writeLine(`\t\t\tmissing &^= missing${titleCase(prop.name)}`);
+                }
+                // Reject null for fields whose types cannot represent null but whose Go types
+                // silently accept it (pointers, slices, maps).
+                const resolvedType = resolveType(prop.type);
+                const goTypeAcceptsNull = (prop.optional || resolvedType.needsPointer || resolvedType.name.startsWith("[]") || resolvedType.name.startsWith("map[")) && !prop.omitzeroValue;
+                if (goTypeAcceptsNull && !typeCanBeNull(prop.type)) {
+                    writeLine(`\t\t\tif dec.PeekKind() == 'n' {`);
+                    writeLine(`\t\t\t\treturn errNull("${prop.name}")`);
+                    writeLine(`\t\t\t}`);
                 }
                 writeLine(`\t\t\tif err := json.UnmarshalDecode(dec, &s.${titleCase(prop.name)}); err != nil {`);
                 writeLine(`\t\t\t\treturn err`);
@@ -1782,17 +1834,19 @@ function generateCode() {
             writeLine(`\t}`);
             writeLine("");
 
-            writeLine(`\tif missing != 0 {`);
-            writeLine(`\t\tvar missingProps []string`);
-            for (const prop of requiredProps) {
-                writeLine(`\t\tif missing&missing${titleCase(prop.name)} != 0 {`);
-                writeLine(`\t\t\tmissingProps = append(missingProps, "${prop.name}")`);
-                writeLine(`\t\t}`);
+            if (requiredProps.length > 0) {
+                writeLine(`\tif missing != 0 {`);
+                writeLine(`\t\tvar missingProps []string`);
+                for (const prop of requiredProps) {
+                    writeLine(`\t\tif missing&missing${titleCase(prop.name)} != 0 {`);
+                    writeLine(`\t\t\tmissingProps = append(missingProps, "${prop.name}")`);
+                    writeLine(`\t\t}`);
+                }
+                writeLine(`\t\treturn errMissing(missingProps)`);
+                writeLine(`\t}`);
+                writeLine("");
             }
-            writeLine(`\t\treturn fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))`);
-            writeLine(`\t}`);
 
-            writeLine("");
             writeLine(`\treturn nil`);
             writeLine(`}`);
             writeLine("");
@@ -1872,7 +1926,7 @@ function generateCode() {
             writeLine(`\tmissing := _missingLast - 1`);
             writeLine("");
             writeLine(`\tif k := dec.PeekKind(); k != '{' {`);
-            writeLine(`\t\treturn fmt.Errorf("expected object start, but encountered %v", k)`);
+            writeLine(`\t\treturn errNotObject(k)`);
             writeLine(`\t}`);
             writeLine(`\tif _, err := dec.ReadToken(); err != nil {`);
             writeLine(`\t\treturn err`);
@@ -1922,7 +1976,7 @@ function generateCode() {
             writeLine(`\t\tif missing&missingMethod != 0 {`);
             writeLine(`\t\t\tmissingProps = append(missingProps, "method")`);
             writeLine(`\t\t}`);
-            writeLine(`\t\treturn fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))`);
+            writeLine(`\t\treturn errMissing(missingProps)`);
             writeLine(`\t}`);
             writeLine("");
             writeLine(`\tif len(rawRegisterOptions) > 0 {`);
@@ -2619,7 +2673,7 @@ function generateCode() {
             }
 
             writeLine(`\tdefault:`);
-            writeLine(`\t\treturn fmt.Errorf("invalid ${name}: expected ${[...(unionContainedNull ? ["null"] : []), ...kindMap.keys()].join(", ")}, got %v", dec.PeekKind())`);
+            writeLine(`\t\treturn errInvalidKind("${name}", dec.PeekKind())`);
             writeLine(`\t}`);
         }
         else if (canDispatch) {
@@ -2681,13 +2735,13 @@ function generateCode() {
                         }
                     }
                     if (!exhaustive) {
-                        writeLine(`\t\treturn fmt.Errorf("invalid ${name}: %s", data)`);
+                        writeLine(`\t\treturn errInvalidValue("${name}", data)`);
                     }
                 }
             }
 
             writeLine(`\tdefault:`);
-            writeLine(`\t\treturn fmt.Errorf("invalid ${name}: expected ${[...(unionContainedNull ? ["null"] : []), ...kindMap.keys()].join(", ")}, got %v", dec.PeekKind())`);
+            writeLine(`\t\treturn errInvalidKind("${name}", dec.PeekKind())`);
             writeLine(`\t}`);
         }
         else {
@@ -2732,7 +2786,7 @@ function generateCode() {
         }
         else if (!fallbackExhaustive) {
             // Fallback paths: the final error references `data` which is in scope.
-            writeLine(`\treturn fmt.Errorf("invalid ${name}: %s", data)`);
+            writeLine(`\treturn errInvalidValue("${name}", data)`);
         }
         writeLine(`}`);
         writeLine("");
@@ -2773,7 +2827,7 @@ function generateCode() {
         writeLine(`\t\treturn err`);
         writeLine(`\t}`);
         writeLine(`\tif string(v) != \`${jsonValue}\` {`);
-        writeLine(`\t\treturn fmt.Errorf("expected ${name} value %s, got %s", \`${jsonValue}\`, v)`);
+        writeLine(`\t\treturn errLiteralMismatch("${name}", \`${jsonValue}\`, v)`);
         writeLine(`\t}`);
         writeLine(`\treturn nil`);
         writeLine(`}`);

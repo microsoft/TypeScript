@@ -47,7 +47,7 @@ func (s *ImplementationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -70,10 +70,16 @@ func (s *ImplementationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -96,7 +102,7 @@ func (s *ImplementationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -125,7 +131,7 @@ func (s *Location) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -166,7 +172,7 @@ func (s *Location) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingRange != 0 {
 			missingProps = append(missingProps, "range")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -194,7 +200,7 @@ func (s *ImplementationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -212,10 +218,16 @@ func (s *ImplementationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -235,7 +247,7 @@ func (s *ImplementationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -275,7 +287,7 @@ func (s *TypeDefinitionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -298,10 +310,16 @@ func (s *TypeDefinitionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -324,7 +342,7 @@ func (s *TypeDefinitionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -352,7 +370,7 @@ func (s *TypeDefinitionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -370,10 +388,16 @@ func (s *TypeDefinitionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -393,7 +417,7 @@ func (s *TypeDefinitionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -420,7 +444,7 @@ func (s *WorkspaceFolder) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -461,7 +485,7 @@ func (s *WorkspaceFolder) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingName != 0 {
 			missingProps = append(missingProps, "name")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -483,7 +507,7 @@ func (s *DidChangeWorkspaceFoldersParams) UnmarshalJSONFrom(dec *json.Decoder) e
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -497,6 +521,9 @@ func (s *DidChangeWorkspaceFoldersParams) UnmarshalJSONFrom(dec *json.Decoder) e
 		switch string(name) {
 		case `"event"`:
 			missing &^= missingEvent
+			if dec.PeekKind() == 'n' {
+				return errNull("event")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Event); err != nil {
 				return err
 			}
@@ -516,7 +543,7 @@ func (s *DidChangeWorkspaceFoldersParams) UnmarshalJSONFrom(dec *json.Decoder) e
 		if missing&missingEvent != 0 {
 			missingProps = append(missingProps, "event")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -537,7 +564,7 @@ func (s *ConfigurationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -551,6 +578,9 @@ func (s *ConfigurationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"items"`:
 			missing &^= missingItems
+			if dec.PeekKind() == 'n' {
+				return errNull("items")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Items); err != nil {
 				return err
 			}
@@ -570,7 +600,7 @@ func (s *ConfigurationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingItems != 0 {
 			missingProps = append(missingProps, "items")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -603,7 +633,7 @@ func (s *DocumentColorParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -616,10 +646,16 @@ func (s *DocumentColorParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -644,7 +680,7 @@ func (s *DocumentColorParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTextDocument != 0 {
 			missingProps = append(missingProps, "textDocument")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -670,7 +706,7 @@ func (s *ColorInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -711,7 +747,7 @@ func (s *ColorInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingColor != 0 {
 			missingProps = append(missingProps, "color")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -739,7 +775,7 @@ func (s *DocumentColorRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -757,10 +793,16 @@ func (s *DocumentColorRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -780,7 +822,7 @@ func (s *DocumentColorRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -821,7 +863,7 @@ func (s *ColorPresentationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -834,10 +876,16 @@ func (s *ColorPresentationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -878,7 +926,7 @@ func (s *ColorPresentationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingRange != 0 {
 			missingProps = append(missingProps, "range")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -910,7 +958,7 @@ func (s *ColorPresentation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -928,10 +976,16 @@ func (s *ColorPresentation) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"textEdit"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("textEdit")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TextEdit); err != nil {
 				return err
 			}
 		case `"additionalTextEdits"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("additionalTextEdits")
+			}
 			if err := json.UnmarshalDecode(dec, &s.AdditionalTextEdits); err != nil {
 				return err
 			}
@@ -951,7 +1005,7 @@ func (s *ColorPresentation) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingLabel != 0 {
 			missingProps = append(missingProps, "label")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -959,6 +1013,43 @@ func (s *ColorPresentation) UnmarshalJSONFrom(dec *json.Decoder) error {
 
 type WorkDoneProgressOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*WorkDoneProgressOptions)(nil)
+
+func (s *WorkDoneProgressOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // General text document registration options.
@@ -978,7 +1069,7 @@ func (s *TextDocumentRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) e
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1011,7 +1102,7 @@ func (s *TextDocumentRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) e
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1044,7 +1135,7 @@ func (s *FoldingRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1057,10 +1148,16 @@ func (s *FoldingRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -1085,7 +1182,7 @@ func (s *FoldingRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTextDocument != 0 {
 			missingProps = append(missingProps, "textDocument")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1132,7 +1229,7 @@ func (s *FoldingRange) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1150,6 +1247,9 @@ func (s *FoldingRange) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"startCharacter"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("startCharacter")
+			}
 			if err := json.UnmarshalDecode(dec, &s.StartCharacter); err != nil {
 				return err
 			}
@@ -1159,14 +1259,23 @@ func (s *FoldingRange) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"endCharacter"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("endCharacter")
+			}
 			if err := json.UnmarshalDecode(dec, &s.EndCharacter); err != nil {
 				return err
 			}
 		case `"kind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("kind")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
 				return err
 			}
 		case `"collapsedText"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("collapsedText")
+			}
 			if err := json.UnmarshalDecode(dec, &s.CollapsedText); err != nil {
 				return err
 			}
@@ -1189,7 +1298,7 @@ func (s *FoldingRange) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingEndLine != 0 {
 			missingProps = append(missingProps, "endLine")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1217,7 +1326,7 @@ func (s *FoldingRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) e
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1235,10 +1344,16 @@ func (s *FoldingRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) e
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -1258,7 +1373,7 @@ func (s *FoldingRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) e
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1298,7 +1413,7 @@ func (s *DeclarationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1321,10 +1436,16 @@ func (s *DeclarationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -1347,7 +1468,7 @@ func (s *DeclarationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1375,7 +1496,7 @@ func (s *DeclarationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1388,6 +1509,9 @@ func (s *DeclarationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 		}
 		switch string(name) {
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
@@ -1397,6 +1521,9 @@ func (s *DeclarationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -1416,7 +1543,7 @@ func (s *DeclarationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1453,7 +1580,7 @@ func (s *SelectionRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1466,10 +1593,16 @@ func (s *SelectionRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -1480,6 +1613,9 @@ func (s *SelectionRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 			}
 		case `"positions"`:
 			missing &^= missingPositions
+			if dec.PeekKind() == 'n' {
+				return errNull("positions")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Positions); err != nil {
 				return err
 			}
@@ -1502,7 +1638,7 @@ func (s *SelectionRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPositions != 0 {
 			missingProps = append(missingProps, "positions")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1528,7 +1664,7 @@ func (s *SelectionRange) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1546,6 +1682,9 @@ func (s *SelectionRange) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"parent"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("parent")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Parent); err != nil {
 				return err
 			}
@@ -1565,7 +1704,7 @@ func (s *SelectionRange) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingRange != 0 {
 			missingProps = append(missingProps, "range")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1593,7 +1732,7 @@ func (s *SelectionRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1606,6 +1745,9 @@ func (s *SelectionRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 		}
 		switch string(name) {
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
@@ -1615,6 +1757,9 @@ func (s *SelectionRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -1634,7 +1779,7 @@ func (s *SelectionRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1655,7 +1800,7 @@ func (s *WorkDoneProgressCreateParams) UnmarshalJSONFrom(dec *json.Decoder) erro
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1688,7 +1833,7 @@ func (s *WorkDoneProgressCreateParams) UnmarshalJSONFrom(dec *json.Decoder) erro
 		if missing&missingToken != 0 {
 			missingProps = append(missingProps, "token")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1709,7 +1854,7 @@ func (s *WorkDoneProgressCancelParams) UnmarshalJSONFrom(dec *json.Decoder) erro
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1742,7 +1887,7 @@ func (s *WorkDoneProgressCancelParams) UnmarshalJSONFrom(dec *json.Decoder) erro
 		if missing&missingToken != 0 {
 			missingProps = append(missingProps, "token")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1781,7 +1926,7 @@ func (s *CallHierarchyPrepareParams) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1804,6 +1949,9 @@ func (s *CallHierarchyPrepareParams) UnmarshalJSONFrom(dec *json.Decoder) error 
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -1826,7 +1974,7 @@ func (s *CallHierarchyPrepareParams) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1885,7 +2033,7 @@ func (s *CallHierarchyItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -1908,10 +2056,16 @@ func (s *CallHierarchyItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"tags"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tags")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tags); err != nil {
 				return err
 			}
 		case `"detail"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("detail")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Detail); err != nil {
 				return err
 			}
@@ -1931,6 +2085,9 @@ func (s *CallHierarchyItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"data"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
 				return err
 			}
@@ -1962,7 +2119,7 @@ func (s *CallHierarchyItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingSelectionRange != 0 {
 			missingProps = append(missingProps, "selectionRange")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -1993,7 +2150,7 @@ func (s *CallHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2011,10 +2168,16 @@ func (s *CallHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -2034,7 +2197,7 @@ func (s *CallHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2064,7 +2227,7 @@ func (s *CallHierarchyIncomingCallsParams) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2077,15 +2240,24 @@ func (s *CallHierarchyIncomingCallsParams) UnmarshalJSONFrom(dec *json.Decoder) 
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
 		case `"item"`:
 			missing &^= missingItem
+			if dec.PeekKind() == 'n' {
+				return errNull("item")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Item); err != nil {
 				return err
 			}
@@ -2105,7 +2277,7 @@ func (s *CallHierarchyIncomingCallsParams) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingItem != 0 {
 			missingProps = append(missingProps, "item")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2134,7 +2306,7 @@ func (s *CallHierarchyIncomingCall) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2148,11 +2320,17 @@ func (s *CallHierarchyIncomingCall) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"from"`:
 			missing &^= missingFrom
+			if dec.PeekKind() == 'n' {
+				return errNull("from")
+			}
 			if err := json.UnmarshalDecode(dec, &s.From); err != nil {
 				return err
 			}
 		case `"fromRanges"`:
 			missing &^= missingFromRanges
+			if dec.PeekKind() == 'n' {
+				return errNull("fromRanges")
+			}
 			if err := json.UnmarshalDecode(dec, &s.FromRanges); err != nil {
 				return err
 			}
@@ -2175,7 +2353,7 @@ func (s *CallHierarchyIncomingCall) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingFromRanges != 0 {
 			missingProps = append(missingProps, "fromRanges")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2205,7 +2383,7 @@ func (s *CallHierarchyOutgoingCallsParams) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2218,15 +2396,24 @@ func (s *CallHierarchyOutgoingCallsParams) UnmarshalJSONFrom(dec *json.Decoder) 
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
 		case `"item"`:
 			missing &^= missingItem
+			if dec.PeekKind() == 'n' {
+				return errNull("item")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Item); err != nil {
 				return err
 			}
@@ -2246,7 +2433,7 @@ func (s *CallHierarchyOutgoingCallsParams) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingItem != 0 {
 			missingProps = append(missingProps, "item")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2276,7 +2463,7 @@ func (s *CallHierarchyOutgoingCall) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2290,11 +2477,17 @@ func (s *CallHierarchyOutgoingCall) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"to"`:
 			missing &^= missingTo
+			if dec.PeekKind() == 'n' {
+				return errNull("to")
+			}
 			if err := json.UnmarshalDecode(dec, &s.To); err != nil {
 				return err
 			}
 		case `"fromRanges"`:
 			missing &^= missingFromRanges
+			if dec.PeekKind() == 'n' {
+				return errNull("fromRanges")
+			}
 			if err := json.UnmarshalDecode(dec, &s.FromRanges); err != nil {
 				return err
 			}
@@ -2317,7 +2510,7 @@ func (s *CallHierarchyOutgoingCall) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingFromRanges != 0 {
 			missingProps = append(missingProps, "fromRanges")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2350,7 +2543,7 @@ func (s *SemanticTokensParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2363,10 +2556,16 @@ func (s *SemanticTokensParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -2391,7 +2590,7 @@ func (s *SemanticTokensParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTextDocument != 0 {
 			missingProps = append(missingProps, "textDocument")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2419,7 +2618,7 @@ func (s *SemanticTokens) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2432,11 +2631,17 @@ func (s *SemanticTokens) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"resultId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resultId")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ResultId); err != nil {
 				return err
 			}
 		case `"data"`:
 			missing &^= missingData
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
 				return err
 			}
@@ -2456,7 +2661,7 @@ func (s *SemanticTokens) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingData != 0 {
 			missingProps = append(missingProps, "data")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2477,7 +2682,7 @@ func (s *SemanticTokensPartialResult) UnmarshalJSONFrom(dec *json.Decoder) error
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2491,6 +2696,9 @@ func (s *SemanticTokensPartialResult) UnmarshalJSONFrom(dec *json.Decoder) error
 		switch string(name) {
 		case `"data"`:
 			missing &^= missingData
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
 				return err
 			}
@@ -2510,7 +2718,7 @@ func (s *SemanticTokensPartialResult) UnmarshalJSONFrom(dec *json.Decoder) error
 		if missing&missingData != 0 {
 			missingProps = append(missingProps, "data")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2550,7 +2758,7 @@ func (s *SemanticTokensRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2568,23 +2776,38 @@ func (s *SemanticTokensRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"legend"`:
 			missing &^= missingLegend
+			if dec.PeekKind() == 'n' {
+				return errNull("legend")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Legend); err != nil {
 				return err
 			}
 		case `"range"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("range")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Range); err != nil {
 				return err
 			}
 		case `"full"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("full")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Full); err != nil {
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -2607,7 +2830,7 @@ func (s *SemanticTokensRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 		if missing&missingLegend != 0 {
 			missingProps = append(missingProps, "legend")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2645,7 +2868,7 @@ func (s *SemanticTokensDeltaParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2658,10 +2881,16 @@ func (s *SemanticTokensDeltaParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -2694,7 +2923,7 @@ func (s *SemanticTokensDeltaParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPreviousResultId != 0 {
 			missingProps = append(missingProps, "previousResultId")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2718,7 +2947,7 @@ func (s *SemanticTokensDelta) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2731,11 +2960,17 @@ func (s *SemanticTokensDelta) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"resultId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resultId")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ResultId); err != nil {
 				return err
 			}
 		case `"edits"`:
 			missing &^= missingEdits
+			if dec.PeekKind() == 'n' {
+				return errNull("edits")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Edits); err != nil {
 				return err
 			}
@@ -2755,7 +2990,7 @@ func (s *SemanticTokensDelta) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingEdits != 0 {
 			missingProps = append(missingProps, "edits")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2776,7 +3011,7 @@ func (s *SemanticTokensDeltaPartialResult) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2790,6 +3025,9 @@ func (s *SemanticTokensDeltaPartialResult) UnmarshalJSONFrom(dec *json.Decoder) 
 		switch string(name) {
 		case `"edits"`:
 			missing &^= missingEdits
+			if dec.PeekKind() == 'n' {
+				return errNull("edits")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Edits); err != nil {
 				return err
 			}
@@ -2809,7 +3047,7 @@ func (s *SemanticTokensDeltaPartialResult) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingEdits != 0 {
 			missingProps = append(missingProps, "edits")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2846,7 +3084,7 @@ func (s *SemanticTokensRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2859,10 +3097,16 @@ func (s *SemanticTokensRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -2895,7 +3139,7 @@ func (s *SemanticTokensRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingRange != 0 {
 			missingProps = append(missingProps, "range")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -2936,7 +3180,7 @@ func (s *ShowDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -2954,14 +3198,23 @@ func (s *ShowDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"external"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("external")
+			}
 			if err := json.UnmarshalDecode(dec, &s.External); err != nil {
 				return err
 			}
 		case `"takeFocus"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("takeFocus")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TakeFocus); err != nil {
 				return err
 			}
 		case `"selection"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("selection")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Selection); err != nil {
 				return err
 			}
@@ -2981,7 +3234,7 @@ func (s *ShowDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingUri != 0 {
 			missingProps = append(missingProps, "uri")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3005,7 +3258,7 @@ func (s *ShowDocumentResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3038,7 +3291,7 @@ func (s *ShowDocumentResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingSuccess != 0 {
 			missingProps = append(missingProps, "success")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3074,7 +3327,7 @@ func (s *LinkedEditingRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3097,6 +3350,9 @@ func (s *LinkedEditingRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -3119,7 +3375,7 @@ func (s *LinkedEditingRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3149,7 +3405,7 @@ func (s *LinkedEditingRanges) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3163,10 +3419,16 @@ func (s *LinkedEditingRanges) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"ranges"`:
 			missing &^= missingRanges
+			if dec.PeekKind() == 'n' {
+				return errNull("ranges")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Ranges); err != nil {
 				return err
 			}
 		case `"wordPattern"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("wordPattern")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WordPattern); err != nil {
 				return err
 			}
@@ -3186,7 +3448,7 @@ func (s *LinkedEditingRanges) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingRanges != 0 {
 			missingProps = append(missingProps, "ranges")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3214,7 +3476,7 @@ func (s *LinkedEditingRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Deco
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3232,10 +3494,16 @@ func (s *LinkedEditingRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Deco
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -3255,7 +3523,7 @@ func (s *LinkedEditingRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Deco
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3280,7 +3548,7 @@ func (s *CreateFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3294,6 +3562,9 @@ func (s *CreateFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"files"`:
 			missing &^= missingFiles
+			if dec.PeekKind() == 'n' {
+				return errNull("files")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Files); err != nil {
 				return err
 			}
@@ -3313,7 +3584,7 @@ func (s *CreateFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingFiles != 0 {
 			missingProps = append(missingProps, "files")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3356,6 +3627,57 @@ type WorkspaceEdit struct {
 	ChangeAnnotations *map[string]*ChangeAnnotation `json:"changeAnnotations,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*WorkspaceEdit)(nil)
+
+func (s *WorkspaceEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"changes"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("changes")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Changes); err != nil {
+				return err
+			}
+		case `"documentChanges"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentChanges")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentChanges); err != nil {
+				return err
+			}
+		case `"changeAnnotations"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("changeAnnotations")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ChangeAnnotations); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // The options to register for file operations.
 //
 // Since: 3.16.0
@@ -3374,7 +3696,7 @@ func (s *FileOperationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3388,6 +3710,9 @@ func (s *FileOperationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 		switch string(name) {
 		case `"filters"`:
 			missing &^= missingFilters
+			if dec.PeekKind() == 'n' {
+				return errNull("filters")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Filters); err != nil {
 				return err
 			}
@@ -3407,7 +3732,7 @@ func (s *FileOperationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingFilters != 0 {
 			missingProps = append(missingProps, "filters")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3433,7 +3758,7 @@ func (s *RenameFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3447,6 +3772,9 @@ func (s *RenameFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"files"`:
 			missing &^= missingFiles
+			if dec.PeekKind() == 'n' {
+				return errNull("files")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Files); err != nil {
 				return err
 			}
@@ -3466,7 +3794,7 @@ func (s *RenameFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingFiles != 0 {
 			missingProps = append(missingProps, "files")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3491,7 +3819,7 @@ func (s *DeleteFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3505,6 +3833,9 @@ func (s *DeleteFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"files"`:
 			missing &^= missingFiles
+			if dec.PeekKind() == 'n' {
+				return errNull("files")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Files); err != nil {
 				return err
 			}
@@ -3524,7 +3855,7 @@ func (s *DeleteFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingFiles != 0 {
 			missingProps = append(missingProps, "files")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3564,7 +3895,7 @@ func (s *MonikerParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3587,10 +3918,16 @@ func (s *MonikerParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -3613,7 +3950,7 @@ func (s *MonikerParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3649,7 +3986,7 @@ func (s *Moniker) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3677,6 +4014,9 @@ func (s *Moniker) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"kind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("kind")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
 				return err
 			}
@@ -3702,7 +4042,7 @@ func (s *Moniker) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingUnique != 0 {
 			missingProps = append(missingProps, "unique")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3726,7 +4066,7 @@ func (s *MonikerRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3744,6 +4084,9 @@ func (s *MonikerRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
@@ -3763,7 +4106,7 @@ func (s *MonikerRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3802,7 +4145,7 @@ func (s *TypeHierarchyPrepareParams) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3825,6 +4168,9 @@ func (s *TypeHierarchyPrepareParams) UnmarshalJSONFrom(dec *json.Decoder) error 
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -3847,7 +4193,7 @@ func (s *TypeHierarchyPrepareParams) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -3907,7 +4253,7 @@ func (s *TypeHierarchyItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -3930,10 +4276,16 @@ func (s *TypeHierarchyItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"tags"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tags")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tags); err != nil {
 				return err
 			}
 		case `"detail"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("detail")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Detail); err != nil {
 				return err
 			}
@@ -3953,6 +4305,9 @@ func (s *TypeHierarchyItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"data"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
 				return err
 			}
@@ -3984,7 +4339,7 @@ func (s *TypeHierarchyItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingSelectionRange != 0 {
 			missingProps = append(missingProps, "selectionRange")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4015,7 +4370,7 @@ func (s *TypeHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -4033,10 +4388,16 @@ func (s *TypeHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -4056,7 +4417,7 @@ func (s *TypeHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4086,7 +4447,7 @@ func (s *TypeHierarchySupertypesParams) UnmarshalJSONFrom(dec *json.Decoder) err
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -4099,15 +4460,24 @@ func (s *TypeHierarchySupertypesParams) UnmarshalJSONFrom(dec *json.Decoder) err
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
 		case `"item"`:
 			missing &^= missingItem
+			if dec.PeekKind() == 'n' {
+				return errNull("item")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Item); err != nil {
 				return err
 			}
@@ -4127,7 +4497,7 @@ func (s *TypeHierarchySupertypesParams) UnmarshalJSONFrom(dec *json.Decoder) err
 		if missing&missingItem != 0 {
 			missingProps = append(missingProps, "item")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4157,7 +4527,7 @@ func (s *TypeHierarchySubtypesParams) UnmarshalJSONFrom(dec *json.Decoder) error
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -4170,15 +4540,24 @@ func (s *TypeHierarchySubtypesParams) UnmarshalJSONFrom(dec *json.Decoder) error
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
 		case `"item"`:
 			missing &^= missingItem
+			if dec.PeekKind() == 'n' {
+				return errNull("item")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Item); err != nil {
 				return err
 			}
@@ -4198,7 +4577,7 @@ func (s *TypeHierarchySubtypesParams) UnmarshalJSONFrom(dec *json.Decoder) error
 		if missing&missingItem != 0 {
 			missingProps = append(missingProps, "item")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4238,7 +4617,7 @@ func (s *InlineValueParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -4251,6 +4630,9 @@ func (s *InlineValueParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -4266,6 +4648,9 @@ func (s *InlineValueParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 			}
 		case `"context"`:
 			missing &^= missingContext
+			if dec.PeekKind() == 'n' {
+				return errNull("context")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Context); err != nil {
 				return err
 			}
@@ -4291,7 +4676,7 @@ func (s *InlineValueParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingContext != 0 {
 			missingProps = append(missingProps, "context")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4322,7 +4707,7 @@ func (s *InlineValueRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -4335,6 +4720,9 @@ func (s *InlineValueRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 		}
 		switch string(name) {
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
@@ -4344,6 +4732,9 @@ func (s *InlineValueRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -4363,7 +4754,7 @@ func (s *InlineValueRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4398,7 +4789,7 @@ func (s *InlayHintParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -4411,6 +4802,9 @@ func (s *InlayHintParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -4443,7 +4837,7 @@ func (s *InlayHintParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingRange != 0 {
 			missingProps = append(missingProps, "range")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4509,7 +4903,7 @@ func (s *InlayHint) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -4532,26 +4926,44 @@ func (s *InlayHint) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"kind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("kind")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
 				return err
 			}
 		case `"textEdits"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("textEdits")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TextEdits); err != nil {
 				return err
 			}
 		case `"tooltip"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tooltip")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tooltip); err != nil {
 				return err
 			}
 		case `"paddingLeft"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("paddingLeft")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PaddingLeft); err != nil {
 				return err
 			}
 		case `"paddingRight"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("paddingRight")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PaddingRight); err != nil {
 				return err
 			}
 		case `"data"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
 				return err
 			}
@@ -4574,7 +4986,7 @@ func (s *InlayHint) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingLabel != 0 {
 			missingProps = append(missingProps, "label")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4609,7 +5021,7 @@ func (s *InlayHintRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) erro
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -4622,10 +5034,16 @@ func (s *InlayHintRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) erro
 		}
 		switch string(name) {
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"resolveProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveProvider")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ResolveProvider); err != nil {
 				return err
 			}
@@ -4635,6 +5053,9 @@ func (s *InlayHintRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) erro
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -4654,7 +5075,7 @@ func (s *InlayHintRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) erro
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4695,7 +5116,7 @@ func (s *DocumentDiagnosticParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -4708,10 +5129,16 @@ func (s *DocumentDiagnosticParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -4721,10 +5148,16 @@ func (s *DocumentDiagnosticParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"identifier"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("identifier")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Identifier); err != nil {
 				return err
 			}
 		case `"previousResultId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("previousResultId")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PreviousResultId); err != nil {
 				return err
 			}
@@ -4744,7 +5177,7 @@ func (s *DocumentDiagnosticParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTextDocument != 0 {
 			missingProps = append(missingProps, "textDocument")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4767,7 +5200,7 @@ func (s *DocumentDiagnosticReportPartialResult) UnmarshalJSONFrom(dec *json.Deco
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -4781,6 +5214,9 @@ func (s *DocumentDiagnosticReportPartialResult) UnmarshalJSONFrom(dec *json.Deco
 		switch string(name) {
 		case `"relatedDocuments"`:
 			missing &^= missingRelatedDocuments
+			if dec.PeekKind() == 'n' {
+				return errNull("relatedDocuments")
+			}
 			if err := json.UnmarshalDecode(dec, &s.RelatedDocuments); err != nil {
 				return err
 			}
@@ -4800,7 +5236,7 @@ func (s *DocumentDiagnosticReportPartialResult) UnmarshalJSONFrom(dec *json.Deco
 		if missing&missingRelatedDocuments != 0 {
 			missingProps = append(missingProps, "relatedDocuments")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4823,7 +5259,7 @@ func (s *DiagnosticServerCancellationData) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -4856,7 +5292,7 @@ func (s *DiagnosticServerCancellationData) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingRetriggerRequest != 0 {
 			missingProps = append(missingProps, "retriggerRequest")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4902,7 +5338,7 @@ func (s *DiagnosticRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -4920,10 +5356,16 @@ func (s *DiagnosticRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"identifier"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("identifier")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Identifier); err != nil {
 				return err
 			}
@@ -4938,6 +5380,9 @@ func (s *DiagnosticRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -4963,7 +5408,7 @@ func (s *DiagnosticRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 		if missing&missingWorkspaceDiagnostics != 0 {
 			missingProps = append(missingProps, "workspaceDiagnostics")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -4998,7 +5443,7 @@ func (s *WorkspaceDiagnosticParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5011,19 +5456,31 @@ func (s *WorkspaceDiagnosticParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
 		case `"identifier"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("identifier")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Identifier); err != nil {
 				return err
 			}
 		case `"previousResultIds"`:
 			missing &^= missingPreviousResultIds
+			if dec.PeekKind() == 'n' {
+				return errNull("previousResultIds")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PreviousResultIds); err != nil {
 				return err
 			}
@@ -5043,7 +5500,7 @@ func (s *WorkspaceDiagnosticParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPreviousResultIds != 0 {
 			missingProps = append(missingProps, "previousResultIds")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5066,7 +5523,7 @@ func (s *WorkspaceDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5080,6 +5537,9 @@ func (s *WorkspaceDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"items"`:
 			missing &^= missingItems
+			if dec.PeekKind() == 'n' {
+				return errNull("items")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Items); err != nil {
 				return err
 			}
@@ -5099,7 +5559,7 @@ func (s *WorkspaceDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingItems != 0 {
 			missingProps = append(missingProps, "items")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5122,7 +5582,7 @@ func (s *WorkspaceDiagnosticReportPartialResult) UnmarshalJSONFrom(dec *json.Dec
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5136,6 +5596,9 @@ func (s *WorkspaceDiagnosticReportPartialResult) UnmarshalJSONFrom(dec *json.Dec
 		switch string(name) {
 		case `"items"`:
 			missing &^= missingItems
+			if dec.PeekKind() == 'n' {
+				return errNull("items")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Items); err != nil {
 				return err
 			}
@@ -5155,7 +5618,7 @@ func (s *WorkspaceDiagnosticReportPartialResult) UnmarshalJSONFrom(dec *json.Dec
 		if missing&missingItems != 0 {
 			missingProps = append(missingProps, "items")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5201,7 +5664,7 @@ func (s *InlineCompletionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5224,11 +5687,17 @@ func (s *InlineCompletionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"context"`:
 			missing &^= missingContext
+			if dec.PeekKind() == 'n' {
+				return errNull("context")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Context); err != nil {
 				return err
 			}
@@ -5254,7 +5723,7 @@ func (s *InlineCompletionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingContext != 0 {
 			missingProps = append(missingProps, "context")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5280,7 +5749,7 @@ func (s *InlineCompletionList) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5294,6 +5763,9 @@ func (s *InlineCompletionList) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"items"`:
 			missing &^= missingItems
+			if dec.PeekKind() == 'n' {
+				return errNull("items")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Items); err != nil {
 				return err
 			}
@@ -5313,7 +5785,7 @@ func (s *InlineCompletionList) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingItems != 0 {
 			missingProps = append(missingProps, "items")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5348,7 +5820,7 @@ func (s *InlineCompletionItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5366,14 +5838,23 @@ func (s *InlineCompletionItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"filterText"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("filterText")
+			}
 			if err := json.UnmarshalDecode(dec, &s.FilterText); err != nil {
 				return err
 			}
 		case `"range"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("range")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Range); err != nil {
 				return err
 			}
 		case `"command"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("command")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Command); err != nil {
 				return err
 			}
@@ -5393,7 +5874,7 @@ func (s *InlineCompletionItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingInsertText != 0 {
 			missingProps = append(missingProps, "insertText")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5426,7 +5907,7 @@ func (s *InlineCompletionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decode
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5439,6 +5920,9 @@ func (s *InlineCompletionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decode
 		}
 		switch string(name) {
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
@@ -5448,6 +5932,9 @@ func (s *InlineCompletionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decode
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -5467,7 +5954,7 @@ func (s *InlineCompletionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decode
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5493,7 +5980,7 @@ func (s *TextDocumentContentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5526,7 +6013,7 @@ func (s *TextDocumentContentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingUri != 0 {
 			missingProps = append(missingProps, "uri")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5555,7 +6042,7 @@ func (s *TextDocumentContentResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5588,7 +6075,7 @@ func (s *TextDocumentContentResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingText != 0 {
 			missingProps = append(missingProps, "text")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5618,7 +6105,7 @@ func (s *TextDocumentContentRegistrationOptions) UnmarshalJSONFrom(dec *json.Dec
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5632,10 +6119,16 @@ func (s *TextDocumentContentRegistrationOptions) UnmarshalJSONFrom(dec *json.Dec
 		switch string(name) {
 		case `"schemes"`:
 			missing &^= missingSchemes
+			if dec.PeekKind() == 'n' {
+				return errNull("schemes")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Schemes); err != nil {
 				return err
 			}
 		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
 				return err
 			}
@@ -5655,7 +6148,7 @@ func (s *TextDocumentContentRegistrationOptions) UnmarshalJSONFrom(dec *json.Dec
 		if missing&missingSchemes != 0 {
 			missingProps = append(missingProps, "schemes")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5681,7 +6174,7 @@ func (s *TextDocumentContentRefreshParams) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5714,7 +6207,7 @@ func (s *TextDocumentContentRefreshParams) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingUri != 0 {
 			missingProps = append(missingProps, "uri")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5734,7 +6227,7 @@ func (s *RegistrationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5748,6 +6241,9 @@ func (s *RegistrationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"registrations"`:
 			missing &^= missingRegistrations
+			if dec.PeekKind() == 'n' {
+				return errNull("registrations")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Registrations); err != nil {
 				return err
 			}
@@ -5767,7 +6263,7 @@ func (s *RegistrationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingRegistrations != 0 {
 			missingProps = append(missingProps, "registrations")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5787,7 +6283,7 @@ func (s *UnregistrationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5801,6 +6297,9 @@ func (s *UnregistrationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"unregisterations"`:
 			missing &^= missingUnregisterations
+			if dec.PeekKind() == 'n' {
+				return errNull("unregisterations")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Unregisterations); err != nil {
 				return err
 			}
@@ -5820,7 +6319,7 @@ func (s *UnregistrationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingUnregisterations != 0 {
 			missingProps = append(missingProps, "unregisterations")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -5896,7 +6395,7 @@ func (s *InitializeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -5909,6 +6408,9 @@ func (s *InitializeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -5918,10 +6420,16 @@ func (s *InitializeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"clientInfo"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("clientInfo")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ClientInfo); err != nil {
 				return err
 			}
 		case `"locale"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("locale")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Locale); err != nil {
 				return err
 			}
@@ -5936,14 +6444,23 @@ func (s *InitializeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 			}
 		case `"capabilities"`:
 			missing &^= missingCapabilities
+			if dec.PeekKind() == 'n' {
+				return errNull("capabilities")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Capabilities); err != nil {
 				return err
 			}
 		case `"initializationOptions"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("initializationOptions")
+			}
 			if err := json.UnmarshalDecode(dec, &s.InitializationOptions); err != nil {
 				return err
 			}
 		case `"trace"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("trace")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Trace); err != nil {
 				return err
 			}
@@ -5973,7 +6490,7 @@ func (s *InitializeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingCapabilities != 0 {
 			missingProps = append(missingProps, "capabilities")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6000,7 +6517,7 @@ func (s *InitializeResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6014,10 +6531,16 @@ func (s *InitializeResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"capabilities"`:
 			missing &^= missingCapabilities
+			if dec.PeekKind() == 'n' {
+				return errNull("capabilities")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Capabilities); err != nil {
 				return err
 			}
 		case `"serverInfo"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("serverInfo")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ServerInfo); err != nil {
 				return err
 			}
@@ -6037,7 +6560,7 @@ func (s *InitializeResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingCapabilities != 0 {
 			missingProps = append(missingProps, "capabilities")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6063,7 +6586,7 @@ func (s *InitializeError) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6096,7 +6619,7 @@ func (s *InitializeError) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingRetry != 0 {
 			missingProps = append(missingProps, "retry")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6120,7 +6643,7 @@ func (s *DidChangeConfigurationParams) UnmarshalJSONFrom(dec *json.Decoder) erro
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6153,7 +6676,7 @@ func (s *DidChangeConfigurationParams) UnmarshalJSONFrom(dec *json.Decoder) erro
 		if missing&missingSettings != 0 {
 			missingProps = append(missingProps, "settings")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6161,6 +6684,43 @@ func (s *DidChangeConfigurationParams) UnmarshalJSONFrom(dec *json.Decoder) erro
 
 type DidChangeConfigurationRegistrationOptions struct {
 	Section *StringOrStrings `json:"section,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DidChangeConfigurationRegistrationOptions)(nil)
+
+func (s *DidChangeConfigurationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"section"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("section")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Section); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // The parameters of a notification message.
@@ -6183,7 +6743,7 @@ func (s *ShowMessageParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6224,7 +6784,7 @@ func (s *ShowMessageParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingMessage != 0 {
 			missingProps = append(missingProps, "message")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6252,7 +6812,7 @@ func (s *ShowMessageRequestParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6275,6 +6835,9 @@ func (s *ShowMessageRequestParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"actions"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("actions")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Actions); err != nil {
 				return err
 			}
@@ -6297,7 +6860,7 @@ func (s *ShowMessageRequestParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingMessage != 0 {
 			missingProps = append(missingProps, "message")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6318,7 +6881,7 @@ func (s *MessageActionItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6351,7 +6914,7 @@ func (s *MessageActionItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTitle != 0 {
 			missingProps = append(missingProps, "title")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6377,7 +6940,7 @@ func (s *LogMessageParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6418,7 +6981,7 @@ func (s *LogMessageParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingMessage != 0 {
 			missingProps = append(missingProps, "message")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6440,7 +7003,7 @@ func (s *DidOpenTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6454,6 +7017,9 @@ func (s *DidOpenTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"textDocument"`:
 			missing &^= missingTextDocument
+			if dec.PeekKind() == 'n' {
+				return errNull("textDocument")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TextDocument); err != nil {
 				return err
 			}
@@ -6473,7 +7039,7 @@ func (s *DidOpenTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTextDocument != 0 {
 			missingProps = append(missingProps, "textDocument")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6511,7 +7077,7 @@ func (s *DidChangeTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6530,6 +7096,9 @@ func (s *DidChangeTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error
 			}
 		case `"contentChanges"`:
 			missing &^= missingContentChanges
+			if dec.PeekKind() == 'n' {
+				return errNull("contentChanges")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ContentChanges); err != nil {
 				return err
 			}
@@ -6552,7 +7121,7 @@ func (s *DidChangeTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error
 		if missing&missingContentChanges != 0 {
 			missingProps = append(missingProps, "contentChanges")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6579,7 +7148,7 @@ func (s *TextDocumentChangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Deco
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6620,7 +7189,7 @@ func (s *TextDocumentChangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Deco
 		if missing&missingSyncKind != 0 {
 			missingProps = append(missingProps, "syncKind")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6646,7 +7215,7 @@ func (s *DidCloseTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6679,7 +7248,7 @@ func (s *DidCloseTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingTextDocument != 0 {
 			missingProps = append(missingProps, "textDocument")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6709,7 +7278,7 @@ func (s *DidSaveTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6727,6 +7296,9 @@ func (s *DidSaveTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"text"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("text")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Text); err != nil {
 				return err
 			}
@@ -6746,7 +7318,7 @@ func (s *DidSaveTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTextDocument != 0 {
 			missingProps = append(missingProps, "textDocument")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6772,7 +7344,7 @@ func (s *TextDocumentSaveRegistrationOptions) UnmarshalJSONFrom(dec *json.Decode
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6790,6 +7362,9 @@ func (s *TextDocumentSaveRegistrationOptions) UnmarshalJSONFrom(dec *json.Decode
 				return err
 			}
 		case `"includeText"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("includeText")
+			}
 			if err := json.UnmarshalDecode(dec, &s.IncludeText); err != nil {
 				return err
 			}
@@ -6809,7 +7384,7 @@ func (s *TextDocumentSaveRegistrationOptions) UnmarshalJSONFrom(dec *json.Decode
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6839,7 +7414,7 @@ func (s *WillSaveTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6880,7 +7455,7 @@ func (s *WillSaveTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingReason != 0 {
 			missingProps = append(missingProps, "reason")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6908,7 +7483,7 @@ func (s *TextEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6949,7 +7524,7 @@ func (s *TextEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingNewText != 0 {
 			missingProps = append(missingProps, "newText")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -6971,7 +7546,7 @@ func (s *DidChangeWatchedFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -6985,6 +7560,9 @@ func (s *DidChangeWatchedFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error
 		switch string(name) {
 		case `"changes"`:
 			missing &^= missingChanges
+			if dec.PeekKind() == 'n' {
+				return errNull("changes")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Changes); err != nil {
 				return err
 			}
@@ -7004,7 +7582,7 @@ func (s *DidChangeWatchedFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error
 		if missing&missingChanges != 0 {
 			missingProps = append(missingProps, "changes")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -7026,7 +7604,7 @@ func (s *DidChangeWatchedFilesRegistrationOptions) UnmarshalJSONFrom(dec *json.D
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -7040,6 +7618,9 @@ func (s *DidChangeWatchedFilesRegistrationOptions) UnmarshalJSONFrom(dec *json.D
 		switch string(name) {
 		case `"watchers"`:
 			missing &^= missingWatchers
+			if dec.PeekKind() == 'n' {
+				return errNull("watchers")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Watchers); err != nil {
 				return err
 			}
@@ -7059,7 +7640,7 @@ func (s *DidChangeWatchedFilesRegistrationOptions) UnmarshalJSONFrom(dec *json.D
 		if missing&missingWatchers != 0 {
 			missingProps = append(missingProps, "watchers")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -7090,7 +7671,7 @@ func (s *PublishDiagnosticsParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -7108,11 +7689,17 @@ func (s *PublishDiagnosticsParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"version"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("version")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Version); err != nil {
 				return err
 			}
 		case `"diagnostics"`:
 			missing &^= missingDiagnostics
+			if dec.PeekKind() == 'n' {
+				return errNull("diagnostics")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Diagnostics); err != nil {
 				return err
 			}
@@ -7135,7 +7722,7 @@ func (s *PublishDiagnosticsParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingDiagnostics != 0 {
 			missingProps = append(missingProps, "diagnostics")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -7180,7 +7767,7 @@ func (s *CompletionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -7203,14 +7790,23 @@ func (s *CompletionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
 		case `"context"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("context")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Context); err != nil {
 				return err
 			}
@@ -7233,7 +7829,7 @@ func (s *CompletionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -7390,7 +7986,7 @@ func (s *CompletionItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -7408,74 +8004,128 @@ func (s *CompletionItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"labelDetails"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("labelDetails")
+			}
 			if err := json.UnmarshalDecode(dec, &s.LabelDetails); err != nil {
 				return err
 			}
 		case `"kind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("kind")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
 				return err
 			}
 		case `"tags"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tags")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tags); err != nil {
 				return err
 			}
 		case `"detail"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("detail")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Detail); err != nil {
 				return err
 			}
 		case `"documentation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentation")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Documentation); err != nil {
 				return err
 			}
 		case `"deprecated"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("deprecated")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Deprecated); err != nil {
 				return err
 			}
 		case `"preselect"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("preselect")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Preselect); err != nil {
 				return err
 			}
 		case `"sortText"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("sortText")
+			}
 			if err := json.UnmarshalDecode(dec, &s.SortText); err != nil {
 				return err
 			}
 		case `"filterText"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("filterText")
+			}
 			if err := json.UnmarshalDecode(dec, &s.FilterText); err != nil {
 				return err
 			}
 		case `"insertText"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("insertText")
+			}
 			if err := json.UnmarshalDecode(dec, &s.InsertText); err != nil {
 				return err
 			}
 		case `"insertTextFormat"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("insertTextFormat")
+			}
 			if err := json.UnmarshalDecode(dec, &s.InsertTextFormat); err != nil {
 				return err
 			}
 		case `"insertTextMode"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("insertTextMode")
+			}
 			if err := json.UnmarshalDecode(dec, &s.InsertTextMode); err != nil {
 				return err
 			}
 		case `"textEdit"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("textEdit")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TextEdit); err != nil {
 				return err
 			}
 		case `"textEditText"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("textEditText")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TextEditText); err != nil {
 				return err
 			}
 		case `"additionalTextEdits"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("additionalTextEdits")
+			}
 			if err := json.UnmarshalDecode(dec, &s.AdditionalTextEdits); err != nil {
 				return err
 			}
 		case `"commitCharacters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("commitCharacters")
+			}
 			if err := json.UnmarshalDecode(dec, &s.CommitCharacters); err != nil {
 				return err
 			}
 		case `"command"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("command")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Command); err != nil {
 				return err
 			}
 		case `"data"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
 				return err
 			}
@@ -7495,7 +8145,7 @@ func (s *CompletionItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingLabel != 0 {
 			missingProps = append(missingProps, "label")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -7561,7 +8211,7 @@ func (s *CompletionList) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -7579,15 +8229,24 @@ func (s *CompletionList) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"itemDefaults"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("itemDefaults")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ItemDefaults); err != nil {
 				return err
 			}
 		case `"applyKind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("applyKind")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ApplyKind); err != nil {
 				return err
 			}
 		case `"items"`:
 			missing &^= missingItems
+			if dec.PeekKind() == 'n' {
+				return errNull("items")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Items); err != nil {
 				return err
 			}
@@ -7610,7 +8269,7 @@ func (s *CompletionList) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingItems != 0 {
 			missingProps = append(missingProps, "items")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -7665,7 +8324,7 @@ func (s *CompletionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -7683,22 +8342,37 @@ func (s *CompletionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"triggerCharacters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("triggerCharacters")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TriggerCharacters); err != nil {
 				return err
 			}
 		case `"allCommitCharacters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("allCommitCharacters")
+			}
 			if err := json.UnmarshalDecode(dec, &s.AllCommitCharacters); err != nil {
 				return err
 			}
 		case `"resolveProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveProvider")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ResolveProvider); err != nil {
 				return err
 			}
 		case `"completionItem"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("completionItem")
+			}
 			if err := json.UnmarshalDecode(dec, &s.CompletionItem); err != nil {
 				return err
 			}
@@ -7718,7 +8392,7 @@ func (s *CompletionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -7755,7 +8429,7 @@ func (s *HoverParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -7778,6 +8452,9 @@ func (s *HoverParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -7800,7 +8477,7 @@ func (s *HoverParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -7826,7 +8503,7 @@ func (s *Hover) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -7844,6 +8521,9 @@ func (s *Hover) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"range"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("range")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Range); err != nil {
 				return err
 			}
@@ -7863,7 +8543,7 @@ func (s *Hover) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingContents != 0 {
 			missingProps = append(missingProps, "contents")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -7888,7 +8568,7 @@ func (s *HoverRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -7906,6 +8586,9 @@ func (s *HoverRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
@@ -7925,7 +8608,7 @@ func (s *HoverRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -7968,7 +8651,7 @@ func (s *SignatureHelpParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -7991,10 +8674,16 @@ func (s *SignatureHelpParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"context"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("context")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Context); err != nil {
 				return err
 			}
@@ -8017,7 +8706,7 @@ func (s *SignatureHelpParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -8070,7 +8759,7 @@ func (s *SignatureHelp) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -8084,10 +8773,16 @@ func (s *SignatureHelp) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"signatures"`:
 			missing &^= missingSignatures
+			if dec.PeekKind() == 'n' {
+				return errNull("signatures")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Signatures); err != nil {
 				return err
 			}
 		case `"activeSignature"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("activeSignature")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ActiveSignature); err != nil {
 				return err
 			}
@@ -8111,7 +8806,7 @@ func (s *SignatureHelp) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingSignatures != 0 {
 			missingProps = append(missingProps, "signatures")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -8147,7 +8842,7 @@ func (s *SignatureHelpRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -8165,14 +8860,23 @@ func (s *SignatureHelpRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"triggerCharacters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("triggerCharacters")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TriggerCharacters); err != nil {
 				return err
 			}
 		case `"retriggerCharacters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("retriggerCharacters")
+			}
 			if err := json.UnmarshalDecode(dec, &s.RetriggerCharacters); err != nil {
 				return err
 			}
@@ -8192,7 +8896,7 @@ func (s *SignatureHelpRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -8233,7 +8937,7 @@ func (s *DefinitionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -8256,10 +8960,16 @@ func (s *DefinitionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -8282,7 +8992,7 @@ func (s *DefinitionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -8307,7 +9017,7 @@ func (s *DefinitionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -8325,6 +9035,9 @@ func (s *DefinitionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
@@ -8344,7 +9057,7 @@ func (s *DefinitionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -8388,7 +9101,7 @@ func (s *ReferenceParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -8411,15 +9124,24 @@ func (s *ReferenceParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
 		case `"context"`:
 			missing &^= missingContext
+			if dec.PeekKind() == 'n' {
+				return errNull("context")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Context); err != nil {
 				return err
 			}
@@ -8445,7 +9167,7 @@ func (s *ReferenceParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingContext != 0 {
 			missingProps = append(missingProps, "context")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -8470,7 +9192,7 @@ func (s *ReferenceRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) erro
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -8488,6 +9210,9 @@ func (s *ReferenceRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) erro
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
@@ -8507,7 +9232,7 @@ func (s *ReferenceRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) erro
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -8548,7 +9273,7 @@ func (s *DocumentHighlightParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -8571,10 +9296,16 @@ func (s *DocumentHighlightParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -8597,7 +9328,7 @@ func (s *DocumentHighlightParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -8624,7 +9355,7 @@ func (s *DocumentHighlight) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -8642,6 +9373,9 @@ func (s *DocumentHighlight) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"kind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("kind")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
 				return err
 			}
@@ -8661,7 +9395,7 @@ func (s *DocumentHighlight) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingRange != 0 {
 			missingProps = append(missingProps, "range")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -8686,7 +9420,7 @@ func (s *DocumentHighlightRegistrationOptions) UnmarshalJSONFrom(dec *json.Decod
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -8704,6 +9438,9 @@ func (s *DocumentHighlightRegistrationOptions) UnmarshalJSONFrom(dec *json.Decod
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
@@ -8723,7 +9460,7 @@ func (s *DocumentHighlightRegistrationOptions) UnmarshalJSONFrom(dec *json.Decod
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -8756,7 +9493,7 @@ func (s *DocumentSymbolParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -8769,10 +9506,16 @@ func (s *DocumentSymbolParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -8797,7 +9540,7 @@ func (s *DocumentSymbolParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTextDocument != 0 {
 			missingProps = append(missingProps, "textDocument")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -8852,7 +9595,7 @@ func (s *SymbolInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -8875,14 +9618,23 @@ func (s *SymbolInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"tags"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tags")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tags); err != nil {
 				return err
 			}
 		case `"containerName"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("containerName")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ContainerName); err != nil {
 				return err
 			}
 		case `"deprecated"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("deprecated")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Deprecated); err != nil {
 				return err
 			}
@@ -8913,7 +9665,7 @@ func (s *SymbolInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingLocation != 0 {
 			missingProps = append(missingProps, "location")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -8970,7 +9722,7 @@ func (s *DocumentSymbol) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -8988,6 +9740,9 @@ func (s *DocumentSymbol) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"detail"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("detail")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Detail); err != nil {
 				return err
 			}
@@ -8997,10 +9752,16 @@ func (s *DocumentSymbol) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"tags"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tags")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tags); err != nil {
 				return err
 			}
 		case `"deprecated"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("deprecated")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Deprecated); err != nil {
 				return err
 			}
@@ -9015,6 +9776,9 @@ func (s *DocumentSymbol) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"children"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("children")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Children); err != nil {
 				return err
 			}
@@ -9043,7 +9807,7 @@ func (s *DocumentSymbol) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingSelectionRange != 0 {
 			missingProps = append(missingProps, "selectionRange")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -9074,7 +9838,7 @@ func (s *DocumentSymbolRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -9092,10 +9856,16 @@ func (s *DocumentSymbolRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"label"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("label")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Label); err != nil {
 				return err
 			}
@@ -9115,7 +9885,7 @@ func (s *DocumentSymbolRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -9156,7 +9926,7 @@ func (s *CodeActionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -9169,10 +9939,16 @@ func (s *CodeActionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -9188,6 +9964,9 @@ func (s *CodeActionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 			}
 		case `"context"`:
 			missing &^= missingContext
+			if dec.PeekKind() == 'n' {
+				return errNull("context")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Context); err != nil {
 				return err
 			}
@@ -9213,7 +9992,7 @@ func (s *CodeActionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingContext != 0 {
 			missingProps = append(missingProps, "context")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -9253,7 +10032,7 @@ func (s *Command) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -9271,6 +10050,9 @@ func (s *Command) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"tooltip"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tooltip")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tooltip); err != nil {
 				return err
 			}
@@ -9280,6 +10062,9 @@ func (s *Command) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"arguments"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("arguments")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Arguments); err != nil {
 				return err
 			}
@@ -9302,7 +10087,7 @@ func (s *Command) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingCommand != 0 {
 			missingProps = append(missingProps, "command")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -9380,7 +10165,7 @@ func (s *CodeAction) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -9398,34 +10183,58 @@ func (s *CodeAction) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"kind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("kind")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
 				return err
 			}
 		case `"diagnostics"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("diagnostics")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Diagnostics); err != nil {
 				return err
 			}
 		case `"isPreferred"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("isPreferred")
+			}
 			if err := json.UnmarshalDecode(dec, &s.IsPreferred); err != nil {
 				return err
 			}
 		case `"disabled"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("disabled")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Disabled); err != nil {
 				return err
 			}
 		case `"edit"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("edit")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Edit); err != nil {
 				return err
 			}
 		case `"command"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("command")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Command); err != nil {
 				return err
 			}
 		case `"data"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
 				return err
 			}
 		case `"tags"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tags")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tags); err != nil {
 				return err
 			}
@@ -9445,7 +10254,7 @@ func (s *CodeAction) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTitle != 0 {
 			missingProps = append(missingProps, "title")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -9500,7 +10309,7 @@ func (s *CodeActionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -9518,18 +10327,30 @@ func (s *CodeActionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"codeActionKinds"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeActionKinds")
+			}
 			if err := json.UnmarshalDecode(dec, &s.CodeActionKinds); err != nil {
 				return err
 			}
 		case `"documentation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentation")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Documentation); err != nil {
 				return err
 			}
 		case `"resolveProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveProvider")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ResolveProvider); err != nil {
 				return err
 			}
@@ -9549,7 +10370,7 @@ func (s *CodeActionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -9585,7 +10406,7 @@ func (s *WorkspaceSymbolParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -9598,10 +10419,16 @@ func (s *WorkspaceSymbolParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -9626,7 +10453,7 @@ func (s *WorkspaceSymbolParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingQuery != 0 {
 			missingProps = append(missingProps, "query")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -9679,7 +10506,7 @@ func (s *WorkspaceSymbol) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -9702,10 +10529,16 @@ func (s *WorkspaceSymbol) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"tags"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tags")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tags); err != nil {
 				return err
 			}
 		case `"containerName"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("containerName")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ContainerName); err != nil {
 				return err
 			}
@@ -9715,6 +10548,9 @@ func (s *WorkspaceSymbol) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"data"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
 				return err
 			}
@@ -9740,7 +10576,7 @@ func (s *WorkspaceSymbol) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingLocation != 0 {
 			missingProps = append(missingProps, "location")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -9755,6 +10591,50 @@ type WorkspaceSymbolRegistrationOptions struct {
 	//
 	// Since: 3.17.0
 	ResolveProvider *bool `json:"resolveProvider,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*WorkspaceSymbolRegistrationOptions)(nil)
+
+func (s *WorkspaceSymbolRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		case `"resolveProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResolveProvider); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // The parameters of a CodeLensRequest.
@@ -9784,7 +10664,7 @@ func (s *CodeLensParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -9797,10 +10677,16 @@ func (s *CodeLensParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -9825,7 +10711,7 @@ func (s *CodeLensParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTextDocument != 0 {
 			missingProps = append(missingProps, "textDocument")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -9858,7 +10744,7 @@ func (s *CodeLens) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -9876,10 +10762,16 @@ func (s *CodeLens) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"command"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("command")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Command); err != nil {
 				return err
 			}
 		case `"data"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
 				return err
 			}
@@ -9899,7 +10791,7 @@ func (s *CodeLens) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingRange != 0 {
 			missingProps = append(missingProps, "range")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -9927,7 +10819,7 @@ func (s *CodeLensRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -9945,10 +10837,16 @@ func (s *CodeLensRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"resolveProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveProvider")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ResolveProvider); err != nil {
 				return err
 			}
@@ -9968,7 +10866,7 @@ func (s *CodeLensRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10001,7 +10899,7 @@ func (s *DocumentLinkParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10014,10 +10912,16 @@ func (s *DocumentLinkParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
 		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
 				return err
 			}
@@ -10042,7 +10946,7 @@ func (s *DocumentLinkParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTextDocument != 0 {
 			missingProps = append(missingProps, "textDocument")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10081,7 +10985,7 @@ func (s *DocumentLink) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10099,14 +11003,23 @@ func (s *DocumentLink) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"target"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("target")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Target); err != nil {
 				return err
 			}
 		case `"tooltip"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tooltip")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tooltip); err != nil {
 				return err
 			}
 		case `"data"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
 				return err
 			}
@@ -10126,7 +11039,7 @@ func (s *DocumentLink) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingRange != 0 {
 			missingProps = append(missingProps, "range")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10154,7 +11067,7 @@ func (s *DocumentLinkRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) e
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10172,10 +11085,16 @@ func (s *DocumentLinkRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) e
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"resolveProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveProvider")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ResolveProvider); err != nil {
 				return err
 			}
@@ -10195,7 +11114,7 @@ func (s *DocumentLinkRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) e
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10228,7 +11147,7 @@ func (s *DocumentFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10241,6 +11160,9 @@ func (s *DocumentFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -10251,6 +11173,9 @@ func (s *DocumentFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 			}
 		case `"options"`:
 			missing &^= missingOptions
+			if dec.PeekKind() == 'n' {
+				return errNull("options")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Options); err != nil {
 				return err
 			}
@@ -10273,7 +11198,7 @@ func (s *DocumentFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingOptions != 0 {
 			missingProps = append(missingProps, "options")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10298,7 +11223,7 @@ func (s *DocumentFormattingRegistrationOptions) UnmarshalJSONFrom(dec *json.Deco
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10316,6 +11241,9 @@ func (s *DocumentFormattingRegistrationOptions) UnmarshalJSONFrom(dec *json.Deco
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
@@ -10335,7 +11263,7 @@ func (s *DocumentFormattingRegistrationOptions) UnmarshalJSONFrom(dec *json.Deco
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10372,7 +11300,7 @@ func (s *DocumentRangeFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) err
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10385,6 +11313,9 @@ func (s *DocumentRangeFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) err
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -10400,6 +11331,9 @@ func (s *DocumentRangeFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) err
 			}
 		case `"options"`:
 			missing &^= missingOptions
+			if dec.PeekKind() == 'n' {
+				return errNull("options")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Options); err != nil {
 				return err
 			}
@@ -10425,7 +11359,7 @@ func (s *DocumentRangeFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) err
 		if missing&missingOptions != 0 {
 			missingProps = append(missingProps, "options")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10457,7 +11391,7 @@ func (s *DocumentRangeFormattingRegistrationOptions) UnmarshalJSONFrom(dec *json
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10475,10 +11409,16 @@ func (s *DocumentRangeFormattingRegistrationOptions) UnmarshalJSONFrom(dec *json
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"rangesSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("rangesSupport")
+			}
 			if err := json.UnmarshalDecode(dec, &s.RangesSupport); err != nil {
 				return err
 			}
@@ -10498,7 +11438,7 @@ func (s *DocumentRangeFormattingRegistrationOptions) UnmarshalJSONFrom(dec *json
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10539,7 +11479,7 @@ func (s *DocumentRangesFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) er
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10552,6 +11492,9 @@ func (s *DocumentRangesFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) er
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -10562,11 +11505,17 @@ func (s *DocumentRangesFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) er
 			}
 		case `"ranges"`:
 			missing &^= missingRanges
+			if dec.PeekKind() == 'n' {
+				return errNull("ranges")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Ranges); err != nil {
 				return err
 			}
 		case `"options"`:
 			missing &^= missingOptions
+			if dec.PeekKind() == 'n' {
+				return errNull("options")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Options); err != nil {
 				return err
 			}
@@ -10592,7 +11541,7 @@ func (s *DocumentRangesFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) er
 		if missing&missingOptions != 0 {
 			missingProps = append(missingProps, "options")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10639,7 +11588,7 @@ func (s *DocumentOnTypeFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) er
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10668,6 +11617,9 @@ func (s *DocumentOnTypeFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) er
 			}
 		case `"options"`:
 			missing &^= missingOptions
+			if dec.PeekKind() == 'n' {
+				return errNull("options")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Options); err != nil {
 				return err
 			}
@@ -10696,7 +11648,7 @@ func (s *DocumentOnTypeFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) er
 		if missing&missingOptions != 0 {
 			missingProps = append(missingProps, "options")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10726,7 +11678,7 @@ func (s *DocumentOnTypeFormattingRegistrationOptions) UnmarshalJSONFrom(dec *jso
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10749,6 +11701,9 @@ func (s *DocumentOnTypeFormattingRegistrationOptions) UnmarshalJSONFrom(dec *jso
 				return err
 			}
 		case `"moreTriggerCharacter"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("moreTriggerCharacter")
+			}
 			if err := json.UnmarshalDecode(dec, &s.MoreTriggerCharacter); err != nil {
 				return err
 			}
@@ -10771,7 +11726,7 @@ func (s *DocumentOnTypeFormattingRegistrationOptions) UnmarshalJSONFrom(dec *jso
 		if missing&missingFirstTriggerCharacter != 0 {
 			missingProps = append(missingProps, "firstTriggerCharacter")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10814,7 +11769,7 @@ func (s *RenameParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10837,6 +11792,9 @@ func (s *RenameParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -10867,7 +11825,7 @@ func (s *RenameParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingNewName != 0 {
 			missingProps = append(missingProps, "newName")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10897,7 +11855,7 @@ func (s *RenameRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10915,10 +11873,16 @@ func (s *RenameRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"prepareProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("prepareProvider")
+			}
 			if err := json.UnmarshalDecode(dec, &s.PrepareProvider); err != nil {
 				return err
 			}
@@ -10938,7 +11902,7 @@ func (s *RenameRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -10974,7 +11938,7 @@ func (s *PrepareRenameParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -10997,6 +11961,9 @@ func (s *PrepareRenameParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -11019,7 +11986,7 @@ func (s *PrepareRenameParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11047,7 +12014,7 @@ func (s *ExecuteCommandParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11060,6 +12027,9 @@ func (s *ExecuteCommandParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
 				return err
 			}
@@ -11069,6 +12039,9 @@ func (s *ExecuteCommandParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"arguments"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("arguments")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Arguments); err != nil {
 				return err
 			}
@@ -11088,7 +12061,7 @@ func (s *ExecuteCommandParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingCommand != 0 {
 			missingProps = append(missingProps, "command")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11112,7 +12085,7 @@ func (s *ExecuteCommandRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11125,11 +12098,17 @@ func (s *ExecuteCommandRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 		}
 		switch string(name) {
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"commands"`:
 			missing &^= missingCommands
+			if dec.PeekKind() == 'n' {
+				return errNull("commands")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Commands); err != nil {
 				return err
 			}
@@ -11149,7 +12128,7 @@ func (s *ExecuteCommandRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder)
 		if missing&missingCommands != 0 {
 			missingProps = append(missingProps, "commands")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11183,7 +12162,7 @@ func (s *ApplyWorkspaceEditParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11196,15 +12175,24 @@ func (s *ApplyWorkspaceEditParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"label"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("label")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Label); err != nil {
 				return err
 			}
 		case `"edit"`:
 			missing &^= missingEdit
+			if dec.PeekKind() == 'n' {
+				return errNull("edit")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Edit); err != nil {
 				return err
 			}
 		case `"metadata"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("metadata")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Metadata); err != nil {
 				return err
 			}
@@ -11224,7 +12212,7 @@ func (s *ApplyWorkspaceEditParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingEdit != 0 {
 			missingProps = append(missingProps, "edit")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11258,7 +12246,7 @@ func (s *ApplyWorkspaceEditResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11276,10 +12264,16 @@ func (s *ApplyWorkspaceEditResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"failureReason"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("failureReason")
+			}
 			if err := json.UnmarshalDecode(dec, &s.FailureReason); err != nil {
 				return err
 			}
 		case `"failedChange"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("failedChange")
+			}
 			if err := json.UnmarshalDecode(dec, &s.FailedChange); err != nil {
 				return err
 			}
@@ -11299,7 +12293,7 @@ func (s *ApplyWorkspaceEditResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingApplied != 0 {
 			missingProps = append(missingProps, "applied")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11346,7 +12340,7 @@ func (s *WorkDoneProgressBegin) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11369,14 +12363,23 @@ func (s *WorkDoneProgressBegin) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"cancellable"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("cancellable")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Cancellable); err != nil {
 				return err
 			}
 		case `"message"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("message")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Message); err != nil {
 				return err
 			}
 		case `"percentage"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("percentage")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Percentage); err != nil {
 				return err
 			}
@@ -11399,7 +12402,7 @@ func (s *WorkDoneProgressBegin) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTitle != 0 {
 			missingProps = append(missingProps, "title")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11440,7 +12443,7 @@ func (s *WorkDoneProgressReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11458,14 +12461,23 @@ func (s *WorkDoneProgressReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"cancellable"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("cancellable")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Cancellable); err != nil {
 				return err
 			}
 		case `"message"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("message")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Message); err != nil {
 				return err
 			}
 		case `"percentage"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("percentage")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Percentage); err != nil {
 				return err
 			}
@@ -11485,7 +12497,7 @@ func (s *WorkDoneProgressReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingKind != 0 {
 			missingProps = append(missingProps, "kind")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11509,7 +12521,7 @@ func (s *WorkDoneProgressEnd) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11527,6 +12539,9 @@ func (s *WorkDoneProgressEnd) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"message"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("message")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Message); err != nil {
 				return err
 			}
@@ -11546,7 +12561,7 @@ func (s *WorkDoneProgressEnd) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingKind != 0 {
 			missingProps = append(missingProps, "kind")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11566,7 +12581,7 @@ func (s *SetTraceParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11599,7 +12614,7 @@ func (s *SetTraceParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingValue != 0 {
 			missingProps = append(missingProps, "value")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11621,7 +12636,7 @@ func (s *LogTraceParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11639,6 +12654,9 @@ func (s *LogTraceParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"verbose"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("verbose")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Verbose); err != nil {
 				return err
 			}
@@ -11658,7 +12676,7 @@ func (s *LogTraceParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingMessage != 0 {
 			missingProps = append(missingProps, "message")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11679,7 +12697,7 @@ func (s *CancelParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11712,7 +12730,7 @@ func (s *CancelParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingId != 0 {
 			missingProps = append(missingProps, "id")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11737,7 +12755,7 @@ func (s *ProgressParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11778,7 +12796,7 @@ func (s *ProgressParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingValue != 0 {
 			missingProps = append(missingProps, "value")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11813,7 +12831,7 @@ func (s *TextDocumentPositionParams) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11854,7 +12872,7 @@ func (s *TextDocumentPositionParams) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingPosition != 0 {
 			missingProps = append(missingProps, "position")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -11865,10 +12883,84 @@ type WorkDoneProgressParams struct {
 	WorkDoneToken *IntegerOrString `json:"workDoneToken,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*WorkDoneProgressParams)(nil)
+
+func (s *WorkDoneProgressParams) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneToken")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneToken); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type PartialResultParams struct {
 	// An optional token that a server can use to report partial results (e.g. streaming) to
 	// the client.
 	PartialResultToken *IntegerOrString `json:"partialResultToken,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*PartialResultParams)(nil)
+
+func (s *PartialResultParams) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"partialResultToken"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("partialResultToken")
+			}
+			if err := json.UnmarshalDecode(dec, &s.PartialResultToken); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Represents the connection of two locations. Provides additional metadata over normal locations,
@@ -11912,7 +13004,7 @@ func (s *LocationLink) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -11925,6 +13017,9 @@ func (s *LocationLink) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"originSelectionRange"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("originSelectionRange")
+			}
 			if err := json.UnmarshalDecode(dec, &s.OriginSelectionRange); err != nil {
 				return err
 			}
@@ -11965,7 +13060,7 @@ func (s *LocationLink) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTargetSelectionRange != 0 {
 			missingProps = append(missingProps, "targetSelectionRange")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12003,7 +13098,7 @@ func (s *Range) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12044,7 +13139,7 @@ func (s *Range) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingEnd != 0 {
 			missingProps = append(missingProps, "end")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12052,6 +13147,43 @@ func (s *Range) UnmarshalJSONFrom(dec *json.Decoder) error {
 
 type ImplementationOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ImplementationOptions)(nil)
+
+func (s *ImplementationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Static registration options to be returned in the initialize
@@ -12062,8 +13194,82 @@ type StaticRegistrationOptions struct {
 	Id *string `json:"id,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*StaticRegistrationOptions)(nil)
+
+func (s *StaticRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"id"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("id")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Id); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type TypeDefinitionOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*TypeDefinitionOptions)(nil)
+
+func (s *TypeDefinitionOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // The workspace folder change event.
@@ -12086,7 +13292,7 @@ func (s *WorkspaceFoldersChangeEvent) UnmarshalJSONFrom(dec *json.Decoder) error
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12100,11 +13306,17 @@ func (s *WorkspaceFoldersChangeEvent) UnmarshalJSONFrom(dec *json.Decoder) error
 		switch string(name) {
 		case `"added"`:
 			missing &^= missingAdded
+			if dec.PeekKind() == 'n' {
+				return errNull("added")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Added); err != nil {
 				return err
 			}
 		case `"removed"`:
 			missing &^= missingRemoved
+			if dec.PeekKind() == 'n' {
+				return errNull("removed")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Removed); err != nil {
 				return err
 			}
@@ -12127,7 +13339,7 @@ func (s *WorkspaceFoldersChangeEvent) UnmarshalJSONFrom(dec *json.Decoder) error
 		if missing&missingRemoved != 0 {
 			missingProps = append(missingProps, "removed")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12139,6 +13351,50 @@ type ConfigurationItem struct {
 
 	// The configuration section asked for.
 	Section *string `json:"section,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ConfigurationItem)(nil)
+
+func (s *ConfigurationItem) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"scopeUri"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("scopeUri")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ScopeUri); err != nil {
+				return err
+			}
+		case `"section"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("section")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Section); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // A literal to identify a text document in the client.
@@ -12157,7 +13413,7 @@ func (s *TextDocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12190,7 +13446,7 @@ func (s *TextDocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingUri != 0 {
 			missingProps = append(missingProps, "uri")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12224,7 +13480,7 @@ func (s *Color) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12281,7 +13537,7 @@ func (s *Color) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingAlpha != 0 {
 			missingProps = append(missingProps, "alpha")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12291,12 +13547,123 @@ type DocumentColorOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*DocumentColorOptions)(nil)
+
+func (s *DocumentColorOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type FoldingRangeOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*FoldingRangeOptions)(nil)
+
+func (s *FoldingRangeOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type DeclarationOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DeclarationOptions)(nil)
+
+func (s *DeclarationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Position in a text document expressed as zero-based line and character
@@ -12348,7 +13715,7 @@ func (s *Position) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12389,7 +13756,7 @@ func (s *Position) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingCharacter != 0 {
 			missingProps = append(missingProps, "character")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12399,11 +13766,85 @@ type SelectionRangeOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*SelectionRangeOptions)(nil)
+
+func (s *SelectionRangeOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Call hierarchy options used during static registration.
 //
 // Since: 3.16.0
 type CallHierarchyOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*CallHierarchyOptions)(nil)
+
+func (s *CallHierarchyOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since: 3.16.0
@@ -12431,7 +13872,7 @@ func (s *SemanticTokensOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12444,19 +13885,31 @@ func (s *SemanticTokensOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"legend"`:
 			missing &^= missingLegend
+			if dec.PeekKind() == 'n' {
+				return errNull("legend")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Legend); err != nil {
 				return err
 			}
 		case `"range"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("range")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Range); err != nil {
 				return err
 			}
 		case `"full"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("full")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Full); err != nil {
 				return err
 			}
@@ -12476,7 +13929,7 @@ func (s *SemanticTokensOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingLegend != 0 {
 			missingProps = append(missingProps, "legend")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12505,7 +13958,7 @@ func (s *SemanticTokensEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12528,6 +13981,9 @@ func (s *SemanticTokensEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"data"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
 				return err
 			}
@@ -12550,7 +14006,7 @@ func (s *SemanticTokensEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingDeleteCount != 0 {
 			missingProps = append(missingProps, "deleteCount")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12558,6 +14014,43 @@ func (s *SemanticTokensEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 
 type LinkedEditingRangeOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*LinkedEditingRangeOptions)(nil)
+
+func (s *LinkedEditingRangeOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Represents information on a file/folder create.
@@ -12578,7 +14071,7 @@ func (s *FileCreate) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12611,7 +14104,7 @@ func (s *FileCreate) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingUri != 0 {
 			missingProps = append(missingProps, "uri")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12646,7 +14139,7 @@ func (s *TextDocumentEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12665,6 +14158,9 @@ func (s *TextDocumentEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 			}
 		case `"edits"`:
 			missing &^= missingEdits
+			if dec.PeekKind() == 'n' {
+				return errNull("edits")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Edits); err != nil {
 				return err
 			}
@@ -12687,7 +14183,7 @@ func (s *TextDocumentEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingEdits != 0 {
 			missingProps = append(missingProps, "edits")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12721,7 +14217,7 @@ func (s *CreateFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12739,6 +14235,9 @@ func (s *CreateFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"annotationId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("annotationId")
+			}
 			if err := json.UnmarshalDecode(dec, &s.AnnotationId); err != nil {
 				return err
 			}
@@ -12748,6 +14247,9 @@ func (s *CreateFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"options"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("options")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Options); err != nil {
 				return err
 			}
@@ -12770,7 +14272,7 @@ func (s *CreateFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingUri != 0 {
 			missingProps = append(missingProps, "uri")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12808,7 +14310,7 @@ func (s *RenameFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12826,6 +14328,9 @@ func (s *RenameFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"annotationId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("annotationId")
+			}
 			if err := json.UnmarshalDecode(dec, &s.AnnotationId); err != nil {
 				return err
 			}
@@ -12840,6 +14345,9 @@ func (s *RenameFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"options"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("options")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Options); err != nil {
 				return err
 			}
@@ -12865,7 +14373,7 @@ func (s *RenameFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingNewUri != 0 {
 			missingProps = append(missingProps, "newUri")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12899,7 +14407,7 @@ func (s *DeleteFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12917,6 +14425,9 @@ func (s *DeleteFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"annotationId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("annotationId")
+			}
 			if err := json.UnmarshalDecode(dec, &s.AnnotationId); err != nil {
 				return err
 			}
@@ -12926,6 +14437,9 @@ func (s *DeleteFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"options"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("options")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Options); err != nil {
 				return err
 			}
@@ -12948,7 +14462,7 @@ func (s *DeleteFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingUri != 0 {
 			missingProps = append(missingProps, "uri")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -12981,7 +14495,7 @@ func (s *ChangeAnnotation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -12999,10 +14513,16 @@ func (s *ChangeAnnotation) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"needsConfirmation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("needsConfirmation")
+			}
 			if err := json.UnmarshalDecode(dec, &s.NeedsConfirmation); err != nil {
 				return err
 			}
 		case `"description"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("description")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Description); err != nil {
 				return err
 			}
@@ -13022,7 +14542,7 @@ func (s *ChangeAnnotation) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingLabel != 0 {
 			missingProps = append(missingProps, "label")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13050,7 +14570,7 @@ func (s *FileOperationFilter) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -13063,11 +14583,17 @@ func (s *FileOperationFilter) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"scheme"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("scheme")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Scheme); err != nil {
 				return err
 			}
 		case `"pattern"`:
 			missing &^= missingPattern
+			if dec.PeekKind() == 'n' {
+				return errNull("pattern")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Pattern); err != nil {
 				return err
 			}
@@ -13087,7 +14613,7 @@ func (s *FileOperationFilter) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPattern != 0 {
 			missingProps = append(missingProps, "pattern")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13115,7 +14641,7 @@ func (s *FileRename) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -13156,7 +14682,7 @@ func (s *FileRename) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingNewUri != 0 {
 			missingProps = append(missingProps, "newUri")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13180,7 +14706,7 @@ func (s *FileDelete) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -13213,7 +14739,7 @@ func (s *FileDelete) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingUri != 0 {
 			missingProps = append(missingProps, "uri")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13223,11 +14749,85 @@ type MonikerOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*MonikerOptions)(nil)
+
+func (s *MonikerOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Type hierarchy options used during static registration.
 //
 // Since: 3.17.0
 type TypeHierarchyOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*TypeHierarchyOptions)(nil)
+
+func (s *TypeHierarchyOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since: 3.17.0
@@ -13251,7 +14851,7 @@ func (s *InlineValueContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -13292,7 +14892,7 @@ func (s *InlineValueContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingStoppedLocation != 0 {
 			missingProps = append(missingProps, "stoppedLocation")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13320,7 +14920,7 @@ func (s *InlineValueText) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -13361,7 +14961,7 @@ func (s *InlineValueText) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingText != 0 {
 			missingProps = append(missingProps, "text")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13395,7 +14995,7 @@ func (s *InlineValueVariableLookup) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -13413,6 +15013,9 @@ func (s *InlineValueVariableLookup) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"variableName"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("variableName")
+			}
 			if err := json.UnmarshalDecode(dec, &s.VariableName); err != nil {
 				return err
 			}
@@ -13440,7 +15043,7 @@ func (s *InlineValueVariableLookup) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingCaseSensitiveLookup != 0 {
 			missingProps = append(missingProps, "caseSensitiveLookup")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13470,7 +15073,7 @@ func (s *InlineValueEvaluatableExpression) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -13488,6 +15091,9 @@ func (s *InlineValueEvaluatableExpression) UnmarshalJSONFrom(dec *json.Decoder) 
 				return err
 			}
 		case `"expression"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("expression")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Expression); err != nil {
 				return err
 			}
@@ -13507,7 +15113,7 @@ func (s *InlineValueEvaluatableExpression) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingRange != 0 {
 			missingProps = append(missingProps, "range")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13518,6 +15124,43 @@ func (s *InlineValueEvaluatableExpression) UnmarshalJSONFrom(dec *json.Decoder) 
 // Since: 3.17.0
 type InlineValueOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*InlineValueOptions)(nil)
+
+func (s *InlineValueOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // An inlay hint label part allows for interactive and composite labels
@@ -13563,7 +15206,7 @@ func (s *InlayHintLabelPart) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -13581,14 +15224,23 @@ func (s *InlayHintLabelPart) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"tooltip"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tooltip")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tooltip); err != nil {
 				return err
 			}
 		case `"location"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("location")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Location); err != nil {
 				return err
 			}
 		case `"command"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("command")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Command); err != nil {
 				return err
 			}
@@ -13608,7 +15260,7 @@ func (s *InlayHintLabelPart) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingValue != 0 {
 			missingProps = append(missingProps, "value")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13657,7 +15309,7 @@ func (s *MarkupContent) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -13698,7 +15350,7 @@ func (s *MarkupContent) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingValue != 0 {
 			missingProps = append(missingProps, "value")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13713,6 +15365,50 @@ type InlayHintOptions struct {
 	// The server provides support to resolve additional
 	// information for an inlay hint item.
 	ResolveProvider *bool `json:"resolveProvider,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*InlayHintOptions)(nil)
+
+func (s *InlayHintOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		case `"resolveProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResolveProvider); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // A full diagnostic report with a set of related documents.
@@ -13751,7 +15447,7 @@ func (s *RelatedFullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decode
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -13769,15 +15465,24 @@ func (s *RelatedFullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decode
 				return err
 			}
 		case `"resultId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resultId")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ResultId); err != nil {
 				return err
 			}
 		case `"items"`:
 			missing &^= missingItems
+			if dec.PeekKind() == 'n' {
+				return errNull("items")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Items); err != nil {
 				return err
 			}
 		case `"relatedDocuments"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("relatedDocuments")
+			}
 			if err := json.UnmarshalDecode(dec, &s.RelatedDocuments); err != nil {
 				return err
 			}
@@ -13800,7 +15505,7 @@ func (s *RelatedFullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decode
 		if missing&missingItems != 0 {
 			missingProps = append(missingProps, "items")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13841,7 +15546,7 @@ func (s *RelatedUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.D
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -13864,6 +15569,9 @@ func (s *RelatedUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.D
 				return err
 			}
 		case `"relatedDocuments"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("relatedDocuments")
+			}
 			if err := json.UnmarshalDecode(dec, &s.RelatedDocuments); err != nil {
 				return err
 			}
@@ -13886,7 +15594,7 @@ func (s *RelatedUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.D
 		if missing&missingResultId != 0 {
 			missingProps = append(missingProps, "resultId")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13919,7 +15627,7 @@ func (s *FullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) erro
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -13937,11 +15645,17 @@ func (s *FullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) erro
 				return err
 			}
 		case `"resultId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resultId")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ResultId); err != nil {
 				return err
 			}
 		case `"items"`:
 			missing &^= missingItems
+			if dec.PeekKind() == 'n' {
+				return errNull("items")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Items); err != nil {
 				return err
 			}
@@ -13964,7 +15678,7 @@ func (s *FullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) erro
 		if missing&missingItems != 0 {
 			missingProps = append(missingProps, "items")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -13997,7 +15711,7 @@ func (s *UnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder)
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -14038,7 +15752,7 @@ func (s *UnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder)
 		if missing&missingResultId != 0 {
 			missingProps = append(missingProps, "resultId")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -14075,7 +15789,7 @@ func (s *DiagnosticOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -14088,10 +15802,16 @@ func (s *DiagnosticOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"identifier"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("identifier")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Identifier); err != nil {
 				return err
 			}
@@ -14124,7 +15844,7 @@ func (s *DiagnosticOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingWorkspaceDiagnostics != 0 {
 			missingProps = append(missingProps, "workspaceDiagnostics")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -14153,7 +15873,7 @@ func (s *PreviousResultId) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -14194,7 +15914,7 @@ func (s *PreviousResultId) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingValue != 0 {
 			missingProps = append(missingProps, "value")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -14230,7 +15950,7 @@ func (s *TextDocumentItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -14287,7 +16007,7 @@ func (s *TextDocumentItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingText != 0 {
 			missingProps = append(missingProps, "text")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -14316,7 +16036,7 @@ func (s *InlineCompletionContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -14334,6 +16054,9 @@ func (s *InlineCompletionContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"selectedCompletionInfo"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("selectedCompletionInfo")
+			}
 			if err := json.UnmarshalDecode(dec, &s.SelectedCompletionInfo); err != nil {
 				return err
 			}
@@ -14353,7 +16076,7 @@ func (s *InlineCompletionContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTriggerKind != 0 {
 			missingProps = append(missingProps, "triggerKind")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -14389,7 +16112,7 @@ func (s *StringValue) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -14430,7 +16153,7 @@ func (s *StringValue) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingValue != 0 {
 			missingProps = append(missingProps, "value")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -14443,6 +16166,43 @@ func (s *StringValue) UnmarshalJSONFrom(dec *json.Decoder) error {
 // Proposed.
 type InlineCompletionOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*InlineCompletionOptions)(nil)
+
+func (s *InlineCompletionOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Text document content provider options.
@@ -14465,7 +16225,7 @@ func (s *TextDocumentContentOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -14479,6 +16239,9 @@ func (s *TextDocumentContentOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 		switch string(name) {
 		case `"schemes"`:
 			missing &^= missingSchemes
+			if dec.PeekKind() == 'n' {
+				return errNull("schemes")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Schemes); err != nil {
 				return err
 			}
@@ -14498,7 +16261,7 @@ func (s *TextDocumentContentOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingSchemes != 0 {
 			missingProps = append(missingProps, "schemes")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -14806,7 +16569,7 @@ func (s *Registration) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -14856,7 +16619,7 @@ func (s *Registration) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingMethod != 0 {
 			missingProps = append(missingProps, "method")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	if len(rawRegisterOptions) > 0 {
@@ -15177,7 +16940,7 @@ func (s *Unregistration) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -15218,7 +16981,7 @@ func (s *Unregistration) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingMethod != 0 {
 			missingProps = append(missingProps, "method")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -15375,6 +17138,274 @@ type ServerCapabilities struct {
 	Workspace *WorkspaceOptions `json:"workspace,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*ServerCapabilities)(nil)
+
+func (s *ServerCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"positionEncoding"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("positionEncoding")
+			}
+			if err := json.UnmarshalDecode(dec, &s.PositionEncoding); err != nil {
+				return err
+			}
+		case `"textDocumentSync"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("textDocumentSync")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TextDocumentSync); err != nil {
+				return err
+			}
+		case `"completionProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("completionProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CompletionProvider); err != nil {
+				return err
+			}
+		case `"hoverProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("hoverProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.HoverProvider); err != nil {
+				return err
+			}
+		case `"signatureHelpProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("signatureHelpProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.SignatureHelpProvider); err != nil {
+				return err
+			}
+		case `"declarationProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("declarationProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DeclarationProvider); err != nil {
+				return err
+			}
+		case `"definitionProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("definitionProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DefinitionProvider); err != nil {
+				return err
+			}
+		case `"typeDefinitionProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("typeDefinitionProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TypeDefinitionProvider); err != nil {
+				return err
+			}
+		case `"implementationProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("implementationProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ImplementationProvider); err != nil {
+				return err
+			}
+		case `"referencesProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("referencesProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ReferencesProvider); err != nil {
+				return err
+			}
+		case `"documentHighlightProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentHighlightProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentHighlightProvider); err != nil {
+				return err
+			}
+		case `"documentSymbolProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentSymbolProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentSymbolProvider); err != nil {
+				return err
+			}
+		case `"codeActionProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeActionProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CodeActionProvider); err != nil {
+				return err
+			}
+		case `"codeLensProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeLensProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CodeLensProvider); err != nil {
+				return err
+			}
+		case `"documentLinkProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentLinkProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentLinkProvider); err != nil {
+				return err
+			}
+		case `"colorProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("colorProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ColorProvider); err != nil {
+				return err
+			}
+		case `"workspaceSymbolProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workspaceSymbolProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkspaceSymbolProvider); err != nil {
+				return err
+			}
+		case `"documentFormattingProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentFormattingProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentFormattingProvider); err != nil {
+				return err
+			}
+		case `"documentRangeFormattingProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentRangeFormattingProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentRangeFormattingProvider); err != nil {
+				return err
+			}
+		case `"documentOnTypeFormattingProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentOnTypeFormattingProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentOnTypeFormattingProvider); err != nil {
+				return err
+			}
+		case `"renameProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("renameProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RenameProvider); err != nil {
+				return err
+			}
+		case `"foldingRangeProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("foldingRangeProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.FoldingRangeProvider); err != nil {
+				return err
+			}
+		case `"selectionRangeProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("selectionRangeProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.SelectionRangeProvider); err != nil {
+				return err
+			}
+		case `"executeCommandProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("executeCommandProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ExecuteCommandProvider); err != nil {
+				return err
+			}
+		case `"callHierarchyProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("callHierarchyProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CallHierarchyProvider); err != nil {
+				return err
+			}
+		case `"linkedEditingRangeProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("linkedEditingRangeProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.LinkedEditingRangeProvider); err != nil {
+				return err
+			}
+		case `"semanticTokensProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("semanticTokensProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.SemanticTokensProvider); err != nil {
+				return err
+			}
+		case `"monikerProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("monikerProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.MonikerProvider); err != nil {
+				return err
+			}
+		case `"typeHierarchyProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("typeHierarchyProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TypeHierarchyProvider); err != nil {
+				return err
+			}
+		case `"inlineValueProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("inlineValueProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InlineValueProvider); err != nil {
+				return err
+			}
+		case `"inlayHintProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("inlayHintProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InlayHintProvider); err != nil {
+				return err
+			}
+		case `"diagnosticProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("diagnosticProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DiagnosticProvider); err != nil {
+				return err
+			}
+		case `"inlineCompletionProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("inlineCompletionProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InlineCompletionProvider); err != nil {
+				return err
+			}
+		case `"workspace"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workspace")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Workspace); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Information about the server
 //
 // Since: 3.15.0
@@ -15398,7 +17429,7 @@ func (s *ServerInfo) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -15416,6 +17447,9 @@ func (s *ServerInfo) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"version"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("version")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Version); err != nil {
 				return err
 			}
@@ -15435,7 +17469,7 @@ func (s *ServerInfo) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingName != 0 {
 			missingProps = append(missingProps, "name")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -15461,7 +17495,7 @@ func (s *VersionedTextDocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) e
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -15502,7 +17536,7 @@ func (s *VersionedTextDocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) e
 		if missing&missingVersion != 0 {
 			missingProps = append(missingProps, "version")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -15512,6 +17546,43 @@ func (s *VersionedTextDocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) e
 type SaveOptions struct {
 	// The client is supposed to include the content on save.
 	IncludeText *bool `json:"includeText,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*SaveOptions)(nil)
+
+func (s *SaveOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"includeText"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("includeText")
+			}
+			if err := json.UnmarshalDecode(dec, &s.IncludeText); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // An event describing a file change.
@@ -15534,7 +17605,7 @@ func (s *FileEvent) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -15575,7 +17646,7 @@ func (s *FileEvent) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingType != 0 {
 			missingProps = append(missingProps, "type")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -15603,7 +17674,7 @@ func (s *FileSystemWatcher) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -15621,6 +17692,9 @@ func (s *FileSystemWatcher) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"kind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("kind")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
 				return err
 			}
@@ -15640,7 +17714,7 @@ func (s *FileSystemWatcher) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingGlobPattern != 0 {
 			missingProps = append(missingProps, "globPattern")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -15701,7 +17775,7 @@ func (s *Diagnostic) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -15719,18 +17793,30 @@ func (s *Diagnostic) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"severity"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("severity")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Severity); err != nil {
 				return err
 			}
 		case `"code"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("code")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Code); err != nil {
 				return err
 			}
 		case `"codeDescription"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeDescription")
+			}
 			if err := json.UnmarshalDecode(dec, &s.CodeDescription); err != nil {
 				return err
 			}
 		case `"source"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("source")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Source); err != nil {
 				return err
 			}
@@ -15740,14 +17826,23 @@ func (s *Diagnostic) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"tags"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tags")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tags); err != nil {
 				return err
 			}
 		case `"relatedInformation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("relatedInformation")
+			}
 			if err := json.UnmarshalDecode(dec, &s.RelatedInformation); err != nil {
 				return err
 			}
 		case `"data"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
 				return err
 			}
@@ -15770,7 +17865,7 @@ func (s *Diagnostic) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingMessage != 0 {
 			missingProps = append(missingProps, "message")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -15796,7 +17891,7 @@ func (s *CompletionContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -15814,6 +17909,9 @@ func (s *CompletionContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"triggerCharacter"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("triggerCharacter")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TriggerCharacter); err != nil {
 				return err
 			}
@@ -15833,7 +17931,7 @@ func (s *CompletionContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTriggerKind != 0 {
 			missingProps = append(missingProps, "triggerKind")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -15850,6 +17948,50 @@ type CompletionItemLabelDetails struct {
 	// An optional string which is rendered less prominently after CompletionItem.detail. Should be used
 	// for fully qualified names and file paths.
 	Description *string `json:"description,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*CompletionItemLabelDetails)(nil)
+
+func (s *CompletionItemLabelDetails) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"detail"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("detail")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Detail); err != nil {
+				return err
+			}
+		case `"description"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("description")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Description); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // A special text edit to provide an insert and a replace operation.
@@ -15878,7 +18020,7 @@ func (s *InsertReplaceEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -15927,7 +18069,7 @@ func (s *InsertReplaceEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingReplace != 0 {
 			missingProps = append(missingProps, "replace")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -15973,6 +18115,71 @@ type CompletionItemDefaults struct {
 	//
 	// Since: 3.17.0
 	Data *CompletionItemDefaultsData `json:"data,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*CompletionItemDefaults)(nil)
+
+func (s *CompletionItemDefaults) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"commitCharacters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("commitCharacters")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CommitCharacters); err != nil {
+				return err
+			}
+		case `"editRange"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("editRange")
+			}
+			if err := json.UnmarshalDecode(dec, &s.EditRange); err != nil {
+				return err
+			}
+		case `"insertTextFormat"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("insertTextFormat")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InsertTextFormat); err != nil {
+				return err
+			}
+		case `"insertTextMode"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("insertTextMode")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InsertTextMode); err != nil {
+				return err
+			}
+		case `"data"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Specifies how fields from a completion item should be combined with those
@@ -16035,6 +18242,50 @@ type CompletionItemApplyKinds struct {
 	Data *ApplyKind `json:"data,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*CompletionItemApplyKinds)(nil)
+
+func (s *CompletionItemApplyKinds) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"commitCharacters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("commitCharacters")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CommitCharacters); err != nil {
+				return err
+			}
+		case `"data"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("data")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Data); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Completion options.
 type CompletionOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
@@ -16070,9 +18321,111 @@ type CompletionOptions struct {
 	CompletionItem *ServerCompletionItemOptions `json:"completionItem,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*CompletionOptions)(nil)
+
+func (s *CompletionOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		case `"triggerCharacters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("triggerCharacters")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TriggerCharacters); err != nil {
+				return err
+			}
+		case `"allCommitCharacters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("allCommitCharacters")
+			}
+			if err := json.UnmarshalDecode(dec, &s.AllCommitCharacters); err != nil {
+				return err
+			}
+		case `"resolveProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResolveProvider); err != nil {
+				return err
+			}
+		case `"completionItem"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("completionItem")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CompletionItem); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Hover options.
 type HoverOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*HoverOptions)(nil)
+
+func (s *HoverOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Additional information about the context in which a signature help request was triggered.
@@ -16111,7 +18464,7 @@ func (s *SignatureHelpContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -16129,6 +18482,9 @@ func (s *SignatureHelpContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"triggerCharacter"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("triggerCharacter")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TriggerCharacter); err != nil {
 				return err
 			}
@@ -16138,6 +18494,9 @@ func (s *SignatureHelpContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"activeSignatureHelp"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("activeSignatureHelp")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ActiveSignatureHelp); err != nil {
 				return err
 			}
@@ -16160,7 +18519,7 @@ func (s *SignatureHelpContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingIsRetrigger != 0 {
 			missingProps = append(missingProps, "isRetrigger")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -16205,7 +18564,7 @@ func (s *SignatureInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -16223,10 +18582,16 @@ func (s *SignatureInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"documentation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentation")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Documentation); err != nil {
 				return err
 			}
 		case `"parameters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("parameters")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Parameters); err != nil {
 				return err
 			}
@@ -16250,7 +18615,7 @@ func (s *SignatureInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingLabel != 0 {
 			missingProps = append(missingProps, "label")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -16272,9 +18637,97 @@ type SignatureHelpOptions struct {
 	RetriggerCharacters *[]string `json:"retriggerCharacters,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*SignatureHelpOptions)(nil)
+
+func (s *SignatureHelpOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		case `"triggerCharacters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("triggerCharacters")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TriggerCharacters); err != nil {
+				return err
+			}
+		case `"retriggerCharacters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("retriggerCharacters")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RetriggerCharacters); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Server Capabilities for a DefinitionRequest.
 type DefinitionOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DefinitionOptions)(nil)
+
+func (s *DefinitionOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Value-object that contains additional information when
@@ -16294,7 +18747,7 @@ func (s *ReferenceContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -16327,7 +18780,7 @@ func (s *ReferenceContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingIncludeDeclaration != 0 {
 			missingProps = append(missingProps, "includeDeclaration")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -16338,9 +18791,83 @@ type ReferenceOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*ReferenceOptions)(nil)
+
+func (s *ReferenceOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Provider options for a DocumentHighlightRequest.
 type DocumentHighlightOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DocumentHighlightOptions)(nil)
+
+func (s *DocumentHighlightOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // A base for all symbol information.
@@ -16374,7 +18901,7 @@ func (s *BaseSymbolInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -16397,10 +18924,16 @@ func (s *BaseSymbolInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"tags"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tags")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Tags); err != nil {
 				return err
 			}
 		case `"containerName"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("containerName")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ContainerName); err != nil {
 				return err
 			}
@@ -16423,7 +18956,7 @@ func (s *BaseSymbolInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingKind != 0 {
 			missingProps = append(missingProps, "kind")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -16438,6 +18971,50 @@ type DocumentSymbolOptions struct {
 	//
 	// Since: 3.16.0
 	Label *string `json:"label,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DocumentSymbolOptions)(nil)
+
+func (s *DocumentSymbolOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		case `"label"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("label")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Label); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Contains additional diagnostic information about the context in which
@@ -16472,7 +19049,7 @@ func (s *CodeActionContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -16486,14 +19063,23 @@ func (s *CodeActionContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"diagnostics"`:
 			missing &^= missingDiagnostics
+			if dec.PeekKind() == 'n' {
+				return errNull("diagnostics")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Diagnostics); err != nil {
 				return err
 			}
 		case `"only"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("only")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Only); err != nil {
 				return err
 			}
 		case `"triggerKind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("triggerKind")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TriggerKind); err != nil {
 				return err
 			}
@@ -16513,7 +19099,7 @@ func (s *CodeActionContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingDiagnostics != 0 {
 			missingProps = append(missingProps, "diagnostics")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -16539,7 +19125,7 @@ func (s *CodeActionDisabled) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -16572,7 +19158,7 @@ func (s *CodeActionDisabled) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingReason != 0 {
 			missingProps = append(missingProps, "reason")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -16613,6 +19199,64 @@ type CodeActionOptions struct {
 	ResolveProvider *bool `json:"resolveProvider,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*CodeActionOptions)(nil)
+
+func (s *CodeActionOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		case `"codeActionKinds"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeActionKinds")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CodeActionKinds); err != nil {
+				return err
+			}
+		case `"documentation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentation")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Documentation); err != nil {
+				return err
+			}
+		case `"resolveProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResolveProvider); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Location with only uri and does not include range.
 //
 // Since: 3.18.0
@@ -16630,7 +19274,7 @@ func (s *LocationUriOnly) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -16663,7 +19307,7 @@ func (s *LocationUriOnly) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingUri != 0 {
 			missingProps = append(missingProps, "uri")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -16680,6 +19324,50 @@ type WorkspaceSymbolOptions struct {
 	ResolveProvider *bool `json:"resolveProvider,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*WorkspaceSymbolOptions)(nil)
+
+func (s *WorkspaceSymbolOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		case `"resolveProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResolveProvider); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Code Lens provider options of a CodeLensRequest.
 type CodeLensOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
@@ -16688,12 +19376,100 @@ type CodeLensOptions struct {
 	ResolveProvider *bool `json:"resolveProvider,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*CodeLensOptions)(nil)
+
+func (s *CodeLensOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		case `"resolveProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResolveProvider); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Provider options for a DocumentLinkRequest.
 type DocumentLinkOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
 
 	// Document links have a resolve provider as well.
 	ResolveProvider *bool `json:"resolveProvider,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DocumentLinkOptions)(nil)
+
+func (s *DocumentLinkOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		case `"resolveProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResolveProvider); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Value-object describing what options formatting should use.
@@ -16731,7 +19507,7 @@ func (s *FormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -16754,14 +19530,23 @@ func (s *FormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"trimTrailingWhitespace"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("trimTrailingWhitespace")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TrimTrailingWhitespace); err != nil {
 				return err
 			}
 		case `"insertFinalNewline"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("insertFinalNewline")
+			}
 			if err := json.UnmarshalDecode(dec, &s.InsertFinalNewline); err != nil {
 				return err
 			}
 		case `"trimFinalNewlines"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("trimFinalNewlines")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TrimFinalNewlines); err != nil {
 				return err
 			}
@@ -16784,7 +19569,7 @@ func (s *FormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingInsertSpaces != 0 {
 			missingProps = append(missingProps, "insertSpaces")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -16793,6 +19578,43 @@ func (s *FormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 // Provider options for a DocumentFormattingRequest.
 type DocumentFormattingOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DocumentFormattingOptions)(nil)
+
+func (s *DocumentFormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Provider options for a DocumentRangeFormattingRequest.
@@ -16805,6 +19627,50 @@ type DocumentRangeFormattingOptions struct {
 	//
 	// Proposed.
 	RangesSupport *bool `json:"rangesSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DocumentRangeFormattingOptions)(nil)
+
+func (s *DocumentRangeFormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		case `"rangesSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("rangesSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RangesSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Provider options for a DocumentOnTypeFormattingRequest.
@@ -16826,7 +19692,7 @@ func (s *DocumentOnTypeFormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) e
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -16844,6 +19710,9 @@ func (s *DocumentOnTypeFormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) e
 				return err
 			}
 		case `"moreTriggerCharacter"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("moreTriggerCharacter")
+			}
 			if err := json.UnmarshalDecode(dec, &s.MoreTriggerCharacter); err != nil {
 				return err
 			}
@@ -16863,7 +19732,7 @@ func (s *DocumentOnTypeFormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) e
 		if missing&missingFirstTriggerCharacter != 0 {
 			missingProps = append(missingProps, "firstTriggerCharacter")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -16877,6 +19746,50 @@ type RenameOptions struct {
 	//
 	// Since: version 3.12.0
 	PrepareProvider *bool `json:"prepareProvider,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*RenameOptions)(nil)
+
+func (s *RenameOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		case `"prepareProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("prepareProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.PrepareProvider); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since: 3.18.0
@@ -16897,7 +19810,7 @@ func (s *PrepareRenamePlaceholder) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -16938,7 +19851,7 @@ func (s *PrepareRenamePlaceholder) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPlaceholder != 0 {
 			missingProps = append(missingProps, "placeholder")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -16959,7 +19872,7 @@ func (s *PrepareRenameDefaultBehavior) UnmarshalJSONFrom(dec *json.Decoder) erro
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -16992,7 +19905,7 @@ func (s *PrepareRenameDefaultBehavior) UnmarshalJSONFrom(dec *json.Decoder) erro
 		if missing&missingDefaultBehavior != 0 {
 			missingProps = append(missingProps, "defaultBehavior")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -17016,7 +19929,7 @@ func (s *ExecuteCommandOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -17029,11 +19942,17 @@ func (s *ExecuteCommandOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
 		case `"commands"`:
 			missing &^= missingCommands
+			if dec.PeekKind() == 'n' {
+				return errNull("commands")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Commands); err != nil {
 				return err
 			}
@@ -17053,7 +19972,7 @@ func (s *ExecuteCommandOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingCommands != 0 {
 			missingProps = append(missingProps, "commands")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -17067,6 +19986,43 @@ func (s *ExecuteCommandOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 type WorkspaceEditMetadata struct {
 	// Signal to the editor that this edit is a refactoring.
 	IsRefactoring *bool `json:"isRefactoring,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*WorkspaceEditMetadata)(nil)
+
+func (s *WorkspaceEditMetadata) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"isRefactoring"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("isRefactoring")
+			}
+			if err := json.UnmarshalDecode(dec, &s.IsRefactoring); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since: 3.16.0
@@ -17089,7 +20045,7 @@ func (s *SemanticTokensLegend) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -17103,11 +20059,17 @@ func (s *SemanticTokensLegend) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"tokenTypes"`:
 			missing &^= missingTokenTypes
+			if dec.PeekKind() == 'n' {
+				return errNull("tokenTypes")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TokenTypes); err != nil {
 				return err
 			}
 		case `"tokenModifiers"`:
 			missing &^= missingTokenModifiers
+			if dec.PeekKind() == 'n' {
+				return errNull("tokenModifiers")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TokenModifiers); err != nil {
 				return err
 			}
@@ -17130,7 +20092,7 @@ func (s *SemanticTokensLegend) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTokenModifiers != 0 {
 			missingProps = append(missingProps, "tokenModifiers")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -17142,6 +20104,43 @@ func (s *SemanticTokensLegend) UnmarshalJSONFrom(dec *json.Decoder) error {
 type SemanticTokensFullDelta struct {
 	// The server supports deltas for full documents.
 	Delta *bool `json:"delta,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*SemanticTokensFullDelta)(nil)
+
+func (s *SemanticTokensFullDelta) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"delta"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("delta")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Delta); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // A text document identifier to optionally denote a specific version of a text document.
@@ -17168,7 +20167,7 @@ func (s *OptionalVersionedTextDocumentIdentifier) UnmarshalJSONFrom(dec *json.De
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -17209,7 +20208,7 @@ func (s *OptionalVersionedTextDocumentIdentifier) UnmarshalJSONFrom(dec *json.De
 		if missing&missingVersion != 0 {
 			missingProps = append(missingProps, "version")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -17243,7 +20242,7 @@ func (s *AnnotatedTextEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -17292,7 +20291,7 @@ func (s *AnnotatedTextEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingAnnotationId != 0 {
 			missingProps = append(missingProps, "annotationId")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -17325,7 +20324,7 @@ func (s *SnippetTextEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -17344,10 +20343,16 @@ func (s *SnippetTextEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 			}
 		case `"snippet"`:
 			missing &^= missingSnippet
+			if dec.PeekKind() == 'n' {
+				return errNull("snippet")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Snippet); err != nil {
 				return err
 			}
 		case `"annotationId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("annotationId")
+			}
 			if err := json.UnmarshalDecode(dec, &s.AnnotationId); err != nil {
 				return err
 			}
@@ -17370,7 +20375,7 @@ func (s *SnippetTextEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingSnippet != 0 {
 			missingProps = append(missingProps, "snippet")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -17397,7 +20402,7 @@ func (s *ResourceOperation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -17415,6 +20420,9 @@ func (s *ResourceOperation) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"annotationId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("annotationId")
+			}
 			if err := json.UnmarshalDecode(dec, &s.AnnotationId); err != nil {
 				return err
 			}
@@ -17434,7 +20442,7 @@ func (s *ResourceOperation) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingKind != 0 {
 			missingProps = append(missingProps, "kind")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -17449,6 +20457,50 @@ type CreateFileOptions struct {
 	IgnoreIfExists *bool `json:"ignoreIfExists,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*CreateFileOptions)(nil)
+
+func (s *CreateFileOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"overwrite"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("overwrite")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Overwrite); err != nil {
+				return err
+			}
+		case `"ignoreIfExists"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("ignoreIfExists")
+			}
+			if err := json.UnmarshalDecode(dec, &s.IgnoreIfExists); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Rename file options
 type RenameFileOptions struct {
 	// Overwrite target if existing. Overwrite wins over `ignoreIfExists`
@@ -17458,6 +20510,50 @@ type RenameFileOptions struct {
 	IgnoreIfExists *bool `json:"ignoreIfExists,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*RenameFileOptions)(nil)
+
+func (s *RenameFileOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"overwrite"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("overwrite")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Overwrite); err != nil {
+				return err
+			}
+		case `"ignoreIfExists"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("ignoreIfExists")
+			}
+			if err := json.UnmarshalDecode(dec, &s.IgnoreIfExists); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Delete file options
 type DeleteFileOptions struct {
 	// Delete the content recursively if a folder is denoted.
@@ -17465,6 +20561,50 @@ type DeleteFileOptions struct {
 
 	// Ignore the operation if the file doesn't exist.
 	IgnoreIfNotExists *bool `json:"ignoreIfNotExists,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DeleteFileOptions)(nil)
+
+func (s *DeleteFileOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"recursive"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("recursive")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Recursive); err != nil {
+				return err
+			}
+		case `"ignoreIfNotExists"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("ignoreIfNotExists")
+			}
+			if err := json.UnmarshalDecode(dec, &s.IgnoreIfNotExists); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // A pattern to describe in which file operation requests or notifications
@@ -17500,7 +20640,7 @@ func (s *FileOperationPattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -17518,10 +20658,16 @@ func (s *FileOperationPattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"matches"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("matches")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Matches); err != nil {
 				return err
 			}
 		case `"options"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("options")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Options); err != nil {
 				return err
 			}
@@ -17541,7 +20687,7 @@ func (s *FileOperationPattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingGlob != 0 {
 			missingProps = append(missingProps, "glob")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -17583,7 +20729,7 @@ func (s *WorkspaceFullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Deco
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -17601,11 +20747,17 @@ func (s *WorkspaceFullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Deco
 				return err
 			}
 		case `"resultId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resultId")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ResultId); err != nil {
 				return err
 			}
 		case `"items"`:
 			missing &^= missingItems
+			if dec.PeekKind() == 'n' {
+				return errNull("items")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Items); err != nil {
 				return err
 			}
@@ -17644,7 +20796,7 @@ func (s *WorkspaceFullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Deco
 		if missing&missingVersion != 0 {
 			missingProps = append(missingProps, "version")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -17685,7 +20837,7 @@ func (s *WorkspaceUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -17742,7 +20894,7 @@ func (s *WorkspaceUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json
 		if missing&missingVersion != 0 {
 			missingProps = append(missingProps, "version")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -17772,7 +20924,7 @@ func (s *SelectedCompletionInfo) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -17813,7 +20965,7 @@ func (s *SelectedCompletionInfo) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingText != 0 {
 			missingProps = append(missingProps, "text")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -17842,7 +20994,7 @@ func (s *ClientInfo) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -17860,6 +21012,9 @@ func (s *ClientInfo) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"version"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("version")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Version); err != nil {
 				return err
 			}
@@ -17879,7 +21034,7 @@ func (s *ClientInfo) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingName != 0 {
 			missingProps = append(missingProps, "name")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -17900,6 +21055,64 @@ type ClientCapabilities struct {
 	//
 	// Since: 3.16.0
 	General *GeneralClientCapabilities `json:"general,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ClientCapabilities)(nil)
+
+func (s *ClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workspace"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workspace")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Workspace); err != nil {
+				return err
+			}
+		case `"textDocument"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("textDocument")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TextDocument); err != nil {
+				return err
+			}
+		case `"window"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("window")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Window); err != nil {
+				return err
+			}
+		case `"general"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("general")
+			}
+			if err := json.UnmarshalDecode(dec, &s.General); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 type TextDocumentSyncOptions struct {
@@ -17924,6 +21137,71 @@ type TextDocumentSyncOptions struct {
 	Save *BooleanOrSaveOptions `json:"save,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*TextDocumentSyncOptions)(nil)
+
+func (s *TextDocumentSyncOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"openClose"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("openClose")
+			}
+			if err := json.UnmarshalDecode(dec, &s.OpenClose); err != nil {
+				return err
+			}
+		case `"change"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("change")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Change); err != nil {
+				return err
+			}
+		case `"willSave"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("willSave")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WillSave); err != nil {
+				return err
+			}
+		case `"willSaveWaitUntil"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("willSaveWaitUntil")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WillSaveWaitUntil); err != nil {
+				return err
+			}
+		case `"save"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("save")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Save); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Defines workspace specific capabilities of the server.
 //
 // Since: 3.18.0
@@ -17944,6 +21222,57 @@ type WorkspaceOptions struct {
 	//
 	// Proposed.
 	TextDocumentContent *TextDocumentContentOptionsOrRegistrationOptions `json:"textDocumentContent,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*WorkspaceOptions)(nil)
+
+func (s *WorkspaceOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workspaceFolders"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workspaceFolders")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkspaceFolders); err != nil {
+				return err
+			}
+		case `"fileOperations"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("fileOperations")
+			}
+			if err := json.UnmarshalDecode(dec, &s.FileOperations); err != nil {
+				return err
+			}
+		case `"textDocumentContent"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("textDocumentContent")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TextDocumentContent); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since: 3.18.0
@@ -17971,7 +21300,7 @@ func (s *TextDocumentContentChangePartial) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -17989,6 +21318,9 @@ func (s *TextDocumentContentChangePartial) UnmarshalJSONFrom(dec *json.Decoder) 
 				return err
 			}
 		case `"rangeLength"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("rangeLength")
+			}
 			if err := json.UnmarshalDecode(dec, &s.RangeLength); err != nil {
 				return err
 			}
@@ -18016,7 +21348,7 @@ func (s *TextDocumentContentChangePartial) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingText != 0 {
 			missingProps = append(missingProps, "text")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -18038,7 +21370,7 @@ func (s *TextDocumentContentChangeWholeDocument) UnmarshalJSONFrom(dec *json.Dec
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -18071,7 +21403,7 @@ func (s *TextDocumentContentChangeWholeDocument) UnmarshalJSONFrom(dec *json.Dec
 		if missing&missingText != 0 {
 			missingProps = append(missingProps, "text")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -18095,7 +21427,7 @@ func (s *CodeDescription) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -18128,7 +21460,7 @@ func (s *CodeDescription) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingHref != 0 {
 			missingProps = append(missingProps, "href")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -18156,7 +21488,7 @@ func (s *DiagnosticRelatedInformation) UnmarshalJSONFrom(dec *json.Decoder) erro
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -18197,7 +21529,7 @@ func (s *DiagnosticRelatedInformation) UnmarshalJSONFrom(dec *json.Decoder) erro
 		if missing&missingMessage != 0 {
 			missingProps = append(missingProps, "message")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -18223,7 +21555,7 @@ func (s *EditRangeWithInsertReplace) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -18264,7 +21596,7 @@ func (s *EditRangeWithInsertReplace) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingReplace != 0 {
 			missingProps = append(missingProps, "replace")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -18278,6 +21610,43 @@ type ServerCompletionItemOptions struct {
 	//
 	// Since: 3.17.0
 	LabelDetailsSupport *bool `json:"labelDetailsSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ServerCompletionItemOptions)(nil)
+
+func (s *ServerCompletionItemOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"labelDetailsSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("labelDetailsSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.LabelDetailsSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since: 3.18.0
@@ -18300,7 +21669,7 @@ func (s *MarkedStringWithLanguage) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -18341,7 +21710,7 @@ func (s *MarkedStringWithLanguage) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingValue != 0 {
 			missingProps = append(missingProps, "value")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -18379,7 +21748,7 @@ func (s *ParameterInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -18397,6 +21766,9 @@ func (s *ParameterInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"documentation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentation")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Documentation); err != nil {
 				return err
 			}
@@ -18416,7 +21788,7 @@ func (s *ParameterInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingLabel != 0 {
 			missingProps = append(missingProps, "label")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -18452,7 +21824,7 @@ func (s *CodeActionKindDocumentation) UnmarshalJSONFrom(dec *json.Decoder) error
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -18471,6 +21843,9 @@ func (s *CodeActionKindDocumentation) UnmarshalJSONFrom(dec *json.Decoder) error
 			}
 		case `"command"`:
 			missing &^= missingCommand
+			if dec.PeekKind() == 'n' {
+				return errNull("command")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Command); err != nil {
 				return err
 			}
@@ -18493,7 +21868,7 @@ func (s *CodeActionKindDocumentation) UnmarshalJSONFrom(dec *json.Decoder) error
 		if missing&missingCommand != 0 {
 			missingProps = append(missingProps, "command")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -18505,6 +21880,43 @@ func (s *CodeActionKindDocumentation) UnmarshalJSONFrom(dec *json.Decoder) error
 type FileOperationPatternOptions struct {
 	// The pattern should be matched ignoring casing.
 	IgnoreCase *bool `json:"ignoreCase,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*FileOperationPatternOptions)(nil)
+
+func (s *FileOperationPatternOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"ignoreCase"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("ignoreCase")
+			}
+			if err := json.UnmarshalDecode(dec, &s.IgnoreCase); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Workspace specific client capabilities.
@@ -18587,6 +21999,148 @@ type WorkspaceClientCapabilities struct {
 	//
 	// Proposed.
 	TextDocumentContent *TextDocumentContentClientCapabilities `json:"textDocumentContent,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*WorkspaceClientCapabilities)(nil)
+
+func (s *WorkspaceClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"applyEdit"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("applyEdit")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ApplyEdit); err != nil {
+				return err
+			}
+		case `"workspaceEdit"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workspaceEdit")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkspaceEdit); err != nil {
+				return err
+			}
+		case `"didChangeConfiguration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("didChangeConfiguration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DidChangeConfiguration); err != nil {
+				return err
+			}
+		case `"didChangeWatchedFiles"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("didChangeWatchedFiles")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DidChangeWatchedFiles); err != nil {
+				return err
+			}
+		case `"symbol"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("symbol")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Symbol); err != nil {
+				return err
+			}
+		case `"executeCommand"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("executeCommand")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ExecuteCommand); err != nil {
+				return err
+			}
+		case `"workspaceFolders"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workspaceFolders")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkspaceFolders); err != nil {
+				return err
+			}
+		case `"configuration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("configuration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Configuration); err != nil {
+				return err
+			}
+		case `"semanticTokens"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("semanticTokens")
+			}
+			if err := json.UnmarshalDecode(dec, &s.SemanticTokens); err != nil {
+				return err
+			}
+		case `"codeLens"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeLens")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CodeLens); err != nil {
+				return err
+			}
+		case `"fileOperations"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("fileOperations")
+			}
+			if err := json.UnmarshalDecode(dec, &s.FileOperations); err != nil {
+				return err
+			}
+		case `"inlineValue"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("inlineValue")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InlineValue); err != nil {
+				return err
+			}
+		case `"inlayHint"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("inlayHint")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InlayHint); err != nil {
+				return err
+			}
+		case `"diagnostics"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("diagnostics")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Diagnostics); err != nil {
+				return err
+			}
+		case `"foldingRange"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("foldingRange")
+			}
+			if err := json.UnmarshalDecode(dec, &s.FoldingRange); err != nil {
+				return err
+			}
+		case `"textDocumentContent"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("textDocumentContent")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TextDocumentContent); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Text document specific client capabilities.
@@ -18723,6 +22277,260 @@ type TextDocumentClientCapabilities struct {
 	InlineCompletion *InlineCompletionClientCapabilities `json:"inlineCompletion,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*TextDocumentClientCapabilities)(nil)
+
+func (s *TextDocumentClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"synchronization"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("synchronization")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Synchronization); err != nil {
+				return err
+			}
+		case `"filters"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("filters")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Filters); err != nil {
+				return err
+			}
+		case `"completion"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("completion")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Completion); err != nil {
+				return err
+			}
+		case `"hover"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("hover")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Hover); err != nil {
+				return err
+			}
+		case `"signatureHelp"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("signatureHelp")
+			}
+			if err := json.UnmarshalDecode(dec, &s.SignatureHelp); err != nil {
+				return err
+			}
+		case `"declaration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("declaration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Declaration); err != nil {
+				return err
+			}
+		case `"definition"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("definition")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Definition); err != nil {
+				return err
+			}
+		case `"typeDefinition"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("typeDefinition")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TypeDefinition); err != nil {
+				return err
+			}
+		case `"implementation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("implementation")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Implementation); err != nil {
+				return err
+			}
+		case `"references"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("references")
+			}
+			if err := json.UnmarshalDecode(dec, &s.References); err != nil {
+				return err
+			}
+		case `"documentHighlight"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentHighlight")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentHighlight); err != nil {
+				return err
+			}
+		case `"documentSymbol"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentSymbol")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentSymbol); err != nil {
+				return err
+			}
+		case `"codeAction"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeAction")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CodeAction); err != nil {
+				return err
+			}
+		case `"codeLens"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeLens")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CodeLens); err != nil {
+				return err
+			}
+		case `"documentLink"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentLink")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentLink); err != nil {
+				return err
+			}
+		case `"colorProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("colorProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ColorProvider); err != nil {
+				return err
+			}
+		case `"formatting"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("formatting")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Formatting); err != nil {
+				return err
+			}
+		case `"rangeFormatting"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("rangeFormatting")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RangeFormatting); err != nil {
+				return err
+			}
+		case `"onTypeFormatting"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("onTypeFormatting")
+			}
+			if err := json.UnmarshalDecode(dec, &s.OnTypeFormatting); err != nil {
+				return err
+			}
+		case `"rename"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("rename")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Rename); err != nil {
+				return err
+			}
+		case `"foldingRange"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("foldingRange")
+			}
+			if err := json.UnmarshalDecode(dec, &s.FoldingRange); err != nil {
+				return err
+			}
+		case `"selectionRange"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("selectionRange")
+			}
+			if err := json.UnmarshalDecode(dec, &s.SelectionRange); err != nil {
+				return err
+			}
+		case `"publishDiagnostics"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("publishDiagnostics")
+			}
+			if err := json.UnmarshalDecode(dec, &s.PublishDiagnostics); err != nil {
+				return err
+			}
+		case `"callHierarchy"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("callHierarchy")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CallHierarchy); err != nil {
+				return err
+			}
+		case `"semanticTokens"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("semanticTokens")
+			}
+			if err := json.UnmarshalDecode(dec, &s.SemanticTokens); err != nil {
+				return err
+			}
+		case `"linkedEditingRange"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("linkedEditingRange")
+			}
+			if err := json.UnmarshalDecode(dec, &s.LinkedEditingRange); err != nil {
+				return err
+			}
+		case `"moniker"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("moniker")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Moniker); err != nil {
+				return err
+			}
+		case `"typeHierarchy"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("typeHierarchy")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TypeHierarchy); err != nil {
+				return err
+			}
+		case `"inlineValue"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("inlineValue")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InlineValue); err != nil {
+				return err
+			}
+		case `"inlayHint"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("inlayHint")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InlayHint); err != nil {
+				return err
+			}
+		case `"diagnostic"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("diagnostic")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Diagnostic); err != nil {
+				return err
+			}
+		case `"inlineCompletion"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("inlineCompletion")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InlineCompletion); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type WindowClientCapabilities struct {
 	// It indicates whether the client supports server initiated
 	// progress using the `window/workDoneProgress/create` request.
@@ -18744,6 +22552,57 @@ type WindowClientCapabilities struct {
 	//
 	// Since: 3.16.0
 	ShowDocument *ShowDocumentClientCapabilities `json:"showDocument,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*WindowClientCapabilities)(nil)
+
+func (s *WindowClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
+				return err
+			}
+		case `"showMessage"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("showMessage")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ShowMessage); err != nil {
+				return err
+			}
+		case `"showDocument"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("showDocument")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ShowDocument); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // General client capabilities.
@@ -18789,6 +22648,64 @@ type GeneralClientCapabilities struct {
 	PositionEncodings *[]PositionEncodingKind `json:"positionEncodings,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*GeneralClientCapabilities)(nil)
+
+func (s *GeneralClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"staleRequestSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("staleRequestSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.StaleRequestSupport); err != nil {
+				return err
+			}
+		case `"regularExpressions"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("regularExpressions")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RegularExpressions); err != nil {
+				return err
+			}
+		case `"markdown"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("markdown")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Markdown); err != nil {
+				return err
+			}
+		case `"positionEncodings"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("positionEncodings")
+			}
+			if err := json.UnmarshalDecode(dec, &s.PositionEncodings); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type WorkspaceFoldersServerCapabilities struct {
 	// The server has support for workspace folders
 	Supported *bool `json:"supported,omitzero"`
@@ -18801,6 +22718,50 @@ type WorkspaceFoldersServerCapabilities struct {
 	// side. The ID can be used to unregister for these events
 	// using the `client/unregisterCapability` request.
 	ChangeNotifications *StringOrBoolean `json:"changeNotifications,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*WorkspaceFoldersServerCapabilities)(nil)
+
+func (s *WorkspaceFoldersServerCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"supported"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("supported")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Supported); err != nil {
+				return err
+			}
+		case `"changeNotifications"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("changeNotifications")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ChangeNotifications); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Options for notifications/requests for user operations on files.
@@ -18824,6 +22785,78 @@ type FileOperationOptions struct {
 
 	// The server is interested in receiving willDeleteFiles file requests.
 	WillDelete *FileOperationRegistrationOptions `json:"willDelete,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*FileOperationOptions)(nil)
+
+func (s *FileOperationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"didCreate"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("didCreate")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DidCreate); err != nil {
+				return err
+			}
+		case `"willCreate"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("willCreate")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WillCreate); err != nil {
+				return err
+			}
+		case `"didRename"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("didRename")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DidRename); err != nil {
+				return err
+			}
+		case `"willRename"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("willRename")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WillRename); err != nil {
+				return err
+			}
+		case `"didDelete"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("didDelete")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DidDelete); err != nil {
+				return err
+			}
+		case `"willDelete"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("willDelete")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WillDelete); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // A relative pattern is a helper to construct glob patterns that are matched
@@ -18851,7 +22884,7 @@ func (s *RelativePattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -18892,7 +22925,7 @@ func (s *RelativePattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPattern != 0 {
 			missingProps = append(missingProps, "pattern")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -18926,7 +22959,7 @@ func (s *TextDocumentFilterLanguage) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -18944,10 +22977,16 @@ func (s *TextDocumentFilterLanguage) UnmarshalJSONFrom(dec *json.Decoder) error 
 				return err
 			}
 		case `"scheme"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("scheme")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Scheme); err != nil {
 				return err
 			}
 		case `"pattern"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("pattern")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Pattern); err != nil {
 				return err
 			}
@@ -18967,7 +23006,7 @@ func (s *TextDocumentFilterLanguage) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingLanguage != 0 {
 			missingProps = append(missingProps, "language")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -19001,7 +23040,7 @@ func (s *TextDocumentFilterScheme) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -19014,6 +23053,9 @@ func (s *TextDocumentFilterScheme) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"language"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("language")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Language); err != nil {
 				return err
 			}
@@ -19023,6 +23065,9 @@ func (s *TextDocumentFilterScheme) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"pattern"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("pattern")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Pattern); err != nil {
 				return err
 			}
@@ -19042,7 +23087,7 @@ func (s *TextDocumentFilterScheme) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingScheme != 0 {
 			missingProps = append(missingProps, "scheme")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -19076,7 +23121,7 @@ func (s *TextDocumentFilterPattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -19089,10 +23134,16 @@ func (s *TextDocumentFilterPattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 		switch string(name) {
 		case `"language"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("language")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Language); err != nil {
 				return err
 			}
 		case `"scheme"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("scheme")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Scheme); err != nil {
 				return err
 			}
@@ -19117,7 +23168,7 @@ func (s *TextDocumentFilterPattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingPattern != 0 {
 			missingProps = append(missingProps, "pattern")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -19169,9 +23220,125 @@ type WorkspaceEditClientCapabilities struct {
 	SnippetEditSupport *bool `json:"snippetEditSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*WorkspaceEditClientCapabilities)(nil)
+
+func (s *WorkspaceEditClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"documentChanges"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentChanges")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentChanges); err != nil {
+				return err
+			}
+		case `"resourceOperations"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resourceOperations")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResourceOperations); err != nil {
+				return err
+			}
+		case `"failureHandling"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("failureHandling")
+			}
+			if err := json.UnmarshalDecode(dec, &s.FailureHandling); err != nil {
+				return err
+			}
+		case `"normalizesLineEndings"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("normalizesLineEndings")
+			}
+			if err := json.UnmarshalDecode(dec, &s.NormalizesLineEndings); err != nil {
+				return err
+			}
+		case `"changeAnnotationSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("changeAnnotationSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ChangeAnnotationSupport); err != nil {
+				return err
+			}
+		case `"metadataSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("metadataSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.MetadataSupport); err != nil {
+				return err
+			}
+		case `"snippetEditSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("snippetEditSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.SnippetEditSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type DidChangeConfigurationClientCapabilities struct {
 	// Did change configuration notification supports dynamic registration.
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DidChangeConfigurationClientCapabilities)(nil)
+
+func (s *DidChangeConfigurationClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 type DidChangeWatchedFilesClientCapabilities struct {
@@ -19185,6 +23352,50 @@ type DidChangeWatchedFilesClientCapabilities struct {
 	//
 	// Since: 3.17.0
 	RelativePatternSupport *bool `json:"relativePatternSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DidChangeWatchedFilesClientCapabilities)(nil)
+
+func (s *DidChangeWatchedFilesClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"relativePatternSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("relativePatternSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RelativePatternSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Client capabilities for a WorkspaceSymbolRequest.
@@ -19209,10 +23420,105 @@ type WorkspaceSymbolClientCapabilities struct {
 	ResolveSupport *ClientSymbolResolveOptions `json:"resolveSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*WorkspaceSymbolClientCapabilities)(nil)
+
+func (s *WorkspaceSymbolClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"symbolKind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("symbolKind")
+			}
+			if err := json.UnmarshalDecode(dec, &s.SymbolKind); err != nil {
+				return err
+			}
+		case `"tagSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tagSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TagSupport); err != nil {
+				return err
+			}
+		case `"resolveSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResolveSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // The client capabilities of a ExecuteCommandRequest.
 type ExecuteCommandClientCapabilities struct {
 	// Execute command supports dynamic registration.
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ExecuteCommandClientCapabilities)(nil)
+
+func (s *ExecuteCommandClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since: 3.16.0
@@ -19227,6 +23533,43 @@ type SemanticTokensWorkspaceClientCapabilities struct {
 	RefreshSupport *bool `json:"refreshSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*SemanticTokensWorkspaceClientCapabilities)(nil)
+
+func (s *SemanticTokensWorkspaceClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"refreshSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("refreshSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RefreshSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Since: 3.16.0
 type CodeLensWorkspaceClientCapabilities struct {
 	// Whether the client implementation supports a refresh request sent from the
@@ -19237,6 +23580,43 @@ type CodeLensWorkspaceClientCapabilities struct {
 	// useful for situation where a server for example detect a project wide
 	// change that requires such a calculation.
 	RefreshSupport *bool `json:"refreshSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*CodeLensWorkspaceClientCapabilities)(nil)
+
+func (s *CodeLensWorkspaceClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"refreshSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("refreshSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RefreshSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Capabilities relating to events from file operations by the user in the client.
@@ -19268,6 +23648,85 @@ type FileOperationClientCapabilities struct {
 	WillDelete *bool `json:"willDelete,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*FileOperationClientCapabilities)(nil)
+
+func (s *FileOperationClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"didCreate"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("didCreate")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DidCreate); err != nil {
+				return err
+			}
+		case `"willCreate"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("willCreate")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WillCreate); err != nil {
+				return err
+			}
+		case `"didRename"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("didRename")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DidRename); err != nil {
+				return err
+			}
+		case `"willRename"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("willRename")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WillRename); err != nil {
+				return err
+			}
+		case `"didDelete"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("didDelete")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DidDelete); err != nil {
+				return err
+			}
+		case `"willDelete"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("willDelete")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WillDelete); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Client workspace capabilities specific to inline values.
 //
 // Since: 3.17.0
@@ -19280,6 +23739,43 @@ type InlineValueWorkspaceClientCapabilities struct {
 	// useful for situation where a server for example detects a project wide
 	// change that requires such a calculation.
 	RefreshSupport *bool `json:"refreshSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*InlineValueWorkspaceClientCapabilities)(nil)
+
+func (s *InlineValueWorkspaceClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"refreshSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("refreshSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RefreshSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Client workspace capabilities specific to inlay hints.
@@ -19296,6 +23792,43 @@ type InlayHintWorkspaceClientCapabilities struct {
 	RefreshSupport *bool `json:"refreshSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*InlayHintWorkspaceClientCapabilities)(nil)
+
+func (s *InlayHintWorkspaceClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"refreshSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("refreshSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RefreshSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Workspace client capabilities specific to diagnostic pull requests.
 //
 // Since: 3.17.0
@@ -19308,6 +23841,43 @@ type DiagnosticWorkspaceClientCapabilities struct {
 	// is useful for situation where a server for example detects a project wide
 	// change that requires such a calculation.
 	RefreshSupport *bool `json:"refreshSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DiagnosticWorkspaceClientCapabilities)(nil)
+
+func (s *DiagnosticWorkspaceClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"refreshSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("refreshSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RefreshSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Client workspace capabilities specific to folding ranges
@@ -19330,6 +23900,43 @@ type FoldingRangeWorkspaceClientCapabilities struct {
 	RefreshSupport *bool `json:"refreshSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*FoldingRangeWorkspaceClientCapabilities)(nil)
+
+func (s *FoldingRangeWorkspaceClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"refreshSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("refreshSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RefreshSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Client capabilities for a text document content provider.
 //
 // Since: 3.18.0
@@ -19338,6 +23945,43 @@ type FoldingRangeWorkspaceClientCapabilities struct {
 type TextDocumentContentClientCapabilities struct {
 	// Text document content provider supports dynamic registration.
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*TextDocumentContentClientCapabilities)(nil)
+
+func (s *TextDocumentContentClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 type TextDocumentSyncClientCapabilities struct {
@@ -19356,11 +24000,106 @@ type TextDocumentSyncClientCapabilities struct {
 	DidSave *bool `json:"didSave,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*TextDocumentSyncClientCapabilities)(nil)
+
+func (s *TextDocumentSyncClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"willSave"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("willSave")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WillSave); err != nil {
+				return err
+			}
+		case `"willSaveWaitUntil"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("willSaveWaitUntil")
+			}
+			if err := json.UnmarshalDecode(dec, &s.WillSaveWaitUntil); err != nil {
+				return err
+			}
+		case `"didSave"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("didSave")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DidSave); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type TextDocumentFilterClientCapabilities struct {
 	// The client supports Relative Patterns.
 	//
 	// Since: 3.18.0
 	RelativePatternSupport *bool `json:"relativePatternSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*TextDocumentFilterClientCapabilities)(nil)
+
+func (s *TextDocumentFilterClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"relativePatternSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("relativePatternSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RelativePatternSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Completion client capabilities
@@ -19392,6 +24131,78 @@ type CompletionClientCapabilities struct {
 	CompletionList *CompletionListCapabilities `json:"completionList,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*CompletionClientCapabilities)(nil)
+
+func (s *CompletionClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"completionItem"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("completionItem")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CompletionItem); err != nil {
+				return err
+			}
+		case `"completionItemKind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("completionItemKind")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CompletionItemKind); err != nil {
+				return err
+			}
+		case `"insertTextMode"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("insertTextMode")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InsertTextMode); err != nil {
+				return err
+			}
+		case `"contextSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("contextSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ContextSupport); err != nil {
+				return err
+			}
+		case `"completionList"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("completionList")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CompletionList); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type HoverClientCapabilities struct {
 	// Whether hover supports dynamic registration.
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
@@ -19399,6 +24210,50 @@ type HoverClientCapabilities struct {
 	// Client supports the following content formats for the content
 	// property. The order describes the preferred format of the client.
 	ContentFormat *[]MarkupKind `json:"contentFormat,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*HoverClientCapabilities)(nil)
+
+func (s *HoverClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"contentFormat"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("contentFormat")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ContentFormat); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Client Capabilities for a SignatureHelpRequest.
@@ -19419,6 +24274,57 @@ type SignatureHelpClientCapabilities struct {
 	ContextSupport *bool `json:"contextSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*SignatureHelpClientCapabilities)(nil)
+
+func (s *SignatureHelpClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"signatureInformation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("signatureInformation")
+			}
+			if err := json.UnmarshalDecode(dec, &s.SignatureInformation); err != nil {
+				return err
+			}
+		case `"contextSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("contextSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ContextSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Since: 3.14.0
 type DeclarationClientCapabilities struct {
 	// Whether declaration supports dynamic registration. If this is set to `true`
@@ -19430,6 +24336,50 @@ type DeclarationClientCapabilities struct {
 	LinkSupport *bool `json:"linkSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*DeclarationClientCapabilities)(nil)
+
+func (s *DeclarationClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"linkSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("linkSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.LinkSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Client Capabilities for a DefinitionRequest.
 type DefinitionClientCapabilities struct {
 	// Whether definition supports dynamic registration.
@@ -19439,6 +24389,50 @@ type DefinitionClientCapabilities struct {
 	//
 	// Since: 3.14.0
 	LinkSupport *bool `json:"linkSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DefinitionClientCapabilities)(nil)
+
+func (s *DefinitionClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"linkSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("linkSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.LinkSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since 3.6.0
@@ -19454,6 +24448,50 @@ type TypeDefinitionClientCapabilities struct {
 	LinkSupport *bool `json:"linkSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*TypeDefinitionClientCapabilities)(nil)
+
+func (s *TypeDefinitionClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"linkSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("linkSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.LinkSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Since: 3.6.0
 type ImplementationClientCapabilities struct {
 	// Whether implementation supports dynamic registration. If this is set to `true`
@@ -19467,16 +24505,134 @@ type ImplementationClientCapabilities struct {
 	LinkSupport *bool `json:"linkSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*ImplementationClientCapabilities)(nil)
+
+func (s *ImplementationClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"linkSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("linkSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.LinkSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Client Capabilities for a ReferencesRequest.
 type ReferenceClientCapabilities struct {
 	// Whether references supports dynamic registration.
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*ReferenceClientCapabilities)(nil)
+
+func (s *ReferenceClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Client Capabilities for a DocumentHighlightRequest.
 type DocumentHighlightClientCapabilities struct {
 	// Whether document highlight supports dynamic registration.
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DocumentHighlightClientCapabilities)(nil)
+
+func (s *DocumentHighlightClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Client Capabilities for a DocumentSymbolRequest.
@@ -19503,6 +24659,71 @@ type DocumentSymbolClientCapabilities struct {
 	//
 	// Since: 3.16.0
 	LabelSupport *bool `json:"labelSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DocumentSymbolClientCapabilities)(nil)
+
+func (s *DocumentSymbolClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"symbolKind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("symbolKind")
+			}
+			if err := json.UnmarshalDecode(dec, &s.SymbolKind); err != nil {
+				return err
+			}
+		case `"hierarchicalDocumentSymbolSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("hierarchicalDocumentSymbolSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.HierarchicalDocumentSymbolSupport); err != nil {
+				return err
+			}
+		case `"tagSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tagSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TagSupport); err != nil {
+				return err
+			}
+		case `"labelSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("labelSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.LabelSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // The Client Capabilities of a CodeActionRequest.
@@ -19564,6 +24785,99 @@ type CodeActionClientCapabilities struct {
 	TagSupport *CodeActionTagOptions `json:"tagSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*CodeActionClientCapabilities)(nil)
+
+func (s *CodeActionClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"codeActionLiteralSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeActionLiteralSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CodeActionLiteralSupport); err != nil {
+				return err
+			}
+		case `"isPreferredSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("isPreferredSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.IsPreferredSupport); err != nil {
+				return err
+			}
+		case `"disabledSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("disabledSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DisabledSupport); err != nil {
+				return err
+			}
+		case `"dataSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dataSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DataSupport); err != nil {
+				return err
+			}
+		case `"resolveSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResolveSupport); err != nil {
+				return err
+			}
+		case `"honorsChangeAnnotations"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("honorsChangeAnnotations")
+			}
+			if err := json.UnmarshalDecode(dec, &s.HonorsChangeAnnotations); err != nil {
+				return err
+			}
+		case `"documentationSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentationSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentationSupport); err != nil {
+				return err
+			}
+		case `"tagSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tagSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TagSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // The client capabilities of a CodeLensRequest.
 type CodeLensClientCapabilities struct {
 	// Whether code lens supports dynamic registration.
@@ -19574,6 +24888,50 @@ type CodeLensClientCapabilities struct {
 	//
 	// Since: 3.18.0
 	ResolveSupport *ClientCodeLensResolveOptions `json:"resolveSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*CodeLensClientCapabilities)(nil)
+
+func (s *CodeLensClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"resolveSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResolveSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // The client capabilities of a DocumentLinkRequest.
@@ -19587,6 +24945,50 @@ type DocumentLinkClientCapabilities struct {
 	TooltipSupport *bool `json:"tooltipSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*DocumentLinkClientCapabilities)(nil)
+
+func (s *DocumentLinkClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"tooltipSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tooltipSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TooltipSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type DocumentColorClientCapabilities struct {
 	// Whether implementation supports dynamic registration. If this is set to `true`
 	// the client supports the new `DocumentColorRegistrationOptions` return value
@@ -19594,10 +24996,84 @@ type DocumentColorClientCapabilities struct {
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*DocumentColorClientCapabilities)(nil)
+
+func (s *DocumentColorClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Client capabilities of a DocumentFormattingRequest.
 type DocumentFormattingClientCapabilities struct {
 	// Whether formatting supports dynamic registration.
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DocumentFormattingClientCapabilities)(nil)
+
+func (s *DocumentFormattingClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Client capabilities of a DocumentRangeFormattingRequest.
@@ -19613,10 +25089,91 @@ type DocumentRangeFormattingClientCapabilities struct {
 	RangesSupport *bool `json:"rangesSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*DocumentRangeFormattingClientCapabilities)(nil)
+
+func (s *DocumentRangeFormattingClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"rangesSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("rangesSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RangesSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Client capabilities of a DocumentOnTypeFormattingRequest.
 type DocumentOnTypeFormattingClientCapabilities struct {
 	// Whether on type formatting supports dynamic registration.
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*DocumentOnTypeFormattingClientCapabilities)(nil)
+
+func (s *DocumentOnTypeFormattingClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 type RenameClientCapabilities struct {
@@ -19647,6 +25204,64 @@ type RenameClientCapabilities struct {
 	HonorsChangeAnnotations *bool `json:"honorsChangeAnnotations,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*RenameClientCapabilities)(nil)
+
+func (s *RenameClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"prepareSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("prepareSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.PrepareSupport); err != nil {
+				return err
+			}
+		case `"prepareSupportDefaultBehavior"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("prepareSupportDefaultBehavior")
+			}
+			if err := json.UnmarshalDecode(dec, &s.PrepareSupportDefaultBehavior); err != nil {
+				return err
+			}
+		case `"honorsChangeAnnotations"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("honorsChangeAnnotations")
+			}
+			if err := json.UnmarshalDecode(dec, &s.HonorsChangeAnnotations); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type FoldingRangeClientCapabilities struct {
 	// Whether implementation supports dynamic registration for folding range
 	// providers. If this is set to `true` the client supports the new
@@ -19675,11 +25290,113 @@ type FoldingRangeClientCapabilities struct {
 	FoldingRange *ClientFoldingRangeOptions `json:"foldingRange,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*FoldingRangeClientCapabilities)(nil)
+
+func (s *FoldingRangeClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"rangeLimit"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("rangeLimit")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RangeLimit); err != nil {
+				return err
+			}
+		case `"lineFoldingOnly"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("lineFoldingOnly")
+			}
+			if err := json.UnmarshalDecode(dec, &s.LineFoldingOnly); err != nil {
+				return err
+			}
+		case `"foldingRangeKind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("foldingRangeKind")
+			}
+			if err := json.UnmarshalDecode(dec, &s.FoldingRangeKind); err != nil {
+				return err
+			}
+		case `"foldingRange"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("foldingRange")
+			}
+			if err := json.UnmarshalDecode(dec, &s.FoldingRange); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type SelectionRangeClientCapabilities struct {
 	// Whether implementation supports dynamic registration for selection range providers. If this is set to `true`
 	// the client supports the new `SelectionRangeRegistrationOptions` return value for the corresponding server
 	// capability as well.
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*SelectionRangeClientCapabilities)(nil)
+
+func (s *SelectionRangeClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // The publish diagnostic client capabilities.
@@ -19712,12 +25429,114 @@ type PublishDiagnosticsClientCapabilities struct {
 	VersionSupport *bool `json:"versionSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*PublishDiagnosticsClientCapabilities)(nil)
+
+func (s *PublishDiagnosticsClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"relatedInformation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("relatedInformation")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RelatedInformation); err != nil {
+				return err
+			}
+		case `"tagSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tagSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TagSupport); err != nil {
+				return err
+			}
+		case `"codeDescriptionSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeDescriptionSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CodeDescriptionSupport); err != nil {
+				return err
+			}
+		case `"dataSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dataSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DataSupport); err != nil {
+				return err
+			}
+		case `"versionSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("versionSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VersionSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Since: 3.16.0
 type CallHierarchyClientCapabilities struct {
 	// Whether implementation supports dynamic registration. If this is set to `true`
 	// the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
 	// return value for the corresponding server capability as well.
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*CallHierarchyClientCapabilities)(nil)
+
+func (s *CallHierarchyClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since: 3.16.0
@@ -19786,7 +25605,7 @@ func (s *SemanticTokensClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -19799,42 +25618,69 @@ func (s *SemanticTokensClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) 
 		}
 		switch string(name) {
 		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
 			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
 				return err
 			}
 		case `"requests"`:
 			missing &^= missingRequests
+			if dec.PeekKind() == 'n' {
+				return errNull("requests")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Requests); err != nil {
 				return err
 			}
 		case `"tokenTypes"`:
 			missing &^= missingTokenTypes
+			if dec.PeekKind() == 'n' {
+				return errNull("tokenTypes")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TokenTypes); err != nil {
 				return err
 			}
 		case `"tokenModifiers"`:
 			missing &^= missingTokenModifiers
+			if dec.PeekKind() == 'n' {
+				return errNull("tokenModifiers")
+			}
 			if err := json.UnmarshalDecode(dec, &s.TokenModifiers); err != nil {
 				return err
 			}
 		case `"formats"`:
 			missing &^= missingFormats
+			if dec.PeekKind() == 'n' {
+				return errNull("formats")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Formats); err != nil {
 				return err
 			}
 		case `"overlappingTokenSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("overlappingTokenSupport")
+			}
 			if err := json.UnmarshalDecode(dec, &s.OverlappingTokenSupport); err != nil {
 				return err
 			}
 		case `"multilineTokenSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("multilineTokenSupport")
+			}
 			if err := json.UnmarshalDecode(dec, &s.MultilineTokenSupport); err != nil {
 				return err
 			}
 		case `"serverCancelSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("serverCancelSupport")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ServerCancelSupport); err != nil {
 				return err
 			}
 		case `"augmentsSyntaxTokens"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("augmentsSyntaxTokens")
+			}
 			if err := json.UnmarshalDecode(dec, &s.AugmentsSyntaxTokens); err != nil {
 				return err
 			}
@@ -19863,7 +25709,7 @@ func (s *SemanticTokensClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) 
 		if missing&missingFormats != 0 {
 			missingProps = append(missingProps, "formats")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -19879,6 +25725,43 @@ type LinkedEditingRangeClientCapabilities struct {
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*LinkedEditingRangeClientCapabilities)(nil)
+
+func (s *LinkedEditingRangeClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Client capabilities specific to the moniker request.
 //
 // Since: 3.16.0
@@ -19889,6 +25772,43 @@ type MonikerClientCapabilities struct {
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*MonikerClientCapabilities)(nil)
+
+func (s *MonikerClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Since: 3.17.0
 type TypeHierarchyClientCapabilities struct {
 	// Whether implementation supports dynamic registration. If this is set to `true`
@@ -19897,12 +25817,86 @@ type TypeHierarchyClientCapabilities struct {
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*TypeHierarchyClientCapabilities)(nil)
+
+func (s *TypeHierarchyClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Client capabilities specific to inline values.
 //
 // Since: 3.17.0
 type InlineValueClientCapabilities struct {
 	// Whether implementation supports dynamic registration for inline value providers.
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*InlineValueClientCapabilities)(nil)
+
+func (s *InlineValueClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Inlay hint client capabilities.
@@ -19915,6 +25909,50 @@ type InlayHintClientCapabilities struct {
 	// Indicates which properties a client can resolve lazily on an inlay
 	// hint.
 	ResolveSupport *ClientInlayHintResolveOptions `json:"resolveSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*InlayHintClientCapabilities)(nil)
+
+func (s *InlayHintClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"resolveSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResolveSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Client capabilities specific to diagnostic pull requests.
@@ -19951,6 +25989,78 @@ type DiagnosticClientCapabilities struct {
 	RelatedDocumentSupport *bool `json:"relatedDocumentSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*DiagnosticClientCapabilities)(nil)
+
+func (s *DiagnosticClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"relatedInformation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("relatedInformation")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RelatedInformation); err != nil {
+				return err
+			}
+		case `"tagSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tagSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TagSupport); err != nil {
+				return err
+			}
+		case `"codeDescriptionSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeDescriptionSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CodeDescriptionSupport); err != nil {
+				return err
+			}
+		case `"dataSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dataSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DataSupport); err != nil {
+				return err
+			}
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		case `"relatedDocumentSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("relatedDocumentSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RelatedDocumentSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Client capabilities specific to inline completions.
 //
 // Since: 3.18.0
@@ -19961,10 +26071,84 @@ type InlineCompletionClientCapabilities struct {
 	DynamicRegistration *bool `json:"dynamicRegistration,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*InlineCompletionClientCapabilities)(nil)
+
+func (s *InlineCompletionClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"dynamicRegistration"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dynamicRegistration")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DynamicRegistration); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Show message request client capabilities
 type ShowMessageRequestClientCapabilities struct {
 	// Capabilities specific to the `MessageActionItem` type.
 	MessageActionItem *ClientShowMessageActionItemOptions `json:"messageActionItem,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ShowMessageRequestClientCapabilities)(nil)
+
+func (s *ShowMessageRequestClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"messageActionItem"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("messageActionItem")
+			}
+			if err := json.UnmarshalDecode(dec, &s.MessageActionItem); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Client capabilities for the showDocument request.
@@ -19986,7 +26170,7 @@ func (s *ShowDocumentClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) er
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20019,7 +26203,7 @@ func (s *ShowDocumentClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) er
 		if missing&missingSupport != 0 {
 			missingProps = append(missingProps, "support")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20047,7 +26231,7 @@ func (s *StaleRequestSupportOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20066,6 +26250,9 @@ func (s *StaleRequestSupportOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 			}
 		case `"retryOnContentModified"`:
 			missing &^= missingRetryOnContentModified
+			if dec.PeekKind() == 'n' {
+				return errNull("retryOnContentModified")
+			}
 			if err := json.UnmarshalDecode(dec, &s.RetryOnContentModified); err != nil {
 				return err
 			}
@@ -20088,7 +26275,7 @@ func (s *StaleRequestSupportOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingRetryOnContentModified != 0 {
 			missingProps = append(missingProps, "retryOnContentModified")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20115,7 +26302,7 @@ func (s *RegularExpressionsClientCapabilities) UnmarshalJSONFrom(dec *json.Decod
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20133,6 +26320,9 @@ func (s *RegularExpressionsClientCapabilities) UnmarshalJSONFrom(dec *json.Decod
 				return err
 			}
 		case `"version"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("version")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Version); err != nil {
 				return err
 			}
@@ -20152,7 +26342,7 @@ func (s *RegularExpressionsClientCapabilities) UnmarshalJSONFrom(dec *json.Decod
 		if missing&missingEngine != 0 {
 			missingProps = append(missingProps, "engine")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20185,7 +26375,7 @@ func (s *MarkdownClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20203,10 +26393,16 @@ func (s *MarkdownClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error 
 				return err
 			}
 		case `"version"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("version")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Version); err != nil {
 				return err
 			}
 		case `"allowedTags"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("allowedTags")
+			}
 			if err := json.UnmarshalDecode(dec, &s.AllowedTags); err != nil {
 				return err
 			}
@@ -20226,7 +26422,7 @@ func (s *MarkdownClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingParser != 0 {
 			missingProps = append(missingProps, "parser")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20240,6 +26436,43 @@ type ChangeAnnotationsSupportOptions struct {
 	GroupsOnLabel *bool `json:"groupsOnLabel,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*ChangeAnnotationsSupportOptions)(nil)
+
+func (s *ChangeAnnotationsSupportOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"groupsOnLabel"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("groupsOnLabel")
+			}
+			if err := json.UnmarshalDecode(dec, &s.GroupsOnLabel); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Since: 3.18.0
 type ClientSymbolKindOptions struct {
 	// The symbol kind values the client supports. When this
@@ -20251,6 +26484,43 @@ type ClientSymbolKindOptions struct {
 	// the symbol kinds from `File` to `Array` as defined in
 	// the initial version of the protocol.
 	ValueSet *[]SymbolKind `json:"valueSet,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ClientSymbolKindOptions)(nil)
+
+func (s *ClientSymbolKindOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"valueSet"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("valueSet")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ValueSet); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since: 3.18.0
@@ -20269,7 +26539,7 @@ func (s *ClientSymbolTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20283,6 +26553,9 @@ func (s *ClientSymbolTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"valueSet"`:
 			missing &^= missingValueSet
+			if dec.PeekKind() == 'n' {
+				return errNull("valueSet")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ValueSet); err != nil {
 				return err
 			}
@@ -20302,7 +26575,7 @@ func (s *ClientSymbolTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingValueSet != 0 {
 			missingProps = append(missingProps, "valueSet")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20325,7 +26598,7 @@ func (s *ClientSymbolResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20339,6 +26612,9 @@ func (s *ClientSymbolResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 		switch string(name) {
 		case `"properties"`:
 			missing &^= missingProperties
+			if dec.PeekKind() == 'n' {
+				return errNull("properties")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Properties); err != nil {
 				return err
 			}
@@ -20358,7 +26634,7 @@ func (s *ClientSymbolResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingProperties != 0 {
 			missingProps = append(missingProps, "properties")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20422,6 +26698,106 @@ type ClientCompletionItemOptions struct {
 	LabelDetailsSupport *bool `json:"labelDetailsSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*ClientCompletionItemOptions)(nil)
+
+func (s *ClientCompletionItemOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"snippetSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("snippetSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.SnippetSupport); err != nil {
+				return err
+			}
+		case `"commitCharactersSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("commitCharactersSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CommitCharactersSupport); err != nil {
+				return err
+			}
+		case `"documentationFormat"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentationFormat")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentationFormat); err != nil {
+				return err
+			}
+		case `"deprecatedSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("deprecatedSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DeprecatedSupport); err != nil {
+				return err
+			}
+		case `"preselectSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("preselectSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.PreselectSupport); err != nil {
+				return err
+			}
+		case `"tagSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tagSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TagSupport); err != nil {
+				return err
+			}
+		case `"insertReplaceSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("insertReplaceSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InsertReplaceSupport); err != nil {
+				return err
+			}
+		case `"resolveSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resolveSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResolveSupport); err != nil {
+				return err
+			}
+		case `"insertTextModeSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("insertTextModeSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.InsertTextModeSupport); err != nil {
+				return err
+			}
+		case `"labelDetailsSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("labelDetailsSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.LabelDetailsSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Since: 3.18.0
 type ClientCompletionItemOptionsKind struct {
 	// The completion item kind values the client supports. When this
@@ -20433,6 +26809,43 @@ type ClientCompletionItemOptionsKind struct {
 	// the completion items kinds from `Text` to `Reference` as defined in
 	// the initial version of the protocol.
 	ValueSet *[]CompletionItemKind `json:"valueSet,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ClientCompletionItemOptionsKind)(nil)
+
+func (s *ClientCompletionItemOptionsKind) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"valueSet"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("valueSet")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ValueSet); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // The client supports the following `CompletionList` specific
@@ -20464,6 +26877,50 @@ type CompletionListCapabilities struct {
 	ApplyKindSupport *bool `json:"applyKindSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*CompletionListCapabilities)(nil)
+
+func (s *CompletionListCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"itemDefaults"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("itemDefaults")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ItemDefaults); err != nil {
+				return err
+			}
+		case `"applyKindSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("applyKindSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ApplyKindSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Since: 3.18.0
 type ClientSignatureInformationOptions struct {
 	// Client supports the following content formats for the documentation
@@ -20489,6 +26946,64 @@ type ClientSignatureInformationOptions struct {
 	NoActiveParameterSupport *bool `json:"noActiveParameterSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*ClientSignatureInformationOptions)(nil)
+
+func (s *ClientSignatureInformationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"documentationFormat"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("documentationFormat")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DocumentationFormat); err != nil {
+				return err
+			}
+		case `"parameterInformation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("parameterInformation")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ParameterInformation); err != nil {
+				return err
+			}
+		case `"activeParameterSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("activeParameterSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ActiveParameterSupport); err != nil {
+				return err
+			}
+		case `"noActiveParameterSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("noActiveParameterSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.NoActiveParameterSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Since: 3.18.0
 type ClientCodeActionLiteralOptions struct {
 	// The code action kind is support with the following value
@@ -20506,7 +27021,7 @@ func (s *ClientCodeActionLiteralOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20520,6 +27035,9 @@ func (s *ClientCodeActionLiteralOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 		switch string(name) {
 		case `"codeActionKind"`:
 			missing &^= missingCodeActionKind
+			if dec.PeekKind() == 'n' {
+				return errNull("codeActionKind")
+			}
 			if err := json.UnmarshalDecode(dec, &s.CodeActionKind); err != nil {
 				return err
 			}
@@ -20539,7 +27057,7 @@ func (s *ClientCodeActionLiteralOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 		if missing&missingCodeActionKind != 0 {
 			missingProps = append(missingProps, "codeActionKind")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20561,7 +27079,7 @@ func (s *ClientCodeActionResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20575,6 +27093,9 @@ func (s *ClientCodeActionResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 		switch string(name) {
 		case `"properties"`:
 			missing &^= missingProperties
+			if dec.PeekKind() == 'n' {
+				return errNull("properties")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Properties); err != nil {
 				return err
 			}
@@ -20594,7 +27115,7 @@ func (s *ClientCodeActionResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 		if missing&missingProperties != 0 {
 			missingProps = append(missingProps, "properties")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20616,7 +27137,7 @@ func (s *CodeActionTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20630,6 +27151,9 @@ func (s *CodeActionTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"valueSet"`:
 			missing &^= missingValueSet
+			if dec.PeekKind() == 'n' {
+				return errNull("valueSet")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ValueSet); err != nil {
 				return err
 			}
@@ -20649,7 +27173,7 @@ func (s *CodeActionTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingValueSet != 0 {
 			missingProps = append(missingProps, "valueSet")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20671,7 +27195,7 @@ func (s *ClientCodeLensResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) erro
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20685,6 +27209,9 @@ func (s *ClientCodeLensResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) erro
 		switch string(name) {
 		case `"properties"`:
 			missing &^= missingProperties
+			if dec.PeekKind() == 'n' {
+				return errNull("properties")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Properties); err != nil {
 				return err
 			}
@@ -20704,7 +27231,7 @@ func (s *ClientCodeLensResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) erro
 		if missing&missingProperties != 0 {
 			missingProps = append(missingProps, "properties")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20719,6 +27246,43 @@ type ClientFoldingRangeKindOptions struct {
 	ValueSet *[]FoldingRangeKind `json:"valueSet,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*ClientFoldingRangeKindOptions)(nil)
+
+func (s *ClientFoldingRangeKindOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"valueSet"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("valueSet")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ValueSet); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Since: 3.18.0
 type ClientFoldingRangeOptions struct {
 	// If set, the client signals that it supports setting collapsedText on
@@ -20726,6 +27290,43 @@ type ClientFoldingRangeOptions struct {
 	//
 	// Since: 3.17.0
 	CollapsedText *bool `json:"collapsedText,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ClientFoldingRangeOptions)(nil)
+
+func (s *ClientFoldingRangeOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"collapsedText"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("collapsedText")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CollapsedText); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // General diagnostics capabilities for pull and push model.
@@ -20752,6 +27353,64 @@ type DiagnosticsCapabilities struct {
 	DataSupport *bool `json:"dataSupport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*DiagnosticsCapabilities)(nil)
+
+func (s *DiagnosticsCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"relatedInformation"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("relatedInformation")
+			}
+			if err := json.UnmarshalDecode(dec, &s.RelatedInformation); err != nil {
+				return err
+			}
+		case `"tagSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("tagSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.TagSupport); err != nil {
+				return err
+			}
+		case `"codeDescriptionSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeDescriptionSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CodeDescriptionSupport); err != nil {
+				return err
+			}
+		case `"dataSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("dataSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DataSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Since: 3.18.0
 type ClientSemanticTokensRequestOptions struct {
 	// The client will send the `textDocument/semanticTokens/range` request if
@@ -20761,6 +27420,50 @@ type ClientSemanticTokensRequestOptions struct {
 	// The client will send the `textDocument/semanticTokens/full` request if
 	// the server provides a corresponding handler.
 	Full *BooleanOrClientSemanticTokensRequestFullDelta `json:"full,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ClientSemanticTokensRequestOptions)(nil)
+
+func (s *ClientSemanticTokensRequestOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"range"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("range")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Range); err != nil {
+				return err
+			}
+		case `"full"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("full")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Full); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since: 3.18.0
@@ -20779,7 +27482,7 @@ func (s *ClientInlayHintResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20793,6 +27496,9 @@ func (s *ClientInlayHintResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 		switch string(name) {
 		case `"properties"`:
 			missing &^= missingProperties
+			if dec.PeekKind() == 'n' {
+				return errNull("properties")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Properties); err != nil {
 				return err
 			}
@@ -20812,7 +27518,7 @@ func (s *ClientInlayHintResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) err
 		if missing&missingProperties != 0 {
 			missingProps = append(missingProps, "properties")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20824,6 +27530,43 @@ type ClientShowMessageActionItemOptions struct {
 	// are preserved and send back to the server in the
 	// request's response.
 	AdditionalPropertiesSupport *bool `json:"additionalPropertiesSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ClientShowMessageActionItemOptions)(nil)
+
+func (s *ClientShowMessageActionItemOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"additionalPropertiesSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("additionalPropertiesSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.AdditionalPropertiesSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since: 3.18.0
@@ -20842,7 +27585,7 @@ func (s *CompletionItemTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20856,6 +27599,9 @@ func (s *CompletionItemTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		switch string(name) {
 		case `"valueSet"`:
 			missing &^= missingValueSet
+			if dec.PeekKind() == 'n' {
+				return errNull("valueSet")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ValueSet); err != nil {
 				return err
 			}
@@ -20875,7 +27621,7 @@ func (s *CompletionItemTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingValueSet != 0 {
 			missingProps = append(missingProps, "valueSet")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20897,7 +27643,7 @@ func (s *ClientCompletionItemResolveOptions) UnmarshalJSONFrom(dec *json.Decoder
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20911,6 +27657,9 @@ func (s *ClientCompletionItemResolveOptions) UnmarshalJSONFrom(dec *json.Decoder
 		switch string(name) {
 		case `"properties"`:
 			missing &^= missingProperties
+			if dec.PeekKind() == 'n' {
+				return errNull("properties")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Properties); err != nil {
 				return err
 			}
@@ -20930,7 +27679,7 @@ func (s *ClientCompletionItemResolveOptions) UnmarshalJSONFrom(dec *json.Decoder
 		if missing&missingProperties != 0 {
 			missingProps = append(missingProps, "properties")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20951,7 +27700,7 @@ func (s *ClientCompletionItemInsertTextModeOptions) UnmarshalJSONFrom(dec *json.
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -20965,6 +27714,9 @@ func (s *ClientCompletionItemInsertTextModeOptions) UnmarshalJSONFrom(dec *json.
 		switch string(name) {
 		case `"valueSet"`:
 			missing &^= missingValueSet
+			if dec.PeekKind() == 'n' {
+				return errNull("valueSet")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ValueSet); err != nil {
 				return err
 			}
@@ -20984,7 +27736,7 @@ func (s *ClientCompletionItemInsertTextModeOptions) UnmarshalJSONFrom(dec *json.
 		if missing&missingValueSet != 0 {
 			missingProps = append(missingProps, "valueSet")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -20997,6 +27749,43 @@ type ClientSignatureParameterInformationOptions struct {
 	//
 	// Since: 3.14.0
 	LabelOffsetSupport *bool `json:"labelOffsetSupport,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ClientSignatureParameterInformationOptions)(nil)
+
+func (s *ClientSignatureParameterInformationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"labelOffsetSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("labelOffsetSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.LabelOffsetSupport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Since: 3.18.0
@@ -21018,7 +27807,7 @@ func (s *ClientCodeActionKindOptions) UnmarshalJSONFrom(dec *json.Decoder) error
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21032,6 +27821,9 @@ func (s *ClientCodeActionKindOptions) UnmarshalJSONFrom(dec *json.Decoder) error
 		switch string(name) {
 		case `"valueSet"`:
 			missing &^= missingValueSet
+			if dec.PeekKind() == 'n' {
+				return errNull("valueSet")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ValueSet); err != nil {
 				return err
 			}
@@ -21051,7 +27843,7 @@ func (s *ClientCodeActionKindOptions) UnmarshalJSONFrom(dec *json.Decoder) error
 		if missing&missingValueSet != 0 {
 			missingProps = append(missingProps, "valueSet")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -21073,7 +27865,7 @@ func (s *ClientDiagnosticsTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21087,6 +27879,9 @@ func (s *ClientDiagnosticsTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error
 		switch string(name) {
 		case `"valueSet"`:
 			missing &^= missingValueSet
+			if dec.PeekKind() == 'n' {
+				return errNull("valueSet")
+			}
 			if err := json.UnmarshalDecode(dec, &s.ValueSet); err != nil {
 				return err
 			}
@@ -21106,7 +27901,7 @@ func (s *ClientDiagnosticsTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error
 		if missing&missingValueSet != 0 {
 			missingProps = append(missingProps, "valueSet")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -21119,6 +27914,43 @@ type ClientSemanticTokensRequestFullDelta struct {
 	Delta *bool `json:"delta,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*ClientSemanticTokensRequestFullDelta)(nil)
+
+func (s *ClientSemanticTokensRequestFullDelta) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"delta"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("delta")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Delta); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // InitializationOptions contains user-provided initialization options.
 type InitializationOptions struct {
 	// DisablePushDiagnostics disables automatic pushing of diagnostics to the client.
@@ -21129,6 +27961,54 @@ type InitializationOptions struct {
 
 	// userPreferences and/or formatting options if provided at initialization.
 	UserPreferences *any `json:"userPreferences,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*InitializationOptions)(nil)
+
+func (s *InitializationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"disablePushDiagnostics"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("disablePushDiagnostics")
+			}
+			if err := json.UnmarshalDecode(dec, &s.DisablePushDiagnostics); err != nil {
+				return err
+			}
+		case `"codeLensShowLocationsCommandName"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("codeLensShowLocationsCommandName")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CodeLensShowLocationsCommandName); err != nil {
+				return err
+			}
+		case `"userPreferences"`:
+			if err := json.UnmarshalDecode(dec, &s.UserPreferences); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // AutoImportFix contains information about an auto-import suggestion.
@@ -21166,7 +28046,7 @@ func (s *AutoImportFix) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21210,6 +28090,9 @@ func (s *AutoImportFix) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 		case `"usagePosition"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("usagePosition")
+			}
 			if err := json.UnmarshalDecode(dec, &s.UsagePosition); err != nil {
 				return err
 			}
@@ -21239,7 +28122,7 @@ func (s *AutoImportFix) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingImportIndex != 0 {
 			missingProps = append(missingProps, "importIndex")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -21263,6 +28146,59 @@ type CompletionItemData struct {
 	AutoImport *AutoImportFix `json:"autoImport,omitzero"`
 }
 
+var _ json.UnmarshalerFrom = (*CompletionItemData)(nil)
+
+func (s *CompletionItemData) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"fileName"`:
+			if err := json.UnmarshalDecode(dec, &s.FileName); err != nil {
+				return err
+			}
+		case `"position"`:
+			if err := json.UnmarshalDecode(dec, &s.Position); err != nil {
+				return err
+			}
+		case `"source"`:
+			if err := json.UnmarshalDecode(dec, &s.Source); err != nil {
+				return err
+			}
+		case `"name"`:
+			if err := json.UnmarshalDecode(dec, &s.Name); err != nil {
+				return err
+			}
+		case `"autoImport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("autoImport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.AutoImport); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type CodeLensData struct {
 	// The kind of the code lens ("references" or "implementations").
 	Kind CodeLensKind `json:"kind"`
@@ -21282,7 +28218,7 @@ func (s *CodeLensData) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21323,7 +28259,7 @@ func (s *CodeLensData) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingUri != 0 {
 			missingProps = append(missingProps, "uri")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -21345,7 +28281,7 @@ func (s *CustomClosingTagCompletion) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21378,7 +28314,7 @@ func (s *CustomClosingTagCompletion) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingNewText != 0 {
 			missingProps = append(missingProps, "newText")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -21408,7 +28344,7 @@ func (s *RequestFailureTelemetryEvent) UnmarshalJSONFrom(dec *json.Decoder) erro
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21432,6 +28368,9 @@ func (s *RequestFailureTelemetryEvent) UnmarshalJSONFrom(dec *json.Decoder) erro
 			}
 		case `"properties"`:
 			missing &^= missingProperties
+			if dec.PeekKind() == 'n' {
+				return errNull("properties")
+			}
 			if err := json.UnmarshalDecode(dec, &s.Properties); err != nil {
 				return err
 			}
@@ -21457,7 +28396,7 @@ func (s *RequestFailureTelemetryEvent) UnmarshalJSONFrom(dec *json.Decoder) erro
 		if missing&missingProperties != 0 {
 			missingProps = append(missingProps, "properties")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -21487,7 +28426,7 @@ func (s *RequestFailureTelemetryProperties) UnmarshalJSONFrom(dec *json.Decoder)
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21536,7 +28475,7 @@ func (s *RequestFailureTelemetryProperties) UnmarshalJSONFrom(dec *json.Decoder)
 		if missing&missingStack != 0 {
 			missingProps = append(missingProps, "stack")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -21558,7 +28497,7 @@ func (s *ProfileParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21591,7 +28530,7 @@ func (s *ProfileParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingDir != 0 {
 			missingProps = append(missingProps, "dir")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -21613,7 +28552,7 @@ func (s *ProfileResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21646,7 +28585,7 @@ func (s *ProfileResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingFile != 0 {
 			missingProps = append(missingProps, "file")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -21656,6 +28595,43 @@ func (s *ProfileResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 type InitializeAPISessionParams struct {
 	// Optional path to use for the named pipe or Unix domain socket. If not provided, a unique path will be generated.
 	Pipe *string `json:"pipe,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*InitializeAPISessionParams)(nil)
+
+func (s *InitializeAPISessionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"pipe"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("pipe")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Pipe); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Result for the initializeAPISession request.
@@ -21678,7 +28654,7 @@ func (s *InitializeAPISessionResult) UnmarshalJSONFrom(dec *json.Decoder) error 
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21719,7 +28695,7 @@ func (s *InitializeAPISessionResult) UnmarshalJSONFrom(dec *json.Decoder) error 
 		if missing&missingPipe != 0 {
 			missingProps = append(missingProps, "pipe")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -21745,7 +28721,7 @@ func (s *ProjectInfoParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21778,7 +28754,7 @@ func (s *ProjectInfoParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingTextDocument != 0 {
 			missingProps = append(missingProps, "textDocument")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -21800,7 +28776,7 @@ func (s *ProjectInfoResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21833,7 +28809,7 @@ func (s *ProjectInfoResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingConfigFilePath != 0 {
 			missingProps = append(missingProps, "configFilePath")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -21882,7 +28858,7 @@ func (s *ColorPresentationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decod
 	missing := _missingLast - 1
 
 	if k := dec.PeekKind(); k != '{' {
-		return fmt.Errorf("expected object start, but encountered %v", k)
+		return errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
 		return err
@@ -21895,6 +28871,9 @@ func (s *ColorPresentationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decod
 		}
 		switch string(name) {
 		case `"workDoneProgress"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("workDoneProgress")
+			}
 			if err := json.UnmarshalDecode(dec, &s.WorkDoneProgress); err != nil {
 				return err
 			}
@@ -21919,7 +28898,7 @@ func (s *ColorPresentationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decod
 		if missing&missingDocumentSelector != 0 {
 			missingProps = append(missingProps, "documentSelector")
 		}
-		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+		return errMissing(missingProps)
 	}
 
 	return nil
@@ -24394,7 +31373,7 @@ func (o *IntegerOrString) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.String = new(string)
 		return json.UnmarshalDecode(dec, o.String)
 	default:
-		return fmt.Errorf("invalid IntegerOrString: expected number, string, got %v", dec.PeekKind())
+		return errInvalidKind("IntegerOrString", dec.PeekKind())
 	}
 }
 
@@ -24424,7 +31403,7 @@ func (o *DocumentSelectorOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.DocumentSelector = new([]TextDocumentFilterLanguageOrSchemeOrPattern)
 		return json.UnmarshalDecode(dec, o.DocumentSelector)
 	default:
-		return fmt.Errorf("invalid DocumentSelectorOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("DocumentSelectorOrNull", dec.PeekKind())
 	}
 }
 
@@ -24461,7 +31440,7 @@ func (o *BooleanOrEmptyObject) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.EmptyObject = new(struct{})
 		return json.UnmarshalDecode(dec, o.EmptyObject)
 	default:
-		return fmt.Errorf("invalid BooleanOrEmptyObject: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrEmptyObject", dec.PeekKind())
 	}
 }
 
@@ -24498,7 +31477,7 @@ func (o *BooleanOrSemanticTokensFullDelta) UnmarshalJSONFrom(dec *json.Decoder) 
 		o.SemanticTokensFullDelta = new(SemanticTokensFullDelta)
 		return json.UnmarshalDecode(dec, o.SemanticTokensFullDelta)
 	default:
-		return fmt.Errorf("invalid BooleanOrSemanticTokensFullDelta: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrSemanticTokensFullDelta", dec.PeekKind())
 	}
 }
 
@@ -24589,7 +31568,7 @@ func (o *StringOrInlayHintLabelParts) UnmarshalJSONFrom(dec *json.Decoder) error
 		o.InlayHintLabelParts = new([]*InlayHintLabelPart)
 		return json.UnmarshalDecode(dec, o.InlayHintLabelParts)
 	default:
-		return fmt.Errorf("invalid StringOrInlayHintLabelParts: expected string, array, got %v", dec.PeekKind())
+		return errInvalidKind("StringOrInlayHintLabelParts", dec.PeekKind())
 	}
 }
 
@@ -24625,7 +31604,7 @@ func (o *StringOrMarkupContent) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.MarkupContent = new(MarkupContent)
 		return json.UnmarshalDecode(dec, o.MarkupContent)
 	default:
-		return fmt.Errorf("invalid StringOrMarkupContent: expected string, object, got %v", dec.PeekKind())
+		return errInvalidKind("StringOrMarkupContent", dec.PeekKind())
 	}
 }
 
@@ -24665,7 +31644,7 @@ func (o *FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) Unmars
 		o.UnchangedDocumentDiagnosticReport = new(UnchangedDocumentDiagnosticReport)
 		return json.Unmarshal(data, o.UnchangedDocumentDiagnosticReport)
 	}
-	return fmt.Errorf("invalid FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport: %s", data)
+	return errInvalidValue("FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport", data)
 }
 
 type WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport struct {
@@ -24704,7 +31683,7 @@ func (o *WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticRepor
 		o.UnchangedDocumentDiagnosticReport = new(WorkspaceUnchangedDocumentDiagnosticReport)
 		return json.Unmarshal(data, o.UnchangedDocumentDiagnosticReport)
 	}
-	return fmt.Errorf("invalid WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport: %s", data)
+	return errInvalidValue("WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport", data)
 }
 
 type StringOrStringValue struct {
@@ -24739,7 +31718,7 @@ func (o *StringOrStringValue) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.StringValue = new(StringValue)
 		return json.UnmarshalDecode(dec, o.StringValue)
 	default:
-		return fmt.Errorf("invalid StringOrStringValue: expected string, object, got %v", dec.PeekKind())
+		return errInvalidKind("StringOrStringValue", dec.PeekKind())
 	}
 }
 
@@ -24769,7 +31748,7 @@ func (o *IntegerOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.Integer = new(int32)
 		return json.UnmarshalDecode(dec, o.Integer)
 	default:
-		return fmt.Errorf("invalid IntegerOrNull: expected null, number, got %v", dec.PeekKind())
+		return errInvalidKind("IntegerOrNull", dec.PeekKind())
 	}
 }
 
@@ -24799,7 +31778,7 @@ func (o *StringOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.String = new(string)
 		return json.UnmarshalDecode(dec, o.String)
 	default:
-		return fmt.Errorf("invalid StringOrNull: expected null, string, got %v", dec.PeekKind())
+		return errInvalidKind("StringOrNull", dec.PeekKind())
 	}
 }
 
@@ -24829,7 +31808,7 @@ func (o *DocumentUriOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.DocumentUri = new(DocumentUri)
 		return json.UnmarshalDecode(dec, o.DocumentUri)
 	default:
-		return fmt.Errorf("invalid DocumentUriOrNull: expected null, string, got %v", dec.PeekKind())
+		return errInvalidKind("DocumentUriOrNull", dec.PeekKind())
 	}
 }
 
@@ -24859,7 +31838,7 @@ func (o *WorkspaceFoldersOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.WorkspaceFolders = new([]*WorkspaceFolder)
 		return json.UnmarshalDecode(dec, o.WorkspaceFolders)
 	default:
-		return fmt.Errorf("invalid WorkspaceFoldersOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("WorkspaceFoldersOrNull", dec.PeekKind())
 	}
 }
 
@@ -24895,7 +31874,7 @@ func (o *StringOrStrings) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.Strings = new([]string)
 		return json.UnmarshalDecode(dec, o.Strings)
 	default:
-		return fmt.Errorf("invalid StringOrStrings: expected string, array, got %v", dec.PeekKind())
+		return errInvalidKind("StringOrStrings", dec.PeekKind())
 	}
 }
 
@@ -24973,7 +31952,7 @@ func (o *TextEditOrInsertReplaceEdit) UnmarshalJSONFrom(dec *json.Decoder) error
 		o.TextEdit = new(TextEdit)
 		return json.Unmarshal(data, o.TextEdit)
 	}
-	return fmt.Errorf("invalid TextEditOrInsertReplaceEdit: %s", data)
+	return errInvalidValue("TextEditOrInsertReplaceEdit", data)
 }
 
 type MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings struct {
@@ -25025,7 +32004,7 @@ func (o *MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings) Unmarsh
 			o.MarkedStringWithLanguage = new(MarkedStringWithLanguage)
 			return json.Unmarshal(data, o.MarkedStringWithLanguage)
 		}
-		return fmt.Errorf("invalid MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings: %s", data)
+		return errInvalidValue("MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings", data)
 	case '"':
 		o.String = new(string)
 		return json.UnmarshalDecode(dec, o.String)
@@ -25033,7 +32012,7 @@ func (o *MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings) Unmarsh
 		o.MarkedStrings = new([]StringOrMarkedStringWithLanguage)
 		return json.UnmarshalDecode(dec, o.MarkedStrings)
 	default:
-		return fmt.Errorf("invalid MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings: expected object, string, array, got %v", dec.PeekKind())
+		return errInvalidKind("MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings", dec.PeekKind())
 	}
 }
 
@@ -25063,7 +32042,7 @@ func (o *UintegerOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.Uinteger = new(uint32)
 		return json.UnmarshalDecode(dec, o.Uinteger)
 	default:
-		return fmt.Errorf("invalid UintegerOrNull: expected null, number, got %v", dec.PeekKind())
+		return errInvalidKind("UintegerOrNull", dec.PeekKind())
 	}
 }
 
@@ -25148,7 +32127,7 @@ func (o *WorkDoneProgressBeginOrReportOrEnd) UnmarshalJSONFrom(dec *json.Decoder
 		o.End = new(WorkDoneProgressEnd)
 		return json.Unmarshal(data, o.End)
 	}
-	return fmt.Errorf("invalid WorkDoneProgressBeginOrReportOrEnd: %s", data)
+	return errInvalidValue("WorkDoneProgressBeginOrReportOrEnd", data)
 }
 
 type TextEditOrAnnotatedTextEditOrSnippetTextEdit struct {
@@ -25228,7 +32207,7 @@ func (o *TextDocumentSyncOptionsOrKind) UnmarshalJSONFrom(dec *json.Decoder) err
 		o.Kind = new(TextDocumentSyncKind)
 		return json.UnmarshalDecode(dec, o.Kind)
 	default:
-		return fmt.Errorf("invalid TextDocumentSyncOptionsOrKind: expected object, number, got %v", dec.PeekKind())
+		return errInvalidKind("TextDocumentSyncOptionsOrKind", dec.PeekKind())
 	}
 }
 
@@ -25265,7 +32244,7 @@ func (o *BooleanOrHoverOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.HoverOptions = new(HoverOptions)
 		return json.UnmarshalDecode(dec, o.HoverOptions)
 	default:
-		return fmt.Errorf("invalid BooleanOrHoverOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrHoverOptions", dec.PeekKind())
 	}
 }
 
@@ -25316,7 +32295,7 @@ func (o *BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions) UnmarshalJ
 			return json.Unmarshal(data, o.DeclarationOptions)
 		}
 	default:
-		return fmt.Errorf("invalid BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions", dec.PeekKind())
 	}
 }
 
@@ -25353,7 +32332,7 @@ func (o *BooleanOrDefinitionOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 		o.DefinitionOptions = new(DefinitionOptions)
 		return json.UnmarshalDecode(dec, o.DefinitionOptions)
 	default:
-		return fmt.Errorf("invalid BooleanOrDefinitionOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrDefinitionOptions", dec.PeekKind())
 	}
 }
 
@@ -25404,7 +32383,7 @@ func (o *BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions) Unma
 			return json.Unmarshal(data, o.TypeDefinitionOptions)
 		}
 	default:
-		return fmt.Errorf("invalid BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions", dec.PeekKind())
 	}
 }
 
@@ -25455,7 +32434,7 @@ func (o *BooleanOrImplementationOptionsOrImplementationRegistrationOptions) Unma
 			return json.Unmarshal(data, o.ImplementationOptions)
 		}
 	default:
-		return fmt.Errorf("invalid BooleanOrImplementationOptionsOrImplementationRegistrationOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrImplementationOptionsOrImplementationRegistrationOptions", dec.PeekKind())
 	}
 }
 
@@ -25492,7 +32471,7 @@ func (o *BooleanOrReferenceOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.ReferenceOptions = new(ReferenceOptions)
 		return json.UnmarshalDecode(dec, o.ReferenceOptions)
 	default:
-		return fmt.Errorf("invalid BooleanOrReferenceOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrReferenceOptions", dec.PeekKind())
 	}
 }
 
@@ -25529,7 +32508,7 @@ func (o *BooleanOrDocumentHighlightOptions) UnmarshalJSONFrom(dec *json.Decoder)
 		o.DocumentHighlightOptions = new(DocumentHighlightOptions)
 		return json.UnmarshalDecode(dec, o.DocumentHighlightOptions)
 	default:
-		return fmt.Errorf("invalid BooleanOrDocumentHighlightOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrDocumentHighlightOptions", dec.PeekKind())
 	}
 }
 
@@ -25566,7 +32545,7 @@ func (o *BooleanOrDocumentSymbolOptions) UnmarshalJSONFrom(dec *json.Decoder) er
 		o.DocumentSymbolOptions = new(DocumentSymbolOptions)
 		return json.UnmarshalDecode(dec, o.DocumentSymbolOptions)
 	default:
-		return fmt.Errorf("invalid BooleanOrDocumentSymbolOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrDocumentSymbolOptions", dec.PeekKind())
 	}
 }
 
@@ -25603,7 +32582,7 @@ func (o *BooleanOrCodeActionOptions) UnmarshalJSONFrom(dec *json.Decoder) error 
 		o.CodeActionOptions = new(CodeActionOptions)
 		return json.UnmarshalDecode(dec, o.CodeActionOptions)
 	default:
-		return fmt.Errorf("invalid BooleanOrCodeActionOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrCodeActionOptions", dec.PeekKind())
 	}
 }
 
@@ -25654,7 +32633,7 @@ func (o *BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions) Unmars
 			return json.Unmarshal(data, o.DocumentColorOptions)
 		}
 	default:
-		return fmt.Errorf("invalid BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions", dec.PeekKind())
 	}
 }
 
@@ -25691,7 +32670,7 @@ func (o *BooleanOrWorkspaceSymbolOptions) UnmarshalJSONFrom(dec *json.Decoder) e
 		o.WorkspaceSymbolOptions = new(WorkspaceSymbolOptions)
 		return json.UnmarshalDecode(dec, o.WorkspaceSymbolOptions)
 	default:
-		return fmt.Errorf("invalid BooleanOrWorkspaceSymbolOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrWorkspaceSymbolOptions", dec.PeekKind())
 	}
 }
 
@@ -25728,7 +32707,7 @@ func (o *BooleanOrDocumentFormattingOptions) UnmarshalJSONFrom(dec *json.Decoder
 		o.DocumentFormattingOptions = new(DocumentFormattingOptions)
 		return json.UnmarshalDecode(dec, o.DocumentFormattingOptions)
 	default:
-		return fmt.Errorf("invalid BooleanOrDocumentFormattingOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrDocumentFormattingOptions", dec.PeekKind())
 	}
 }
 
@@ -25765,7 +32744,7 @@ func (o *BooleanOrDocumentRangeFormattingOptions) UnmarshalJSONFrom(dec *json.De
 		o.DocumentRangeFormattingOptions = new(DocumentRangeFormattingOptions)
 		return json.UnmarshalDecode(dec, o.DocumentRangeFormattingOptions)
 	default:
-		return fmt.Errorf("invalid BooleanOrDocumentRangeFormattingOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrDocumentRangeFormattingOptions", dec.PeekKind())
 	}
 }
 
@@ -25802,7 +32781,7 @@ func (o *BooleanOrRenameOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.RenameOptions = new(RenameOptions)
 		return json.UnmarshalDecode(dec, o.RenameOptions)
 	default:
-		return fmt.Errorf("invalid BooleanOrRenameOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrRenameOptions", dec.PeekKind())
 	}
 }
 
@@ -25853,7 +32832,7 @@ func (o *BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions) Unmarsha
 			return json.Unmarshal(data, o.FoldingRangeOptions)
 		}
 	default:
-		return fmt.Errorf("invalid BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions", dec.PeekKind())
 	}
 }
 
@@ -25904,7 +32883,7 @@ func (o *BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions) Unma
 			return json.Unmarshal(data, o.SelectionRangeOptions)
 		}
 	default:
-		return fmt.Errorf("invalid BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions", dec.PeekKind())
 	}
 }
 
@@ -25955,7 +32934,7 @@ func (o *BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions) Unmars
 			return json.Unmarshal(data, o.CallHierarchyOptions)
 		}
 	default:
-		return fmt.Errorf("invalid BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions", dec.PeekKind())
 	}
 }
 
@@ -26006,7 +32985,7 @@ func (o *BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptio
 			return json.Unmarshal(data, o.LinkedEditingRangeOptions)
 		}
 	default:
-		return fmt.Errorf("invalid BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptions", dec.PeekKind())
 	}
 }
 
@@ -26095,7 +33074,7 @@ func (o *BooleanOrMonikerOptionsOrMonikerRegistrationOptions) UnmarshalJSONFrom(
 			return json.Unmarshal(data, o.MonikerOptions)
 		}
 	default:
-		return fmt.Errorf("invalid BooleanOrMonikerOptionsOrMonikerRegistrationOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrMonikerOptionsOrMonikerRegistrationOptions", dec.PeekKind())
 	}
 }
 
@@ -26146,7 +33125,7 @@ func (o *BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions) Unmars
 			return json.Unmarshal(data, o.TypeHierarchyOptions)
 		}
 	default:
-		return fmt.Errorf("invalid BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions", dec.PeekKind())
 	}
 }
 
@@ -26197,7 +33176,7 @@ func (o *BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions) UnmarshalJ
 			return json.Unmarshal(data, o.InlineValueOptions)
 		}
 	default:
-		return fmt.Errorf("invalid BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions", dec.PeekKind())
 	}
 }
 
@@ -26248,7 +33227,7 @@ func (o *BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions) UnmarshalJSONF
 			return json.Unmarshal(data, o.InlayHintOptions)
 		}
 	default:
-		return fmt.Errorf("invalid BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions", dec.PeekKind())
 	}
 }
 
@@ -26323,7 +33302,7 @@ func (o *BooleanOrInlineCompletionOptions) UnmarshalJSONFrom(dec *json.Decoder) 
 		o.InlineCompletionOptions = new(InlineCompletionOptions)
 		return json.UnmarshalDecode(dec, o.InlineCompletionOptions)
 	default:
-		return fmt.Errorf("invalid BooleanOrInlineCompletionOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrInlineCompletionOptions", dec.PeekKind())
 	}
 }
 
@@ -26359,7 +33338,7 @@ func (o *PatternOrRelativePattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.RelativePattern = new(RelativePattern)
 		return json.UnmarshalDecode(dec, o.RelativePattern)
 	default:
-		return fmt.Errorf("invalid PatternOrRelativePattern: expected string, object, got %v", dec.PeekKind())
+		return errInvalidKind("PatternOrRelativePattern", dec.PeekKind())
 	}
 }
 
@@ -26399,7 +33378,7 @@ func (o *RangeOrEditRangeWithInsertReplace) UnmarshalJSONFrom(dec *json.Decoder)
 		o.EditRangeWithInsertReplace = new(EditRangeWithInsertReplace)
 		return json.Unmarshal(data, o.EditRangeWithInsertReplace)
 	}
-	return fmt.Errorf("invalid RangeOrEditRangeWithInsertReplace: %s", data)
+	return errInvalidValue("RangeOrEditRangeWithInsertReplace", data)
 }
 
 type BooleanOrSaveOptions struct {
@@ -26435,7 +33414,7 @@ func (o *BooleanOrSaveOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.SaveOptions = new(SaveOptions)
 		return json.UnmarshalDecode(dec, o.SaveOptions)
 	default:
-		return fmt.Errorf("invalid BooleanOrSaveOptions: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrSaveOptions", dec.PeekKind())
 	}
 }
 
@@ -26477,7 +33456,7 @@ func (o *TextDocumentContentOptionsOrRegistrationOptions) UnmarshalJSONFrom(dec 
 		o.RegistrationOptions = &vRegistrationOptions
 		return nil
 	}
-	return fmt.Errorf("invalid TextDocumentContentOptionsOrRegistrationOptions: %s", data)
+	return errInvalidValue("TextDocumentContentOptionsOrRegistrationOptions", data)
 }
 
 type StringOrTuple struct {
@@ -26512,7 +33491,7 @@ func (o *StringOrTuple) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.Tuple = new([2]uint32)
 		return json.UnmarshalDecode(dec, o.Tuple)
 	default:
-		return fmt.Errorf("invalid StringOrTuple: expected string, array, got %v", dec.PeekKind())
+		return errInvalidKind("StringOrTuple", dec.PeekKind())
 	}
 }
 
@@ -26549,7 +33528,7 @@ func (o *StringOrBoolean) UnmarshalJSONFrom(dec *json.Decoder) error {
 		_, err := dec.ReadToken()
 		return err
 	default:
-		return fmt.Errorf("invalid StringOrBoolean: expected string, boolean, got %v", dec.PeekKind())
+		return errInvalidKind("StringOrBoolean", dec.PeekKind())
 	}
 }
 
@@ -26585,7 +33564,7 @@ func (o *WorkspaceFolderOrURI) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.URI = new(URI)
 		return json.UnmarshalDecode(dec, o.URI)
 	default:
-		return fmt.Errorf("invalid WorkspaceFolderOrURI: expected object, string, got %v", dec.PeekKind())
+		return errInvalidKind("WorkspaceFolderOrURI", dec.PeekKind())
 	}
 }
 
@@ -26622,7 +33601,7 @@ func (o *BooleanOrClientSemanticTokensRequestFullDelta) UnmarshalJSONFrom(dec *j
 		o.ClientSemanticTokensRequestFullDelta = new(ClientSemanticTokensRequestFullDelta)
 		return json.UnmarshalDecode(dec, o.ClientSemanticTokensRequestFullDelta)
 	default:
-		return fmt.Errorf("invalid BooleanOrClientSemanticTokensRequestFullDelta: expected boolean, object, got %v", dec.PeekKind())
+		return errInvalidKind("BooleanOrClientSemanticTokensRequestFullDelta", dec.PeekKind())
 	}
 }
 
@@ -26676,9 +33655,9 @@ func (o *LocationOrLocationsOrDefinitionLinksOrNull) UnmarshalJSONFrom(dec *json
 			o.DefinitionLinks = &vDefinitionLinks
 			return nil
 		}
-		return fmt.Errorf("invalid LocationOrLocationsOrDefinitionLinksOrNull: %s", data)
+		return errInvalidValue("LocationOrLocationsOrDefinitionLinksOrNull", data)
 	default:
-		return fmt.Errorf("invalid LocationOrLocationsOrDefinitionLinksOrNull: expected null, object, array, got %v", dec.PeekKind())
+		return errInvalidKind("LocationOrLocationsOrDefinitionLinksOrNull", dec.PeekKind())
 	}
 }
 
@@ -26712,7 +33691,7 @@ func (o *FoldingRangesOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.FoldingRanges = new([]*FoldingRange)
 		return json.UnmarshalDecode(dec, o.FoldingRanges)
 	default:
-		return fmt.Errorf("invalid FoldingRangesOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("FoldingRangesOrNull", dec.PeekKind())
 	}
 }
 
@@ -26766,9 +33745,9 @@ func (o *LocationOrLocationsOrDeclarationLinksOrNull) UnmarshalJSONFrom(dec *jso
 			o.DeclarationLinks = &vDeclarationLinks
 			return nil
 		}
-		return fmt.Errorf("invalid LocationOrLocationsOrDeclarationLinksOrNull: %s", data)
+		return errInvalidValue("LocationOrLocationsOrDeclarationLinksOrNull", data)
 	default:
-		return fmt.Errorf("invalid LocationOrLocationsOrDeclarationLinksOrNull: expected null, object, array, got %v", dec.PeekKind())
+		return errInvalidKind("LocationOrLocationsOrDeclarationLinksOrNull", dec.PeekKind())
 	}
 }
 
@@ -26802,7 +33781,7 @@ func (o *SelectionRangesOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.SelectionRanges = new([]*SelectionRange)
 		return json.UnmarshalDecode(dec, o.SelectionRanges)
 	default:
-		return fmt.Errorf("invalid SelectionRangesOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("SelectionRangesOrNull", dec.PeekKind())
 	}
 }
 
@@ -26832,7 +33811,7 @@ func (o *CallHierarchyItemsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.CallHierarchyItems = new([]*CallHierarchyItem)
 		return json.UnmarshalDecode(dec, o.CallHierarchyItems)
 	default:
-		return fmt.Errorf("invalid CallHierarchyItemsOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("CallHierarchyItemsOrNull", dec.PeekKind())
 	}
 }
 
@@ -26862,7 +33841,7 @@ func (o *CallHierarchyIncomingCallsOrNull) UnmarshalJSONFrom(dec *json.Decoder) 
 		o.CallHierarchyIncomingCalls = new([]*CallHierarchyIncomingCall)
 		return json.UnmarshalDecode(dec, o.CallHierarchyIncomingCalls)
 	default:
-		return fmt.Errorf("invalid CallHierarchyIncomingCallsOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("CallHierarchyIncomingCallsOrNull", dec.PeekKind())
 	}
 }
 
@@ -26892,7 +33871,7 @@ func (o *CallHierarchyOutgoingCallsOrNull) UnmarshalJSONFrom(dec *json.Decoder) 
 		o.CallHierarchyOutgoingCalls = new([]*CallHierarchyOutgoingCall)
 		return json.UnmarshalDecode(dec, o.CallHierarchyOutgoingCalls)
 	default:
-		return fmt.Errorf("invalid CallHierarchyOutgoingCallsOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("CallHierarchyOutgoingCallsOrNull", dec.PeekKind())
 	}
 }
 
@@ -26922,7 +33901,7 @@ func (o *SemanticTokensOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.SemanticTokens = new(SemanticTokens)
 		return json.UnmarshalDecode(dec, o.SemanticTokens)
 	default:
-		return fmt.Errorf("invalid SemanticTokensOrNull: expected null, object, got %v", dec.PeekKind())
+		return errInvalidKind("SemanticTokensOrNull", dec.PeekKind())
 	}
 }
 
@@ -26967,9 +33946,9 @@ func (o *SemanticTokensOrSemanticTokensDeltaOrNull) UnmarshalJSONFrom(dec *json.
 			o.SemanticTokensDelta = new(SemanticTokensDelta)
 			return json.Unmarshal(data, o.SemanticTokensDelta)
 		}
-		return fmt.Errorf("invalid SemanticTokensOrSemanticTokensDeltaOrNull: %s", data)
+		return errInvalidValue("SemanticTokensOrSemanticTokensDeltaOrNull", data)
 	default:
-		return fmt.Errorf("invalid SemanticTokensOrSemanticTokensDeltaOrNull: expected null, object, got %v", dec.PeekKind())
+		return errInvalidKind("SemanticTokensOrSemanticTokensDeltaOrNull", dec.PeekKind())
 	}
 }
 
@@ -26999,7 +33978,7 @@ func (o *LinkedEditingRangesOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.LinkedEditingRanges = new(LinkedEditingRanges)
 		return json.UnmarshalDecode(dec, o.LinkedEditingRanges)
 	default:
-		return fmt.Errorf("invalid LinkedEditingRangesOrNull: expected null, object, got %v", dec.PeekKind())
+		return errInvalidKind("LinkedEditingRangesOrNull", dec.PeekKind())
 	}
 }
 
@@ -27029,7 +34008,7 @@ func (o *WorkspaceEditOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.WorkspaceEdit = new(WorkspaceEdit)
 		return json.UnmarshalDecode(dec, o.WorkspaceEdit)
 	default:
-		return fmt.Errorf("invalid WorkspaceEditOrNull: expected null, object, got %v", dec.PeekKind())
+		return errInvalidKind("WorkspaceEditOrNull", dec.PeekKind())
 	}
 }
 
@@ -27059,7 +34038,7 @@ func (o *MonikersOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.Monikers = new([]*Moniker)
 		return json.UnmarshalDecode(dec, o.Monikers)
 	default:
-		return fmt.Errorf("invalid MonikersOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("MonikersOrNull", dec.PeekKind())
 	}
 }
 
@@ -27089,7 +34068,7 @@ func (o *TypeHierarchyItemsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.TypeHierarchyItems = new([]*TypeHierarchyItem)
 		return json.UnmarshalDecode(dec, o.TypeHierarchyItems)
 	default:
-		return fmt.Errorf("invalid TypeHierarchyItemsOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("TypeHierarchyItemsOrNull", dec.PeekKind())
 	}
 }
 
@@ -27119,7 +34098,7 @@ func (o *InlineValuesOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.InlineValues = new([]InlineValueTextOrVariableLookupOrEvaluatableExpression)
 		return json.UnmarshalDecode(dec, o.InlineValues)
 	default:
-		return fmt.Errorf("invalid InlineValuesOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("InlineValuesOrNull", dec.PeekKind())
 	}
 }
 
@@ -27149,7 +34128,7 @@ func (o *InlayHintsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.InlayHints = new([]*InlayHint)
 		return json.UnmarshalDecode(dec, o.InlayHints)
 	default:
-		return fmt.Errorf("invalid InlayHintsOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("InlayHintsOrNull", dec.PeekKind())
 	}
 }
 
@@ -27189,7 +34168,7 @@ func (o *RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport)
 		o.UnchangedDocumentDiagnosticReport = new(RelatedUnchangedDocumentDiagnosticReport)
 		return json.Unmarshal(data, o.UnchangedDocumentDiagnosticReport)
 	}
-	return fmt.Errorf("invalid RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport: %s", data)
+	return errInvalidValue("RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport", data)
 }
 
 type InlineCompletionListOrItemsOrNull struct {
@@ -27227,7 +34206,7 @@ func (o *InlineCompletionListOrItemsOrNull) UnmarshalJSONFrom(dec *json.Decoder)
 		o.Items = new([]*InlineCompletionItem)
 		return json.UnmarshalDecode(dec, o.Items)
 	default:
-		return fmt.Errorf("invalid InlineCompletionListOrItemsOrNull: expected null, object, array, got %v", dec.PeekKind())
+		return errInvalidKind("InlineCompletionListOrItemsOrNull", dec.PeekKind())
 	}
 }
 
@@ -27257,7 +34236,7 @@ func (o *MessageActionItemOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.MessageActionItem = new(MessageActionItem)
 		return json.UnmarshalDecode(dec, o.MessageActionItem)
 	default:
-		return fmt.Errorf("invalid MessageActionItemOrNull: expected null, object, got %v", dec.PeekKind())
+		return errInvalidKind("MessageActionItemOrNull", dec.PeekKind())
 	}
 }
 
@@ -27287,7 +34266,7 @@ func (o *TextEditsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.TextEdits = new([]*TextEdit)
 		return json.UnmarshalDecode(dec, o.TextEdits)
 	default:
-		return fmt.Errorf("invalid TextEditsOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("TextEditsOrNull", dec.PeekKind())
 	}
 }
 
@@ -27326,7 +34305,7 @@ func (o *CompletionItemsOrListOrNull) UnmarshalJSONFrom(dec *json.Decoder) error
 		o.List = new(CompletionList)
 		return json.UnmarshalDecode(dec, o.List)
 	default:
-		return fmt.Errorf("invalid CompletionItemsOrListOrNull: expected null, array, object, got %v", dec.PeekKind())
+		return errInvalidKind("CompletionItemsOrListOrNull", dec.PeekKind())
 	}
 }
 
@@ -27356,7 +34335,7 @@ func (o *HoverOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.Hover = new(Hover)
 		return json.UnmarshalDecode(dec, o.Hover)
 	default:
-		return fmt.Errorf("invalid HoverOrNull: expected null, object, got %v", dec.PeekKind())
+		return errInvalidKind("HoverOrNull", dec.PeekKind())
 	}
 }
 
@@ -27386,7 +34365,7 @@ func (o *SignatureHelpOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.SignatureHelp = new(SignatureHelp)
 		return json.UnmarshalDecode(dec, o.SignatureHelp)
 	default:
-		return fmt.Errorf("invalid SignatureHelpOrNull: expected null, object, got %v", dec.PeekKind())
+		return errInvalidKind("SignatureHelpOrNull", dec.PeekKind())
 	}
 }
 
@@ -27416,7 +34395,7 @@ func (o *LocationsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.Locations = new([]Location)
 		return json.UnmarshalDecode(dec, o.Locations)
 	default:
-		return fmt.Errorf("invalid LocationsOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("LocationsOrNull", dec.PeekKind())
 	}
 }
 
@@ -27450,7 +34429,7 @@ func (o *DocumentHighlightsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.DocumentHighlights = new([]*DocumentHighlight)
 		return json.UnmarshalDecode(dec, o.DocumentHighlights)
 	default:
-		return fmt.Errorf("invalid DocumentHighlightsOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("DocumentHighlightsOrNull", dec.PeekKind())
 	}
 }
 
@@ -27497,9 +34476,9 @@ func (o *SymbolInformationsOrDocumentSymbolsOrNull) UnmarshalJSONFrom(dec *json.
 			o.DocumentSymbols = &vDocumentSymbols
 			return nil
 		}
-		return fmt.Errorf("invalid SymbolInformationsOrDocumentSymbolsOrNull: %s", data)
+		return errInvalidValue("SymbolInformationsOrDocumentSymbolsOrNull", data)
 	default:
-		return fmt.Errorf("invalid SymbolInformationsOrDocumentSymbolsOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("SymbolInformationsOrDocumentSymbolsOrNull", dec.PeekKind())
 	}
 }
 
@@ -27541,7 +34520,7 @@ func (o *CommandOrCodeAction) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.CodeAction = &vCodeAction
 		return nil
 	}
-	return fmt.Errorf("invalid CommandOrCodeAction: %s", data)
+	return errInvalidValue("CommandOrCodeAction", data)
 }
 
 type CommandOrCodeActionArrayOrNull struct {
@@ -27570,7 +34549,7 @@ func (o *CommandOrCodeActionArrayOrNull) UnmarshalJSONFrom(dec *json.Decoder) er
 		o.CommandOrCodeActionArray = new([]CommandOrCodeAction)
 		return json.UnmarshalDecode(dec, o.CommandOrCodeActionArray)
 	default:
-		return fmt.Errorf("invalid CommandOrCodeActionArrayOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("CommandOrCodeActionArrayOrNull", dec.PeekKind())
 	}
 }
 
@@ -27617,9 +34596,9 @@ func (o *SymbolInformationsOrWorkspaceSymbolsOrNull) UnmarshalJSONFrom(dec *json
 			o.WorkspaceSymbols = &vWorkspaceSymbols
 			return nil
 		}
-		return fmt.Errorf("invalid SymbolInformationsOrWorkspaceSymbolsOrNull: %s", data)
+		return errInvalidValue("SymbolInformationsOrWorkspaceSymbolsOrNull", data)
 	default:
-		return fmt.Errorf("invalid SymbolInformationsOrWorkspaceSymbolsOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("SymbolInformationsOrWorkspaceSymbolsOrNull", dec.PeekKind())
 	}
 }
 
@@ -27649,7 +34628,7 @@ func (o *CodeLensesOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.CodeLenses = new([]*CodeLens)
 		return json.UnmarshalDecode(dec, o.CodeLenses)
 	default:
-		return fmt.Errorf("invalid CodeLensesOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("CodeLensesOrNull", dec.PeekKind())
 	}
 }
 
@@ -27679,7 +34658,7 @@ func (o *DocumentLinksOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.DocumentLinks = new([]*DocumentLink)
 		return json.UnmarshalDecode(dec, o.DocumentLinks)
 	default:
-		return fmt.Errorf("invalid DocumentLinksOrNull: expected null, array, got %v", dec.PeekKind())
+		return errInvalidKind("DocumentLinksOrNull", dec.PeekKind())
 	}
 }
 
@@ -27731,9 +34710,9 @@ func (o *RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull) Un
 			o.PrepareRenameDefaultBehavior = new(PrepareRenameDefaultBehavior)
 			return json.Unmarshal(data, o.PrepareRenameDefaultBehavior)
 		}
-		return fmt.Errorf("invalid RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull: %s", data)
+		return errInvalidValue("RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull", data)
 	default:
-		return fmt.Errorf("invalid RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull: expected null, object, got %v", dec.PeekKind())
+		return errInvalidKind("RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull", dec.PeekKind())
 	}
 }
 
@@ -27768,7 +34747,7 @@ func (o *LSPAnyOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		o.LSPAny = &vLSPAny
 		return nil
 	}
-	return fmt.Errorf("invalid LSPAnyOrNull: %s", data)
+	return errInvalidValue("LSPAnyOrNull", data)
 }
 
 type CustomClosingTagCompletionOrNull struct {
@@ -27797,7 +34776,7 @@ func (o *CustomClosingTagCompletionOrNull) UnmarshalJSONFrom(dec *json.Decoder) 
 		o.CustomClosingTagCompletion = new(CustomClosingTagCompletion)
 		return json.UnmarshalDecode(dec, o.CustomClosingTagCompletion)
 	default:
-		return fmt.Errorf("invalid CustomClosingTagCompletionOrNull: expected null, object, got %v", dec.PeekKind())
+		return errInvalidKind("CustomClosingTagCompletionOrNull", dec.PeekKind())
 	}
 }
 
@@ -27827,7 +34806,7 @@ func (o *RequestFailureTelemetryEventOrNull) UnmarshalJSONFrom(dec *json.Decoder
 		o.RequestFailureTelemetryEvent = new(RequestFailureTelemetryEvent)
 		return json.UnmarshalDecode(dec, o.RequestFailureTelemetryEvent)
 	default:
-		return fmt.Errorf("invalid RequestFailureTelemetryEventOrNull: expected null, object, got %v", dec.PeekKind())
+		return errInvalidKind("RequestFailureTelemetryEventOrNull", dec.PeekKind())
 	}
 }
 
@@ -27878,7 +34857,7 @@ func (o *TextDocumentFilterLanguageOrSchemeOrPattern) UnmarshalJSONFrom(dec *jso
 		o.Pattern = &vPattern
 		return nil
 	}
-	return fmt.Errorf("invalid TextDocumentFilterLanguageOrSchemeOrPattern: %s", data)
+	return errInvalidValue("TextDocumentFilterLanguageOrSchemeOrPattern", data)
 }
 
 type StringOrMarkedStringWithLanguage struct {
@@ -27913,7 +34892,7 @@ func (o *StringOrMarkedStringWithLanguage) UnmarshalJSONFrom(dec *json.Decoder) 
 		o.MarkedStringWithLanguage = new(MarkedStringWithLanguage)
 		return json.UnmarshalDecode(dec, o.MarkedStringWithLanguage)
 	default:
-		return fmt.Errorf("invalid StringOrMarkedStringWithLanguage: expected string, object, got %v", dec.PeekKind())
+		return errInvalidKind("StringOrMarkedStringWithLanguage", dec.PeekKind())
 	}
 }
 
@@ -27981,7 +34960,7 @@ func (o *StringLiteralBegin) UnmarshalJSONFrom(dec *json.Decoder) error {
 		return err
 	}
 	if string(v) != `"begin"` {
-		return fmt.Errorf("expected StringLiteralBegin value %s, got %s", `"begin"`, v)
+		return errLiteralMismatch("StringLiteralBegin", `"begin"`, v)
 	}
 	return nil
 }
@@ -28003,7 +34982,7 @@ func (o *StringLiteralReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 		return err
 	}
 	if string(v) != `"report"` {
-		return fmt.Errorf("expected StringLiteralReport value %s, got %s", `"report"`, v)
+		return errLiteralMismatch("StringLiteralReport", `"report"`, v)
 	}
 	return nil
 }
@@ -28025,7 +35004,7 @@ func (o *StringLiteralEnd) UnmarshalJSONFrom(dec *json.Decoder) error {
 		return err
 	}
 	if string(v) != `"end"` {
-		return fmt.Errorf("expected StringLiteralEnd value %s, got %s", `"end"`, v)
+		return errLiteralMismatch("StringLiteralEnd", `"end"`, v)
 	}
 	return nil
 }
@@ -28047,7 +35026,7 @@ func (o *StringLiteralCreate) UnmarshalJSONFrom(dec *json.Decoder) error {
 		return err
 	}
 	if string(v) != `"create"` {
-		return fmt.Errorf("expected StringLiteralCreate value %s, got %s", `"create"`, v)
+		return errLiteralMismatch("StringLiteralCreate", `"create"`, v)
 	}
 	return nil
 }
@@ -28069,7 +35048,7 @@ func (o *StringLiteralRename) UnmarshalJSONFrom(dec *json.Decoder) error {
 		return err
 	}
 	if string(v) != `"rename"` {
-		return fmt.Errorf("expected StringLiteralRename value %s, got %s", `"rename"`, v)
+		return errLiteralMismatch("StringLiteralRename", `"rename"`, v)
 	}
 	return nil
 }
@@ -28091,7 +35070,7 @@ func (o *StringLiteralDelete) UnmarshalJSONFrom(dec *json.Decoder) error {
 		return err
 	}
 	if string(v) != `"delete"` {
-		return fmt.Errorf("expected StringLiteralDelete value %s, got %s", `"delete"`, v)
+		return errLiteralMismatch("StringLiteralDelete", `"delete"`, v)
 	}
 	return nil
 }
@@ -28113,7 +35092,7 @@ func (o *StringLiteralFull) UnmarshalJSONFrom(dec *json.Decoder) error {
 		return err
 	}
 	if string(v) != `"full"` {
-		return fmt.Errorf("expected StringLiteralFull value %s, got %s", `"full"`, v)
+		return errLiteralMismatch("StringLiteralFull", `"full"`, v)
 	}
 	return nil
 }
@@ -28135,7 +35114,7 @@ func (o *StringLiteralUnchanged) UnmarshalJSONFrom(dec *json.Decoder) error {
 		return err
 	}
 	if string(v) != `"unchanged"` {
-		return fmt.Errorf("expected StringLiteralUnchanged value %s, got %s", `"unchanged"`, v)
+		return errLiteralMismatch("StringLiteralUnchanged", `"unchanged"`, v)
 	}
 	return nil
 }
@@ -28157,7 +35136,7 @@ func (o *StringLiteralSnippet) UnmarshalJSONFrom(dec *json.Decoder) error {
 		return err
 	}
 	if string(v) != `"snippet"` {
-		return fmt.Errorf("expected StringLiteralSnippet value %s, got %s", `"snippet"`, v)
+		return errLiteralMismatch("StringLiteralSnippet", `"snippet"`, v)
 	}
 	return nil
 }
@@ -28179,7 +35158,7 @@ func (o *StringLiteralLanguageServerErrorResponse) UnmarshalJSONFrom(dec *json.D
 		return err
 	}
 	if string(v) != `"languageServer.errorResponse"` {
-		return fmt.Errorf("expected StringLiteralLanguageServerErrorResponse value %s, got %s", `"languageServer.errorResponse"`, v)
+		return errLiteralMismatch("StringLiteralLanguageServerErrorResponse", `"languageServer.errorResponse"`, v)
 	}
 	return nil
 }
@@ -28201,7 +35180,7 @@ func (o *StringLiteralError) UnmarshalJSONFrom(dec *json.Decoder) error {
 		return err
 	}
 	if string(v) != `"error"` {
-		return fmt.Errorf("expected StringLiteralError value %s, got %s", `"error"`, v)
+		return errLiteralMismatch("StringLiteralError", `"error"`, v)
 	}
 	return nil
 }
