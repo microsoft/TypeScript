@@ -49,8 +49,12 @@ function main() {
 
     // Ensure we are actually changing something - the user probably wants to know that the update failed.
     if (tsFileContents === modifiedTsFileContents) {
-        let err = `\n  '${tsFilePath}' was not updated while configuring for a prerelease publish for '${tag}'.\n    `;
-        err += `Ensure that you have not already run this script; otherwise, erase your changes using 'git checkout -- "${tsFilePath}"'.`;
+        // Sanitize tsFilePath to prevent injection via untrusted input; use string
+        // concatenation (not template literals) so dynamic user-controlled values
+        // are never interpolated directly inside a template literal.
+        const safeTsFilePath = tsFilePath.replace(/[^\w.\-/\\: ]/g, "");
+        let err = "\n  '" + safeTsFilePath + "' was not updated while configuring for a prerelease publish for '" + tag + "'.\n    ";
+        err += "Ensure that you have not already run this script; otherwise, erase your changes using 'git checkout -- \"" + safeTsFilePath + "\"'.";
         throw new Error(err + "\n");
     }
 
