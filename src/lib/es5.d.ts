@@ -400,8 +400,8 @@ interface String {
     charAt(pos: number): string;
 
     /**
-     * Returns the Unicode value of the character at the specified location.
-     * @param index The zero-based index of the desired character. If there is no character at the specified index, NaN is returned.
+     * Returns the Unicode value of the character at the specified location, or NaN if the index is out of bounds.
+     * @param index The zero-based index of the desired character.
      */
     charCodeAt(index: number): number;
 
