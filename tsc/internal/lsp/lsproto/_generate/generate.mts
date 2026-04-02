@@ -1990,7 +1990,11 @@ function generateCode() {
                 writeLine(`\t\t\t}`);
                 writeLine(`\t\t\ts.RegisterOptions.${reg.fieldName} = &v`);
             }
+            writeLine(`\t\tdefault:`);
+            writeLine(`\t\t\treturn fmt.Errorf("unknown registration method: %s", method)`);
             writeLine(`\t\t}`);
+            writeLine(`\t} else {`);
+            writeLine(`\t\treturn fmt.Errorf("missing registerOptions for method: %s", method)`);
             writeLine(`\t}`);
             writeLine("");
             writeLine(`\treturn nil`);

@@ -16913,7 +16913,11 @@ func (s *Registration) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return err
 			}
 			s.RegisterOptions.WorkspaceDidChangeWatchedFiles = &v
+		default:
+			return fmt.Errorf("unknown registration method: %s", method)
 		}
+	} else {
+		return fmt.Errorf("missing registerOptions for method: %s", method)
 	}
 
 	return nil
