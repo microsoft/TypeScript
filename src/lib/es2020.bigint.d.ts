@@ -130,7 +130,7 @@ declare var BigInt: BigIntConstructor;
  */
 interface BigInt64Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /** The size in bytes of each element in the array. */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 8;
 
     /** The ArrayBuffer instance referenced by the array. */
     readonly buffer: TArrayBuffer;
@@ -377,7 +377,7 @@ interface BigInt64ArrayConstructor {
     new (array: ArrayLike<bigint> | ArrayBuffer): BigInt64Array<ArrayBuffer>;
 
     /** The size in bytes of each element in the array. */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 8;
 
     /**
      * Returns a new array from a set of elements.
@@ -421,7 +421,7 @@ declare var BigInt64Array: BigInt64ArrayConstructor;
  */
 interface BigUint64Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /** The size in bytes of each element in the array. */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 8;
 
     /** The ArrayBuffer instance referenced by the array. */
     readonly buffer: TArrayBuffer;
@@ -668,7 +668,7 @@ interface BigUint64ArrayConstructor {
     new (array: ArrayLike<bigint> | ArrayBuffer): BigUint64Array<ArrayBuffer>;
 
     /** The size in bytes of each element in the array. */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 8;
 
     /**
      * Returns a new array from a set of elements.
