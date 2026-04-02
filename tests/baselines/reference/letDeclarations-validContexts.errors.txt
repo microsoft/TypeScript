@@ -1,14 +1,14 @@
 letDeclarations-validContexts.ts(18,1): error TS1101: 'with' statements are not allowed in strict mode.
 letDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-letDeclarations-validContexts.ts(31,5): error TS1344: 'A label is not allowed here.
-letDeclarations-validContexts.ts(35,21): error TS1344: 'A label is not allowed here.
-letDeclarations-validContexts.ts(64,9): error TS1344: 'A label is not allowed here.
-letDeclarations-validContexts.ts(124,1): error TS1344: 'A label is not allowed here.
-letDeclarations-validContexts.ts(126,5): error TS1344: 'A label is not allowed here.
-letDeclarations-validContexts.ts(130,5): error TS1344: 'A label is not allowed here.
-letDeclarations-validContexts.ts(132,9): error TS1344: 'A label is not allowed here.
-letDeclarations-validContexts.ts(137,5): error TS1344: 'A label is not allowed here.
-letDeclarations-validContexts.ts(139,9): error TS1344: 'A label is not allowed here.
+letDeclarations-validContexts.ts(31,5): error TS1344: A label is not allowed here.
+letDeclarations-validContexts.ts(35,21): error TS1344: A label is not allowed here.
+letDeclarations-validContexts.ts(64,9): error TS1344: A label is not allowed here.
+letDeclarations-validContexts.ts(124,1): error TS1344: A label is not allowed here.
+letDeclarations-validContexts.ts(126,5): error TS1344: A label is not allowed here.
+letDeclarations-validContexts.ts(130,5): error TS1344: A label is not allowed here.
+letDeclarations-validContexts.ts(132,9): error TS1344: A label is not allowed here.
+letDeclarations-validContexts.ts(137,5): error TS1344: A label is not allowed here.
+letDeclarations-validContexts.ts(139,9): error TS1344: A label is not allowed here.
 
 
 ==== letDeclarations-validContexts.ts (11 errors) ====
@@ -48,13 +48,13 @@ letDeclarations-validContexts.ts(139,9): error TS1344: 'A label is not allowed h
     if (true) {
         label: let l8 = 0;
         ~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
     }
     
     while (false) {
         label2: label3: label4: let l9 = 0;
                         ~~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
     }
     
     // Try/catch/finally
@@ -85,7 +85,7 @@ letDeclarations-validContexts.ts(139,9): error TS1344: 'A label is not allowed h
             let l16 = 0
             label17: let l17 = 0;
             ~~~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
         }
     }
     
@@ -147,31 +147,31 @@ letDeclarations-validContexts.ts(139,9): error TS1344: 'A label is not allowed h
     // labels
     label: let l30 = 0;
     ~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
     {
         label2: let l31 = 0;
         ~~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
     }
     
     function f3() {
         label: let l32 = 0;
         ~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
         {
             label2: let l33 = 0;
             ~~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
         }
     }
     
     namespace m3 {
         label: let l34 = 0;
         ~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
         {
             label2: let l35 = 0;
             ~~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
         }
     }
