@@ -21,7 +21,9 @@ Output::
 {
     "compilerOptions": {
         "composite": true,
-        "strict": true
+        "strict": true,
+        "declaration": true,
+        "incremental": true
     },
     "references": [
         {
