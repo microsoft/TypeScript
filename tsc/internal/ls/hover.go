@@ -323,6 +323,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 				default:
 					decl := symbol.ValueDeclaration
 					if decl != nil {
+						decl = ast.GetRootDeclaration(decl)
 						switch {
 						case ast.IsParameter(decl):
 							b.WriteString("(parameter) ")

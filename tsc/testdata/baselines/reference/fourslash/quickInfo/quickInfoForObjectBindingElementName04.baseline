@@ -17,7 +17,7 @@
 //     ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var a: { b: string; }
+// | (parameter) a: { b: string; }
 // | ```
 // | A description of 'a'
 // | ----------------------------------------------------------------------
@@ -25,7 +25,7 @@
 //     ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var b: string
+// | (parameter) b: string
 // | ```
 // | A description of 'b'
 // | ----------------------------------------------------------------------
@@ -44,7 +44,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar a: { b: string; }\n```\nA description of 'a'"
+        "value": "```tsx\n(parameter) a: { b: string; }\n```\nA description of 'a'"
       },
       "range": {
         "start": {
@@ -71,7 +71,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar b: string\n```\nA description of 'b'"
+        "value": "```tsx\n(parameter) b: string\n```\nA description of 'b'"
       },
       "range": {
         "start": {
