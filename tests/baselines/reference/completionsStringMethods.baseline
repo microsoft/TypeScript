@@ -209,7 +209,7 @@
           ],
           "documentation": [
             {
-              "text": "Returns the Unicode value of the character at the specified location.",
+              "text": "Returns the Unicode value of the character at the specified location, or NaN if the index is out of bounds.",
               "kind": "text"
             }
           ],
@@ -226,7 +226,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The zero-based index of the desired character. If there is no character at the specified index, NaN is returned.",
+                  "text": "The zero-based index of the desired character.",
                   "kind": "text"
                 }
               ]
