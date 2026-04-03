@@ -1,8 +1,8 @@
 constDeclarations-validContexts.ts(18,1): error TS1101: 'with' statements are not allowed in strict mode.
 constDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-constDeclarations-validContexts.ts(31,5): error TS1344: 'A label is not allowed here.
-constDeclarations-validContexts.ts(35,21): error TS1344: 'A label is not allowed here.
-constDeclarations-validContexts.ts(64,9): error TS1344: 'A label is not allowed here.
+constDeclarations-validContexts.ts(31,5): error TS1344: A label is not allowed here.
+constDeclarations-validContexts.ts(35,21): error TS1344: A label is not allowed here.
+constDeclarations-validContexts.ts(64,9): error TS1344: A label is not allowed here.
 
 
 ==== constDeclarations-validContexts.ts (5 errors) ====
@@ -42,13 +42,13 @@ constDeclarations-validContexts.ts(64,9): error TS1344: 'A label is not allowed 
     if (true) {
         label: const c8 = 0;
         ~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
     }
     
     while (false) {
         label2: label3: label4: const c9 = 0;
                         ~~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
     }
     
     // Try/catch/finally
@@ -79,7 +79,7 @@ constDeclarations-validContexts.ts(64,9): error TS1344: 'A label is not allowed 
             const c16 = 0
             label17: const c17 = 0;
             ~~~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
         }
     }
     

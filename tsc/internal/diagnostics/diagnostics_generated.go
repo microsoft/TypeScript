@@ -558,7 +558,7 @@ var Class_constructor_may_not_be_an_accessor = &Message{code: 1341, category: Ca
 
 var The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node16_node18_node20_or_nodenext = &Message{code: 1343, category: CategoryError, key: "The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system__1343", text: "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', or 'nodenext'."}
 
-var A_label_is_not_allowed_here = &Message{code: 1344, category: CategoryError, key: "A_label_is_not_allowed_here_1344", text: "'A label is not allowed here."}
+var A_label_is_not_allowed_here = &Message{code: 1344, category: CategoryError, key: "A_label_is_not_allowed_here_1344", text: "A label is not allowed here."}
 
 var An_expression_of_type_void_cannot_be_tested_for_truthiness = &Message{code: 1345, category: CategoryError, key: "An_expression_of_type_void_cannot_be_tested_for_truthiness_1345", text: "An expression of type 'void' cannot be tested for truthiness."}
 

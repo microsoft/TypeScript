@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/classPropertyInferenceFromBroaderTypeConst.ts] ////
+
+=== classPropertyInferenceFromBroaderTypeConst.ts ===
+// Repro from GH#62264
+// Class property should infer the wider declared type (AB), not the narrowed literal type ("A")
+
+type AB = 'A' | 'B';
+>AB : AB
+
+const DEFAULT: AB = 'A';
+>DEFAULT : AB
+>'A' : "A"
+
+class C {
+>C : C
+
+    D = DEFAULT;
+>D : AB
+>DEFAULT : AB
+
+    method() {
+>method : () => void
+
+        switch (this.D) {
+>this.D : AB
+>this : this
+>D : AB
+
+            case 'A': break;
+>'A' : "A"
+
+            case 'B': break; // should not error
+>'B' : "B"
+        }
+    }
+}
+
+// D should be AB, not "A"
+declare const c: C;
+>c : C
+
+declare function expectAB(x: AB): void;
+>expectAB : (x: AB) => void
+>x : AB
+
+expectAB(c.D); // ok
+>expectAB(c.D) : void
+>expectAB : (x: AB) => void
+>c.D : AB
+>c : C
+>D : AB
+
+c.D = 'B'; // ok
+>c.D = 'B' : "B"
+>c.D : AB
+>c : C
+>D : AB
+>'B' : "B"
+
+// Static property should work the same way
+class D {
+>D : D
+
+    static SD = DEFAULT;
+>SD : AB
+>DEFAULT : AB
+}
+D.SD = 'B'; // ok
+>D.SD = 'B' : "B"
+>D.SD : AB
+>D : typeof D
+>SD : AB
+>'B' : "B"
+

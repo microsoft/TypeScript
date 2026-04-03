@@ -1,7 +1,7 @@
 constDeclarations-scopes.ts(27,1): error TS1101: 'with' statements are not allowed in strict mode.
 constDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-constDeclarations-scopes.ts(43,5): error TS1344: 'A label is not allowed here.
-constDeclarations-scopes.ts(48,21): error TS1344: 'A label is not allowed here.
+constDeclarations-scopes.ts(43,5): error TS1344: A label is not allowed here.
+constDeclarations-scopes.ts(48,21): error TS1344: A label is not allowed here.
 
 
 ==== constDeclarations-scopes.ts (4 errors) ====
@@ -53,14 +53,14 @@ constDeclarations-scopes.ts(48,21): error TS1344: 'A label is not allowed here.
     if (true) {
         label: const c = 0;
         ~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
         n = c;
     }
     
     while (false) {
         label2: label3: label4: const c = 0;
                         ~~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
         n = c;
     }
     

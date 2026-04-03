@@ -3,7 +3,7 @@ invalidWhileContinueStatements.ts(8,14): error TS1115: A 'continue' statement ca
 invalidWhileContinueStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
 invalidWhileContinueStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
 invalidWhileContinueStatements.ts(27,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
-invalidWhileContinueStatements.ts(33,1): error TS1344: 'A label is not allowed here.
+invalidWhileContinueStatements.ts(33,1): error TS1344: A label is not allowed here.
 invalidWhileContinueStatements.ts(37,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
 
 
@@ -52,7 +52,7 @@ invalidWhileContinueStatements.ts(37,5): error TS1115: A 'continue' statement ca
     // label on non-loop statement
     NINE:
     ~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
     var y = 12;
     
     while (true) {
