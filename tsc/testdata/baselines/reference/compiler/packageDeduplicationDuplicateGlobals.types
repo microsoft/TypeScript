@@ -2,20 +2,20 @@
 
 === /src/index.ts ===
 import { useBar } from "bar";
->useBar : () => ReturnType<() => typeof myGlobal>
+>useBar : () => ReturnType<typeof import(".pnpm/foo@1.0.0+globals@1.0.0/node_modules/foo").useFoo>
 
 import { useBaz } from "baz";
->useBaz : () => ReturnType<() => typeof myGlobal>
+>useBaz : () => ReturnType<typeof import(".pnpm/foo@1.0.0+globals@1.0.0/node_modules/foo").useFoo>
 
 const barResult = useBar();
 >barResult : string
 >useBar() : string
->useBar : () => ReturnType<() => typeof myGlobal>
+>useBar : () => ReturnType<typeof import(".pnpm/foo@1.0.0+globals@1.0.0/node_modules/foo").useFoo>
 
 const bazResult = useBaz();
 >bazResult : string
 >useBaz() : string
->useBaz : () => ReturnType<() => typeof myGlobal>
+>useBaz : () => ReturnType<typeof import(".pnpm/foo@1.0.0+globals@1.0.0/node_modules/foo").useFoo>
 
 const x: string = myGlobal;
 >x : string

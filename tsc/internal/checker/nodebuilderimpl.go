@@ -319,7 +319,7 @@ func (b *NodeBuilderImpl) serializeTypeName(node *ast.Node, isTypeOf bool, typeA
 	if isTypeOf {
 		meaning = ast.SymbolFlagsValue
 	}
-	symbol := b.ch.resolveEntityName(node, meaning, true, true, node)
+	symbol := b.ch.resolveEntityName(node, meaning, true, false, node)
 	if symbol == nil {
 		return nil
 	}

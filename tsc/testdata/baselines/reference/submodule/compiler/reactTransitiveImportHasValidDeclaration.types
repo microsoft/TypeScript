@@ -45,13 +45,13 @@ export default function styled(tag: string): (o: object) => StyledOtherComponent
 
 === index.ts ===
 import styled from "react-emotion"
->styled : (tag: string) => (o: object) => import("create-emotion-styled").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>styled : (tag: string) => (o: object) => import("create-emotion-styled").StyledOtherComponent<{}, import("create-emotion-styled").StyledOtherComponentList["div"], any>
 
 const Form = styled('div')({ color: "red" })
 >Form : import("create-emotion-styled").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
 >styled('div')({ color: "red" }) : import("create-emotion-styled").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
->styled('div') : (o: object) => import("create-emotion-styled").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
->styled : (tag: string) => (o: object) => import("create-emotion-styled").StyledOtherComponent<{}, import("react").DetailedHTMLProps<import("react").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>styled('div') : (o: object) => import("create-emotion-styled").StyledOtherComponent<{}, import("create-emotion-styled").StyledOtherComponentList["div"], any>
+>styled : (tag: string) => (o: object) => import("create-emotion-styled").StyledOtherComponent<{}, import("create-emotion-styled").StyledOtherComponentList["div"], any>
 >'div' : "div"
 >{ color: "red" } : { color: string; }
 >color : string
