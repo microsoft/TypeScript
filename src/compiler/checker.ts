@@ -3603,6 +3603,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // constructor functions aren't block scoped
             return;
         }
+        // Labels are in a separate namespace from variables; a label identifier
+        // that happens to share a name with a block-scoped variable should not
+        // trigger a "used before its declaration" error.
+        if (errorLocation.parent) {
+            const parent = errorLocation.parent;
+            if (
+                parent.kind === SyntaxKind.LabeledStatement && (parent as LabeledStatement).label === errorLocation ||
+                (parent.kind === SyntaxKind.BreakStatement || parent.kind === SyntaxKind.ContinueStatement) && (parent as BreakOrContinueStatement).label === errorLocation
+            ) {
+                return;
+            }
+        }
         // Block-scoped variables cannot be used before their definition
         const declaration = result.declarations?.find(
             d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration),
