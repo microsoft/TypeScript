@@ -3869,6 +3869,9 @@ export function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.ModuleBlock:
             return ContainerFlags.IsControlFlowContainer;
 
+        case SyntaxKind.PropertyDeclaration:
+            return (node as PropertyDeclaration).initializer ? ContainerFlags.IsControlFlowContainer : ContainerFlags.None;
+
         case SyntaxKind.CatchClause:
         case SyntaxKind.ForStatement:
         case SyntaxKind.ForInStatement:
