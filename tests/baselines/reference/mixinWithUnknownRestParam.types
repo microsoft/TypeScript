@@ -1,0 +1,54 @@
+//// [tests/cases/conformance/classes/mixinWithUnknownRestParam.ts] ////
+
+=== mixinWithUnknownRestParam.ts ===
+// Repro for https://github.com/microsoft/TypeScript/issues/29707
+// unknown[] should be a valid mixin constructor constraint, same as any[]
+
+type ClassConstructor = new (...args: unknown[]) => {}
+>ClassConstructor : ClassConstructor
+>                 : ^^^^^^^^^^^^^^^^
+>args : unknown[]
+>     : ^^^^^^^^^
+
+function mixin<C extends ClassConstructor>(Class: C) {
+>mixin : <C extends ClassConstructor>(Class: C) => { new (...args: unknown[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & C
+>      : ^ ^^^^^^^^^                ^^     ^^ ^^^^^^^^^^^^^^^    ^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Class : C
+>      : ^
+
+    return class extends Class {}
+>class extends Class {} : { new (...args: unknown[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & C
+>                       : ^^^^^^^^^^    ^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Class : {}
+>      : ^^
+}
+
+class Base {
+>Base : Base
+>     : ^^^^
+
+    constructor(public x: number) {}
+>x : number
+>  : ^^^^^^
+}
+
+const Mixed = mixin(Base)
+>Mixed : { new (...args: unknown[]): mixin<ClassConstructor>.(Anonymous class); prototype: mixin<any>.(Anonymous class); } & ClassConstructor
+>      : ^^^^^^^^^^    ^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixin(Base) : { new (...args: unknown[]): mixin<ClassConstructor>.(Anonymous class); prototype: mixin<any>.(Anonymous class); } & ClassConstructor
+>            : ^^^^^^^^^^    ^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixin : <C extends ClassConstructor>(Class: C) => { new (...args: unknown[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & C
+>      : ^ ^^^^^^^^^                ^^     ^^ ^^^^^^^^^^^^^^^    ^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Base : typeof Base
+>     : ^^^^^^^^^^^
+
+const instance = new Mixed(42)
+>instance : mixin<ClassConstructor>.(Anonymous class)
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Mixed(42) : mixin<ClassConstructor>.(Anonymous class)
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Mixed : { new (...args: unknown[]): mixin<ClassConstructor>.(Anonymous class); prototype: mixin<any>.(Anonymous class); } & ClassConstructor
+>      : ^^^^^^^^^^    ^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+

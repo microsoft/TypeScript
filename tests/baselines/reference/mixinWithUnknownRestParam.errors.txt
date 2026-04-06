@@ -1,0 +1,30 @@
+mixinWithUnknownRestParam.ts(14,21): error TS2345: Argument of type 'typeof Base' is not assignable to parameter of type 'ClassConstructor'.
+  Types of construct signatures are incompatible.
+    Type 'new (x: number) => Base' is not assignable to type 'new (...args: unknown[]) => {}'.
+      Types of parameters 'x' and 'args' are incompatible.
+        Type 'unknown' is not assignable to type 'number'.
+
+
+==== mixinWithUnknownRestParam.ts (1 errors) ====
+    // Repro for https://github.com/microsoft/TypeScript/issues/29707
+    // unknown[] should be a valid mixin constructor constraint, same as any[]
+    
+    type ClassConstructor = new (...args: unknown[]) => {}
+    
+    function mixin<C extends ClassConstructor>(Class: C) {
+        return class extends Class {}
+    }
+    
+    class Base {
+        constructor(public x: number) {}
+    }
+    
+    const Mixed = mixin(Base)
+                        ~~~~
+!!! error TS2345: Argument of type 'typeof Base' is not assignable to parameter of type 'ClassConstructor'.
+!!! error TS2345:   Types of construct signatures are incompatible.
+!!! error TS2345:     Type 'new (x: number) => Base' is not assignable to type 'new (...args: unknown[]) => {}'.
+!!! error TS2345:       Types of parameters 'x' and 'args' are incompatible.
+!!! error TS2345:         Type 'unknown' is not assignable to type 'number'.
+    const instance = new Mixed(42)
+    
