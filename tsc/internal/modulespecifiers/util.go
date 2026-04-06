@@ -151,6 +151,23 @@ func GetJSExtensionForDeclarationFileExtension(ext string) string {
 	}
 }
 
+// TryGetRealFileNameForNonJSDeclarationFileName remaps files like `foo.d.json.ts` or
+// `foo.module.d.css.ts` back to their real non-JS names.
+func TryGetRealFileNameForNonJSDeclarationFileName(fileName string) string {
+	baseName := tspath.GetBaseFileName(fileName)
+	// Ends with .ts, contains ".d.", and is NOT a standard .d.ts file
+	if !strings.HasSuffix(fileName, tspath.ExtensionTs) ||
+		!strings.Contains(baseName, ".d.") ||
+		strings.HasSuffix(baseName, tspath.ExtensionDts) {
+		return ""
+	}
+	noExtension := tspath.RemoveExtension(fileName, tspath.ExtensionTs)
+	lastDotIndex := strings.LastIndex(noExtension, ".")
+	ext := noExtension[lastDotIndex:]
+	before, _, _ := strings.Cut(noExtension, ".d.")
+	return before + ext
+}
+
 func getJSExtensionForFile(fileName string, options *core.CompilerOptions) string {
 	result := module.TryGetJSExtensionForFile(fileName, options)
 	if len(result) == 0 {

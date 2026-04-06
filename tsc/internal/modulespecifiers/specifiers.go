@@ -661,6 +661,12 @@ func processEnding(
 	if tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionMts, tspath.ExtensionCts}) {
 		return noExtension + getJSExtensionForFile(fileName, options)
 	}
+	if !tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionDts}) && tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionTs}) && strings.Contains(fileName, ".d.") {
+		// `foo.d.json.ts` and the like - remap back to `foo.json`
+		if result := TryGetRealFileNameForNonJSDeclarationFileName(fileName); result != "" {
+			return result
+		}
+	}
 
 	switch allowedEndings[0] {
 	case ModuleSpecifierEndingMinimal:
@@ -676,10 +682,21 @@ func processEnding(
 	case ModuleSpecifierEndingJsExtension:
 		return noExtension + getJSExtensionForFile(fileName, options)
 	case ModuleSpecifierEndingTsExtension:
-		// declaration files are already handled first with a remap back to input js paths,
-		// and mjs/cjs/json are already singled out,
-		// so we know fileName has to be either an input .js or .ts path already
-		// TODO: possible dead code in strada in this branch to do with declaration file name handling
+		// For now, we don't know if this import is going to be type-only, which means we don't
+		// know if a .d.ts extension is valid, so use no extension or a .js extension
+		if tspath.IsDeclarationFileName(fileName) {
+			extensionlessPriority := -1
+			for i, e := range allowedEndings {
+				if e == ModuleSpecifierEndingMinimal || e == ModuleSpecifierEndingIndex {
+					extensionlessPriority = i
+					break
+				}
+			}
+			if extensionlessPriority != -1 && extensionlessPriority < jsPriority {
+				return noExtension
+			}
+			return noExtension + getJSExtensionForFile(fileName, options)
+		}
 		return fileName
 	default:
 		debug.AssertNever(allowedEndings[0])

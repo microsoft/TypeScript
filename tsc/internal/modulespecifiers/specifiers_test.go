@@ -257,6 +257,40 @@ func TestContainsIgnoredPath(t *testing.T) {
 	}
 }
 
+func TestTryGetRealFileNameForNonJSDeclarationFileName(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name     string
+		fileName string
+		expected string
+	}{
+		{
+			name:     "json declaration file",
+			fileName: "/project/foo.d.json.ts",
+			expected: "/project/foo.json",
+		},
+		{
+			name:     "multi-dot source extension declaration file",
+			fileName: "/project/foo.module.d.css.ts",
+			expected: "/project/foo.module.css",
+		},
+		{
+			name:     "plain dts file ignored",
+			fileName: "/project/foo.d.ts",
+			expected: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := TryGetRealFileNameForNonJSDeclarationFileName(tt.fileName); got != tt.expected {
+				t.Errorf("TryGetRealFileNameForNonJSDeclarationFileName(%q) = %q, expected %q", tt.fileName, got, tt.expected)
+			}
+		})
+	}
+}
+
 func TestTryGetModuleNameFromExportsOrImports(t *testing.T) {
 	t.Parallel()
 	t.Run("with exports pattern", func(t *testing.T) {
