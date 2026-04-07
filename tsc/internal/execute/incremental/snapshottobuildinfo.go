@@ -135,6 +135,7 @@ func (t *toBuildInfo) toBuildInfoDiagnosticsFromFileNameDiagnostics(diagnostics 
 			ReportsUnnecessary: d.reportsUnnecessary,
 			ReportsDeprecated:  d.reportsDeprecated,
 			SkippedOnNoEmit:    d.skippedOnNoEmit,
+			RepopulateInfo:     toBuildInfoRepopulateInfo(d.repopulateInfo),
 		}
 	})
 }
@@ -162,8 +163,21 @@ func (t *toBuildInfo) toBuildInfoDiagnosticsFromDiagnostics(filePath tspath.Path
 			ReportsUnnecessary: d.ReportsUnnecessary(),
 			ReportsDeprecated:  d.ReportsDeprecated(),
 			SkippedOnNoEmit:    d.SkippedOnNoEmit(),
+			RepopulateInfo:     toBuildInfoRepopulateInfo(d.RepopulateInfo()),
 		}
 	})
+}
+
+func toBuildInfoRepopulateInfo(info *ast.RepopulateDiagnosticInfo) *BuildInfoRepopulateInfo {
+	if info == nil {
+		return nil
+	}
+	return &BuildInfoRepopulateInfo{
+		Kind:            info.Kind,
+		ModuleReference: info.ModuleReference,
+		Mode:            info.Mode,
+		PackageName:     info.PackageName,
+	}
 }
 
 func (t *toBuildInfo) toBuildInfoDiagnosticsOfFile(filePath tspath.Path, diags *DiagnosticsOrBuildInfoDiagnosticsWithFileName) *BuildInfoDiagnosticsOfFile {

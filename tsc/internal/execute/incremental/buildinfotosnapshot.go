@@ -3,6 +3,7 @@ package incremental
 import (
 	"strings"
 
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -86,6 +87,7 @@ func (t *toSnapshot) toBuildInfoDiagnosticsWithFileName(diagnostics []*BuildInfo
 			reportsUnnecessary: d.ReportsUnnecessary,
 			reportsDeprecated:  d.ReportsDeprecated,
 			skippedOnNoEmit:    d.SkippedOnNoEmit,
+			repopulateInfo:     fromBuildInfoRepopulateInfo(d.RepopulateInfo),
 		}
 	})
 }
@@ -93,6 +95,18 @@ func (t *toSnapshot) toBuildInfoDiagnosticsWithFileName(diagnostics []*BuildInfo
 func (t *toSnapshot) toDiagnosticsOrBuildInfoDiagnosticsWithFileName(dig *BuildInfoDiagnosticsOfFile) *DiagnosticsOrBuildInfoDiagnosticsWithFileName {
 	return &DiagnosticsOrBuildInfoDiagnosticsWithFileName{
 		buildInfoDiagnostics: t.toBuildInfoDiagnosticsWithFileName(dig.Diagnostics),
+	}
+}
+
+func fromBuildInfoRepopulateInfo(info *BuildInfoRepopulateInfo) *ast.RepopulateDiagnosticInfo {
+	if info == nil {
+		return nil
+	}
+	return &ast.RepopulateDiagnosticInfo{
+		Kind:            info.Kind,
+		ModuleReference: info.ModuleReference,
+		Mode:            info.Mode,
+		PackageName:     info.PackageName,
 	}
 }
 

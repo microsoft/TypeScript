@@ -1732,3 +1732,81 @@ func (c *Checker) isJSLiteralType(t *Type) bool {
 	}
 	return false
 }
+
+// DiagnosticDetails holds a resolved diagnostic message and its arguments,
+// used for sharing diagnostic chain computation between the checker and incremental builder.
+type DiagnosticDetails struct {
+	Message *diagnostics.Message
+	Args    []any
+}
+
+// CreateModuleNotFoundChain computes the diagnostic message and arguments for a module-not-found
+// error chain entry. This is shared between the checker (initial diagnostic creation) and the
+// incremental builder (repopulation of cached diagnostics).
+// Mirrors createModuleNotFoundChain in the TypeScript compiler's utilities.ts.
+func CreateModuleNotFoundChain(program Program, file *ast.SourceFile, moduleReference string, mode core.ResolutionMode, packageName string) DiagnosticDetails {
+	resolvedModule := program.GetResolvedModule(file, moduleReference, mode)
+
+	if resolvedModule != nil && resolvedModule.AlternateResult != "" {
+		if strings.Contains(resolvedModule.AlternateResult, "/node_modules/@types/") {
+			packageName = "@types/" + module.MangleScopedPackageName(packageName)
+		}
+		return DiagnosticDetails{
+			Message: diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
+			Args:    []any{resolvedModule.AlternateResult, packageName},
+		}
+	}
+
+	packagesMap := program.GetPackagesMap()
+	if _, ok := packagesMap[module.GetTypesPackageName(packageName)]; ok {
+		return DiagnosticDetails{
+			Message: diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
+			Args:    []any{packageName, module.MangleScopedPackageName(packageName)},
+		}
+	}
+	if packagesMap[packageName] {
+		return DiagnosticDetails{
+			Message: diagnostics.If_the_0_package_actually_exposes_this_module_try_adding_a_new_declaration_d_ts_file_containing_declare_module_1,
+			Args:    []any{packageName, moduleReference},
+		}
+	}
+	return DiagnosticDetails{
+		Message: diagnostics.Try_npm_i_save_dev_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
+		Args:    []any{moduleReference, module.MangleScopedPackageName(packageName)},
+	}
+}
+
+// CreateModeMismatchDetails computes the diagnostic message and arguments for a mode-mismatch
+// error chain entry. This is shared between the checker (initial diagnostic creation) and the
+// incremental builder (repopulation of cached diagnostics).
+// Mirrors createModeMismatchDetails in the TypeScript compiler's utilities.ts.
+func CreateModeMismatchDetails(program Program, file *ast.SourceFile) DiagnosticDetails {
+	ext := tspath.TryGetExtensionFromPath(file.FileName())
+	targetExt := core.IfElse(ext == tspath.ExtensionTs, tspath.ExtensionMts, core.IfElse(ext == tspath.ExtensionJs, tspath.ExtensionMjs, ""))
+	meta := program.GetSourceFileMetaData(file.Path())
+	packageJsonType := meta.PackageJsonType
+	packageJsonDirectory := meta.PackageJsonDirectory
+
+	if packageJsonDirectory != "" && packageJsonType == "" {
+		if targetExt != "" {
+			return DiagnosticDetails{
+				Message: diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Colon_module_to_1,
+				Args:    []any{targetExt, tspath.CombinePaths(packageJsonDirectory, "package.json")},
+			}
+		}
+		return DiagnosticDetails{
+			Message: diagnostics.To_convert_this_file_to_an_ECMAScript_module_add_the_field_type_Colon_module_to_0,
+			Args:    []any{tspath.CombinePaths(packageJsonDirectory, "package.json")},
+		}
+	}
+	if targetExt != "" {
+		return DiagnosticDetails{
+			Message: diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_create_a_local_package_json_file_with_type_Colon_module,
+			Args:    []any{targetExt},
+		}
+	}
+	return DiagnosticDetails{
+		Message: diagnostics.To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module,
+		Args:    nil,
+	}
+}

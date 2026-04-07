@@ -109,6 +109,10 @@ type Program struct {
 	// Used by workspace/symbol
 	hasTSFileOnce sync.Once
 	hasTSFile     bool
+
+	// Cached map of package names to whether they bundle types
+	packagesMapOnce sync.Once
+	packagesMap     map[string]bool
 }
 
 // FileExists implements checker.Program.
@@ -465,6 +469,22 @@ func (p *Program) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, mod
 
 func (p *Program) GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule] {
 	return p.resolvedModules
+}
+
+// GetPackagesMap returns a lazily-cached map of package names to whether they bundle types.
+// This is used by incremental diagnostic repopulation.
+func (p *Program) GetPackagesMap() map[string]bool {
+	p.packagesMapOnce.Do(func() {
+		p.packagesMap = make(map[string]bool)
+		for _, resolvedModulesInFile := range p.resolvedModules {
+			for _, mod := range resolvedModulesInFile {
+				if mod.PackageId.Name != "" {
+					p.packagesMap[mod.PackageId.Name] = p.packagesMap[mod.PackageId.Name] || mod.Extension == tspath.ExtensionDts
+				}
+			}
+		}
+	})
+	return p.packagesMap
 }
 
 // collectDiagnostics collects diagnostics from a single file or all files.

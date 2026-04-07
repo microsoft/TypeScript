@@ -2709,8 +2709,6 @@ func TestTscModuleResolution(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/workspaces/project/package.json")
 					},
-					// !!! repopulateInfo on diagnostics not yet implemented
-					expectedDiff: "Currently we arent repopulating error chain so errors will be different",
 				},
 			},
 		},
@@ -2761,24 +2759,18 @@ func TestTscModuleResolution(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/projects/project/node_modules/@types/bar/index.d.ts")
 					},
-					// !!! repopulateInfo on diagnostics not yet implemented
-					expectedDiff: "Currently we arent repopulating error chain so errors will be different",
 				},
 				{
 					caption: "delete the node10Result in package/types",
 					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/projects/project/node_modules/foo/index.d.ts")
 					},
-					// !!! repopulateInfo on diagnostics not yet implemented
-					expectedDiff: "Currently we arent repopulating error chain so errors will be different",
 				},
 				{
 					caption: "add the alternateResult in @types",
 					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getTscModuleResolutionAlternateResultDts("bar"))
 					},
-					// !!! repopulateInfo on diagnostics not yet implemented
-					expectedDiff: "Currently we arent repopulating error chain so errors will be different",
 				},
 				{
 					caption: "add the alternateResult in package/types",
@@ -2815,24 +2807,18 @@ func TestTscModuleResolution(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/projects/project/node_modules/@types/bar2/index.d.ts")
 					},
-					// !!! repopulateInfo on diagnostics not yet implemented
-					expectedDiff: "Currently we arent repopulating error chain so errors will be different",
 				},
 				{
 					caption: "delete the node10Result in package/types",
 					edit: func(sys *TestSys) {
 						sys.removeNoError("/home/src/projects/project/node_modules/foo2/index.d.ts")
 					},
-					// !!! repopulateInfo on diagnostics not yet implemented
-					expectedDiff: "Currently we arent repopulating error chain so errors will be different",
 				},
 				{
 					caption: "add the alternateResult in @types",
 					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getTscModuleResolutionAlternateResultDts("bar2"))
 					},
-					// !!! repopulateInfo on diagnostics not yet implemented
-					expectedDiff: "Currently we arent repopulating error chain so errors will be different",
 				},
 				{
 					caption: "add the ndoe10Result in package/types",

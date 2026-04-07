@@ -554,6 +554,7 @@ type Program interface {
 	GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.ModuleKind
 	GetResolvedModule(currentSourceFile ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule
 	GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]
+	GetPackagesMap() map[string]bool
 	GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData
 	GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReference string, specifier *ast.Node)
 	GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node
@@ -15019,39 +15020,29 @@ func (c *Checker) errorOnImplicitAnyModule(isError bool, errorNode *ast.Node, mo
 }
 
 func (c *Checker) createModuleNotFoundChain(resolvedModule *module.ResolvedModule, errorNode *ast.Node, moduleReference string, mode core.ResolutionMode, packageName string) *ast.Diagnostic {
-	if resolvedModule.AlternateResult != "" {
-		if strings.Contains(resolvedModule.AlternateResult, "/node_modules/@types/") {
-			packageName = "@types/" + module.MangleScopedPackageName(packageName)
-		}
-		return NewDiagnosticForNode(errorNode, diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings, resolvedModule.AlternateResult, packageName)
+	// Store the original packageName for repopulateInfo before any modifications
+	storedPackageName := packageName
+	if storedPackageName == moduleReference {
+		storedPackageName = ""
 	}
-	if c.typesPackageExists(packageName) {
-		return NewDiagnosticForNode(errorNode, diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1, packageName, module.MangleScopedPackageName(packageName))
-	}
-	if c.packageBundlesTypes(packageName) {
-		return NewDiagnosticForNode(errorNode, diagnostics.If_the_0_package_actually_exposes_this_module_try_adding_a_new_declaration_d_ts_file_containing_declare_module_1, packageName, moduleReference)
-	}
-	return NewDiagnosticForNode(errorNode, diagnostics.Try_npm_i_save_dev_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0, moduleReference, module.MangleScopedPackageName(packageName))
+
+	details := CreateModuleNotFoundChain(c.program, ast.GetSourceFileOfNode(errorNode), moduleReference, mode, packageName)
+	result := NewDiagnosticForNode(errorNode, details.Message, details.Args...)
+	result.SetRepopulateInfo(&ast.RepopulateDiagnosticInfo{
+		Kind:            ast.RepopulateModuleNotFound,
+		ModuleReference: moduleReference,
+		Mode:            mode,
+		PackageName:     storedPackageName,
+	})
+	return result
 }
 
 func (c *Checker) createModeMismatchDetails(sourceFile *ast.SourceFile, errorNode *ast.Node) *ast.Diagnostic {
-	ext := tspath.TryGetExtensionFromPath(sourceFile.FileName())
-	targetExt := core.IfElse(ext == tspath.ExtensionTs, tspath.ExtensionMts, core.IfElse(ext == tspath.ExtensionJs, tspath.ExtensionMjs, ""))
-	meta := c.program.GetSourceFileMetaData(sourceFile.Path())
-	packageJsonType := meta.PackageJsonType
-	packageJsonDirectory := meta.PackageJsonDirectory
-	var result *ast.Diagnostic
-	if packageJsonDirectory != "" && packageJsonType == "" {
-		if targetExt != "" {
-			result = NewDiagnosticForNode(errorNode, diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Colon_module_to_1, targetExt, tspath.CombinePaths(packageJsonDirectory, "package.json"))
-		} else {
-			result = NewDiagnosticForNode(errorNode, diagnostics.To_convert_this_file_to_an_ECMAScript_module_add_the_field_type_Colon_module_to_0, tspath.CombinePaths(packageJsonDirectory, "package.json"))
-		}
-	} else if targetExt != "" {
-		result = NewDiagnosticForNode(errorNode, diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_create_a_local_package_json_file_with_type_Colon_module, targetExt)
-	} else {
-		result = NewDiagnosticForNode(errorNode, diagnostics.To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module)
-	}
+	details := CreateModeMismatchDetails(c.program, sourceFile)
+	result := NewDiagnosticForNode(errorNode, details.Message, details.Args...)
+	result.SetRepopulateInfo(&ast.RepopulateDiagnosticInfo{
+		Kind: ast.RepopulateModeMismatch,
+	})
 	return result
 }
 

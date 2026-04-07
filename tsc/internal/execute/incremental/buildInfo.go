@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"iter"
 
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
@@ -194,19 +195,27 @@ func (b *BuildInfoReferenceMapEntry) UnmarshalJSON(data []byte) error {
 
 type BuildInfoDiagnostic struct {
 	// BuildInfoFileId if it is for a File thats other than its stored for
-	File               BuildInfoFileId        `json:"file,omitzero"`
-	NoFile             bool                   `json:"noFile,omitzero"`
-	Pos                int                    `json:"pos,omitzero"`
-	End                int                    `json:"end,omitzero"`
-	Code               int32                  `json:"code,omitzero"`
-	Category           diagnostics.Category   `json:"category,omitzero"`
-	MessageKey         diagnostics.Key        `json:"messageKey,omitzero"`
-	MessageArgs        []string               `json:"messageArgs,omitzero"`
-	MessageChain       []*BuildInfoDiagnostic `json:"messageChain,omitzero"`
-	RelatedInformation []*BuildInfoDiagnostic `json:"relatedInformation,omitzero"`
-	ReportsUnnecessary bool                   `json:"reportsUnnecessary,omitzero"`
-	ReportsDeprecated  bool                   `json:"reportsDeprecated,omitzero"`
-	SkippedOnNoEmit    bool                   `json:"skippedOnNoEmit,omitzero"`
+	File               BuildInfoFileId          `json:"file,omitzero"`
+	NoFile             bool                     `json:"noFile,omitzero"`
+	Pos                int                      `json:"pos,omitzero"`
+	End                int                      `json:"end,omitzero"`
+	Code               int32                    `json:"code,omitzero"`
+	Category           diagnostics.Category     `json:"category,omitzero"`
+	MessageKey         diagnostics.Key          `json:"messageKey,omitzero"`
+	MessageArgs        []string                 `json:"messageArgs,omitzero"`
+	MessageChain       []*BuildInfoDiagnostic   `json:"messageChain,omitzero"`
+	RelatedInformation []*BuildInfoDiagnostic   `json:"relatedInformation,omitzero"`
+	ReportsUnnecessary bool                     `json:"reportsUnnecessary,omitzero"`
+	ReportsDeprecated  bool                     `json:"reportsDeprecated,omitzero"`
+	SkippedOnNoEmit    bool                     `json:"skippedOnNoEmit,omitzero"`
+	RepopulateInfo     *BuildInfoRepopulateInfo `json:"repopulateInfo,omitzero"`
+}
+
+type BuildInfoRepopulateInfo struct {
+	Kind            ast.RepopulateDiagnosticKind `json:"kind"`
+	ModuleReference string                       `json:"moduleReference,omitzero"`
+	Mode            core.ResolutionMode          `json:"mode,omitzero"`
+	PackageName     string                       `json:"packageName,omitzero"`
 }
 
 type BuildInfoDiagnosticsOfFile struct {

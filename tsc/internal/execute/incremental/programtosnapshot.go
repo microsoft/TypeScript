@@ -119,14 +119,14 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 				}
 				if !t.snapshot.changedFilesSet.Has(file.Path()) {
 					if emitDiagnostics, ok := t.oldProgram.snapshot.emitDiagnosticsPerFile.Load(file.Path()); ok {
-						t.snapshot.emitDiagnosticsPerFile.Store(file.Path(), emitDiagnostics)
+						t.snapshot.emitDiagnosticsPerFile.Store(file.Path(), repopulateDiagnosticsOfFile(emitDiagnostics, t.program, file))
 					}
 					if canCopySemanticDiagnostics {
 						if (!file.IsDeclarationFile || copyDeclarationFileDiagnostics) &&
 							(!t.program.IsSourceFileDefaultLibrary(file.Path()) || copyLibFileDiagnostics) {
 							// Unchanged file copy diagnostics
 							if diagnostics, ok := t.oldProgram.snapshot.semanticDiagnosticsPerFile.Load(file.Path()); ok {
-								t.snapshot.semanticDiagnosticsPerFile.Store(file.Path(), diagnostics)
+								t.snapshot.semanticDiagnosticsPerFile.Store(file.Path(), repopulateDiagnosticsOfFile(diagnostics, t.program, file))
 							}
 						}
 					}
@@ -297,4 +297,103 @@ func getReferencedFiles(program *compiler.Program, file *ast.SourceFile) *collec
 		addReferencedFilesFromSymbol(file, &referencedFiles, ambientModule)
 	}
 	return core.IfElse(referencedFiles.Len() > 0, &referencedFiles, nil)
+}
+
+// repopulateDiagnosticsOfFile repopulates diagnostic chains that depend on program state.
+// When diagnostics are copied from a previous build, their message chains may reference
+// stale program state (e.g., resolved module alternate results, package.json scope).
+// This function recomputes those chains using the current program's state.
+func repopulateDiagnosticsOfFile(diags *DiagnosticsOrBuildInfoDiagnosticsWithFileName, p *compiler.Program, file *ast.SourceFile) *DiagnosticsOrBuildInfoDiagnosticsWithFileName {
+	if diags.diagnostics != nil {
+		repopulated := repopulateDiagnosticsList(diags.diagnostics, p, file)
+		if repopulated == nil {
+			return diags
+		}
+		return &DiagnosticsOrBuildInfoDiagnosticsWithFileName{diagnostics: repopulated}
+	}
+	// buildInfoDiagnostics will be repopulated via toDiagnostic's repopulateInfo handling
+	return diags
+}
+
+// repopulateDiagnosticsList repopulates diagnostic chains in a list of diagnostics.
+// Returns nil if no diagnostics needed repopulation (i.e., no changes were made).
+func repopulateDiagnosticsList(diags []*ast.Diagnostic, p *compiler.Program, file *ast.SourceFile) []*ast.Diagnostic {
+	changed := false
+	result := make([]*ast.Diagnostic, len(diags))
+	for i, d := range diags {
+		repopulated := repopulateDiagnosticMessageChain(d.MessageChain(), p, file)
+		if repopulated != nil {
+			clone := d.Clone()
+			clone.SetMessageChain(repopulated)
+			result[i] = clone
+			changed = true
+		} else {
+			result[i] = d
+		}
+	}
+	if !changed {
+		return nil
+	}
+	return result
+}
+
+// repopulateDiagnosticMessageChain repopulates chains that have repopulate info.
+// Returns nil if no changes were made.
+func repopulateDiagnosticMessageChain(chain []*ast.Diagnostic, p *compiler.Program, file *ast.SourceFile) []*ast.Diagnostic {
+	if len(chain) == 0 {
+		return nil
+	}
+	changed := false
+	result := make([]*ast.Diagnostic, len(chain))
+	for i, c := range chain {
+		if c.RepopulateInfo() != nil {
+			// Convert to buildInfoDiagnosticWithFileName and repopulate
+			b := &buildInfoDiagnosticWithFileName{
+				pos:            c.Pos(),
+				end:            c.End(),
+				code:           c.Code(),
+				category:       c.Category(),
+				messageKey:     c.MessageKey(),
+				messageArgs:    c.MessageArgs(),
+				repopulateInfo: c.RepopulateInfo(),
+			}
+			// Recursively handle nested chains
+			for _, nested := range c.MessageChain() {
+				b.messageChain = append(b.messageChain, astDiagToBuildInfoDiag(nested))
+			}
+			result[i] = repopulateDiagnosticChain(b, p, file)
+			changed = true
+		} else {
+			// Check nested chains
+			nested := repopulateDiagnosticMessageChain(c.MessageChain(), p, file)
+			if nested != nil {
+				clone := c.Clone()
+				clone.SetMessageChain(nested)
+				result[i] = clone
+				changed = true
+			} else {
+				result[i] = c
+			}
+		}
+	}
+	if !changed {
+		return nil
+	}
+	return result
+}
+
+func astDiagToBuildInfoDiag(d *ast.Diagnostic) *buildInfoDiagnosticWithFileName {
+	b := &buildInfoDiagnosticWithFileName{
+		pos:            d.Pos(),
+		end:            d.End(),
+		code:           d.Code(),
+		category:       d.Category(),
+		messageKey:     d.MessageKey(),
+		messageArgs:    d.MessageArgs(),
+		repopulateInfo: d.RepopulateInfo(),
+	}
+	for _, nested := range d.MessageChain() {
+		b.messageChain = append(b.messageChain, astDiagToBuildInfoDiag(nested))
+	}
+	return b
 }

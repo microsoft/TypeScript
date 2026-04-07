@@ -98,6 +98,10 @@ func (p *fakeProgram) IsSourceFromProjectReference(path tspath.Path) bool {
 	return false
 }
 
+func (p *fakeProgram) GetPackagesMap() map[string]bool {
+	return nil
+}
+
 func (p *fakeProgram) GetProjectReferenceFromOutputDts(path tspath.Path) *tsoptions.SourceOutputAndProjectReference {
 	return nil
 }

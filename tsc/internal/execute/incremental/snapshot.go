@@ -8,6 +8,7 @@ import (
 	"sync/atomic"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -144,6 +145,7 @@ type buildInfoDiagnosticWithFileName struct {
 	reportsUnnecessary bool
 	reportsDeprecated  bool
 	skippedOnNoEmit    bool
+	repopulateInfo     *ast.RepopulateDiagnosticInfo
 }
 
 type DiagnosticsOrBuildInfoDiagnosticsWithFileName struct {
@@ -158,6 +160,11 @@ func (b *buildInfoDiagnosticWithFileName) toDiagnostic(p *compiler.Program, file
 	} else if !b.noFile {
 		fileForDiagnostic = file
 	}
+
+	if b.repopulateInfo != nil {
+		return repopulateDiagnosticChain(b, p, fileForDiagnostic)
+	}
+
 	var messageChain []*ast.Diagnostic
 	for _, msg := range b.messageChain {
 		messageChain = append(messageChain, msg.toDiagnostic(p, fileForDiagnostic))
@@ -178,6 +185,104 @@ func (b *buildInfoDiagnosticWithFileName) toDiagnostic(p *compiler.Program, file
 		b.reportsUnnecessary,
 		b.reportsDeprecated,
 		b.skippedOnNoEmit,
+	)
+}
+
+// repopulateDiagnosticChain recomputes a diagnostic chain entry that depends on
+// program state which may have changed between incremental builds.
+func repopulateDiagnosticChain(b *buildInfoDiagnosticWithFileName, p *compiler.Program, file *ast.SourceFile) *ast.Diagnostic {
+	info := b.repopulateInfo
+	switch info.Kind {
+	case ast.RepopulateModeMismatch:
+		return repopulateModeMismatchChain(b, p, file)
+	case ast.RepopulateModuleNotFound:
+		return repopulateModuleNotFoundChain(b, p, file, info)
+	default:
+		// Fall back to using the stored (possibly stale) data
+		return b.toDiagnosticWithoutRepopulate(p, file)
+	}
+}
+
+func (b *buildInfoDiagnosticWithFileName) toDiagnosticWithoutRepopulate(p *compiler.Program, file *ast.SourceFile) *ast.Diagnostic {
+	var messageChain []*ast.Diagnostic
+	for _, msg := range b.messageChain {
+		messageChain = append(messageChain, msg.toDiagnostic(p, file))
+	}
+	var relatedInformation []*ast.Diagnostic
+	for _, info := range b.relatedInformation {
+		relatedInformation = append(relatedInformation, info.toDiagnostic(p, file))
+	}
+	return ast.NewDiagnosticFromSerialized(
+		file,
+		core.NewTextRange(b.pos, b.end),
+		b.code,
+		b.category,
+		b.messageKey,
+		b.messageArgs,
+		messageChain,
+		relatedInformation,
+		b.reportsUnnecessary,
+		b.reportsDeprecated,
+		b.skippedOnNoEmit,
+	)
+}
+
+func repopulateModeMismatchChain(b *buildInfoDiagnosticWithFileName, p *compiler.Program, file *ast.SourceFile) *ast.Diagnostic {
+	if file == nil {
+		return b.toDiagnosticWithoutRepopulate(p, file)
+	}
+
+	details := checker.CreateModeMismatchDetails(p, file)
+
+	var nextChain []*ast.Diagnostic
+	for _, msg := range b.messageChain {
+		nextChain = append(nextChain, msg.toDiagnostic(p, file))
+	}
+
+	return ast.NewDiagnosticFromSerialized(
+		file,
+		core.NewTextRange(b.pos, b.end),
+		details.Message.Code(),
+		details.Message.Category(),
+		details.Message.Key(),
+		diagnostics.StringifyArgs(details.Args),
+		nextChain,
+		nil,
+		false,
+		false,
+		false,
+	)
+}
+
+func repopulateModuleNotFoundChain(b *buildInfoDiagnosticWithFileName, p *compiler.Program, file *ast.SourceFile, info *ast.RepopulateDiagnosticInfo) *ast.Diagnostic {
+	if file == nil {
+		return b.toDiagnosticWithoutRepopulate(p, file)
+	}
+
+	packageName := info.PackageName
+	if packageName == "" {
+		packageName = info.ModuleReference
+	}
+
+	details := checker.CreateModuleNotFoundChain(p, file, info.ModuleReference, info.Mode, packageName)
+
+	var nextChain []*ast.Diagnostic
+	for _, msg := range b.messageChain {
+		nextChain = append(nextChain, msg.toDiagnostic(p, file))
+	}
+
+	return ast.NewDiagnosticFromSerialized(
+		file,
+		core.NewTextRange(b.pos, b.end),
+		details.Message.Code(),
+		details.Message.Category(),
+		details.Message.Key(),
+		diagnostics.StringifyArgs(details.Args),
+		nextChain,
+		nil,
+		false,
+		false,
+		false,
 	)
 }
 

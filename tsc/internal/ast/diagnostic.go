@@ -11,6 +11,23 @@ import (
 	"github.com/microsoft/typescript-go/internal/locale"
 )
 
+// RepopulateDiagnosticKind indicates the kind of repopulation for a diagnostic chain entry.
+type RepopulateDiagnosticKind int
+
+const (
+	RepopulateModeMismatch   RepopulateDiagnosticKind = 1
+	RepopulateModuleNotFound RepopulateDiagnosticKind = 2
+)
+
+// RepopulateDiagnosticInfo stores information needed to recompute a diagnostic chain entry
+// during incremental builds when the program state may have changed.
+type RepopulateDiagnosticInfo struct {
+	Kind            RepopulateDiagnosticKind
+	ModuleReference string
+	Mode            core.ResolutionMode
+	PackageName     string
+}
+
 // Diagnostic
 
 type Diagnostic struct {
@@ -27,27 +44,30 @@ type Diagnostic struct {
 	reportsUnnecessary bool
 	reportsDeprecated  bool
 	skippedOnNoEmit    bool
+	repopulateInfo     *RepopulateDiagnosticInfo
 }
 
-func (d *Diagnostic) File() *SourceFile                 { return d.file }
-func (d *Diagnostic) Pos() int                          { return d.loc.Pos() }
-func (d *Diagnostic) End() int                          { return d.loc.End() }
-func (d *Diagnostic) Len() int                          { return d.loc.Len() }
-func (d *Diagnostic) Loc() core.TextRange               { return d.loc }
-func (d *Diagnostic) Code() int32                       { return d.code }
-func (d *Diagnostic) Category() diagnostics.Category    { return d.category }
-func (d *Diagnostic) MessageKey() diagnostics.Key       { return d.messageKey }
-func (d *Diagnostic) MessageArgs() []string             { return d.messageArgs }
-func (d *Diagnostic) MessageChain() []*Diagnostic       { return d.messageChain }
-func (d *Diagnostic) RelatedInformation() []*Diagnostic { return d.relatedInformation }
-func (d *Diagnostic) ReportsUnnecessary() bool          { return d.reportsUnnecessary }
-func (d *Diagnostic) ReportsDeprecated() bool           { return d.reportsDeprecated }
-func (d *Diagnostic) SkippedOnNoEmit() bool             { return d.skippedOnNoEmit }
+func (d *Diagnostic) File() *SourceFile                         { return d.file }
+func (d *Diagnostic) Pos() int                                  { return d.loc.Pos() }
+func (d *Diagnostic) End() int                                  { return d.loc.End() }
+func (d *Diagnostic) Len() int                                  { return d.loc.Len() }
+func (d *Diagnostic) Loc() core.TextRange                       { return d.loc }
+func (d *Diagnostic) Code() int32                               { return d.code }
+func (d *Diagnostic) Category() diagnostics.Category            { return d.category }
+func (d *Diagnostic) MessageKey() diagnostics.Key               { return d.messageKey }
+func (d *Diagnostic) MessageArgs() []string                     { return d.messageArgs }
+func (d *Diagnostic) MessageChain() []*Diagnostic               { return d.messageChain }
+func (d *Diagnostic) RelatedInformation() []*Diagnostic         { return d.relatedInformation }
+func (d *Diagnostic) ReportsUnnecessary() bool                  { return d.reportsUnnecessary }
+func (d *Diagnostic) ReportsDeprecated() bool                   { return d.reportsDeprecated }
+func (d *Diagnostic) SkippedOnNoEmit() bool                     { return d.skippedOnNoEmit }
+func (d *Diagnostic) RepopulateInfo() *RepopulateDiagnosticInfo { return d.repopulateInfo }
 
-func (d *Diagnostic) SetFile(file *SourceFile)                  { d.file = file }
-func (d *Diagnostic) SetLocation(loc core.TextRange)            { d.loc = loc }
-func (d *Diagnostic) SetCategory(category diagnostics.Category) { d.category = category }
-func (d *Diagnostic) SetSkippedOnNoEmit()                       { d.skippedOnNoEmit = true }
+func (d *Diagnostic) SetFile(file *SourceFile)                         { d.file = file }
+func (d *Diagnostic) SetLocation(loc core.TextRange)                   { d.loc = loc }
+func (d *Diagnostic) SetCategory(category diagnostics.Category)        { d.category = category }
+func (d *Diagnostic) SetSkippedOnNoEmit()                              { d.skippedOnNoEmit = true }
+func (d *Diagnostic) SetRepopulateInfo(info *RepopulateDiagnosticInfo) { d.repopulateInfo = info }
 
 func (d *Diagnostic) SetMessageChain(messageChain []*Diagnostic) *Diagnostic {
 	d.messageChain = messageChain
