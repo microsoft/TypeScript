@@ -56,6 +56,7 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 			return &testUnit{content: content, name: filename}, nil
 		},
 	)
+
 	if currentDirectory == "" {
 		currentDirectory = srcFolder
 	}
@@ -165,7 +166,14 @@ func ParseTestFilesAndSymlinksWithOptions[T any](
 				currentDirectory = metaDataValue
 			}
 			if metaDataName != "filename" {
-				if slices.Contains(fourslashDirectives, metaDataName) {
+				if metaDataName == "symlink" && currentFileName != "" {
+					for link := range strings.SplitSeq(metaDataValue, ",") {
+						link = strings.TrimSpace(link)
+						if link != "" {
+							symlinks[link] = currentFileName
+						}
+					}
+				} else if slices.Contains(fourslashDirectives, metaDataName) {
 					// File-specific option
 					currentFileOptions[metaDataName] = metaDataValue
 				} else {

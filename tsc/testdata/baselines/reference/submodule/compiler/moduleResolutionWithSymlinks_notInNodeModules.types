@@ -2,14 +2,14 @@
 
 === /src/app.ts ===
 import { x } from "./shared/abc";
->x : any
+>x : 0
 
 import { x as x2 } from "./shared2/abc";
->x : any
->x2 : any
+>x : 0
+>x2 : 0
 
 x + x2;
->x + x2 : any
->x : any
->x2 : any
+>x + x2 : number
+>x : 0
+>x2 : 0
 

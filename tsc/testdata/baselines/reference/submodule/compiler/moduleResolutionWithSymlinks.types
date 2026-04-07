@@ -5,22 +5,22 @@ import { MyClass } from "./library-a";
 >MyClass : typeof MyClass
 
 import { MyClass2 } from "./library-b";
->MyClass2 : any
+>MyClass2 : typeof MyClass
 
 let x: MyClass;
 >x : MyClass
 
 let y: MyClass2;
->y : MyClass2
+>y : MyClass
 
 x = y;
->x = y : MyClass2
+>x = y : MyClass
 >x : MyClass
->y : MyClass2
+>y : MyClass
 
 y = x;
 >y = x : MyClass
->y : MyClass2
+>y : MyClass
 >x : MyClass
 
 /*
@@ -49,9 +49,9 @@ export class MyClass { private x: number; }
 
 === /src/library-b/index.ts ===
 import {MyClass} from "library-a";
->MyClass : any
+>MyClass : typeof MyClass
 
 export { MyClass as MyClass2 }
->MyClass : any
->MyClass2 : any
+>MyClass : typeof MyClass
+>MyClass2 : typeof MyClass
 

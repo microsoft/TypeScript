@@ -5,22 +5,26 @@
 /// <reference types="linked" />
 
 import { C as C1 } from "linked";
->C : any
->C1 : any
+>C : typeof C1
+>C1 : typeof C1
 
 import { C as C2 } from "linked2";
->C : any
->C2 : any
+>C : typeof C2
+>C2 : typeof C2
 
 let x = new C1();
->x : any
->new C1() : any
->C1 : any
+>x : C1
+>new C1() : C1
+>C1 : typeof C1
 
 // Should fail. We no longer resolve any symlinks.
 x = new C2();
->x = new C2() : any
->x : any
->new C2() : any
->C2 : any
+>x = new C2() : C2
+>x : C1
+>new C2() : C2
+>C2 : typeof C2
+
+=== /app/node_modules/real/index.d.ts ===
+export const real: string;
+>real : string
 
