@@ -24,7 +24,7 @@ class Container {
 module.exports = Container;
 >module.exports = Container : typeof Container
 >module.exports : typeof Container
->module : { Container: typeof Container; }
+>module : { exports: typeof Container; }
 >exports : typeof Container
 >Container : typeof Container
 
@@ -32,7 +32,7 @@ module.exports = Container;
 module.exports = class Obj {
 >module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof Obj
 >module.exports : typeof Obj
->module : { Obj: typeof Obj; }
+>module : { exports: typeof Obj; }
 >exports : typeof Obj
 >class Obj {    constructor() {        this.x = 12;    }} : typeof Obj
 >Obj : typeof Obj

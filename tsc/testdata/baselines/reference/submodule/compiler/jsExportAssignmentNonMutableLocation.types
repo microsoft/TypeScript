@@ -11,7 +11,7 @@ const customSymbol = Symbol("custom");
 module.exports = {
 >module.exports = {    customSymbol,} : { customSymbol: symbol; }
 >module.exports : { customSymbol: symbol; }
->module : { "export=": { customSymbol: symbol; }; }
+>module : { exports: { customSymbol: symbol; }; }
 >exports : { customSymbol: symbol; }
 >{    customSymbol,} : { customSymbol: symbol; }
 

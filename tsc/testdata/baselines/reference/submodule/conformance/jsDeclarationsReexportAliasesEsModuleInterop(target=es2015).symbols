@@ -5,9 +5,9 @@ class Foo {}
 >Foo : Symbol(Foo, Decl(cls.js, 0, 0))
 
 module.exports = Foo;
->module.exports : Symbol(Foo, Decl(cls.js, 0, 0))
->module : Symbol("./cls", Decl(cls.js, 0, 0))
->exports : Symbol(Foo, Decl(cls.js, 0, 0))
+>module.exports : Symbol(exports, Decl(cls.js, 0, 0))
+>module : Symbol(module, Decl(cls.js, 0, 0))
+>exports : Symbol(exports, Decl(cls.js, 0, 0))
 >Foo : Symbol(Foo, Decl(cls.js, 0, 0))
 
 === usage.js ===

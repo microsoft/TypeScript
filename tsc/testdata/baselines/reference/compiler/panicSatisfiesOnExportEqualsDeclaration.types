@@ -7,7 +7,7 @@
 module.exports = {};
 >module.exports = {} : {}
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >{} : {}
 

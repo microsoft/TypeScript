@@ -21,7 +21,7 @@
 ->b : typeof b
 +>module.exports.b : {}
 +>module.exports : typeof import("./enumTagOnExports")
-+>module : { "\"enumTagOnExports\"": typeof import("./enumTagOnExports"); }
++>module : { exports: typeof import("./enumTagOnExports"); }
 +>exports : typeof import("./enumTagOnExports")
 +>b : {}
  >{} : {}

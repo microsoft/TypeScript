@@ -60,9 +60,9 @@
 ->module.exports : Symbol(y, Decl(test.js, 45, 9))
 ->module : Symbol(module, Decl(test.js, 45, 9))
 ->exports : Symbol(module.exports, Decl(test.js, 0, 0))
-+>module.exports : Symbol("./test", Decl(test.js, 0, 0))
-+>module : Symbol("./test", Decl(test.js, 0, 0))
-+>exports : Symbol("./test", Decl(test.js, 0, 0))
++>module.exports : Symbol(exports, Decl(test.js, 0, 0))
++>module : Symbol(module, Decl(test.js, 0, 0))
++>exports : Symbol(exports, Decl(test.js, 0, 0))
  >y : Symbol(y, Decl(test.js, 45, 9))
 
      status: "done",
@@ -73,9 +73,9 @@
 ->module.exports : Symbol(module.exports, Decl(test.js, 0, 0))
 ->module : Symbol(module, Decl(test.js, 45, 9))
 ->exports : Symbol(module.exports, Decl(test.js, 0, 0))
-+>module.exports : Symbol("./test", Decl(test.js, 0, 0))
-+>module : Symbol("./test", Decl(test.js, 0, 0))
-+>exports : Symbol("./test", Decl(test.js, 0, 0))
++>module.exports : Symbol(exports, Decl(test.js, 0, 0))
++>module : Symbol(module, Decl(test.js, 0, 0))
++>exports : Symbol(exports, Decl(test.js, 0, 0))
  >y : Symbol(y, Decl(test.js, 45, 9))
 
  // prototype-property assignment
@@ -119,8 +119,10 @@
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 ->module : Symbol(export=, Decl(mod.js, 0, 0))
-+>module.exports : Symbol(export=, Decl(mod.js, 0, 0))
-+>module : Symbol("./mod", Decl(mod.js, 0, 0))
- >exports : Symbol(export=, Decl(mod.js, 0, 0))
+->exports : Symbol(export=, Decl(mod.js, 0, 0))
++>module.exports : Symbol(exports, Decl(mod.js, 0, 0))
++>module : Symbol(module, Decl(mod.js, 0, 0))
++>exports : Symbol(exports, Decl(mod.js, 0, 0))
 
      status: "done",
+ >status : Symbol(status, Decl(mod.js, 2, 18))

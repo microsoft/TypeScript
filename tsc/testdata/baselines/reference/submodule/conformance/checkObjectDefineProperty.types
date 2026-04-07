@@ -250,7 +250,7 @@ match(() => expected, (x = expected) => void 0);
 module.exports = x;
 >module.exports = x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 >module.exports : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
->module : { readonly x: { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }; }
+>module : { exports: { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }; }
 >exports : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 >x : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 

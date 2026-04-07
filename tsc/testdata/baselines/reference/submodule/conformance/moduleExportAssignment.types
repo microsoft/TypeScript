@@ -30,7 +30,7 @@ var npmlog = module.exports = new EE()
 >npmlog : EE
 >module.exports = new EE() : EE
 >module.exports : typeof import("./npmlog")
->module : { "\"npmlog\"": typeof import("./npmlog"); }
+>module : { exports: typeof import("./npmlog"); }
 >exports : typeof import("./npmlog")
 >new EE() : EE
 >EE : typeof EE
@@ -46,7 +46,7 @@ module.exports.on('hi') // here too
 >module.exports.on('hi') : any
 >module.exports.on : any
 >module.exports : typeof import("./npmlog")
->module : { "\"npmlog\"": typeof import("./npmlog"); }
+>module : { exports: typeof import("./npmlog"); }
 >exports : typeof import("./npmlog")
 >on : any
 >'hi' : "hi"
@@ -62,7 +62,7 @@ module.exports.y = 2
 >module.exports.y = 2 : 2
 >module.exports.y : 2
 >module.exports : typeof import("./npmlog")
->module : { "\"npmlog\"": typeof import("./npmlog"); }
+>module : { exports: typeof import("./npmlog"); }
 >exports : typeof import("./npmlog")
 >y : 2
 >2 : 2
@@ -75,7 +75,7 @@ npmlog.y
 module.exports.x
 >module.exports.x : any
 >module.exports : typeof import("./npmlog")
->module : { "\"npmlog\"": typeof import("./npmlog"); }
+>module : { exports: typeof import("./npmlog"); }
 >exports : typeof import("./npmlog")
 >x : any
 

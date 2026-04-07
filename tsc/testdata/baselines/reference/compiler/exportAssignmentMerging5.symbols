@@ -28,9 +28,9 @@ let v1 = { x: "test" };
  * @typedef {{x: string}} Foo
  */
 module.exports = { a: 1, b: "hello" };
->module.exports : Symbol(export=, Decl(a.js, 0, 0))
->module : Symbol("./a", Decl(a.js, 0, 0))
->exports : Symbol(export=, Decl(a.js, 0, 0))
+>module.exports : Symbol(exports, Decl(a.js, 0, 0))
+>module : Symbol(module, Decl(a.js, 0, 0))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
 >a : Symbol(a, Decl(a.js, 3, 18))
 >b : Symbol(b, Decl(a.js, 3, 24))
 

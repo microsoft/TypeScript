@@ -70,9 +70,9 @@ function foo() {
  * @type {MyComponentProps}
  */
 module.exports = {
->module.exports : Symbol(export=, Decl(input.js, 42, 1))
->module : Symbol("./input", Decl(input.js, 0, 0))
->exports : Symbol(export=, Decl(input.js, 42, 1))
+>module.exports : Symbol(exports, Decl(input.js, 0, 0))
+>module : Symbol(module, Decl(input.js, 0, 0))
+>exports : Symbol(exports, Decl(input.js, 0, 0))
 
     color: "red"
 >color : Symbol(color, Decl(input.js, 47, 18))
@@ -81,7 +81,7 @@ module.exports = {
 expectLiteral({ props: module.exports });
 >expectLiteral : Symbol(expectLiteral, Decl(input.js, 27, 27))
 >props : Symbol(props, Decl(input.js, 51, 15))
->module.exports : Symbol(export=, Decl(input.js, 42, 1))
->module : Symbol("./input", Decl(input.js, 0, 0))
->exports : Symbol(export=, Decl(input.js, 42, 1))
+>module.exports : Symbol(exports, Decl(input.js, 0, 0))
+>module : Symbol(module, Decl(input.js, 0, 0))
+>exports : Symbol(exports, Decl(input.js, 0, 0))
 

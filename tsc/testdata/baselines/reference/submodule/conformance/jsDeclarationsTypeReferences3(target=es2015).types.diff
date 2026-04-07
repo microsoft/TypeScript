@@ -24,7 +24,7 @@
 +>module.exports.A = {} : {}
 +>module.exports.A : {}
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
 +>A : {}
  >{} : {}
@@ -43,7 +43,7 @@
 +>module.exports.A.B : any
 +>module.exports.A : {}
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
 +>A : {}
 +>B : any

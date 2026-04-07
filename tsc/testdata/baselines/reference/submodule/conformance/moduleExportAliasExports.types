@@ -24,7 +24,7 @@ exports.everywhere = 2
 module.exports = exports
 >module.exports = exports : typeof import("./Eloquent")
 >module.exports : typeof import("./Eloquent")
->module : { "\"Eloquent\"": typeof import("./Eloquent"); }
+>module : { exports: typeof import("./Eloquent"); }
 >exports : typeof import("./Eloquent")
 >exports : typeof import("./Eloquent")
 

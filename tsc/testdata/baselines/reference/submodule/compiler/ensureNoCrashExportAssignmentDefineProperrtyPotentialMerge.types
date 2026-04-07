@@ -10,16 +10,16 @@ const _item = require("./namespacer");
 module.exports = 12;
 >module.exports = 12 : 12
 >module.exports : 12
->module : { "export=": 12; }
+>module : { exports: 12; }
 >exports : 12
 >12 : 12
 
 Object.defineProperty(module, "exports", { value: "oh no" });
->Object.defineProperty(module, "exports", { value: "oh no" }) : any
+>Object.defineProperty(module, "exports", { value: "oh no" }) : { exports: 12; }
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->module : any
+>module : { exports: 12; }
 >"exports" : "exports"
 >{ value: "oh no" } : { value: string; }
 >value : string
@@ -41,7 +41,7 @@ A.bar = class Q {}
 module.exports = A;
 >module.exports = A : { bar: typeof Q; }
 >module.exports : { bar: typeof Q; }
->module : { readonly A: { bar: typeof Q; }; }
+>module : { exports: { bar: typeof Q; }; }
 >exports : { bar: typeof Q; }
 >A : { bar: typeof Q; }
 
@@ -75,7 +75,7 @@ Object.defineProperty(B, "NS", { value: "why though", writable: true });
 module.exports = B;
 >module.exports = B : { NS: string | { bar: typeof Q; }; }
 >module.exports : { NS: string | { bar: typeof Q; }; }
->module : { readonly B: { NS: string | { bar: typeof Q; }; }; }
+>module : { exports: { NS: string | { bar: typeof Q; }; }; }
 >exports : { NS: string | { bar: typeof Q; }; }
 >B : { NS: string | { bar: typeof Q; }; }
 

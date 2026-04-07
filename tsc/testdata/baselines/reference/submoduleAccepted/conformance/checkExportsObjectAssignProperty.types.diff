@@ -13,7 +13,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import("./mod2")
-+>module : { "\"mod2\"": typeof import("./mod2"); }
++>module : { exports: typeof import("./mod2"); }
 +>exports : typeof import("./mod2")
  >"thing" : "thing"
  >{ value: "yes", writable: true } : { value: string; writable: true; }
@@ -31,7 +31,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import("./mod2")
-+>module : { "\"mod2\"": typeof import("./mod2"); }
++>module : { exports: typeof import("./mod2"); }
 +>exports : typeof import("./mod2")
  >"readonlyProp" : "readonlyProp"
  >{ value: "Smith", writable: false } : { value: string; writable: false; }
@@ -49,7 +49,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import("./mod2")
-+>module : { "\"mod2\"": typeof import("./mod2"); }
++>module : { exports: typeof import("./mod2"); }
 +>exports : typeof import("./mod2")
  >"rwAccessors" : "rwAccessors"
  >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
@@ -67,7 +67,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import("./mod2")
-+>module : { "\"mod2\"": typeof import("./mod2"); }
++>module : { exports: typeof import("./mod2"); }
 +>exports : typeof import("./mod2")
  >"readonlyAccessor" : "readonlyAccessor"
  >{ get() { return 21.75 } } : { get(): number; }
@@ -84,7 +84,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import("./mod2")
-+>module : { "\"mod2\"": typeof import("./mod2"); }
++>module : { exports: typeof import("./mod2"); }
 +>exports : typeof import("./mod2")
  >"setonlyAccessor" : "setonlyAccessor"
  >{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set(str: string): void; }

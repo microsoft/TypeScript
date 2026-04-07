@@ -12,7 +12,7 @@
 ->MC : typeof import("./MC")
 +>module.exports = class MC {  watch() {    return new MW(this);  }} : typeof MC
 +>module.exports : typeof MC
-+>module : { "export=": typeof MC; }
++>module : { exports: typeof MC; }
 +>exports : typeof MC
 +>class MC {  watch() {    return new MW(this);  }} : typeof MC
 +>MC : typeof MC
@@ -36,11 +36,3 @@
 +>compiler : MC
    }
  }
-
- module.exports = MW;
- >module.exports = MW : typeof MW
- >module.exports : typeof MW
-->module : { exports: typeof MW; }
-+>module : { "export=": typeof MW; }
- >exports : typeof MW
- >MW : typeof MW

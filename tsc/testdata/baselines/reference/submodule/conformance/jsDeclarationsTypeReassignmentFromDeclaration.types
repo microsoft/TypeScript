@@ -20,7 +20,7 @@ const items = [];
 module.exports = items;
 >module.exports = items : Item[]
 >module.exports : Item[]
->module : { readonly items: typeof import("/some-mod"); }
+>module : { exports: Item[]; }
 >exports : Item[]
 >items : Item[]
 

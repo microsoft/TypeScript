@@ -12,7 +12,7 @@
 +>npm : (tree: any) => void
 +>module.exports = function (tree) {} : (tree: any) => void
 +>module.exports : typeof import("./npm")
-+>module : { "\"npm\"": typeof import("./npm"); }
++>module : { exports: typeof import("./npm"); }
 +>exports : typeof import("./npm")
  >function (tree) {} : (tree: any) => void
  >tree : any
@@ -24,7 +24,7 @@
 ->module : { exports: { (tree: any): void; asReadInstalled: (tree: any) => void; }; }
 ->exports : { (tree: any): void; asReadInstalled: (tree: any) => void; }
 +>module.exports : typeof import("./npm")
-+>module : { "\"npm\"": typeof import("./npm"); }
++>module : { exports: typeof import("./npm"); }
 +>exports : typeof import("./npm")
  >asReadInstalled : (tree: any) => void
  >function (tree) {    npm(tree) // both references should be callable    module.exports(tree)} : (tree: any) => void
@@ -43,7 +43,7 @@
 ->exports : { (tree: any): void; asReadInstalled: (tree: any) => void; }
 +>module.exports(tree) : any
 +>module.exports : typeof import("./npm")
-+>module : { "\"npm\"": typeof import("./npm"); }
++>module : { exports: typeof import("./npm"); }
 +>exports : typeof import("./npm")
  >tree : any
  }

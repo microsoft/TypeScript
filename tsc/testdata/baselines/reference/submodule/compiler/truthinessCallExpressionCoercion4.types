@@ -8,16 +8,16 @@ if (typeof module === 'object' && module.exports) {
 >typeof module === 'object' && module.exports : false | (() => void)
 >typeof module === 'object' : boolean
 >typeof module : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->module : any
+>module : { exports: () => void; }
 >'object' : "object"
 >module.exports : () => void
->module : { fn(): void; }
+>module : { exports: () => void; }
 >exports : () => void
 
     module.exports = fn;
 >module.exports = fn : () => void
 >module.exports : () => void
->module : { fn(): void; }
+>module : { exports: () => void; }
 >exports : () => void
 >fn : () => void
 }

@@ -17,9 +17,9 @@ function bar() { return 4 }
 
 /** @typedef {() => number} buz */
 module.exports = {
->module.exports : Symbol(export=, Decl(mod.js, 3, 27))
->module : Symbol("./mod", Decl(mod.js, 0, 0))
->exports : Symbol(export=, Decl(mod.js, 3, 27))
+>module.exports : Symbol(exports, Decl(mod.js, 0, 0))
+>module : Symbol(module, Decl(mod.js, 0, 0))
+>exports : Symbol(exports, Decl(mod.js, 0, 0))
 
     Thing,
 >Thing : Symbol(Thing, Decl(mod.js, 5, 18))

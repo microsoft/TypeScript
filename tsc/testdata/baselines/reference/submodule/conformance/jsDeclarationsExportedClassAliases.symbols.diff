@@ -11,9 +11,9 @@
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->module : Symbol(module, Decl(index.js, 1, 35))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
-+>module.exports : Symbol(export=, Decl(index.js, 1, 35))
-+>module : Symbol(".", Decl(index.js, 0, 0))
-+>exports : Symbol(export=, Decl(index.js, 1, 35))
++>module.exports : Symbol(exports, Decl(index.js, 0, 0))
++>module : Symbol(module, Decl(index.js, 0, 0))
++>exports : Symbol(exports, Decl(index.js, 0, 0))
 
      errors
  >errors : Symbol(errors, Decl(index.js, 3, 18))
@@ -24,9 +24,9 @@
 ->module.exports : Symbol(module.exports, Decl(errors.js, 0, 0))
 ->module : Symbol(module, Decl(errors.js, 4, 1))
 ->exports : Symbol(module.exports, Decl(errors.js, 0, 0))
-+>module.exports : Symbol(export=, Decl(errors.js, 4, 1))
-+>module : Symbol("./errors", Decl(errors.js, 0, 0))
-+>exports : Symbol(export=, Decl(errors.js, 4, 1))
++>module.exports : Symbol(exports, Decl(errors.js, 0, 0))
++>module : Symbol(module, Decl(errors.js, 0, 0))
++>exports : Symbol(exports, Decl(errors.js, 0, 0))
 
      FancyError
  >FancyError : Symbol(FancyError, Decl(errors.js, 6, 18))

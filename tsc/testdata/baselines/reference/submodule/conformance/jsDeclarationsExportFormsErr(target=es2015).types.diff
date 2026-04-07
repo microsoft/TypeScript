@@ -10,7 +10,7 @@
 ->exports : any
 +>module.exports = ns : typeof ns
 +>module.exports : typeof ns
-+>module : { "\"cls\"": typeof ns; }
++>module : { exports: typeof ns; }
 +>exports : typeof ns
  >ns : typeof ns
 

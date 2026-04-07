@@ -73,7 +73,7 @@
 ->bothBefore : number | "string"
 +>module.exports.bothBefore : number
 +>module.exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>module : { A: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
++>module : { exports: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
 +>exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
 +>bothBefore : number
  >'string' : "string"
@@ -114,7 +114,7 @@
 ->A : typeof A
 +>module.exports = A : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
 +>module.exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>module : { A: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
++>module : { exports: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
 +>exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
 +>A : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
 
@@ -139,7 +139,7 @@
 ->bothAfter : number | "string"
 +>module.exports.bothAfter : number
 +>module.exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>module : { A: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
++>module : { exports: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
 +>exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
 +>bothAfter : number
  >'string' : "string"
@@ -153,7 +153,7 @@
 ->justProperty : "string"
 +>module.exports.justProperty : any
 +>module.exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>module : { A: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
++>module : { exports: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
 +>exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
 +>justProperty : any
  >'string' : "string"

@@ -24,7 +24,7 @@
 ->alias : typeof alias
 +>module.exports = alias : () => void
 +>module.exports : () => void
-+>module : { alias(): void; }
++>module : { exports: () => void; }
 +>exports : () => void
 +>alias : () => void
 

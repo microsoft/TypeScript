@@ -38,7 +38,7 @@ Object.defineProperty(module.exports, _sym, { value: "ok" });
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof import("./lateBoundAssignmentDeclarationSupport3")
->module : { "\"lateBoundAssignmentDeclarationSupport3\"": typeof import("./lateBoundAssignmentDeclarationSupport3"); }
+>module : { exports: typeof import("./lateBoundAssignmentDeclarationSupport3"); }
 >exports : typeof import("./lateBoundAssignmentDeclarationSupport3")
 >_sym : unique symbol
 >{ value: "ok" } : { value: string; }
@@ -51,7 +51,7 @@ Object.defineProperty(module.exports, _str, { value: "ok" });
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof import("./lateBoundAssignmentDeclarationSupport3")
->module : { "\"lateBoundAssignmentDeclarationSupport3\"": typeof import("./lateBoundAssignmentDeclarationSupport3"); }
+>module : { exports: typeof import("./lateBoundAssignmentDeclarationSupport3"); }
 >exports : typeof import("./lateBoundAssignmentDeclarationSupport3")
 >_str : "my-fake-sym"
 >{ value: "ok" } : { value: string; }
@@ -62,7 +62,7 @@ module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
 >module.exports.S : unique symbol
 >module.exports : typeof import("./lateBoundAssignmentDeclarationSupport3")
->module : { "\"lateBoundAssignmentDeclarationSupport3\"": typeof import("./lateBoundAssignmentDeclarationSupport3"); }
+>module : { exports: typeof import("./lateBoundAssignmentDeclarationSupport3"); }
 >exports : typeof import("./lateBoundAssignmentDeclarationSupport3")
 >S : unique symbol
 >_sym : unique symbol

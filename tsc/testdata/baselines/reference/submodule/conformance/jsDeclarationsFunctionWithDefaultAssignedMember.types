@@ -21,7 +21,7 @@ foo.default = foo;
 module.exports = foo;
 >module.exports = foo : { (): void; foo: typeof foo; default: typeof foo; }
 >module.exports : { (): void; foo: typeof foo; default: typeof foo; }
->module : { foo: { (): void; foo: typeof foo; default: typeof foo; }; }
+>module : { exports: { (): void; foo: typeof foo; default: typeof foo; }; }
 >exports : { (): void; foo: typeof foo; default: typeof foo; }
 >foo : { (): void; foo: typeof foo; default: typeof foo; }
 

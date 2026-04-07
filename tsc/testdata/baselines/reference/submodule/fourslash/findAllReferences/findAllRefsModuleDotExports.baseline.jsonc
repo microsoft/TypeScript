@@ -14,8 +14,5 @@
 
 
 // === findAllReferences ===
-// === /a.js ===
-// const b = require("[|./b|]");
-
 // === /b.js ===
-// /*FIND ALL REFS*/[|module.exports = 0|];
+// /*FIND ALL REFS*/[|module|].exports = 0;

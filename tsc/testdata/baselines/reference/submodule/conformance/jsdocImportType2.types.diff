@@ -12,7 +12,7 @@
 ->Chunk : typeof import("./mod1")
 +>module.exports = class Chunk {    constructor() {        this.chunk = 1;    }} : typeof Chunk
 +>module.exports : typeof Chunk
-+>module : { Chunk: typeof Chunk; }
++>module : { exports: typeof Chunk; }
 +>exports : typeof Chunk
 +>class Chunk {    constructor() {        this.chunk = 1;    }} : typeof Chunk
 +>Chunk : typeof Chunk

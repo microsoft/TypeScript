@@ -10,7 +10,7 @@ const m = require("./exporter");
 module.exports = m.default;
 >module.exports = m.default : () => void
 >module.exports : () => void
->module : { validate(): void; }
+>module : { exports: () => void; }
 >exports : () => void
 >m.default : () => void
 >m : typeof m
@@ -20,7 +20,7 @@ module.exports.memberName = "thing";
 >module.exports.memberName = "thing" : "thing"
 >module.exports.memberName : any
 >module.exports : () => void
->module : { validate(): void; }
+>module : { exports: () => void; }
 >exports : () => void
 >memberName : any
 >"thing" : "thing"

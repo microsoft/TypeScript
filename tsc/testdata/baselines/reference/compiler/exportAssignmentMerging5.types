@@ -33,7 +33,7 @@ let v1 = { x: "test" };
 module.exports = { a: 1, b: "hello" };
 >module.exports = { a: 1, b: "hello" } : { a: number; b: string; }
 >module.exports : { a: number; b: string; }
->module : { "export=": { a: number; b: string; }; }
+>module : { exports: { a: number; b: string; }; }
 >exports : { a: number; b: string; }
 >{ a: 1, b: "hello" } : { a: number; b: string; }
 >a : number

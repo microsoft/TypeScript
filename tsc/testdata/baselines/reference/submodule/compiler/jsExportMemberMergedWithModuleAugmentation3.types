@@ -5,7 +5,7 @@ module.exports.x = 1;
 >module.exports.x = 1 : 1
 >module.exports.x : any
 >module.exports : typeof import("./y.js")
->module : { "export=": typeof import("./y.js"); }
+>module : { exports: typeof import("./y.js"); }
 >exports : typeof import("./y.js")
 >x : any
 >1 : 1
@@ -13,7 +13,7 @@ module.exports.x = 1;
 module.exports = require("./y.js");
 >module.exports = require("./y.js") : typeof import("./y.js")
 >module.exports : typeof import("./y.js")
->module : { "export=": typeof import("./y.js"); }
+>module : { exports: typeof import("./y.js"); }
 >exports : typeof import("./y.js")
 >require("./y.js") : typeof import("./y.js")
 >require : any

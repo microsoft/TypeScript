@@ -7,9 +7,9 @@
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->module : Symbol(export=, Decl(index.js, 5, 1))
 ->exports : Symbol(export=, Decl(index.js, 5, 1))
-+>module.exports : Symbol(Q, Decl(index.js, 6, 16))
-+>module : Symbol(".", Decl(index.js, 0, 0))
-+>exports : Symbol(Q, Decl(index.js, 6, 16))
++>module.exports : Symbol(exports, Decl(index.js, 0, 0))
++>module : Symbol(module, Decl(index.js, 0, 0))
++>exports : Symbol(exports, Decl(index.js, 0, 0))
  >Q : Symbol(Q, Decl(index.js, 6, 16))
 
      constructor() {
@@ -22,7 +22,7 @@
 ->module : Symbol(module, Decl(index.js, 5, 1))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->Another : Symbol(Another, Decl(index.js, 10, 1))
-+>module.exports : Symbol(Q, Decl(index.js, 6, 16))
-+>module : Symbol(".", Decl(index.js, 0, 0))
-+>exports : Symbol(Q, Decl(index.js, 6, 16))
++>module.exports : Symbol(exports, Decl(index.js, 0, 0))
++>module : Symbol(module, Decl(index.js, 0, 0))
++>exports : Symbol(exports, Decl(index.js, 0, 0))
  >Q : Symbol(Q, Decl(index.js, 2, 1))

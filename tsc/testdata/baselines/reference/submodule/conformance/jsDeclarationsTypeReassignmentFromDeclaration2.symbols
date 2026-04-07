@@ -6,9 +6,9 @@ const items = require("./some-mod")();
 >require : Symbol(require)
 
 module.exports = items;
->module.exports : Symbol(items, Decl(index.js, 0, 5))
->module : Symbol(".", Decl(index.js, 0, 0))
->exports : Symbol(items, Decl(index.js, 0, 5))
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
 >items : Symbol(items, Decl(index.js, 0, 5))
 
 === some-mod.d.ts ===

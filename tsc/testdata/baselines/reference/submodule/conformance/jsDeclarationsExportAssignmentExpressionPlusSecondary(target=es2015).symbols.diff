@@ -6,11 +6,13 @@
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->module : Symbol(export=, Decl(index.js, 3, 2))
-+>module.exports : Symbol(export=, Decl(index.js, 3, 2))
-+>module : Symbol(".", Decl(index.js, 0, 0))
- >exports : Symbol(export=, Decl(index.js, 3, 2))
+->exports : Symbol(export=, Decl(index.js, 3, 2))
++>module.exports : Symbol(exports, Decl(index.js, 0, 0))
++>module : Symbol(module, Decl(index.js, 0, 0))
++>exports : Symbol(exports, Decl(index.js, 0, 0))
 
      thing: "ok",
+ >thing : Symbol(thing, Decl(index.js, 4, 18))
 @@= skipped -18, +18 lines =@@
      }
  };
@@ -20,7 +22,7 @@
 ->module : Symbol(module, Decl(index.js, 3, 2))
 ->exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->Strings : Symbol(Strings, Decl(index.js, 10, 2))
-+>module.exports : Symbol(export=, Decl(index.js, 3, 2))
-+>module : Symbol(".", Decl(index.js, 0, 0))
-+>exports : Symbol(export=, Decl(index.js, 3, 2))
++>module.exports : Symbol(exports, Decl(index.js, 0, 0))
++>module : Symbol(module, Decl(index.js, 0, 0))
++>exports : Symbol(exports, Decl(index.js, 0, 0))
  >Strings : Symbol(Strings, Decl(index.js, 0, 5))

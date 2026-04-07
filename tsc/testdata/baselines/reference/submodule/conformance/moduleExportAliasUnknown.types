@@ -4,7 +4,7 @@
 module.exports = window.nonprop;
 >module.exports = window.nonprop : any
 >module.exports : any
->module : { unknown: any; }
+>module : { exports: any; }
 >exports : any
 >window.nonprop : any
 >window : Window & typeof globalThis

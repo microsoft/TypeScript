@@ -10,7 +10,7 @@
 ->exports : (foo: Foo) => string
 +>module.exports = /** @type {FooFun} */(void 0) : FooFun
 +>module.exports : FooFun
-+>module : { "export=": FooFun; }
++>module : { exports: FooFun; }
 +>exports : FooFun
  >(void 0) : FooFun
  >void 0 : undefined

@@ -12,7 +12,7 @@
 ->Thing : typeof import(".")
 +>module.exports = class Thing {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof Thing
 +>module.exports : typeof Thing
-+>module : { Thing: typeof Thing; }
++>module : { exports: typeof Thing; }
 +>exports : typeof Thing
 +>class Thing {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof Thing
 +>Thing : typeof Thing

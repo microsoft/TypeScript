@@ -11,7 +11,7 @@
 ->MyClass : typeof MyClass
 +>module.exports = MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
 +>module.exports : { (): void; staticMethod: () => void; staticProperty: number; }
-+>module : { "export=": { (): void; staticMethod: () => void; staticProperty: number; }; }
++>module : { exports: { (): void; staticMethod: () => void; staticProperty: number; }; }
 +>exports : { (): void; staticMethod: () => void; staticProperty: number; }
 +>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
 

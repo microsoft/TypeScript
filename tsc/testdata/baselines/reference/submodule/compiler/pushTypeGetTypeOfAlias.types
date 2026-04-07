@@ -4,7 +4,7 @@
 module.exports = function () {};
 >module.exports = function () {} : () => void
 >module.exports : () => void
->module : { "export=": () => void; }
+>module : { exports: () => void; }
 >exports : () => void
 >function () {} : () => void
 

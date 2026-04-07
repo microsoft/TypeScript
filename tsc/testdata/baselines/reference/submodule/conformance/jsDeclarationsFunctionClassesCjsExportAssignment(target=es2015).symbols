@@ -12,9 +12,9 @@ function Timer(timeout) {
 >timeout : Symbol(timeout, Decl(timer.js, 3, 15))
 }
 module.exports = Timer;
->module.exports : Symbol(Timer, Decl(timer.js, 0, 0))
->module : Symbol("./timer", Decl(timer.js, 0, 0))
->exports : Symbol(Timer, Decl(timer.js, 0, 0))
+>module.exports : Symbol(exports, Decl(timer.js, 0, 0))
+>module : Symbol(module, Decl(timer.js, 0, 0))
+>exports : Symbol(exports, Decl(timer.js, 0, 0))
 >Timer : Symbol(Timer, Decl(timer.js, 0, 0))
 
 === hook.js ===
@@ -32,9 +32,9 @@ function Hook(handle) {
 >handle : Symbol(handle, Decl(hook.js, 6, 14))
 }
 module.exports = Hook;
->module.exports : Symbol(Hook, Decl(hook.js, 8, 1))
->module : Symbol("./hook", Decl(hook.js, 0, 0))
->exports : Symbol(Hook, Decl(hook.js, 8, 1))
+>module.exports : Symbol(exports, Decl(hook.js, 0, 0))
+>module : Symbol(module, Decl(hook.js, 0, 0))
+>exports : Symbol(exports, Decl(hook.js, 0, 0))
 >Hook : Symbol(Hook, Decl(hook.js, 0, 0))
 
 === context.js ===
@@ -103,8 +103,8 @@ Context.prototype = {
     }
 }
 module.exports = Context;
->module.exports : Symbol(Context, Decl(context.js, 46, 1))
->module : Symbol("./context", Decl(context.js, 0, 0))
->exports : Symbol(Context, Decl(context.js, 46, 1))
+>module.exports : Symbol(exports, Decl(context.js, 0, 0))
+>module : Symbol(module, Decl(context.js, 0, 0))
+>exports : Symbol(exports, Decl(context.js, 0, 0))
 >Context : Symbol(Context, Decl(context.js, 0, 0))
 

@@ -18,7 +18,7 @@ const a = {};
 module.exports = a;
 >module.exports = a : {}
 >module.exports : {}
->module : { readonly a: {}; }
+>module : { exports: {}; }
 >exports : {}
 >a : {}
 
@@ -41,7 +41,7 @@ const a = {};
 module.exports = a;
 >module.exports = a : {}
 >module.exports : {}
->module : { readonly a: {}; }
+>module : { exports: {}; }
 >exports : {}
 >a : {}
 

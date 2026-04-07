@@ -196,7 +196,7 @@
 ->exports : typeof module.exports
 +>moduleExportsAlias : {}
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
 
  moduleExportsAlias.func3 = function () { };
@@ -218,7 +218,7 @@
 ->func4 : () => void
 +>module.exports.func4 : any
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
 +>func4 : any
  >function () { } : () => void
@@ -234,7 +234,7 @@
 +>exports = module.exports : {}
 +>exports : any
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
 
  multipleDeclarationAlias1.func5 = function () { };
@@ -256,7 +256,7 @@
 +>multipleDeclarationAlias2 : typeof import("./b")
 +>module.exports = exports : typeof import("./b")
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
  >exports : typeof import("./b")
 
@@ -292,7 +292,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
 
  multipleDeclarationAlias4.func8 = function () { };
@@ -314,7 +314,7 @@
 +>multipleDeclarationAlias5 : {}
 +>module.exports = exports = {} : {}
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
  >exports = {} : {}
 ->exports : typeof import("./b")
@@ -344,7 +344,7 @@
 +>exports : any
 +>module.exports = {} : {}
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
  >{} : {}
 
@@ -417,7 +417,7 @@
 +>exports : any
 +>module.exports = someOtherVariable = {} : {}
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
 +>someOtherVariable = {} : {}
 +>someOtherVariable : any
@@ -434,7 +434,7 @@
 +>module.exports.func12 = function () { } : () => void
 +>module.exports.func12 : any
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
 +>func12 : any
 +>function () { } : () => void
@@ -444,7 +444,7 @@
 +>exports : any
 +>module.exports = someOtherVariable = {} : {}
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
 +>someOtherVariable = {} : {}
 +>someOtherVariable : any
@@ -461,7 +461,7 @@
 +>module.exports.func12 = function () { } : () => void
 +>module.exports.func12 : any
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
 +>func12 : any
  >function () { } : () => void
@@ -477,7 +477,7 @@
 +>exports : any
 +>module.exports = {} : {}
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
  >{} : {}
 
@@ -499,7 +499,7 @@
 ->func14 : () => void
 +>module.exports.func14 : any
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
 +>func14 : any
  >function () { } : () => void
@@ -515,7 +515,7 @@
 +>exports : any
 +>module.exports = {} : {}
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
  >{} : {}
 
@@ -537,7 +537,7 @@
 ->func16 : () => void
 +>module.exports.func16 : any
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
 +>func16 : any
  >function () { } : () => void
@@ -549,7 +549,7 @@
 ->exports : typeof module.exports
 +>module.exports = exports = {} : {}
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
  >exports = {} : {}
 ->exports : typeof import("./b")
@@ -574,7 +574,7 @@
 ->func18 : () => void
 +>module.exports.func18 : any
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
 +>func18 : any
  >function () { } : () => void
@@ -586,7 +586,7 @@
 ->exports : typeof module.exports
 +>module.exports = {} : {}
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
  >{} : {}
 
@@ -608,7 +608,7 @@
 ->func20 : () => void
 +>module.exports.func20 : any
 +>module.exports : {}
-+>module : { "export=": {}; }
++>module : { exports: {}; }
 +>exports : {}
 +>func20 : any
  >function () { } : () => void

@@ -47,7 +47,7 @@ declare var module: any;
 module.exports = minimatch
 >module.exports = minimatch : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
 >module.exports : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
->module : { minimatch: { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }; }
+>module : { exports: { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }; }
 >exports : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
 >minimatch : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
 

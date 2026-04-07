@@ -6,9 +6,9 @@ const dummy = 0;
 >dummy : Symbol(dummy, Decl(typedefModuleExportsIndirect1.js, 1, 5))
 
 module.exports = dummy;
->module.exports : Symbol(dummy, Decl(typedefModuleExportsIndirect1.js, 1, 16))
->module : Symbol("./typedefModuleExportsIndirect1", Decl(typedefModuleExportsIndirect1.js, 0, 0))
->exports : Symbol(dummy, Decl(typedefModuleExportsIndirect1.js, 1, 16))
+>module.exports : Symbol(exports, Decl(typedefModuleExportsIndirect1.js, 0, 0))
+>module : Symbol(module, Decl(typedefModuleExportsIndirect1.js, 0, 0))
+>exports : Symbol(exports, Decl(typedefModuleExportsIndirect1.js, 0, 0))
 >dummy : Symbol(dummy, Decl(typedefModuleExportsIndirect1.js, 1, 5))
 
 === use.js ===

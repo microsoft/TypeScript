@@ -6,9 +6,9 @@ const f = function() {};
 >f : Symbol(f, Decl(typedefModuleExportsIndirect2.js, 1, 5))
 
 module.exports = f;
->module.exports : Symbol(f, Decl(typedefModuleExportsIndirect2.js, 1, 24))
->module : Symbol("./typedefModuleExportsIndirect2", Decl(typedefModuleExportsIndirect2.js, 0, 0))
->exports : Symbol(f, Decl(typedefModuleExportsIndirect2.js, 1, 24))
+>module.exports : Symbol(exports, Decl(typedefModuleExportsIndirect2.js, 0, 0))
+>module : Symbol(module, Decl(typedefModuleExportsIndirect2.js, 0, 0))
+>exports : Symbol(exports, Decl(typedefModuleExportsIndirect2.js, 0, 0))
 >f : Symbol(f, Decl(typedefModuleExportsIndirect2.js, 1, 5))
 
 === use.js ===

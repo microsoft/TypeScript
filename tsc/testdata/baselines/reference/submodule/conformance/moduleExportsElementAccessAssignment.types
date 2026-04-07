@@ -71,7 +71,7 @@ module.exports["c"] = { x: "x" };
 >module.exports["c"] = { x: "x" } : { x: string; }
 >module.exports["c"] : { x: string; }
 >module.exports : typeof import("./mod1")
->module : { "\"mod1\"": typeof import("./mod1"); }
+>module : { exports: typeof import("./mod1"); }
 >exports : typeof import("./mod1")
 >"c" : "c"
 >{ x: "x" } : { x: string; }
@@ -82,7 +82,7 @@ module["exports"]["d"] = {};
 >module["exports"]["d"] = {} : {}
 >module["exports"]["d"] : {}
 >module["exports"] : typeof import("./mod1")
->module : { "\"mod1\"": typeof import("./mod1"); }
+>module : { exports: typeof import("./mod1"); }
 >"exports" : "exports"
 >"d" : "d"
 >{} : {}
@@ -92,7 +92,7 @@ module["exports"]["d"].e = 0;
 >module["exports"]["d"].e : any
 >module["exports"]["d"] : {}
 >module["exports"] : typeof import("./mod1")
->module : { "\"mod1\"": typeof import("./mod1"); }
+>module : { exports: typeof import("./mod1"); }
 >"exports" : "exports"
 >"d" : "d"
 >e : any

@@ -14,7 +14,7 @@
 +>exports : any
 +>module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; }
 +>module.exports : typeof import("./bug24754")
-+>module : { "\"bug24754\"": typeof import("./bug24754"); }
++>module : { exports: typeof import("./bug24754"); }
 +>exports : typeof import("./bug24754")
  >webpack : { (): void; WebpackOptionsDefaulter: number; }
 

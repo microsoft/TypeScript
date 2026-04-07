@@ -7,17 +7,17 @@ const m = require("./exporter");
 >"./exporter" : Symbol(m, Decl(exporter.js, 0, 0))
 
 module.exports = m.default;
->module.exports : Symbol(m.default, Decl(exporter.js, 0, 0))
->module : Symbol(".", Decl(index.js, 0, 0))
->exports : Symbol(m.default, Decl(exporter.js, 0, 0))
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
 >m.default : Symbol(m.default, Decl(exporter.js, 0, 22))
 >m : Symbol(m, Decl(index.js, 0, 5))
 >default : Symbol(m.default, Decl(exporter.js, 0, 22))
 
 module.exports.memberName = "thing";
->module.exports : Symbol(m.default, Decl(exporter.js, 0, 0))
->module : Symbol(".", Decl(index.js, 0, 0))
->exports : Symbol(m.default, Decl(exporter.js, 0, 0))
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
 
 === exporter.js ===
 function validate() {}

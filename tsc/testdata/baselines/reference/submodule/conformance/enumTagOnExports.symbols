@@ -10,8 +10,8 @@ exports.a = {};
 /** @enum {string} */
 module.exports.b = {};
 >module.exports.b : Symbol(b, Decl(enumTagOnExports.js, 1, 15))
->module.exports : Symbol("./enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
->module : Symbol("./enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
->exports : Symbol("./enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
+>module.exports : Symbol(exports, Decl(enumTagOnExports.js, 0, 0))
+>module : Symbol(module, Decl(enumTagOnExports.js, 0, 0))
+>exports : Symbol(exports, Decl(enumTagOnExports.js, 0, 0))
 >b : Symbol(b, Decl(enumTagOnExports.js, 1, 15))
 

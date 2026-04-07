@@ -27,7 +27,7 @@ class Foo extends Bar {}
 module.exports = Foo;
 >module.exports = Foo : typeof Foo
 >module.exports : typeof Foo
->module : { Foo: typeof Foo; }
+>module : { exports: typeof Foo; }
 >exports : typeof Foo
 >Foo : typeof Foo
 
@@ -35,7 +35,7 @@ module.exports.Strings = Strings;
 >module.exports.Strings = Strings : { a: string; b: string; }
 >module.exports.Strings : any
 >module.exports : typeof Foo
->module : { Foo: typeof Foo; }
+>module : { exports: typeof Foo; }
 >exports : typeof Foo
 >Strings : any
 >Strings : { a: string; b: string; }
@@ -47,7 +47,7 @@ class Bar {}
 module.exports = Bar;
 >module.exports = Bar : typeof Bar
 >module.exports : typeof Bar
->module : { Bar: typeof Bar; }
+>module : { exports: typeof Bar; }
 >exports : typeof Bar
 >Bar : typeof Bar
 

@@ -127,7 +127,7 @@ exports.func2 = function () { };
 var moduleExportsAlias = module.exports;
 >moduleExportsAlias : {}
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 
 moduleExportsAlias.func3 = function () { };
@@ -141,7 +141,7 @@ module.exports.func4 = function () { };
 >module.exports.func4 = function () { } : () => void
 >module.exports.func4 : any
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >func4 : any
 >function () { } : () => void
@@ -151,7 +151,7 @@ var multipleDeclarationAlias1 = exports = module.exports;
 >exports = module.exports : {}
 >exports : any
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 
 multipleDeclarationAlias1.func5 = function () { };
@@ -165,7 +165,7 @@ var multipleDeclarationAlias2 = module.exports = exports;
 >multipleDeclarationAlias2 : typeof import("./b")
 >module.exports = exports : typeof import("./b")
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >exports : typeof import("./b")
 
@@ -197,7 +197,7 @@ var multipleDeclarationAlias4 = someOtherVariable = module.exports;
 >someOtherVariable = module.exports : {}
 >someOtherVariable : any
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 
 multipleDeclarationAlias4.func8 = function () { };
@@ -211,7 +211,7 @@ var multipleDeclarationAlias5 = module.exports = exports = {};
 >multipleDeclarationAlias5 : {}
 >module.exports = exports = {} : {}
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >exports = {} : {}
 >exports : any
@@ -230,7 +230,7 @@ var multipleDeclarationAlias6 = exports = module.exports = {};
 >exports : any
 >module.exports = {} : {}
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >{} : {}
 
@@ -246,7 +246,7 @@ exports = module.exports = someOtherVariable = {};
 >exports : any
 >module.exports = someOtherVariable = {} : {}
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >someOtherVariable = {} : {}
 >someOtherVariable : any
@@ -263,7 +263,7 @@ module.exports.func12 = function () { };
 >module.exports.func12 = function () { } : () => void
 >module.exports.func12 : any
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >func12 : any
 >function () { } : () => void
@@ -273,7 +273,7 @@ exports = module.exports = someOtherVariable = {};
 >exports : any
 >module.exports = someOtherVariable = {} : {}
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >someOtherVariable = {} : {}
 >someOtherVariable : any
@@ -290,7 +290,7 @@ module.exports.func12 = function () { };
 >module.exports.func12 = function () { } : () => void
 >module.exports.func12 : any
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >func12 : any
 >function () { } : () => void
@@ -300,7 +300,7 @@ exports = module.exports = {};
 >exports : any
 >module.exports = {} : {}
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >{} : {}
 
@@ -315,7 +315,7 @@ module.exports.func14 = function () { };
 >module.exports.func14 = function () { } : () => void
 >module.exports.func14 : any
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >func14 : any
 >function () { } : () => void
@@ -325,7 +325,7 @@ exports = module.exports = {};
 >exports : any
 >module.exports = {} : {}
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >{} : {}
 
@@ -340,7 +340,7 @@ module.exports.func16 = function () { };
 >module.exports.func16 = function () { } : () => void
 >module.exports.func16 : any
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >func16 : any
 >function () { } : () => void
@@ -348,7 +348,7 @@ module.exports.func16 = function () { };
 module.exports = exports = {};
 >module.exports = exports = {} : {}
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >exports = {} : {}
 >exports : any
@@ -365,7 +365,7 @@ module.exports.func18 = function () { };
 >module.exports.func18 = function () { } : () => void
 >module.exports.func18 : any
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >func18 : any
 >function () { } : () => void
@@ -373,7 +373,7 @@ module.exports.func18 = function () { };
 module.exports = {};
 >module.exports = {} : {}
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >{} : {}
 
@@ -388,7 +388,7 @@ module.exports.func20 = function () { };
 >module.exports.func20 = function () { } : () => void
 >module.exports.func20 : any
 >module.exports : {}
->module : { "export=": {}; }
+>module : { exports: {}; }
 >exports : {}
 >func20 : any
 >function () { } : () => void

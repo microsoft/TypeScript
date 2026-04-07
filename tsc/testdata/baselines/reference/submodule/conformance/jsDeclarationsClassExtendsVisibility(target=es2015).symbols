@@ -21,15 +21,15 @@ class Foo extends Bar {}
 >Bar : Symbol(Bar, Decl(cls.js, 0, 5))
 
 module.exports = Foo;
->module.exports : Symbol(Foo, Decl(cls.js, 4, 2))
->module : Symbol("./cls", Decl(cls.js, 0, 0))
->exports : Symbol(Foo, Decl(cls.js, 4, 2))
+>module.exports : Symbol(exports, Decl(cls.js, 0, 0))
+>module : Symbol(module, Decl(cls.js, 0, 0))
+>exports : Symbol(exports, Decl(cls.js, 0, 0))
 >Foo : Symbol(Foo, Decl(cls.js, 4, 2))
 
 module.exports.Strings = Strings;
->module.exports : Symbol(Foo, Decl(cls.js, 4, 2))
->module : Symbol("./cls", Decl(cls.js, 0, 0))
->exports : Symbol(Foo, Decl(cls.js, 4, 2))
+>module.exports : Symbol(exports, Decl(cls.js, 0, 0))
+>module : Symbol(module, Decl(cls.js, 0, 0))
+>exports : Symbol(exports, Decl(cls.js, 0, 0))
 >Strings : Symbol(Strings, Decl(cls.js, 1, 5))
 
 === bar.js ===
@@ -37,8 +37,8 @@ class Bar {}
 >Bar : Symbol(Bar, Decl(bar.js, 0, 0))
 
 module.exports = Bar;
->module.exports : Symbol(Bar, Decl(bar.js, 0, 0))
->module : Symbol("./bar", Decl(bar.js, 0, 0))
->exports : Symbol(Bar, Decl(bar.js, 0, 0))
+>module.exports : Symbol(exports, Decl(bar.js, 0, 0))
+>module : Symbol(module, Decl(bar.js, 0, 0))
+>exports : Symbol(exports, Decl(bar.js, 0, 0))
 >Bar : Symbol(Bar, Decl(bar.js, 0, 0))
 

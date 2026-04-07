@@ -216,7 +216,7 @@ Object.defineProperty(Person.prototype, "setonlyAccessor", {
 module.exports = Person;
 >module.exports = Person : (name: string) => void
 >module.exports : (name: string) => void
->module : { Person(name: string): void; }
+>module : { exports: (name: string) => void; }
 >exports : (name: string) => void
 >Person : (name: string) => void
 

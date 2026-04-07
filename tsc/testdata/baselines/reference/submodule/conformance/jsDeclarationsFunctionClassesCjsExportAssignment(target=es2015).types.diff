@@ -24,7 +24,7 @@
 ->Timer : typeof Timer
 +>module.exports = Timer : (timeout: number) => void
 +>module.exports : (timeout: number) => void
-+>module : { Timer(timeout: number): void; }
++>module : { exports: (timeout: number) => void; }
 +>exports : (timeout: number) => void
 +>Timer : (timeout: number) => void
 
@@ -54,7 +54,7 @@
 ->Hook : typeof Hook
 +>module.exports = Hook : (handle: HookHandler) => void
 +>module.exports : (handle: HookHandler) => void
-+>module : { "export=": (handle: HookHandler) => void; }
++>module : { exports: (handle: HookHandler) => void; }
 +>exports : (handle: HookHandler) => void
 +>Hook : (handle: HookHandler) => void
 
@@ -120,6 +120,6 @@
 ->Context : typeof Context
 +>module.exports = Context : { (input: Input): any; prototype: { construct(input: Input, handle?: HookHandler | undefined): State; }; }
 +>module.exports : { (input: Input): any; prototype: { construct(input: Input, handle?: HookHandler | undefined): State; }; }
-+>module : { "export=": { (input: Input): any; prototype: { construct(input: Input, handle?: HookHandler | undefined): State; }; }; }
++>module : { exports: { (input: Input): any; prototype: { construct(input: Input, handle?: HookHandler | undefined): State; }; }; }
 +>exports : { (input: Input): any; prototype: { construct(input: Input, handle?: HookHandler | undefined): State; }; }
 +>Context : { (input: Input): any; prototype: { construct(input: Input, handle?: HookHandler | undefined): State; }; }

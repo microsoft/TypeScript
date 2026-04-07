@@ -23,9 +23,9 @@
 ->module : Symbol(export=, Decl(base.js, 8, 24))
 ->exports : Symbol(export=, Decl(base.js, 8, 24))
 ->BaseFactory : Symbol(BaseFactory, Decl(base.js, 4, 5), Decl(base.js, 6, 2))
-+>module.exports : Symbol(BaseFactory, Decl(base.js, 4, 5))
-+>module : Symbol("./base", Decl(base.js, 0, 0))
-+>exports : Symbol(BaseFactory, Decl(base.js, 4, 5))
++>module.exports : Symbol(exports, Decl(base.js, 0, 0))
++>module : Symbol(module, Decl(base.js, 0, 0))
++>exports : Symbol(exports, Decl(base.js, 0, 0))
 +>BaseFactory : Symbol(BaseFactory, Decl(base.js, 4, 5))
 
  === file.js ===

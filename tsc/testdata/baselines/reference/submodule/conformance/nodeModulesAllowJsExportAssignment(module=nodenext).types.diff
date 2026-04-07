@@ -1,15 +1,6 @@
 --- old.nodeModulesAllowJsExportAssignment(module=nodenext).types
 +++ new.nodeModulesAllowJsExportAssignment(module=nodenext).types
-@@= skipped -17, +17 lines =@@
- module.exports = a;
- >module.exports = a : {}
- >module.exports : {}
-->module : { exports: {}; }
-+>module : { readonly a: {}; }
- >exports : {}
- >a : {}
-
-@@= skipped -21, +21 lines =@@
+@@= skipped -38, +38 lines =@@
  >{} : {}
 
  module.exports = a;
@@ -19,6 +10,6 @@
 ->exports : any
 +>module.exports = a : {}
 +>module.exports : {}
-+>module : { readonly a: {}; }
++>module : { exports: {}; }
 +>exports : {}
  >a : {}

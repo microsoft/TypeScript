@@ -33,7 +33,7 @@ class MainThreadTasks {
 module.exports = MainThreadTasks;
 >module.exports = MainThreadTasks : typeof MainThreadTasks
 >module.exports : typeof MainThreadTasks
->module : { "export=": typeof MainThreadTasks; }
+>module : { exports: typeof MainThreadTasks; }
 >exports : typeof MainThreadTasks
 >MainThreadTasks : typeof MainThreadTasks
 
@@ -90,7 +90,7 @@ const taskNameToGroup = {};
 module.exports = {
 >module.exports = {    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
 >module.exports : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
->module : { "export=": { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }; }
+>module : { exports: { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }; }
 >exports : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
 >{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
 

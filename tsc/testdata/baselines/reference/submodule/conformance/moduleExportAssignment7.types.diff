@@ -1,15 +1,6 @@
 --- old.moduleExportAssignment7.types
 +++ new.moduleExportAssignment7.types
-@@= skipped -22, +22 lines =@@
- module.exports = {
- >module.exports = {    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
- >module.exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
-->module : { exports: { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }; }
-+>module : { "export=": { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }; }
- >exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
- >{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
-
-@@= skipped -36, +36 lines =@@
+@@= skipped -58, +58 lines =@@
   * @param {import("./mod").literal} g
   */
  function jstypes(a, b, c, d, e, f, g) {

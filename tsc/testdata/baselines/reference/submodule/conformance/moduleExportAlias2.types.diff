@@ -26,7 +26,7 @@
 +>exports : any
 +>module.exports = C : () => void
 +>module.exports : typeof import("./semver")
-+>module : { "\"semver\"": typeof import("./semver"); }
++>module : { exports: typeof import("./semver"); }
 +>exports : typeof import("./semver")
 +>C : () => void
 

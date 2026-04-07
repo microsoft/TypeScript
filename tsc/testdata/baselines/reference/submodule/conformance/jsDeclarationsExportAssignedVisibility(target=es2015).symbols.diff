@@ -7,9 +7,9 @@
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->module : Symbol(export=, Decl(index.js, 6, 1))
 ->exports : Symbol(export=, Decl(index.js, 6, 1))
-+>module.exports : Symbol(Container, Decl(index.js, 0, 29))
-+>module : Symbol(".", Decl(index.js, 0, 0))
-+>exports : Symbol(Container, Decl(index.js, 0, 29))
++>module.exports : Symbol(exports, Decl(index.js, 0, 0))
++>module : Symbol(module, Decl(index.js, 0, 0))
++>exports : Symbol(exports, Decl(index.js, 0, 0))
  >Container : Symbol(Container, Decl(index.js, 0, 29))
 
  === obj.js ===
@@ -17,9 +17,9 @@
 ->module.exports : Symbol(module.exports, Decl(obj.js, 0, 0))
 ->module : Symbol(export=, Decl(obj.js, 0, 0))
 ->exports : Symbol(export=, Decl(obj.js, 0, 0))
-+>module.exports : Symbol(Obj, Decl(obj.js, 0, 16))
-+>module : Symbol("./obj", Decl(obj.js, 0, 0))
-+>exports : Symbol(Obj, Decl(obj.js, 0, 16))
++>module.exports : Symbol(exports, Decl(obj.js, 0, 0))
++>module : Symbol(module, Decl(obj.js, 0, 0))
++>exports : Symbol(exports, Decl(obj.js, 0, 0))
  >Obj : Symbol(Obj, Decl(obj.js, 0, 16))
 
      constructor() {

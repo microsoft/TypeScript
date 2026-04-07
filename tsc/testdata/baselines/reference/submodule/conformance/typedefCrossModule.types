@@ -13,7 +13,7 @@ declare var module: { exports: any};
 module.exports = C
 >module.exports = C : () => void
 >module.exports : () => void
->module : { "export=": () => void; }
+>module : { exports: () => void; }
 >exports : () => void
 >C : () => void
 

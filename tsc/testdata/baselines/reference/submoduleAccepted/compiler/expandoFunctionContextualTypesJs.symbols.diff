@@ -60,11 +60,13 @@
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(input.js, 0, 0))
 ->module : Symbol(export=, Decl(input.js, 42, 1))
-+>module.exports : Symbol(export=, Decl(input.js, 42, 1))
-+>module : Symbol("./input", Decl(input.js, 0, 0))
- >exports : Symbol(export=, Decl(input.js, 42, 1))
+->exports : Symbol(export=, Decl(input.js, 42, 1))
++>module.exports : Symbol(exports, Decl(input.js, 0, 0))
++>module : Symbol(module, Decl(input.js, 0, 0))
++>exports : Symbol(exports, Decl(input.js, 0, 0))
 
      color: "red"
+ >color : Symbol(color, Decl(input.js, 47, 18))
 @@= skipped -25, +21 lines =@@
  expectLiteral({ props: module.exports });
  >expectLiteral : Symbol(expectLiteral, Decl(input.js, 27, 27))
@@ -72,6 +74,6 @@
 ->module.exports : Symbol(module.exports, Decl(input.js, 0, 0))
 ->module : Symbol(module, Decl(input.js, 42, 1), Decl(input.js, 51, 22))
 ->exports : Symbol(module.exports, Decl(input.js, 0, 0))
-+>module.exports : Symbol(export=, Decl(input.js, 42, 1))
-+>module : Symbol("./input", Decl(input.js, 0, 0))
-+>exports : Symbol(export=, Decl(input.js, 42, 1))
++>module.exports : Symbol(exports, Decl(input.js, 0, 0))
++>module : Symbol(module, Decl(input.js, 0, 0))
++>exports : Symbol(exports, Decl(input.js, 0, 0))

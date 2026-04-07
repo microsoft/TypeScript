@@ -2,9 +2,9 @@
 
 === index.js ===
 module.exports = class {
->module.exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
->module : Symbol(".", Decl(index.js, 0, 0))
->exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
 
     /**
      * @param {number} p
@@ -20,18 +20,18 @@ module.exports = class {
     }
 }
 module.exports.Sub = class {
->module.exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
->module : Symbol(".", Decl(index.js, 0, 0))
->exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
 
     constructor() {
         this.instance = new module.exports(10);
 >this.instance : Symbol(Sub.instance, Decl(index.js, 9, 19))
 >this : Symbol(Sub, Decl(index.js, 8, 20))
 >instance : Symbol(Sub.instance, Decl(index.js, 9, 19))
->module.exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
->module : Symbol(".", Decl(index.js, 0, 0))
->exports : Symbol((Anonymous class), Decl(index.js, 0, 16))
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
     }
 }
 

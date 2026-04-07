@@ -28,7 +28,7 @@ if (!!true) {
     module.exports = { a: 1 };
 >module.exports = { a: 1 } : { a: number; }
 >module.exports : { a: number; b?: undefined; } | { a?: undefined; b: string; }
->module : { "export=": { a: number; b?: undefined; } | { a?: undefined; b: string; }; }
+>module : { exports: { a: number; b?: undefined; } | { a?: undefined; b: string; }; }
 >exports : { a: number; b?: undefined; } | { a?: undefined; b: string; }
 >{ a: 1 } : { a: number; }
 >a : number
@@ -38,7 +38,7 @@ else {
     module.exports = { b: "hello" };
 >module.exports = { b: "hello" } : { b: string; }
 >module.exports : { a: number; b?: undefined; } | { a?: undefined; b: string; }
->module : { "export=": { a: number; b?: undefined; } | { a?: undefined; b: string; }; }
+>module : { exports: { a: number; b?: undefined; } | { a?: undefined; b: string; }; }
 >exports : { a: number; b?: undefined; } | { a?: undefined; b: string; }
 >{ b: "hello" } : { b: string; }
 >b : string

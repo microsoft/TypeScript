@@ -16,9 +16,9 @@ f(1, n => { })
  * @param {(t: T) => void} k
  */
 module.exports = function (x, k) { return k(x) }
->module.exports : Symbol(export=, Decl(first.js, 0, 0))
->module : Symbol("./first", Decl(first.js, 0, 0))
->exports : Symbol(export=, Decl(first.js, 0, 0))
+>module.exports : Symbol(exports, Decl(first.js, 0, 0))
+>module : Symbol(module, Decl(first.js, 0, 0))
+>exports : Symbol(exports, Decl(first.js, 0, 0))
 >x : Symbol(x, Decl(first.js, 4, 27))
 >k : Symbol(k, Decl(first.js, 4, 29))
 >k : Symbol(k, Decl(first.js, 4, 29))

@@ -25,7 +25,7 @@
 ->exports : typeof module.exports
 +>module.exports = {  hardline} : { hardline: { type: string; }; }
 +>module.exports : { hardline: { type: string; }; }
-+>module : { "export=": { hardline: { type: string; }; }; }
++>module : { exports: { hardline: { type: string; }; }; }
 +>exports : { hardline: { type: string; }; }
  >{  hardline} : { hardline: { type: string; }; }
 
@@ -41,7 +41,7 @@
 ->{  nested: require('./first')} : { nested: typeof import("./first"); }
 +>module.exports = {  nested: require('./first')} : { nested: { hardline: { type: string; }; }; }
 +>module.exports : { nested: { hardline: { type: string; }; }; }
-+>module : { "export=": { nested: { hardline: { type: string; }; }; }; }
++>module : { exports: { nested: { hardline: { type: string; }; }; }; }
 +>exports : { nested: { hardline: { type: string; }; }; }
 +>{  nested: require('./first')} : { nested: { hardline: { type: string; }; }; }
 

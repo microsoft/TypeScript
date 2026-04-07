@@ -38,7 +38,7 @@
 ->exports : { (): void; f: (a: number) => void; }
 +>module.exports = function () { } : () => void
 +>module.exports : () => void
-+>module : { "export=": () => void; }
++>module : { exports: () => void; }
 +>exports : () => void
  >function () { } : () => void
 
@@ -52,7 +52,7 @@
 ->f : (a: number) => void
 +>module.exports.f : any
 +>module.exports : () => void
-+>module : { "export=": () => void; }
++>module : { exports: () => void; }
 +>exports : () => void
 +>f : any
  >function (a) { } : (a: number) => void

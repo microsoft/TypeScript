@@ -3,7 +3,7 @@
 === bug27327.js ===
 /** @type {string} */
 module.exports = 0;
->module.exports : Symbol(export=, Decl(bug27327.js, 0, 0))
->module : Symbol("./bug27327", Decl(bug27327.js, 0, 0))
->exports : Symbol(export=, Decl(bug27327.js, 0, 0))
+>module.exports : Symbol(exports, Decl(bug27327.js, 0, 0))
+>module : Symbol(module, Decl(bug27327.js, 0, 0))
+>exports : Symbol(exports, Decl(bug27327.js, 0, 0))
 

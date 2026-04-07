@@ -5,14 +5,15 @@ function fn() {}
 >fn : Symbol(fn, Decl(a.js, 0, 0))
 
 if (typeof module === 'object' && module.exports) {
->module.exports : Symbol(fn, Decl(a.js, 0, 0))
->module : Symbol("./a", Decl(a.js, 0, 0))
->exports : Symbol(fn, Decl(a.js, 0, 0))
+>module : Symbol(module, Decl(a.js, 0, 0))
+>module.exports : Symbol(exports, Decl(a.js, 0, 0))
+>module : Symbol(module, Decl(a.js, 0, 0))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
 
     module.exports = fn;
->module.exports : Symbol(fn, Decl(a.js, 0, 0))
->module : Symbol("./a", Decl(a.js, 0, 0))
->exports : Symbol(fn, Decl(a.js, 0, 0))
+>module.exports : Symbol(exports, Decl(a.js, 0, 0))
+>module : Symbol(module, Decl(a.js, 0, 0))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
 >fn : Symbol(fn, Decl(a.js, 0, 0))
 }
 

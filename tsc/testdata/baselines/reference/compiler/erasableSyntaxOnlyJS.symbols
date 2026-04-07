@@ -10,9 +10,9 @@ import foo = require("./foo.js");
 
 === bar.cjs ===
 module.exports = {
->module.exports : Symbol(export=, Decl(bar.cjs, 0, 0))
->module : Symbol("./bar.cjs", Decl(bar.cjs, 0, 0))
->exports : Symbol(export=, Decl(bar.cjs, 0, 0))
+>module.exports : Symbol(exports, Decl(bar.cjs, 0, 0))
+>module : Symbol(module, Decl(bar.cjs, 0, 0))
+>exports : Symbol(exports, Decl(bar.cjs, 0, 0))
 
     a: 1,
 >a : Symbol(a, Decl(bar.cjs, 0, 18))
@@ -20,9 +20,9 @@ module.exports = {
 
 === foo.js ===
 module.exports = {
->module.exports : Symbol(export=, Decl(foo.js, 0, 0))
->module : Symbol("./foo", Decl(foo.js, 0, 0))
->exports : Symbol(export=, Decl(foo.js, 0, 0))
+>module.exports : Symbol(exports, Decl(foo.js, 0, 0))
+>module : Symbol(module, Decl(foo.js, 0, 0))
+>exports : Symbol(exports, Decl(foo.js, 0, 0))
 
     b: 2,
 >b : Symbol(b, Decl(foo.js, 0, 18))

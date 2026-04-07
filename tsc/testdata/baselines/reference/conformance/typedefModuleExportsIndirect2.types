@@ -9,7 +9,7 @@ const f = function() {};
 module.exports = f;
 >module.exports = f : () => void
 >module.exports : () => void
->module : { "export=": () => void; }
+>module : { exports: () => void; }
 >exports : () => void
 >f : () => void
 

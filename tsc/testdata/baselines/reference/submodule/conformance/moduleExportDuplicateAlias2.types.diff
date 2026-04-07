@@ -11,7 +11,7 @@
 ->apply : any
 +>module.exports.apply : () => void
 +>module.exports : typeof import("./moduleExportAliasDuplicateAlias")
-+>module : { "\"moduleExportAliasDuplicateAlias\"": typeof import("./moduleExportAliasDuplicateAlias"); }
++>module : { exports: typeof import("./moduleExportAliasDuplicateAlias"); }
 +>exports : typeof import("./moduleExportAliasDuplicateAlias")
 +>apply : () => void
  >undefined : undefined
@@ -28,7 +28,7 @@
 ->apply : any
 +>module.exports.apply : () => void
 +>module.exports : typeof import("./moduleExportAliasDuplicateAlias")
-+>module : { "\"moduleExportAliasDuplicateAlias\"": typeof import("./moduleExportAliasDuplicateAlias"); }
++>module : { exports: typeof import("./moduleExportAliasDuplicateAlias"); }
 +>exports : typeof import("./moduleExportAliasDuplicateAlias")
 +>apply : () => void
  >a : () => void
@@ -42,7 +42,7 @@
 ->apply : any
 +>module.exports.apply : () => void
 +>module.exports : typeof import("./moduleExportAliasDuplicateAlias")
-+>module : { "\"moduleExportAliasDuplicateAlias\"": typeof import("./moduleExportAliasDuplicateAlias"); }
++>module : { exports: typeof import("./moduleExportAliasDuplicateAlias"); }
 +>exports : typeof import("./moduleExportAliasDuplicateAlias")
 +>apply : () => void
  >a : () => void
@@ -54,6 +54,6 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import("./moduleExportAliasDuplicateAlias")
-+>module : { "\"moduleExportAliasDuplicateAlias\"": typeof import("./moduleExportAliasDuplicateAlias"); }
++>module : { exports: typeof import("./moduleExportAliasDuplicateAlias"); }
 +>exports : typeof import("./moduleExportAliasDuplicateAlias")
  >apply : () => void

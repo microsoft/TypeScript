@@ -12,7 +12,7 @@ import foo = require("./foo.js");
 module.exports = {
 >module.exports = {    a: 1,} : { a: number; }
 >module.exports : { a: number; }
->module : { "export=": { a: number; }; }
+>module : { exports: { a: number; }; }
 >exports : { a: number; }
 >{    a: 1,} : { a: number; }
 
@@ -25,7 +25,7 @@ module.exports = {
 module.exports = {
 >module.exports = {    b: 2,} : { b: number; }
 >module.exports : { b: number; }
->module : { "export=": { b: number; }; }
+>module : { exports: { b: number; }; }
 >exports : { b: number; }
 >{    b: 2,} : { b: number; }
 

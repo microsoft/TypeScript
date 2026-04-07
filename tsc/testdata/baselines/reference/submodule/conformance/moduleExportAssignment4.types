@@ -15,7 +15,7 @@ exports.default = { m: 1, a: 1 }
 module.exports = exports['default'];
 >module.exports = exports['default'] : any
 >module.exports : any
->module : { "export=": any; }
+>module : { exports: any; }
 >exports : any
 >exports['default'] : any
 >exports : typeof import("./async")

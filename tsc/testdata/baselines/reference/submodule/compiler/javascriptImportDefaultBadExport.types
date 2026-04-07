@@ -8,7 +8,7 @@ const alias = {};
 module.exports = alias;
 >module.exports = alias : {}
 >module.exports : {}
->module : { readonly alias: {}; }
+>module : { exports: {}; }
 >exports : {}
 >alias : {}
 

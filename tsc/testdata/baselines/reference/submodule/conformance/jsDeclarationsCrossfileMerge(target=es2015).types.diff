@@ -11,7 +11,7 @@
 ->m.default : { (): void; memberName: "thing"; }
 +>module.exports = m.default : () => void
 +>module.exports : () => void
-+>module : { validate(): void; }
++>module : { exports: () => void; }
 +>exports : () => void
 +>m.default : () => void
  >m : typeof m
@@ -27,7 +27,7 @@
 ->memberName : "thing"
 +>module.exports.memberName : any
 +>module.exports : () => void
-+>module : { validate(): void; }
++>module : { exports: () => void; }
 +>exports : () => void
 +>memberName : any
  >"thing" : "thing"

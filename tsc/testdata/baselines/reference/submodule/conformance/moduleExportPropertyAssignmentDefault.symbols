@@ -5,14 +5,14 @@ var axios = {}
 >axios : Symbol(axios, Decl(axios.js, 0, 3))
 
 module.exports = axios // both assignments should be ok
->module.exports : Symbol(axios, Decl(axios.js, 0, 3))
->module : Symbol("./axios", Decl(axios.js, 0, 0))
->exports : Symbol(axios, Decl(axios.js, 0, 3))
+>module.exports : Symbol(exports, Decl(axios.js, 0, 0))
+>module : Symbol(module, Decl(axios.js, 0, 0))
+>exports : Symbol(exports, Decl(axios.js, 0, 0))
 >axios : Symbol(axios, Decl(axios.js, 0, 3))
 
 module.exports.default = axios
->module.exports : Symbol(axios, Decl(axios.js, 0, 3))
->module : Symbol("./axios", Decl(axios.js, 0, 0))
->exports : Symbol(axios, Decl(axios.js, 0, 3))
+>module.exports : Symbol(exports, Decl(axios.js, 0, 0))
+>module : Symbol(module, Decl(axios.js, 0, 0))
+>exports : Symbol(exports, Decl(axios.js, 0, 0))
 >axios : Symbol(axios, Decl(axios.js, 0, 3))
 

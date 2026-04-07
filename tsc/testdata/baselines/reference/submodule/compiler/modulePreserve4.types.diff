@@ -11,7 +11,7 @@
 ->y : any
 +>module.exports.y : 0
 +>module.exports : typeof import("./a")
-+>module : { "\"/a\"": typeof import("./a"); }
++>module : { exports: typeof import("./a"); }
 +>exports : typeof import("./a")
 +>y : 0
  >0 : 0

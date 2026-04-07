@@ -1462,8 +1462,16 @@ func (c *Checker) getModuleSymbol(sourceFile *ast.Node) *ast.Symbol {
 	if cached, ok := c.moduleSymbols[sourceFile]; ok {
 		return cached
 	}
-	result := c.newSymbol(ast.SymbolFlagsModuleExports|ast.SymbolFlagsFunctionScopedVariable, ast.InternalSymbolNameModuleExports)
+	result := c.newSymbol(ast.SymbolFlagsModuleExports|ast.SymbolFlagsFunctionScopedVariable, "module")
+	result.Declarations = []*ast.Node{sourceFile}
 	result.ValueDeclaration = sourceFile
+	exportsSymbol := c.newSymbol(ast.SymbolFlagsModuleExports|ast.SymbolFlagsProperty, "exports")
+	exportsSymbol.Declarations = result.Declarations
+	exportsSymbol.ValueDeclaration = result.ValueDeclaration
+	exportsSymbol.Parent = result
+	members := make(ast.SymbolTable, 1)
+	members["exports"] = exportsSymbol
+	c.valueSymbolLinks.Get(result).resolvedType = c.newAnonymousType(result, members, nil, nil, nil)
 	c.moduleSymbols[sourceFile] = result
 	return result
 }
@@ -16081,12 +16089,6 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 	if symbol == c.requireSymbol {
 		return c.anyType
 	}
-	if symbol.Flags&ast.SymbolFlagsModuleExports != 0 && symbol.ValueDeclaration != nil {
-		fileSymbol := c.resolveExternalModuleSymbol(symbol.ValueDeclaration.Symbol(), false /*dontResolveAlias*/)
-		members := make(ast.SymbolTable, 1)
-		members["exports"] = fileSymbol
-		return c.newAnonymousType(symbol, members, nil, nil, nil)
-	}
 	debug.Assert(symbol.ValueDeclaration != nil)
 	declaration := symbol.ValueDeclaration
 	if ast.IsSourceFile(declaration) && ast.IsJsonSourceFile(declaration.AsSourceFile()) {
@@ -16099,6 +16101,9 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 	// Handle variable, parameter or property
 	if !c.pushTypeResolution(symbol, TypeSystemPropertyNameType) {
 		return c.reportCircularityError(symbol)
+	}
+	if symbol.Flags&ast.SymbolFlagsModuleExports != 0 {
+		return c.getTypeOfSymbol(c.resolveExternalModuleSymbol(symbol.ValueDeclaration.Symbol(), false /*dontResolveAlias*/))
 	}
 	var result *Type
 	switch declaration.Kind {
@@ -30890,9 +30895,6 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 			}
 			meaning := core.IfElse(isJSDoc, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace, ast.SymbolFlagsValue)
 			result := c.resolveEntityName(name, meaning, true /*ignoreErrors*/, true /*dontResolveAlias*/, nil /*location*/)
-			if result != nil && result.Flags&ast.SymbolFlagsModuleExports != 0 {
-				result = result.ValueDeclaration.Symbol() // Symbol of the module source file
-			}
 			if result == nil && isJSDoc {
 				if container := ast.FindAncestor(name, ast.IsClassOrInterfaceLike); container != nil {
 					symbol := c.getSymbolOfDeclaration(container)

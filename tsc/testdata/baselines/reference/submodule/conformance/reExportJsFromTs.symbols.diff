@@ -6,8 +6,10 @@
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(constants.js, 0, 0))
 ->module : Symbol(export=, Decl(constants.js, 0, 0))
-+>module.exports : Symbol(export=, Decl(constants.js, 0, 0))
-+>module : Symbol("./constants", Decl(constants.js, 0, 0))
- >exports : Symbol(export=, Decl(constants.js, 0, 0))
+->exports : Symbol(export=, Decl(constants.js, 0, 0))
++>module.exports : Symbol(exports, Decl(constants.js, 0, 0))
++>module : Symbol(module, Decl(constants.js, 0, 0))
++>exports : Symbol(exports, Decl(constants.js, 0, 0))
 
    str: 'x',
+ >str : Symbol(str, Decl(constants.js, 0, 18))

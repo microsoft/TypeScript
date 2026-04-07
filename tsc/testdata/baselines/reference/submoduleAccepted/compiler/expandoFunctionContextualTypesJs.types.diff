@@ -45,15 +45,5 @@
 ->module.exports = {    color: "red"} : MyComponentProps
 +>module.exports = {    color: "red"} : { color: "red"; }
  >module.exports : MyComponentProps
-->module : { exports: MyComponentProps; }
-+>module : { "export=": MyComponentProps; }
- >exports : MyComponentProps
- >{    color: "red"} : { color: "red"; }
-
-@@= skipped -24, +24 lines =@@
- >{ props: module.exports } : { props: MyComponentProps; }
- >props : MyComponentProps
- >module.exports : MyComponentProps
-->module : { exports: MyComponentProps; }
-+>module : { "export=": MyComponentProps; }
+ >module : { exports: MyComponentProps; }
  >exports : MyComponentProps

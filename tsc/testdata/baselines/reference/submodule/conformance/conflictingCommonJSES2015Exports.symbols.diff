@@ -4,9 +4,9 @@
  >c : Symbol(c, Decl(bug24934.js, 0, 25))
 
  module.exports = { abc };
-+>module.exports : Symbol(export=, Decl(bug24934.js, 0, 42))
-+>module : Symbol("./bug24934", Decl(bug24934.js, 0, 0))
-+>exports : Symbol(export=, Decl(bug24934.js, 0, 42))
++>module.exports : Symbol(exports, Decl(bug24934.js, 0, 0))
++>module : Symbol(module, Decl(bug24934.js, 0, 0))
++>exports : Symbol(exports, Decl(bug24934.js, 0, 0))
  >abc : Symbol(abc, Decl(bug24934.js, 1, 18))
 
  === use.js ===

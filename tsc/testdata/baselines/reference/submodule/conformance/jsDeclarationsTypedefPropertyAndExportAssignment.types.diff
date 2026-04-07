@@ -11,16 +11,7 @@
  >require : any
  >'./module.js' : "./module.js"
 
-@@= skipped -30, +30 lines =@@
- module.exports = MainThreadTasks;
- >module.exports = MainThreadTasks : typeof MainThreadTasks
- >module.exports : typeof MainThreadTasks
-->module : { exports: typeof MainThreadTasks; }
-+>module : { "export=": typeof MainThreadTasks; }
- >exports : typeof MainThreadTasks
- >MainThreadTasks : typeof MainThreadTasks
-
-@@= skipped -51, +51 lines =@@
+@@= skipped -81, +81 lines =@@
 
  /** @type {Object<string, TaskGroup>} */
  const taskNameToGroup = {};
@@ -36,7 +27,7 @@
 ->{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: { [x: string]: TaskGroup; }; }
 +>module.exports = {    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
 +>module.exports : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
-+>module : { "export=": { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }; }
++>module : { exports: { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }; }
 +>exports : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
 +>{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
 

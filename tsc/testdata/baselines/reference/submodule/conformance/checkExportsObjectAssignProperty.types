@@ -258,7 +258,7 @@ Object.defineProperty(module.exports, "thing", { value: "yes", writable: true })
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof import("./mod2")
->module : { "\"mod2\"": typeof import("./mod2"); }
+>module : { exports: typeof import("./mod2"); }
 >exports : typeof import("./mod2")
 >"thing" : "thing"
 >{ value: "yes", writable: true } : { value: string; writable: true; }
@@ -273,7 +273,7 @@ Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof import("./mod2")
->module : { "\"mod2\"": typeof import("./mod2"); }
+>module : { exports: typeof import("./mod2"); }
 >exports : typeof import("./mod2")
 >"readonlyProp" : "readonlyProp"
 >{ value: "Smith", writable: false } : { value: string; writable: false; }
@@ -288,7 +288,7 @@ Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, s
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof import("./mod2")
->module : { "\"mod2\"": typeof import("./mod2"); }
+>module : { exports: typeof import("./mod2"); }
 >exports : typeof import("./mod2")
 >"rwAccessors" : "rwAccessors"
 >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
@@ -303,7 +303,7 @@ Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof import("./mod2")
->module : { "\"mod2\"": typeof import("./mod2"); }
+>module : { exports: typeof import("./mod2"); }
 >exports : typeof import("./mod2")
 >"readonlyAccessor" : "readonlyAccessor"
 >{ get() { return 21.75 } } : { get(): number; }
@@ -316,7 +316,7 @@ Object.defineProperty(module.exports, "setonlyAccessor", {
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof import("./mod2")
->module : { "\"mod2\"": typeof import("./mod2"); }
+>module : { exports: typeof import("./mod2"); }
 >exports : typeof import("./mod2")
 >"setonlyAccessor" : "setonlyAccessor"
 >{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set(str: string): void; }

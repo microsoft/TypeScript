@@ -7,7 +7,5 @@
 ->module.exports = 0 : string
 +>module.exports = 0 : 0
  >module.exports : string
-->module : { exports: string; }
-+>module : { "export=": string; }
+ >module : { exports: string; }
  >exports : string
- >0 : 0

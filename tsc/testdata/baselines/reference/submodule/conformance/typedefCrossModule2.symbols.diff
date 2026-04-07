@@ -31,11 +31,13 @@
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 ->module : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
-+>module.exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
-+>module : Symbol("./mod1", Decl(mod1.js, 0, 0))
- >exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
+->exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
++>module.exports : Symbol(exports, Decl(mod1.js, 0, 0))
++>module : Symbol(module, Decl(mod1.js, 0, 0))
++>exports : Symbol(exports, Decl(mod1.js, 0, 0))
 
      Baz: class { }
+ >Baz : Symbol(Baz, Decl(mod1.js, 9, 18))
 @@= skipped -31, +31 lines =@@
 
  /** @typedef {number} Qux */
@@ -56,8 +58,10 @@
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 ->module : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
-+>module.exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
-+>module : Symbol("./mod1", Decl(mod1.js, 0, 0))
- >exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
+->exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
++>module.exports : Symbol(exports, Decl(mod1.js, 0, 0))
++>module : Symbol(module, Decl(mod1.js, 0, 0))
++>exports : Symbol(exports, Decl(mod1.js, 0, 0))
 
      Quack: 2
+ >Quack : Symbol(Quack, Decl(mod1.js, 22, 18))

@@ -12,8 +12,8 @@ window.console; // should not have error: Property 'console' does not exist on t
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 
 module.exports = 'anything';
->module.exports : Symbol(export=, Decl(bug27099.js, 1, 15))
->module : Symbol("./bug27099", Decl(bug27099.js, 0, 0))
->exports : Symbol(export=, Decl(bug27099.js, 1, 15))
+>module.exports : Symbol(exports, Decl(bug27099.js, 0, 0))
+>module : Symbol(module, Decl(bug27099.js, 0, 0))
+>exports : Symbol(exports, Decl(bug27099.js, 0, 0))
 
 

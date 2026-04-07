@@ -13,7 +13,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >"a" : "a"
  >{ value: function a() {} } : { value: () => void; }
@@ -31,7 +31,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >"b" : "b"
  >{ value: function b() {} } : { value: () => void; }
@@ -44,7 +44,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >b : () => void
  >"cat" : "cat"
@@ -62,7 +62,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >"d" : "d"
  >{ value: d } : { value: (a: number, b: number) => string; }
@@ -80,7 +80,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >"e" : "e"
  >{ value: e } : { value: <T, U>(a: T, b: U) => T & U; }
@@ -98,7 +98,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >"f" : "f"
  >{ value: f } : { value: <T>(a: T) => T; }
@@ -111,7 +111,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >f : <T>(a: T) => T
  >"self" : "self"
@@ -122,7 +122,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >f : <T>(a: T) => T
 
@@ -140,7 +140,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >"g" : "g"
  >{ value: g } : { value: (a: { x: string; }, b: { y: () => void; }) => void | ""; }
@@ -158,7 +158,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >"h" : "h"
  >{ value: hh } : { value: (a: { x: string; }, b: { y: () => void; }) => void | ""; }
@@ -175,7 +175,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >"i" : "i"
  >{ value: function i(){} } : { value: () => void; }
@@ -193,7 +193,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >"ii" : "ii"
  >{ value: module.exports.i } : { value: () => void; }
@@ -203,7 +203,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >i : () => void
 
@@ -218,7 +218,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >"jj" : "jj"
  >{ value: module.exports.j } : { value: () => void; }
@@ -228,7 +228,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >j : () => void
 
@@ -242,7 +242,7 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 +>module.exports : typeof import(".")
-+>module : { "\"index\"": typeof import("."); }
++>module : { exports: typeof import("."); }
 +>exports : typeof import(".")
  >"j" : "j"
  >{ value: function j() {} } : { value: () => void; }

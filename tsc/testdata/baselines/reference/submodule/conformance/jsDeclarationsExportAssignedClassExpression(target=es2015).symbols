@@ -2,9 +2,9 @@
 
 === index.js ===
 module.exports = class Thing {
->module.exports : Symbol(Thing, Decl(index.js, 0, 16))
->module : Symbol(".", Decl(index.js, 0, 0))
->exports : Symbol(Thing, Decl(index.js, 0, 16))
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
 >Thing : Symbol(Thing, Decl(index.js, 0, 16))
 
     /**

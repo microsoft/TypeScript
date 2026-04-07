@@ -30,7 +30,7 @@
 ->{    thing} : { thing: Something; }
 +>module.exports = {    thing} : { thing: import("fs").Something; }
 +>module.exports : { thing: import("fs").Something; }
-+>module : { "export=": { thing: import("fs").Something; }; }
++>module : { exports: { thing: import("fs").Something; }; }
 +>exports : { thing: import("fs").Something; }
 +>{    thing} : { thing: import("fs").Something; }
 
