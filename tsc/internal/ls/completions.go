@@ -2494,6 +2494,9 @@ func shouldIncludeSymbol(
 	}
 
 	allFlags = allFlags | symbolOrigin.CombinedLocalAndExportSymbolFlags()
+	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+		allFlags = allFlags | typeChecker.GetSymbolFlags(symbol)
+	}
 
 	// import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
 	if isInRightSideOfInternalImportEqualsDeclaration(data.location) {

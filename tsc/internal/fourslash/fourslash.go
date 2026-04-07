@@ -926,6 +926,7 @@ type CompletionsExpectedCodeAction struct {
 
 type VerifyCompletionsResult struct {
 	AndApplyCodeAction func(t *testing.T, expectedAction *CompletionsExpectedCodeAction)
+	AndHasNoCodeAction func(t *testing.T, unexpectedAction *CompletionsExpectedCodeAction)
 }
 
 // string | *Marker | []string | []*Marker
@@ -977,6 +978,21 @@ func (f *FourslashTest) VerifyCompletions(t *testing.T, markerInput MarkerInput,
 			assert.Check(t, strings.Contains(*item.Detail, expectedAction.Description), "Completion item detail does not contain expected description.")
 			f.applyTextEdits(t, *item.AdditionalTextEdits)
 			assert.Equal(t, f.getScriptInfo(f.activeFilename).content, expectedAction.NewFileContent, fmt.Sprintf("File content after applying code action '%s' did not match expected content.", expectedAction.Name))
+		},
+		AndHasNoCodeAction: func(t *testing.T, unexpectedAction *CompletionsExpectedCodeAction) {
+			item := core.Find(list.Items, func(item *lsproto.CompletionItem) bool {
+				if item.Label != unexpectedAction.Name || item.Data == nil {
+					return false
+				}
+				data := item.Data
+				if data.AutoImport == nil {
+					return false
+				}
+				return data.AutoImport.ModuleSpecifier == unexpectedAction.Source
+			})
+			if item != nil {
+				t.Fatalf("Unexpected code action '%s' from source '%s' found in completions.", unexpectedAction.Name, unexpectedAction.Source)
+			}
 		},
 	}
 }
