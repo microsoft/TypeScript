@@ -20,6 +20,7 @@ import {
     configurationMiddleware,
     sendNotificationMiddleware,
 } from "./configurationMiddleware";
+import { registerSourceDefinitionFeature } from "./languageFeatures/sourceDefinition";
 import { registerTagClosingFeature } from "./languageFeatures/tagClosing";
 import * as tr from "./telemetryReporting";
 import {
@@ -205,6 +206,7 @@ export class Client implements vscode.Disposable {
 
         this.disposables.push(
             serverTelemetryListener,
+            registerSourceDefinitionFeature(this.client),
             registerTagClosingFeature("typescript", this.documentSelector, this.client),
             registerTagClosingFeature("javascript", this.documentSelector, this.client),
         );

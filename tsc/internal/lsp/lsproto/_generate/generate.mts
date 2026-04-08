@@ -408,6 +408,14 @@ const customRequests: Request[] = [
         messageDirection: "clientToServer",
         documentation: "Returns project information (e.g. the tsconfig.json path) for a given text document.",
     },
+    {
+        method: "custom/textDocument/sourceDefinition",
+        typeName: "CustomTextDocumentSourceDefinitionRequest",
+        params: { kind: "reference", name: "TextDocumentPositionParams" },
+        result: { kind: "reference", name: "LocationOrLocationsOrDefinitionLinksOrNull" },
+        messageDirection: "clientToServer",
+        documentation: "Request to get source definitions for a position.",
+    },
 ];
 
 const customTypeAliases: TypeAlias[] = [
@@ -492,6 +500,16 @@ function patchAndPreprocessModel() {
     }
 
     for (const structure of model.structures) {
+        // Patch ServerCapabilities to add custom tsgo capability flags
+        if (structure.name === "ServerCapabilities") {
+            structure.properties.push({
+                name: "customSourceDefinitionProvider",
+                type: { kind: "base", name: "boolean" },
+                optional: true,
+                documentation: "The server provides source definition support via custom/textDocument/sourceDefinition.",
+            });
+        }
+
         for (const prop of structure.properties) {
             // Replace initializationOptions type with custom InitializationOptions
             if (prop.name === "initializationOptions" && prop.type.kind === "reference" && prop.type.name === "LSPAny") {

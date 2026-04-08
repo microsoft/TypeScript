@@ -1,0 +1,13 @@
+--- old.goToSource7_conditionallyMinified.baseline.jsonc
++++ new.goToSource7_conditionallyMinified.baseline.jsonc
+@@= skipped -5, +5 lines =@@
+ // 'use strict';
+ // if (process.env.NODE_ENV !== 'production') {
+ //   (function() {
+-//     function useState(initialState) {}
+-//     exports.[|useState|] = useState;
++//     function [|useState|](initialState) {}
++//     exports.useState = useState;
+ //     exports.version = '16.8.6';
+ //   }());
+ // }

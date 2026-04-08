@@ -19,6 +19,17 @@ func (l *LanguageService) ProvideDefinition(
 	documentURI lsproto.DocumentUri,
 	position lsproto.Position,
 ) (lsproto.DefinitionResponse, error) {
+	if l.UserPreferences().PreferGoToSourceDefinition {
+		return l.ProvideSourceDefinition(ctx, documentURI, position)
+	}
+	return l.provideDefinitionWorker(ctx, documentURI, position)
+}
+
+func (l *LanguageService) provideDefinitionWorker(
+	ctx context.Context,
+	documentURI lsproto.DocumentUri,
+	position lsproto.Position,
+) (lsproto.DefinitionResponse, error) {
 	caps := lsproto.GetClientCapabilities(ctx)
 	clientSupportsLink := caps.TextDocument.Definition.LinkSupport
 
@@ -161,7 +172,12 @@ func (l *LanguageService) createDefinitionLocations(
 		file := ast.GetSourceFileOfNode(decl)
 		fileName := file.FileName()
 		name := core.OrElse(ast.GetNameOfDeclaration(decl), decl)
-		nameRange := createRangeFromNode(name, file)
+		var nameRange core.TextRange
+		if name.Kind == ast.KindEmptyStatement {
+			nameRange = core.NewTextRange(name.Pos(), name.Pos())
+		} else {
+			nameRange = createRangeFromNode(name, file)
+		}
 		if locationRanges.AddIfAbsent(fileRange{fileName, nameRange}) {
 			contextNode := core.OrElse(getContextNode(decl), decl)
 			contextRange := core.OrElse(toContextRange(&nameRange, file, contextNode), &nameRange)

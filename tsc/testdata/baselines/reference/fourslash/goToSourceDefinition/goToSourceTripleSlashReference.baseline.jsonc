@@ -1,0 +1,8 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/helper.js ===
+// <|function [|helper|]() { return 1; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// /// <reference path="./helper.js/*GOTO SOURCE DEF*/" />
+// declare function helper(): number;
+// helper();

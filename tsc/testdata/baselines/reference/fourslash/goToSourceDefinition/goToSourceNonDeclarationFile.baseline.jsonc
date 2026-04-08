@@ -1,0 +1,7 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/utils.ts ===
+// <|export function [|helper|]() { return 1; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { helper } from "./utils";
+// helper/*GOTO SOURCE DEF*/();

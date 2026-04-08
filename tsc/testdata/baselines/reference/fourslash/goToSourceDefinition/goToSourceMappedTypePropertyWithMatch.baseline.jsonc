@@ -1,0 +1,19 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export const obj = { <|[|a|]: 1|>, b: 2 };
+
+// === /home/src/workspaces/project/index.ts ===
+// import { obj } from "pkg";
+// obj./*GOTO SOURCE DEF*/a;
+// obj.b;
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export const obj = { a: 1, <|[|b|]: 2|> };
+
+// === /home/src/workspaces/project/index.ts ===
+// import { obj } from "pkg";
+// obj.a;
+// obj./*GOTO SOURCE DEF*/b;

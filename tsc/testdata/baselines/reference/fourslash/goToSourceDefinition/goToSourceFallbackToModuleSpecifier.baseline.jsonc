@@ -1,0 +1,6 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|Object.defineProperty(exports, [|"internalHelper"|], { value: function() {} })|>;
+
+// === /home/src/workspaces/project/index.ts ===
+// import { /*GOTO SOURCE DEF*/internalHelper } from "pkg";

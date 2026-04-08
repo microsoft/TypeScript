@@ -1,0 +1,17 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/impl.js ===
+// <|export function [|doWork|]() { return 42; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { /*GOTO SOURCE DEF*/doWork } from "pkg";
+// doWork();
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/impl.js ===
+// <|export function [|doWork|]() { return 42; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { doWork } from "pkg";
+// doWork/*GOTO SOURCE DEF*/();

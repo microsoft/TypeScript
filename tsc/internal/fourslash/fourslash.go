@@ -1895,9 +1895,10 @@ func (f *FourslashTest) verifyBaselineDefinitions(
 		}
 
 		f.addResultToBaseline(t, definitionCommand, f.getBaselineForSpansWithFileContents(resultAsSpans, baselineFourslashLocationsOptions{
-			marker:         markerOrRange,
-			markerName:     definitionMarker,
-			additionalSpan: additionalSpan,
+			marker:              markerOrRange,
+			markerName:          definitionMarker,
+			additionalSpan:      additionalSpan,
+			preserveResultOrder: definitionCommand == goToSourceDefinitionCmd,
 		}))
 	}
 }
@@ -1919,6 +1920,33 @@ func (f *FourslashTest) VerifyBaselineGoToTypeDefinition(
 			}
 
 			return sendRequest(t, f, lsproto.TextDocumentTypeDefinitionInfo, params)
+		},
+		false, /*includeOriginalSelectionRange*/
+		markers...,
+	)
+}
+
+func (f *FourslashTest) VerifyBaselineGoToSourceDefinition(
+	t *testing.T,
+	markers ...string,
+) {
+	f.verifyBaselineDefinitions(
+		t,
+		goToSourceDefinitionCmd,
+		"/*GOTO SOURCE DEF*/", /*definitionMarker*/
+		func(t *testing.T, f *FourslashTest, fileName string, position lsproto.Position) lsproto.LocationOrLocationsOrDefinitionLinksOrNull {
+			params := &lsproto.TextDocumentPositionParams{
+				TextDocument: lsproto.TextDocumentIdentifier{
+					Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
+				},
+				Position: f.currentCaretPosition,
+			}
+
+			result := sendRequest(t, f, lsproto.CustomTextDocumentSourceDefinitionInfo, params)
+			if result == nil {
+				return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{}
+			}
+			return *result
 		},
 		false, /*includeOriginalSelectionRange*/
 		markers...,

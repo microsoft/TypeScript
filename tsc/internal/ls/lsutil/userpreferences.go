@@ -144,6 +144,10 @@ type UserPreferences struct {
 
 	CodeLens CodeLensUserPreferences
 
+	// ------- Definition -------
+
+	PreferGoToSourceDefinition bool
+
 	// ------- Symbols -------
 
 	ExcludeLibrarySymbolsInNavTo bool
@@ -713,6 +717,8 @@ func (p *UserPreferences) Set(name string, value any) bool {
 		p.InlayHints.IncludeInlayFunctionLikeReturnTypeHints = parseBoolWithDefault(value, false)
 	case "includeinlayenummembervaluehints":
 		p.InlayHints.IncludeInlayEnumMemberValueHints = parseBoolWithDefault(value, false)
+	case "prefergotosourcedefinition":
+		p.PreferGoToSourceDefinition = parseBoolWithDefault(value, false)
 	case "excludelibrarysymbolsinnavto":
 		p.ExcludeLibrarySymbolsInNavTo = parseBoolWithDefault(value, false)
 	case "disablesuggestions":

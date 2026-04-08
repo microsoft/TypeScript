@@ -1,0 +1,9 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export function [|dynHelper|]() { return "dynamic"; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// async function main() {
+//     const mod = await import("pkg");
+//     mod./*GOTO SOURCE DEF*/dynHelper();
+// }

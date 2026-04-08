@@ -1,0 +1,7 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export function [|alpha|]() { return "a"; }|>
+// export function beta() { return 2; }
+
+// === /home/src/workspaces/project/reexport.ts ===
+// export { alpha, beta } from "pkg"/*GOTO SOURCE DEF*/;

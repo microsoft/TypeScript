@@ -206,6 +206,7 @@ Config File Names::
           "ImplementationsCodeLensShowOnInterfaceMethods": true,
           "ImplementationsCodeLensShowOnAllClassMethods": true
         },
+        "PreferGoToSourceDefinition": false,
         "ExcludeLibrarySymbolsInNavTo": false,
         "DisableSuggestions": false,
         "DisableLineTextInReferences": false,
@@ -683,6 +684,7 @@ Config::
           "ImplementationsCodeLensShowOnInterfaceMethods": false,
           "ImplementationsCodeLensShowOnAllClassMethods": false
         },
+        "PreferGoToSourceDefinition": false,
         "ExcludeLibrarySymbolsInNavTo": true,
         "DisableSuggestions": false,
         "DisableLineTextInReferences": true,

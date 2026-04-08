@@ -1,0 +1,8 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export function unrelated() {}
+// <|export function [|original|]() { return "ok"; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { original as renamed } from "pkg";
+// renamed/*GOTO SOURCE DEF*/();

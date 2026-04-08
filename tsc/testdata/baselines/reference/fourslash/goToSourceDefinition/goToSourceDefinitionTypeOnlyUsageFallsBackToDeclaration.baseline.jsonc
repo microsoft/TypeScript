@@ -1,0 +1,11 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.d.ts ===
+// <|export interface [|Config|] {
+//     name: string;
+// }|>
+// export declare function create(config: Config): void;
+
+// === /home/src/workspaces/project/index.ts ===
+// import { Config, create } from "pkg";
+// const c: /*GOTO SOURCE DEF*/Config = { name: "test" };
+// create(c);

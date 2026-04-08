@@ -1,0 +1,13 @@
+--- old.goToSource15_bundler.baseline.jsonc
++++ new.goToSource15_bundler.baseline.jsonc
+@@= skipped -5, +5 lines =@@
+ // 'use strict';
+ // if (process.env.NODE_ENV !== 'production') {
+ //   (function() {
+-//     function useState(initialState) {}
+-//     exports.[|useState|] = useState;
++//     function [|useState|](initialState) {}
++//     exports.useState = useState;
+ //     exports.version = '16.8.6';
+ //   }());
+ // }

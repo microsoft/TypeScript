@@ -1,0 +1,16 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|exports.[|foo|] = 1|>;
+
+// === /home/src/workspaces/project/index.ts ===
+// import { foo as /*GOTO SOURCE DEF*/bar } from "pkg";
+// bar;
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|exports.[|foo|] = 1|>;
+
+// === /home/src/workspaces/project/reexport.ts ===
+// export { foo as /*GOTO SOURCE DEF*/bar } from "pkg";

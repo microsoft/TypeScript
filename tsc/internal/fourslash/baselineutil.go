@@ -28,6 +28,7 @@ const (
 	findAllReferencesCmd        baselineCommand = "findAllReferences"
 	goToDefinitionCmd           baselineCommand = "goToDefinition"
 	goToImplementationCmd       baselineCommand = "goToImplementation"
+	goToSourceDefinitionCmd     baselineCommand = "goToSourceDefinition"
 	goToTypeDefinitionCmd       baselineCommand = "goToType"
 	inlayHintsCmd               baselineCommand = "Inlay Hints"
 	nonSuggestionDiagnosticsCmd baselineCommand = "Syntax and Semantic Diagnostics"
@@ -274,7 +275,7 @@ func (f *FourslashTest) getBaselineOptions(command baselineCommand, testPath str
 				return strings.Join(fixedLines, "\n")
 			},
 		}
-	case goToDefinitionCmd, goToTypeDefinitionCmd, goToImplementationCmd:
+	case goToDefinitionCmd, goToTypeDefinitionCmd, goToImplementationCmd, goToSourceDefinitionCmd:
 		return baseline.Options{
 			Subfolder:   subfolder,
 			IsSubmodule: true,
@@ -515,7 +516,9 @@ type baselineFourslashLocationsOptions struct {
 	endMarkerSuffix   func(span documentSpan) *string
 	getLocationData   func(span documentSpan) string
 
-	additionalSpan *documentSpan
+	additionalSpan      *documentSpan
+	preserveResultOrder bool
+	orderedFiles        []lsproto.DocumentUri
 }
 
 func locationToSpan(loc lsproto.Location) documentSpan {
@@ -534,6 +537,9 @@ func (f *FourslashTest) getBaselineForLocationsWithFileContents(locations []lspr
 
 func (f *FourslashTest) getBaselineForSpansWithFileContents(spans []documentSpan, options baselineFourslashLocationsOptions) string {
 	spansByFile := collections.GroupBy(spans, func(span documentSpan) lsproto.DocumentUri { return span.uri })
+	if options.preserveResultOrder {
+		options.orderedFiles = uniqueFilesInSpanOrder(spans)
+	}
 	return f.getBaselineForGroupedSpansWithFileContents(
 		spansByFile,
 		options,
@@ -549,25 +555,16 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 	spanToContextId := map[documentSpan]int{}
 
 	baselineEntries := []string{}
-	walkDirFn := func(path string, d vfs.DirEntry, e error) error {
-		if e != nil {
-			return e
-		}
-
-		if !d.Type().IsRegular() {
-			return nil
-		}
-
+	addFileEntry := func(path string) {
 		fileName := lsconv.FileNameToDocumentURI(path)
 		ranges := groupedRanges.Get(fileName)
 		if len(ranges) == 0 {
-			return nil
+			return
 		}
 
 		content, ok := f.textOfFile(path)
 		if !ok {
-			// !!! error?
-			return nil
+			return
 		}
 
 		if options.marker != nil && options.marker.FileName() == path {
@@ -579,17 +576,34 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 		}
 
 		baselineEntries = append(baselineEntries, f.getBaselineContentForFile(path, content, ranges, spanToContextId, options))
+	}
+	walkDirFn := func(path string, d vfs.DirEntry, e error) error {
+		if e != nil {
+			return e
+		}
+
+		if !d.Type().IsRegular() {
+			return nil
+		}
+
+		addFileEntry(path)
 		return nil
 	}
 
-	err := f.vfs.WalkDir("/", walkDirFn)
-	if err != nil && !errors.Is(err, fs.ErrNotExist) {
-		panic("walkdir error during fourslash baseline: " + err.Error())
-	}
+	if options.preserveResultOrder {
+		for _, uri := range options.orderedFiles {
+			addFileEntry(uri.FileName())
+		}
+	} else {
+		err := f.vfs.WalkDir("/", walkDirFn)
+		if err != nil && !errors.Is(err, fs.ErrNotExist) {
+			panic("walkdir error during fourslash baseline: " + err.Error())
+		}
 
-	err = f.vfs.WalkDir("bundled:///", walkDirFn)
-	if err != nil && !errors.Is(err, fs.ErrNotExist) {
-		panic("walkdir error during fourslash baseline: " + err.Error())
+		err = f.vfs.WalkDir("bundled:///", walkDirFn)
+		if err != nil && !errors.Is(err, fs.ErrNotExist) {
+			panic("walkdir error during fourslash baseline: " + err.Error())
+		}
 	}
 
 	// In Strada, there is a bug where we only ever add additional spans to baselines if we haven't
@@ -618,6 +632,22 @@ func (f *FourslashTest) getBaselineForGroupedSpansWithFileContents(groupedRanges
 	// !!! skipDocumentContainingOnlyMarker
 
 	return strings.Join(baselineEntries, "\n\n")
+}
+
+func uniqueFilesInSpanOrder(spans []documentSpan) []lsproto.DocumentUri {
+	if len(spans) == 0 {
+		return nil
+	}
+	seen := map[lsproto.DocumentUri]struct{}{}
+	result := make([]lsproto.DocumentUri, 0, len(spans))
+	for _, span := range spans {
+		if _, ok := seen[span.uri]; ok {
+			continue
+		}
+		seen[span.uri] = struct{}{}
+		result = append(result, span.uri)
+	}
+	return result
 }
 
 func (f *FourslashTest) textOfFile(fileName string) (string, bool) {

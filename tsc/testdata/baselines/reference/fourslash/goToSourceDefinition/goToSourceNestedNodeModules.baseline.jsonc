@@ -1,0 +1,17 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/outer/node_modules/inner/index.js ===
+// <|export function [|inner|]() { return "ok"; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { /*GOTO SOURCE DEF*/inner } from "outer";
+// inner();
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/outer/node_modules/inner/index.js ===
+// <|export function [|inner|]() { return "ok"; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { inner } from "outer";
+// inner/*GOTO SOURCE DEF*/();

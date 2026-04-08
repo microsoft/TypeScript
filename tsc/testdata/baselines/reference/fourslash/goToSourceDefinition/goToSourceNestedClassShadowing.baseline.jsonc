@@ -1,0 +1,11 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export class [|Widget|] {}|>
+// function factory() {
+//     class Widget { constructor() { this.local = true; } }
+//     return new Widget();
+// }
+
+// === /home/src/workspaces/project/index.ts ===
+// import { /*GOTO SOURCE DEF*/Widget } from "pkg";
+// new Widget();

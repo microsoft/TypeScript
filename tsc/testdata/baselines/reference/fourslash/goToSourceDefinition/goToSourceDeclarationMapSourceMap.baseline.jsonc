@@ -1,0 +1,7 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/src/index.ts ===
+// <|export function [|greet|]() { return "hi"; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { greet } from "pkg";
+// greet/*GOTO SOURCE DEF*/();

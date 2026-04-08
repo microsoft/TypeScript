@@ -1,0 +1,16 @@
+--- old.goToSource8_mapFromAtTypes.baseline.jsonc
++++ new.goToSource8_mapFromAtTypes.baseline.jsonc
+@@= skipped -7, +7 lines =@@
+ //      return augend + addend;
+ //     }, 0);
+ // 
+-//     function lodash(value) {}
+-//     lodash.[|add|] = add;
+-// 
+-//     /** Detect free variable `global` from Node.js. */
+-//     var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+-// --- (line: 26) skipped ---
++// --- (line: 21) skipped ---
+
+ // === /home/src/workspaces/project/index.ts ===
+ // import { /*GOTO SOURCE DEF*/add } from 'lodash';

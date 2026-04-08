@@ -17140,6 +17140,9 @@ type ServerCapabilities struct {
 
 	// Workspace specific server capabilities.
 	Workspace *WorkspaceOptions `json:"workspace,omitzero"`
+
+	// The server provides source definition support via custom/textDocument/sourceDefinition.
+	CustomSourceDefinitionProvider *bool `json:"customSourceDefinitionProvider,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*ServerCapabilities)(nil)
@@ -17394,6 +17397,13 @@ func (s *ServerCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return errNull("workspace")
 			}
 			if err := json.UnmarshalDecode(dec, &s.Workspace); err != nil {
+				return err
+			}
+		case `"customSourceDefinitionProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("customSourceDefinitionProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CustomSourceDefinitionProvider); err != nil {
 				return err
 			}
 		default:
@@ -30203,6 +30213,8 @@ func unmarshalParams(method Method, data []byte) (any, error) {
 		return unmarshalPtrTo[InitializeAPISessionParams](data)
 	case MethodCustomProjectInfo:
 		return unmarshalPtrTo[ProjectInfoParams](data)
+	case MethodCustomTextDocumentSourceDefinition:
+		return unmarshalPtrTo[TextDocumentPositionParams](data)
 	case MethodWorkspaceDidChangeWorkspaceFolders:
 		return unmarshalPtrTo[DidChangeWorkspaceFoldersParams](data)
 	case MethodWindowWorkDoneProgressCancel:
@@ -30408,6 +30420,8 @@ func unmarshalResult(method Method, data []byte) (any, error) {
 		return unmarshalValue[CustomInitializeAPISessionResponse](data)
 	case MethodCustomProjectInfo:
 		return unmarshalValue[CustomProjectInfoResponse](data)
+	case MethodCustomTextDocumentSourceDefinition:
+		return unmarshalValue[CustomTextDocumentSourceDefinitionResponse](data)
 	default:
 		return unmarshalAny(data)
 	}
@@ -30728,6 +30742,8 @@ const (
 	MethodCustomInitializeAPISession Method = "custom/initializeAPISession"
 	// Returns project information (e.g. the tsconfig.json path) for a given text document.
 	MethodCustomProjectInfo Method = "custom/projectInfo"
+	// Request to get source definitions for a position.
+	MethodCustomTextDocumentSourceDefinition Method = "custom/textDocument/sourceDefinition"
 	// The `workspace/didChangeWorkspaceFolders` notification is sent from the client to the server when the workspace
 	// folder configuration changes.
 	MethodWorkspaceDidChangeWorkspaceFolders Method = "workspace/didChangeWorkspaceFolders"
@@ -31272,6 +31288,12 @@ type CustomProjectInfoResponse = *ProjectInfoResult
 
 // Type mapping info for `custom/projectInfo`
 var CustomProjectInfoInfo = RequestInfo[*ProjectInfoParams, CustomProjectInfoResponse]{Method: MethodCustomProjectInfo}
+
+// Response type for `custom/textDocument/sourceDefinition`
+type CustomTextDocumentSourceDefinitionResponse = *LocationOrLocationsOrDefinitionLinksOrNull
+
+// Type mapping info for `custom/textDocument/sourceDefinition`
+var CustomTextDocumentSourceDefinitionInfo = RequestInfo[*TextDocumentPositionParams, CustomTextDocumentSourceDefinitionResponse]{Method: MethodCustomTextDocumentSourceDefinition}
 
 // Type mapping info for `workspace/didChangeWorkspaceFolders`
 var WorkspaceDidChangeWorkspaceFoldersInfo = NotificationInfo[*DidChangeWorkspaceFoldersParams]{Method: MethodWorkspaceDidChangeWorkspaceFolders}

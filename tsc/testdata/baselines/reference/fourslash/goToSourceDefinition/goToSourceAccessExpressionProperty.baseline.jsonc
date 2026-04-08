@@ -1,0 +1,19 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export const obj = { <|[|greet|](name) { return name; }|>, count: 42 };
+
+// === /home/src/workspaces/project/index.ts ===
+// import { obj } from "pkg";
+// obj./*GOTO SOURCE DEF*/greet("world");
+// obj.count;
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export const obj = { greet(name) { return name; }, <|[|count|]: 42|> };
+
+// === /home/src/workspaces/project/index.ts ===
+// import { obj } from "pkg";
+// obj.greet("world");
+// obj./*GOTO SOURCE DEF*/count;
