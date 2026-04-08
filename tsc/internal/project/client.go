@@ -16,4 +16,6 @@ type Client interface {
 	RefreshCodeLens(ctx context.Context) error
 	ProgressStart(message *diagnostics.Message, args ...any)
 	ProgressFinish(message *diagnostics.Message, args ...any)
+	SendTelemetry(ctx context.Context, telemetry lsproto.TelemetryEvent) error
+	IsActive() bool
 }

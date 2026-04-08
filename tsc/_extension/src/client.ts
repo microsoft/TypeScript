@@ -66,6 +66,7 @@ export class Client implements vscode.Disposable {
             traceOutputChannel: this.traceOutputChannel,
             initializationOptions: {
                 codeLensShowLocationsCommandName,
+                enableTelemetry: true,
             },
             errorHandler: new ReportingErrorHandler(this.telemetryReporter, 5),
             middleware: {

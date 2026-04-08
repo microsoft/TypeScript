@@ -27975,6 +27975,9 @@ type InitializationOptions struct {
 
 	// userPreferences and/or formatting options if provided at initialization.
 	UserPreferences *any `json:"userPreferences,omitzero"`
+
+	// EnableTelemetry enables sending telemetry events from the server to the client.
+	EnableTelemetry *bool `json:"enableTelemetry,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*InitializationOptions)(nil)
@@ -28009,6 +28012,13 @@ func (s *InitializationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 			}
 		case `"userPreferences"`:
 			if err := json.UnmarshalDecode(dec, &s.UserPreferences); err != nil {
+				return err
+			}
+		case `"enableTelemetry"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("enableTelemetry")
+			}
+			if err := json.UnmarshalDecode(dec, &s.EnableTelemetry); err != nil {
 				return err
 			}
 		default:
@@ -28827,6 +28837,301 @@ func (s *ProjectInfoResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	}
 
 	return nil
+}
+
+// A PerformanceStatsTelemetryEvent is sent periodically with performance and resource usage statistics.
+type PerformanceStatsTelemetryEvent struct {
+	// The name of the telemetry event.
+	EventName StringLiteralLanguageServerPerformanceStats `json:"eventName"`
+
+	// Indicates this is a usage telemetry event.
+	TelemetryPurpose StringLiteralUsage `json:"telemetryPurpose"`
+
+	// Numeric measurements for this telemetry event.
+	Measurements *PerformanceStatsTelemetryMeasurements `json:"measurements"`
+}
+
+var _ json.UnmarshalerFrom = (*PerformanceStatsTelemetryEvent)(nil)
+
+func (s *PerformanceStatsTelemetryEvent) UnmarshalJSONFrom(dec *json.Decoder) error {
+	const (
+		missingEventName uint = 1 << iota
+		missingTelemetryPurpose
+		missingMeasurements
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"eventName"`:
+			missing &^= missingEventName
+			if err := json.UnmarshalDecode(dec, &s.EventName); err != nil {
+				return err
+			}
+		case `"telemetryPurpose"`:
+			missing &^= missingTelemetryPurpose
+			if err := json.UnmarshalDecode(dec, &s.TelemetryPurpose); err != nil {
+				return err
+			}
+		case `"measurements"`:
+			missing &^= missingMeasurements
+			if dec.PeekKind() == 'n' {
+				return errNull("measurements")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Measurements); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingEventName != 0 {
+			missingProps = append(missingProps, "eventName")
+		}
+		if missing&missingTelemetryPurpose != 0 {
+			missingProps = append(missingProps, "telemetryPurpose")
+		}
+		if missing&missingMeasurements != 0 {
+			missingProps = append(missingProps, "measurements")
+		}
+		return errMissing(missingProps)
+	}
+
+	return nil
+}
+
+// Numeric measurements for PerformanceStatsTelemetryEvent.
+type PerformanceStatsTelemetryMeasurements struct {
+	// Number of files currently open in the editor.
+	OpenFileCount float64 `json:"openFileCount,omitzero"`
+
+	// Seconds since the session was initialized.
+	UptimeSeconds float64 `json:"uptimeSeconds,omitzero"`
+
+	// Number of loaded projects.
+	ProjectCount float64 `json:"projectCount,omitzero"`
+
+	// Number of loaded config files.
+	ConfigCount float64 `json:"configCount,omitzero"`
+
+	// Number of files cached from disk.
+	CachedDiskFileCount float64 `json:"cachedDiskFileCount,omitzero"`
+
+	// Total memory mapped by the Go runtime in bytes.
+	MemoryUsedBytes float64 `json:"memoryUsedBytes,omitzero"`
+
+	// GOMEMLIMIT value in bytes, or 0 if not set.
+	GoMemLimit float64 `json:"goMemLimit,omitzero"`
+
+	// GOGC percentage value configured for the GC.
+	GoGCPercent float64 `json:"goGCPercent,omitzero"`
+
+	// Heap size target the GC is working toward in bytes.
+	HeapGoalBytes float64 `json:"heapGoalBytes,omitzero"`
+
+	// Bytes of live (reachable) heap objects.
+	HeapLiveBytes float64 `json:"heapLiveBytes,omitzero"`
+
+	// Number of live or unswept objects occupying heap memory.
+	HeapObjectCount float64 `json:"heapObjectCount,omitzero"`
+
+	// Heap memory reserved for goroutine stacks.
+	HeapStackBytes float64 `json:"heapStackBytes,omitzero"`
+
+	// Heap memory returned to the OS.
+	HeapReleasedBytes float64 `json:"heapReleasedBytes,omitzero"`
+
+	// Heap memory that is free and eligible to be returned to the OS.
+	HeapFreeBytes float64 `json:"heapFreeBytes,omitzero"`
+
+	// Total scannable heap bytes — how much the GC must traverse.
+	GcScanHeapBytes float64 `json:"gcScanHeapBytes,omitzero"`
+
+	// The current GOMAXPROCS value.
+	GoMaxProcs float64 `json:"goMaxProcs,omitzero"`
+
+	// Current number of goroutines.
+	GoroutineCount float64 `json:"goroutineCount,omitzero"`
+
+	// Total completed GC cycles.
+	GcCyclesTotal float64 `json:"gcCyclesTotal,omitzero"`
+
+	// Cumulative CPU time spent in GC in seconds.
+	GcCPUSeconds float64 `json:"gcCPUSeconds,omitzero"`
+
+	// Cumulative CPU time spent in user Go code in seconds.
+	UserCPUSeconds float64 `json:"userCPUSeconds,omitzero"`
+
+	// Total physical memory on the system in bytes.
+	SystemMemTotal float64 `json:"systemMemTotal,omitzero"`
+
+	// Used physical memory on the system in bytes.
+	SystemMemUsed float64 `json:"systemMemUsed,omitzero"`
+
+	// Number of auto-import project buckets.
+	AutoImportProjectBucketCount float64 `json:"autoImportProjectBucketCount,omitzero"`
+
+	// Number of auto-import node_modules buckets.
+	AutoImportNodeModulesBucketCount float64 `json:"autoImportNodeModulesBucketCount,omitzero"`
+
+	// Unique packages across all node_modules buckets.
+	AutoImportUniquePackageCount float64 `json:"autoImportUniquePackageCount,omitzero"`
+
+	// Total indexed exports from project files.
+	AutoImportProjectExportCount float64 `json:"autoImportProjectExportCount,omitzero"`
+
+	// Total indexed exports from node_modules.
+	AutoImportNodeModulesExportCount float64 `json:"autoImportNodeModulesExportCount,omitzero"`
+
+	// Total files tracked across project buckets.
+	AutoImportProjectFileCount float64 `json:"autoImportProjectFileCount,omitzero"`
+
+	// Total files tracked across node_modules buckets.
+	AutoImportNodeModulesFileCount float64 `json:"autoImportNodeModulesFileCount,omitzero"`
+
+	// Number of node_modules buckets with no package.json filter.
+	AutoImportNodeModulesUnfilteredBucketCount float64 `json:"autoImportNodeModulesUnfilteredBucketCount,omitzero"`
+}
+
+// A ProjectInfoTelemetryEvent is sent once per project when it is first loaded.
+type ProjectInfoTelemetryEvent struct {
+	// The name of the telemetry event.
+	EventName StringLiteralLanguageServerProjectInfo `json:"eventName"`
+
+	// Indicates this is a usage telemetry event.
+	TelemetryPurpose StringLiteralUsage `json:"telemetryPurpose"`
+
+	// String properties for this telemetry event. Complex values (compilerOptions, fileStats) are JSON-stringified.
+	Properties map[string]string `json:"properties"`
+
+	// Numeric measurements for this telemetry event.
+	Measurements *ProjectInfoTelemetryMeasurements `json:"measurements"`
+}
+
+var _ json.UnmarshalerFrom = (*ProjectInfoTelemetryEvent)(nil)
+
+func (s *ProjectInfoTelemetryEvent) UnmarshalJSONFrom(dec *json.Decoder) error {
+	const (
+		missingEventName uint = 1 << iota
+		missingTelemetryPurpose
+		missingProperties
+		missingMeasurements
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"eventName"`:
+			missing &^= missingEventName
+			if err := json.UnmarshalDecode(dec, &s.EventName); err != nil {
+				return err
+			}
+		case `"telemetryPurpose"`:
+			missing &^= missingTelemetryPurpose
+			if err := json.UnmarshalDecode(dec, &s.TelemetryPurpose); err != nil {
+				return err
+			}
+		case `"properties"`:
+			missing &^= missingProperties
+			if dec.PeekKind() == 'n' {
+				return errNull("properties")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Properties); err != nil {
+				return err
+			}
+		case `"measurements"`:
+			missing &^= missingMeasurements
+			if dec.PeekKind() == 'n' {
+				return errNull("measurements")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Measurements); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingEventName != 0 {
+			missingProps = append(missingProps, "eventName")
+		}
+		if missing&missingTelemetryPurpose != 0 {
+			missingProps = append(missingProps, "telemetryPurpose")
+		}
+		if missing&missingProperties != 0 {
+			missingProps = append(missingProps, "properties")
+		}
+		if missing&missingMeasurements != 0 {
+			missingProps = append(missingProps, "measurements")
+		}
+		return errMissing(missingProps)
+	}
+
+	return nil
+}
+
+// Numeric measurements for ProjectInfoTelemetryEvent.
+type ProjectInfoTelemetryMeasurements struct {
+	JsFileCount float64 `json:"jsFileCount,omitzero"`
+
+	JsFileSize float64 `json:"jsFileSize,omitzero"`
+
+	JsxFileCount float64 `json:"jsxFileCount,omitzero"`
+
+	JsxFileSize float64 `json:"jsxFileSize,omitzero"`
+
+	TsFileCount float64 `json:"tsFileCount,omitzero"`
+
+	TsFileSize float64 `json:"tsFileSize,omitzero"`
+
+	TsxFileCount float64 `json:"tsxFileCount,omitzero"`
+
+	TsxFileSize float64 `json:"tsxFileSize,omitzero"`
+
+	DtsFileCount float64 `json:"dtsFileCount,omitzero"`
+
+	DtsFileSize float64 `json:"dtsFileSize,omitzero"`
 }
 
 // CallHierarchyItemData is a placeholder for custom data preserved on a CallHierarchyItem.
@@ -31363,7 +31668,7 @@ var ProgressInfo = NotificationInfo[*ProgressParams]{Method: MethodProgress}
 
 // Type aliases
 
-type TelemetryEvent = RequestFailureTelemetryEventOrNull
+type TelemetryEvent = RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull
 
 // Union types
 
@@ -34806,33 +35111,57 @@ func (o *CustomClosingTagCompletionOrNull) UnmarshalJSONFrom(dec *json.Decoder) 
 	}
 }
 
-type RequestFailureTelemetryEventOrNull struct {
-	RequestFailureTelemetryEvent *RequestFailureTelemetryEvent
+type RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull struct {
+	RequestFailureTelemetryEvent   *RequestFailureTelemetryEvent
+	PerformanceStatsTelemetryEvent *PerformanceStatsTelemetryEvent
+	ProjectInfoTelemetryEvent      *ProjectInfoTelemetryEvent
 }
 
-var _ json.MarshalerTo = (*RequestFailureTelemetryEventOrNull)(nil)
+var _ json.MarshalerTo = (*RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull)(nil)
 
-func (o *RequestFailureTelemetryEventOrNull) MarshalJSONTo(enc *json.Encoder) error {
+func (o *RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull) MarshalJSONTo(enc *json.Encoder) error {
+	assertAtMostOne("more than one element of RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull is set", boolToInt(o.RequestFailureTelemetryEvent != nil)+boolToInt(o.PerformanceStatsTelemetryEvent != nil)+boolToInt(o.ProjectInfoTelemetryEvent != nil))
+
 	if o.RequestFailureTelemetryEvent != nil {
 		return json.MarshalEncode(enc, o.RequestFailureTelemetryEvent)
+	}
+	if o.PerformanceStatsTelemetryEvent != nil {
+		return json.MarshalEncode(enc, o.PerformanceStatsTelemetryEvent)
+	}
+	if o.ProjectInfoTelemetryEvent != nil {
+		return json.MarshalEncode(enc, o.ProjectInfoTelemetryEvent)
 	}
 	return enc.WriteToken(json.Null)
 }
 
-var _ json.UnmarshalerFrom = (*RequestFailureTelemetryEventOrNull)(nil)
+var _ json.UnmarshalerFrom = (*RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull)(nil)
 
-func (o *RequestFailureTelemetryEventOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
-	*o = RequestFailureTelemetryEventOrNull{}
+func (o *RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
+	*o = RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull{}
 
 	switch dec.PeekKind() {
 	case 'n':
 		_, err := dec.ReadToken()
 		return err
 	case '{':
-		o.RequestFailureTelemetryEvent = new(RequestFailureTelemetryEvent)
-		return json.UnmarshalDecode(dec, o.RequestFailureTelemetryEvent)
+		data, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(jsonObjectRawField(data, "eventName")) {
+		case `"languageServer.projectInfo"`:
+			o.ProjectInfoTelemetryEvent = new(ProjectInfoTelemetryEvent)
+			return json.Unmarshal(data, o.ProjectInfoTelemetryEvent)
+		case `"languageServer.errorResponse"`:
+			o.RequestFailureTelemetryEvent = new(RequestFailureTelemetryEvent)
+			return json.Unmarshal(data, o.RequestFailureTelemetryEvent)
+		case `"languageServer.performanceStats"`:
+			o.PerformanceStatsTelemetryEvent = new(PerformanceStatsTelemetryEvent)
+			return json.Unmarshal(data, o.PerformanceStatsTelemetryEvent)
+		}
+		return errInvalidValue("RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull", data)
 	default:
-		return errInvalidKind("RequestFailureTelemetryEventOrNull", dec.PeekKind())
+		return errInvalidKind("RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull", dec.PeekKind())
 	}
 }
 
@@ -35207,6 +35536,72 @@ func (o *StringLiteralError) UnmarshalJSONFrom(dec *json.Decoder) error {
 	}
 	if string(v) != `"error"` {
 		return errLiteralMismatch("StringLiteralError", `"error"`, v)
+	}
+	return nil
+}
+
+// StringLiteralLanguageServerPerformanceStats is a literal type for "languageServer.performanceStats"
+type StringLiteralLanguageServerPerformanceStats struct{}
+
+var _ json.MarshalerTo = StringLiteralLanguageServerPerformanceStats{}
+
+func (o StringLiteralLanguageServerPerformanceStats) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"languageServer.performanceStats"`))
+}
+
+var _ json.UnmarshalerFrom = &StringLiteralLanguageServerPerformanceStats{}
+
+func (o *StringLiteralLanguageServerPerformanceStats) UnmarshalJSONFrom(dec *json.Decoder) error {
+	v, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	if string(v) != `"languageServer.performanceStats"` {
+		return errLiteralMismatch("StringLiteralLanguageServerPerformanceStats", `"languageServer.performanceStats"`, v)
+	}
+	return nil
+}
+
+// StringLiteralUsage is a literal type for "usage"
+type StringLiteralUsage struct{}
+
+var _ json.MarshalerTo = StringLiteralUsage{}
+
+func (o StringLiteralUsage) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"usage"`))
+}
+
+var _ json.UnmarshalerFrom = &StringLiteralUsage{}
+
+func (o *StringLiteralUsage) UnmarshalJSONFrom(dec *json.Decoder) error {
+	v, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	if string(v) != `"usage"` {
+		return errLiteralMismatch("StringLiteralUsage", `"usage"`, v)
+	}
+	return nil
+}
+
+// StringLiteralLanguageServerProjectInfo is a literal type for "languageServer.projectInfo"
+type StringLiteralLanguageServerProjectInfo struct{}
+
+var _ json.MarshalerTo = StringLiteralLanguageServerProjectInfo{}
+
+func (o StringLiteralLanguageServerProjectInfo) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"languageServer.projectInfo"`))
+}
+
+var _ json.UnmarshalerFrom = &StringLiteralLanguageServerProjectInfo{}
+
+func (o *StringLiteralLanguageServerProjectInfo) UnmarshalJSONFrom(dec *json.Decoder) error {
+	v, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	if string(v) != `"languageServer.projectInfo"` {
+		return errLiteralMismatch("StringLiteralLanguageServerProjectInfo", `"languageServer.projectInfo"`, v)
 	}
 	return nil
 }

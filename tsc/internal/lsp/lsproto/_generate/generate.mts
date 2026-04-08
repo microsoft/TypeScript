@@ -56,6 +56,12 @@ const customStructures: Structure[] = [
                 optional: true,
                 documentation: "userPreferences and/or formatting options if provided at initialization.",
             },
+            {
+                name: "enableTelemetry",
+                type: { kind: "base", name: "boolean" },
+                optional: true,
+                documentation: "EnableTelemetry enables sending telemetry events from the server to the client.",
+            },
         ],
         documentation: "InitializationOptions contains user-provided initialization options.",
     },
@@ -286,6 +292,105 @@ const customStructures: Structure[] = [
         ],
         documentation: "Result for the custom/projectInfo request.",
     },
+    {
+        name: "PerformanceStatsTelemetryEvent",
+        properties: [
+            {
+                name: "eventName",
+                type: { kind: "stringLiteral", value: "languageServer.performanceStats" },
+                documentation: "The name of the telemetry event.",
+            },
+            {
+                name: "telemetryPurpose",
+                type: { kind: "stringLiteral", value: "usage" },
+                documentation: "Indicates this is a usage telemetry event.",
+            },
+            {
+                name: "measurements",
+                type: { kind: "reference", name: "PerformanceStatsTelemetryMeasurements" },
+                documentation: "Numeric measurements for this telemetry event.",
+            },
+        ],
+        documentation: "A PerformanceStatsTelemetryEvent is sent periodically with performance and resource usage statistics.",
+    },
+    {
+        name: "PerformanceStatsTelemetryMeasurements",
+        properties: [
+            { name: "openFileCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Number of files currently open in the editor." },
+            { name: "uptimeSeconds", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Seconds since the session was initialized." },
+            { name: "projectCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Number of loaded projects." },
+            { name: "configCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Number of loaded config files." },
+            { name: "cachedDiskFileCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Number of files cached from disk." },
+            { name: "memoryUsedBytes", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Total memory mapped by the Go runtime in bytes." },
+            { name: "goMemLimit", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "GOMEMLIMIT value in bytes, or 0 if not set." },
+            { name: "goGCPercent", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "GOGC percentage value configured for the GC." },
+            { name: "heapGoalBytes", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Heap size target the GC is working toward in bytes." },
+            { name: "heapLiveBytes", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Bytes of live (reachable) heap objects." },
+            { name: "heapObjectCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Number of live or unswept objects occupying heap memory." },
+            { name: "heapStackBytes", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Heap memory reserved for goroutine stacks." },
+            { name: "heapReleasedBytes", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Heap memory returned to the OS." },
+            { name: "heapFreeBytes", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Heap memory that is free and eligible to be returned to the OS." },
+            { name: "gcScanHeapBytes", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Total scannable heap bytes — how much the GC must traverse." },
+            { name: "goMaxProcs", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "The current GOMAXPROCS value." },
+            { name: "goroutineCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Current number of goroutines." },
+            { name: "gcCyclesTotal", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Total completed GC cycles." },
+            { name: "gcCPUSeconds", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Cumulative CPU time spent in GC in seconds." },
+            { name: "userCPUSeconds", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Cumulative CPU time spent in user Go code in seconds." },
+            { name: "systemMemTotal", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Total physical memory on the system in bytes." },
+            { name: "systemMemUsed", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Used physical memory on the system in bytes." },
+            { name: "autoImportProjectBucketCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Number of auto-import project buckets." },
+            { name: "autoImportNodeModulesBucketCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Number of auto-import node_modules buckets." },
+            { name: "autoImportUniquePackageCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Unique packages across all node_modules buckets." },
+            { name: "autoImportProjectExportCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Total indexed exports from project files." },
+            { name: "autoImportNodeModulesExportCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Total indexed exports from node_modules." },
+            { name: "autoImportProjectFileCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Total files tracked across project buckets." },
+            { name: "autoImportNodeModulesFileCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Total files tracked across node_modules buckets." },
+            { name: "autoImportNodeModulesUnfilteredBucketCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true, documentation: "Number of node_modules buckets with no package.json filter." },
+        ],
+        documentation: "Numeric measurements for PerformanceStatsTelemetryEvent.",
+    },
+    {
+        name: "ProjectInfoTelemetryEvent",
+        properties: [
+            {
+                name: "eventName",
+                type: { kind: "stringLiteral", value: "languageServer.projectInfo" },
+                documentation: "The name of the telemetry event.",
+            },
+            {
+                name: "telemetryPurpose",
+                type: { kind: "stringLiteral", value: "usage" },
+                documentation: "Indicates this is a usage telemetry event.",
+            },
+            {
+                name: "properties",
+                type: { kind: "map", key: { kind: "base", name: "string" }, value: { kind: "base", name: "string" } },
+                documentation: "String properties for this telemetry event. Complex values (compilerOptions, fileStats) are JSON-stringified.",
+            },
+            {
+                name: "measurements",
+                type: { kind: "reference", name: "ProjectInfoTelemetryMeasurements" },
+                documentation: "Numeric measurements for this telemetry event.",
+            },
+        ],
+        documentation: "A ProjectInfoTelemetryEvent is sent once per project when it is first loaded.",
+    },
+    {
+        name: "ProjectInfoTelemetryMeasurements",
+        properties: [
+            { name: "jsFileCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true },
+            { name: "jsFileSize", type: { kind: "base", name: "decimal" }, omitzeroValue: true },
+            { name: "jsxFileCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true },
+            { name: "jsxFileSize", type: { kind: "base", name: "decimal" }, omitzeroValue: true },
+            { name: "tsFileCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true },
+            { name: "tsFileSize", type: { kind: "base", name: "decimal" }, omitzeroValue: true },
+            { name: "tsxFileCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true },
+            { name: "tsxFileSize", type: { kind: "base", name: "decimal" }, omitzeroValue: true },
+            { name: "dtsFileCount", type: { kind: "base", name: "decimal" }, omitzeroValue: true },
+            { name: "dtsFileSize", type: { kind: "base", name: "decimal" }, omitzeroValue: true },
+        ],
+        documentation: "Numeric measurements for ProjectInfoTelemetryEvent.",
+    },
 ];
 
 const customEnumerations: Enumeration[] = [
@@ -425,6 +530,8 @@ const customTypeAliases: TypeAlias[] = [
             kind: "or",
             items: [
                 { kind: "reference", name: "RequestFailureTelemetryEvent" },
+                { kind: "reference", name: "PerformanceStatsTelemetryEvent" },
+                { kind: "reference", name: "ProjectInfoTelemetryEvent" },
                 { kind: "base", name: "null" },
             ],
         },
@@ -776,6 +883,39 @@ function patchAndPreprocessModel() {
 }
 
 patchAndPreprocessModel();
+
+// Validate that telemetry events in the TelemetryEvent union have properly shaped
+// measurements and properties fields. measurements struct fields must only contain
+// numeric types (decimal/integer/uinteger).
+function validateTelemetryEvents() {
+    const telemetryAlias = customTypeAliases.find(a => a.name === "TelemetryEvent");
+    if (!telemetryAlias || telemetryAlias.type.kind !== "or") return;
+
+    const structureMap = new Map(model.structures.map(s => [s.name, s]));
+
+    for (const item of telemetryAlias.type.items) {
+        if (item.kind !== "reference") continue;
+        const eventStruct = structureMap.get(item.name);
+        if (!eventStruct) continue;
+
+        for (const prop of eventStruct.properties) {
+            if (prop.name === "measurements" && prop.type.kind === "reference") {
+                const measurementsStruct = structureMap.get(prop.type.name);
+                if (!measurementsStruct) continue;
+                for (const mp of measurementsStruct.properties) {
+                    if (mp.type.kind !== "base" || !["decimal", "integer", "uinteger"].includes(mp.type.name)) {
+                        throw new Error(
+                            `Telemetry measurements struct ${prop.type.name}.${mp.name} must be a numeric type ` +
+                                `(decimal/integer/uinteger), got ${mp.type.kind === "base" ? mp.type.name : mp.type.kind}`,
+                        );
+                    }
+                }
+            }
+        }
+    }
+}
+
+validateTelemetryEvents();
 
 interface GoType {
     name: string;

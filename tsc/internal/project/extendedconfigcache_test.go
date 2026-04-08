@@ -38,6 +38,12 @@ func (noopClient) ProgressStart(message *diagnostics.Message, args ...any) {}
 
 func (noopClient) ProgressFinish(message *diagnostics.Message, args ...any) {}
 
+func (noopClient) SendTelemetry(ctx context.Context, telemetry lsproto.TelemetryEvent) error {
+	return nil
+}
+
+func (noopClient) IsActive() bool { return true }
+
 // TestExtendedConfigCacheOwnership tests the invariant that each ExtendedSourceFile
 // of a config in the ConfigFileRegistry is owned exactly once per snapshot that
 // references it, and released exactly once when that snapshot is removed.
