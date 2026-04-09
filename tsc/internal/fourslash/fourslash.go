@@ -1589,7 +1589,6 @@ func (f *FourslashTest) VerifyImportFixAtPosition(t *testing.T, expectedTexts []
 	actualTextArray := make([]string, 0, len(importActions))
 	for _, action := range importActions {
 		// Apply the code action
-		var edits []*lsproto.TextEdit
 		if action.Edit != nil && action.Edit.Changes != nil {
 			if len(*action.Edit.Changes) != 1 {
 				t.Fatalf("Expected exactly 1 change, got %d", len(*action.Edit.Changes))
@@ -1598,7 +1597,6 @@ func (f *FourslashTest) VerifyImportFixAtPosition(t *testing.T, expectedTexts []
 				if uri != lsconv.FileNameToDocumentURI(f.activeFilename) {
 					t.Fatalf("Expected change to file %s, got %s", f.activeFilename, uri)
 				}
-				edits = changeEdits
 				f.applyTextEdits(t, changeEdits)
 			}
 		}
@@ -1612,14 +1610,8 @@ func (f *FourslashTest) VerifyImportFixAtPosition(t *testing.T, expectedTexts []
 		}
 		actualTextArray = append(actualTextArray, text)
 
-		// Undo changes to perform next fix
-		for _, textChange := range edits {
-			start := int(f.converters.LineAndCharacterToPosition(script, textChange.Range.Start))
-			end := int(f.converters.LineAndCharacterToPosition(script, textChange.Range.End))
-			deletedText := originalContent[start:end]
-			insertedText := textChange.NewText
-			f.editScriptAndUpdateMarkers(t, f.activeFilename, start, start+len(insertedText), deletedText)
-		}
+		// Restore original content for next fix
+		f.editScriptAndUpdateMarkers(t, f.activeFilename, 0, len(script.content), originalContent)
 		f.currentCaretPosition = currentCaretPosition
 	}
 

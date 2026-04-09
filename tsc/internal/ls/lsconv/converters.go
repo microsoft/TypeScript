@@ -2,7 +2,6 @@ package lsconv
 
 import (
 	"context"
-	"fmt"
 	"net/url"
 	"slices"
 	"strings"
@@ -149,19 +148,31 @@ func (c *Converters) LineAndCharacterToPosition(script Script, lineAndCharacter 
 	line := core.TextPos(lineAndCharacter.Line)
 	char := core.TextPos(lineAndCharacter.Character)
 
-	if line < 0 || int(line) >= len(lineMap.LineStarts) {
-		panic(fmt.Sprintf("bad line number. Line: %d, lineMap length: %d", line, len(lineMap.LineStarts)))
+	textLen := core.TextPos(len(script.Text()))
+
+	// Clamp line to valid range.
+	if int(line) >= len(lineMap.LineStarts) {
+		return textLen
 	}
 
 	start := lineMap.LineStarts[line]
+
+	// Determine the end of this line (start of next line, or end of text).
+	var lineEnd core.TextPos
+	if int(line)+1 < len(lineMap.LineStarts) {
+		lineEnd = lineMap.LineStarts[int(line)+1]
+	} else {
+		lineEnd = textLen
+	}
+
 	if lineMap.AsciiOnly || c.positionEncoding == lsproto.PositionEncodingKindUTF8 {
-		return start + char
+		return max(start, min(start+char, lineEnd))
 	}
 
 	var utf8Char core.TextPos
 	var utf16Char core.TextPos
 
-	for i, r := range script.Text()[start:] {
+	for i, r := range script.Text()[start:lineEnd] {
 		u16Len := core.TextPos(utf16.RuneLen(r))
 		if utf16Char+u16Len > char {
 			break
@@ -176,7 +187,7 @@ func (c *Converters) LineAndCharacterToPosition(script Script, lineAndCharacter 
 func (c *Converters) PositionToLineAndCharacter(script Script, position core.TextPos) lsproto.Position {
 	// UTF-8 offset to UTF-8/16 0-indexed line and character
 
-	position = min(position, core.TextPos(len(script.Text())))
+	position = max(0, min(position, core.TextPos(len(script.Text()))))
 
 	lineMap := c.getLineMap(script.FileName())
 
@@ -184,7 +195,7 @@ func (c *Converters) PositionToLineAndCharacter(script Script, position core.Tex
 	if !isLineStart {
 		line--
 	}
-	line = max(0, line)
+	line = max(0, min(line, len(lineMap.LineStarts)-1))
 
 	// The current line ranges from lineMap.LineStarts[line] (or 0) to lineMap.LineStarts[line+1] (or len(text)).
 
