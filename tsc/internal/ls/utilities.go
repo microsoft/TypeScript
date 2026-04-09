@@ -304,7 +304,7 @@ func (l *LanguageService) createLspPosition(position int, file *ast.SourceFile) 
 	return l.converters.PositionToLineAndCharacter(file, core.TextPos(position))
 }
 
-func quote(file *ast.SourceFile, preferences *lsutil.UserPreferences, text string) string {
+func quote(file *ast.SourceFile, preferences lsutil.UserPreferences, text string) string {
 	// Editors can pass in undefined or empty string - we want to infer the preference in those cases.
 	quotePreference := lsutil.GetQuotePreference(file, preferences)
 	quoted, _ := core.StringifyJson(text, "" /*prefix*/, "" /*indent*/)

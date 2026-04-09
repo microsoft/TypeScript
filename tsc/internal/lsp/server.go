@@ -317,7 +317,7 @@ func (s *Server) ProgressFinish(message *diagnostics.Message, args ...any) {
 	}
 }
 
-func (s *Server) RequestConfiguration(ctx context.Context) (*lsutil.UserConfig, error) {
+func (s *Server) RequestConfiguration(ctx context.Context) (lsutil.UserPreferences, error) {
 	caps := lsproto.GetClientCapabilities(ctx)
 	if !caps.Workspace.Configuration {
 		if s.initializeParams != nil && s.initializeParams.InitializationOptions != nil && s.initializeParams.InitializationOptions.UserPreferences != nil {
@@ -326,13 +326,11 @@ func (s *Server) RequestConfiguration(ctx context.Context) (*lsutil.UserConfig, 
 				*s.initializeParams.InitializationOptions.UserPreferences,
 				*s.initializeParams.InitializationOptions.UserPreferences,
 			)
-			// Any options received via initializationOptions will be used for both `js` and `ts` options
 			if config, ok := (*s.initializeParams.InitializationOptions.UserPreferences).(map[string]any); ok {
-				return lsutil.NewUserConfig(lsutil.NewDefaultUserPreferences().ParseWorker(config)), nil
+				return lsutil.ParseUserPreferences(map[string]any{"js/ts": config}), nil
 			}
 		}
-		// if no configuration request capability, return default config
-		return lsutil.NewUserConfig(nil), nil
+		return lsutil.NewDefaultUserPreferences(), nil
 	}
 	configs, err := sendClientRequest(ctx, s, lsproto.WorkspaceConfigurationInfo, &lsproto.ConfigurationParams{
 		Items: []*lsproto.ConfigurationItem{
@@ -351,7 +349,7 @@ func (s *Server) RequestConfiguration(ctx context.Context) (*lsutil.UserConfig, 
 		},
 	})
 	if err != nil {
-		return &lsutil.UserConfig{}, fmt.Errorf("configure request failed: %w", err)
+		return lsutil.UserPreferences{}, fmt.Errorf("configure request failed: %w", err)
 	}
 	configMap := map[string]any{}
 	for i, config := range configs {
@@ -373,7 +371,7 @@ func (s *Server) RequestConfiguration(ctx context.Context) (*lsutil.UserConfig, 
 		configMap["javascript"],
 		configMap["editor"],
 	)
-	return lsutil.ParseNewUserConfig(configMap), nil
+	return lsutil.ParseUserPreferences(configMap), nil
 }
 
 func (s *Server) Run(ctx context.Context) error {
@@ -1190,7 +1188,7 @@ func (s *Server) handleDidChangeWorkspaceConfiguration(ctx context.Context, para
 	if params.Settings == nil {
 		return nil
 	} else if settings, ok := params.Settings.(map[string]any); ok {
-		s.session.Configure(lsutil.ParseNewUserConfig(settings))
+		s.session.Configure(lsutil.ParseUserPreferences(settings))
 	}
 	return nil
 }

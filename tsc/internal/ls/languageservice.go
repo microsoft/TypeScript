@@ -15,7 +15,7 @@ import (
 type LanguageService struct {
 	projectPath             tspath.Path
 	host                    Host
-	activeConfig            *lsutil.UserPreferences
+	activeConfig            lsutil.UserPreferences
 	program                 *compiler.Program
 	converters              *lsconv.Converters
 	documentPositionMappers map[string]*sourcemap.DocumentPositionMapper
@@ -45,14 +45,11 @@ func (l *LanguageService) GetProgram() *compiler.Program {
 	return l.program
 }
 
-func (l *LanguageService) UserPreferences() *lsutil.UserPreferences {
+func (l *LanguageService) UserPreferences() lsutil.UserPreferences {
 	return l.activeConfig
 }
 
-func (l *LanguageService) FormatOptions() *lsutil.FormatCodeSettings {
-	if l.activeConfig.FormatCodeSettings == nil {
-		return lsutil.GetDefaultFormatCodeSettings()
-	}
+func (l *LanguageService) FormatOptions() lsutil.FormatCodeSettings {
 	return l.activeConfig.FormatCodeSettings
 }
 

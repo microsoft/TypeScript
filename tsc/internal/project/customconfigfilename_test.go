@@ -39,7 +39,7 @@ func TestCustomConfigFileName(t *testing.T) {
 
 		prefs := lsutil.NewDefaultUserPreferences()
 		prefs.CustomConfigFileName = "tsconfig.all.json"
-		session.Configure(lsutil.NewUserConfig(prefs))
+		session.Configure(prefs)
 
 		ls, err = session.GetLanguageService(context.Background(), uri)
 		assert.NilError(t, err)
@@ -56,7 +56,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		prefs := lsutil.NewDefaultUserPreferences()
 		// default for CustomConfigFileName is "".
 		assert.Equal(t, prefs.CustomConfigFileName, "")
-		session.Configure(lsutil.NewUserConfig(prefs))
+		session.Configure(prefs)
 
 		session.DidOpenFile(context.Background(), uri, 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 		_, err := session.GetLanguageService(context.Background(), uri)
@@ -72,7 +72,7 @@ func TestCustomConfigFileName(t *testing.T) {
 
 		prefs := lsutil.NewDefaultUserPreferences()
 		prefs.CustomConfigFileName = "tsconfig.nonexistent.json"
-		session.Configure(lsutil.NewUserConfig(prefs))
+		session.Configure(prefs)
 
 		session.DidOpenFile(context.Background(), uri, 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 		_, err := session.GetLanguageService(context.Background(), uri)
@@ -98,7 +98,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		// Step 2: Switch to custom config (strict: true)
 		prefs := lsutil.NewDefaultUserPreferences()
 		prefs.CustomConfigFileName = "tsconfig.all.json"
-		session.Configure(lsutil.NewUserConfig(prefs))
+		session.Configure(prefs)
 
 		ls, err = session.GetLanguageService(context.Background(), uri)
 		assert.NilError(t, err)
@@ -110,7 +110,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		// Step 3: Clear custom config preference, should revert to tsconfig.json (strict: false)
 		prefs = lsutil.NewDefaultUserPreferences()
 		prefs.CustomConfigFileName = ""
-		session.Configure(lsutil.NewUserConfig(prefs))
+		session.Configure(prefs)
 
 		ls, err = session.GetLanguageService(context.Background(), uri)
 		assert.NilError(t, err)
@@ -138,7 +138,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		// Change the custom config preference
 		prefs := lsutil.NewDefaultUserPreferences()
 		prefs.CustomConfigFileName = "tsconfig.all.json"
-		session.Configure(lsutil.NewUserConfig(prefs))
+		session.Configure(prefs)
 
 		// GetLanguageService triggers the snapshot update with the new config
 		_, err = session.GetLanguageService(context.Background(), uri)
@@ -164,8 +164,13 @@ func TestCustomConfigFileName(t *testing.T) {
 			"..",
 			".",
 		} {
-			prefs := lsutil.NewDefaultUserPreferences()
-			prefs.Set("customConfigFileName", invalidName)
+			prefs := lsutil.ParseUserPreferences(map[string]any{
+				"js/ts": map[string]any{
+					"native-preview": map[string]any{
+						"customConfigFileName": invalidName,
+					},
+				},
+			})
 			assert.Equal(t, prefs.CustomConfigFileName, "",
 				"expected customConfigFileName to be cleared for invalid value %q", invalidName)
 		}
@@ -178,8 +183,13 @@ func TestCustomConfigFileName(t *testing.T) {
 			"tsconfig.editor.json",
 			"jsconfig.custom.json",
 		} {
-			prefs := lsutil.NewDefaultUserPreferences()
-			prefs.Set("customConfigFileName", validName)
+			prefs := lsutil.ParseUserPreferences(map[string]any{
+				"js/ts": map[string]any{
+					"native-preview": map[string]any{
+						"customConfigFileName": validName,
+					},
+				},
+			})
 			assert.Equal(t, prefs.CustomConfigFileName, validName,
 				"expected customConfigFileName to be %q", validName)
 		}
@@ -211,7 +221,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		// Now set custom config to pick up tsconfig.all.json
 		prefs := lsutil.NewDefaultUserPreferences()
 		prefs.CustomConfigFileName = "tsconfig.all.json"
-		session.Configure(lsutil.NewUserConfig(prefs))
+		session.Configure(prefs)
 
 		_, err = session.GetLanguageService(context.Background(), uriLocal)
 		assert.NilError(t, err)

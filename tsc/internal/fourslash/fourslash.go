@@ -56,7 +56,7 @@ type FourslashTest struct {
 
 	stateEnableFormatting   bool
 	reportFormatOnTypeCrash bool
-	userPreferences         *lsutil.UserPreferences
+	userPreferences         lsutil.UserPreferences
 	currentCaretPosition    lsproto.Position
 	lastKnownMarkerName     *string
 	activeFilename          string
@@ -184,7 +184,7 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 		testData:                &testData,
 		stateEnableFormatting:   true,
 		reportFormatOnTypeCrash: true,
-		userPreferences:         lsutil.NewDefaultUserPreferences(), // !!! parse default preferences for fourslash case?
+		userPreferences:         lsutil.NewDefaultUserPreferences(),
 		vfs:                     fs,
 		scriptInfos:             scriptInfos,
 		converters:              converters,
@@ -224,11 +224,27 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 func (f *FourslashTest) handleServerRequest(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 	switch req.Method {
 	case lsproto.MethodWorkspaceConfiguration:
-		// Return current user preferences
+		// Return current user preferences for each requested section.
+		// The server requests multiple sections (js/ts, typescript, javascript, editor);
+		// we return user preferences for "js/ts" and nil for others.
+		params, ok := req.Params.(*lsproto.ConfigurationParams)
+		if !ok || params == nil || params.Items == nil {
+			return &lsproto.ResponseMessage{
+				ID:      req.ID,
+				JSONRPC: req.JSONRPC,
+				Result:  []any{f.userPreferences},
+			}
+		}
+		results := make([]any, len(params.Items))
+		for i, item := range params.Items {
+			if item.Section != nil && *item.Section == "js/ts" {
+				results[i] = f.userPreferences
+			}
+		}
 		return &lsproto.ResponseMessage{
 			ID:      req.ID,
 			JSONRPC: req.JSONRPC,
-			Result:  []any{f.userPreferences},
+			Result:  results,
 		}
 
 	case lsproto.MethodClientRegisterCapability:
@@ -574,12 +590,11 @@ func (f *FourslashTest) updateState(method lsproto.Method, params any) {
 	}
 }
 
-func (f *FourslashTest) GetOptions() *lsutil.UserPreferences {
+func (f *FourslashTest) GetOptions() lsutil.UserPreferences {
 	return f.userPreferences
 }
 
-func (f *FourslashTest) Configure(t *testing.T, config *lsutil.UserPreferences) {
-	// !!!
+func (f *FourslashTest) Configure(t *testing.T, config lsutil.UserPreferences) {
 	// We send 'js/ts' by default because that is what we expect the primary config to be in vscode and VS (one
 	// set of preferences for both languages). This should be fine in fourslash since tests that need
 	// multiple options usually send reconfiguration commands for each `verify` anyways
@@ -591,8 +606,8 @@ func (f *FourslashTest) Configure(t *testing.T, config *lsutil.UserPreferences) 
 	})
 }
 
-func (f *FourslashTest) ConfigureWithReset(t *testing.T, config *lsutil.UserPreferences) (reset func()) {
-	originalConfig := f.userPreferences.Copy()
+func (f *FourslashTest) ConfigureWithReset(t *testing.T, config lsutil.UserPreferences) (reset func()) {
+	originalConfig := f.userPreferences
 	f.Configure(t, config)
 	return func() {
 		f.Configure(t, originalConfig)
@@ -1024,7 +1039,7 @@ func (f *FourslashTest) getCompletions(t *testing.T, userPreferences *lsutil.Use
 		Context:  &lsproto.CompletionContext{},
 	}
 	if userPreferences != nil {
-		reset := f.ConfigureWithReset(t, userPreferences)
+		reset := f.ConfigureWithReset(t, *userPreferences)
 		defer reset()
 	}
 	result := sendRequest(t, f, lsproto.TextDocumentCompletionInfo, params)
@@ -1367,7 +1382,7 @@ func (f *FourslashTest) VerifyOrganizeImports(t *testing.T, expectedContent stri
 	t.Helper()
 
 	if preferences != nil {
-		reset := f.ConfigureWithReset(t, preferences)
+		reset := f.ConfigureWithReset(t, *preferences)
 		defer reset()
 	}
 
@@ -1436,10 +1451,10 @@ func (f *FourslashTest) VerifyApplyCodeActionFromCompletion(t *testing.T, marker
 		userPreferences = options.UserPreferences
 	} else {
 		// Default preferences: enables auto-imports
-		userPreferences = lsutil.NewDefaultUserPreferences()
+		userPreferences = new(lsutil.NewDefaultUserPreferences())
 	}
 
-	reset := f.ConfigureWithReset(t, userPreferences)
+	reset := f.ConfigureWithReset(t, *userPreferences)
 	defer reset()
 	completionsList := f.getCompletions(t, nil) // Already configured, so we do not need to pass it in again
 	items := core.Filter(completionsList.Items, func(item *lsproto.CompletionItem) bool {
@@ -1518,7 +1533,7 @@ func (f *FourslashTest) VerifyImportFixAtPosition(t *testing.T, expectedTexts []
 	}
 
 	if preferences != nil {
-		reset := f.ConfigureWithReset(t, preferences)
+		reset := f.ConfigureWithReset(t, *preferences)
 		defer reset()
 	}
 
@@ -1637,7 +1652,7 @@ func (f *FourslashTest) VerifyImportFixModuleSpecifiers(
 	f.GoToMarker(t, markerName)
 
 	if preferences != nil {
-		reset := f.ConfigureWithReset(t, preferences)
+		reset := f.ConfigureWithReset(t, *preferences)
 		defer reset()
 	}
 
@@ -1766,7 +1781,7 @@ func (f *FourslashTest) VerifyBaselineFindAllReferences(
 
 func (f *FourslashTest) VerifyBaselineCodeLens(t *testing.T, preferences *lsutil.UserPreferences) {
 	if preferences != nil {
-		reset := f.ConfigureWithReset(t, preferences)
+		reset := f.ConfigureWithReset(t, *preferences)
 		defer reset()
 	}
 
@@ -3518,13 +3533,13 @@ func (f *FourslashTest) getCurrentPositionPrefix() string {
 
 func (f *FourslashTest) BaselineAutoImportsCompletions(t *testing.T, markerNames []string) {
 	t.Helper()
-	reset := f.ConfigureWithReset(t, &lsutil.UserPreferences{
+	reset := f.ConfigureWithReset(t, lsutil.UserPreferences{
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
-		ImportModuleSpecifierEnding:           f.userPreferences.ImportModuleSpecifierEnding,
 		ImportModuleSpecifierPreference:       f.userPreferences.ImportModuleSpecifierPreference,
-		AutoImportFileExcludePatterns:         f.userPreferences.AutoImportFileExcludePatterns,
+		ImportModuleSpecifierEnding:           f.userPreferences.ImportModuleSpecifierEnding,
 		AutoImportSpecifierExcludeRegexes:     f.userPreferences.AutoImportSpecifierExcludeRegexes,
+		AutoImportFileExcludePatterns:         f.userPreferences.AutoImportFileExcludePatterns,
 		PreferTypeOnlyAutoImports:             f.userPreferences.PreferTypeOnlyAutoImports,
 	})
 	defer reset()
@@ -3644,7 +3659,7 @@ func (f *FourslashTest) verifyBaselineRename(
 	markerOrRanges []MarkerOrRange,
 ) {
 	if preferences != nil {
-		defer f.ConfigureWithReset(t, preferences)()
+		defer f.ConfigureWithReset(t, *preferences)()
 	}
 
 	for _, markerOrRange := range markerOrRanges {
@@ -3722,7 +3737,7 @@ func (f *FourslashTest) verifyBaselineRename(
 
 func (f *FourslashTest) VerifyRenameSucceeded(t *testing.T, preferences *lsutil.UserPreferences) {
 	if preferences != nil {
-		defer f.ConfigureWithReset(t, preferences)()
+		defer f.ConfigureWithReset(t, *preferences)()
 	}
 	params := &lsproto.PrepareRenameParams{
 		TextDocument: lsproto.TextDocumentIdentifier{
@@ -3752,7 +3767,7 @@ func (f *FourslashTest) VerifyRenameSucceeded(t *testing.T, preferences *lsutil.
 
 func (f *FourslashTest) VerifyRenameFailed(t *testing.T, preferences *lsutil.UserPreferences) {
 	if preferences != nil {
-		defer f.ConfigureWithReset(t, preferences)()
+		defer f.ConfigureWithReset(t, *preferences)()
 	}
 	params := &lsproto.PrepareRenameParams{
 		TextDocument: lsproto.TextDocumentIdentifier{
@@ -3848,9 +3863,9 @@ func (f *FourslashTest) VerifyBaselineInlayHints(
 
 	preferences := testPreferences
 	if preferences == nil {
-		preferences = lsutil.NewDefaultUserPreferences()
+		preferences = new(lsutil.NewDefaultUserPreferences())
 	}
-	reset := f.ConfigureWithReset(t, preferences)
+	reset := f.ConfigureWithReset(t, *preferences)
 	defer reset()
 
 	prefix := fmt.Sprintf("At position (Ln %d, Col %d): ", lspRange.Start.Line, lspRange.Start.Character)
@@ -4275,13 +4290,13 @@ type VerifyWorkspaceSymbolCase struct {
 
 // `verify.navigateTo` in Strada.
 func (f *FourslashTest) VerifyWorkspaceSymbol(t *testing.T, cases []*VerifyWorkspaceSymbolCase) {
-	originalPreferences := f.userPreferences.Copy()
+	originalPreferences := f.userPreferences
 	for _, testCase := range cases {
 		preferences := testCase.Preferences
 		if preferences == nil {
-			preferences = lsutil.NewDefaultUserPreferences()
+			preferences = new(lsutil.NewDefaultUserPreferences())
 		}
-		f.Configure(t, preferences)
+		f.Configure(t, *preferences)
 		result := sendRequest(t, f, lsproto.WorkspaceSymbolInfo, &lsproto.WorkspaceSymbolParams{Query: testCase.Pattern})
 		if result.SymbolInformations == nil {
 			t.Fatalf("Expected non-nil symbol information array from workspace symbol request")

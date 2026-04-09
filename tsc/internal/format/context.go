@@ -23,10 +23,10 @@ type FormattingContext struct {
 
 	SourceFile            *ast.SourceFile
 	FormattingRequestKind FormatRequestKind
-	Options               *lsutil.FormatCodeSettings
+	Options               lsutil.FormatCodeSettings
 }
 
-func NewFormattingContext(file *ast.SourceFile, kind FormatRequestKind, options *lsutil.FormatCodeSettings) *FormattingContext {
+func NewFormattingContext(file *ast.SourceFile, kind FormatRequestKind, options lsutil.FormatCodeSettings) *FormattingContext {
 	res := &FormattingContext{
 		SourceFile:            file,
 		FormattingRequestKind: kind,

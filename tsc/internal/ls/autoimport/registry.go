@@ -82,7 +82,7 @@ func (b BucketState) DirtyPackages() *collections.Set[string] {
 	return b.dirtyPackages
 }
 
-func (b BucketState) possiblyNeedsRebuildForFile(file tspath.Path, preferences *lsutil.UserPreferences) bool {
+func (b BucketState) possiblyNeedsRebuildForFile(file tspath.Path, preferences lsutil.UserPreferences) bool {
 	return b.newProgramStructure > 0 ||
 		b.hasDirtyFileBesides(file) ||
 		!core.UnorderedEqual(b.fileExcludePatterns, preferences.AutoImportFileExcludePatterns) ||
@@ -192,7 +192,7 @@ func (d *directory) Clone() *directory {
 
 type Registry struct {
 	toPath          func(fileName string) tspath.Path
-	userPreferences *lsutil.UserPreferences
+	userPreferences lsutil.UserPreferences
 
 	// exports      map[tspath.Path][]*RawExport
 	directories map[tspath.Path]*directory
@@ -208,7 +208,7 @@ type Registry struct {
 	specifierCache map[tspath.Path]*collections.SyncMap[tspath.Path, string]
 }
 
-func NewRegistry(toPath func(fileName string) tspath.Path, preferences *lsutil.UserPreferences) *Registry {
+func NewRegistry(toPath func(fileName string) tspath.Path, preferences lsutil.UserPreferences) *Registry {
 	return &Registry{
 		toPath:          toPath,
 		userPreferences: preferences,
@@ -216,7 +216,7 @@ func NewRegistry(toPath func(fileName string) tspath.Path, preferences *lsutil.U
 	}
 }
 
-func (r *Registry) IsPreparedForImportingFile(fileName string, projectPath tspath.Path, preferences *lsutil.UserPreferences) bool {
+func (r *Registry) IsPreparedForImportingFile(fileName string, projectPath tspath.Path, preferences lsutil.UserPreferences) bool {
 	if r == nil {
 		return false
 	}
@@ -262,7 +262,7 @@ func (r *Registry) Clone(ctx context.Context, change RegistryChange, host Regist
 	}
 	builder := newRegistryBuilder(r, host)
 	if change.UserPreferences != nil {
-		builder.userPreferences = change.UserPreferences
+		builder.userPreferences = *change.UserPreferences
 		if !core.UnorderedEqual(builder.userPreferences.AutoImportSpecifierExcludeRegexes, r.userPreferences.AutoImportSpecifierExcludeRegexes) {
 			builder.specifierCache.Clear()
 		}
@@ -376,7 +376,7 @@ type registryBuilder struct {
 	host RegistryCloneHost
 	base *Registry
 
-	userPreferences *lsutil.UserPreferences
+	userPreferences lsutil.UserPreferences
 	directories     *dirty.Map[tspath.Path, *directory]
 	nodeModules     *dirty.Map[tspath.Path, *RegistryBucket]
 	projects        *dirty.Map[tspath.Path, *RegistryBucket]
@@ -392,7 +392,7 @@ func newRegistryBuilder(registry *Registry, host RegistryCloneHost) *registryBui
 		host: host,
 		base: registry,
 
-		userPreferences:    registry.userPreferences.OrDefault(),
+		userPreferences:    registry.userPreferences,
 		directories:        dirty.NewMap(registry.directories),
 		nodeModules:        dirty.NewMap(registry.nodeModules),
 		projects:           dirty.NewMap(registry.projects),

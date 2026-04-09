@@ -3,6 +3,7 @@ package fourslash_test
 import (
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -31,12 +32,12 @@ foo(Math.random() ? 1 : "hello");
 	defer done()
 	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
 		CodeLens: lsutil.CodeLensUserPreferences{
-			ReferencesCodeLensEnabled:            true,
-			ReferencesCodeLensShowOnAllFunctions: true,
+			ReferencesCodeLensEnabled:            core.TSTrue,
+			ReferencesCodeLensShowOnAllFunctions: core.TSTrue,
 
-			ImplementationsCodeLensEnabled:                true,
-			ImplementationsCodeLensShowOnInterfaceMethods: true,
-			ImplementationsCodeLensShowOnAllClassMethods:  true,
+			ImplementationsCodeLensEnabled:                core.TSTrue,
+			ImplementationsCodeLensShowOnInterfaceMethods: core.TSTrue,
+			ImplementationsCodeLensShowOnAllClassMethods:  core.TSTrue,
 		},
 	})
 }

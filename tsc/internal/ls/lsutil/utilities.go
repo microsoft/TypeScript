@@ -94,7 +94,7 @@ func QuotePreferenceFromString(str *ast.StringLiteral) QuotePreference {
 	return QuotePreferenceDouble
 }
 
-func GetQuotePreference(sourceFile *ast.SourceFile, preferences *UserPreferences) QuotePreference {
+func GetQuotePreference(sourceFile *ast.SourceFile, preferences UserPreferences) QuotePreference {
 	if preferences.QuotePreference != "" && preferences.QuotePreference != "auto" {
 		if preferences.QuotePreference == "single" {
 			return QuotePreferenceSingle

@@ -416,7 +416,7 @@ func (l *LanguageService) getCompletionData(
 	typeChecker *checker.Checker,
 	file *ast.SourceFile,
 	position int,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 	forItemResolve bool,
 ) (completionData, error) {
 	inCheckedFile := isCheckedFile(file, l.GetProgram().Options())
@@ -1943,7 +1943,7 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 
 func completionNameForLiteral(
 	file *ast.SourceFile,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 	literal literalValue,
 ) string {
 	switch literal := literal.(type) {
@@ -1960,7 +1960,7 @@ func completionNameForLiteral(
 
 func createCompletionItemForLiteral(
 	file *ast.SourceFile,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 	literal literalValue,
 ) *lsproto.CompletionItem {
 	return &lsproto.CompletionItem{
@@ -3049,7 +3049,7 @@ func (l *LanguageService) createRangeFromStringLiteralLikeContent(file *ast.Sour
 	return new(l.createLspRangeFromBounds(nodeStart+1, replacementEnd, file))
 }
 
-func quotePropertyName(file *ast.SourceFile, preferences *lsutil.UserPreferences, name string) string {
+func quotePropertyName(file *ast.SourceFile, preferences lsutil.UserPreferences, name string) string {
 	r, _ := utf8.DecodeRuneInString(name)
 	if unicode.IsDigit(r) {
 		return name
@@ -5423,7 +5423,7 @@ func getJSDocParameterCompletions(
 	position int,
 	typeChecker *checker.Checker,
 	options *core.CompilerOptions,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 	tagNameOnly bool,
 ) []*lsproto.CompletionItem {
 	currentToken := astnav.GetTokenAtPosition(file, position)
@@ -5565,7 +5565,7 @@ func getJSDocParamAnnotation(
 	isSnippet bool,
 	typeChecker *checker.Checker,
 	options *core.CompilerOptions,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 	tabstopCounter *int,
 ) string {
 	if isSnippet {
@@ -5656,7 +5656,7 @@ func generateJSDocParamTagsForDestructuring(
 	isSnippet bool,
 	typeChecker *checker.Checker,
 	options *core.CompilerOptions,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 ) []string {
 	tabstopCounter := 1
 	if !isJS {
@@ -5696,7 +5696,7 @@ func jsDocParamPatternWorker(
 	isSnippet bool,
 	typeChecker *checker.Checker,
 	options *core.CompilerOptions,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 	counter *int,
 ) []string {
 	if ast.IsObjectBindingPattern(pattern) && dotDotDotToken == nil {
@@ -5765,7 +5765,7 @@ func jsDocParamElementWorker(
 	isSnippet bool,
 	typeChecker *checker.Checker,
 	options *core.CompilerOptions,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 	counter *int,
 ) []string {
 	if ast.IsIdentifier(element.Name()) { // `{ b }` or `{ b: newB }`

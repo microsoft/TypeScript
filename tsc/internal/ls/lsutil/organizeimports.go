@@ -31,8 +31,8 @@ func FilterImportDeclarations(statements []*ast.Statement) []*ast.Statement {
 }
 
 // GetDetectionLists returns the lists of comparers and type orders to test for organize imports detection.
-func GetDetectionLists(preferences *UserPreferences) (comparersToTest []func(a, b string) int, typeOrdersToTest []OrganizeImportsTypeOrder) {
-	if preferences != nil && !preferences.OrganizeImportsIgnoreCase.IsUnknown() {
+func GetDetectionLists(preferences UserPreferences) (comparersToTest []func(a, b string) int, typeOrdersToTest []OrganizeImportsTypeOrder) {
+	if !preferences.OrganizeImportsIgnoreCase.IsUnknown() {
 		ignoreCase := preferences.OrganizeImportsIgnoreCase.IsTrue()
 		comparersToTest = []func(a, b string) int{getOrganizeImportsStringComparer(preferences, ignoreCase)}
 	} else {
@@ -42,7 +42,7 @@ func GetDetectionLists(preferences *UserPreferences) (comparersToTest []func(a, 
 		}
 	}
 
-	if preferences != nil && preferences.OrganizeImportsTypeOrder != OrganizeImportsTypeOrderAuto {
+	if preferences.OrganizeImportsTypeOrder != OrganizeImportsTypeOrderAuto {
 		typeOrdersToTest = []OrganizeImportsTypeOrder{preferences.OrganizeImportsTypeOrder}
 	} else {
 		typeOrdersToTest = []OrganizeImportsTypeOrder{
@@ -62,18 +62,12 @@ func getOrganizeImportsOrdinalStringComparer(ignoreCase bool) func(a, b string) 
 	return stringutil.CompareStringsCaseSensitive
 }
 
-func getOrganizeImportsUnicodeStringComparer(ignoreCase bool, preferences *UserPreferences) func(a, b string) int {
+func getOrganizeImportsUnicodeStringComparer(ignoreCase bool, preferences UserPreferences) func(a, b string) int {
 	resolvedLocale := getOrganizeImportsLocale(preferences)
 
-	caseFirst := OrganizeImportsCaseFirstFalse
-	numeric := false
-	accents := true
-
-	if preferences != nil {
-		caseFirst = preferences.OrganizeImportsCaseFirst
-		numeric = preferences.OrganizeImportsNumericCollation
-		accents = preferences.OrganizeImportsAccentCollation
-	}
+	caseFirst := preferences.OrganizeImportsCaseFirst
+	numeric := preferences.OrganizeImportsNumericCollation.IsTrue()
+	accents := !preferences.OrganizeImportsAccentCollation.IsFalse()
 
 	tag, _ := language.Parse(resolvedLocale)
 
@@ -158,9 +152,9 @@ func getOrganizeImportsUnicodeStringComparer(ignoreCase bool, preferences *UserP
 	}
 }
 
-func getOrganizeImportsLocale(preferences *UserPreferences) string {
+func getOrganizeImportsLocale(preferences UserPreferences) string {
 	localeStr := "en"
-	if preferences != nil && preferences.OrganizeImportsLocale != "" {
+	if preferences.OrganizeImportsLocale != "" {
 		localeStr = preferences.OrganizeImportsLocale
 	}
 
@@ -180,11 +174,8 @@ func getOrganizeImportsLocale(preferences *UserPreferences) string {
 	return "en"
 }
 
-func getOrganizeImportsStringComparer(preferences *UserPreferences, ignoreCase bool) func(a, b string) int {
-	collation := OrganizeImportsCollationOrdinal
-	if preferences != nil {
-		collation = preferences.OrganizeImportsCollation
-	}
+func getOrganizeImportsStringComparer(preferences UserPreferences, ignoreCase bool) func(a, b string) int {
+	collation := preferences.OrganizeImportsCollation
 
 	if collation == OrganizeImportsCollationUnicode {
 		return getOrganizeImportsUnicodeStringComparer(ignoreCase, preferences)
@@ -298,11 +289,8 @@ func CompareImportsOrRequireStatements(s1 *ast.Statement, s2 *ast.Statement, com
 	return compareImportKind(s1, s2)
 }
 
-func compareImportOrExportSpecifiers(s1 *ast.Node, s2 *ast.Node, comparer func(a, b string) int, preferences *UserPreferences) int {
-	typeOrder := OrganizeImportsTypeOrderLast
-	if preferences != nil {
-		typeOrder = preferences.OrganizeImportsTypeOrder
-	}
+func compareImportOrExportSpecifiers(s1 *ast.Node, s2 *ast.Node, comparer func(a, b string) int, preferences UserPreferences) int {
+	typeOrder := preferences.OrganizeImportsTypeOrder
 
 	s1Name := s1.Name().Text()
 	s2Name := s2.Name().Text()
@@ -324,10 +312,10 @@ func compareImportOrExportSpecifiers(s1 *ast.Node, s2 *ast.Node, comparer func(a
 }
 
 // GetNamedImportSpecifierComparer returns a comparer function for sorting import specifiers.
-func GetNamedImportSpecifierComparer(preferences *UserPreferences, comparer func(a, b string) int) func(s1, s2 *ast.Node) int {
+func GetNamedImportSpecifierComparer(preferences UserPreferences, comparer func(a, b string) int) func(s1, s2 *ast.Node) int {
 	if comparer == nil {
 		ignoreCase := false
-		if preferences != nil && !preferences.OrganizeImportsIgnoreCase.IsUnknown() {
+		if !preferences.OrganizeImportsIgnoreCase.IsUnknown() {
 			ignoreCase = preferences.OrganizeImportsIgnoreCase.IsTrue()
 		}
 		comparer = getOrganizeImportsOrdinalStringComparer(ignoreCase)
@@ -352,19 +340,17 @@ func GetImportDeclarationInsertIndex(sortedImports []*ast.Statement, newImport *
 }
 
 // GetOrganizeImportsStringComparerWithDetection returns a string comparer based on detecting the order of import statements by the module specifier
-func GetOrganizeImportsStringComparerWithDetection(originalImportDecls []*ast.Statement, preferences *UserPreferences) (comparer func(a, b string) int, isSorted bool) {
+func GetOrganizeImportsStringComparerWithDetection(originalImportDecls []*ast.Statement, preferences UserPreferences) (comparer func(a, b string) int, isSorted bool) {
 	result, sorted := DetectModuleSpecifierCaseBySort([][]*ast.Statement{originalImportDecls}, getComparers(preferences))
 	return result, sorted
 }
 
-func getComparers(preferences *UserPreferences) []func(a string, b string) int {
-	if preferences != nil {
-		switch preferences.OrganizeImportsIgnoreCase {
-		case core.TSTrue:
-			return caseInsensitiveOrganizeImportsComparer
-		case core.TSFalse:
-			return caseSensitiveOrganizeImportsComparer
-		}
+func getComparers(preferences UserPreferences) []func(a string, b string) int {
+	switch preferences.OrganizeImportsIgnoreCase {
+	case core.TSTrue:
+		return caseInsensitiveOrganizeImportsComparer
+	case core.TSFalse:
+		return caseSensitiveOrganizeImportsComparer
 	}
 
 	return organizeImportsComparers
@@ -480,7 +466,7 @@ func detectNamedImportOrganizationBySort(
 
 		for _, importDecl := range namedImportsByDecl {
 			for _, typeOrder := range typesToTest {
-				prefs := &UserPreferences{OrganizeImportsTypeOrder: typeOrder}
+				prefs := UserPreferences{OrganizeImportsTypeOrder: typeOrder}
 				diff := measureSortedness(importDecl, func(n1, n2 *ast.Node) int {
 					return compareImportOrExportSpecifiers(n1, n2, curComparer, prefs)
 				})
@@ -585,7 +571,7 @@ func measureSortedness[T any](arr []T, comparer func(a, b T) int) int {
 }
 
 // GetNamedImportSpecifierComparerWithDetection returns a specifier comparer based on detecting the existing sort order within a single import statement
-func GetNamedImportSpecifierComparerWithDetection(importDecl *ast.Node, sourceFile *ast.SourceFile, preferences *UserPreferences) (specifierComparer func(s1, s2 *ast.Node) int, isSorted core.Tristate) {
+func GetNamedImportSpecifierComparerWithDetection(importDecl *ast.Node, sourceFile *ast.SourceFile, preferences UserPreferences) (specifierComparer func(s1, s2 *ast.Node) int, isSorted core.Tristate) {
 	comparersToTest, typeOrdersToTest := GetDetectionLists(preferences)
 
 	var importStmt *ast.Statement
@@ -596,12 +582,12 @@ func GetNamedImportSpecifierComparerWithDetection(importDecl *ast.Node, sourceFi
 	specifierComparer = GetNamedImportSpecifierComparer(preferences, comparersToTest[0])
 	isSorted = core.TSUnknown
 
-	if (preferences == nil || preferences.OrganizeImportsIgnoreCase.IsUnknown() || preferences.OrganizeImportsTypeOrder == OrganizeImportsTypeOrderAuto) && importStmt != nil {
+	if (preferences.OrganizeImportsIgnoreCase.IsUnknown() || preferences.OrganizeImportsTypeOrder == OrganizeImportsTypeOrderAuto) && importStmt != nil {
 		detectFromDecl := detectNamedImportOrganizationBySort([]*ast.Statement{importStmt}, comparersToTest, typeOrdersToTest)
 		if detectFromDecl != nil {
 			isSorted = core.BoolToTristate(detectFromDecl.isSorted)
 			specifierComparer = GetNamedImportSpecifierComparer(
-				&UserPreferences{OrganizeImportsTypeOrder: detectFromDecl.typeOrder},
+				UserPreferences{OrganizeImportsTypeOrder: detectFromDecl.typeOrder},
 				detectFromDecl.namedImportComparer,
 			)
 		} else if sourceFile != nil {
@@ -610,7 +596,7 @@ func GetNamedImportSpecifierComparerWithDetection(importDecl *ast.Node, sourceFi
 			if detectFromFile != nil {
 				isSorted = core.BoolToTristate(detectFromFile.isSorted)
 				specifierComparer = GetNamedImportSpecifierComparer(
-					&UserPreferences{OrganizeImportsTypeOrder: detectFromFile.typeOrder},
+					UserPreferences{OrganizeImportsTypeOrder: detectFromFile.typeOrder},
 					detectFromFile.namedImportComparer,
 				)
 			}

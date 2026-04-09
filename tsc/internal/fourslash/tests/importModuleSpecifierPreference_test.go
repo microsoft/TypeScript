@@ -21,7 +21,7 @@ helper/**/`
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.Configure(t, &lsutil.UserPreferences{
+	f.Configure(t, lsutil.UserPreferences{
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
 		ImportModuleSpecifierPreference:       modulespecifiers.ImportModuleSpecifierPreferenceShortest,
@@ -48,7 +48,7 @@ helper/**/`
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.Configure(t, &lsutil.UserPreferences{
+	f.Configure(t, lsutil.UserPreferences{
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
 		ImportModuleSpecifierPreference:       modulespecifiers.ImportModuleSpecifierPreferenceProjectRelative,
@@ -75,7 +75,7 @@ helper/**/`
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.Configure(t, &lsutil.UserPreferences{
+	f.Configure(t, lsutil.UserPreferences{
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
 		ImportModuleSpecifierPreference:       modulespecifiers.ImportModuleSpecifierPreferenceRelative,
@@ -111,7 +111,7 @@ helper/**/`
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.Configure(t, &lsutil.UserPreferences{
+	f.Configure(t, lsutil.UserPreferences{
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
 		ImportModuleSpecifierPreference:       modulespecifiers.ImportModuleSpecifierPreferenceNonRelative,

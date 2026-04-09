@@ -160,7 +160,7 @@ func organizeImportsWorker(
 		}
 
 		specifierComparer := lsutil.GetNamedImportSpecifierComparer(
-			&lsutil.UserPreferences{OrganizeImportsTypeOrder: comparer.typeOrder},
+			lsutil.UserPreferences{OrganizeImportsTypeOrder: comparer.typeOrder},
 			comparer.namedImportComparer,
 		)
 
@@ -788,7 +788,7 @@ func organizeExportsWorker(
 	}
 
 	specifierComparerFunc := lsutil.GetNamedImportSpecifierComparer(
-		&lsutil.UserPreferences{OrganizeImportsTypeOrder: comparer.typeOrder},
+		lsutil.UserPreferences{OrganizeImportsTypeOrder: comparer.typeOrder},
 		comparer.namedImportComparer,
 	)
 

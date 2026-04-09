@@ -15,140 +15,122 @@ import (
 ///
 
 type (
-	optionSelector                  = func(options *lsutil.FormatCodeSettings) core.Tristate
-	anyOptionSelector[T comparable] = func(options *lsutil.FormatCodeSettings) T
+	optionSelector                  = func(options lsutil.FormatCodeSettings) core.Tristate
+	anyOptionSelector[T comparable] = func(options lsutil.FormatCodeSettings) T
 )
 
-func semicolonOption(options *lsutil.FormatCodeSettings) lsutil.SemicolonPreference {
+func semicolonOption(options lsutil.FormatCodeSettings) lsutil.SemicolonPreference {
 	return options.Semicolons
 }
 
-func insertSpaceAfterCommaDelimiterOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceAfterCommaDelimiterOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterCommaDelimiter
 }
 
-func insertSpaceAfterSemicolonInForStatementsOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceAfterSemicolonInForStatementsOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterSemicolonInForStatements
 }
 
-func insertSpaceBeforeAndAfterBinaryOperatorsOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceBeforeAndAfterBinaryOperatorsOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceBeforeAndAfterBinaryOperators
 }
 
-func insertSpaceAfterConstructorOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceAfterConstructorOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterConstructor
 }
 
-func insertSpaceAfterKeywordsInControlFlowStatementsOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceAfterKeywordsInControlFlowStatementsOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterKeywordsInControlFlowStatements
 }
 
-func insertSpaceAfterFunctionKeywordForAnonymousFunctionsOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceAfterFunctionKeywordForAnonymousFunctionsOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterFunctionKeywordForAnonymousFunctions
 }
 
-func insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesisOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesisOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis
 }
 
-func insertSpaceAfterOpeningAndBeforeClosingNonemptyBracketsOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceAfterOpeningAndBeforeClosingNonemptyBracketsOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets
 }
 
-func insertSpaceAfterOpeningAndBeforeClosingNonemptyBracesOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceAfterOpeningAndBeforeClosingNonemptyBracesOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces
 }
 
-func insertSpaceAfterOpeningAndBeforeClosingEmptyBracesOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceAfterOpeningAndBeforeClosingEmptyBracesOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterOpeningAndBeforeClosingEmptyBraces
 }
 
-func insertSpaceAfterOpeningAndBeforeClosingTemplateStringBracesOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceAfterOpeningAndBeforeClosingTemplateStringBracesOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces
 }
 
-func insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBracesOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBracesOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces
 }
 
-func insertSpaceAfterTypeAssertionOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceAfterTypeAssertionOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterTypeAssertion
 }
 
-func insertSpaceBeforeFunctionParenthesisOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceBeforeFunctionParenthesisOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceBeforeFunctionParenthesis
 }
 
-func placeOpenBraceOnNewLineForFunctionsOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func placeOpenBraceOnNewLineForFunctionsOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.PlaceOpenBraceOnNewLineForFunctions
 }
 
-func placeOpenBraceOnNewLineForControlBlocksOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func placeOpenBraceOnNewLineForControlBlocksOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.PlaceOpenBraceOnNewLineForControlBlocks
 }
 
-func insertSpaceBeforeTypeAnnotationOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func insertSpaceBeforeTypeAnnotationOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceBeforeTypeAnnotation
 }
 
-func indentMultiLineObjectLiteralBeginningOnBlankLineOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func indentMultiLineObjectLiteralBeginningOnBlankLineOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.IndentMultiLineObjectLiteralBeginningOnBlankLine
 }
 
-func indentSwitchCaseOption(options *lsutil.FormatCodeSettings) core.Tristate {
+func indentSwitchCaseOption(options lsutil.FormatCodeSettings) core.Tristate {
 	return options.IndentSwitchCase
 }
 
 func optionEquals[T comparable](optionName anyOptionSelector[T], optionValue T) contextPredicate {
 	return func(context *FormattingContext) bool {
-		if context.Options == nil {
-			return false
-		}
 		return optionName(context.Options) == optionValue
 	}
 }
 
 func isOptionEnabled(optionName optionSelector) contextPredicate {
 	return func(context *FormattingContext) bool {
-		if context.Options == nil {
-			return false
-		}
 		return optionName(context.Options).IsTrue()
 	}
 }
 
 func isOptionDisabled(optionName optionSelector) contextPredicate {
 	return func(context *FormattingContext) bool {
-		if context.Options == nil {
-			return true
-		}
 		return optionName(context.Options).IsFalse()
 	}
 }
 
 func isOptionDisabledOrUndefined(optionName optionSelector) contextPredicate {
 	return func(context *FormattingContext) bool {
-		if context.Options == nil {
-			return true
-		}
 		return optionName(context.Options).IsFalseOrUnknown()
 	}
 }
 
 func isOptionDisabledOrUndefinedOrTokensOnSameLine(optionName optionSelector) contextPredicate {
 	return func(context *FormattingContext) bool {
-		if context.Options == nil {
-			return true
-		}
 		return optionName(context.Options).IsFalseOrUnknown() || context.TokensAreOnSameLine()
 	}
 }
 
 func isOptionEnabledOrUndefined(optionName optionSelector) contextPredicate {
 	return func(context *FormattingContext) bool {
-		if context.Options == nil {
-			return true
-		}
 		return optionName(context.Options).IsTrueOrUnknown()
 	}
 }

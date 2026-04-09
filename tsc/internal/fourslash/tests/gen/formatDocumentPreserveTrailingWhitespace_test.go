@@ -6,6 +6,7 @@ package fourslash_test
 import (
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -27,7 +28,7 @@ function b(){
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	opts233 := f.GetOptions()
-	opts233.FormatCodeSettings.TrimTrailingWhitespace = false
+	opts233.FormatCodeSettings.TrimTrailingWhitespace = core.TSFalse
 	f.Configure(t, opts233)
 	f.FormatDocument(t, "")
 	f.VerifyCurrentFileContent(t, `

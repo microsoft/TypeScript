@@ -39,15 +39,15 @@ func TestFormat(t *testing.T) {
 
 	t.Run("format checker.ts", func(t *testing.T) {
 		t.Parallel()
-		ctx := format.WithFormatCodeSettings(t.Context(), &lsutil.FormatCodeSettings{
+		ctx := format.WithFormatCodeSettings(t.Context(), lsutil.FormatCodeSettings{
 			EditorSettings: lsutil.EditorSettings{
 				TabSize:                4,
 				IndentSize:             4,
 				BaseIndentSize:         4,
 				NewLineCharacter:       "\n",
-				ConvertTabsToSpaces:    true,
+				ConvertTabsToSpaces:    core.TSTrue,
 				IndentStyle:            lsutil.IndentStyleSmart,
-				TrimTrailingWhitespace: true,
+				TrimTrailingWhitespace: core.TSTrue,
 			},
 			InsertSpaceBeforeTypeAnnotation: core.TSTrue,
 		}, "\n")
@@ -68,15 +68,15 @@ func TestFormat(t *testing.T) {
 }
 
 func BenchmarkFormat(b *testing.B) {
-	ctx := format.WithFormatCodeSettings(b.Context(), &lsutil.FormatCodeSettings{
+	ctx := format.WithFormatCodeSettings(b.Context(), lsutil.FormatCodeSettings{
 		EditorSettings: lsutil.EditorSettings{
 			TabSize:                4,
 			IndentSize:             4,
 			BaseIndentSize:         4,
 			NewLineCharacter:       "\n",
-			ConvertTabsToSpaces:    true,
+			ConvertTabsToSpaces:    core.TSTrue,
 			IndentStyle:            lsutil.IndentStyleSmart,
-			TrimTrailingWhitespace: true,
+			TrimTrailingWhitespace: core.TSTrue,
 		},
 		InsertSpaceBeforeTypeAnnotation: core.TSTrue,
 	}, "\n")

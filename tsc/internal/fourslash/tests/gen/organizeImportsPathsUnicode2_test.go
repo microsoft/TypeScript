@@ -34,7 +34,7 @@ console.log(a1, a2, a100);`,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase:       core.TSFalse,
 			OrganizeImportsCollation:        lsutil.OrganizeImportsCollationUnicode,
-			OrganizeImportsNumericCollation: false,
+			OrganizeImportsNumericCollation: core.TSFalse,
 		},
 	)
 	f.VerifyOrganizeImports(t,
@@ -47,7 +47,7 @@ console.log(a1, a2, a100);`,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase:       core.TSFalse,
 			OrganizeImportsCollation:        lsutil.OrganizeImportsCollationUnicode,
-			OrganizeImportsNumericCollation: true,
+			OrganizeImportsNumericCollation: core.TSTrue,
 		},
 	)
 }

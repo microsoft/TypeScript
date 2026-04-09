@@ -36,7 +36,7 @@ func (l *LanguageService) toLSPDiagnostics(ctx context.Context, diagnostics ...[
 	lspDiagnostics := make([]*lsproto.Diagnostic, 0, size)
 	for _, diagSlice := range diagnostics {
 		for _, diag := range diagSlice {
-			lspDiagnostics = append(lspDiagnostics, lsconv.DiagnosticToLSPPull(ctx, l.converters, diag, l.UserPreferences().ReportStyleChecksAsWarnings))
+			lspDiagnostics = append(lspDiagnostics, lsconv.DiagnosticToLSPPull(ctx, l.converters, diag, l.UserPreferences().ReportStyleChecksAsWarnings.IsTrue()))
 		}
 	}
 	return lspDiagnostics

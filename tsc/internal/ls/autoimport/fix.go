@@ -54,9 +54,9 @@ func (f *Fix) Edits(
 	ctx context.Context,
 	file *ast.SourceFile,
 	compilerOptions *core.CompilerOptions,
-	formatOptions *lsutil.FormatCodeSettings,
+	formatOptions lsutil.FormatCodeSettings,
 	converters *lsconv.Converters,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 ) ([]*lsproto.TextEdit, string) {
 	locale := locale.FromContext(ctx)
 	tracker := change.NewTracker(ctx, compilerOptions, formatOptions, converters)
@@ -118,7 +118,7 @@ func (f *Fix) Edits(
 	}
 }
 
-func addImportType(f *Fix, file *ast.SourceFile, preferences *lsutil.UserPreferences, tracker *change.Tracker, locale locale.Locale) string {
+func addImportType(f *Fix, file *ast.SourceFile, preferences lsutil.UserPreferences, tracker *change.Tracker, locale locale.Locale) string {
 	if f.UsagePosition == nil {
 		panic("UsagePosition must be set for JSDoc type import fix")
 	}
@@ -184,7 +184,7 @@ func addToExistingImport(
 	importClauseOrBindingPattern *ast.Node,
 	defaultImport *newImportBinding,
 	namedImports []*newImportBinding,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 ) {
 	switch importClauseOrBindingPattern.Kind {
 	case ast.KindObjectBindingPattern:
@@ -334,7 +334,7 @@ func getNewImports(
 	namedImports []*newImportBinding,
 	namespaceLikeImport *newImportBinding, // { lsproto.importKind: lsproto.ImportKind.CommonJS | lsproto.ImportKind.Namespace; }
 	compilerOptions *core.CompilerOptions,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 ) []*ast.AnyImportSyntax {
 	tokenFlags := core.IfElse(quotePreference == lsutil.QuotePreferenceSingle, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone)
 	moduleSpecifierStringLiteral := ct.NodeFactory.NewStringLiteral(moduleSpecifier, tokenFlags)
@@ -483,7 +483,7 @@ func createConstEqualsRequireDeclaration(changeTracker *change.Tracker, name *as
 	)
 }
 
-func insertImports(ct *change.Tracker, sourceFile *ast.SourceFile, imports []*ast.AnyImportOrRequireStatement, blankLineBetween bool, preferences *lsutil.UserPreferences) {
+func insertImports(ct *change.Tracker, sourceFile *ast.SourceFile, imports []*ast.AnyImportOrRequireStatement, blankLineBetween bool, preferences lsutil.UserPreferences) {
 	var existingImportStatements []*ast.Statement
 
 	if imports[0].Kind == ast.KindVariableStatement {
@@ -908,7 +908,7 @@ func needsTypeOnly(addAsTypeOnly lsproto.AddAsTypeOnly) bool {
 	return addAsTypeOnly == lsproto.AddAsTypeOnlyRequired
 }
 
-func shouldUseTypeOnly(addAsTypeOnly lsproto.AddAsTypeOnly, preferences *lsutil.UserPreferences) bool {
+func shouldUseTypeOnly(addAsTypeOnly lsproto.AddAsTypeOnly, preferences lsutil.UserPreferences) bool {
 	return needsTypeOnly(addAsTypeOnly) || addAsTypeOnly != lsproto.AddAsTypeOnlyNotAllowed && preferences.PreferTypeOnlyAutoImports.IsTrue()
 }
 
@@ -1031,7 +1031,7 @@ func promoteFromTypeOnly(
 	aliasDeclaration *ast.Declaration,
 	compilerOptions *core.CompilerOptions,
 	sourceFile *ast.SourceFile,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 ) *ast.Declaration {
 	// See comment in `doAddExistingFix` on constant with the same name.
 	convertExistingToTypeOnly := compilerOptions.VerbatimModuleSyntax
@@ -1124,7 +1124,7 @@ func promoteImportClause(
 	importClause *ast.ImportClause,
 	compilerOptions *core.CompilerOptions,
 	sourceFile *ast.SourceFile,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 	convertExistingToTypeOnly core.Tristate,
 	aliasDeclaration *ast.Declaration,
 ) {

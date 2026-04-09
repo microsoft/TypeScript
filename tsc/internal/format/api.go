@@ -29,23 +29,23 @@ const (
 	formatNewlineKey
 )
 
-func WithFormatCodeSettings(ctx context.Context, options *lsutil.FormatCodeSettings, newLine string) context.Context {
+func WithFormatCodeSettings(ctx context.Context, options lsutil.FormatCodeSettings, newLine string) context.Context {
 	ctx = context.WithValue(ctx, formatOptionsKey, options)
 	ctx = context.WithValue(ctx, formatNewlineKey, newLine)
 	// In strada, the rules map was both globally cached *and* cached into the context, for some reason. We skip that here and just use the global one.
 	return ctx
 }
 
-func GetFormatCodeSettingsFromContext(ctx context.Context) *lsutil.FormatCodeSettings {
+func GetFormatCodeSettingsFromContext(ctx context.Context) lsutil.FormatCodeSettings {
 	if opt := ctx.Value(formatOptionsKey); opt != nil {
-		return opt.(*lsutil.FormatCodeSettings)
+		return opt.(lsutil.FormatCodeSettings)
 	}
-	return nil
+	return lsutil.GetDefaultFormatCodeSettings()
 }
 
 func GetNewLineOrDefaultFromContext(ctx context.Context) string { // TODO: Move into broader LS - more than just the formatter uses the newline editor setting/host new line
 	opt := GetFormatCodeSettingsFromContext(ctx)
-	if opt != nil && len(opt.NewLineCharacter) > 0 {
+	if len(opt.NewLineCharacter) > 0 {
 		return opt.NewLineCharacter
 	}
 	host := ctx.Value(formatNewlineKey).(string)

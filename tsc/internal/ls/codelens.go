@@ -15,8 +15,8 @@ import (
 func (l *LanguageService) ProvideCodeLenses(ctx context.Context, documentURI lsproto.DocumentUri) (lsproto.CodeLensResponse, error) {
 	_, file := l.getProgramAndFile(documentURI)
 
-	userPrefs := &l.UserPreferences().CodeLens
-	if !userPrefs.ReferencesCodeLensEnabled && !userPrefs.ImplementationsCodeLensEnabled {
+	userPrefs := l.UserPreferences().CodeLens
+	if !userPrefs.ReferencesCodeLensEnabled.IsTrue() && !userPrefs.ImplementationsCodeLensEnabled.IsTrue() {
 		return lsproto.CodeLensResponse{}, nil
 	}
 
@@ -32,11 +32,11 @@ func (l *LanguageService) ProvideCodeLenses(ctx context.Context, documentURI lsp
 		if currentSymbol := node.Symbol(); lastSymbol != currentSymbol {
 			lastSymbol = currentSymbol
 
-			if userPrefs.ReferencesCodeLensEnabled && isValidReferenceLensNode(node, userPrefs) {
+			if userPrefs.ReferencesCodeLensEnabled.IsTrue() && isValidReferenceLensNode(node, userPrefs) {
 				result = append(result, l.newCodeLensForNode(documentURI, file, node, lsproto.CodeLensKindReferences))
 			}
 
-			if userPrefs.ImplementationsCodeLensEnabled && isValidImplementationsCodeLensNode(node, userPrefs) {
+			if userPrefs.ImplementationsCodeLensEnabled.IsTrue() && isValidImplementationsCodeLensNode(node, userPrefs) {
 				result = append(result, l.newCodeLensForNode(documentURI, file, node, lsproto.CodeLensKindImplementations))
 			}
 		}
@@ -149,7 +149,7 @@ func (l *LanguageService) newCodeLensForNode(fileUri lsproto.DocumentUri, file *
 	}
 }
 
-func isValidImplementationsCodeLensNode(node *ast.Node, userPrefs *lsutil.CodeLensUserPreferences) bool {
+func isValidImplementationsCodeLensNode(node *ast.Node, userPrefs lsutil.CodeLensUserPreferences) bool {
 	switch node.Kind {
 	// Always show on interfaces
 	case ast.KindInterfaceDeclaration:
@@ -158,11 +158,11 @@ func isValidImplementationsCodeLensNode(node *ast.Node, userPrefs *lsutil.CodeLe
 
 	// If configured, show on interface methods
 	case ast.KindMethodSignature:
-		return userPrefs.ImplementationsCodeLensShowOnInterfaceMethods && node.Parent.Kind == ast.KindInterfaceDeclaration
+		return userPrefs.ImplementationsCodeLensShowOnInterfaceMethods.IsTrue() && node.Parent.Kind == ast.KindInterfaceDeclaration
 
 	// If configured, show on all class methods - but not private ones.
 	case ast.KindMethodDeclaration:
-		if userPrefs.ImplementationsCodeLensShowOnAllClassMethods && node.Parent.Kind == ast.KindClassDeclaration {
+		if userPrefs.ImplementationsCodeLensShowOnAllClassMethods.IsTrue() && node.Parent.Kind == ast.KindClassDeclaration {
 			return !ast.HasModifier(node, ast.ModifierFlagsPrivate) && node.Name().Kind != ast.KindPrivateIdentifier
 		}
 		fallthrough
@@ -176,10 +176,10 @@ func isValidImplementationsCodeLensNode(node *ast.Node, userPrefs *lsutil.CodeLe
 	return false
 }
 
-func isValidReferenceLensNode(node *ast.Node, userPrefs *lsutil.CodeLensUserPreferences) bool {
+func isValidReferenceLensNode(node *ast.Node, userPrefs lsutil.CodeLensUserPreferences) bool {
 	switch node.Kind {
 	case ast.KindFunctionDeclaration:
-		if userPrefs.ReferencesCodeLensShowOnAllFunctions {
+		if userPrefs.ReferencesCodeLensShowOnAllFunctions.IsTrue() {
 			return true
 		}
 		fallthrough

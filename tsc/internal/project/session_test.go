@@ -1197,13 +1197,13 @@ func TestSession(t *testing.T) {
 		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
 
-		session.Configure(lsutil.NewUserConfig(nil))
+		session.Configure(lsutil.NewDefaultUserPreferences())
 		// Change user preferences for code lens and inlay hints.
-		newPrefs := session.Config().TS()
-		newPrefs.CodeLens.ReferencesCodeLensEnabled = !newPrefs.CodeLens.ReferencesCodeLensEnabled
-		newPrefs.InlayHints.IncludeInlayFunctionLikeReturnTypeHints = !newPrefs.InlayHints.IncludeInlayFunctionLikeReturnTypeHints
+		newPrefs := session.Config()
+		newPrefs.CodeLens.ReferencesCodeLensEnabled = core.TSTrue
+		newPrefs.InlayHints.IncludeInlayFunctionLikeReturnTypeHints = core.TSTrue
 
-		session.Configure(lsutil.NewUserConfig(newPrefs))
+		session.Configure(newPrefs)
 
 		codeLensRefreshCalls := utils.Client().RefreshCodeLensCalls()
 		inlayHintsRefreshCalls := utils.Client().RefreshInlayHintsCalls()
@@ -1223,37 +1223,40 @@ func TestSession(t *testing.T) {
 		assert.NilError(t, err)
 
 		configMap1 := map[string]any{
-			"UseAliasesForRename":       true,
-			"QuotePreference":           "single",
-			"OrganizeImportsIgnoreCase": true,
+			"preferences": map[string]any{
+				"useAliasesForRenames": true,
+				"quoteStyle":           "single",
+			},
+			"unstable": map[string]any{
+				"organizeImportsIgnoreCase": true,
+			},
 		}
-		// set "typescript" options only
-		session.Configure(lsutil.ParseNewUserConfig(map[string]any{"typescript": configMap1}))
+		session.Configure(lsutil.ParseUserPreferences(map[string]any{"js/ts": configMap1}))
 		actualConfig1 := session.Config()
 		expectedPrefs1 := lsutil.NewDefaultUserPreferences()
 		expectedPrefs1.UseAliasesForRename = core.TSTrue
 		expectedPrefs1.QuotePreference = lsutil.QuotePreferenceSingle
 		expectedPrefs1.OrganizeImportsIgnoreCase = core.TSTrue
 
-		// "javascript" options should default to ts
-		assert.DeepEqual(t, *actualConfig1.TS(), *expectedPrefs1)
-		assert.DeepEqual(t, *actualConfig1.JS(), *expectedPrefs1)
+		assert.DeepEqual(t, actualConfig1, expectedPrefs1)
 
 		configMap2 := map[string]any{
-			"UseAliasesForRename":       false,
-			"QuotePreference":           "double",
-			"OrganizeImportsIgnoreCase": false,
+			"preferences": map[string]any{
+				"useAliasesForRenames": false,
+				"quoteStyle":           "double",
+			},
+			"unstable": map[string]any{
+				"organizeImportsIgnoreCase": false,
+			},
 		}
-		// set "javascript" options only
-		session.Configure(lsutil.ParseNewUserConfig(map[string]any{"javascript": configMap2}))
+		session.Configure(lsutil.ParseUserPreferences(map[string]any{"js/ts": configMap2}))
 		actualConfig2 := session.Config()
 		expectedPrefs2 := lsutil.NewDefaultUserPreferences()
 		expectedPrefs2.UseAliasesForRename = core.TSFalse
 		expectedPrefs2.QuotePreference = lsutil.QuotePreferenceDouble
 		expectedPrefs2.OrganizeImportsIgnoreCase = core.TSFalse
-		// "typescript" options should not change
-		assert.DeepEqual(t, *actualConfig2.TS(), *expectedPrefs1)
-		assert.DeepEqual(t, *actualConfig2.JS(), *expectedPrefs2)
+
+		assert.DeepEqual(t, actualConfig2, expectedPrefs2)
 	})
 
 	t.Run("language service for closed files", func(t *testing.T) {

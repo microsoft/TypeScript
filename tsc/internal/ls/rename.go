@@ -182,7 +182,7 @@ func isDefinedInLibraryFile(program *compiler.Program, declaration *ast.Node) bo
 }
 
 // wouldRenameInOtherNodeModules checks if renaming the symbol would affect node_modules.
-func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Symbol, ch *checker.Checker, preferences *lsutil.UserPreferences) *diagnostics.Message {
+func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Symbol, ch *checker.Checker, preferences lsutil.UserPreferences) *diagnostics.Message {
 	sym := symbol
 	if !preferences.UseAliasesForRename.IsTrue() && sym.Flags&ast.SymbolFlagsAlias != 0 {
 		importSpecifier := core.Find(sym.Declarations, ast.IsImportSpecifier)

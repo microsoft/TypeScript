@@ -523,10 +523,10 @@ func ProvideWorkspaceSymbols(
 	ctx context.Context,
 	programs []*compiler.Program,
 	converters *lsconv.Converters,
-	preferences *lsutil.UserPreferences,
+	preferences lsutil.UserPreferences,
 	query string,
 ) (lsproto.WorkspaceSymbolResponse, error) {
-	excludeLibrarySymbols := preferences.ExcludeLibrarySymbolsInNavTo
+	excludeLibrarySymbols := preferences.ExcludeLibrarySymbolsInNavTo.IsTrue()
 	// Obtain set of non-declaration source files from all active programs.
 	sourceFiles := map[tspath.Path]*ast.SourceFile{}
 	for _, program := range programs {

@@ -537,7 +537,7 @@ export declare const otherValue: string;`,
 		newPreferences.IncludeCompletionsForModuleExports = core.TSTrue
 		newPreferences.IncludeCompletionsForImportStatements = core.TSTrue
 		newPreferences.AutoImportFileExcludePatterns = []string{"**/node_modules/**/*.d.ts"}
-		session.Configure(lsutil.NewUserConfig(newPreferences))
+		session.Configure(newPreferences)
 
 		// IsPreparedForImportingFile should return false since exclude patterns changed
 		snapshot2 := session.Snapshot()

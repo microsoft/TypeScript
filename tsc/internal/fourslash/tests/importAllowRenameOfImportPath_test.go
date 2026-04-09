@@ -26,12 +26,12 @@ const a = require("./[|a|]");
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	prefsTrue := &lsutil.UserPreferences{
+	prefsTrue := lsutil.UserPreferences{
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
 		AllowRenameOfImportPath:               core.TSTrue,
 	}
-	prefsFalse := &lsutil.UserPreferences{
+	prefsFalse := lsutil.UserPreferences{
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
 		AllowRenameOfImportPath:               core.TSFalse,
@@ -39,11 +39,11 @@ const a = require("./[|a|]");
 	markers := []string{"a", "dir", "index"}
 	f.Configure(t, prefsTrue)
 	f.GoToEachMarker(t, markers, func(marker *fourslash.Marker, index int) {
-		f.VerifyRenameSucceeded(t, prefsTrue)
+		f.VerifyRenameSucceeded(t, &prefsTrue)
 	})
 
 	f.Configure(t, prefsFalse)
 	f.GoToEachMarker(t, markers, func(marker *fourslash.Marker, index int) {
-		f.VerifyRenameFailed(t, prefsFalse)
+		f.VerifyRenameFailed(t, &prefsFalse)
 	})
 }

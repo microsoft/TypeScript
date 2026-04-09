@@ -28,7 +28,7 @@ a/*start*/`
 	f.VerifyBaselineGoToSourceDefinition(t, "start")
 
 	// 3. Go-to-definition with preferGoToSourceDefinition: goes to the .js file, same as source definition
-	f.Configure(t, &lsutil.UserPreferences{PreferGoToSourceDefinition: true})
+	f.Configure(t, lsutil.UserPreferences{PreferGoToSourceDefinition: true})
 	f.VerifyBaselineGoToDefinition(t, false /*includeOriginalSelectionRange*/, "start")
 }
 
@@ -52,6 +52,6 @@ let value: /*start*/Config;`
 
 	// With preferGoToSourceDefinition, when no source .js definition exists for a type-only symbol,
 	// go-to-definition should fall back to the .d.ts definition.
-	f.Configure(t, &lsutil.UserPreferences{PreferGoToSourceDefinition: true})
+	f.Configure(t, lsutil.UserPreferences{PreferGoToSourceDefinition: true})
 	f.VerifyBaselineGoToDefinition(t, false /*includeOriginalSelectionRange*/, "start")
 }

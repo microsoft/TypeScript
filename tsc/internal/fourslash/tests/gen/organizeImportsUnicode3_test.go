@@ -38,7 +38,7 @@ console.log(A, À, B);`,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase:      core.TSFalse,
 			OrganizeImportsCollation:       lsutil.OrganizeImportsCollationUnicode,
-			OrganizeImportsAccentCollation: false,
+			OrganizeImportsAccentCollation: core.TSFalse,
 		},
 	)
 	f.VerifyOrganizeImports(t,
@@ -53,7 +53,7 @@ console.log(A, À, B);`,
 		&lsutil.UserPreferences{
 			OrganizeImportsIgnoreCase:      core.TSFalse,
 			OrganizeImportsCollation:       lsutil.OrganizeImportsCollationUnicode,
-			OrganizeImportsAccentCollation: true,
+			OrganizeImportsAccentCollation: core.TSTrue,
 		},
 	)
 }

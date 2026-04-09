@@ -22,7 +22,7 @@ let y = MyV/*value*/;
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.Configure(t, &lsutil.UserPreferences{
+	f.Configure(t, lsutil.UserPreferences{
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
 		PreferTypeOnlyAutoImports:             core.TSTrue,
