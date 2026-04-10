@@ -7,11 +7,17 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name 'phaser' was not resolved. ========
-======== Resolving type reference directive 'phaser', containing file '/__inferred type names__.ts', root directory '/typings'. ========
-Resolving with primary search path '/typings'.
 File '/typings/phaser.d.ts' does not exist.
 Found 'package.json' at '/typings/phaser/package.json'.
+'package.json' does not have a 'typesVersions' field.
+'package.json' does not have a 'typings' field.
+'package.json' has 'types' field 'types/phaser.d.ts' that references '/typings/phaser/types/phaser.d.ts'.
+File '/typings/phaser/types/phaser.d.ts' exists - use it as a name resolution result.
+======== Module name 'phaser' was successfully resolved to '/typings/phaser/types/phaser.d.ts'. ========
+======== Resolving type reference directive 'phaser', containing file '/__inferred type names__.ts', root directory '/typings'. ========
+Resolving with primary search path '/typings'.
+File '/typings/phaser.d.ts' does not exist according to earlier cached lookups.
+File '/typings/phaser/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'types/phaser.d.ts' that references '/typings/phaser/types/phaser.d.ts'.
