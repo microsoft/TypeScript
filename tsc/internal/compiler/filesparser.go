@@ -165,9 +165,10 @@ func (t *parseTask) redirect(loader *fileLoader, fileName string) {
 }
 
 func (t *parseTask) loadAutomaticTypeDirectives(loader *fileLoader) {
-	toParseTypeRefs, typeResolutionsInFile, typeResolutionsTrace := loader.resolveAutomaticTypeDirectives(t.normalizedFilePath)
+	toParseTypeRefs, typeResolutionsInFile, typeResolutionsTrace, pDiagnostics := loader.resolveAutomaticTypeDirectives(t.normalizedFilePath)
 	t.typeResolutionsInFile = typeResolutionsInFile
 	t.typeResolutionsTrace = typeResolutionsTrace
+	t.processingDiagnostics = append(t.processingDiagnostics, pDiagnostics...)
 	for _, typeResolution := range toParseTypeRefs {
 		t.addSubTask(typeResolution, nil)
 	}
@@ -440,6 +441,9 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 
 			if task.isForAutomaticTypeDirective {
 				typeResolutionsInFile[task.path] = task.typeResolutionsInFile
+				if len(task.processingDiagnostics) > 0 {
+					includeProcessor.processingDiagnostics = append(includeProcessor.processingDiagnostics, task.processingDiagnostics...)
+				}
 				continue
 			}
 

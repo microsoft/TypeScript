@@ -214,6 +214,7 @@ func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName string) (
 	toParse []resolvedRef,
 	typeResolutionsInFile module.ModeAwareCache[*module.ResolvedTypeReferenceDirective],
 	typeResolutionsTrace []module.DiagAndArgs,
+	pDiagnostics []*processingDiagnostic,
 ) {
 	automaticTypeDirectiveNames := module.GetAutomaticTypeDirectiveNames(p.opts.Config.CompilerOptions(), p.opts.Host)
 	if len(automaticTypeDirectiveNames) != 0 {
@@ -237,10 +238,22 @@ func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName string) (
 					},
 					packageId: resolved.PackageId,
 				})
+			} else {
+				pDiagnostics = append(pDiagnostics, &processingDiagnostic{
+					kind: processingDiagnosticKindExplainingFileInclude,
+					data: &includeExplainingDiagnostic{
+						diagnosticReason: &FileIncludeReason{
+							kind: fileIncludeKindAutomaticTypeDirectiveFile,
+							data: &automaticTypeDirectiveFileData{typeReference: name},
+						},
+						message: diagnostics.Cannot_find_type_definition_file_for_0,
+						args:    []any{name},
+					},
+				})
 			}
 		}
 	}
-	return toParse, typeResolutionsInFile, typeResolutionsTrace
+	return toParse, typeResolutionsInFile, typeResolutionsTrace, pDiagnostics
 }
 
 func (p *fileLoader) addProjectReferenceTasks(singleThreaded bool) {
