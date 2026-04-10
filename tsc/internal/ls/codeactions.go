@@ -6,8 +6,11 @@ import (
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 )
@@ -33,8 +36,10 @@ type CodeFixContext struct {
 
 // CodeAction represents a single code action fix
 type CodeAction struct {
-	Description string
-	Changes     []*lsproto.TextEdit
+	Description       string
+	Changes           []*lsproto.TextEdit
+	FixID             string
+	FixAllDescription string
 }
 
 // CombinedCodeActions represents combined code actions for fix-all scenarios
@@ -55,20 +60,29 @@ func (l *LanguageService) ProvideCodeActions(ctx context.Context, params *lsprot
 
 	var actions []lsproto.CommandOrCodeAction
 
-	// Handle source actions (like organize imports)
 	if params.Context != nil && params.Context.Only != nil {
 		for _, kind := range *params.Context.Only {
-			// Get all matching organize imports actions for the requested kind
 			matchingKinds := getOrganizeImportsActionsForKind(kind)
 			for _, matchingKind := range matchingKinds {
 				organizeAction := l.createOrganizeImportsAction(ctx, program, file, matchingKind)
 				actions = append(actions, *organizeAction)
 			}
+
+			if isFixAllKind(kind) {
+				fixAllAction, err := l.createFixAllAction(ctx, program, file, params.TextDocument.Uri)
+				if err != nil {
+					return lsproto.CodeActionResponse{}, err
+				}
+				if fixAllAction != nil {
+					actions = append(actions, *fixAllAction)
+				}
+			}
 		}
 	}
 
-	// Process diagnostics in the context to generate quick fixes
-	if params.Context != nil && params.Context.Diagnostics != nil {
+	if params.Context != nil && params.Context.Diagnostics != nil && wantsQuickFixes(params.Context.Only) {
+		fixIdSeen := make(map[string]*CodeFixProvider)
+
 		for _, diag := range params.Context.Diagnostics {
 			if diag.Code == nil || diag.Code.Integer == nil {
 				continue
@@ -76,13 +90,11 @@ func (l *LanguageService) ProvideCodeActions(ctx context.Context, params *lsprot
 
 			errorCode := *diag.Code.Integer
 
-			// Check all code fix providers
 			for _, provider := range codeFixProviders {
 				if !containsErrorCode(provider.ErrorCodes, errorCode) {
 					continue
 				}
 
-				// Create context for the provider
 				position := l.converters.LineAndCharacterToPosition(file, diag.Range.Start)
 				endPosition := l.converters.LineAndCharacterToPosition(file, diag.Range.End)
 				fixContext := &CodeFixContext{
@@ -95,30 +107,181 @@ func (l *LanguageService) ProvideCodeActions(ctx context.Context, params *lsprot
 					Params:     params,
 				}
 
-				// Get code actions from the provider
 				providerActions, err := provider.GetCodeActions(ctx, fixContext)
 				if err != nil {
 					return lsproto.CodeActionResponse{}, err
 				}
 				for _, action := range providerActions {
 					actions = append(actions, convertToLSPCodeAction(&action, diag, params.TextDocument.Uri))
+					if action.FixID != "" {
+						fixIdSeen[action.FixID] = provider
+					}
 				}
 			}
 		}
+
+		fixAllActions, err := l.getFixAllQuickFixes(ctx, program, file, params.TextDocument.Uri, fixIdSeen)
+		if err != nil {
+			return lsproto.CodeActionResponse{}, err
+		}
+		actions = append(actions, fixAllActions...)
 	}
 
 	return lsproto.CommandOrCodeActionArrayOrNull{CommandOrCodeActionArray: &actions}, nil
 }
 
+// getFixAllQuickFixes returns per-provider "Fix all in file" quickfix entries for providers
+// that matched at least 2 diagnostics in the full file.
+func (l *LanguageService) getFixAllQuickFixes(
+	ctx context.Context,
+	program *compiler.Program,
+	file *ast.SourceFile,
+	uri lsproto.DocumentUri,
+	fixIdSeen map[string]*CodeFixProvider,
+) ([]lsproto.CommandOrCodeAction, error) {
+	var actions []lsproto.CommandOrCodeAction
+
+	// Deduplicate providers; multiple fixIds may map to the same provider.
+	var seen collections.Set[*CodeFixProvider]
+	for _, provider := range fixIdSeen {
+		if seen.Has(provider) {
+			continue
+		}
+		seen.Add(provider)
+
+		if provider.GetAllCodeActions == nil {
+			continue
+		}
+
+		if !hasMultipleFixableDiagnostics(ctx, program, file, provider.ErrorCodes) {
+			continue
+		}
+
+		fixContext := &CodeFixContext{
+			SourceFile: file,
+			Program:    program,
+			LS:         l,
+		}
+		combined, err := provider.GetAllCodeActions(ctx, fixContext)
+		if err != nil {
+			return nil, err
+		}
+		if combined != nil && len(combined.Changes) > 0 {
+			kind := lsproto.CodeActionKindQuickFix
+			changes := map[lsproto.DocumentUri][]*lsproto.TextEdit{
+				uri: combined.Changes,
+			}
+			actions = append(actions, lsproto.CommandOrCodeAction{
+				CodeAction: &lsproto.CodeAction{
+					Title: combined.Description,
+					Kind:  &kind,
+					Edit:  &lsproto.WorkspaceEdit{Changes: &changes},
+				},
+			})
+		}
+	}
+
+	return actions, nil
+}
+
+// hasMultipleFixableDiagnostics returns true if the file has at least 2 diagnostics
+// matching the given error codes.
+func hasMultipleFixableDiagnostics(ctx context.Context, program *compiler.Program, file *ast.SourceFile, errorCodes []int32) bool {
+	allDiags := program.GetSemanticDiagnostics(ctx, file)
+	count := 0
+	for _, d := range allDiags {
+		if containsErrorCode(errorCodes, d.Code()) {
+			count++
+			if count >= 2 {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// codeActionKindContains returns true if the requested kind equals or is a
+// hierarchical parent of actionKind, using '.' as the separator. This matches
+// the semantics of VS Code's HierarchicalKind.contains.
+func codeActionKindContains(requestedKind, actionKind lsproto.CodeActionKind) bool {
+	return requestedKind == actionKind ||
+		requestedKind == "" ||
+		strings.HasPrefix(string(actionKind), string(requestedKind)+".")
+}
+
+// isFixAllKind returns true if the requested kind matches source.fixAll
+func isFixAllKind(kind lsproto.CodeActionKind) bool {
+	return codeActionKindContains(kind, lsproto.CodeActionKindSourceFixAll)
+}
+
+// wantsQuickFixes returns true if the Only filter is nil/empty (meaning all kinds are wanted)
+// or explicitly includes the quickfix kind.
+func wantsQuickFixes(only *[]lsproto.CodeActionKind) bool {
+	if only == nil || len(*only) == 0 {
+		return true
+	}
+	for _, kind := range *only {
+		if codeActionKindContains(kind, lsproto.CodeActionKindQuickFix) {
+			return true
+		}
+	}
+	return false
+}
+
+// createFixAllAction creates a source.fixAll code action that applies all auto-fixable
+// code fixes across the file.
+func (l *LanguageService) createFixAllAction(
+	ctx context.Context,
+	program *compiler.Program,
+	file *ast.SourceFile,
+	uri lsproto.DocumentUri,
+) (*lsproto.CommandOrCodeAction, error) {
+	kind := lsproto.CodeActionKindSourceFixAll
+	lspChanges := make(map[lsproto.DocumentUri][]*lsproto.TextEdit)
+
+	for _, provider := range codeFixProviders {
+		if provider.GetAllCodeActions == nil {
+			continue
+		}
+
+		fixContext := &CodeFixContext{
+			SourceFile: file,
+			Program:    program,
+			LS:         l,
+		}
+
+		combined, err := provider.GetAllCodeActions(ctx, fixContext)
+		if err != nil {
+			return nil, err
+		}
+		if combined != nil && len(combined.Changes) > 0 {
+			lspChanges[uri] = append(lspChanges[uri], combined.Changes...)
+		}
+	}
+
+	if len(lspChanges) == 0 {
+		return nil, nil
+	}
+
+	return &lsproto.CommandOrCodeAction{
+		CodeAction: &lsproto.CodeAction{
+			Title: diagnostics.Fix_All.Localize(locale.FromContext(ctx)),
+			Kind:  &kind,
+			Edit:  &lsproto.WorkspaceEdit{Changes: &lspChanges},
+		},
+	}, nil
+}
+
 // getOrganizeImportsActionTitle returns the appropriate title for the given organize imports kind
-func getOrganizeImportsActionTitle(kind lsproto.CodeActionKind) string {
+func getOrganizeImportsActionTitle(ctx context.Context, kind lsproto.CodeActionKind) string {
+	loc := locale.FromContext(ctx)
 	switch kind {
 	case lsproto.CodeActionKindSourceRemoveUnusedImports:
-		return "Remove Unused Imports"
+		return diagnostics.Remove_Unused_Imports.Localize(loc)
 	case lsproto.CodeActionKindSourceSortImports:
-		return "Sort Imports"
+		return diagnostics.Sort_Imports.Localize(loc)
 	default:
-		return "Organize Imports"
+		return diagnostics.Organize_Imports.Localize(loc)
 	}
 }
 
@@ -133,7 +296,7 @@ func getOrganizeImportsActionsForKind(requestedKind lsproto.CodeActionKind) []ls
 
 	var result []lsproto.CodeActionKind
 	for _, organizeKind := range organizeImportsKinds {
-		if strings.HasPrefix(string(organizeKind), string(requestedKind)) {
+		if codeActionKindContains(requestedKind, organizeKind) {
 			result = append(result, organizeKind)
 		}
 	}
@@ -152,7 +315,7 @@ func (l *LanguageService) createOrganizeImportsAction(
 	file *ast.SourceFile,
 	kind lsproto.CodeActionKind,
 ) *lsproto.CommandOrCodeAction {
-	title := getOrganizeImportsActionTitle(kind)
+	title := getOrganizeImportsActionTitle(ctx, kind)
 	changes := l.OrganizeImports(
 		ctx,
 		file,

@@ -4298,6 +4298,14 @@ var Installing_types_for_0 = &Message{code: 100013, category: CategoryMessage, k
 
 var Project_0 = &Message{code: 100014, category: CategoryMessage, key: "Project_0_100014", text: "Project '{0}'"}
 
+var Fix_All = &Message{code: 100015, category: CategoryMessage, key: "Fix_All_100015", text: "Fix All"}
+
+var Organize_Imports = &Message{code: 100016, category: CategoryMessage, key: "Organize_Imports_100016", text: "Organize Imports"}
+
+var Remove_Unused_Imports = &Message{code: 100017, category: CategoryMessage, key: "Remove_Unused_Imports_100017", text: "Remove Unused Imports"}
+
+var Sort_Imports = &Message{code: 100018, category: CategoryMessage, key: "Sort_Imports_100018", text: "Sort Imports"}
+
 func keyToMessage(key Key) *Message {
 	switch key {
 	case "Unterminated_string_literal_1002":
@@ -8596,6 +8604,14 @@ func keyToMessage(key Key) *Message {
 		return Installing_types_for_0
 	case "Project_0_100014":
 		return Project_0
+	case "Fix_All_100015":
+		return Fix_All
+	case "Organize_Imports_100016":
+		return Organize_Imports
+	case "Remove_Unused_Imports_100017":
+		return Remove_Unused_Imports
+	case "Sort_Imports_100018":
+		return Sort_Imports
 	default:
 		return nil
 	}

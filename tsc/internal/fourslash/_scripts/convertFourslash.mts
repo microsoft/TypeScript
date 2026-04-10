@@ -19,6 +19,31 @@ const outputDir = path.join(import.meta.dirname, "../", "tests", "gen");
 const unparsedFiles: { file: string; error: string; }[] = [];
 const unparsedReportPath = path.join(import.meta.dirname, "unparsedTests.txt");
 
+// Go import paths used in generated test files.
+const IMPORT_FOURSLASH = `"github.com/microsoft/typescript-go/internal/fourslash"`;
+const IMPORT_TESTUTIL = `"github.com/microsoft/typescript-go/internal/testutil"`;
+const IMPORT_CORE = `"github.com/microsoft/typescript-go/internal/core"`;
+const IMPORT_LS = `"github.com/microsoft/typescript-go/internal/ls"`;
+const IMPORT_LSUTIL = `"github.com/microsoft/typescript-go/internal/ls/lsutil"`;
+const IMPORT_LSPROTO = `"github.com/microsoft/typescript-go/internal/lsp/lsproto"`;
+const IMPORT_UTIL = `. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"`;
+
+// Code fix IDs that have been implemented in the Go port.
+// Tests for code fixes not in this set will be skipped during conversion.
+const allowedCodeFixIds = new Set([
+    "fixMissingImport",
+]);
+
+// File name prefixes for code fix tests that are allowed even without a fixId.
+// These correspond to tests using verify.codeFix() or verify.codeFixAvailable()
+// that don't include a fixId field.
+const allowedCodeFixDescriptionPrefixes = [
+    "Import ",
+    "Add import from ",
+    "Update import from ",
+    "Change 'import' to 'import type'",
+];
+
 function getManualTests(): Set<string> {
     if (!fs.existsSync(manualTestsPath)) {
         return new Set();
@@ -117,7 +142,39 @@ function parseFileContent(filename: string, content: string): GoTest {
     if (goTest.commands.length === 0) {
         throw new Error(`No commands parsed in file: ${filename}`);
     }
+    validateCodeFixCommands(goTest.commands);
     return goTest;
+}
+
+function validateCodeFixCommands(commands: Cmd[]): void {
+    const hasCodeFixCmd = commands.some(c => c.kind === "verifyCodeFix" || c.kind === "verifyCodeFixAvailable" || c.kind === "verifyCodeFixAll");
+    if (!hasCodeFixCmd) {
+        return;
+    }
+    // Every codeFixAll must use an allowed fixId.
+    for (const cmd of commands) {
+        if (cmd.kind === "verifyCodeFixAll" && !allowedCodeFixIds.has(cmd.fixId)) {
+            throw new Error(`Unsupported code fix ID: ${cmd.fixId}`);
+        }
+    }
+    // If there are codeFix/codeFixAvailable commands but no codeFixAll with an allowed ID,
+    // the test is only accepted if its descriptions match allowed patterns.
+    const hasAllowedCodeFixAll = commands.some(c => c.kind === "verifyCodeFixAll" && allowedCodeFixIds.has(c.fixId));
+    const hasCodeFixOrAvailable = commands.some(c => c.kind === "verifyCodeFix" || c.kind === "verifyCodeFixAvailable");
+    if (hasCodeFixOrAvailable && !hasAllowedCodeFixAll) {
+        const allAllowed = commands.every(c => {
+            if (c.kind === "verifyCodeFix") {
+                return allowedCodeFixDescriptionPrefixes.some(p => c.description.startsWith(p));
+            }
+            if (c.kind === "verifyCodeFixAvailable") {
+                return c.descriptions.length > 0 && c.descriptions.every(d => allowedCodeFixDescriptionPrefixes.some(p => d.startsWith(p)));
+            }
+            return true;
+        });
+        if (!allAllowed) {
+            throw new Error(`Code fix test has no allowed fixId and descriptions do not match any allowed prefix`);
+        }
+    }
 }
 
 function getTestInput(content: string): string {
@@ -305,6 +362,12 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] {
                     return parseErrorExistsAfterMarker(callExpression.arguments);
                 case "errorExistsBeforeMarker":
                     return parseErrorExistsBeforeMarker(callExpression.arguments);
+                case "codeFix":
+                    return parseCodeFixArgs(callExpression.arguments);
+                case "codeFixAvailable":
+                    return parseCodeFixAvailableArgs(callExpression.arguments);
+                case "codeFixAll":
+                    return parseCodeFixAllArgs(callExpression.arguments);
             }
         }
         // `goTo....`
@@ -1614,6 +1677,117 @@ function parseErrorExistsBeforeMarker(args: readonly ts.Expression[]): [VerifyEr
     }];
 }
 
+function parseCodeFixArgs(args: readonly ts.Expression[]): [VerifyCodeFixCmd] {
+    if (args.length !== 1) {
+        throw new Error(`Expected 1 argument in verify.codeFix, got ${args.length}`);
+    }
+    const obj = getObjectLiteralExpression(args[0]);
+    if (!obj) {
+        throw new Error(`Expected object literal in verify.codeFix, got ${args[0].getText()}`);
+    }
+
+    let description = "";
+    let newFileContent = "";
+    let index = 0;
+    let applyChanges = false;
+
+    for (const prop of obj.properties) {
+        if (!ts.isPropertyAssignment(prop) || !ts.isIdentifier(prop.name)) continue;
+        switch (prop.name.text) {
+            case "description": {
+                const str = getStringLiteralLike(prop.initializer);
+                if (str) description = str.text;
+                break;
+            }
+            case "newFileContent": {
+                const str = getStringLiteralLike(prop.initializer);
+                if (str) newFileContent = str.text;
+                break;
+            }
+            case "index": {
+                const num = getNumericLiteral(prop.initializer);
+                if (num) index = parseInt(num.text);
+                break;
+            }
+            case "applyChanges": {
+                if (prop.initializer.kind === ts.SyntaxKind.TrueKeyword) {
+                    applyChanges = true;
+                }
+                break;
+            }
+        }
+    }
+
+    return [{
+        kind: "verifyCodeFix",
+        description,
+        newFileContent,
+        index,
+        applyChanges,
+    }];
+}
+
+function parseCodeFixAvailableArgs(args: readonly ts.Expression[]): [VerifyCodeFixAvailableCmd] {
+    const descriptions: string[] = [];
+
+    if (args.length === 1) {
+        const arrayArg = getArrayLiteralExpression(args[0]);
+        if (arrayArg) {
+            for (const elem of arrayArg.elements) {
+                const obj = getObjectLiteralExpression(elem);
+                if (obj) {
+                    for (const prop of obj.properties) {
+                        if (ts.isPropertyAssignment(prop) && ts.isIdentifier(prop.name) && prop.name.text === "description") {
+                            const str = getStringLiteralLike(prop.initializer);
+                            if (str) descriptions.push(str.text);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return [{
+        kind: "verifyCodeFixAvailable",
+        descriptions,
+    }];
+}
+
+function parseCodeFixAllArgs(args: readonly ts.Expression[]): [VerifyCodeFixAllCmd] {
+    if (args.length !== 1) {
+        throw new Error(`Expected 1 argument in verify.codeFixAll, got ${args.length}`);
+    }
+    const obj = getObjectLiteralExpression(args[0]);
+    if (!obj) {
+        throw new Error(`Expected object literal in verify.codeFixAll, got ${args[0].getText()}`);
+    }
+
+    let fixId = "";
+    let newFileContent = "";
+
+    for (const prop of obj.properties) {
+        if (!ts.isPropertyAssignment(prop) || !ts.isIdentifier(prop.name)) continue;
+        switch (prop.name.text) {
+            case "fixId": {
+                const str = getStringLiteralLike(prop.initializer);
+                if (str) fixId = str.text;
+                break;
+            }
+            case "newFileContent": {
+                const str = getStringLiteralLike(prop.initializer);
+                if (str) newFileContent = str.text;
+                break;
+            }
+        }
+    }
+
+    return [{
+        kind: "verifyCodeFixAll",
+        fixId,
+        newFileContent,
+    }];
+}
+
 function stringToTristate(s: string): string {
     switch (s) {
         case "true":
@@ -1676,10 +1850,10 @@ function parseUserPreferences(arg: ts.ObjectLiteralExpression): string {
                     preferences.push(`IncludePackageJsonAutoImports: ${prop.initializer.getText()}`);
                     break;
                 case "allowRenameOfImportPath":
-                    preferences.push(`AllowRenameOfImportPath: ${prop.initializer.getText()}`);
+                    preferences.push(`AllowRenameOfImportPath: ${stringToTristate(prop.initializer.getText())}`);
                     break;
                 case "preferTypeOnlyAutoImports":
-                    preferences.push(`PreferTypeOnlyAutoImports: ${prop.initializer.getText()}`);
+                    preferences.push(`PreferTypeOnlyAutoImports: ${stringToTristate(prop.initializer.getText())}`);
                     break;
                 case "organizeImportsTypeOrder":
                     if (!ts.isStringLiteralLike(prop.initializer)) {
@@ -3198,6 +3372,25 @@ interface VerifyErrorExistsBeforeMarkerCmd {
     markerName: string;
 }
 
+interface VerifyCodeFixCmd {
+    kind: "verifyCodeFix";
+    description: string;
+    newFileContent: string;
+    index: number;
+    applyChanges: boolean;
+}
+
+interface VerifyCodeFixAvailableCmd {
+    kind: "verifyCodeFixAvailable";
+    descriptions: string[];
+}
+
+interface VerifyCodeFixAllCmd {
+    kind: "verifyCodeFixAll";
+    fixId: string;
+    newFileContent: string;
+}
+
 type Cmd =
     | VerifyCompletionsCmd
     | VerifyApplyCodeActionFromCompletionCmd
@@ -3237,7 +3430,10 @@ type Cmd =
     | VerifyCurrentFileContentIsCmd
     | VerifyErrorExistsBetweenMarkersCmd
     | VerifyErrorExistsAfterMarkerCmd
-    | VerifyErrorExistsBeforeMarkerCmd;
+    | VerifyErrorExistsBeforeMarkerCmd
+    | VerifyCodeFixCmd
+    | VerifyCodeFixAvailableCmd
+    | VerifyCodeFixAllCmd;
 
 function generateVerifyOutliningSpans({ foldingRangeKind }: VerifyOutliningSpansCmd): string {
     if (foldingRangeKind) {
@@ -3246,12 +3442,13 @@ function generateVerifyOutliningSpans({ foldingRangeKind }: VerifyOutliningSpans
     return `f.VerifyOutliningSpans(t)`;
 }
 
-function generateVerifyCompletions({ marker, args, isNewIdentifierLocation, andApplyCodeActionArgs }: VerifyCompletionsCmd): string {
+function generateVerifyCompletions({ marker, args, isNewIdentifierLocation, andApplyCodeActionArgs }: VerifyCompletionsCmd, imports: Set<string>): string {
     let expectedList: string;
     if (args === "nil") {
         expectedList = "nil";
     }
     else {
+        imports.add(IMPORT_UTIL);
         const expected = [];
         if (args?.includes) expected.push(`Includes: ${args.includes},`);
         if (args?.excludes) expected.push(`Excludes: ${args.excludes},`);
@@ -3501,10 +3698,10 @@ function generateNavigateTo({ args }: VerifyNavToCmd): string {
     return `f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{\n${args.join(", ")}})`;
 }
 
-function generateCmd(cmd: Cmd): string {
+function generateCmd(cmd: Cmd, imports: Set<string>): string {
     switch (cmd.kind) {
         case "verifyCompletions":
-            return generateVerifyCompletions(cmd);
+            return generateVerifyCompletions(cmd, imports);
         case "verifyApplyCodeActionFromCompletion":
             return generateVerifyApplyCodeActionFromCompletion(cmd);
         case "verifyBaselineFindAllReferences":
@@ -3590,6 +3787,25 @@ function generateCmd(cmd: Cmd): string {
             return `f.VerifyErrorExistsAfterMarker(t, ${getGoStringLiteral(cmd.markerName)})`;
         case "verifyErrorExistsBeforeMarker":
             return `f.VerifyErrorExistsBeforeMarker(t, ${getGoStringLiteral(cmd.markerName)})`;
+        case "verifyCodeFix":
+            return `f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+	Description: ${getGoStringLiteral(cmd.description)},
+	NewFileContent: ${getGoMultiLineStringLiteral(cmd.newFileContent)},
+	Index: ${cmd.index},${
+                cmd.applyChanges ? `
+	ApplyChanges: true,` : ``
+            }
+})`;
+        case "verifyCodeFixAvailable":
+            if (cmd.descriptions.length === 0) {
+                return `f.VerifyCodeFixAvailable(t, nil)`;
+            }
+            return `f.VerifyCodeFixAvailable(t, []string{${cmd.descriptions.map(d => getGoStringLiteral(d)).join(", ")}})`;
+        case "verifyCodeFixAll":
+            return `f.VerifyCodeFixAll(t, fourslash.VerifyCodeFixAllOptions{
+	FixID: ${getGoStringLiteral(cmd.fixId)},
+	NewFileContent: ${getGoMultiLineStringLiteral(cmd.newFileContent)},
+})`;
         default:
             let neverCommand: never = cmd;
             throw new Error(`Unknown command kind: ${neverCommand as Cmd["kind"]}`);
@@ -3605,26 +3821,40 @@ interface GoTest {
 function generateGoTest(test: GoTest, isServer: boolean): string {
     const testName = (test.name[0].toUpperCase() + test.name.substring(1)).replaceAll("-", "_").replaceAll(/[^a-zA-Z0-9_]/g, "");
     const content = test.content;
-    const commands = test.commands.map(cmd => generateCmd(cmd)).join("\n");
-    const imports = [`"github.com/microsoft/typescript-go/internal/fourslash"`];
-    // Only include these imports if the commands use them to avoid unused import errors.
-    // Use regex with word boundary to avoid false positives like "underscore." matching "core."
+    const neededImports = new Set<string>();
+    neededImports.add(IMPORT_FOURSLASH);
+    neededImports.add(IMPORT_TESTUTIL);
+    const commands = test.commands.map(cmd => generateCmd(cmd, neededImports)).join("\n");
+    // Scan the generated command code for package-qualified names that may come from
+    // parsed command fields (e.g. UserPreferences generated during parsing).
+    // These qualified names (core., ls., lsutil., lsproto.) are safe to detect via regex
+    // because they won't appear in TypeScript test content strings.
     if (/\bcore\./.test(commands)) {
-        imports.unshift(`"github.com/microsoft/typescript-go/internal/core"`);
+        neededImports.add(IMPORT_CORE);
     }
     if (/\bls\./.test(commands)) {
-        imports.push(`"github.com/microsoft/typescript-go/internal/ls"`);
+        neededImports.add(IMPORT_LS);
     }
     if (/\blsutil\./.test(commands)) {
-        imports.push(`"github.com/microsoft/typescript-go/internal/ls/lsutil"`);
+        neededImports.add(IMPORT_LSUTIL);
     }
     if (/\blsproto\./.test(commands)) {
-        imports.push(`"github.com/microsoft/typescript-go/internal/lsp/lsproto"`);
+        neededImports.add(IMPORT_LSPROTO);
     }
-    if (usesFourslashUtil(commands)) {
-        imports.push(`. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"`);
+    // ToAny, DefaultCommitCharacters, and Completion* are Go-specific identifiers from
+    // the util package, safe to detect via regex since they won't appear in TypeScript test
+    // content. Other util symbols (like Ignored) are tracked explicitly during generation
+    // to avoid false positives from English words in test content strings.
+    if (/\bToAny\b|\bDefaultCommitCharacters\b|\bCompletion[A-Z]\w+\b/.test(commands)) {
+        neededImports.add(IMPORT_UTIL);
     }
-    imports.push(`"github.com/microsoft/typescript-go/internal/testutil"`);
+    // Sort imports for deterministic output. Dot imports sort last.
+    const imports = Array.from(neededImports).sort((a, b) => {
+        const aDot = a.startsWith(".");
+        const bDot = b.startsWith(".");
+        if (aDot !== bDot) return aDot ? 1 : -1;
+        return a.localeCompare(b);
+    });
     const template = `// Code generated by convertFourslash; DO NOT EDIT.
 // To modify this test, run "npm run makemanual ${test.name}"
 
@@ -3646,22 +3876,6 @@ func Test${testName}(t *testing.T) {
     ${isServer ? `f.MarkTestAsStradaServer()\n` : ""}${commands}
 }`;
     return template;
-}
-
-function usesFourslashUtil(goTxt: string): boolean {
-    for (const [_, constant] of completionConstants) {
-        if (goTxt.includes(constant)) {
-            return true;
-        }
-    }
-    for (const [_, constant] of completionPlus) {
-        if (goTxt.includes(constant)) {
-            return true;
-        }
-    }
-    return goTxt.includes("Ignored")
-        || goTxt.includes("DefaultCommitCharacters")
-        || goTxt.includes("ToAny");
 }
 
 function getNodeOfKind<T extends ts.Node>(node: ts.Node, hasKind: (n: ts.Node) => n is T): T | undefined {

@@ -106,5 +106,21 @@
     "Installing types for '{0}'": {
         "category": "Message",
         "code": 100013
+    },
+    "Fix All": {
+        "category": "Message",
+        "code": 100015
+    },
+    "Organize Imports": {
+        "category": "Message",
+        "code": 100016
+    },
+    "Remove Unused Imports": {
+        "category": "Message",
+        "code": 100017
+    },
+    "Sort Imports": {
+        "category": "Message",
+        "code": 100018
     }
 }
