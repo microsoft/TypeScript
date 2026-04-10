@@ -243,6 +243,14 @@ func (c *Checker) GetBaseTypes(t *Type) []*Type {
 	return c.getBaseTypes(t)
 }
 
+func (c *Checker) GetApparentType(t *Type) *Type {
+	return c.getApparentType(t)
+}
+
+func (c *Checker) GetBaseConstructorTypeOfClass(t *Type) *Type {
+	return c.getBaseConstructorTypeOfClass(t)
+}
+
 func (c *Checker) GetRestTypeOfSignature(sig *Signature) *Type {
 	return c.getRestTypeOfSignature(sig)
 }

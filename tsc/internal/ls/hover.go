@@ -564,14 +564,23 @@ func getJSDocOrTag(c *checker.Checker, node *ast.Node) *ast.Node {
 		}
 		if ast.IsClassOrInterfaceLike(node.Parent) {
 			isStatic := ast.HasStaticModifier(node)
-			for _, baseType := range c.GetBaseTypes(c.GetDeclaredTypeOfSymbol(node.Parent.Symbol())) {
-				t := baseType
-				if isStatic && baseType.Symbol() != nil {
-					t = c.GetTypeOfSymbol(baseType.Symbol())
-				}
-				if prop := c.GetPropertyOfType(t, symbol.Name); prop != nil && prop.ValueDeclaration != nil {
+			classType := c.GetDeclaredTypeOfSymbol(node.Parent.Symbol())
+			if isStatic {
+				// For static members, use the checker's base constructor type resolution.
+				// This correctly handles intersection constructor types from mixins
+				// (e.g., typeof MixinClass & T) by preserving the full intersection.
+				staticBaseType := c.GetApparentType(c.GetBaseConstructorTypeOfClass(classType))
+				if prop := c.GetPropertyOfType(staticBaseType, symbol.Name); prop != nil && prop.ValueDeclaration != nil {
 					if jsDoc := getJSDocOrTag(c, prop.ValueDeclaration); jsDoc != nil {
 						return jsDoc
+					}
+				}
+			} else {
+				for _, baseType := range c.GetBaseTypes(classType) {
+					if prop := c.GetPropertyOfType(baseType, symbol.Name); prop != nil && prop.ValueDeclaration != nil {
+						if jsDoc := getJSDocOrTag(c, prop.ValueDeclaration); jsDoc != nil {
+							return jsDoc
+						}
 					}
 				}
 			}
