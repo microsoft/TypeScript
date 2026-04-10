@@ -290,9 +290,9 @@
                         "$ref": "#/definitions/member"
                     }
                 },
-                "pool": {
+                "arena": {
                     "type": "boolean",
-                    "description": "Whether this node uses an object pool for allocation."
+                    "description": "Whether this node uses an object arena for allocation."
                 },
                 "handWrittenVisitor": {
                     "type": "boolean",

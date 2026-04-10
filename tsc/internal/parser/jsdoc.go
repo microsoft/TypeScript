@@ -78,7 +78,7 @@ func (p *Parser) withJSDoc(node *ast.Node, info jsdocScannerInfo) []*ast.Node {
 
 	// Should only be called once per node
 	p.hasDeprecatedTag = false
-	jsdoc := p.nodeSlicePool.NewSlice(len(ranges))[:0]
+	jsdoc := p.nodeSliceArena.NewSlice(len(ranges))[:0]
 	pos := node.Pos()
 	for _, comment := range ranges {
 		if parsed := p.parseJSDocComment(node, comment.Pos(), comment.End(), pos); parsed != nil {
@@ -193,11 +193,11 @@ func (p *Parser) parseJSDocComment(parent *ast.Node, start int, end int, fullSta
 func (p *Parser) parseJSDocCommentWorker(start int, end int, fullStart int, indent int) *ast.Node {
 	// Initially we can parse out a tag.  We also have seen a starting asterisk.
 	// This is so that /** * @type */ doesn't parse.
-	tags := p.nodeSlicePool.NewSlice(1)[:0]
+	tags := p.nodeSliceArena.NewSlice(1)[:0]
 	tagsPos := -1
 	tagsEnd := -1
 	state := jsdocStateSawAsterisk
-	commentParts := p.nodeSlicePool.NewSlice(1)[:0]
+	commentParts := p.nodeSliceArena.NewSlice(1)[:0]
 	comments := p.jsdocCommentsSpace
 	commentsPos := -1
 	linkEnd := start
@@ -299,7 +299,7 @@ loop:
 				if linkEnd == start {
 					comments = removeLeadingNewlines(comments)
 				}
-				jsdocText := p.finishNodeWithEnd(p.factory.NewJSDocText(p.stringSlicePool.Clone(comments)), linkEnd, commentEnd)
+				jsdocText := p.finishNodeWithEnd(p.factory.NewJSDocText(p.stringSliceArena.Clone(comments)), linkEnd, commentEnd)
 				commentParts = append(commentParts, jsdocText, link)
 				comments = comments[:0]
 				linkEnd = p.scanner.TokenEnd()
@@ -329,7 +329,7 @@ loop:
 
 	if len(comments) > 0 {
 		comments[len(comments)-1] = strings.TrimRightFunc(comments[len(comments)-1], unicode.IsSpace)
-		jsdocText := p.finishNodeWithEnd(p.factory.NewJSDocText(p.stringSlicePool.Clone(comments)), linkEnd, commentsPos)
+		jsdocText := p.finishNodeWithEnd(p.factory.NewJSDocText(p.stringSliceArena.Clone(comments)), linkEnd, commentsPos)
 		commentParts = append(commentParts, jsdocText)
 	}
 
@@ -584,7 +584,7 @@ loop:
 				} else {
 					commentStart = commentsPos
 				}
-				text := p.finishNodeWithEnd(p.factory.NewJSDocText(p.stringSlicePool.Clone(comments)), commentStart, commentEnd)
+				text := p.finishNodeWithEnd(p.factory.NewJSDocText(p.stringSliceArena.Clone(comments)), commentStart, commentEnd)
 				parts = append(parts, text)
 				parts = append(parts, link)
 				comments = comments[:0]
@@ -638,14 +638,14 @@ loop:
 		} else {
 			commentStart = commentsPos
 		}
-		text := p.finishNode(p.factory.NewJSDocText(p.stringSlicePool.Clone(comments)), commentStart)
+		text := p.finishNode(p.factory.NewJSDocText(p.stringSliceArena.Clone(comments)), commentStart)
 		parts = append(parts, text)
 	}
 
 	p.jsdocTagCommentsPartsSpace = parts[:0]
 
 	if len(parts) > 0 {
-		return p.newNodeList(core.NewTextRange(commentsPos, p.scanner.TokenEnd()), p.nodeSlicePool.Clone(parts))
+		return p.newNodeList(core.NewTextRange(commentsPos, p.scanner.TokenEnd()), p.nodeSliceArena.Clone(parts))
 	}
 	return nil
 }

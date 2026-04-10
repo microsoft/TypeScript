@@ -49,7 +49,7 @@ type MappingsDecoder struct {
 	sourceCharacter    core.UTF16Offset
 	nameIndex          NameIndex
 	error              error
-	mappingPool        core.Pool[Mapping]
+	mappingArena       core.Arena[Mapping]
 }
 
 func DecodeMappings(mappings string) *MappingsDecoder {
@@ -165,7 +165,7 @@ func (d *MappingsDecoder) Next() (value *Mapping, done bool) {
 }
 
 func (d *MappingsDecoder) captureMapping(hasSource bool, hasName bool) *Mapping {
-	mapping := d.mappingPool.New()
+	mapping := d.mappingArena.New()
 	mapping.GeneratedLine = d.generatedLine
 	mapping.GeneratedCharacter = d.generatedCharacter
 	mapping.SourceIndex = core.IfElse(hasSource, d.sourceIndex, MissingSource)

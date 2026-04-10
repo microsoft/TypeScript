@@ -28,7 +28,7 @@ export interface NodeDef {
     extends: string[];
     members?: Member[];
     generateSubtreeFacts?: boolean;
-    pool?: boolean;
+    arena?: boolean;
     handWritten?: boolean;
     handWrittenVisitor?: boolean;
     typeParameters?: { name: string; constraint: string; default?: string; }[];
@@ -235,8 +235,8 @@ export class NodeType extends TypeBase {
         return this.fieldsCache;
     }
 
-    get pool(): boolean {
-        return this.def?.pool || false;
+    get arena(): boolean {
+        return this.def?.arena || false;
     }
 
     get handWritten(): boolean {

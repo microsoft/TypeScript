@@ -89,17 +89,17 @@ class CodeWriter {
 }
 
 function generateNodeFactoryStruct(w: CodeWriter) {
-    const poolFields: { fieldName: string; typeName: string; }[] = [];
+    const arenaFields: { fieldName: string; typeName: string; }[] = [];
     for (const node of api.nodes()) {
-        if (!node.pool) continue;
-        poolFields.push({
-            fieldName: `${api.uncapitalize(node.name)}Pool`,
+        if (!node.arena) continue;
+        arenaFields.push({
+            fieldName: `${api.uncapitalize(node.name)}Arena`,
             typeName: node.name,
         });
     }
-    poolFields.push({ fieldName: "modifierListPool", typeName: "ModifierList" });
-    poolFields.push({ fieldName: "nodeListPool", typeName: "NodeList" });
-    poolFields.sort((a, b) => a.fieldName.localeCompare(b.fieldName));
+    arenaFields.push({ fieldName: "modifierListArena", typeName: "ModifierList" });
+    arenaFields.push({ fieldName: "nodeListArena", typeName: "NodeList" });
+    arenaFields.sort((a, b) => a.fieldName.localeCompare(b.fieldName));
 
     w.write("// ──────────────────────────────────────────────────────────────────────");
     w.write("// NodeFactory");
@@ -108,8 +108,8 @@ function generateNodeFactoryStruct(w: CodeWriter) {
     w.write("type NodeFactory struct {");
     w.push();
     w.write("hooks NodeFactoryHooks");
-    for (const { fieldName, typeName } of poolFields) {
-        w.write(`${fieldName} core.Pool[${typeName}]`);
+    for (const { fieldName, typeName } of arenaFields) {
+        w.write(`${fieldName} core.Arena[${typeName}]`);
     }
     w.write("");
     w.write("nodeCount int");
@@ -292,8 +292,8 @@ function emitNewFactory(
     w.write(`func (f *NodeFactory) ${funcName}(${params}) *Node {`);
     w.push();
 
-    if (node.pool) {
-        w.write(`data := f.${api.uncapitalize(structName)}Pool.New()`);
+    if (node.arena) {
+        w.write(`data := f.${api.uncapitalize(structName)}Arena.New()`);
     }
     else {
         w.write(`data := &${structName}{}`);

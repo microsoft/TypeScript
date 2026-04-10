@@ -125,7 +125,7 @@ type NodeList struct {
 }
 
 func (f *NodeFactory) NewNodeList(nodes []*Node) *NodeList {
-	list := f.nodeListPool.New()
+	list := f.nodeListArena.New()
 	list.Loc = core.UndefinedTextRange()
 	list.Nodes = nodes
 	return list
@@ -156,7 +156,7 @@ type ModifierList struct {
 }
 
 func (f *NodeFactory) NewModifierList(nodes []*Node) *ModifierList {
-	list := f.modifierListPool.New()
+	list := f.modifierListArena.New()
 	list.Loc = core.UndefinedTextRange()
 	list.Nodes = nodes
 	list.ModifierFlags = ModifiersToFlags(nodes)
@@ -164,7 +164,7 @@ func (f *NodeFactory) NewModifierList(nodes []*Node) *ModifierList {
 }
 
 func (list *ModifierList) Clone(f *NodeFactory) *ModifierList {
-	res := f.modifierListPool.New()
+	res := f.modifierListArena.New()
 	res.Loc = list.Loc
 	res.Nodes = list.Nodes
 	res.ModifierFlags = list.ModifierFlags

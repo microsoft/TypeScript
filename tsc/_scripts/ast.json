@@ -1183,7 +1183,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true,
+                "arena": true,
                 "instantiationAliases": {
                     "EndOfFile": "EndOfFile",
                     "DotToken": "DotToken",
@@ -1231,7 +1231,7 @@
                         "type": "string"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "PrivateIdentifier": {
                 "extends": [
@@ -1315,7 +1315,7 @@
                         "visit": "embeddedStatement"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "DoStatement": {
                 "generateSubtreeFacts": true,
@@ -1457,7 +1457,7 @@
                         "optional": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "WithStatement": {
                 "generateSubtreeFacts": true,
@@ -1627,7 +1627,7 @@
                         "type": "Expression"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "Block": {
                 "generateSubtreeFacts": true,
@@ -1647,7 +1647,7 @@
                         "type": "bool"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "VariableStatement": {
                 "extends": [
@@ -1665,7 +1665,7 @@
                         "type": "VariableDeclarationList"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "VariableDeclaration": {
                 "extends": [
@@ -1696,7 +1696,7 @@
                         "optional": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "VariableDeclarationList": {
                 "extends": [
@@ -1714,7 +1714,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "BindingPattern": {
                 "extends": [
@@ -1776,7 +1776,7 @@
                         "optional": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "BindingElement": {
                 "extends": [
@@ -1878,7 +1878,7 @@
                         "goOnly": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "ClassDeclaration": {
                 "extends": [
@@ -1956,7 +1956,7 @@
                         "list": "NodeList"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "InterfaceDeclaration": {
                 "extends": [
@@ -1994,7 +1994,7 @@
                         "list": "NodeList"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "TypeAliasDeclaration": {
                 "kind": [
@@ -2030,7 +2030,7 @@
                         "type": "TypeNode"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "EnumMember": {
                 "extends": [
@@ -2349,7 +2349,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "ConstructorDeclaration": {
                 "kind": "Constructor",
@@ -2542,7 +2542,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "MethodDeclaration": {
                 "extends": [
@@ -2628,7 +2628,7 @@
                         "type": "Expression"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "PropertyDeclaration": {
                 "extends": [
@@ -2718,7 +2718,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true,
+                "arena": true,
                 "instantiationAliases": {
                     "NullLiteral": "NullKeyword",
                     "TrueLiteral": "TrueKeyword",
@@ -2743,7 +2743,7 @@
                         "bitmask": "TokenFlagsStringLiteralFlags"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "NumericLiteral": {
                 "extends": [
@@ -2760,7 +2760,7 @@
                         "bitmask": "TokenFlagsNumericLiteralFlags"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "BigIntLiteral": {
                 "extends": [
@@ -2842,7 +2842,7 @@
                         "type": "Expression"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "PrefixUnaryExpression": {
                 "generateSubtreeFacts": true,
@@ -2866,7 +2866,7 @@
                         "type": "Expression"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "PostfixUnaryExpression": {
                 "generateSubtreeFacts": true,
@@ -3063,7 +3063,7 @@
                         "type": "Expression"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "PropertyAccessExpression": {
                 "extends": [
@@ -3092,7 +3092,7 @@
                         "bitmask": "NodeFlagsOptionalChain"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "ElementAccessExpression": {
                 "generateSubtreeFacts": true,
@@ -3121,7 +3121,7 @@
                         "bitmask": "NodeFlagsOptionalChain"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "CallExpression": {
                 "extends": [
@@ -3156,7 +3156,7 @@
                         "bitmask": "NodeFlagsOptionalChain"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "NewExpression": {
                 "extends": [
@@ -3306,7 +3306,7 @@
                         "type": "Expression"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "ArrayLiteralExpression": {
                 "generateSubtreeFacts": true,
@@ -3387,7 +3387,7 @@
                         "type": "Expression"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "ShorthandPropertyAssignment": {
                 "extends": [
@@ -3506,7 +3506,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "UnionTypeNode": {
                 "kind": "UnionType",
@@ -3520,7 +3520,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "IntersectionTypeNode": {
                 "kind": "IntersectionType",
@@ -3534,7 +3534,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "ConditionalTypeNode": {
                 "kind": "ConditionalType",
@@ -3580,7 +3580,7 @@
                         "type": "TypeNode"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "InferTypeNode": {
                 "kind": "InferType",
@@ -3605,7 +3605,7 @@
                         "type": "TypeNode"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "IndexedAccessTypeNode": {
                 "kind": "IndexedAccessType",
@@ -3622,7 +3622,7 @@
                         "type": "TypeNode"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "TypeReferenceNode": {
                 "kind": "TypeReference",
@@ -3639,7 +3639,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "ExpressionWithTypeArguments": {
                 "extends": [
@@ -3658,7 +3658,7 @@
                         "list": "NodeList"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "LiteralTypeNode": {
                 "kind": "LiteralType",
@@ -3671,7 +3671,7 @@
                         "type": "Node"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "ThisTypeNode": {
                 "kind": "ThisType",
@@ -3823,7 +3823,7 @@
                         "list": "NodeList"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "TupleTypeNode": {
                 "kind": "TupleType",
@@ -3900,7 +3900,7 @@
                         "type": "TypeNode"
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "FunctionTypeNode": {
                 "kind": "FunctionType",
@@ -3922,7 +3922,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "ConstructorTypeNode": {
                 "kind": "ConstructorType",
@@ -4307,7 +4307,7 @@
                         "optional": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "JSDocTypeExpression": {
                 "extends": [
@@ -4402,7 +4402,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "JSDocTemplateTag": {
                 "extends": [
@@ -4537,7 +4537,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "JSDocSeeTag": {
                 "extends": [
@@ -4979,7 +4979,7 @@
                         "private": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "JSDocText": {
                 "extends": [
@@ -4991,7 +4991,7 @@
                         "inherited": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "JSDocLink": {
                 "extends": [
@@ -5078,7 +5078,7 @@
                         "optional": true
                     }
                 ],
-                "pool": true
+                "arena": true
             },
             "SyntheticReferenceExpression": {
                 "generateSubtreeFacts": true,

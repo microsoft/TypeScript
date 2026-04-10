@@ -650,9 +650,9 @@ type Checker struct {
 	propertiesTypes                             map[PropertiesTypesKey]*Type
 	diagnostics                                 ast.DiagnosticsCollection
 	suggestionDiagnostics                       ast.DiagnosticsCollection
-	symbolPool                                  core.Pool[ast.Symbol]
-	signaturePool                               core.Pool[Signature]
-	indexInfoPool                               core.Pool[IndexInfo]
+	symbolArena                                 core.Arena[ast.Symbol]
+	signatureArena                              core.Arena[Signature]
+	indexInfoArena                              core.Arena[IndexInfo]
 	mergedSymbols                               map[*ast.Symbol]*ast.Symbol
 	factory                                     ast.NodeFactory
 	nodeLinks                                   core.LinkStore[*ast.Node, NodeLinks]
@@ -13600,7 +13600,7 @@ func (c *Checker) hasParseDiagnostics(sourceFile *ast.SourceFile) bool {
 
 func (c *Checker) newSymbol(flags ast.SymbolFlags, name string) *ast.Symbol {
 	c.SymbolCount++
-	result := c.symbolPool.New()
+	result := c.symbolArena.New()
 	result.Flags = flags | ast.SymbolFlagsTransient
 	result.Name = name
 	return result
@@ -24613,7 +24613,7 @@ func (c *Checker) newSubstitutionType(baseType *Type, constraint *Type) *Type {
 }
 
 func (c *Checker) newSignature(flags SignatureFlags, declaration *ast.Node, typeParameters []*Type, thisParameter *ast.Symbol, parameters []*ast.Symbol, resolvedReturnType *Type, resolvedTypePredicate *TypePredicate, minArgumentCount int) *Signature {
-	sig := c.signaturePool.New()
+	sig := c.signatureArena.New()
 	sig.flags = flags
 	sig.declaration = declaration
 	sig.typeParameters = typeParameters
@@ -24627,7 +24627,7 @@ func (c *Checker) newSignature(flags SignatureFlags, declaration *ast.Node, type
 }
 
 func (c *Checker) newIndexInfo(keyType *Type, valueType *Type, isReadonly bool, declaration *ast.Node, components []*ast.Node) *IndexInfo {
-	info := c.indexInfoPool.New()
+	info := c.indexInfoArena.New()
 	info.keyType = keyType
 	info.valueType = valueType
 	info.isReadonly = isReadonly
