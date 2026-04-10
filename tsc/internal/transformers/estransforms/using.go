@@ -155,8 +155,8 @@ func (tx *usingDeclarationTransformer) visitSourceFile(node *ast.SourceFile) *as
 					tx.Factory().NewModifier(ast.KindExportKeyword),
 				}),
 				tx.Factory().NewVariableDeclarationList(
-					ast.NodeFlagsLet,
 					tx.Factory().NewNodeList(tx.exportVars),
+					ast.NodeFlagsLet,
 				),
 			))
 		}
@@ -197,7 +197,7 @@ func (tx *usingDeclarationTransformer) visitBlock(node *ast.Block) *ast.Node {
 		)...)
 		statementList := tx.Factory().NewNodeList(statements)
 		statementList.Loc = node.Statements.Loc
-		return tx.Factory().UpdateBlock(node, statementList)
+		return tx.Factory().UpdateBlock(node, statementList, node.MultiLine)
 	}
 	return tx.Visitor().VisitEachChild(node.AsNode())
 }
@@ -256,8 +256,8 @@ func (tx *usingDeclarationTransformer) visitForOfStatement(node *ast.ForInOrOfSt
 		temp := tx.Factory().NewGeneratedNameForNode(forDecl.Name())
 		usingVar := tx.Factory().UpdateVariableDeclaration(forDecl.AsVariableDeclaration(), forDecl.Name(), nil /*exclamationToken*/, nil /*type*/, temp)
 		usingVarList := tx.Factory().NewVariableDeclarationList(
-			core.IfElse(isAwaitUsing, ast.NodeFlagsAwaitUsing, ast.NodeFlagsUsing),
 			tx.Factory().NewNodeList([]*ast.Node{usingVar}),
+			core.IfElse(isAwaitUsing, ast.NodeFlagsAwaitUsing, ast.NodeFlagsUsing),
 		)
 		usingVarStatement := tx.Factory().NewVariableStatement(nil /*modifiers*/, usingVarList)
 		var statement *ast.Statement
@@ -268,6 +268,7 @@ func (tx *usingDeclarationTransformer) visitForOfStatement(node *ast.ForInOrOfSt
 			statement = tx.Factory().UpdateBlock(
 				node.Statement.AsBlock(),
 				tx.Factory().NewNodeList(statements),
+				node.Statement.AsBlock().MultiLine,
 			)
 		} else {
 			statement = tx.Factory().NewBlock(
@@ -283,10 +284,10 @@ func (tx *usingDeclarationTransformer) visitForOfStatement(node *ast.ForInOrOfSt
 				node,
 				node.AwaitModifier,
 				tx.Factory().NewVariableDeclarationList(
-					ast.NodeFlagsConst,
 					tx.Factory().NewNodeList([]*ast.VariableDeclarationNode{
 						tx.Factory().NewVariableDeclaration(temp, nil /*exclamationToken*/, nil /*type*/, nil),
 					}),
+					ast.NodeFlagsConst,
 				),
 				node.Expression,
 				statement,
@@ -366,7 +367,7 @@ func (tx *usingDeclarationTransformer) transformUsingDeclarations(statementsIn [
 
 			// Only replace the statement if it was valid.
 			if len(declarations) > 0 {
-				varList := tx.Factory().NewVariableDeclarationList(ast.NodeFlagsConst, tx.Factory().NewNodeList(declarations))
+				varList := tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList(declarations), ast.NodeFlagsConst)
 				tx.EmitContext().SetOriginal(varList, declarationList)
 				varList.Loc = declarationList.Loc
 				hoistOrAppendNode(tx.Factory().UpdateVariableStatement(varStatement, nil /*modifiers*/, varList))
@@ -658,7 +659,7 @@ func (tx *usingDeclarationTransformer) createDownlevelUsingStatements(bodyStatem
 		tx.Factory().NewPropertyAssignment(nil /*modifiers*/, tx.Factory().NewIdentifier("hasError"), nil /*postfixToken*/, nil /*typeNode*/, tx.Factory().NewFalseExpression()),
 	}), false /*multiLine*/)
 	envVar := tx.Factory().NewVariableDeclaration(envBinding, nil /*exclamationToken*/, nil /*typeNode*/, envObject)
-	envVarList := tx.Factory().NewVariableDeclarationList(ast.NodeFlagsConst, tx.Factory().NewNodeList([]*ast.VariableDeclarationNode{envVar}))
+	envVarList := tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.VariableDeclarationNode{envVar}), ast.NodeFlagsConst)
 	envVarStatement := tx.Factory().NewVariableStatement(nil /*modifiers*/, envVarList)
 	statements = append(statements, envVarStatement)
 
@@ -724,14 +725,14 @@ func (tx *usingDeclarationTransformer) createDownlevelUsingStatements(bodyStatem
 		finallyBlock = tx.Factory().NewBlock(tx.Factory().NewNodeList([]*ast.Statement{
 			tx.Factory().NewVariableStatement(
 				nil, /*modifiers*/
-				tx.Factory().NewVariableDeclarationList(ast.NodeFlagsConst, tx.Factory().NewNodeList([]*ast.VariableDeclarationNode{
+				tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.VariableDeclarationNode{
 					tx.Factory().NewVariableDeclaration(
 						result,
 						nil, /*exclamationToken*/
 						nil, /*type*/
 						tx.Factory().NewDisposeResourcesHelper(envBinding),
 					),
-				})),
+				}), ast.NodeFlagsConst),
 			),
 			tx.Factory().NewIfStatement(result, tx.Factory().NewExpressionStatement(tx.Factory().NewAwaitExpression(result)), nil /*elseStatement*/),
 		}), true /*multiLine*/)

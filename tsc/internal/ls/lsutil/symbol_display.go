@@ -302,7 +302,7 @@ func isFirstDeclarationOfSymbolParameter(symbol *ast.Symbol) bool {
 		declaration = symbol.Declarations[0]
 	}
 	result := ast.FindAncestorOrQuit(declaration, func(n *ast.Node) ast.FindAncestorResult {
-		if ast.IsParameter(n) {
+		if ast.IsParameterDeclaration(n) {
 			return ast.FindAncestorTrue
 		}
 		if ast.IsBindingElement(n) || ast.IsObjectBindingPattern(n) || ast.IsArrayBindingPattern(n) {

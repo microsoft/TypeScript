@@ -6,10 +6,11 @@ import { ScriptTarget } from "#enums/scriptTarget";
 import { SyntaxKind } from "#enums/syntaxKind";
 import { TokenFlags } from "#enums/tokenFlags";
 import type {
-    JSDocSyntaxKind,
     JsxTokenSyntaxKind,
     KeywordSyntaxKind,
-} from "./nodes.ts";
+} from "./ast.ts";
+
+export type JSDocTokenKind = SyntaxKind.EndOfFile | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.GreaterThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.OpenParenToken | SyntaxKind.CloseParenToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.Unknown | KeywordSyntaxKind;
 
 export interface CommentDirective {
     range: { pos: number; end: number; };
@@ -71,8 +72,8 @@ export interface Scanner {
     reScanQuestionToken(): SyntaxKind;
     reScanInvalidIdentifier(): SyntaxKind;
     scanJsxToken(): JsxTokenSyntaxKind;
-    scanJsDocToken(): JSDocSyntaxKind;
-    scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken;
+    scanJsDocToken(): JSDocTokenKind;
+    scanJSDocCommentTextToken(inBackticks: boolean): JSDocTokenKind | SyntaxKind.JSDocCommentTextToken;
     scan(): SyntaxKind;
 
     getText(): string;
@@ -2327,7 +2328,7 @@ export function createScanner(
         return scanJsxAttributeValue();
     }
 
-    function scanJSDocCommentTextToken(inBackticks: boolean): JSDocSyntaxKind | SyntaxKind.JSDocCommentTextToken {
+    function scanJSDocCommentTextToken(inBackticks: boolean): JSDocTokenKind | SyntaxKind.JSDocCommentTextToken {
         fullStartPos = tokenStart = pos;
         tokenFlags = TokenFlags.None;
         if (pos >= end) {
@@ -2354,7 +2355,7 @@ export function createScanner(
         return token = SyntaxKind.JSDocCommentTextToken;
     }
 
-    function scanJsDocToken(): JSDocSyntaxKind {
+    function scanJsDocToken(): JSDocTokenKind {
         fullStartPos = tokenStart = pos;
         tokenFlags = TokenFlags.None;
         if (pos >= end) {

@@ -27,8 +27,8 @@
             "default": "./dist/is.js"
         },
         "./factory": {
-            "@typescript/source": "./src/factory.ts",
-            "default": "./dist/factory.js"
+            "@typescript/source": "./src/factory.generated.ts",
+            "default": "./dist/factory.generated.js"
         },
         "./utils": {
             "@typescript/source": "./src/utils.ts",
@@ -49,9 +49,8 @@
     },
     "scripts": {
         "generate:enums": "npx hereby generate:enums --herebyfile ../../Herebyfile.mjs",
-        "generate:factory": "node --conditions=@typescript/source --experimental-strip-types --no-warnings scripts/generateFactory.ts",
-        "generate:visitor": "node --conditions=@typescript/source --experimental-strip-types --no-warnings scripts/generateVisitor.ts",
-        "prebuild": "npm run generate:enums && npm run generate:factory && npm run generate:visitor",
+        "generate:ast": "node --experimental-strip-types --no-warnings ../../_scripts/generate-ts-ast.ts",
+        "prebuild": "npm run generate:enums && npm run generate:ast",
         "build": "tsc -b"
     }
 }

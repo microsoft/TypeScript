@@ -19,6 +19,7 @@ import { createVirtualFileSystem } from "@typescript/api/fs";
 import type { FileSystem } from "@typescript/api/fs";
 import {
     cast,
+    getSynthesizedDeepClone,
     isCallExpression,
     isFunctionDeclaration,
     isIdentifier,
@@ -30,12 +31,10 @@ import {
     isTemplateHead,
     isTemplateMiddle,
     isTemplateTail,
+    isTypeNode,
     isVariableDeclarationList,
     type Node,
     NodeFlags,
-} from "@typescript/ast";
-import {
-    isTypeNode,
     SyntaxKind,
 } from "@typescript/ast";
 import {
@@ -49,6 +48,8 @@ import {
 } from "@typescript/ast/factory";
 import { visitEachChild } from "@typescript/ast/visitor";
 import assert from "node:assert";
+import { globSync } from "node:fs";
+import { resolve } from "node:path";
 import {
     describe,
     test,
@@ -2251,6 +2252,162 @@ describe("VariableDeclarationList - BlockScoped flags", () => {
     });
 });
 
+test("TypeOperator operator kind", async () => {
+    const api = spawnAPI({
+        "/tsconfig.json": "{}",
+        "/src/index.ts": `function test(arg: readonly number[]) { }\n`,
+    });
+    try {
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert(sourceFile);
+        const param = (sourceFile.statements[0] as import("@typescript/ast").FunctionDeclaration).parameters[0];
+        assert(param);
+        const type = param.type as import("@typescript/ast").TypeOperatorNode;
+        assert(type);
+        assert.equal(type.kind, SyntaxKind.TypeOperator);
+        assert.equal(type.operator, SyntaxKind.ReadonlyKeyword);
+        const printed = await project.emitter.printNode(sourceFile);
+        assert.equal(sourceFile.text, printed);
+    }
+    finally {
+        await api.close();
+    }
+});
+
+test("SpreadAssignment roundtrip", async () => {
+    const api = spawnAPI({
+        "/tsconfig.json": "{}",
+        "/src/index.ts": `var thing = { ...other };\n`,
+    });
+    try {
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert(sourceFile);
+        const stmt = sourceFile.statements[0] as import("@typescript/ast").VariableStatement;
+        const object = stmt.declarationList.declarations[0].initializer as import("@typescript/ast").ObjectLiteralExpression;
+        const assignment = object.properties[0] as import("@typescript/ast").SpreadAssignment;
+        assert(assignment);
+        assert.equal(assignment.kind, SyntaxKind.SpreadAssignment);
+        const expr = assignment.expression;
+        assert(expr);
+        assert.equal(expr.kind, SyntaxKind.Identifier);
+        const printed = await project.emitter.printNode(sourceFile);
+        assert.equal(sourceFile.text, printed);
+    }
+    finally {
+        await api.close();
+    }
+});
+
+test("VariableDeclarationList const flag clone", async () => {
+    const api = spawnAPI({
+        "/tsconfig.json": "{}",
+        "/src/index.ts": `const thing = 123;\n`,
+    });
+    try {
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert(sourceFile);
+        {
+            const stmt = sourceFile.statements[0] as import("@typescript/ast").VariableStatement;
+            const list = stmt.declarationList;
+            assert(list.flags & NodeFlags.Const);
+        }
+        const cloned = getSynthesizedDeepClone(sourceFile);
+        {
+            const stmt = cloned.statements[0] as import("@typescript/ast").VariableStatement;
+            const list = stmt.declarationList;
+            assert(list.flags & NodeFlags.Const);
+        }
+        const printed = await project.emitter.printNode(cloned);
+        assert.equal(sourceFile.text, printed);
+    }
+    finally {
+        await api.close();
+    }
+});
+
+test("JSDoc before ExpressionStatement allowed", async () => {
+    const api = spawnAPI({
+        "/tsconfig.json": "{}",
+        "/src/index.ts": `
+/**
+ * A doc.
+ */
+doThing();
+        `,
+    });
+    try {
+        const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = await project.program.getSourceFile("/src/index.ts");
+        assert(sourceFile);
+        const printed = await project.emitter.printNode(sourceFile);
+        assert.equal(sourceFile.text.trim(), printed.trim());
+    }
+    finally {
+        await api.close();
+    }
+});
+
+test("Parse-clone-emit roundtrip", async () => {
+    const tsSource = fileURLToPath(new URL("../../../../_submodules/TypeScript/src", import.meta.url).toString());
+    const api = new API({
+        cwd: tsSource,
+        tsserverPath: getTsserverPath(),
+    });
+    const target = {
+        cloneCrashed: 0,
+        printCrashed: 0,
+        clonePrintCrashed: 0,
+    };
+    const errors = { ...target };
+    try {
+        for (const tsconfig of globSync("**/tsconfig.json", { cwd: tsSource })) {
+            const snapshot = await api.updateSnapshot({ openProject: resolve(tsSource, tsconfig) });
+            const project = snapshot.getProject(tsconfig);
+            assert(project);
+            for (const file of project.rootFiles) {
+                const source = await project.program.getSourceFile(file);
+                assert(source);
+                let clone: typeof source;
+
+                try {
+                    await project.emitter.printNode(source);
+                }
+                catch {
+                    errors.printCrashed++;
+                    continue;
+                }
+
+                try {
+                    clone = getSynthesizedDeepClone(source);
+                }
+                catch {
+                    errors.cloneCrashed++;
+                    continue;
+                }
+
+                try {
+                    await project.emitter.printNode(clone);
+                }
+                catch {
+                    errors.clonePrintCrashed++;
+                    continue;
+                }
+            }
+        }
+    }
+    finally {
+        await api.close();
+    }
+    assert.deepEqual(errors, target);
+});
+
 describe("Program - diagnostics", () => {
     test("getSyntacticDiagnostics", async () => {
         const source = `const x: = 1;`;
@@ -2389,10 +2546,14 @@ test("Benchmarks", async () => {
     await runBenchmarks({ singleIteration: true });
 });
 
+function getTsserverPath() {
+    return fileURLToPath(new URL(`../../../../built/local/tsgo${process.platform === "win32" ? ".exe" : ""}`, import.meta.url).toString());
+}
+
 function spawnAPI(files: Record<string, string> = { ...defaultFiles }) {
     return new API({
         cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
-        tsserverPath: fileURLToPath(new URL(`../../../../built/local/tsgo${process.platform === "win32" ? ".exe" : ""}`, import.meta.url).toString()),
+        tsserverPath: getTsserverPath(),
         fs: createVirtualFileSystem(files),
     });
 }
@@ -2401,7 +2562,7 @@ function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }): { 
     const fs = createVirtualFileSystem(files);
     const api = new API({
         cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
-        tsserverPath: fileURLToPath(new URL(`../../../../built/local/tsgo${process.platform === "win32" ? ".exe" : ""}`, import.meta.url).toString()),
+        tsserverPath: getTsserverPath(),
         fs,
     });
     return { api, fs };

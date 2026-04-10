@@ -1,0 +1,5515 @@
+{
+    "$schema": "./ast.schema.json",
+    "kinds": {
+        "elements": [
+            "Unknown",
+            "EndOfFile",
+            "SingleLineCommentTrivia",
+            "MultiLineCommentTrivia",
+            "NewLineTrivia",
+            "WhitespaceTrivia",
+            "ConflictMarkerTrivia",
+            "NonTextFileMarkerTrivia",
+            "NumericLiteral",
+            "BigIntLiteral",
+            "StringLiteral",
+            "JsxText",
+            "JsxTextAllWhiteSpaces",
+            "RegularExpressionLiteral",
+            "NoSubstitutionTemplateLiteral",
+            {
+                "comment": "Pseudo-literals"
+            },
+            "TemplateHead",
+            "TemplateMiddle",
+            "TemplateTail",
+            {
+                "comment": "Punctuation"
+            },
+            "OpenBraceToken",
+            "CloseBraceToken",
+            "OpenParenToken",
+            "CloseParenToken",
+            "OpenBracketToken",
+            "CloseBracketToken",
+            "DotToken",
+            "DotDotDotToken",
+            "SemicolonToken",
+            "CommaToken",
+            "QuestionDotToken",
+            "LessThanToken",
+            "LessThanSlashToken",
+            "GreaterThanToken",
+            "LessThanEqualsToken",
+            "GreaterThanEqualsToken",
+            "EqualsEqualsToken",
+            "ExclamationEqualsToken",
+            "EqualsEqualsEqualsToken",
+            "ExclamationEqualsEqualsToken",
+            "EqualsGreaterThanToken",
+            "PlusToken",
+            "MinusToken",
+            "AsteriskToken",
+            "AsteriskAsteriskToken",
+            "SlashToken",
+            "PercentToken",
+            "PlusPlusToken",
+            "MinusMinusToken",
+            "LessThanLessThanToken",
+            "GreaterThanGreaterThanToken",
+            "GreaterThanGreaterThanGreaterThanToken",
+            "AmpersandToken",
+            "BarToken",
+            "CaretToken",
+            "ExclamationToken",
+            "TildeToken",
+            "AmpersandAmpersandToken",
+            "BarBarToken",
+            "QuestionToken",
+            "ColonToken",
+            "AtToken",
+            "QuestionQuestionToken",
+            {
+                "comment": "Only the JSDoc scanner produces BacktickToken. The normal scanner produces NoSubstitutionTemplateLiteral and related kinds."
+            },
+            "BacktickToken",
+            {
+                "comment": "Only the JSDoc scanner produces HashToken. The normal scanner produces PrivateIdentifier."
+            },
+            "HashToken",
+            {
+                "comment": "Assignments"
+            },
+            "EqualsToken",
+            "PlusEqualsToken",
+            "MinusEqualsToken",
+            "AsteriskEqualsToken",
+            "AsteriskAsteriskEqualsToken",
+            "SlashEqualsToken",
+            "PercentEqualsToken",
+            "LessThanLessThanEqualsToken",
+            "GreaterThanGreaterThanEqualsToken",
+            "GreaterThanGreaterThanGreaterThanEqualsToken",
+            "AmpersandEqualsToken",
+            "BarEqualsToken",
+            "BarBarEqualsToken",
+            "AmpersandAmpersandEqualsToken",
+            "QuestionQuestionEqualsToken",
+            "CaretEqualsToken",
+            {
+                "comment": "Identifiers and PrivateIdentifier"
+            },
+            "Identifier",
+            "PrivateIdentifier",
+            "JSDocCommentTextToken",
+            {
+                "comment": "Reserved words"
+            },
+            "BreakKeyword",
+            "CaseKeyword",
+            "CatchKeyword",
+            "ClassKeyword",
+            "ConstKeyword",
+            "ContinueKeyword",
+            "DebuggerKeyword",
+            "DefaultKeyword",
+            "DeleteKeyword",
+            "DoKeyword",
+            "ElseKeyword",
+            "EnumKeyword",
+            "ExportKeyword",
+            "ExtendsKeyword",
+            "FalseKeyword",
+            "FinallyKeyword",
+            "ForKeyword",
+            "FunctionKeyword",
+            "IfKeyword",
+            "ImportKeyword",
+            "InKeyword",
+            "InstanceOfKeyword",
+            "NewKeyword",
+            "NullKeyword",
+            "ReturnKeyword",
+            "SuperKeyword",
+            "SwitchKeyword",
+            "ThisKeyword",
+            "ThrowKeyword",
+            "TrueKeyword",
+            "TryKeyword",
+            "TypeOfKeyword",
+            "VarKeyword",
+            "VoidKeyword",
+            "WhileKeyword",
+            "WithKeyword",
+            {
+                "comment": "Strict mode reserved words"
+            },
+            "ImplementsKeyword",
+            "InterfaceKeyword",
+            "LetKeyword",
+            "PackageKeyword",
+            "PrivateKeyword",
+            "ProtectedKeyword",
+            "PublicKeyword",
+            "StaticKeyword",
+            "YieldKeyword",
+            {
+                "comment": "Contextual keywords"
+            },
+            "AbstractKeyword",
+            "AccessorKeyword",
+            "AsKeyword",
+            "AssertsKeyword",
+            "AssertKeyword",
+            "AnyKeyword",
+            "AsyncKeyword",
+            "AwaitKeyword",
+            "BooleanKeyword",
+            "ConstructorKeyword",
+            "DeclareKeyword",
+            "GetKeyword",
+            "ImmediateKeyword",
+            "InferKeyword",
+            "IntrinsicKeyword",
+            "IsKeyword",
+            "KeyOfKeyword",
+            "ModuleKeyword",
+            "NamespaceKeyword",
+            "NeverKeyword",
+            "OutKeyword",
+            "ReadonlyKeyword",
+            "RequireKeyword",
+            "NumberKeyword",
+            "ObjectKeyword",
+            "SatisfiesKeyword",
+            "SetKeyword",
+            "StringKeyword",
+            "SymbolKeyword",
+            "TypeKeyword",
+            "UndefinedKeyword",
+            "UniqueKeyword",
+            "UnknownKeyword",
+            "UsingKeyword",
+            "FromKeyword",
+            "GlobalKeyword",
+            "BigIntKeyword",
+            "OverrideKeyword",
+            "OfKeyword",
+            {
+                "name": "DeferKeyword",
+                "comment": "LastKeyword and LastToken and LastContextualKeyword"
+            },
+            {
+                "comment": "Parse tree nodes"
+            },
+            {
+                "comment": "Names"
+            },
+            "QualifiedName",
+            "ComputedPropertyName",
+            {
+                "comment": "Signature elements"
+            },
+            "TypeParameter",
+            "Parameter",
+            "Decorator",
+            {
+                "comment": "TypeMember"
+            },
+            "PropertySignature",
+            "PropertyDeclaration",
+            "MethodSignature",
+            "MethodDeclaration",
+            "ClassStaticBlockDeclaration",
+            "Constructor",
+            "GetAccessor",
+            "SetAccessor",
+            "CallSignature",
+            "ConstructSignature",
+            "IndexSignature",
+            {
+                "comment": "Type"
+            },
+            "TypePredicate",
+            "TypeReference",
+            "FunctionType",
+            "ConstructorType",
+            "TypeQuery",
+            "TypeLiteral",
+            "ArrayType",
+            "TupleType",
+            "OptionalType",
+            "RestType",
+            "UnionType",
+            "IntersectionType",
+            "ConditionalType",
+            "InferType",
+            "ParenthesizedType",
+            "ThisType",
+            "TypeOperator",
+            "IndexedAccessType",
+            "MappedType",
+            "LiteralType",
+            "NamedTupleMember",
+            "TemplateLiteralType",
+            "TemplateLiteralTypeSpan",
+            "ImportType",
+            {
+                "comment": "Binding patterns"
+            },
+            "ObjectBindingPattern",
+            "ArrayBindingPattern",
+            "BindingElement",
+            {
+                "comment": "Expression"
+            },
+            "ArrayLiteralExpression",
+            "ObjectLiteralExpression",
+            "PropertyAccessExpression",
+            "ElementAccessExpression",
+            "CallExpression",
+            "NewExpression",
+            "TaggedTemplateExpression",
+            "TypeAssertionExpression",
+            "ParenthesizedExpression",
+            "FunctionExpression",
+            "ArrowFunction",
+            "DeleteExpression",
+            "TypeOfExpression",
+            "VoidExpression",
+            "AwaitExpression",
+            "PrefixUnaryExpression",
+            "PostfixUnaryExpression",
+            "BinaryExpression",
+            "ConditionalExpression",
+            "TemplateExpression",
+            "YieldExpression",
+            "SpreadElement",
+            "ClassExpression",
+            "OmittedExpression",
+            "ExpressionWithTypeArguments",
+            "AsExpression",
+            "NonNullExpression",
+            "MetaProperty",
+            "SyntheticExpression",
+            "SatisfiesExpression",
+            {
+                "comment": "Misc"
+            },
+            "TemplateSpan",
+            "SemicolonClassElement",
+            {
+                "comment": "Element"
+            },
+            "Block",
+            "EmptyStatement",
+            "VariableStatement",
+            "ExpressionStatement",
+            "IfStatement",
+            "DoStatement",
+            "WhileStatement",
+            "ForStatement",
+            "ForInStatement",
+            "ForOfStatement",
+            "ContinueStatement",
+            "BreakStatement",
+            "ReturnStatement",
+            "WithStatement",
+            "SwitchStatement",
+            "LabeledStatement",
+            "ThrowStatement",
+            "TryStatement",
+            "DebuggerStatement",
+            "VariableDeclaration",
+            "VariableDeclarationList",
+            "FunctionDeclaration",
+            "ClassDeclaration",
+            "InterfaceDeclaration",
+            "TypeAliasDeclaration",
+            "EnumDeclaration",
+            "ModuleDeclaration",
+            "ModuleBlock",
+            "CaseBlock",
+            "NamespaceExportDeclaration",
+            "ImportEqualsDeclaration",
+            "ImportDeclaration",
+            "ImportClause",
+            "NamespaceImport",
+            "NamedImports",
+            "ImportSpecifier",
+            "ExportAssignment",
+            "ExportDeclaration",
+            "NamedExports",
+            "NamespaceExport",
+            "ExportSpecifier",
+            "MissingDeclaration",
+            {
+                "comment": "Module references"
+            },
+            "ExternalModuleReference",
+            {
+                "comment": "JSX"
+            },
+            "JsxElement",
+            "JsxSelfClosingElement",
+            "JsxOpeningElement",
+            "JsxClosingElement",
+            "JsxFragment",
+            "JsxOpeningFragment",
+            "JsxClosingFragment",
+            "JsxAttribute",
+            "JsxAttributes",
+            "JsxSpreadAttribute",
+            "JsxExpression",
+            "JsxNamespacedName",
+            {
+                "comment": "Clauses"
+            },
+            "CaseClause",
+            "DefaultClause",
+            "HeritageClause",
+            "CatchClause",
+            {
+                "comment": "Import attributes"
+            },
+            "ImportAttributes",
+            "ImportAttribute",
+            {
+                "comment": "Property assignments"
+            },
+            "PropertyAssignment",
+            "ShorthandPropertyAssignment",
+            "SpreadAssignment",
+            {
+                "comment": "Enum"
+            },
+            "EnumMember",
+            {
+                "comment": "Top-level nodes"
+            },
+            "SourceFile",
+            {
+                "comment": "JSDoc nodes"
+            },
+            "JSDocTypeExpression",
+            "JSDocNameReference",
+            {
+                "name": "JSDocAllType",
+                "comment": "The * type"
+            },
+            "JSDocNullableType",
+            "JSDocNonNullableType",
+            "JSDocOptionalType",
+            "JSDocVariadicType",
+            "JSDoc",
+            "JSDocText",
+            "JSDocTypeLiteral",
+            "JSDocSignature",
+            "JSDocLink",
+            "JSDocLinkCode",
+            "JSDocLinkPlain",
+            "JSDocUnknownTag",
+            "JSDocAugmentsTag",
+            "JSDocImplementsTag",
+            "JSDocDeprecatedTag",
+            "JSDocPublicTag",
+            "JSDocPrivateTag",
+            "JSDocProtectedTag",
+            "JSDocReadonlyTag",
+            "JSDocOverrideTag",
+            "JSDocCallbackTag",
+            "JSDocOverloadTag",
+            "JSDocParameterTag",
+            "JSDocReturnTag",
+            "JSDocThisTag",
+            "JSDocTypeTag",
+            "JSDocTemplateTag",
+            "JSDocTypedefTag",
+            "JSDocSeeTag",
+            "JSDocPropertyTag",
+            "JSDocThrowsTag",
+            "JSDocSatisfiesTag",
+            "JSDocImportTag",
+            {
+                "comment": "Synthesized list"
+            },
+            "SyntaxList",
+            {
+                "comment": "Reparsed JS nodes"
+            },
+            "JSTypeAliasDeclaration",
+            "JSExportAssignment",
+            "CommonJSExport",
+            "JSImportDeclaration",
+            {
+                "comment": "Transformation nodes"
+            },
+            "NotEmittedStatement",
+            "PartiallyEmittedExpression",
+            "SyntheticReferenceExpression",
+            "NotEmittedTypeElement"
+        ],
+        "markers": [
+            {
+                "name": "FirstAssignment",
+                "value": "EqualsToken"
+            },
+            {
+                "name": "LastAssignment",
+                "value": "CaretEqualsToken"
+            },
+            {
+                "name": "FirstCompoundAssignment",
+                "value": "PlusEqualsToken"
+            },
+            {
+                "name": "LastCompoundAssignment",
+                "value": "CaretEqualsToken"
+            },
+            {
+                "name": "FirstReservedWord",
+                "value": "BreakKeyword"
+            },
+            {
+                "name": "LastReservedWord",
+                "value": "WithKeyword"
+            },
+            {
+                "name": "FirstKeyword",
+                "value": "BreakKeyword"
+            },
+            {
+                "name": "LastKeyword",
+                "value": "DeferKeyword"
+            },
+            {
+                "name": "FirstFutureReservedWord",
+                "value": "ImplementsKeyword"
+            },
+            {
+                "name": "LastFutureReservedWord",
+                "value": "YieldKeyword"
+            },
+            {
+                "name": "FirstTypeNode",
+                "value": "TypePredicate"
+            },
+            {
+                "name": "LastTypeNode",
+                "value": "ImportType"
+            },
+            {
+                "name": "FirstPunctuation",
+                "value": "OpenBraceToken"
+            },
+            {
+                "name": "LastPunctuation",
+                "value": "CaretEqualsToken"
+            },
+            {
+                "name": "FirstToken",
+                "value": "Unknown"
+            },
+            {
+                "name": "LastToken",
+                "value": "LastKeyword"
+            },
+            {
+                "name": "FirstLiteralToken",
+                "value": "NumericLiteral"
+            },
+            {
+                "name": "LastLiteralToken",
+                "value": "NoSubstitutionTemplateLiteral"
+            },
+            {
+                "name": "FirstTemplateToken",
+                "value": "NoSubstitutionTemplateLiteral"
+            },
+            {
+                "name": "LastTemplateToken",
+                "value": "TemplateTail"
+            },
+            {
+                "name": "FirstBinaryOperator",
+                "value": "LessThanToken"
+            },
+            {
+                "name": "LastBinaryOperator",
+                "value": "CaretEqualsToken"
+            },
+            {
+                "name": "FirstStatement",
+                "value": "VariableStatement"
+            },
+            {
+                "name": "LastStatement",
+                "value": "DebuggerStatement"
+            },
+            {
+                "name": "FirstNode",
+                "value": "QualifiedName"
+            },
+            {
+                "name": "FirstJSDocNode",
+                "value": "JSDocTypeExpression"
+            },
+            {
+                "name": "LastJSDocNode",
+                "value": "JSDocImportTag"
+            },
+            {
+                "name": "FirstJSDocTagNode",
+                "value": "JSDocUnknownTag"
+            },
+            {
+                "name": "LastJSDocTagNode",
+                "value": "JSDocImportTag"
+            },
+            {
+                "name": "FirstContextualKeyword",
+                "value": "AbstractKeyword"
+            },
+            {
+                "name": "LastContextualKeyword",
+                "value": "DeferKeyword"
+            },
+            {
+                "name": "LastUnaryOperator",
+                "value": "TildeToken"
+            },
+            {
+                "name": "FirstTriviaToken",
+                "value": "SingleLineCommentTrivia"
+            },
+            {
+                "name": "LastTriviaToken",
+                "value": "ConflictMarkerTrivia"
+            }
+        ],
+        "aliases": {
+            "TriviaSyntaxKind": [
+                "SingleLineCommentTrivia",
+                "MultiLineCommentTrivia",
+                "NewLineTrivia",
+                "WhitespaceTrivia",
+                "ConflictMarkerTrivia"
+            ],
+            "LiteralSyntaxKind": {
+                "range": [
+                    "FirstLiteralToken",
+                    "LastLiteralToken"
+                ]
+            },
+            "PseudoLiteralSyntaxKind": [
+                "TemplateHead",
+                "TemplateMiddle",
+                "TemplateTail"
+            ],
+            "PunctuationSyntaxKind": {
+                "range": [
+                    "FirstPunctuation",
+                    "LastPunctuation"
+                ]
+            },
+            "KeywordSyntaxKind": {
+                "range": [
+                    "FirstKeyword",
+                    "LastKeyword"
+                ]
+            },
+            "ModifierSyntaxKind": [
+                "AbstractKeyword",
+                "AccessorKeyword",
+                "AsyncKeyword",
+                "ConstKeyword",
+                "DeclareKeyword",
+                "DefaultKeyword",
+                "ExportKeyword",
+                "InKeyword",
+                "PrivateKeyword",
+                "ProtectedKeyword",
+                "PublicKeyword",
+                "ReadonlyKeyword",
+                "OutKeyword",
+                "OverrideKeyword",
+                "StaticKeyword"
+            ],
+            "KeywordTypeSyntaxKind": [
+                "AnyKeyword",
+                "BigIntKeyword",
+                "BooleanKeyword",
+                "IntrinsicKeyword",
+                "NeverKeyword",
+                "NumberKeyword",
+                "ObjectKeyword",
+                "StringKeyword",
+                "SymbolKeyword",
+                "UndefinedKeyword",
+                "UnknownKeyword",
+                "VoidKeyword"
+            ],
+            "KeywordExpressionSyntaxKind": [
+                "NullKeyword",
+                "TrueKeyword",
+                "FalseKeyword",
+                "ThisKeyword",
+                "SuperKeyword",
+                "ImportKeyword"
+            ],
+            "TokenSyntaxKind": {
+                "range": [
+                    "FirstToken",
+                    "LastToken"
+                ]
+            },
+            "JsxTokenSyntaxKind": [
+                "LessThanSlashToken",
+                "EndOfFile",
+                "ConflictMarkerTrivia",
+                "JsxText",
+                "JsxTextAllWhiteSpaces",
+                "OpenBraceToken",
+                "LessThanToken"
+            ],
+            "JSDocNodeSyntaxKind": {
+                "range": [
+                    "FirstJSDocNode",
+                    "LastJSDocNode"
+                ]
+            },
+            "ImportPhaseModifierSyntaxKind": [
+                "TypeKeyword",
+                "DeferKeyword"
+            ],
+            "PostfixUnaryOperator": [
+                "PlusPlusToken",
+                "MinusMinusToken"
+            ],
+            "PrefixUnaryOperator": [
+                "PlusToken",
+                "MinusToken",
+                "TildeToken",
+                "ExclamationToken",
+                "PlusPlusToken",
+                "MinusMinusToken"
+            ],
+            "AssignmentOperator": [
+                "EqualsToken",
+                "CompoundAssignmentOperator"
+            ],
+            "BinaryOperator": [
+                "AssignmentOperatorOrHigher",
+                "CommaToken"
+            ],
+            "ExponentiationOperator": [
+                "AsteriskAsteriskToken"
+            ],
+            "MultiplicativeOperator": [
+                "AsteriskToken",
+                "SlashToken",
+                "PercentToken"
+            ],
+            "MultiplicativeOperatorOrHigher": [
+                "ExponentiationOperator",
+                "MultiplicativeOperator"
+            ],
+            "AdditiveOperator": [
+                "PlusToken",
+                "MinusToken"
+            ],
+            "AdditiveOperatorOrHigher": [
+                "MultiplicativeOperatorOrHigher",
+                "AdditiveOperator"
+            ],
+            "ShiftOperator": [
+                "LessThanLessThanToken",
+                "GreaterThanGreaterThanToken",
+                "GreaterThanGreaterThanGreaterThanToken"
+            ],
+            "ShiftOperatorOrHigher": [
+                "AdditiveOperatorOrHigher",
+                "ShiftOperator"
+            ],
+            "RelationalOperator": [
+                "LessThanToken",
+                "LessThanEqualsToken",
+                "GreaterThanToken",
+                "GreaterThanEqualsToken",
+                "InstanceOfKeyword",
+                "InKeyword"
+            ],
+            "RelationalOperatorOrHigher": [
+                "ShiftOperatorOrHigher",
+                "RelationalOperator"
+            ],
+            "EqualityOperator": [
+                "EqualsEqualsToken",
+                "EqualsEqualsEqualsToken",
+                "ExclamationEqualsEqualsToken",
+                "ExclamationEqualsToken"
+            ],
+            "EqualityOperatorOrHigher": [
+                "RelationalOperatorOrHigher",
+                "EqualityOperator"
+            ],
+            "BitwiseOperator": [
+                "AmpersandToken",
+                "BarToken",
+                "CaretToken"
+            ],
+            "BitwiseOperatorOrHigher": [
+                "EqualityOperatorOrHigher",
+                "BitwiseOperator"
+            ],
+            "LogicalOperator": [
+                "AmpersandAmpersandToken",
+                "BarBarToken"
+            ],
+            "LogicalOperatorOrHigher": [
+                "BitwiseOperatorOrHigher",
+                "LogicalOperator"
+            ],
+            "CompoundAssignmentOperator": [
+                "PlusEqualsToken",
+                "MinusEqualsToken",
+                "AsteriskAsteriskEqualsToken",
+                "AsteriskEqualsToken",
+                "SlashEqualsToken",
+                "PercentEqualsToken",
+                "AmpersandEqualsToken",
+                "BarEqualsToken",
+                "CaretEqualsToken",
+                "LessThanLessThanEqualsToken",
+                "GreaterThanGreaterThanGreaterThanEqualsToken",
+                "GreaterThanGreaterThanEqualsToken",
+                "BarBarEqualsToken",
+                "AmpersandAmpersandEqualsToken",
+                "QuestionQuestionEqualsToken"
+            ],
+            "AssignmentOperatorOrHigher": [
+                "QuestionQuestionToken",
+                "LogicalOperatorOrHigher",
+                "AssignmentOperator"
+            ],
+            "LogicalOrCoalescingAssignmentOperator": [
+                "AmpersandAmpersandEqualsToken",
+                "BarBarEqualsToken",
+                "QuestionQuestionEqualsToken"
+            ]
+        }
+    },
+    "bases": {
+        "NodeBase": {
+            "fields": {
+                "Flags": {
+                    "type": "NodeFlags"
+                }
+            },
+            "extends": []
+        },
+        "StatementBase": {
+            "brand": "_statementBrand",
+            "extends": [
+                "NodeBase",
+                "FlowNodeBase"
+            ]
+        },
+        "IterationStatementBase": {
+            "extends": [
+                "StatementBase"
+            ],
+            "fields": {
+                "Statement": {
+                    "type": "Statement"
+                }
+            }
+        },
+        "ExpressionBase": {
+            "brand": "_expressionBrand",
+            "extends": [
+                "NodeBase"
+            ]
+        },
+        "UnaryExpressionBase": {
+            "extends": [
+                "ExpressionBase"
+            ],
+            "brand": "_unaryExpressionBrand"
+        },
+        "UpdateExpressionBase": {
+            "extends": [
+                "UnaryExpressionBase"
+            ],
+            "brand": "_updateExpressionBrand"
+        },
+        "LeftHandSideExpressionBase": {
+            "extends": [
+                "UpdateExpressionBase"
+            ],
+            "brand": "_leftHandSideExpressionBrand"
+        },
+        "MemberExpressionBase": {
+            "extends": [
+                "LeftHandSideExpressionBase"
+            ],
+            "brand": "_memberExpressionBrand"
+        },
+        "PrimaryExpressionBase": {
+            "extends": [
+                "MemberExpressionBase"
+            ],
+            "brand": "_primaryExpressionBrand"
+        },
+        "TypeNodeBase": {
+            "brand": "_typeNodeBrand",
+            "extends": [
+                "NodeBase",
+                "TypeSyntaxBase"
+            ]
+        },
+        "NodeWithTypeArgumentsBase": {
+            "extends": [
+                "TypeNodeBase"
+            ],
+            "fields": {
+                "TypeArguments": {
+                    "type": "TypeNode",
+                    "list": "NodeList",
+                    "optional": true
+                }
+            }
+        },
+        "JSDocTypeBase": {
+            "extends": [
+                "TypeNodeBase"
+            ],
+            "brand": "_jsDocTypeBrand"
+        },
+        "DeclarationBase": {
+            "brand": "_declarationBrand",
+            "fields": {
+                "Symbol": {
+                    "type": "*Symbol",
+                    "goOnly": true
+                }
+            },
+            "extends": []
+        },
+        "ExportableBase": {
+            "fields": {
+                "LocalSymbol": {
+                    "type": "*Symbol",
+                    "goOnly": true
+                }
+            },
+            "extends": []
+        },
+        "ModifiersBase": {
+            "fields": {
+                "modifiers": {
+                    "type": "ModifierLike",
+                    "list": "ModifierList",
+                    "optional": true,
+                    "private": true,
+                    "visit": "modifiers"
+                },
+                "modifierFlags": {
+                    "type": "ModifierFlags",
+                    "noGo": true,
+                    "noFactory": true
+                }
+            },
+            "extends": []
+        },
+        "LocalsContainerBase": {
+            "fields": {
+                "Locals": {
+                    "type": "SymbolTable",
+                    "goOnly": true
+                },
+                "NextContainer": {
+                    "type": "*Node",
+                    "goOnly": true
+                }
+            },
+            "extends": []
+        },
+        "FlowNodeBase": {
+            "fields": {
+                "FlowNode": {
+                    "type": "*FlowNode",
+                    "goOnly": true
+                }
+            },
+            "extends": []
+        },
+        "CompositeBase": {
+            "fields": {
+                "facts": {
+                    "type": "atomic.Uint32",
+                    "goOnly": true
+                }
+            },
+            "extends": []
+        },
+        "TypeSyntaxBase": {
+            "extends": []
+        },
+        "FunctionLikeBase": {
+            "extends": [
+                "DeclarationBase",
+                "LocalsContainerBase"
+            ],
+            "fields": {
+                "TypeParameters": {
+                    "type": "TypeParameterDeclaration",
+                    "list": "NodeList",
+                    "optional": true
+                },
+                "Parameters": {
+                    "type": "ParameterDeclaration",
+                    "list": "NodeList"
+                },
+                "Type": {
+                    "type": "TypeNode",
+                    "optional": true
+                },
+                "FullSignature": {
+                    "type": "TypeNode",
+                    "optional": true
+                }
+            }
+        },
+        "BodyBase": {
+            "fields": {
+                "AsteriskToken": {
+                    "type": "AsteriskToken",
+                    "optional": true
+                },
+                "Body": {
+                    "type": "NodeBody",
+                    "optional": true
+                },
+                "EndFlowNode": {
+                    "type": "*FlowNode",
+                    "goOnly": true
+                }
+            },
+            "extends": []
+        },
+        "FunctionLikeWithBodyBase": {
+            "extends": [
+                "FunctionLikeBase",
+                "BodyBase"
+            ],
+            "fields": {
+                "Body": {
+                    "type": "BlockOrExpression",
+                    "optional": true,
+                    "noGo": true
+                }
+            },
+            "brand": "_functionLikeDeclarationBrand"
+        },
+        "ClassLikeBase": {
+            "extends": [
+                "DeclarationBase",
+                "ExportableBase",
+                "ModifiersBase",
+                "LocalsContainerBase",
+                "CompositeBase"
+            ],
+            "fields": {
+                "name": {
+                    "type": "Identifier",
+                    "optional": true,
+                    "private": true
+                },
+                "TypeParameters": {
+                    "type": "TypeParameterDeclaration",
+                    "list": "NodeList",
+                    "optional": true
+                },
+                "HeritageClauses": {
+                    "type": "HeritageClause",
+                    "list": "NodeList",
+                    "optional": true
+                },
+                "Members": {
+                    "type": "ClassElement",
+                    "list": "NodeList"
+                }
+            }
+        },
+        "LiteralLikeNodeBase": {
+            "fields": {
+                "Text": {
+                    "type": "string"
+                },
+                "TokenFlags": {
+                    "type": "TokenFlags"
+                }
+            },
+            "extends": []
+        },
+        "LiteralExpressionBase": {
+            "extends": [
+                "LiteralLikeNodeBase",
+                "PrimaryExpressionBase"
+            ],
+            "brand": "_literalExpressionBrand"
+        },
+        "TemplateLiteralLikeNodeBase": {
+            "extends": [
+                "LiteralLikeNodeBase"
+            ],
+            "fields": {
+                "RawText": {
+                    "type": "string"
+                },
+                "TemplateFlags": {
+                    "type": "TokenFlags"
+                }
+            }
+        },
+        "TypeElementBase": {
+            "brand": "_typeElementBrand",
+            "extends": []
+        },
+        "ClassElementBase": {
+            "brand": "_classElementBrand",
+            "extends": []
+        },
+        "NamedMemberBase": {
+            "extends": [
+                "DeclarationBase",
+                "ModifiersBase"
+            ],
+            "fields": {
+                "name": {
+                    "type": "PropertyName",
+                    "private": true
+                },
+                "PostfixToken": {
+                    "type": [
+                        "QuestionToken",
+                        "ExclamationToken"
+                    ],
+                    "typeGuard": "isQuestionOrExclamationToken",
+                    "optional": true
+                }
+            }
+        },
+        "ObjectLiteralElementBase": {
+            "brand": "_objectLiteralBrand",
+            "extends": []
+        },
+        "AccessorDeclarationBase": {
+            "extends": [
+                "NamedMemberBase",
+                "FunctionLikeWithBodyBase",
+                "FlowNodeBase",
+                "TypeElementBase",
+                "ClassElementBase",
+                "ObjectLiteralElementBase",
+                "CompositeBase",
+                "NodeBase"
+            ]
+        },
+        "FunctionOrConstructorTypeNodeBase": {
+            "extends": [
+                "TypeNodeBase",
+                "ModifiersBase",
+                "FunctionLikeBase"
+            ]
+        },
+        "UnionOrIntersectionTypeNodeBase": {
+            "fields": {
+                "Types": {
+                    "type": "TypeNode",
+                    "list": "NodeList"
+                }
+            },
+            "extends": [
+                "TypeNodeBase"
+            ]
+        },
+        "JSDocTagBase": {
+            "fields": {
+                "TagName": {
+                    "type": "Identifier"
+                },
+                "Comment": {
+                    "type": "JSDocComment",
+                    "list": "NodeList",
+                    "optional": true
+                }
+            },
+            "extends": [
+                "NodeBase"
+            ]
+        },
+        "JSDocCommentBase": {
+            "fields": {
+                "text": {
+                    "type": "string",
+                    "list": "raw",
+                    "private": true
+                }
+            },
+            "extends": [
+                "NodeBase"
+            ]
+        }
+    },
+    "nodes": {
+        "definitions": {
+            "Token": {
+                "extends": [
+                    "NodeBase"
+                ],
+                "typeParameters": [
+                    {
+                        "name": "TKind",
+                        "constraint": "TokenSyntaxKind",
+                        "default": "TokenSyntaxKind"
+                    }
+                ],
+                "members": [
+                    {
+                        "name": "Kind",
+                        "type": "TKind",
+                        "inherited": true
+                    }
+                ],
+                "pool": true,
+                "instantiationAliases": {
+                    "EndOfFile": "EndOfFile",
+                    "DotToken": "DotToken",
+                    "DotDotDotToken": "DotDotDotToken",
+                    "QuestionToken": "QuestionToken",
+                    "ExclamationToken": "ExclamationToken",
+                    "ColonToken": "ColonToken",
+                    "EqualsToken": "EqualsToken",
+                    "AsteriskToken": "AsteriskToken",
+                    "EqualsGreaterThanToken": "EqualsGreaterThanToken",
+                    "PlusToken": "PlusToken",
+                    "MinusToken": "MinusToken",
+                    "QuestionDotToken": "QuestionDotToken",
+                    "AssertsKeyword": "AssertsKeyword",
+                    "AssertKeyword": "AssertKeyword",
+                    "AwaitKeyword": "AwaitKeyword",
+                    "CaseKeyword": "CaseKeyword",
+                    "AbstractKeyword": "AbstractKeyword",
+                    "AccessorKeyword": "AccessorKeyword",
+                    "AsyncKeyword": "AsyncKeyword",
+                    "ConstKeyword": "ConstKeyword",
+                    "DeclareKeyword": "DeclareKeyword",
+                    "DefaultKeyword": "DefaultKeyword",
+                    "ExportKeyword": "ExportKeyword",
+                    "InKeyword": "InKeyword",
+                    "PrivateKeyword": "PrivateKeyword",
+                    "ProtectedKeyword": "ProtectedKeyword",
+                    "PublicKeyword": "PublicKeyword",
+                    "ReadonlyKeyword": "ReadonlyKeyword",
+                    "OutKeyword": "OutKeyword",
+                    "OverrideKeyword": "OverrideKeyword",
+                    "StaticKeyword": "StaticKeyword",
+                    "BinaryOperatorToken": "BinaryOperator",
+                    "AssignmentOperatorToken": "AssignmentOperator"
+                }
+            },
+            "Identifier": {
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "FlowNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Text",
+                        "type": "string"
+                    }
+                ],
+                "pool": true
+            },
+            "PrivateIdentifier": {
+                "extends": [
+                    "PrimaryExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Text",
+                        "type": "string"
+                    }
+                ]
+            },
+            "QualifiedName": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase",
+                    "FlowNodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Left",
+                        "type": "EntityName"
+                    },
+                    {
+                        "name": "Right",
+                        "type": "Identifier"
+                    }
+                ]
+            },
+            "ComputedPropertyName": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "Decorator": {
+                "extends": [
+                    "NodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "LeftHandSideExpression"
+                    }
+                ]
+            },
+            "EmptyStatement": {
+                "extends": [
+                    "StatementBase"
+                ]
+            },
+            "IfStatement": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "StatementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "ThenStatement",
+                        "type": "Statement",
+                        "visit": "embeddedStatement"
+                    },
+                    {
+                        "name": "ElseStatement",
+                        "type": "Statement",
+                        "optional": true,
+                        "visit": "embeddedStatement"
+                    }
+                ],
+                "pool": true
+            },
+            "DoStatement": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "IterationStatementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Statement",
+                        "type": "Statement",
+                        "visit": "iterationBody",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "WhileStatement": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "IterationStatementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Statement",
+                        "type": "Statement",
+                        "visit": "iterationBody",
+                        "inherited": true
+                    }
+                ]
+            },
+            "ForStatement": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "IterationStatementBase",
+                    "LocalsContainerBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Initializer",
+                        "type": "ForInitializer",
+                        "optional": true
+                    },
+                    {
+                        "name": "Condition",
+                        "type": "Expression",
+                        "optional": true
+                    },
+                    {
+                        "name": "Incrementor",
+                        "type": "Expression",
+                        "optional": true
+                    },
+                    {
+                        "name": "Statement",
+                        "type": "Statement",
+                        "visit": "iterationBody",
+                        "inherited": true
+                    }
+                ]
+            },
+            "ForInOrOfStatement": {
+                "extends": [
+                    "StatementBase",
+                    "LocalsContainerBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Kind",
+                        "type": [
+                            "SyntaxKind.ForInStatement",
+                            "SyntaxKind.ForOfStatement"
+                        ],
+                        "inherited": true
+                    },
+                    {
+                        "name": "AwaitModifier",
+                        "type": "AwaitKeyword",
+                        "optional": true
+                    },
+                    {
+                        "name": "Initializer",
+                        "type": "ForInitializer"
+                    },
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Statement",
+                        "type": "Statement",
+                        "visit": "iterationBody"
+                    }
+                ]
+            },
+            "BreakStatement": {
+                "extends": [
+                    "StatementBase"
+                ],
+                "members": [
+                    {
+                        "name": "Label",
+                        "type": "Identifier",
+                        "optional": true
+                    }
+                ]
+            },
+            "ContinueStatement": {
+                "extends": [
+                    "StatementBase"
+                ],
+                "members": [
+                    {
+                        "name": "Label",
+                        "type": "Identifier",
+                        "optional": true
+                    }
+                ]
+            },
+            "ReturnStatement": {
+                "extends": [
+                    "StatementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression",
+                        "optional": true
+                    }
+                ],
+                "pool": true
+            },
+            "WithStatement": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "StatementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Statement",
+                        "type": "Statement",
+                        "visit": "embeddedStatement"
+                    }
+                ]
+            },
+            "SwitchStatement": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "StatementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "CaseBlock",
+                        "type": "CaseBlock"
+                    }
+                ]
+            },
+            "CaseBlock": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase",
+                    "LocalsContainerBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Clauses",
+                        "type": "CaseOrDefaultClause",
+                        "list": "NodeList"
+                    }
+                ]
+            },
+            "CaseOrDefaultClause": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Kind",
+                        "type": [
+                            "SyntaxKind.CaseClause",
+                            "SyntaxKind.DefaultClause"
+                        ],
+                        "inherited": true
+                    },
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Statements",
+                        "type": "Statement",
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "FallthroughFlowNode",
+                        "type": "*FlowNode",
+                        "goOnly": true
+                    }
+                ]
+            },
+            "ThrowStatement": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "StatementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "TryStatement": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "StatementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "TryBlock",
+                        "type": "Block"
+                    },
+                    {
+                        "name": "CatchClause",
+                        "type": "CatchClause",
+                        "optional": true
+                    },
+                    {
+                        "name": "FinallyBlock",
+                        "type": "Block",
+                        "optional": true
+                    }
+                ]
+            },
+            "CatchClause": {
+                "extends": [
+                    "NodeBase",
+                    "LocalsContainerBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "VariableDeclaration",
+                        "type": "VariableDeclaration",
+                        "optional": true
+                    },
+                    {
+                        "name": "Block",
+                        "type": "Block"
+                    }
+                ]
+            },
+            "DebuggerStatement": {
+                "extends": [
+                    "StatementBase"
+                ]
+            },
+            "LabeledStatement": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "StatementBase"
+                ],
+                "members": [
+                    {
+                        "name": "Label",
+                        "type": "Identifier"
+                    },
+                    {
+                        "name": "Statement",
+                        "type": "Statement",
+                        "visit": "embeddedStatement"
+                    }
+                ]
+            },
+            "ExpressionStatement": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "StatementBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ],
+                "pool": true
+            },
+            "Block": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "StatementBase",
+                    "LocalsContainerBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Statements",
+                        "type": "Statement",
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "MultiLine",
+                        "type": "bool"
+                    }
+                ],
+                "pool": true
+            },
+            "VariableStatement": {
+                "extends": [
+                    "StatementBase",
+                    "ModifiersBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "DeclarationList",
+                        "type": "VariableDeclarationList"
+                    }
+                ],
+                "pool": true
+            },
+            "VariableDeclaration": {
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ExportableBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "name",
+                        "type": "BindingName",
+                        "private": true
+                    },
+                    {
+                        "name": "ExclamationToken",
+                        "type": "ExclamationToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode",
+                        "optional": true
+                    },
+                    {
+                        "name": "Initializer",
+                        "type": "Expression",
+                        "optional": true
+                    }
+                ],
+                "pool": true
+            },
+            "VariableDeclarationList": {
+                "extends": [
+                    "NodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Declarations",
+                        "type": "VariableDeclaration",
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "Flags",
+                        "inherited": true
+                    }
+                ],
+                "pool": true
+            },
+            "BindingPattern": {
+                "extends": [
+                    "NodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Kind",
+                        "type": [
+                            "SyntaxKind.ObjectBindingPattern",
+                            "SyntaxKind.ArrayBindingPattern"
+                        ],
+                        "inherited": true
+                    },
+                    {
+                        "name": "Elements",
+                        "type": "BindingElement",
+                        "list": "NodeList"
+                    }
+                ]
+            },
+            "ParameterDeclaration": {
+                "kind": "Parameter",
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ModifiersBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "DotDotDotToken",
+                        "type": "DotDotDotToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "BindingName",
+                        "private": true
+                    },
+                    {
+                        "name": "QuestionToken",
+                        "type": "QuestionToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode",
+                        "optional": true
+                    },
+                    {
+                        "name": "Initializer",
+                        "type": "Expression",
+                        "optional": true
+                    }
+                ],
+                "pool": true
+            },
+            "BindingElement": {
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ExportableBase",
+                    "FlowNodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "DotDotDotToken",
+                        "type": "DotDotDotToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "PropertyName",
+                        "type": "PropertyName",
+                        "optional": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "BindingName",
+                        "optional": true,
+                        "private": true
+                    },
+                    {
+                        "name": "Initializer",
+                        "type": "Expression",
+                        "optional": true
+                    }
+                ]
+            },
+            "MissingDeclaration": {
+                "extends": [
+                    "StatementBase",
+                    "DeclarationBase",
+                    "ModifiersBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    }
+                ]
+            },
+            "FunctionDeclaration": {
+                "extends": [
+                    "DeclarationBase",
+                    "StatementBase",
+                    "ExportableBase",
+                    "ModifiersBase",
+                    "FunctionLikeWithBodyBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "AsteriskToken",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true,
+                        "optional": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true,
+                        "visit": "parameters"
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    },
+                    {
+                        "name": "FullSignature",
+                        "inherited": true,
+                        "noTS": true
+                    },
+                    {
+                        "name": "Body",
+                        "inherited": true,
+                        "type": "FunctionBody",
+                        "optional": true,
+                        "visit": "functionBody"
+                    },
+                    {
+                        "name": "ReturnFlowNode",
+                        "type": "*FlowNode",
+                        "goOnly": true
+                    }
+                ],
+                "pool": true
+            },
+            "ClassDeclaration": {
+                "extends": [
+                    "DeclarationBase",
+                    "StatementBase",
+                    "ClassLikeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "HeritageClauses",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Members",
+                        "inherited": true
+                    }
+                ]
+            },
+            "ClassExpression": {
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "ClassLikeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "HeritageClauses",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Members",
+                        "inherited": true
+                    }
+                ]
+            },
+            "HeritageClause": {
+                "extends": [
+                    "NodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Token",
+                        "type": [
+                            "SyntaxKind.ExtendsKeyword",
+                            "SyntaxKind.ImplementsKeyword"
+                        ]
+                    },
+                    {
+                        "name": "Types",
+                        "type": "ExpressionWithTypeArguments",
+                        "list": "NodeList"
+                    }
+                ],
+                "pool": true
+            },
+            "InterfaceDeclaration": {
+                "extends": [
+                    "DeclarationBase",
+                    "StatementBase",
+                    "ExportableBase",
+                    "ModifiersBase",
+                    "TypeSyntaxBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "type": "TypeParameterDeclaration",
+                        "optional": true,
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "HeritageClauses",
+                        "type": "HeritageClause",
+                        "optional": true,
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "Members",
+                        "type": "TypeElement",
+                        "list": "NodeList"
+                    }
+                ],
+                "pool": true
+            },
+            "TypeAliasDeclaration": {
+                "kind": [
+                    "TypeAliasDeclaration",
+                    "JSTypeAliasDeclaration"
+                ],
+                "extends": [
+                    "DeclarationBase",
+                    "StatementBase",
+                    "ExportableBase",
+                    "ModifiersBase",
+                    "LocalsContainerBase",
+                    "TypeSyntaxBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "type": "TypeParameterDeclaration",
+                        "optional": true,
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ],
+                "pool": true
+            },
+            "EnumMember": {
+                "extends": [
+                    "NodeBase",
+                    "NamedMemberBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "name",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Initializer",
+                        "type": "Expression",
+                        "optional": true
+                    }
+                ]
+            },
+            "EnumDeclaration": {
+                "extends": [
+                    "DeclarationBase",
+                    "StatementBase",
+                    "ExportableBase",
+                    "ModifiersBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true
+                    },
+                    {
+                        "name": "Members",
+                        "type": "EnumMember",
+                        "list": "NodeList"
+                    }
+                ]
+            },
+            "ModuleBlock": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "StatementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Statements",
+                        "type": "Statement",
+                        "list": "NodeList"
+                    }
+                ]
+            },
+            "NotEmittedStatement": {
+                "extends": [
+                    "StatementBase"
+                ]
+            },
+            "NotEmittedTypeElement": {
+                "extends": [
+                    "NodeBase",
+                    "TypeElementBase"
+                ]
+            },
+            "ImportDeclaration": {
+                "kind": [
+                    "ImportDeclaration",
+                    "JSImportDeclaration"
+                ],
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "StatementBase",
+                    "ModifiersBase",
+                    "CompositeBase",
+                    "DeclarationBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "ImportClause",
+                        "type": "ImportClause",
+                        "optional": true
+                    },
+                    {
+                        "name": "ModuleSpecifier",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Attributes",
+                        "type": "ImportAttributes",
+                        "optional": true
+                    }
+                ]
+            },
+            "ExternalModuleReference": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "NamespaceImport": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ExportableBase"
+                ],
+                "members": [
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true
+                    }
+                ]
+            },
+            "NamedImports": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Elements",
+                        "type": "ImportSpecifier",
+                        "list": "NodeList"
+                    }
+                ]
+            },
+            "ExportAssignment": {
+                "kind": [
+                    "ExportAssignment",
+                    "JSExportAssignment"
+                ],
+                "extends": [
+                    "DeclarationBase",
+                    "StatementBase",
+                    "ModifiersBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "IsExportEquals",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "CommonJSExport": {
+                "extends": [
+                    "StatementBase",
+                    "DeclarationBase",
+                    "ExportableBase",
+                    "ModifiersBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "Initializer",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "NamespaceExportDeclaration": {
+                "extends": [
+                    "DeclarationBase",
+                    "StatementBase",
+                    "ModifiersBase",
+                    "TypeSyntaxBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true
+                    }
+                ]
+            },
+            "NamespaceExport": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase"
+                ],
+                "members": [
+                    {
+                        "name": "name",
+                        "type": "ModuleExportName",
+                        "private": true
+                    }
+                ]
+            },
+            "NamedExports": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Elements",
+                        "type": "ExportSpecifier",
+                        "list": "NodeList"
+                    }
+                ]
+            },
+            "ExportSpecifier": {
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ExportableBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "IsTypeOnly",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "PropertyName",
+                        "type": "ModuleExportName",
+                        "optional": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "ModuleExportName",
+                        "private": true
+                    }
+                ]
+            },
+            "CallSignatureDeclaration": {
+                "kind": "CallSignature",
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "FunctionLikeBase",
+                    "TypeElementBase",
+                    "TypeSyntaxBase"
+                ],
+                "members": [
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    }
+                ]
+            },
+            "ConstructSignatureDeclaration": {
+                "kind": "ConstructSignature",
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "FunctionLikeBase",
+                    "TypeElementBase",
+                    "TypeSyntaxBase"
+                ],
+                "members": [
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    }
+                ],
+                "pool": true
+            },
+            "ConstructorDeclaration": {
+                "kind": "Constructor",
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ModifiersBase",
+                    "FunctionLikeWithBodyBase",
+                    "ClassElementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true,
+                        "visit": "parameters"
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    },
+                    {
+                        "name": "FullSignature",
+                        "inherited": true,
+                        "noTS": true
+                    },
+                    {
+                        "name": "Body",
+                        "inherited": true,
+                        "type": "FunctionBody",
+                        "optional": true,
+                        "visit": "functionBody"
+                    },
+                    {
+                        "name": "ReturnFlowNode",
+                        "type": "*FlowNode",
+                        "goOnly": true
+                    }
+                ]
+            },
+            "GetAccessorDeclaration": {
+                "kind": "GetAccessor",
+                "extends": [
+                    "AccessorDeclarationBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true,
+                        "visit": "parameters"
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    },
+                    {
+                        "name": "FullSignature",
+                        "inherited": true,
+                        "noTS": true
+                    },
+                    {
+                        "name": "Body",
+                        "inherited": true,
+                        "type": "FunctionBody",
+                        "optional": true,
+                        "visit": "functionBody"
+                    }
+                ]
+            },
+            "SetAccessorDeclaration": {
+                "kind": "SetAccessor",
+                "extends": [
+                    "AccessorDeclarationBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true,
+                        "visit": "parameters"
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    },
+                    {
+                        "name": "FullSignature",
+                        "inherited": true,
+                        "noTS": true
+                    },
+                    {
+                        "name": "Body",
+                        "inherited": true,
+                        "type": "FunctionBody",
+                        "optional": true,
+                        "visit": "functionBody"
+                    }
+                ]
+            },
+            "IndexSignatureDeclaration": {
+                "kind": "IndexSignature",
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ModifiersBase",
+                    "FunctionLikeBase",
+                    "TypeElementBase",
+                    "ClassElementBase",
+                    "TypeSyntaxBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true,
+                        "optional": false
+                    }
+                ]
+            },
+            "MethodSignatureDeclaration": {
+                "kind": "MethodSignature",
+                "extends": [
+                    "NodeBase",
+                    "NamedMemberBase",
+                    "FunctionLikeBase",
+                    "TypeElementBase",
+                    "TypeSyntaxBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "inherited": true
+                    },
+                    {
+                        "name": "PostfixToken",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    }
+                ],
+                "pool": true
+            },
+            "MethodDeclaration": {
+                "extends": [
+                    "NodeBase",
+                    "NamedMemberBase",
+                    "FunctionLikeWithBodyBase",
+                    "FlowNodeBase",
+                    "ClassElementBase",
+                    "ObjectLiteralElementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "AsteriskToken",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "inherited": true
+                    },
+                    {
+                        "name": "PostfixToken",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true,
+                        "visit": "parameters"
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    },
+                    {
+                        "name": "FullSignature",
+                        "inherited": true,
+                        "noTS": true
+                    },
+                    {
+                        "name": "Body",
+                        "inherited": true,
+                        "type": "FunctionBody",
+                        "optional": true,
+                        "visit": "functionBody"
+                    }
+                ]
+            },
+            "PropertySignatureDeclaration": {
+                "kind": "PropertySignature",
+                "extends": [
+                    "NodeBase",
+                    "NamedMemberBase",
+                    "TypeElementBase",
+                    "TypeSyntaxBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "inherited": true
+                    },
+                    {
+                        "name": "PostfixToken",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "Initializer",
+                        "type": "Expression"
+                    }
+                ],
+                "pool": true
+            },
+            "PropertyDeclaration": {
+                "extends": [
+                    "NodeBase",
+                    "NamedMemberBase",
+                    "ClassElementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "inherited": true
+                    },
+                    {
+                        "name": "PostfixToken",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode",
+                        "optional": true
+                    },
+                    {
+                        "name": "Initializer",
+                        "type": "Expression",
+                        "optional": true
+                    }
+                ]
+            },
+            "SemicolonClassElement": {
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ClassElementBase"
+                ]
+            },
+            "ClassStaticBlockDeclaration": {
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ModifiersBase",
+                    "LocalsContainerBase",
+                    "ClassElementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Body",
+                        "type": "Block"
+                    },
+                    {
+                        "name": "ReturnFlowNode",
+                        "type": "*FlowNode",
+                        "goOnly": true
+                    }
+                ]
+            },
+            "OmittedExpression": {
+                "extends": [
+                    "ExpressionBase"
+                ]
+            },
+            "KeywordExpression": {
+                "extends": [
+                    "ExpressionBase",
+                    "FlowNodeBase"
+                ],
+                "typeParameters": [
+                    {
+                        "name": "TKind",
+                        "constraint": "KeywordExpressionSyntaxKind",
+                        "default": "KeywordExpressionSyntaxKind"
+                    }
+                ],
+                "members": [
+                    {
+                        "name": "Kind",
+                        "type": "TKind",
+                        "inherited": true
+                    }
+                ],
+                "pool": true,
+                "instantiationAliases": {
+                    "NullLiteral": "NullKeyword",
+                    "TrueLiteral": "TrueKeyword",
+                    "FalseLiteral": "FalseKeyword",
+                    "ThisExpression": "ThisKeyword",
+                    "SuperExpression": "SuperKeyword",
+                    "ImportExpression": "ImportKeyword"
+                }
+            },
+            "StringLiteral": {
+                "extends": [
+                    "LiteralExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Text",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TokenFlags",
+                        "inherited": true,
+                        "bitmask": "TokenFlagsStringLiteralFlags"
+                    }
+                ],
+                "pool": true
+            },
+            "NumericLiteral": {
+                "extends": [
+                    "LiteralExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Text",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TokenFlags",
+                        "inherited": true,
+                        "bitmask": "TokenFlagsNumericLiteralFlags"
+                    }
+                ],
+                "pool": true
+            },
+            "BigIntLiteral": {
+                "extends": [
+                    "LiteralExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Text",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TokenFlags",
+                        "inherited": true,
+                        "bitmask": "TokenFlagsNumericLiteralFlags"
+                    }
+                ]
+            },
+            "RegularExpressionLiteral": {
+                "extends": [
+                    "LiteralExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Text",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TokenFlags",
+                        "inherited": true,
+                        "bitmask": "TokenFlagsRegularExpressionLiteralFlags"
+                    }
+                ]
+            },
+            "NoSubstitutionTemplateLiteral": {
+                "extends": [
+                    "ExpressionBase",
+                    "TemplateLiteralLikeNodeBase",
+                    "DeclarationBase"
+                ],
+                "members": [
+                    {
+                        "name": "Text",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TemplateFlags",
+                        "inherited": true,
+                        "bitmask": "TokenFlagsTemplateLiteralLikeFlags"
+                    }
+                ]
+            },
+            "BinaryExpression": {
+                "extends": [
+                    "ExpressionBase",
+                    "DeclarationBase",
+                    "ModifiersBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Left",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode",
+                        "optional": true
+                    },
+                    {
+                        "name": "OperatorToken",
+                        "type": "BinaryOperatorToken"
+                    },
+                    {
+                        "name": "Right",
+                        "type": "Expression"
+                    }
+                ],
+                "pool": true
+            },
+            "PrefixUnaryExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "UpdateExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Operator",
+                        "type": [
+                            "SyntaxKind.PlusToken",
+                            "SyntaxKind.MinusToken",
+                            "SyntaxKind.TildeToken",
+                            "SyntaxKind.ExclamationToken",
+                            "SyntaxKind.PlusPlusToken",
+                            "SyntaxKind.MinusMinusToken"
+                        ]
+                    },
+                    {
+                        "name": "Operand",
+                        "type": "Expression"
+                    }
+                ],
+                "pool": true
+            },
+            "PostfixUnaryExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "UpdateExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Operand",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Operator",
+                        "type": [
+                            "SyntaxKind.PlusPlusToken",
+                            "SyntaxKind.MinusMinusToken"
+                        ]
+                    }
+                ]
+            },
+            "YieldExpression": {
+                "extends": [
+                    "ExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "AsteriskToken",
+                        "type": "AsteriskToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "Expression",
+                        "type": "Expression",
+                        "optional": true
+                    }
+                ]
+            },
+            "ArrowFunction": {
+                "extends": [
+                    "ExpressionBase",
+                    "DeclarationBase",
+                    "ModifiersBase",
+                    "FunctionLikeWithBodyBase",
+                    "FlowNodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true,
+                        "visit": "parameters"
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    },
+                    {
+                        "name": "FullSignature",
+                        "inherited": true,
+                        "noTS": true
+                    },
+                    {
+                        "name": "EqualsGreaterThanToken",
+                        "type": "EqualsGreaterThanToken"
+                    },
+                    {
+                        "name": "Body",
+                        "inherited": true,
+                        "optional": false,
+                        "type": "ConciseBody",
+                        "visit": "functionBody"
+                    }
+                ]
+            },
+            "FunctionExpression": {
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "DeclarationBase",
+                    "ModifiersBase",
+                    "FunctionLikeWithBodyBase",
+                    "FlowNodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "AsteriskToken",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "optional": true,
+                        "private": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true,
+                        "visit": "parameters"
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    },
+                    {
+                        "name": "FullSignature",
+                        "inherited": true,
+                        "noTS": true
+                    },
+                    {
+                        "name": "Body",
+                        "inherited": true,
+                        "optional": false,
+                        "type": "FunctionBody",
+                        "visit": "functionBody"
+                    },
+                    {
+                        "name": "ReturnFlowNode",
+                        "type": "*FlowNode",
+                        "goOnly": true
+                    }
+                ]
+            },
+            "AsExpression": {
+                "extends": [
+                    "ExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ]
+            },
+            "SatisfiesExpression": {
+                "extends": [
+                    "ExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ]
+            },
+            "ConditionalExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "ExpressionBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Condition",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "QuestionToken",
+                        "type": "QuestionToken"
+                    },
+                    {
+                        "name": "WhenTrue",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "ColonToken",
+                        "type": "ColonToken"
+                    },
+                    {
+                        "name": "WhenFalse",
+                        "type": "Expression"
+                    }
+                ],
+                "pool": true
+            },
+            "PropertyAccessExpression": {
+                "extends": [
+                    "MemberExpressionBase",
+                    "FlowNodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "QuestionDotToken",
+                        "type": "QuestionDotToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "MemberName",
+                        "private": true
+                    },
+                    {
+                        "name": "Flags",
+                        "inherited": true,
+                        "bitmask": "NodeFlagsOptionalChain"
+                    }
+                ],
+                "pool": true
+            },
+            "ElementAccessExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "MemberExpressionBase",
+                    "FlowNodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "QuestionDotToken",
+                        "type": "QuestionDotToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "ArgumentExpression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Flags",
+                        "inherited": true,
+                        "bitmask": "NodeFlagsOptionalChain"
+                    }
+                ],
+                "pool": true
+            },
+            "CallExpression": {
+                "extends": [
+                    "LeftHandSideExpressionBase",
+                    "DeclarationBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "QuestionDotToken",
+                        "type": "QuestionDotToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "TypeArguments",
+                        "type": "TypeNode",
+                        "optional": true,
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "Arguments",
+                        "type": "Expression",
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "Flags",
+                        "inherited": true,
+                        "bitmask": "NodeFlagsOptionalChain"
+                    }
+                ],
+                "pool": true
+            },
+            "NewExpression": {
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "TypeArguments",
+                        "type": "TypeNode",
+                        "optional": true,
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "Arguments",
+                        "type": "Expression",
+                        "optional": true,
+                        "list": "NodeList"
+                    }
+                ]
+            },
+            "MetaProperty": {
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "FlowNodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "KeywordToken",
+                        "type": [
+                            "SyntaxKind.ImportKeyword",
+                            "SyntaxKind.NewKeyword"
+                        ]
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true
+                    }
+                ]
+            },
+            "NonNullExpression": {
+                "extends": [
+                    "LeftHandSideExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Flags",
+                        "inherited": true,
+                        "bitmask": "NodeFlagsOptionalChain"
+                    }
+                ]
+            },
+            "SpreadElement": {
+                "extends": [
+                    "ExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "TemplateExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Head",
+                        "type": "TemplateHead"
+                    },
+                    {
+                        "name": "TemplateSpans",
+                        "type": "TemplateSpan",
+                        "list": "NodeList"
+                    }
+                ]
+            },
+            "TemplateSpan": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Literal",
+                        "type": "TemplateMiddleOrTail"
+                    }
+                ]
+            },
+            "TaggedTemplateExpression": {
+                "extends": [
+                    "MemberExpressionBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Tag",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "QuestionDotToken",
+                        "type": "QuestionDotToken"
+                    },
+                    {
+                        "name": "TypeArguments",
+                        "type": "TypeNode",
+                        "optional": true,
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "Template",
+                        "type": "TemplateLiteral"
+                    },
+                    {
+                        "name": "Flags",
+                        "inherited": true,
+                        "bitmask": "NodeFlagsOptionalChain"
+                    }
+                ]
+            },
+            "ParenthesizedExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "PrimaryExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ],
+                "pool": true
+            },
+            "ArrayLiteralExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Elements",
+                        "type": "Expression",
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "MultiLine",
+                        "type": "bool"
+                    }
+                ]
+            },
+            "ObjectLiteralExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "DeclarationBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Properties",
+                        "type": "ObjectLiteralElementLike",
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "MultiLine",
+                        "type": "bool"
+                    }
+                ]
+            },
+            "SpreadAssignment": {
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ObjectLiteralElementBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "PropertyAssignment": {
+                "extends": [
+                    "NodeBase",
+                    "NamedMemberBase",
+                    "ObjectLiteralElementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "inherited": true
+                    },
+                    {
+                        "name": "PostfixToken",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "Initializer",
+                        "type": "Expression"
+                    }
+                ],
+                "pool": true
+            },
+            "ShorthandPropertyAssignment": {
+                "extends": [
+                    "NodeBase",
+                    "NamedMemberBase",
+                    "ObjectLiteralElementBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "inherited": true
+                    },
+                    {
+                        "name": "PostfixToken",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "EqualsToken",
+                        "type": "EqualsToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "ObjectAssignmentInitializer",
+                        "type": "Expression",
+                        "optional": true
+                    }
+                ]
+            },
+            "DeleteExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "UnaryExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "TypeOfExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "UnaryExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "VoidExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "UnaryExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "AwaitExpression": {
+                "extends": [
+                    "UnaryExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "TypeAssertion": {
+                "kind": "TypeAssertionExpression",
+                "extends": [
+                    "UnaryExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "KeywordTypeNode": {
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "typeParameters": [
+                    {
+                        "name": "TKind",
+                        "constraint": "KeywordTypeSyntaxKind",
+                        "default": "KeywordTypeSyntaxKind"
+                    }
+                ],
+                "members": [
+                    {
+                        "name": "Kind",
+                        "type": "TKind",
+                        "inherited": true
+                    }
+                ],
+                "pool": true
+            },
+            "UnionTypeNode": {
+                "kind": "UnionType",
+                "extends": [
+                    "TypeNodeBase",
+                    "UnionOrIntersectionTypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Types",
+                        "inherited": true
+                    }
+                ],
+                "pool": true
+            },
+            "IntersectionTypeNode": {
+                "kind": "IntersectionType",
+                "extends": [
+                    "TypeNodeBase",
+                    "UnionOrIntersectionTypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Types",
+                        "inherited": true
+                    }
+                ],
+                "pool": true
+            },
+            "ConditionalTypeNode": {
+                "kind": "ConditionalType",
+                "extends": [
+                    "TypeNodeBase",
+                    "LocalsContainerBase"
+                ],
+                "members": [
+                    {
+                        "name": "CheckType",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "ExtendsType",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "TrueType",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "FalseType",
+                        "type": "TypeNode"
+                    }
+                ]
+            },
+            "TypeOperatorNode": {
+                "kind": "TypeOperator",
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Operator",
+                        "type": [
+                            "SyntaxKind.KeyOfKeyword",
+                            "SyntaxKind.ReadonlyKeyword",
+                            "SyntaxKind.UniqueKeyword"
+                        ]
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ],
+                "pool": true
+            },
+            "InferTypeNode": {
+                "kind": "InferType",
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "TypeParameter",
+                        "type": "TypeParameterDeclaration"
+                    }
+                ]
+            },
+            "ArrayTypeNode": {
+                "kind": "ArrayType",
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "ElementType",
+                        "type": "TypeNode"
+                    }
+                ],
+                "pool": true
+            },
+            "IndexedAccessTypeNode": {
+                "kind": "IndexedAccessType",
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "ObjectType",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "IndexType",
+                        "type": "TypeNode"
+                    }
+                ],
+                "pool": true
+            },
+            "TypeReferenceNode": {
+                "kind": "TypeReference",
+                "extends": [
+                    "NodeWithTypeArgumentsBase"
+                ],
+                "members": [
+                    {
+                        "name": "TypeName",
+                        "type": "EntityName"
+                    },
+                    {
+                        "name": "TypeArguments",
+                        "inherited": true
+                    }
+                ],
+                "pool": true
+            },
+            "ExpressionWithTypeArguments": {
+                "extends": [
+                    "MemberExpressionBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "TypeArguments",
+                        "type": "TypeNode",
+                        "optional": true,
+                        "list": "NodeList"
+                    }
+                ],
+                "pool": true
+            },
+            "LiteralTypeNode": {
+                "kind": "LiteralType",
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Literal",
+                        "type": "Node"
+                    }
+                ],
+                "pool": true
+            },
+            "ThisTypeNode": {
+                "kind": "ThisType",
+                "extends": [
+                    "TypeNodeBase"
+                ]
+            },
+            "TypePredicateNode": {
+                "kind": "TypePredicate",
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "AssertsModifier",
+                        "type": "AssertsKeyword",
+                        "optional": true
+                    },
+                    {
+                        "name": "ParameterName",
+                        "type": "TypePredicateParameterName"
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode",
+                        "optional": true
+                    }
+                ]
+            },
+            "ImportAttribute": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "name",
+                        "type": "ImportAttributeName",
+                        "private": true
+                    },
+                    {
+                        "name": "Value",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "ImportAttributes": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Token",
+                        "type": [
+                            "SyntaxKind.WithKeyword",
+                            "SyntaxKind.AssertKeyword"
+                        ]
+                    },
+                    {
+                        "name": "Attributes",
+                        "type": "ImportAttribute",
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "MultiLine",
+                        "type": "bool"
+                    }
+                ]
+            },
+            "TypeQueryNode": {
+                "kind": "TypeQuery",
+                "extends": [
+                    "NodeWithTypeArgumentsBase"
+                ],
+                "members": [
+                    {
+                        "name": "ExprName",
+                        "type": "EntityName"
+                    },
+                    {
+                        "name": "TypeArguments",
+                        "inherited": true
+                    }
+                ]
+            },
+            "MappedTypeNode": {
+                "kind": "MappedType",
+                "extends": [
+                    "TypeNodeBase",
+                    "DeclarationBase",
+                    "LocalsContainerBase"
+                ],
+                "members": [
+                    {
+                        "name": "ReadonlyToken",
+                        "type": [
+                            "ReadonlyKeyword",
+                            "PlusToken",
+                            "MinusToken"
+                        ],
+                        "typeGuard": "isReadonlyKeywordOrPlusOrMinusToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "TypeParameter",
+                        "type": "TypeParameterDeclaration"
+                    },
+                    {
+                        "name": "NameType",
+                        "type": "TypeNode",
+                        "optional": true
+                    },
+                    {
+                        "name": "QuestionToken",
+                        "type": [
+                            "QuestionToken",
+                            "PlusToken",
+                            "MinusToken"
+                        ],
+                        "typeGuard": "isQuestionOrPlusOrMinusToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode",
+                        "optional": true
+                    },
+                    {
+                        "name": "Members",
+                        "type": "TypeElement",
+                        "list": "NodeList",
+                        "optional": true
+                    }
+                ]
+            },
+            "TypeLiteralNode": {
+                "kind": "TypeLiteral",
+                "extends": [
+                    "TypeNodeBase",
+                    "DeclarationBase"
+                ],
+                "members": [
+                    {
+                        "name": "Members",
+                        "type": "TypeElement",
+                        "list": "NodeList"
+                    }
+                ],
+                "pool": true
+            },
+            "TupleTypeNode": {
+                "kind": "TupleType",
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Elements",
+                        "type": "TypeNode",
+                        "list": "NodeList"
+                    }
+                ]
+            },
+            "NamedTupleMember": {
+                "extends": [
+                    "TypeNodeBase",
+                    "DeclarationBase"
+                ],
+                "members": [
+                    {
+                        "name": "DotDotDotToken",
+                        "type": "DotDotDotToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true
+                    },
+                    {
+                        "name": "QuestionToken",
+                        "type": "QuestionToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ]
+            },
+            "OptionalTypeNode": {
+                "kind": "OptionalType",
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ]
+            },
+            "RestTypeNode": {
+                "kind": "RestType",
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ]
+            },
+            "ParenthesizedTypeNode": {
+                "kind": "ParenthesizedType",
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ],
+                "pool": true
+            },
+            "FunctionTypeNode": {
+                "kind": "FunctionType",
+                "extends": [
+                    "TypeNodeBase",
+                    "FunctionOrConstructorTypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    }
+                ],
+                "pool": true
+            },
+            "ConstructorTypeNode": {
+                "kind": "ConstructorType",
+                "extends": [
+                    "TypeNodeBase",
+                    "FunctionOrConstructorTypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    }
+                ]
+            },
+            "TemplateHead": {
+                "extends": [
+                    "NodeBase",
+                    "TemplateLiteralLikeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Text",
+                        "inherited": true
+                    },
+                    {
+                        "name": "RawText",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TemplateFlags",
+                        "inherited": true,
+                        "bitmask": "TokenFlagsTemplateLiteralLikeFlags"
+                    }
+                ]
+            },
+            "TemplateMiddle": {
+                "extends": [
+                    "NodeBase",
+                    "TemplateLiteralLikeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Text",
+                        "inherited": true
+                    },
+                    {
+                        "name": "RawText",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TemplateFlags",
+                        "inherited": true,
+                        "bitmask": "TokenFlagsTemplateLiteralLikeFlags"
+                    }
+                ]
+            },
+            "TemplateTail": {
+                "extends": [
+                    "NodeBase",
+                    "TemplateLiteralLikeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Text",
+                        "inherited": true
+                    },
+                    {
+                        "name": "RawText",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TemplateFlags",
+                        "inherited": true,
+                        "bitmask": "TokenFlagsTemplateLiteralLikeFlags"
+                    }
+                ]
+            },
+            "TemplateLiteralTypeNode": {
+                "kind": "TemplateLiteralType",
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Head",
+                        "type": "TemplateHead"
+                    },
+                    {
+                        "name": "TemplateSpans",
+                        "type": "TemplateLiteralTypeSpan",
+                        "list": "NodeList"
+                    }
+                ]
+            },
+            "TemplateLiteralTypeSpan": {
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "Literal",
+                        "type": "TemplateMiddleOrTail"
+                    }
+                ]
+            },
+            "SyntheticExpression": {
+                "extends": [
+                    "ExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Type",
+                        "type": "any"
+                    },
+                    {
+                        "name": "IsSpread",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "TupleNameSource",
+                        "type": "Node",
+                        "optional": true
+                    }
+                ]
+            },
+            "PartiallyEmittedExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "LeftHandSideExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "JsxElement": {
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "OpeningElement",
+                        "type": "JsxOpeningElement"
+                    },
+                    {
+                        "name": "Children",
+                        "type": "JsxChild",
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "ClosingElement",
+                        "type": "JsxClosingElement"
+                    }
+                ]
+            },
+            "JsxAttributes": {
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "DeclarationBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Properties",
+                        "type": "JsxAttributeLike",
+                        "list": "NodeList"
+                    }
+                ]
+            },
+            "JsxNamespacedName": {
+                "extends": [
+                    "ExpressionBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Namespace",
+                        "type": "Identifier"
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true
+                    }
+                ]
+            },
+            "JsxOpeningElement": {
+                "extends": [
+                    "ExpressionBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "type": "JsxTagNameExpression"
+                    },
+                    {
+                        "name": "TypeArguments",
+                        "type": "TypeNode",
+                        "optional": true,
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "Attributes",
+                        "type": "JsxAttributes"
+                    }
+                ]
+            },
+            "JsxSelfClosingElement": {
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "type": "JsxTagNameExpression"
+                    },
+                    {
+                        "name": "TypeArguments",
+                        "type": "TypeNode",
+                        "optional": true,
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "Attributes",
+                        "type": "JsxAttributes"
+                    }
+                ]
+            },
+            "JsxFragment": {
+                "extends": [
+                    "PrimaryExpressionBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "OpeningFragment",
+                        "type": "JsxOpeningFragment"
+                    },
+                    {
+                        "name": "Children",
+                        "type": "JsxChild",
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "ClosingFragment",
+                        "type": "JsxClosingFragment"
+                    }
+                ]
+            },
+            "JsxOpeningFragment": {
+                "extends": [
+                    "ExpressionBase"
+                ]
+            },
+            "JsxClosingFragment": {
+                "extends": [
+                    "ExpressionBase"
+                ]
+            },
+            "JsxAttribute": {
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "name",
+                        "type": "JsxAttributeName",
+                        "private": true
+                    },
+                    {
+                        "name": "Initializer",
+                        "type": "JsxAttributeValue",
+                        "optional": true
+                    }
+                ]
+            },
+            "JsxSpreadAttribute": {
+                "extends": [
+                    "ObjectLiteralElementBase",
+                    "NodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "JsxClosingElement": {
+                "extends": [
+                    "NodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "type": "JsxTagNameExpression"
+                    }
+                ]
+            },
+            "JsxExpression": {
+                "extends": [
+                    "ExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "DotDotDotToken",
+                        "type": "DotDotDotToken",
+                        "optional": true
+                    },
+                    {
+                        "name": "Expression",
+                        "type": "Expression",
+                        "optional": true
+                    }
+                ]
+            },
+            "JsxText": {
+                "extends": [
+                    "ExpressionBase",
+                    "LiteralLikeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Text",
+                        "inherited": true
+                    },
+                    {
+                        "name": "ContainsOnlyTriviaWhiteSpaces",
+                        "type": "bool"
+                    }
+                ]
+            },
+            "SyntaxList": {
+                "extends": [
+                    "NodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Children",
+                        "type": "Node",
+                        "list": "raw"
+                    }
+                ]
+            },
+            "JSDoc": {
+                "extends": [
+                    "NodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Comment",
+                        "type": "JSDocComment",
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "Tags",
+                        "type": "JSDocTag",
+                        "list": "NodeList",
+                        "optional": true
+                    }
+                ],
+                "pool": true
+            },
+            "JSDocTypeExpression": {
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ]
+            },
+            "JSDocNonNullableType": {
+                "extends": [
+                    "JSDocTypeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ]
+            },
+            "JSDocNullableType": {
+                "extends": [
+                    "JSDocTypeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ]
+            },
+            "JSDocAllType": {
+                "extends": [
+                    "JSDocTypeBase"
+                ]
+            },
+            "JSDocVariadicType": {
+                "extends": [
+                    "JSDocTypeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ]
+            },
+            "JSDocOptionalType": {
+                "extends": [
+                    "JSDocTypeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Type",
+                        "type": "TypeNode"
+                    }
+                ]
+            },
+            "JSDocTypeTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeExpression",
+                        "type": "Node"
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocUnknownTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ],
+                "pool": true
+            },
+            "JSDocTemplateTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Constraint",
+                        "type": "Node"
+                    },
+                    {
+                        "name": "TypeParameters",
+                        "type": "TypeParameterDeclaration",
+                        "list": "NodeList"
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocReturnTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeExpression",
+                        "type": "TypeNode",
+                        "optional": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocPublicTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocPrivateTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocProtectedTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocReadonlyTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocOverrideTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocDeprecatedTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ],
+                "pool": true
+            },
+            "JSDocSeeTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "NameExpression",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocImplementsTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "ClassName",
+                        "type": "ExpressionWithTypeArguments"
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocAugmentsTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "ClassName",
+                        "type": "ExpressionWithTypeArguments"
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocSatisfiesTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeExpression",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocThrowsTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeExpression",
+                        "type": "TypeNode",
+                        "optional": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocThisTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeExpression",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocImportTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "ImportClause",
+                        "type": "ImportClause",
+                        "optional": true
+                    },
+                    {
+                        "name": "ModuleSpecifier",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "Attributes",
+                        "type": "ImportAttributes",
+                        "optional": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocCallbackTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeExpression",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "FullName",
+                        "type": "Node",
+                        "optional": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocOverloadTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeExpression",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocTypedefTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "members": [
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "TypeExpression",
+                        "type": "Node",
+                        "optional": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true,
+                        "optional": true
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocSignature": {
+                "extends": [
+                    "JSDocTypeBase",
+                    "FunctionLikeBase"
+                ],
+                "members": [
+                    {
+                        "name": "TypeParameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Parameters",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Type",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocNameReference": {
+                "extends": [
+                    "TypeNodeBase"
+                ],
+                "members": [
+                    {
+                        "name": "name",
+                        "type": "EntityName",
+                        "private": true
+                    }
+                ]
+            },
+            "SourceFile": {
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "LocalsContainerBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "Statements",
+                        "type": "Statement",
+                        "list": "NodeList",
+                        "visit": "topLevelStatements"
+                    },
+                    {
+                        "name": "EndOfFileToken",
+                        "type": "EndOfFile"
+                    }
+                ],
+                "handWritten": true
+            },
+            "ModuleDeclaration": {
+                "extends": [
+                    "DeclarationBase",
+                    "StatementBase",
+                    "ExportableBase",
+                    "ModifiersBase",
+                    "LocalsContainerBase",
+                    "BodyBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "Keyword",
+                        "type": [
+                            "SyntaxKind.ModuleKeyword",
+                            "SyntaxKind.NamespaceKeyword"
+                        ]
+                    },
+                    {
+                        "name": "name",
+                        "type": "ModuleName",
+                        "private": true
+                    },
+                    {
+                        "name": "Body",
+                        "inherited": true,
+                        "type": "ModuleBody"
+                    }
+                ]
+            },
+            "ImportEqualsDeclaration": {
+                "extends": [
+                    "DeclarationBase",
+                    "StatementBase",
+                    "ExportableBase",
+                    "ModifiersBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "IsTypeOnly",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true
+                    },
+                    {
+                        "name": "ModuleReference",
+                        "type": "ModuleReference"
+                    }
+                ]
+            },
+            "ExportDeclaration": {
+                "extends": [
+                    "DeclarationBase",
+                    "StatementBase",
+                    "ModifiersBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "IsTypeOnly",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "ExportClause",
+                        "type": "NamedExportBindings",
+                        "optional": true
+                    },
+                    {
+                        "name": "ModuleSpecifier",
+                        "type": "Expression",
+                        "optional": true
+                    },
+                    {
+                        "name": "Attributes",
+                        "type": "ImportAttributes",
+                        "optional": true
+                    }
+                ]
+            },
+            "ImportTypeNode": {
+                "kind": "ImportType",
+                "extends": [
+                    "NodeWithTypeArgumentsBase"
+                ],
+                "members": [
+                    {
+                        "name": "IsTypeOf",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "Argument",
+                        "type": "TypeNode"
+                    },
+                    {
+                        "name": "Attributes",
+                        "type": "ImportAttributes",
+                        "optional": true
+                    },
+                    {
+                        "name": "Qualifier",
+                        "type": "EntityName",
+                        "optional": true
+                    },
+                    {
+                        "name": "TypeArguments",
+                        "inherited": true
+                    }
+                ]
+            },
+            "ImportClause": {
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ExportableBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "PhaseModifier",
+                        "type": "ImportPhaseModifierSyntaxKind",
+                        "optional": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "optional": true,
+                        "private": true
+                    },
+                    {
+                        "name": "NamedBindings",
+                        "type": "NamedImportBindings",
+                        "optional": true
+                    }
+                ]
+            },
+            "ImportSpecifier": {
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ExportableBase",
+                    "CompositeBase"
+                ],
+                "members": [
+                    {
+                        "name": "IsTypeOnly",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "PropertyName",
+                        "type": "ModuleExportName",
+                        "optional": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true
+                    }
+                ],
+                "pool": true
+            },
+            "JSDocText": {
+                "extends": [
+                    "JSDocCommentBase"
+                ],
+                "members": [
+                    {
+                        "name": "text",
+                        "inherited": true
+                    }
+                ],
+                "pool": true
+            },
+            "JSDocLink": {
+                "extends": [
+                    "JSDocCommentBase"
+                ],
+                "members": [
+                    {
+                        "name": "name",
+                        "type": "EntityName",
+                        "optional": true,
+                        "private": true
+                    },
+                    {
+                        "name": "text",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocLinkPlain": {
+                "extends": [
+                    "JSDocCommentBase"
+                ],
+                "members": [
+                    {
+                        "name": "name",
+                        "type": "EntityName",
+                        "optional": true,
+                        "private": true
+                    },
+                    {
+                        "name": "text",
+                        "inherited": true
+                    }
+                ]
+            },
+            "JSDocLinkCode": {
+                "extends": [
+                    "JSDocCommentBase"
+                ],
+                "members": [
+                    {
+                        "name": "name",
+                        "type": "EntityName",
+                        "optional": true,
+                        "private": true
+                    },
+                    {
+                        "name": "text",
+                        "inherited": true
+                    }
+                ]
+            },
+            "TypeParameterDeclaration": {
+                "kind": "TypeParameter",
+                "extends": [
+                    "NodeBase",
+                    "DeclarationBase",
+                    "ModifiersBase",
+                    "TypeSyntaxBase"
+                ],
+                "members": [
+                    {
+                        "name": "modifiers",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "Identifier",
+                        "private": true
+                    },
+                    {
+                        "name": "Constraint",
+                        "type": "TypeNode",
+                        "optional": true
+                    },
+                    {
+                        "name": "Expression",
+                        "type": "Expression",
+                        "optional": true
+                    },
+                    {
+                        "name": "DefaultType",
+                        "type": "TypeNode",
+                        "optional": true
+                    }
+                ],
+                "pool": true
+            },
+            "SyntheticReferenceExpression": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "ExpressionBase"
+                ],
+                "members": [
+                    {
+                        "name": "Expression",
+                        "type": "Expression"
+                    },
+                    {
+                        "name": "ThisArg",
+                        "type": "Expression"
+                    }
+                ]
+            },
+            "JSDocTypeLiteral": {
+                "extends": [
+                    "JSDocTypeBase",
+                    "DeclarationBase"
+                ],
+                "members": [
+                    {
+                        "name": "JSDocPropertyTags",
+                        "type": "JSDocTag",
+                        "list": "raw",
+                        "optional": true
+                    },
+                    {
+                        "name": "IsArrayType",
+                        "type": "bool"
+                    }
+                ]
+            },
+            "JSDocParameterOrPropertyTag": {
+                "extends": [
+                    "JSDocTagBase"
+                ],
+                "handWrittenVisitor": true,
+                "members": [
+                    {
+                        "name": "Kind",
+                        "type": ["SyntaxKind.JSDocParameterTag", "SyntaxKind.JSDocPropertyTag"],
+                        "inherited": true
+                    },
+                    {
+                        "name": "TagName",
+                        "inherited": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "EntityName",
+                        "private": true
+                    },
+                    {
+                        "name": "IsBracketed",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "TypeExpression",
+                        "type": "TypeNode",
+                        "optional": true
+                    },
+                    {
+                        "name": "IsNameFirst",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "Comment",
+                        "inherited": true
+                    }
+                ]
+            }
+        },
+        "aliases": {
+            "Expression": {
+                "base": "ExpressionBase"
+            },
+            "Statement": {
+                "base": "StatementBase"
+            },
+            "TypeNode": {
+                "base": "TypeNodeBase"
+            },
+            "BlockOrExpression": [
+                "Block",
+                "Expression"
+            ],
+            "NodeBody": [
+                "Block",
+                "Expression",
+                "ModuleBlock",
+                "ModuleDeclaration"
+            ],
+            "AccessExpression": [
+                "PropertyAccessExpression",
+                "ElementAccessExpression"
+            ],
+            "DeclarationName": [
+                "Identifier",
+                "PrivateIdentifier",
+                "StringLiteral",
+                "NumericLiteral",
+                "BigIntLiteral",
+                "NoSubstitutionTemplateLiteral",
+                "ComputedPropertyName",
+                "BindingPattern",
+                "ElementAccessExpression"
+            ],
+            "ModuleName": [
+                "Identifier",
+                "StringLiteral"
+            ],
+            "ModuleExportName": [
+                "Identifier",
+                "StringLiteral"
+            ],
+            "PropertyName": [
+                "Identifier",
+                "StringLiteral",
+                "NoSubstitutionTemplateLiteral",
+                "NumericLiteral",
+                "ComputedPropertyName",
+                "PrivateIdentifier",
+                "BigIntLiteral"
+            ],
+            "ModuleBody": [
+                "ModuleBlock",
+                "ModuleDeclaration"
+            ],
+            "ForInitializer": [
+                "Expression",
+                "MissingDeclaration",
+                "VariableDeclarationList"
+            ],
+            "ModuleReference": [
+                "Identifier",
+                "QualifiedName",
+                "ExternalModuleReference"
+            ],
+            "NamedImportBindings": [
+                "NamespaceImport",
+                "NamedImports"
+            ],
+            "NamedExportBindings": [
+                "NamespaceExport",
+                "NamedExports"
+            ],
+            "MemberName": [
+                "Identifier",
+                "PrivateIdentifier"
+            ],
+            "EntityName": [
+                "Identifier",
+                "QualifiedName"
+            ],
+            "BindingName": [
+                "Identifier",
+                "BindingPattern"
+            ],
+            "ModifierLike": [
+                "Modifier",
+                "Decorator"
+            ],
+            "JsxChild": [
+                "JsxText",
+                "JsxExpression",
+                "JsxElement",
+                "JsxSelfClosingElement",
+                "JsxFragment"
+            ],
+            "JsxAttributeLike": [
+                "JsxAttribute",
+                "JsxSpreadAttribute"
+            ],
+            "JsxAttributeName": [
+                "Identifier",
+                "JsxNamespacedName"
+            ],
+            "JsxAttributeValue": [
+                "StringLiteral",
+                "JsxExpression",
+                "JsxElement",
+                "JsxSelfClosingElement",
+                "JsxFragment"
+            ],
+            "JsxTagNameExpression": [
+                "Identifier",
+                "KeywordExpression",
+                "PropertyAccessExpression",
+                "JsxNamespacedName"
+            ],
+            "ClassLikeDeclaration": [
+                "ClassDeclaration",
+                "ClassExpression"
+            ],
+            "AccessorDeclaration": [
+                "GetAccessorDeclaration",
+                "SetAccessorDeclaration"
+            ],
+            "LiteralLikeNode": [
+                "StringLiteral",
+                "NumericLiteral",
+                "BigIntLiteral",
+                "RegularExpressionLiteral",
+                "TemplateLiteralLikeNode",
+                "JsxText"
+            ],
+            "LiteralExpression": [
+                "StringLiteral",
+                "NumericLiteral",
+                "BigIntLiteral",
+                "RegularExpressionLiteral",
+                "NoSubstitutionTemplateLiteral"
+            ],
+            "UnionOrIntersectionTypeNode": [
+                "UnionTypeNode",
+                "IntersectionTypeNode"
+            ],
+            "TemplateLiteralLikeNode": [
+                "PseudoLiteralSyntaxKind"
+            ],
+            "TemplateMiddleOrTail": [
+                "TemplateMiddle",
+                "TemplateTail"
+            ],
+            "TemplateLiteral": [
+                "TemplateExpression",
+                "NoSubstitutionTemplateLiteral"
+            ],
+            "TypePredicateParameterName": [
+                "Identifier",
+                "ThisTypeNode"
+            ],
+            "ImportAttributeName": [
+                "Identifier",
+                "StringLiteral"
+            ],
+            "LeftHandSideExpression": {
+                "base": "LeftHandSideExpressionBase"
+            },
+            "JSDocComment": [
+                "JSDocText",
+                "JSDocLink",
+                "JSDocLinkCode",
+                "JSDocLinkPlain"
+            ],
+            "SignatureDeclaration": [
+                "CallSignatureDeclaration",
+                "ConstructSignatureDeclaration",
+                "MethodSignatureDeclaration",
+                "IndexSignatureDeclaration",
+                "FunctionTypeNode",
+                "ConstructorTypeNode",
+                "FunctionDeclaration",
+                "MethodDeclaration",
+                "ConstructorDeclaration",
+                "AccessorDeclaration",
+                "FunctionExpression",
+                "ArrowFunction"
+            ],
+            "StringLiteralLikeNode": [
+                "StringLiteral",
+                "NoSubstitutionTemplateLiteral"
+            ],
+            "NumericOrStringLikeLiteral": [
+                "StringLiteralLikeNode",
+                "NumericLiteral"
+            ],
+            "ObjectLiteralLikeNode": [
+                "ObjectLiteralExpression",
+                "ObjectBindingPattern"
+            ],
+            "ObjectTypeDeclaration": [
+                "ClassLikeDeclaration",
+                "InterfaceDeclaration",
+                "TypeLiteralNode"
+            ],
+            "JsxOpeningLikeElement": [
+                "JsxOpeningElement",
+                "JsxSelfClosingElement"
+            ],
+            "NamedImportsOrExports": [
+                "NamedImports",
+                "NamedExports"
+            ],
+            "BreakOrContinueStatement": [
+                "BreakStatement",
+                "ContinueStatement"
+            ],
+            "CallLikeExpression": [
+                "CallExpression",
+                "NewExpression",
+                "TaggedTemplateExpression",
+                "Decorator",
+                "JsxOpeningLikeElement",
+                "BinaryExpression"
+            ],
+            "FunctionLikeDeclaration": [
+                "FunctionDeclaration",
+                "MethodDeclaration",
+                "GetAccessorDeclaration",
+                "SetAccessorDeclaration",
+                "ConstructorDeclaration",
+                "FunctionExpression",
+                "ArrowFunction"
+            ],
+            "VariableOrParameterDeclaration": [
+                "VariableDeclaration",
+                "ParameterDeclaration"
+            ],
+            "VariableOrPropertyDeclaration": [
+                "VariableDeclaration",
+                "PropertyDeclaration"
+            ],
+            "CallOrNewExpression": [
+                "CallExpression",
+                "NewExpression"
+            ],
+            "ImportClauseOrBindingPattern": [
+                "ImportClause",
+                "BindingPattern"
+            ],
+            "AnyImportSyntax": [
+                "ImportDeclaration",
+                "ImportEqualsDeclaration"
+            ],
+            "Declaration": {
+                "base": "DeclarationBase"
+            },
+            "ClassElement": {
+                "base": "ClassElementBase"
+            },
+            "TypeElement": {
+                "base": "TypeElementBase"
+            },
+            "ObjectLiteralElement": {
+                "base": "ObjectLiteralElementBase"
+            },
+            "JSDocTag": {
+                "base": "JSDocTagBase"
+            },
+            "ArrayBindingElement": [
+                "BindingElement",
+                "OmittedExpression"
+            ],
+            "AssertionExpression": [
+                "TypeAssertion",
+                "AsExpression"
+            ],
+            "BooleanLiteral": [
+                "TrueLiteral",
+                "FalseLiteral"
+            ],
+            "ConciseBody": [
+                "Block",
+                "Expression"
+            ],
+            "DestructuringAssignment": [
+                "ObjectDestructuringAssignment",
+                "ArrayDestructuringAssignment"
+            ],
+            "LiteralToken": [
+                "NumericLiteral",
+                "BigIntLiteral",
+                "StringLiteral",
+                "JsxText",
+                "RegularExpressionLiteral",
+                "NoSubstitutionTemplateLiteral"
+            ],
+            "Modifier": [
+                "ModifierSyntaxKind"
+            ],
+            "ObjectLiteralElementLike": [
+                "PropertyAssignment",
+                "ShorthandPropertyAssignment",
+                "SpreadAssignment",
+                "MethodDeclaration",
+                "GetAccessorDeclaration",
+                "SetAccessorDeclaration"
+            ],
+            "PropertyNameLiteral": [
+                "Identifier",
+                "StringLiteral",
+                "NumericLiteral"
+            ],
+            "PseudoLiteralToken": [
+                "PseudoLiteralSyntaxKind"
+            ],
+            "TemplateLiteralToken": [
+                "NoSubstitutionTemplateLiteral",
+                "PseudoLiteralToken"
+            ],
+            "ArrayDestructuringAssignment": [
+                "BinaryExpression"
+            ],
+            "ObjectDestructuringAssignment": [
+                "BinaryExpression"
+            ],
+            "FunctionBody": [
+                "Block"
+            ],
+            "IncrementExpression": [
+                "UpdateExpressionBase"
+            ]
+        },
+        "listAliases": {
+            "StatementList": "Statement",
+            "CaseClausesList": "CaseOrDefaultClause",
+            "VariableDeclarationNodeList": "VariableDeclaration",
+            "BindingElementList": "BindingElement",
+            "TypeParameterList": "TypeParameterDeclaration",
+            "ParameterList": "ParameterDeclaration",
+            "HeritageClauseList": "HeritageClause",
+            "ClassElementList": "ClassElement",
+            "TypeElementList": "TypeElement",
+            "ExpressionWithTypeArgumentsList": "ExpressionWithTypeArguments",
+            "EnumMemberList": "EnumMember",
+            "ImportSpecifierList": "ImportSpecifier",
+            "ExportSpecifierList": "ExportSpecifier",
+            "TypeArgumentList": "TypeNode",
+            "ArgumentList": "Expression",
+            "TemplateSpanList": "TemplateSpan",
+            "ElementList": "Expression",
+            "PropertyDefinitionList": "ObjectLiteralElement",
+            "TypeList": "TypeNode",
+            "ImportAttributeList": "ImportAttribute",
+            "TemplateLiteralTypeSpanList": "TemplateLiteralTypeSpan",
+            "JsxChildList": "JsxChild",
+            "JsxAttributeList": "JsxAttributeLike"
+        }
+    }
+}

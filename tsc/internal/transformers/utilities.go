@@ -48,7 +48,6 @@ func IsIdentifierReference(name *ast.IdentifierNode, parent *ast.Node) bool {
 		ast.KindJsxSelfClosingElement,
 		ast.KindJsxSpreadAttribute,
 		ast.KindJsxExpression,
-		ast.KindCommaListExpression,
 		ast.KindPartiallyEmittedExpression:
 		// all immediate children that can be `Identifier` would be instances of `IdentifierReference`
 		return true

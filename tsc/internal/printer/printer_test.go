@@ -2120,6 +2120,7 @@ func TestParenthesizeUnionType2(t *testing.T) {
 									nil,
 									factory.NewIdentifier("a"),
 									factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+									nil, /*expression*/
 									nil, /*defaultType*/
 								),
 							),
@@ -2369,6 +2370,7 @@ func TestParenthesizeConditionalType3(t *testing.T) {
 								nil,
 								factory.NewIdentifier("b"),
 								factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+								nil, /*expression*/
 								nil, /*defaultType*/
 							),
 						),
@@ -2409,6 +2411,7 @@ func TestParenthesizeConditionalType4(t *testing.T) {
 										nil,
 										factory.NewIdentifier("b"),
 										factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+										nil, /*expression*/
 										nil, /*defaultType*/
 									),
 								),
@@ -2432,10 +2435,10 @@ func TestNameGeneration(t *testing.T) {
 	ec := printer.NewEmitContext()
 	file := ec.Factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", Path: "/file.ts"}, "", ec.Factory.NewNodeList([]*ast.Node{
 		ec.Factory.NewVariableStatement(nil, ec.Factory.NewVariableDeclarationList(
-			ast.NodeFlagsNone,
 			ec.Factory.NewNodeList([]*ast.Node{
 				ec.Factory.NewVariableDeclaration(ec.Factory.NewTempVariable(), nil, nil, nil),
 			}),
+			ast.NodeFlagsNone,
 		)),
 		ec.Factory.NewFunctionDeclaration(
 			nil,
@@ -2447,10 +2450,10 @@ func TestNameGeneration(t *testing.T) {
 			nil,
 			ec.Factory.NewBlock(ec.Factory.NewNodeList([]*ast.Node{
 				ec.Factory.NewVariableStatement(nil, ec.Factory.NewVariableDeclarationList(
-					ast.NodeFlagsNone,
 					ec.Factory.NewNodeList([]*ast.Node{
 						ec.Factory.NewVariableDeclaration(ec.Factory.NewTempVariable(), nil, nil, nil),
 					}),
+					ast.NodeFlagsNone,
 				)),
 			}), true),
 		),

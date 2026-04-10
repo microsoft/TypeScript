@@ -779,7 +779,7 @@ func (c *Checker) checkGrammarArrowFunction(node *ast.Node, file *ast.SourceFile
 	typeParameters := arrowFunc.TypeParameters
 	if typeParameters != nil {
 		typeParamNodes := typeParameters.Nodes
-		hasConstraint := len(typeParamNodes) > 0 && typeParamNodes[0].AsTypeParameter().Constraint != nil
+		hasConstraint := len(typeParamNodes) > 0 && typeParamNodes[0].AsTypeParameterDeclaration().Constraint != nil
 		if !(len(typeParamNodes) > 1 || typeParameters.HasTrailingComma() || hasConstraint) {
 			if tspath.FileExtensionIsOneOf(file.FileName(), []string{tspath.ExtensionMts, tspath.ExtensionCts}) {
 				// TODO(danielr): should we return early here?
@@ -883,7 +883,7 @@ func (c *Checker) checkGrammarHeritageClause(node *ast.HeritageClause) bool {
 	return false
 }
 
-func (c *Checker) checkGrammarExpressionWithTypeArguments(node *ast.Node /*Union[ExpressionWithTypeArguments, TypeQueryNode]*/) bool {
+func (c *Checker) checkGrammarExpressionWithTypeArguments(node *ast.Node /*Union[ExpressionWithTypeArguments, TypeQuery]*/) bool {
 	if !ast.IsExpressionWithTypeArguments(node) {
 		return false
 	}

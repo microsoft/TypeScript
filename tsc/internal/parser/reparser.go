@@ -36,7 +36,7 @@ func (p *Parser) reparseCommonJS(node *ast.Node, jsdoc []*ast.Node) {
 		var export *ast.Node
 		switch ast.GetAssignmentDeclarationKind(expr) {
 		case ast.JSDeclarationKindModuleExports:
-			export = p.factory.NewJSExportAssignment(nil, p.factory.DeepCloneReparse(expr.AsBinaryExpression().Right))
+			export = p.factory.NewJSExportAssignment(nil, true, nil, p.factory.DeepCloneReparse(expr.AsBinaryExpression().Right))
 		case ast.JSDeclarationKindExportsProperty:
 			// TODO: Name can sometimes be a string literal, so downstream code needs to handle this
 			export = p.factory.NewCommonJSExport(
@@ -165,7 +165,7 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 			if thisTag.TypeExpression != nil {
 				parameter.AsParameterDeclaration().Type = p.addDeepCloneReparse(thisTag.TypeExpression.Type())
 			}
-		} else {
+		} else if param.Kind == ast.KindJSDocParameterTag || param.Kind == ast.KindJSDocPropertyTag {
 			jsparam := param.AsJSDocParameterOrPropertyTag()
 			var dotDotDotToken *ast.Node
 			var paramType *ast.TypeNode
@@ -284,7 +284,8 @@ func (p *Parser) gatherTypeParameters(j *ast.Node, tagWithTypeParameters *ast.No
 					p.factory.DeepCloneReparseModifiers(tp.Modifiers()),
 					p.addDeepCloneReparse(tp.Name()),
 					p.addDeepCloneReparse(constraint.Type()),
-					p.addDeepCloneReparse(tp.AsTypeParameter().DefaultType),
+					nil, // expression
+					p.addDeepCloneReparse(tp.AsTypeParameterDeclaration().DefaultType),
 				)
 				p.finishReparsedNode(reparse, tp)
 			} else {
@@ -564,7 +565,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 	}
 }
 
-func (p *Parser) makeQuestionIfOptional(parameter *ast.JSDocParameterTag) *ast.Node {
+func (p *Parser) makeQuestionIfOptional(parameter *ast.JSDocParameterOrPropertyTag) *ast.Node {
 	var questionToken *ast.Node
 	if parameter.IsBracketed || parameter.TypeExpression != nil && parameter.TypeExpression.Type().Kind == ast.KindJSDocOptionalType {
 		questionToken = p.factory.NewToken(ast.KindQuestionToken)
@@ -574,7 +575,7 @@ func (p *Parser) makeQuestionIfOptional(parameter *ast.JSDocParameterTag) *ast.N
 	return questionToken
 }
 
-func findMatchingParameter(fun *ast.Node, parameterTag *ast.JSDocParameterTag, jsDoc *ast.Node) (*ast.ParameterDeclaration, bool) {
+func findMatchingParameter(fun *ast.Node, parameterTag *ast.JSDocParameterOrPropertyTag, jsDoc *ast.Node) (*ast.ParameterDeclaration, bool) {
 	tagIndex := -1
 	paramCount := -1
 	for _, tag := range jsDoc.AsJSDoc().Tags.Nodes {

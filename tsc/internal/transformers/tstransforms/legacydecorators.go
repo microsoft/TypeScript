@@ -86,7 +86,7 @@ func (tx *LegacyDecoratorsTransformer) visitPropertyAccessExpression(node *ast.P
 	// .name of PropertyAccessExpression.
 	expression := tx.Visitor().VisitNode(node.Expression)
 	if expression != node.Expression {
-		return tx.Factory().UpdatePropertyAccessExpression(node, expression, node.QuestionDotToken, node.Name())
+		return tx.Factory().UpdatePropertyAccessExpression(node, expression, node.QuestionDotToken, node.Name(), node.Flags)
 	}
 	return node.AsNode()
 }
@@ -483,7 +483,7 @@ func (tx *LegacyDecoratorsTransformer) transformClassDeclarationWithClassDecorat
 	)
 	tx.EmitContext().SetOriginal(varDecl, node.AsNode())
 
-	varDeclList := tx.Factory().NewVariableDeclarationList(ast.NodeFlagsLet, tx.Factory().NewNodeList([]*ast.Node{varDecl}))
+	varDeclList := tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsLet)
 	varStatement := tx.Factory().NewVariableStatement(nil, varDeclList)
 	tx.EmitContext().SetOriginal(varStatement, node.AsNode())
 	varStatement.Loc = location

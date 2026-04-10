@@ -1,0 +1,421 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "TypeScript AST Schema",
+    "description": "Schema for defining TypeScript AST node shapes, used by code generators to produce Go and TypeScript AST infrastructure.",
+    "type": "object",
+    "required": [
+        "bases",
+        "nodes"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "description": "JSON Schema reference for editor support."
+        },
+        "bases": {
+            "type": "object",
+            "description": "Base types and traits that nodes can extend. Each maps to a Go struct embedding. The Go struct name defaults to Capitalize(key)+'Base'; specify 'go' only when it differs.",
+            "additionalProperties": {
+                "$ref": "#/definitions/base"
+            }
+        },
+        "kinds": {
+            "type": "object",
+            "description": "SyntaxKind enum definition",
+            "properties": {
+                "elements": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {
+                                "type": "string",
+                                "description": "Kind name (sugar for { \"name\": \"...\" })"
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Kind constant name (without Kind prefix)"
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "description": "Comment (group header if no name, trailing comment if with name)"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                "markers": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "Marker name (e.g. FirstAssignment)"
+                            },
+                            "value": {
+                                "type": "string",
+                                "description": "Kind name this marker aliases (e.g. EqualsToken)"
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "value"
+                        ]
+                    }
+                },
+                "aliases": {
+                    "type": "object",
+                    "description": "SyntaxKind union type aliases",
+                    "additionalProperties": {
+                        "oneOf": [
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "description": "Kind name or reference to another union"
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "range": {
+                                        "type": "array",
+                                        "items": { "type": "string" },
+                                        "minItems": 2,
+                                        "maxItems": 2,
+                                        "description": "[FirstMarker, LastMarker] range for concise kind check"
+                                    }
+                                },
+                                "required": ["range"]
+                            }
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "elements",
+                "markers"
+            ]
+        },
+        "nodes": {
+            "type": "object",
+            "properties": {
+                "definitions": {
+                    "type": "object",
+                    "description": "Concrete node type definitions",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/node"
+                    }
+                },
+                "aliases": {
+                    "type": "object",
+                    "description": "Named union types used as member type constraints.",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/union"
+                    }
+                },
+                "listAliases": {
+                    "type": "object",
+                    "description": "NodeList type aliases (e.g. StatementList = NodeList[*Statement])",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "definitions",
+                "aliases"
+            ]
+        }
+    },
+    "definitions": {
+        "base": {
+            "type": "object",
+            "description": "A base type or trait. Go struct name is derived as Capitalize(key)+'Base'.",
+            "additionalProperties": false,
+            "properties": {
+                "ts": {
+                    "type": "string",
+                    "description": "TypeScript type name override. Defaults to Capitalize(key)."
+                },
+                "tsName": {
+                    "type": "string",
+                    "description": "TypeScript interface name for this base (e.g., 'FunctionLikeDeclarationBase'). Defaults to Capitalize(key)."
+                },
+                "brand": {
+                    "type": "string",
+                    "description": "TypeScript brand property name (e.g., '_expressionBrand'). When present, the generated TS interface includes this brand."
+                },
+                "extends": {
+                    "type": "array",
+                    "description": "Other bases transitively included by this one.",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "fields": {
+                    "type": "object",
+                    "description": "Fields provided by this base. Keys are Go field names, values describe the field type.",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/baseField"
+                    }
+                }
+            }
+        },
+        "baseField": {
+            "type": "object",
+            "description": "A field provided by a base struct.",
+            "required": [
+                "type"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    ]
+                },
+                "list": {
+                    "description": "How this member stores multiple child nodes.",
+                    "enum": [
+                        "NodeList",
+                        "ModifierList",
+                        "raw"
+                    ]
+                },
+                "visit": {
+                    "type": "string",
+                    "description": "Visitor metadata for this inherited/base field."
+                },
+                "typeGuard": {
+                    "type": "string",
+                    "description": "TypeScript type guard override for this inherited/base field."
+                },
+                "optional": {
+                    "type": "boolean"
+                },
+                "private": {
+                    "type": "boolean"
+                },
+                "goOnly": {
+                    "type": "boolean",
+                    "description": "If true, this field is Go-only (implies both noTS and noFactory)"
+                },
+                "noGo": {
+                    "type": "boolean",
+                    "description": "If true, this field is absent from Go"
+                },
+                "noTS": {
+                    "type": "boolean",
+                    "description": "If true, this field is excluded from encoding and all TS files"
+                },
+                "noFactory": {
+                    "type": "boolean",
+                    "description": "If true, this field is excluded from factory functions, visitor, and clone"
+                }
+            }
+        },
+        "union": {
+            "description": "A named union type. Either a category union (all nodes extending a given base) or an explicit list of node kinds.",
+            "oneOf": [
+                {
+                    "type": "object",
+                    "required": [
+                        "base"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "base": {
+                            "type": "string",
+                            "description": "The base category name (e.g., 'expression')."
+                        }
+                    }
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ]
+        },
+        "node": {
+            "type": "object",
+            "description": "A concrete AST node kind.",
+            "required": [
+                "extends"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "kind": {
+                    "oneOf": [
+                        {
+                            "type": "string",
+                            "description": "SyntaxKind constant base name when it differs from the schema key."
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "Array of SyntaxKind names sharing this node's data shape. The first is the primary kind; the rest are aliases."
+                        }
+                    ],
+                    "description": "SyntaxKind constant name(s). When it differs from the schema key, specify a string. When multiple SyntaxKind values share this node's implementation, specify an array."
+                },
+                "extends": {
+                    "type": "array",
+                    "description": "Bases this node extends. First entry is the primary base. Maps to Go struct embeddings.",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "members": {
+                    "type": "array",
+                    "description": "Ordered list of members. Array position defines factory parameter order, visitor traversal order, and binary encoding order.",
+                    "items": {
+                        "$ref": "#/definitions/member"
+                    }
+                },
+                "pool": {
+                    "type": "boolean",
+                    "description": "Whether this node uses an object pool for allocation."
+                },
+                "handWrittenVisitor": {
+                    "type": "boolean",
+                    "description": "Whether this node's ForEachChild and VisitEachChild functions are hand-written rather than generated."
+                },
+                "generateSubtreeFacts": {
+                    "type": "boolean",
+                    "description": "Whether this node's Go computeSubtreeFacts method is a trivial child-propagation implementation that can be generated from schema."
+                },
+                "tsName": {
+                    "type": "string",
+                    "description": "TypeScript interface name override. Defaults to the node key."
+                },
+                "typeParameters": {
+                    "type": "array",
+                    "description": "Generic type parameters for the node",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "Type parameter name (e.g. TKind)"
+                            },
+                            "constraint": {
+                                "type": "string",
+                                "description": "Constraint type (e.g. KeywordTypeSyntaxKind)"
+                            },
+                            "default": {
+                                "type": "string",
+                                "description": "Default type"
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "constraint"
+                        ]
+                    }
+                },
+                "instantiationAliases": {
+                    "type": "object",
+                    "description": "Named type alias instantiations of the generic node (e.g. DotToken = Token<SyntaxKind.DotToken>)",
+                    "additionalProperties": {
+                        "type": "string",
+                        "description": "SyntaxKind value to instantiate the type parameter with"
+                    }
+                },
+                "handWritten": {
+                    "type": "boolean",
+                    "description": "Whether this node's factory, visitor, and other generated code is hand-written rather than generated."
+                }
+            }
+        },
+        "member": {
+            "type": "object",
+            "description": "A member of a node. Either a base-provided field (inherited: true, name only) or an own field (with type info).",
+            "required": [
+                "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Go struct / TS interface property name (e.g., 'Expression', 'Type', 'Body')."
+                },
+                "inherited": {
+                    "type": "boolean",
+                    "description": "If true, this field is provided by an extended base. Type and visibility come from the base's fields definition."
+                },
+                "type": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    ],
+                    "description": "Type name, or array of type names for inline union"
+                },
+                "optional": {
+                    "type": "boolean",
+                    "description": "Whether this member is optional."
+                },
+                "list": {
+                    "description": "How this member stores multiple child nodes. \"NodeList\" for *NodeList, \"raw\" for []*Node.",
+                    "enum": [
+                        "NodeList",
+                        "ModifierList",
+                        "raw"
+                    ]
+                },
+                "visit": {
+                    "type": "string",
+                    "description": "Visitor method override (e.g., 'embeddedStatement', 'functionBody', 'parameters')."
+                },
+                "typeGuard": {
+                    "type": "string",
+                    "description": "TypeScript type guard override."
+                },
+                "private": {
+                    "type": "boolean",
+                    "description": "Whether this field is unexported in Go (lowercase name)."
+                },
+                "goOnly": {
+                    "type": "boolean",
+                    "description": "If true, this member is Go-only (implies both noTS and noFactory)"
+                },
+                "noTS": {
+                    "type": "boolean",
+                    "description": "If true, this member is excluded from encoding and all TS files"
+                },
+                "noFactory": {
+                    "type": "boolean",
+                    "description": "If true, this member is excluded from factory functions, visitor, and clone"
+                },
+                "bitmask": {
+                    "type": "string",
+                    "description": "Bitmask constant to AND with the value in factory functions"
+                }
+            }
+        }
+    }
+}

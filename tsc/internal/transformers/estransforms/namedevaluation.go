@@ -540,6 +540,7 @@ func transformNamedEvaluationOfExportAssignment(emitContext *printer.EmitContext
 	return factory.UpdateExportAssignment(
 		node,
 		nil, /*modifiers*/
+		node.IsExportEquals,
 		nil, /*typeNode*/
 		expression,
 	)

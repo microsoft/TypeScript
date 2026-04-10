@@ -334,11 +334,12 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		return b.setTextRange(b.f.UpdateIndexedAccessTypeNode(node.AsIndexedAccessTypeNode(), resultObjectType, visitor.VisitNode(node.AsIndexedAccessTypeNode().IndexType)), node)
 	}
 	tryVisitKeyOf := func(node *ast.Node) *ast.Node {
-		t := tryVisitSimpleTypeNode(node.AsTypeOperatorNode().Type)
+		to := node.AsTypeOperatorNode()
+		t := tryVisitSimpleTypeNode(to.Type)
 		if t == nil {
 			return nil
 		}
-		return b.setTextRange(b.f.UpdateTypeOperatorNode(node.AsTypeOperatorNode(), t), node)
+		return b.setTextRange(b.f.UpdateTypeOperatorNode(to, to.Operator, t), node)
 	}
 	tryVisitTypeQuery := func(node *ast.Node) *ast.Node {
 		introducesError, exprName, _ := trackExistingEntityName(node.AsTypeQueryNode().ExprName, nil)
@@ -495,12 +496,12 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		if ast.IsTypeParameterDeclaration(node) {
 			_, newName, _ := trackExistingEntityName(node.Name(), nil)
 			return factory.UpdateTypeParameterDeclaration(
-				node.AsTypeParameter(),
+				node.AsTypeParameterDeclaration(),
 				visitor.VisitModifiers(node.Modifiers()),
 				newName,
-				visitor.VisitNode(node.AsTypeParameter().Constraint),
-				visitor.VisitNode(node.AsTypeParameter().Expression),
-				visitor.VisitNode(node.AsTypeParameter().DefaultType),
+				visitor.VisitNode(node.AsTypeParameterDeclaration().Constraint),
+				visitor.VisitNode(node.AsTypeParameterDeclaration().Expression),
+				visitor.VisitNode(node.AsTypeParameterDeclaration().DefaultType),
 			)
 		}
 		if ast.IsIndexedAccessTypeNode(node) {
@@ -592,7 +593,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				return nil
 			}
 		}
-		if (ast.IsFunctionLike(node) && node.Type() == nil) || (ast.IsPropertyDeclaration(node) && node.Type() == nil && node.Initializer() == nil) || (ast.IsPropertySignatureDeclaration(node) && node.Type() == nil && node.Initializer() == nil) || (ast.IsParameter(node) && node.Type() == nil && node.Initializer() == nil) {
+		if (ast.IsFunctionLike(node) && node.Type() == nil) || (ast.IsPropertyDeclaration(node) && node.Type() == nil && node.Initializer() == nil) || (ast.IsPropertySignatureDeclaration(node) && node.Type() == nil && node.Initializer() == nil) || (ast.IsParameterDeclaration(node) && node.Type() == nil && node.Initializer() == nil) {
 			visited := visitor.VisitEachChild(node)
 			if visited == node {
 				visited = b.setTextRange(node.Clone(factory), node)

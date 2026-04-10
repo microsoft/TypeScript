@@ -282,7 +282,7 @@ func (ch *objectRestSpreadTransformer) transformFunctionBody(node *ast.Node) *as
 
 	newStatementList := ch.Factory().NewNodeList(append(append(append(prefix, extras...), newStatements...), suffix...))
 	newStatementList.Loc = body.StatementList().Loc
-	return ch.Factory().UpdateBlock(body.AsBlock(), newStatementList)
+	return ch.Factory().UpdateBlock(body.AsBlock(), newStatementList, body.AsBlock().MultiLine)
 }
 
 func (ch *objectRestSpreadTransformer) collectObjectRestAssignments(node *ast.Node) []*ast.Node {
@@ -301,7 +301,7 @@ func (ch *objectRestSpreadTransformer) collectObjectRestAssignments(node *ast.No
 						transformers.FlattenLevelAll, false, false,
 					)
 					if declarations != nil {
-						declarationList := ch.Factory().NewVariableDeclarationList(ast.NodeFlagsNone, ch.Factory().NewNodeList([]*ast.Node{}))
+						declarationList := ch.Factory().NewVariableDeclarationList(ch.Factory().NewNodeList([]*ast.Node{}), ast.NodeFlagsNone)
 						decls := []*ast.Node{declarations}
 						if declarations.Kind == ast.KindSyntaxList {
 							decls = declarations.AsSyntaxList().Children
@@ -359,7 +359,7 @@ func (ch *objectRestSpreadTransformer) collectObjectRestAssignments(node *ast.No
 				transformers.FlattenLevelObjectRest, false, true,
 			)
 			if declarations != nil {
-				declarationList := ch.Factory().NewVariableDeclarationList(ast.NodeFlagsNone, ch.Factory().NewNodeList([]*ast.Node{}))
+				declarationList := ch.Factory().NewVariableDeclarationList(ch.Factory().NewNodeList([]*ast.Node{}), ast.NodeFlagsNone)
 				decls := []*ast.Node{declarations}
 				if declarations.Kind == ast.KindSyntaxList {
 					decls = declarations.AsSyntaxList().Children
@@ -392,13 +392,13 @@ func (ch *objectRestSpreadTransformer) visitCatchClause(node *ast.CatchClause) *
 			} else {
 				decls = []*ast.Node{visitedBindings}
 			}
-			newStatement := ch.Factory().NewVariableStatement(nil, ch.Factory().NewVariableDeclarationList(ast.NodeFlagsNone, ch.Factory().NewNodeList(decls)))
+			newStatement := ch.Factory().NewVariableStatement(nil, ch.Factory().NewVariableDeclarationList(ch.Factory().NewNodeList(decls), ast.NodeFlagsNone))
 			statements := []*ast.Node{newStatement}
 			statements = append(statements, block.Statements()...)
 			statementList := ch.Factory().NewNodeList(statements)
 			statementList.Loc = block.StatementList().Loc
 
-			block = ch.Factory().UpdateBlock(block.AsBlock(), statementList)
+			block = ch.Factory().UpdateBlock(block.AsBlock(), statementList, block.AsBlock().MultiLine)
 		}
 		return ch.Factory().UpdateCatchClause(
 			node,
@@ -470,8 +470,8 @@ func (ch *objectRestSpreadTransformer) visitForOftatement(node *ast.ForInOrOfSta
 			}
 
 			list := ch.Factory().NewVariableDeclarationList(
-				ast.NodeFlagsLet,
 				ch.Factory().NewNodeList([]*ast.Node{ch.Factory().NewVariableDeclaration(temp, nil, nil, nil)}),
+				ast.NodeFlagsLet,
 			)
 			list.Loc = node.Initializer.Loc
 

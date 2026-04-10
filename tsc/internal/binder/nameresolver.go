@@ -71,7 +71,7 @@ loop:
 							// to make sure that they reference no variables declared after them.
 							useResult = lastLocation.Kind == ast.KindParameter ||
 								lastLocation.Flags&ast.NodeFlagsSynthesized != 0 ||
-								lastLocation == location.Type() && ast.FindAncestor(result.ValueDeclaration, ast.IsParameter) != nil
+								lastLocation == location.Type() && ast.FindAncestor(result.ValueDeclaration, ast.IsParameterDeclaration) != nil
 						}
 					}
 				} else if location.Kind == ast.KindConditionalType {
@@ -274,7 +274,7 @@ loop:
 			}
 		case ast.KindInferType:
 			if meaning&ast.SymbolFlagsTypeParameter != 0 {
-				parameterName := location.AsInferTypeNode().TypeParameter.AsTypeParameter().Name()
+				parameterName := location.AsInferTypeNode().TypeParameter.AsTypeParameterDeclaration().Name()
 				if parameterName != nil && name == parameterName.Text() {
 					result = location.AsInferTypeNode().TypeParameter.Symbol()
 					break loop
@@ -345,7 +345,7 @@ loop:
 }
 
 func (r *NameResolver) useOuterVariableScopeInParameter(result *ast.Symbol, location *ast.Node, lastLocation *ast.Node) bool {
-	if ast.IsParameter(lastLocation) {
+	if ast.IsParameterDeclaration(lastLocation) {
 		body := location.Body()
 		if body != nil && result.ValueDeclaration != nil && result.ValueDeclaration.Pos() >= body.Pos() && result.ValueDeclaration.End() <= body.End() {
 			// check for several cases where we introduce temporaries that require moving the name/initializer of the parameter to the body

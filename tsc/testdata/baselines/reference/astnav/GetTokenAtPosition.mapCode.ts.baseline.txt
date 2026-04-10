@@ -23,6 +23,26 @@
 44 │    sourceFile: SourceFile,
 
 
+〚Positions: [788, 788]〛
+【TS: JSDocTag [788, 798)】
+《Go: JSDocUnknownTag [788, 798)》
+40 │import { ChangeTracker } from "./textChanges.js";
+41 │
+42 │/** 《【〚@〛internal 】》*/
+43 │export function mapCode(
+44 │    sourceFile: SourceFile,
+
+
+〚Positions: [797, 797]〛
+【TS: JSDocTag [788, 798)】
+《Go: JSDocUnknownTag [788, 798)》
+40 │import { ChangeTracker } from "./textChanges.js";
+41 │
+42 │/** 《【@internal〚 〛】》*/
+43 │export function mapCode(
+44 │    sourceFile: SourceFile,
+
+
 〚Positions: [798, 799]〛
 【TS: JSDoc [784, 800)】
 《Go: JSDoc [780, 800)》

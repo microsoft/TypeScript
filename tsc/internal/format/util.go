@@ -87,7 +87,7 @@ func GetLineStartPositionForPosition(position int, sourceFile *ast.SourceFile) i
  */
 func isGrammarError(parent *ast.Node, child *ast.Node) bool {
 	if ast.IsTypeParameterDeclaration(parent) {
-		return child == parent.AsTypeParameter().Expression
+		return child == parent.AsTypeParameterDeclaration().Expression
 	}
 	if ast.IsPropertySignatureDeclaration(parent) {
 		return child == parent.Initializer()

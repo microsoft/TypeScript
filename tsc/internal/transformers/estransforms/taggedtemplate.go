@@ -48,8 +48,8 @@ func (tx *taggedTemplateTransformer) visitSourceFile(node *ast.SourceFile) *ast.
 			tx.Factory().NewVariableStatement(
 				nil, /*modifiers*/
 				tx.Factory().NewVariableDeclarationList(
-					ast.NodeFlagsNone,
 					tx.Factory().NewNodeList(tx.taggedTemplateStringDeclarations),
+					ast.NodeFlagsNone,
 				),
 			),
 		)
@@ -122,7 +122,7 @@ func (tx *taggedTemplateTransformer) processTaggedTemplateExpression(node *ast.T
 	return call
 }
 
-func createTemplateCooked(f *printer.NodeFactory, template *ast.TemplateLiteralLikeBase) *ast.Node {
+func createTemplateCooked(f *printer.NodeFactory, template *ast.TemplateLiteralLikeNodeBase) *ast.Node {
 	if template.TemplateFlags&ast.TokenFlagsIsInvalid != 0 {
 		return f.NewVoidZeroExpression()
 	}

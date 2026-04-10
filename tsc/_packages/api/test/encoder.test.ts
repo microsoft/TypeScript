@@ -32,6 +32,7 @@ import {
     encodeSourceFile,
 } from "../src/node/encoder.ts";
 import {
+    RemoteNode,
     RemoteNodeList,
     RemoteSourceFile,
 } from "../src/node/node.ts";
@@ -74,7 +75,7 @@ describe("Encoder", () => {
     test("encodes source file with identifier", () => {
         const id = createIdentifier("hello");
         const decl = createVariableDeclaration(id, undefined, undefined, undefined);
-        const declList = createVariableDeclarationList([decl]);
+        const declList = createVariableDeclarationList([decl], 0);
         const stmt = createVariableStatement(undefined, declList);
         const sf = makeSF("var hello = 42;", "/test.ts", [stmt]);
 
@@ -245,7 +246,7 @@ describe("Encoder", () => {
         const jsx = createJsxElement(opening, [], closing);
         const stmt = createVariableStatement(
             undefined,
-            createVariableDeclarationList([createVariableDeclaration(createIdentifier("x"), undefined, undefined, jsx)]),
+            createVariableDeclarationList([createVariableDeclaration(createIdentifier("x"), undefined, undefined, jsx)], 0),
         );
         const sf = makeSF("const x = <div></div>;", "/test.tsx", [stmt]);
 
@@ -262,10 +263,10 @@ describe("Encoder", () => {
         assert.strictEqual(jsxElem.kind, SyntaxKind.JsxElement);
         const openingElem = jsxElem.openingElement!;
         assert.strictEqual(openingElem.kind, SyntaxKind.JsxOpeningElement);
-        const attrs = openingElem.attributes!;
+        const attrs = openingElem.attributes! as RemoteNode;
         assert.strictEqual(attrs.kind, SyntaxKind.JsxAttributes);
         // Empty properties should return undefined, not throw
-        assert.strictEqual(attrs.properties, undefined);
+        assert.strictEqual(jsxElem.typeArguments, undefined);
     });
 });
 

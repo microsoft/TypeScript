@@ -248,7 +248,7 @@ func (tx *RuntimeSyntaxTransformer) addVarForDeclaration(statements []*ast.State
 	name := tx.Factory().GetLocalNameEx(node, printer.AssignedNameOptions{AllowSourceMaps: true})
 	varDecl := tx.Factory().NewVariableDeclaration(name, nil, nil, nil)
 	varFlags := core.IfElse(tx.currentScope == tx.currentSourceFile, ast.NodeFlagsNone, ast.NodeFlagsLet)
-	varDecls := tx.Factory().NewVariableDeclarationList(varFlags, tx.Factory().NewNodeList([]*ast.Node{varDecl}))
+	varDecls := tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.Node{varDecl}), varFlags)
 	// Replicate modifierVisitor: strip decorators, TypeScript modifiers, and export when in namespace.
 	modifierMask := ^(ast.ModifierFlagsTypeScriptModifier | ast.ModifierFlagsDecorator)
 	if tx.currentNamespace != nil {
@@ -563,7 +563,7 @@ func (tx *RuntimeSyntaxTransformer) visitImportEqualsDeclaration(node *ast.Impor
 		//  var ${name} = ${moduleReference};
 		varDecl := tx.Factory().NewVariableDeclaration(node.Name(), nil /*exclamationToken*/, nil /*type*/, moduleReference)
 		tx.EmitContext().SetOriginal(varDecl, node.AsNode())
-		varList := tx.Factory().NewVariableDeclarationList(ast.NodeFlagsNone, tx.Factory().NewNodeList([]*ast.Node{varDecl}))
+		varList := tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsNone)
 		varModifiers := transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), ast.ModifierFlagsExport)
 		varStatement := tx.Factory().NewVariableStatement(varModifiers, varList)
 		tx.EmitContext().SetOriginal(varStatement, node.AsNode())
@@ -862,7 +862,7 @@ func (tx *RuntimeSyntaxTransformer) transformConstructorBodyWorker(statementsIn 
 		tryBlockStatementList.Loc = tryBlock.Statements.Loc
 		statementsOut = append(statementsOut, tx.Factory().UpdateTryStatement(
 			tryStatement,
-			tx.Factory().UpdateBlock(tryBlock, tryBlockStatementList),
+			tx.Factory().UpdateBlock(tryBlock, tryBlockStatementList, tryBlock.MultiLine),
 			tx.Visitor().VisitNode(tryStatement.CatchClause),
 			tx.Visitor().VisitNode(tryStatement.FinallyBlock),
 		))

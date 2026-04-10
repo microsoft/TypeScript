@@ -196,7 +196,7 @@ func (ch *PseudoChecker) getTypeAnnotationFromAccessor(node *ast.Node) *ast.Node
 		return nil
 	}
 	p := set.Parameters.Nodes[0]
-	if !ast.IsParameter(p) {
+	if !ast.IsParameterDeclaration(p) {
 		return nil
 	}
 	return p.AsParameterDeclaration().Type
@@ -544,7 +544,7 @@ func (ch *PseudoChecker) cloneTypeParameters(nodes *ast.NodeList) []*ast.TypePar
 	}
 	result := make([]*ast.TypeParameterDeclaration, 0, len(nodes.Nodes))
 	for _, e := range nodes.Nodes {
-		result = append(result, e.AsTypeParameter())
+		result = append(result, e.AsTypeParameterDeclaration())
 	}
 	return result
 }

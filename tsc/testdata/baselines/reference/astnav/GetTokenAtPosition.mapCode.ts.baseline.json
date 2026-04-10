@@ -618,7 +618,7 @@
   {
     "startPos": 788,
     "endPos": 788,
-    "kind": "JSDocTag",
+    "kind": "JSDocUnknownTag",
     "nodePos": 788,
     "nodeEnd": 798
   },
@@ -632,7 +632,7 @@
   {
     "startPos": 797,
     "endPos": 797,
-    "kind": "JSDocTag",
+    "kind": "JSDocUnknownTag",
     "nodePos": 788,
     "nodeEnd": 798
   },

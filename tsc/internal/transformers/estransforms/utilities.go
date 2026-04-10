@@ -240,7 +240,7 @@ func (s *superAccessState) createSuperAccessVariableStatement() *ast.Node {
 	)
 
 	decl := f.NewVariableDeclaration(s.superBinding, nil, nil, objectCreateCall)
-	declList := f.NewVariableDeclarationList(ast.NodeFlagsConst, f.NewNodeList([]*ast.Node{decl}))
+	declList := f.NewVariableDeclarationList(f.NewNodeList([]*ast.Node{decl}), ast.NodeFlagsConst)
 	return f.NewVariableStatement(nil, declList)
 }
 

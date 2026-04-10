@@ -436,11 +436,11 @@ func (tx *forawaitTransformer) transformForAwaitOfStatement(node *ast.ForInOrOfS
 	// Build the for statement
 	iteratorDecl := f.NewVariableDeclaration(iterator, nil, nil, initializer)
 	iteratorDecl.Loc = node.Expression.Loc
-	varDeclList := f.NewVariableDeclarationList(ast.NodeFlagsNone, f.NewNodeList([]*ast.Node{
+	varDeclList := f.NewVariableDeclarationList(f.NewNodeList([]*ast.Node{
 		f.NewVariableDeclaration(nonUserCode, nil, nil, f.NewKeywordExpression(ast.KindTrueKeyword)),
 		iteratorDecl,
 		f.NewVariableDeclaration(result, nil, nil, nil),
-	}))
+	}), ast.NodeFlagsNone)
 	varDeclList.Loc = node.Expression.Loc
 
 	condition := f.InlineExpressions([]*ast.Node{
@@ -779,10 +779,12 @@ func (tx *forawaitTransformer) transformAsyncGeneratorFunctionBody(node *ast.Nod
 	asyncBody := f.UpdateBlock(
 		node.Body().AsBlock(),
 		tx.Visitor().VisitNodes(node.Body().StatementList()),
+		node.Body().AsBlock().MultiLine,
 	)
 	asyncBody = f.UpdateBlock(
 		asyncBody.AsBlock(),
 		tx.EmitContext().EndAndMergeVariableEnvironmentList(asyncBody.StatementList()),
+		asyncBody.AsBlock().MultiLine,
 	)
 
 	// Substitute super property accesses with _super/_superIndex helpers
@@ -833,6 +835,7 @@ func (tx *forawaitTransformer) transformAsyncGeneratorFunctionBody(node *ast.Nod
 	block := f.UpdateBlock(
 		node.Body().AsBlock(),
 		tx.EmitContext().EndAndMergeVariableEnvironmentList(f.NewNodeList(outerStatements)),
+		node.Body().AsBlock().MultiLine,
 	)
 
 	if emitSuperHelpers && tx.hasSuperElementAccess {

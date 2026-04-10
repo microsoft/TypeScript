@@ -34,7 +34,7 @@ func canProduceDiagnostics(node *ast.Node) bool {
 		ast.IsMethodDeclaration(node) ||
 		ast.IsMethodSignatureDeclaration(node) ||
 		ast.IsFunctionDeclaration(node) ||
-		ast.IsParameter(node) ||
+		ast.IsParameterDeclaration(node) ||
 		ast.IsTypeParameterDeclaration(node) ||
 		ast.IsExpressionWithTypeArguments(node) ||
 		ast.IsImportEqualsDeclaration(node) ||

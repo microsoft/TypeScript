@@ -5,7 +5,7 @@ import type {
     Identifier,
     Node,
     NodeArray,
-    StringLiteralLike,
+    StringLiteralLikeNode,
 } from "@typescript/ast";
 import {
     isImportDeclaration,
@@ -76,11 +76,11 @@ describe("cloneNode", () => {
         assert.notStrictEqual(clone, num);
         assert.strictEqual(clone.kind, SyntaxKind.NumericLiteral);
         assert.strictEqual(clone.text, "42");
-        assert.strictEqual(clone.numericLiteralFlags, TokenFlags.None);
+        assert.strictEqual(clone.tokenFlags, TokenFlags.None);
     });
 
     test("clones a string literal", () => {
-        const str = createStringLiteral("world");
+        const str = createStringLiteral("world", TokenFlags.None);
         const clone = cloneNode(str);
 
         assert.notStrictEqual(clone, str);
@@ -101,7 +101,7 @@ describe("cloneNode", () => {
         const left = createIdentifier("a");
         const right = createIdentifier("b");
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(left, op, right);
+        const bin = createBinaryExpression(undefined, left, undefined, op, right);
         const clone = cloneNode(bin);
 
         assert.notStrictEqual(clone, bin);
@@ -200,7 +200,7 @@ describe("visitEachChild", () => {
         const left = createIdentifier("a");
         const right = createIdentifier("b");
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(left, op, right);
+        const bin = createBinaryExpression(undefined, left, undefined, op, right);
 
         const result = visitEachChild(bin, node => node);
         assert.strictEqual(result, bin);
@@ -216,7 +216,7 @@ describe("visitEachChild", () => {
         const left = createIdentifier("a");
         const right = createIdentifier("b");
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(left, op, right);
+        const bin = createBinaryExpression(undefined, left, undefined, op, right);
 
         const newRight = createIdentifier("c");
         const result = visitEachChild(bin, node => {
@@ -304,7 +304,7 @@ describe("getSynthesizedDeepClone", () => {
         const left = createIdentifier("a");
         const right = createNumericLiteral("42", TokenFlags.None);
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(left, op, right);
+        const bin = createBinaryExpression(undefined, left, undefined, op, right);
 
         const clone = getSynthesizedDeepClone(bin);
 
@@ -329,7 +329,7 @@ describe("getSynthesizedDeepClone", () => {
         const left = createIdentifier("a");
         const right = createIdentifier("b");
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(left, op, right);
+        const bin = createBinaryExpression(undefined, left, undefined, op, right);
 
         const clone = getSynthesizedDeepClone(bin);
 
@@ -382,7 +382,7 @@ describe("getSynthesizedDeepClone", () => {
     });
 
     test("deeply clones string literal", () => {
-        const str = createStringLiteral("test");
+        const str = createStringLiteral("test", TokenFlags.None);
         const clone = getSynthesizedDeepClone(str);
         assert.notStrictEqual(clone, str);
         assert.strictEqual(clone.kind, SyntaxKind.StringLiteral);
@@ -401,7 +401,7 @@ describe("getSynthesizedDeepClone", () => {
         const left = createIdentifier("x");
         const right = createNumericLiteral("1", TokenFlags.None);
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(left, op, right);
+        const bin = createBinaryExpression(undefined, left, undefined, op, right);
         const stmt = createExpressionStatement(bin);
 
         const clone = getSynthesizedDeepClone(stmt);
@@ -603,14 +603,14 @@ describe("RemoteNode + visitEachChild", () => {
             // Replace the module specifier with a new string literal
             const result = visitEachChild(importDecl, node => {
                 if (node.kind === SyntaxKind.StringLiteral) {
-                    return createStringLiteral("./bar");
+                    return createStringLiteral("./bar", TokenFlags.None);
                 }
                 return node;
             });
 
             assert.notStrictEqual(result, importDecl);
             assert.strictEqual(result.kind, SyntaxKind.ImportDeclaration);
-            assert.strictEqual((result.moduleSpecifier as StringLiteralLike).text, "./bar");
+            assert.strictEqual((result.moduleSpecifier as StringLiteralLikeNode).text, "./bar");
         }
         finally {
             api.close();

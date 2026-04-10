@@ -411,7 +411,7 @@ func (r *EmitResolver) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeA
 				}
 				if symbol.Flags&ast.SymbolFlagsBlockScopedVariable != 0 {
 					rootDeclaration := ast.WalkUpBindingElementsAndPatterns(declaration)
-					if ast.IsParameter(rootDeclaration) {
+					if ast.IsParameterDeclaration(rootDeclaration) {
 						return nil
 					}
 					variableStatement := rootDeclaration.Parent.Parent

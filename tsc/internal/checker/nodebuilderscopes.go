@@ -216,7 +216,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 						bindElement = bindElementWorker
 						bindPattern = bindPatternWorker
 
-						if ast.IsParameter(d) && d.Name() != nil && ast.IsBindingPattern(d.Name()) {
+						if ast.IsParameterDeclaration(d) && d.Name() != nil && ast.IsBindingPattern(d.Name()) {
 							bindPattern(d.Name().AsBindingPattern())
 							return true
 						}

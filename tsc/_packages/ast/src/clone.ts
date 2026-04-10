@@ -1,17 +1,17 @@
 import { SyntaxKind } from "#enums/syntaxKind";
-import {
-    cloneNode,
-    createNodeArray,
-    createNumericLiteral,
-    createStringLiteral,
-} from "./factory.ts";
 import type {
     Node,
     NodeArray,
     NumericLiteral,
     ReadonlyTextRange,
     StringLiteral,
-} from "./nodes.ts";
+} from "./ast.ts";
+import {
+    cloneNode,
+    createNodeArray,
+    createNumericLiteral,
+    createStringLiteral,
+} from "./factory.generated.ts";
 import { visitEachChild } from "./visitor.ts";
 
 function isArray(value: any): value is readonly unknown[] {
@@ -127,9 +127,9 @@ function getSynthesizedDeepCloneWorker<T extends Node>(node: T): T {
         // Leaf node — visitEachChild returned the same node since there are no children.
         // We need to explicitly clone it.
         const clone = node.kind === SyntaxKind.StringLiteral
-            ? createStringLiteral((node as Node as StringLiteral).text) as Node as T
+            ? createStringLiteral((node as Node as StringLiteral).text, (node as Node as StringLiteral).tokenFlags) as Node as T
             : node.kind === SyntaxKind.NumericLiteral
-            ? createNumericLiteral((node as Node as NumericLiteral).text, (node as Node as NumericLiteral).numericLiteralFlags) as Node as T
+            ? createNumericLiteral((node as Node as NumericLiteral).text, (node as Node as NumericLiteral).tokenFlags) as Node as T
             : cloneNode(node);
         return setTextRange(clone, node);
     }

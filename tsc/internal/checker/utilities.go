@@ -279,10 +279,10 @@ func isOptionalDeclaration(declaration *ast.Node) bool {
 
 func (c *Checker) isOptionalParameter(node *ast.Node) bool {
 	// !!! TODO: JSDoc support
-	if ast.IsParameter(node) && node.QuestionToken() != nil {
+	if ast.IsParameterDeclaration(node) && node.QuestionToken() != nil {
 		return true
 	}
-	if !ast.IsParameter(node) {
+	if !ast.IsParameterDeclaration(node) {
 		return false
 	}
 	if node.Initializer() != nil {
@@ -1007,7 +1007,7 @@ func (c *Checker) isParameterOrMutableLocalVariable(symbol *ast.Symbol) bool {
 	// Return true if symbol is a parameter, a catch clause variable, or a mutable local variable
 	if symbol.ValueDeclaration != nil {
 		declaration := ast.GetRootDeclaration(symbol.ValueDeclaration)
-		return declaration != nil && (ast.IsParameter(declaration) || ast.IsVariableDeclaration(declaration) && (ast.IsCatchClause(declaration.Parent) || c.isMutableLocalVariableDeclaration(declaration)))
+		return declaration != nil && (ast.IsParameterDeclaration(declaration) || ast.IsVariableDeclaration(declaration) && (ast.IsCatchClause(declaration.Parent) || c.isMutableLocalVariableDeclaration(declaration)))
 	}
 	return false
 }
@@ -1166,7 +1166,7 @@ func getSuperContainer(node *ast.Node, stopOnFunctions bool) *ast.Node {
 			return node
 		case ast.KindDecorator:
 			// Decorators are always applied outside of the body of a class or method.
-			if ast.IsParameter(node.Parent) && ast.IsClassElement(node.Parent.Parent) {
+			if ast.IsParameterDeclaration(node.Parent) && ast.IsClassElement(node.Parent.Parent) {
 				// If the decorator's parent is a Parameter, we resolve the this container from
 				// the grandparent class declaration.
 				node = node.Parent.Parent

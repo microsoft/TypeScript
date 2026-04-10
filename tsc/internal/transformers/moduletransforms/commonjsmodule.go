@@ -758,8 +758,8 @@ func (tx *CommonJSModuleTransformer) visitTopLevelImportDeclaration(node *ast.Im
 	varStatement := tx.Factory().NewVariableStatement(
 		nil, /*modifiers*/
 		tx.Factory().NewVariableDeclarationList(
-			ast.NodeFlagsConst,
 			tx.Factory().NewNodeList(variables),
+			ast.NodeFlagsConst,
 		),
 	)
 
@@ -796,7 +796,6 @@ func (tx *CommonJSModuleTransformer) visitTopLevelImportEqualsDeclaration(node *
 		statement := tx.Factory().NewVariableStatement(
 			nil, /*modifiers*/
 			tx.Factory().NewVariableDeclarationList(
-				ast.NodeFlagsConst,
 				tx.Factory().NewNodeList([]*ast.VariableDeclarationNode{
 					tx.Factory().NewVariableDeclaration(
 						node.Name().Clone(tx.Factory()),
@@ -805,6 +804,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelImportEqualsDeclaration(node *
 						tx.createRequireCall(node.AsNode()),
 					),
 				}),
+				ast.NodeFlagsConst,
 			),
 		)
 		tx.EmitContext().SetOriginal(statement, node.AsNode())
@@ -830,7 +830,6 @@ func (tx *CommonJSModuleTransformer) visitTopLevelExportDeclaration(node *ast.Ex
 		varStatement := tx.Factory().NewVariableStatement(
 			nil, /*modifiers*/
 			tx.Factory().NewVariableDeclarationList(
-				ast.NodeFlagsNone,
 				tx.Factory().NewNodeList([]*ast.VariableDeclarationNode{
 					tx.Factory().NewVariableDeclaration(
 						generatedName,
@@ -839,6 +838,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelExportDeclaration(node *ast.Ex
 						tx.createRequireCall(node.AsNode()),
 					),
 				}),
+				ast.NodeFlagsNone,
 			),
 		)
 		tx.EmitContext().SetOriginal(varStatement, node.AsNode())
@@ -986,6 +986,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelVariableStatement(node *ast.Va
 					tx.Factory().UpdateVariableDeclarationList(
 						node.DeclarationList.AsVariableDeclarationList(),
 						variableList,
+						node.DeclarationList.Flags,
 					),
 				)
 				if len(statements) > 0 {
@@ -1202,7 +1203,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelNestedForInOrOfStatement(node 
 				bodyStatements := append(exportStatements, block.Statements.Nodes...)
 				bodyStatementList := tx.Factory().NewNodeList(bodyStatements)
 				bodyStatementList.Loc = block.Statements.Loc
-				body = tx.Factory().UpdateBlock(block, bodyStatementList)
+				body = tx.Factory().UpdateBlock(block, bodyStatementList, block.MultiLine)
 			} else {
 				bodyStatements := append(exportStatements, body)
 				body = tx.Factory().NewBlock(tx.Factory().NewNodeList(bodyStatements), true /*multiLine*/)
@@ -1696,7 +1697,7 @@ func (tx *CommonJSModuleTransformer) visitPrefixUnaryExpression(node *ast.Prefix
 			// note:
 			//   after the operation, `exports.x` will hold the value of `x` after the increment.
 
-			expression := tx.Factory().UpdatePrefixUnaryExpression(node, tx.Visitor().VisitNode(node.Operand))
+			expression := tx.Factory().UpdatePrefixUnaryExpression(node, node.Operator, tx.Visitor().VisitNode(node.Operand))
 			for _, exportName := range exportedNames {
 				expression = tx.createExportExpression(exportName, expression, nil /*location*/, false /*liveBinding*/)
 				tx.EmitContext().AssignCommentAndSourceMapRanges(expression, node.AsNode())
@@ -1748,7 +1749,7 @@ func (tx *CommonJSModuleTransformer) visitPostfixUnaryExpression(node *ast.Postf
 			//   `y` will hold the value of `x` before the increment.
 
 			var temp *ast.IdentifierNode
-			expression := tx.Factory().UpdatePostfixUnaryExpression(node, tx.Visitor().VisitNode(node.Operand))
+			expression := tx.Factory().UpdatePostfixUnaryExpression(node, tx.Visitor().VisitNode(node.Operand), node.Operator)
 			if !resultIsDiscarded {
 				temp = tx.Factory().NewTempVariable()
 				tx.EmitContext().AddVariableDeclaration(temp)
@@ -1809,6 +1810,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 			node.QuestionDotToken,
 			nil, /*typeArguments*/
 			tx.Visitor().VisitNodes(node.Arguments),
+			node.Flags,
 		)
 		if !ast.IsIdentifier(expression) && !transformers.IsHelperName(tx.EmitContext(), node.Expression) {
 			tx.EmitContext().AddEmitFlags(updated, printer.EFIndirectCall)
@@ -1968,6 +1970,7 @@ func (tx *CommonJSModuleTransformer) shimOrRewriteImportOrRequireCall(node *ast.
 		node.QuestionDotToken,
 		nil, /*typeArguments*/
 		argumentsList,
+		node.Flags,
 	)
 }
 
@@ -1990,6 +1993,7 @@ func (tx *CommonJSModuleTransformer) visitTaggedTemplateExpression(node *ast.Tag
 			nil, /*questionDotToken*/
 			nil, /*typeArguments*/
 			tx.Visitor().VisitNode(node.Template),
+			node.Flags,
 		)
 		if !ast.IsIdentifier(expression) && !transformers.IsHelperName(tx.EmitContext(), node.Tag) {
 			tx.EmitContext().AddEmitFlags(updated, printer.EFIndirectCall)

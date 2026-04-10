@@ -1895,7 +1895,7 @@ func getStringLiteralTypes(t *checker.Type, uniques *collections.Set[string], ty
 	return nil
 }
 
-func getAlreadyUsedTypesInStringLiteralUnion(union *ast.UnionType, current *ast.LiteralType) []string {
+func getAlreadyUsedTypesInStringLiteralUnion(union *ast.UnionTypeNodeNode, current *ast.LiteralTypeNodeNode) []string {
 	typesList := union.AsUnionTypeNode().Types
 	if typesList == nil {
 		return nil

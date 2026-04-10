@@ -1,18 +1,19 @@
 import { NodeFlags } from "#enums/nodeFlags";
 import { SyntaxKind } from "#enums/syntaxKind";
-import { createToken } from "./factory.ts";
+import type { TokenSyntaxKind } from "./ast.generated.ts";
+import type {
+    Node,
+    NodeArray,
+    SourceFile,
+} from "./ast.ts";
+import { createToken } from "./factory.generated.ts";
 import {
-    isJSDocKind,
+    isJSDocNodeKind,
     isKeywordKind,
     isPrivateIdentifier,
     isPropertyNameLiteral,
     isTokenKind,
 } from "./is.ts";
-import type {
-    Node,
-    NodeArray,
-    SourceFile,
-} from "./nodes.ts";
 import {
     createScanner,
     skipTrivia,
@@ -167,7 +168,7 @@ function getTokenAtPositionImpl(
                 const result = testNode(node);
                 switch (result) {
                     case -1:
-                        if (!isJSDocKind(node.kind)) {
+                        if (!isJSDocNodeKind(node.kind)) {
                             state.left = node.end;
                         }
                         nodeAfterLeft = undefined;
@@ -264,7 +265,7 @@ function getTokenAtPositionImpl(
                 }
                 if (tokenStart <= position && position < tokenEnd) {
                     if (token === SyntaxKind.Identifier || !isTokenKind(token)) {
-                        if (isJSDocKind(current.kind)) {
+                        if (isJSDocNodeKind(current.kind)) {
                             return current;
                         }
                         throw new Error(`did not expect ${SyntaxKind[current.kind]} to have ${SyntaxKind[token]} in its trivia`);
@@ -303,7 +304,7 @@ export function getTokenPosOfNode(node: Node, sourceFile: SourceFile, includeJSD
     if (nodeIsMissing(node)) {
         return node.pos;
     }
-    if (isJSDocKind(node.kind) || node.kind === SyntaxKind.JsxText) {
+    if (isJSDocNodeKind(node.kind) || node.kind === SyntaxKind.JsxText) {
         return skipTrivia(sourceFile.text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
     if (includeJSDoc && node.jsDoc && node.jsDoc.length > 0) {
@@ -589,7 +590,7 @@ function getOrCreateToken(sourceFile: SourceFile, kind: SyntaxKind, pos: number,
         return existing;
     }
 
-    const token: Mutable<Node> = createToken(kind);
+    const token: Mutable<Node> = createToken(kind as TokenSyntaxKind);
     token.pos = pos;
     token.end = end;
     token.parent = parent;
