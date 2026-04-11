@@ -394,7 +394,7 @@ interface String {
     toString(): string;
 
     /**
-     * Returns the character at the specified index.
+     * Returns the character at the specified index. Negative values are treated as 0.
      * @param pos The zero-based index of the desired character.
      */
     charAt(pos: number): string;
