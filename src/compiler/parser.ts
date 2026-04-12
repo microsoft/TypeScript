@@ -3956,6 +3956,24 @@ namespace Parser {
         const pos = getNodePos();
         const modifiers = parseModifiers(/*allowDecorators*/ false, /*permitConstAsModifier*/ true);
         const name = parseIdentifier();
+
+        // Higher-kinded type parameter support (experimental):
+        // Detect `F<_>` or `F<_, _>` syntax where a type parameter itself takes type parameters.
+        // This parses patterns like `<F<_>>`, `<F<A, B>>` in type parameter lists.
+        let isHigherKinded = false;
+        let hktParameters: NodeArray<TypeParameterDeclaration> | undefined;
+        if (token() === SyntaxKind.LessThanToken) {
+            // Speculatively parse as HKT parameters: F<_> or F<A, B>
+            const savedPos = getNodePos();
+            hktParameters = parseBracketedList(ParsingContext.TypeParameters, parseTypeParameter, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+            if (hktParameters && hktParameters.length > 0) {
+                isHigherKinded = true;
+            }
+            else {
+                hktParameters = undefined;
+            }
+        }
+
         let constraint: TypeNode | undefined;
         let expression: Expression | undefined;
         if (parseOptional(SyntaxKind.ExtendsKeyword)) {
@@ -3981,6 +3999,11 @@ namespace Parser {
         const defaultType = parseOptional(SyntaxKind.EqualsToken) ? parseType() : undefined;
         const node = factory.createTypeParameterDeclaration(modifiers, name, constraint, defaultType);
         node.expression = expression;
+        // Attach HKT metadata if this is a higher-kinded type parameter
+        if (isHigherKinded) {
+            (node as any).isHigherKinded = true;
+            (node as any).hktParameters = hktParameters;
+        }
         return finishNode(node, pos);
     }
 

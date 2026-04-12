@@ -1835,6 +1835,14 @@ export interface TypeParameterDeclaration extends NamedDeclaration, JSDocContain
 
     // For error recovery purposes (see `isGrammarError` in utilities.ts).
     expression?: Expression;
+
+    // Higher-kinded type support (experimental)
+    /** When true, this type parameter is higher-kinded: it accepts type parameters itself, e.g. `F<_>` */
+    /** @internal */
+    readonly isHigherKinded?: boolean;
+    /** The type parameters of this higher-kinded type parameter, e.g. the `_` in `F<_>` */
+    /** @internal */
+    readonly hktParameters?: NodeArray<TypeParameterDeclaration>;
 }
 
 export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
@@ -6878,6 +6886,11 @@ export interface TypeParameter extends InstantiableType {
     isThisType?: boolean;
     /** @internal */
     resolvedDefaultType?: Type;
+    // Higher-kinded type support (experimental)
+    /** @internal */
+    isHigherKinded?: boolean;
+    /** @internal */
+    hktParameters?: TypeParameter[];
 }
 
 /** @internal */
