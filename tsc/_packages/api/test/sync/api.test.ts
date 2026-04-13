@@ -51,6 +51,8 @@ import {
     createIdentifier,
     createKeywordTypeNode,
     createParameterDeclaration,
+    createToken,
+    createTypeAliasDeclaration,
     createTypeReferenceNode,
     createUnionTypeNode,
 } from "@typescript/ast/factory";
@@ -2356,6 +2358,28 @@ doThing();
         assert(sourceFile);
         const printed = project.emitter.printNode(sourceFile);
         assert.equal(sourceFile.text.trim(), printed.trim());
+    }
+    finally {
+        api.close();
+    }
+});
+
+test("Factory ModifierList auto-conversion", () => {
+    const api = spawnAPI();
+    try {
+        const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const node = createTypeAliasDeclaration(
+            [createToken(SyntaxKind.ExportKeyword)],
+            createIdentifier("Test"),
+            undefined,
+            createKeywordTypeNode(SyntaxKind.AnyKeyword),
+        );
+
+        assert.equal(project.emitter.printNode(node), "export type Test = any;");
+
+        const cloned = getSynthesizedDeepClone(node);
+        assert.equal(project.emitter.printNode(cloned), "export type Test = any;");
     }
     finally {
         api.close();

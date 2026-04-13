@@ -789,7 +789,7 @@ function generateFactory(): string {
                 }
                 continue;
             }
-            if (listKind === "NodeList") {
+            if (listKind === "NodeList" || listKind === "ModifierList") {
                 if (isParam) {
                     if (m.optional) {
                         dataParts.push(`${propName}: ${paramName} ? createNodeArray(${paramName}) : undefined`);
