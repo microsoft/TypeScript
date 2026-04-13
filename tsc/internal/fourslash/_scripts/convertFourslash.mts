@@ -1857,7 +1857,7 @@ function parseUserPreferences(arg: ts.ObjectLiteralExpression): string {
                     break;
                 case "organizeImportsTypeOrder":
                     if (!ts.isStringLiteralLike(prop.initializer)) {
-                        return undefined;
+                        throw new Error(`Expected string literal for organizeImportsTypeOrder, got ${prop.initializer.getText()}`);
                     }
                     switch (prop.initializer.text) {
                         case "last":
@@ -1870,7 +1870,7 @@ function parseUserPreferences(arg: ts.ObjectLiteralExpression): string {
                             preferences.push(`OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderFirst`);
                             break;
                         default:
-                            return undefined;
+                            throw new Error(`Unsupported organizeImportsTypeOrder value: ${prop.initializer.text}`);
                     }
                     break;
                 case "autoImportFileExcludePatterns":

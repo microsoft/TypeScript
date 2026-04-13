@@ -854,6 +854,23 @@ export const checkFormat = task({
     },
 });
 
+const scriptTsconfigs = [
+    "./_scripts/tsconfig.json",
+    "./internal/fourslash/_scripts/tsconfig.json",
+    "./internal/lsp/lsproto/_generate/tsconfig.json",
+];
+
+export const checkScripts = task({
+    name: "check:scripts",
+    description: "Type-checks TypeScript scripts.",
+    run: async () => {
+        for (const tsconfig of scriptTsconfigs) {
+            console.log(`Type-checking ${tsconfig}`);
+            await $`tsc -p ${tsconfig}`;
+        }
+    },
+});
+
 /**
  * @param {string} localBaseline Path to the local copy of the baselines
  * @param {string} refBaseline Path to the reference copy of the baselines
