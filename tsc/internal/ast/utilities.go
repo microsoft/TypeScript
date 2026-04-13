@@ -3977,6 +3977,39 @@ func IsJSDocNameReferenceContext(node *Node) bool {
 	}) != nil
 }
 
+// GetJSDocRoot returns the containing JSDoc node for a node inside a JSDoc comment.
+func GetJSDocRoot(node *Node) *Node {
+	return FindAncestor(node.Parent, func(n *Node) bool {
+		return n.Kind == KindJSDoc
+	})
+}
+
+// GetJSDocHost returns the declaration that the JSDoc comment containing the given node is attached to.
+func GetJSDocHost(node *Node) *Node {
+	jsDoc := GetJSDocRoot(node)
+	if jsDoc == nil {
+		return nil
+	}
+	return jsDoc.Parent
+}
+
+// GetHostSignatureFromJSDoc returns the function-like declaration that hosts the JSDoc comment
+// containing the given node. This is used to resolve @link references to parameters.
+func GetHostSignatureFromJSDoc(node *Node) *Node {
+	host := GetJSDocHost(node)
+	if host == nil {
+		return nil
+	}
+	// !!! Strada's getEffectiveJSDocHost applies JS assignment pattern transforms (getSourceOfAssignment, getSourceOfDefaultedAssignment, etc.) not yet ported
+	if IsPropertySignatureDeclaration(host) && host.Type() != nil && IsFunctionLike(host.Type()) {
+		return host.Type()
+	}
+	if IsFunctionLike(host) {
+		return host
+	}
+	return nil
+}
+
 func IsImportOrImportEqualsDeclaration(node *Node) bool {
 	return IsImportDeclaration(node) || IsImportEqualsDeclaration(node)
 }
