@@ -12,8 +12,11 @@
         "type": "git",
         "url": "https://github.com/microsoft/typescript-go"
     },
+    "enabledApiProposals": [
+        "editorHoverVerbosityLevel"
+    ],
     "engines": {
-        "vscode": "^1.106.0"
+        "vscode": "^1.110.0"
     },
     "capabilities": {
         "untrustedWorkspaces": {
@@ -197,7 +200,7 @@
         "vscode-languageclient": "^10.0.0-next.21"
     },
     "devDependencies": {
-        "@types/vscode": "~1.106.1",
+        "@types/vscode": "~1.110.0",
         "@vscode/vsce": "^3.7.1",
         "esbuild": "^0.27.4"
     }

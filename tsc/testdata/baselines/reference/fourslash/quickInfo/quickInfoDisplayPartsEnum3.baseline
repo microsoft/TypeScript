@@ -118,7 +118,7 @@
 //            ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | enum constE
+// | const enum constE
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -158,7 +158,7 @@
 //                 ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | enum constE
+// | const enum constE
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -173,7 +173,7 @@
 //              ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | enum constE
+// | const enum constE
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -195,7 +195,7 @@
 //              ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | enum constE
+// | const enum constE
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -217,7 +217,7 @@
 //              ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | enum constE
+// | const enum constE
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -253,7 +253,8 @@
           "line": 0,
           "character": 6
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -361,7 +362,8 @@
           "line": 5,
           "character": 13
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -388,7 +390,8 @@
           "line": 5,
           "character": 16
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -415,7 +418,8 @@
           "line": 6,
           "character": 9
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -442,7 +446,8 @@
           "line": 6,
           "character": 13
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -496,7 +501,8 @@
           "line": 7,
           "character": 9
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -523,7 +529,8 @@
           "line": 7,
           "character": 13
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -577,7 +584,8 @@
           "line": 8,
           "character": 9
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -604,7 +612,8 @@
           "line": 8,
           "character": 13
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -647,7 +656,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nenum constE\n```\n"
+        "value": "```tsx\nconst enum constE\n```\n"
       },
       "range": {
         "start": {
@@ -658,7 +667,8 @@
           "line": 9,
           "character": 17
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -766,7 +776,8 @@
           "line": 14,
           "character": 14
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -782,7 +793,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nenum constE\n```\n"
+        "value": "```tsx\nconst enum constE\n```\n"
       },
       "range": {
         "start": {
@@ -793,7 +804,8 @@
           "line": 14,
           "character": 22
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -820,7 +832,8 @@
           "line": 15,
           "character": 10
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -836,7 +849,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nenum constE\n```\n"
+        "value": "```tsx\nconst enum constE\n```\n"
       },
       "range": {
         "start": {
@@ -847,7 +860,8 @@
           "line": 15,
           "character": 19
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -901,7 +915,8 @@
           "line": 16,
           "character": 10
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -917,7 +932,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nenum constE\n```\n"
+        "value": "```tsx\nconst enum constE\n```\n"
       },
       "range": {
         "start": {
@@ -928,7 +943,8 @@
           "line": 16,
           "character": 19
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -982,7 +998,8 @@
           "line": 17,
           "character": 10
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -998,7 +1015,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nenum constE\n```\n"
+        "value": "```tsx\nconst enum constE\n```\n"
       },
       "range": {
         "start": {
@@ -1009,7 +1026,8 @@
           "line": 17,
           "character": 19
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {

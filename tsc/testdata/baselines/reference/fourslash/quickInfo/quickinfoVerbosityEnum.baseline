@@ -1,0 +1,503 @@
+// === QuickInfo ===
+=== /a.ts ===
+// export {};
+// enum Color {
+//      ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | enum Color {
+// |     Red = 0,
+// |     Green = 1,
+// |     Blue = 2
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | enum Color
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     Red,
+//     Green,
+//     Blue,
+// }
+// const x: Color = Color.Red;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const x: Color.Red | Color.Green | Color.Blue
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const x: Color
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const enum Direction {
+//            ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const enum Direction {
+// |     Up = 0,
+// |     Down = 1
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//            ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const enum Direction
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     Up,
+//     Down,
+// }
+// const y: Direction = Direction.Up;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const y: Direction.Up | Direction.Down
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const y: Direction
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// enum Flags {
+//      ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | enum Flags {
+// |     None = 0,
+// |     IsDirectory = 1 << 0,
+// |     IsFile = 1 << 1,
+// |     IsSymlink = 1 << 2
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | enum Flags
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     None = 0,
+//     IsDirectory = 1 << 0,
+//     IsFile = 1 << 1,
+//     IsSymlink = 1 << 2,
+// }
+=== /c.ts ===
+// import { Color } from "./b";
+// const c: Color = Color.Red;
+//          ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) enum Color {
+// |     Red = "red"
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//          ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) enum Color
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+
+
+[
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 10
+      },
+      "Name": "c",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nenum Color\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 5
+          },
+          "end": {
+            "line": 1,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 10
+      },
+      "Name": "c",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nenum Color {\n    Red = 0,\n    Green = 1,\n    Blue = 2\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 5
+          },
+          "end": {
+            "line": 1,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 63,
+      "LSPosition": {
+        "line": 6,
+        "character": 7
+      },
+      "Name": "x",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst x: Color\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 6,
+            "character": 6
+          },
+          "end": {
+            "line": 6,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 63,
+      "LSPosition": {
+        "line": 6,
+        "character": 7
+      },
+      "Name": "x",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst x: Color.Red | Color.Green | Color.Blue\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 6,
+            "character": 6
+          },
+          "end": {
+            "line": 6,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 104,
+      "LSPosition": {
+        "line": 7,
+        "character": 20
+      },
+      "Name": "d",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst enum Direction\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 11
+          },
+          "end": {
+            "line": 7,
+            "character": 20
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 104,
+      "LSPosition": {
+        "line": 7,
+        "character": 20
+      },
+      "Name": "d",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst enum Direction {\n    Up = 0,\n    Down = 1\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 11
+          },
+          "end": {
+            "line": 7,
+            "character": 20
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 134,
+      "LSPosition": {
+        "line": 11,
+        "character": 7
+      },
+      "Name": "y",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst y: Direction\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 6
+          },
+          "end": {
+            "line": 11,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 134,
+      "LSPosition": {
+        "line": 11,
+        "character": 7
+      },
+      "Name": "y",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst y: Direction.Up | Direction.Down\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 6
+          },
+          "end": {
+            "line": 11,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 172,
+      "LSPosition": {
+        "line": 12,
+        "character": 10
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nenum Flags\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 12,
+            "character": 5
+          },
+          "end": {
+            "line": 12,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 172,
+      "LSPosition": {
+        "line": 12,
+        "character": 10
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nenum Flags {\n    None = 0,\n    IsDirectory = 1 << 0,\n    IsFile = 1 << 1,\n    IsSymlink = 1 << 2\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 12,
+            "character": 5
+          },
+          "end": {
+            "line": 12,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 43,
+      "LSPosition": {
+        "line": 1,
+        "character": 14
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(alias) enum Color\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 9
+          },
+          "end": {
+            "line": 1,
+            "character": 14
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 43,
+      "LSPosition": {
+        "line": 1,
+        "character": 14
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(alias) enum Color {\n    Red = \"red\"\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 9
+          },
+          "end": {
+            "line": 1,
+            "character": 14
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

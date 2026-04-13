@@ -1,0 +1,93 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityInterfaceMemberOrdering.ts ===
+// interface Callable {
+//           ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Callable {
+// |     [key: string]: any;
+// |     new (x: string): Callable;
+// |     (x: string): boolean;
+// |     name: string;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Callable
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     (x: string): boolean;
+//     new (x: string): Callable;
+//     [key: string]: any;
+//     name: string;
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 18,
+      "LSPosition": {
+        "line": 0,
+        "character": 18
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Callable\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 18
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 18,
+      "LSPosition": {
+        "line": 0,
+        "character": 18
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Callable {\n    [key: string]: any;\n    new (x: string): Callable;\n    (x: string): boolean;\n    name: string;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 18
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

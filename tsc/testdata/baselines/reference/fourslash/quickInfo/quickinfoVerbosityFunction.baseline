@@ -1,0 +1,316 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityFunction.ts ===
+// interface Apple {
+//     color: string;
+//     size: number;
+// }
+// interface Orchard {
+//     takeOneApple(a: Apple): void;
+//     getApple(): Apple;
+//     getApple(size: number): Apple[];
+// }
+// const o: Orchard = {} as any;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const o: {
+// |     takeOneApple(a: {
+// |         color: string;
+// |         size: number;
+// |     }): void;
+// |     getApple(): {
+// |         color: string;
+// |         size: number;
+// |     };
+// |     getApple(size: number): {
+// |         color: string;
+// |         size: number;
+// |     }[];
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const o: {
+// |     takeOneApple(a: Apple): void;
+// |     getApple(): Apple;
+// |     getApple(size: number): Apple[];
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const o: Orchard
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// declare function isApple(x: unknown): x is Apple;
+//                  ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function isApple(x: unknown): x is {
+// |     color: string;
+// |     size: number;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                  ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function isApple(x: unknown): x is Apple
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// type SomeType = {
+//     prop1: string;
+// }
+// function someFun(a: SomeType): SomeType {
+//     return a;
+// }
+// someFun.what = 'what';
+// ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function someFun(a: {
+// |     prop1: string;
+// | }): {
+// |     prop1: string;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+// ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function someFun(a: SomeType): SomeType
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 180,
+      "LSPosition": {
+        "line": 9,
+        "character": 7
+      },
+      "Name": "o",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst o: Orchard\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 6
+          },
+          "end": {
+            "line": 9,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 180,
+      "LSPosition": {
+        "line": 9,
+        "character": 7
+      },
+      "Name": "o",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst o: {\n    takeOneApple(a: Apple): void;\n    getApple(): Apple;\n    getApple(size: number): Apple[];\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 6
+          },
+          "end": {
+            "line": 9,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 180,
+      "LSPosition": {
+        "line": 9,
+        "character": 7
+      },
+      "Name": "o",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst o: {\n    takeOneApple(a: {\n        color: string;\n        size: number;\n    }): void;\n    getApple(): {\n        color: string;\n        size: number;\n    };\n    getApple(size: number): {\n        color: string;\n        size: number;\n    }[];\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 6
+          },
+          "end": {
+            "line": 9,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 227,
+      "LSPosition": {
+        "line": 10,
+        "character": 24
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nfunction isApple(x: unknown): x is Apple\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 17
+          },
+          "end": {
+            "line": 10,
+            "character": 24
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 227,
+      "LSPosition": {
+        "line": 10,
+        "character": 24
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nfunction isApple(x: unknown): x is {\n    color: string;\n    size: number;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 17
+          },
+          "end": {
+            "line": 10,
+            "character": 24
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 357,
+      "LSPosition": {
+        "line": 17,
+        "character": 7
+      },
+      "Name": "s",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nfunction someFun(a: SomeType): SomeType\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 17,
+            "character": 0
+          },
+          "end": {
+            "line": 17,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 357,
+      "LSPosition": {
+        "line": 17,
+        "character": 7
+      },
+      "Name": "s",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nfunction someFun(a: {\n    prop1: string;\n}): {\n    prop1: string;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 17,
+            "character": 0
+          },
+          "end": {
+            "line": 17,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

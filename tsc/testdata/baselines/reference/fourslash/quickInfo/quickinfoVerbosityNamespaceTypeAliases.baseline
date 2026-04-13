@@ -1,0 +1,96 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityNamespaceTypeAliases.ts ===
+// type BaseConfig = { host: string; port: number };
+// 
+// declare namespace Config {
+//                   ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace Config {
+// |     type Readonly<T> = { readonly [K in keyof T]: T[K]; };
+// |     type Optional<T> = { [K in keyof T]?: T[K] | undefined; };
+// |     type ServerConfig = {
+// |         readonly host: string;
+// |         readonly port: number;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                   ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace Config
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     type Readonly<T> = { readonly [K in keyof T]: T[K] };
+//     type Optional<T> = { [K in keyof T]?: T[K] };
+//     type ServerConfig = Readonly<BaseConfig>;
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 75,
+      "LSPosition": {
+        "line": 2,
+        "character": 24
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace Config\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 18
+          },
+          "end": {
+            "line": 2,
+            "character": 24
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 75,
+      "LSPosition": {
+        "line": 2,
+        "character": 24
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace Config {\n    type Readonly<T> = { readonly [K in keyof T]: T[K]; };\n    type Optional<T> = { [K in keyof T]?: T[K] | undefined; };\n    type ServerConfig = {\n        readonly host: string;\n        readonly port: number;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 2,
+            "character": 18
+          },
+          "end": {
+            "line": 2,
+            "character": 24
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

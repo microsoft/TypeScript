@@ -11,14 +11,14 @@
 //           ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) T
+// | (type parameter) T in type List<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) T
+// | (type parameter) T in type List<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -33,14 +33,14 @@
 //            ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) T extends string
+// | (type parameter) T extends string in type List2<T extends string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) T extends string
+// | (type parameter) T extends string in type List2<T extends string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -85,7 +85,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T\n```\n"
+        "value": "```tsx\n(type parameter) T in type List<T>\n```\n"
       },
       "range": {
         "start": {
@@ -112,7 +112,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T\n```\n"
+        "value": "```tsx\n(type parameter) T in type List<T>\n```\n"
       },
       "range": {
         "start": {
@@ -166,7 +166,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends string\n```\n"
+        "value": "```tsx\n(type parameter) T extends string in type List2<T extends string>\n```\n"
       },
       "range": {
         "start": {
@@ -193,7 +193,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends string\n```\n"
+        "value": "```tsx\n(type parameter) T extends string in type List2<T extends string>\n```\n"
       },
       "range": {
         "start": {

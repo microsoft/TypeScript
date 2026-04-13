@@ -71,7 +71,8 @@
           "line": 0,
           "character": 9
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -98,7 +99,8 @@
           "line": 0,
           "character": 69
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -125,7 +127,8 @@
           "line": 1,
           "character": 6
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -152,7 +155,8 @@
           "line": 2,
           "character": 16
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -179,7 +183,8 @@
           "line": 2,
           "character": 76
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -206,7 +211,8 @@
           "line": 3,
           "character": 6
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   }
 ]

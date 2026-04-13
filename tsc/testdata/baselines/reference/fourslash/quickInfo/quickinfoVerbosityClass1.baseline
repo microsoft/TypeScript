@@ -1,0 +1,743 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityClass1.ts ===
+// {
+//     class Foo {
+//         a!: "a" | "c";
+//     }
+//     const f = new Foo();
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: {
+// |     a: "a" | "c";
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+// {
+//     type FooParam = "a" | "b";
+//     class Foo {
+//         constructor(public x: string) {
+//             this.x = "a";
+//         }
+//         foo(p: FooParam): void {}
+//     }
+//     const f = new Foo("");
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: {
+// |     x: string;
+// |     foo(p: "a" | "b"): void;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: {
+// |     x: string;
+// |     foo(p: FooParam): void;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+// {
+//     class Bar {
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Bar {
+// |     a: string;
+// |     bar(): void;
+// |     baz(param: string): void;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Bar
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//         a!: string;
+//         bar(): void {}
+//         baz(param: string): void {}
+//     }
+//     class Foo extends Bar {
+//         b!: boolean;
+//         override baz(param: string | number): void {}
+//     }
+//     const f = new Foo();
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: {
+// |     b: boolean;
+// |     baz(param: string | number): void;
+// |     a: string;
+// |     bar(): void;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+// {
+//     class Bar<B extends string> {
+//         bar(param: B): void {}
+//         baz(): this { return this; }
+//     }
+//     class Foo extends Bar<"foo"> {
+//         foo(): this { return this; }
+//     }
+//     const b = new Bar();
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const b: {
+// |     bar(param: string): void;
+// |     baz(): Bar<string>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const b: Bar<string>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     const f = new Foo();
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: {
+// |     foo(): Foo;
+// |     bar(param: "foo"): void;
+// |     baz(): Foo;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+// {
+//     class Bar<B extends string> {
+//         bar(param: B): void {}
+//         baz(): this { return this; }
+//     }
+//     const noname = new (class extends Bar<"foo"> {
+//           ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const noname: {
+// |     foo(): (Anonymous class);
+// |     bar(param: "foo"): void;
+// |     baz(): (Anonymous class);
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const noname: (Anonymous class)
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//         foo(): this { return this; }
+//     })();
+//     const klass = class extends Bar<"foo"> {
+//         foo(): this { return this; }
+//     };
+//     const k = new klass();
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const k: {
+// |     foo(): klass;
+// |     bar(param: "foo"): void;
+// |     baz(): klass;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const k: klass
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 58,
+      "LSPosition": {
+        "line": 4,
+        "character": 11
+      },
+      "Name": "f1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 4,
+            "character": 10
+          },
+          "end": {
+            "line": 4,
+            "character": 11
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 58,
+      "LSPosition": {
+        "line": 4,
+        "character": 11
+      },
+      "Name": "f1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: {\n    a: \"a\" | \"c\";\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 4,
+            "character": 10
+          },
+          "end": {
+            "line": 4,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 250,
+      "LSPosition": {
+        "line": 14,
+        "character": 11
+      },
+      "Name": "f2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 10
+          },
+          "end": {
+            "line": 14,
+            "character": 11
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 250,
+      "LSPosition": {
+        "line": 14,
+        "character": 11
+      },
+      "Name": "f2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: {\n    x: string;\n    foo(p: FooParam): void;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 10
+          },
+          "end": {
+            "line": 14,
+            "character": 11
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 250,
+      "LSPosition": {
+        "line": 14,
+        "character": 11
+      },
+      "Name": "f2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: {\n    x: string;\n    foo(p: \"a\" | \"b\"): void;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 10
+          },
+          "end": {
+            "line": 14,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 283,
+      "LSPosition": {
+        "line": 17,
+        "character": 13
+      },
+      "Name": "B",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Bar\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 17,
+            "character": 10
+          },
+          "end": {
+            "line": 17,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 283,
+      "LSPosition": {
+        "line": 17,
+        "character": 13
+      },
+      "Name": "B",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Bar {\n    a: string;\n    bar(): void;\n    baz(param: string): void;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 17,
+            "character": 10
+          },
+          "end": {
+            "line": 17,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 491,
+      "LSPosition": {
+        "line": 26,
+        "character": 11
+      },
+      "Name": "f3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 26,
+            "character": 10
+          },
+          "end": {
+            "line": 26,
+            "character": 11
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 491,
+      "LSPosition": {
+        "line": 26,
+        "character": 11
+      },
+      "Name": "f3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: {\n    b: boolean;\n    baz(param: string | number): void;\n    a: string;\n    bar(): void;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 26,
+            "character": 10
+          },
+          "end": {
+            "line": 26,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 706,
+      "LSPosition": {
+        "line": 36,
+        "character": 11
+      },
+      "Name": "b1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst b: Bar<string>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 36,
+            "character": 10
+          },
+          "end": {
+            "line": 36,
+            "character": 11
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 706,
+      "LSPosition": {
+        "line": 36,
+        "character": 11
+      },
+      "Name": "b1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst b: {\n    bar(param: string): void;\n    baz(): Bar<string>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 36,
+            "character": 10
+          },
+          "end": {
+            "line": 36,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 731,
+      "LSPosition": {
+        "line": 37,
+        "character": 11
+      },
+      "Name": "f4",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 37,
+            "character": 10
+          },
+          "end": {
+            "line": 37,
+            "character": 11
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 731,
+      "LSPosition": {
+        "line": 37,
+        "character": 11
+      },
+      "Name": "f4",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: {\n    foo(): Foo;\n    bar(param: \"foo\"): void;\n    baz(): Foo;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 37,
+            "character": 10
+          },
+          "end": {
+            "line": 37,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 873,
+      "LSPosition": {
+        "line": 44,
+        "character": 16
+      },
+      "Name": "n1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst noname: (Anonymous class)\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 44,
+            "character": 10
+          },
+          "end": {
+            "line": 44,
+            "character": 16
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 873,
+      "LSPosition": {
+        "line": 44,
+        "character": 16
+      },
+      "Name": "n1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst noname: {\n    foo(): (Anonymous class);\n    bar(param: \"foo\"): void;\n    baz(): (Anonymous class);\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 44,
+            "character": 10
+          },
+          "end": {
+            "line": 44,
+            "character": 16
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 1055,
+      "LSPosition": {
+        "line": 50,
+        "character": 11
+      },
+      "Name": "k1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst k: klass\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 50,
+            "character": 10
+          },
+          "end": {
+            "line": 50,
+            "character": 11
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 1055,
+      "LSPosition": {
+        "line": 50,
+        "character": 11
+      },
+      "Name": "k1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst k: {\n    foo(): klass;\n    bar(param: \"foo\"): void;\n    baz(): klass;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 50,
+            "character": 10
+          },
+          "end": {
+            "line": 50,
+            "character": 11
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

@@ -1,0 +1,107 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityNamespaceClassHeritage.ts ===
+// declare class Base {
+//     id: number;
+// }
+// 
+// declare namespace Shapes {
+//                   ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace Shapes {
+// |     class Circle extends Base {
+// |         radius: number;
+// |     }
+// |     class Square extends Base {
+// |         side: number;
+// |     }
+// |     interface Drawable {
+// |         draw(): void;
+// |     }
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                   ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace Shapes
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     class Circle extends Base {
+//         radius: number;
+//     }
+//     class Square extends Base {
+//         side: number;
+//     }
+//     interface Drawable {
+//         draw(): void;
+//     }
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 64,
+      "LSPosition": {
+        "line": 4,
+        "character": 24
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace Shapes\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 4,
+            "character": 18
+          },
+          "end": {
+            "line": 4,
+            "character": 24
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 64,
+      "LSPosition": {
+        "line": 4,
+        "character": 24
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace Shapes {\n    class Circle extends Base {\n        radius: number;\n    }\n    class Square extends Base {\n        side: number;\n    }\n    interface Drawable {\n        draw(): void;\n    }\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 4,
+            "character": 18
+          },
+          "end": {
+            "line": 4,
+            "character": 24
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

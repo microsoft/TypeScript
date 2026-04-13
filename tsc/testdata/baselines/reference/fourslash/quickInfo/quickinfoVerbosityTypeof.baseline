@@ -1,0 +1,177 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityTypeof.ts ===
+// interface Apple {
+//     color: string;
+//     weight: number;
+// }
+// const a: Apple = { color: "red", weight: 150 };
+// const b: typeof a = { color: "green", weight: 120 };
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const b: {
+// |     color: string;
+// |     weight: number;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const b: Apple
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// class Banana {
+//     length: number;
+//     constructor(length: number) {
+//         this.length = length;
+//     }
+// }
+// const c: typeof Banana = Banana;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const c: {
+// |     new (length: number): Banana;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const c: typeof Banana
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 114,
+      "LSPosition": {
+        "line": 5,
+        "character": 7
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst b: Apple\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 114,
+      "LSPosition": {
+        "line": 5,
+        "character": 7
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst b: {\n    color: string;\n    weight: number;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 274,
+      "LSPosition": {
+        "line": 12,
+        "character": 7
+      },
+      "Name": "c",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst c: typeof Banana\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 12,
+            "character": 6
+          },
+          "end": {
+            "line": 12,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 274,
+      "LSPosition": {
+        "line": 12,
+        "character": 7
+      },
+      "Name": "c",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst c: {\n    new (length: number): Banana;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 12,
+            "character": 6
+          },
+          "end": {
+            "line": 12,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

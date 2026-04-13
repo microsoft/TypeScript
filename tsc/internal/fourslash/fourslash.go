@@ -349,7 +349,8 @@ var (
 		LinkSupport: ptrTrue,
 	}
 	defaultHoverCapabilities = &lsproto.HoverClientCapabilities{
-		ContentFormat: &[]lsproto.MarkupKind{lsproto.MarkupKindMarkdown, lsproto.MarkupKindPlainText},
+		ContentFormat:  &[]lsproto.MarkupKind{lsproto.MarkupKindMarkdown, lsproto.MarkupKindPlainText},
+		VerbosityLevel: ptrTrue,
 	}
 	defaultSignatureHelpCapabilities = &lsproto.SignatureHelpClientCapabilities{
 		SignatureInformation: &lsproto.ClientSignatureInformationOptions{
@@ -2431,6 +2432,114 @@ func appendLinesForMarkedStringWithLanguage(result []string, ms *lsproto.MarkedS
 	result = append(result, ms.Value)
 	result = append(result, "```")
 	return result
+}
+
+type hoverWithVerbosity struct {
+	Hover          *lsproto.Hover `json:"hover"`
+	VerbosityLevel int            `json:"verbosityLevel"`
+}
+
+// hoverContentString extracts the text content from a hover response for comparison.
+func hoverContentString(hover *lsproto.Hover) string {
+	if hover == nil {
+		return ""
+	}
+	if hover.Contents.MarkupContent != nil {
+		return hover.Contents.MarkupContent.Value
+	}
+	if hover.Contents.String != nil {
+		return *hover.Contents.String
+	}
+	return ""
+}
+
+func (f *FourslashTest) VerifyBaselineHoverWithVerbosity(t *testing.T, verbosityLevels map[string][]int) {
+	var markersAndItems []markerAndItem[*hoverWithVerbosity]
+	for _, marker := range f.Markers() {
+		if marker.Name == nil {
+			continue
+		}
+		levels, ok := verbosityLevels[*marker.Name]
+		if !ok {
+			levels = []int{0}
+		}
+		for i, level := range levels {
+			var verbLevel *int32
+			if level > 0 {
+				verbLevel = new(int32(level))
+			}
+			params := &lsproto.HoverParams{
+				TextDocument: lsproto.TextDocumentIdentifier{
+					Uri: lsconv.FileNameToDocumentURI(marker.fileName),
+				},
+				Position:       marker.LSPosition,
+				VerbosityLevel: verbLevel,
+			}
+			result := sendRequest(t, f, lsproto.TextDocumentHoverInfo, params)
+			item := &hoverWithVerbosity{
+				Hover:          result.Hover,
+				VerbosityLevel: level,
+			}
+			// If the previous level said it can't expand further, verify the hover
+			// content is identical, meaning the flag was accurate.
+			if i > 0 && level > levels[i-1] {
+				prevItem := markersAndItems[len(markersAndItems)-1].Item
+				if prevItem != nil && prevItem.Hover != nil && !prevItem.Hover.CanIncreaseVerbosity {
+					prevContent := hoverContentString(prevItem.Hover)
+					curContent := hoverContentString(item.Hover)
+					if prevContent != curContent {
+						t.Errorf("At marker %q: verbosity level %d response differs from level %d, but level %d had canIncreaseVerbosity=false.\n  level %d: %s\n  level %d: %s",
+							*marker.Name, level, levels[i-1], levels[i-1], levels[i-1], prevContent, level, curContent)
+					}
+				}
+			}
+			markersAndItems = append(markersAndItems, markerAndItem[*hoverWithVerbosity]{Marker: marker, Item: item})
+		}
+	}
+
+	getRange := func(item *hoverWithVerbosity) *lsproto.Range {
+		if item == nil || item.Hover == nil || item.Hover.Range == nil {
+			return nil
+		}
+		return item.Hover.Range
+	}
+
+	getTooltipLines := func(item, _prev *hoverWithVerbosity) []string {
+		if item == nil || item.Hover == nil {
+			return nil
+		}
+		var result []string
+
+		if item.Hover.Contents.MarkupContent != nil {
+			result = strings.Split(item.Hover.Contents.MarkupContent.Value, "\n")
+		}
+		if item.Hover.Contents.String != nil {
+			result = strings.Split(*item.Hover.Contents.String, "\n")
+		}
+		if item.Hover.Contents.MarkedStringWithLanguage != nil {
+			result = appendLinesForMarkedStringWithLanguage(result, item.Hover.Contents.MarkedStringWithLanguage)
+		}
+		if item.Hover.Contents.MarkedStrings != nil {
+			for _, ms := range *item.Hover.Contents.MarkedStrings {
+				if ms.MarkedStringWithLanguage != nil {
+					result = appendLinesForMarkedStringWithLanguage(result, ms.MarkedStringWithLanguage)
+				} else {
+					result = append(result, *ms.String)
+				}
+			}
+		}
+
+		result = append(result, fmt.Sprintf("(verbosity level: %d)", item.VerbosityLevel))
+
+		return result
+	}
+
+	f.addResultToBaseline(t, quickInfoCmd, annotateContentWithTooltips(t, f, markersAndItems, "quickinfo", getRange, getTooltipLines))
+	if jsonStr, err := core.StringifyJson(markersAndItems, "", "  "); err == nil {
+		f.writeToBaseline(quickInfoCmd, jsonStr)
+	} else {
+		t.Fatalf("Failed to stringify markers and items for baseline: %v", err)
+	}
 }
 
 func (f *FourslashTest) VerifyBaselineSignatureHelp(t *testing.T) {

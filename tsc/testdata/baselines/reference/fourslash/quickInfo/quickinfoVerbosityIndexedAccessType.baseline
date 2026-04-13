@@ -1,0 +1,174 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityIndexedAccessType.ts ===
+// interface T2 {
+// 	"string key": string;
+// 	"number key": number;
+// 	"any key": string | number | symbol;
+// }
+// type K2 = "string key" | "any key";
+// function fn2<T extends T2>(obj: T, key: keyof T) {
+// 	const value: T[K2] = undefined as any;
+//        ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const value: T["any key" | "string key"]
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//        ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const value: T[K2]
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+// function fn3<K extends keyof T2>(obj: T2, key: K) {
+//     const value: T2[K] = undefined as any;;
+//           ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const value: {
+// |     "string key": string;
+// |     "number key": number;
+// |     "any key": string | number | symbol;
+// | }[K]
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const value: T2[K]
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 200,
+      "LSPosition": {
+        "line": 7,
+        "character": 12
+      },
+      "Name": "v1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst value: T[K2]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 7
+          },
+          "end": {
+            "line": 7,
+            "character": 12
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 200,
+      "LSPosition": {
+        "line": 7,
+        "character": 12
+      },
+      "Name": "v1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst value: T[\"any key\" | \"string key\"]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 7
+          },
+          "end": {
+            "line": 7,
+            "character": 12
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 297,
+      "LSPosition": {
+        "line": 10,
+        "character": 15
+      },
+      "Name": "v2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst value: T2[K]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 10
+          },
+          "end": {
+            "line": 10,
+            "character": 15
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 297,
+      "LSPosition": {
+        "line": 10,
+        "character": 15
+      },
+      "Name": "v2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst value: {\n    \"string key\": string;\n    \"number key\": number;\n    \"any key\": string | number | symbol;\n}[K]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 10
+          },
+          "end": {
+            "line": 10,
+            "character": 15
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

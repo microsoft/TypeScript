@@ -1,0 +1,831 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityClass2.ts ===
+// interface Apple {
+//     color: string;
+// }
+// class Foo<T> {
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Foo<T> {
+// |     static whatever(): void;
+// |     constructor(public x: T);
+// |     public x: T;
+// |     public y: T;
+// |     private foo(): {
+// |         color: string;
+// |     };
+// |     protected z: boolean;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Foo<T> {
+// |     static whatever(): void;
+// |     constructor(public x: T);
+// |     public x: T;
+// |     public y: T;
+// |     private foo(): Apple;
+// |     protected z: boolean;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Foo<T>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     constructor(public x: T) { }
+//     public y!: T;
+//     static whatever(): void { }
+//     private foo(): Apple { return { color: "green" }; }
+//     static {
+//         const a = class { x?: Apple; };
+//     }
+//     protected z = true;
+// }
+// type Whatever = Foo<string>;
+//      ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type Whatever = {
+// |     x: string;
+// |     y: string;
+// |     foo(): {
+// |         color: string;
+// |     };
+// |     z: boolean;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type Whatever = {
+// |     x: string;
+// |     y: string;
+// |     foo(): Apple;
+// |     z: boolean;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type Whatever = Foo<string>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const a = Foo;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const a: {
+// |     new <T>(x: T): Foo<T>;
+// |     whatever(): void;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const a: typeof Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const c = Foo<string>;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const c: { new (x: string): Foo<string>; whatever(): void; }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// [1].forEach(class <T> {
+//             ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (local class) class<T> {
+// |     static whatever(): void;
+// |     constructor(public x: T);
+// |     public x: T;
+// |     public y: T;
+// |     private foo(): {
+// |         color: string;
+// |     };
+// |     protected z: boolean;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//             ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (local class) class<T> {
+// |     static whatever(): void;
+// |     constructor(public x: T);
+// |     public x: T;
+// |     public y: T;
+// |     private foo(): Apple;
+// |     protected z: boolean;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//             ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (local class) (Anonymous class)<T>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     constructor(public x: T) { }
+//     public y!: T;
+//     static whatever(): void { }
+//     private foo(): Apple { return { color: "green" }; }
+//     static {
+//         const a = class { x?: Apple; };
+//     }
+//     protected z = true;
+// });
+// const b = Bar<number>;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const b: any
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// @random()
+// abstract class Animal {
+//                ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | abstract class Animal {
+// |     name: string;
+// |     abstract makeSound(): void;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | abstract class Animal
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     name!: string;
+//     abstract makeSound(): void;
+// }
+// class Dog {
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Dog {
+// |     what(this: this, that: Dog): void;
+// |     #bones: string[];
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Dog
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     what(this: this, that: Dog) { }
+//     #bones: string[];
+// }
+// const d = new Dog();
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const d: {
+// |     what(this: Dog, that: Dog): void;
+// |     #bones: string[];
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const d: Dog
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 48,
+      "LSPosition": {
+        "line": 3,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Foo<T>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 6
+          },
+          "end": {
+            "line": 3,
+            "character": 9
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 48,
+      "LSPosition": {
+        "line": 3,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Foo<T> {\n    static whatever(): void;\n    constructor(public x: T);\n    public x: T;\n    public y: T;\n    private foo(): Apple;\n    protected z: boolean;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 6
+          },
+          "end": {
+            "line": 3,
+            "character": 9
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 48,
+      "LSPosition": {
+        "line": 3,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Foo<T> {\n    static whatever(): void;\n    constructor(public x: T);\n    public x: T;\n    public y: T;\n    private foo(): {\n        color: string;\n    };\n    protected z: boolean;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 6
+          },
+          "end": {
+            "line": 3,
+            "character": 9
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 291,
+      "LSPosition": {
+        "line": 13,
+        "character": 13
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype Whatever = Foo<string>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 5
+          },
+          "end": {
+            "line": 13,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 291,
+      "LSPosition": {
+        "line": 13,
+        "character": 13
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype Whatever = {\n    x: string;\n    y: string;\n    foo(): Apple;\n    z: boolean;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 5
+          },
+          "end": {
+            "line": 13,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 291,
+      "LSPosition": {
+        "line": 13,
+        "character": 13
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype Whatever = {\n    x: string;\n    y: string;\n    foo(): {\n        color: string;\n    };\n    z: boolean;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 5
+          },
+          "end": {
+            "line": 13,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 314,
+      "LSPosition": {
+        "line": 14,
+        "character": 7
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst a: typeof Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 6
+          },
+          "end": {
+            "line": 14,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 314,
+      "LSPosition": {
+        "line": 14,
+        "character": 7
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst a: {\n    new <T>(x: T): Foo<T>;\n    whatever(): void;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 6
+          },
+          "end": {
+            "line": 14,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 329,
+      "LSPosition": {
+        "line": 15,
+        "character": 7
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst c: { new (x: string): Foo<string>; whatever(): void; }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 6
+          },
+          "end": {
+            "line": 15,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 362,
+      "LSPosition": {
+        "line": 16,
+        "character": 17
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(local class) (Anonymous class)<T>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 12
+          },
+          "end": {
+            "line": 16,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 362,
+      "LSPosition": {
+        "line": 16,
+        "character": 17
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(local class) class<T> {\n    static whatever(): void;\n    constructor(public x: T);\n    public x: T;\n    public y: T;\n    private foo(): Apple;\n    protected z: boolean;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 12
+          },
+          "end": {
+            "line": 16,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 362,
+      "LSPosition": {
+        "line": 16,
+        "character": 17
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(local class) class<T> {\n    static whatever(): void;\n    constructor(public x: T);\n    public x: T;\n    public y: T;\n    private foo(): {\n        color: string;\n    };\n    protected z: boolean;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 12
+          },
+          "end": {
+            "line": 16,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 602,
+      "LSPosition": {
+        "line": 26,
+        "character": 7
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst b: any\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 26,
+            "character": 6
+          },
+          "end": {
+            "line": 26,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 649,
+      "LSPosition": {
+        "line": 28,
+        "character": 21
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nabstract class Animal\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 28,
+            "character": 15
+          },
+          "end": {
+            "line": 28,
+            "character": 21
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 649,
+      "LSPosition": {
+        "line": 28,
+        "character": 21
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nabstract class Animal {\n    name: string;\n    abstract makeSound(): void;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 28,
+            "character": 15
+          },
+          "end": {
+            "line": 28,
+            "character": 21
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 714,
+      "LSPosition": {
+        "line": 32,
+        "character": 9
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Dog\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 32,
+            "character": 6
+          },
+          "end": {
+            "line": 32,
+            "character": 9
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 714,
+      "LSPosition": {
+        "line": 32,
+        "character": 9
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Dog {\n    what(this: this, that: Dog): void;\n    #bones: string[];\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 32,
+            "character": 6
+          },
+          "end": {
+            "line": 32,
+            "character": 9
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 784,
+      "LSPosition": {
+        "line": 36,
+        "character": 7
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst d: Dog\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 36,
+            "character": 6
+          },
+          "end": {
+            "line": 36,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 784,
+      "LSPosition": {
+        "line": 36,
+        "character": 7
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst d: {\n    what(this: Dog, that: Dog): void;\n    #bones: string[];\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 36,
+            "character": 6
+          },
+          "end": {
+            "line": 36,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

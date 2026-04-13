@@ -1055,9 +1055,9 @@ func annotateContentWithTooltips[T comparable](
 	barWithGutter := "| " + strings.Repeat("-", 70)
 
 	// sort by file, then *backwards* by position in the file
-	// so we can insert multiple times on a line without counting
+	// so we can insert multiple times on a line without counting.
 	sorted := slices.Clone(markersAndItems)
-	slices.SortFunc(sorted, func(a, b markerAndItem[T]) int {
+	slices.SortStableFunc(sorted, func(a, b markerAndItem[T]) int {
 		if c := cmp.Compare(a.Marker.FileName(), b.Marker.FileName()); c != 0 {
 			return c
 		}

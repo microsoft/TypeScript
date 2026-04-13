@@ -34,11 +34,40 @@ func (b *NodeBuilderImpl) reuseTypeNode(node *ast.Node) *ast.Node {
 	}
 	r := b.reuseNode(node)
 	if r != nil {
+		// After successful reuse during hover, probe the reused AST for expandable
+		// type references so canIncreaseExpansionDepth is set even though
+		// typeToTypeNode (and shouldExpandType) were never called.
+		if b.ctx.maxExpansionDepth >= 0 && !b.ctx.canIncreaseExpansionDepth {
+			b.walkNodeForExpandability(node)
+		}
 		return r
 	}
 	b.ctx.tracker.ReportInferenceFallback(node)
 	t := b.getTypeFromTypeNode(node, false)
 	return b.typeToTypeNode(t)
+}
+
+// walkNodeForExpandability walks a reused AST node tree, calling checkTypeExpandability
+// on each type reference, type predicate, or import type node.
+// Short-circuits once canIncreaseExpansionDepth is set.
+func (b *NodeBuilderImpl) walkNodeForExpandability(node *ast.Node) {
+	if b.ctx.canIncreaseExpansionDepth || node == nil {
+		return
+	}
+	// Check these explicitly so we look into type arguments wehther or not they are in the tree or not.
+	if ast.IsTypeReferenceNode(node) || ast.IsExpressionWithTypeArguments(node) || ast.IsTypePredicateNode(node) || ast.IsImportTypeNode(node) {
+		t := b.getTypeFromTypeNode(node, false)
+		if t != nil {
+			b.checkTypeExpandability(t)
+			if b.ctx.canIncreaseExpansionDepth {
+				return
+			}
+		}
+	}
+	node.ForEachChild(func(child *ast.Node) bool {
+		b.walkNodeForExpandability(child)
+		return b.ctx.canIncreaseExpansionDepth
+	})
 }
 
 type recoveryBoundary struct {

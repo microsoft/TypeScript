@@ -1,0 +1,83 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityServer.ts ===
+// type FooType = string | number
+// const foo: FooType = 1
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const foo: string | number
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const foo: FooType
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 40,
+      "LSPosition": {
+        "line": 1,
+        "character": 9
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst foo: FooType\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 6
+          },
+          "end": {
+            "line": 1,
+            "character": 9
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 40,
+      "LSPosition": {
+        "line": 1,
+        "character": 9
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst foo: string | number\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 6
+          },
+          "end": {
+            "line": 1,
+            "character": 9
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

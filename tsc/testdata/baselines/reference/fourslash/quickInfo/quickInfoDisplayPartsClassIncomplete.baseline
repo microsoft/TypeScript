@@ -38,7 +38,8 @@
           "line": 0,
           "character": 5
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {

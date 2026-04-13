@@ -1,0 +1,172 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityClassInterfaceMerge.ts ===
+// declare class Foo {
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Foo {
+// |     x: number;
+// |     y: string;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     x: number;
+// }
+// declare interface Foo {
+//     y: string;
+// }
+// const f: Foo = { x: 1, y: "hello" };
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Foo {
+// |     x: number;
+// |     y: string;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 17,
+      "LSPosition": {
+        "line": 0,
+        "character": 17
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 17,
+      "LSPosition": {
+        "line": 0,
+        "character": 17
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Foo {\n    x: number;\n    y: string;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 90,
+      "LSPosition": {
+        "line": 6,
+        "character": 12
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 6,
+            "character": 9
+          },
+          "end": {
+            "line": 6,
+            "character": 12
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 90,
+      "LSPosition": {
+        "line": 6,
+        "character": 12
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Foo {\n    x: number;\n    y: string;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 6,
+            "character": 9
+          },
+          "end": {
+            "line": 6,
+            "character": 12
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

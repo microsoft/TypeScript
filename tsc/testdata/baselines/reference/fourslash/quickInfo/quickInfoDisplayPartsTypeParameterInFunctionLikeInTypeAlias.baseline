@@ -4,14 +4,14 @@
 //                               ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) A
+// | (type parameter) A in type MixinCtor<A>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                                            ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) A
+// | (type parameter) A in type MixinCtor<A>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -19,7 +19,7 @@
 //                                                                           ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) A
+// | (type parameter) A in type MixinCtor<A>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -37,7 +37,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) A\n```\n"
+        "value": "```tsx\n(type parameter) A in type MixinCtor<A>\n```\n"
       },
       "range": {
         "start": {
@@ -64,7 +64,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) A\n```\n"
+        "value": "```tsx\n(type parameter) A in type MixinCtor<A>\n```\n"
       },
       "range": {
         "start": {
@@ -91,7 +91,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) A\n```\n"
+        "value": "```tsx\n(type parameter) A in type MixinCtor<A>\n```\n"
       },
       "range": {
         "start": {

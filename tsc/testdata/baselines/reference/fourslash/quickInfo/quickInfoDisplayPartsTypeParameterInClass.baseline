@@ -11,7 +11,7 @@
 //         ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) T
+// | (type parameter) T in c<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -33,7 +33,7 @@
 //                    ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) T
+// | (type parameter) T in c<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -49,7 +49,7 @@
 //            ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) U
+// | (type parameter) U in c.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -63,7 +63,7 @@
 //                  ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) U
+// | (type parameter) U in c.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -77,7 +77,7 @@
 //                        ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) T
+// | (type parameter) T in c<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -147,7 +147,7 @@
 //          ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) T extends c<string>
+// | (type parameter) T extends c<string> in c2<T extends c<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -176,7 +176,7 @@
 //                    ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) T extends c<string>
+// | (type parameter) T extends c<string> in c2<T extends c<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -192,7 +192,7 @@
 //            ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) U extends c<string>
+// | (type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -213,7 +213,7 @@
 //                                    ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) U extends c<string>
+// | (type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -227,7 +227,7 @@
 //                                          ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (type parameter) T extends c<string>
+// | (type parameter) T extends c<string> in c2<T extends c<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -332,7 +332,8 @@
           "line": 0,
           "character": 7
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -348,7 +349,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T\n```\n"
+        "value": "```tsx\n(type parameter) T in c<T>\n```\n"
       },
       "range": {
         "start": {
@@ -386,7 +387,8 @@
           "line": 1,
           "character": 15
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -429,7 +431,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T\n```\n"
+        "value": "```tsx\n(type parameter) T in c<T>\n```\n"
       },
       "range": {
         "start": {
@@ -483,7 +485,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U\n```\n"
+        "value": "```tsx\n(type parameter) U in c.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -537,7 +539,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U\n```\n"
+        "value": "```tsx\n(type parameter) U in c.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -591,7 +593,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T\n```\n"
+        "value": "```tsx\n(type parameter) T in c<T>\n```\n"
       },
       "range": {
         "start": {
@@ -656,7 +658,8 @@
           "line": 7,
           "character": 13
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -683,7 +686,8 @@
           "line": 7,
           "character": 21
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -710,7 +714,8 @@
           "line": 8,
           "character": 8
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -737,7 +742,8 @@
           "line": 8,
           "character": 12
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -764,7 +770,8 @@
           "line": 9,
           "character": 9
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -818,7 +825,8 @@
           "line": 10,
           "character": 8
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -834,7 +842,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends c<string>\n```\n"
+        "value": "```tsx\n(type parameter) T extends c<string> in c2<T extends c<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -845,7 +853,8 @@
           "line": 10,
           "character": 10
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -872,7 +881,8 @@
           "line": 10,
           "character": 20
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -899,7 +909,8 @@
           "line": 11,
           "character": 15
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -926,7 +937,8 @@
           "line": 11,
           "character": 17
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -942,7 +954,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends c<string>\n```\n"
+        "value": "```tsx\n(type parameter) T extends c<string> in c2<T extends c<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -953,7 +965,8 @@
           "line": 11,
           "character": 20
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -980,7 +993,8 @@
           "line": 13,
           "character": 10
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -996,7 +1010,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends c<string>\n```\n"
+        "value": "```tsx\n(type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1007,7 +1021,8 @@
           "line": 13,
           "character": 12
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1034,7 +1049,8 @@
           "line": 13,
           "character": 22
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1061,7 +1077,8 @@
           "line": 13,
           "character": 33
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1077,7 +1094,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends c<string>\n```\n"
+        "value": "```tsx\n(type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1088,7 +1105,8 @@
           "line": 13,
           "character": 36
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1115,7 +1133,8 @@
           "line": 13,
           "character": 39
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1131,7 +1150,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends c<string>\n```\n"
+        "value": "```tsx\n(type parameter) T extends c<string> in c2<T extends c<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1142,7 +1161,8 @@
           "line": 13,
           "character": 42
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1169,7 +1189,8 @@
           "line": 14,
           "character": 16
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1196,7 +1217,8 @@
           "line": 17,
           "character": 14
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1223,7 +1245,8 @@
           "line": 17,
           "character": 23
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1250,7 +1273,8 @@
           "line": 17,
           "character": 33
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1277,7 +1301,8 @@
           "line": 18,
           "character": 9
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1304,7 +1329,8 @@
           "line": 18,
           "character": 14
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1331,7 +1357,8 @@
           "line": 19,
           "character": 10
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1358,7 +1385,8 @@
           "line": 19,
           "character": 17
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1385,7 +1413,8 @@
           "line": 19,
           "character": 27
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1412,7 +1441,8 @@
           "line": 19,
           "character": 38
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   }
 ]

@@ -617,6 +617,38 @@ function patchAndPreprocessModel() {
             });
         }
 
+        // Patch HoverParams to add verbosityLevel
+        if (structure.name === "HoverParams") {
+            structure.properties.push({
+                name: "verbosityLevel",
+                type: { kind: "base", name: "integer" },
+                optional: true,
+                documentation: "Controls how many levels of type definitions will be expanded. Default is 0.",
+            });
+        }
+
+        // Patch Hover to add canIncreaseVerbosity
+        if (structure.name === "Hover") {
+            structure.properties.push(
+                {
+                    name: "canIncreaseVerbosity",
+                    type: { kind: "base", name: "boolean" },
+                    omitzeroValue: true,
+                    documentation: "Whether the verbosity level can be increased for this hover.",
+                },
+            );
+        }
+
+        // Patch HoverClientCapabilities to add verbosityLevel support flag
+        if (structure.name === "HoverClientCapabilities") {
+            structure.properties.push({
+                name: "verbosityLevel",
+                type: { kind: "base", name: "boolean" },
+                optional: true,
+                documentation: "The client supports the `verbosityLevel` property on `HoverParams` and `canIncreaseVerbosity` on `Hover`.",
+            });
+        }
+
         for (const prop of structure.properties) {
             // Replace initializationOptions type with custom InitializationOptions
             if (prop.name === "initializationOptions" && prop.type.kind === "reference" && prop.type.name === "LSPAny") {

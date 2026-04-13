@@ -1,0 +1,360 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityRecursiveType.ts ===
+// type Node<T> = {
+//      ^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type Node<T> = { value: T; left: Node<T> | undefined; right: Node<T> | undefined; }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     value: T;
+//     left: Node<T> | undefined;
+//     right: Node<T> | undefined;
+// }
+// const n: Node<number> = {
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const n: {
+// |     value: number;
+// |     left: Node<number> | undefined;
+// |     right: Node<number> | undefined;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const n: Node<number>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     value: 1,
+//     left: undefined,
+//     right: undefined,
+// }
+// interface Orange {
+//     name: string;
+// }
+// type TreeNode<T> = {
+//      ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type TreeNode<T> = {
+// |     value: T;
+// |     left: TreeNode<T> | undefined;
+// |     right: TreeNode<T> | undefined;
+// |     orange?: {
+// |         name: string;
+// |     } | undefined;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type TreeNode<T> = { value: T; left: TreeNode<T> | undefined; right: TreeNode<T> | undefined; orange?: Orange; }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     value: T;
+//     left: TreeNode<T> | undefined;
+//     right: TreeNode<T> | undefined;
+//     orange?: Orange;
+// }
+// const m: TreeNode<number> = {
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const m: {
+// |     value: number;
+// |     left: TreeNode<number> | undefined;
+// |     right: TreeNode<number> | undefined;
+// |     orange?: {
+// |         name: string;
+// |     } | undefined;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const m: {
+// |     value: number;
+// |     left: TreeNode<number> | undefined;
+// |     right: TreeNode<number> | undefined;
+// |     orange?: Orange;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const m: TreeNode<number>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     value: 1,
+//     left: undefined,
+//     right: undefined,
+//     orange: { name: "orange" },
+// }
+[
+  {
+    "marker": {
+      "Position": 9,
+      "LSPosition": {
+        "line": 0,
+        "character": 9
+      },
+      "Name": "N",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype Node<T> = { value: T; left: Node<T> | undefined; right: Node<T> | undefined; }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 5
+          },
+          "end": {
+            "line": 0,
+            "character": 9
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 103,
+      "LSPosition": {
+        "line": 5,
+        "character": 7
+      },
+      "Name": "n",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst n: Node<number>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 103,
+      "LSPosition": {
+        "line": 5,
+        "character": 7
+      },
+      "Name": "n",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst n: {\n    value: number;\n    left: Node<number> | undefined;\n    right: Node<number> | undefined;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 233,
+      "LSPosition": {
+        "line": 13,
+        "character": 13
+      },
+      "Name": "t",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype TreeNode<T> = { value: T; left: TreeNode<T> | undefined; right: TreeNode<T> | undefined; orange?: Orange; }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 5
+          },
+          "end": {
+            "line": 13,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 233,
+      "LSPosition": {
+        "line": 13,
+        "character": 13
+      },
+      "Name": "t",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype TreeNode<T> = {\n    value: T;\n    left: TreeNode<T> | undefined;\n    right: TreeNode<T> | undefined;\n    orange?: {\n        name: string;\n    } | undefined;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 5
+          },
+          "end": {
+            "line": 13,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 356,
+      "LSPosition": {
+        "line": 19,
+        "character": 7
+      },
+      "Name": "m",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst m: TreeNode<number>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 6
+          },
+          "end": {
+            "line": 19,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 356,
+      "LSPosition": {
+        "line": 19,
+        "character": 7
+      },
+      "Name": "m",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst m: {\n    value: number;\n    left: TreeNode<number> | undefined;\n    right: TreeNode<number> | undefined;\n    orange?: Orange;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 6
+          },
+          "end": {
+            "line": 19,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 356,
+      "LSPosition": {
+        "line": 19,
+        "character": 7
+      },
+      "Name": "m",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst m: {\n    value: number;\n    left: TreeNode<number> | undefined;\n    right: TreeNode<number> | undefined;\n    orange?: {\n        name: string;\n    } | undefined;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 6
+          },
+          "end": {
+            "line": 19,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  }
+]

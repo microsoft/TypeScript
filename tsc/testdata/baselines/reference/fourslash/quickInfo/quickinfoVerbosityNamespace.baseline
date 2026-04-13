@@ -1,0 +1,547 @@
+// === QuickInfo ===
+=== /1.ts ===
+// export {};
+// class Foo<T> {
+//     y: string;
+// }
+// namespace Foo {
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Foo<T> {
+// |     y: string;
+// | }
+// | namespace Foo {
+// |     let y: number;
+// |     let x: string;
+// |     let w: string;
+// | }
+// | 
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Foo<T>
+// | namespace Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     export var y: number = 1;
+//     export var x: string = "hello";
+//     export var w = "world";
+//     var z = 2;
+// }
+=== /3.ts ===
+// import * as Foo_1 from "./b";
+// export declare namespace ns {
+//                          ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace ns {
+// |     export { Foo };
+// |     export let c: number;
+// |     export let d: 1;
+// |     export let f: {
+// |         a: string;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//                          ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace ns {
+// |     export { Foo };
+// |     export let c: number;
+// |     export let d: 1;
+// |     export let f: Apple;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                          ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace ns
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     import Foo = Foo_1.Foo;
+//     export { Foo };
+//     export const c: number;
+//     export const d = 1;
+//     let e: Apple;
+//     export let f: Apple;
+// }
+// interface Apple {
+//     a: string;
+// }
+
+
+=== /4.ts ===
+// class Foo<T> {
+//     y!: T;
+// }
+// namespace Two {
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace Two {
+// |     let f: {
+// |         y: number;
+// |     };
+// |     let g: {
+// |         y: string;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace Two {
+// |     let f: Foo<number>;
+// |     let g: Foo<string>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace Two
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     export const f = new Foo<number>();
+// }
+
+
+=== /6.ts ===
+// namespace OnlyLocal {
+//           ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace OnlyLocal { }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace OnlyLocal
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     const bar: number;
+// }
+
+
+=== /foo.ts ===
+// export function foo() { return "foo"; }
+// import("./foo")
+//         ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | module "/foo" {
+// |     function foo(): string;
+// |     namespace foo { }
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//         ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | module "./foo"
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// var x = import("./foo")
+
+
+[
+  {
+    "marker": {
+      "Position": 56,
+      "LSPosition": {
+        "line": 4,
+        "character": 13
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Foo<T>\nnamespace Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 4,
+            "character": 10
+          },
+          "end": {
+            "line": 4,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 56,
+      "LSPosition": {
+        "line": 4,
+        "character": 13
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Foo<T> {\n    y: string;\n}\nnamespace Foo {\n    let y: number;\n    let x: string;\n    let w: string;\n}\n\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 4,
+            "character": 10
+          },
+          "end": {
+            "line": 4,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 57,
+      "LSPosition": {
+        "line": 1,
+        "character": 27
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace ns\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 25
+          },
+          "end": {
+            "line": 1,
+            "character": 27
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 57,
+      "LSPosition": {
+        "line": 1,
+        "character": 27
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace ns {\n    export { Foo };\n    export let c: number;\n    export let d: 1;\n    export let f: Apple;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 25
+          },
+          "end": {
+            "line": 1,
+            "character": 27
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 57,
+      "LSPosition": {
+        "line": 1,
+        "character": 27
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace ns {\n    export { Foo };\n    export let c: number;\n    export let d: 1;\n    export let f: {\n        a: string;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 25
+          },
+          "end": {
+            "line": 1,
+            "character": 27
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 41,
+      "LSPosition": {
+        "line": 3,
+        "character": 13
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace Two\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 10
+          },
+          "end": {
+            "line": 3,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 41,
+      "LSPosition": {
+        "line": 3,
+        "character": 13
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace Two {\n    let f: Foo<number>;\n    let g: Foo<string>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 10
+          },
+          "end": {
+            "line": 3,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 41,
+      "LSPosition": {
+        "line": 3,
+        "character": 13
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace Two {\n    let f: {\n        y: number;\n    };\n    let g: {\n        y: string;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 10
+          },
+          "end": {
+            "line": 3,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 19,
+      "LSPosition": {
+        "line": 0,
+        "character": 19
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace OnlyLocal\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 19
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 19,
+      "LSPosition": {
+        "line": 0,
+        "character": 19
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace OnlyLocal { }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 48,
+      "LSPosition": {
+        "line": 1,
+        "character": 8
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nmodule \"./foo\"\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 8
+          },
+          "end": {
+            "line": 1,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 48,
+      "LSPosition": {
+        "line": 1,
+        "character": 8
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nmodule \"/foo\" {\n    function foo(): string;\n    namespace foo { }\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 8
+          },
+          "end": {
+            "line": 1,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

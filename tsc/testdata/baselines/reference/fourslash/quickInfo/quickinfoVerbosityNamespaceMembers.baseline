@@ -1,0 +1,123 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityNamespaceMembers.ts ===
+// declare namespace NS {
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace NS {
+// |     type StringAlias = string;
+// |     type Pair<T> = {
+// |         first: T;
+// |         second: T;
+// |     };
+// |     enum Color {
+// |         Red,
+// |         Green,
+// |         Blue
+// |     }
+// |     class MyClass {
+// |         name: string;
+// |         greet(): void;
+// |     }
+// |     interface MyInterface {
+// |         id: number;
+// |         label: string;
+// |     }
+// |     let value: number;
+// |     function doSomething(x: string): boolean;
+// |     namespace doSomething { }
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace NS
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     type StringAlias = string;
+//     type Pair<T> = { first: T; second: T };
+// 
+//     enum Color { Red, Green, Blue }
+// 
+//     class MyClass {
+//         name: string;
+//         greet(): void;
+//     }
+// 
+//     interface MyInterface {
+//         id: number;
+//         label: string;
+//     }
+// 
+//     const value: number;
+//     function doSomething(x: string): boolean;
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 20,
+      "LSPosition": {
+        "line": 0,
+        "character": 20
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace NS\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 18
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 20,
+      "LSPosition": {
+        "line": 0,
+        "character": 20
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace NS {\n    type StringAlias = string;\n    type Pair<T> = {\n        first: T;\n        second: T;\n    };\n    enum Color {\n        Red,\n        Green,\n        Blue\n    }\n    class MyClass {\n        name: string;\n        greet(): void;\n    }\n    interface MyInterface {\n        id: number;\n        label: string;\n    }\n    let value: number;\n    function doSomething(x: string): boolean;\n    namespace doSomething { }\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 18
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

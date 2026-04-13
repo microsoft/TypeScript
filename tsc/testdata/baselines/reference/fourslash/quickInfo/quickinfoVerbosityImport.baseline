@@ -1,0 +1,504 @@
+// === QuickInfo ===
+=== /1.ts ===
+// import * as zero from "./0";
+// const b = zero;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const b: {
+// |     readonly a: {
+// |         a: number;
+// |         b: string;
+// |     };
+// |     Color: {
+// |         readonly [x: number]: string;
+// |         readonly Red: zero.Color.Red;
+// |         readonly Green: zero.Color.Green;
+// |         readonly Blue: zero.Color.Blue;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const b: {
+// |     readonly a: zero.Apple;
+// |     Color: typeof zero.Color;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const b: typeof zero
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+=== /2.ts ===
+// import { a } from "./0";
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) const a: {
+// |     a: number;
+// |     b: string;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) const a: Apple
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// import { Color } from "./0";
+//          ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) enum Color {
+// |     Red = 0,
+// |     Green = 1,
+// |     Blue = 2
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//          ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) enum Color
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+
+
+=== /4.ts ===
+// import Foo from "./3";
+//        ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) class default
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const f = new Foo();
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: {
+// |     a: boolean;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) constructor default(): {
+// |     a: boolean;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (alias) constructor default(): Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+
+
+[
+  {
+    "marker": {
+      "Position": 36,
+      "LSPosition": {
+        "line": 1,
+        "character": 7
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst b: typeof zero\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 6
+          },
+          "end": {
+            "line": 1,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 36,
+      "LSPosition": {
+        "line": 1,
+        "character": 7
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst b: {\n    readonly a: zero.Apple;\n    Color: typeof zero.Color;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 6
+          },
+          "end": {
+            "line": 1,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 36,
+      "LSPosition": {
+        "line": 1,
+        "character": 7
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst b: {\n    readonly a: {\n        a: number;\n        b: string;\n    };\n    Color: {\n        readonly [x: number]: string;\n        readonly Red: zero.Color.Red;\n        readonly Green: zero.Color.Green;\n        readonly Blue: zero.Color.Blue;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 6
+          },
+          "end": {
+            "line": 1,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 10,
+      "LSPosition": {
+        "line": 0,
+        "character": 10
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(alias) const a: Apple\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 9
+          },
+          "end": {
+            "line": 0,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 10,
+      "LSPosition": {
+        "line": 0,
+        "character": 10
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(alias) const a: {\n    a: number;\n    b: string;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 9
+          },
+          "end": {
+            "line": 0,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 39,
+      "LSPosition": {
+        "line": 1,
+        "character": 14
+      },
+      "Name": "c",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(alias) enum Color\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 9
+          },
+          "end": {
+            "line": 1,
+            "character": 14
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 39,
+      "LSPosition": {
+        "line": 1,
+        "character": 14
+      },
+      "Name": "c",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(alias) enum Color {\n    Red = 0,\n    Green = 1,\n    Blue = 2\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 9
+          },
+          "end": {
+            "line": 1,
+            "character": 14
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 10,
+      "LSPosition": {
+        "line": 0,
+        "character": 10
+      },
+      "Name": "d",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(alias) class default\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 7
+          },
+          "end": {
+            "line": 0,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 30,
+      "LSPosition": {
+        "line": 1,
+        "character": 7
+      },
+      "Name": "e",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 6
+          },
+          "end": {
+            "line": 1,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 30,
+      "LSPosition": {
+        "line": 1,
+        "character": 7
+      },
+      "Name": "e",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: {\n    a: boolean;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 6
+          },
+          "end": {
+            "line": 1,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 40,
+      "LSPosition": {
+        "line": 1,
+        "character": 17
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(alias) constructor default(): Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 14
+          },
+          "end": {
+            "line": 1,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 40,
+      "LSPosition": {
+        "line": 1,
+        "character": 17
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(alias) constructor default(): {\n    a: boolean;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 14
+          },
+          "end": {
+            "line": 1,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

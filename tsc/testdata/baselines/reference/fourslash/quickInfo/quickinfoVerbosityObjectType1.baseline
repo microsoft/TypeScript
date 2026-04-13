@@ -1,0 +1,302 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityObjectType1.ts ===
+// type Str = string | {};
+// type FooType = Str | number;
+// type Sym = symbol | (() => void);
+// type BarType = Sym | boolean;
+// type Obj = { foo: FooType, bar: BarType, str: Str };
+// const obj1: Obj = { foo: 1, bar: true, str: "3"};
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const obj1: {
+// |     foo: number | (string | {});
+// |     bar: boolean | (symbol | (() => void));
+// |     str: string | {};
+// | }
+// | ```
+// | 
+// | (verbosity level: 3)
+// | ----------------------------------------------------------------------
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const obj1: {
+// |     foo: number | Str;
+// |     bar: boolean | Sym;
+// |     str: string | {};
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const obj1: {
+// |     foo: FooType;
+// |     bar: BarType;
+// |     str: Str;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const obj1: Obj
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const obj2: { foo: FooType, bar: BarType, str: Str } = { foo: 1, bar: true, str: "3"};
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const obj2: {
+// |     foo: number | (string | {});
+// |     bar: boolean | (symbol | (() => void));
+// |     str: string | {};
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const obj2: {
+// |     foo: number | Str;
+// |     bar: boolean | Sym;
+// |     str: string | {};
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const obj2: { foo: FooType; bar: BarType; str: Str; }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 180,
+      "LSPosition": {
+        "line": 5,
+        "character": 10
+      },
+      "Name": "o1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst obj1: Obj\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 180,
+      "LSPosition": {
+        "line": 5,
+        "character": 10
+      },
+      "Name": "o1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst obj1: {\n    foo: FooType;\n    bar: BarType;\n    str: Str;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 180,
+      "LSPosition": {
+        "line": 5,
+        "character": 10
+      },
+      "Name": "o1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst obj1: {\n    foo: number | Str;\n    bar: boolean | Sym;\n    str: string | {};\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 180,
+      "LSPosition": {
+        "line": 5,
+        "character": 10
+      },
+      "Name": "o1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst obj1: {\n    foo: number | (string | {});\n    bar: boolean | (symbol | (() => void));\n    str: string | {};\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 3
+    }
+  },
+  {
+    "marker": {
+      "Position": 230,
+      "LSPosition": {
+        "line": 6,
+        "character": 10
+      },
+      "Name": "o2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst obj2: { foo: FooType; bar: BarType; str: Str; }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 6,
+            "character": 6
+          },
+          "end": {
+            "line": 6,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 230,
+      "LSPosition": {
+        "line": 6,
+        "character": 10
+      },
+      "Name": "o2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst obj2: {\n    foo: number | Str;\n    bar: boolean | Sym;\n    str: string | {};\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 6,
+            "character": 6
+          },
+          "end": {
+            "line": 6,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 230,
+      "LSPosition": {
+        "line": 6,
+        "character": 10
+      },
+      "Name": "o2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst obj2: {\n    foo: number | (string | {});\n    bar: boolean | (symbol | (() => void));\n    str: string | {};\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 6,
+            "character": 6
+          },
+          "end": {
+            "line": 6,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  }
+]

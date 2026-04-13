@@ -1,0 +1,165 @@
+// === QuickInfo ===
+=== /quickinfoVerbosity2.ts ===
+// type Str = string | {};
+// type FooType = Str | number;
+// type Sym = symbol | (() => void);
+// type BarType = Sym | boolean;
+// type BothType = FooType | BarType;
+// const both: BothType = 1;
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const both: (boolean | (symbol | (() => void))) | (number | (string | {}))
+// | ```
+// | 
+// | (verbosity level: 3)
+// | ----------------------------------------------------------------------
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const both: (boolean | Sym) | (number | Str)
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const both: BarType | FooType
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const both: BothType
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 162,
+      "LSPosition": {
+        "line": 5,
+        "character": 10
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst both: BothType\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 162,
+      "LSPosition": {
+        "line": 5,
+        "character": 10
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst both: BarType | FooType\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 162,
+      "LSPosition": {
+        "line": 5,
+        "character": 10
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst both: (boolean | Sym) | (number | Str)\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 162,
+      "LSPosition": {
+        "line": 5,
+        "character": 10
+      },
+      "Name": "b",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst both: (boolean | (symbol | (() => void))) | (number | (string | {}))\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 3
+    }
+  }
+]

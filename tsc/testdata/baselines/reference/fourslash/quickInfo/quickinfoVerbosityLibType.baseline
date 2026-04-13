@@ -1,0 +1,212 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityLibType.ts ===
+// interface Apple {
+//     color: string;
+//     size: number;
+// }
+// function f(): Promise<Apple> {
+//     return Promise.resolve({ color: "red", size: 5 });
+// }
+// const g = f;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const g: () => Promise<{
+// |     color: string;
+// |     size: number;
+// | }>
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const g: () => Promise<Apple>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const u: Map<string, Apple> = new Map;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const u: Map<string, {
+// |     color: string;
+// |     size: number;
+// | }>
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const u: Map<string, Apple>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// type Foo<T> = Promise<T>;
+//               ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Promise<T>
+// | ```
+// | Represents the completion of an asynchronous operation
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 152,
+      "LSPosition": {
+        "line": 7,
+        "character": 7
+      },
+      "Name": "g",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst g: () => Promise<Apple>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 6
+          },
+          "end": {
+            "line": 7,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 152,
+      "LSPosition": {
+        "line": 7,
+        "character": 7
+      },
+      "Name": "g",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst g: () => Promise<{\n    color: string;\n    size: number;\n}>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 6
+          },
+          "end": {
+            "line": 7,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 165,
+      "LSPosition": {
+        "line": 8,
+        "character": 7
+      },
+      "Name": "u",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst u: Map<string, Apple>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 6
+          },
+          "end": {
+            "line": 8,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 165,
+      "LSPosition": {
+        "line": 8,
+        "character": 7
+      },
+      "Name": "u",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst u: Map<string, {\n    color: string;\n    size: number;\n}>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 6
+          },
+          "end": {
+            "line": 8,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 218,
+      "LSPosition": {
+        "line": 9,
+        "character": 21
+      },
+      "Name": "p",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Promise<T>\n```\nRepresents the completion of an asynchronous operation"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 14
+          },
+          "end": {
+            "line": 9,
+            "character": 21
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  }
+]

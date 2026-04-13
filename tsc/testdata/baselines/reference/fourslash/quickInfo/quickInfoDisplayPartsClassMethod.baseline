@@ -480,7 +480,8 @@
           "line": 17,
           "character": 9
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -534,7 +535,8 @@
           "line": 18,
           "character": 1
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {

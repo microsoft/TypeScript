@@ -1,0 +1,91 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityAbstractClass.ts ===
+// declare abstract class Shape {
+//                        ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | abstract class Shape {
+// |     abstract area(): number;
+// |     abstract perimeter(): number;
+// |     toString(): string;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                        ^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | abstract class Shape
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     abstract area(): number;
+//     abstract perimeter(): number;
+//     toString(): string;
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 28,
+      "LSPosition": {
+        "line": 0,
+        "character": 28
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nabstract class Shape\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 23
+          },
+          "end": {
+            "line": 0,
+            "character": 28
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 28,
+      "LSPosition": {
+        "line": 0,
+        "character": 28
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nabstract class Shape {\n    abstract area(): number;\n    abstract perimeter(): number;\n    toString(): string;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 23
+          },
+          "end": {
+            "line": 0,
+            "character": 28
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

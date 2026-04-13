@@ -1,0 +1,255 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityIndexType.ts ===
+// interface T1 {
+// 	banana: string;
+// 	grape: number;
+// 	apple: boolean;
+// }
+// const x1: keyof T1 = 'banana';
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const x1: keyof {
+// |     banana: string;
+// |     grape: number;
+// |     apple: boolean;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const x1: keyof T1
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const x2: keyof T1 & ("grape" | "apple") = 'grape';
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const x2: "apple" | "grape"
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// function fn1<T extends T1>(obj: T, key: keyof T, k2: keyof T1) {
+// 	if (key === k2) {
+//              ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) k2: keyof {
+// |     banana: string;
+// |     grape: number;
+// |     apple: boolean;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//              ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) k2: keyof T1
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// 		return obj[key];
+//              ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) key: keyof T
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// 	}
+// 	return key;
+// }
+[
+  {
+    "marker": {
+      "Position": 75,
+      "LSPosition": {
+        "line": 5,
+        "character": 8
+      },
+      "Name": "x1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst x1: keyof T1\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 8
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 75,
+      "LSPosition": {
+        "line": 5,
+        "character": 8
+      },
+      "Name": "x1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst x1: keyof {\n    banana: string;\n    grape: number;\n    apple: boolean;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 8
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 106,
+      "LSPosition": {
+        "line": 6,
+        "character": 8
+      },
+      "Name": "x2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst x2: \"apple\" | \"grape\"\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 6,
+            "character": 6
+          },
+          "end": {
+            "line": 6,
+            "character": 8
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 230,
+      "LSPosition": {
+        "line": 8,
+        "character": 15
+      },
+      "Name": "k2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(parameter) k2: keyof T1\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 13
+          },
+          "end": {
+            "line": 8,
+            "character": 15
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 230,
+      "LSPosition": {
+        "line": 8,
+        "character": 15
+      },
+      "Name": "k2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(parameter) k2: keyof {\n    banana: string;\n    grape: number;\n    apple: boolean;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 13
+          },
+          "end": {
+            "line": 8,
+            "character": 15
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 250,
+      "LSPosition": {
+        "line": 9,
+        "character": 16
+      },
+      "Name": "key",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(parameter) key: keyof T\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 13
+          },
+          "end": {
+            "line": 9,
+            "character": 16
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  }
+]

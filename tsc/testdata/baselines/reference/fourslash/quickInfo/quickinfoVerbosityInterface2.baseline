@@ -1,0 +1,791 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityInterface2.ts ===
+// {
+//     interface Foo {
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo {
+// |     a: "a" | "c";
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//         a: "a" | "c";
+//     }
+// }
+// {
+//     interface Bar {
+//         b: "b" | "d";
+//     }
+//     interface Foo extends Bar {
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo extends Bar {
+// |     a: "a" | "c";
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//         a: "a" | "c";
+//     }
+// }
+// {
+//     type BarParam = "b" | "d";
+//     interface Bar {
+//         bar(b: BarParam): string;
+//     }
+//     type FooType = "a" | "c";
+//     interface FooParam {
+//         param: FooType;
+//     }
+//     interface Foo extends Bar {
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo extends Bar {
+// |     a: "a" | "c";
+// |     foo: (a: {
+// |         param: FooType;
+// |     }) => number;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo extends Bar {
+// |     a: FooType;
+// |     foo: (a: FooParam) => number;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//         a: FooType;
+//         foo: (a: FooParam) => number;
+//     }
+// }
+// {
+//     interface Bar<B> {
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Bar<B> {
+// |     bar(b: B): string;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Bar<B>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//         bar(b: B): string;
+//     }
+//     interface FooParam {
+//         param: "a" | "c";
+//     }
+//     interface Foo extends Bar<FooParam> {
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo extends Bar<{
+// |     param: "a" | "c";
+// | }> {
+// |     a: "a" | "c";
+// |     foo: (a: {
+// |         param: "a" | "c";
+// |     }) => number;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo extends Bar<FooParam> {
+// |     a: "a" | "c";
+// |     foo: (a: FooParam) => number;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//         a: "a" | "c";
+//         foo: (a: FooParam) => number;
+//     }
+// }
+// {
+//     interface Foo {
+//         a: "a";
+//     }
+//     interface Foo {
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo {
+// |     a: "a";
+// |     b: "b";
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//         b: "b";
+//     }
+// }
+// interface Foo {
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace Foo {
+// |     let bar: string;
+// | }
+// | interface Foo {
+// |     a: "a";
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     a: "a";
+// }
+// namespace Foo {
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace Foo {
+// |     let bar: string;
+// | }
+// | interface Foo {
+// |     a: "a";
+// | }
+// | 
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo
+// | namespace Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     export const bar: string;
+// }
+[
+  {
+    "marker": {
+      "Position": 19,
+      "LSPosition": {
+        "line": 1,
+        "character": 17
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 14
+          },
+          "end": {
+            "line": 1,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 19,
+      "LSPosition": {
+        "line": 1,
+        "character": 17
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo {\n    a: \"a\" | \"c\";\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 14
+          },
+          "end": {
+            "line": 1,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 119,
+      "LSPosition": {
+        "line": 9,
+        "character": 17
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 14
+          },
+          "end": {
+            "line": 9,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 119,
+      "LSPosition": {
+        "line": 9,
+        "character": 17
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo extends Bar {\n    a: \"a\" | \"c\";\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 14
+          },
+          "end": {
+            "line": 9,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 359,
+      "LSPosition": {
+        "line": 22,
+        "character": 17
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 14
+          },
+          "end": {
+            "line": 22,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 359,
+      "LSPosition": {
+        "line": 22,
+        "character": 17
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo extends Bar {\n    a: FooType;\n    foo: (a: FooParam) => number;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 14
+          },
+          "end": {
+            "line": 22,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 359,
+      "LSPosition": {
+        "line": 22,
+        "character": 17
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo extends Bar {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: FooType;\n    }) => number;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 14
+          },
+          "end": {
+            "line": 22,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 459,
+      "LSPosition": {
+        "line": 28,
+        "character": 17
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Bar<B>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 28,
+            "character": 14
+          },
+          "end": {
+            "line": 28,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 459,
+      "LSPosition": {
+        "line": 28,
+        "character": 17
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Bar<B> {\n    bar(b: B): string;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 28,
+            "character": 14
+          },
+          "end": {
+            "line": 28,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 572,
+      "LSPosition": {
+        "line": 34,
+        "character": 17
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 34,
+            "character": 14
+          },
+          "end": {
+            "line": 34,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 572,
+      "LSPosition": {
+        "line": 34,
+        "character": 17
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo extends Bar<FooParam> {\n    a: \"a\" | \"c\";\n    foo: (a: FooParam) => number;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 34,
+            "character": 14
+          },
+          "end": {
+            "line": 34,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 572,
+      "LSPosition": {
+        "line": 34,
+        "character": 17
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo extends Bar<{\n    param: \"a\" | \"c\";\n}> {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: \"a\" | \"c\";\n    }) => number;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 34,
+            "character": 14
+          },
+          "end": {
+            "line": 34,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 726,
+      "LSPosition": {
+        "line": 43,
+        "character": 17
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 43,
+            "character": 14
+          },
+          "end": {
+            "line": 43,
+            "character": 17
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 726,
+      "LSPosition": {
+        "line": 43,
+        "character": 17
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo {\n    a: \"a\";\n    b: \"b\";\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 43,
+            "character": 14
+          },
+          "end": {
+            "line": 43,
+            "character": 17
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 766,
+      "LSPosition": {
+        "line": 47,
+        "character": 13
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 47,
+            "character": 10
+          },
+          "end": {
+            "line": 47,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 766,
+      "LSPosition": {
+        "line": 47,
+        "character": 13
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace Foo {\n    let bar: string;\n}\ninterface Foo {\n    a: \"a\";\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 47,
+            "character": 10
+          },
+          "end": {
+            "line": 47,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 796,
+      "LSPosition": {
+        "line": 50,
+        "character": 13
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo\nnamespace Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 50,
+            "character": 10
+          },
+          "end": {
+            "line": 50,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 796,
+      "LSPosition": {
+        "line": 50,
+        "character": 13
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace Foo {\n    let bar: string;\n}\ninterface Foo {\n    a: \"a\";\n}\n\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 50,
+            "character": 10
+          },
+          "end": {
+            "line": 50,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

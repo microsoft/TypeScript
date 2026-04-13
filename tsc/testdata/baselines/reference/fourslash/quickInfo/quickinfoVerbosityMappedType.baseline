@@ -1,0 +1,290 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityMappedType.ts ===
+// type Apple = boolean | number;
+// type Orange = string | boolean;
+// type F<T> = {
+// 	[K in keyof T as T[K] extends Apple ? never : K]: T[K];
+// }
+// type Bar = {
+// 	banana: string;
+// 	apple: boolean;
+// }
+// const x: F<Bar> = { banana: 'hello' };
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const x: {
+// |     banana: string;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const x: F<Bar>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type F<T> = { [K in keyof T as T[K] extends number | boolean ? never : K]: T[K]; }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type F<T> = { [K in keyof T as T[K] extends Apple ? never : K]: T[K]; }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const y: { [K in keyof Bar]?: Bar[K] } = { banana: 'hello' };
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const y: { banana?: string | undefined; apple?: boolean | undefined; }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// type G<T> = {
+// 	[K in keyof T]: T[K] & Apple
+// };
+// const z: G<Bar> = { banana: 'hello', apple: true };
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type G<T> = { [K in keyof T]: T[K] & (number | boolean); }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type G<T> = { [K in keyof T]: T[K] & Apple; }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 192,
+      "LSPosition": {
+        "line": 9,
+        "character": 7
+      },
+      "Name": "x",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst x: F<Bar>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 6
+          },
+          "end": {
+            "line": 9,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 192,
+      "LSPosition": {
+        "line": 9,
+        "character": 7
+      },
+      "Name": "x",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst x: {\n    banana: string;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 6
+          },
+          "end": {
+            "line": 9,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 195,
+      "LSPosition": {
+        "line": 9,
+        "character": 10
+      },
+      "Name": "F",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype F<T> = { [K in keyof T as T[K] extends Apple ? never : K]: T[K]; }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 9
+          },
+          "end": {
+            "line": 9,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 195,
+      "LSPosition": {
+        "line": 9,
+        "character": 10
+      },
+      "Name": "F",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype F<T> = { [K in keyof T as T[K] extends number | boolean ? never : K]: T[K]; }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 9
+          },
+          "end": {
+            "line": 9,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 231,
+      "LSPosition": {
+        "line": 10,
+        "character": 7
+      },
+      "Name": "y",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst y: { banana?: string | undefined; apple?: boolean | undefined; }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 6
+          },
+          "end": {
+            "line": 10,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 343,
+      "LSPosition": {
+        "line": 14,
+        "character": 10
+      },
+      "Name": "G",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype G<T> = { [K in keyof T]: T[K] & Apple; }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 9
+          },
+          "end": {
+            "line": 14,
+            "character": 10
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 343,
+      "LSPosition": {
+        "line": 14,
+        "character": 10
+      },
+      "Name": "G",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype G<T> = { [K in keyof T]: T[K] & (number | boolean); }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 9
+          },
+          "end": {
+            "line": 14,
+            "character": 10
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

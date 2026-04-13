@@ -1,0 +1,133 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityConditionalType.ts ===
+// interface Apple {
+//     color: string;
+//     weight: number;
+// }
+// type StrInt = string | bigint;
+// type T1<T extends Apple | Apple[]> = T extends { color: string } ? "one apple" : StrInt;
+// function f<T extends Apple | Apple[]>(x: T1<T>): void {
+//     x;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) x: T extends {
+// |     color: string;
+// | } ? "one apple" : string | bigint
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) x: T extends {
+// |     color: string;
+// | } ? "one apple" : StrInt
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//     ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) x: T1<T>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 240,
+      "LSPosition": {
+        "line": 7,
+        "character": 5
+      },
+      "Name": "x",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(parameter) x: T1<T>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 4
+          },
+          "end": {
+            "line": 7,
+            "character": 5
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 240,
+      "LSPosition": {
+        "line": 7,
+        "character": 5
+      },
+      "Name": "x",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(parameter) x: T extends {\n    color: string;\n} ? \"one apple\" : StrInt\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 4
+          },
+          "end": {
+            "line": 7,
+            "character": 5
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 240,
+      "LSPosition": {
+        "line": 7,
+        "character": 5
+      },
+      "Name": "x",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(parameter) x: T extends {\n    color: string;\n} ? \"one apple\" : string | bigint\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 4
+          },
+          "end": {
+            "line": 7,
+            "character": 5
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  }
+]

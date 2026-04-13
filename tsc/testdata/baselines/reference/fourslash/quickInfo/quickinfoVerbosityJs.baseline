@@ -1,0 +1,484 @@
+// === QuickInfo ===
+=== /somefile.js ===
+// /**
+//  * @typedef {Object} SomeType
+//  * @property {string} prop1
+//  */
+// /** @type {SomeType} */
+// const a = {
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const a: {
+// |     prop1: string;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const a: SomeType
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     prop1: 'value',
+// }
+// /**
+//  * @typedef {Object} SomeType2
+//                      ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type SomeType2 = {
+// |     prop2: number;
+// |     prop3: {
+// |         prop1: string;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                      ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type SomeType2 = { prop2: number; prop3: SomeType; }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//  * @property {number} prop2
+//  * @property {SomeType} prop3
+//  */
+// /** @type {SomeType[]} */
+// const ss = [{ prop1: 'value' }, { prop1: 'value' }];
+// const d = ss.map((s) => s.prop1);
+//                   ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) s: {
+// |     prop1: string;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                   ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) s: SomeType
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// /** @param {SomeType} a
+//  * @returns {SomeType}
+//  */
+// function someFun(a) {
+//          ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function someFun(a: {
+// |     prop1: string;
+// | }): {
+// |     prop1: string;
+// | }
+// | ```
+// | 
+// | 
+// | *@param* `a`
+// | 
+// | *@returns*
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//          ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | function someFun(a: SomeType): SomeType
+// | ```
+// | 
+// | 
+// | *@param* `a`
+// | 
+// | *@returns*
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     return a;
+// }
+// someFun.what = 'what';
+// class SomeClass {
+//       ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class SomeClass {
+// |     b: {
+// |         prop2: number;
+// |         prop3: SomeType;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class SomeClass {
+// |     b: SomeType2;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class SomeClass
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     /** @type {SomeType2} */
+//     b;
+// }
+[
+  {
+    "marker": {
+      "Position": 97,
+      "LSPosition": {
+        "line": 5,
+        "character": 7
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst a: SomeType\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 97,
+      "LSPosition": {
+        "line": 5,
+        "character": 7
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst a: {\n    prop1: string;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 6
+          },
+          "end": {
+            "line": 5,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 158,
+      "LSPosition": {
+        "line": 9,
+        "character": 30
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype SomeType2 = { prop2: number; prop3: SomeType; }\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 21
+          },
+          "end": {
+            "line": 9,
+            "character": 30
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 158,
+      "LSPosition": {
+        "line": 9,
+        "character": 30
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype SomeType2 = {\n    prop2: number;\n    prop3: {\n        prop1: string;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 9,
+            "character": 21
+          },
+          "end": {
+            "line": 9,
+            "character": 30
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 319,
+      "LSPosition": {
+        "line": 15,
+        "character": 19
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(parameter) s: SomeType\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 18
+          },
+          "end": {
+            "line": 15,
+            "character": 19
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 319,
+      "LSPosition": {
+        "line": 15,
+        "character": 19
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(parameter) s: {\n    prop1: string;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 18
+          },
+          "end": {
+            "line": 15,
+            "character": 19
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 401,
+      "LSPosition": {
+        "line": 19,
+        "character": 16
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nfunction someFun(a: SomeType): SomeType\n```\n\n\n*@param* `a`\n\n*@returns*"
+        },
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 9
+          },
+          "end": {
+            "line": 19,
+            "character": 16
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 401,
+      "LSPosition": {
+        "line": 19,
+        "character": 16
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nfunction someFun(a: {\n    prop1: string;\n}): {\n    prop1: string;\n}\n```\n\n\n*@param* `a`\n\n*@returns*"
+        },
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 9
+          },
+          "end": {
+            "line": 19,
+            "character": 16
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 461,
+      "LSPosition": {
+        "line": 23,
+        "character": 15
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass SomeClass\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 23,
+            "character": 6
+          },
+          "end": {
+            "line": 23,
+            "character": 15
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 461,
+      "LSPosition": {
+        "line": 23,
+        "character": 15
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass SomeClass {\n    b: SomeType2;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 23,
+            "character": 6
+          },
+          "end": {
+            "line": 23,
+            "character": 15
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 461,
+      "LSPosition": {
+        "line": 23,
+        "character": 15
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass SomeClass {\n    b: {\n        prop2: number;\n        prop3: SomeType;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 23,
+            "character": 6
+          },
+          "end": {
+            "line": 23,
+            "character": 15
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 2
+    }
+  }
+]

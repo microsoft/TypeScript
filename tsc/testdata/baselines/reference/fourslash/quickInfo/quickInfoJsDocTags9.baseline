@@ -44,7 +44,8 @@
           "line": 8,
           "character": 9
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   }
 ]

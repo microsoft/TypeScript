@@ -1371,9 +1371,9 @@ func (s *Session) handleTypeToString(ctx context.Context, params *TypeToTypeNode
 	}
 
 	if params.Flags != 0 {
-		return setup.checker.TypeToStringEx(t, enclosingDeclaration, checker.TypeFormatFlags(params.Flags)), nil
+		return setup.checker.TypeToStringEx(t, enclosingDeclaration, checker.TypeFormatFlags(params.Flags), nil), nil
 	}
-	return setup.checker.TypeToStringEx(t, enclosingDeclaration, checker.TypeFormatFlagsAllowUniqueESSymbolType|checker.TypeFormatFlagsUseAliasDefinedOutsideCurrentScope), nil
+	return setup.checker.TypeToStringEx(t, enclosingDeclaration, checker.TypeFormatFlagsAllowUniqueESSymbolType|checker.TypeFormatFlagsUseAliasDefinedOutsideCurrentScope, nil), nil
 }
 
 // handlePrintNode decodes a binary-encoded AST node and prints it to text.

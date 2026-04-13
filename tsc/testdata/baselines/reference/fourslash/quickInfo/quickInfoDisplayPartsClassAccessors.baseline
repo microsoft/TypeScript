@@ -932,7 +932,8 @@
           "line": 31,
           "character": 13
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -986,7 +987,8 @@
           "line": 32,
           "character": 5
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1040,7 +1042,8 @@
           "line": 33,
           "character": 9
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -1094,7 +1097,8 @@
           "line": 34,
           "character": 1
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {

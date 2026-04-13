@@ -1,0 +1,520 @@
+// === QuickInfo ===
+=== /a.ts ===
+// interface Foo<T extends Date> {
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo<T extends Date> {
+// |     prop: T;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | interface Foo<T extends Date>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     prop: T
+// }
+// class Bar<T extends Date> implements Foo<T> {
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Bar<T extends Date> implements Foo<T> {
+// |     prop: T;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Bar<T extends Date> implements Foo<T> {
+// |     prop: T;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Bar<T extends Date>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     prop!: T
+// }
+=== /b.ts ===
+// import { f } from "./a";
+// f({ x: 1 });
+// ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*1*/.
+// | ----------------------------------------------------------------------
+// ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*1*/.
+// | ----------------------------------------------------------------------
+
+
+=== /c.ts ===
+// class c5b { public foo() { } }
+// namespace c5b { export var y = 2; }
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c5b {
+// |     public foo(): void;
+// | }
+// | namespace c5b {
+// |     let y: number;
+// | }
+// | 
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c5b {
+// |     public foo(): void;
+// | }
+// | namespace c5b {
+// |     let y: number;
+// | }
+// | 
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class c5b
+// | namespace c5b
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+
+
+=== /file.tsx ===
+// interface OptionProp {
+//     propx: 2
+// }
+// class Opt extends React.Component<OptionProp, {}> {
+//     render() {
+//         return <div>Hello</div>;
+//     }
+// }
+// const obj1: OptionProp = {
+//     propx: 2
+// }
+// let y1 = <Opt propx={2} />;
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Opt {
+// |     render(): any;
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Opt {
+// |     render(): any;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | class Opt
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+
+
+[
+  {
+    "marker": {
+      "Position": 25,
+      "LSPosition": {
+        "line": 1,
+        "character": 0
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": null,
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 25,
+      "LSPosition": {
+        "line": 1,
+        "character": 0
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": null,
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 201,
+      "LSPosition": {
+        "line": 11,
+        "character": 13
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Opt\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 10
+          },
+          "end": {
+            "line": 11,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 201,
+      "LSPosition": {
+        "line": 11,
+        "character": 13
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Opt {\n    render(): any;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 10
+          },
+          "end": {
+            "line": 11,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 201,
+      "LSPosition": {
+        "line": 11,
+        "character": 13
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Opt {\n    render(): any;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 10
+          },
+          "end": {
+            "line": 11,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 13,
+      "LSPosition": {
+        "line": 0,
+        "character": 13
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo<T extends Date>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 13,
+      "LSPosition": {
+        "line": 0,
+        "character": 13
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ninterface Foo<T extends Date> {\n    prop: T;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 10
+          },
+          "end": {
+            "line": 0,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 55,
+      "LSPosition": {
+        "line": 3,
+        "character": 9
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Bar<T extends Date>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 6
+          },
+          "end": {
+            "line": 3,
+            "character": 9
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 55,
+      "LSPosition": {
+        "line": 3,
+        "character": 9
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Bar<T extends Date> implements Foo<T> {\n    prop: T;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 6
+          },
+          "end": {
+            "line": 3,
+            "character": 9
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 55,
+      "LSPosition": {
+        "line": 3,
+        "character": 9
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass Bar<T extends Date> implements Foo<T> {\n    prop: T;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 6
+          },
+          "end": {
+            "line": 3,
+            "character": 9
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 44,
+      "LSPosition": {
+        "line": 1,
+        "character": 13
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass c5b\nnamespace c5b\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 10
+          },
+          "end": {
+            "line": 1,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 44,
+      "LSPosition": {
+        "line": 1,
+        "character": 13
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass c5b {\n    public foo(): void;\n}\nnamespace c5b {\n    let y: number;\n}\n\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 10
+          },
+          "end": {
+            "line": 1,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 44,
+      "LSPosition": {
+        "line": 1,
+        "character": 13
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nclass c5b {\n    public foo(): void;\n}\nnamespace c5b {\n    let y: number;\n}\n\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 10
+          },
+          "end": {
+            "line": 1,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  }
+]

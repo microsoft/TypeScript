@@ -207,7 +207,8 @@
           "line": 49,
           "character": 17
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {
@@ -246,7 +247,8 @@
           "line": 50,
           "character": 3
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   },
   {

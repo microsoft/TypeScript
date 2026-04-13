@@ -1,0 +1,740 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityTuple.ts ===
+// interface Orange {
+//     color: string;
+// }
+// interface Apple {
+//     color: string;
+//     other: Orange;
+// }
+// type TwoFruits = [Orange, Apple];
+//      ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type TwoFruits = [{
+// |     color: string;
+// | }, {
+// |     color: string;
+// |     other: {
+// |         color: string;
+// |     };
+// | }]
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type TwoFruits = [{
+// |     color: string;
+// | }, {
+// |     color: string;
+// |     other: Orange;
+// | }]
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type TwoFruits = [Orange, Apple]
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const tf: TwoFruits = [
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const tf: [{
+// |     color: string;
+// | }, {
+// |     color: string;
+// |     other: {
+// |         color: string;
+// |     };
+// | }]
+// | ```
+// | 
+// | (verbosity level: 3)
+// | ----------------------------------------------------------------------
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const tf: [{
+// |     color: string;
+// | }, {
+// |     color: string;
+// |     other: Orange;
+// | }]
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const tf: [Orange, Apple]
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const tf: TwoFruits
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     { color: "orange" },
+//     { color: "red", other: { color: "orange" } }
+// ];
+// const tf2: [Orange, Apple] = [
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const tf2: [{
+// |     color: string;
+// | }, {
+// |     color: string;
+// |     other: {
+// |         color: string;
+// |     };
+// | }]
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const tf2: [{
+// |     color: string;
+// | }, {
+// |     color: string;
+// |     other: Orange;
+// | }]
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const tf2: [Orange, Apple]
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     { color: "orange" },
+//     { color: "red", other: { color: "orange" } }
+// ];
+// type ManyFruits = (Orange | Apple)[];
+//      ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type ManyFruits = ({
+// |     color: string;
+// |     other: {
+// |         color: string;
+// |     };
+// | } | {
+// |     color: string;
+// | })[]
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type ManyFruits = ({
+// |     color: string;
+// |     other: Orange;
+// | } | {
+// |     color: string;
+// | })[]
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type ManyFruits = (Apple | Orange)[]
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// const mf: ManyFruits = [];
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const mf: ({
+// |     color: string;
+// |     other: {
+// |         color: string;
+// |     };
+// | } | {
+// |     color: string;
+// | })[]
+// | ```
+// | 
+// | (verbosity level: 3)
+// | ----------------------------------------------------------------------
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const mf: ({
+// |     color: string;
+// |     other: Orange;
+// | } | {
+// |     color: string;
+// | })[]
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const mf: (Apple | Orange)[]
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const mf: ManyFruits
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 112,
+      "LSPosition": {
+        "line": 7,
+        "character": 14
+      },
+      "Name": "T",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype TwoFruits = [Orange, Apple]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 5
+          },
+          "end": {
+            "line": 7,
+            "character": 14
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 112,
+      "LSPosition": {
+        "line": 7,
+        "character": 14
+      },
+      "Name": "T",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype TwoFruits = [{\n    color: string;\n}, {\n    color: string;\n    other: Orange;\n}]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 5
+          },
+          "end": {
+            "line": 7,
+            "character": 14
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 112,
+      "LSPosition": {
+        "line": 7,
+        "character": 14
+      },
+      "Name": "T",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype TwoFruits = [{\n    color: string;\n}, {\n    color: string;\n    other: {\n        color: string;\n    };\n}]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 5
+          },
+          "end": {
+            "line": 7,
+            "character": 14
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 140,
+      "LSPosition": {
+        "line": 8,
+        "character": 8
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst tf: TwoFruits\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 6
+          },
+          "end": {
+            "line": 8,
+            "character": 8
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 140,
+      "LSPosition": {
+        "line": 8,
+        "character": 8
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst tf: [Orange, Apple]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 6
+          },
+          "end": {
+            "line": 8,
+            "character": 8
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 140,
+      "LSPosition": {
+        "line": 8,
+        "character": 8
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst tf: [{\n    color: string;\n}, {\n    color: string;\n    other: Orange;\n}]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 6
+          },
+          "end": {
+            "line": 8,
+            "character": 8
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 140,
+      "LSPosition": {
+        "line": 8,
+        "character": 8
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst tf: [{\n    color: string;\n}, {\n    color: string;\n    other: {\n        color: string;\n    };\n}]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 6
+          },
+          "end": {
+            "line": 8,
+            "character": 8
+          }
+        }
+      },
+      "verbosityLevel": 3
+    }
+  },
+  {
+    "marker": {
+      "Position": 242,
+      "LSPosition": {
+        "line": 12,
+        "character": 9
+      },
+      "Name": "f2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst tf2: [Orange, Apple]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 12,
+            "character": 6
+          },
+          "end": {
+            "line": 12,
+            "character": 9
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 242,
+      "LSPosition": {
+        "line": 12,
+        "character": 9
+      },
+      "Name": "f2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst tf2: [{\n    color: string;\n}, {\n    color: string;\n    other: Orange;\n}]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 12,
+            "character": 6
+          },
+          "end": {
+            "line": 12,
+            "character": 9
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 242,
+      "LSPosition": {
+        "line": 12,
+        "character": 9
+      },
+      "Name": "f2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst tf2: [{\n    color: string;\n}, {\n    color: string;\n    other: {\n        color: string;\n    };\n}]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 12,
+            "character": 6
+          },
+          "end": {
+            "line": 12,
+            "character": 9
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 356,
+      "LSPosition": {
+        "line": 16,
+        "character": 15
+      },
+      "Name": "m",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype ManyFruits = (Apple | Orange)[]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 5
+          },
+          "end": {
+            "line": 16,
+            "character": 15
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 356,
+      "LSPosition": {
+        "line": 16,
+        "character": 15
+      },
+      "Name": "m",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype ManyFruits = ({\n    color: string;\n    other: Orange;\n} | {\n    color: string;\n})[]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 5
+          },
+          "end": {
+            "line": 16,
+            "character": 15
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 356,
+      "LSPosition": {
+        "line": 16,
+        "character": 15
+      },
+      "Name": "m",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype ManyFruits = ({\n    color: string;\n    other: {\n        color: string;\n    };\n} | {\n    color: string;\n})[]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 16,
+            "character": 5
+          },
+          "end": {
+            "line": 16,
+            "character": 15
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 387,
+      "LSPosition": {
+        "line": 17,
+        "character": 8
+      },
+      "Name": "mf",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst mf: ManyFruits\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 17,
+            "character": 6
+          },
+          "end": {
+            "line": 17,
+            "character": 8
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 387,
+      "LSPosition": {
+        "line": 17,
+        "character": 8
+      },
+      "Name": "mf",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst mf: (Apple | Orange)[]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 17,
+            "character": 6
+          },
+          "end": {
+            "line": 17,
+            "character": 8
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 387,
+      "LSPosition": {
+        "line": 17,
+        "character": 8
+      },
+      "Name": "mf",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst mf: ({\n    color: string;\n    other: Orange;\n} | {\n    color: string;\n})[]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 17,
+            "character": 6
+          },
+          "end": {
+            "line": 17,
+            "character": 8
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "Position": 387,
+      "LSPosition": {
+        "line": 17,
+        "character": 8
+      },
+      "Name": "mf",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst mf: ({\n    color: string;\n    other: {\n        color: string;\n    };\n} | {\n    color: string;\n})[]\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 17,
+            "character": 6
+          },
+          "end": {
+            "line": 17,
+            "character": 8
+          }
+        }
+      },
+      "verbosityLevel": 3
+    }
+  }
+]

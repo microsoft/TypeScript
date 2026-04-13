@@ -1,0 +1,215 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityIndexSignature.ts ===
+// type Key = string | number;
+// interface Apple {
+//     banana: number;
+// }
+// interface Foo {
+//     [a: Key]: Apple;
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: string | number
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (parameter) a: Key
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+// const f: Foo = {};
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: {
+// |     [a: string]: {
+// |         banana: number;
+// |     };
+// |     [a: number]: {
+// |         banana: number;
+// |     };
+// | }
+// | ```
+// | 
+// | (verbosity level: 2)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: {
+// |     [a: string]: Apple;
+// |     [a: number]: Apple;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const f: Foo
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 90,
+      "LSPosition": {
+        "line": 5,
+        "character": 6
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(parameter) a: Key\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 5
+          },
+          "end": {
+            "line": 5,
+            "character": 6
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 90,
+      "LSPosition": {
+        "line": 5,
+        "character": 6
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\n(parameter) a: string | number\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 5
+          },
+          "end": {
+            "line": 5,
+            "character": 6
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 114,
+      "LSPosition": {
+        "line": 7,
+        "character": 7
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: Foo\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 6
+          },
+          "end": {
+            "line": 7,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 114,
+      "LSPosition": {
+        "line": 7,
+        "character": 7
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: {\n    [a: string]: Apple;\n    [a: number]: Apple;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 6
+          },
+          "end": {
+            "line": 7,
+            "character": 7
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 114,
+      "LSPosition": {
+        "line": 7,
+        "character": 7
+      },
+      "Name": "f",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst f: {\n    [a: string]: {\n        banana: number;\n    };\n    [a: number]: {\n        banana: number;\n    };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 6
+          },
+          "end": {
+            "line": 7,
+            "character": 7
+          }
+        }
+      },
+      "verbosityLevel": 2
+    }
+  }
+]

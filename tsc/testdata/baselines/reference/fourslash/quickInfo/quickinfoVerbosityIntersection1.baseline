@@ -1,0 +1,177 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityIntersection1.ts ===
+// {
+//     type Foo = { a: "a" | "c" };
+//     type Bar = { a: "a" | "b" };
+//     const obj: Foo & Bar = { a: "a" };
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const obj: {
+// |     a: "a" | "c";
+// | } & {
+// |     a: "a" | "b";
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const obj: Foo & Bar
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+// {
+//     type Foo = { a: "c" };
+//     type Bar = { a: "b" };
+//     const obj: Foo & Bar = { a: "" };
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const obj: never
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+// {
+//     type Foo = { a: "c" };
+//     type Bar = { a: "b" };
+//     type Never = Foo & Bar;
+//     const obj: Never = { a: "" };
+//           ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const obj: never
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 81,
+      "LSPosition": {
+        "line": 3,
+        "character": 13
+      },
+      "Name": "o1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst obj: Foo & Bar\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 10
+          },
+          "end": {
+            "line": 3,
+            "character": 13
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 81,
+      "LSPosition": {
+        "line": 3,
+        "character": 13
+      },
+      "Name": "o1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst obj: {\n    a: \"a\" | \"c\";\n} & {\n    a: \"a\" | \"b\";\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 10
+          },
+          "end": {
+            "line": 3,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 178,
+      "LSPosition": {
+        "line": 8,
+        "character": 13
+      },
+      "Name": "o2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst obj: never\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 8,
+            "character": 10
+          },
+          "end": {
+            "line": 8,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 302,
+      "LSPosition": {
+        "line": 14,
+        "character": 13
+      },
+      "Name": "o3",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst obj: never\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 10
+          },
+          "end": {
+            "line": 14,
+            "character": 13
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  }
+]

@@ -2168,7 +2168,8 @@
           "line": 199,
           "character": 22
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   }
 ]

@@ -1,0 +1,95 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityNamespaceDefaultExport.ts ===
+// declare namespace ns {
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace ns {
+// |     let circle: Shape;
+// |     export { circle as default };
+// |     export { Shape };
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace ns
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     interface Shape {
+//         sides: number;
+//     }
+//     const circle: Shape;
+//     export default circle;
+//     export { Shape };
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 20,
+      "LSPosition": {
+        "line": 0,
+        "character": 20
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace ns\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 18
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 20,
+      "LSPosition": {
+        "line": 0,
+        "character": 20
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace ns {\n    let circle: Shape;\n    export { circle as default };\n    export { Shape };\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 18
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

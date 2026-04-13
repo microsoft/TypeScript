@@ -1,0 +1,180 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityConstEnum.ts ===
+// const enum Direction {
+//            ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const enum Direction {
+// |     Up = "UP",
+// |     Down = "DOWN",
+// |     Left = "LEFT",
+// |     Right = "RIGHT"
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//            ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const enum Direction
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     Up = "UP",
+//     Down = "DOWN",
+//     Left = "LEFT",
+//     Right = "RIGHT",
+// }
+// 
+// enum NumericEnum {
+//      ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | enum NumericEnum {
+// |     A = 0,
+// |     B = 10,
+// |     C = 11
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | enum NumericEnum
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     A,
+//     B = 10,
+//     C,
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 20,
+      "LSPosition": {
+        "line": 0,
+        "character": 20
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst enum Direction\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 11
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 20,
+      "LSPosition": {
+        "line": 0,
+        "character": 20
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst enum Direction {\n    Up = \"UP\",\n    Down = \"DOWN\",\n    Left = \"LEFT\",\n    Right = \"RIGHT\"\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 11
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 116,
+      "LSPosition": {
+        "line": 7,
+        "character": 16
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nenum NumericEnum\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 5
+          },
+          "end": {
+            "line": 7,
+            "character": 16
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 116,
+      "LSPosition": {
+        "line": 7,
+        "character": 16
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nenum NumericEnum {\n    A = 0,\n    B = 10,\n    C = 11\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 5
+          },
+          "end": {
+            "line": 7,
+            "character": 16
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

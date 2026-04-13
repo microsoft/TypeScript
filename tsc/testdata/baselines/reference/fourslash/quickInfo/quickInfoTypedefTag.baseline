@@ -122,7 +122,8 @@
           "line": 21,
           "character": 1
         }
-      }
+      },
+      "canIncreaseVerbosity": true
     }
   }
 ]
