@@ -12,7 +12,7 @@ exports.formatters = {}
 === first.js ===
 exports = require('./mod')
 >exports = require('./mod') : typeof import("./mod")
->exports : any
+>exports : typeof import("./first")
 >require('./mod') : typeof import("./mod")
 >require : any
 >'./mod' : "./mod"
@@ -33,7 +33,7 @@ exports.formatters.j = function (v) {
 === second.js ===
 exports = require('./mod')
 >exports = require('./mod') : typeof import("./mod")
->exports : any
+>exports : typeof import("./second")
 >require('./mod') : typeof import("./mod")
 >require : any
 >'./mod' : "./mod"

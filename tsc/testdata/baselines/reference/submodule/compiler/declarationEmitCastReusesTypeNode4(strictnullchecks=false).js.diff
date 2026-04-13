@@ -40,11 +40,10 @@
 +    set x(v: P);
  }
  declare const _default: P;
--export default _default;
+ export default _default;
 -export type P = {} & {
 -    name?: string;
 -};
-+export default /** @type {P} */ _default;
 +/**
 + *
 + * @param {P} x

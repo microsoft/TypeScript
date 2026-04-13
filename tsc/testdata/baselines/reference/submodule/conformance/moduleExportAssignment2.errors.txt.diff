@@ -2,21 +2,20 @@
 +++ new.moduleExportAssignment2.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+npm.js(1,11): error TS2322: Type '(tree: any) => void' is not assignable to type 'typeof import("npm")'.
-+npm.js(5,12): error TS2349: This expression is not callable.
-+  Type 'typeof import("npm")' has no call signatures.
++npm.js(1,11): error TS2309: An export assignment cannot be used in a module with other exported elements.
++npm.js(3,16): error TS2339: Property 'asReadInstalled' does not exist on type '(tree: any) => void'.
 +
 +
 +==== npm.js (2 errors) ====
 +    var npm = module.exports = function (tree) {
-+              ~~~~~~~~~~~~~~
-+!!! error TS2322: Type '(tree: any) => void' is not assignable to type 'typeof import("npm")'.
++              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +    }
++    ~
++!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    module.exports.asReadInstalled = function (tree) {
++                   ~~~~~~~~~~~~~~~
++!!! error TS2339: Property 'asReadInstalled' does not exist on type '(tree: any) => void'.
 +        npm(tree) // both references should be callable
 +        module.exports(tree)
-+               ~~~~~~~
-+!!! error TS2349: This expression is not callable.
-+!!! error TS2349:   Type 'typeof import("npm")' has no call signatures.
 +    }
 +    

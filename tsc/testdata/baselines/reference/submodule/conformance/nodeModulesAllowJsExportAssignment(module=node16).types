@@ -40,8 +40,8 @@ const a = {};
 
 module.exports = a;
 >module.exports = a : {}
->module.exports : {}
->module : { exports: {}; }
->exports : {}
+>module.exports : any
+>module : any
+>exports : any
 >a : {}
 

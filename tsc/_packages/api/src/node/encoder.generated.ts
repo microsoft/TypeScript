@@ -63,7 +63,6 @@ export function getNodeCommonData(node: Node): number {
         case SyntaxKind.HeritageClause:
             return ((node as HeritageClause).token === SyntaxKind.ImplementsKeyword ? 1 : 0) << 24;
         case SyntaxKind.ExportAssignment:
-        case SyntaxKind.JSExportAssignment:
             return ((node as ExportAssignment).isExportEquals ? 1 : 0) << 24;
         case SyntaxKind.ExportSpecifier:
             return ((node as ExportSpecifier).isTypeOnly ? 1 : 0) << 24;

@@ -11,7 +11,7 @@ function foo() {
 >module : { exports: (o: any) => any; }
 >exports : (o: any) => any
 >exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
->exports : any
+>exports : (o: any) => any
 >function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
 >o : any
 
@@ -40,7 +40,7 @@ function foo() {
     exports.methods = m;
 >exports.methods = m : () => void
 >exports.methods : any
->exports : typeof import(".")
+>exports : (o: any) => any
 >methods : any
 >m : () => void
 }

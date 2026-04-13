@@ -6,24 +6,21 @@
  const C = require("./semver")
 ->C : typeof C
 ->require("./semver") : typeof C
-+>C : any
-+>require("./semver") : any
++>C : { (): void; f: (n: any) => any; }
++>require("./semver") : { (): void; f: (n: any) => any; }
  >require : any
  >"./semver" : "./semver"
 
- var two = C.f(1)
+@@= skipped -9, +9 lines =@@
  >two : any
  >C.f(1) : any
-->C.f : (n: any) => any
+ >C.f : (n: any) => any
 ->C : typeof C
-->f : (n: any) => any
-+>C.f : any
-+>C : any
-+>f : any
++>C : { (): void; f: (n: any) => any; }
+ >f : (n: any) => any
  >1 : 1
 
- === types.d.ts ===
-@@= skipped -23, +23 lines =@@
+@@= skipped -14, +14 lines =@@
  === semver.js ===
  /// <reference path='./types.d.ts'/>
  exports = module.exports = C
@@ -35,11 +32,11 @@
 ->exports : typeof C
 ->C : typeof C
 +>exports = module.exports = C : { (): void; f: (n: any) => any; }
-+>exports : any
++>exports : { (): void; f: (n: any) => any; }
 +>module.exports = C : { (): void; f: (n: any) => any; }
-+>module.exports : any
-+>module : any
-+>exports : any
++>module.exports : { (): void; f: (n: any) => any; }
++>module : { exports: { (): void; f: (n: any) => any; }; }
++>exports : { (): void; f: (n: any) => any; }
 +>C : { (): void; f: (n: any) => any; }
 
  C.f = n => n + 1

@@ -360,7 +360,7 @@ func (n *Node) Expression() *Node {
 		return n.AsThrowStatement().Expression
 	case KindExternalModuleReference:
 		return n.AsExternalModuleReference().Expression
-	case KindExportAssignment, KindJSExportAssignment:
+	case KindExportAssignment:
 		return n.AsExportAssignment().Expression
 	case KindDecorator:
 		return n.AsDecorator().Expression
@@ -449,7 +449,7 @@ func (m *MutableNode) SetExpression(expr *Node) {
 		n.AsThrowStatement().Expression = expr
 	case KindExternalModuleReference:
 		n.AsExternalModuleReference().Expression = expr
-	case KindExportAssignment, KindJSExportAssignment:
+	case KindExportAssignment:
 		n.AsExportAssignment().Expression = expr
 	case KindDecorator:
 		n.AsDecorator().Expression = expr
@@ -662,10 +662,8 @@ func (n *Node) Type() *Node {
 		return n.AsJSDocNonNullableType().Type
 	case KindJSDocOptionalType:
 		return n.AsJSDocOptionalType().Type
-	case KindExportAssignment, KindJSExportAssignment:
+	case KindExportAssignment:
 		return n.AsExportAssignment().Type
-	case KindCommonJSExport:
-		return n.AsCommonJSExport().Type
 	case KindBinaryExpression:
 		return n.AsBinaryExpression().Type
 	default:
@@ -725,10 +723,8 @@ func (m *MutableNode) SetType(t *Node) {
 		n.AsJSDocNonNullableType().Type = t
 	case KindJSDocOptionalType:
 		n.AsJSDocOptionalType().Type = t
-	case KindExportAssignment, KindJSExportAssignment:
+	case KindExportAssignment:
 		n.AsExportAssignment().Type = t
-	case KindCommonJSExport:
-		n.AsCommonJSExport().Type = t
 	case KindBinaryExpression:
 		n.AsBinaryExpression().Type = t
 	default:
@@ -762,8 +758,6 @@ func (n *Node) Initializer() *Node {
 		return n.AsForInOrOfStatement().Initializer
 	case KindJsxAttribute:
 		return n.AsJsxAttribute().Initializer
-	case KindCommonJSExport:
-		return n.AsCommonJSExport().Initializer
 	}
 	panic("Unhandled case in Node.Initializer")
 }
@@ -791,8 +785,6 @@ func (m *MutableNode) SetInitializer(initializer *Node) {
 		n.AsForInOrOfStatement().Initializer = initializer
 	case KindJsxAttribute:
 		n.AsJsxAttribute().Initializer = initializer
-	case KindCommonJSExport:
-		n.AsCommonJSExport().Initializer = initializer
 	default:
 		panic("Unhandled case in mutableNode.SetInitializer")
 	}
@@ -1905,7 +1897,7 @@ func (node *ExportAssignment) computeSubtreeFacts() SubtreeFacts {
 }
 
 func IsAnyExportAssignment(node *Node) bool {
-	return node.Kind == KindExportAssignment || node.Kind == KindJSExportAssignment
+	return node.Kind == KindExportAssignment
 }
 
 func (node *ExportDeclaration) computeSubtreeFacts() SubtreeFacts {
@@ -2845,7 +2837,7 @@ func (node *SourceFile) computeDeclarationMap() map[string][]*Node {
 				break
 			}
 			fallthrough
-		case KindVariableDeclaration, KindBindingElement, KindCommonJSExport:
+		case KindVariableDeclaration, KindBindingElement:
 			name := node.Name()
 			if name != nil {
 				if IsBindingPattern(name) {
@@ -2896,7 +2888,7 @@ func (node *SourceFile) computeDeclarationMap() map[string][]*Node {
 			}
 		case KindBinaryExpression:
 			switch GetAssignmentDeclarationKind(node) {
-			case JSDeclarationKindThisProperty, JSDeclarationKindProperty:
+			case JSDeclarationKindExportsProperty, JSDeclarationKindThisProperty, JSDeclarationKindProperty:
 				addDeclaration(node)
 			}
 			node.ForEachChild(visit)

@@ -2,22 +2,22 @@
 
 === b.js ===
 const a = require("./a");
->a : { a: number; b: string; }
->require("./a") : { a: number; b: string; }
+>a : typeof a
+>require("./a") : typeof a
 >require : any
 >"./a" : "./a"
 
 const c1 = a.a;
->c1 : number
->a.a : number
->a : { a: number; b: string; }
->a : number
+>c1 : any
+>a.a : any
+>a : typeof a
+>a : any
 
 const c2 = a.b;
->c2 : string
->a.b : string
->a : { a: number; b: string; }
->b : string
+>c2 : any
+>a.b : any
+>a : typeof a
+>b : any
 
 /** @type {a.Foo} */
 let v1 = { x: "test" };
@@ -36,9 +36,9 @@ export const x = 1; // Causes error
 
 module.exports = { a: 1, b: "hello" };
 >module.exports = { a: 1, b: "hello" } : { a: number; b: string; }
->module.exports : { a: number; b: string; }
->module : { exports: { a: number; b: string; }; }
->exports : { a: number; b: string; }
+>module.exports : any
+>module : any
+>exports : any
 >{ a: 1, b: "hello" } : { a: number; b: string; }
 >a : number
 >1 : 1

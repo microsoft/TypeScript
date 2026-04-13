@@ -103,8 +103,7 @@ export declare class Foo {
 import ns = require("./cls");
 export = ns;
 //// [bin.d.ts]
-import * as ns from "./cls";
-export = ns;
+export {};
 //// [globalNs.d.ts]
 export * from "./cls";
 export as namespace GLO;

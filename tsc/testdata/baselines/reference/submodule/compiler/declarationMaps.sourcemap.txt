@@ -283,20 +283,14 @@ sourceFile:declarationMaps.ts
 2 >Emitted(14, 3) Source(16, 3) + SourceIndex(0)
 ---
 >>>export = m2;
-1->
-2 >^^^^^^^^^
-3 >         ^^
-4 >           ^
-5 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->^^^^^^^^^
+2 >         ^^
+3 >           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-  >
-2 >export = 
-3 >         m2
-4 >           ;
-1->Emitted(15, 1) Source(18, 1) + SourceIndex(0)
-2 >Emitted(15, 10) Source(18, 10) + SourceIndex(0)
-3 >Emitted(15, 12) Source(18, 12) + SourceIndex(0)
-4 >Emitted(15, 13) Source(18, 13) + SourceIndex(0)
+  >export = 
+2 >         m2
+1->Emitted(15, 10) Source(18, 10) + SourceIndex(0)
+2 >Emitted(15, 12) Source(18, 12) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=declarationMaps.d.ts.map

@@ -201,9 +201,7 @@ func (tx *DeclarationTransformer) visit(node *ast.Node) *ast.Node {
 		ast.KindImportDeclaration,
 		ast.KindJSImportDeclaration,
 		ast.KindExportDeclaration,
-		ast.KindJSExportAssignment,
-		ast.KindExportAssignment,
-		ast.KindCommonJSExport:
+		ast.KindExportAssignment:
 		return tx.visitDeclarationStatements(node)
 	// statements we elide
 	case ast.KindBreakStatement,
@@ -227,7 +225,7 @@ func (tx *DeclarationTransformer) visit(node *ast.Node) *ast.Node {
 		ast.KindMissingDeclaration:
 		return nil
 	case ast.KindExpressionStatement:
-		return tx.visitExpressionStatement(node.AsExpressionStatement())
+		return tx.visitExpressionStatement(node)
 	// parts of things, things we just visit children of
 	default:
 		return tx.visitDeclarationSubtree(node)
@@ -1018,44 +1016,8 @@ func (tx *DeclarationTransformer) visitDeclarationStatements(input *ast.Node) *a
 			tx.rewriteModuleSpecifier(input, input.ModuleSpecifier()),
 			tx.tryGetResolutionModeOverride(input.AsExportDeclaration().Attributes),
 		)
-	case ast.KindCommonJSExport:
-		if ast.IsSourceFile(input.Parent) {
-			return tx.transformCommonJSExport(input, input.Name())
-		}
-		return nil
-	case ast.KindExportAssignment, ast.KindJSExportAssignment:
-		if ast.IsSourceFile(input.Parent) {
-			tx.resultHasExternalModuleIndicator = true
-		}
-		tx.resultHasScopeMarker = true
-		if input.Expression().Kind == ast.KindIdentifier {
-			return input
-		}
-		// expression is non-identifier, create _default typed variable to reference
-		newId := tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
-		tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
-			return &SymbolAccessibilityDiagnostic{
-				diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
-				errorNode:         input,
-			}
-		}
-		tx.tracker.PushErrorFallbackNode(input)
-		type_ := tx.ensureType(input, false)
-		varDecl := tx.Factory().NewVariableDeclaration(newId, nil, type_, nil)
-		tx.tracker.PopErrorFallbackNode()
-		var modList *ast.ModifierList
-		if tx.needsDeclare {
-			modList = tx.Factory().NewModifierList([]*ast.Node{tx.Factory().NewModifier(ast.KindDeclareKeyword)})
-		} else {
-			modList = tx.Factory().NewModifierList([]*ast.Node{})
-		}
-		statement := tx.Factory().NewVariableStatement(modList, tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst))
-
-		assignment := tx.Factory().UpdateExportAssignment(input.AsExportAssignment(), input.Modifiers(), input.AsExportAssignment().IsExportEquals, input.Type(), newId)
-		// Remove comments from the export declaration and copy them onto the synthetic _default declaration
-		tx.preserveJsDoc(statement, input)
-		tx.removeAllComments(assignment)
-		return tx.Factory().NewSyntaxList([]*ast.Node{statement, assignment})
+	case ast.KindExportAssignment:
+		return tx.transformExportAssignment(input, input, input.Expression(), input.AsExportAssignment().IsExportEquals)
 	default:
 		id := ast.GetNodeId(tx.EmitContext().MostOriginal(input))
 		if tx.lateStatementReplacementMap[id] == nil {
@@ -1064,6 +1026,41 @@ func (tx *DeclarationTransformer) visitDeclarationStatements(input *ast.Node) *a
 		}
 		return input
 	}
+}
+
+func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, assignment *ast.Node, expression *ast.Node, isExportEquals bool) *ast.Node {
+	if ast.IsSourceFile(input.Parent) {
+		tx.resultHasExternalModuleIndicator = true
+	}
+	tx.resultHasScopeMarker = true
+	if ast.IsIdentifier(expression) {
+		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, expression)
+		tx.preserveJsDoc(exportAssignment, input)
+		return exportAssignment
+	}
+	// expression is non-identifier, create _default typed variable to reference
+	newId := tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+		return &SymbolAccessibilityDiagnostic{
+			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
+			errorNode:         input,
+		}
+	}
+	tx.tracker.PushErrorFallbackNode(assignment)
+	type_ := tx.ensureType(assignment, false)
+	varDecl := tx.Factory().NewVariableDeclaration(newId, nil, type_, nil)
+	tx.tracker.PopErrorFallbackNode()
+	var modList *ast.ModifierList
+	if tx.needsDeclare {
+		modList = tx.Factory().NewModifierList([]*ast.Node{tx.Factory().NewModifier(ast.KindDeclareKeyword)})
+	} else {
+		modList = tx.Factory().NewModifierList([]*ast.Node{})
+	}
+	statement := tx.Factory().NewVariableStatement(modList, tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst))
+	exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+	// Remove comments from the export declaration and copy them onto the synthetic _default declaration
+	tx.preserveJsDoc(statement, input)
+	return tx.Factory().NewSyntaxList([]*ast.Node{statement, exportAssignment})
 }
 
 func (tx *DeclarationTransformer) transformCommonJSExport(input *ast.Node, name *ast.Node) *ast.Node {
@@ -1999,17 +1996,23 @@ func (tx *DeclarationTransformer) transformJSDocOptionalType(input *ast.JSDocOpt
 	return replacement
 }
 
-func (tx *DeclarationTransformer) visitExpressionStatement(node *ast.ExpressionStatement) *ast.Node {
-	expression := node.Expression
-	if expression == nil {
-		return nil
-	}
-	switch ast.GetAssignmentDeclarationKind(expression) {
-	case ast.JSDeclarationKindProperty:
-		return tx.transformExpandoAssignment(expression.AsBinaryExpression())
-	case ast.JSDeclarationKindObjectDefinePropertyExports:
-		if ast.IsSourceFile(node.Parent) {
-			return tx.transformCommonJSExport(expression, expression.Arguments()[1])
+func (tx *DeclarationTransformer) visitExpressionStatement(node *ast.Node) *ast.Node {
+	if expression := node.Expression(); expression != nil {
+		switch ast.GetAssignmentDeclarationKind(expression) {
+		case ast.JSDeclarationKindModuleExports:
+			if ast.IsSourceFile(node.Parent) && node.Parent.AsSourceFile().CommonJSModuleIndicator != nil {
+				return tx.transformExportAssignment(node, expression, expression.AsBinaryExpression().Right, true /*isExportEquals*/)
+			}
+		case ast.JSDeclarationKindExportsProperty:
+			if ast.IsSourceFile(node.Parent) && node.Parent.AsSourceFile().CommonJSModuleIndicator != nil {
+				return tx.transformCommonJSExport(expression, ast.GetElementOrPropertyAccessName(expression.AsBinaryExpression().Left))
+			}
+		case ast.JSDeclarationKindProperty:
+			return tx.transformExpandoAssignment(expression.AsBinaryExpression())
+		case ast.JSDeclarationKindObjectDefinePropertyExports:
+			if ast.IsSourceFile(node.Parent) && node.Parent.AsSourceFile().CommonJSModuleIndicator != nil {
+				return tx.transformCommonJSExport(expression, expression.Arguments()[1])
+			}
 		}
 	}
 	return nil

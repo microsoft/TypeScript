@@ -12,7 +12,7 @@ declare var module: any, exports: any;
 === a-ext.js ===
 exports.A = function () {
 >exports.A : Symbol(A, Decl(a-ext.js, 0, 0))
->exports : Symbol("./a-ext", Decl(a-ext.js, 0, 0))
+>exports : Symbol(exports, Decl(a-ext.js, 0, 0))
 >A : Symbol(A, Decl(a-ext.js, 0, 0))
 
     this.x = 1;
@@ -33,7 +33,7 @@ function a(p) { p.x; }
 === b-ext.js ===
 exports.B = class {
 >exports.B : Symbol(B, Decl(b-ext.js, 0, 0))
->exports : Symbol("./b-ext", Decl(b-ext.js, 0, 0))
+>exports : Symbol(exports, Decl(b-ext.js, 0, 0))
 >B : Symbol(B, Decl(b-ext.js, 0, 0))
 
     constructor() {

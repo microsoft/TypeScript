@@ -700,12 +700,6 @@ export interface ExportAssignment extends DeclarationBase, StatementBase, Modifi
     readonly type: TypeNode;
     readonly expression: Expression;
 }
-export interface CommonJSExport extends StatementBase, DeclarationBase, ModifiersBase {
-    readonly kind: SyntaxKind.CommonJSExport;
-    readonly name: Identifier;
-    readonly type: TypeNode;
-    readonly initializer: Expression;
-}
 export interface NamespaceExportDeclaration extends DeclarationBase, StatementBase, ModifiersBase {
     readonly kind: SyntaxKind.NamespaceExportDeclaration;
     readonly name: Identifier;

@@ -65,7 +65,7 @@ export declare class C {
     set x(v: P);
 }
 declare const _default: P;
-export default /** @type {P} */ _default;
+export default _default;
 /**
  *
  * @param {P} x

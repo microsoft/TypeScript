@@ -60,5 +60,3 @@ declare const a: {};
 export = a;
 //// [file.d.ts]
 import "fs";
-declare const a: {};
-export = a;

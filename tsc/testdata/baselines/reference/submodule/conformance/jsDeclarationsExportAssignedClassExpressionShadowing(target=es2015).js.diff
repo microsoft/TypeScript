@@ -5,23 +5,20 @@
 
  //// [index.d.ts]
 -export = Q;
--declare class Q {
+ declare class Q {
 -    x: A;
 -}
 -declare namespace Q {
 -    export { Q_1 as Another };
 -}
- declare class A {
-     member: Q;
- }
+-declare class A {
+-    member: Q;
+-}
 -declare class Q_1 {
-+declare class Q {
      x: number;
  }
 +declare const _default: {
-+    new (): {
-+        x: A;
-+    };
++    new (): import(".");
 +};
 +export = _default;
 +export declare var Another: typeof Q;

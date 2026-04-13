@@ -4,13 +4,15 @@
 var npmlog = require('./npmlog')
 >npmlog : Symbol(npmlog, Decl(use.js, 0, 3))
 >require : Symbol(require)
->'./npmlog' : Symbol(npmlog, Decl(npmlog.js, 0, 0))
+>'./npmlog' : Symbol("./npmlog", Decl(npmlog.js, 0, 0))
 
 npmlog.x
 >npmlog : Symbol(npmlog, Decl(use.js, 0, 3))
 
 npmlog.on
+>npmlog.on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
 >npmlog : Symbol(npmlog, Decl(use.js, 0, 3))
+>on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
 
 === npmlog.js ===
 class EE {
@@ -34,19 +36,19 @@ npmlog.on('hi') // both references should see EE.on
 >on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
 
 module.exports.on('hi') // here too
+>module.exports.on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
 >module.exports : Symbol(exports, Decl(npmlog.js, 0, 0))
 >module : Symbol(module, Decl(npmlog.js, 0, 0))
 >exports : Symbol(exports, Decl(npmlog.js, 0, 0))
+>on : Symbol(EE.on, Decl(npmlog.js, 0, 10))
 
 npmlog.x = 1
 >npmlog : Symbol(npmlog, Decl(npmlog.js, 4, 3))
 
 module.exports.y = 2
->module.exports.y : Symbol(y, Decl(npmlog.js, 9, 12))
 >module.exports : Symbol(exports, Decl(npmlog.js, 0, 0))
 >module : Symbol(module, Decl(npmlog.js, 0, 0))
 >exports : Symbol(exports, Decl(npmlog.js, 0, 0))
->y : Symbol(y, Decl(npmlog.js, 9, 12))
 
 npmlog.y
 >npmlog : Symbol(npmlog, Decl(npmlog.js, 4, 3))

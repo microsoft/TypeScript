@@ -98,9 +98,9 @@ class Thing {
 /** @type {DoneStatus} */
 exports.x = {
 >exports.x = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->exports.x : { status: "done"; m(n: number): void; }
+>exports.x : DoneStatus
 >exports : typeof import("./test")
->x : { status: "done"; m(n: number): void; }
+>x : DoneStatus
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: "done",
@@ -112,18 +112,18 @@ exports.x = {
 >n : number
 }
 exports.x
->exports.x : { status: "done"; m(n: number): void; }
+>exports.x : DoneStatus
 >exports : typeof import("./test")
->x : { status: "done"; m(n: number): void; }
+>x : DoneStatus
 
 /** @type {DoneStatus} */
 module.exports.y = {
 >module.exports.y = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->module.exports.y : { status: "done"; m(n: number): void; }
+>module.exports.y : DoneStatus
 >module.exports : typeof import("./test")
 >module : { exports: typeof import("./test"); }
 >exports : typeof import("./test")
->y : { status: "done"; m(n: number): void; }
+>y : DoneStatus
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: "done",
@@ -135,11 +135,11 @@ module.exports.y = {
 >n : number
 }
 module.exports.y
->module.exports.y : { status: "done"; m(n: number): void; }
+>module.exports.y : DoneStatus
 >module.exports : typeof import("./test")
 >module : { exports: typeof import("./test"); }
 >exports : typeof import("./test")
->y : { status: "done"; m(n: number): void; }
+>y : DoneStatus
 
 // prototype-property assignment
 /** @type {DoneStatus} */

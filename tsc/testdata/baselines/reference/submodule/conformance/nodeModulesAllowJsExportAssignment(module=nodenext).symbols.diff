@@ -13,11 +13,3 @@
  >a : Symbol(a, Decl(file.js, 1, 5))
 
  === index.js ===
-@@= skipped -20, +20 lines =@@
- >a : Symbol(a, Decl(file.js, 2, 5))
-
- module.exports = a;
-+>module.exports : Symbol(exports, Decl(file.js, 0, 0))
-+>module : Symbol(module, Decl(file.js, 0, 0))
-+>exports : Symbol(exports, Decl(file.js, 0, 0))
- >a : Symbol(a, Decl(file.js, 2, 5))

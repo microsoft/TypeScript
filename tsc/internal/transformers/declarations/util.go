@@ -66,7 +66,6 @@ func isDeclarationAndNotVisible(emitContext *printer.EmitContext, resolver print
 		ast.KindImportDeclaration,
 		ast.KindJSImportDeclaration,
 		ast.KindExportDeclaration,
-		ast.KindJSExportAssignment,
 		ast.KindExportAssignment:
 		return false
 	case ast.KindClassStaticBlockDeclaration:

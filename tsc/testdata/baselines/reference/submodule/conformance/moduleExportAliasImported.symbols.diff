@@ -7,7 +7,7 @@
 ->exports.version : Symbol(version, Decl(bug28014.js, 0, 0))
 ->exports : Symbol(version, Decl(bug28014.js, 0, 0))
 ->version : Symbol(version, Decl(bug28014.js, 0, 0))
-+>exports : Symbol("./bug28014", Decl(bug28014.js, 0, 0))
++>exports : Symbol(exports, Decl(bug28014.js, 0, 0))
 
  function alias() { }
  >alias : Symbol(alias, Decl(bug28014.js, 0, 19))

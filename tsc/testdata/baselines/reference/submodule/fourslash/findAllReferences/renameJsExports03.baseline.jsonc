@@ -5,6 +5,10 @@
 // }
 // module.exports = [|A|];
 
+// === /b.js ===
+// const [|A|] = require("./a");
+// new [|A|];
+
 
 
 // === findAllReferences ===
@@ -13,6 +17,10 @@
 //     /*FIND ALL REFS*/[|constructor|]() { }
 // }
 // module.exports = A;
+
+// === /b.js ===
+// const A = require("./a");
+// new [|A|];
 
 
 

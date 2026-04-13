@@ -2,7 +2,7 @@
 
 === async.js ===
 exports.default = { m: 1, a: 1 }
->exports : Symbol("./async", Decl(async.js, 0, 0))
+>exports : Symbol(exports, Decl(async.js, 0, 0))
 >m : Symbol(m, Decl(async.js, 0, 19))
 >a : Symbol(a, Decl(async.js, 0, 25))
 
@@ -10,5 +10,5 @@ module.exports = exports['default'];
 >module.exports : Symbol(exports, Decl(async.js, 0, 0))
 >module : Symbol(module, Decl(async.js, 0, 0))
 >exports : Symbol(exports, Decl(async.js, 0, 0))
->exports : Symbol("./async", Decl(async.js, 0, 0))
+>exports : Symbol(exports, Decl(async.js, 0, 0))
 

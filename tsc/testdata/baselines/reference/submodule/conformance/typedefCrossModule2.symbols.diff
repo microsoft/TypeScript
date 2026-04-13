@@ -12,20 +12,14 @@
 
  === mod1.js ===
  // error
-
- /** @typedef {number} Foo */
- class Foo { } // should error
-->Foo : Symbol(Foo, Decl(mod1.js, 0, 0))
-+>Foo : Symbol(Foo, Decl(mod1.js, 2, 4), Decl(mod1.js, 0, 0))
+@@= skipped -13, +13 lines =@@
 
  /** @typedef {number} Bar */
  exports.Bar = class { }
 ->exports.Bar : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
 ->exports : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
 ->Bar : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
-+>exports.Bar : Symbol(Bar, Decl(mod1.js, 5, 4), Decl(mod1.js, 3, 13))
-+>exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
-+>Bar : Symbol(Bar, Decl(mod1.js, 5, 4), Decl(mod1.js, 3, 13))
++>exports : Symbol(exports, Decl(mod1.js, 0, 0))
 
  /** @typedef {number} Baz */
  module.exports = {
@@ -38,21 +32,14 @@
 
      Baz: class { }
  >Baz : Symbol(Baz, Decl(mod1.js, 9, 18))
-@@= skipped -31, +31 lines =@@
-
- /** @typedef {number} Qux */
- var Qux = 2;
-->Qux : Symbol(Qux, Decl(mod1.js, 16, 3), Decl(mod1.js, 15, 4))
-+>Qux : Symbol(Qux, Decl(mod1.js, 15, 4), Decl(mod1.js, 16, 3))
+@@= skipped -22, +20 lines =@@
 
  /** @typedef {number} Quid */
  exports.Quid = 2;
 ->exports.Quid : Symbol(Quid, Decl(mod1.js, 16, 12), Decl(mod1.js, 18, 4))
 ->exports : Symbol(Quid, Decl(mod1.js, 16, 12), Decl(mod1.js, 18, 4))
 ->Quid : Symbol(Quid, Decl(mod1.js, 16, 12), Decl(mod1.js, 18, 4))
-+>exports.Quid : Symbol(Quid, Decl(mod1.js, 18, 4), Decl(mod1.js, 16, 12))
-+>exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
-+>Quid : Symbol(Quid, Decl(mod1.js, 18, 4), Decl(mod1.js, 16, 12))
++>exports : Symbol(exports, Decl(mod1.js, 0, 0))
 
  /** @typedef {number} Quack */
  module.exports = {

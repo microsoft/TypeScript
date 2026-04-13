@@ -17,9 +17,9 @@ import * as ns from "./cls";
 
 module.exports = ns; // We refuse to bind cjs module exports assignments in the same file we find an import in
 >module.exports = ns : typeof ns
->module.exports : typeof ns
->module : { exports: typeof ns; }
->exports : typeof ns
+>module.exports : any
+>module : any
+>exports : any
 >ns : typeof ns
 
 === globalNs.js ===

@@ -1,17 +1,11 @@
 --- old.findAllRefsModuleDotExports.baseline.jsonc
 +++ new.findAllRefsModuleDotExports.baseline.jsonc
-@@= skipped -8, +8 lines =@@
- // const b = require("/*FIND ALL REFS*/[|./b|]");
-
- // === /b.js ===
--// [|module|].exports = 0;
-+// [|module.exports = 0|];
-
-
+@@= skipped -14, +14 lines =@@
 
  // === findAllReferences ===
--// === /a.js ===
+ // === /a.js ===
 -// const b = require("[|./b|]");
--
++// const [|b|] = require("./b");
+
  // === /b.js ===
  // /*FIND ALL REFS*/[|module|].exports = 0;

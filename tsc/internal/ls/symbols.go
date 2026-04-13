@@ -73,7 +73,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 	var symbols []*lsproto.DocumentSymbol
 	expandoTargets := collections.Set[string]{}
 	addSymbolForNode := func(node *ast.Node, name *ast.Node, children []*lsproto.DocumentSymbol) {
-		if node.Flags&ast.NodeFlagsReparsed == 0 || node.Kind == ast.KindJSExportAssignment {
+		if node.Flags&ast.NodeFlagsReparsed == 0 {
 			symbol := l.newDocumentSymbol(node, name, children)
 			if symbol != nil {
 				symbols = append(symbols, symbol)
@@ -241,7 +241,7 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
 					node.ForEachChild(visit)
 				}
 			}
-		case ast.KindExportAssignment, ast.KindJSExportAssignment:
+		case ast.KindExportAssignment:
 			if node.AsExportAssignment().IsExportEquals {
 				addSymbolForNode(node, nil /*name*/, getSymbolsForNode(node.Expression()))
 			} else {

@@ -18,5 +18,3 @@
  //// [file.d.ts]
 -export {};
 +import "fs";
-+declare const a: {};
-+export = a;

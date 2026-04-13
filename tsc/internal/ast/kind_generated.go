@@ -382,8 +382,6 @@ const (
 	KindSyntaxList
 	// Reparsed JS nodes
 	KindJSTypeAliasDeclaration
-	KindJSExportAssignment
-	KindCommonJSExport
 	KindJSImportDeclaration
 	// Transformation nodes
 	KindNotEmittedStatement

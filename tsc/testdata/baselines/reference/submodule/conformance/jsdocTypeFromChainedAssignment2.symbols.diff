@@ -5,11 +5,11 @@
  exports.f = exports.g = function fg(n) {
  >exports.f : Symbol(f, Decl(mod.js, 0, 0))
 ->exports : Symbol(f, Decl(mod.js, 0, 0))
-+>exports : Symbol("./mod", Decl(mod.js, 0, 0))
++>exports : Symbol(exports, Decl(mod.js, 0, 0))
  >f : Symbol(f, Decl(mod.js, 0, 0))
  >exports.g : Symbol(g, Decl(mod.js, 1, 11))
 ->exports : Symbol(g, Decl(mod.js, 1, 11))
-+>exports : Symbol("./mod", Decl(mod.js, 0, 0))
++>exports : Symbol(exports, Decl(mod.js, 0, 0))
  >g : Symbol(g, Decl(mod.js, 1, 11))
  >fg : Symbol(fg, Decl(mod.js, 1, 23))
  >n : Symbol(n, Decl(mod.js, 1, 36))

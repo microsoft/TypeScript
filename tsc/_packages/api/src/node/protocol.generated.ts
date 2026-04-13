@@ -50,8 +50,6 @@ export const childProperties: Readonly<Partial<Record<SyntaxKind, readonly (stri
     [SyntaxKind.NamespaceImport]: ["name"],
     [SyntaxKind.NamedImports]: ["elements"],
     [SyntaxKind.ExportAssignment]: ["modifiers", "type", "expression"],
-    [SyntaxKind.JSExportAssignment]: ["modifiers", "type", "expression"],
-    [SyntaxKind.CommonJSExport]: ["modifiers", "name", "type", "initializer"],
     [SyntaxKind.NamespaceExportDeclaration]: ["modifiers", "name"],
     [SyntaxKind.NamespaceExport]: ["name"],
     [SyntaxKind.NamedExports]: ["elements"],

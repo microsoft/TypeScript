@@ -49,58 +49,30 @@
  >x : DoneStatus
 
 
-@@= skipped -69, +69 lines =@@
- /** @type {DoneStatus} */
- exports.x = {
- >exports.x = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
-->exports.x : DoneStatus
-+>exports.x : { status: "done"; m(n: number): void; }
- >exports : typeof import("./test")
-->x : DoneStatus
-+>x : { status: "done"; m(n: number): void; }
- >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
-
-     status: "done",
-@@= skipped -14, +14 lines =@@
- >n : number
- }
- exports.x
-->exports.x : DoneStatus
-+>exports.x : { status: "done"; m(n: number): void; }
- >exports : typeof import("./test")
-->x : DoneStatus
-+>x : { status: "done"; m(n: number): void; }
-
- /** @type {DoneStatus} */
+@@= skipped -91, +91 lines =@@
  module.exports.y = {
  >module.exports.y = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
-->module.exports.y : DoneStatus
+ >module.exports.y : DoneStatus
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-->y : DoneStatus
-+>module.exports.y : { status: "done"; m(n: number): void; }
 +>module.exports : typeof import("./test")
 +>module : { exports: typeof import("./test"); }
 +>exports : typeof import("./test")
-+>y : { status: "done"; m(n: number): void; }
+ >y : DoneStatus
  >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 
-     status: "done",
-@@= skipped -23, +23 lines =@@
- >n : number
+@@= skipped -16, +16 lines =@@
  }
  module.exports.y
-->module.exports.y : DoneStatus
+ >module.exports.y : DoneStatus
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-->y : DoneStatus
-+>module.exports.y : { status: "done"; m(n: number): void; }
 +>module.exports : typeof import("./test")
 +>module : { exports: typeof import("./test"); }
 +>exports : typeof import("./test")
-+>y : { status: "done"; m(n: number): void; }
+ >y : DoneStatus
 
  // prototype-property assignment
  /** @type {DoneStatus} */
@@ -116,7 +88,7 @@
  >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
 
      status: 'done',
-@@= skipped -26, +26 lines =@@
+@@= skipped -25, +25 lines =@@
  >n : number
  }
  Thing.prototype.x

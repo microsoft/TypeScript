@@ -45,18 +45,12 @@ func (ch *PseudoChecker) GetTypeOfDeclaration(node *ast.Node) *PseudoType {
 		return ch.typeFromProperty(node)
 	case ast.KindBindingElement:
 		return NewPseudoTypeNoResult(node)
-	case ast.KindExportAssignment, ast.KindJSExportAssignment:
+	case ast.KindExportAssignment:
 		return ch.typeFromExpression(node.AsExportAssignment().Expression)
 	case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression, ast.KindBinaryExpression:
 		return ch.typeFromExpandoProperty(node)
 	case ast.KindPropertyAssignment, ast.KindShorthandPropertyAssignment:
 		return ch.typeFromPropertyAssignment(node)
-	case ast.KindCommonJSExport:
-		t := node.AsCommonJSExport().Type
-		if t != nil {
-			return NewPseudoTypeDirect(t)
-		}
-		return ch.typeFromExpression(node.AsCommonJSExport().Initializer)
 	case ast.KindCallExpression:
 		switch ast.GetAssignmentDeclarationKind(node) {
 		// TODO: How much of the checker's getTypeFromPropertyDescriptor is worth trying to emulate over ASTs?

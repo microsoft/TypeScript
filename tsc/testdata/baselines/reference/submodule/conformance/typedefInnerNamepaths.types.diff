@@ -5,6 +5,6 @@
      /** @param {C~A} o */
      constructor(o) {
 ->o : any
-+>o : object
++>o : C
      }
  }

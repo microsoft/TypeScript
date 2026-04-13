@@ -17,6 +17,10 @@ import pc from "picocolors";
 import tmp from "tmp";
 import which from "which";
 
+if (process.platform === "win32") {
+    process.chdir(fs.realpathSync.native(process.cwd()));
+}
+
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
 

@@ -6,13 +6,18 @@
 -
 -
 -==== assignmentToVoidZero1.js (2 errors) ====
--    // #38552
--    exports.y = exports.x = void 0;
++assignmentToVoidZero1.js(2,13): error TS6425: Nested CommonJS export constructs cannot be serialized for declaration emit.
++
++
++==== assignmentToVoidZero1.js (1 errors) ====
+     // #38552
+     exports.y = exports.x = void 0;
 -    ~~~~~~~~~
 -!!! error TS2322: Type 'undefined' is not assignable to type '2'.
 -                ~~~~~~~~~
 -!!! error TS2322: Type 'undefined' is not assignable to type '1'.
--    exports.x = 1;
--    exports.y = 2;
--    
-+<no content>
++                ~~~~~~~~~~~~~~~~~~
++!!! error TS6425: Nested CommonJS export constructs cannot be serialized for declaration emit.
+     exports.x = 1;
+     exports.y = 2;
+     

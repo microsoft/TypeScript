@@ -4,9 +4,9 @@
 var middlewarify = module.exports = {};
 >middlewarify : {}
 >module.exports = {} : {}
->module.exports : error
->module : any
->exports : any
+>module.exports : {}
+>module : { exports: {}; }
+>exports : {}
 >{} : {}
 
 /** @enum */

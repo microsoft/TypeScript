@@ -1,3 +1,8 @@
 // === findAllReferences ===
 // === /bar.js ===
 // const { /*FIND ALL REFS*/[|foo|]: bar } = require('./foo');
+
+// === /foo.js ===
+// module.exports = {
+//     [|foo|]: '1'
+// };

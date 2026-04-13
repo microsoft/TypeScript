@@ -6,8 +6,8 @@
  var npmlog = require('./npmlog')
 ->npmlog : { on(s: string): void; x: number; y: 2; }
 ->require('./npmlog') : { on(s: string): void; x: number; y: 2; }
-+>npmlog : typeof npmlog
-+>require('./npmlog') : typeof npmlog
++>npmlog : EE
++>require('./npmlog') : EE
  >require : any
  >'./npmlog' : "./npmlog"
 
@@ -16,19 +16,16 @@
 ->npmlog : { on(s: string): void; x: number; y: 2; }
 ->x : number
 +>npmlog.x : any
-+>npmlog : typeof npmlog
++>npmlog : EE
 +>x : any
 
  npmlog.on
-->npmlog.on : (s: string) => void
+ >npmlog.on : (s: string) => void
 ->npmlog : { on(s: string): void; x: number; y: 2; }
-->on : (s: string) => void
-+>npmlog.on : any
-+>npmlog : typeof npmlog
-+>on : any
++>npmlog : EE
+ >on : (s: string) => void
 
  === npmlog.js ===
- class EE {
 @@= skipped -25, +25 lines =@@
  >s : string
  }
@@ -40,9 +37,9 @@
 ->exports : { on(s: string): void; x: number; y: 2; }
 +>npmlog : EE
 +>module.exports = new EE() : EE
-+>module.exports : typeof import("./npmlog")
-+>module : { exports: typeof import("./npmlog"); }
-+>exports : typeof import("./npmlog")
++>module.exports : EE
++>module : { exports: EE; }
++>exports : EE
  >new EE() : EE
  >EE : typeof EE
 
@@ -55,18 +52,15 @@
  >'hi' : "hi"
 
  module.exports.on('hi') // here too
-->module.exports.on('hi') : void
-->module.exports.on : (s: string) => void
+ >module.exports.on('hi') : void
+ >module.exports.on : (s: string) => void
 ->module.exports : { on(s: string): void; x: number; y: 2; }
 ->module : { exports: { on(s: string): void; x: number; y: 2; }; }
 ->exports : { on(s: string): void; x: number; y: 2; }
-->on : (s: string) => void
-+>module.exports.on('hi') : any
-+>module.exports.on : any
-+>module.exports : typeof import("./npmlog")
-+>module : { exports: typeof import("./npmlog"); }
-+>exports : typeof import("./npmlog")
-+>on : any
++>module.exports : EE
++>module : { exports: EE; }
++>exports : EE
+ >on : (s: string) => void
  >'hi' : "hi"
 
  npmlog.x = 1
@@ -81,14 +75,16 @@
 
  module.exports.y = 2
  >module.exports.y = 2 : 2
- >module.exports.y : 2
+->module.exports.y : 2
 ->module.exports : { on(s: string): void; x: number; y: 2; }
 ->module : { exports: { on(s: string): void; x: number; y: 2; }; }
 ->exports : { on(s: string): void; x: number; y: 2; }
-+>module.exports : typeof import("./npmlog")
-+>module : { exports: typeof import("./npmlog"); }
-+>exports : typeof import("./npmlog")
- >y : 2
+->y : 2
++>module.exports.y : any
++>module.exports : EE
++>module : { exports: EE; }
++>exports : EE
++>y : any
  >2 : 2
 
  npmlog.y
@@ -106,7 +102,7 @@
 ->exports : { on(s: string): void; x: number; y: 2; }
 ->x : number
 +>module.exports.x : any
-+>module.exports : typeof import("./npmlog")
-+>module : { exports: typeof import("./npmlog"); }
-+>exports : typeof import("./npmlog")
++>module.exports : EE
++>module : { exports: EE; }
++>exports : EE
 +>x : any

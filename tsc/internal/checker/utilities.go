@@ -183,7 +183,7 @@ func isShorthandAmbientModule(node *ast.Node) bool {
 
 func getAliasDeclarationFromName(node *ast.Node) *ast.Node {
 	switch node.Parent.Kind {
-	case ast.KindImportClause, ast.KindImportSpecifier, ast.KindNamespaceImport, ast.KindExportSpecifier, ast.KindExportAssignment, ast.KindJSExportAssignment,
+	case ast.KindImportClause, ast.KindImportSpecifier, ast.KindNamespaceImport, ast.KindExportSpecifier, ast.KindExportAssignment,
 		ast.KindImportEqualsDeclaration, ast.KindNamespaceExport:
 		return node.Parent
 	case ast.KindQualifiedName:
@@ -1072,7 +1072,7 @@ func isInRightSideOfImportOrExportAssignment(node *ast.EntityName) bool {
 	}
 
 	return node.Parent.Kind == ast.KindImportEqualsDeclaration && node.Parent.AsImportEqualsDeclaration().ModuleReference == node ||
-		(node.Parent.Kind == ast.KindExportAssignment || node.Parent.Kind == ast.KindJSExportAssignment) && node.Parent.Expression() == node
+		node.Parent.Kind == ast.KindExportAssignment && node.Parent.Expression() == node
 }
 
 func isJsxIntrinsicTagName(tagName *ast.Node) bool {

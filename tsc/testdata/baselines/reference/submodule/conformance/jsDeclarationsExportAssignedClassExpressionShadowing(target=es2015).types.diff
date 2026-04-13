@@ -1,36 +1,14 @@
 --- old.jsDeclarationsExportAssignedClassExpressionShadowing(target=es2015).types
 +++ new.jsDeclarationsExportAssignedClassExpressionShadowing(target=es2015).types
-@@= skipped -16, +16 lines =@@
- >42 : 42
- }
- module.exports = class Q {
-->module.exports = class Q {    constructor() {        this.x = new A();    }} : typeof import(".")
-->module.exports : typeof import(".")
-->module : { exports: typeof import("."); }
-->exports : typeof import(".")
-->class Q {    constructor() {        this.x = new A();    }} : typeof import(".")
-->Q : typeof import(".")
-+>module.exports = class Q {    constructor() {        this.x = new A();    }} : typeof Q
-+>module.exports : typeof Q
-+>module : { exports: typeof Q; }
-+>exports : typeof Q
-+>class Q {    constructor() {        this.x = new A();    }} : typeof Q
-+>Q : typeof Q
-
-     constructor() {
-         this.x = new A();
-@@= skipped -19, +19 lines =@@
+@@= skipped -35, +35 lines =@@
  }
  module.exports.Another = Q;
  >module.exports.Another = Q : typeof Q
 ->module.exports.Another : typeof Q
-->module.exports : typeof import(".")
-->module : { exports: typeof import("."); }
-->exports : typeof import(".")
-->Another : typeof Q
 +>module.exports.Another : any
-+>module.exports : typeof Q
-+>module : { exports: typeof Q; }
-+>exports : typeof Q
+ >module.exports : typeof import(".")
+ >module : { exports: typeof import("."); }
+ >exports : typeof import(".")
+->Another : typeof Q
 +>Another : any
  >Q : typeof Q

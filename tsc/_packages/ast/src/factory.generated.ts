@@ -31,7 +31,6 @@ import type {
     ClassExpression,
     ClassStaticBlockDeclaration,
     ColonToken,
-    CommonJSExport,
     ComputedPropertyName,
     ConciseBody,
     ConditionalExpression,
@@ -779,10 +778,7 @@ function cloneNodeData(node: Node): any {
         case SyntaxKind.NamedImports:
             return { elements: n.elements };
         case SyntaxKind.ExportAssignment:
-        case SyntaxKind.JSExportAssignment:
             return { modifiers: n.modifiers, isExportEquals: n.isExportEquals, type: n.type, expression: n.expression };
-        case SyntaxKind.CommonJSExport:
-            return { modifiers: n.modifiers, name: n.name, type: n.type, initializer: n.initializer };
         case SyntaxKind.NamespaceExportDeclaration:
             return { modifiers: n.modifiers, name: n.name };
         case SyntaxKind.NamespaceExport:
@@ -1202,15 +1198,6 @@ const forEachChildTable: Record<number, ForEachChildFunction> = {
         visitNodes(cbNode, cbNodes, data.modifiers) ||
         visitNode(cbNode, data.type) ||
         visitNode(cbNode, data.expression),
-    [SyntaxKind.JSExportAssignment]: (data, cbNode, cbNodes) =>
-        visitNodes(cbNode, cbNodes, data.modifiers) ||
-        visitNode(cbNode, data.type) ||
-        visitNode(cbNode, data.expression),
-    [SyntaxKind.CommonJSExport]: (data, cbNode, cbNodes) =>
-        visitNodes(cbNode, cbNodes, data.modifiers) ||
-        visitNode(cbNode, data.name) ||
-        visitNode(cbNode, data.type) ||
-        visitNode(cbNode, data.initializer),
     [SyntaxKind.NamespaceExportDeclaration]: (data, cbNode, cbNodes) =>
         visitNodes(cbNode, cbNodes, data.modifiers) ||
         visitNode(cbNode, data.name),
@@ -1960,15 +1947,6 @@ export function createExportAssignment(modifiers: readonly ModifierLike[] | unde
         type,
         expression,
     }) as unknown as ExportAssignment;
-}
-
-export function createCommonJSExport(modifiers: readonly ModifierLike[] | undefined, name: Identifier, type: TypeNode, initializer: Expression): CommonJSExport {
-    return new NodeObject(SyntaxKind.CommonJSExport, {
-        modifiers: modifiers ? createNodeArray(modifiers) : undefined,
-        name,
-        type,
-        initializer,
-    }) as unknown as CommonJSExport;
 }
 
 export function createNamespaceExportDeclaration(modifiers: readonly ModifierLike[] | undefined, name: Identifier): NamespaceExportDeclaration {
@@ -3247,10 +3225,6 @@ export function updateNamedImports(node: NamedImports, elements: readonly Import
 
 export function updateExportAssignment(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, type: TypeNode, expression: Expression): ExportAssignment {
     return node.modifiers !== modifiers || node.type !== type || node.expression !== expression ? createExportAssignment(modifiers, node.isExportEquals, type, expression) : node;
-}
-
-export function updateCommonJSExport(node: CommonJSExport, modifiers: readonly ModifierLike[] | undefined, name: Identifier, type: TypeNode, initializer: Expression): CommonJSExport {
-    return node.modifiers !== modifiers || node.name !== name || node.type !== type || node.initializer !== initializer ? createCommonJSExport(modifiers, name, type, initializer) : node;
 }
 
 export function updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier): NamespaceExportDeclaration {

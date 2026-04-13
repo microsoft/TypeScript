@@ -1432,7 +1432,6 @@ func (c *Checker) createNameResolver() *binder.NameResolver {
 		Globals:                          c.globals,
 		ArgumentsSymbol:                  c.argumentsSymbol,
 		RequireSymbol:                    c.requireSymbol,
-		GetModuleSymbol:                  c.getModuleSymbol,
 		Lookup:                           c.getSymbol,
 		SymbolReferenced:                 c.symbolReferenced,
 		SetRequiresScopeChangeCache:      c.setRequiresScopeChangeCache,
@@ -1451,30 +1450,11 @@ func (c *Checker) createNameResolverForSuggestion() *binder.NameResolver {
 		Globals:                     c.globals,
 		ArgumentsSymbol:             c.argumentsSymbol,
 		RequireSymbol:               c.requireSymbol,
-		GetModuleSymbol:             c.getModuleSymbol,
 		Lookup:                      c.getSuggestionForSymbolNameLookup,
 		SymbolReferenced:            c.symbolReferenced,
 		SetRequiresScopeChangeCache: c.setRequiresScopeChangeCache,
 		GetRequiresScopeChangeCache: c.getRequiresScopeChangeCache,
 	}
-}
-
-func (c *Checker) getModuleSymbol(sourceFile *ast.Node) *ast.Symbol {
-	if cached, ok := c.moduleSymbols[sourceFile]; ok {
-		return cached
-	}
-	result := c.newSymbol(ast.SymbolFlagsModuleExports|ast.SymbolFlagsFunctionScopedVariable, "module")
-	result.Declarations = []*ast.Node{sourceFile}
-	result.ValueDeclaration = sourceFile
-	exportsSymbol := c.newSymbol(ast.SymbolFlagsModuleExports|ast.SymbolFlagsProperty, "exports")
-	exportsSymbol.Declarations = result.Declarations
-	exportsSymbol.ValueDeclaration = result.ValueDeclaration
-	exportsSymbol.Parent = result
-	members := make(ast.SymbolTable, 1)
-	members["exports"] = exportsSymbol
-	c.valueSymbolLinks.Get(result).resolvedType = c.newAnonymousType(result, members, nil, nil, nil)
-	c.moduleSymbols[sourceFile] = result
-	return result
 }
 
 func (c *Checker) symbolReferenced(symbol *ast.Symbol, meaning ast.SymbolFlags) {
@@ -5432,7 +5412,7 @@ func (c *Checker) checkExportSpecifier(node *ast.Node) {
 }
 
 func (c *Checker) checkExportAssignment(node *ast.Node) {
-	isExportEquals := ast.IsJSExportAssignment(node) || node.AsExportAssignment().IsExportEquals
+	isExportEquals := node.AsExportAssignment().IsExportEquals
 	illegalContextMessage := core.IfElse(isExportEquals,
 		diagnostics.An_export_assignment_must_be_at_the_top_level_of_a_file_or_module_declaration,
 		diagnostics.A_default_export_must_be_at_the_top_level_of_a_file_or_module_declaration)
@@ -5576,7 +5556,9 @@ func (c *Checker) checkExternalModuleExports(node *ast.Node) {
 				// so count should be either 1 (just type alias) or 2 (type alias + merged value)
 				continue
 			}
-			if exportedDeclarationsCount > 1 && !core.Every(symbol.Declarations, ast.IsCommonJSExport) {
+			if exportedDeclarationsCount > 1 && !core.Every(symbol.Declarations, func(node *ast.Node) bool {
+				return ast.GetAssignmentDeclarationKind(node) == ast.JSDeclarationKindExportsProperty
+			}) {
 				for _, declaration := range symbol.Declarations {
 					if isNotOverload(declaration) {
 						c.error(declaration, diagnostics.Cannot_redeclare_exported_variable_0, id)
@@ -6791,9 +6773,9 @@ func (c *Checker) getDeclarationSpaces(node *ast.Declaration) DeclarationSpaces 
 		return DeclarationSpacesExportType | DeclarationSpacesExportValue
 	case ast.KindSourceFile:
 		return DeclarationSpacesExportType | DeclarationSpacesExportValue | DeclarationSpacesExportNamespace
-	case ast.KindExportAssignment, ast.KindJSExportAssignment, ast.KindBinaryExpression:
+	case ast.KindExportAssignment, ast.KindBinaryExpression:
 		var expression *ast.Node
-		if ast.IsExportAssignment(node) || ast.IsJSExportAssignment(node) {
+		if ast.IsExportAssignment(node) {
 			expression = node.Expression()
 		} else {
 			expression = node.AsBinaryExpression().Right
@@ -6812,8 +6794,6 @@ func (c *Checker) getDeclarationSpaces(node *ast.Declaration) DeclarationSpaces 
 			result |= c.getDeclarationSpaces(d)
 		}
 		return result
-	case ast.KindCommonJSExport:
-		return DeclarationSpacesExportValue
 	case ast.KindVariableDeclaration, ast.KindBindingElement, ast.KindFunctionDeclaration, ast.KindImportSpecifier:
 		return DeclarationSpacesExportValue
 	case ast.KindMethodSignature, ast.KindPropertySignature:
@@ -6966,7 +6946,8 @@ func (c *Checker) checkUnusedLocalsAndParameters(node *ast.Node) {
 	for _, local := range node.Locals() {
 		referenceKinds := c.symbolReferenceLinks.Get(local).referenceKinds
 		if local.Flags&ast.SymbolFlagsTypeParameter != 0 && (local.Flags&ast.SymbolFlagsVariable == 0 || referenceKinds&ast.SymbolFlagsVariable != 0) ||
-			local.Flags&ast.SymbolFlagsTypeParameter == 0 && (referenceKinds != 0 || local.ExportSymbol != nil) {
+			local.Flags&ast.SymbolFlagsTypeParameter == 0 && (referenceKinds != 0 || local.ExportSymbol != nil ||
+				local.Flags&ast.SymbolFlagsModuleExports != 0) {
 			continue
 		}
 		for _, declaration := range local.Declarations {
@@ -10688,7 +10669,7 @@ func (c *Checker) checkIdentifier(node *ast.Node, checkMode CheckMode) *Type {
 	t := c.getNarrowedTypeOfSymbol(localOrExportSymbol, node)
 	assignmentKind := getAssignmentTargetKind(node)
 	if assignmentKind != AssignmentKindNone {
-		if localOrExportSymbol.Flags&ast.SymbolFlagsVariable == 0 {
+		if localOrExportSymbol.Flags&ast.SymbolFlagsVariable == 0 && !(ast.IsInJSFile(node) && localOrExportSymbol.Flags&ast.SymbolFlagsValueModule != 0) {
 			var assignmentError *diagnostics.Message
 			switch {
 			case localOrExportSymbol.Flags&ast.SymbolFlagsEnum != 0:
@@ -11661,7 +11642,7 @@ func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 				// Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
 				if inJs && ast.IsIdentifier(expression) {
 					sourceFile := ast.GetSourceFileOfNode(parent)
-					if sourceFile.CommonJSModuleIndicator != nil && c.getResolvedSymbol(expression) == sourceFile.Symbol {
+					if sourceFile.CommonJSModuleIndicator != nil && c.getResolvedSymbol(expression).Flags&ast.SymbolFlagsModuleExports != 0 {
 						return nil
 					}
 				}
@@ -12344,7 +12325,9 @@ func (c *Checker) checkAssignmentOperator(left *ast.Node, operator ast.Kind, rig
 	if ast.IsAssignmentOperator(operator) {
 		// We ignore assignments of undefined to CommonJS exports when there are multiple assignment declarations
 		if ast.IsAccessExpression(left) {
-			if symbol := c.symbolNodeLinks.Get(left).resolvedSymbol; symbol != nil && symbol.ValueDeclaration != nil && ast.IsCommonJSExport(symbol.ValueDeclaration) && len(symbol.Declarations) > 1 && rightType.flags&TypeFlagsUndefined != 0 {
+			if symbol := c.symbolNodeLinks.Get(left).resolvedSymbol; symbol != nil && symbol.ValueDeclaration != nil &&
+				ast.GetAssignmentDeclarationKind(symbol.ValueDeclaration) == ast.JSDeclarationKindExportsProperty &&
+				len(symbol.Declarations) > 1 && rightType.flags&TypeFlagsUndefined != 0 {
 				return
 			}
 		}
@@ -15261,7 +15244,7 @@ func (c *Checker) getTargetOfAliasDeclaration(node *ast.Node) *ast.Symbol {
 		return c.getTargetOfImportSpecifier(node)
 	case ast.KindExportSpecifier:
 		return c.getTargetOfExportSpecifier(node, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace, true /*dontRecursivelyResolve*/)
-	case ast.KindExportAssignment, ast.KindJSExportAssignment:
+	case ast.KindExportAssignment:
 		return c.getTargetOfExportAssignment(node)
 	case ast.KindBinaryExpression:
 		return c.getTargetOfBinaryExpression(node)
@@ -15325,9 +15308,7 @@ func (c *Checker) resolveEntityName(name *ast.Node, meaning ast.SymbolFlags, ign
 	}
 	if symbol != nil && symbol != c.unknownSymbol {
 		if !ast.NodeIsSynthesized(name) && ast.IsEntityName(name) &&
-			(symbol.Flags&ast.SymbolFlagsAlias != 0 ||
-				name.Parent != nil && name.Parent.Kind == ast.KindExportAssignment ||
-				name.Parent != nil && name.Parent.Kind == ast.KindJSExportAssignment) {
+			(symbol.Flags&ast.SymbolFlagsAlias != 0 || name.Parent != nil && name.Parent.Kind == ast.KindExportAssignment) {
 			c.markSymbolOfAliasDeclarationIfTypeOnly(getAliasDeclarationFromName(name), nil)
 		}
 		if symbol.Flags&meaning == 0 && !dontResolveAlias && symbol.Flags&ast.SymbolFlagsAlias != 0 {
@@ -16094,7 +16075,10 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 		return c.reportCircularityError(symbol)
 	}
 	if symbol.Flags&ast.SymbolFlagsModuleExports != 0 {
-		return c.getTypeOfSymbol(c.resolveExternalModuleSymbol(symbol.ValueDeclaration.Symbol(), false /*dontResolveAlias*/))
+		if symbol.Name == "exports" {
+			return c.getTypeOfSymbol(c.resolveExternalModuleSymbol(symbol.ValueDeclaration.Symbol(), false /*dontResolveAlias*/))
+		}
+		return c.newAnonymousType(symbol, symbol.Members, nil, nil, nil)
 	}
 	var result *Type
 	switch declaration.Kind {
@@ -16113,7 +16097,7 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 		} else {
 			result = c.widenTypeForVariableLikeDeclaration(c.checkExpressionCached(declaration.Expression()), declaration, false /*reportErrors*/)
 		}
-	case ast.KindBinaryExpression, ast.KindCallExpression, ast.KindJSExportAssignment, ast.KindCommonJSExport:
+	case ast.KindBinaryExpression, ast.KindCallExpression:
 		result = c.getWidenedTypeForAssignmentDeclaration(symbol)
 	case ast.KindJsxAttribute:
 		result = c.checkJsxAttribute(declaration, CheckModeNormal)
@@ -16405,6 +16389,12 @@ func (c *Checker) getTypeOfFuncClassEnumModule(symbol *ast.Symbol) *Type {
 func (c *Checker) getTypeOfFuncClassEnumModuleWorker(symbol *ast.Symbol) *Type {
 	if symbol.Flags&ast.SymbolFlagsModule != 0 && isShorthandAmbientModuleSymbol(symbol) {
 		return c.anyType
+	} else if symbol.Flags&ast.SymbolFlagsValueModule != 0 && symbol.ValueDeclaration != nil &&
+		ast.IsSourceFile(symbol.ValueDeclaration) && symbol.ValueDeclaration.AsSourceFile().CommonJSModuleIndicator != nil {
+		resolvedModule := c.resolveExternalModuleSymbol(symbol, false /*dontResolveAlias*/)
+		if resolvedModule != symbol {
+			return c.getTypeOfSymbol(resolvedModule)
+		}
 	}
 	t := c.newObjectType(ObjectFlagsAnonymous, symbol)
 	if symbol.Flags&ast.SymbolFlagsClass != 0 {
@@ -17567,13 +17557,13 @@ func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol) *Ty
 	if t == nil {
 		var types []*Type
 		for i, declaration := range symbol.Declarations {
-			if (ast.IsBinaryExpression(declaration) || ast.IsJSExportAssignment(declaration)) && declaration.Type() != nil {
+			if ast.IsBinaryExpression(declaration) && declaration.Type() != nil {
 				t = c.getTypeFromTypeNode(declaration.Type())
 				break
 			}
 			assignedType := c.getAssignmentDeclarationInitializerType(declaration)
 			// We ignore initial assignments of undefined to CommonJS exports when there are multiple assignment declarations
-			if !ast.IsCommonJSExport(declaration) || i != 0 || len(symbol.Declarations) == 1 || assignedType.flags&TypeFlagsUndefined == 0 {
+			if ast.GetAssignmentDeclarationKind(declaration) != ast.JSDeclarationKindExportsProperty || i != 0 || len(symbol.Declarations) == 1 || assignedType.flags&TypeFlagsUndefined == 0 {
 				types = core.AppendIfUnique(types, assignedType)
 			}
 		}
@@ -17597,16 +17587,14 @@ func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol) *Ty
 
 func (c *Checker) getAssignmentDeclarationInitializerType(node *ast.Node) *Type {
 	if ast.IsBinaryExpression(node) {
+		switch ast.GetAssignmentDeclarationKind(node) {
+		case ast.JSDeclarationKindModuleExports, ast.JSDeclarationKindExportsProperty:
+			return c.getRegularTypeOfLiteralType(c.checkExpressionCached(ast.GetRightMostAssignedExpression(node)))
+		}
 		return c.checkExpressionForMutableLocation(node.AsBinaryExpression().Right, CheckModeNormal)
 	}
 	if ast.IsCallExpression(node) {
 		return c.getTypeFromPropertyDescriptor(node.Arguments()[2])
-	}
-	if ast.IsJSExportAssignment(node) {
-		return c.getRegularTypeOfLiteralType(c.checkExpressionCached(node.Expression()))
-	}
-	if ast.IsCommonJSExport(node) {
-		return c.getRegularTypeOfLiteralType(c.checkExpressionCached(node.Initializer()))
 	}
 	return c.neverType
 }
@@ -23988,8 +23976,11 @@ func (c *Checker) getTypeFromImportTypeNode(node *ast.Node) *Type {
 					symbolFromModule = c.getSymbol(c.getExportsOfSymbol(mergedResolvedSymbol), current.Text(), meaning)
 					if symbolFromModule == nil {
 						// a CommonJS module might have typedefs exported alongside an export=
+						// !!!
 						immediateModuleSymbol := c.resolveExternalModuleSymbol(innerModuleSymbol, true /*dontResolveAlias*/)
-						if immediateModuleSymbol != nil && core.Some(immediateModuleSymbol.Declarations, func(d *ast.Node) bool { return d.Kind == ast.KindJSExportAssignment }) {
+						if immediateModuleSymbol != nil && core.Some(immediateModuleSymbol.Declarations, func(d *ast.Node) bool {
+							return ast.GetAssignmentDeclarationKind(d) == ast.JSDeclarationKindModuleExports
+						}) {
 							symbolFromModule = c.getSymbol(c.getExportsOfSymbol(immediateModuleSymbol.Parent), current.Text(), meaning)
 						}
 					}
@@ -28436,7 +28427,7 @@ func (c *Checker) getContextualType(node *ast.Node, contextFlags ContextFlags) *
 		return c.getContextualType(parent, contextFlags)
 	case ast.KindSatisfiesExpression:
 		return c.getTypeFromTypeNode(parent.Type())
-	case ast.KindExportAssignment, ast.KindJSExportAssignment, ast.KindCommonJSExport:
+	case ast.KindExportAssignment:
 		return c.tryGetTypeFromTypeNode(parent)
 	case ast.KindJsxExpression:
 		return c.getContextualTypeForJsxExpression(parent, contextFlags)
@@ -28853,9 +28844,11 @@ func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags
 	case ast.KindEqualsToken, ast.KindAmpersandAmpersandEqualsToken, ast.KindBarBarEqualsToken, ast.KindQuestionQuestionEqualsToken:
 		// In an assignment expression, the right operand is contextually typed by the type of the left operand
 		// unless it's an assignment declaration.
-		kind := ast.GetAssignmentDeclarationKind(binary.AsNode())
-		if node == binary.Right && kind != ast.JSDeclarationKindModuleExports && kind != ast.JSDeclarationKindExportsProperty {
-			return c.getContextualTypeForAssignmentExpression(binary)
+		if node == binary.Right {
+			target := ast.GetLeftmostExpression(binary.Left, false)
+			if !(ast.IsIdentifier(target) && c.getResolvedSymbol(target).Flags&ast.SymbolFlagsModuleExports != 0) {
+				return c.getContextualTypeForAssignmentExpression(binary)
+			}
 		}
 	case ast.KindBarBarToken, ast.KindQuestionQuestionToken:
 		// When an || expression has a contextual type, the operands are contextually typed by that type, except
@@ -30816,8 +30809,7 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 	if ast.IsDeclarationName(name) {
 		return c.getSymbolOfNode(name.Parent)
 	}
-
-	if (name.Parent.Kind == ast.KindExportAssignment || name.Parent.Kind == ast.KindJSExportAssignment) && ast.IsEntityNameExpression(name) {
+	if name.Parent.Kind == ast.KindExportAssignment && ast.IsEntityNameExpression(name) {
 		// Even an entity name expression that doesn't resolve as an entityname may still typecheck as a property access expression
 		success := c.resolveEntityName(
 			name,

@@ -1,18 +1,7 @@
 --- old.moduleExportAlias4.types
 +++ new.moduleExportAlias4.types
-@@= skipped -8, +8 lines =@@
- >'./bug24024' : "./bug24024"
-
- module.exports = class C {}
-->module.exports = class C {} : typeof wat
-+>module.exports = class C {} : typeof C
- >module.exports : typeof wat
- >module : { exports: typeof wat; }
- >exports : typeof wat
-->class C {} : typeof wat
-->C : typeof wat
-+>class C {} : typeof C
-+>C : typeof C
+@@= skipped -16, +16 lines =@@
+ >C : typeof wat
 
  module.exports.D = class D { }
 ->module.exports.D = class D { } : typeof wat.D

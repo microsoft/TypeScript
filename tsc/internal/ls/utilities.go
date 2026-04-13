@@ -838,7 +838,7 @@ func getMeaningFromLocation(node *ast.Node) ast.SemanticMeaning {
 
 func getMeaningFromDeclaration(node *ast.Node) ast.SemanticMeaning {
 	switch node.Kind {
-	case ast.KindVariableDeclaration, ast.KindCommonJSExport, ast.KindParameter, ast.KindBindingElement,
+	case ast.KindVariableDeclaration, ast.KindParameter, ast.KindBindingElement,
 		ast.KindPropertyDeclaration, ast.KindPropertySignature, ast.KindPropertyAssignment, ast.KindShorthandPropertyAssignment,
 		ast.KindMethodDeclaration, ast.KindMethodSignature, ast.KindConstructor, ast.KindGetAccessor, ast.KindSetAccessor,
 		ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindArrowFunction, ast.KindCatchClause, ast.KindJsxAttribute:
@@ -860,7 +860,7 @@ func getMeaningFromDeclaration(node *ast.Node) ast.SemanticMeaning {
 		}
 
 	case ast.KindEnumDeclaration, ast.KindNamedImports, ast.KindImportSpecifier, ast.KindImportEqualsDeclaration, ast.KindImportDeclaration,
-		ast.KindJSImportDeclaration, ast.KindExportAssignment, ast.KindJSExportAssignment, ast.KindExportDeclaration:
+		ast.KindJSImportDeclaration, ast.KindExportAssignment, ast.KindExportDeclaration:
 		return ast.SemanticMeaningAll
 
 	// An external module can be a Value

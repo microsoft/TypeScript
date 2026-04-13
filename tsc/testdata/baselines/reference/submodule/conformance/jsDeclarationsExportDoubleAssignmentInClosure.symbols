@@ -9,7 +9,7 @@ function foo() {
 >module.exports : Symbol(exports, Decl(index.js, 0, 0))
 >module : Symbol(module, Decl(index.js, 0, 0))
 >exports : Symbol(exports, Decl(index.js, 0, 0))
->exports : Symbol(".", Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
 >o : Symbol(o, Decl(index.js, 2, 41))
 
         return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
@@ -24,7 +24,7 @@ function foo() {
         // I have no idea what to put here
     }
     exports.methods = m;
->exports : Symbol(".", Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
 >m : Symbol(m, Decl(index.js, 5, 9))
 }
 

@@ -5,11 +5,6 @@ export const x = 0;
 >x : Symbol(x, Decl(a.js, 0, 12))
 
 module.exports.y = 0; // Error
->module.exports.y : Symbol(y, Decl(a.js, 0, 19))
->module.exports : Symbol(exports, Decl(a.js, 0, 0))
->module : Symbol(module, Decl(a.js, 0, 0))
->exports : Symbol(exports, Decl(a.js, 0, 0))
->y : Symbol(y, Decl(a.js, 0, 19))
 
 === /b.ts ===
 
@@ -37,7 +32,7 @@ export default 0;
 === /g.js ===
 exports.default = 0;
 >exports.default : Symbol(default, Decl(g.js, 0, 0))
->exports : Symbol("./g", Decl(g.js, 0, 0))
+>exports : Symbol(exports, Decl(g.js, 0, 0))
 >default : Symbol(default, Decl(g.js, 0, 0))
 
 === /main1.ts ===
@@ -264,7 +259,7 @@ const g2 = require("./g"); // { default: 0 }
 === /main4.cjs ===
 exports.x = require("./g");
 >exports.x : Symbol(x, Decl(main4.cjs, 0, 0))
->exports : Symbol("./main4.cjs", Decl(main4.cjs, 0, 0))
+>exports : Symbol(exports, Decl(main4.cjs, 0, 0))
 >x : Symbol(x, Decl(main4.cjs, 0, 0))
 >require : Symbol(require)
 

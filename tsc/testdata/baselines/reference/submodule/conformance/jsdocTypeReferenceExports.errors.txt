@@ -1,4 +1,4 @@
-bug27342.js(3,11): error TS2709: Cannot use namespace 'exports' as a type.
+bug27342.js(3,11): error TS2749: 'exports' refers to a value, but is being used as a type here. Did you mean 'typeof exports'?
 
 
 ==== bug27342.js (1 errors) ====
@@ -6,7 +6,7 @@ bug27342.js(3,11): error TS2709: Cannot use namespace 'exports' as a type.
     /**
      * @type {exports}
               ~~~~~~~
-!!! error TS2709: Cannot use namespace 'exports' as a type.
+!!! error TS2749: 'exports' refers to a value, but is being used as a type here. Did you mean 'typeof exports'?
      */
     var x
     

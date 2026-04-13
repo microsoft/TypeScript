@@ -299,7 +299,6 @@ type (
 	NamespaceImportNode               = Node
 	NamedImportsNode                  = Node
 	ExportAssignmentNode              = Node
-	CommonJSExportNode                = Node
 	NamespaceExportDeclarationNode    = Node
 	NamespaceExportNode               = Node
 	NamedExportsNode                  = Node
@@ -2909,25 +2908,9 @@ func (f *NodeFactory) NewExportAssignment(modifiers *ModifierList, isExportEqual
 	return f.newNode(KindExportAssignment, data)
 }
 
-func (f *NodeFactory) NewJSExportAssignment(modifiers *ModifierList, isExportEquals bool, typeNode *TypeNode, expression *Expression) *Node {
-	data := &ExportAssignment{}
-	data.modifiers = modifiers
-	data.IsExportEquals = isExportEquals
-	data.Type = typeNode
-	data.Expression = expression
-	return f.newNode(KindJSExportAssignment, data)
-}
-
 func (f *NodeFactory) UpdateExportAssignment(node *ExportAssignment, modifiers *ModifierList, isExportEquals bool, typeNode *TypeNode, expression *Expression) *Node {
 	if modifiers != node.modifiers || isExportEquals != node.IsExportEquals || typeNode != node.Type || expression != node.Expression {
-		switch node.Kind {
-		case KindExportAssignment:
-			return updateNode(f.NewExportAssignment(modifiers, isExportEquals, typeNode, expression), node.AsNode(), f.hooks)
-		case KindJSExportAssignment:
-			return updateNode(f.NewJSExportAssignment(modifiers, isExportEquals, typeNode, expression), node.AsNode(), f.hooks)
-		default:
-			panic("unexpected kind in UpdateExportAssignment: " + node.Kind.String())
-		}
+		return updateNode(f.NewExportAssignment(modifiers, isExportEquals, typeNode, expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
@@ -2941,75 +2924,11 @@ func (node *ExportAssignment) VisitEachChild(v *NodeVisitor) *Node {
 }
 
 func (node *ExportAssignment) Clone(f NodeFactoryCoercible) *Node {
-	switch node.Kind {
-	case KindExportAssignment:
-		return cloneNode(f.AsNodeFactory().NewExportAssignment(node.Modifiers(), node.IsExportEquals, node.Type, node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
-	case KindJSExportAssignment:
-		return cloneNode(f.AsNodeFactory().NewJSExportAssignment(node.Modifiers(), node.IsExportEquals, node.Type, node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
-	default:
-		panic("unexpected kind in ExportAssignment.Clone: " + node.Kind.String())
-	}
+	return cloneNode(f.AsNodeFactory().NewExportAssignment(node.Modifiers(), node.IsExportEquals, node.Type, node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsExportAssignment(node *Node) bool {
 	return node.Kind == KindExportAssignment
-}
-
-func IsJSExportAssignment(node *Node) bool {
-	return node.Kind == KindJSExportAssignment
-}
-
-// ──────────────────────────────────────────────────────────────────────
-// CommonJSExport
-// ──────────────────────────────────────────────────────────────────────
-
-type CommonJSExport struct {
-	StatementBase
-	DeclarationBase
-	ExportableBase
-	ModifiersBase
-	name        *IdentifierNode
-	Type        *TypeNode
-	Initializer *Expression
-}
-
-func (f *NodeFactory) NewCommonJSExport(modifiers *ModifierList, name *IdentifierNode, typeNode *TypeNode, initializer *Expression) *Node {
-	data := &CommonJSExport{}
-	data.modifiers = modifiers
-	data.name = name
-	data.Type = typeNode
-	data.Initializer = initializer
-	return f.newNode(KindCommonJSExport, data)
-}
-
-func (f *NodeFactory) UpdateCommonJSExport(node *CommonJSExport, modifiers *ModifierList, name *IdentifierNode, typeNode *TypeNode, initializer *Expression) *Node {
-	if modifiers != node.modifiers || name != node.name || typeNode != node.Type || initializer != node.Initializer {
-		return updateNode(f.NewCommonJSExport(modifiers, name, typeNode, initializer), node.AsNode(), f.hooks)
-	}
-	return node.AsNode()
-}
-
-func (node *CommonJSExport) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) ||
-		visit(v, node.name) ||
-		visit(v, node.Type) ||
-		visit(v, node.Initializer)
-}
-
-func (node *CommonJSExport) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateCommonJSExport(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.Type), v.visitNode(node.Initializer))
-}
-
-func (node *CommonJSExport) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewCommonJSExport(node.Modifiers(), node.name, node.Type, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
-}
-
-func (node *CommonJSExport) Name() *DeclarationName {
-	return node.name
-}
-
-func IsCommonJSExport(node *Node) bool {
-	return node.Kind == KindCommonJSExport
 }
 
 // ──────────────────────────────────────────────────────────────────────
@@ -9129,10 +9048,6 @@ func (n *Node) AsNamedImports() *NamedImports {
 
 func (n *Node) AsExportAssignment() *ExportAssignment {
 	return n.data.(*ExportAssignment)
-}
-
-func (n *Node) AsCommonJSExport() *CommonJSExport {
-	return n.data.(*CommonJSExport)
 }
 
 func (n *Node) AsNamespaceExportDeclaration() *NamespaceExportDeclaration {

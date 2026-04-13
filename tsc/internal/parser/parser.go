@@ -1534,8 +1534,7 @@ func (p *Parser) parseExpressionOrLabeledStatement() *ast.Statement {
 	if hasParen {
 		jsdoc &^= jsdocScannerInfoHasJSDoc
 	}
-	jsdocs := p.withJSDoc(result, jsdoc)
-	p.reparseCommonJS(result, jsdocs)
+	p.withJSDoc(result, jsdoc)
 	return result
 }
 

@@ -158,12 +158,9 @@ func getChildrenPropertyMask(node *ast.Node) uint8 {
 	case ast.KindNamedImports:
 		n := node.AsNamedImports()
 		return (boolToByte(n.Elements != nil) << 0)
-	case ast.KindExportAssignment, ast.KindJSExportAssignment:
+	case ast.KindExportAssignment:
 		n := node.AsExportAssignment()
 		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(n.Type != nil) << 1) | (boolToByte(n.Expression != nil) << 2)
-	case ast.KindCommonJSExport:
-		n := node.AsCommonJSExport()
-		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(n.Name() != nil) << 1) | (boolToByte(n.Type != nil) << 2) | (boolToByte(n.Initializer != nil) << 3)
 	case ast.KindNamespaceExportDeclaration:
 		n := node.AsNamespaceExportDeclaration()
 		return (boolToByte(hasModifiers(n.Modifiers())) << 0) | (boolToByte(n.Name() != nil) << 1)
@@ -554,7 +551,7 @@ func getNodeCommonData(node *ast.Node) uint32 {
 			tokenIdx = 1
 		}
 		return tokenIdx << 24
-	case ast.KindExportAssignment, ast.KindJSExportAssignment:
+	case ast.KindExportAssignment:
 		n := node.AsExportAssignment()
 		return uint32(boolToByte(n.IsExportEquals)) << 24
 	case ast.KindExportSpecifier:

@@ -1,17 +1,38 @@
 --- old.moduleExportAlias2.types
 +++ new.moduleExportAlias2.types
-@@= skipped -16, +16 lines =@@
+@@= skipped -2, +2 lines =@@
+ === index.js ===
+ /// <reference path='node.d.ts' />
+ const C = require("./semver")
+->C : typeof C
+->require("./semver") : typeof C
++>C : () => void
++>require("./semver") : () => void
+ >require : (name: string) => any
+ >"./semver" : "./semver"
+
+ var two = C.f(1)
+ >two : any
+ >C.f(1) : any
+->C.f : (n: any) => any
+->C : typeof C
+->f : (n: any) => any
++>C.f : any
++>C : () => void
++>f : any
  >1 : 1
 
  var c = new C
 ->c : C
 ->new C : C
+->C : typeof C
 +>c : any
 +>new C : any
- >C : typeof C
++>C : () => void
 
  === node.d.ts ===
-@@= skipped -19, +19 lines =@@
+ declare function require(name: string): any;
+@@= skipped -33, +33 lines =@@
  === semver.js ===
  /// <reference path='node.d.ts' />
  exports = module.exports = C
@@ -23,21 +44,24 @@
 ->exports : typeof C
 ->C : typeof C
 +>exports = module.exports = C : () => void
-+>exports : any
++>exports : () => void
 +>module.exports = C : () => void
-+>module.exports : typeof import("./semver")
-+>module : { exports: typeof import("./semver"); }
-+>exports : typeof import("./semver")
++>module.exports : () => void
++>module : { exports: () => void; }
++>exports : () => void
 +>C : () => void
 
  exports.f = n => n + 1
  >exports.f = n => n + 1 : (n: any) => any
- >exports.f : (n: any) => any
+->exports.f : (n: any) => any
 ->exports : typeof C
-+>exports : typeof import("./semver")
- >f : (n: any) => any
+->f : (n: any) => any
++>exports.f : any
++>exports : () => void
++>f : any
  >n => n + 1 : (n: any) => any
  >n : any
+ >n + 1 : any
 @@= skipped -20, +20 lines =@@
  >1 : 1
 

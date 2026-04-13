@@ -35,15 +35,11 @@ module.exports.Sub = class {
 
 //// [index.d.ts]
 declare const _default: {
-    new (p: number): {
-        t: number;
-    };
+    new (p: number): import(".");
 };
 export = _default;
 export declare var Sub: {
     new (): {
-        instance: {
-            t: number;
-        };
+        instance: import(".");
     };
 };

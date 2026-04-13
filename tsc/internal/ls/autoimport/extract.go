@@ -226,7 +226,7 @@ func (e *symbolExtractor) extractFromSymbol(name string, symbol *ast.Symbol, mod
 			}
 		}
 	} else if syntax == ExportSyntaxCommonJSModuleExports {
-		expression := symbol.Declarations[0].AsExportAssignment().Expression
+		expression := symbol.Declarations[0].AsBinaryExpression().Right
 		if expression.Kind == ast.KindObjectLiteralExpression {
 			// what is actually desirable here? I think it would be reasonable to only treat these as exports
 			// if *every* property is a shorthand property or identifier: identifier
@@ -416,10 +416,13 @@ func getSyntax(symbol *ast.Symbol) ExportSyntax {
 			)
 		case ast.KindNamespaceExportDeclaration:
 			return ExportSyntaxUMD
-		case ast.KindJSExportAssignment:
-			return ExportSyntaxCommonJSModuleExports
-		case ast.KindCommonJSExport:
-			return ExportSyntaxCommonJSExportsProperty
+		case ast.KindBinaryExpression:
+			switch ast.GetAssignmentDeclarationKind(decl) {
+			case ast.JSDeclarationKindModuleExports:
+				return ExportSyntaxCommonJSModuleExports
+			case ast.JSDeclarationKindExportsProperty:
+				return ExportSyntaxCommonJSExportsProperty
+			}
 		default:
 			if ast.GetCombinedModifierFlags(decl)&ast.ModifierFlagsDefault != 0 {
 				return ExportSyntaxDefaultModifier

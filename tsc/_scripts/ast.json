@@ -438,8 +438,6 @@
                 "comment": "Reparsed JS nodes"
             },
             "JSTypeAliasDeclaration",
-            "JSExportAssignment",
-            "CommonJSExport",
             "JSImportDeclaration",
             {
                 "comment": "Transformation nodes"
@@ -2175,10 +2173,6 @@
                 ]
             },
             "ExportAssignment": {
-                "kind": [
-                    "ExportAssignment",
-                    "JSExportAssignment"
-                ],
                 "extends": [
                     "DeclarationBase",
                     "StatementBase",
@@ -2200,33 +2194,6 @@
                     },
                     {
                         "name": "Expression",
-                        "type": "Expression"
-                    }
-                ]
-            },
-            "CommonJSExport": {
-                "extends": [
-                    "StatementBase",
-                    "DeclarationBase",
-                    "ExportableBase",
-                    "ModifiersBase"
-                ],
-                "members": [
-                    {
-                        "name": "modifiers",
-                        "inherited": true
-                    },
-                    {
-                        "name": "name",
-                        "type": "Identifier",
-                        "private": true
-                    },
-                    {
-                        "name": "Type",
-                        "type": "TypeNode"
-                    },
-                    {
-                        "name": "Initializer",
                         "type": "Expression"
                     }
                 ]

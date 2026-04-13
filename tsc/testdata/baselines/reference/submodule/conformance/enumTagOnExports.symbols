@@ -4,7 +4,7 @@
 /** @enum {number} */
 exports.a = {};
 >exports.a : Symbol(a, Decl(enumTagOnExports.js, 0, 0))
->exports : Symbol("./enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
+>exports : Symbol(exports, Decl(enumTagOnExports.js, 0, 0))
 >a : Symbol(a, Decl(enumTagOnExports.js, 0, 0))
 
 /** @enum {string} */

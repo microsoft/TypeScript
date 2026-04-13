@@ -508,7 +508,7 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 			}
 			sym := symbol
 			if useLhsSymbol {
-				sym = checker.GetSymbolAtLocation(ast.GetElementOrPropertyAccessName(node.AsBinaryExpression().Left))
+				sym = node.Symbol()
 			}
 			if sym == nil {
 				return nil

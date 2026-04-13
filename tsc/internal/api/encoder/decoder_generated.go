@@ -426,23 +426,13 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		return d.factory.NewNamespaceImport(d.singleChild(childIndices)), nil
 	case ast.KindNamedImports:
 		return d.factory.NewNamedImports(d.singleNodeListChild(childIndices)), nil
-	case ast.KindExportAssignment, ast.KindJSExportAssignment:
+	case ast.KindExportAssignment:
 		isExportEquals := commonData&1 != 0
 		it := newChildIter(childIndices)
 		modifiers := d.modifierListAt(it.nextIf(mask, 0))
 		typeNode := d.nodeAt(it.nextIf(mask, 1))
 		expression := d.nodeAt(it.nextIf(mask, 2))
-		if kind == ast.KindJSExportAssignment {
-			return d.factory.NewJSExportAssignment(modifiers, isExportEquals, typeNode, expression), nil
-		}
 		return d.factory.NewExportAssignment(modifiers, isExportEquals, typeNode, expression), nil
-	case ast.KindCommonJSExport:
-		it := newChildIter(childIndices)
-		modifiers := d.modifierListAt(it.nextIf(mask, 0))
-		name := d.nodeAt(it.nextIf(mask, 1))
-		typeNode := d.nodeAt(it.nextIf(mask, 2))
-		initializer := d.nodeAt(it.nextIf(mask, 3))
-		return d.factory.NewCommonJSExport(modifiers, name, typeNode, initializer), nil
 	case ast.KindNamespaceExportDeclaration:
 		it := newChildIter(childIndices)
 		modifiers := d.modifierListAt(it.nextIf(mask, 0))

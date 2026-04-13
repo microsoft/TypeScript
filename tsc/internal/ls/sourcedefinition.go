@@ -653,7 +653,7 @@ func hasConcreteSourceDeclarations(declarations []*ast.Node) bool {
 }
 
 func isConcreteSourceDeclaration(node *ast.Node) bool {
-	if !ast.IsDeclaration(node) || node.Kind == ast.KindExportAssignment || node.Kind == ast.KindJSExportAssignment {
+	if !ast.IsDeclaration(node) || node.Kind == ast.KindExportAssignment {
 		return false
 	}
 	if (ast.IsBinaryExpression(node) || ast.IsCallExpression(node)) && ast.GetAssignmentDeclarationKind(node) != ast.JSDeclarationKindNone {
@@ -668,8 +668,7 @@ func isConcreteSourceDeclaration(node *ast.Node) bool {
 		ast.KindNamespaceImport,
 		ast.KindExportSpecifier,
 		ast.KindPropertyAccessExpression,
-		ast.KindElementAccessExpression,
-		ast.KindCommonJSExport:
+		ast.KindElementAccessExpression:
 		return false
 	default:
 		return true

@@ -18,9 +18,9 @@
  >exports.blah = exports.someProp : any
  >exports.blah : any
 ->exports : { (): void; blah: any; }
-+>exports : typeof import("./bar")
++>exports : () => void
  >blah : any
  >exports.someProp : any
 ->exports : { (): void; blah: any; }
-+>exports : typeof import("./bar")
++>exports : () => void
  >someProp : any

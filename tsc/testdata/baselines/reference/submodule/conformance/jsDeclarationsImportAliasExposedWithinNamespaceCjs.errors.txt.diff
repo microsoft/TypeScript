@@ -8,6 +8,7 @@
 +file.js(14,15): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 +file.js(18,15): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 +file.js(18,39): error TS2300: Duplicate identifier 'myTypes'.
++file.js(20,9): error TS2300: Duplicate identifier 'myTypes'.
 +file2.js(6,11): error TS2315: Type 'Object' is not generic.
 +file2.js(12,23): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 +file2.js(17,12): error TS2702: 'testFnTypes' only refers to a type, but is being used as a namespace here.
@@ -48,7 +49,7 @@
 +    }
 +    
 +    module.exports = {testFn, testFnTypes};
-+==== file.js (6 errors) ====
++==== file.js (7 errors) ====
 +    /**
 +     * @namespace myTypes
 +     * @global
@@ -81,3 +82,5 @@
 +!!! error TS2300: Duplicate identifier 'myTypes'.
 +    
 +    exports.myTypes = myTypes;
++            ~~~~~~~
++!!! error TS2300: Duplicate identifier 'myTypes'.

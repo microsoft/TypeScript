@@ -1,4 +1,10 @@
+mod1.js(3,23): error TS2300: Duplicate identifier 'Foo'.
+mod1.js(4,7): error TS2300: Duplicate identifier 'Foo'.
+mod1.js(7,9): error TS2339: Property 'Bar' does not exist on type '{ Baz: typeof Baz; Quack?: undefined; } | { Baz?: undefined; Quack: number; }'.
+  Property 'Bar' does not exist on type '{ Baz: typeof Baz; Quack?: undefined; }'.
 mod1.js(10,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+mod1.js(20,9): error TS2339: Property 'Quid' does not exist on type '{ Baz: typeof Baz; Quack?: undefined; } | { Baz?: undefined; Quack: number; }'.
+  Property 'Quid' does not exist on type '{ Baz: typeof Baz; Quack?: undefined; }'.
 use.js(6,15): error TS18048: 'mod.Baz' is possibly 'undefined'.
 
 
@@ -12,14 +18,21 @@ use.js(6,15): error TS18048: 'mod.Baz' is possibly 'undefined'.
                   ~~~~~~~
 !!! error TS18048: 'mod.Baz' is possibly 'undefined'.
     
-==== mod1.js (1 errors) ====
+==== mod1.js (5 errors) ====
     // error
     
     /** @typedef {number} Foo */
+                          ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
     class Foo { } // should error
+          ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
     
     /** @typedef {number} Bar */
     exports.Bar = class { }
+            ~~~
+!!! error TS2339: Property 'Bar' does not exist on type '{ Baz: typeof Baz; Quack?: undefined; } | { Baz?: undefined; Quack: number; }'.
+!!! error TS2339:   Property 'Bar' does not exist on type '{ Baz: typeof Baz; Quack?: undefined; }'.
     
     /** @typedef {number} Baz */
     module.exports = {
@@ -37,6 +50,9 @@ use.js(6,15): error TS18048: 'mod.Baz' is possibly 'undefined'.
     
     /** @typedef {number} Quid */
     exports.Quid = 2;
+            ~~~~
+!!! error TS2339: Property 'Quid' does not exist on type '{ Baz: typeof Baz; Quack?: undefined; } | { Baz?: undefined; Quack: number; }'.
+!!! error TS2339:   Property 'Quid' does not exist on type '{ Baz: typeof Baz; Quack?: undefined; }'.
     
     /** @typedef {number} Quack */
     module.exports = {

@@ -7,11 +7,11 @@ export const x = 0;
 
 module.exports.y = 0; // Error
 >module.exports.y = 0 : 0
->module.exports.y : 0
->module.exports : typeof import("./a")
->module : { exports: typeof import("./a"); }
->exports : typeof import("./a")
->y : 0
+>module.exports.y : any
+>module.exports : any
+>module : any
+>exports : any
+>y : any
 >0 : 0
 
 === /b.ts ===
@@ -51,7 +51,7 @@ exports.default = 0;
 === /main1.ts ===
 import { x, y } from "./a"; // No y
 >x : 0
->y : 0
+>y : any
 
 import a1 = require("./a"); // { x: 0 }
 >a1 : typeof a1
@@ -170,7 +170,7 @@ g2.default;
 === /main2.mts ===
 import { x, y } from "./a"; // No y
 >x : 0
->y : 0
+>y : any
 
 import a1 = require("./a"); // { x: 0 }
 >a1 : typeof a1
@@ -232,7 +232,7 @@ import g2 = require("./g"); // { default: 0 }
 === /main3.cjs ===
 import { x, y } from "./a"; // No y
 >x : 0
->y : 0
+>y : any
 
 import a1 = require("./a"); // Error in JS
 >a1 : typeof a1

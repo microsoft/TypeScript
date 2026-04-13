@@ -4168,12 +4168,10 @@ func (p *Printer) emitStatement(node *ast.Statement) {
 		p.emitImportEqualsDeclaration(node.AsImportEqualsDeclaration())
 	case ast.KindImportDeclaration:
 		p.emitImportDeclaration(node.AsImportDeclaration())
-	case ast.KindExportAssignment, ast.KindJSExportAssignment:
+	case ast.KindExportAssignment:
 		p.emitExportAssignment(node.AsExportAssignment())
 	case ast.KindExportDeclaration:
 		p.emitExportDeclaration(node.AsExportDeclaration())
-	case ast.KindCommonJSExport:
-		break
 
 	default:
 		panic(fmt.Sprintf("unhandled statement: %v", node.Kind))
