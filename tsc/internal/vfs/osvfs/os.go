@@ -2,10 +2,12 @@ package osvfs
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 	"time"
 	"unicode"
 
@@ -13,6 +15,15 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/microsoft/typescript-go/internal/vfs/internal"
+)
+
+var (
+	// Semaphore for operations that are effectively blocking syscalls.
+	blockingOpSema = core.NewLimitedSemaphore(128)
+	// Semaphore for file reads.
+	readSema = core.NewLimitedSemaphore(128)
+	// Semaphore for file writes.
+	writeSema = core.NewLimitedSemaphore(32)
 )
 
 // FS creates a new FS from the OS file system.
@@ -78,37 +89,68 @@ func (vfs *osFS) UseCaseSensitiveFileNames() bool {
 	return isFileSystemCaseSensitive
 }
 
-var readSema = make(chan struct{}, 128)
-
 func (vfs *osFS) ReadFile(path string) (contents string, ok bool) {
-	// Limit ourselves to fewer open files, which greatly reduces IO contention.
-	readSema <- struct{}{}
-	defer func() { <-readSema }()
-
+	defer readSema.Acquire()()
 	return vfs.common.ReadFile(path)
 }
 
 func (vfs *osFS) DirectoryExists(path string) bool {
+	defer blockingOpSema.Acquire()()
 	return vfs.common.DirectoryExists(path)
 }
 
 func (vfs *osFS) FileExists(path string) bool {
+	defer blockingOpSema.Acquire()()
 	return vfs.common.FileExists(path)
 }
 
 func (vfs *osFS) GetAccessibleEntries(path string) vfs.Entries {
+	defer blockingOpSema.Acquire()()
 	return vfs.common.GetAccessibleEntries(path)
 }
 
 func (vfs *osFS) Stat(path string) vfs.FileInfo {
+	defer blockingOpSema.Acquire()()
 	return vfs.common.Stat(path)
 }
 
+var limitedWalkDirFuncPool = sync.Pool{
+	New: func() any {
+		w := &limitedWalkDirFunc{}
+		w.walk = w.walker
+		return w
+	},
+}
+
+func getLimitedWalkDirFunc(walkFn vfs.WalkDirFunc) *limitedWalkDirFunc {
+	w := limitedWalkDirFuncPool.Get().(*limitedWalkDirFunc)
+	w.inner = walkFn
+	return w
+}
+
+func putLimitedWalkDirFunc(w *limitedWalkDirFunc) {
+	w.inner = nil
+	limitedWalkDirFuncPool.Put(w)
+}
+
+type limitedWalkDirFunc struct {
+	inner vfs.WalkDirFunc
+	walk  vfs.WalkDirFunc
+}
+
+func (w *limitedWalkDirFunc) walker(path string, d fs.DirEntry, err error) error {
+	defer blockingOpSema.Acquire()()
+	return w.inner(path, d, err)
+}
+
 func (vfs *osFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
-	return vfs.common.WalkDir(root, walkFn)
+	walker := getLimitedWalkDirFunc(walkFn)
+	defer putLimitedWalkDirFunc(walker)
+	return vfs.common.WalkDir(root, walker.walk)
 }
 
 func (vfs *osFS) Realpath(path string) string {
+	defer blockingOpSema.Acquire()()
 	return osFSRealpath(path)
 }
 
@@ -128,11 +170,8 @@ func osFSRealpath(path string) string {
 	return tspath.NormalizeSlashes(path)
 }
 
-var writeSema = make(chan struct{}, 32)
-
 func (vfs *osFS) writeFile(path string, content string) error {
-	writeSema <- struct{}{}
-	defer func() { <-writeSema }()
+	defer writeSema.Acquire()()
 
 	file, err := os.Create(path)
 	if err != nil {
@@ -148,6 +187,7 @@ func (vfs *osFS) writeFile(path string, content string) error {
 }
 
 func (vfs *osFS) ensureDirectoryExists(directoryPath string) error {
+	defer blockingOpSema.Acquire()()
 	return os.MkdirAll(directoryPath, 0o777)
 }
 
@@ -163,11 +203,13 @@ func (vfs *osFS) WriteFile(path string, content string) error {
 }
 
 func (vfs *osFS) Remove(path string) error {
+	defer blockingOpSema.Acquire()()
 	// todo: #701 add retry mechanism?
 	return os.RemoveAll(path)
 }
 
 func (vfs *osFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+	defer blockingOpSema.Acquire()()
 	return os.Chtimes(path, aTime, mTime)
 }
 
