@@ -56,4 +56,24 @@ describe("unittests:: tsserver:: codeFix::", () => {
         });
         baselineTsserverLogs("codeFix", "install package when serialized", session);
     });
+
+    it("install package rejects invalid package names", () => {
+        const { host, session } = setup();
+        // A client could craft an applyCodeActionCommand with arbitrary package names.
+        // The server must validate and reject names with invalid characters to prevent shell injection.
+        for (const packageName of ["; echo 'hello' #", "react'test", "a/b/c"]) {
+            session.executeCommandSeq<ts.server.protocol.ApplyCodeActionCommandRequest>({
+                command: ts.server.protocol.CommandTypes.ApplyCodeActionCommand,
+                arguments: {
+                    command: {
+                        type: "install package",
+                        file: "/home/src/projects/project/src/file.ts",
+                        packageName,
+                    },
+                },
+            });
+        }
+        host.runPendingInstalls();
+        baselineTsserverLogs("codeFix", "install package rejects invalid package names", session);
+    });
 });
