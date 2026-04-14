@@ -1119,7 +1119,7 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 	s.telemetryEnabled = enableTelemetry
 
 	s.session = project.NewSession(&project.SessionInit{
-		BackgroundCtx: s.backgroundCtx,
+		BackgroundCtx: lsproto.WithClientCapabilities(s.backgroundCtx, &s.clientCapabilities),
 		Options: &project.SessionOptions{
 			CurrentDirectory:       cwd,
 			DefaultLibraryPath:     s.defaultLibraryPath,

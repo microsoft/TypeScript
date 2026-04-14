@@ -24,12 +24,13 @@ var (
 // configFileRegistry, producing a new clone with `finalize()` after
 // all changes have been made.
 type configFileRegistryBuilder struct {
-	fs                   *sourceFS
-	isOpenFile           func(tspath.Path) bool
-	extendedConfigCache  *ExtendedConfigCache
-	snapshotID           uint64
-	sessionOptions       *SessionOptions
-	customConfigFileName string
+	hasRelativePatternCapability bool
+	fs                           *sourceFS
+	isOpenFile                   func(tspath.Path) bool
+	extendedConfigCache          *ExtendedConfigCache
+	snapshotID                   uint64
+	sessionOptions               *SessionOptions
+	customConfigFileName         string
 
 	base                        *ConfigFileRegistry
 	configs                     *dirty.SyncMap[tspath.Path, *configFileEntry]
@@ -38,6 +39,7 @@ type configFileRegistryBuilder struct {
 }
 
 func newConfigFileRegistryBuilder(
+	hasRelativePatternCapability bool,
 	fs *snapshotFSBuilder,
 	oldConfigFileRegistry *ConfigFileRegistry,
 	extendedConfigCache *ExtendedConfigCache,
@@ -47,14 +49,15 @@ func newConfigFileRegistryBuilder(
 	logger *logging.LogTree,
 ) *configFileRegistryBuilder {
 	return &configFileRegistryBuilder{
-		fs:                          newSourceFS(false, fs, fs.toPath),
-		isOpenFile:                  fs.isOpenFile,
-		base:                        oldConfigFileRegistry,
-		sessionOptions:              sessionOptions,
-		extendedConfigCache:         extendedConfigCache,
-		snapshotID:                  snapshotID,
-		customConfigFileName:        customConfigFileName,
-		customConfigFileNameChanged: customConfigFileName != oldConfigFileRegistry.customConfigFileName,
+		hasRelativePatternCapability: hasRelativePatternCapability,
+		fs:                           newSourceFS(false, fs, fs.toPath),
+		isOpenFile:                   fs.isOpenFile,
+		base:                         oldConfigFileRegistry,
+		sessionOptions:               sessionOptions,
+		extendedConfigCache:          extendedConfigCache,
+		snapshotID:                   snapshotID,
+		customConfigFileName:         customConfigFileName,
+		customConfigFileNameChanged:  customConfigFileName != oldConfigFileRegistry.customConfigFileName,
 
 		configs:         dirty.NewSyncMap(oldConfigFileRegistry.configs),
 		configFileNames: dirty.NewMap(oldConfigFileRegistry.configFileNames),
@@ -233,8 +236,8 @@ func (c *configFileRegistryBuilder) updateRootFilesWatch(fileName string, entry 
 
 	slices.Sort(globs)
 	entry.rootFilesWatch = entry.rootFilesWatch.Clone(PatternsAndIgnored{
-		patterns: globs,
-		ignored:  ignored,
+		patternsInsideWorkspace: globs,
+		ignored:                 ignored,
 	})
 }
 
@@ -243,7 +246,7 @@ func (c *configFileRegistryBuilder) updateRootFilesWatch(fileName string, entry 
 // in the cache. Each `acquireConfigForProject` call that passes a `project` should be accompanied
 // by an eventual `releaseConfigForProject` call with the same project.
 func (c *configFileRegistryBuilder) acquireConfigForProject(fileName string, path tspath.Path, project *Project, logger *logging.LogTree) *tsoptions.ParsedCommandLine {
-	entry, _ := c.configs.LoadOrStore(path, newConfigFileEntry(fileName))
+	entry, _ := c.configs.LoadOrStore(path, newConfigFileEntry(c.hasRelativePatternCapability, fileName))
 	var needsRetainProject bool
 	entry.ChangeIf(
 		func(config *configFileEntry) bool {
@@ -269,7 +272,7 @@ func (c *configFileRegistryBuilder) acquireConfigForProject(fileName string, pat
 // Each `acquireConfigForFile` call that passes an `openFilePath`
 // should be accompanied by an eventual `releaseConfigForOpenFile` call with the same open file.
 func (c *configFileRegistryBuilder) acquireConfigForFile(configFileName string, configFilePath tspath.Path, filePath tspath.Path, logger *logging.LogTree) *tsoptions.ParsedCommandLine {
-	entry, _ := c.configs.LoadOrStore(configFilePath, newConfigFileEntry(configFileName))
+	entry, _ := c.configs.LoadOrStore(configFilePath, newConfigFileEntry(c.hasRelativePatternCapability, configFileName))
 	var needsRetainOpenFile bool
 	entry.ChangeIf(
 		func(config *configFileEntry) bool {

@@ -332,7 +332,7 @@ func (m *SyncMap[K, V]) finalize(hooks FinalizationHooks[K, V]) (map[K]V, bool) 
 		if entry.delete {
 			ensureCloned()
 			if hooks.OnDelete != nil {
-				hooks.OnDelete(key, entry.original)
+				hooks.OnDelete(key, entry.value)
 			}
 			delete(result, key)
 		} else if entry.dirty {

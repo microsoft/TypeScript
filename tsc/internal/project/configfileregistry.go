@@ -49,13 +49,14 @@ type configFileEntry struct {
 	rootFilesWatch *WatchedFiles[PatternsAndIgnored]
 }
 
-func newConfigFileEntry(fileName string) *configFileEntry {
+func newConfigFileEntry(hasRelativePatternCapability bool, fileName string) *configFileEntry {
 	return &configFileEntry{
 		fileName:      fileName,
 		pendingReload: PendingReloadFull,
 		rootFilesWatch: NewWatchedFiles(
 			"root files for "+fileName,
 			lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
+			hasRelativePatternCapability,
 			core.Identity,
 		),
 	}

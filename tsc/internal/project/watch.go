@@ -10,6 +10,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -29,19 +30,51 @@ type fileSystemWatcherValue struct {
 }
 
 type PatternsAndIgnored struct {
-	patterns []string
-	ignored  map[string]struct{}
+	directoriesOutsideWorkspace []string
+	patternsInsideWorkspace     []string
+	ignored                     map[string]struct{}
 }
 
+// toFileSystemWatcherKey produces a deduplication key for a file system watcher.
+// Note: this key is a simple string concatenation of the base and pattern, so
+// structurally different watchers (Pattern vs RelativePattern, URI vs WorkspaceFolder)
+// could theoretically collide. In practice, workspace watchers use plain Pattern
+// with filesystem paths while outside-workspace watchers use RelativePattern with
+// file:// URIs, so collisions don't occur.
 func toFileSystemWatcherKey(w *lsproto.FileSystemWatcher) fileSystemWatcherKey {
-	if w.GlobPattern.RelativePattern != nil {
-		panic("relative globs not implemented")
-	}
 	kind := w.Kind
 	if kind == nil {
 		kind = new(lsproto.WatchKindCreate | lsproto.WatchKindChange | lsproto.WatchKindDelete)
 	}
-	return fileSystemWatcherKey{pattern: *w.GlobPattern.Pattern, kind: *kind}
+	var pattern string
+	if w.GlobPattern.Pattern != nil {
+		pattern = *w.GlobPattern.Pattern
+	} else if w.GlobPattern.RelativePattern != nil {
+		var base string
+		if w.GlobPattern.RelativePattern.BaseUri.URI != nil {
+			base = string(*w.GlobPattern.RelativePattern.BaseUri.URI)
+		} else if w.GlobPattern.RelativePattern.BaseUri.WorkspaceFolder != nil {
+			panic("workspace folder-based relative patterns not implemented")
+		}
+		pattern = base + "/" + w.GlobPattern.RelativePattern.Pattern
+	}
+	return fileSystemWatcherKey{pattern: pattern, kind: *kind}
+}
+
+func fileSystemWatcherGlobString(w *lsproto.FileSystemWatcher) string {
+	if w.GlobPattern.Pattern != nil {
+		return *w.GlobPattern.Pattern
+	}
+	if w.GlobPattern.RelativePattern != nil {
+		var base string
+		if w.GlobPattern.RelativePattern.BaseUri.URI != nil {
+			base = string(*w.GlobPattern.RelativePattern.BaseUri.URI)
+		} else if w.GlobPattern.RelativePattern.BaseUri.WorkspaceFolder != nil {
+			panic("workspace folder-based relative patterns not implemented")
+		}
+		return base + "/" + w.GlobPattern.RelativePattern.Pattern
+	}
+	return ""
 }
 
 type WatcherID string
@@ -49,40 +82,52 @@ type WatcherID string
 var watcherID atomic.Uint64
 
 type WatchedFiles[T any] struct {
-	name                string
-	watchKind           lsproto.WatchKind
-	computeGlobPatterns func(input T) PatternsAndIgnored
+	name                         string
+	watchKind                    lsproto.WatchKind
+	hasRelativePatternCapability bool
+	computeGlobPatterns          func(input T) PatternsAndIgnored
 
-	mu                  sync.RWMutex
-	input               T
-	computeWatchersOnce sync.Once
-	watchers            []*lsproto.FileSystemWatcher
-	ignored             map[string]struct{}
-	id                  uint64
+	mu                       sync.RWMutex
+	input                    T
+	computeWatchersOnce      sync.Once
+	workspaceWatchers        []*lsproto.FileSystemWatcher
+	outsideWorkspaceWatchers []*lsproto.FileSystemWatcher
+	ignored                  map[string]struct{}
+	id                       uint64
 }
 
-func NewWatchedFiles[T any](name string, watchKind lsproto.WatchKind, computeGlobPatterns func(input T) PatternsAndIgnored) *WatchedFiles[T] {
+func NewWatchedFiles[T any](name string, watchKind lsproto.WatchKind, hasRelativePatternCapability bool, computeGlobPatterns func(input T) PatternsAndIgnored) *WatchedFiles[T] {
 	return &WatchedFiles[T]{
-		id:                  watcherID.Add(1),
-		name:                name,
-		watchKind:           watchKind,
-		computeGlobPatterns: computeGlobPatterns,
+		id:                           watcherID.Add(1),
+		name:                         name,
+		watchKind:                    watchKind,
+		hasRelativePatternCapability: hasRelativePatternCapability,
+		computeGlobPatterns:          computeGlobPatterns,
 	}
 }
 
-func (w *WatchedFiles[T]) Watchers() (WatcherID, []*lsproto.FileSystemWatcher, map[string]struct{}) {
+type Watchers struct {
+	WatcherID                WatcherID
+	WorkspaceWatchers        []*lsproto.FileSystemWatcher
+	OutsideWorkspaceWatchers []*lsproto.FileSystemWatcher
+	IgnoredPaths             map[string]struct{}
+}
+
+func (w *WatchedFiles[T]) Watchers() Watchers {
 	w.computeWatchersOnce.Do(func() {
 		w.mu.Lock()
 		defer w.mu.Unlock()
 		result := w.computeGlobPatterns(w.input)
-		globs := result.patterns
+		globs := result.patternsInsideWorkspace
+
 		ignored := result.ignored
 		// ignored is only used for logging and doesn't affect watcher identity
 		w.ignored = ignored
-		if !slices.EqualFunc(w.watchers, globs, func(a *lsproto.FileSystemWatcher, b string) bool {
+		changed := false
+		if !slices.EqualFunc(w.workspaceWatchers, globs, func(a *lsproto.FileSystemWatcher, b string) bool {
 			return *a.GlobPattern.Pattern == b
 		}) {
-			w.watchers = core.Map(globs, func(glob string) *lsproto.FileSystemWatcher {
+			w.workspaceWatchers = core.Map(globs, func(glob string) *lsproto.FileSystemWatcher {
 				return &lsproto.FileSystemWatcher{
 					GlobPattern: lsproto.PatternOrRelativePattern{
 						Pattern: &glob,
@@ -90,21 +135,37 @@ func (w *WatchedFiles[T]) Watchers() (WatcherID, []*lsproto.FileSystemWatcher, m
 					Kind: &w.watchKind,
 				}
 			})
+			changed = true
+		}
+		dirsOutside := result.directoriesOutsideWorkspace
+		if !slices.EqualFunc(w.outsideWorkspaceWatchers, dirsOutside, func(a *lsproto.FileSystemWatcher, b string) bool {
+			return fileSystemWatcherGlobString(a) == recursiveDirectoryGlobPattern(b, w.hasRelativePatternCapability)
+		}) {
+			w.outsideWorkspaceWatchers = core.Map(dirsOutside, func(dir string) *lsproto.FileSystemWatcher {
+				return newRecursiveDirectoryWatcher(dir, w.watchKind, w.hasRelativePatternCapability)
+			})
+			changed = true
+		}
+		if changed {
 			w.id = watcherID.Add(1)
 		}
 	})
 
 	w.mu.RLock()
 	defer w.mu.RUnlock()
-	return WatcherID(fmt.Sprintf("%s watcher %d", w.name, w.id)), w.watchers, w.ignored
+	return Watchers{
+		WatcherID:                WatcherID(fmt.Sprintf("%s watcher %d", w.name, w.id)),
+		WorkspaceWatchers:        w.workspaceWatchers,
+		OutsideWorkspaceWatchers: w.outsideWorkspaceWatchers,
+		IgnoredPaths:             w.ignored,
+	}
 }
 
 func (w *WatchedFiles[T]) ID() WatcherID {
 	if w == nil {
 		return ""
 	}
-	id, _, _ := w.Watchers()
-	return id
+	return w.Watchers().WatcherID
 }
 
 func (w *WatchedFiles[T]) Name() string {
@@ -122,11 +183,13 @@ func (w *WatchedFiles[T]) Clone(input T) *WatchedFiles[T] {
 	w.mu.RLock()
 	defer w.mu.RUnlock()
 	return &WatchedFiles[T]{
-		name:                w.name,
-		watchKind:           w.watchKind,
-		computeGlobPatterns: w.computeGlobPatterns,
-		watchers:            w.watchers,
-		input:               input,
+		name:                         w.name,
+		watchKind:                    w.watchKind,
+		hasRelativePatternCapability: w.hasRelativePatternCapability,
+		computeGlobPatterns:          w.computeGlobPatterns,
+		workspaceWatchers:            w.workspaceWatchers,
+		outsideWorkspaceWatchers:     w.outsideWorkspaceWatchers,
+		input:                        input,
 	}
 }
 
@@ -144,6 +207,9 @@ func createResolutionLookupGlobMapper(workspaceDirectory string, libDirectory st
 
 		if data != nil {
 			data.Range(func(path tspath.Path) bool {
+				if tspath.IsDynamicFileName(string(path)) {
+					return true
+				}
 				// Assuming all of the input paths are file paths, we can avoid
 				// duplicate work by only taking one file per dir, since their outputs
 				// will always be the same.
@@ -184,6 +250,7 @@ func createResolutionLookupGlobMapper(workspaceDirectory string, libDirectory st
 			slices.Sort(nodeModulesGlobs)
 			globs = append(globs, nodeModulesGlobs...)
 		}
+		var outsideDirs []string
 		if externalDirectories.Len() > 0 {
 			externalDirStrings := make([]string, 0, externalDirectories.Len())
 			for dir := range externalDirectories.Keys() {
@@ -197,14 +264,13 @@ func createResolutionLookupGlobMapper(workspaceDirectory string, libDirectory st
 			)
 			slices.Sort(externalDirectoryParents)
 			ignored = ignoredExternalDirs
-			for _, dir := range externalDirectoryParents {
-				globs = append(globs, getRecursiveGlobPattern(dir))
-			}
+			outsideDirs = externalDirectoryParents
 		}
 
 		return PatternsAndIgnored{
-			patterns: globs,
-			ignored:  ignored,
+			directoriesOutsideWorkspace: outsideDirs,
+			patternsInsideWorkspace:     globs,
+			ignored:                     ignored,
 		}
 	}
 }
@@ -246,12 +312,10 @@ func getTypingsLocationsGlobs(
 	if includeTypingsLocation {
 		globs[tspath.ToPath(typingsLocation, currentDirectory, useCaseSensitiveFileNames)] = getRecursiveGlobPattern(typingsLocation)
 	}
-	for _, dir := range externalDirectoryParents {
-		globs[tspath.ToPath(dir, currentDirectory, useCaseSensitiveFileNames)] = getRecursiveGlobPattern(dir)
-	}
 	return PatternsAndIgnored{
-		patterns: slices.Collect(maps.Values(globs)),
-		ignored:  ignored,
+		directoriesOutsideWorkspace: externalDirectoryParents,
+		patternsInsideWorkspace:     slices.Collect(maps.Values(globs)),
+		ignored:                     ignored,
 	}
 }
 
@@ -291,4 +355,40 @@ func perceivedOsRootLengthForWatching(pathComponents []string) int {
 
 func getRecursiveGlobPattern(directory string) string {
 	return fmt.Sprintf("%s/%s", tspath.RemoveTrailingDirectorySeparator(directory), "**/*")
+}
+
+// recursiveDirectoryGlobPattern returns the string form of a recursive watcher
+// for the given directory that would be produced by newRecursiveDirectoryWatcher.
+func recursiveDirectoryGlobPattern(directory string, useRelativePattern bool) string {
+	if useRelativePattern {
+		return string(lsconv.FileNameToDocumentURI(directory)) + "/**/*"
+	}
+	return getRecursiveGlobPattern(directory)
+}
+
+// newRecursiveDirectoryWatcher creates a FileSystemWatcher for recursively
+// watching a directory. When useRelativePattern is true, a RelativePattern with
+// a file:// base URI is used; otherwise a plain glob Pattern is used.
+func newRecursiveDirectoryWatcher(directory string, kind lsproto.WatchKind, useRelativePattern bool) *lsproto.FileSystemWatcher {
+	if useRelativePattern {
+		baseUri := lsproto.URI(lsconv.FileNameToDocumentURI(directory))
+		return &lsproto.FileSystemWatcher{
+			GlobPattern: lsproto.PatternOrRelativePattern{
+				RelativePattern: &lsproto.RelativePattern{
+					BaseUri: lsproto.WorkspaceFolderOrURI{
+						URI: &baseUri,
+					},
+					Pattern: "**/*",
+				},
+			},
+			Kind: &kind,
+		}
+	}
+	glob := getRecursiveGlobPattern(directory)
+	return &lsproto.FileSystemWatcher{
+		GlobPattern: lsproto.PatternOrRelativePattern{
+			Pattern: &glob,
+		},
+		Kind: &kind,
+	}
 }
