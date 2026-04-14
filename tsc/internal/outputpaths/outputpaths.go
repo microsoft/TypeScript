@@ -102,7 +102,7 @@ func GetOutputDeclarationFileNameWorker(inputFileName string, options *core.Comp
 	}
 	return tspath.ChangeExtension(
 		getOutputPathWithoutChangingExtension(inputFileName, dir, host),
-		getDeclarationEmitExtensionForPath(inputFileName),
+		tspath.GetDeclarationEmitExtensionForPath(inputFileName),
 	)
 }
 
@@ -195,17 +195,6 @@ func GetSourceMapFilePath(jsFilePath string, options *core.CompilerOptions) stri
 		return jsFilePath + ".map"
 	}
 	return ""
-}
-
-func getDeclarationEmitExtensionForPath(fileName string) string {
-	if tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionMjs, tspath.ExtensionMts}) {
-		return tspath.ExtensionDmts
-	} else if tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionCjs, tspath.ExtensionCts}) {
-		return tspath.ExtensionDcts
-	} else if tspath.FileExtensionIs(fileName, tspath.ExtensionJson) {
-		return ".d.json.ts"
-	}
-	return tspath.ExtensionDts
 }
 
 func GetBuildInfoFileName(options *core.CompilerOptions, opts tspath.ComparePathsOptions) string {

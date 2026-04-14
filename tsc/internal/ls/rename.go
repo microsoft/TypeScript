@@ -26,6 +26,8 @@ type RenameInfo struct {
 	LocalizedErrorMessage string
 	DisplayName           string
 	TriggerSpan           lsproto.Range
+	FileToRename          string
+	NewFileName           string
 }
 
 func (l *LanguageService) ProvideRename(ctx context.Context, params *lsproto.RenameParams, orchestrator CrossProjectOrchestrator) (lsproto.WorkspaceEditOrNull, error) {
@@ -42,7 +44,7 @@ func (l *LanguageService) ProvideRename(ctx context.Context, params *lsproto.Ren
 	)
 }
 
-func (l *LanguageService) GetRenameInfo(ctx context.Context, documentURI lsproto.DocumentUri, position lsproto.Position) RenameInfo {
+func (l *LanguageService) GetRenameInfo(ctx context.Context, newName string, documentURI lsproto.DocumentUri, position lsproto.Position) RenameInfo {
 	program, sourceFile := l.getProgramAndFile(documentURI)
 	pos := int(l.converters.LineAndCharacterToPosition(sourceFile, position))
 
@@ -50,7 +52,7 @@ func (l *LanguageService) GetRenameInfo(ctx context.Context, documentURI lsproto
 	node = getAdjustedLocation(node, true /*forRename*/, sourceFile)
 
 	if nodeIsEligibleForRename(node) {
-		if renameInfo, ok := l.getRenameInfoForNode(ctx, node, sourceFile, program); ok {
+		if renameInfo, ok := l.getRenameInfoForNode(ctx, newName, node, sourceFile, program); ok {
 			return renameInfo
 		}
 	}
@@ -68,7 +70,7 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 	// Use getRenameInfoForNode directly with the already-resolved node to avoid
 	// re-resolving the position and polluting state baselines.
 	sourceFile := ast.GetSourceFileOfNode(data.OriginalNode)
-	if info, ok := l.getRenameInfoForNode(ctx, data.OriginalNode, sourceFile, program); !ok || !info.CanRename {
+	if info, ok := l.getRenameInfoForNode(ctx, params.NewName, data.OriginalNode, sourceFile, program); !ok || !info.CanRename {
 		return lsproto.WorkspaceEditOrNull{}, nil
 	}
 
@@ -98,7 +100,7 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 }
 
 // getRenameInfoForNode performs detailed validation for a rename operation on a specific node.
-func (l *LanguageService) getRenameInfoForNode(ctx context.Context, node *ast.Node, sourceFile *ast.SourceFile, program *compiler.Program) (RenameInfo, bool) {
+func (l *LanguageService) getRenameInfoForNode(ctx context.Context, newName string, node *ast.Node, sourceFile *ast.SourceFile, program *compiler.Program) (RenameInfo, bool) {
 	ch, done := program.GetTypeChecker(ctx)
 	defer done()
 
@@ -131,7 +133,7 @@ func (l *LanguageService) getRenameInfoForNode(ctx context.Context, node *ast.No
 
 	if ast.IsStringLiteralLike(node) && ast.TryGetImportFromModuleSpecifier(node) != nil {
 		if l.UserPreferences().AllowRenameOfImportPath.IsTrue() {
-			return l.getRenameInfoForModule(ctx, node, sourceFile, symbol)
+			return l.getRenameInfoForModule(ctx, newName, node, sourceFile, symbol)
 		}
 		return RenameInfo{}, false
 	}
@@ -217,10 +219,25 @@ func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Sym
 	return nil
 }
 
+func ClientSupportsWillRenameFiles(ctx context.Context) bool {
+	return lsproto.GetClientCapabilities(ctx).Workspace.FileOperations.WillRename
+}
+
+func ClientSupportsDocumentChanges(ctx context.Context) bool {
+	return lsproto.GetClientCapabilities(ctx).Workspace.WorkspaceEdit.DocumentChanges
+}
+
+func ClientSupportsRenameResourceOperations(ctx context.Context) bool {
+	return slices.Contains(lsproto.GetClientCapabilities(ctx).Workspace.WorkspaceEdit.ResourceOperations, lsproto.ResourceOperationKindRename)
+}
+
 // getRenameInfoForModule handles rename validation for module specifiers.
-func (l *LanguageService) getRenameInfoForModule(ctx context.Context, node *ast.Node, sourceFile *ast.SourceFile, moduleSymbol *ast.Symbol) (RenameInfo, bool) {
-	if !tspath.IsExternalModuleNameRelative(node.Text()) {
+func (l *LanguageService) getRenameInfoForModule(ctx context.Context, newName string, specifier *ast.StringLiteralLike, sourceFile *ast.SourceFile, moduleSymbol *ast.Symbol) (RenameInfo, bool) {
+	if !tspath.IsExternalModuleNameRelative(specifier.Text()) {
 		return getRenameInfoError(ctx, diagnostics.You_cannot_rename_a_module_via_a_global_import), true
+	}
+	if !ClientSupportsDocumentChanges(ctx) || !ClientSupportsRenameResourceOperations(ctx) {
+		return getRenameInfoError(ctx, diagnostics.File_rename_is_not_supported_by_the_editor), true
 	}
 
 	moduleSourceFile := core.Find(moduleSymbol.Declarations, ast.IsSourceFile)
@@ -230,7 +247,7 @@ func (l *LanguageService) getRenameInfoForModule(ctx context.Context, node *ast.
 
 	fileName := moduleSourceFile.AsSourceFile().FileName()
 	withoutIndex := ""
-	if !strings.HasSuffix(node.Text(), "/index") && !strings.HasSuffix(node.Text(), "/index.js") {
+	if !strings.HasSuffix(specifier.Text(), "/index") && !strings.HasSuffix(specifier.Text(), "/index.js") {
 		candidate := tspath.RemoveFileExtension(fileName)
 		if trimmed, ok := strings.CutSuffix(candidate, "/index"); ok {
 			withoutIndex = trimmed
@@ -241,17 +258,39 @@ func (l *LanguageService) getRenameInfoForModule(ctx context.Context, node *ast.
 	if withoutIndex != "" {
 		displayName = withoutIndex
 	}
+	newFileName := l.getNewFileNameForModuleRename(displayName, specifier.Text(), newName)
 
 	// Span should only be the last component of the path. + 1 to account for the quote character.
-	indexAfterLastSlash := strings.LastIndex(node.Text(), "/") + 1
-	start := node.Pos() + 1 + indexAfterLastSlash
-	length := len(node.Text()) - indexAfterLastSlash
+	indexAfterLastSlash := strings.LastIndex(specifier.Text(), "/") + 1
+	start := specifier.Pos() + 1 + indexAfterLastSlash
+	length := len(specifier.Text()) - indexAfterLastSlash
 
 	return RenameInfo{
-		CanRename:   true,
-		DisplayName: displayName,
-		TriggerSpan: l.converters.ToLSPRange(sourceFile, core.NewTextRange(start, start+length)),
+		CanRename:    true,
+		DisplayName:  specifier.Text()[indexAfterLastSlash:],
+		TriggerSpan:  l.converters.ToLSPRange(sourceFile, core.NewTextRange(start, start+length)),
+		FileToRename: displayName,
+		NewFileName:  newFileName,
 	}, true
+}
+
+// Adjust the new name based on the old path that an import specifier resolves to.
+// For example, if specifier "a.js" resolves to file a.ts, renaming "a.js" -> "b.js" should mean file rename a.ts -> b.ts.
+func (l *LanguageService) getNewFileNameForModuleRename(oldPath, specifierText, newName string) string {
+	newPath := tspath.CombinePaths(tspath.GetDirectoryPath(oldPath), newName)
+	ignoreCase := !l.host.UseCaseSensitiveFileNames()
+	var oldExt string
+	if tspath.IsDeclarationFileName(oldPath) {
+		oldExt = tspath.GetDeclarationFileExtension(oldPath)
+	} else {
+		oldExt = tspath.GetAnyExtensionFromPath(oldPath, nil /*extensions*/, ignoreCase)
+	}
+	if !tspath.HasExtension(newPath) {
+		newPath = newPath + oldExt
+	} else if tspath.GetAnyExtensionFromPath(newPath, nil /*extensions*/, ignoreCase) == tspath.GetAnyExtensionFromPath(specifierText, nil /*extensions*/, ignoreCase) {
+		newPath = tspath.ChangeAnyExtension(newPath, oldExt, nil /*extensions*/, ignoreCase)
+	}
+	return newPath
 }
 
 func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *ReferenceEntry, newText string, ch *checker.Checker, quotePreference lsutil.QuotePreference) string {

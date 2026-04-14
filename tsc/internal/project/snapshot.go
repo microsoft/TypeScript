@@ -144,6 +144,10 @@ func (s *Snapshot) DirectoryExists(path string) bool {
 	return s.fs.fs.DirectoryExists(path)
 }
 
+func (s *Snapshot) FileExists(path string) bool {
+	return s.fs.fs.FileExists(path)
+}
+
 func (s *Snapshot) GetDirectories(path string) []string {
 	return s.fs.fs.GetAccessibleEntries(path).Directories
 }

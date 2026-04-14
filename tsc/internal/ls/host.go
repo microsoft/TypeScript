@@ -21,4 +21,5 @@ type Host interface {
 	ReadDirectory(currentDir string, path string, extensions []string, excludes []string, includes []string, depth int) []string
 	GetDirectories(path string) []string
 	DirectoryExists(path string) bool
+	FileExists(path string) bool
 }

@@ -104,7 +104,7 @@ func CompileFiles(
 
 	// Parse harness and compiler options from the test configuration
 	if testConfig != nil {
-		setOptionsFromTestConfig(t, testConfig, compilerOptions, &harnessOptions, currentDirectory)
+		SetOptionsFromTestConfig(t, testConfig, compilerOptions, &harnessOptions, currentDirectory, false /*allowUnknownOptions*/)
 	}
 
 	return CompileFilesEx(t, inputFiles, otherFiles, &harnessOptions, compilerOptions, currentDirectory, symlinks, tsconfig)
@@ -232,7 +232,7 @@ func CompileFilesEx(
 	result.Repeat = func(testConfig TestConfiguration) *CompilationResult {
 		newHarnessOptions := *harnessOptions
 		newCompilerOptions := compilerOptions.Clone()
-		setOptionsFromTestConfig(t, testConfig, newCompilerOptions, &newHarnessOptions, currentDirectory)
+		SetOptionsFromTestConfig(t, testConfig, newCompilerOptions, &newHarnessOptions, currentDirectory, false /*allowUnknownOptions*/)
 		return CompileFilesEx(t, inputFiles, otherFiles, &newHarnessOptions, newCompilerOptions, currentDirectory, symlinks, tsconfig)
 	}
 	return result
@@ -263,24 +263,7 @@ var testLibFolderMap = sync.OnceValue(func() map[string]any {
 	return testfs
 })
 
-func SetCompilerOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compilerOptions *core.CompilerOptions, currentDirectory string) {
-	for name, value := range testConfig {
-		if name == "typescriptversion" {
-			continue
-		}
-
-		commandLineOption := getCommandLineOption(name)
-		if commandLineOption != nil {
-			parsedValue := getOptionValue(t, commandLineOption, value, currentDirectory)
-			errors := tsoptions.ParseCompilerOptions(commandLineOption.Name, parsedValue, compilerOptions)
-			if len(errors) > 0 {
-				t.Fatalf("Error parsing value '%s' for compiler option '%s'.", value, commandLineOption.Name)
-			}
-		}
-	}
-}
-
-func setOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compilerOptions *core.CompilerOptions, harnessOptions *HarnessOptions, currentDirectory string) {
+func SetOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compilerOptions *core.CompilerOptions, harnessOptions *HarnessOptions, currentDirectory string, allowUnknownOptions bool) {
 	for name, value := range testConfig {
 		if name == "typescriptversion" {
 			continue
@@ -301,8 +284,9 @@ func setOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compil
 			parseHarnessOption(t, harnessOption.Name, parsedValue, harnessOptions)
 			continue
 		}
-
-		t.Fatalf("Unknown compiler option '%s'.", name)
+		if !allowUnknownOptions {
+			t.Fatalf("Unknown compiler option '%s'.", name)
+		}
 	}
 }
 

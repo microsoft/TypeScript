@@ -1334,7 +1334,50 @@ func GetModuleSpecifier(
 	toFileName string,
 	options ModuleSpecifierOptions,
 ) string {
-	userPreferences := UserPreferences{}
+	return getModuleSpecifierWithPreferences(
+		compilerOptions,
+		host,
+		importingSourceFile,
+		importingSourceFileName,
+		oldImportSpecifier,
+		toFileName,
+		UserPreferences{},
+		options,
+	)
+}
+
+func UpdateModuleSpecifier(
+	compilerOptions *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	importingSourceFile *ast.SourceFile,
+	importingSourceFileName string,
+	oldImportSpecifier string,
+	toFileName string,
+	userPreferences UserPreferences,
+	options ModuleSpecifierOptions,
+) string {
+	return getModuleSpecifierWithPreferences(
+		compilerOptions,
+		host,
+		importingSourceFile,
+		importingSourceFileName,
+		oldImportSpecifier,
+		toFileName,
+		userPreferences,
+		options,
+	)
+}
+
+func getModuleSpecifierWithPreferences(
+	compilerOptions *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	importingSourceFile *ast.SourceFile, // !!! | FutureSourceFile
+	importingSourceFileName string,
+	oldImportSpecifier string, // used only in updatingModuleSpecifier
+	toFileName string,
+	userPreferences UserPreferences,
+	options ModuleSpecifierOptions,
+) string {
 	info := getInfo(importingSourceFileName, host)
 	modulePaths := getAllModulePaths(info, toFileName, host, compilerOptions, userPreferences, options)
 	preferences := getModuleSpecifierPreferences(userPreferences, host, compilerOptions, importingSourceFile, oldImportSpecifier)
@@ -1347,9 +1390,8 @@ func GetModuleSpecifier(
 	for _, modulePath := range modulePaths {
 		if firstDefined := tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, false /*packageNameOnly*/, options.OverrideImportMode); len(firstDefined) > 0 {
 			return firstDefined
-		} else if firstDefined := getLocalModuleSpecifier(toFileName, info, compilerOptions, host, resolutionMode, preferences, false); len(firstDefined) > 0 {
-			return firstDefined
 		}
 	}
-	return ""
+
+	return getLocalModuleSpecifier(toFileName, info, compilerOptions, host, resolutionMode, preferences, false)
 }

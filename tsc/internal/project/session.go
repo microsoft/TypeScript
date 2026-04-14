@@ -914,6 +914,26 @@ func (s *Session) GetProjectsForFile(ctx context.Context, uri lsproto.DocumentUr
 	return allProjects, nil
 }
 
+func (s *Session) GetLanguageServicesForDocuments(ctx context.Context, uris []lsproto.DocumentUri) []*ls.LanguageService {
+	snapshot := s.getSnapshot(
+		ctx,
+		ResourceRequest{Documents: uris},
+		false, /*callerRef*/
+	)
+
+	activeFile := ""
+	if len(uris) > 0 {
+		activeFile = uris[0].FileName()
+	}
+
+	projects := snapshot.ProjectCollection.Projects()
+	services := make([]*ls.LanguageService, 0, len(projects))
+	for _, project := range projects {
+		services = append(services, ls.NewLanguageService(project.configFilePath, project.GetProgram(), snapshot, activeFile))
+	}
+	return services
+}
+
 func (s *Session) GetLanguageServiceForProjectWithFile(ctx context.Context, project *Project, uri lsproto.DocumentUri) *ls.LanguageService {
 	snapshot := s.getSnapshot(
 		ctx,

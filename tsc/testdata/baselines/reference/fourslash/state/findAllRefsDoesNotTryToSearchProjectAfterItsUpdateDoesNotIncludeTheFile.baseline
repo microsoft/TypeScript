@@ -591,6 +591,9 @@ Config File Names::
   }
 }
 
+//// [/packages/babel-loader/src/index.ts] *modified* 
+// commentimport type { Foo } from "../../core/src/index.js";
+
 Projects::
   [/packages/babel-loader/tsconfig.json] *modified*
     /packages/babel-loader/src/index.ts      *modified*

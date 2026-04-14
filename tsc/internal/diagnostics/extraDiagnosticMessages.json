@@ -122,5 +122,9 @@
     "Sort Imports": {
         "category": "Message",
         "code": 100018
+    },
+    "File rename is not supported by the editor": {
+        "category": "Error",
+        "code": 8040
     }
 }
