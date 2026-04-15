@@ -2448,7 +2448,7 @@ func (b *NodeBuilderImpl) addPropertyToElementList(propertySymbol *ast.Symbol, t
 		writeType := b.ch.getWriteTypeOfSymbol(propertySymbol)
 		if !b.ch.isErrorType(propertyType) && !b.ch.isErrorType(writeType) {
 			propDeclaration := ast.GetDeclarationOfKind(propertySymbol, ast.KindPropertyDeclaration)
-			if propertyType != writeType || propertySymbol.Parent.Flags&ast.SymbolFlagsClass != 0 && propDeclaration == nil {
+			if propertyType != writeType || propertySymbol.Parent != nil && propertySymbol.Parent.Flags&ast.SymbolFlagsClass != 0 && propDeclaration == nil {
 				symbolMapper := b.ch.valueSymbolLinks.Get(propertySymbol).mapper
 				if getterDeclaration := ast.GetDeclarationOfKind(propertySymbol, ast.KindGetAccessor); getterDeclaration != nil {
 					getterSignature := b.ch.getSignatureFromDeclaration(getterDeclaration)
@@ -2473,7 +2473,7 @@ func (b *NodeBuilderImpl) addPropertyToElementList(propertySymbol *ast.Symbol, t
 					typeElements = append(typeElements, setter)
 				}
 				return typeElements
-			} else if propertySymbol.Parent.Flags&ast.SymbolFlagsClass != 0 && propDeclaration != nil && core.Find(propDeclaration.ModifierNodes(), func(m *ast.Node) bool {
+			} else if propertySymbol.Parent != nil && propertySymbol.Parent.Flags&ast.SymbolFlagsClass != 0 && propDeclaration != nil && core.Find(propDeclaration.ModifierNodes(), func(m *ast.Node) bool {
 				return m.Kind == ast.KindAccessorKeyword
 			}) != nil {
 				fakeGetterSignature := b.ch.newSignature(SignatureFlagsNone, nil, nil, nil, nil, propertyType, nil, 0)
