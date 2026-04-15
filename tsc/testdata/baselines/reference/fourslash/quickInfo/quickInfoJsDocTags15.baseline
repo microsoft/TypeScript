@@ -6,7 +6,9 @@
 //                    ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | type Foo = { getName: _a.Bar; }
+// | type Foo = {
+// |     getName: _a.Bar;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -18,7 +20,9 @@
 //                 ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | type Foo = { getName: _a.Bar; }
+// | type Foo = {
+// |     getName: _a.Bar;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -30,7 +34,9 @@
 //                  ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | type Foo = { getName: _a.Bar; }
+// | type Foo = {
+// |     getName: _a.Bar;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -50,7 +56,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype Foo = { getName: _a.Bar; }\n```\n"
+        "value": "```tsx\ntype Foo = {\n    getName: _a.Bar;\n}\n```\n"
       },
       "range": {
         "start": {
@@ -78,7 +84,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype Foo = { getName: _a.Bar; }\n```\n"
+        "value": "```tsx\ntype Foo = {\n    getName: _a.Bar;\n}\n```\n"
       },
       "range": {
         "start": {
@@ -106,7 +112,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype Foo = { getName: _a.Bar; }\n```\n"
+        "value": "```tsx\ntype Foo = {\n    getName: _a.Bar;\n}\n```\n"
       },
       "range": {
         "start": {

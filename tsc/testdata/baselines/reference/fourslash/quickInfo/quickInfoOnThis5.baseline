@@ -7,7 +7,11 @@
 //                         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | this: { num: number; f(): void; g(this: number): void; }
+// | this: {
+// |     num: number;
+// |     f(): void;
+// |     g(this: number): void;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -15,7 +19,11 @@
 //                         ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | this: { num: number; f(): void; g(this: number): void; }
+// | this: {
+// |     num: number;
+// |     f(): void;
+// |     g(this: number): void;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -76,7 +84,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nthis: { num: number; f(): void; g(this: number): void; }\n```\n"
+        "value": "```tsx\nthis: {\n    num: number;\n    f(): void;\n    g(this: number): void;\n}\n```\n"
       },
       "range": {
         "start": {
@@ -103,7 +111,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nthis: { num: number; f(): void; g(this: number): void; }\n```\n"
+        "value": "```tsx\nthis: {\n    num: number;\n    f(): void;\n    g(this: number): void;\n}\n```\n"
       },
       "range": {
         "start": {

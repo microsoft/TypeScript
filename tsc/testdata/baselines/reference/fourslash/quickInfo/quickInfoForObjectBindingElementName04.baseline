@@ -17,7 +17,9 @@
 //     ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (parameter) a: { b: string; }
+// | (parameter) a: {
+// |     b: string;
+// | }
 // | ```
 // | A description of 'a'
 // | ----------------------------------------------------------------------
@@ -44,7 +46,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: { b: string; }\n```\nA description of 'a'"
+        "value": "```tsx\n(parameter) a: {\n    b: string;\n}\n```\nA description of 'a'"
       },
       "range": {
         "start": {

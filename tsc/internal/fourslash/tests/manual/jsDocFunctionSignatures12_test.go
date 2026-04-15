@@ -29,5 +29,5 @@ function f1(o) {
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.GoToMarker(t, "")
-	f.VerifyQuickInfoIs(t, "(parameter) o: { stringProp: string; numProp: number; boolProp: boolean; anyProp: any; anotherAnyProp: any; functionProp: (arg0: string, arg1: any) => any; }", "")
+	f.VerifyQuickInfoIs(t, "(parameter) o: {\n    stringProp: string;\n    numProp: number;\n    boolProp: boolean;\n    anyProp: any;\n    anotherAnyProp: any;\n    functionProp: (arg0: string, arg1: any) => any;\n}", "")
 }

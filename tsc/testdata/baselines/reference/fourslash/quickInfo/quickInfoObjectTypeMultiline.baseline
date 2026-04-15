@@ -1,0 +1,96 @@
+// === QuickInfo ===
+=== /quickInfoObjectTypeMultiline.ts ===
+// type X = {
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type X = {
+// |     a: number;
+// |     b: string;
+// |     c: {};
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | type X = {
+// |     a: number;
+// |     b: string;
+// |     c: C;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     a: number
+//     b: string
+//     c: C
+// }
+// type C = {}
+// 
+[
+  {
+    "marker": {
+      "Position": 6,
+      "LSPosition": {
+        "line": 0,
+        "character": 6
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype X = {\n    a: number;\n    b: string;\n    c: C;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 5
+          },
+          "end": {
+            "line": 0,
+            "character": 6
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 6,
+      "LSPosition": {
+        "line": 0,
+        "character": 6
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\ntype X = {\n    a: number;\n    b: string;\n    c: {};\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 5
+          },
+          "end": {
+            "line": 0,
+            "character": 6
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

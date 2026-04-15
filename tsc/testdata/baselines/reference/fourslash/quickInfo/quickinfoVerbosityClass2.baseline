@@ -114,7 +114,10 @@
 //       ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | const c: { new (x: string): Foo<string>; whatever(): void; }
+// | const c: {
+// |     new (x: string): Foo<string>;
+// |     whatever(): void;
+// | }
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -506,7 +509,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst c: { new (x: string): Foo<string>; whatever(): void; }\n```\n"
+          "value": "```tsx\nconst c: {\n    new (x: string): Foo<string>;\n    whatever(): void;\n}\n```\n"
         },
         "range": {
           "start": {

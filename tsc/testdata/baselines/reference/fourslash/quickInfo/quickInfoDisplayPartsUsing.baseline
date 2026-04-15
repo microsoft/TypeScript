@@ -13,7 +13,9 @@
 //                 ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | await using b: { [Symbol.asyncDispose](): Promise<void>; }
+// | await using b: {
+// |     [Symbol.asyncDispose](): Promise<void>;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -59,7 +61,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nawait using b: { [Symbol.asyncDispose](): Promise<void>; }\n```\n"
+        "value": "```tsx\nawait using b: {\n    [Symbol.asyncDispose](): Promise<void>;\n}\n```\n"
       },
       "range": {
         "start": {

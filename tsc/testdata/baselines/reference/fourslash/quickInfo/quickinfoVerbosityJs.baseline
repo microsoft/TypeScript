@@ -44,7 +44,10 @@
 //                      ^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | type SomeType2 = { prop2: number; prop3: SomeType; }
+// | type SomeType2 = {
+// |     prop2: number;
+// |     prop3: SomeType;
+// | }
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -219,7 +222,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype SomeType2 = { prop2: number; prop3: SomeType; }\n```\n"
+          "value": "```tsx\ntype SomeType2 = {\n    prop2: number;\n    prop3: SomeType;\n}\n```\n"
         },
         "range": {
           "start": {

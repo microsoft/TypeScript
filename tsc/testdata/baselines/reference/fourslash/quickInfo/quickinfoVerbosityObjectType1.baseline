@@ -78,7 +78,11 @@
 //       ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | const obj2: { foo: FooType; bar: BarType; str: Str; }
+// | const obj2: {
+// |     foo: FooType;
+// |     bar: BarType;
+// |     str: Str;
+// | }
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -221,7 +225,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj2: { foo: FooType; bar: BarType; str: Str; }\n```\n"
+          "value": "```tsx\nconst obj2: {\n    foo: FooType;\n    bar: BarType;\n    str: Str;\n}\n```\n"
         },
         "range": {
           "start": {

@@ -4,7 +4,11 @@
 //      ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | type Node<T> = { value: T; left: Node<T> | undefined; right: Node<T> | undefined; }
+// | type Node<T> = {
+// |     value: T;
+// |     left: Node<T> | undefined;
+// |     right: Node<T> | undefined;
+// | }
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -60,7 +64,12 @@
 //      ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | type TreeNode<T> = { value: T; left: TreeNode<T> | undefined; right: TreeNode<T> | undefined; orange?: Orange; }
+// | type TreeNode<T> = {
+// |     value: T;
+// |     left: TreeNode<T> | undefined;
+// |     right: TreeNode<T> | undefined;
+// |     orange?: Orange;
+// | }
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -127,7 +136,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype Node<T> = { value: T; left: Node<T> | undefined; right: Node<T> | undefined; }\n```\n"
+          "value": "```tsx\ntype Node<T> = {\n    value: T;\n    left: Node<T> | undefined;\n    right: Node<T> | undefined;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -218,7 +227,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype TreeNode<T> = { value: T; left: TreeNode<T> | undefined; right: TreeNode<T> | undefined; orange?: Orange; }\n```\n"
+          "value": "```tsx\ntype TreeNode<T> = {\n    value: T;\n    left: TreeNode<T> | undefined;\n    right: TreeNode<T> | undefined;\n    orange?: Orange;\n}\n```\n"
         },
         "range": {
           "start": {

@@ -5,7 +5,9 @@
 //             ^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | type AdditionalWallabyConfig = { autoDetect: boolean; }
+// | type AdditionalWallabyConfig = {
+// |     autoDetect: boolean;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -26,7 +28,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype AdditionalWallabyConfig = { autoDetect: boolean; }\n```\n"
+        "value": "```tsx\ntype AdditionalWallabyConfig = {\n    autoDetect: boolean;\n}\n```\n"
       },
       "range": {
         "start": {

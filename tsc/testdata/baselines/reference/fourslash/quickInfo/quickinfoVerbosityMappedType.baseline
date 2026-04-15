@@ -48,7 +48,10 @@
 //       ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | const y: { banana?: string | undefined; apple?: boolean | undefined; }
+// | const y: {
+// |     banana?: string | undefined;
+// |     apple?: boolean | undefined;
+// | }
 // | ```
 // | 
 // | (verbosity level: 0)
@@ -210,7 +213,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst y: { banana?: string | undefined; apple?: boolean | undefined; }\n```\n"
+          "value": "```tsx\nconst y: {\n    banana?: string | undefined;\n    apple?: boolean | undefined;\n}\n```\n"
         },
         "range": {
           "start": {

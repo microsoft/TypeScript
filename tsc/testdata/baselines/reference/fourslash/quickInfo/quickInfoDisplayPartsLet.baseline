@@ -98,7 +98,10 @@
 //     ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | let h: { (a: string): number; (a: number): string; }
+// | let h: {
+// |     (a: string): number;
+// |     (a: number): string;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -106,14 +109,20 @@
 //     ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | let i: { (a: string): number; (a: number): string; }
+// | let i: {
+// |     (a: string): number;
+// |     (a: number): string;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //         ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | let h: { (a: string): number; (a: number): string; }
+// | let h: {
+// |     (a: string): number;
+// |     (a: number): string;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -444,7 +453,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nlet h: { (a: string): number; (a: number): string; }\n```\n"
+        "value": "```tsx\nlet h: {\n    (a: string): number;\n    (a: number): string;\n}\n```\n"
       },
       "range": {
         "start": {
@@ -471,7 +480,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nlet i: { (a: string): number; (a: number): string; }\n```\n"
+        "value": "```tsx\nlet i: {\n    (a: string): number;\n    (a: number): string;\n}\n```\n"
       },
       "range": {
         "start": {
@@ -498,7 +507,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nlet h: { (a: string): number; (a: number): string; }\n```\n"
+        "value": "```tsx\nlet h: {\n    (a: string): number;\n    (a: number): string;\n}\n```\n"
       },
       "range": {
         "start": {

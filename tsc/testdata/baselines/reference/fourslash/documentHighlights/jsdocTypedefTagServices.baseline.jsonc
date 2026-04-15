@@ -1,0 +1,25 @@
+// === documentHighlights ===
+// === /a.js ===
+// /**
+//  * Doc comment
+//  * @typedef /*HIGHLIGHTS*/[|Product|]
+//  * @property {string} title
+//  */
+// /**
+//  * @type {[|Product|]}
+//  */
+// const product = null;
+
+
+
+// === documentHighlights ===
+// === /a.js ===
+// /**
+//  * Doc comment
+//  * @typedef [|Product|]
+//  * @property {string} title
+//  */
+// /**
+//  * @type {/*HIGHLIGHTS*/[|Product|]}
+//  */
+// const product = null;

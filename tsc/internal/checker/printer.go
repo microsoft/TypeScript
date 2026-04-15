@@ -188,7 +188,7 @@ func (c *Checker) TypeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags 
 
 func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags TypeFormatFlags, vc *VerbosityContext) string {
 	newLine := ""
-	if vc != nil && vc.Level > 0 {
+	if flags&TypeFormatFlagsMultilineObjectLiterals != 0 {
 		newLine = "\n"
 	}
 	writer := printer.NewTextWriter(newLine, 0)
@@ -330,7 +330,7 @@ func (c *Checker) signatureToStringEx(signature *Signature, enclosingDeclaration
 	if enclosingDeclaration != nil {
 		sourceFile = ast.GetSourceFileOfNode(enclosingDeclaration)
 	}
-	if vc != nil && vc.Level > 0 {
+	if flags&TypeFormatFlagsMultilineObjectLiterals != 0 {
 		writer := printer.NewTextWriter("\n", 0)
 		p.Write(sig, sourceFile, getTrailingSemicolonDeferringWriter(writer), nil)
 		return writer.String()

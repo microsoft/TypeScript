@@ -65,11 +65,11 @@ const obj5 = { /*5n*/name: "", /*5a*/age: 10 };
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 
-	f.VerifyQuickInfoAt(t, "t1", "type MyType1 = { name: string; age: number; }", "")
-	f.VerifyQuickInfoAt(t, "t2", "type MyType2 = { name: string; age: number; }", "")
-	f.VerifyQuickInfoAt(t, "t3", "type MyType3 = { name: string; age: number; }", "")
-	f.VerifyQuickInfoAt(t, "t4", "type MyType4 = { name: string; age: number; }", "")
-	f.VerifyQuickInfoAt(t, "t5", "type MyType5 = { name: string; }", ""+
+	f.VerifyQuickInfoAt(t, "t1", "type MyType1 = {\n    name: string;\n    age: number;\n}", "")
+	f.VerifyQuickInfoAt(t, "t2", "type MyType2 = {\n    name: string;\n    age: number;\n}", "")
+	f.VerifyQuickInfoAt(t, "t3", "type MyType3 = {\n    name: string;\n    age: number;\n}", "")
+	f.VerifyQuickInfoAt(t, "t4", "type MyType4 = {\n    name: string;\n    age: number;\n}", "")
+	f.VerifyQuickInfoAt(t, "t5", "type MyType5 = {\n    name: string;\n}", ""+
 		"\n\n*@foo* — *bar\n"+
 		"\n\n*@property* — {number} age\n")
 

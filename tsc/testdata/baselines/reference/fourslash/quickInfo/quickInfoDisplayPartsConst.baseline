@@ -98,7 +98,10 @@
 //       ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | const h: { (a: string): number; (a: number): string; }
+// | const h: {
+// |     (a: string): number;
+// |     (a: number): string;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -106,14 +109,20 @@
 //       ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | const i: { (a: string): number; (a: number): string; }
+// | const i: {
+// |     (a: string): number;
+// |     (a: number): string;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | const h: { (a: string): number; (a: number): string; }
+// | const h: {
+// |     (a: string): number;
+// |     (a: number): string;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -444,7 +453,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst h: { (a: string): number; (a: number): string; }\n```\n"
+        "value": "```tsx\nconst h: {\n    (a: string): number;\n    (a: number): string;\n}\n```\n"
       },
       "range": {
         "start": {
@@ -471,7 +480,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst i: { (a: string): number; (a: number): string; }\n```\n"
+        "value": "```tsx\nconst i: {\n    (a: string): number;\n    (a: number): string;\n}\n```\n"
       },
       "range": {
         "start": {
@@ -498,7 +507,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst h: { (a: string): number; (a: number): string; }\n```\n"
+        "value": "```tsx\nconst h: {\n    (a: string): number;\n    (a: number): string;\n}\n```\n"
       },
       "range": {
         "start": {
