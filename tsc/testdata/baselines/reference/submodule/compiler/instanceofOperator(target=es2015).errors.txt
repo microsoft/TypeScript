@@ -1,3 +1,4 @@
+instanceofOperator.ts(7,11): error TS2725: Class name cannot be 'Object' when targeting ES5 and above with module CommonJS.
 instanceofOperator.ts(12,5): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 instanceofOperator.ts(12,18): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
 instanceofOperator.ts(15,20): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
@@ -8,7 +9,7 @@ instanceofOperator.ts(21,5): error TS2358: The left-hand side of an 'instanceof'
 instanceofOperator.ts(21,26): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
 
 
-==== instanceofOperator.ts (8 errors) ====
+==== instanceofOperator.ts (9 errors) ====
     // Spec:
     // The instanceof operator requires the left operand to be of type Any or an object type, and the right 
     // operand to be of type Any or a subtype of the ‘Function’ interface type. The result is always of the 
@@ -16,6 +17,8 @@ instanceofOperator.ts(21,26): error TS2359: The right-hand side of an 'instanceo
     
     namespace test {
         class Object { }
+              ~~~~~~
+!!! error TS2725: Class name cannot be 'Object' when targeting ES5 and above with module CommonJS.
         declare var obj: Object;
     
     

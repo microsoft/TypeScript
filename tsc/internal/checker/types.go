@@ -298,14 +298,16 @@ const (
 type NodeCheckFlags uint32
 
 const (
-	NodeCheckFlagsNone                           NodeCheckFlags = 0
-	NodeCheckFlagsTypeChecked                    NodeCheckFlags = 1 << 0  // Node has been type checked
-	NodeCheckFlagsContextChecked                 NodeCheckFlags = 1 << 6  // Contextual types have been assigned
-	NodeCheckFlagsEnumValuesComputed             NodeCheckFlags = 1 << 10 // Values for enum members have been computed, and any errors have been reported for them.
-	NodeCheckFlagsAssignmentsMarked              NodeCheckFlags = 1 << 17 // Parameter assignments have been marked
-	NodeCheckFlagsInCheckIdentifier              NodeCheckFlags = 1 << 22
-	NodeCheckFlagsInitializerIsUndefined         NodeCheckFlags = 1 << 24
-	NodeCheckFlagsInitializerIsUndefinedComputed NodeCheckFlags = 1 << 25
+	NodeCheckFlagsNone                                     NodeCheckFlags = 0
+	NodeCheckFlagsTypeChecked                              NodeCheckFlags = 1 << 0  // Node has been type checked
+	NodeCheckFlagsContextChecked                           NodeCheckFlags = 1 << 6  // Contextual types have been assigned
+	NodeCheckFlagsEnumValuesComputed                       NodeCheckFlags = 1 << 10 // Values for enum members have been computed, and any errors have been reported for them.
+	NodeCheckFlagsAssignmentsMarked                        NodeCheckFlags = 1 << 17 // Parameter assignments have been marked
+	NodeCheckFlagsContainsClassWithPrivateIdentifiers      NodeCheckFlags = 1 << 20 // Marked on all block-scoped containers containing a class with private identifiers.
+	NodeCheckFlagsContainsSuperPropertyInStaticInitializer NodeCheckFlags = 1 << 21 // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
+	NodeCheckFlagsInCheckIdentifier                        NodeCheckFlags = 1 << 22
+	NodeCheckFlagsInitializerIsUndefined                   NodeCheckFlags = 1 << 24
+	NodeCheckFlagsInitializerIsUndefinedComputed           NodeCheckFlags = 1 << 25
 )
 
 // Common links
