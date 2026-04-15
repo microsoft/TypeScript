@@ -5,7 +5,7 @@
  * @type {function(boolean, string, ...*):void}
  */
 const foo = function (a, b, ...r) { };
->foo : function
+>foo : Function
 >function (a, b, ...r) { } : (a: any, b: any, ...r: any[]) => void
 >a : any
 >b : any
@@ -14,7 +14,7 @@ const foo = function (a, b, ...r) { };
 === b.ts ===
 foo(false, '');
 >foo(false, '') : any
->foo : function
+>foo : Function
 >false : false
 >'' : ""
 

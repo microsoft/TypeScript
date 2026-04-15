@@ -5,7 +5,7 @@
   */
  function g(a) {
 ->g : <T>(a: T) => () => T
-+>g : <T>(a: T) => function
++>g : <T>(a: T) => Function
  >a : T
 
      return () => a
@@ -19,22 +19,8 @@
 ->g : <T>(a: T) => () => T
 +>s : any
 +>g('hi')() : any
-+>g('hi') : function
-+>g : <T>(a: T) => function
++>g('hi') : Function
++>g : <T>(a: T) => Function
  >'hi' : "hi"
 
  /**
-  * @param {Array.<Object>} keyframes - Can't look up types on Element since it's a global in another file. (But it shouldn't crash).
-  */
- Element.prototype.animate = function(keyframes) {};
-->Element.prototype.animate = function(keyframes) {} : (keyframes: Array<any>) => void
-+>Element.prototype.animate = function(keyframes) {} : (keyframes: Array<Object>) => void
- >Element.prototype.animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes | null, options?: number | KeyframeAnimationOptions) => Animation
- >Element.prototype : Element
- >Element : { new (): Element; prototype: Element; }
- >prototype : Element
- >animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes | null, options?: number | KeyframeAnimationOptions) => Animation
-->function(keyframes) {} : (keyframes: Array<any>) => void
-->keyframes : any[]
-+>function(keyframes) {} : (keyframes: Array<Object>) => void
-+>keyframes : Object[]

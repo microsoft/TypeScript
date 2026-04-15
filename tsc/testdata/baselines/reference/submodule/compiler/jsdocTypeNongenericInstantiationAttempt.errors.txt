@@ -1,6 +1,6 @@
 index.js(2,19): error TS2315: Type 'Boolean' is not generic.
-index2.js(2,19): error TS2304: Cannot find name 'Void'.
-index3.js(2,19): error TS2304: Cannot find name 'Undefined'.
+index2.js(2,19): error TS2315: Type 'Void' is not generic.
+index3.js(2,19): error TS2315: Type 'Undefined' is not generic.
 index4.js(2,19): error TS2315: Type 'Function' is not generic.
 index5.js(2,19): error TS2315: Type 'String' is not generic.
 index6.js(2,19): error TS2315: Type 'Number' is not generic.
@@ -22,8 +22,8 @@ index8.js(4,15): error TS2304: Cannot find name 'T'.
 ==== index2.js (1 errors) ====
     /**
      * @param {<T>(m: Void<T>) => string} somebody
-                      ~~~~
-!!! error TS2304: Cannot find name 'Void'.
+                      ~~~~~~~
+!!! error TS2315: Type 'Void' is not generic.
      */
     function sayHello2(somebody) {
         return 'Hello ' + somebody;
@@ -33,8 +33,8 @@ index8.js(4,15): error TS2304: Cannot find name 'T'.
 ==== index3.js (1 errors) ====
     /**
      * @param {<T>(m: Undefined<T>) => string} somebody
-                      ~~~~~~~~~
-!!! error TS2304: Cannot find name 'Undefined'.
+                      ~~~~~~~~~~~~
+!!! error TS2315: Type 'Undefined' is not generic.
      */
     function sayHello3(somebody) {
         return 'Hello ' + somebody;

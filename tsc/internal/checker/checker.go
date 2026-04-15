@@ -22552,15 +22552,73 @@ func (c *Checker) getTypeFromTypeReference(node *ast.Node) *Type {
 	if links.resolvedType == nil {
 		// Cache both the resolved symbol and the resolved type. The resolved symbol is needed when we check the
 		// type reference in checkTypeReferenceNode.
-		symbol := c.getSymbolFromTypeReference(node)
 		// handle LS queries on the `const` in `x as const` by resolving to the type of `x`
 		if isConstTypeReference(node) && ast.IsAssertionExpression(node.Parent) {
 			links.resolvedType = c.checkExpressionCached(node.Parent.Expression())
+		} else if t := c.getIntendedTypeFromJSDocTypeReference(node); t != nil {
+			links.resolvedType = t
 		} else {
-			links.resolvedType = c.getTypeReferenceType(node, symbol)
+			links.resolvedType = c.getTypeReferenceType(node, c.getSymbolFromTypeReference(node))
 		}
 	}
 	return links.resolvedType
+}
+
+func (c *Checker) getIntendedTypeFromJSDocTypeReference(node *ast.Node) *Type {
+	if node.Flags&ast.NodeFlagsJSDoc != 0 && ast.IsTypeReferenceNode(node) {
+		typeName := node.AsTypeReferenceNode().TypeName
+		if ast.IsIdentifier(typeName) {
+			typeArgs := node.TypeArguments()
+			switch typeName.Text() {
+			case "String":
+				c.checkNoTypeArguments(node, nil)
+				return c.stringType
+			case "Number":
+				c.checkNoTypeArguments(node, nil)
+				return c.numberType
+			case "BigInt":
+				c.checkNoTypeArguments(node, nil)
+				return c.bigintType
+			case "Boolean":
+				c.checkNoTypeArguments(node, nil)
+				return c.booleanType
+			case "Void":
+				c.checkNoTypeArguments(node, nil)
+				return c.voidType
+			case "Undefined":
+				c.checkNoTypeArguments(node, nil)
+				return c.undefinedType
+			case "Null":
+				c.checkNoTypeArguments(node, nil)
+				return c.nullType
+			case "Function", "function":
+				c.checkNoTypeArguments(node, nil)
+				return c.globalFunctionType
+			case "array":
+				if len(typeArgs) == 0 && !c.noImplicitAny {
+					return c.anyArrayType
+				}
+			case "promise":
+				if len(typeArgs) == 0 && !c.noImplicitAny {
+					return c.createPromiseType(c.anyType)
+				}
+			case "Object":
+				if len(typeArgs) == 2 {
+					if recordSymbol := c.getGlobalRecordSymbol(); recordSymbol != nil {
+						if indexType := c.getTypeFromTypeNode(typeArgs[0]); c.isValidIndexKeyType(indexType) {
+							return c.getTypeAliasInstantiation(recordSymbol, []*Type{indexType, c.getTypeFromTypeNode(typeArgs[1])}, nil)
+						}
+					}
+					return c.anyType
+				}
+				if !c.noImplicitAny {
+					c.checkNoTypeArguments(node, nil)
+					return c.anyType
+				}
+			}
+		}
+	}
+	return nil
 }
 
 func (c *Checker) getSymbolFromTypeReference(node *ast.Node) *ast.Symbol {
@@ -22710,7 +22768,13 @@ func (c *Checker) getTypeArgumentsFromNode(node *ast.Node) []*Type {
 
 func (c *Checker) checkNoTypeArguments(node *ast.Node, symbol *ast.Symbol) bool {
 	if len(node.TypeArguments()) != 0 {
-		c.error(node, diagnostics.Type_0_is_not_generic, c.symbolToString(symbol))
+		var typeName string
+		if symbol != nil {
+			typeName = c.symbolToString(symbol)
+		} else {
+			typeName = scanner.DeclarationNameToString(node.AsTypeReferenceNode().TypeName)
+		}
+		c.error(node, diagnostics.Type_0_is_not_generic, typeName)
 		return false
 	}
 	return true

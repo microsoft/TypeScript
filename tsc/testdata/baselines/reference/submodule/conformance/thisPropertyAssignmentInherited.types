@@ -8,14 +8,14 @@ export class Element {
    * @returns {String}
    */
   get textContent() {
->textContent : String
+>textContent : string
 
     return  ''
 >'' : ""
   }
   set textContent(x) {}
->textContent : String
->x : String
+>textContent : string
+>x : string
 
   cloneNode() { return this}
 >cloneNode : () => this
@@ -30,19 +30,19 @@ export class TextElement extends HTMLElement {
 >HTMLElement : HTMLElement
 
   get innerHTML() { return this.textContent; }
->innerHTML : String
->this.textContent : String
+>innerHTML : string
+>this.textContent : string
 >this : this
->textContent : String
+>textContent : string
 
   set innerHTML(html) { this.textContent = html; }
->innerHTML : String
->html : String
->this.textContent = html : String
->this.textContent : String
+>innerHTML : string
+>html : string
+>this.textContent = html : string
+>this.textContent : string
 >this : this
->textContent : String
->html : String
+>textContent : string
+>html : string
 
   toString() {
 >toString : () => void

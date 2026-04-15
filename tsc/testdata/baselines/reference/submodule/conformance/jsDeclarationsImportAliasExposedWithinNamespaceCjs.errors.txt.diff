@@ -2,27 +2,23 @@
 +++ new.jsDeclarationsImportAliasExposedWithinNamespaceCjs.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+file.js(4,11): error TS2315: Type 'Object' is not generic.
 +file.js(10,51): error TS2300: Duplicate identifier 'myTypes'.
 +file.js(13,13): error TS2300: Duplicate identifier 'myTypes'.
 +file.js(14,15): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 +file.js(18,15): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 +file.js(18,39): error TS2300: Duplicate identifier 'myTypes'.
 +file.js(20,9): error TS2300: Duplicate identifier 'myTypes'.
-+file2.js(6,11): error TS2315: Type 'Object' is not generic.
 +file2.js(12,23): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 +file2.js(17,12): error TS2702: 'testFnTypes' only refers to a type, but is being used as a namespace here.
 +
 +
-+==== file2.js (3 errors) ====
++==== file2.js (2 errors) ====
 +    const {myTypes} = require('./file.js');
 +    
 +    /**
 +     * @namespace testFnTypes
 +     * @global
 +     * @type {Object<string,*>}
-+              ~~~~~~~~~~~~~~~~
-+!!! error TS2315: Type 'Object' is not generic.
 +     */
 +    const testFnTypes = {
 +        // SOME PROPS HERE
@@ -49,13 +45,11 @@
 +    }
 +    
 +    module.exports = {testFn, testFnTypes};
-+==== file.js (7 errors) ====
++==== file.js (6 errors) ====
 +    /**
 +     * @namespace myTypes
 +     * @global
 +     * @type {Object<string,*>}
-+              ~~~~~~~~~~~~~~~~
-+!!! error TS2315: Type 'Object' is not generic.
 +     */
 +    const myTypes = {
 +        // SOME PROPS HERE

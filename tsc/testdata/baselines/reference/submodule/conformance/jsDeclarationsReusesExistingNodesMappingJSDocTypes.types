@@ -23,13 +23,13 @@ export const e = null;
 
 /** @type {function(string, number): object} */
 export const f = null;
->f : function
+>f : Function
 
 /** @type {function(new: object, string, number)} */
 export const g = null;
->g : function
+>g : Function
 
 /** @type {Object.<string, number>} */
 export const h = null;
->h : any
+>h : Record<string, number>
 

@@ -3,27 +3,27 @@
 === index.js ===
 // these are recognized as TS concepts by the checker
 /** @type {String} */const a = "";
->a : String
+>a : string
 >"" : ""
 
 /** @type {Number} */const b = 0;
->b : Number
+>b : number
 >0 : 0
 
 /** @type {Boolean} */const c = true;
->c : Boolean
+>c : boolean
 >true : true
 
 /** @type {Void} */const d = undefined;
->d : Void
+>d : void
 >undefined : undefined
 
 /** @type {Undefined} */const e = undefined;
->e : Undefined
+>e : undefined
 >undefined : undefined
 
 /** @type {Null} */const f = null;
->f : Null
+>f : null
 
 /** @type {Function} */const g = () => void 0;
 >g : Function
@@ -32,17 +32,17 @@
 >0 : 0
 
 /** @type {function} */const h = () => void 0;
->h : function
+>h : Function
 >() => void 0 : () => undefined
 >void 0 : undefined
 >0 : 0
 
 /** @type {array} */const i = [];
->i : array
+>i : any[]
 >[] : never[]
 
 /** @type {promise} */const j = Promise.resolve(0);
->j : promise
+>j : Promise<any>
 >Promise.resolve(0) : Promise<number>
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
@@ -50,7 +50,7 @@
 >0 : 0
 
 /** @type {Object<string, string>} */const k = {x: "x"};
->k : any
+>k : Record<string, string>
 >{x: "x"} : { x: string; }
 >x : string
 >"x" : "x"

@@ -1,30 +1,6 @@
 --- old.checkJsdocTypeTag1.types
 +++ new.checkJsdocTypeTag1.types
-@@= skipped -3, +3 lines =@@
- // @ts-check
- /** @type {String} */
- var S = "hello world";
-->S : string
-+>S : String
- >"hello world" : "hello world"
-
- /** @type {number} */
-@@= skipped -44, +44 lines =@@
-
- /** @type {function} */
- const y = (a) => a + 1;
-->y : Function
-+>y : function
- >(a) => a + 1 : (a: any) => any
- >a : any
- >a + 1 : any
-@@= skipped -9, +9 lines =@@
-
- y(1);
- >y(1) : any
-->y : Function
-+>y : function
- >1 : 1
+@@= skipped -61, +61 lines =@@
 
  /** @type {function (number)} */
  const x1 = (a) => a + 1;
@@ -33,7 +9,7 @@
 ->a : number
 ->a + 1 : number
 ->a : number
-+>x1 : function
++>x1 : Function
 +>(a) => a + 1 : (a: any) => any
 +>a : any
 +>a + 1 : any
@@ -43,7 +19,7 @@
  x1(0);
  >x1(0) : any
 ->x1 : (arg0: number) => any
-+>x1 : function
++>x1 : Function
  >0 : 0
 
  /** @type {function (number): number} */
@@ -53,7 +29,7 @@
 ->a : number
 ->a + 1 : number
 ->a : number
-+>x2 : function
++>x2 : Function
 +>(a) => a + 1 : (a: any) => any
 +>a : any
 +>a + 1 : any
@@ -64,7 +40,7 @@
 ->x2(0) : number
 ->x2 : (arg0: number) => number
 +>x2(0) : any
-+>x2 : function
++>x2 : Function
  >0 : 0
 
  /**

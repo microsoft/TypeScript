@@ -1,15 +1,6 @@
 --- old.checkJsdocTypeTag2.types
 +++ new.checkJsdocTypeTag2.types
-@@= skipped -3, +3 lines =@@
- // @ts-check
- /** @type {String} */
- var S = true;
-->S : string
-+>S : String
- >true : true
-
- /** @type {number} */
-@@= skipped -10, +10 lines =@@
+@@= skipped -13, +13 lines =@@
 
  /** @type {function (number)} */
  const x1 = (a) => a + 1;
@@ -18,7 +9,7 @@
 ->a : number
 ->a + 1 : number
 ->a : number
-+>x1 : function
++>x1 : Function
 +>(a) => a + 1 : (a: any) => any
 +>a : any
 +>a + 1 : any
@@ -28,7 +19,7 @@
  x1("string");
  >x1("string") : any
 ->x1 : (arg0: number) => any
-+>x1 : function
++>x1 : Function
  >"string" : "string"
 
  /** @type {function (number): number} */
@@ -38,7 +29,7 @@
 ->a : number
 ->a + 1 : number
 ->a : number
-+>x2 : function
++>x2 : Function
 +>(a) => a + 1 : (a: any) => any
 +>a : any
 +>a + 1 : any
@@ -56,7 +47,7 @@
 ->x2(0) : number
 ->x2 : (arg0: number) => number
 +>x2(0) : any
-+>x2 : function
++>x2 : Function
  >0 : 0
 
  /** @type {function (number): number} */
@@ -64,7 +55,7 @@
 ->x3 : (arg0: number) => number
 ->(a) => a.concat("hi") : (a: number) => number
 ->a : number
-+>x3 : function
++>x3 : Function
 +>(a) => a.concat("hi") : (a: any) => any
 +>a : any
  >a.concat("hi") : any
@@ -78,7 +69,7 @@
 ->x3(0) : number
 ->x3 : (arg0: number) => number
 +>x3(0) : any
-+>x3 : function
++>x3 : Function
  >0 : 0
 
  /** @type {function (number): string} */
@@ -88,7 +79,7 @@
 ->a : number
 ->a + 1 : number
 ->a : number
-+>x4 : function
++>x4 : Function
 +>(a) => a + 1 : (a: any) => any
 +>a : any
 +>a + 1 : any
@@ -99,5 +90,5 @@
 ->x4(0) : string
 ->x4 : (arg0: number) => string
 +>x4(0) : any
-+>x4 : function
++>x4 : Function
  >0 : 0

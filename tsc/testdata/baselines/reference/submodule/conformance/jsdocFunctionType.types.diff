@@ -6,12 +6,12 @@
  function id1(c) {
 ->id1 : (c: (this: string, arg1: number) => number) => (this: string, arg1: number) => number
 ->c : (this: string, arg1: number) => number
-+>id1 : (c: function) => function
-+>c : function
++>id1 : (c: Function) => Function
++>c : Function
 
      return c
 ->c : (this: string, arg1: number) => number
-+>c : function
++>c : Function
  }
 
  var x = id1(function (n) { return this.length + n });
@@ -25,9 +25,9 @@
 ->this : string
 ->length : number
 ->n : number
-+>x : function
-+>id1(function (n) { return this.length + n }) : function
-+>id1 : (c: function) => function
++>x : Function
++>id1(function (n) { return this.length + n }) : Function
++>id1 : (c: Function) => Function
 +>function (n) { return this.length + n } : (n: any) => any
 +>n : any
 +>this.length + n : any
@@ -43,12 +43,12 @@
  function id2(c) {
 ->id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
 ->c : new (arg1: number) => { length: number; }
-+>id2 : (c: function) => function
-+>c : function
++>id2 : (c: Function) => Function
++>c : Function
 
      return c
 ->c : new (arg1: number) => { length: number; }
-+>c : function
++>c : Function
  }
 
  class C {
@@ -59,9 +59,9 @@
 ->y : new (arg1: number) => { length: number; }
 ->id2(C) : new (arg1: number) => { length: number; }
 ->id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
-+>y : function
-+>id2(C) : function
-+>id2 : (c: function) => function
++>y : Function
++>id2(C) : Function
++>id2 : (c: Function) => Function
  >C : typeof C
 
  var z = new y(12);
@@ -70,7 +70,7 @@
 ->y : new (arg1: number) => { length: number; }
 +>z : any
 +>new y(12) : any
-+>y : function
++>y : Function
  >12 : 12
 
  z.length;
@@ -87,7 +87,7 @@
 ->function (ab, onetwo) { return ab === "a" ? 3 : 4;  } : (ab: "a" | "b", onetwo: 1 | 2) => 3 | 4
 ->ab : "a" | "b"
 ->onetwo : 1 | 2
-+>f : function
++>f : Function
 +>function (ab, onetwo) { return ab === "a" ? 3 : 4;  } : (ab: any, onetwo: any) => 3 | 4
 +>ab : any
 +>onetwo : any
@@ -120,9 +120,9 @@
 ->id2(D) : new (arg1: number) => { length: number; }
 ->id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
 ->D : typeof D
-+>y2 : function
-+>id2(D) : function
-+>id2 : (c: function) => function
++>y2 : Function
++>id2(D) : Function
++>id2 : (c: Function) => Function
 +>D : (n: number) => void
 
  var z2 = new y2(33);
@@ -131,7 +131,7 @@
 ->y2 : new (arg1: number) => { length: number; }
 +>z2 : any
 +>new y2(33) : any
-+>y2 : function
++>y2 : Function
  >33 : 33
 
  z2.length;
@@ -153,11 +153,11 @@
 ->dref : new (arg1: number) => D
 ->new dref(33) : D
 ->dref : new (arg1: number) => D
-+>construct : (dref: function) => D
-+>function(dref) { return new dref(33); } : (dref: function) => D
-+>dref : function
++>construct : (dref: Function) => D
++>function(dref) { return new dref(33); } : (dref: Function) => D
++>dref : Function
 +>new dref(33) : any
-+>dref : function
++>dref : Function
  >33 : 33
 
  var z3 = construct(D);
@@ -165,7 +165,7 @@
  >construct(D) : D
 ->construct : (dref: new (arg1: number) => D) => D
 ->D : typeof D
-+>construct : (dref: function) => D
++>construct : (dref: Function) => D
 +>D : (n: number) => void
 
  z3.length;
@@ -203,9 +203,9 @@
 ->id2(E) : new (arg1: number) => { length: number; }
 ->id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
 ->E : typeof E
-+>y3 : function
-+>id2(E) : function
-+>id2 : (c: function) => function
++>y3 : Function
++>id2(E) : Function
++>id2 : (c: Function) => Function
 +>E : (n: number) => void
 
  // Repro from #39229

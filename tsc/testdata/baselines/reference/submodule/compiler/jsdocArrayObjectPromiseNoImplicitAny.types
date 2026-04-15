@@ -64,7 +64,7 @@ var notAnyObject = {valueOf: 1}; // error since assigning to Object, not any.
 
 /** @type {Object<string, number>} */
 var paramedObject = {valueOf: 1};
->paramedObject : any
+>paramedObject : Record<string, number>
 >{valueOf: 1} : { valueOf: number; }
 >valueOf : number
 >1 : 1

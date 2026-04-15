@@ -14,12 +14,12 @@ const sources = new Map();
  * @returns {String}
  */
 function source(type = "javascript") {
->source : (type?: string | undefined) => String
+>source : (type?: string | undefined) => string
 >type : string | undefined
 >"javascript" : "javascript"
 
     return /** @type {String} */ (
->(        type            ? sources.get(type)            : sources.get("some other thing")    ) : String
+>(        type            ? sources.get(type)            : sources.get("some other thing")    ) : string
 
         type
 >type            ? sources.get(type)            : sources.get("some other thing") : string | undefined

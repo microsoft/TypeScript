@@ -3,7 +3,7 @@
 === a.js ===
 /** @type {String} */
 var S;
->S : String
+>S : string
 
 /** @type {string} */
 var s;
@@ -11,7 +11,7 @@ var s;
 
 /** @type {Number} */
 var N;
->N : Number
+>N : number
 
 /** @type {number} */
 var n;
@@ -19,7 +19,7 @@ var n;
 
 /** @type {BigInt} */
 var BI;
->BI : BigInt
+>BI : bigint
 
 /** @type {bigint} */
 var bi;
@@ -27,7 +27,7 @@ var bi;
 
 /** @type {Boolean} */
 var B;
->B : Boolean
+>B : boolean
 
 /** @type {boolean} */
 var b;
@@ -35,7 +35,7 @@ var b;
 
 /** @type {Void} */
 var V;
->V : Void
+>V : void
 
 /** @type {void} */
 var v;
@@ -43,7 +43,7 @@ var v;
 
 /** @type {Undefined} */
 var U;
->U : Undefined
+>U : undefined
 
 /** @type {undefined} */
 var u;
@@ -51,7 +51,7 @@ var u;
 
 /** @type {Null} */
 var Nl;
->Nl : Null
+>Nl : null
 
 /** @type {null} */
 var nl;
@@ -99,43 +99,43 @@ var ctor;
 
 === b.ts ===
 var S: string;
->S : String
+>S : string
 
 var s: string;
 >s : string
 
 var N: number;
->N : Number
+>N : number
 
 var n: number
 >n : number
 
 var B: boolean;
->B : Boolean
+>B : boolean
 
 var b: boolean;
 >b : boolean
 
 var BI: bigint;
->BI : BigInt
+>BI : bigint
 
 var bi: bigint;
 >bi : bigint
 
 var V :void;
->V : Void
+>V : void
 
 var v: void;
 >v : void
 
 var U: undefined;
->U : Undefined
+>U : undefined
 
 var u: undefined;
 >u : undefined
 
 var Nl: null;
->Nl : Null
+>Nl : null
 
 var nl: null;
 >nl : null

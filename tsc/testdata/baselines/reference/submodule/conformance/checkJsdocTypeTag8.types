@@ -7,12 +7,12 @@
   * @param {Number|BigInt} n
   */
 function isLessThanFive(n) {
->isLessThanFive : (n: Number | BigInt) => boolean
->n : any
+>isLessThanFive : (n: number | bigint) => boolean
+>n : number | bigint
 
   return n < 5;
 >n < 5 : boolean
->n : any
+>n : number | bigint
 >5 : 5
 }
 

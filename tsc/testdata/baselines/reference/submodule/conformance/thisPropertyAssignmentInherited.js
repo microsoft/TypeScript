@@ -29,13 +29,13 @@ export declare class Element {
      * @returns {String}
      */
     get textContent(): String;
-    set textContent(x: String);
+    set textContent(x: string);
     cloneNode(): this;
 }
 export declare class HTMLElement extends Element {
 }
 export declare class TextElement extends HTMLElement {
-    get innerHTML(): String;
-    set innerHTML(html: String);
+    get innerHTML(): string;
+    set innerHTML(html: string);
     toString(): void;
 }

@@ -3,8 +3,8 @@
 === index.js ===
 const {taskGroups, taskNameToGroup} = require('./module.js');
 >taskGroups : { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }
->taskNameToGroup : any
->require('./module.js') : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
+>taskNameToGroup : Record<string, import("./module.js").TaskGroup>
+>require('./module.js') : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: Record<string, import("./module.js").TaskGroup>; }
 >require : any
 >'./module.js' : "./module.js"
 
@@ -84,20 +84,20 @@ const taskGroups = {
 
 /** @type {Object<string, TaskGroup>} */
 const taskNameToGroup = {};
->taskNameToGroup : any
+>taskNameToGroup : Record<string, TaskGroup>
 >{} : {}
 
 module.exports = {
->module.exports = {    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
->module.exports : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
->module : { exports: { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }; }
->exports : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
->{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: any; }
+>module.exports = {    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: Record<string, TaskGroup>; }
+>module.exports : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: Record<string, TaskGroup>; }
+>module : { exports: { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: Record<string, TaskGroup>; }; }
+>exports : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: Record<string, TaskGroup>; }
+>{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: Record<string, TaskGroup>; }
 
     taskGroups,
 >taskGroups : { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }
 
     taskNameToGroup,
->taskNameToGroup : any
+>taskNameToGroup : Record<string, TaskGroup>
 
 };

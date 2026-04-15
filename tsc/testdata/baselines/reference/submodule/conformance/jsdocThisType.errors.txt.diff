@@ -6,22 +6,20 @@
  /a.js(18,10): error TS2339: Property 'test' does not exist on type 'Foo'.
 -/a.js(23,10): error TS2339: Property 'test' does not exist on type 'Foo'.
 -/a.js(28,10): error TS2339: Property 'test' does not exist on type 'Foo'.
-+/a.js(21,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +/a.js(21,20): error TS1005: '}' expected.
 +/a.js(23,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-+/a.js(26,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +/a.js(26,12): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
 +/a.js(26,20): error TS1005: '}' expected.
 +/a.js(28,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
  ==== /types.d.ts (0 errors) ====
-@@= skipped -11, +16 lines =@@
+@@= skipped -11, +14 lines =@@
      
      export type M = (this: Foo) => void;
      
 -==== /a.js (6 errors) ====
-+==== /a.js (11 errors) ====
++==== /a.js (9 errors) ====
      /** @type {import('./types').M} */
      export const f1 = function() {
          this.test();
@@ -29,9 +27,6 @@
      }
      
      /** @type {function(this: import('./types').Foo): void} */
-+               ~~~~~~~~
-+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
 +                       ~
 +!!! error TS1005: '}' expected.
      export const f5 = function() {
@@ -44,9 +39,6 @@
      }
      
      /** @type {function(this: import('./types').Foo): void} */
-+               ~~~~~~~~
-+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
 +               ~~~~~~~~
 +!!! error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
 +                       ~

@@ -1,16 +1,12 @@
-a.js(2,11): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 a.js(2,19): error TS1005: '}' expected.
 a.js(4,23): error TS7006: Parameter 'a' implicitly has an 'any' type.
 a.js(4,26): error TS7006: Parameter 'b' implicitly has an 'any' type.
 a.js(4,29): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
 
 
-==== a.js (5 errors) ====
+==== a.js (4 errors) ====
     /**
      * @type {function(boolean, string, ...*):void}
-              ~~~~~~~~
-!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
                       ~
 !!! error TS1005: '}' expected.
      */

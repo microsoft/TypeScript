@@ -1,36 +1,30 @@
-functions.js(2,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 functions.js(2,20): error TS1005: '}' expected.
-functions.js(3,13): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 functions.js(3,21): error TS1005: '}' expected.
 functions.js(9,23): error TS7006: Parameter 'n' implicitly has an 'any' type.
 functions.js(9,35): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-functions.js(12,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 functions.js(12,20): error TS1005: '}' expected.
-functions.js(13,13): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 functions.js(13,21): error TS1005: '}' expected.
-functions.js(30,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+functions.js(27,13): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
 functions.js(30,21): error TS1005: '}' expected.
 functions.js(31,19): error TS7006: Parameter 'ab' implicitly has an 'any' type.
 functions.js(31,23): error TS7006: Parameter 'onetwo' implicitly has an 'any' type.
 functions.js(39,3): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-functions.js(48,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+functions.js(43,14): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
 functions.js(48,20): error TS1005: '}' expected.
 functions.js(49,13): error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
+functions.js(51,45): error TS2351: This expression is not constructable.
+  Type 'Function' has no construct signatures.
 functions.js(61,3): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
-==== functions.js (19 errors) ====
+==== functions.js (16 errors) ====
     /**
      * @param {function(this: string, number): number} c is just passing on through
-               ~~~~~~~~
-!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
                        ~
 !!! error TS1005: '}' expected.
      * @return {function(this: string, number): number}
-                ~~~~~~~~
-!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
                         ~
 !!! error TS1005: '}' expected.
      */
@@ -46,15 +40,9 @@ functions.js(61,3): error TS2683: 'this' implicitly has type 'any' because it do
     
     /**
      * @param {function(new: { length: number }, number): number} c is just passing on through
-               ~~~~~~~~
-!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
                        ~
 !!! error TS1005: '}' expected.
      * @return {function(new: { length: number }, number): number}
-                ~~~~~~~~
-!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
                         ~
 !!! error TS1005: '}' expected.
      */
@@ -71,12 +59,12 @@ functions.js(61,3): error TS2683: 'this' implicitly has type 'any' because it do
     
     var y = id2(C);
     var z = new y(12);
+                ~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'Function' has no construct signatures.
     z.length;
     
     /** @type {function ("a" | "b", 1 | 2): 3 | 4} */
-               ~~~~~~~~
-!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
                         ~
 !!! error TS1005: '}' expected.
     var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
@@ -98,14 +86,14 @@ functions.js(61,3): error TS2683: 'this' implicitly has type 'any' because it do
     
     var y2 = id2(D);
     var z2 = new y2(33);
+                 ~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'Function' has no construct signatures.
     z2.length;
     
     
     /** 
      * @param {function(new: D, number)} dref
-               ~~~~~~~~
-!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
                        ~
 !!! error TS1005: '}' expected.
      * @return {D}
@@ -113,6 +101,9 @@ functions.js(61,3): error TS2683: 'this' implicitly has type 'any' because it do
 !!! error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
      */
     var construct = function(dref) { return new dref(33); }
+                                                ~~~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'Function' has no construct signatures.
     var z3 = construct(D);
     z3.length;
     

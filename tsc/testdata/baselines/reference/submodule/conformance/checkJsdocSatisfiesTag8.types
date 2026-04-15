@@ -5,12 +5,12 @@
 
 // Should be able to detect a failure here
 const x = /** @satisfies {Facts} */ ({
->x : any
->({    m: true,    s: "false"}) : any
->{    m: true,    s: "false"} : { m: boolean; s: string; }
+>x : { m: true; s: string; }
+>({    m: true,    s: "false"}) : { m: true; s: string; }
+>{    m: true,    s: "false"} : { m: true; s: string; }
 
     m: true,
->m : boolean
+>m : true
 >true : true
 
     s: "false"

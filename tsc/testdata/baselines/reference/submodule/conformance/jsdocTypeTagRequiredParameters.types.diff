@@ -7,7 +7,7 @@
 ->f : (arg0: string) => void
 ->(value) => {} : (value: string) => void
 ->value : string
-+>f : function
++>f : Function
 +>(value) => {} : (value: any) => void
 +>value : any
 
@@ -20,7 +20,7 @@
 ->f() : void
 ->f : (arg0: string) => void
 +>f() : any
-+>f : function
++>f : Function
 
  g() // should error
  >g() : void

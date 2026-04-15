@@ -5,12 +5,12 @@
  /** @type {Object.<string, number>} */
  var o1;
 ->o1 : { [x: string]: number; }
-+>o1 : any
++>o1 : Record<string, number>
 
  /** @type {Object.<number, boolean>} */
  var o2;
 ->o2 : { [x: number]: boolean; }
-+>o2 : any
++>o2 : Record<number, boolean>
 
  /** @type {Object.<boolean, string>} */
  var o3;
@@ -20,26 +20,22 @@
  function f(o) {
 ->f : (o: { [x: string]: boolean; }) => void
 ->o : { [x: string]: boolean; }
-+>f : (o: Object<string, boolean>) => void
-+>o : any
++>f : (o: Record<string, boolean>) => void
++>o : Record<string, boolean>
 
      o.foo = 1; // error
  >o.foo = 1 : 1
-->o.foo : boolean
+ >o.foo : boolean
 ->o : { [x: string]: boolean; }
-->foo : boolean
-+>o.foo : any
-+>o : any
-+>foo : any
++>o : Record<string, boolean>
+ >foo : boolean
  >1 : 1
 
      o.bar = false; // ok
  >o.bar = false : false
-->o.bar : boolean
+ >o.bar : boolean
 ->o : { [x: string]: boolean; }
-->bar : boolean
-+>o.bar : any
-+>o : any
-+>bar : any
++>o : Record<string, boolean>
+ >bar : boolean
  >false : false
  }

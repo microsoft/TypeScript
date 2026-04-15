@@ -26,7 +26,7 @@
  export const f5 = function() {
 ->f5 : (this: import("./types").Foo) => void
 ->function() {    this.test();} : (this: import("./types").Foo) => void
-+>f5 : function
++>f5 : Function
 +>function() {    this.test();} : () => void
 
      this.test();

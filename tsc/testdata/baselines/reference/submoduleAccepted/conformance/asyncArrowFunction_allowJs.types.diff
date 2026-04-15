@@ -6,7 +6,7 @@
  const a = () => 0
 ->a : () => string
 ->() => 0 : () => string
-+>a : function
++>a : Function
 +>() => 0 : () => number
  >0 : 0
 
@@ -15,7 +15,7 @@
  const b = async () => 0
 ->b : () => string
 ->async () => 0 : () => string
-+>b : function
++>b : Function
 +>async () => 0 : () => Promise<number>
  >0 : 0
 
@@ -24,7 +24,7 @@
  const c = async () => {
 ->c : () => string
 ->async () => {	return 0} : () => string
-+>c : function
++>c : Function
 +>async () => {	return 0} : () => Promise<number>
 
  	return 0
@@ -35,7 +35,7 @@
  const d = async () => {
 ->d : () => string
 ->async () => {	return ""} : () => string
-+>d : function
++>d : Function
 +>async () => {	return ""} : () => Promise<string>
 
  	return ""
@@ -47,7 +47,7 @@
 ->f : (arg0: () => string) => void
 ->(p) => {} : (p: () => string) => void
 ->p : () => string
-+>f : function
++>f : Function
 +>(p) => {} : (p: any) => void
 +>p : any
 
@@ -56,7 +56,7 @@
 ->f(async () => {	return 0}) : void
 ->f : (arg0: () => string) => void
 +>f(async () => {	return 0}) : any
-+>f : function
++>f : Function
  >async () => {	return 0} : () => Promise<number>
 
  	return 0

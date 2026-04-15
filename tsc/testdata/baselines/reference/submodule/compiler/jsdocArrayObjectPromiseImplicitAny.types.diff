@@ -18,33 +18,12 @@
  >pr : Promise<any>
 
    return pr;
-@@= skipped -9, +9 lines =@@
-
- /** @type {Object} */
- var anyObject = {valueOf: 1}; // not an error since assigning to any.
-->anyObject : any
-+>anyObject : Object
- >{valueOf: 1} : { valueOf: number; }
- >valueOf : number
- >1 : 1
+@@= skipped -16, +16 lines =@@
 
  /** @type {Object<string, number>} */
  var paramedObject = {valueOf: 1};
 ->paramedObject : { [x: string]: number; }
-+>paramedObject : any
++>paramedObject : Record<string, number>
  >{valueOf: 1} : { valueOf: number; }
  >valueOf : number
  >1 : 1
-@@= skipped -17, +17 lines =@@
-  * @return {Object}
-  */
- function returnAnyObject(obj) {
-->returnAnyObject : (obj: any) => any
-->obj : any
-+>returnAnyObject : (obj: Object) => Object
-+>obj : Object
-
-   return obj;
-->obj : any
-+>obj : Object
- }

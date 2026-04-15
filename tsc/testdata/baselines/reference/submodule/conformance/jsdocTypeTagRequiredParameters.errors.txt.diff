@@ -2,7 +2,6 @@
 +++ new.jsdocTypeTagRequiredParameters.errors.txt
 @@= skipped -0, +0 lines =@@
 -a.js(11,1): error TS2554: Expected 1 arguments, but got 0.
-+a.js(1,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +a.js(1,20): error TS1005: '}' expected.
 +a.js(2,12): error TS7006: Parameter 'value' implicitly has an 'any' type.
  a.js(12,1): error TS2554: Expected 1 arguments, but got 0.
@@ -10,11 +9,8 @@
 
 
 -==== a.js (3 errors) ====
-+==== a.js (5 errors) ====
++==== a.js (4 errors) ====
      /** @type {function(string): void} */
-+               ~~~~~~~~
-+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
 +                       ~
 +!!! error TS1005: '}' expected.
      const f = (value) => {
@@ -23,7 +19,7 @@
      };
      /** @type {(s: string) => void} */
      function g(s) {
-@@= skipped -14, +23 lines =@@
+@@= skipped -14, +19 lines =@@
      }
      
      f() // should error

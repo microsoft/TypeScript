@@ -1,12 +1,6 @@
 --- old.jsdocTypeNongenericInstantiationAttempt.errors.txt
 +++ new.jsdocTypeNongenericInstantiationAttempt.errors.txt
-@@= skipped -0, +0 lines =@@
- index.js(2,19): error TS2315: Type 'Boolean' is not generic.
--index2.js(2,19): error TS2315: Type 'Void' is not generic.
--index3.js(2,19): error TS2315: Type 'Undefined' is not generic.
-+index2.js(2,19): error TS2304: Cannot find name 'Void'.
-+index3.js(2,19): error TS2304: Cannot find name 'Undefined'.
- index4.js(2,19): error TS2315: Type 'Function' is not generic.
+@@= skipped -4, +4 lines =@@
  index5.js(2,19): error TS2315: Type 'String' is not generic.
  index6.js(2,19): error TS2315: Type 'Number' is not generic.
  index7.js(2,19): error TS2315: Type 'Object' is not generic.
@@ -14,29 +8,7 @@
  index8.js(4,15): error TS2304: Cannot find name 'T'.
 
 
-@@= skipped -20, +21 lines =@@
- ==== index2.js (1 errors) ====
-     /**
-      * @param {<T>(m: Void<T>) => string} somebody
--                      ~~~~~~~
--!!! error TS2315: Type 'Void' is not generic.
-+                      ~~~~
-+!!! error TS2304: Cannot find name 'Void'.
-      */
-     function sayHello2(somebody) {
-         return 'Hello ' + somebody;
-@@= skipped -11, +11 lines =@@
- ==== index3.js (1 errors) ====
-     /**
-      * @param {<T>(m: Undefined<T>) => string} somebody
--                      ~~~~~~~~~~~~
--!!! error TS2315: Type 'Undefined' is not generic.
-+                      ~~~~~~~~~
-+!!! error TS2304: Cannot find name 'Undefined'.
-      */
-     function sayHello3(somebody) {
-         return 'Hello ' + somebody;
-@@= skipped -51, +51 lines =@@
+@@= skipped -78, +79 lines =@@
          return 'Hello ' + somebody;
      }
      

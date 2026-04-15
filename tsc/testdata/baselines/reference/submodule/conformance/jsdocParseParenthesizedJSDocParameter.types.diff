@@ -11,7 +11,7 @@
 ->s.toString : () => string
 ->s : string
 ->toString : () => string
-+>x : function
++>x : Function
 +>s => s.toString() : (s: any) => any
 +>s : any
 +>s.toString() : any

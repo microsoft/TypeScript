@@ -86,7 +86,7 @@
 //     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var func: function
+// | var func: Function
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -95,7 +95,7 @@
 //     ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var func1: function
+// | var func1: Function
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -365,7 +365,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar func: function\n```\n"
+        "value": "```tsx\nvar func: Function\n```\n"
       },
       "range": {
         "start": {
@@ -392,7 +392,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar func1: function\n```\n"
+        "value": "```tsx\nvar func1: Function\n```\n"
       },
       "range": {
         "start": {

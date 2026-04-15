@@ -23,7 +23,7 @@
  /** @type {Object<string, number>} */
  var paramedObject = {valueOf: 1};
 ->paramedObject : { [x: string]: number; }
-+>paramedObject : any
++>paramedObject : Record<string, number>
  >{valueOf: 1} : { valueOf: number; }
  >valueOf : number
  >1 : 1

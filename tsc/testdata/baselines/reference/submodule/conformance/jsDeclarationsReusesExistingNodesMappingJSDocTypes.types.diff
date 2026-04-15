@@ -5,14 +5,14 @@
  /** @type {function(string, number): object} */
  export const f = null;
 ->f : (arg0: string, arg1: number) => object
-+>f : function
++>f : Function
 
  /** @type {function(new: object, string, number)} */
  export const g = null;
 ->g : new (arg1: string, arg2: number) => object
-+>g : function
++>g : Function
 
  /** @type {Object.<string, number>} */
  export const h = null;
 ->h : { [x: string]: number; }
-+>h : any
++>h : Record<string, number>

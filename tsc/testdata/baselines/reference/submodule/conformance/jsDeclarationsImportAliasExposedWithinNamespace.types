@@ -7,7 +7,7 @@
  * @type {Object<string,*>}
  */
 const myTypes = {
->myTypes : any
+>myTypes : Record<string, any>
 >{    // SOME PROPS HERE} : {}
 
     // SOME PROPS HERE
@@ -24,11 +24,11 @@ const myTypes = {
 /** @typedef {myTypes.typeB|Function} myTypes.typeC */
 
 export {myTypes};
->myTypes : any
+>myTypes : Record<string, any>
 
 === file2.js ===
 import {myTypes} from './file.js';
->myTypes : any
+>myTypes : Record<string, any>
 
 /**
  * @namespace testFnTypes
@@ -36,7 +36,7 @@ import {myTypes} from './file.js';
  * @type {Object<string,*>}
  */
 const testFnTypes = {
->testFnTypes : any
+>testFnTypes : Record<string, any>
 >{    // SOME PROPS HERE} : {}
 
     // SOME PROPS HERE
@@ -72,5 +72,5 @@ function testFn(input) {
 
 export {testFn, testFnTypes};
 >testFn : (input: testFnTypes.input) => number | null
->testFnTypes : any
+>testFnTypes : Record<string, any>
 

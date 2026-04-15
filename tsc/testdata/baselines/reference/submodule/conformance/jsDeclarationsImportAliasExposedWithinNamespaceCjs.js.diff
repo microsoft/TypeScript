@@ -31,7 +31,7 @@
 -    type typeC = myTypes.typeB | Function;
 -}
 +export type myTypes = myTypes.typeB | Function;
-+export declare var myTypes: any;
++export declare var myTypes: Record<string, any>;
  //// [file2.d.ts]
 +export type testFnTypes = boolean | myTypes.typeC;
  /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
@@ -52,7 +52,7 @@
 +declare function testFn(input: testFnTypes.input): number | null;
 +declare const _default: {
 +    testFn: typeof testFn;
-+    testFnTypes: any;
++    testFnTypes: Record<string, any>;
  };
 -export namespace testFnTypes {
 -    type input = boolean | myTypes.typeC;

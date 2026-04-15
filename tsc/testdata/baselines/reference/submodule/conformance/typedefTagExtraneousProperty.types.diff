@@ -5,30 +5,27 @@
  /** @type {Mmap} */
  var y = { bye: "no" };
 ->y : { [x: string]: string; }
-+>y : any
++>y : Record<string, string>
  >{ bye: "no" } : { bye: string; }
  >bye : string
  >"no" : "no"
 
  y
 ->y : { [x: string]: string; }
-+>y : any
++>y : Record<string, string>
 
  y.ignoreMe = "ok but just because of the index signature"
  >y.ignoreMe = "ok but just because of the index signature" : "ok but just because of the index signature"
-->y.ignoreMe : string
+ >y.ignoreMe : string
 ->y : { [x: string]: string; }
-->ignoreMe : string
-+>y.ignoreMe : any
-+>y : any
-+>ignoreMe : any
++>y : Record<string, string>
+ >ignoreMe : string
  >"ok but just because of the index signature" : "ok but just because of the index signature"
 
  y['hi'] = "yes"
  >y['hi'] = "yes" : "yes"
-->y['hi'] : string
+ >y['hi'] : string
 ->y : { [x: string]: string; }
-+>y['hi'] : any
-+>y : any
++>y : Record<string, string>
  >'hi' : "hi"
  >"yes" : "yes"

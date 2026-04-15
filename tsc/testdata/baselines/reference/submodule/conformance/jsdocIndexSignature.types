@@ -3,11 +3,11 @@
 === indices.js ===
 /** @type {Object.<string, number>} */
 var o1;
->o1 : any
+>o1 : Record<string, number>
 
 /** @type {Object.<number, boolean>} */
 var o2;
->o2 : any
+>o2 : Record<number, boolean>
 
 /** @type {Object.<boolean, string>} */
 var o3;
@@ -15,21 +15,21 @@ var o3;
 
 /** @param {Object.<string, boolean>} o */
 function f(o) {
->f : (o: Object<string, boolean>) => void
->o : any
+>f : (o: Record<string, boolean>) => void
+>o : Record<string, boolean>
 
     o.foo = 1; // error
 >o.foo = 1 : 1
->o.foo : any
->o : any
->foo : any
+>o.foo : boolean
+>o : Record<string, boolean>
+>foo : boolean
 >1 : 1
 
     o.bar = false; // ok
 >o.bar = false : false
->o.bar : any
->o : any
->bar : any
+>o.bar : boolean
+>o : Record<string, boolean>
+>bar : boolean
 >false : false
 }
 

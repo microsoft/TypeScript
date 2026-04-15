@@ -4,21 +4,21 @@
 // Error (good)
 /** @type {function(): string} */
 const a = () => 0
->a : function
+>a : Function
 >() => 0 : () => number
 >0 : 0
 
 // Error (good)
 /** @type {function(): string} */
 const b = async () => 0
->b : function
+>b : Function
 >async () => 0 : () => Promise<number>
 >0 : 0
 
 // No error (bad)
 /** @type {function(): string} */
 const c = async () => {
->c : function
+>c : Function
 >async () => {	return 0} : () => Promise<number>
 
 	return 0
@@ -28,7 +28,7 @@ const c = async () => {
 // Error (good)
 /** @type {function(): string} */
 const d = async () => {
->d : function
+>d : Function
 >async () => {	return ""} : () => Promise<string>
 
 	return ""
@@ -37,14 +37,14 @@ const d = async () => {
 
 /** @type {function(function(): string): void} */
 const f = (p) => {}
->f : function
+>f : Function
 >(p) => {} : (p: any) => void
 >p : any
 
 // Error (good)
 f(async () => {
 >f(async () => {	return 0}) : any
->f : function
+>f : Function
 >async () => {	return 0} : () => Promise<number>
 
 	return 0

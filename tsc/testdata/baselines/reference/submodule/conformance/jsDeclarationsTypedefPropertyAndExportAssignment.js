@@ -122,7 +122,7 @@ declare const _default: {
             label: string;
         };
     };
-    taskNameToGroup: any;
+    taskNameToGroup: Record<string, TaskGroup>;
 };
 export = _default;
 //// [index.d.ts]

@@ -57,14 +57,14 @@ function returnAnyPromise(pr) {
 
 /** @type {Object} */
 var anyObject = {valueOf: 1}; // not an error since assigning to any.
->anyObject : Object
+>anyObject : any
 >{valueOf: 1} : { valueOf: number; }
 >valueOf : number
 >1 : 1
 
 /** @type {Object<string, number>} */
 var paramedObject = {valueOf: 1};
->paramedObject : any
+>paramedObject : Record<string, number>
 >{valueOf: 1} : { valueOf: number; }
 >valueOf : number
 >1 : 1
@@ -74,10 +74,10 @@ var paramedObject = {valueOf: 1};
  * @return {Object}
  */
 function returnAnyObject(obj) {
->returnAnyObject : (obj: Object) => Object
->obj : Object
+>returnAnyObject : (obj: any) => any
+>obj : any
 
   return obj;
->obj : Object
+>obj : any
 }
 

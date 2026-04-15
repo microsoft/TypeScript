@@ -59,7 +59,7 @@ export function f4() {
 
 /** @type {function(this: import('./types').Foo): void} */
 export const f5 = function() {
->f5 : function
+>f5 : Function
 >function() {    this.test();} : () => void
 
     this.test();

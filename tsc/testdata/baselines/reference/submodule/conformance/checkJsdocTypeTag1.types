@@ -4,7 +4,7 @@
 // @ts-check
 /** @type {String} */
 var S = "hello world";
->S : String
+>S : string
 >"hello world" : "hello world"
 
 /** @type {number} */
@@ -48,7 +48,7 @@ x(1);
 
 /** @type {function} */
 const y = (a) => a + 1;
->y : function
+>y : Function
 >(a) => a + 1 : (a: any) => any
 >a : any
 >a + 1 : any
@@ -57,12 +57,12 @@ const y = (a) => a + 1;
 
 y(1);
 >y(1) : any
->y : function
+>y : Function
 >1 : 1
 
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
->x1 : function
+>x1 : Function
 >(a) => a + 1 : (a: any) => any
 >a : any
 >a + 1 : any
@@ -71,12 +71,12 @@ const x1 = (a) => a + 1;
 
 x1(0);
 >x1(0) : any
->x1 : function
+>x1 : Function
 >0 : 0
 
 /** @type {function (number): number} */
 const x2 = (a) => a + 1;
->x2 : function
+>x2 : Function
 >(a) => a + 1 : (a: any) => any
 >a : any
 >a + 1 : any
@@ -85,7 +85,7 @@ const x2 = (a) => a + 1;
 
 x2(0);
 >x2(0) : any
->x2 : function
+>x2 : Function
 >0 : 0
 
 /**

@@ -5,10 +5,9 @@ jsdocArrayObjectPromiseNoImplicitAny.js(15,12): error TS2314: Generic type 'Prom
 jsdocArrayObjectPromiseNoImplicitAny.js(22,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
 jsdocArrayObjectPromiseNoImplicitAny.js(23,13): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
 jsdocArrayObjectPromiseNoImplicitAny.js(30,21): error TS2322: Type 'number' is not assignable to type '() => Object'.
-jsdocArrayObjectPromiseNoImplicitAny.js(32,12): error TS2315: Type 'Object' is not generic.
 
 
-==== jsdocArrayObjectPromiseNoImplicitAny.js (8 errors) ====
+==== jsdocArrayObjectPromiseNoImplicitAny.js (7 errors) ====
     /** @type {Array} */
                ~~~~~
 !!! error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
@@ -55,8 +54,6 @@ jsdocArrayObjectPromiseNoImplicitAny.js(32,12): error TS2315: Type 'Object' is n
 !!! error TS2322: Type 'number' is not assignable to type '() => Object'.
     
     /** @type {Object<string, number>} */
-               ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2315: Type 'Object' is not generic.
     var paramedObject = {valueOf: 1};
     
     /**

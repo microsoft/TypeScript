@@ -14,8 +14,8 @@
 // pathFilter('foo', 'bar', 'baz', {});
 //            ^
 // | ----------------------------------------------------------------------
-// | pathFilter(**basePath: String**, pattern: String, type: String, options: Object): any[]
-// | - `basePath: String`: The base path where the search will be performed.
+// | pathFilter(**basePath: string**, pattern: string, type: string, options: Object): any[]
+// | - `basePath: string`: The base path where the search will be performed.
 
 // | Filters a path based on a regexp or glob pattern.
 // | ----------------------------------------------------------------------
@@ -33,28 +33,28 @@
     "item": {
       "signatures": [
         {
-          "label": "pathFilter(basePath: String, pattern: String, type: String, options: Object): any[]",
+          "label": "pathFilter(basePath: string, pattern: string, type: string, options: Object): any[]",
           "documentation": {
             "kind": "markdown",
             "value": "Filters a path based on a regexp or glob pattern."
           },
           "parameters": [
             {
-              "label": "basePath: String",
+              "label": "basePath: string",
               "documentation": {
                 "kind": "markdown",
                 "value": "The base path where the search will be performed.\n"
               }
             },
             {
-              "label": "pattern: String",
+              "label": "pattern: string",
               "documentation": {
                 "kind": "markdown",
                 "value": "A string defining a regexp of a glob pattern.\n"
               }
             },
             {
-              "label": "type: String",
+              "label": "type: string",
               "documentation": {
                 "kind": "markdown",
                 "value": "The search pattern type, can be a regexp or a glob.\n"

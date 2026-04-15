@@ -12,25 +12,17 @@
 -
 -
 -==== file.js (7 errors) ====
-+file.js(2,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +file.js(2,20): error TS1005: '}' expected.
-+file.js(6,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +file.js(6,20): error TS1005: '}' expected.
-+file.js(10,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +file.js(10,20): error TS1005: '}' expected.
-+file.js(16,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +file.js(16,20): error TS1005: '}' expected.
-+file.js(21,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +file.js(21,20): error TS1005: '}' expected.
 +file.js(22,12): error TS7006: Parameter 'p' implicitly has an 'any' type.
 +
 +
-+==== file.js (11 errors) ====
++==== file.js (6 errors) ====
      // Error (good)
      /** @type {function(): string} */
-+               ~~~~~~~~
-+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
 +                       ~
 +!!! error TS1005: '}' expected.
      const a = () => 0
@@ -41,9 +33,6 @@
      /** @type {function(): string} */
 -                           ~~~~~~
 -!!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
-+               ~~~~~~~~
-+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
 +                       ~
 +!!! error TS1005: '}' expected.
      const b = async () => 0
@@ -54,9 +43,6 @@
      /** @type {function(): string} */
 -                           ~~~~~~
 -!!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
-+               ~~~~~~~~
-+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
 +                       ~
 +!!! error TS1005: '}' expected.
      const c = async () => {
@@ -69,9 +55,6 @@
      /** @type {function(): string} */
 -                           ~~~~~~
 -!!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
-+               ~~~~~~~~
-+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
 +                       ~
 +!!! error TS1005: '}' expected.
      const d = async () => {
@@ -79,9 +62,6 @@
      }
      
      /** @type {function(function(): string): void} */
-+               ~~~~~~~~
-+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
 +                       ~
 +!!! error TS1005: '}' expected.
      const f = (p) => {}
