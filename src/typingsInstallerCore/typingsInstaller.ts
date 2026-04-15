@@ -239,6 +239,22 @@ export abstract class TypingsInstaller {
     /** @internal */
     installPackage(req: InstallPackageRequest): void {
         const { fileName, packageName, projectName, projectRootPath, id } = req;
+        const validationResult = JsTyping.validatePackageName(packageName);
+        if (validationResult !== JsTyping.NameValidationResult.Ok) {
+            const message = JsTyping.renderPackageNameValidationFailure(validationResult, packageName);
+            if (this.log.isEnabled()) {
+                this.log.writeLine(message);
+            }
+            const response: PackageInstalledResponse = {
+                kind: ActionPackageInstalled,
+                projectName,
+                id,
+                success: false,
+                message,
+            };
+            this.sendResponse(response);
+            return;
+        }
         const cwd = forEachAncestorDirectory(getDirectoryPath(fileName), directory => {
             if (this.installTypingHost.fileExists(combinePaths(directory, "package.json"))) {
                 return directory;
