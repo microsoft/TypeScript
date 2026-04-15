@@ -19,8 +19,8 @@ isolatedDeclarationErrorsExpressions.ts(33,12): error TS9010: Variable must have
 isolatedDeclarationErrorsExpressions.ts(49,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(50,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(51,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
-isolatedDeclarationErrorsExpressions.ts(53,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
-isolatedDeclarationErrorsExpressions.ts(55,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsExpressions.ts(53,18): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsExpressions.ts(55,38): error TS9018: Arrays with spread elements can't inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(59,12): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(60,12): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(61,12): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
@@ -169,13 +169,13 @@ isolatedDeclarationErrorsExpressions.ts(128,19): error TS9019: Binding elements 
 !!! related TS9027 isolatedDeclarationErrorsExpressions.ts:51:12: Add a type annotation to the variable templateLetOk4AsConst.
     
     export let arr = [1, 2, 3];
-               ~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+                     ~~~~~~~~~
+!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
 !!! related TS9027 isolatedDeclarationErrorsExpressions.ts:53:12: Add a type annotation to the variable arr.
     export let arrConst = [1, 2, 3] as const;
     export let arrWithSpread = [1, 2, 3, ...arr] as const;
-               ~~~~~~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+                                         ~~~~~~
+!!! error TS9018: Arrays with spread elements can't inferred with --isolatedDeclarations.
 !!! related TS9027 isolatedDeclarationErrorsExpressions.ts:55:12: Add a type annotation to the variable arrWithSpread.
     
     export class Exported {

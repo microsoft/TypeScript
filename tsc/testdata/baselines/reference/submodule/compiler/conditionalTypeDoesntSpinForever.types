@@ -46,8 +46,8 @@ export enum PubSubRecordIsStoredInRedisAsA {
     }
   
   const buildNameFieldConstructor = <SO_FAR>(soFar: SO_FAR) => (
->buildNameFieldConstructor : <SO_FAR>(soFar: SO_FAR) => {} | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
-><SO_FAR>(soFar: SO_FAR) => (    "name" in soFar ? {} : {      name: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>    }  ) : <SO_FAR>(soFar: SO_FAR) => {} | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
+>buildNameFieldConstructor : <SO_FAR>(soFar: SO_FAR) => { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
+><SO_FAR>(soFar: SO_FAR) => (    "name" in soFar ? {} : {      name: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>    }  ) : <SO_FAR>(soFar: SO_FAR) => { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
 >soFar : SO_FAR
 >(    "name" in soFar ? {} : {      name: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>    }  ) : {} | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
 
@@ -103,8 +103,8 @@ export enum PubSubRecordIsStoredInRedisAsA {
     }
   
   const buildStoredAsConstructor = <SO_FAR>(soFar: SO_FAR) => (
->buildStoredAsConstructor : <SO_FAR>(soFar: SO_FAR) => {} | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
-><SO_FAR>(soFar: SO_FAR) => (    "storedAs" in soFar ? {} : {      storedAsJsonEncodedRedisString: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}>,      storedAsRedisHash: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}>,    }  ) : <SO_FAR>(soFar: SO_FAR) => {} | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
+>buildStoredAsConstructor : <SO_FAR>(soFar: SO_FAR) => { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
+><SO_FAR>(soFar: SO_FAR) => (    "storedAs" in soFar ? {} : {      storedAsJsonEncodedRedisString: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}>,      storedAsRedisHash: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}>,    }  ) : <SO_FAR>(soFar: SO_FAR) => { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
 >soFar : SO_FAR
 >(    "storedAs" in soFar ? {} : {      storedAsJsonEncodedRedisString: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}>,      storedAsRedisHash: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}>,    }  ) : {} | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
 
@@ -183,8 +183,8 @@ export enum PubSubRecordIsStoredInRedisAsA {
     } : {}
   
   const buildIdentifierFieldConstructor = <SO_FAR>(soFar: SO_FAR) => (
->buildIdentifierFieldConstructor : <SO_FAR>(soFar: SO_FAR) => {} | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
-><SO_FAR>(soFar: SO_FAR) => (    "identifier" in soFar || (!("record" in soFar)) ? {} : {      identifier: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>    }  ) : <SO_FAR>(soFar: SO_FAR) => {} | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
+>buildIdentifierFieldConstructor : <SO_FAR>(soFar: SO_FAR) => { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
+><SO_FAR>(soFar: SO_FAR) => (    "identifier" in soFar || (!("record" in soFar)) ? {} : {      identifier: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>    }  ) : <SO_FAR>(soFar: SO_FAR) => { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
 >soFar : SO_FAR
 >(    "identifier" in soFar || (!("record" in soFar)) ? {} : {      identifier: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>    }  ) : {} | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
 
@@ -242,8 +242,8 @@ export enum PubSubRecordIsStoredInRedisAsA {
     }
   
   const buildRecordFieldConstructor = <SO_FAR>(soFar: SO_FAR) => (
->buildRecordFieldConstructor : <SO_FAR>(soFar: SO_FAR) => {} | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
-><SO_FAR>(soFar: SO_FAR) => (    "record" in soFar ? {} : {      record: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>    }  ) : <SO_FAR>(soFar: SO_FAR) => {} | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
+>buildRecordFieldConstructor : <SO_FAR>(soFar: SO_FAR) => { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
+><SO_FAR>(soFar: SO_FAR) => (    "record" in soFar ? {} : {      record: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>    }  ) : <SO_FAR>(soFar: SO_FAR) => { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
 >soFar : SO_FAR
 >(    "record" in soFar ? {} : {      record: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>    }  ) : {} | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
 
@@ -376,8 +376,8 @@ export enum PubSubRecordIsStoredInRedisAsA {
     } : {}
   
   const buildType = <SO_FAR>(soFar: SO_FAR) => (
->buildType : <SO_FAR>(soFar: SO_FAR) => {} | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
-><SO_FAR>(soFar: SO_FAR) => (    "identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar && "PubSubRecordIsStoredInRedisAsA" in soFar ? {} : {      type: soFar,      fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),      hasField: (fieldName: string | number | symbol) => fieldName in soFar    }  ) : <SO_FAR>(soFar: SO_FAR) => {} | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
+>buildType : <SO_FAR>(soFar: SO_FAR) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
+><SO_FAR>(soFar: SO_FAR) => (    "identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar && "PubSubRecordIsStoredInRedisAsA" in soFar ? {} : {      type: soFar,      fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),      hasField: (fieldName: string | number | symbol) => fieldName in soFar    }  ) : <SO_FAR>(soFar: SO_FAR) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
 >soFar : SO_FAR
 >(    "identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar && "PubSubRecordIsStoredInRedisAsA" in soFar ? {} : {      type: soFar,      fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),      hasField: (fieldName: string | number | symbol) => fieldName in soFar    }  ) : {} | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
 
@@ -452,22 +452,22 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
     buildNameFieldConstructor(soFar),
 >buildNameFieldConstructor(soFar) : { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
->buildNameFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => {} | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { name: TYPE; }>; }
+>buildNameFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { name: TYPE; }>; }
 >soFar : SO_FAR
 
     buildIdentifierFieldConstructor(soFar),
 >buildIdentifierFieldConstructor(soFar) : { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
->buildIdentifierFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => {} | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { identifier: TYPE; }>; }
+>buildIdentifierFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { identifier: TYPE; }>; }
 >soFar : SO_FAR
 
     buildRecordFieldConstructor(soFar),
 >buildRecordFieldConstructor(soFar) : { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
->buildRecordFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => {} | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { record: TYPE; }>; }
+>buildRecordFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { record: TYPE; }>; }
 >soFar : SO_FAR
 
     buildStoredAsConstructor(soFar),
 >buildStoredAsConstructor(soFar) : { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
->buildStoredAsConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => {} | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR_1 & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR_1 & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
+>buildStoredAsConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR_1 & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR_1 & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
 >soFar : SO_FAR
 
     buildMaxMsToWaitBeforePublishingFieldConstructor(soFar),
@@ -477,7 +477,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
     buildType(soFar)
 >buildType(soFar) : { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
->buildType : <SO_FAR_1>(soFar: SO_FAR_1) => {} | { type: SO_FAR_1; fields: () => Set<keyof SO_FAR_1>; hasField: (fieldName: string | number | symbol) => boolean; }
+>buildType : <SO_FAR_1>(soFar: SO_FAR_1) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR_1; fields: () => Set<keyof SO_FAR_1>; hasField: (fieldName: string | number | symbol) => boolean; }
 >soFar : SO_FAR
 
   ) as BuildPubSubRecordType<SO_FAR>;

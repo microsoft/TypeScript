@@ -1,17 +1,6 @@
 --- old.isolatedDeclarationErrorsExpressions.errors.txt
 +++ new.isolatedDeclarationErrorsExpressions.errors.txt
-@@= skipped -18, +18 lines =@@
- isolatedDeclarationErrorsExpressions.ts(49,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
- isolatedDeclarationErrorsExpressions.ts(50,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
- isolatedDeclarationErrorsExpressions.ts(51,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
--isolatedDeclarationErrorsExpressions.ts(53,18): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
--isolatedDeclarationErrorsExpressions.ts(55,38): error TS9018: Arrays with spread elements can't inferred with --isolatedDeclarations.
-+isolatedDeclarationErrorsExpressions.ts(53,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
-+isolatedDeclarationErrorsExpressions.ts(55,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
- isolatedDeclarationErrorsExpressions.ts(59,12): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
- isolatedDeclarationErrorsExpressions.ts(60,12): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
- isolatedDeclarationErrorsExpressions.ts(61,12): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
-@@= skipped -24, +24 lines =@@
+@@= skipped -42, +42 lines =@@
  isolatedDeclarationErrorsExpressions.ts(104,5): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
  isolatedDeclarationErrorsExpressions.ts(109,37): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
  isolatedDeclarationErrorsExpressions.ts(110,37): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
@@ -24,25 +13,7 @@
  isolatedDeclarationErrorsExpressions.ts(119,36): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
  isolatedDeclarationErrorsExpressions.ts(127,16): error TS9019: Binding elements can't be exported directly with --isolatedDeclarations.
  isolatedDeclarationErrorsExpressions.ts(128,19): error TS9019: Binding elements can't be exported directly with --isolatedDeclarations.
-@@= skipped -126, +126 lines =@@
- !!! related TS9027 isolatedDeclarationErrorsExpressions.ts:51:12: Add a type annotation to the variable templateLetOk4AsConst.
-     
-     export let arr = [1, 2, 3];
--                     ~~~~~~~~~
--!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
-+               ~~~
-+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
- !!! related TS9027 isolatedDeclarationErrorsExpressions.ts:53:12: Add a type annotation to the variable arr.
-     export let arrConst = [1, 2, 3] as const;
-     export let arrWithSpread = [1, 2, 3, ...arr] as const;
--                                         ~~~~~~
--!!! error TS9018: Arrays with spread elements can't inferred with --isolatedDeclarations.
-+               ~~~~~~~~~~~~~
-+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
- !!! related TS9027 isolatedDeclarationErrorsExpressions.ts:55:12: Add a type annotation to the variable arrWithSpread.
-     
-     export class Exported {
-@@= skipped -131, +131 lines =@@
+@@= skipped -257, +257 lines =@@
  !!! related TS9028 isolatedDeclarationErrorsExpressions.ts:110:33: Add a type annotation to the parameter p.
      export function numberParamBad3(p = numberParam): void { }
                                          ~~~~~~~~~~~
