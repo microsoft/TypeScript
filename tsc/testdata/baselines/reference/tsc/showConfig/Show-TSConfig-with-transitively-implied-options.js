@@ -18,5 +18,8 @@ Output::
         "module": "nodenext",
         "moduleResolution": "nodenext",
         "moduleDetection": "force"
-    }
+    },
+    "files": [
+        "./src/index.ts"
+    ]
 }

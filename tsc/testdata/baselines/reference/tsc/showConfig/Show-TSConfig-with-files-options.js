@@ -8,8 +8,8 @@ Output::
 {
     "compilerOptions": {},
     "files": [
-        "./project/file0.ts",
-        "./project/file1.ts",
-        "./project/file2.ts"
+        "./file0.ts",
+        "./file1.ts",
+        "./file2.ts"
     ]
 }

@@ -32,5 +32,8 @@ Output::
         {
             "path": "./packages/b"
         }
+    ],
+    "files": [
+        "./src/index.ts"
     ]
 }

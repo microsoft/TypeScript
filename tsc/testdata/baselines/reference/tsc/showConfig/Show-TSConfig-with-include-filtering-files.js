@@ -24,6 +24,10 @@ Output::
     "compilerOptions": {
         "strict": true
     },
+    "files": [
+        "./src/main.ts",
+        "./src/util.ts"
+    ],
     "include": [
         "src/**/*"
     ]

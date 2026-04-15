@@ -65,6 +65,9 @@ Output::
         "esModuleInterop": true,
         "useDefineForClassFields": false
     },
+    "files": [
+        "./src/index.ts"
+    ],
     "include": [
         "./src/**/*"
     ],

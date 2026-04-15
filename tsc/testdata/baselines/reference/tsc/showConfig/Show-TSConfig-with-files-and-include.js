@@ -26,7 +26,8 @@ Output::
         "strict": true
     },
     "files": [
-        "./extra.ts"
+        "./extra.ts",
+        "./src/main.ts"
     ],
     "include": [
         "src/**/*"
