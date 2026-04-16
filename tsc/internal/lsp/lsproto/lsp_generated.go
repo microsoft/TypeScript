@@ -21086,6 +21086,21 @@ type ClientCapabilities struct {
 	//
 	// Since: 3.16.0
 	General *GeneralClientCapabilities `json:"general,omitzero"`
+
+	// Whether the client supports Visual Studio extensions.
+	VSSupportsVisualStudioExtensions *bool `json:"_vs_supportsVisualStudioExtensions,omitzero"`
+
+	// The snippet version supported by the client.
+	VSSupportedSnippetVersion *int32 `json:"_vs_supportedSnippetVersion,omitzero"`
+
+	// Whether the client supports not including text in textDocument/didOpen notifications.
+	VSSupportsNotIncludingTextInTextDocumentDidOpen *bool `json:"_vs_supportsNotIncludingTextInTextDocumentDidOpen,omitzero"`
+
+	// Whether the client supports icon extensions.
+	VSSupportsIconExtensions *bool `json:"_vs_supportsIconExtensions,omitzero"`
+
+	// Whether the client supports diagnostic requests.
+	VSSupportsDiagnosticRequests *bool `json:"_vs_supportsDiagnosticRequests,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*ClientCapabilities)(nil)
@@ -21130,6 +21145,41 @@ func (s *ClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return errNull("general")
 			}
 			if err := json.UnmarshalDecode(dec, &s.General); err != nil {
+				return err
+			}
+		case `"_vs_supportsVisualStudioExtensions"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("_vs_supportsVisualStudioExtensions")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VSSupportsVisualStudioExtensions); err != nil {
+				return err
+			}
+		case `"_vs_supportedSnippetVersion"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("_vs_supportedSnippetVersion")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VSSupportedSnippetVersion); err != nil {
+				return err
+			}
+		case `"_vs_supportsNotIncludingTextInTextDocumentDidOpen"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("_vs_supportsNotIncludingTextInTextDocumentDidOpen")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VSSupportsNotIncludingTextInTextDocumentDidOpen); err != nil {
+				return err
+			}
+		case `"_vs_supportsIconExtensions"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("_vs_supportsIconExtensions")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VSSupportsIconExtensions); err != nil {
+				return err
+			}
+		case `"_vs_supportsDiagnosticRequests"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("_vs_supportsDiagnosticRequests")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VSSupportsDiagnosticRequests); err != nil {
 				return err
 			}
 		default:
@@ -37920,6 +37970,16 @@ type ResolvedClientCapabilities struct {
 	//
 	// Since: 3.16.0
 	General ResolvedGeneralClientCapabilities `json:"general,omitzero"`
+	// Whether the client supports Visual Studio extensions.
+	VSSupportsVisualStudioExtensions bool `json:"_vs_supportsVisualStudioExtensions,omitzero"`
+	// The snippet version supported by the client.
+	VSSupportedSnippetVersion int32 `json:"_vs_supportedSnippetVersion,omitzero"`
+	// Whether the client supports not including text in textDocument/didOpen notifications.
+	VSSupportsNotIncludingTextInTextDocumentDidOpen bool `json:"_vs_supportsNotIncludingTextInTextDocumentDidOpen,omitzero"`
+	// Whether the client supports icon extensions.
+	VSSupportsIconExtensions bool `json:"_vs_supportsIconExtensions,omitzero"`
+	// Whether the client supports diagnostic requests.
+	VSSupportsDiagnosticRequests bool `json:"_vs_supportsDiagnosticRequests,omitzero"`
 }
 
 func ResolveClientCapabilities(v *ClientCapabilities) ResolvedClientCapabilities {
@@ -37927,9 +37987,14 @@ func ResolveClientCapabilities(v *ClientCapabilities) ResolvedClientCapabilities
 		return ResolvedClientCapabilities{}
 	}
 	return ResolvedClientCapabilities{
-		Workspace:    resolveWorkspaceClientCapabilities(v.Workspace),
-		TextDocument: resolveTextDocumentClientCapabilities(v.TextDocument),
-		Window:       resolveWindowClientCapabilities(v.Window),
-		General:      resolveGeneralClientCapabilities(v.General),
+		Workspace:                        resolveWorkspaceClientCapabilities(v.Workspace),
+		TextDocument:                     resolveTextDocumentClientCapabilities(v.TextDocument),
+		Window:                           resolveWindowClientCapabilities(v.Window),
+		General:                          resolveGeneralClientCapabilities(v.General),
+		VSSupportsVisualStudioExtensions: derefOr(v.VSSupportsVisualStudioExtensions),
+		VSSupportedSnippetVersion:        derefOr(v.VSSupportedSnippetVersion),
+		VSSupportsNotIncludingTextInTextDocumentDidOpen: derefOr(v.VSSupportsNotIncludingTextInTextDocumentDidOpen),
+		VSSupportsIconExtensions:                        derefOr(v.VSSupportsIconExtensions),
+		VSSupportsDiagnosticRequests:                    derefOr(v.VSSupportsDiagnosticRequests),
 	}
 }

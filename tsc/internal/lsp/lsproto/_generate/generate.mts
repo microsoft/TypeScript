@@ -639,6 +639,42 @@ function patchAndPreprocessModel() {
             );
         }
 
+        // Patch ClientCapabilities to add VS-specific client capabilities
+        if (structure.name === "ClientCapabilities") {
+            structure.properties.push(
+                {
+                    name: "_vs_supportsVisualStudioExtensions",
+                    type: { kind: "base", name: "boolean" },
+                    optional: true,
+                    documentation: "Whether the client supports Visual Studio extensions.",
+                },
+                {
+                    name: "_vs_supportedSnippetVersion",
+                    type: { kind: "base", name: "integer" },
+                    optional: true,
+                    documentation: "The snippet version supported by the client.",
+                },
+                {
+                    name: "_vs_supportsNotIncludingTextInTextDocumentDidOpen",
+                    type: { kind: "base", name: "boolean" },
+                    optional: true,
+                    documentation: "Whether the client supports not including text in textDocument/didOpen notifications.",
+                },
+                {
+                    name: "_vs_supportsIconExtensions",
+                    type: { kind: "base", name: "boolean" },
+                    optional: true,
+                    documentation: "Whether the client supports icon extensions.",
+                },
+                {
+                    name: "_vs_supportsDiagnosticRequests",
+                    type: { kind: "base", name: "boolean" },
+                    optional: true,
+                    documentation: "Whether the client supports diagnostic requests.",
+                },
+            );
+        }
+
         // Patch HoverClientCapabilities to add verbosityLevel support flag
         if (structure.name === "HoverClientCapabilities") {
             structure.properties.push({
@@ -970,6 +1006,13 @@ const typeInfo: TypeInfo = {
 
 function titleCase(s: string) {
     return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function goFieldName(prop: Property): string {
+    if (prop.name.startsWith("_vs_")) {
+        return "VS" + titleCase(prop.name.slice(4));
+    }
+    return titleCase(prop.name);
 }
 
 function resolveType(type: Type): GoType {
@@ -1739,14 +1782,14 @@ function generateCode() {
                 const refStructure = model.structures.find(s => s.name === type.name);
                 if (refStructure) {
                     // Use a named type for the resolved version
-                    lines.push(`${indent}${titleCase(prop.name)} Resolved${type.name} \`json:"${prop.name},omitzero"\``);
+                    lines.push(`${indent}${goFieldName(prop)} Resolved${type.name} \`json:"${prop.name},omitzero"\``);
                     continue;
                 }
             }
 
             // For other types (primitives, enums, arrays, etc.), use the type directly (no pointer)
             const goType = type.name;
-            lines.push(`${indent}${titleCase(prop.name)} ${goType} \`json:"${prop.name},omitzero"\``);
+            lines.push(`${indent}${goFieldName(prop)} ${goType} \`json:"${prop.name},omitzero"\``);
         }
 
         return lines;
@@ -1757,7 +1800,7 @@ function generateCode() {
 
         for (const prop of structure.properties) {
             const type = resolveType(prop.type);
-            const fieldName = titleCase(prop.name);
+            const fieldName = goFieldName(prop);
             const accessPath = `${varName}.${fieldName}`;
 
             // For reference types that are structures, call the resolve function
@@ -1890,7 +1933,7 @@ function generateCode() {
                 const useOmitzero = prop.optional || prop.omitzeroValue;
                 const goType = (prop.optional || type.needsPointer) && !prop.omitzeroValue ? `*${type.name}` : type.name;
 
-                writeLine(`\t${titleCase(prop.name)} ${goType} \`json:"${prop.name}${useOmitzero ? ",omitzero" : ""}"\``);
+                writeLine(`\t${goFieldName(prop)} ${goType} \`json:"${prop.name}${useOmitzero ? ",omitzero" : ""}"\``);
 
                 if (includeDocumentation) {
                     writeLine("");
@@ -1969,7 +2012,7 @@ function generateCode() {
                 for (let i = 0; i < requiredProps.length; i++) {
                     const prop = requiredProps[i];
                     const iotaPrefix = i === 0 ? " uint = 1 << iota" : "";
-                    writeLine(`\t\tmissing${titleCase(prop.name)}${iotaPrefix}`);
+                    writeLine(`\t\tmissing${goFieldName(prop)}${iotaPrefix}`);
                 }
                 writeLine(`\t\t_missingLast`);
                 writeLine(`\t)`);
@@ -1995,7 +2038,7 @@ function generateCode() {
             for (const prop of structure.properties) {
                 writeLine(`\t\tcase \`"${prop.name}"\`:`);
                 if (!prop.optional && !prop.omitzeroValue) {
-                    writeLine(`\t\t\tmissing &^= missing${titleCase(prop.name)}`);
+                    writeLine(`\t\t\tmissing &^= missing${goFieldName(prop)}`);
                 }
                 // Reject null for fields whose types cannot represent null but whose Go types
                 // silently accept it (pointers, slices, maps).
@@ -2006,7 +2049,7 @@ function generateCode() {
                     writeLine(`\t\t\t\treturn errNull("${prop.name}")`);
                     writeLine(`\t\t\t}`);
                 }
-                writeLine(`\t\t\tif err := json.UnmarshalDecode(dec, &s.${titleCase(prop.name)}); err != nil {`);
+                writeLine(`\t\t\tif err := json.UnmarshalDecode(dec, &s.${goFieldName(prop)}); err != nil {`);
                 writeLine(`\t\t\t\treturn err`);
                 writeLine(`\t\t\t}`);
             }
@@ -2028,7 +2071,7 @@ function generateCode() {
                 writeLine(`\tif missing != 0 {`);
                 writeLine(`\t\tvar missingProps []string`);
                 for (const prop of requiredProps) {
-                    writeLine(`\t\tif missing&missing${titleCase(prop.name)} != 0 {`);
+                    writeLine(`\t\tif missing&missing${goFieldName(prop)} != 0 {`);
                     writeLine(`\t\t\tmissingProps = append(missingProps, "${prop.name}")`);
                     writeLine(`\t\t}`);
                 }
