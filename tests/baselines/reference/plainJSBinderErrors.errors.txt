@@ -11,7 +11,7 @@ plainJSBinderErrors.js(19,16): error TS1102: 'delete' cannot be called on an ide
 plainJSBinderErrors.js(22,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 plainJSBinderErrors.js(23,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 plainJSBinderErrors.js(27,9): error TS1101: 'with' statements are not allowed in strict mode.
-plainJSBinderErrors.js(33,13): error TS1344: 'A label is not allowed here.
+plainJSBinderErrors.js(33,13): error TS1344: A label is not allowed here.
 plainJSBinderErrors.js(34,13): error TS1107: Jump target cannot cross function boundary.
 plainJSBinderErrors.js(39,7): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
 plainJSBinderErrors.js(40,7): error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
@@ -80,7 +80,7 @@ plainJSBinderErrors.js(40,7): error TS1215: Invalid use of 'arguments'. Modules 
             for(;;) {
                 label: var x = 1
                 ~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
                 break label
                 ~~~~~~~~~~~
 !!! error TS1107: Jump target cannot cross function boundary.

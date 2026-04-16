@@ -9,7 +9,7 @@ labeledStatementDeclarationListInLoopNoCrash3.ts(15,42): error TS1005: ')' expec
 labeledStatementDeclarationListInLoopNoCrash3.ts(15,53): error TS2304: Cannot find name 'fontSize'.
 labeledStatementDeclarationListInLoopNoCrash3.ts(15,61): error TS1005: ';' expected.
 labeledStatementDeclarationListInLoopNoCrash3.ts(16,12): error TS1005: ';' expected.
-labeledStatementDeclarationListInLoopNoCrash3.ts(16,12): error TS1344: 'A label is not allowed here.
+labeledStatementDeclarationListInLoopNoCrash3.ts(16,12): error TS1344: A label is not allowed here.
 labeledStatementDeclarationListInLoopNoCrash3.ts(16,23): error TS1134: Variable declaration expected.
 labeledStatementDeclarationListInLoopNoCrash3.ts(16,38): error TS2592: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig.
 labeledStatementDeclarationListInLoopNoCrash3.ts(16,39): error TS1005: ')' expected.
@@ -58,7 +58,7 @@ labeledStatementDeclarationListInLoopNoCrash3.ts(22,1): error TS1160: Unterminat
                ~~~~~~
 !!! error TS1005: ';' expected.
                ~~~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
                           ~
 !!! error TS1134: Variable declaration expected.
                                          ~

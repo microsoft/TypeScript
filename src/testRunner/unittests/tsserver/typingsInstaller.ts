@@ -1524,10 +1524,11 @@ describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () 
     it("package name cannot start with underscore", () => {
         assert.equal(validatePackageName("_foo"), NameValidationResult.NameStartsWithUnderscore);
     });
-    it("package non URI safe characters are not supported", () => {
-        assert.equal(validatePackageName("  scope  "), NameValidationResult.NameContainsNonURISafeCharacters);
-        assert.equal(validatePackageName("; say ‘Hello from TypeScript!’ #"), NameValidationResult.NameContainsNonURISafeCharacters);
-        assert.equal(validatePackageName("a/b/c"), NameValidationResult.NameContainsNonURISafeCharacters);
+    it("package invalid characters are not supported", () => {
+        assert.equal(validatePackageName("  scope  "), NameValidationResult.NameContainsInvalidCharacters);
+        assert.equal(validatePackageName("; say ‘Hello from TypeScript!’ #"), NameValidationResult.NameContainsInvalidCharacters);
+        assert.equal(validatePackageName("a/b/c"), NameValidationResult.NameContainsInvalidCharacters);
+        assert.equal(validatePackageName("react'test"), NameValidationResult.NameContainsInvalidCharacters);
     });
     it("scoped package name is supported", () => {
         assert.equal(validatePackageName("@scope/bar"), NameValidationResult.Ok);
@@ -1540,10 +1541,10 @@ describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () 
         assert.deepEqual(validatePackageName("@_scope/bar"), { name: "_scope", isScopeName: true, result: NameValidationResult.NameStartsWithUnderscore });
         assert.deepEqual(validatePackageName("@_scope/_bar"), { name: "_scope", isScopeName: true, result: NameValidationResult.NameStartsWithUnderscore });
     });
-    it("scope name in scoped package name with non URI safe characters are not supported", () => {
-        assert.deepEqual(validatePackageName("@  scope  /bar"), { name: "  scope  ", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
-        assert.deepEqual(validatePackageName("@; say ‘Hello from TypeScript!’ #/bar"), { name: "; say ‘Hello from TypeScript!’ #", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
-        assert.deepEqual(validatePackageName("@  scope  /  bar  "), { name: "  scope  ", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
+    it("scope name in scoped package name with invalid characters are not supported", () => {
+        assert.deepEqual(validatePackageName("@  scope  /bar"), { name: "  scope  ", isScopeName: true, result: NameValidationResult.NameContainsInvalidCharacters });
+        assert.deepEqual(validatePackageName("@; say ‘Hello from TypeScript!’ #/bar"), { name: "; say ‘Hello from TypeScript!’ #", isScopeName: true, result: NameValidationResult.NameContainsInvalidCharacters });
+        assert.deepEqual(validatePackageName("@  scope  /  bar  "), { name: "  scope  ", isScopeName: true, result: NameValidationResult.NameContainsInvalidCharacters });
     });
     it("package name in scoped package name cannot start with dot", () => {
         assert.deepEqual(validatePackageName("@scope/.bar"), { name: ".bar", isScopeName: false, result: NameValidationResult.NameStartsWithDot });
@@ -1551,9 +1552,9 @@ describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () 
     it("package name in scoped package name cannot start with underscore", () => {
         assert.deepEqual(validatePackageName("@scope/_bar"), { name: "_bar", isScopeName: false, result: NameValidationResult.NameStartsWithUnderscore });
     });
-    it("package name in scoped package name with non URI safe characters are not supported", () => {
-        assert.deepEqual(validatePackageName("@scope/  bar  "), { name: "  bar  ", isScopeName: false, result: NameValidationResult.NameContainsNonURISafeCharacters });
-        assert.deepEqual(validatePackageName("@scope/; say ‘Hello from TypeScript!’ #"), { name: "; say ‘Hello from TypeScript!’ #", isScopeName: false, result: NameValidationResult.NameContainsNonURISafeCharacters });
+    it("package name in scoped package name with invalid characters are not supported", () => {
+        assert.deepEqual(validatePackageName("@scope/  bar  "), { name: "  bar  ", isScopeName: false, result: NameValidationResult.NameContainsInvalidCharacters });
+        assert.deepEqual(validatePackageName("@scope/; say ‘Hello from TypeScript!’ #"), { name: "; say ‘Hello from TypeScript!’ #", isScopeName: false, result: NameValidationResult.NameContainsInvalidCharacters });
     });
 });
 

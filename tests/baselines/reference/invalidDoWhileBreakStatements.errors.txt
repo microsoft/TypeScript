@@ -3,7 +3,7 @@ invalidDoWhileBreakStatements.ts(8,4): error TS1116: A 'break' statement can onl
 invalidDoWhileBreakStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
 invalidDoWhileBreakStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
 invalidDoWhileBreakStatements.ts(27,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
-invalidDoWhileBreakStatements.ts(33,1): error TS1344: 'A label is not allowed here.
+invalidDoWhileBreakStatements.ts(33,1): error TS1344: A label is not allowed here.
 invalidDoWhileBreakStatements.ts(37,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
 
 
@@ -52,7 +52,7 @@ invalidDoWhileBreakStatements.ts(37,5): error TS1116: A 'break' statement can on
     // label on non-loop statement
     NINE:
     ~~~~
-!!! error TS1344: 'A label is not allowed here.
+!!! error TS1344: A label is not allowed here.
     var y = 12;
     
     do {
