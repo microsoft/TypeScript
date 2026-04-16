@@ -1262,6 +1262,12 @@ func (f *isolatedDeclarationsFixer) addTypeToVariableLike(decl *ast.Node) string
 		f.changeTracker.ReplaceNode(f.sourceFile, decl.Type(), typeNode, nil)
 	} else {
 		f.changeTracker.TryInsertTypeAnnotation(f.sourceFile, decl, typeNode)
+		// Parenthesize paren-less arrow function parameters (`x => ...`) so the inserted `: T`
+		// produces `(x: T) => ...` instead of the invalid `x: T => ...`. Queued after the type
+		// annotation so that the `)` edit at param.End() sorts after the annotation insertion.
+		if ast.IsParameterDeclaration(decl) && decl.Parent != nil && ast.IsArrowFunction(decl.Parent) {
+			f.changeTracker.ParenthesizeArrowParameters(f.sourceFile, decl.Parent)
+		}
 	}
 	return diagnostics.Add_annotation_of_type_0.Localize(f.locale, typeToStringForDiag(typeNode, f.sourceFile, f.changeTracker))
 }

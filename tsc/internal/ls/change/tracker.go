@@ -226,6 +226,23 @@ func (t *Tracker) TryInsertTypeAnnotation(sourceFile *ast.SourceFile, node *ast.
 	return true
 }
 
+// ParenthesizeArrowParameters wraps the parameters of a paren-less arrow function in `(` and `)`.
+// This is a no-op if the arrow function already has parens.
+func (t *Tracker) ParenthesizeArrowParameters(sourceFile *ast.SourceFile, arrowFunc *ast.Node) {
+	if astnav.FindChildOfKind(arrowFunc, ast.KindCloseParenToken, sourceFile) != nil {
+		return
+	}
+	params := arrowFunc.Parameters()
+	if len(params) == 0 {
+		return
+	}
+	firstParam := params[0]
+	lastParam := params[len(params)-1]
+	startPos := astnav.GetStartOfNode(firstParam, sourceFile, false)
+	t.InsertText(sourceFile, t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(startPos)), "(")
+	t.InsertText(sourceFile, t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(lastParam.End())), ")")
+}
+
 // InsertModifierBefore inserts a modifier token (like 'type') before a node with a trailing space.
 func (t *Tracker) InsertModifierBefore(sourceFile *ast.SourceFile, modifier ast.Kind, before *ast.Node) {
 	pos := astnav.GetStartOfNode(before, sourceFile, false)
