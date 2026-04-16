@@ -233,12 +233,13 @@ func (p *Printer) getTextOfNode(node *ast.Node, includeTrivia bool) string {
 		}
 	}
 
+	canUseSourceFile := p.currentSourceFile != nil && node.Parent != nil && !ast.NodeIsSynthesized(node)
+
 	switch node.Kind {
 	case ast.KindIdentifier,
 		ast.KindPrivateIdentifier,
 		ast.KindJsxNamespacedName:
-		// !!! If `node` is not a parse tree node, verify its original node comes from the same source file
-		if p.currentSourceFile == nil || node.Parent == nil || ast.NodeIsSynthesized(node) {
+		if !canUseSourceFile || ast.GetSourceFileOfNode(node) != p.emitContext.MostOriginal(p.currentSourceFile.AsNode()).AsSourceFile() {
 			return node.Text()
 		}
 	case ast.KindStringLiteral,
@@ -1200,6 +1201,10 @@ func (p *Printer) emitEntityName(node *ast.EntityName) {
 		p.emitIdentifierReference(node.AsIdentifier())
 	case ast.KindQualifiedName:
 		p.emitQualifiedName(node.AsQualifiedName())
+	case ast.KindPropertyAccessExpression:
+		// TypeQuery nodes may have PropertyAccessExpression as exprName (e.g. typeof foo.x).
+		// TS's emitter handles this via generic emit(); we dispatch to expression emitter here.
+		p.emitExpression(node, ast.OperatorPrecedenceDisallowComma)
 	default:
 		panic(fmt.Sprintf("unexpected EntityName: %v", node.Kind))
 	}

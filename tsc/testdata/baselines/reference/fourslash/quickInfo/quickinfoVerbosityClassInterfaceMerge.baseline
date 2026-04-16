@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /quickinfoVerbosityClassInterfaceMerge.ts ===
+// 
 // declare class Foo {
 //               ^^^
 // | ----------------------------------------------------------------------
@@ -49,9 +50,9 @@
 [
   {
     "marker": {
-      "Position": 17,
+      "Position": 18,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 17
       },
       "Name": "1",
@@ -65,11 +66,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 14
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 17
           }
         },
@@ -80,9 +81,9 @@
   },
   {
     "marker": {
-      "Position": 17,
+      "Position": 18,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 17
       },
       "Name": "1",
@@ -96,11 +97,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 14
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 17
           }
         }
@@ -110,9 +111,9 @@
   },
   {
     "marker": {
-      "Position": 90,
+      "Position": 91,
       "LSPosition": {
-        "line": 6,
+        "line": 7,
         "character": 12
       },
       "Name": "2",
@@ -126,11 +127,11 @@
         },
         "range": {
           "start": {
-            "line": 6,
+            "line": 7,
             "character": 9
           },
           "end": {
-            "line": 6,
+            "line": 7,
             "character": 12
           }
         },
@@ -141,9 +142,9 @@
   },
   {
     "marker": {
-      "Position": 90,
+      "Position": 91,
       "LSPosition": {
-        "line": 6,
+        "line": 7,
         "character": 12
       },
       "Name": "2",
@@ -157,11 +158,11 @@
         },
         "range": {
           "start": {
-            "line": 6,
+            "line": 7,
             "character": 9
           },
           "end": {
-            "line": 6,
+            "line": 7,
             "character": 12
           }
         }

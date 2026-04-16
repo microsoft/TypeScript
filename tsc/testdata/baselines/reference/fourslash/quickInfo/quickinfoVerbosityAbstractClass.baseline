@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /quickinfoVerbosityAbstractClass.ts ===
+// 
 // declare abstract class Shape {
 //                        ^^^^^
 // | ----------------------------------------------------------------------
@@ -29,9 +30,9 @@
 [
   {
     "marker": {
-      "Position": 28,
+      "Position": 29,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 28
       },
       "Name": "1",
@@ -45,11 +46,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 23
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 28
           }
         },
@@ -60,9 +61,9 @@
   },
   {
     "marker": {
-      "Position": 28,
+      "Position": 29,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 28
       },
       "Name": "1",
@@ -76,11 +77,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 23
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 28
           }
         }

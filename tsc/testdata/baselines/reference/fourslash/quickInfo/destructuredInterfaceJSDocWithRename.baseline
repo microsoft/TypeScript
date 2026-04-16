@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /destructuredInterfaceJSDocWithRename.ts ===
+// 
 // interface FooBar {
 //     /** foo comment */
 //     foo: number;
@@ -28,9 +29,9 @@
 [
   {
     "marker": {
-      "Position": 144,
+      "Position": 145,
       "LSPosition": {
-        "line": 9,
+        "line": 10,
         "character": 12
       },
       "Name": "1",
@@ -43,11 +44,11 @@
       },
       "range": {
         "start": {
-          "line": 9,
+          "line": 10,
           "character": 12
         },
         "end": {
-          "line": 9,
+          "line": 10,
           "character": 17
         }
       }
@@ -55,9 +56,9 @@
   },
   {
     "marker": {
-      "Position": 156,
+      "Position": 157,
       "LSPosition": {
-        "line": 9,
+        "line": 10,
         "character": 24
       },
       "Name": "2",
@@ -70,11 +71,11 @@
       },
       "range": {
         "start": {
-          "line": 9,
+          "line": 10,
           "character": 24
         },
         "end": {
-          "line": 9,
+          "line": 10,
           "character": 29
         }
       }

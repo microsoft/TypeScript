@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /quickinfoVerbosityNestedNamespace.ts ===
+// 
 // declare namespace Outer {
 //                   ^^^^^
 // | ----------------------------------------------------------------------
@@ -34,9 +35,9 @@
 [
   {
     "marker": {
-      "Position": 23,
+      "Position": 24,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 23
       },
       "Name": "1",
@@ -50,11 +51,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 18
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 23
           }
         },
@@ -65,9 +66,9 @@
   },
   {
     "marker": {
-      "Position": 23,
+      "Position": 24,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 23
       },
       "Name": "1",
@@ -81,11 +82,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 18
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 23
           }
         }

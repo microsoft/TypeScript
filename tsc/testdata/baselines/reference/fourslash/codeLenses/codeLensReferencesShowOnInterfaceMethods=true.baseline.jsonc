@@ -1,5 +1,6 @@
 // === Code Lenses ===
 // === /codeLensReferencesShowOnInterfaceMethods=true.ts ===
+// 
 // export interface /*CODELENS: 3 implementations*/I {
 //   methodA(): void;
 // }
@@ -29,14 +30,15 @@
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnInterfaceMethods=true.ts ===
+// 
 // export interface I {
 //   /*CODELENS: 1 implementation*/methodA(): void;
 // }
 // export interface I {
 //   methodB(): void;
-// --- (line: 6) skipped ---
+// --- (line: 7) skipped ---
 
-// --- (line: 10) skipped ---
+// --- (line: 11) skipped ---
 // }
 // 
 // class C implements J {
@@ -44,12 +46,13 @@
 //   methodB(): void {}
 //   methodC(): void {}
 // }
-// --- (line: 18) skipped ---
+// --- (line: 19) skipped ---
 
 
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnInterfaceMethods=true.ts ===
+// 
 // export interface I {
 //   methodA(): void;
 // }
@@ -79,7 +82,7 @@
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnInterfaceMethods=true.ts ===
-// --- (line: 4) skipped ---
+// --- (line: 5) skipped ---
 //   methodB(): void;
 // }
 // 
@@ -105,7 +108,7 @@
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnInterfaceMethods=true.ts ===
-// --- (line: 5) skipped ---
+// --- (line: 6) skipped ---
 // }
 // 
 // interface J extends I {
@@ -130,7 +133,7 @@
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnInterfaceMethods=true.ts ===
-// --- (line: 6) skipped ---
+// --- (line: 7) skipped ---
 // 
 // interface J extends I {
 //   methodB(): void;
@@ -144,13 +147,13 @@
 // }
 // 
 // class AbstractC implements J {
-// --- (line: 20) skipped ---
+// --- (line: 21) skipped ---
 
 
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnInterfaceMethods=true.ts ===
-// --- (line: 16) skipped ---
+// --- (line: 17) skipped ---
 // }
 // 
 // class AbstractC implements J {
@@ -164,7 +167,7 @@
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnInterfaceMethods=true.ts ===
-// --- (line: 18) skipped ---
+// --- (line: 19) skipped ---
 // class AbstractC implements J {
 //   abstract methodA(): void;
 //   methodB(): void {}

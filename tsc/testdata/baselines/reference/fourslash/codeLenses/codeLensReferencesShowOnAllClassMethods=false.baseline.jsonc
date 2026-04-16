@@ -1,27 +1,29 @@
 // === Code Lenses ===
 // === /codeLensReferencesShowOnAllClassMethods=false.ts ===
+// 
 // export abstract class /*CODELENS: 0 implementations*/ABC {
 //   abstract methodA(): void;
 //   methodB(): void {}
 //   #methodC(): void {}
-// --- (line: 5) skipped ---
-
-
-
-// === Code Lenses ===
-// === /codeLensReferencesShowOnAllClassMethods=false.ts ===
-// export abstract class ABC {
-//   abstract /*CODELENS: 0 implementations*/methodA(): void;
-//   methodB(): void {}
-//   #methodC(): void {}
-//   protected methodD(): void {}
 // --- (line: 6) skipped ---
 
 
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnAllClassMethods=false.ts ===
-// --- (line: 3) skipped ---
+// 
+// export abstract class ABC {
+//   abstract /*CODELENS: 0 implementations*/methodA(): void;
+//   methodB(): void {}
+//   #methodC(): void {}
+//   protected methodD(): void {}
+// --- (line: 7) skipped ---
+
+
+
+// === Code Lenses ===
+// === /codeLensReferencesShowOnAllClassMethods=false.ts ===
+// --- (line: 4) skipped ---
 //   #methodC(): void {}
 //   protected methodD(): void {}
 //   private methodE(): void {}
@@ -29,4 +31,4 @@
 //   public methodH(): void {}
 // 
 //   static methodStaticA(): void {}
-// --- (line: 11) skipped ---
+// --- (line: 12) skipped ---

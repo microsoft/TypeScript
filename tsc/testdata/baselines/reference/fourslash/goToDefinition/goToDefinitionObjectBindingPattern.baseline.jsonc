@@ -1,5 +1,6 @@
 // === goToDefinition ===
 // === /goToDefinitionObjectBindingPattern.ts ===
+// 
 // interface SomeType {
 //     <|[|targetProperty|]: number;|>
 // }
@@ -10,13 +11,13 @@
 //     targetProperty
 // });
 // 
-// --- (line: 11) skipped ---
+// --- (line: 12) skipped ---
 
 
 
 // === goToDefinition ===
 // === /goToDefinitionObjectBindingPattern.ts ===
-// --- (line: 3) skipped ---
+// --- (line: 4) skipped ---
 // 
 // function foo(callback: (p: SomeType) => void) {}
 // 
@@ -25,12 +26,13 @@
 // });
 // 
 // let { targetProperty }: SomeType = { targetProperty: 42 };
-// --- (line: 12) skipped ---
+// --- (line: 13) skipped ---
 
 
 
 // === goToDefinition ===
 // === /goToDefinitionObjectBindingPattern.ts ===
+// 
 // interface SomeType {
 //     <|[|targetProperty|]: number;|>
 // }
@@ -51,6 +53,7 @@
 
 // === goToDefinition ===
 // === /goToDefinitionObjectBindingPattern.ts ===
+// 
 // interface SomeType {
 //     <|[|targetProperty|]: number;|>
 // }
@@ -71,14 +74,15 @@
 
 // === goToDefinition ===
 // === /goToDefinitionObjectBindingPattern.ts ===
+// 
 // interface SomeType {
 //     <|[|targetProperty|]: number;|>
 // }
 // 
 // function foo(callback: (p: SomeType) => void) {}
-// --- (line: 6) skipped ---
+// --- (line: 7) skipped ---
 
-// --- (line: 9) skipped ---
+// --- (line: 10) skipped ---
 // 
 // let { targetProperty }: SomeType = { targetProperty: 42 };
 // 
@@ -90,7 +94,7 @@
 
 // === goToDefinition ===
 // === /goToDefinitionObjectBindingPattern.ts ===
-// --- (line: 9) skipped ---
+// --- (line: 10) skipped ---
 // 
 // let { targetProperty }: SomeType = { targetProperty: 42 };
 // 
@@ -102,14 +106,15 @@
 
 // === goToDefinition ===
 // === /goToDefinitionObjectBindingPattern.ts ===
+// 
 // interface SomeType {
 //     <|[|targetProperty|]: number;|>
 // }
 // 
 // function foo(callback: (p: SomeType) => void) {}
-// --- (line: 6) skipped ---
+// --- (line: 7) skipped ---
 
-// --- (line: 11) skipped ---
+// --- (line: 12) skipped ---
 // 
 // let { targetProperty: alias_1 }: SomeType = { targetProperty: 42 };
 // 
@@ -119,7 +124,7 @@
 
 // === goToDefinition ===
 // === /goToDefinitionObjectBindingPattern.ts ===
-// --- (line: 11) skipped ---
+// --- (line: 12) skipped ---
 // 
 // let { targetProperty: alias_1 }: SomeType = { targetProperty: 42 };
 // 

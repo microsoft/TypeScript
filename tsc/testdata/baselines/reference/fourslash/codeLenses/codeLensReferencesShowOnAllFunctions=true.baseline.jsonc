@@ -1,27 +1,30 @@
 // === Code Lenses ===
 // === /codeLensReferencesShowOnAllFunctions=true.ts ===
+// 
 // export function /*CODELENS: 0 references*/f1(): void {}
 // 
 // function f2(): void {}
 // 
-// --- (line: 5) skipped ---
+// --- (line: 6) skipped ---
 
 
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnAllFunctions=true.ts ===
+// 
 // export function f1(): void {}
 // 
 // function /*CODELENS: 0 references*/f2(): void {}
 // 
 // export const f3 = () => {};
 // 
-// --- (line: 7) skipped ---
+// --- (line: 8) skipped ---
 
 
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnAllFunctions=true.ts ===
+// 
 // export function f1(): void {}
 // 
 // function f2(): void {}

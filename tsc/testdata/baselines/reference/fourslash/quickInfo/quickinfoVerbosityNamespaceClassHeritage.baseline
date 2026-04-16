@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /quickinfoVerbosityNamespaceClassHeritage.ts ===
+// 
 // declare class Base {
 //     id: number;
 // }
@@ -45,9 +46,9 @@
 [
   {
     "marker": {
-      "Position": 64,
+      "Position": 65,
       "LSPosition": {
-        "line": 4,
+        "line": 5,
         "character": 24
       },
       "Name": "1",
@@ -61,11 +62,11 @@
         },
         "range": {
           "start": {
-            "line": 4,
+            "line": 5,
             "character": 18
           },
           "end": {
-            "line": 4,
+            "line": 5,
             "character": 24
           }
         },
@@ -76,9 +77,9 @@
   },
   {
     "marker": {
-      "Position": 64,
+      "Position": 65,
       "LSPosition": {
-        "line": 4,
+        "line": 5,
         "character": 24
       },
       "Name": "1",
@@ -92,11 +93,11 @@
         },
         "range": {
           "start": {
-            "line": 4,
+            "line": 5,
             "character": 18
           },
           "end": {
-            "line": 4,
+            "line": 5,
             "character": 24
           }
         }

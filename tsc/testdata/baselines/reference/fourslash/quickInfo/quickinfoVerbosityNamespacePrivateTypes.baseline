@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /quickinfoVerbosityNamespacePrivateTypes.ts ===
+// 
 // declare namespace API {
 //                   ^^^
 // | ----------------------------------------------------------------------
@@ -36,9 +37,9 @@
 [
   {
     "marker": {
-      "Position": 21,
+      "Position": 22,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 21
       },
       "Name": "1",
@@ -52,11 +53,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 18
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 21
           }
         },
@@ -67,9 +68,9 @@
   },
   {
     "marker": {
-      "Position": 21,
+      "Position": 22,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 21
       },
       "Name": "1",
@@ -83,11 +84,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 18
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 21
           }
         },

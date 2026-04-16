@@ -3058,6 +3058,9 @@ func IsJSDocSingleCommentNodeList(nodeList *NodeList) bool {
 		return false
 	}
 	parent := nodeList.Nodes[0].Parent
+	if parent == nil {
+		return false
+	}
 	return IsJSDocSingleCommentNode(parent) && nodeList == parent.CommentList()
 }
 

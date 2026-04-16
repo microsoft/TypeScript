@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /main.ts ===
+// 
 // class Base {}
 // 
 // declare const BaseFactory: new() => Base & { c: string };
@@ -18,9 +19,9 @@
 [
   {
     "marker": {
-      "Position": 119,
+      "Position": 120,
       "LSPosition": {
-        "line": 5,
+        "line": 6,
         "character": 9
       },
       "Name": "1",
@@ -33,11 +34,11 @@
       },
       "range": {
         "start": {
-          "line": 5,
+          "line": 6,
           "character": 9
         },
         "end": {
-          "line": 5,
+          "line": 6,
           "character": 16
         }
       }

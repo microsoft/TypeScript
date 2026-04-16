@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /quickinfoVerbosityNamespaceTypeAliases.ts ===
+// 
 // type BaseConfig = { host: string; port: number };
 // 
 // declare namespace Config {
@@ -34,9 +35,9 @@
 [
   {
     "marker": {
-      "Position": 75,
+      "Position": 76,
       "LSPosition": {
-        "line": 2,
+        "line": 3,
         "character": 24
       },
       "Name": "1",
@@ -50,11 +51,11 @@
         },
         "range": {
           "start": {
-            "line": 2,
+            "line": 3,
             "character": 18
           },
           "end": {
-            "line": 2,
+            "line": 3,
             "character": 24
           }
         },
@@ -65,9 +66,9 @@
   },
   {
     "marker": {
-      "Position": 75,
+      "Position": 76,
       "LSPosition": {
-        "line": 2,
+        "line": 3,
         "character": 24
       },
       "Name": "1",
@@ -81,11 +82,11 @@
         },
         "range": {
           "start": {
-            "line": 2,
+            "line": 3,
             "character": 18
           },
           "end": {
-            "line": 2,
+            "line": 3,
             "character": 24
           }
         }

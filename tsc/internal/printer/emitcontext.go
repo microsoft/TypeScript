@@ -77,6 +77,7 @@ func (c *EmitContext) onUpdate(updated *ast.Node, original *ast.Node) {
 }
 
 func (c *EmitContext) onClone(updated *ast.Node, original *ast.Node) {
+	c.SetOriginal(updated, original)
 	if ast.IsIdentifier(updated) || ast.IsPrivateIdentifier(updated) {
 		if autoGenerate := c.autoGenerate[original]; autoGenerate != nil {
 			autoGenerateCopy := *autoGenerate

@@ -1,4 +1,7 @@
 UseCaseSensitiveFileNames: true
+//// [/declarationMapsRenameWithProjectReferences.ts] *new* 
+
+
 //// [/myproject/dependency/FnS.ts] *new* 
 export function fn1() { }
 export function fn2() { }

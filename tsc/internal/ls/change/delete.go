@@ -25,7 +25,7 @@ func deleteDeclaration(t *Tracker, deletedNodesInLists map[*ast.Node]bool, sourc
 			// Lambdas with exactly one parameter are special because, after removal, there
 			// must be an empty parameter list (i.e. `()`) and this won't necessarily be the
 			// case if the parameter is simply removed (e.g. in `x => 1`).
-			t.ReplaceRangeWithText(sourceFile, t.getAdjustedRange(sourceFile, node, node, LeadingTriviaOptionIncludeAll, TrailingTriviaOptionInclude), "()")
+			t.ReplaceRangeWithText(sourceFile, t.GetAdjustedRange(sourceFile, node, node, LeadingTriviaOptionIncludeAll, TrailingTriviaOptionInclude), "()")
 		} else {
 			deleteNodeInList(t, deletedNodesInLists, sourceFile, node)
 		}

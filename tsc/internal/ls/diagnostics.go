@@ -4,26 +4,32 @@ import (
 	"context"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 )
 
+// getAllDiagnostics collects all diagnostics for a file: syntactic, semantic,
+// suggestion, and (when declarations are emitted) declaration diagnostics.
+func getAllDiagnostics(ctx context.Context, program *compiler.Program, file *ast.SourceFile) []*ast.Diagnostic {
+	var diags []*ast.Diagnostic
+	diags = append(diags, program.GetSyntacticDiagnostics(ctx, file)...)
+	diags = append(diags, program.GetSemanticDiagnostics(ctx, file)...)
+	diags = append(diags, program.GetSuggestionDiagnostics(ctx, file)...)
+	if program.Options().GetEmitDeclarations() {
+		diags = append(diags, program.GetDeclarationDiagnostics(ctx, file)...)
+	}
+	return diags
+}
+
 func (l *LanguageService) ProvideDiagnostics(ctx context.Context, uri lsproto.DocumentUri) (lsproto.DocumentDiagnosticResponse, error) {
 	program, file := l.getProgramAndFile(uri)
 
-	diagnostics := make([][]*ast.Diagnostic, 0, 4)
-	diagnostics = append(diagnostics, program.GetSyntacticDiagnostics(ctx, file))
-	diagnostics = append(diagnostics, program.GetSemanticDiagnostics(ctx, file))
-	// !!! user preference for suggestion diagnostics; keep only unnecessary/deprecated?
-	// See: https://github.com/microsoft/vscode/blob/3dbc74129aaae102e5cb485b958fa5360e8d3e7a/extensions/typescript-language-features/src/languageFeatures/diagnostics.ts#L114
-	diagnostics = append(diagnostics, program.GetSuggestionDiagnostics(ctx, file))
-	if program.Options().GetEmitDeclarations() {
-		diagnostics = append(diagnostics, program.GetDeclarationDiagnostics(ctx, file))
-	}
+	diagnostics := getAllDiagnostics(ctx, program, file)
 
 	return lsproto.RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{
 		FullDocumentDiagnosticReport: &lsproto.RelatedFullDocumentDiagnosticReport{
-			Items: l.toLSPDiagnostics(ctx, diagnostics...),
+			Items: l.toLSPDiagnostics(ctx, diagnostics),
 		},
 	}, nil
 }

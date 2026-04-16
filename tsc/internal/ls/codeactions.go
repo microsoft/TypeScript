@@ -51,6 +51,7 @@ type CombinedCodeActions struct {
 // codeFixProviders is the list of all registered code fix providers
 var codeFixProviders = []*CodeFixProvider{
 	ImportFixProvider,
+	IsolatedDeclarationsFixProvider,
 	// Add more code fix providers here as they are implemented
 }
 
@@ -185,9 +186,10 @@ func (l *LanguageService) getFixAllQuickFixes(
 }
 
 // hasMultipleFixableDiagnostics returns true if the file has at least 2 diagnostics
-// matching the given error codes.
+// matching the given error codes. Checks all diagnostic sources (semantic,
+// syntactic, suggestion, declaration) to match ProvideDiagnostics.
 func hasMultipleFixableDiagnostics(ctx context.Context, program *compiler.Program, file *ast.SourceFile, errorCodes []int32) bool {
-	allDiags := program.GetSemanticDiagnostics(ctx, file)
+	allDiags := getAllDiagnostics(ctx, program, file)
 	count := 0
 	for _, d := range allDiags {
 		if containsErrorCode(errorCodes, d.Code()) {

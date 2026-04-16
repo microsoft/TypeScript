@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /destructuredInterfaceJSDoc.ts ===
+// 
 // interface FooBar {
 //     /** foo comment */
 //     foo: number;
@@ -44,9 +45,9 @@
 [
   {
     "marker": {
-      "Position": 179,
+      "Position": 180,
       "LSPosition": {
-        "line": 11,
+        "line": 12,
         "character": 7
       },
       "Name": "1",
@@ -59,11 +60,11 @@
       },
       "range": {
         "start": {
-          "line": 11,
+          "line": 12,
           "character": 7
         },
         "end": {
-          "line": 11,
+          "line": 12,
           "character": 10
         }
       }
@@ -71,9 +72,9 @@
   },
   {
     "marker": {
-      "Position": 184,
+      "Position": 185,
       "LSPosition": {
-        "line": 11,
+        "line": 12,
         "character": 12
       },
       "Name": "2",
@@ -86,11 +87,11 @@
       },
       "range": {
         "start": {
-          "line": 11,
+          "line": 12,
           "character": 12
         },
         "end": {
-          "line": 11,
+          "line": 12,
           "character": 15
         }
       }
@@ -98,9 +99,9 @@
   },
   {
     "marker": {
-      "Position": 189,
+      "Position": 190,
       "LSPosition": {
-        "line": 11,
+        "line": 12,
         "character": 17
       },
       "Name": "3",
@@ -113,11 +114,11 @@
       },
       "range": {
         "start": {
-          "line": 11,
+          "line": 12,
           "character": 17
         },
         "end": {
-          "line": 11,
+          "line": 12,
           "character": 20
         }
       }
@@ -125,9 +126,9 @@
   },
   {
     "marker": {
-      "Position": 194,
+      "Position": 195,
       "LSPosition": {
-        "line": 11,
+        "line": 12,
         "character": 22
       },
       "Name": "4",
@@ -140,11 +141,11 @@
       },
       "range": {
         "start": {
-          "line": 11,
+          "line": 12,
           "character": 22
         },
         "end": {
-          "line": 11,
+          "line": 12,
           "character": 25
         }
       }

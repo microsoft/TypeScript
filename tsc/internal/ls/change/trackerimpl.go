@@ -122,23 +122,6 @@ func getFormatCodeSettingsForWriting(options lsutil.FormatCodeSettings, sourceFi
 }
 
 func (t *Tracker) getNonformattedText(node *ast.Node, sourceFile *ast.SourceFile) (string, *ast.Node) {
-	nodeIn := node
-	eofToken := t.Factory.NewToken(ast.KindEndOfFile)
-	if ast.IsStatement(node) {
-		text := ""
-		// OrganizeImports uses nodes from the old tree for preserving comments when emitting,
-		// which causes text to be indexed with the positions of the old nodes.
-		// For more details, check PR #2331
-		if !ast.NodeIsSynthesized(node) {
-			text = sourceFile.Text()
-		}
-		nodeIn = t.Factory.NewSourceFile(
-			ast.SourceFileParseOptions{FileName: sourceFile.FileName(), Path: sourceFile.Path()},
-			text,
-			t.Factory.NewNodeList([]*ast.Node{node}),
-			t.Factory.NewToken(ast.KindEndOfFile),
-		)
-	}
 	writer := printer.NewChangeTrackerWriter(t.newLine, t.formatSettings.IndentSize)
 	printer.NewPrinter(
 		printer.PrinterOptions{
@@ -149,36 +132,33 @@ func (t *Tracker) getNonformattedText(node *ast.Node, sourceFile *ast.SourceFile
 		},
 		writer.GetPrintHandlers(),
 		t.EmitContext,
-	).Write(nodeIn, sourceFile, writer, nil)
+	).Write(node, sourceFile, writer, nil)
 
 	text := writer.String()
-	text = strings.TrimSuffix(text, t.newLine) // Newline artifact from printing a SourceFile instead of a node
+	text = strings.TrimSuffix(text, t.newLine)
 
-	nodeOut := writer.AssignPositionsToNode(nodeIn, t.NodeFactory)
-	var sourceFileLike *ast.Node
-	if !ast.IsStatement(node) {
-		nodeList := t.Factory.NewNodeList([]*ast.Node{nodeOut})
-		nodeList.Loc = nodeOut.Loc
-		eofToken.Loc = core.NewTextRange(nodeOut.End(), nodeOut.End())
-		sourceFileLike = t.Factory.NewSourceFile(
-			ast.SourceFileParseOptions{FileName: sourceFile.FileName(), Path: sourceFile.Path()},
-			text,
-			nodeList,
-			eofToken,
-		)
-		sourceFileLike.ForEachChild(func(child *ast.Node) bool {
-			child.Parent = sourceFileLike
-			return true
-		})
-		sourceFileLike.Loc = nodeOut.Loc
-	} else {
-		sourceFileLike = nodeOut
-	}
+	nodeOut := writer.AssignPositionsToNode(node, t.NodeFactory)
+	eofToken := t.Factory.NewToken(ast.KindEndOfFile)
+	nodeList := t.Factory.NewNodeList([]*ast.Node{nodeOut})
+	nodeList.Loc = nodeOut.Loc
+	eofToken.Loc = core.NewTextRange(nodeOut.End(), nodeOut.End())
+	sourceFileLike := t.Factory.NewSourceFile(
+		ast.SourceFileParseOptions{FileName: sourceFile.FileName(), Path: sourceFile.Path()},
+		text,
+		nodeList,
+		eofToken,
+	)
+	sourceFileLike.ForEachChild(func(child *ast.Node) bool {
+		child.Parent = sourceFileLike
+		return true
+	})
+	sourceFileLike.Loc = nodeOut.Loc
 	return text, sourceFileLike
 }
 
 // method on the changeTracker because use of converters
-func (t *Tracker) getAdjustedRange(sourceFile *ast.SourceFile, startNode *ast.Node, endNode *ast.Node, leadingOption LeadingTriviaOption, trailingOption TrailingTriviaOption) lsproto.Range {
+// GetAdjustedRange computes the adjusted range for a node in a source file, accounting for trivia.
+func (t *Tracker) GetAdjustedRange(sourceFile *ast.SourceFile, startNode *ast.Node, endNode *ast.Node, leadingOption LeadingTriviaOption, trailingOption TrailingTriviaOption) lsproto.Range {
 	return t.converters.ToLSPRange(
 		sourceFile,
 		core.NewTextRange(

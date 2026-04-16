@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /quickinfoVerbosityInterfaceMemberOrdering.ts ===
+// 
 // interface Callable {
 //           ^^^^^^^^
 // | ----------------------------------------------------------------------
@@ -31,9 +32,9 @@
 [
   {
     "marker": {
-      "Position": 18,
+      "Position": 19,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 18
       },
       "Name": "1",
@@ -47,11 +48,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 10
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 18
           }
         },
@@ -62,9 +63,9 @@
   },
   {
     "marker": {
-      "Position": 18,
+      "Position": 19,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 18
       },
       "Name": "1",
@@ -78,11 +79,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 10
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 18
           }
         }

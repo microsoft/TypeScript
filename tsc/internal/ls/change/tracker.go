@@ -129,7 +129,7 @@ func (t *Tracker) ReplaceNode(sourceFile *ast.SourceFile, oldNode *ast.Node, new
 			TrailingTriviaOption: TrailingTriviaOptionExclude,
 		}
 	}
-	t.ReplaceRange(sourceFile, t.getAdjustedRange(sourceFile, oldNode, oldNode, options.LeadingTriviaOption, options.TrailingTriviaOption), newNode, *options)
+	t.ReplaceRange(sourceFile, t.GetAdjustedRange(sourceFile, oldNode, oldNode, options.LeadingTriviaOption, options.TrailingTriviaOption), newNode, *options)
 }
 
 func (t *Tracker) ReplaceNodeWithNodes(sourceFile *ast.SourceFile, oldNode *ast.Node, newNodes []*ast.Node, options *NodeOptions) {
@@ -139,7 +139,7 @@ func (t *Tracker) ReplaceNodeWithNodes(sourceFile *ast.SourceFile, oldNode *ast.
 			TrailingTriviaOption: TrailingTriviaOptionExclude,
 		}
 	}
-	t.ReplaceRangeWithNodes(sourceFile, t.getAdjustedRange(sourceFile, oldNode, oldNode, options.LeadingTriviaOption, options.TrailingTriviaOption), newNodes, *options)
+	t.ReplaceRangeWithNodes(sourceFile, t.GetAdjustedRange(sourceFile, oldNode, oldNode, options.LeadingTriviaOption, options.TrailingTriviaOption), newNodes, *options)
 }
 
 func (t *Tracker) ReplaceRange(sourceFile *ast.SourceFile, lsprotoRange lsproto.Range, newNode *ast.Node, options NodeOptions) {
@@ -186,6 +186,46 @@ func (t *Tracker) InsertNodeBefore(sourceFile *ast.SourceFile, before *ast.Node,
 	t.InsertNodeAt(sourceFile, core.TextPos(t.getAdjustedStartPosition(sourceFile, before, leadingTriviaOption, false)), newNode, t.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween))
 }
 
+// TryInsertTypeAnnotation inserts a type annotation after the appropriate position on a node
+// (after the close paren for function-like, after the name/exclamation/question for variable-like).
+// Returns true if successful.
+func (t *Tracker) TryInsertTypeAnnotation(sourceFile *ast.SourceFile, node *ast.Node, typeNode *ast.Node) bool {
+	var endNode *ast.Node
+	if ast.IsFunctionLike(node) {
+		endNode = astnav.FindChildOfKind(node, ast.KindCloseParenToken, sourceFile)
+		if endNode == nil {
+			if !ast.IsArrowFunction(node) {
+				return false
+			}
+			// If no `)`, is an arrow function `x => x`, so use the end of the first parameter
+			params := node.Parameters()
+			if len(params) == 0 {
+				return false
+			}
+			endNode = params[0]
+		}
+	} else {
+		switch node.Kind {
+		case ast.KindVariableDeclaration:
+			endNode = node.AsVariableDeclaration().ExclamationToken
+		case ast.KindPropertySignature:
+			endNode = node.AsPropertySignatureDeclaration().PostfixToken
+		case ast.KindPropertyDeclaration:
+			endNode = node.AsPropertyDeclaration().PostfixToken
+		case ast.KindParameter:
+			endNode = node.AsParameterDeclaration().QuestionToken
+		}
+		if endNode == nil {
+			endNode = node.Name()
+		}
+	}
+	if endNode == nil {
+		return false
+	}
+	t.InsertNodeAt(sourceFile, core.TextPos(endNode.End()), typeNode, NodeOptions{Prefix: ": "})
+	return true
+}
+
 // InsertModifierBefore inserts a modifier token (like 'type') before a node with a trailing space.
 func (t *Tracker) InsertModifierBefore(sourceFile *ast.SourceFile, modifier ast.Kind, before *ast.Node) {
 	pos := astnav.GetStartOfNode(before, sourceFile, false)
@@ -210,7 +250,7 @@ func (t *Tracker) DeleteRange(sourceFile *ast.SourceFile, textRange core.TextRan
 // DeleteNode deletes a node immediately with specified trivia options.
 // Stop! Consider using Delete instead, which has logic for deleting nodes from delimited lists.
 func (t *Tracker) DeleteNode(sourceFile *ast.SourceFile, node *ast.Node, leadingTrivia LeadingTriviaOption, trailingTrivia TrailingTriviaOption) {
-	rng := t.getAdjustedRange(sourceFile, node, node, leadingTrivia, trailingTrivia)
+	rng := t.GetAdjustedRange(sourceFile, node, node, leadingTrivia, trailingTrivia)
 	t.ReplaceRangeWithText(sourceFile, rng, "")
 }
 

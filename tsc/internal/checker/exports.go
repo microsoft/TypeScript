@@ -266,3 +266,35 @@ func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
 func (c *Checker) IsContextSensitive(node *ast.Node) bool {
 	return c.isContextSensitive(node)
 }
+
+func (c *Checker) FillMissingTypeArguments(typeArguments []*Type, typeParameters []*Type, minTypeArgumentCount int, isJavaScriptImplicitAny bool) []*Type {
+	return c.fillMissingTypeArguments(typeArguments, typeParameters, minTypeArgumentCount, isJavaScriptImplicitAny)
+}
+
+func (c *Checker) GetMinTypeArgumentCount(typeParameters []*Type) int {
+	return c.getMinTypeArgumentCount(typeParameters)
+}
+
+func (c *Checker) GetWidenedLiteralType(t *Type) *Type {
+	return c.getWidenedLiteralType(t)
+}
+
+func (c *Checker) IsTypeAssignableTo(source *Type, target *Type) bool {
+	return c.isTypeAssignableTo(source, target)
+}
+
+func (c *Checker) GetUnionTypeEx(types []*Type, unionReduction UnionReduction) *Type {
+	return c.getUnionTypeEx(types, unionReduction, nil, nil)
+}
+
+func (c *Checker) RequiresAddingImplicitUndefined(node *ast.Node) bool {
+	enclosingDeclaration := ast.FindAncestor(node, ast.IsDeclaration)
+	if enclosingDeclaration == nil {
+		enclosingDeclaration = ast.GetSourceFileOfNode(node).AsNode()
+	}
+	symbol := node.Symbol()
+	if symbol == nil {
+		return false
+	}
+	return c.GetEmitResolver().RequiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
+}

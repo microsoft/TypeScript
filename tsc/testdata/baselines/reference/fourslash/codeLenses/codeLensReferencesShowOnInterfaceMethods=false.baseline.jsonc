@@ -1,5 +1,6 @@
 // === Code Lenses ===
 // === /codeLensReferencesShowOnInterfaceMethods=false.ts ===
+// 
 // export interface /*CODELENS: 3 implementations*/I {
 //   methodA(): void;
 // }
@@ -29,7 +30,7 @@
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnInterfaceMethods=false.ts ===
-// --- (line: 4) skipped ---
+// --- (line: 5) skipped ---
 //   methodB(): void;
 // }
 // 
@@ -55,7 +56,7 @@
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnInterfaceMethods=false.ts ===
-// --- (line: 16) skipped ---
+// --- (line: 17) skipped ---
 // }
 // 
 // class AbstractC implements J {
@@ -69,7 +70,7 @@
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnInterfaceMethods=false.ts ===
-// --- (line: 18) skipped ---
+// --- (line: 19) skipped ---
 // class AbstractC implements J {
 //   abstract methodA(): void;
 //   methodB(): void {}

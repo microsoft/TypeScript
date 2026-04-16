@@ -1,5 +1,6 @@
 // === SignatureHelp ===
 === /signatureHelpBindingPattern.ts ===
+// 
 // /**
 //  * @param options An empty object binding pattern.
 //  */
@@ -160,9 +161,9 @@
 [
   {
     "marker": {
-      "Position": 93,
+      "Position": 94,
       "LSPosition": {
-        "line": 4,
+        "line": 5,
         "character": 9
       },
       "Name": "emptyObj",
@@ -189,9 +190,9 @@
   },
   {
     "marker": {
-      "Position": 186,
+      "Position": 187,
       "LSPosition": {
-        "line": 10,
+        "line": 11,
         "character": 9
       },
       "Name": "emptyArr",
@@ -218,9 +219,9 @@
   },
   {
     "marker": {
-      "Position": 316,
+      "Position": 317,
       "LSPosition": {
-        "line": 16,
+        "line": 17,
         "character": 12
       },
       "Name": "nonEmptyObj",
@@ -247,9 +248,9 @@
   },
   {
     "marker": {
-      "Position": 432,
+      "Position": 433,
       "LSPosition": {
-        "line": 22,
+        "line": 23,
         "character": 12
       },
       "Name": "nonEmptyArr",
@@ -276,9 +277,9 @@
   },
   {
     "marker": {
-      "Position": 621,
+      "Position": 622,
       "LSPosition": {
-        "line": 29,
+        "line": 30,
         "character": 13
       },
       "Name": "idLeading",
@@ -312,9 +313,9 @@
   },
   {
     "marker": {
-      "Position": 637,
+      "Position": 638,
       "LSPosition": {
-        "line": 29,
+        "line": 30,
         "character": 29
       },
       "Name": "bindingTrailing",
@@ -348,9 +349,9 @@
   },
   {
     "marker": {
-      "Position": 829,
+      "Position": 830,
       "LSPosition": {
-        "line": 36,
+        "line": 37,
         "character": 15
       },
       "Name": "bindingLeading",
@@ -384,9 +385,9 @@
   },
   {
     "marker": {
-      "Position": 849,
+      "Position": 850,
       "LSPosition": {
-        "line": 36,
+        "line": 37,
         "character": 35
       },
       "Name": "idTrailing",
@@ -420,9 +421,9 @@
   },
   {
     "marker": {
-      "Position": 1188,
+      "Position": 1189,
       "LSPosition": {
-        "line": 47,
+        "line": 48,
         "character": 32
       },
       "Name": "firstObjParam",
@@ -456,9 +457,9 @@
   },
   {
     "marker": {
-      "Position": 1208,
+      "Position": 1209,
       "LSPosition": {
-        "line": 47,
+        "line": 48,
         "character": 52
       },
       "Name": "secondObjParam",

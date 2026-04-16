@@ -1,15 +1,17 @@
 // === Code Lenses ===
 // === /codeLensReferencesShowOnAllFunctions=false.ts ===
+// 
 // export function /*CODELENS: 0 references*/f1(): void {}
 // 
 // function f2(): void {}
 // 
-// --- (line: 5) skipped ---
+// --- (line: 6) skipped ---
 
 
 
 // === Code Lenses ===
 // === /codeLensReferencesShowOnAllFunctions=false.ts ===
+// 
 // export function f1(): void {}
 // 
 // function f2(): void {}

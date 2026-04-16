@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /quickinfoVerbosityConstMergedWithNamespace.ts ===
+// 
 // declare function create(x: string): number;
 //                  ^^^^^^
 // | ----------------------------------------------------------------------
@@ -53,9 +54,9 @@
 [
   {
     "marker": {
-      "Position": 23,
+      "Position": 24,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 23
       },
       "Name": "1",
@@ -69,11 +70,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 17
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 23
           }
         },
@@ -84,9 +85,9 @@
   },
   {
     "marker": {
-      "Position": 23,
+      "Position": 24,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 23
       },
       "Name": "1",
@@ -100,11 +101,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 17
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 23
           }
         }
@@ -114,9 +115,9 @@
   },
   {
     "marker": {
-      "Position": 68,
+      "Position": 69,
       "LSPosition": {
-        "line": 1,
+        "line": 2,
         "character": 24
       },
       "Name": "2",
@@ -130,11 +131,11 @@
         },
         "range": {
           "start": {
-            "line": 1,
+            "line": 2,
             "character": 18
           },
           "end": {
-            "line": 1,
+            "line": 2,
             "character": 24
           }
         },
@@ -145,9 +146,9 @@
   },
   {
     "marker": {
-      "Position": 68,
+      "Position": 69,
       "LSPosition": {
-        "line": 1,
+        "line": 2,
         "character": 24
       },
       "Name": "2",
@@ -161,11 +162,11 @@
         },
         "range": {
           "start": {
-            "line": 1,
+            "line": 2,
             "character": 18
           },
           "end": {
-            "line": 1,
+            "line": 2,
             "character": 24
           }
         }

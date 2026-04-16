@@ -4,17 +4,13 @@
  // === findRenameLocations ===
 -
  // === /jsDocTypedef_form2.js ===
--// 
- // /** @typedef {(string | number)} /*RENAME*/[|NumberLikeRENAME|] */
  // 
- // /** @type {[|NumberLikeRENAME|]} */
-@@= skipped -9, +7 lines =@@
+ // /** @typedef {(string | number)} /*RENAME*/[|NumberLikeRENAME|] */
+@@= skipped -9, +8 lines =@@
 
 
  // === findRenameLocations ===
 -
  // === /jsDocTypedef_form2.js ===
--// 
- // /** @typedef {(string | number)} [|NumberLikeRENAME|] */
  // 
- // /** @type {/*RENAME*/[|NumberLikeRENAME|]} */
+ // /** @typedef {(string | number)} [|NumberLikeRENAME|] */

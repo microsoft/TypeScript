@@ -29,5 +29,5 @@ class Foo/*3*/ {
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyQuickInfoAt(t, "1", "var someVar: number", "Some var")
-	f.VerifyQuickInfoAt(t, "2", "var otherVar: number", "Other var\nSee [someVar](file:///basicQuickInfo.ts#4,5-4,12)")
+	f.VerifyQuickInfoAt(t, "2", "var otherVar: number", "Other var\nSee [someVar](file:///basicQuickInfo.ts#5,5-5,12)")
 }

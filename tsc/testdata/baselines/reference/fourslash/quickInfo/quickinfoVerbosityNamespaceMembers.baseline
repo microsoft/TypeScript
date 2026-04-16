@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /quickinfoVerbosityNamespaceMembers.ts ===
+// 
 // declare namespace NS {
 //                   ^^
 // | ----------------------------------------------------------------------
@@ -61,9 +62,9 @@
 [
   {
     "marker": {
-      "Position": 20,
+      "Position": 21,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 20
       },
       "Name": "1",
@@ -77,11 +78,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 18
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 20
           }
         },
@@ -92,9 +93,9 @@
   },
   {
     "marker": {
-      "Position": 20,
+      "Position": 21,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 20
       },
       "Name": "1",
@@ -108,11 +109,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 18
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 20
           }
         }

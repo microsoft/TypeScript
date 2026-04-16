@@ -389,15 +389,17 @@ func TypeToAutoImportableTypeNode(
 	if typeNode == nil {
 		return nil
 	}
-	return typeNodeToAutoImportableTypeNode(typeNode, importAdder, idToSymbol)
+	return TypeNodeToAutoImportableTypeNode(typeNode, importAdder, idToSymbol)
 }
 
-func typeNodeToAutoImportableTypeNode(
+// TypeNodeToAutoImportableTypeNode converts import type references in a type node to
+// simple type references and registers needed imports with the import adder.
+func TypeNodeToAutoImportableTypeNode(
 	typeNode *ast.TypeNode,
 	importAdder ImportAdder,
 	idToSymbol map[*ast.IdentifierNode]*ast.Symbol,
 ) *ast.TypeNode {
-	referenceTypeNode, importableSymbols := tryGetAutoImportableReferenceFromTypeNode(typeNode, idToSymbol)
+	referenceTypeNode, importableSymbols := TryGetAutoImportableReferenceFromTypeNode(typeNode, idToSymbol)
 	if referenceTypeNode != nil {
 		if importAdder != nil {
 			importSymbols(importAdder, importableSymbols)
@@ -418,7 +420,10 @@ func importSymbols(importAdder ImportAdder, symbols []*ast.Symbol) {
 // Given a type node containing 'import("./a").SomeType<import("./b").OtherType<...>>',
 // returns an equivalent type reference node with any nested ImportTypeNodes also replaced
 // with type references, and a list of symbols that must be imported to use the type reference.
-func tryGetAutoImportableReferenceFromTypeNode(importTypeNode *ast.TypeNode, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) (*ast.TypeNode, []*ast.Symbol) {
+// TryGetAutoImportableReferenceFromTypeNode converts import type references in a type node
+// to simple type references and returns the transformed type node and the symbols that need
+// to be imported.
+func TryGetAutoImportableReferenceFromTypeNode(importTypeNode *ast.TypeNode, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) (*ast.TypeNode, []*ast.Symbol) {
 	var symbols []*ast.Symbol
 	var visitor *ast.NodeVisitor
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})

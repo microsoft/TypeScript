@@ -1,5 +1,6 @@
 // === QuickInfo ===
 === /quickinfoVerbosityConstEnum.ts ===
+// 
 // const enum Direction {
 //            ^^^^^^^^^
 // | ----------------------------------------------------------------------
@@ -57,9 +58,9 @@
 [
   {
     "marker": {
-      "Position": 20,
+      "Position": 21,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 20
       },
       "Name": "1",
@@ -73,11 +74,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 11
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 20
           }
         },
@@ -88,9 +89,9 @@
   },
   {
     "marker": {
-      "Position": 20,
+      "Position": 21,
       "LSPosition": {
-        "line": 0,
+        "line": 1,
         "character": 20
       },
       "Name": "1",
@@ -104,11 +105,11 @@
         },
         "range": {
           "start": {
-            "line": 0,
+            "line": 1,
             "character": 11
           },
           "end": {
-            "line": 0,
+            "line": 1,
             "character": 20
           }
         }
@@ -118,9 +119,9 @@
   },
   {
     "marker": {
-      "Position": 116,
+      "Position": 117,
       "LSPosition": {
-        "line": 7,
+        "line": 8,
         "character": 16
       },
       "Name": "2",
@@ -134,11 +135,11 @@
         },
         "range": {
           "start": {
-            "line": 7,
+            "line": 8,
             "character": 5
           },
           "end": {
-            "line": 7,
+            "line": 8,
             "character": 16
           }
         },
@@ -149,9 +150,9 @@
   },
   {
     "marker": {
-      "Position": 116,
+      "Position": 117,
       "LSPosition": {
-        "line": 7,
+        "line": 8,
         "character": 16
       },
       "Name": "2",
@@ -165,11 +166,11 @@
         },
         "range": {
           "start": {
-            "line": 7,
+            "line": 8,
             "character": 5
           },
           "end": {
-            "line": 7,
+            "line": 8,
             "character": 16
           }
         }

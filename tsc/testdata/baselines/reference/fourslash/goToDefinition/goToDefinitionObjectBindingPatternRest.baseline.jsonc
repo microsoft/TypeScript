@@ -1,5 +1,6 @@
 // === goToDefinition ===
 // === /goToDefinitionObjectBindingPatternRest.ts ===
+// 
 // interface SomeType {
 //     targetProperty: number;
 // }
