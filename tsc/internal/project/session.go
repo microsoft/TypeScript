@@ -382,6 +382,7 @@ func (s *Session) ScheduleDiagnosticsRefresh() {
 
 	// Enqueue the debounced diagnostics refresh
 	s.backgroundQueue.Enqueue(debounceCtx, func(ctx context.Context) {
+		defer cancel()
 		// Sleep for the debounce delay
 		select {
 		case <-time.After(s.options.DebounceDelay):

@@ -490,8 +490,8 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
 		case req := <-s.requestQueue:
 			s.lastRequestTimeMs.Store(time.Now().UnixMilli())
 			requestCtx := locale.WithLocale(ctx, s.locale)
+			var cancel context.CancelFunc
 			if req.ID != nil {
-				var cancel context.CancelFunc
 				requestCtx, cancel = context.WithCancel(core.WithRequestID(requestCtx, req.ID.String()))
 				s.pendingClientRequestsMu.Lock()
 				s.pendingClientRequests[*req.ID] = pendingClientRequest{
@@ -517,6 +517,7 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
 
 			removeRequest := func() {
 				if req.ID != nil {
+					defer cancel()
 					s.pendingClientRequestsMu.Lock()
 					defer s.pendingClientRequestsMu.Unlock()
 					delete(s.pendingClientRequests, *req.ID)
