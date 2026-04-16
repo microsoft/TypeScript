@@ -77,7 +77,7 @@ type Project struct {
 	programFilesWatch *WatchedFiles[*collections.SyncSet[tspath.Path]]
 	typingsWatch      *WatchedFiles[PatternsAndIgnored]
 
-	checkerPool *checkerPool
+	checkerPool *CheckerPool
 
 	// installedTypingsInfo is the value of `project.ComputeTypingsInfo()` that was
 	// used during the most recently completed typings installation.
@@ -326,13 +326,15 @@ func (p *Project) hasPotentialProjectReference(projectTreeRequest *ProjectTreeRe
 }
 
 type CreateProgramResult struct {
-	Program    *compiler.Program
-	UpdateKind ProgramUpdateKind
+	Program     *compiler.Program
+	UpdateKind  ProgramUpdateKind
+	CheckerPool *CheckerPool
 }
 
 func (p *Project) CreateProgram() CreateProgramResult {
 	updateKind := ProgramUpdateKindNewFiles
 	var programCloned bool
+	var checkerPool *CheckerPool
 	var newProgram *compiler.Program
 
 	// Create the command line, potentially augmented with typing files
@@ -369,7 +371,8 @@ func (p *Project) CreateProgram() CreateProgramResult {
 				UseSourceOfProjectReference: true,
 				TypingsLocation:             typingsLocation,
 				CreateCheckerPool: func(program *compiler.Program) compiler.CheckerPool {
-					return newCheckerPool(p.host.sessionOptions.CheckerPoolOptions, program, p.log)
+					checkerPool = newCheckerPool(4, program, p.log)
+					return checkerPool
 				},
 			},
 		)
@@ -382,8 +385,9 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	newProgram.BindSourceFiles()
 
 	return CreateProgramResult{
-		Program:    newProgram,
-		UpdateKind: updateKind,
+		Program:     newProgram,
+		UpdateKind:  updateKind,
+		CheckerPool: checkerPool,
 	}
 }
 
