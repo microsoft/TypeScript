@@ -44,7 +44,7 @@ This is still a work in progress and is not yet at full feature parity with Type
 
 Definitions:
 
- * **done** aka "believed done": We're not currently aware of any deficits or major left work to do. OK to log bugs
+ * **done** aka "believed done": We're not currently aware of any deficits or major work left to do. OK to log bugs
  * **in progress**: currently being worked on; some features may work and some might not. OK to log panics, but nothing else please
  * **prototype**: proof-of-concept only; do not log bugs
  * **not ready**: either haven't even started yet, or far enough from ready that you shouldn't bother messing with it yet
