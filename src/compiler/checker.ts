@@ -25303,7 +25303,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isArrayType(type)) {
                 // Array wrappers are common and finite in non-recursive object graphs; track recursion identity through
                 // the element type instead of the shared global Array symbol to avoid false positives in deep nesting.
-                return getRecursionIdentity(getTypeArguments(type as TypeReference)[0]);
+                return getRecursionIdentity(getTypeArguments(type)[0]);
             }
             if (getObjectFlags(type) & ObjectFlags.Reference && (type as TypeReference).node) {
                 // Deferred type references are tracked through their associated AST node. This gives us finer

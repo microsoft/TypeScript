@@ -1,0 +1,77 @@
+issue52912.ts(18,7): error TS2322: Type 'Source1' is not assignable to type 'Target1'.
+  Types of property 'array' are incompatible.
+    Type 'Source2[]' is not assignable to type 'Target2[]'.
+      Type 'Source2' is not assignable to type 'Target2'.
+        Types of property 'array' are incompatible.
+          Type 'Source3[]' is not assignable to type 'Target3[]'.
+            Type 'Source3' is not assignable to type 'Target3'.
+              Types of property 'array' are incompatible.
+                Type 'Source4[]' is not assignable to type 'Target4[]'.
+                  Property 'someNewProperty' is missing in type 'Source4' but required in type 'Target4'.
+issue52912.ts(19,7): error TS2322: Type 'Source2' is not assignable to type 'Target2'.
+  Types of property 'array' are incompatible.
+    Type 'Source3[]' is not assignable to type 'Target3[]'.
+      Type 'Source3' is not assignable to type 'Target3'.
+        Types of property 'array' are incompatible.
+          Type 'Source4[]' is not assignable to type 'Target4[]'.
+            Property 'someNewProperty' is missing in type 'Source4' but required in type 'Target4'.
+issue52912.ts(20,7): error TS2322: Type 'Source3' is not assignable to type 'Target3'.
+  Types of property 'array' are incompatible.
+    Type 'Source4[]' is not assignable to type 'Target4[]'.
+      Property 'someNewProperty' is missing in type 'Source4' but required in type 'Target4'.
+issue52912.ts(21,7): error TS2741: Property 'someNewProperty' is missing in type 'Source4' but required in type 'Target4'.
+
+
+==== issue52912.ts (4 errors) ====
+    // Repro from #52912
+    
+    type Source1 = { array: Source2[] };
+    type Source2 = { array: Source3[] };
+    type Source3 = { array: Source4[] };
+    type Source4 = {};
+    
+    type Target1 = { array: Target2[] };
+    type Target2 = { array: Target3[] };
+    type Target3 = { array: Target4[] };
+    type Target4 = { someNewProperty: string };
+    
+    declare const source1: Source1;
+    declare const source2: Source2;
+    declare const source3: Source3;
+    declare const source4: Source4;
+    
+    const target1: Target1 = source1; // Error
+          ~~~~~~~
+!!! error TS2322: Type 'Source1' is not assignable to type 'Target1'.
+!!! error TS2322:   Types of property 'array' are incompatible.
+!!! error TS2322:     Type 'Source2[]' is not assignable to type 'Target2[]'.
+!!! error TS2322:       Type 'Source2' is not assignable to type 'Target2'.
+!!! error TS2322:         Types of property 'array' are incompatible.
+!!! error TS2322:           Type 'Source3[]' is not assignable to type 'Target3[]'.
+!!! error TS2322:             Type 'Source3' is not assignable to type 'Target3'.
+!!! error TS2322:               Types of property 'array' are incompatible.
+!!! error TS2322:                 Type 'Source4[]' is not assignable to type 'Target4[]'.
+!!! error TS2322:                   Property 'someNewProperty' is missing in type 'Source4' but required in type 'Target4'.
+!!! related TS2728 issue52912.ts:11:18: 'someNewProperty' is declared here.
+    const target2: Target2 = source2; // Error
+          ~~~~~~~
+!!! error TS2322: Type 'Source2' is not assignable to type 'Target2'.
+!!! error TS2322:   Types of property 'array' are incompatible.
+!!! error TS2322:     Type 'Source3[]' is not assignable to type 'Target3[]'.
+!!! error TS2322:       Type 'Source3' is not assignable to type 'Target3'.
+!!! error TS2322:         Types of property 'array' are incompatible.
+!!! error TS2322:           Type 'Source4[]' is not assignable to type 'Target4[]'.
+!!! error TS2322:             Property 'someNewProperty' is missing in type 'Source4' but required in type 'Target4'.
+!!! related TS2728 issue52912.ts:11:18: 'someNewProperty' is declared here.
+    const target3: Target3 = source3; // Error
+          ~~~~~~~
+!!! error TS2322: Type 'Source3' is not assignable to type 'Target3'.
+!!! error TS2322:   Types of property 'array' are incompatible.
+!!! error TS2322:     Type 'Source4[]' is not assignable to type 'Target4[]'.
+!!! error TS2322:       Property 'someNewProperty' is missing in type 'Source4' but required in type 'Target4'.
+!!! related TS2728 issue52912.ts:11:18: 'someNewProperty' is declared here.
+    const target4: Target4 = source4; // Error
+          ~~~~~~~
+!!! error TS2741: Property 'someNewProperty' is missing in type 'Source4' but required in type 'Target4'.
+!!! related TS2728 issue52912.ts:11:18: 'someNewProperty' is declared here.
+    

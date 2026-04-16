@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/issue52912.ts] ////
+
+=== issue52912.ts ===
+// Repro from #52912
+
+type Source1 = { array: Source2[] };
+>Source1 : Source1
+>        : ^^^^^^^
+>array : Source2[]
+>      : ^^^^^^^^^
+
+type Source2 = { array: Source3[] };
+>Source2 : Source2
+>        : ^^^^^^^
+>array : Source3[]
+>      : ^^^^^^^^^
+
+type Source3 = { array: Source4[] };
+>Source3 : Source3
+>        : ^^^^^^^
+>array : Source4[]
+>      : ^^^^^^^^^
+
+type Source4 = {};
+>Source4 : Source4
+>        : ^^^^^^^
+
+type Target1 = { array: Target2[] };
+>Target1 : Target1
+>        : ^^^^^^^
+>array : Target2[]
+>      : ^^^^^^^^^
+
+type Target2 = { array: Target3[] };
+>Target2 : Target2
+>        : ^^^^^^^
+>array : Target3[]
+>      : ^^^^^^^^^
+
+type Target3 = { array: Target4[] };
+>Target3 : Target3
+>        : ^^^^^^^
+>array : Target4[]
+>      : ^^^^^^^^^
+
+type Target4 = { someNewProperty: string };
+>Target4 : Target4
+>        : ^^^^^^^
+>someNewProperty : string
+>                : ^^^^^^
+
+declare const source1: Source1;
+>source1 : Source1
+>        : ^^^^^^^
+
+declare const source2: Source2;
+>source2 : Source2
+>        : ^^^^^^^
+
+declare const source3: Source3;
+>source3 : Source3
+>        : ^^^^^^^
+
+declare const source4: Source4;
+>source4 : Source4
+>        : ^^^^^^^
+
+const target1: Target1 = source1; // Error
+>target1 : Target1
+>        : ^^^^^^^
+>source1 : Source1
+>        : ^^^^^^^
+
+const target2: Target2 = source2; // Error
+>target2 : Target2
+>        : ^^^^^^^
+>source2 : Source2
+>        : ^^^^^^^
+
+const target3: Target3 = source3; // Error
+>target3 : Target3
+>        : ^^^^^^^
+>source3 : Source3
+>        : ^^^^^^^
+
+const target4: Target4 = source4; // Error
+>target4 : Target4
+>        : ^^^^^^^
+>source4 : Source4
+>        : ^^^^^^^
+

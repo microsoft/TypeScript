@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/issue52912.ts] ////
+
+=== issue52912.ts ===
+// Repro from #52912
+
+type Source1 = { array: Source2[] };
+>Source1 : Symbol(Source1, Decl(issue52912.ts, 0, 0))
+>array : Symbol(array, Decl(issue52912.ts, 2, 16))
+>Source2 : Symbol(Source2, Decl(issue52912.ts, 2, 36))
+
+type Source2 = { array: Source3[] };
+>Source2 : Symbol(Source2, Decl(issue52912.ts, 2, 36))
+>array : Symbol(array, Decl(issue52912.ts, 3, 16))
+>Source3 : Symbol(Source3, Decl(issue52912.ts, 3, 36))
+
+type Source3 = { array: Source4[] };
+>Source3 : Symbol(Source3, Decl(issue52912.ts, 3, 36))
+>array : Symbol(array, Decl(issue52912.ts, 4, 16))
+>Source4 : Symbol(Source4, Decl(issue52912.ts, 4, 36))
+
+type Source4 = {};
+>Source4 : Symbol(Source4, Decl(issue52912.ts, 4, 36))
+
+type Target1 = { array: Target2[] };
+>Target1 : Symbol(Target1, Decl(issue52912.ts, 5, 18))
+>array : Symbol(array, Decl(issue52912.ts, 7, 16))
+>Target2 : Symbol(Target2, Decl(issue52912.ts, 7, 36))
+
+type Target2 = { array: Target3[] };
+>Target2 : Symbol(Target2, Decl(issue52912.ts, 7, 36))
+>array : Symbol(array, Decl(issue52912.ts, 8, 16))
+>Target3 : Symbol(Target3, Decl(issue52912.ts, 8, 36))
+
+type Target3 = { array: Target4[] };
+>Target3 : Symbol(Target3, Decl(issue52912.ts, 8, 36))
+>array : Symbol(array, Decl(issue52912.ts, 9, 16))
+>Target4 : Symbol(Target4, Decl(issue52912.ts, 9, 36))
+
+type Target4 = { someNewProperty: string };
+>Target4 : Symbol(Target4, Decl(issue52912.ts, 9, 36))
+>someNewProperty : Symbol(someNewProperty, Decl(issue52912.ts, 10, 16))
+
+declare const source1: Source1;
+>source1 : Symbol(source1, Decl(issue52912.ts, 12, 13))
+>Source1 : Symbol(Source1, Decl(issue52912.ts, 0, 0))
+
+declare const source2: Source2;
+>source2 : Symbol(source2, Decl(issue52912.ts, 13, 13))
+>Source2 : Symbol(Source2, Decl(issue52912.ts, 2, 36))
+
+declare const source3: Source3;
+>source3 : Symbol(source3, Decl(issue52912.ts, 14, 13))
+>Source3 : Symbol(Source3, Decl(issue52912.ts, 3, 36))
+
+declare const source4: Source4;
+>source4 : Symbol(source4, Decl(issue52912.ts, 15, 13))
+>Source4 : Symbol(Source4, Decl(issue52912.ts, 4, 36))
+
+const target1: Target1 = source1; // Error
+>target1 : Symbol(target1, Decl(issue52912.ts, 17, 5))
+>Target1 : Symbol(Target1, Decl(issue52912.ts, 5, 18))
+>source1 : Symbol(source1, Decl(issue52912.ts, 12, 13))
+
+const target2: Target2 = source2; // Error
+>target2 : Symbol(target2, Decl(issue52912.ts, 18, 5))
+>Target2 : Symbol(Target2, Decl(issue52912.ts, 7, 36))
+>source2 : Symbol(source2, Decl(issue52912.ts, 13, 13))
+
+const target3: Target3 = source3; // Error
+>target3 : Symbol(target3, Decl(issue52912.ts, 19, 5))
+>Target3 : Symbol(Target3, Decl(issue52912.ts, 8, 36))
+>source3 : Symbol(source3, Decl(issue52912.ts, 14, 13))
+
+const target4: Target4 = source4; // Error
+>target4 : Symbol(target4, Decl(issue52912.ts, 20, 5))
+>Target4 : Symbol(Target4, Decl(issue52912.ts, 9, 36))
+>source4 : Symbol(source4, Decl(issue52912.ts, 15, 13))
+
