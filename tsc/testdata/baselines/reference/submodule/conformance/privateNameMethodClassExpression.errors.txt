@@ -1,5 +1,5 @@
-privateNameMethodClassExpression.ts(9,17): error TS18013: Property '#method' is not accessible outside class '(Missing)' because it has a private identifier.
-privateNameMethodClassExpression.ts(10,17): error TS18013: Property '#field' is not accessible outside class '(Missing)' because it has a private identifier.
+privateNameMethodClassExpression.ts(9,17): error TS18013: Property '#method' is not accessible outside class 'C' because it has a private identifier.
+privateNameMethodClassExpression.ts(10,17): error TS18013: Property '#field' is not accessible outside class 'C' because it has a private identifier.
 
 
 ==== privateNameMethodClassExpression.ts (2 errors) ====
@@ -13,9 +13,9 @@ privateNameMethodClassExpression.ts(10,17): error TS18013: Property '#field' is 
     console.log(C.getInstance().getField());
     C.getInstance().#method; // Error
                     ~~~~~~~
-!!! error TS18013: Property '#method' is not accessible outside class '(Missing)' because it has a private identifier.
+!!! error TS18013: Property '#method' is not accessible outside class 'C' because it has a private identifier.
     C.getInstance().#field; // Error
                     ~~~~~~
-!!! error TS18013: Property '#field' is not accessible outside class '(Missing)' because it has a private identifier.
+!!! error TS18013: Property '#field' is not accessible outside class 'C' because it has a private identifier.
     
     
