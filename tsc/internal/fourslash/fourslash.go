@@ -64,6 +64,10 @@ type FourslashTest struct {
 
 	capabilities   *lsproto.ClientCapabilities
 	isStradaServer bool // Whether this is a fourslash server test in Strada. !!! Remove once we don't need to diff baselines.
+
+	// Semantic token configuration
+	semanticTokenTypes     []string
+	semanticTokenModifiers []string
 }
 
 type scriptInfo struct {
@@ -192,6 +196,8 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 		converters:              converters,
 		baselines:               make(map[baselineCommand]*strings.Builder),
 		openFiles:               make(map[string]struct{}),
+		semanticTokenTypes:      defaultSemanticTokenTypes(),
+		semanticTokenModifiers:  defaultSemanticTokenModifiers(),
 	}
 	client, closeClient := lsptestutil.NewLSPClient(t, serverOpts, f.handleServerRequest)
 	f.client = client
@@ -324,6 +330,50 @@ func (f *FourslashTest) initialize(t *testing.T, capabilities *lsproto.ClientCap
 	// Wait for the initial configuration exchange to complete
 	// The server will send workspace/configuration as part of handleInitialized
 	<-f.client.Server.InitComplete()
+}
+
+func defaultSemanticTokenTypes() []string {
+	return []string{
+		string(lsproto.SemanticTokenTypeNamespace),
+		string(lsproto.SemanticTokenTypeClass),
+		string(lsproto.SemanticTokenTypeEnum),
+		string(lsproto.SemanticTokenTypeInterface),
+		string(lsproto.SemanticTokenTypeStruct),
+		string(lsproto.SemanticTokenTypeTypeParameter),
+		string(lsproto.SemanticTokenTypeType),
+		string(lsproto.SemanticTokenTypeParameter),
+		string(lsproto.SemanticTokenTypeVariable),
+		string(lsproto.SemanticTokenTypeProperty),
+		string(lsproto.SemanticTokenTypeEnumMember),
+		string(lsproto.SemanticTokenTypeDecorator),
+		string(lsproto.SemanticTokenTypeEvent),
+		string(lsproto.SemanticTokenTypeFunction),
+		string(lsproto.SemanticTokenTypeMethod),
+		string(lsproto.SemanticTokenTypeMacro),
+		string(lsproto.SemanticTokenTypeLabel),
+		string(lsproto.SemanticTokenTypeComment),
+		string(lsproto.SemanticTokenTypeString),
+		string(lsproto.SemanticTokenTypeKeyword),
+		string(lsproto.SemanticTokenTypeNumber),
+		string(lsproto.SemanticTokenTypeRegexp),
+		string(lsproto.SemanticTokenTypeOperator),
+	}
+}
+
+func defaultSemanticTokenModifiers() []string {
+	return []string{
+		string(lsproto.SemanticTokenModifierDeclaration),
+		string(lsproto.SemanticTokenModifierDefinition),
+		string(lsproto.SemanticTokenModifierReadonly),
+		string(lsproto.SemanticTokenModifierStatic),
+		string(lsproto.SemanticTokenModifierDeprecated),
+		string(lsproto.SemanticTokenModifierAbstract),
+		string(lsproto.SemanticTokenModifierAsync),
+		string(lsproto.SemanticTokenModifierModification),
+		string(lsproto.SemanticTokenModifierDocumentation),
+		string(lsproto.SemanticTokenModifierDefaultLibrary),
+		"local",
+	}
 }
 
 // If modifying the defaults, update GetDefaultCapabilities too.
@@ -518,6 +568,18 @@ func getCapabilitiesWithDefaults(capabilities *lsproto.ClientCapabilities) *lspr
 	}
 	if capabilitiesWithDefaults.TextDocument.PublishDiagnostics == nil {
 		capabilitiesWithDefaults.TextDocument.PublishDiagnostics = defaultPublishDiagnosticCapabilities
+	}
+	if capabilitiesWithDefaults.TextDocument.SemanticTokens == nil {
+		capabilitiesWithDefaults.TextDocument.SemanticTokens = &lsproto.SemanticTokensClientCapabilities{
+			Requests: &lsproto.ClientSemanticTokensRequestOptions{
+				Full: &lsproto.BooleanOrClientSemanticTokensRequestFullDelta{
+					Boolean: ptrTrue,
+				},
+			},
+			TokenTypes:     defaultSemanticTokenTypes(),
+			TokenModifiers: defaultSemanticTokenModifiers(),
+			Formats:        []lsproto.TokenFormat{lsproto.TokenFormatRelative},
+		}
 	}
 	if capabilitiesWithDefaults.Workspace == nil {
 		capabilitiesWithDefaults.Workspace = &lsproto.WorkspaceClientCapabilities{}
