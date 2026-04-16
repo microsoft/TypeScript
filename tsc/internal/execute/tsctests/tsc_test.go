@@ -1584,7 +1584,6 @@ func TestTscIncremental(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/home/src/workspaces/project/constants.ts", "export default 2;")
 					},
-					expectedDiff: "Currently there is issue with d.ts emit for export default = 1 to widen in dts which is why we are not re-computing errors and results in incorrect error reporting",
 				},
 			},
 		},
@@ -1610,7 +1609,6 @@ func TestTscIncremental(t *testing.T) {
 					edit: func(sys *TestSys) {
 						sys.writeFileNoError("/home/src/workspaces/project/constants.ts", "export default 2;")
 					},
-					expectedDiff: "Currently there is issue with d.ts emit for export default = 1 to widen in dts which is why we are not re-computing errors and results in incorrect error reporting",
 				},
 			},
 		},

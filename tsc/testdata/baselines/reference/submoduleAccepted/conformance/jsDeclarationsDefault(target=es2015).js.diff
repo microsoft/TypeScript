@@ -5,7 +5,7 @@
 
  //// [index1.d.ts]
 -declare const _default: 12;
-+declare const _default: number;
++declare const _default = 12;
  export default _default;
  //// [index2.d.ts]
  export default function foo(): typeof foo;
@@ -30,7 +30,7 @@
  //// [index5.d.ts]
 -type _default = string | number;
 -declare const _default: 12;
-+declare const _default: number;
++declare const _default = 12;
  export default _default;
 +export type default = string | number;
 +/**

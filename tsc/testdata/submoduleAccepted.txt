@@ -479,3 +479,9 @@ compiler/importDeclWithExportModifierAndExportAssignmentInAmbientContext.errors.
 compiler/importDeclWithExportModifierAndExportAssignmentInAmbientContext.types.diff
 compiler/incompatibleExports1.errors.txt.diff
 compiler/incompatibleExports2.errors.txt.diff
+
+## corrected literal widening in declaration files ##
+compiler/dynamicImportsDeclaration.js.diff
+compiler/modulePreserve4.js.diff
+compiler/nodeNextCjsNamespaceImportDefault2.js.diff
+conformance/jsDeclarationsDefault(target=es2015).js.diff

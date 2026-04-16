@@ -1047,8 +1047,14 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		}
 	}
 	tx.tracker.PushErrorFallbackNode(assignment)
-	type_ := tx.ensureType(assignment, false)
-	varDecl := tx.Factory().NewVariableDeclaration(newId, nil, type_, nil)
+	var type_, initializer *ast.Node
+	if ast.IsPrimitiveLiteralValue(unwrapParenthesizedExpression(expression), true) {
+		initializer = tx.resolver.CreateLiteralConstValue(tx.EmitContext(), tx.EmitContext().ParseNode(assignment), tx.tracker)
+	}
+	if initializer == nil {
+		type_ = tx.ensureType(assignment, false)
+	}
+	varDecl := tx.Factory().NewVariableDeclaration(newId, nil, type_, initializer)
 	tx.tracker.PopErrorFallbackNode()
 	var modList *ast.ModifierList
 	if tx.needsDeclare {

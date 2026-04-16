@@ -26,7 +26,7 @@ tsgo
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/src/main.d.ts] *new* 
-declare const _default: number;
+declare const _default = 42;
 export default _default;
 
 //// [/home/src/projects/project/src/main.js] *new* 
@@ -35,7 +35,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = 42;
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"00e459cbb1596f8c4bdf988b0589433f-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}","impliedNodeFormat":99},{"version":"666fdc0c7a7f134c8c14dc85be1ebc28-export default 42;","signature":"18ae69a2c0b372747b9973ad9c14a1e0-declare const _default: number;\nexport default _default;\n","impliedNodeFormat":1}],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"latestChangedDtsFile":"./src/main.d.ts"}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"00e459cbb1596f8c4bdf988b0589433f-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}","impliedNodeFormat":99},{"version":"666fdc0c7a7f134c8c14dc85be1ebc28-export default 42;","signature":"0a99118c9f5f3794c6419525fa8a0326-declare const _default = 42;\nexport default _default;\n","impliedNodeFormat":1}],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"latestChangedDtsFile":"./src/main.d.ts"}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -78,11 +78,11 @@ exports.default = 42;
     {
       "fileName": "./src/main.ts",
       "version": "666fdc0c7a7f134c8c14dc85be1ebc28-export default 42;",
-      "signature": "18ae69a2c0b372747b9973ad9c14a1e0-declare const _default: number;\nexport default _default;\n",
+      "signature": "0a99118c9f5f3794c6419525fa8a0326-declare const _default = 42;\nexport default _default;\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "666fdc0c7a7f134c8c14dc85be1ebc28-export default 42;",
-        "signature": "18ae69a2c0b372747b9973ad9c14a1e0-declare const _default: number;\nexport default _default;\n",
+        "signature": "0a99118c9f5f3794c6419525fa8a0326-declare const _default = 42;\nexport default _default;\n",
         "impliedNodeFormat": 1
       }
     }
@@ -94,7 +94,7 @@ exports.default = 42;
     "module": 100
   },
   "latestChangedDtsFile": "./src/main.d.ts",
-  "size": 1373
+  "size": 1370
 }
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>

@@ -101,7 +101,7 @@ function func() { }
 
 
 //// [index1.d.ts]
-declare const _default: number;
+declare const _default = 12;
 export default _default;
 //// [index2.d.ts]
 export default function foo(): typeof foo;
@@ -120,7 +120,7 @@ declare class Bar extends Fab {
 }
 export default Bar;
 //// [index5.d.ts]
-declare const _default: number;
+declare const _default = 12;
 export default _default;
 export type default = string | number;
 /**

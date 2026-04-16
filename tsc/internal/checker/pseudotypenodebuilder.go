@@ -686,7 +686,7 @@ func (b *NodeBuilderImpl) pseudoTypeToType(t *pseudochecker.PseudoType) *Type {
 		return b.ch.trueType
 	case pseudochecker.PseudoTypeKindStringLiteral, pseudochecker.PseudoTypeKindNumericLiteral, pseudochecker.PseudoTypeKindBigIntLiteral:
 		source := t.AsPseudoTypeLiteral().Node
-		return b.ch.getWidenedType(b.ch.getRegularTypeOfExpression(source)) // big shortcut, uses cached expression types where possible
+		return b.ch.getRegularTypeOfExpression(source) // big shortcut, uses cached expression types where possible
 	case pseudochecker.PseudoTypeKindObjectLiteral, pseudochecker.PseudoTypeKindSingleCallSignature, pseudochecker.PseudoTypeKindTuple:
 		return nil // no simple mapping to a type, since these are structural types
 	default:

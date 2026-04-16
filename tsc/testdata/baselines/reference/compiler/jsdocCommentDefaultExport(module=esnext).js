@@ -66,7 +66,7 @@ export default class {
 }
 //// [exportDefaultLiteral.d.ts]
 /** Literal comment */
-declare const _default: number;
+declare const _default = 42;
 export default _default;
 //// [exportDefaultNull.d.ts]
 /** Null comment */

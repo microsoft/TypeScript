@@ -52,13 +52,13 @@ exports.mod = await (async () => {
 
 
 //// [case0.d.ts]
-declare const _default: number;
+declare const _default = 0;
 export default _default;
 //// [case1.d.ts]
-declare const _default: number;
+declare const _default = 1;
 export default _default;
 //// [caseFallback.d.ts]
-declare const _default: string;
+declare const _default = "fallback";
 export default _default;
 //// [index.d.ts]
 export declare const mod: {
