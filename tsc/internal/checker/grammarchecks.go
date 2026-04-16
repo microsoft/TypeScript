@@ -883,14 +883,10 @@ func (c *Checker) checkGrammarHeritageClause(node *ast.HeritageClause) bool {
 }
 
 func (c *Checker) checkGrammarExpressionWithTypeArguments(node *ast.Node /*Union[ExpressionWithTypeArguments, TypeQuery]*/) bool {
-	if !ast.IsExpressionWithTypeArguments(node) {
-		return false
-	}
-	exprWithTypeArgs := node.AsExpressionWithTypeArguments()
-	if node.Expression().Kind == ast.KindImportKeyword && exprWithTypeArgs.TypeArguments != nil {
+	if ast.IsExpressionWithTypeArguments(node) && node.Expression().Kind == ast.KindImportKeyword && node.TypeArgumentList() != nil {
 		return c.grammarErrorOnNode(node, diagnostics.This_use_of_import_is_invalid_import_calls_can_be_written_but_they_must_have_parentheses_and_cannot_have_type_arguments)
 	}
-	return c.checkGrammarTypeArguments(node, exprWithTypeArgs.TypeArguments)
+	return c.checkGrammarTypeArguments(node, node.TypeArgumentList())
 }
 
 func (c *Checker) checkGrammarClassDeclarationHeritageClauses(node *ast.ClassLikeDeclaration, file *ast.SourceFile) bool {
