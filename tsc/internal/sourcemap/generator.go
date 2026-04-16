@@ -1,6 +1,7 @@
 package sourcemap
 
 import (
+	"encoding/base64"
 	"errors"
 	"slices"
 	"strings"
@@ -335,13 +336,29 @@ func (gen *Generator) RawSourceMap() *RawSourceMap {
 	}
 }
 
-// Gets the string representation of the source map
-func (gen *Generator) String() string {
+func (gen *Generator) bytes() []byte {
 	buf, err := json.Marshal(gen.RawSourceMap())
 	if err != nil {
 		panic(err.Error())
 	}
-	return string(buf)
+	return buf
+}
+
+// Gets the string representation of the source map
+func (gen *Generator) String() string {
+	return string(gen.bytes())
+}
+
+func (gen *Generator) Base64DataURL() string {
+	const prefix = "data:application/json;base64,"
+	data := gen.bytes()
+	var sb strings.Builder
+	sb.Grow(len(prefix) + base64.StdEncoding.EncodedLen(len(data)))
+	sb.WriteString(prefix)
+	encoder := base64.NewEncoder(base64.StdEncoding, &sb)
+	_, _ = encoder.Write(data)
+	encoder.Close()
+	return sb.String()
 }
 
 func base64FormatEncode(value int) rune {

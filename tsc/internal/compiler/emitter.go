@@ -1,8 +1,6 @@
 package compiler
 
 import (
-	"encoding/base64"
-
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -269,7 +267,8 @@ func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, s
 				e.writer.RawWrite(core.IfElse(options.NewLine == core.NewLineKindCRLF, "\r\n", "\n"))
 			}
 			sourceMapUrlPos = e.writer.GetTextPos()
-			e.writer.WriteComment("//# sourceMappingURL=" + sourceMappingURL)
+			e.writer.WriteComment("//# sourceMappingURL=")
+			e.writer.WriteComment(sourceMappingURL)
 		}
 
 		// Write the source map
@@ -363,9 +362,7 @@ func (e *emitter) getSourceMapDirectory(mapOptions *core.CompilerOptions, filePa
 func (e *emitter) getSourceMappingURL(mapOptions *core.CompilerOptions, sourceMapGenerator *sourcemap.Generator, filePath string, sourceMapFilePath string, sourceFile *ast.SourceFile) string {
 	if mapOptions.InlineSourceMap.IsTrue() {
 		// Encode the sourceMap into the sourceMap url
-		sourceMapText := sourceMapGenerator.String()
-		base64SourceMapText := base64.StdEncoding.EncodeToString([]byte(sourceMapText))
-		return "data:application/json;base64," + base64SourceMapText
+		return sourceMapGenerator.Base64DataURL()
 	}
 
 	sourceMapFile := tspath.GetBaseFileName(tspath.NormalizeSlashes(sourceMapFilePath))
