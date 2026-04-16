@@ -48,7 +48,7 @@ jobs:
 
   release-build:
     if: ${{ github.repository == 'microsoft/typescript-go' && github.event_name != 'merge_group' }}
-    runs-on: ['self-hosted', '1ES.Pool=TypeScript-1ES-GitHub-XL', '1ES.ImageOverride=azure-linux-3']
+    runs-on: TypeScript-1ES-GitHub-XL-2
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
@@ -97,7 +97,7 @@ jobs:
           - os: ubuntu-latest
             name: 'no submodules'
             no-submodules: true
-          - os: ['self-hosted', '1ES.Pool=TypeScript-1ES-GitHub-XL', '1ES.ImageOverride=azure-linux-3']
+          - os: TypeScript-1ES-GitHub-XL-2
             name: 'race mode'
             race: true
             skip: ${{ github.event_name == 'merge_group' || github.repository != 'microsoft/typescript-go' }}
