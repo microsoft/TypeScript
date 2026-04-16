@@ -969,7 +969,7 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 	s.initStarted.Store(true)
 
 	s.initializeParams = params
-	s.clientCapabilities = lsproto.ResolveClientCapabilities(params.Capabilities)
+	s.clientCapabilities = params.Capabilities.Resolve()
 	if s.clientCapabilities.Window.WorkDoneProgress {
 		s.projectProgress = newProjectLoadingProgress(s, s.progressDelay)
 	}
