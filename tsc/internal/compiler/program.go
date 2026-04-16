@@ -328,6 +328,11 @@ func (p *Program) initCheckerPool() {
 	}
 }
 
+// GetCheckerPool returns the checker pool associated with this program.
+func (p *Program) GetCheckerPool() CheckerPool {
+	return p.checkerPool
+}
+
 func canReplaceFileInProgram(file1 *ast.SourceFile, file2 *ast.SourceFile) bool {
 	return file2 != nil &&
 		file1.ParseOptions() == file2.ParseOptions() &&
