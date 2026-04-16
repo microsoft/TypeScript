@@ -308,6 +308,11 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 					b.WriteString(" extends ")
 					b.WriteString(typeToString(cons, nil, typeFormatFlags))
 				}
+				def := c.GetDefaultFromTypeParameter(tp)
+				if def != nil {
+					b.WriteString(" = ")
+					b.WriteString(typeToString(def, nil, typeFormatFlags))
+				}
 			}
 			b.WriteString(">")
 		}

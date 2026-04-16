@@ -154,6 +154,10 @@ func (c *Checker) GetConstraintOfTypeParameter(typeParameter *Type) *Type {
 	return c.getConstraintOfTypeParameter(typeParameter)
 }
 
+func (c *Checker) GetDefaultFromTypeParameter(typeParameter *Type) *Type {
+	return c.getDefaultFromTypeParameter(typeParameter)
+}
+
 func (c *Checker) GetResolutionModeOverride(node *ast.ImportAttributes, reportErrors bool) core.ResolutionMode {
 	return c.getResolutionModeOverride(node, reportErrors)
 }
