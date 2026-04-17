@@ -266,7 +266,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/sys v0.42.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/sys v0.43.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 Copyright 2009 The Go Authors
@@ -294,7 +294,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/term v0.41.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/term v0.42.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 Copyright 2009 The Go Authors
@@ -309,7 +309,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/text v0.35.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/text v0.36.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 (c) AeHa (c)

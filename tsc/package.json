@@ -11,16 +11,16 @@
         "@types/node": "latest",
         "@types/tmp": "^0.2.6",
         "@types/which": "^3.0.4",
-        "adm-zip": "^0.5.16",
+        "adm-zip": "^0.5.17",
         "chokidar": "^5.0.0",
-        "dprint": "^0.53.0",
+        "dprint": "^0.54.0",
         "execa": "^9.6.1",
         "glob": "^13.0.6",
         "hereby": "^1.14.0",
         "p-limit": "^7.3.0",
         "picocolors": "^1.1.1",
         "tmp": "^0.2.5",
-        "typescript": "^5.9.3",
+        "typescript": "^6.0.2",
         "which": "^6.0.1"
     },
     "scripts": {
@@ -39,9 +39,14 @@
         "./_extension",
         "./_packages/*"
     ],
-    "packageManager": "npm@11.11.1+sha512.6ac6b30a876415dcf545e433ba4cb34bf0c3efbb86088a9415e446de0b5a4fc6fd511d277b59bd40e06e3204fbda28f5aeded346b3a8c780355b39ed31622e12",
+    "overrides": {
+        "@microsoft/applicationinsights-web-basic": "3.3.11",
+        "@microsoft/1ds-core-js": "4.3.11",
+        "@microsoft/1ds-post-js": "4.3.11"
+    },
+    "packageManager": "npm@11.12.1+sha512.cdca14b85d647b3192028d02aadbe82d75f79a446aceea9874be98e6d768f20ebd3555770a48d0e9906106007877bbc690f715e9372f2e2dc644a3c3157fb14c",
     "volta": {
         "node": "22.22.0",
-        "npm": "11.11.1"
+        "npm": "11.12.1"
     }
 }
