@@ -88,7 +88,65 @@ func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Check
 	if quickInfo == "" {
 		return "", ""
 	}
-	return quickInfo, l.getDocumentationFromDeclaration(c, symbol, declaration, node, contentFormat, false /*commentOnly*/)
+
+	documentation := l.documentationFromSignature(c, symbol, getCallOrNewExpression(node), node, contentFormat, false /*commentOnly*/)
+	if documentation != "" {
+		return quickInfo, documentation
+	}
+
+	documentation = l.getDocumentationFromDeclaration(c, symbol, declaration, node, contentFormat, false /*commentOnly*/)
+	if documentation != "" {
+		return quickInfo, documentation
+	}
+
+	return quickInfo, l.documentationFromAlias(c, symbol, node, contentFormat)
+}
+
+func (l *LanguageService) documentationFromSignature(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+	if node == nil {
+		return ""
+	}
+	signature := c.GetResolvedSignature(node)
+	if signature == nil {
+		return ""
+	}
+	declaration := signature.Declaration()
+	if declaration == nil {
+		return ""
+	}
+	if ast.IsCallSignatureDeclaration(declaration) || ast.IsConstructSignatureDeclaration(declaration) {
+		return l.getDocumentationFromDeclaration(c, symbol, declaration, location, contentFormat, commentOnly)
+	}
+	return ""
+}
+
+func (l *LanguageService) documentationFromAlias(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind) string {
+	if symbol == nil || symbol.Flags&ast.SymbolFlagsAlias == 0 {
+		return ""
+	}
+
+	aliasedSymbol := c.GetAliasedSymbol(symbol)
+	if aliasedSymbol == nil || aliasedSymbol == c.GetUnknownSymbol() {
+		return ""
+	}
+
+	candidates := []*ast.Symbol{aliasedSymbol}
+	if aliasedSymbol.ExportSymbol != nil {
+		candidates = append(candidates, aliasedSymbol.ExportSymbol)
+	}
+
+	for _, candidate := range candidates {
+		aliasedDeclaration := core.OrElse(candidate.ValueDeclaration, core.FirstOrNil(candidate.Declarations))
+		if aliasedDeclaration == nil {
+			continue
+		}
+
+		if documentation := l.getDocumentationFromDeclaration(c, candidate, aliasedDeclaration, node, contentFormat, false /*commentOnly*/); documentation != "" {
+			return documentation
+		}
+	}
+
+	return ""
 }
 
 func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, symbol *ast.Symbol, declaration *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
@@ -434,7 +492,11 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 				b.WriteString(": ")
 			}
 			if callNode := getCallOrNewExpression(node); callNode != nil {
-				b.WriteString(signatureToString(c.GetResolvedSignature(callNode), container, typeFormatFlags|checker.TypeFormatFlagsWriteCallStyleSignature|checker.TypeFormatFlagsWriteTypeArgumentsOfSignature|checker.TypeFormatFlagsWriteArrowStyleSignature))
+				flags := typeFormatFlags | checker.TypeFormatFlagsWriteTypeArgumentsOfSignature | checker.TypeFormatFlagsWriteArrowStyleSignature
+				if ast.IsCallExpression(callNode) {
+					flags |= checker.TypeFormatFlagsWriteCallStyleSignature
+				}
+				b.WriteString(signatureToString(c.GetResolvedSignature(callNode), container, flags))
 			} else {
 				t := c.GetTypeOfSymbolAtLocation(symbol, node)
 				// If the type is a constrained type parameter, support expansion:
