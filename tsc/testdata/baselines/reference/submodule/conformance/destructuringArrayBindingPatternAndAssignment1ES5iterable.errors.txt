@@ -1,8 +1,10 @@
+error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
 destructuringArrayBindingPatternAndAssignment1ES5iterable.ts(43,6): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
 destructuringArrayBindingPatternAndAssignment1ES5iterable.ts(44,8): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
 destructuringArrayBindingPatternAndAssignment1ES5iterable.ts(44,18): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
 
 
+!!! error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
 ==== destructuringArrayBindingPatternAndAssignment1ES5iterable.ts (3 errors) ====
     /* AssignmentPattern:
      *      ObjectAssignmentPattern

@@ -30,7 +30,6 @@ type CompilerOptions struct {
 	EmitDeclarationOnly                       Tristate                                  `json:"emitDeclarationOnly,omitzero"`
 	EmitBOM                                   Tristate                                  `json:"emitBOM,omitzero"`
 	EmitDecoratorMetadata                     Tristate                                  `json:"emitDecoratorMetadata,omitzero"`
-	DownlevelIteration                        Tristate                                  `json:"downlevelIteration,omitzero"`
 	Declaration                               Tristate                                  `json:"declaration,omitzero"`
 	DeclarationDir                            string                                    `json:"declarationDir,omitzero"`
 	DeclarationMap                            Tristate                                  `json:"declarationMap,omitzero"`
@@ -124,6 +123,8 @@ type CompilerOptions struct {
 	AlwaysStrict Tristate `json:"alwaysStrict,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
 	BaseUrl string `json:"baseUrl,omitzero"`
+	// Deprecated: Do not use outside of options parsing and validation.
+	DownlevelIteration Tristate `json:"downlevelIteration,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.
 	ESModuleInterop Tristate `json:"esModuleInterop,omitzero"`
 	// Deprecated: Do not use outside of options parsing and validation.

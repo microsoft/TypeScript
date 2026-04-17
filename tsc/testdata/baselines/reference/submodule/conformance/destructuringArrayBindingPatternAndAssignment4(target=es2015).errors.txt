@@ -1,6 +1,8 @@
+error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
 destructuringArrayBindingPatternAndAssignment4.ts(5,7): error TS2488: Type 'null' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
+!!! error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
 ==== destructuringArrayBindingPatternAndAssignment4.ts (1 errors) ====
     // #35497
     
