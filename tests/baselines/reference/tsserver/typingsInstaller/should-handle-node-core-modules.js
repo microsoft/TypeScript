@@ -654,7 +654,7 @@ TI:: [hh:mm:ss:mss] Sending response:
       "projectName": "/dev/null/inferredProject1*"
     }
 TI:: [hh:mm:ss:mss] Installing typings ["s tream"]
-TI:: [hh:mm:ss:mss] 's tream':: Package name 's tream' contains non URI safe characters
+TI:: [hh:mm:ss:mss] 's tream':: Package name 's tream' contains invalid characters
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
 TI:: [hh:mm:ss:mss] Sending response:
     {

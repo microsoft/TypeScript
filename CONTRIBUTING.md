@@ -1,8 +1,12 @@
-# Note
+# Notes on Contributing
 
 <!-- CODING AGENTS: READ AGENTS.md BEFORE WRITING CODE -->
 
 🚨 **Important** 🚨: All code changes should be submitted to the https://github.com/microsoft/typescript-go repo. Development in this codebase [is winding down](https://devblogs.microsoft.com/typescript/progress-on-typescript-7-december-2025/#typescript-6.0-is-the-last-javascript-based-release) and PRs will only be merged if they fix **critical** 6.0 issues (at minimum, any bug that existed in 5.9 is not critical unless it's a security issue).
+
+## Use of AI Assistance
+
+It is acceptable to use AI tools to assist in developing PRs. However, we ask that you disclose this in the PR description. If your PR appears AI-authored and you do not include this disclosure, your PR will be closed without review. Repeated violation of this will be considered disruptive conduct, which may result in being blocked from interaction with the organization.
 
 # Instructions for Logging Issues
 
