@@ -704,11 +704,11 @@ func (s *Session) collectProjectInfoTelemetry(project *Project) lsproto.Telemetr
 	if opts.Module != core.ModuleKindNone {
 		compilerOptions["module"] = opts.Module.String()
 	}
-	if name := moduleResolutionKindName(opts.ModuleResolution); name != "" {
-		compilerOptions["moduleResolution"] = name
+	if opts.ModuleResolution != core.ModuleResolutionKindUnknown {
+		compilerOptions["moduleResolution"] = opts.ModuleResolution.String()
 	}
 	if opts.Jsx != core.JsxEmitNone {
-		compilerOptions["jsx"] = fmt.Sprintf("%d", opts.Jsx)
+		compilerOptions["jsx"] = opts.Jsx.String()
 	}
 	if b, err := json.Marshal(compilerOptions); err == nil {
 		props["compilerOptions"] = string(b)
@@ -748,9 +748,8 @@ func boolTelemetry(v bool) string {
 func countFileStats(sourceFiles []*ast.SourceFile) *lsproto.ProjectInfoTelemetryMeasurements {
 	var stats lsproto.ProjectInfoTelemetryMeasurements
 	for _, sf := range sourceFiles {
-		fileName := sf.FileName()
 		size := float64(sf.End())
-		switch core.GetScriptKindFromFileName(fileName) {
+		switch sf.ScriptKind {
 		case core.ScriptKindJS:
 			stats.JsFileCount++
 			stats.JsFileSize += size
@@ -758,7 +757,7 @@ func countFileStats(sourceFiles []*ast.SourceFile) *lsproto.ProjectInfoTelemetry
 			stats.JsxFileCount++
 			stats.JsxFileSize += size
 		case core.ScriptKindTS:
-			if tspath.IsDeclarationFileName(fileName) {
+			if tspath.IsDeclarationFileName(sf.FileName()) {
 				stats.DtsFileCount++
 				stats.DtsFileSize += size
 			} else {
@@ -771,25 +770,6 @@ func countFileStats(sourceFiles []*ast.SourceFile) *lsproto.ProjectInfoTelemetry
 		}
 	}
 	return &stats
-}
-
-func moduleResolutionKindName(kind core.ModuleResolutionKind) string {
-	switch kind {
-	case core.ModuleResolutionKindUnknown:
-		return ""
-	case core.ModuleResolutionKindClassic:
-		return "Classic"
-	case core.ModuleResolutionKindNode10:
-		return "Node10"
-	case core.ModuleResolutionKindNode16:
-		return "Node16"
-	case core.ModuleResolutionKindNodeNext:
-		return "NodeNext"
-	case core.ModuleResolutionKindBundler:
-		return "Bundler"
-	default:
-		return ""
-	}
 }
 
 func (s *Session) Snapshot() *Snapshot {
