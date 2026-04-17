@@ -1,0 +1,17 @@
+// === goToDefinition ===
+// === /home/src/workspaces/project/type.d.ts ===
+// export interface DidChangeContentEvent {
+//     [|(): void;|]
+// }
+// 
+// export declare class TextDocuments {
+//     <|get [|onDidChangeContent|](): DidChangeContentEvent;|>
+// }
+// 
+
+// === /home/src/workspaces/project/index.ts ===
+// import { TextDocuments } from "./type";
+// 
+// declare const documents: TextDocuments | undefined;
+// 
+// documents!./*GOTO DEF*/onDidChangeContent()

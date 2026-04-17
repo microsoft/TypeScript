@@ -75,6 +75,9 @@ fourslash/findAllReferences/referencesForOverrides.baseline.jsonc.diff
 fourslash/findAllReferences/referencesForStaticsAndMembersWithSameNames.baseline.jsonc.diff
 fourslash/findAllReferences/remoteGetReferences.baseline.jsonc.diff
 
+## go to definition ##
+fourslash/goToDefinition/goToDefinitionJsxCall.baseline.jsonc.diff
+
 ## Improved quote style fidelity ##
 compiler/assignmentToConditionalBrandedStringTemplateOrMapping.types.diff
 compiler/callSignatureFunctionOverload.types.diff

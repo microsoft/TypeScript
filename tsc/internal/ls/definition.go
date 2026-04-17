@@ -77,10 +77,22 @@ func (l *LanguageService) provideDefinitionWorker(
 
 	declarations := getDeclarationsFromLocation(c, node)
 	calledDeclaration := tryGetSignatureDeclaration(c, node)
-	if calledDeclaration != nil {
-		// If we can resolve a call signature, remove all function-like declarations and add that signature.
-		nonFunctionDeclarations := core.Filter(slices.Clip(declarations), func(node *ast.Node) bool { return !ast.IsFunctionLike(node) })
-		declarations = append(nonFunctionDeclarations, calledDeclaration)
+	if calledDeclaration != nil && !(ast.IsJsxOpeningLikeElement(node.Parent) && isJsxConstructorLike(calledDeclaration)) {
+		symbol := c.GetSymbolAtLocation(getDeclarationNameForKeyword(node))
+		if symbol != nil && core.Some(c.GetRootSymbols(symbol), func(rootSymbol *ast.Symbol) bool {
+			return symbolMatchesSignature(rootSymbol, calledDeclaration)
+		}) {
+			if !ast.IsConstructorDeclaration(calledDeclaration) {
+				declarations = nil
+			} else {
+				declarations = core.Filter(slices.Clip(declarations), func(node *ast.Node) bool {
+					return node != calledDeclaration && (ast.IsClassDeclaration(node) || ast.IsClassExpression(node))
+				})
+			}
+		} else {
+			declarations = core.Filter(slices.Clip(declarations), func(node *ast.Node) bool { return node != calledDeclaration })
+		}
+		declarations = append(declarations, calledDeclaration)
 	}
 	return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, declarations, reference), nil
 }
@@ -345,6 +357,31 @@ func tryGetSignatureDeclaration(typeChecker *checker.Checker, node *ast.Node) *a
 		}
 	}
 	return nil
+}
+
+func isJsxConstructorLike(node *ast.Node) bool {
+	switch {
+	case ast.IsConstructorDeclaration(node),
+		ast.IsConstructorTypeNode(node),
+		ast.IsCallSignatureDeclaration(node),
+		ast.IsConstructSignatureDeclaration(node):
+		return true
+	default:
+		return false
+	}
+}
+
+func symbolMatchesSignature(symbol *ast.Symbol, calledDeclaration *ast.Node) bool {
+	if symbol == nil || calledDeclaration == nil {
+		return false
+	}
+	calledSymbol := calledDeclaration.Symbol()
+	if symbol == calledSymbol || calledSymbol != nil && symbol == calledSymbol.Parent {
+		return true
+	}
+	parent := calledDeclaration.Parent
+	return parent != nil && (ast.IsAssignmentExpression(parent, false /*excludeCompoundAssignment*/) ||
+		!ast.IsCallLikeExpression(parent) && ast.CanHaveSymbol(parent) && symbol == parent.Symbol())
 }
 
 func getSymbolForOverriddenMember(typeChecker *checker.Checker, node *ast.Node) *ast.Symbol {

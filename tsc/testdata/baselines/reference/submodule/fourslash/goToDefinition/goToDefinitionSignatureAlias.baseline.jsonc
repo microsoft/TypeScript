@@ -46,7 +46,7 @@
 // f();
 // g();
 // h();
-// <|const [|i|] = () => 0;|>
+// const [|i|] = <|() => 0|>;
 // const iFn = function () { return 0; };
 // const j = i;
 // /*GOTO DEF*/i();
@@ -63,7 +63,7 @@
 // g();
 // h();
 // const i = () => 0;
-// <|const [|iFn|] = function () { return 0; };|>
+// const [|iFn|] = <|function () { return 0; }|>;
 // const j = i;
 // i();
 // /*GOTO DEF*/iFn();
@@ -99,7 +99,7 @@
 // i();
 // iFn();
 // j();
-// const o = { <|[|m|]: () => 0|> };
+// const o = { [|m|]: <|() => 0|> };
 // o./*GOTO DEF*/m();
 // const oFn = { mFn: function () { return 0; } };
 // oFn.mFn();
@@ -114,7 +114,7 @@
 // j();
 // const o = { m: () => 0 };
 // o.m();
-// const oFn = { <|[|mFn|]: function () { return 0; }|> };
+// const oFn = { [|mFn|]: <|function () { return 0; }|> };
 // oFn./*GOTO DEF*/mFn();
 // class Component { constructor(props: {}) {} }
 // type ComponentClass = new () => Component;
@@ -125,11 +125,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// --- (line: 13) skipped ---
-// o.m();
-// const oFn = { mFn: function () { return 0; } };
-// oFn.mFn();
-// class Component { [|constructor(props: {}) {}|] }
+// --- (line: 17) skipped ---
 // type ComponentClass = new () => Component;
 // interface ComponentClass2 { new(): Component; }
 // 
@@ -164,14 +160,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// --- (line: 14) skipped ---
-// const oFn = { mFn: function () { return 0; } };
-// oFn.mFn();
-// class Component { constructor(props: {}) {} }
-// type ComponentClass = [|new () => Component|];
-// interface ComponentClass2 { new(): Component; }
-// 
-// class MyComponent extends Component {}
+// --- (line: 21) skipped ---
 // <MyComponent />;
 // new MyComponent({});
 // 
@@ -210,17 +199,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// --- (line: 15) skipped ---
-// oFn.mFn();
-// class Component { constructor(props: {}) {} }
-// type ComponentClass = new () => Component;
-// interface ComponentClass2 { [|new(): Component;|] }
-// 
-// class MyComponent extends Component {}
-// <MyComponent />;
-// new MyComponent({});
-// 
-// declare const MyComponent2: ComponentClass;
+// --- (line: 25) skipped ---
 // <MyComponent2 />;
 // new MyComponent2();
 // 

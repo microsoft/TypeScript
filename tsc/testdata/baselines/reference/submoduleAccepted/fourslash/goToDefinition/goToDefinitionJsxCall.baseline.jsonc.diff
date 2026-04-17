@@ -1,11 +1,6 @@
 --- old.goToDefinitionJsxCall.baseline.jsonc
 +++ new.goToDefinitionJsxCall.baseline.jsonc
-@@= skipped -0, +0 lines =@@
- // === goToDefinition ===
- // === /test.tsx ===
- // interface FC<P = {}> {
--//     (props: P, context?: any): string;
-+//     [|(props: P, context?: any): string;|]
+@@= skipped -4, +4 lines =@@
  // }
  // 
  // <|const [|Thing|]: FC = (props) => <div></div>;|>
