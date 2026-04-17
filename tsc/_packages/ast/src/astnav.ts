@@ -134,7 +134,14 @@ function getTokenAtPositionImpl(
         if (node.kind !== SyntaxKind.EndOfFile && node.end === position && includePrecedingTokenAtEndPosition !== undefined) {
             state.prevSubtree = node;
         }
-        if (node.end < position || (node.kind !== SyntaxKind.EndOfFile && node.end === position)) {
+        // A node "contains" the position if position < end, except nodes at the file end
+        // treat end as inclusive (there's nowhere else to look). This applies to the EOF
+        // token itself, and to JSDoc nodes reaching EOF (e.g. unterminated JSDoc comments).
+        if (
+            node.end < position || node.end === position &&
+                node.kind !== SyntaxKind.EndOfFile &&
+                (!isJSDocNodeKind(node.kind) || node.end !== sourceFile.endOfFileToken.end)
+        ) {
             return -1;
         }
         const nodePos = getPosition(node, sourceFile, allowPositionInLeadingTrivia);

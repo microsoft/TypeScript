@@ -2342,7 +2342,7 @@ export function createScanner(
                 else if (
                     ch === CharacterCodes.at
                     && pos - 1 >= 0 && isWhiteSpaceSingleLine(charCodeUnchecked(pos - 1))
-                    && !(pos + 1 < end && isWhiteSpaceLike(charCodeUnchecked(pos + 1)))
+                    && pos + 1 < end && isIdentifierStart(charCodeUnchecked(pos + 1))
                 ) {
                     break;
                 }
