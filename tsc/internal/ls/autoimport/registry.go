@@ -732,8 +732,14 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 		return nil, false
 	})
 
+	var nodeModulesLogger *logging.LogTree
+	if logger != nil && len(nodeModulesTasks) > 0 {
+		nodeModulesLogger = logger.Fork("Building node_modules indexes")
+	}
+
 	// --- Phase 1: Discovery (parallel per bucket) ---
 	// Resolve package.json and realpath for each package in each bucket.
+	discoveryStart := time.Now()
 	for _, task := range nodeModulesTasks {
 		wg.Go(func() {
 			if task.isUpdate {
@@ -751,11 +757,15 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 		})
 	}
 	wg.Wait()
+	if nodeModulesLogger != nil {
+		nodeModulesLogger.Logf("Discovered packages: %v", time.Since(discoveryStart))
+	}
 
 	// --- Phase 2: Extraction (parallel per unique realpath) ---
 	// Extract from main packages first. If a main package has no TypeScript entrypoints,
 	// we fall back to extracting from @types in a second pass. Packages with no main
 	// package extract directly from @types in the primary pass.
+	extractionStart := time.Now()
 	seen := make(map[string]bool)
 	extractionCache := make(map[string]*perPackageExtractionResult)
 	var extractionMu sync.Mutex
@@ -824,6 +834,9 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 		})
 	}
 	wg.Wait()
+	if nodeModulesLogger != nil {
+		nodeModulesLogger.Logf("Extracted exports: %v (%d packages)", time.Since(extractionStart), len(seen))
+	}
 	b.uniquePackageCount = len(seen)
 
 	// --- Phase 3: Bucket building (parallel per bucket) ---
@@ -841,11 +854,11 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 			if task.isUpdate {
 				b.updateNodeModulesBucket(
 					ctx, br, task.existingBucket, task.dirtyPackages, task.discovered, extractionCache,
-					logger.Fork("Updating node_modules bucket "+task.dirName))
+					nodeModulesLogger.Fork(task.dirName))
 			} else {
 				b.buildNodeModulesBucket(
 					ctx, br, task.dependencyNames, task.dirPath, task.discovered, task.directoryPackageNames, extractionCache,
-					logger.Fork("Building node_modules bucket "+task.dirName))
+					nodeModulesLogger.Fork(task.dirName))
 			}
 		})
 	}
@@ -874,7 +887,6 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 		}
 	}
 
-	start := time.Now()
 	wg.Wait()
 
 	for _, br := range allResults {
@@ -944,11 +956,11 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 		}
 	}
 
-	if logger != nil && len(allResults) > 0 {
+	if nodeModulesLogger != nil {
 		if secondPassFileCount > 0 {
-			logger.Logf("%d files required second pass, took %v", secondPassFileCount, time.Since(secondPassStart))
+			nodeModulesLogger.Logf("%d files required second pass, took %v", secondPassFileCount, time.Since(secondPassStart))
 		}
-		logger.Logf("Built %d indexes in %v", len(allResults), time.Since(start))
+		nodeModulesLogger.Logf("Total: %v", time.Since(discoveryStart))
 	}
 }
 
@@ -1421,7 +1433,6 @@ func (b *registryBuilder) buildNodeModulesBucket(
 		return
 	}
 
-	start := time.Now()
 	extraction := installExtractions(discovered, extractionCache)
 
 	indexStart := time.Now()
@@ -1487,7 +1498,6 @@ func (b *registryBuilder) buildNodeModulesBucket(
 			logger.Logf("Skipped %d entrypoints due to exclude patterns", extraction.skippedEntrypointsCount)
 		}
 		logger.Logf("Built index: %v", time.Since(indexStart))
-		logger.Logf("Bucket total: %v", time.Since(start))
 	}
 
 	result.err = ctx.Err()
@@ -1607,7 +1617,6 @@ func (b *registryBuilder) updateNodeModulesBucket(
 	if logger != nil {
 		logger.Logf("Granular update of %d packages: %v (%d exports)", dirtyPackages.Len(), indexStart.Sub(start), extraction.stats.exports.Load())
 		logger.Logf("Built index: %v", time.Since(indexStart))
-		logger.Logf("Bucket total: %v", time.Since(start))
 	}
 
 	result.err = ctx.Err()
