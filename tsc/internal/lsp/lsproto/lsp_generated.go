@@ -17160,6 +17160,9 @@ type ServerCapabilities struct {
 
 	// The server provides source definition support via custom/textDocument/sourceDefinition.
 	CustomSourceDefinitionProvider *bool `json:"customSourceDefinitionProvider,omitzero"`
+
+	// The server provides multi-document highlight support via custom/textDocument/multiDocumentHighlight.
+	CustomMultiDocumentHighlightProvider *bool `json:"customMultiDocumentHighlightProvider,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*ServerCapabilities)(nil)
@@ -17421,6 +17424,13 @@ func (s *ServerCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return errNull("customSourceDefinitionProvider")
 			}
 			if err := json.UnmarshalDecode(dec, &s.CustomSourceDefinitionProvider); err != nil {
+				return err
+			}
+		case `"customMultiDocumentHighlightProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("customMultiDocumentHighlightProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.CustomMultiDocumentHighlightProvider); err != nil {
 				return err
 			}
 		default:
@@ -29211,6 +29221,166 @@ type ProjectInfoTelemetryMeasurements struct {
 	DtsFileSize float64 `json:"dtsFileSize,omitzero"`
 }
 
+// Represents a collection of document highlights from a single document, used in multi-document highlight responses.
+type MultiDocumentHighlight struct {
+	// The URI of the document containing the highlights.
+	Uri DocumentUri `json:"uri"`
+
+	// The highlights for the document.
+	Highlights []*DocumentHighlight `json:"highlights"`
+}
+
+var _ json.UnmarshalerFrom = (*MultiDocumentHighlight)(nil)
+
+func (s *MultiDocumentHighlight) UnmarshalJSONFrom(dec *json.Decoder) error {
+	const (
+		missingUri uint = 1 << iota
+		missingHighlights
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"uri"`:
+			missing &^= missingUri
+			if err := json.UnmarshalDecode(dec, &s.Uri); err != nil {
+				return err
+			}
+		case `"highlights"`:
+			missing &^= missingHighlights
+			if dec.PeekKind() == 'n' {
+				return errNull("highlights")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Highlights); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingUri != 0 {
+			missingProps = append(missingProps, "uri")
+		}
+		if missing&missingHighlights != 0 {
+			missingProps = append(missingProps, "highlights")
+		}
+		return errMissing(missingProps)
+	}
+
+	return nil
+}
+
+// Parameters for the custom/textDocument/multiDocumentHighlight request.
+type MultiDocumentHighlightParams struct {
+	// The text document.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+
+	// The position inside the text document.
+	Position Position `json:"position"`
+
+	// The list of file URIs to search for highlights across.
+	FilesToSearch []DocumentUri `json:"filesToSearch"`
+}
+
+func (s *MultiDocumentHighlightParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
+func (s *MultiDocumentHighlightParams) TextDocumentPosition() Position {
+	return s.Position
+}
+
+var _ json.UnmarshalerFrom = (*MultiDocumentHighlightParams)(nil)
+
+func (s *MultiDocumentHighlightParams) UnmarshalJSONFrom(dec *json.Decoder) error {
+	const (
+		missingTextDocument uint = 1 << iota
+		missingPosition
+		missingFilesToSearch
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"textDocument"`:
+			missing &^= missingTextDocument
+			if err := json.UnmarshalDecode(dec, &s.TextDocument); err != nil {
+				return err
+			}
+		case `"position"`:
+			missing &^= missingPosition
+			if err := json.UnmarshalDecode(dec, &s.Position); err != nil {
+				return err
+			}
+		case `"filesToSearch"`:
+			missing &^= missingFilesToSearch
+			if dec.PeekKind() == 'n' {
+				return errNull("filesToSearch")
+			}
+			if err := json.UnmarshalDecode(dec, &s.FilesToSearch); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingTextDocument != 0 {
+			missingProps = append(missingProps, "textDocument")
+		}
+		if missing&missingPosition != 0 {
+			missingProps = append(missingProps, "position")
+		}
+		if missing&missingFilesToSearch != 0 {
+			missingProps = append(missingProps, "filesToSearch")
+		}
+		return errMissing(missingProps)
+	}
+
+	return nil
+}
+
 // CallHierarchyItemData is a placeholder for custom data preserved on a CallHierarchyItem.
 type CallHierarchyItemData struct{}
 
@@ -30597,6 +30767,8 @@ func unmarshalParams(method Method, data []byte) (any, error) {
 		return unmarshalPtrTo[ProjectInfoParams](data)
 	case MethodCustomTextDocumentSourceDefinition:
 		return unmarshalPtrTo[TextDocumentPositionParams](data)
+	case MethodCustomTextDocumentMultiDocumentHighlight:
+		return unmarshalPtrTo[MultiDocumentHighlightParams](data)
 	case MethodWorkspaceDidChangeWorkspaceFolders:
 		return unmarshalPtrTo[DidChangeWorkspaceFoldersParams](data)
 	case MethodWindowWorkDoneProgressCancel:
@@ -30804,6 +30976,8 @@ func unmarshalResult(method Method, data []byte) (any, error) {
 		return unmarshalValue[CustomProjectInfoResponse](data)
 	case MethodCustomTextDocumentSourceDefinition:
 		return unmarshalValue[CustomTextDocumentSourceDefinitionResponse](data)
+	case MethodCustomTextDocumentMultiDocumentHighlight:
+		return unmarshalValue[CustomMultiDocumentHighlightResponse](data)
 	default:
 		return unmarshalAny(data)
 	}
@@ -31126,6 +31300,8 @@ const (
 	MethodCustomProjectInfo Method = "custom/projectInfo"
 	// Request to get source definitions for a position.
 	MethodCustomTextDocumentSourceDefinition Method = "custom/textDocument/sourceDefinition"
+	// Request to get document highlights across multiple files.
+	MethodCustomTextDocumentMultiDocumentHighlight Method = "custom/textDocument/multiDocumentHighlight"
 	// The `workspace/didChangeWorkspaceFolders` notification is sent from the client to the server when the workspace
 	// folder configuration changes.
 	MethodWorkspaceDidChangeWorkspaceFolders Method = "workspace/didChangeWorkspaceFolders"
@@ -31676,6 +31852,12 @@ type CustomTextDocumentSourceDefinitionResponse = *LocationOrLocationsOrDefiniti
 
 // Type mapping info for `custom/textDocument/sourceDefinition`
 var CustomTextDocumentSourceDefinitionInfo = RequestInfo[*TextDocumentPositionParams, CustomTextDocumentSourceDefinitionResponse]{Method: MethodCustomTextDocumentSourceDefinition}
+
+// Response type for `custom/textDocument/multiDocumentHighlight`
+type CustomMultiDocumentHighlightResponse = MultiDocumentHighlightsOrNull
+
+// Type mapping info for `custom/textDocument/multiDocumentHighlight`
+var CustomTextDocumentMultiDocumentHighlightInfo = RequestInfo[*MultiDocumentHighlightParams, CustomMultiDocumentHighlightResponse]{Method: MethodCustomTextDocumentMultiDocumentHighlight}
 
 // Type mapping info for `workspace/didChangeWorkspaceFolders`
 var WorkspaceDidChangeWorkspaceFoldersInfo = NotificationInfo[*DidChangeWorkspaceFoldersParams]{Method: MethodWorkspaceDidChangeWorkspaceFolders}
@@ -35185,6 +35367,36 @@ func (o *CustomClosingTagCompletionOrNull) UnmarshalJSONFrom(dec *json.Decoder) 
 		return json.UnmarshalDecode(dec, o.CustomClosingTagCompletion)
 	default:
 		return errInvalidKind("CustomClosingTagCompletionOrNull", dec.PeekKind())
+	}
+}
+
+type MultiDocumentHighlightsOrNull struct {
+	MultiDocumentHighlights *[]*MultiDocumentHighlight
+}
+
+var _ json.MarshalerTo = (*MultiDocumentHighlightsOrNull)(nil)
+
+func (o *MultiDocumentHighlightsOrNull) MarshalJSONTo(enc *json.Encoder) error {
+	if o.MultiDocumentHighlights != nil {
+		return json.MarshalEncode(enc, o.MultiDocumentHighlights)
+	}
+	return enc.WriteToken(json.Null)
+}
+
+var _ json.UnmarshalerFrom = (*MultiDocumentHighlightsOrNull)(nil)
+
+func (o *MultiDocumentHighlightsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
+	*o = MultiDocumentHighlightsOrNull{}
+
+	switch dec.PeekKind() {
+	case 'n':
+		_, err := dec.ReadToken()
+		return err
+	case '[':
+		o.MultiDocumentHighlights = new([]*MultiDocumentHighlight)
+		return json.UnmarshalDecode(dec, o.MultiDocumentHighlights)
+	default:
+		return errInvalidKind("MultiDocumentHighlightsOrNull", dec.PeekKind())
 	}
 }
 

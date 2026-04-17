@@ -1,4 +1,7 @@
 // === documentHighlights ===
+// filesToSearch:
+//   /x.ts
+
 // === /x.ts ===
 // import y from "./y";
 // 

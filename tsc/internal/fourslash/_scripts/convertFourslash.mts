@@ -1342,6 +1342,7 @@ function parseBaselineFindAllReferencesArgs(args: readonly ts.Expression[]): [Ve
 function parseBaselineDocumentHighlightsArgs(args: readonly ts.Expression[]): [VerifyBaselineDocumentHighlightsCmd] {
     const newArgs: string[] = [];
     let preferences: string | undefined;
+    let filesToSearch: string[] | undefined;
     for (const arg of args) {
         let strArg;
         if (strArg = getArrayLiteralExpression(arg)) {
@@ -1350,8 +1351,47 @@ function parseBaselineDocumentHighlightsArgs(args: readonly ts.Expression[]): [V
                 newArgs.push(newArg);
             }
         }
+        else if (ts.isCallExpression(arg) && arg.getText().includes("test.ranges()")) {
+            newArgs.push("ToAny(f.Ranges())...");
+        }
         else if (ts.isObjectLiteralExpression(arg)) {
-            // !!! todo when multiple files supported in lsp
+            for (const prop of arg.properties) {
+                if (ts.isPropertyAssignment(prop) && ts.isIdentifier(prop.name) && prop.name.text === "filesToSearch" && ts.isArrayLiteralExpression(prop.initializer)) {
+                    filesToSearch = [];
+                    for (const e of prop.initializer.elements) {
+                        if (ts.isStringLiteral(e)) {
+                            filesToSearch.push(JSON.stringify(e.text));
+                        }
+                        else if (ts.isPropertyAccessExpression(e) && e.name.text === "fileName") {
+                            // e.g. test.ranges()[0].fileName -> f.Ranges()[0].FileName()
+                            const obj = e.expression;
+                            if (ts.isElementAccessExpression(obj) && ts.isCallExpression(obj.expression) && obj.expression.getText().includes("ranges")) {
+                                const index = obj.argumentExpression?.getText();
+                                if (index !== undefined) {
+                                    filesToSearch.push(`f.Ranges()[${index}].FileName()`);
+                                    continue;
+                                }
+                            }
+                            // e.g. range.fileName where `const range = test.ranges()[0]`
+                            if (ts.isIdentifier(obj)) {
+                                const resolved = parseRangeVariable(obj);
+                                if (resolved) {
+                                    filesToSearch.push(`${resolved}.FileName()`);
+                                    continue;
+                                }
+                            }
+                            // Fallback: skip filesToSearch entirely
+                            filesToSearch = undefined;
+                            break;
+                        }
+                        else {
+                            // Unsupported expression; skip filesToSearch
+                            filesToSearch = undefined;
+                            break;
+                        }
+                    }
+                }
+            }
         }
         else {
             newArgs.push(parseBaselineMarkerOrRangeArg(arg));
@@ -1366,6 +1406,7 @@ function parseBaselineDocumentHighlightsArgs(args: readonly ts.Expression[]): [V
         kind: "verifyBaselineDocumentHighlights",
         args: newArgs,
         preferences: preferences ? preferences : "nil /*preferences*/",
+        filesToSearch,
     }];
 }
 
@@ -2134,6 +2175,10 @@ function parseRangeVariable(arg: ts.Identifier | ts.ElementAccessExpression): st
             if (ts.isIdentifier(decl.name) && decl.name.text === argName && decl.initializer?.getText().includes("ranges")) {
                 if (ts.isElementAccessExpression(arg)) {
                     return `f.Ranges()[${arg.argumentExpression!.getText()}]`;
+                }
+                // `const range = test.ranges()[0]` used directly as `range`
+                if (ts.isIdentifier(arg) && ts.isElementAccessExpression(decl.initializer) && ts.isCallExpression(decl.initializer.expression) && decl.initializer.argumentExpression) {
+                    return `f.Ranges()[${decl.initializer.argumentExpression.getText()}]`;
                 }
             }
             // `const cRanges = ranges.get("C")` or `const cRanges = test.rangesByText().get("C")`
@@ -3415,6 +3460,7 @@ interface VerifyBaselineDocumentHighlightsCmd {
     kind: "verifyBaselineDocumentHighlights";
     args: string[];
     preferences: string;
+    filesToSearch?: string[];
 }
 
 interface VerifyBaselineInlayHintsCmd {
@@ -3725,7 +3771,11 @@ function generateBaselineFindAllReferences({ markers, ranges }: VerifyBaselineFi
     return `f.VerifyBaselineFindAllReferences(t, ${markers.join(", ")})`;
 }
 
-function generateBaselineDocumentHighlights({ args, preferences }: VerifyBaselineDocumentHighlightsCmd): string {
+function generateBaselineDocumentHighlights({ args, preferences, filesToSearch }: VerifyBaselineDocumentHighlightsCmd): string {
+    if (filesToSearch) {
+        const filesGo = `[]string{${filesToSearch.join(", ")}}`;
+        return `f.VerifyBaselineDocumentHighlightsWithOptions(t, ${preferences}, ${filesGo}, ${args.join(", ")})`;
+    }
     return `f.VerifyBaselineDocumentHighlights(t, ${preferences}, ${args.join(", ")})`;
 }
 

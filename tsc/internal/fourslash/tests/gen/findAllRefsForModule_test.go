@@ -26,5 +26,5 @@ export const x = 0;
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyBaselineFindAllReferences(t, "0", "1", "2")
-	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, f.Ranges()[1], f.Ranges()[3], f.Ranges()[4])
+	f.VerifyBaselineDocumentHighlightsWithOptions(t, nil /*preferences*/, []string{"/b.ts", "/c/sub.js", "/d.ts"}, f.Ranges()[1], f.Ranges()[3], f.Ranges()[4])
 }

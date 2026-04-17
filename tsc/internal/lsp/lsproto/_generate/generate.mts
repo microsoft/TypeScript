@@ -391,6 +391,43 @@ const customStructures: Structure[] = [
         ],
         documentation: "Numeric measurements for ProjectInfoTelemetryEvent.",
     },
+    {
+        name: "MultiDocumentHighlight",
+        properties: [
+            {
+                name: "uri",
+                type: { kind: "base", name: "DocumentUri" },
+                documentation: "The URI of the document containing the highlights.",
+            },
+            {
+                name: "highlights",
+                type: { kind: "array", element: { kind: "reference", name: "DocumentHighlight" } },
+                documentation: "The highlights for the document.",
+            },
+        ],
+        documentation: "Represents a collection of document highlights from a single document, used in multi-document highlight responses.",
+    },
+    {
+        name: "MultiDocumentHighlightParams",
+        properties: [
+            {
+                name: "textDocument",
+                type: { kind: "reference", name: "TextDocumentIdentifier" },
+                documentation: "The text document.",
+            },
+            {
+                name: "position",
+                type: { kind: "reference", name: "Position" },
+                documentation: "The position inside the text document.",
+            },
+            {
+                name: "filesToSearch",
+                type: { kind: "array", element: { kind: "base", name: "DocumentUri" } },
+                documentation: "The list of file URIs to search for highlights across.",
+            },
+        ],
+        documentation: "Parameters for the custom/textDocument/multiDocumentHighlight request.",
+    },
 ];
 
 const customEnumerations: Enumeration[] = [
@@ -520,6 +557,20 @@ const customRequests: Request[] = [
         result: { kind: "reference", name: "LocationOrLocationsOrDefinitionLinksOrNull" },
         messageDirection: "clientToServer",
         documentation: "Request to get source definitions for a position.",
+    },
+    {
+        method: "custom/textDocument/multiDocumentHighlight",
+        typeName: "CustomMultiDocumentHighlightRequest",
+        params: { kind: "reference", name: "MultiDocumentHighlightParams" },
+        result: {
+            kind: "or",
+            items: [
+                { kind: "array", element: { kind: "reference", name: "MultiDocumentHighlight" } },
+                { kind: "base", name: "null" },
+            ],
+        },
+        messageDirection: "clientToServer",
+        documentation: "Request to get document highlights across multiple files.",
     },
 ];
 
@@ -682,6 +733,16 @@ function patchAndPreprocessModel() {
                 type: { kind: "base", name: "boolean" },
                 optional: true,
                 documentation: "The client supports the `verbosityLevel` property on `HoverParams` and `canIncreaseVerbosity` on `Hover`.",
+            });
+        }
+
+        // Patch ServerCapabilities to add custom tsgo capability flags
+        if (structure.name === "ServerCapabilities") {
+            structure.properties.push({
+                name: "customMultiDocumentHighlightProvider",
+                type: { kind: "base", name: "boolean" },
+                optional: true,
+                documentation: "The server provides multi-document highlight support via custom/textDocument/multiDocumentHighlight.",
             });
         }
 

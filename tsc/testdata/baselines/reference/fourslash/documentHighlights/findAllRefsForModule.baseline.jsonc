@@ -1,15 +1,48 @@
 // === documentHighlights ===
+// filesToSearch:
+//   /b.ts
+//   /c/sub.js
+//   /d.ts
+
 // === /b.ts ===
 // import { x } from "/*HIGHLIGHTS*/[|./a|]";
 
+// === /c/sub.js ===
+// const a = require("[|../a|]");
+
+// === /d.ts ===
+// /// <reference path="[|./a.ts|]" />
+
 
 
 // === documentHighlights ===
+// filesToSearch:
+//   /b.ts
+//   /c/sub.js
+//   /d.ts
+
+// === /b.ts ===
+// import { x } from "[|./a|]";
+
 // === /c/sub.js ===
 // const a = require("/*HIGHLIGHTS*/[|../a|]");
 
+// === /d.ts ===
+// /// <reference path="[|./a.ts|]" />
+
 
 
 // === documentHighlights ===
+// filesToSearch:
+//   /b.ts
+//   /c/sub.js
+//   /d.ts
+
+// === /b.ts ===
+// import { x } from "[|./a|]";
+
+// === /c/sub.js ===
+// const a = require("[|../a|]");
+
 // === /d.ts ===
 // /// <reference path="/*HIGHLIGHTS*/[|./a.ts|]" />

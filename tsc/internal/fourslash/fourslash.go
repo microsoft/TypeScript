@@ -3202,6 +3202,15 @@ func (f *FourslashTest) VerifyBaselineDocumentHighlights(
 	preferences *lsutil.UserPreferences,
 	markerOrRangeOrNames ...MarkerOrRangeOrName,
 ) {
+	f.VerifyBaselineDocumentHighlightsWithOptions(t, preferences, nil /*filesToSearch*/, markerOrRangeOrNames...)
+}
+
+func (f *FourslashTest) VerifyBaselineDocumentHighlightsWithOptions(
+	t *testing.T,
+	preferences *lsutil.UserPreferences,
+	filesToSearch []string,
+	markerOrRangeOrNames ...MarkerOrRangeOrName,
+) {
 	var markerOrRanges []MarkerOrRange
 	for _, markerOrRangeOrName := range markerOrRangeOrNames {
 		switch markerOrNameOrRange := markerOrRangeOrName.(type) {
@@ -3220,39 +3229,81 @@ func (f *FourslashTest) VerifyBaselineDocumentHighlights(
 		}
 	}
 
-	f.verifyBaselineDocumentHighlights(t, preferences, markerOrRanges)
+	f.verifyBaselineDocumentHighlights(t, preferences, filesToSearch, markerOrRanges)
 }
 
 func (f *FourslashTest) verifyBaselineDocumentHighlights(
 	t *testing.T,
 	preferences *lsutil.UserPreferences,
+	filesToSearch []string,
 	markerOrRanges []MarkerOrRange,
 ) {
 	for _, markerOrRange := range markerOrRanges {
 		f.goToMarker(t, markerOrRange)
 
-		params := &lsproto.DocumentHighlightParams{
-			TextDocument: lsproto.TextDocumentIdentifier{
-				Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
-			},
-			Position: f.currentCaretPosition,
-		}
-		result := sendRequest(t, f, lsproto.TextDocumentDocumentHighlightInfo, params)
-		highlights := result.DocumentHighlights
-		if highlights == nil {
-			highlights = &[]*lsproto.DocumentHighlight{}
-		}
-
 		var spans []lsproto.Location
-		for _, h := range *highlights {
-			spans = append(spans, lsproto.Location{
-				Uri:   lsconv.FileNameToDocumentURI(f.activeFilename),
-				Range: h.Range,
-			})
+		var header string
+
+		if len(filesToSearch) > 0 {
+			// Multi-file: use the custom method.
+			var searchURIs []lsproto.DocumentUri
+			for _, file := range filesToSearch {
+				searchURIs = append(searchURIs, lsconv.FileNameToDocumentURI(file))
+			}
+
+			params := &lsproto.MultiDocumentHighlightParams{
+				TextDocument: lsproto.TextDocumentIdentifier{
+					Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
+				},
+				Position:      f.currentCaretPosition,
+				FilesToSearch: searchURIs,
+			}
+			result := sendRequest(t, f, lsproto.CustomTextDocumentMultiDocumentHighlightInfo, params)
+			multiHighlights := result.MultiDocumentHighlights
+			if multiHighlights == nil {
+				multiHighlights = &[]*lsproto.MultiDocumentHighlight{}
+			}
+
+			for _, mh := range *multiHighlights {
+				for _, h := range mh.Highlights {
+					spans = append(spans, lsproto.Location{
+						Uri:   mh.Uri,
+						Range: h.Range,
+					})
+				}
+			}
+
+			var sb strings.Builder
+			sb.WriteString("// filesToSearch:\n")
+			for _, file := range filesToSearch {
+				fmt.Fprintf(&sb, "//   %s\n", file)
+			}
+			sb.WriteString("\n")
+			header = sb.String()
+		} else {
+			// Single-file: use the standard LSP method.
+			params := &lsproto.DocumentHighlightParams{
+				TextDocument: lsproto.TextDocumentIdentifier{
+					Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
+				},
+				Position: f.currentCaretPosition,
+			}
+			result := sendRequest(t, f, lsproto.TextDocumentDocumentHighlightInfo, params)
+			highlights := result.DocumentHighlights
+			if highlights == nil {
+				highlights = &[]*lsproto.DocumentHighlight{}
+			}
+
+			for _, h := range *highlights {
+				spans = append(spans, lsproto.Location{
+					Uri:   lsconv.FileNameToDocumentURI(f.activeFilename),
+					Range: h.Range,
+				})
+			}
 		}
 
 		// Add result to baseline
-		f.addResultToBaseline(t, documentHighlightsCmd, f.getBaselineForLocationsWithFileContents(spans, baselineFourslashLocationsOptions{
+		f.addResultToBaseline(t, documentHighlightsCmd, header+f.getBaselineForLocationsWithFileContents(spans, baselineFourslashLocationsOptions{
 			marker:     markerOrRange,
 			markerName: "/*HIGHLIGHTS*/",
 		}))

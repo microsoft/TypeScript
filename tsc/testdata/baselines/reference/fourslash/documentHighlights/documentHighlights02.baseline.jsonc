@@ -1,0 +1,34 @@
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /a.ts ===
+// function /*HIGHLIGHTS*/[|foo|] () {
+// 	return 1;
+// }
+// [|foo|]();
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /a.ts ===
+// function [|foo|] () {
+// 	return 1;
+// }
+// /*HIGHLIGHTS*/[|foo|]();
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /b.ts ===
+// /// <reference path="a.ts"/>
+// /*HIGHLIGHTS*/[|foo|]();

@@ -22,6 +22,7 @@ import {
     configurationMiddleware,
     sendNotificationMiddleware,
 } from "./configurationMiddleware";
+import { registerMultiDocumentHighlightFeature } from "./languageFeatures/documentHighlight";
 import { registerHoverFeature } from "./languageFeatures/hover";
 import { registerSourceDefinitionFeature } from "./languageFeatures/sourceDefinition";
 import { registerTagClosingFeature } from "./languageFeatures/tagClosing";
@@ -227,6 +228,7 @@ export class Client implements vscode.Disposable {
 
         this.disposables.push(
             serverTelemetryListener,
+            registerMultiDocumentHighlightFeature(this.documentSelector, this.client),
             registerSourceDefinitionFeature(this.client),
             registerHoverFeature(this.documentSelector, this.client),
             registerTagClosingFeature("typescript", this.documentSelector, this.client),
