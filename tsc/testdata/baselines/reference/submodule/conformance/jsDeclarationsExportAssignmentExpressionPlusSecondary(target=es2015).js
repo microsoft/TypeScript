@@ -32,6 +32,10 @@ module.exports.Strings = Strings;
 
 
 //// [index.d.ts]
+declare const Strings: {
+    a: string;
+    b: string;
+};
 declare const _default: {
     thing: string;
     also: string;
@@ -40,7 +44,4 @@ declare const _default: {
     };
 };
 export = _default;
-export declare var Strings: {
-    a: string;
-    b: string;
-};
+export { Strings };

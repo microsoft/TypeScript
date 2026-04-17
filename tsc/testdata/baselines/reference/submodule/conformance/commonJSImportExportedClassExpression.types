@@ -13,10 +13,10 @@ function f(k) {
 >k : K
 
     k.values()
->k.values() : any
->k.values : any
+>k.values() : void
+>k.values : () => void
 >k : K
->values : any
+>values : () => void
 }
 
 === mod1.js ===

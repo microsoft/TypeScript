@@ -125,9 +125,12 @@ loop:
 				}
 			}
 			if name != ast.InternalSymbolNameDefault {
-				result = r.lookup(moduleExports, name, meaning&ast.SymbolFlagsModuleMember)
-				if result != nil {
-					break loop
+				if result = r.lookup(moduleExports, name, meaning&ast.SymbolFlagsModuleMember); result != nil {
+					if ast.IsSourceFile(location) && location.AsSourceFile().CommonJSModuleIndicator != nil && result.Flags&ast.SymbolFlagsType == 0 {
+						result = nil
+					} else {
+						break loop
+					}
 				}
 			}
 		case ast.KindEnumDeclaration:

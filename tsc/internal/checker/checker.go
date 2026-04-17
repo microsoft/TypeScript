@@ -12422,10 +12422,8 @@ func (c *Checker) getBaseTypesIfUnrelated(leftType *Type, rightType *Type, isRel
 func (c *Checker) checkAssignmentOperator(left *ast.Node, operator ast.Kind, right *ast.Node, leftType *Type, rightType *Type) {
 	if ast.IsAssignmentOperator(operator) {
 		// We ignore assignments of undefined to CommonJS exports when there are multiple assignment declarations
-		if ast.IsAccessExpression(left) {
-			if symbol := c.symbolNodeLinks.Get(left).resolvedSymbol; symbol != nil && symbol.ValueDeclaration != nil &&
-				ast.GetAssignmentDeclarationKind(symbol.ValueDeclaration) == ast.JSDeclarationKindExportsProperty &&
-				len(symbol.Declarations) > 1 && rightType.flags&TypeFlagsUndefined != 0 {
+		if ast.IsDeclarationNode(left.Parent) && ast.GetAssignmentDeclarationKind(left.Parent) == ast.JSDeclarationKindExportsProperty {
+			if symbol := c.symbolNodeLinks.Get(left).resolvedSymbol; symbol != nil && len(symbol.Declarations) > 1 && rightType.flags&TypeFlagsUndefined != 0 {
 				return
 			}
 		}

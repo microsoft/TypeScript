@@ -22,10 +22,11 @@ module.exports.Strings = Strings;
 
 
 //// [cls.d.ts]
-declare class Foo {
-}
-export = Foo;
-export declare var Strings: {
+declare const Strings: {
     a: string;
     b: string;
 };
+declare class Foo {
+}
+export = Foo;
+export { Strings };

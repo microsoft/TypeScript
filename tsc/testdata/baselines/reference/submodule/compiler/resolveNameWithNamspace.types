@@ -30,7 +30,7 @@ var myAssert = require('assert')
 === app.js ===
 exports.equal = myAssert.equal
 >exports.equal = myAssert.equal : any
->exports.equal : any
+>exports.equal : error
 >exports : typeof import("./app")
 >equal : any
 >myAssert.equal : any
@@ -38,8 +38,8 @@ exports.equal = myAssert.equal
 >equal : any
 
 exports.equal()
->exports.equal() : any
->exports.equal : any
+>exports.equal() : error
+>exports.equal : error
 >exports : typeof import("./app")
 >equal : any
 

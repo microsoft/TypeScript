@@ -12,12 +12,3 @@
 +>exports : Symbol(exports, Decl(mod1.js, 0, 0))
  >C : Symbol(C, Decl(mod1.js, 2, 1))
  >C : Symbol(C, Decl(mod1.js, 0, 0))
-
-@@= skipped -14, +14 lines =@@
- >c : Symbol(c, Decl(test.js, 2, 14))
-
-     c.s
-->c.s : Symbol(C.s, Decl(mod1.js, 0, 9))
- >c : Symbol(c, Decl(test.js, 2, 14))
-->s : Symbol(C.s, Decl(mod1.js, 0, 9))
- }

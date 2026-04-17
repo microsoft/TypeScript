@@ -129,7 +129,7 @@ declare function g(a: {
 }, b: {
     y: typeof module.exports.b;
 }): void | "";
-export declare var g: typeof g;
+export { g };
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
@@ -139,7 +139,7 @@ declare function hh(a: {
 }, b: {
     y: typeof module.exports.b;
 }): void | "";
-export declare var h: typeof hh;
+export { hh as h };
 export declare var i: () => void;
 export declare var ii: () => void;
 export declare var jj: () => void;

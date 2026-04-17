@@ -70,9 +70,9 @@ const { B } = require("./b-ext");
 function b(p) { p.x; }
 >b : (p: B) => void
 >p : B
->p.x : any
+>p.x : number
 >p : B
->x : any
+>x : number
 
 === c-ext.js ===
 export function C() {

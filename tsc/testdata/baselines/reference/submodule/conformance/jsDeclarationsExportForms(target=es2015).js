@@ -293,10 +293,10 @@ declare const ns: typeof ns;
 export = ns;
 //// [cjs3.d.ts]
 declare const ns: typeof ns;
-export declare var ns: typeof ns;
+export { ns };
 //// [cjs4.d.ts]
 declare const ns: typeof ns;
-export declare var names: typeof ns;
+export { ns as names };
 //// [includeAll.d.ts]
 import "./cjs4";
 import "./cjs3";
@@ -315,11 +315,7 @@ import "./bar2";
 
 out/cjs.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
 out/cjs2.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
-out/cjs3.d.ts(1,15): error TS2395: Individual declarations in merged declaration 'ns' must be all exported or all local.
-out/cjs3.d.ts(1,15): error TS2451: Cannot redeclare block-scoped variable 'ns'.
-out/cjs3.d.ts(2,20): error TS2395: Individual declarations in merged declaration 'ns' must be all exported or all local.
-out/cjs3.d.ts(2,20): error TS2451: Cannot redeclare block-scoped variable 'ns'.
-out/cjs3.d.ts(2,20): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
+out/cjs3.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
 out/cjs4.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
 
 
@@ -368,25 +364,17 @@ out/cjs4.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in 
 !!! error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
     export = ns;
     
-==== out/cjs3.d.ts (5 errors) ====
+==== out/cjs3.d.ts (1 errors) ====
     declare const ns: typeof ns;
                   ~~
-!!! error TS2395: Individual declarations in merged declaration 'ns' must be all exported or all local.
-                  ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
-    export declare var ns: typeof ns;
-                       ~~
-!!! error TS2395: Individual declarations in merged declaration 'ns' must be all exported or all local.
-                       ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'ns'.
-                       ~~
 !!! error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
+    export { ns };
     
 ==== out/cjs4.d.ts (1 errors) ====
     declare const ns: typeof ns;
                   ~~
 !!! error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
-    export declare var names: typeof ns;
+    export { ns as names };
     
 ==== out/includeAll.d.ts (0 errors) ====
     import "./cjs4";

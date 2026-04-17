@@ -2588,6 +2588,8 @@ func IsNonLocalAlias(symbol *Symbol, excludes SymbolFlags) bool {
 //	export = <EntityNameExpression>
 //	export default <EntityNameExpression>
 //	module.exports = <EntityNameExpression> (JS only)
+//	module.exports.<symbol> = <EntityNameExpression> (JS only)
+//	exports.<symbol> = <EntityNameExpression> (JS only)
 func IsAliasSymbolDeclaration(node *Node) bool {
 	switch node.Kind {
 	case KindImportEqualsDeclaration, KindNamespaceExportDeclaration, KindNamespaceImport, KindNamespaceExport,
@@ -2600,7 +2602,10 @@ func IsAliasSymbolDeclaration(node *Node) bool {
 	case KindVariableDeclaration, KindBindingElement:
 		return IsVariableDeclarationInitializedToRequire(node)
 	case KindBinaryExpression:
-		return GetAssignmentDeclarationKind(node) == JSDeclarationKindModuleExports && ExpressionIsAlias(node.AsBinaryExpression().Right)
+		switch GetAssignmentDeclarationKind(node) {
+		case JSDeclarationKindModuleExports, JSDeclarationKindExportsProperty:
+			return ExpressionIsAlias(node.AsBinaryExpression().Right)
+		}
 	}
 	return false
 }

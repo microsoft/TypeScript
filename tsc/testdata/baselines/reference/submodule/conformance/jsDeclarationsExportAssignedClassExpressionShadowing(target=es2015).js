@@ -43,4 +43,4 @@ declare const _default: {
     new (): import(".");
 };
 export = _default;
-export declare var Another: typeof Q;
+export { Q as Another };

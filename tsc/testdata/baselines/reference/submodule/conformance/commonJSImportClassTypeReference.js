@@ -37,6 +37,6 @@ function f(k) {
 declare class K {
     values(): K;
 }
-export declare var K: typeof K;
+export { K };
 //// [main.d.ts]
 export {};

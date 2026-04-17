@@ -1,16 +1,12 @@
 --- old.jsDeclarationsImportAliasExposedWithinNamespaceCjs.js
 +++ new.jsDeclarationsImportAliasExposedWithinNamespaceCjs.js
-@@= skipped -53, +53 lines =@@
-
-
- //// [file.d.ts]
--/**
-- * @namespace myTypes
-- * @global
-- * @type {Object<string,*>}
-- */
+@@= skipped -58, +58 lines =@@
+  * @global
+  * @type {Object<string,*>}
+  */
 -export const myTypes: {
 -    [x: string]: any;
++declare const myTypes: Object<string, any>;
 +export type myTypes = string | RegExp | Array<string | RegExp>;
 +export type myTypes = {
 +    prop1: myTypes.typeA;
@@ -37,7 +33,7 @@
  /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
  /**
   * @function testFn
-@@= skipped -30, +16 lines =@@
+@@= skipped -25, +17 lines =@@
   * @param {testFnTypes.input} input - Input.
   * @returns {number|null} Result.
   */

@@ -11,6 +11,10 @@
  //// [cls.d.ts]
 -export = Foo;
 +declare const Bar: typeof Bar;
++declare const Strings: {
++    a: string;
++    b: string;
++};
  declare class Foo extends Bar {
  }
 -declare namespace Foo {
@@ -22,7 +26,4 @@
 -    let b: string;
 -}
 +export = Foo;
-+export declare var Strings: {
-+    a: string;
-+    b: string;
-+};
++export { Strings };

@@ -60,11 +60,11 @@ k.x
 >x : any
 
 var classic = new s.Classic()
->classic : Classic
->new s.Classic() : Classic
->s.Classic : typeof Classic
+>classic : s.Classic
+>new s.Classic() : s.Classic
+>s.Classic : typeof s.Classic
 >s : typeof s
->Classic : typeof Classic
+>Classic : typeof s.Classic
 
 
 /** @param {s.n.K} c
@@ -80,9 +80,9 @@ function f(c, classic) {
 >x : any
 
     classic.p
->classic.p : any
+>classic.p : number
 >classic : s.Classic
->p : any
+>p : number
 }
 
 

@@ -5,6 +5,10 @@
 
  //// [cls.d.ts]
 -export = Foo;
++declare const Strings: {
++    a: string;
++    b: string;
++};
  declare class Foo {
  }
 -declare namespace Foo {
@@ -15,7 +19,4 @@
 -    let b: string;
 -}
 +export = Foo;
-+export declare var Strings: {
-+    a: string;
-+    b: string;
-+};
++export { Strings };

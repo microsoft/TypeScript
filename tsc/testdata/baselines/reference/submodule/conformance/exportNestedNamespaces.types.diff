@@ -63,17 +63,8 @@
 +>x : any
 
  var classic = new s.Classic()
-->classic : s.Classic
-->new s.Classic() : s.Classic
-->s.Classic : typeof s.Classic
-+>classic : Classic
-+>new s.Classic() : Classic
-+>s.Classic : typeof Classic
- >s : typeof s
-->Classic : typeof s.Classic
-+>Classic : typeof Classic
-
-
+ >classic : s.Classic
+@@= skipped -24, +24 lines =@@
  /** @param {s.n.K} c
      @param {s.Classic} classic */
  function f(c, classic) {
@@ -92,10 +83,4 @@
 +>x : any
 
      classic.p
-->classic.p : number
-+>classic.p : any
- >classic : s.Classic
-->p : number
-+>p : any
- }
-
+ >classic.p : number

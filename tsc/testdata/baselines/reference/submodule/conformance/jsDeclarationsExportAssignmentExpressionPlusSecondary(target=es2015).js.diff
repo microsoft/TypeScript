@@ -13,6 +13,10 @@
 -export declare namespace desc {
 -    let item: string;
 -}
++declare const Strings: {
++    a: string;
++    b: string;
++};
 +declare const _default: {
 +    thing: string;
 +    also: string;
@@ -21,7 +25,4 @@
 +    };
 +};
 +export = _default;
-+export declare var Strings: {
-+    a: string;
-+    b: string;
-+};
++export { Strings };

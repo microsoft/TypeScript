@@ -12,19 +12,3 @@
 +>exports : typeof import("./mod1")
  >C : typeof C
  >C : typeof C
-
-@@= skipped -11, +11 lines =@@
- /** @param {X} c */
- function demo(c) {
- >demo : (c: X) => void
-->c : import("./mod1").C
-+>c : any
-
-     c.s
-->c.s : () => void
-->c : import("./mod1").C
-->s : () => void
-+>c.s : any
-+>c : any
-+>s : any
- }

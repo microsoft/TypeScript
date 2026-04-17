@@ -1,6 +1,5 @@
 a-ext.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 a.js(3,13): error TS2749: 'A' refers to a value, but is being used as a type here. Did you mean 'typeof A'?
-b.js(3,13): error TS2749: 'B' refers to a value, but is being used as a type here. Did you mean 'typeof B'?
 c-ext.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 c.js(3,13): error TS2749: 'C' refers to a value, but is being used as a type here. Did you mean 'typeof C'?
 d-ext.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
@@ -37,12 +36,10 @@ g.js(5,13): error TS2749: 'G' refers to a value, but is being used as a type her
         }
     };
     
-==== b.js (1 errors) ====
+==== b.js (0 errors) ====
     const { B } = require("./b-ext");
     
     /** @param {B} p */
-                ~
-!!! error TS2749: 'B' refers to a value, but is being used as a type here. Did you mean 'typeof B'?
     function b(p) { p.x; }
     
 ==== c-ext.js (1 errors) ====

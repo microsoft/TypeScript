@@ -1,16 +1,6 @@
 --- old.commonJSImportClassTypeReference.symbols
 +++ new.commonJSImportClassTypeReference.symbols
-@@= skipped -11, +11 lines =@@
- >k : Symbol(k, Decl(main.js, 2, 11))
-
-     k.values()
-->k.values : Symbol(K.values, Decl(mod1.js, 0, 9))
- >k : Symbol(k, Decl(main.js, 2, 11))
-->values : Symbol(K.values, Decl(mod1.js, 0, 9))
- }
-
- === mod1.js ===
-@@= skipped -18, +16 lines =@@
+@@= skipped -29, +29 lines =@@
  }
  exports.K = K;
  >exports.K : Symbol(K, Decl(mod1.js, 4, 1))

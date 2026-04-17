@@ -1072,7 +1072,16 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 func (tx *DeclarationTransformer) transformCommonJSExport(input *ast.Node, name *ast.Node) *ast.Node {
 	tx.resultHasExternalModuleIndicator = true
 	tx.resultHasScopeMarker = true
-	if ast.IsIdentifier(name) {
+	if isCommonJSAliasExport(input) {
+		// export { name }
+		// export { source as name }
+		propertyName := input.AsBinaryExpression().Right
+		if ast.IsIdentifier(name) && propertyName.Text() == name.Text() {
+			propertyName = nil
+		}
+		exportSpecifier := tx.Factory().NewExportSpecifier(false, propertyName, name)
+		return tx.Factory().NewExportDeclaration(nil, false, tx.Factory().NewNamedExports(tx.Factory().NewNodeList([]*ast.Node{exportSpecifier})), nil, nil)
+	} else if ast.IsIdentifier(name) {
 		if name.Text() == "default" {
 			// const _default: Type; export default _default;
 			newId := tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
@@ -1140,6 +1149,15 @@ func (tx *DeclarationTransformer) transformCommonJSExport(input *ast.Node, name 
 		tx.removeAllComments(assignment)
 		return tx.Factory().NewSyntaxList([]*ast.Node{statement, assignment})
 	}
+}
+
+func isCommonJSAliasExport(node *ast.Node) bool {
+	if ast.IsBinaryExpression(node) && ast.IsIdentifier(node.AsBinaryExpression().Right) {
+		if symbol := node.Symbol(); symbol != nil && len(symbol.Declarations) == 1 {
+			return true
+		}
+	}
+	return false
 }
 
 func (tx *DeclarationTransformer) rewriteModuleSpecifier(parent *ast.Node, input *ast.Node) *ast.Node {

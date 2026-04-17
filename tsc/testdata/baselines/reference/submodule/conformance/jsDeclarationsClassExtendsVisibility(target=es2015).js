@@ -37,10 +37,11 @@ declare class Bar {
 export = Bar;
 //// [cls.d.ts]
 declare const Bar: typeof Bar;
-declare class Foo extends Bar {
-}
-export = Foo;
-export declare var Strings: {
+declare const Strings: {
     a: string;
     b: string;
 };
+declare class Foo extends Bar {
+}
+export = Foo;
+export { Strings };

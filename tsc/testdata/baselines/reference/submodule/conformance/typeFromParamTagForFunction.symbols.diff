@@ -32,16 +32,7 @@
  >B : Symbol(B, Decl(b-ext.js, 0, 0))
 
      constructor() {
-@@= skipped -28, +26 lines =@@
- function b(p) { p.x; }
- >b : Symbol(b, Decl(b.js, 0, 33))
- >p : Symbol(p, Decl(b.js, 3, 11))
-->p.x : Symbol(B.x, Decl(b-ext.js, 1, 19))
- >p : Symbol(p, Decl(b.js, 3, 11))
-->x : Symbol(B.x, Decl(b-ext.js, 1, 19))
-
- === c-ext.js ===
- export function C() {
+@@= skipped -37, +35 lines =@@
  >C : Symbol(C, Decl(c-ext.js, 0, 0))
 
      this.x = 1;
@@ -51,7 +42,7 @@
  }
 
  === c.js ===
-@@= skipped -24, +19 lines =@@
+@@= skipped -15, +12 lines =@@
  function c(p) { p.x; }
  >c : Symbol(c, Decl(c.js, 0, 33))
  >p : Symbol(p, Decl(c.js, 3, 11))

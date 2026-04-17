@@ -28,8 +28,9 @@ chalk;
 
 
 //// [mod1.d.ts]
-export declare var chalk: {
+declare const chalk: {
     grey: {};
 };
+export { chalk };
 //// [main.d.ts]
 export {};

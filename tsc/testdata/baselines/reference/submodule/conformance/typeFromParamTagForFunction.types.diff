@@ -43,15 +43,7 @@
 
  === b-ext.js ===
  exports.B = class {
-@@= skipped -33, +33 lines =@@
- function b(p) { p.x; }
- >b : (p: B) => void
- >p : B
-->p.x : number
-+>p.x : any
- >p : B
-->x : number
-+>x : any
+@@= skipped -39, +39 lines =@@
 
  === c-ext.js ===
  export function C() {
@@ -74,7 +66,7 @@
  >require("./c-ext") : typeof import("./c-ext")
  >require : (id: string) => any
  >"./c-ext" : "./c-ext"
-@@= skipped -27, +27 lines =@@
+@@= skipped -21, +21 lines =@@
  function c(p) { p.x; }
  >c : (p: C) => void
  >p : C

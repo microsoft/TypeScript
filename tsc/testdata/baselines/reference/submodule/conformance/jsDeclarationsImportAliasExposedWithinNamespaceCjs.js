@@ -54,6 +54,12 @@ module.exports = {testFn, testFnTypes};
 
 
 //// [file.d.ts]
+/**
+ * @namespace myTypes
+ * @global
+ * @type {Object<string,*>}
+ */
+declare const myTypes: Object<string, any>;
 export type myTypes = string | RegExp | Array<string | RegExp>;
 export type myTypes = {
     prop1: myTypes.typeA;

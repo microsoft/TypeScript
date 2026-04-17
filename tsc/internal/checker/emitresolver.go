@@ -238,9 +238,14 @@ func (r *EmitResolver) PrecalculateDeclarationEmitVisibility(file *ast.SourceFil
 }
 
 func isCommonJSModuleExports(node *ast.Node) bool {
-	return ast.IsBinaryExpression(node) && ast.IsExpressionStatement(node.Parent) && ast.IsSourceFile(node.Parent.Parent) &&
-		node.Parent.Parent.AsSourceFile().CommonJSModuleIndicator != nil &&
-		ast.GetAssignmentDeclarationKind(node) == ast.JSDeclarationKindModuleExports
+	if ast.IsBinaryExpression(node) && ast.IsExpressionStatement(node.Parent) && ast.IsSourceFile(node.Parent.Parent) &&
+		node.Parent.Parent.AsSourceFile().CommonJSModuleIndicator != nil {
+		switch ast.GetAssignmentDeclarationKind(node) {
+		case ast.JSDeclarationKindModuleExports, ast.JSDeclarationKindExportsProperty:
+			return true
+		}
+	}
+	return false
 }
 
 func (r *EmitResolver) aliasMarkingVisitorWorker(node *ast.Node) bool {

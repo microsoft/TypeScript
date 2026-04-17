@@ -65,6 +65,8 @@ function f(c, classic) {
 >c : Symbol(c, Decl(use.js, 9, 11))
 
     classic.p
+>classic.p : Symbol(s.Classic.p, Decl(mod.js, 5, 19))
 >classic : Symbol(classic, Decl(use.js, 9, 13))
+>p : Symbol(s.Classic.p, Decl(mod.js, 5, 19))
 }
 

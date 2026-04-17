@@ -12,7 +12,9 @@ function f(k) {
 >k : Symbol(k, Decl(main.js, 2, 11))
 
     k.values()
+>k.values : Symbol(K.values, Decl(mod1.js, 0, 9))
 >k : Symbol(k, Decl(main.js, 2, 11))
+>values : Symbol(K.values, Decl(mod1.js, 0, 9))
 }
 
 === mod1.js ===

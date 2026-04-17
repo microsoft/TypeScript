@@ -1,14 +1,6 @@
 --- old.commonJSImportExportedClassExpression.symbols
 +++ new.commonJSImportExportedClassExpression.symbols
-@@= skipped -11, +11 lines =@@
- >k : Symbol(k, Decl(main.js, 2, 11))
-
-     k.values()
-->k.values : Symbol(K.values, Decl(mod1.js, 0, 21))
- >k : Symbol(k, Decl(main.js, 2, 11))
-->values : Symbol(K.values, Decl(mod1.js, 0, 21))
- }
-
+@@= skipped -19, +19 lines =@@
  === mod1.js ===
  exports.K = class K {
  >exports.K : Symbol(K, Decl(mod1.js, 0, 0))
