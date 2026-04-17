@@ -80,11 +80,12 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 
 	// JS files don't use reference calculations as they don't do import elision, no need to calculate it
 	importElisionEnabled := !options.VerbatimModuleSyntax.IsTrue() && !ast.IsInJSFile(sourceFile.AsNode())
+	jsxTransformEnabled := options.GetJSXTransformEnabled() && sourceFile.LanguageVariant == core.LanguageVariantJSX
 
 	emitResolver := host.GetEmitResolver()
 
 	var referenceResolver binder.ReferenceResolver
-	if importElisionEnabled || options.GetJSXTransformEnabled() || !options.GetIsolatedModules() || options.EmitDecoratorMetadata.IsTrue() {
+	if importElisionEnabled || jsxTransformEnabled || !options.GetIsolatedModules() || options.EmitDecoratorMetadata.IsTrue() {
 		emitResolver.MarkLinkedReferencesRecursively(sourceFile)
 		referenceResolver = emitResolver
 	} else {
@@ -122,7 +123,7 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 		}
 	}
 
-	if options.GetJSXTransformEnabled() {
+	if jsxTransformEnabled {
 		tx = append(tx, jsxtransforms.NewJSXTransformer(&opts))
 	}
 
