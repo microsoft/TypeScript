@@ -25312,8 +25312,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // unique AST node.
                 return (type as TypeReference).node!;
             }
-            if (type.symbol && objectFlags & (ObjectFlags.Instantiated|ObjectFlags.InstantiatedReference) &&
-                !(objectFlags & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
+            if (
+                type.symbol && objectFlags & (ObjectFlags.Instantiated | ObjectFlags.InstantiatedReference) &&
+                !(objectFlags & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)
+            ) {
                 // We track instantiated object types that have a symbol by that symbol (representing the origin of the
                 // type), but exclude the static side of a class since it shares its symbol with the instance side.
                 return type.symbol;
