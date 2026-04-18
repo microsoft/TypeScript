@@ -303,7 +303,7 @@
         "category": "Error",
         "code": 1106
     },
-    "Jump target cannot cross function boundary.": {
+    "A 'continue' statement can only jump to a label on an enclosing loop or switch statement.": {
         "category": "Error",
         "code": 1107
     },
