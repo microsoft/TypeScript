@@ -39,9 +39,9 @@ const inputALike: ArrayLike<A> = { length: 0 };
 >  : ^
 
 const inputARand = getEither(inputA, inputALike);
->inputARand : ArrayLike<A> | Iterable<A>
+>inputARand : Iterable<A> | ArrayLike<A>
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->getEither(inputA, inputALike) : ArrayLike<A> | Iterable<A>
+>getEither(inputA, inputALike) : Iterable<A> | ArrayLike<A>
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getEither : <T>(in1: Iterable<T>, in2: ArrayLike<T>) => ArrayLike<T> | Iterable<T>
 >          : ^ ^^   ^^           ^^   ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -203,7 +203,7 @@ const result8: A[] = Array.from(inputARand);
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >     : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
->inputARand : ArrayLike<A> | Iterable<A>
+>inputARand : Iterable<A> | ArrayLike<A>
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const result9: B[] = Array.from(inputARand, ({ a }): B => ({ b: a }));
@@ -217,7 +217,7 @@ const result9: B[] = Array.from(inputARand, ({ a }): B => ({ b: a }));
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >     : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
->inputARand : ArrayLike<A> | Iterable<A>
+>inputARand : Iterable<A> | ArrayLike<A>
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a }): B => ({ b: a }) : ({ a }: A) => B
 >                         : ^     ^^^^^^^^ 

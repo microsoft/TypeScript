@@ -4,7 +4,7 @@
 Identity cache: 2,500
 Assignability cache: 5,000
 Type Count: 50,000
-Instantiation count: 100,000
+Instantiation count: 250,000
 Symbol count: 100,000
 
 === complex.ts ===
