@@ -14056,7 +14056,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (getObjectFlags(type) & ObjectFlags.Reference) {
             const target = (type as TypeReference).target;
             const typeArguments = getTypeArguments(type as TypeReference);
-            return length(target.typeParameters) === length(typeArguments) ? createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType!])) : type;
+            return length(target.typeParameters) === length(typeArguments) ? createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType!]), !!(getObjectFlags(type) & ObjectFlags.InstantiatedReference)) : type;
         }
         else if (type.flags & TypeFlags.Intersection) {
             const types = sameMap((type as IntersectionType).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType));
@@ -16919,13 +16919,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return createTypeReference(target, typeArguments);
     }
 
-    function createTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined): TypeReference {
-        const id = getTypeListId(typeArguments);
+    function createTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined, instantiatedReference?: boolean): TypeReference {
+        const id = getTypeListId(typeArguments) + (instantiatedReference ? "*" : "");
         let type = target.instantiations.get(id);
         if (!type) {
             type = createObjectType(ObjectFlags.Reference, target.symbol) as TypeReference;
             target.instantiations.set(id, type);
             type.objectFlags |= typeArguments ? getPropagatingFlagsOfTypes(typeArguments) : 0;
+            if (instantiatedReference) {
+                type.objectFlags |= ObjectFlags.InstantiatedReference;
+            }
             type.target = target;
             type.resolvedTypeArguments = typeArguments;
         }
@@ -21064,7 +21067,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (objectFlags & ObjectFlags.Reference && !(type as TypeReference).node) {
                     const resolvedTypeArguments = (type as TypeReference).resolvedTypeArguments;
                     const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
-                    return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference((type as TypeReference).target, newTypeArguments) : type;
+                    return newTypeArguments === resolvedTypeArguments ? type :
+                        (type as TypeReference).target.objectFlags & ObjectFlags.Tuple ? createNormalizedTupleType((type as TypeReference).target as TupleType, newTypeArguments!) :
+                        createTypeReference((type as TypeReference).target, newTypeArguments, /*instantiatedReference*/ true);
                 }
                 if (objectFlags & ObjectFlags.ReverseMapped) {
                     return instantiateReverseMappedType(type as ReverseMappedType, mapper);
@@ -25085,7 +25090,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const result = symbol.flags & SymbolFlags.TypeAlias ?
             getTypeAliasInstantiation(symbol, instantiateTypes(getSymbolLinks(symbol).typeParameters!, mapper)) :
-            createTypeReference(type as GenericType, instantiateTypes((type as GenericType).typeParameters, mapper));
+            createTypeReference(type as GenericType, instantiateTypes((type as GenericType).typeParameters, mapper), /*instantiatedReference*/ true);
         markerTypes.add(getTypeId(result));
         return result;
     }
@@ -25300,27 +25305,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getRecursionIdentity(type: Type): object {
         // Object and array literals are known not to contain recursive references and don't need a recursion identity.
         if (type.flags & TypeFlags.Object && !isObjectOrArrayLiteralType(type)) {
-            if (getObjectFlags(type) & ObjectFlags.Reference && (type as TypeReference).node) {
+            const objectFlags = getObjectFlags(type);
+            if (objectFlags & ObjectFlags.Reference && (type as TypeReference).node) {
                 // Deferred type references are tracked through their associated AST node. This gives us finer
                 // granularity than using their associated target because each manifest type reference has a
                 // unique AST node.
                 return (type as TypeReference).node!;
             }
-            if (type.symbol && !(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
-                // We track object types that have a symbol by that symbol (representing the origin of the type), but
-                // exclude the static side of a class since it shares its symbol with the instance side.
+            if (type.symbol && objectFlags & (ObjectFlags.Instantiated|ObjectFlags.InstantiatedReference) &&
+                !(objectFlags & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
+                // We track instantiated object types that have a symbol by that symbol (representing the origin of the
+                // type), but exclude the static side of a class since it shares its symbol with the instance side.
                 return type.symbol;
             }
             if (isTupleType(type)) {
                 return type.target;
             }
         }
-        if (type.flags & TypeFlags.TypeParameter) {
+        else if (type.flags & TypeFlags.TypeParameter) {
             // We use the symbol of the type parameter such that all "fresh" instantiations of that type parameter
             // have the same recursion identity.
             return type.symbol;
         }
-        if (type.flags & TypeFlags.IndexedAccess) {
+        else if (type.flags & TypeFlags.IndexedAccess) {
             // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P1][P2][P3] it is A.
             do {
                 type = (type as IndexedAccessType).objectType;
@@ -25328,7 +25335,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             while (type.flags & TypeFlags.IndexedAccess);
             return type;
         }
-        if (type.flags & TypeFlags.Conditional) {
+        else if (type.flags & TypeFlags.Conditional) {
             // The root object represents the origin of the conditional type
             return (type as ConditionalType).root;
         }
