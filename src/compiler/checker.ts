@@ -14056,7 +14056,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (getObjectFlags(type) & ObjectFlags.Reference) {
             const target = (type as TypeReference).target;
             const typeArguments = getTypeArguments(type as TypeReference);
-            return length(target.typeParameters) === length(typeArguments) ? createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType!]), !!(getObjectFlags(type) & ObjectFlags.InstantiatedReference)) : type;
+            return length(target.typeParameters) === length(typeArguments) ? createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType!]), isInstantiatedType(type)) : type;
         }
         else if (type.flags & TypeFlags.Intersection) {
             const types = sameMap((type as IntersectionType).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType));
@@ -16943,13 +16943,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
-    function createDeferredTypeReference(target: GenericType, node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode, mapper?: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): DeferredTypeReference {
+    function createDeferredTypeReference(target: GenericType, node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode, mapper?: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], instantiatedReference?: boolean): DeferredTypeReference {
         if (!aliasSymbol) {
             aliasSymbol = getAliasSymbolForTypeNode(node);
             const localAliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
             aliasTypeArguments = mapper ? instantiateTypes(localAliasTypeArguments, mapper) : localAliasTypeArguments;
         }
-        const type = createObjectType(ObjectFlags.Reference, target.symbol) as DeferredTypeReference;
+        const type = createObjectType(ObjectFlags.Reference | (instantiatedReference ? ObjectFlags.InstantiatedReference : 0), target.symbol) as DeferredTypeReference;
         type.target = target;
         type.node = node;
         type.mapper = mapper;
@@ -20783,7 +20783,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (target.objectFlags & ObjectFlags.SingleSignatureType && mapper) {
                     newMapper = combineTypeMappers(newMapper, mapper);
                 }
-                result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((type as DeferredTypeReference).target, (type as DeferredTypeReference).node, newMapper, newAliasSymbol, newAliasTypeArguments) :
+                result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((type as DeferredTypeReference).target, (type as DeferredTypeReference).node, newMapper, newAliasSymbol, newAliasTypeArguments, /*instantiatedReference*/ true) :
                     target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(target as MappedType, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     instantiateAnonymousType(target, newMapper, newAliasSymbol, newAliasTypeArguments);
                 target.instantiations.set(id, result); // Set cached result early in case we recursively invoke instantiation while eagerly computing type variable visibility below
@@ -22324,7 +22324,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         while (true) {
             const t = isFreshLiteralType(type) ? (type as FreshableType).regularType :
                 isGenericTupleType(type) ? getNormalizedTupleType(type, writing) :
-                getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).node ? createTypeReference((type as TypeReference).target, getTypeArguments(type as TypeReference)) : getSingleBaseForNonAugmentingSubtype(type) || type :
+                getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).node ? createTypeReference((type as TypeReference).target, getTypeArguments(type as TypeReference), isInstantiatedType(type)) : getSingleBaseForNonAugmentingSubtype(type) || type :
                 type.flags & TypeFlags.UnionOrIntersection ? getNormalizedUnionOrIntersectionType(type as UnionOrIntersectionType, writing) :
                 type.flags & TypeFlags.Substitution ? writing ? (type as SubstitutionType).baseType : getSubstitutionIntersection(type as SubstitutionType) :
                 type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
@@ -25312,10 +25312,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // unique AST node.
                 return (type as TypeReference).node!;
             }
-            if (
-                type.symbol && objectFlags & (ObjectFlags.Instantiated | ObjectFlags.InstantiatedReference) &&
-                !(objectFlags & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)
-            ) {
+            if (isInstantiatedType(type) && !(objectFlags & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
                 // We track instantiated object types that have a symbol by that symbol (representing the origin of the
                 // type), but exclude the static side of a class since it shares its symbol with the instance side.
                 return type.symbol;
@@ -25342,6 +25339,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as ConditionalType).root;
         }
         return type;
+    }
+
+    function isInstantiatedType(type: Type) {
+        return !!(type.symbol && getObjectFlags(type)&(ObjectFlags.Instantiated|ObjectFlags.InstantiatedReference));
     }
 
     function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
@@ -26051,7 +26052,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 result = getIntersectionType(sameMap((type as IntersectionType).types, getWidenedType));
             }
             else if (isArrayOrTupleType(type)) {
-                result = createTypeReference(type.target, sameMap(getTypeArguments(type), getWidenedType));
+                result = createTypeReference(type.target, sameMap(getTypeArguments(type), getWidenedType), isInstantiatedType(type));
             }
             if (result && context === undefined) {
                 type.widened = result;
@@ -39146,7 +39147,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
             // Unwrap an `Awaited<T>` to `T` to improve inference.
             promisedType = getAwaitedTypeNoAlias(unwrapAwaitedType(promisedType)) || unknownType;
-            return createTypeReference(globalPromiseType, [promisedType]);
+            return createTypeReference(globalPromiseType, [promisedType], isInstantiatedType(promisedType));
         }
 
         return unknownType;
@@ -39159,7 +39160,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
             // Unwrap an `Awaited<T>` to `T` to improve inference.
             promisedType = getAwaitedTypeNoAlias(unwrapAwaitedType(promisedType)) || unknownType;
-            return createTypeReference(globalPromiseLikeType, [promisedType]);
+            return createTypeReference(globalPromiseLikeType, [promisedType], isInstantiatedType(promisedType));
         }
 
         return unknownType;
