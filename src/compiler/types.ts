@@ -6563,7 +6563,7 @@ export const enum ObjectFlags {
     IdenticalBaseTypeCalculated = 1 << 25, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
     /** @internal */
     IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
-    InstantiatedReference = 1 << 28, // Originates in instantiation of type reference
+    InstantiationResult = 1 << 28, // was result of type instantiation
 
     // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
     /** @internal */
