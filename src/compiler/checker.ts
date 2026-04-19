@@ -16919,13 +16919,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return createTypeReference(target, typeArguments);
     }
 
-    function createTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined): TypeReference {
+    function createTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined, fromTypeNode?: boolean): TypeReference {
         const id = getTypeListId(typeArguments);
         let type = target.instantiations.get(id);
         if (!type) {
             type = createObjectType(ObjectFlags.Reference, target.symbol) as TypeReference;
             target.instantiations.set(id, type);
-            type.objectFlags |= typeArguments ? getPropagatingFlagsOfTypes(typeArguments) : 0;
+            type.objectFlags |= (typeArguments ? getPropagatingFlagsOfTypes(typeArguments) : 0) | (fromTypeNode ? ObjectFlags.FromTypeNode : 0);
             type.target = target;
             type.resolvedTypeArguments = typeArguments;
         }
@@ -17019,7 +17019,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // supplied as type arguments and the type reference only specifies arguments for the local type parameters
             // of the class or interface.
             const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgumentsFromTypeReferenceNode(node), typeParameters, minTypeArgumentCount, isJs));
-            return createTypeReference(type as GenericType, typeArguments);
+            return createTypeReference(type as GenericType, typeArguments, /*fromTypeNode*/ true);
         }
         return checkNoTypeArguments(node, symbol) ? type : errorType;
     }
@@ -17834,7 +17834,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else {
                 const elementTypes = node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] : map(node.elements, getTypeFromTypeNode);
-                links.resolvedType = createNormalizedTypeReference(target, elementTypes);
+                links.resolvedType = target.objectFlags & ObjectFlags.Tuple ?
+                    createNormalizedTupleType(target as TupleType, elementTypes) :
+                    createTypeReference(target, elementTypes, /*fromTypeNode*/ true);
             }
         }
         return links.resolvedType;
@@ -21061,25 +21063,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (flags & TypeFlags.Object) {
             const objectFlags = (type as ObjectType).objectFlags;
             if (objectFlags & (ObjectFlags.Reference | ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
-                let result;
                 if (objectFlags & ObjectFlags.Reference && !(type as TypeReference).node) {
                     const resolvedTypeArguments = (type as TypeReference).resolvedTypeArguments;
                     const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
-                    if (newTypeArguments === resolvedTypeArguments) {
-                        return type;
-                    }
-                    result = (type as TypeReference).target.objectFlags & ObjectFlags.Tuple ?
-                        createNormalizedTupleType((type as TypeReference).target as TupleType, newTypeArguments!) :
-                        createTypeReference((type as TypeReference).target, newTypeArguments);
+                    return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference((type as TypeReference).target, newTypeArguments) : type;
                 }
-                else if (objectFlags & ObjectFlags.ReverseMapped) {
-                    result = instantiateReverseMappedType(type as ReverseMappedType, mapper);
+                if (objectFlags & ObjectFlags.ReverseMapped) {
+                    return instantiateReverseMappedType(type as ReverseMappedType, mapper);
                 }
-                else {
-                    result = getObjectTypeInstantiation(type as TypeReference | AnonymousType | MappedType, mapper, aliasSymbol, aliasTypeArguments);
-                }
-                (result as ObjectType).objectFlags |= ObjectFlags.InstantiationResult;
-                return result;
+                return getObjectTypeInstantiation(type as TypeReference | AnonymousType | MappedType, mapper, aliasSymbol, aliasTypeArguments);
             }
             return type;
         }
@@ -25317,7 +25309,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // unique AST node.
                 return (type as TypeReference).node!;
             }
-            if (type.symbol && !(objectFlags & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class) && objectFlags & ObjectFlags.InstantiationResult) {
+            if (type.symbol && !(objectFlags & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class) && !(objectFlags & ObjectFlags.FromTypeNode)) {
                 // We track instantiated object types that have a symbol by that symbol (representing the origin of the
                 // type), but exclude the static side of a class since it shares its symbol with the instance side.
                 return type.symbol;
