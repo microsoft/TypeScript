@@ -1,8 +1,5 @@
 //// [tests/cases/compiler/discriminateWithOptionalProperty2.ts] ////
 
-=== Performance Stats ===
-Type Count: 1,000
-
 === discriminateWithOptionalProperty2.ts ===
 // https://github.com/microsoft/TypeScript/issues/55532#issuecomment-1694744665
 

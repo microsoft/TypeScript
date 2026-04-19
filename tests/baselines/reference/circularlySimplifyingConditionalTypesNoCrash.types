@@ -1,8 +1,5 @@
 //// [tests/cases/compiler/circularlySimplifyingConditionalTypesNoCrash.ts] ////
 
-=== Performance Stats ===
-Instantiation count: 1,000
-
 === circularlySimplifyingConditionalTypesNoCrash.ts ===
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 >Omit : Omit<T, K>
@@ -71,8 +68,8 @@ declare var connect: Connect;
 const myStoreConnect: Connect = function(
 >myStoreConnect : Connect
 >               : ^^^^^^^
->function(    mapStateToProps?: any,    mapDispatchToProps?: any,    mergeProps?: any,    options: unknown = {},) {    return connect(        mapStateToProps,        mapDispatchToProps,        mergeProps,        options,    );} : (mapStateToProps?: any, mapDispatchToProps?: any, mergeProps?: any, options?: unknown) => InferableComponentEnhancerWithProps<TStateProps, Omit<Shared<TStateProps, any>, Extract<keyof TStateProps, Extract<keyof TStateProps, string | number | symbol>>> & TOwnProps>
->                                                                                                                                                                                                                                   : ^               ^^^   ^^                  ^^^   ^^          ^^^   ^^       ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function(    mapStateToProps?: any,    mapDispatchToProps?: any,    mergeProps?: any,    options: unknown = {},) {    return connect(        mapStateToProps,        mapDispatchToProps,        mergeProps,        options,    );} : (mapStateToProps?: any, mapDispatchToProps?: any, mergeProps?: any, options?: unknown) => InferableComponentEnhancerWithProps<TStateProps, Omit<P, Extract<keyof TStateProps, keyof P>> & TOwnProps>
+>                                                                                                                                                                                                                                   : ^               ^^^   ^^                  ^^^   ^^          ^^^   ^^       ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     mapStateToProps?: any,
 >mapStateToProps : any
@@ -91,8 +88,8 @@ const myStoreConnect: Connect = function(
 
 ) {
     return connect(
->connect(        mapStateToProps,        mapDispatchToProps,        mergeProps,        options,    ) : InferableComponentEnhancerWithProps<TStateProps, Omit<Shared<TStateProps, any>, Extract<keyof TStateProps, Extract<keyof TStateProps, string | number | symbol>>> & TOwnProps>
->                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>connect(        mapStateToProps,        mapDispatchToProps,        mergeProps,        options,    ) : InferableComponentEnhancerWithProps<TStateProps, Omit<P, Extract<keyof TStateProps, keyof P>> & TOwnProps>
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >connect : Connect
 >        : ^^^^^^^
 
