@@ -13,11 +13,11 @@
 ////}
 
 verify.codeFix({
-    description: "Add return type 'Foo<string, string[]>'",
+    description: "Add return type 'Foo<string>'",
     index: 0,
     newFileContent:
 `export interface Foo<T, U = T[]> {}
-export function foo(x: Foo<string, string[]>): Foo<string, string[]> {
+export function foo(x: Foo<string, string[]>): Foo<string> {
     return x;
 }`,
 });
