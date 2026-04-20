@@ -363,7 +363,7 @@ func getRenameInfoError(ctx context.Context, message *diagnostics.Message) Renam
 }
 
 func getRenameInfoSuccess(node *ast.Node, sourceFile *ast.SourceFile, displayName string, converters *lsconv.Converters) RenameInfo {
-	start := node.Pos()
+	start := astnav.GetStartOfNode(node, sourceFile, false /*includeJSDoc*/)
 	end := node.End()
 	if ast.IsStringLiteralLike(node) {
 		// Exclude the quotes
