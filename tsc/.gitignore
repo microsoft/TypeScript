@@ -194,6 +194,7 @@ custom-gcl.hash
 .idea
 
 !testdata/submoduleAccepted.txt
+!testdata/submoduleTriaged.txt
 
 !NOTICE.txt
 

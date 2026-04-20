@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/collections"
-	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/peter-evans/patience"
@@ -20,6 +19,7 @@ type Options struct {
 	Subfolder           string
 	IsSubmodule         bool
 	IsSubmoduleAccepted bool
+	IsSubmoduleTriaged  bool
 	DiffFixupOld        func(string) string
 	DiffFixupNew        func(string) string
 	SkipDiffWithOld     bool
@@ -56,42 +56,59 @@ func Run(t *testing.T, fileName string, actual string, opts Options) {
 	const (
 		submoduleFolder         = "submodule"
 		submoduleAcceptedFolder = "submoduleAccepted"
+		submoduleTriagedFolder  = "submoduleTriaged"
 	)
 
 	diffFileName := fileName + ".diff"
-	isSubmoduleAccepted := opts.IsSubmoduleAccepted || submoduleAcceptedFileNames().Has(origSubfolder+"/"+diffFileName)
+	diffKey := origSubfolder + "/" + diffFileName
+	isSubmoduleAccepted := opts.IsSubmoduleAccepted || submoduleAcceptedFileNames().Has(diffKey)
+	isSubmoduleTriaged := opts.IsSubmoduleTriaged || submoduleTriagedFileNames().Has(diffKey)
 
-	outRoot := core.IfElse(isSubmoduleAccepted, submoduleAcceptedFolder, submoduleFolder)
-	unusedOutRoot := core.IfElse(isSubmoduleAccepted, submoduleFolder, submoduleAcceptedFolder)
-
-	{
-		localPath := filepath.Join(localRoot, outRoot, origSubfolder, diffFileName)
-		referencePath := filepath.Join(referenceRoot, outRoot, origSubfolder, diffFileName)
-
-		// Record this diff baseline for tracking unused baselines
-		recordBaseline(t, filepath.Join(outRoot, origSubfolder, diffFileName))
-
-		diff := getBaselineDiff(t, actual, submoduleExpected, fileName, opts.DiffFixupOld, opts.DiffFixupNew)
-		writeComparison(t, diff, localPath, referencePath, false)
+	if isSubmoduleAccepted && isSubmoduleTriaged {
+		t.Fatalf("diff file %s/%s is in both submoduleAccepted and submoduleTriaged; it should only be in one", origSubfolder, diffFileName)
 	}
 
-	// Delete the other diff file if it exists
-	{
-		localPath := filepath.Join(localRoot, unusedOutRoot, origSubfolder, diffFileName)
-		referencePath := filepath.Join(referenceRoot, unusedOutRoot, origSubfolder, diffFileName)
+	var outRoot string
+	switch {
+	case isSubmoduleAccepted:
+		outRoot = submoduleAcceptedFolder
+	case isSubmoduleTriaged:
+		outRoot = submoduleTriagedFolder
+	default:
+		outRoot = submoduleFolder
+	}
 
-		// Record this potential diff baseline for tracking unused baselines
-		recordBaseline(t, filepath.Join(unusedOutRoot, origSubfolder, diffFileName))
+	allRoots := [3]string{submoduleFolder, submoduleAcceptedFolder, submoduleTriagedFolder}
 
-		writeComparison(t, NoContent, localPath, referencePath, false)
+	diff := getBaselineDiff(t, actual, submoduleExpected, fileName, opts.DiffFixupOld, opts.DiffFixupNew)
+
+	for _, root := range allRoots {
+		localPath := filepath.Join(localRoot, root, origSubfolder, diffFileName)
+		referencePath := filepath.Join(referenceRoot, root, origSubfolder, diffFileName)
+
+		// Record this baseline for tracking unused baselines
+		recordBaseline(t, filepath.Join(root, origSubfolder, diffFileName))
+
+		if root == outRoot {
+			writeComparison(t, diff, localPath, referencePath, false)
+		} else {
+			writeComparison(t, NoContent, localPath, referencePath, false)
+		}
 	}
 }
 
 var submoduleAcceptedFileNames = sync.OnceValue(func() *collections.Set[string] {
+	return readFileNameSet(filepath.Join(repo.TestDataPath(), "submoduleAccepted.txt"))
+})
+
+var submoduleTriagedFileNames = sync.OnceValue(func() *collections.Set[string] {
+	return readFileNameSet(filepath.Join(repo.TestDataPath(), "submoduleTriaged.txt"))
+})
+
+func readFileNameSet(path string) *collections.Set[string] {
 	var set collections.Set[string]
 
-	submoduleAccepted := filepath.Join(repo.TestDataPath(), "submoduleAccepted.txt")
-	if content, err := os.ReadFile(submoduleAccepted); err == nil {
+	if content, err := os.ReadFile(path); err == nil {
 		for line := range strings.SplitSeq(string(content), "\n") {
 			line = strings.TrimSpace(line)
 			if line == "" || line[0] == '#' {
@@ -100,11 +117,11 @@ var submoduleAcceptedFileNames = sync.OnceValue(func() *collections.Set[string] 
 			set.Add(line)
 		}
 	} else {
-		panic(fmt.Sprintf("failed to read submodule accepted file: %v", err))
+		panic(fmt.Sprintf("failed to read file %s: %v", path, err))
 	}
 
 	return &set
-})
+}
 
 func readFileOrNoContent(fileName string) string {
 	content, err := os.ReadFile(fileName)
