@@ -4,36 +4,22 @@
 conformance/assertionsAndNonReturningFunctions.types.diff
 conformance/assertionTypePredicates2.errors.txt.diff
 conformance/assignmentToVoidZero1.errors.txt.diff
-conformance/assignmentToVoidZero1.types.diff
 conformance/asyncArrowFunction_allowJs.errors.txt.diff
 conformance/asyncArrowFunction_allowJs.types.diff
-conformance/asyncFunctionDeclaration16_es5.errors.txt.diff
-conformance/asyncFunctionDeclaration16_es5.types.diff
-conformance/binderUninitializedModuleExportsAssignment.types.diff
-conformance/callbackOnConstructor.errors.txt.diff
 conformance/callbackOnConstructor.types.diff
 conformance/callbackTag2.errors.txt.diff
 conformance/callbackTag2.types.diff
 conformance/callbackTag4.types.diff
 conformance/callbackTagNamespace.types.diff
-conformance/callbackTagVariadicType.types.diff
 conformance/callOfPropertylessConstructorFunction.errors.txt.diff
 conformance/callOfPropertylessConstructorFunction.types.diff
 conformance/callWithMissingVoidUndefinedUnknownAnyInJs(strict=false).errors.txt.diff
-conformance/checkExportsObjectAssignProperty.errors.txt.diff
 conformance/checkExportsObjectAssignProperty.types.diff
-conformance/checkJsdocOnEndOfFile.types.diff
 conformance/checkJsdocParamOnVariableDeclaredFunctionExpression.errors.txt.diff
-conformance/checkJsdocParamOnVariableDeclaredFunctionExpression.types.diff
-conformance/checkParamTag1.types.diff
-conformance/node10Alternateresult_noTypes.errors.txt.diff
-conformance/node10AlternateResult_noResolution.errors.txt.diff
-conformance/node10AlternateResult_noResolution.errors.txt.diff
 
 ## inlay hints ##
 fourslash/inlayHints/inlayHintsInteractiveParameterNamesWithComments.baseline.diff
 fourslash/inlayHints/inlayHintsImportType2.baseline.diff
-fourslash/inlayHints/inlayHintsInteractiveImportType2.baseline.diff
 fourslash/inlayHints/inlayHintsFunctionParameterTypes1.baseline.diff
 fourslash/inlayHints/inlayHintsFunctionParameterTypes3.baseline.diff
 fourslash/inlayHints/inlayHintsInferredTypePredicate1.baseline.diff
@@ -101,9 +87,7 @@ compiler/destructuredDeclarationEmit.types.diff
 compiler/discriminableUnionWithIntersectedMembers.types.diff
 compiler/discriminantPropertyCheck.types.diff
 compiler/discriminatedUnionWithIndexSignature.types.diff
-compiler/excessPropertyCheckIntersectionWithRecursiveType.errors.txt.diff
 compiler/excessPropertyCheckIntersectionWithRecursiveType.types.diff
-compiler/excessPropertyCheckWithMultipleDiscriminants.errors.txt.diff
 compiler/forwardRefInTypeDeclaration(strict=false).types.diff
 compiler/forwardRefInTypeDeclaration(strict=true).types.diff
 compiler/genericObjectSpreadResultInSwitch.types.diff
@@ -115,9 +99,7 @@ compiler/inferenceOfNullableObjectTypesWithCommonBase.types.diff
 compiler/intersectionTypeNormalization.types.diff
 compiler/invariantGenericErrorElaboration.types.diff
 compiler/jsFileMethodOverloads.types.diff
-compiler/jsdocBracelessTypeTag1.errors.txt.diff
 compiler/jsdocBracelessTypeTag1.types.diff
-compiler/jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.errors.txt.diff
 compiler/jsxIntrinsicElementsCompatability.types.diff
 compiler/mappedTypeContextualTypesApplied.types.diff
 compiler/mappedTypeGenericIndexedAccess.types.diff
@@ -139,7 +121,6 @@ compiler/overloadOnConstInBaseWithBadImplementationInDerived.types.diff
 compiler/overloadOnConstInCallback1.types.diff
 compiler/overloadOnConstInObjectLiteralImplementingAnInterface.types.diff
 compiler/overloadOnConstInheritance1.types.diff
-compiler/overloadOnConstInheritance2.errors.txt.diff
 compiler/overloadOnConstInheritance2.types.diff
 compiler/overloadOnConstInheritance3.types.diff
 compiler/overloadOnConstInheritance4.types.diff
@@ -167,7 +148,6 @@ conformance/ambientErrors.types.diff
 conformance/assignmentCompatWithDiscriminatedUnion.types.diff
 conformance/commonTypeIntersection.types.diff
 conformance/constAssertions.types.diff
-conformance/controlFlowAliasing.errors.txt.diff
 conformance/controlFlowAliasing.types.diff
 conformance/controlFlowGenericTypes.types.diff
 conformance/controlFlowOptionalChain.types.diff
@@ -176,7 +156,6 @@ conformance/destructuringParameterDeclaration8.types.diff
 conformance/discriminatedUnionTypes2.types.diff
 conformance/es2018IntlAPIs.types.diff
 conformance/es2020IntlAPIs.types.diff
-conformance/generatorReturnContextualType.errors.txt.diff
 conformance/generatorReturnContextualType.types.diff
 conformance/independentPropertyVariance.types.diff
 conformance/intersectionIncludingPropFromGlobalAugmentation.types.diff
@@ -193,7 +172,6 @@ conformance/mappedTypeProperties.types.diff
 conformance/memberFunctionsWithPrivateOverloads.types.diff
 conformance/memberFunctionsWithPublicOverloads.types.diff
 conformance/memberFunctionsWithPublicPrivateOverloads.types.diff
-conformance/narrowExceptionVariableInCatchClause.errors.txt.diff
 conformance/narrowExceptionVariableInCatchClause.types.diff
 conformance/override2.types.diff
 conformance/parserOverloadOnConstants1.types.diff
@@ -300,7 +278,6 @@ compiler/classNonUniqueSymbolMethodHasSymbolIndexer.js.diff
 compiler/coAndContraVariantInferences3.types.diff
 compiler/commaOperatorInConditionalExpression.types.diff
 compiler/commonJsExportTypeDeclarationError(target=es2015).symbols.diff
-compiler/commonJsExportTypeDeclarationError(target=es2015).types.diff
 compiler/commonJsIsolatedModules.symbols.diff
 compiler/commonJsIsolatedModules.types.diff
 compiler/commonJsUnusedLocals.symbols.diff
