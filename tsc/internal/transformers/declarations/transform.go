@@ -1205,7 +1205,17 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 	// Should be removed createTypeOfDeclaration will actually now reuse the existing annotation so there is no real need to duplicate type walking
 	// Left in for now to minimize diff during syntactic type node builder refactor
 	if !ast.IsExportAssignment(node) && !ast.IsBindingElement(node) && node.Type() != nil && (!ast.IsParameterDeclaration(node) || !tx.resolver.RequiresAddingImplicitUndefined(node, nil, tx.enclosingDeclaration)) {
-		return tx.Visitor().Visit(node.Type())
+		if tx.state.currentSourceFile.IsJS() {
+			// JS types have a heap of constructs we can't directly emit into .d.ts files; the node builder contains logic to remap those where possible, so we invoke it here
+			// In strada we always built js declarations symbolically, so all js type nodes went through this postprocessing
+			res := tx.resolver.TryJSTypeNodeToTypeNode(tx.EmitContext(), node.Type(), tx.enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
+			if res != nil {
+				return res
+			}
+			// otherwise, fall back to full serialization
+		} else {
+			return tx.Visitor().Visit(node.Type())
+		}
 	}
 
 	oldErrorNameNode := tx.state.errorNameNode

@@ -149,7 +149,7 @@ export { _exported_4 as "f" };
 declare function g(a: {
     x: string;
 }, b: {
-    y: typeof module.exports.b;
+    y: () => void;
 }): void | "";
 declare const _exported_5: typeof g;
 export { _exported_5 as "g" };
@@ -160,7 +160,7 @@ export { _exported_5 as "g" };
 declare function hh(a: {
     x: string;
 }, b: {
-    y: typeof module.exports.b;
+    y: () => void;
 }): void | "";
 declare const _exported_6: typeof hh;
 export { _exported_6 as "h" };
@@ -182,9 +182,7 @@ out/index.d.ts(4,25): error TS18057: String literal import and export names are 
 out/index.d.ts(12,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 out/index.d.ts(21,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 out/index.d.ts(28,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
-out/index.d.ts(36,15): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 out/index.d.ts(39,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
-out/index.d.ts(47,15): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 out/index.d.ts(50,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 out/index.d.ts(52,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 out/index.d.ts(54,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
@@ -192,7 +190,7 @@ out/index.d.ts(56,25): error TS18057: String literal import and export names are
 out/index.d.ts(58,26): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 
 
-==== out/index.d.ts (13 errors) ====
+==== out/index.d.ts (11 errors) ====
     declare const _exported: () => void;
     export { _exported as "a" };
                           ~~~
@@ -238,9 +236,7 @@ out/index.d.ts(58,26): error TS18057: String literal import and export names are
     declare function g(a: {
         x: string;
     }, b: {
-        y: typeof module.exports.b;
-                  ~~~~~~
-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+        y: () => void;
     }): void | "";
     declare const _exported_5: typeof g;
     export { _exported_5 as "g" };
@@ -253,9 +249,7 @@ out/index.d.ts(58,26): error TS18057: String literal import and export names are
     declare function hh(a: {
         x: string;
     }, b: {
-        y: typeof module.exports.b;
-                  ~~~~~~
-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+        y: () => void;
     }): void | "";
     declare const _exported_6: typeof hh;
     export { _exported_6 as "h" };

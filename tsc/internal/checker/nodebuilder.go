@@ -266,6 +266,11 @@ func (b *NodeBuilder) TypeToTypeNode(typ *Type, enclosingDeclaration *ast.Node, 
 	return b.exitContext(b.impl.typeToTypeNode(typ))
 }
 
+func (b *NodeBuilder) TryJSTypeNodeToTypeNode(node *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
+	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)
+	return b.exitContext(b.impl.tryJSTypeNodeToTypeNode(node))
+}
+
 // var _ NodeBuilderInterface = NewNodeBuilderAPI(nil, nil)
 
 func NewNodeBuilder(ch *Checker, e *printer.EmitContext) *NodeBuilder {

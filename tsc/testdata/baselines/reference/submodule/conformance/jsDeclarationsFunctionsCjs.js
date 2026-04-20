@@ -127,7 +127,7 @@ export declare var f: <T>(a: T) => T;
 declare function g(a: {
     x: string;
 }, b: {
-    y: typeof module.exports.b;
+    y: () => void;
 }): void | "";
 export { g };
 /**
@@ -137,7 +137,7 @@ export { g };
 declare function hh(a: {
     x: string;
 }, b: {
-    y: typeof module.exports.b;
+    y: () => void;
 }): void | "";
 export { hh as h };
 export declare var i: () => void;

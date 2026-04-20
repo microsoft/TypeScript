@@ -10,8 +10,7 @@
      /**
       * @returns {String}
       */
--    get textContent(): string;
-+    get textContent(): String;
+     get textContent(): string;
 +    set textContent(x: string);
      cloneNode(): this;
  }

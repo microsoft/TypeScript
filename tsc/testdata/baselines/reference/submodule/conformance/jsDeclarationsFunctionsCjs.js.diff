@@ -42,7 +42,7 @@
 -        (): void;
 -        cat: string;
 -    };
-+    y: typeof module.exports.b;
++    y: () => void;
  }): void | "";
 +export { g };
  /**
@@ -56,7 +56,7 @@
 -        (): void;
 -        cat: string;
 -    };
-+    y: typeof module.exports.b;
++    y: () => void;
  }): void | "";
 -export { hh as h, i as ii, j as jj };
 +export { hh as h };

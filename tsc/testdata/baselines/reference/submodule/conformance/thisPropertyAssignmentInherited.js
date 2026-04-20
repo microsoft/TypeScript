@@ -28,7 +28,7 @@ export declare class Element {
     /**
      * @returns {String}
      */
-    get textContent(): String;
+    get textContent(): string;
     set textContent(x: string);
     cloneNode(): this;
 }

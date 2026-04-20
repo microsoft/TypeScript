@@ -59,7 +59,7 @@ module.exports = {testFn, testFnTypes};
  * @global
  * @type {Object<string,*>}
  */
-declare const myTypes: Object<string, any>;
+declare const myTypes: Record<string, any>;
 export type myTypes = string | RegExp | Array<string | RegExp>;
 export type myTypes = {
     prop1: myTypes.typeA;

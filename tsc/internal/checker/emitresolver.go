@@ -1222,3 +1222,12 @@ func (r *EmitResolver) GetPropertiesOfContainerFunction(node *ast.Node) []*ast.S
 	}
 	return r.checker.getPropertiesOfType(r.checker.getTypeOfSymbol(s))
 }
+
+func (r *EmitResolver) TryJSTypeNodeToTypeNode(emitContext *printer.EmitContext, typeNode *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
+	typeNode = emitContext.ParseNode(typeNode)
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+
+	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
+	return requestNodeBuilder.TryJSTypeNodeToTypeNode(typeNode, enclosingDeclaration, flags, internalFlags, tracker)
+}

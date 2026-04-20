@@ -50,7 +50,7 @@ exports.h = null;
 
 //// [index.d.ts]
 /** @type {?} */
-export declare const a:  | null;
+export declare const a: any | null;
 /** @type {*} */
 export declare const b: any;
 /** @type {string?} */
@@ -60,8 +60,8 @@ export declare const d: string | undefined;
 /** @type {string!} */
 export declare const e: string;
 /** @type {function(string, number): object} */
-export declare const f: function;
+export declare const f: Function;
 /** @type {function(new: object, string, number)} */
-export declare const g: function;
+export declare const g: Function;
 /** @type {Object.<string, number>} */
-export declare const h: Object<string, number>;
+export declare const h: Record<string, number>;

@@ -17,6 +17,10 @@ func (b *NodeBuilderImpl) reuseNode(node *ast.Node) *ast.Node {
 	return b.tryReuseExistingNodeHelper(node)
 }
 
+func (b *NodeBuilderImpl) tryJSTypeNodeToTypeNode(node *ast.Node) *ast.Node {
+	return b.reuseNode(node)
+}
+
 // a wrapper around `reuseNode` that handles renaming `new` to `"new"` so we don't accidentally emit constructor signatures when we don't mean to
 func (b *NodeBuilderImpl) reuseName(node *ast.Node) *ast.Node {
 	res := b.reuseNode(node)

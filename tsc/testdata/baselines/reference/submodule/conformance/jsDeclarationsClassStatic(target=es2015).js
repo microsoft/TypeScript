@@ -63,7 +63,7 @@ declare const Strings: {
 export = Handler;
 export { Strings };
 export type HandlerOptions = {
-    name: String;
+    name: string;
 };
 /**
  * @typedef {Object} HandlerOptions

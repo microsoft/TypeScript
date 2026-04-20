@@ -63,17 +63,17 @@
 
 
 //// [index.d.ts]
-/** @type {String} */ declare const a: String;
-/** @type {Number} */ declare const b: Number;
-/** @type {Boolean} */ declare const c: Boolean;
-/** @type {Void} */ declare const d: Void;
-/** @type {Undefined} */ declare const e: Undefined;
-/** @type {Null} */ declare const f: Null;
+/** @type {String} */ declare const a: string;
+/** @type {Number} */ declare const b: number;
+/** @type {Boolean} */ declare const c: boolean;
+/** @type {Void} */ declare const d: void;
+/** @type {Undefined} */ declare const e: undefined;
+/** @type {Null} */ declare const f: null;
 /** @type {Function} */ declare const g: Function;
-/** @type {function} */ declare const h: function;
-/** @type {array} */ declare const i: array;
-/** @type {promise} */ declare const j: promise;
-/** @type {Object<string, string>} */ declare const k: Object<string, string>;
+/** @type {function} */ declare const h: Function;
+/** @type {array} */ declare const i: any[];
+/** @type {promise} */ declare const j: Promise<any>;
+/** @type {Object<string, string>} */ declare const k: Record<string, string>;
 /** @type {class} */ declare const l: class;
 /** @type {bool} */ declare const m: bool;
 /** @type {int} */ declare const n: int;

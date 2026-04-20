@@ -5,7 +5,7 @@
  //// [index.d.ts]
  /** @type {?} */
 -export const a: unknown;
-+export declare const a:  | null;
++export declare const a: any | null;
  /** @type {*} */
 -export const b: any;
 +export declare const b: any;
@@ -20,12 +20,12 @@
 +export declare const e: string;
  /** @type {function(string, number): object} */
 -export const f: (arg0: string, arg1: number) => object;
-+export declare const f: function;
++export declare const f: Function;
  /** @type {function(new: object, string, number)} */
 -export const g: new (arg1: string, arg2: number) => object;
-+export declare const g: function;
++export declare const g: Function;
  /** @type {Object.<string, number>} */
 -export const h: {
 -    [x: string]: number;
 -};
-+export declare const h: Object<string, number>;
++export declare const h: Record<string, number>;

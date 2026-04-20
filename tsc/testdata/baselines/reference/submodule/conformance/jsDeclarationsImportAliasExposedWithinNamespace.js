@@ -59,7 +59,7 @@ export {testFn, testFnTypes};
  * @global
  * @type {Object<string,*>}
  */
-declare const myTypes: Object<string, any>;
+declare const myTypes: Record<string, any>;
 export type myTypes = string | RegExp | Array<string | RegExp>;
 export type myTypes = {
     prop1: myTypes.typeA;
@@ -80,7 +80,7 @@ export { myTypes };
  * @global
  * @type {Object<string,*>}
  */
-declare const testFnTypes: Object<string, any>;
+declare const testFnTypes: Record<string, any>;
 export type testFnTypes = boolean | myTypes.typeC;
 /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
 /**
