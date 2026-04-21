@@ -698,6 +698,7 @@ func GetTypeNodePrecedence(n *TypeNode) TypePrecedence {
 		KindLiteralType,
 		KindTypePredicate,
 		KindTypeReference,
+		KindExpressionWithTypeArguments,
 		KindTypeLiteral,
 		KindTupleType,
 		KindRestType,

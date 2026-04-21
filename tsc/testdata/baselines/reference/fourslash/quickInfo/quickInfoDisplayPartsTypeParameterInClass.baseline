@@ -132,7 +132,7 @@
 //           ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (method) c.method<"hello">(a: "hello", b: string): "hello"
+// | (method) c<string>.method<"hello">(a: "hello", b: string): "hello"
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -289,7 +289,7 @@
 //            ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (method) c2.method<c<string>>(a: c<string>, b: c<string>): c<string>
+// | (method) c2<c<string>>.method<c<string>>(a: c<string>, b: c<string>): c<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -787,7 +787,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.method<\"hello\">(a: \"hello\", b: string): \"hello\"\n```\n"
+        "value": "```tsx\n(method) c<string>.method<\"hello\">(a: \"hello\", b: string): \"hello\"\n```\n"
       },
       "range": {
         "start": {
@@ -1374,7 +1374,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c2.method<c<string>>(a: c<string>, b: c<string>): c<string>\n```\n"
+        "value": "```tsx\n(method) c2<c<string>>.method<c<string>>(a: c<string>, b: c<string>): c<string>\n```\n"
       },
       "range": {
         "start": {
