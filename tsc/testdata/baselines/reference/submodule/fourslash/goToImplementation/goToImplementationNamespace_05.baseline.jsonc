@@ -34,7 +34,13 @@
 
 // === goToImplementation ===
 // === /goToImplementationNamespace_05.ts ===
-// --- (line: 7) skipped ---
+// namespace Foo.<|[|Baz|] {
+//     export function hello() {}
+// }|>
+// 
+// module Bar.Baz {
+//     export function sure() {}
+// }
 // 
 // let x = Foo;
 // let y = Bar;
@@ -45,7 +51,14 @@
 
 // === goToImplementation ===
 // === /goToImplementationNamespace_05.ts ===
-// --- (line: 8) skipped ---
+// namespace Foo.Baz {
+//     export function hello() {}
+// }
+// 
+// module Bar.<|[|Baz|] {
+//     export function sure() {}
+// }|>
+// 
 // let x = Foo;
 // let y = Bar;
 // let x1 = Foo.Baz;

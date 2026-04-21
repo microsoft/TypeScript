@@ -52,7 +52,8 @@ func getTokenAtPosition(
 	var nodeAfterLeft *ast.Node
 
 	testNode := func(node *ast.Node) int {
-		if node.Kind != ast.KindEndOfFile && node.End() == position && includePrecedingTokenAtEndPosition != nil {
+		if node.Kind != ast.KindEndOfFile && node.End() == position &&
+			includePrecedingTokenAtEndPosition != nil && node.Flags&ast.NodeFlagsReparsed == 0 {
 			prevSubtree = node
 		}
 
@@ -118,7 +119,12 @@ func getTokenAtPosition(
 			if nodeList.End() == position && includePrecedingTokenAtEndPosition != nil {
 				left = nodeList.End()
 				nodeAfterLeft = nil
-				prevSubtree = nodeList.Nodes[len(nodeList.Nodes)-1]
+				for i := len(nodeList.Nodes) - 1; i >= 0; i-- {
+					if nodeList.Nodes[i].Flags&ast.NodeFlagsReparsed == 0 {
+						prevSubtree = nodeList.Nodes[i]
+						break
+					}
+				}
 			} else if nodeList.End() <= position {
 				left = nodeList.End()
 				nodeAfterLeft = nil
