@@ -113,6 +113,50 @@ func TestSession(t *testing.T) {
 		})
 	})
 
+	t.Run("watchChange and didOpen in same batch rebuilds program", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/TS/p1/tsconfig.json": `{
+				"compilerOptions": {
+					"noLib": true,
+					"strict": true
+				}
+			}`,
+			"/home/projects/TS/p1/src/a.ts": "export const a = 1;\n",
+			"/home/projects/TS/p1/src/b.ts": "export const b = 1;\n",
+		}
+		session, utils := projecttestutil.Setup(files)
+		oldContent := files["/home/projects/TS/p1/src/a.ts"].(string)
+
+		// Open b.ts to create the project; a.ts is included via tsconfig.
+		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/src/b.ts", 1, files["/home/projects/TS/p1/src/b.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		// Verify a.ts is in the program with the original content.
+		ls, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/b.ts")
+		assert.NilError(t, err)
+		assert.Equal(t, ls.GetProgram().GetSourceFile("/home/projects/TS/p1/src/a.ts").Text(), oldContent)
+
+		// Modify a.ts on disk (simulate a build tool or git checkout).
+		newContent := "export const a = 2;\nexport const extra = true;\n"
+		err = utils.FS().WriteFile("/home/projects/TS/p1/src/a.ts", newContent)
+		assert.NilError(t, err)
+
+		// Queue a watch event for the disk change (not flushed yet).
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{Type: lsproto.FileChangeTypeChanged, Uri: "file:///home/projects/TS/p1/src/a.ts"},
+		})
+
+		// Open a.ts in the editor—flushes both watch event and didOpen together.
+		// Before the fix, processChanges would discard the watch event,
+		// leaving the project with a stale SourceFile and a mismatched line map.
+		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/src/a.ts", 1, newContent, lsproto.LanguageKindTypeScript)
+
+		// The program's SourceFile must reflect the overlay (new) content.
+		ls, err = session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/a.ts")
+		assert.NilError(t, err)
+		assert.Equal(t, ls.GetProgram().GetSourceFile("/home/projects/TS/p1/src/a.ts").Text(), newContent)
+	})
+
 	t.Run("DidChangeFile", func(t *testing.T) {
 		t.Parallel()
 		t.Run("update file and program", func(t *testing.T) {
