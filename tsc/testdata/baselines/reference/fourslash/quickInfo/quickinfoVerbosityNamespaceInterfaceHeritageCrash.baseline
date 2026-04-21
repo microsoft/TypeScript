@@ -1,0 +1,89 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityNamespaceInterfaceHeritageCrash.ts ===
+// 
+// declare namespace NS {
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace NS {
+// |     interface Config extends þtype {
+// |     }
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | namespace NS
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     interface Config extends Record<string, any> {}
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 20
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace NS\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 18
+          },
+          "end": {
+            "line": 1,
+            "character": 20
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 20
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nnamespace NS {\n    interface Config extends ï¿½type {\n    }\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 18
+          },
+          "end": {
+            "line": 1,
+            "character": 20
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]
