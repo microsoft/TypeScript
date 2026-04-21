@@ -1,3 +1,26 @@
 # Diff files to instead write to submoduleTriaged as "triaged" changes.
 # These are known diffs that we intend to fix.
 # Each group should include a link to the tracking issue.
+
+# https://github.com/microsoft/typescript-go/issues/3410
+compiler/anonClassDeclarationEmitIsAnon.types.diff
+compiler/baseConstraintOfDecorator.types.diff
+compiler/baseExpressionTypeParameters.types.diff
+compiler/declarationEmitGenericTypeParamerSerialization3.types.diff
+compiler/declarationEmitLocalClassDeclarationMixin.types.diff
+
+# https://github.com/microsoft/typescript-go/issues/3456
+compiler/argumentsReferenceInConstructor1_Js.js.diff
+compiler/argumentsReferenceInConstructor2_Js.js.diff
+compiler/argumentsReferenceInConstructor3_Js.js.diff
+compiler/argumentsReferenceInConstructor4_Js.js.diff
+compiler/argumentsReferenceInConstructor5_Js.js.diff
+compiler/argumentsReferenceInConstructor6_Js.js.diff
+compiler/argumentsReferenceInConstructor7_Js.js.diff
+compiler/argumentsReferenceInMethod1_Js.js.diff
+compiler/argumentsReferenceInMethod2_Js.js.diff
+compiler/argumentsReferenceInMethod3_Js.js.diff
+compiler/argumentsReferenceInMethod4_Js.js.diff
+compiler/argumentsReferenceInMethod5_Js.js.diff
+compiler/argumentsReferenceInMethod6_Js.js.diff
+compiler/argumentsReferenceInMethod7_Js.js.diff
