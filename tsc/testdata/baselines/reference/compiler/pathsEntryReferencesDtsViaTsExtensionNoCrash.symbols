@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/pathsEntryReferencesDtsViaTsExtensionNoCrash.ts] ////
+
+=== named-import.ts ===
+import { blah } from "some-path";
+>blah : Symbol(blah, Decl(named-import.ts, 0, 8))
+
+export const value = blah;
+>value : Symbol(value, Decl(named-import.ts, 2, 12))
+>blah : Symbol(blah, Decl(named-import.ts, 0, 8))
+
+=== some-path/index.d.ts ===
+export declare const blah: 1;
+>blah : Symbol(blah, Decl(index.d.ts, 0, 20))
+
