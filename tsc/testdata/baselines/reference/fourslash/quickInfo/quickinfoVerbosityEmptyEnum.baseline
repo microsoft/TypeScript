@@ -1,0 +1,85 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityEmptyEnum.ts ===
+// 
+// enum Degree {}
+// 
+// declare const e: Degree;
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const e: Degree
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const e: Degree
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 32,
+      "LSPosition": {
+        "line": 3,
+        "character": 15
+      },
+      "Name": "0",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst e: Degree\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 14
+          },
+          "end": {
+            "line": 3,
+            "character": 15
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 32,
+      "LSPosition": {
+        "line": 3,
+        "character": 15
+      },
+      "Name": "0",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```tsx\nconst e: Degree\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 14
+          },
+          "end": {
+            "line": 3,
+            "character": 15
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

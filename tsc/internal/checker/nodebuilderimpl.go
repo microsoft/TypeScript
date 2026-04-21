@@ -3158,7 +3158,7 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 				panic("Unhandled type node kind returned from `symbolToTypeNode`.")
 			}
 		}
-		if !b.shouldExpandType(t, false /*isAlias*/) {
+		if t.flags&TypeFlagsUnion == 0 || !b.shouldExpandType(t, false /*isAlias*/) {
 			return b.symbolToTypeNode(t.symbol, ast.SymbolFlagsType, nil)
 		}
 		expandingEnum = true
