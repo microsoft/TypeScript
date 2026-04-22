@@ -8,7 +8,7 @@
 // const x1: keyof T1 = 'banana';
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const x1: keyof {
 // |     banana: string;
 // |     grape: number;
@@ -20,7 +20,7 @@
 // | ----------------------------------------------------------------------
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const x1: keyof T1
 // | ```
 // | 
@@ -29,7 +29,7 @@
 // const x2: keyof T1 & ("grape" | "apple") = 'grape';
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const x2: "apple" | "grape"
 // | ```
 // | 
@@ -39,7 +39,7 @@
 // 	if (key === k2) {
 //              ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) k2: keyof {
 // |     banana: string;
 // |     grape: number;
@@ -51,7 +51,7 @@
 // | ----------------------------------------------------------------------
 //              ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) k2: keyof T1
 // | ```
 // | 
@@ -60,7 +60,7 @@
 // 		return obj[key];
 //              ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) key: keyof T
 // | ```
 // | 
@@ -84,7 +84,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst x1: keyof T1\n```\n"
+          "value": "```typescript\nconst x1: keyof T1\n```\n"
         },
         "range": {
           "start": {
@@ -115,7 +115,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst x1: keyof {\n    banana: string;\n    grape: number;\n    apple: boolean;\n}\n```\n"
+          "value": "```typescript\nconst x1: keyof {\n    banana: string;\n    grape: number;\n    apple: boolean;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -145,7 +145,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst x2: \"apple\" | \"grape\"\n```\n"
+          "value": "```typescript\nconst x2: \"apple\" | \"grape\"\n```\n"
         },
         "range": {
           "start": {
@@ -175,7 +175,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(parameter) k2: keyof T1\n```\n"
+          "value": "```typescript\n(parameter) k2: keyof T1\n```\n"
         },
         "range": {
           "start": {
@@ -206,7 +206,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(parameter) k2: keyof {\n    banana: string;\n    grape: number;\n    apple: boolean;\n}\n```\n"
+          "value": "```typescript\n(parameter) k2: keyof {\n    banana: string;\n    grape: number;\n    apple: boolean;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -236,7 +236,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(parameter) key: keyof T\n```\n"
+          "value": "```typescript\n(parameter) key: keyof T\n```\n"
         },
         "range": {
           "start": {

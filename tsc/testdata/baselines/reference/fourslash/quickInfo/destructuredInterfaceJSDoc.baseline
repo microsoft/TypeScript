@@ -15,28 +15,28 @@
 // const {foo, bar, baz: biz} = fubar;
 //        ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const foo: number
 // | ```
 // | foo comment
 // | ----------------------------------------------------------------------
 //             ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const bar: string
 // | ```
 // | bar comment
 // | ----------------------------------------------------------------------
 //                  ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) FooBar.baz: string
 // | ```
 // | baz comment
 // | ----------------------------------------------------------------------
 //                       ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const biz: string
 // | ```
 // | baz comment
@@ -56,7 +56,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst foo: number\n```\nfoo comment"
+        "value": "```typescript\nconst foo: number\n```\nfoo comment"
       },
       "range": {
         "start": {
@@ -83,7 +83,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst bar: string\n```\nbar comment"
+        "value": "```typescript\nconst bar: string\n```\nbar comment"
       },
       "range": {
         "start": {
@@ -110,7 +110,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) FooBar.baz: string\n```\nbaz comment"
+        "value": "```typescript\n(property) FooBar.baz: string\n```\nbaz comment"
       },
       "range": {
         "start": {
@@ -137,7 +137,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst biz: string\n```\nbaz comment"
+        "value": "```typescript\nconst biz: string\n```\nbaz comment"
       },
       "range": {
         "start": {

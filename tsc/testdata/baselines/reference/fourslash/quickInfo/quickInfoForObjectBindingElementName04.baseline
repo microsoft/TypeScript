@@ -16,7 +16,7 @@
 //     a;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: {
 // |     b: string;
 // | }
@@ -26,7 +26,7 @@
 //     b;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) b: string
 // | ```
 // | A description of 'b'
@@ -46,7 +46,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: {\n    b: string;\n}\n```\nA description of 'a'"
+        "value": "```typescript\n(parameter) a: {\n    b: string;\n}\n```\nA description of 'a'"
       },
       "range": {
         "start": {
@@ -73,7 +73,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) b: string\n```\nA description of 'b'"
+        "value": "```typescript\n(parameter) b: string\n```\nA description of 'b'"
       },
       "range": {
         "start": {

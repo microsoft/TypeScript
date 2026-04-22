@@ -8,7 +8,7 @@
 // const both: BothType = 1;
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const both: (boolean | (symbol | (() => void))) | (number | (string | {}))
 // | ```
 // | 
@@ -16,7 +16,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const both: (boolean | Sym) | (number | Str)
 // | ```
 // | 
@@ -24,7 +24,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const both: BarType | FooType
 // | ```
 // | 
@@ -32,7 +32,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const both: BothType
 // | ```
 // | 
@@ -53,7 +53,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst both: BothType\n```\n"
+          "value": "```typescript\nconst both: BothType\n```\n"
         },
         "range": {
           "start": {
@@ -84,7 +84,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst both: BarType | FooType\n```\n"
+          "value": "```typescript\nconst both: BarType | FooType\n```\n"
         },
         "range": {
           "start": {
@@ -115,7 +115,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst both: (boolean | Sym) | (number | Str)\n```\n"
+          "value": "```typescript\nconst both: (boolean | Sym) | (number | Str)\n```\n"
         },
         "range": {
           "start": {
@@ -146,7 +146,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst both: (boolean | (symbol | (() => void))) | (number | (string | {}))\n```\n"
+          "value": "```typescript\nconst both: (boolean | (symbol | (() => void))) | (number | (string | {}))\n```\n"
         },
         "range": {
           "start": {

@@ -8,7 +8,7 @@
 // declare namespace Shapes {
 //                   ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace Shapes {
 // |     class Circle extends Base {
 // |         radius: number;
@@ -26,7 +26,7 @@
 // | ----------------------------------------------------------------------
 //                   ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace Shapes
 // | ```
 // | 
@@ -58,7 +58,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nnamespace Shapes\n```\n"
+          "value": "```typescript\nnamespace Shapes\n```\n"
         },
         "range": {
           "start": {
@@ -89,7 +89,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nnamespace Shapes {\n    class Circle extends Base {\n        radius: number;\n    }\n    class Square extends Base {\n        side: number;\n    }\n    interface Drawable {\n        draw(): void;\n    }\n}\n```\n"
+          "value": "```typescript\nnamespace Shapes {\n    class Circle extends Base {\n        radius: number;\n    }\n    class Square extends Base {\n        side: number;\n    }\n    interface Drawable {\n        draw(): void;\n    }\n}\n```\n"
         },
         "range": {
           "start": {

@@ -11,7 +11,7 @@
 // f();
 // ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function f(): void
 // | ```
 // | [https://vscode.dev](https://vscode.dev)
@@ -33,7 +33,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction f(): void\n```\n[https://vscode.dev](https://vscode.dev)\n[link text]{https://vscode.dev}\n[link text](https://vscode.dev)\n[link text](https://vscode.dev)"
+        "value": "```typescript\nfunction f(): void\n```\n[https://vscode.dev](https://vscode.dev)\n[link text]{https://vscode.dev}\n[link text](https://vscode.dev)\n[link text](https://vscode.dev)"
       },
       "range": {
         "start": {

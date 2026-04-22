@@ -13,14 +13,14 @@
 // const {foo: myFoo, bar: myBar} = fubar;
 //             ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const myFoo: number
 // | ```
 // | foo comment
 // | ----------------------------------------------------------------------
 //                         ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const myBar: string
 // | ```
 // | bar comment
@@ -40,7 +40,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst myFoo: number\n```\nfoo comment"
+        "value": "```typescript\nconst myFoo: number\n```\nfoo comment"
       },
       "range": {
         "start": {
@@ -67,7 +67,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst myBar: string\n```\nbar comment"
+        "value": "```typescript\nconst myBar: string\n```\nbar comment"
       },
       "range": {
         "start": {

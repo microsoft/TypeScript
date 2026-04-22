@@ -4,7 +4,7 @@
 //     property: string;
 //     ^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) I.property: string
 // | ```
 // | 
@@ -12,7 +12,7 @@
 //     method(): string;
 //     ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) I.method(): string
 // | ```
 // | 
@@ -24,28 +24,28 @@
 // iInstance.property = iInstance.method();
 // ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iInstance: I
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //           ^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) I.property: string
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                      ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iInstance: I
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) I.method(): string
 // | ```
 // | 
@@ -53,7 +53,7 @@
 // iInstance();
 // ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iInstance: () => string
 // | ```
 // | 
@@ -61,14 +61,14 @@
 // var anotherInstance = new iInstance();
 //     ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var anotherInstance: I
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                           ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iInstance: new () => I
 // | ```
 // | 
@@ -87,7 +87,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) I.property: string\n```\n"
+        "value": "```typescript\n(property) I.property: string\n```\n"
       },
       "range": {
         "start": {
@@ -114,7 +114,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) I.method(): string\n```\n"
+        "value": "```typescript\n(method) I.method(): string\n```\n"
       },
       "range": {
         "start": {
@@ -141,7 +141,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iInstance: I\n```\n"
+        "value": "```typescript\nvar iInstance: I\n```\n"
       },
       "range": {
         "start": {
@@ -169,7 +169,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) I.property: string\n```\n"
+        "value": "```typescript\n(property) I.property: string\n```\n"
       },
       "range": {
         "start": {
@@ -196,7 +196,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iInstance: I\n```\n"
+        "value": "```typescript\nvar iInstance: I\n```\n"
       },
       "range": {
         "start": {
@@ -224,7 +224,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) I.method(): string\n```\n"
+        "value": "```typescript\n(method) I.method(): string\n```\n"
       },
       "range": {
         "start": {
@@ -251,7 +251,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iInstance: () => string\n```\n"
+        "value": "```typescript\nvar iInstance: () => string\n```\n"
       },
       "range": {
         "start": {
@@ -278,7 +278,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar anotherInstance: I\n```\n"
+        "value": "```typescript\nvar anotherInstance: I\n```\n"
       },
       "range": {
         "start": {
@@ -306,7 +306,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iInstance: new () => I\n```\n"
+        "value": "```typescript\nvar iInstance: new () => I\n```\n"
       },
       "range": {
         "start": {

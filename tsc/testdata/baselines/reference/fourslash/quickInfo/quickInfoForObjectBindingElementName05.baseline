@@ -14,7 +14,7 @@
 //     a;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: string | number
 // | ```
 // | A description of a
@@ -34,7 +34,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: string | number\n```\nA description of a"
+        "value": "```typescript\n(parameter) a: string | number\n```\nA description of a"
       },
       "range": {
         "start": {

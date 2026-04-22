@@ -9,7 +9,7 @@
 // function foo() {
 //          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo(): string
 // | ```
 // | 
@@ -33,7 +33,7 @@
 // function foo2() {
 //          ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo2(): string
 // | ```
 // | 
@@ -57,7 +57,7 @@
 // function moo() {
 //          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function moo(): string
 // | ```
 // | 
@@ -82,7 +82,7 @@
 // function boo() {
 //          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function boo(): string
 // | ```
 // | 
@@ -108,7 +108,7 @@
 // function goo() {
 //          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function goo(): string
 // | ```
 // | 
@@ -139,7 +139,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(): string\n```\n\n\n*@example*\n```tsx\nif (true) {\n    foo()\n}\n```\n"
+        "value": "```typescript\nfunction foo(): string\n```\n\n\n*@example*\n```tsx\nif (true) {\n    foo()\n}\n```\n"
       },
       "range": {
         "start": {
@@ -166,7 +166,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo2(): string\n```\n\n\n*@example*\n```tsx\n{\n    foo()\n}\n```\n"
+        "value": "```typescript\nfunction foo2(): string\n```\n\n\n*@example*\n```tsx\n{\n    foo()\n}\n```\n"
       },
       "range": {
         "start": {
@@ -193,7 +193,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction moo(): string\n```\n\n\n*@example*\n```tsx\n  x y\n  12345\n     b\n```\n"
+        "value": "```typescript\nfunction moo(): string\n```\n\n\n*@example*\n```tsx\n  x y\n  12345\n     b\n```\n"
       },
       "range": {
         "start": {
@@ -220,7 +220,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction boo(): string\n```\n\n\n*@func*\n\n*@example*\n```tsx\n  x y\n  12345\n     b\n```\n"
+        "value": "```typescript\nfunction boo(): string\n```\n\n\n*@func*\n\n*@example*\n```tsx\n  x y\n  12345\n     b\n```\n"
       },
       "range": {
         "start": {
@@ -247,7 +247,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction goo(): string\n```\n\n\n*@func*\n\n*@example*\n```tsx\nx y\n12345\n   b\n```\n"
+        "value": "```typescript\nfunction goo(): string\n```\n\n\n*@func*\n\n*@example*\n```tsx\nx y\n12345\n   b\n```\n"
       },
       "range": {
         "start": {

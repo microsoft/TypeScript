@@ -3,14 +3,14 @@
 // interface I<T> {
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface I<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //             ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T in I<T>
 // | ```
 // | 
@@ -18,42 +18,42 @@
 //     new <U>(a: U, b: T): U;
 //          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in new new <U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //             ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in new new <U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                   ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) b: T
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                      ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T in I<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in new new <U>(a: U, b: T): U
 // | ```
 // | 
@@ -61,42 +61,42 @@
 //     <U>(a: U, b: T): U;
 //      ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in <U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //         ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in <U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //               ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) b: T
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                  ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T in I<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                      ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in <U>(a: U, b: T): U
 // | ```
 // | 
@@ -104,49 +104,49 @@
 //     method<U>(a: U, b: T): U;
 //     ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) I.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in I.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //               ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                  ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in I.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) b: T
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                        ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T in I<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                            ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in I.method<U>(a: U, b: T): U
 // | ```
 // | 
@@ -155,14 +155,14 @@
 // var iVal: I<string>;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal: I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface I<T>
 // | ```
 // | 
@@ -170,7 +170,7 @@
 // new iVal("hello", "hello");
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal: new <"hello">(a: "hello", b: string) => "hello"
 // | ```
 // | 
@@ -178,7 +178,7 @@
 // iVal("hello", "hello");
 // ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal: <"hello">(a: "hello", b: string) => "hello"
 // | ```
 // | 
@@ -186,14 +186,14 @@
 // iVal.method("hello", "hello");
 // ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal: I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //      ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) I<string>.method<"hello">(a: "hello", b: string): "hello"
 // | ```
 // | 
@@ -201,21 +201,21 @@
 // interface I1<T extends I<string>> {
 //           ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface I1<T extends I<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //              ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T extends I<string> in I1<T extends I<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                        ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface I<T>
 // | ```
 // | 
@@ -223,49 +223,49 @@
 //     new <U extends I<string>>(a: U, b: T): U;
 //          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                    ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface I<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                               ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                  ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) b: T
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                        ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T extends I<string> in I1<T extends I<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                            ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
@@ -273,49 +273,49 @@
 //     <U extends I<string>>(a: U, b: T): U;
 //      ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface I<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                              ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                 ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) b: T
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                    ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T extends I<string> in I1<T extends I<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                        ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
@@ -323,56 +323,56 @@
 //     method<U extends I<string>>(a: U, b: T): U;
 //     ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) I1.method<U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                      ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface I<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                 ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                    ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) b: T
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T extends I<string> in I1<T extends I<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                              ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
@@ -381,21 +381,21 @@
 // var iVal1: I1<I<string>>;
 //     ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal1: I1<I<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface I1<T extends I<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //               ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface I<T>
 // | ```
 // | 
@@ -403,21 +403,21 @@
 // new iVal1(iVal, iVal);
 //     ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal1: new <I<string>>(a: I<string>, b: I<string>) => I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //           ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal: I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                 ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal: I<string>
 // | ```
 // | 
@@ -425,21 +425,21 @@
 // iVal1(iVal, iVal);
 // ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal1: <I<string>>(a: I<string>, b: I<string>) => I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal: I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //             ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal: I<string>
 // | ```
 // | 
@@ -447,28 +447,28 @@
 // iVal1.method(iVal, iVal);
 // ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal1: I1<I<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //       ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) I1<I<string>>.method<I<string>>(a: I<string>, b: I<string>): I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //              ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal: I<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                    ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var iVal: I<string>
 // | ```
 // | 
@@ -487,7 +487,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I<T>\n```\n"
+        "value": "```typescript\ninterface I<T>\n```\n"
       },
       "range": {
         "start": {
@@ -515,7 +515,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T in I<T>\n```\n"
+        "value": "```typescript\n(type parameter) T in I<T>\n```\n"
       },
       "range": {
         "start": {
@@ -542,7 +542,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in new new <U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in new new <U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -569,7 +569,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -596,7 +596,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in new new <U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in new new <U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -623,7 +623,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) b: T\n```\n"
+        "value": "```typescript\n(parameter) b: T\n```\n"
       },
       "range": {
         "start": {
@@ -650,7 +650,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T in I<T>\n```\n"
+        "value": "```typescript\n(type parameter) T in I<T>\n```\n"
       },
       "range": {
         "start": {
@@ -677,7 +677,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in new new <U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in new new <U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -704,7 +704,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in <U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in <U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -731,7 +731,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -758,7 +758,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in <U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in <U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -785,7 +785,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) b: T\n```\n"
+        "value": "```typescript\n(parameter) b: T\n```\n"
       },
       "range": {
         "start": {
@@ -812,7 +812,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T in I<T>\n```\n"
+        "value": "```typescript\n(type parameter) T in I<T>\n```\n"
       },
       "range": {
         "start": {
@@ -839,7 +839,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in <U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in <U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -866,7 +866,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) I.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(method) I.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -893,7 +893,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in I.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in I.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -920,7 +920,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -947,7 +947,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in I.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in I.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -974,7 +974,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) b: T\n```\n"
+        "value": "```typescript\n(parameter) b: T\n```\n"
       },
       "range": {
         "start": {
@@ -1001,7 +1001,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T in I<T>\n```\n"
+        "value": "```typescript\n(type parameter) T in I<T>\n```\n"
       },
       "range": {
         "start": {
@@ -1028,7 +1028,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in I.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in I.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1055,7 +1055,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I<string>\n```\n"
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
       },
       "range": {
         "start": {
@@ -1083,7 +1083,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I<T>\n```\n"
+        "value": "```typescript\ninterface I<T>\n```\n"
       },
       "range": {
         "start": {
@@ -1111,7 +1111,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: new <\"hello\">(a: \"hello\", b: string) => \"hello\"\n```\n"
+        "value": "```typescript\nvar iVal: new <\"hello\">(a: \"hello\", b: string) => \"hello\"\n```\n"
       },
       "range": {
         "start": {
@@ -1138,7 +1138,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: <\"hello\">(a: \"hello\", b: string) => \"hello\"\n```\n"
+        "value": "```typescript\nvar iVal: <\"hello\">(a: \"hello\", b: string) => \"hello\"\n```\n"
       },
       "range": {
         "start": {
@@ -1165,7 +1165,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I<string>\n```\n"
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
       },
       "range": {
         "start": {
@@ -1193,7 +1193,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) I<string>.method<\"hello\">(a: \"hello\", b: string): \"hello\"\n```\n"
+        "value": "```typescript\n(method) I<string>.method<\"hello\">(a: \"hello\", b: string): \"hello\"\n```\n"
       },
       "range": {
         "start": {
@@ -1220,7 +1220,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I1<T extends I<string>>\n```\n"
+        "value": "```typescript\ninterface I1<T extends I<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1248,7 +1248,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends I<string> in I1<T extends I<string>>\n```\n"
+        "value": "```typescript\n(type parameter) T extends I<string> in I1<T extends I<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1276,7 +1276,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I<T>\n```\n"
+        "value": "```typescript\ninterface I<T>\n```\n"
       },
       "range": {
         "start": {
@@ -1304,7 +1304,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1332,7 +1332,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I<T>\n```\n"
+        "value": "```typescript\ninterface I<T>\n```\n"
       },
       "range": {
         "start": {
@@ -1360,7 +1360,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -1388,7 +1388,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1416,7 +1416,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) b: T\n```\n"
+        "value": "```typescript\n(parameter) b: T\n```\n"
       },
       "range": {
         "start": {
@@ -1444,7 +1444,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends I<string> in I1<T extends I<string>>\n```\n"
+        "value": "```typescript\n(type parameter) T extends I<string> in I1<T extends I<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1472,7 +1472,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends I<string> in new new <U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1500,7 +1500,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1528,7 +1528,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I<T>\n```\n"
+        "value": "```typescript\ninterface I<T>\n```\n"
       },
       "range": {
         "start": {
@@ -1556,7 +1556,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -1584,7 +1584,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1612,7 +1612,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) b: T\n```\n"
+        "value": "```typescript\n(parameter) b: T\n```\n"
       },
       "range": {
         "start": {
@@ -1640,7 +1640,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends I<string> in I1<T extends I<string>>\n```\n"
+        "value": "```typescript\n(type parameter) T extends I<string> in I1<T extends I<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1668,7 +1668,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends I<string> in <U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1696,7 +1696,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(method) I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1724,7 +1724,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1752,7 +1752,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I<T>\n```\n"
+        "value": "```typescript\ninterface I<T>\n```\n"
       },
       "range": {
         "start": {
@@ -1780,7 +1780,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -1808,7 +1808,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1836,7 +1836,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) b: T\n```\n"
+        "value": "```typescript\n(parameter) b: T\n```\n"
       },
       "range": {
         "start": {
@@ -1864,7 +1864,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends I<string> in I1<T extends I<string>>\n```\n"
+        "value": "```typescript\n(type parameter) T extends I<string> in I1<T extends I<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1892,7 +1892,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1920,7 +1920,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal1: I1<I<string>>\n```\n"
+        "value": "```typescript\nvar iVal1: I1<I<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1948,7 +1948,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I1<T extends I<string>>\n```\n"
+        "value": "```typescript\ninterface I1<T extends I<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1976,7 +1976,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ninterface I<T>\n```\n"
+        "value": "```typescript\ninterface I<T>\n```\n"
       },
       "range": {
         "start": {
@@ -2004,7 +2004,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal1: new <I<string>>(a: I<string>, b: I<string>) => I<string>\n```\n"
+        "value": "```typescript\nvar iVal1: new <I<string>>(a: I<string>, b: I<string>) => I<string>\n```\n"
       },
       "range": {
         "start": {
@@ -2032,7 +2032,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I<string>\n```\n"
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
       },
       "range": {
         "start": {
@@ -2060,7 +2060,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I<string>\n```\n"
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
       },
       "range": {
         "start": {
@@ -2088,7 +2088,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal1: <I<string>>(a: I<string>, b: I<string>) => I<string>\n```\n"
+        "value": "```typescript\nvar iVal1: <I<string>>(a: I<string>, b: I<string>) => I<string>\n```\n"
       },
       "range": {
         "start": {
@@ -2116,7 +2116,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I<string>\n```\n"
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
       },
       "range": {
         "start": {
@@ -2144,7 +2144,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I<string>\n```\n"
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
       },
       "range": {
         "start": {
@@ -2172,7 +2172,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal1: I1<I<string>>\n```\n"
+        "value": "```typescript\nvar iVal1: I1<I<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -2200,7 +2200,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) I1<I<string>>.method<I<string>>(a: I<string>, b: I<string>): I<string>\n```\n"
+        "value": "```typescript\n(method) I1<I<string>>.method<I<string>>(a: I<string>, b: I<string>): I<string>\n```\n"
       },
       "range": {
         "start": {
@@ -2228,7 +2228,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I<string>\n```\n"
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
       },
       "range": {
         "start": {
@@ -2256,7 +2256,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar iVal: I<string>\n```\n"
+        "value": "```typescript\nvar iVal: I<string>\n```\n"
       },
       "range": {
         "start": {

@@ -12,7 +12,7 @@
 // x.m();
 // ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var x: any
 // | ```
 // | 
@@ -31,7 +31,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar x: any\n```\n"
+        "value": "```typescript\nvar x: any\n```\n"
       },
       "range": {
         "start": {

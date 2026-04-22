@@ -4,7 +4,7 @@
 //     interface Foo {
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo {
 // |     a: "a" | "c";
 // | }
@@ -14,7 +14,7 @@
 // | ----------------------------------------------------------------------
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo
 // | ```
 // | 
@@ -30,7 +30,7 @@
 //     interface Foo extends Bar {
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo extends Bar {
 // |     a: "a" | "c";
 // | }
@@ -40,7 +40,7 @@
 // | ----------------------------------------------------------------------
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo
 // | ```
 // | 
@@ -61,7 +61,7 @@
 //     interface Foo extends Bar {
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo extends Bar {
 // |     a: "a" | "c";
 // |     foo: (a: {
@@ -74,7 +74,7 @@
 // | ----------------------------------------------------------------------
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo extends Bar {
 // |     a: FooType;
 // |     foo: (a: FooParam) => number;
@@ -85,7 +85,7 @@
 // | ----------------------------------------------------------------------
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo
 // | ```
 // | 
@@ -99,7 +99,7 @@
 //     interface Bar<B> {
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Bar<B> {
 // |     bar(b: B): string;
 // | }
@@ -109,7 +109,7 @@
 // | ----------------------------------------------------------------------
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Bar<B>
 // | ```
 // | 
@@ -123,7 +123,7 @@
 //     interface Foo extends Bar<FooParam> {
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo extends Bar<{
 // |     param: "a" | "c";
 // | }> {
@@ -138,7 +138,7 @@
 // | ----------------------------------------------------------------------
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo extends Bar<FooParam> {
 // |     a: "a" | "c";
 // |     foo: (a: FooParam) => number;
@@ -149,7 +149,7 @@
 // | ----------------------------------------------------------------------
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo
 // | ```
 // | 
@@ -166,7 +166,7 @@
 //     interface Foo {
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo {
 // |     a: "a";
 // |     b: "b";
@@ -177,7 +177,7 @@
 // | ----------------------------------------------------------------------
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo
 // | ```
 // | 
@@ -189,7 +189,7 @@
 // interface Foo {
 //           ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace Foo {
 // |     let bar: string;
 // | }
@@ -202,7 +202,7 @@
 // | ----------------------------------------------------------------------
 //           ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo
 // | ```
 // | 
@@ -213,7 +213,7 @@
 // namespace Foo {
 //           ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace Foo {
 // |     let bar: string;
 // | }
@@ -227,7 +227,7 @@
 // | ----------------------------------------------------------------------
 //           ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Foo
 // | namespace Foo
 // | ```
@@ -251,7 +251,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo\n```\n"
+          "value": "```typescript\ninterface Foo\n```\n"
         },
         "range": {
           "start": {
@@ -282,7 +282,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo {\n    a: \"a\" | \"c\";\n}\n```\n"
+          "value": "```typescript\ninterface Foo {\n    a: \"a\" | \"c\";\n}\n```\n"
         },
         "range": {
           "start": {
@@ -312,7 +312,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo\n```\n"
+          "value": "```typescript\ninterface Foo\n```\n"
         },
         "range": {
           "start": {
@@ -343,7 +343,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo extends Bar {\n    a: \"a\" | \"c\";\n}\n```\n"
+          "value": "```typescript\ninterface Foo extends Bar {\n    a: \"a\" | \"c\";\n}\n```\n"
         },
         "range": {
           "start": {
@@ -373,7 +373,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo\n```\n"
+          "value": "```typescript\ninterface Foo\n```\n"
         },
         "range": {
           "start": {
@@ -404,7 +404,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo extends Bar {\n    a: FooType;\n    foo: (a: FooParam) => number;\n}\n```\n"
+          "value": "```typescript\ninterface Foo extends Bar {\n    a: FooType;\n    foo: (a: FooParam) => number;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -435,7 +435,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo extends Bar {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: FooType;\n    }) => number;\n}\n```\n"
+          "value": "```typescript\ninterface Foo extends Bar {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: FooType;\n    }) => number;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -466,7 +466,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Bar<B>\n```\n"
+          "value": "```typescript\ninterface Bar<B>\n```\n"
         },
         "range": {
           "start": {
@@ -497,7 +497,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Bar<B> {\n    bar(b: B): string;\n}\n```\n"
+          "value": "```typescript\ninterface Bar<B> {\n    bar(b: B): string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -527,7 +527,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo\n```\n"
+          "value": "```typescript\ninterface Foo\n```\n"
         },
         "range": {
           "start": {
@@ -558,7 +558,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo extends Bar<FooParam> {\n    a: \"a\" | \"c\";\n    foo: (a: FooParam) => number;\n}\n```\n"
+          "value": "```typescript\ninterface Foo extends Bar<FooParam> {\n    a: \"a\" | \"c\";\n    foo: (a: FooParam) => number;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -589,7 +589,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo extends Bar<{\n    param: \"a\" | \"c\";\n}> {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: \"a\" | \"c\";\n    }) => number;\n}\n```\n"
+          "value": "```typescript\ninterface Foo extends Bar<{\n    param: \"a\" | \"c\";\n}> {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: \"a\" | \"c\";\n    }) => number;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -619,7 +619,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo\n```\n"
+          "value": "```typescript\ninterface Foo\n```\n"
         },
         "range": {
           "start": {
@@ -650,7 +650,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo {\n    a: \"a\";\n    b: \"b\";\n}\n```\n"
+          "value": "```typescript\ninterface Foo {\n    a: \"a\";\n    b: \"b\";\n}\n```\n"
         },
         "range": {
           "start": {
@@ -680,7 +680,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo\n```\n"
+          "value": "```typescript\ninterface Foo\n```\n"
         },
         "range": {
           "start": {
@@ -711,7 +711,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nnamespace Foo {\n    let bar: string;\n}\ninterface Foo {\n    a: \"a\";\n}\n```\n"
+          "value": "```typescript\nnamespace Foo {\n    let bar: string;\n}\ninterface Foo {\n    a: \"a\";\n}\n```\n"
         },
         "range": {
           "start": {
@@ -741,7 +741,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Foo\nnamespace Foo\n```\n"
+          "value": "```typescript\ninterface Foo\nnamespace Foo\n```\n"
         },
         "range": {
           "start": {
@@ -772,7 +772,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nnamespace Foo {\n    let bar: string;\n}\ninterface Foo {\n    a: \"a\";\n}\n\n```\n"
+          "value": "```typescript\nnamespace Foo {\n    let bar: string;\n}\ninterface Foo {\n    a: \"a\";\n}\n\n```\n"
         },
         "range": {
           "start": {

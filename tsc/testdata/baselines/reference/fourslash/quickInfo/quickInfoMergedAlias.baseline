@@ -6,7 +6,7 @@
 // export function foo() {}
 //                 ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo(): void
 // | ```
 // | A function
@@ -15,7 +15,7 @@
 // import { foo } from './a';
 //          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) function foo(): void
 // | type foo = number
 // | ```
@@ -24,7 +24,7 @@
 // export { foo };
 //          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) function foo(): void
 // | (alias) type foo = number
 // | ```
@@ -37,7 +37,7 @@
 // type foo = number;
 //      ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type foo = number
 // | ```
 // | A type
@@ -46,7 +46,7 @@
 // foo()
 // ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) function foo(): void
 // | ```
 // | A function
@@ -54,7 +54,7 @@
 // let x1: foo;
 //         ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type foo = number
 // | ```
 // | A type
@@ -65,7 +65,7 @@
 // import { foo } from './b';
 //          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) function foo(): void
 // | (alias) type foo = number
 // | namespace foo
@@ -79,7 +79,7 @@
 // namespace foo {
 //           ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace foo
 // | ```
 // | A namespace
@@ -90,7 +90,7 @@
 // foo()
 // ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) function foo(): void
 // | ```
 // | A function
@@ -98,7 +98,7 @@
 // let x1: foo;
 //         ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) type foo = number
 // | ```
 // | A type
@@ -106,7 +106,7 @@
 // let x2: foo.bar;
 //         ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace foo
 // | ```
 // | A namespace
@@ -127,7 +127,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(): void\n```\nA function"
+        "value": "```typescript\nfunction foo(): void\n```\nA function"
       },
       "range": {
         "start": {
@@ -154,7 +154,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) function foo(): void\ntype foo = number\n```\nA function"
+        "value": "```typescript\n(alias) function foo(): void\ntype foo = number\n```\nA function"
       },
       "range": {
         "start": {
@@ -181,7 +181,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) function foo(): void\n(alias) type foo = number\n```\nA function"
+        "value": "```typescript\n(alias) function foo(): void\n(alias) type foo = number\n```\nA function"
       },
       "range": {
         "start": {
@@ -208,7 +208,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype foo = number\n```\nA type"
+        "value": "```typescript\ntype foo = number\n```\nA type"
       },
       "range": {
         "start": {
@@ -235,7 +235,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) function foo(): void\n```\nA function"
+        "value": "```typescript\n(alias) function foo(): void\n```\nA function"
       },
       "range": {
         "start": {
@@ -262,7 +262,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype foo = number\n```\nA type"
+        "value": "```typescript\ntype foo = number\n```\nA type"
       },
       "range": {
         "start": {
@@ -289,7 +289,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) function foo(): void\n(alias) type foo = number\nnamespace foo\n```\nA function"
+        "value": "```typescript\n(alias) function foo(): void\n(alias) type foo = number\nnamespace foo\n```\nA function"
       },
       "range": {
         "start": {
@@ -317,7 +317,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nnamespace foo\n```\nA namespace"
+        "value": "```typescript\nnamespace foo\n```\nA namespace"
       },
       "range": {
         "start": {
@@ -345,7 +345,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) function foo(): void\n```\nA function"
+        "value": "```typescript\n(alias) function foo(): void\n```\nA function"
       },
       "range": {
         "start": {
@@ -372,7 +372,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) type foo = number\n```\nA type"
+        "value": "```typescript\n(alias) type foo = number\n```\nA type"
       },
       "range": {
         "start": {
@@ -399,7 +399,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nnamespace foo\n```\nA namespace"
+        "value": "```typescript\nnamespace foo\n```\nA namespace"
       },
       "range": {
         "start": {

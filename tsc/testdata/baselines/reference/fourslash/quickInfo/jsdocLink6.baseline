@@ -8,7 +8,7 @@
 // export default function f() { }
 //                         ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function f(): void
 // | ```
 // | [A](file:///a.ts#1,25-1,26)
@@ -28,7 +28,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction f(): void\n```\n[A](file:///a.ts#1,25-1,26)\n[B](file:///a.ts#2,17-2,18)"
+        "value": "```typescript\nfunction f(): void\n```\n[A](file:///a.ts#1,25-1,26)\n[B](file:///a.ts#2,17-2,18)"
       },
       "range": {
         "start": {

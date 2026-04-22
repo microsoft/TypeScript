@@ -4,7 +4,7 @@
 // declare namespace Outer {
 //                   ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace Outer {
 // |     namespace Inner {
 // |         let x: number;
@@ -19,7 +19,7 @@
 // | ----------------------------------------------------------------------
 //                   ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace Outer
 // | ```
 // | 
@@ -47,7 +47,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nnamespace Outer\n```\n"
+          "value": "```typescript\nnamespace Outer\n```\n"
         },
         "range": {
           "start": {
@@ -78,7 +78,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nnamespace Outer {\n    namespace Inner {\n        let x: number;\n        function f(): string;\n        namespace f { }\n    }\n    let outerVal: boolean;\n}\n```\n"
+          "value": "```typescript\nnamespace Outer {\n    namespace Inner {\n        let x: number;\n        function f(): string;\n        namespace f { }\n    }\n    let outerVal: boolean;\n}\n```\n"
         },
         "range": {
           "start": {

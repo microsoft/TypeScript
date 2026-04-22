@@ -9,7 +9,7 @@
 //   static idField = "id" as const;
 //          ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) Derived.idField: "id"
 // | ```
 // | 
@@ -30,7 +30,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Derived.idField: \"id\"\n```\n"
+        "value": "```typescript\n(property) Derived.idField: \"id\"\n```\n"
       },
       "range": {
         "start": {

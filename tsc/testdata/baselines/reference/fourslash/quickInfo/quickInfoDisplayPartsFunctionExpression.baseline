@@ -3,14 +3,14 @@
 // var x = function foo() {
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var x: () => void
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                  ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo(): void
 // | ```
 // | 
@@ -18,7 +18,7 @@
 //     foo();
 //     ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo(): void
 // | ```
 // | 
@@ -27,7 +27,7 @@
 // var y = function () {
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var y: () => void
 // | ```
 // | 
@@ -36,7 +36,7 @@
 // (function foo1() {
 //           ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo1(): void
 // | ```
 // | 
@@ -44,7 +44,7 @@
 //     foo1();
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo1(): void
 // | ```
 // | 
@@ -64,7 +64,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar x: () => void\n```\n"
+        "value": "```typescript\nvar x: () => void\n```\n"
       },
       "range": {
         "start": {
@@ -91,7 +91,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(): void\n```\n"
+        "value": "```typescript\nfunction foo(): void\n```\n"
       },
       "range": {
         "start": {
@@ -118,7 +118,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(): void\n```\n"
+        "value": "```typescript\nfunction foo(): void\n```\n"
       },
       "range": {
         "start": {
@@ -145,7 +145,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar y: () => void\n```\n"
+        "value": "```typescript\nvar y: () => void\n```\n"
       },
       "range": {
         "start": {
@@ -172,7 +172,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo1(): void\n```\n"
+        "value": "```typescript\nfunction foo1(): void\n```\n"
       },
       "range": {
         "start": {
@@ -199,7 +199,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo1(): void\n```\n"
+        "value": "```typescript\nfunction foo1(): void\n```\n"
       },
       "range": {
         "start": {

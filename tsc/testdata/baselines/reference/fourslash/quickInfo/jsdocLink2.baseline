@@ -11,7 +11,7 @@
 // function CC() {
 //          ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function CC(): void
 // | ```
 // | [C](file:///jsdocLink2.ts#1,7-1,8)
@@ -39,7 +39,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction CC(): void\n```\n[C](file:///jsdocLink2.ts#1,7-1,8)\n\n*@wat* — Makes a [C](file:///jsdocLink2.ts#1,7-1,8). A default one.\n[C()](file:///jsdocLink2.ts#1,7-1,8)\n[postfix text](file:///jsdocLink2.ts#1,7-1,8)\nunformatted postfix text\n\n*@see* — [C](file:///jsdocLink2.ts#1,7-1,8) its great\n"
+        "value": "```typescript\nfunction CC(): void\n```\n[C](file:///jsdocLink2.ts#1,7-1,8)\n\n*@wat* — Makes a [C](file:///jsdocLink2.ts#1,7-1,8). A default one.\n[C()](file:///jsdocLink2.ts#1,7-1,8)\n[postfix text](file:///jsdocLink2.ts#1,7-1,8)\nunformatted postfix text\n\n*@see* — [C](file:///jsdocLink2.ts#1,7-1,8) its great\n"
       },
       "range": {
         "start": {

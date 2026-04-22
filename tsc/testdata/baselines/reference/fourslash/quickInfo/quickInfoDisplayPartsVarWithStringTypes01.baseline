@@ -3,7 +3,7 @@
 // let hello: "hello" | 'hello' = "hello";
 //     ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | let hello: "hello"
 // | ```
 // | 
@@ -11,7 +11,7 @@
 // let world: 'world' = "world";
 //     ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | let world: "world"
 // | ```
 // | 
@@ -19,7 +19,7 @@
 // let helloOrWorld: "hello" | 'world';
 //     ^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | let helloOrWorld: "hello" | "world"
 // | ```
 // | 
@@ -38,7 +38,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nlet hello: \"hello\"\n```\n"
+        "value": "```typescript\nlet hello: \"hello\"\n```\n"
       },
       "range": {
         "start": {
@@ -65,7 +65,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nlet world: \"world\"\n```\n"
+        "value": "```typescript\nlet world: \"world\"\n```\n"
       },
       "range": {
         "start": {
@@ -92,7 +92,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nlet helloOrWorld: \"hello\" | \"world\"\n```\n"
+        "value": "```typescript\nlet helloOrWorld: \"hello\" | \"world\"\n```\n"
       },
       "range": {
         "start": {

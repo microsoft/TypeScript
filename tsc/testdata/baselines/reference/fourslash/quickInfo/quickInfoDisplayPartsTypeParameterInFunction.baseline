@@ -3,28 +3,28 @@
 // function foo<U>(a: U) {
 //          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo<U>(a: U): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //              ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in foo<U>(a: U): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                 ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                    ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in foo<U>(a: U): U
 // | ```
 // | 
@@ -32,7 +32,7 @@
 //     return a;
 //            ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
@@ -41,7 +41,7 @@
 // foo("Hello");
 // ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo<"Hello">(a: "Hello"): "Hello"
 // | ```
 // | 
@@ -49,28 +49,28 @@
 // function foo2<U extends string>(a: U) {
 //          ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo2<U extends string>(a: U): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //               ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends string in foo2<U extends string>(a: U): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                 ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                    ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends string in foo2<U extends string>(a: U): U
 // | ```
 // | 
@@ -78,7 +78,7 @@
 //     return a;
 //            ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
@@ -87,7 +87,7 @@
 // foo2("hello");
 // ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo2<"hello">(a: "hello"): "hello"
 // | ```
 // | 
@@ -106,7 +106,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo<U>(a: U): U\n```\n"
+        "value": "```typescript\nfunction foo<U>(a: U): U\n```\n"
       },
       "range": {
         "start": {
@@ -133,7 +133,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in foo<U>(a: U): U\n```\n"
+        "value": "```typescript\n(type parameter) U in foo<U>(a: U): U\n```\n"
       },
       "range": {
         "start": {
@@ -160,7 +160,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -187,7 +187,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in foo<U>(a: U): U\n```\n"
+        "value": "```typescript\n(type parameter) U in foo<U>(a: U): U\n```\n"
       },
       "range": {
         "start": {
@@ -214,7 +214,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -241,7 +241,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo<\"Hello\">(a: \"Hello\"): \"Hello\"\n```\n"
+        "value": "```typescript\nfunction foo<\"Hello\">(a: \"Hello\"): \"Hello\"\n```\n"
       },
       "range": {
         "start": {
@@ -268,7 +268,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo2<U extends string>(a: U): U\n```\n"
+        "value": "```typescript\nfunction foo2<U extends string>(a: U): U\n```\n"
       },
       "range": {
         "start": {
@@ -295,7 +295,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends string in foo2<U extends string>(a: U): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends string in foo2<U extends string>(a: U): U\n```\n"
       },
       "range": {
         "start": {
@@ -322,7 +322,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -350,7 +350,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends string in foo2<U extends string>(a: U): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends string in foo2<U extends string>(a: U): U\n```\n"
       },
       "range": {
         "start": {
@@ -377,7 +377,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -405,7 +405,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo2<\"hello\">(a: \"hello\"): \"hello\"\n```\n"
+        "value": "```typescript\nfunction foo2<\"hello\">(a: \"hello\"): \"hello\"\n```\n"
       },
       "range": {
         "start": {

@@ -4,7 +4,7 @@
 // class c2 {
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c2
 // | ```
 // | This is class c2 without constructor
@@ -13,14 +13,14 @@
 // var i2 = new c2();
 //     ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var i2: c2
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //              ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor c2(): c2
 // | ```
 // | This is class c2 without constructor
@@ -28,14 +28,14 @@
 // var i2_c = c2;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var i2_c: typeof c2
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c2
 // | ```
 // | This is class c2 without constructor
@@ -43,7 +43,7 @@
 // class c3 {
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c3
 // | ```
 // | 
@@ -55,14 +55,14 @@
 // var i3 = new c3();
 //     ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var i3: c3
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //              ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor c3(): c3
 // | ```
 // | Constructor comment
@@ -70,14 +70,14 @@
 // var i3_c = c3;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var i3_c: typeof c3
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c3
 // | ```
 // | 
@@ -86,7 +86,7 @@
 // class c4 {
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c4
 // | ```
 // | Class comment
@@ -98,14 +98,14 @@
 // var i4 = new c4();
 //     ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var i4: c4
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //              ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor c4(): c4
 // | ```
 // | Constructor comment
@@ -113,14 +113,14 @@
 // var i4_c = c4;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var i4_c: typeof c4
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c4
 // | ```
 // | Class comment
@@ -129,7 +129,7 @@
 // class c5 {
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c5
 // | ```
 // | Class with statics
@@ -139,14 +139,14 @@
 // var i5 = new c5();
 //     ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var i5: c5
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //              ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor c5(): c5
 // | ```
 // | Class with statics
@@ -154,14 +154,14 @@
 // var i5_c = c5;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var i5_c: typeof c5
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c5
 // | ```
 // | Class with statics
@@ -170,7 +170,7 @@
 // class c6 {
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c6
 // | ```
 // | class with statics and constructor
@@ -184,14 +184,14 @@
 // var i6 = new c6();
 //     ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var i6: c6
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //              ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor c6(): c6
 // | ```
 // | constructor comment
@@ -199,14 +199,14 @@
 // var i6_c = c6;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var i6_c: typeof c6
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c6
 // | ```
 // | class with statics and constructor
@@ -234,7 +234,7 @@
 // var myVar = new m.m2.c1();
 //                      ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor m.m2.c1(): m.m2.c1
 // | ```
 // | constructor comment
@@ -253,7 +253,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c2\n```\nThis is class c2 without constructor"
+        "value": "```typescript\nclass c2\n```\nThis is class c2 without constructor"
       },
       "range": {
         "start": {
@@ -281,7 +281,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i2: c2\n```\n"
+        "value": "```typescript\nvar i2: c2\n```\n"
       },
       "range": {
         "start": {
@@ -309,7 +309,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c2(): c2\n```\nThis is class c2 without constructor"
+        "value": "```typescript\nconstructor c2(): c2\n```\nThis is class c2 without constructor"
       },
       "range": {
         "start": {
@@ -337,7 +337,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i2_c: typeof c2\n```\n"
+        "value": "```typescript\nvar i2_c: typeof c2\n```\n"
       },
       "range": {
         "start": {
@@ -365,7 +365,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c2\n```\nThis is class c2 without constructor"
+        "value": "```typescript\nclass c2\n```\nThis is class c2 without constructor"
       },
       "range": {
         "start": {
@@ -393,7 +393,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c3\n```\n"
+        "value": "```typescript\nclass c3\n```\n"
       },
       "range": {
         "start": {
@@ -421,7 +421,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i3: c3\n```\n"
+        "value": "```typescript\nvar i3: c3\n```\n"
       },
       "range": {
         "start": {
@@ -449,7 +449,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c3(): c3\n```\nConstructor comment"
+        "value": "```typescript\nconstructor c3(): c3\n```\nConstructor comment"
       },
       "range": {
         "start": {
@@ -477,7 +477,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i3_c: typeof c3\n```\n"
+        "value": "```typescript\nvar i3_c: typeof c3\n```\n"
       },
       "range": {
         "start": {
@@ -505,7 +505,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c3\n```\n"
+        "value": "```typescript\nclass c3\n```\n"
       },
       "range": {
         "start": {
@@ -533,7 +533,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c4\n```\nClass comment"
+        "value": "```typescript\nclass c4\n```\nClass comment"
       },
       "range": {
         "start": {
@@ -561,7 +561,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i4: c4\n```\n"
+        "value": "```typescript\nvar i4: c4\n```\n"
       },
       "range": {
         "start": {
@@ -589,7 +589,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c4(): c4\n```\nConstructor comment"
+        "value": "```typescript\nconstructor c4(): c4\n```\nConstructor comment"
       },
       "range": {
         "start": {
@@ -617,7 +617,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i4_c: typeof c4\n```\n"
+        "value": "```typescript\nvar i4_c: typeof c4\n```\n"
       },
       "range": {
         "start": {
@@ -645,7 +645,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c4\n```\nClass comment"
+        "value": "```typescript\nclass c4\n```\nClass comment"
       },
       "range": {
         "start": {
@@ -673,7 +673,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c5\n```\nClass with statics"
+        "value": "```typescript\nclass c5\n```\nClass with statics"
       },
       "range": {
         "start": {
@@ -701,7 +701,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i5: c5\n```\n"
+        "value": "```typescript\nvar i5: c5\n```\n"
       },
       "range": {
         "start": {
@@ -729,7 +729,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c5(): c5\n```\nClass with statics"
+        "value": "```typescript\nconstructor c5(): c5\n```\nClass with statics"
       },
       "range": {
         "start": {
@@ -757,7 +757,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i5_c: typeof c5\n```\n"
+        "value": "```typescript\nvar i5_c: typeof c5\n```\n"
       },
       "range": {
         "start": {
@@ -785,7 +785,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c5\n```\nClass with statics"
+        "value": "```typescript\nclass c5\n```\nClass with statics"
       },
       "range": {
         "start": {
@@ -813,7 +813,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c6\n```\nclass with statics and constructor"
+        "value": "```typescript\nclass c6\n```\nclass with statics and constructor"
       },
       "range": {
         "start": {
@@ -841,7 +841,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i6: c6\n```\n"
+        "value": "```typescript\nvar i6: c6\n```\n"
       },
       "range": {
         "start": {
@@ -869,7 +869,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c6(): c6\n```\nconstructor comment"
+        "value": "```typescript\nconstructor c6(): c6\n```\nconstructor comment"
       },
       "range": {
         "start": {
@@ -897,7 +897,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar i6_c: typeof c6\n```\n"
+        "value": "```typescript\nvar i6_c: typeof c6\n```\n"
       },
       "range": {
         "start": {
@@ -925,7 +925,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c6\n```\nclass with statics and constructor"
+        "value": "```typescript\nclass c6\n```\nclass with statics and constructor"
       },
       "range": {
         "start": {
@@ -953,7 +953,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor m.m2.c1(): m.m2.c1\n```\nconstructor comment"
+        "value": "```typescript\nconstructor m.m2.c1(): m.m2.c1\n```\nconstructor comment"
       },
       "range": {
         "start": {

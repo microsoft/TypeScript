@@ -19,7 +19,7 @@
 //     method(x, y) {
 //     ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) Bar.method(x: any, y: any): number
 // | ```
 // | 
@@ -44,7 +44,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) Bar.method(x: any, y: any): number\n```\n\n\n*@inheritDoc*"
+        "value": "```typescript\n(method) Bar.method(x: any, y: any): number\n```\n\n\n*@inheritDoc*"
       },
       "range": {
         "start": {

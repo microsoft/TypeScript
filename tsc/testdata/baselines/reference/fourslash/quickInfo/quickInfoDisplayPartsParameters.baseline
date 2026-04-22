@@ -4,7 +4,7 @@
 // function foo(param: string, optionalParam?: string, paramWithInitializer = "hello", ...restParam: string[]) {
 //          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
 // | ```
 // | 
@@ -13,28 +13,28 @@
 // | ----------------------------------------------------------------------
 //              ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) param: string
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                             ^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) optionalParam: string | undefined
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                                     ^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) paramWithInitializer: string
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                                                                        ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) restParam: string[]
 // | ```
 // | 
@@ -42,7 +42,7 @@
 //     param = "Hello";
 //     ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) param: string
 // | ```
 // | 
@@ -50,7 +50,7 @@
 //     optionalParam = "World";
 //     ^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) optionalParam: string | undefined
 // | ```
 // | 
@@ -58,7 +58,7 @@
 //     paramWithInitializer = "Hello";
 //     ^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) paramWithInitializer: string
 // | ```
 // | 
@@ -66,7 +66,7 @@
 //     restParam[0] = "World";
 //     ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) restParam: string[]
 // | ```
 // | 
@@ -86,7 +86,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n\n\n*@return* — *crunch* "
+        "value": "```typescript\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n\n\n*@return* — *crunch* "
       },
       "range": {
         "start": {
@@ -113,7 +113,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) param: string\n```\n"
+        "value": "```typescript\n(parameter) param: string\n```\n"
       },
       "range": {
         "start": {
@@ -140,7 +140,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) optionalParam: string | undefined\n```\n"
+        "value": "```typescript\n(parameter) optionalParam: string | undefined\n```\n"
       },
       "range": {
         "start": {
@@ -167,7 +167,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) paramWithInitializer: string\n```\n"
+        "value": "```typescript\n(parameter) paramWithInitializer: string\n```\n"
       },
       "range": {
         "start": {
@@ -194,7 +194,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) restParam: string[]\n```\n"
+        "value": "```typescript\n(parameter) restParam: string[]\n```\n"
       },
       "range": {
         "start": {
@@ -221,7 +221,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) param: string\n```\n"
+        "value": "```typescript\n(parameter) param: string\n```\n"
       },
       "range": {
         "start": {
@@ -248,7 +248,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) optionalParam: string | undefined\n```\n"
+        "value": "```typescript\n(parameter) optionalParam: string | undefined\n```\n"
       },
       "range": {
         "start": {
@@ -275,7 +275,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) paramWithInitializer: string\n```\n"
+        "value": "```typescript\n(parameter) paramWithInitializer: string\n```\n"
       },
       "range": {
         "start": {
@@ -302,7 +302,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) restParam: string[]\n```\n"
+        "value": "```typescript\n(parameter) restParam: string[]\n```\n"
       },
       "range": {
         "start": {

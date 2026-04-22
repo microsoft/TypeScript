@@ -4,14 +4,14 @@
 //    export default {
 //    ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) (Anonymous function).default: {}
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //           ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) (Anonymous function).default: {}
 // | ```
 // | 
@@ -32,7 +32,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) (Anonymous function).default: {}\n```\n"
+        "value": "```typescript\n(property) (Anonymous function).default: {}\n```\n"
       },
       "range": {
         "start": {
@@ -59,7 +59,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) (Anonymous function).default: {}\n```\n"
+        "value": "```typescript\n(property) (Anonymous function).default: {}\n```\n"
       },
       "range": {
         "start": {

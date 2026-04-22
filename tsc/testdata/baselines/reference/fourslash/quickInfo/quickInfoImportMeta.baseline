@@ -8,7 +8,7 @@
 // | ----------------------------------------------------------------------
 // ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) ImportMetaExpression.meta: ImportMeta
 // | ```
 // | 
@@ -39,7 +39,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) ImportMetaExpression.meta: ImportMeta\n```\n"
+        "value": "```typescript\n(property) ImportMetaExpression.meta: ImportMeta\n```\n"
       },
       "range": {
         "start": {

@@ -4,7 +4,7 @@
 // var s;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var s: string
 // | ```
 // | 
@@ -13,7 +13,7 @@
 // var n;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var n: number
 // | ```
 // | 
@@ -22,7 +22,7 @@
 // var b;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var b: boolean
 // | ```
 // | 
@@ -31,7 +31,7 @@
 // var v;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var v: void
 // | ```
 // | 
@@ -40,7 +40,7 @@
 // var u;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var u: undefined
 // | ```
 // | 
@@ -49,7 +49,7 @@
 // var nl;
 //     ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var nl: null
 // | ```
 // | 
@@ -58,7 +58,7 @@
 // var a;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var a: array
 // | ```
 // | 
@@ -67,7 +67,7 @@
 // var p;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var p: promise
 // | ```
 // | 
@@ -76,7 +76,7 @@
 // var nullable;
 //     ^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var nullable: number | null
 // | ```
 // | 
@@ -85,7 +85,7 @@
 // var func;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var func: Function
 // | ```
 // | 
@@ -94,7 +94,7 @@
 // var func1;
 //     ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var func1: Function
 // | ```
 // | 
@@ -103,7 +103,7 @@
 // var sOrn;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var sOrn: string | number
 // | ```
 // | 
@@ -122,7 +122,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar s: string\n```\n"
+        "value": "```typescript\nvar s: string\n```\n"
       },
       "range": {
         "start": {
@@ -149,7 +149,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar n: number\n```\n"
+        "value": "```typescript\nvar n: number\n```\n"
       },
       "range": {
         "start": {
@@ -176,7 +176,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar b: boolean\n```\n"
+        "value": "```typescript\nvar b: boolean\n```\n"
       },
       "range": {
         "start": {
@@ -203,7 +203,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar v: void\n```\n"
+        "value": "```typescript\nvar v: void\n```\n"
       },
       "range": {
         "start": {
@@ -230,7 +230,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar u: undefined\n```\n"
+        "value": "```typescript\nvar u: undefined\n```\n"
       },
       "range": {
         "start": {
@@ -257,7 +257,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar nl: null\n```\n"
+        "value": "```typescript\nvar nl: null\n```\n"
       },
       "range": {
         "start": {
@@ -284,7 +284,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar a: array\n```\n"
+        "value": "```typescript\nvar a: array\n```\n"
       },
       "range": {
         "start": {
@@ -311,7 +311,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar p: promise\n```\n"
+        "value": "```typescript\nvar p: promise\n```\n"
       },
       "range": {
         "start": {
@@ -338,7 +338,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar nullable: number | null\n```\n"
+        "value": "```typescript\nvar nullable: number | null\n```\n"
       },
       "range": {
         "start": {
@@ -365,7 +365,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar func: Function\n```\n"
+        "value": "```typescript\nvar func: Function\n```\n"
       },
       "range": {
         "start": {
@@ -392,7 +392,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar func1: Function\n```\n"
+        "value": "```typescript\nvar func1: Function\n```\n"
       },
       "range": {
         "start": {
@@ -419,7 +419,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar sOrn: string | number\n```\n"
+        "value": "```typescript\nvar sOrn: string | number\n```\n"
       },
       "range": {
         "start": {

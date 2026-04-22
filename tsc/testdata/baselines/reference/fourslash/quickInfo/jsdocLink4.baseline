@@ -5,7 +5,7 @@
 //   bar(): void
 //   ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) I.bar(): void
 // | ```
 // | [I](file:///jsdocLink4.ts#1,15-1,16)
@@ -15,7 +15,7 @@
 // var n = 1
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var n: number
 // | ```
 // | [I](file:///jsdocLink4.ts#1,15-1,16)
@@ -29,7 +29,7 @@
 // f()
 // ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function f(x: any): void
 // | ```
 // | A real, very serious [to an interface](file:///jsdocLink4.ts#1,15-1,16). Right there.
@@ -51,7 +51,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) I.bar(): void\n```\n[I](file:///jsdocLink4.ts#1,15-1,16)"
+        "value": "```typescript\n(method) I.bar(): void\n```\n[I](file:///jsdocLink4.ts#1,15-1,16)"
       },
       "range": {
         "start": {
@@ -78,7 +78,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar n: number\n```\n[I](file:///jsdocLink4.ts#1,15-1,16)"
+        "value": "```typescript\nvar n: number\n```\n[I](file:///jsdocLink4.ts#1,15-1,16)"
       },
       "range": {
         "start": {
@@ -105,7 +105,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction f(x: any): void\n```\nA real, very serious [to an interface](file:///jsdocLink4.ts#1,15-1,16). Right there.\n\n*@param* `x` — one [here too](file:///jsdocLink4.ts#14,6-14,9)"
+        "value": "```typescript\nfunction f(x: any): void\n```\nA real, very serious [to an interface](file:///jsdocLink4.ts#1,15-1,16). Right there.\n\n*@param* `x` — one [here too](file:///jsdocLink4.ts#14,6-14,9)"
       },
       "range": {
         "start": {

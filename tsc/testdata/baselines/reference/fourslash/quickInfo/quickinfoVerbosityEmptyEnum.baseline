@@ -6,7 +6,7 @@
 // declare const e: Degree;
 //               ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const e: Degree
 // | ```
 // | 
@@ -14,7 +14,7 @@
 // | ----------------------------------------------------------------------
 //               ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const e: Degree
 // | ```
 // | 
@@ -36,7 +36,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst e: Degree\n```\n"
+          "value": "```typescript\nconst e: Degree\n```\n"
         },
         "range": {
           "start": {
@@ -66,7 +66,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst e: Degree\n```\n"
+          "value": "```typescript\nconst e: Degree\n```\n"
         },
         "range": {
           "start": {

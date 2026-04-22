@@ -15,7 +15,7 @@
 // function foo(x) {}
 //          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo(x: any): void
 // | ```
 // | 
@@ -34,7 +34,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(x: any): void\n```\n"
+        "value": "```typescript\nfunction foo(x: any): void\n```\n"
       },
       "range": {
         "start": {

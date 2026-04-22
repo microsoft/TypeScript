@@ -5,7 +5,7 @@
 //      * Text before {@link a} text after
 //                           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: number
 // | ```
 // | 
@@ -27,7 +27,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: number\n```\n"
+        "value": "```typescript\n(parameter) a: number\n```\n"
       },
       "range": {
         "start": {

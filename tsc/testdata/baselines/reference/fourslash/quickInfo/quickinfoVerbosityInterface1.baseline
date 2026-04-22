@@ -7,7 +7,7 @@
 //     const f: Foo = { a: "a" };
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     a: "a" | "c";
 // | }
@@ -17,7 +17,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: Foo
 // | ```
 // | 
@@ -34,7 +34,7 @@
 //     const f: Foo = { a: "a", b: "b" };
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     a: "a" | "c";
 // |     b: "b" | "d";
@@ -45,7 +45,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: Foo
 // | ```
 // | 
@@ -68,7 +68,7 @@
 //     const f: Foo = { a: "a", bar: () => "b", foo: () => 1 };
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     a: "a" | "c";
 // |     foo: (a: {
@@ -82,7 +82,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     a: "a" | "c";
 // |     foo: (a: {
@@ -96,7 +96,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     a: FooType;
 // |     foo: (a: FooParam) => number;
@@ -108,7 +108,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: Foo
 // | ```
 // | 
@@ -129,7 +129,7 @@
 //     const f: Foo = { a: "a", bar: () => "b", foo: () => 1 };
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     a: "a" | "c";
 // |     foo: (a: {
@@ -145,7 +145,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     a: "a" | "c";
 // |     foo: (a: FooParam) => number;
@@ -157,7 +157,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: Foo
 // | ```
 // | 
@@ -166,7 +166,7 @@
 //     const b: Bar<number> = { bar: () => "" };
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const b: {
 // |     bar(b: number): string;
 // | }
@@ -176,7 +176,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const b: Bar<number>
 // | ```
 // | 
@@ -191,7 +191,7 @@
 //     const a: Alias = { a: "a" };
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const a: {
 // |     a: string;
 // | }
@@ -201,7 +201,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const a: Foo<string>
 // | ```
 // | 
@@ -209,7 +209,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const a: Alias
 // | ```
 // | 
@@ -226,7 +226,7 @@
 //     const f: Foo = { a: "a", b: "b" };
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     a: "a";
 // |     b: "b";
@@ -237,7 +237,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: Foo
 // | ```
 // | 
@@ -259,7 +259,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: Foo\n```\n"
+          "value": "```typescript\nconst f: Foo\n```\n"
         },
         "range": {
           "start": {
@@ -290,7 +290,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    a: \"a\" | \"c\";\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    a: \"a\" | \"c\";\n}\n```\n"
         },
         "range": {
           "start": {
@@ -320,7 +320,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: Foo\n```\n"
+          "value": "```typescript\nconst f: Foo\n```\n"
         },
         "range": {
           "start": {
@@ -351,7 +351,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    a: \"a\" | \"c\";\n    b: \"b\" | \"d\";\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    a: \"a\" | \"c\";\n    b: \"b\" | \"d\";\n}\n```\n"
         },
         "range": {
           "start": {
@@ -381,7 +381,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: Foo\n```\n"
+          "value": "```typescript\nconst f: Foo\n```\n"
         },
         "range": {
           "start": {
@@ -412,7 +412,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    a: FooType;\n    foo: (a: FooParam) => number;\n    bar(b: BarParam): string;\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    a: FooType;\n    foo: (a: FooParam) => number;\n    bar(b: BarParam): string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -443,7 +443,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: FooType;\n    }) => number;\n    bar(b: \"b\" | \"d\"): string;\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: FooType;\n    }) => number;\n    bar(b: \"b\" | \"d\"): string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -474,7 +474,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: \"a\" | \"c\";\n    }) => number;\n    bar(b: \"b\" | \"d\"): string;\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: \"a\" | \"c\";\n    }) => number;\n    bar(b: \"b\" | \"d\"): string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -504,7 +504,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: Foo\n```\n"
+          "value": "```typescript\nconst f: Foo\n```\n"
         },
         "range": {
           "start": {
@@ -535,7 +535,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    a: \"a\" | \"c\";\n    foo: (a: FooParam) => number;\n    bar(b: FooParam): string;\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    a: \"a\" | \"c\";\n    foo: (a: FooParam) => number;\n    bar(b: FooParam): string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -566,7 +566,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: \"a\" | \"c\";\n    }) => number;\n    bar(b: {\n        param: \"a\" | \"c\";\n    }): string;\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: \"a\" | \"c\";\n    }) => number;\n    bar(b: {\n        param: \"a\" | \"c\";\n    }): string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -596,7 +596,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst b: Bar<number>\n```\n"
+          "value": "```typescript\nconst b: Bar<number>\n```\n"
         },
         "range": {
           "start": {
@@ -627,7 +627,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst b: {\n    bar(b: number): string;\n}\n```\n"
+          "value": "```typescript\nconst b: {\n    bar(b: number): string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -657,7 +657,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst a: Alias\n```\n"
+          "value": "```typescript\nconst a: Alias\n```\n"
         },
         "range": {
           "start": {
@@ -688,7 +688,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst a: Foo<string>\n```\n"
+          "value": "```typescript\nconst a: Foo<string>\n```\n"
         },
         "range": {
           "start": {
@@ -719,7 +719,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst a: {\n    a: string;\n}\n```\n"
+          "value": "```typescript\nconst a: {\n    a: string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -749,7 +749,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: Foo\n```\n"
+          "value": "```typescript\nconst f: Foo\n```\n"
         },
         "range": {
           "start": {
@@ -780,7 +780,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    a: \"a\";\n    b: \"b\";\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    a: \"a\";\n    b: \"b\";\n}\n```\n"
         },
         "range": {
           "start": {

@@ -10,7 +10,7 @@
 // 	const value: T[K2] = undefined as any;
 //        ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const value: T["any key" | "string key"]
 // | ```
 // | 
@@ -18,7 +18,7 @@
 // | ----------------------------------------------------------------------
 //        ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const value: T[K2]
 // | ```
 // | 
@@ -29,7 +29,7 @@
 //     const value: T2[K] = undefined as any;;
 //           ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const value: {
 // |     "string key": string;
 // |     "number key": number;
@@ -41,7 +41,7 @@
 // | ----------------------------------------------------------------------
 //           ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const value: T2[K]
 // | ```
 // | 
@@ -63,7 +63,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst value: T[K2]\n```\n"
+          "value": "```typescript\nconst value: T[K2]\n```\n"
         },
         "range": {
           "start": {
@@ -94,7 +94,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst value: T[\"any key\" | \"string key\"]\n```\n"
+          "value": "```typescript\nconst value: T[\"any key\" | \"string key\"]\n```\n"
         },
         "range": {
           "start": {
@@ -124,7 +124,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst value: T2[K]\n```\n"
+          "value": "```typescript\nconst value: T2[K]\n```\n"
         },
         "range": {
           "start": {
@@ -155,7 +155,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst value: {\n    \"string key\": string;\n    \"number key\": number;\n    \"any key\": string | number | symbol;\n}[K]\n```\n"
+          "value": "```typescript\nconst value: {\n    \"string key\": string;\n    \"number key\": number;\n    \"any key\": string | number | symbol;\n}[K]\n```\n"
         },
         "range": {
           "start": {

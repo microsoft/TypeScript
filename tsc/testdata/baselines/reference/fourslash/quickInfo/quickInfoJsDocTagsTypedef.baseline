@@ -5,7 +5,7 @@
 //  * @typedef {Object} Bar
 //                      ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type Bar = {
 // |     baz: string;
 // |     qux: string;
@@ -22,7 +22,7 @@
 //  * @param {Bar} x - x comment
 //            ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type Bar = {
 // |     baz: string;
 // |     qux: string;
@@ -49,7 +49,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype Bar = {\n    baz: string;\n    qux: string;\n}\n```\nBar comment"
+        "value": "```typescript\ntype Bar = {\n    baz: string;\n    qux: string;\n}\n```\nBar comment"
       },
       "range": {
         "start": {
@@ -76,7 +76,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype Bar = {\n    baz: string;\n    qux: string;\n}\n```\nBar comment"
+        "value": "```typescript\ntype Bar = {\n    baz: string;\n    qux: string;\n}\n```\nBar comment"
       },
       "range": {
         "start": {

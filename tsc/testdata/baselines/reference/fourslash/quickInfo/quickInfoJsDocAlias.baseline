@@ -4,7 +4,7 @@
 // A()
 // ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) const A: () => void
 // | ```
 // | docs - const A: T
@@ -23,7 +23,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) const A: () => void\n```\ndocs - const A: T"
+        "value": "```typescript\n(alias) const A: () => void\n```\ndocs - const A: T"
       },
       "range": {
         "start": {

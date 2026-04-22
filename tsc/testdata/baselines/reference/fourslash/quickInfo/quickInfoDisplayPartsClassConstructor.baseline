@@ -4,7 +4,7 @@
 //     constructor() {
 //     ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor c(): c
 // | ```
 // | 
@@ -14,14 +14,14 @@
 // var cInstance = new c();
 //     ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cInstance: c
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor c(): c
 // | ```
 // | 
@@ -29,14 +29,14 @@
 // var cVal = c;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cVal: typeof c
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c
 // | ```
 // | 
@@ -45,7 +45,7 @@
 //     constructor(x: string);
 //     ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor cWithOverloads(x: string): cWithOverloads
 // | ```
 // | 
@@ -53,7 +53,7 @@
 //     constructor(x: number);
 //     ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor cWithOverloads(x: number): cWithOverloads
 // | ```
 // | 
@@ -61,7 +61,7 @@
 //     constructor(x: any) {
 //     ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor cWithOverloads(x: any): cWithOverloads
 // | ```
 // | 
@@ -71,14 +71,14 @@
 // var cWithOverloadsInstance = new cWithOverloads("hello");
 //     ^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cWithOverloadsInstance: cWithOverloads
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                  ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor cWithOverloads(x: string): cWithOverloads
 // | ```
 // | 
@@ -86,14 +86,14 @@
 // var cWithOverloadsInstance2 = new cWithOverloads(10);
 //     ^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cWithOverloadsInstance2: cWithOverloads
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                   ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor cWithOverloads(x: number): cWithOverloads
 // | ```
 // | 
@@ -101,14 +101,14 @@
 // var cWithOverloadsVal = cWithOverloads;
 //     ^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cWithOverloadsVal: typeof cWithOverloads
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                         ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class cWithOverloads
 // | ```
 // | 
@@ -117,7 +117,7 @@
 //     constructor(x: string);
 //     ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor cWithMultipleOverloads(x: string): cWithMultipleOverloads
 // | ```
 // | 
@@ -125,7 +125,7 @@
 //     constructor(x: number);
 //     ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor cWithMultipleOverloads(x: number): cWithMultipleOverloads
 // | ```
 // | 
@@ -133,7 +133,7 @@
 //     constructor(x: boolean);
 //     ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor cWithMultipleOverloads(x: boolean): cWithMultipleOverloads
 // | ```
 // | 
@@ -141,7 +141,7 @@
 //     constructor(x: any) {
 //     ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor cWithMultipleOverloads(x: any): cWithMultipleOverloads
 // | ```
 // | 
@@ -151,14 +151,14 @@
 // var cWithMultipleOverloadsInstance = new cWithMultipleOverloads("hello");
 //     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cWithMultipleOverloadsInstance: cWithMultipleOverloads
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                          ^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor cWithMultipleOverloads(x: string): cWithMultipleOverloads
 // | ```
 // | 
@@ -166,14 +166,14 @@
 // var cWithMultipleOverloadsInstance2 = new cWithMultipleOverloads(10);
 //     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cWithMultipleOverloadsInstance2: cWithMultipleOverloads
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                           ^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor cWithMultipleOverloads(x: number): cWithMultipleOverloads
 // | ```
 // | 
@@ -181,14 +181,14 @@
 // var cWithMultipleOverloadsInstance3 = new cWithMultipleOverloads(true);
 //     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cWithMultipleOverloadsInstance3: cWithMultipleOverloads
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                           ^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor cWithMultipleOverloads(x: boolean): cWithMultipleOverloads
 // | ```
 // | 
@@ -196,14 +196,14 @@
 // var cWithMultipleOverloadsVal = cWithMultipleOverloads;
 //     ^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cWithMultipleOverloadsVal: typeof cWithMultipleOverloads
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                 ^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class cWithMultipleOverloads
 // | ```
 // | 
@@ -222,7 +222,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c(): c\n```\n"
+        "value": "```typescript\nconstructor c(): c\n```\n"
       },
       "range": {
         "start": {
@@ -250,7 +250,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c\n```\n"
+        "value": "```typescript\nvar cInstance: c\n```\n"
       },
       "range": {
         "start": {
@@ -278,7 +278,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c(): c\n```\n"
+        "value": "```typescript\nconstructor c(): c\n```\n"
       },
       "range": {
         "start": {
@@ -306,7 +306,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cVal: typeof c\n```\n"
+        "value": "```typescript\nvar cVal: typeof c\n```\n"
       },
       "range": {
         "start": {
@@ -334,7 +334,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c\n```\n"
+        "value": "```typescript\nclass c\n```\n"
       },
       "range": {
         "start": {
@@ -362,7 +362,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor cWithOverloads(x: string): cWithOverloads\n```\n"
+        "value": "```typescript\nconstructor cWithOverloads(x: string): cWithOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -390,7 +390,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor cWithOverloads(x: number): cWithOverloads\n```\n"
+        "value": "```typescript\nconstructor cWithOverloads(x: number): cWithOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -418,7 +418,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor cWithOverloads(x: any): cWithOverloads\n```\n"
+        "value": "```typescript\nconstructor cWithOverloads(x: any): cWithOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -446,7 +446,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cWithOverloadsInstance: cWithOverloads\n```\n"
+        "value": "```typescript\nvar cWithOverloadsInstance: cWithOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -474,7 +474,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor cWithOverloads(x: string): cWithOverloads\n```\n"
+        "value": "```typescript\nconstructor cWithOverloads(x: string): cWithOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -502,7 +502,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cWithOverloadsInstance2: cWithOverloads\n```\n"
+        "value": "```typescript\nvar cWithOverloadsInstance2: cWithOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -530,7 +530,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor cWithOverloads(x: number): cWithOverloads\n```\n"
+        "value": "```typescript\nconstructor cWithOverloads(x: number): cWithOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -558,7 +558,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cWithOverloadsVal: typeof cWithOverloads\n```\n"
+        "value": "```typescript\nvar cWithOverloadsVal: typeof cWithOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -586,7 +586,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass cWithOverloads\n```\n"
+        "value": "```typescript\nclass cWithOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -614,7 +614,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor cWithMultipleOverloads(x: string): cWithMultipleOverloads\n```\n"
+        "value": "```typescript\nconstructor cWithMultipleOverloads(x: string): cWithMultipleOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -642,7 +642,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor cWithMultipleOverloads(x: number): cWithMultipleOverloads\n```\n"
+        "value": "```typescript\nconstructor cWithMultipleOverloads(x: number): cWithMultipleOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -670,7 +670,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor cWithMultipleOverloads(x: boolean): cWithMultipleOverloads\n```\n"
+        "value": "```typescript\nconstructor cWithMultipleOverloads(x: boolean): cWithMultipleOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -698,7 +698,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor cWithMultipleOverloads(x: any): cWithMultipleOverloads\n```\n"
+        "value": "```typescript\nconstructor cWithMultipleOverloads(x: any): cWithMultipleOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -726,7 +726,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cWithMultipleOverloadsInstance: cWithMultipleOverloads\n```\n"
+        "value": "```typescript\nvar cWithMultipleOverloadsInstance: cWithMultipleOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -754,7 +754,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor cWithMultipleOverloads(x: string): cWithMultipleOverloads\n```\n"
+        "value": "```typescript\nconstructor cWithMultipleOverloads(x: string): cWithMultipleOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -782,7 +782,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cWithMultipleOverloadsInstance2: cWithMultipleOverloads\n```\n"
+        "value": "```typescript\nvar cWithMultipleOverloadsInstance2: cWithMultipleOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -810,7 +810,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor cWithMultipleOverloads(x: number): cWithMultipleOverloads\n```\n"
+        "value": "```typescript\nconstructor cWithMultipleOverloads(x: number): cWithMultipleOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -838,7 +838,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cWithMultipleOverloadsInstance3: cWithMultipleOverloads\n```\n"
+        "value": "```typescript\nvar cWithMultipleOverloadsInstance3: cWithMultipleOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -866,7 +866,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor cWithMultipleOverloads(x: boolean): cWithMultipleOverloads\n```\n"
+        "value": "```typescript\nconstructor cWithMultipleOverloads(x: boolean): cWithMultipleOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -894,7 +894,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cWithMultipleOverloadsVal: typeof cWithMultipleOverloads\n```\n"
+        "value": "```typescript\nvar cWithMultipleOverloadsVal: typeof cWithMultipleOverloads\n```\n"
       },
       "range": {
         "start": {
@@ -922,7 +922,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass cWithMultipleOverloads\n```\n"
+        "value": "```typescript\nclass cWithMultipleOverloads\n```\n"
       },
       "range": {
         "start": {

@@ -15,7 +15,7 @@
 //     public name: string, // documentation should leech and work ! 
 //            ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) Foo.name: string
 // | ```
 // | 
@@ -29,7 +29,7 @@
 //   public name: string = ''; // documentation leeched and work ! 
 //          ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) Foo2.name: string
 // | ```
 // | 
@@ -53,7 +53,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Foo.name: string\n```\n"
+        "value": "```typescript\n(property) Foo.name: string\n```\n"
       },
       "range": {
         "start": {
@@ -80,7 +80,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Foo2.name: string\n```\n"
+        "value": "```typescript\n(property) Foo2.name: string\n```\n"
       },
       "range": {
         "start": {

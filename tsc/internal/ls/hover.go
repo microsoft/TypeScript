@@ -283,7 +283,7 @@ func getCommentText(comments []*ast.Node) string {
 func formatQuickInfo(quickInfo string) string {
 	var b strings.Builder
 	b.Grow(32)
-	writeCode(&b, "tsx", quickInfo)
+	writeCode(&b, "typescript", quickInfo)
 	return b.String()
 }
 

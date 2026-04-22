@@ -6,7 +6,7 @@
 //     x;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) x: T extends number | Str
 // | ```
 // | 
@@ -14,7 +14,7 @@
 // | ----------------------------------------------------------------------
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) x: T extends FooType
 // | ```
 // | 
@@ -22,7 +22,7 @@
 // | ----------------------------------------------------------------------
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) x: T
 // | ```
 // | 
@@ -32,7 +32,7 @@
 // const y: <T extends FooType>(x: T) => void = fn;
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const y: <T extends number | (string | {})>(x: T) => void
 // | ```
 // | 
@@ -40,7 +40,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const y: <T extends number | Str>(x: T) => void
 // | ```
 // | 
@@ -48,7 +48,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const y: <T extends FooType>(x: T) => void
 // | ```
 // | 
@@ -57,7 +57,7 @@
 // type MixinCtor<A> = new () => A & { constructor: MixinCtor<A> };
 //                               ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) A in type MixinCtor<A>
 // | ```
 // | 
@@ -78,7 +78,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(parameter) x: T\n```\n"
+          "value": "```typescript\n(parameter) x: T\n```\n"
         },
         "range": {
           "start": {
@@ -109,7 +109,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(parameter) x: T extends FooType\n```\n"
+          "value": "```typescript\n(parameter) x: T extends FooType\n```\n"
         },
         "range": {
           "start": {
@@ -140,7 +140,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(parameter) x: T extends number | Str\n```\n"
+          "value": "```typescript\n(parameter) x: T extends number | Str\n```\n"
         },
         "range": {
           "start": {
@@ -171,7 +171,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst y: <T extends FooType>(x: T) => void\n```\n"
+          "value": "```typescript\nconst y: <T extends FooType>(x: T) => void\n```\n"
         },
         "range": {
           "start": {
@@ -202,7 +202,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst y: <T extends number | Str>(x: T) => void\n```\n"
+          "value": "```typescript\nconst y: <T extends number | Str>(x: T) => void\n```\n"
         },
         "range": {
           "start": {
@@ -233,7 +233,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst y: <T extends number | (string | {})>(x: T) => void\n```\n"
+          "value": "```typescript\nconst y: <T extends number | (string | {})>(x: T) => void\n```\n"
         },
         "range": {
           "start": {
@@ -263,7 +263,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(type parameter) A in type MixinCtor<A>\n```\n"
+          "value": "```typescript\n(type parameter) A in type MixinCtor<A>\n```\n"
         },
         "range": {
           "start": {

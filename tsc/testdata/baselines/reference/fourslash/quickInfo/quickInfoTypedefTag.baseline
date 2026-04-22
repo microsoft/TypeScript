@@ -8,7 +8,7 @@
 // f()
 // ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function f(): void
 // | ```
 // | 
@@ -23,7 +23,7 @@
 // g()
 // ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function g(): void
 // | ```
 // | 
@@ -38,7 +38,7 @@
 // h({ nope: 1 })
 // ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function h(keep: Local): void
 // | ```
 // | 
@@ -57,7 +57,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction f(): void\n```\n"
+        "value": "```typescript\nfunction f(): void\n```\n"
       },
       "range": {
         "start": {
@@ -84,7 +84,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction g(): void\n```\n"
+        "value": "```typescript\nfunction g(): void\n```\n"
       },
       "range": {
         "start": {
@@ -111,7 +111,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction h(keep: Local): void\n```\n"
+        "value": "```typescript\nfunction h(keep: Local): void\n```\n"
       },
       "range": {
         "start": {

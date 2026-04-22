@@ -3,7 +3,7 @@
 // function (param: string) {
 // ^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function (Missing)(param: string): void
 // | function (Missing)(): void
 // | ```
@@ -17,7 +17,7 @@
 // function  {
 // ^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function (Missing)(param: string): void
 // | function (Missing)(): void
 // | ```
@@ -42,7 +42,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction (Missing)(param: string): void\nfunction (Missing)(): void\n```\n"
+        "value": "```typescript\nfunction (Missing)(param: string): void\nfunction (Missing)(): void\n```\n"
       },
       "range": {
         "start": {
@@ -81,7 +81,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction (Missing)(param: string): void\nfunction (Missing)(): void\n```\n"
+        "value": "```typescript\nfunction (Missing)(param: string): void\nfunction (Missing)(): void\n```\n"
       },
       "range": {
         "start": {

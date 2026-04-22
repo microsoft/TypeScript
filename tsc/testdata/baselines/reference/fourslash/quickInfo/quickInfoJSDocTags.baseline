@@ -52,7 +52,7 @@
 // var foo = new Foo(4);
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor Foo(value: number): Foo
 // | ```
 // | This is the constructor.
@@ -67,7 +67,7 @@
 // Foo.method1();
 // ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class Foo
 // | ```
 // | This is class Foo.
@@ -77,7 +77,7 @@
 // | ----------------------------------------------------------------------
 //     ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) Foo.method1(): void
 // | ```
 // | method1 documentation
@@ -92,7 +92,7 @@
 // foo.method2();
 //     ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) Foo.method2(): void
 // | ```
 // | 
@@ -106,7 +106,7 @@
 // foo.method3();
 //     ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) Foo.method3(): number
 // | ```
 // | 
@@ -121,7 +121,7 @@
 // foo.method4();
 //     ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) Foo.method4(foo: string): number
 // | ```
 // | 
@@ -137,7 +137,7 @@
 // foo.property1;
 //     ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) Foo.property1: string
 // | ```
 // | 
@@ -148,7 +148,7 @@
 // foo.property2;
 //     ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) Foo.property2: number
 // | ```
 // | 
@@ -167,7 +167,7 @@
 // foo.method5();
 //     ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) Foo.method5(): void
 // | ```
 // | 
@@ -177,7 +177,7 @@
 // foo.newMet
 //     ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | any
 // | ```
 // | 
@@ -196,7 +196,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor Foo(value: number): Foo\n```\nThis is the constructor.\n\n*@myjsdoctag* — this is a comment\n"
+        "value": "```typescript\nconstructor Foo(value: number): Foo\n```\nThis is the constructor.\n\n*@myjsdoctag* — this is a comment\n"
       },
       "range": {
         "start": {
@@ -236,7 +236,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass Foo\n```\nThis is class Foo.\n\n*@mytag* — comment1 comment2\n"
+        "value": "```typescript\nclass Foo\n```\nThis is class Foo.\n\n*@mytag* — comment1 comment2\n"
       },
       "range": {
         "start": {
@@ -264,7 +264,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) Foo.method1(): void\n```\nmethod1 documentation\n\n*@mytag* — comment1 comment2\n"
+        "value": "```typescript\n(method) Foo.method1(): void\n```\nmethod1 documentation\n\n*@mytag* — comment1 comment2\n"
       },
       "range": {
         "start": {
@@ -303,7 +303,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) Foo.method2(): void\n```\n\n\n*@mytag*"
+        "value": "```typescript\n(method) Foo.method2(): void\n```\n\n\n*@mytag*"
       },
       "range": {
         "start": {
@@ -342,7 +342,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) Foo.method3(): number\n```\n\n\n*@returns* — a value\n"
+        "value": "```typescript\n(method) Foo.method3(): number\n```\n\n\n*@returns* — a value\n"
       },
       "range": {
         "start": {
@@ -381,7 +381,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) Foo.method4(foo: string): number\n```\n\n\n*@param* `foo` — A value.\n\n\n*@returns* — Another value\n\n\n*@mytag*"
+        "value": "```typescript\n(method) Foo.method4(foo: string): number\n```\n\n\n*@param* `foo` — A value.\n\n\n*@returns* — Another value\n\n\n*@mytag*"
       },
       "range": {
         "start": {
@@ -408,7 +408,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Foo.property1: string\n```\n\n\n*@mytag* — comment1 comment2\n"
+        "value": "```typescript\n(property) Foo.property1: string\n```\n\n\n*@mytag* — comment1 comment2\n"
       },
       "range": {
         "start": {
@@ -435,7 +435,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) Foo.property2: number\n```\n\n\n*@mytag1* — some comments\nsome more comments about mytag1\n\n\n*@mytag2* — here all the comments are on a new line\n\n\n*@mytag3*\n\n*@mytag*"
+        "value": "```typescript\n(property) Foo.property2: number\n```\n\n\n*@mytag1* — some comments\nsome more comments about mytag1\n\n\n*@mytag2* — here all the comments are on a new line\n\n\n*@mytag3*\n\n*@mytag*"
       },
       "range": {
         "start": {
@@ -462,7 +462,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) Foo.method5(): void\n```\n\n\n*@mytag*"
+        "value": "```typescript\n(method) Foo.method5(): void\n```\n\n\n*@mytag*"
       },
       "range": {
         "start": {
@@ -489,7 +489,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nany\n```\n"
+        "value": "```typescript\nany\n```\n"
       },
       "range": {
         "start": {

@@ -12,7 +12,7 @@
 // function CC() {
 //          ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function CC(): void
 // | ```
 // | [C](file:///jsdocLink3.ts#1,14-1,15)
@@ -40,7 +40,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction CC(): void\n```\n[C](file:///jsdocLink3.ts#1,14-1,15)\n\n*@wat* — Makes a [C](file:///jsdocLink3.ts#1,14-1,15). A default one.\n[C()](file:///jsdocLink3.ts#1,14-1,15)\n[postfix text](file:///jsdocLink3.ts#1,14-1,15)\nunformatted postfix text\n\n*@see* — [C](file:///jsdocLink3.ts#1,14-1,15) its great\n"
+        "value": "```typescript\nfunction CC(): void\n```\n[C](file:///jsdocLink3.ts#1,14-1,15)\n\n*@wat* — Makes a [C](file:///jsdocLink3.ts#1,14-1,15). A default one.\n[C()](file:///jsdocLink3.ts#1,14-1,15)\n[postfix text](file:///jsdocLink3.ts#1,14-1,15)\nunformatted postfix text\n\n*@see* — [C](file:///jsdocLink3.ts#1,14-1,15) its great\n"
       },
       "range": {
         "start": {

@@ -8,7 +8,7 @@
 // const obj1: Obj = { foo: 1, bar: true, str: "3"};
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj1: {
 // |     foo: number | (string | {});
 // |     bar: boolean | (symbol | (() => void));
@@ -20,7 +20,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj1: {
 // |     foo: number | Str;
 // |     bar: boolean | Sym;
@@ -32,7 +32,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj1: {
 // |     foo: FooType;
 // |     bar: BarType;
@@ -44,7 +44,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj1: Obj
 // | ```
 // | 
@@ -53,7 +53,7 @@
 // const obj2: { foo: FooType, bar: BarType, str: Str } = { foo: 1, bar: true, str: "3"};
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj2: {
 // |     foo: number | (string | {});
 // |     bar: boolean | (symbol | (() => void));
@@ -65,7 +65,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj2: {
 // |     foo: number | Str;
 // |     bar: boolean | Sym;
@@ -77,7 +77,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj2: {
 // |     foo: FooType;
 // |     bar: BarType;
@@ -102,7 +102,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj1: Obj\n```\n"
+          "value": "```typescript\nconst obj1: Obj\n```\n"
         },
         "range": {
           "start": {
@@ -133,7 +133,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj1: {\n    foo: FooType;\n    bar: BarType;\n    str: Str;\n}\n```\n"
+          "value": "```typescript\nconst obj1: {\n    foo: FooType;\n    bar: BarType;\n    str: Str;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -164,7 +164,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj1: {\n    foo: number | Str;\n    bar: boolean | Sym;\n    str: string | {};\n}\n```\n"
+          "value": "```typescript\nconst obj1: {\n    foo: number | Str;\n    bar: boolean | Sym;\n    str: string | {};\n}\n```\n"
         },
         "range": {
           "start": {
@@ -195,7 +195,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj1: {\n    foo: number | (string | {});\n    bar: boolean | (symbol | (() => void));\n    str: string | {};\n}\n```\n"
+          "value": "```typescript\nconst obj1: {\n    foo: number | (string | {});\n    bar: boolean | (symbol | (() => void));\n    str: string | {};\n}\n```\n"
         },
         "range": {
           "start": {
@@ -225,7 +225,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj2: {\n    foo: FooType;\n    bar: BarType;\n    str: Str;\n}\n```\n"
+          "value": "```typescript\nconst obj2: {\n    foo: FooType;\n    bar: BarType;\n    str: Str;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -256,7 +256,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj2: {\n    foo: number | Str;\n    bar: boolean | Sym;\n    str: string | {};\n}\n```\n"
+          "value": "```typescript\nconst obj2: {\n    foo: number | Str;\n    bar: boolean | Sym;\n    str: string | {};\n}\n```\n"
         },
         "range": {
           "start": {
@@ -287,7 +287,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj2: {\n    foo: number | (string | {});\n    bar: boolean | (symbol | (() => void));\n    str: string | {};\n}\n```\n"
+          "value": "```typescript\nconst obj2: {\n    foo: number | (string | {});\n    bar: boolean | (symbol | (() => void));\n    str: string | {};\n}\n```\n"
         },
         "range": {
           "start": {

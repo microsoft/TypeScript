@@ -8,7 +8,7 @@
 //     [a: Key]: Apple;
 //      ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: string | number
 // | ```
 // | 
@@ -16,7 +16,7 @@
 // | ----------------------------------------------------------------------
 //      ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: Key
 // | ```
 // | 
@@ -26,7 +26,7 @@
 // const f: Foo = {};
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     [a: string]: {
 // |         banana: number;
@@ -41,7 +41,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     [a: string]: Apple;
 // |     [a: number]: Apple;
@@ -52,7 +52,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: Foo
 // | ```
 // | 
@@ -73,7 +73,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(parameter) a: Key\n```\n"
+          "value": "```typescript\n(parameter) a: Key\n```\n"
         },
         "range": {
           "start": {
@@ -104,7 +104,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(parameter) a: string | number\n```\n"
+          "value": "```typescript\n(parameter) a: string | number\n```\n"
         },
         "range": {
           "start": {
@@ -134,7 +134,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: Foo\n```\n"
+          "value": "```typescript\nconst f: Foo\n```\n"
         },
         "range": {
           "start": {
@@ -165,7 +165,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    [a: string]: Apple;\n    [a: number]: Apple;\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    [a: string]: Apple;\n    [a: number]: Apple;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -196,7 +196,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    [a: string]: {\n        banana: number;\n    };\n    [a: number]: {\n        banana: number;\n    };\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    [a: string]: {\n        banana: number;\n    };\n    [a: number]: {\n        banana: number;\n    };\n}\n```\n"
         },
         "range": {
           "start": {

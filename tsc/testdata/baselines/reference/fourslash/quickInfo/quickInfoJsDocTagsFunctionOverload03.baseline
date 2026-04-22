@@ -3,7 +3,7 @@
 // declare function foo(): void;
 //                  ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo(): void
 // | ```
 // | 
@@ -16,7 +16,7 @@
 // declare function foo(x: number): void
 //                  ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo(x: number): void
 // | ```
 // | Doc foo overloaded
@@ -38,7 +38,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(): void\n```\n"
+        "value": "```typescript\nfunction foo(): void\n```\n"
       },
       "range": {
         "start": {
@@ -65,7 +65,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(x: number): void\n```\nDoc foo overloaded\n\n*@tag* — Tag text\n"
+        "value": "```typescript\nfunction foo(x: number): void\n```\nDoc foo overloaded\n\n*@tag* — Tag text\n"
       },
       "range": {
         "start": {

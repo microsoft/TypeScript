@@ -4,7 +4,7 @@
 // foo("");
 // ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo<string>(t: string): (t: string) => ...
 // | ```
 // | 
@@ -23,7 +23,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo<string>(t: string): (t: string) => ...\n```\n"
+        "value": "```typescript\nfunction foo<string>(t: string): (t: string) => ...\n```\n"
       },
       "range": {
         "start": {

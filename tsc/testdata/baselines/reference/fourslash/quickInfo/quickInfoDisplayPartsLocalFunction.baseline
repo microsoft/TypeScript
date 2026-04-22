@@ -3,7 +3,7 @@
 // function outerFoo() {
 //          ^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function outerFoo(): void
 // | ```
 // | 
@@ -11,7 +11,7 @@
 //     function foo(param: string, optionalParam?: string, paramWithInitializer = "hello", ...restParam: string[]) {
 //              ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
 // | ```
 // | 
@@ -20,7 +20,7 @@
 //     function foowithoverload(a: string): string;
 //              ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foowithoverload(a: string): string
 // | ```
 // | 
@@ -28,7 +28,7 @@
 //     function foowithoverload(a: number): number;
 //              ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foowithoverload(a: number): number
 // | ```
 // | 
@@ -36,7 +36,7 @@
 //     function foowithoverload(a: any): any {
 //              ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foowithoverload(a: any): any
 // | ```
 // | 
@@ -46,7 +46,7 @@
 //     function foowith3overload(a: string): string;
 //              ^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foowith3overload(a: string): string
 // | ```
 // | 
@@ -54,7 +54,7 @@
 //     function foowith3overload(a: number): number;
 //              ^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foowith3overload(a: number): number
 // | ```
 // | 
@@ -62,7 +62,7 @@
 //     function foowith3overload(a: boolean): boolean;
 //              ^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foowith3overload(a: boolean): boolean
 // | ```
 // | 
@@ -70,7 +70,7 @@
 //     function foowith3overload(a: any): any {
 //              ^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foowith3overload(a: any): any
 // | ```
 // | 
@@ -80,7 +80,7 @@
 //     foo("hello");
 //     ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
 // | ```
 // | 
@@ -88,7 +88,7 @@
 //     foowithoverload("hello");
 //     ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foowithoverload(a: string): string
 // | ```
 // | 
@@ -96,7 +96,7 @@
 //     foowithoverload(10);
 //     ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foowithoverload(a: number): number
 // | ```
 // | 
@@ -104,7 +104,7 @@
 //     foowith3overload("hello");
 //     ^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foowith3overload(a: string): string
 // | ```
 // | 
@@ -112,7 +112,7 @@
 //     foowith3overload(10);
 //     ^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foowith3overload(a: number): number
 // | ```
 // | 
@@ -120,7 +120,7 @@
 //     foowith3overload(true);
 //     ^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function foowith3overload(a: boolean): boolean
 // | ```
 // | 
@@ -129,7 +129,7 @@
 // outerFoo();
 // ^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function outerFoo(): void
 // | ```
 // | 
@@ -148,7 +148,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction outerFoo(): void\n```\n"
+        "value": "```typescript\nfunction outerFoo(): void\n```\n"
       },
       "range": {
         "start": {
@@ -175,7 +175,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n"
+        "value": "```typescript\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n"
       },
       "range": {
         "start": {
@@ -202,7 +202,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowithoverload(a: string): string\n```\n"
+        "value": "```typescript\nfunction foowithoverload(a: string): string\n```\n"
       },
       "range": {
         "start": {
@@ -229,7 +229,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowithoverload(a: number): number\n```\n"
+        "value": "```typescript\nfunction foowithoverload(a: number): number\n```\n"
       },
       "range": {
         "start": {
@@ -256,7 +256,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowithoverload(a: any): any\n```\n"
+        "value": "```typescript\nfunction foowithoverload(a: any): any\n```\n"
       },
       "range": {
         "start": {
@@ -283,7 +283,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowith3overload(a: string): string\n```\n"
+        "value": "```typescript\nfunction foowith3overload(a: string): string\n```\n"
       },
       "range": {
         "start": {
@@ -310,7 +310,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowith3overload(a: number): number\n```\n"
+        "value": "```typescript\nfunction foowith3overload(a: number): number\n```\n"
       },
       "range": {
         "start": {
@@ -337,7 +337,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowith3overload(a: boolean): boolean\n```\n"
+        "value": "```typescript\nfunction foowith3overload(a: boolean): boolean\n```\n"
       },
       "range": {
         "start": {
@@ -364,7 +364,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowith3overload(a: any): any\n```\n"
+        "value": "```typescript\nfunction foowith3overload(a: any): any\n```\n"
       },
       "range": {
         "start": {
@@ -391,7 +391,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n"
+        "value": "```typescript\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n"
       },
       "range": {
         "start": {
@@ -418,7 +418,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowithoverload(a: string): string\n```\n"
+        "value": "```typescript\nfunction foowithoverload(a: string): string\n```\n"
       },
       "range": {
         "start": {
@@ -445,7 +445,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowithoverload(a: number): number\n```\n"
+        "value": "```typescript\nfunction foowithoverload(a: number): number\n```\n"
       },
       "range": {
         "start": {
@@ -472,7 +472,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowith3overload(a: string): string\n```\n"
+        "value": "```typescript\nfunction foowith3overload(a: string): string\n```\n"
       },
       "range": {
         "start": {
@@ -499,7 +499,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowith3overload(a: number): number\n```\n"
+        "value": "```typescript\nfunction foowith3overload(a: number): number\n```\n"
       },
       "range": {
         "start": {
@@ -526,7 +526,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foowith3overload(a: boolean): boolean\n```\n"
+        "value": "```typescript\nfunction foowith3overload(a: boolean): boolean\n```\n"
       },
       "range": {
         "start": {
@@ -553,7 +553,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction outerFoo(): void\n```\n"
+        "value": "```typescript\nfunction outerFoo(): void\n```\n"
       },
       "range": {
         "start": {

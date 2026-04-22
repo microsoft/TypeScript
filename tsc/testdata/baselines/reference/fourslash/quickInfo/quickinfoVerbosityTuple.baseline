@@ -10,7 +10,7 @@
 // type TwoFruits = [Orange, Apple];
 //      ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type TwoFruits = [{
 // |     color: string;
 // | }, {
@@ -25,7 +25,7 @@
 // | ----------------------------------------------------------------------
 //      ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type TwoFruits = [{
 // |     color: string;
 // | }, {
@@ -38,7 +38,7 @@
 // | ----------------------------------------------------------------------
 //      ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type TwoFruits = [Orange, Apple]
 // | ```
 // | 
@@ -47,7 +47,7 @@
 // const tf: TwoFruits = [
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const tf: [{
 // |     color: string;
 // | }, {
@@ -62,7 +62,7 @@
 // | ----------------------------------------------------------------------
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const tf: [{
 // |     color: string;
 // | }, {
@@ -75,7 +75,7 @@
 // | ----------------------------------------------------------------------
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const tf: [Orange, Apple]
 // | ```
 // | 
@@ -83,7 +83,7 @@
 // | ----------------------------------------------------------------------
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const tf: TwoFruits
 // | ```
 // | 
@@ -95,7 +95,7 @@
 // const tf2: [Orange, Apple] = [
 //       ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const tf2: [{
 // |     color: string;
 // | }, {
@@ -110,7 +110,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const tf2: [{
 // |     color: string;
 // | }, {
@@ -123,7 +123,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const tf2: [Orange, Apple]
 // | ```
 // | 
@@ -135,7 +135,7 @@
 // type ManyFruits = (Orange | Apple)[];
 //      ^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type ManyFruits = ({
 // |     color: string;
 // |     other: {
@@ -150,7 +150,7 @@
 // | ----------------------------------------------------------------------
 //      ^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type ManyFruits = ({
 // |     color: string;
 // |     other: Orange;
@@ -163,7 +163,7 @@
 // | ----------------------------------------------------------------------
 //      ^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type ManyFruits = (Apple | Orange)[]
 // | ```
 // | 
@@ -172,7 +172,7 @@
 // const mf: ManyFruits = [];
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const mf: ({
 // |     color: string;
 // |     other: {
@@ -187,7 +187,7 @@
 // | ----------------------------------------------------------------------
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const mf: ({
 // |     color: string;
 // |     other: Orange;
@@ -200,7 +200,7 @@
 // | ----------------------------------------------------------------------
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const mf: (Apple | Orange)[]
 // | ```
 // | 
@@ -208,7 +208,7 @@
 // | ----------------------------------------------------------------------
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const mf: ManyFruits
 // | ```
 // | 
@@ -229,7 +229,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype TwoFruits = [Orange, Apple]\n```\n"
+          "value": "```typescript\ntype TwoFruits = [Orange, Apple]\n```\n"
         },
         "range": {
           "start": {
@@ -260,7 +260,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype TwoFruits = [{\n    color: string;\n}, {\n    color: string;\n    other: Orange;\n}]\n```\n"
+          "value": "```typescript\ntype TwoFruits = [{\n    color: string;\n}, {\n    color: string;\n    other: Orange;\n}]\n```\n"
         },
         "range": {
           "start": {
@@ -291,7 +291,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype TwoFruits = [{\n    color: string;\n}, {\n    color: string;\n    other: {\n        color: string;\n    };\n}]\n```\n"
+          "value": "```typescript\ntype TwoFruits = [{\n    color: string;\n}, {\n    color: string;\n    other: {\n        color: string;\n    };\n}]\n```\n"
         },
         "range": {
           "start": {
@@ -321,7 +321,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst tf: TwoFruits\n```\n"
+          "value": "```typescript\nconst tf: TwoFruits\n```\n"
         },
         "range": {
           "start": {
@@ -352,7 +352,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst tf: [Orange, Apple]\n```\n"
+          "value": "```typescript\nconst tf: [Orange, Apple]\n```\n"
         },
         "range": {
           "start": {
@@ -383,7 +383,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst tf: [{\n    color: string;\n}, {\n    color: string;\n    other: Orange;\n}]\n```\n"
+          "value": "```typescript\nconst tf: [{\n    color: string;\n}, {\n    color: string;\n    other: Orange;\n}]\n```\n"
         },
         "range": {
           "start": {
@@ -414,7 +414,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst tf: [{\n    color: string;\n}, {\n    color: string;\n    other: {\n        color: string;\n    };\n}]\n```\n"
+          "value": "```typescript\nconst tf: [{\n    color: string;\n}, {\n    color: string;\n    other: {\n        color: string;\n    };\n}]\n```\n"
         },
         "range": {
           "start": {
@@ -444,7 +444,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst tf2: [Orange, Apple]\n```\n"
+          "value": "```typescript\nconst tf2: [Orange, Apple]\n```\n"
         },
         "range": {
           "start": {
@@ -475,7 +475,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst tf2: [{\n    color: string;\n}, {\n    color: string;\n    other: Orange;\n}]\n```\n"
+          "value": "```typescript\nconst tf2: [{\n    color: string;\n}, {\n    color: string;\n    other: Orange;\n}]\n```\n"
         },
         "range": {
           "start": {
@@ -506,7 +506,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst tf2: [{\n    color: string;\n}, {\n    color: string;\n    other: {\n        color: string;\n    };\n}]\n```\n"
+          "value": "```typescript\nconst tf2: [{\n    color: string;\n}, {\n    color: string;\n    other: {\n        color: string;\n    };\n}]\n```\n"
         },
         "range": {
           "start": {
@@ -536,7 +536,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype ManyFruits = (Apple | Orange)[]\n```\n"
+          "value": "```typescript\ntype ManyFruits = (Apple | Orange)[]\n```\n"
         },
         "range": {
           "start": {
@@ -567,7 +567,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype ManyFruits = ({\n    color: string;\n    other: Orange;\n} | {\n    color: string;\n})[]\n```\n"
+          "value": "```typescript\ntype ManyFruits = ({\n    color: string;\n    other: Orange;\n} | {\n    color: string;\n})[]\n```\n"
         },
         "range": {
           "start": {
@@ -598,7 +598,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype ManyFruits = ({\n    color: string;\n    other: {\n        color: string;\n    };\n} | {\n    color: string;\n})[]\n```\n"
+          "value": "```typescript\ntype ManyFruits = ({\n    color: string;\n    other: {\n        color: string;\n    };\n} | {\n    color: string;\n})[]\n```\n"
         },
         "range": {
           "start": {
@@ -628,7 +628,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst mf: ManyFruits\n```\n"
+          "value": "```typescript\nconst mf: ManyFruits\n```\n"
         },
         "range": {
           "start": {
@@ -659,7 +659,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst mf: (Apple | Orange)[]\n```\n"
+          "value": "```typescript\nconst mf: (Apple | Orange)[]\n```\n"
         },
         "range": {
           "start": {
@@ -690,7 +690,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst mf: ({\n    color: string;\n    other: Orange;\n} | {\n    color: string;\n})[]\n```\n"
+          "value": "```typescript\nconst mf: ({\n    color: string;\n    other: Orange;\n} | {\n    color: string;\n})[]\n```\n"
         },
         "range": {
           "start": {
@@ -721,7 +721,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst mf: ({\n    color: string;\n    other: {\n        color: string;\n    };\n} | {\n    color: string;\n})[]\n```\n"
+          "value": "```typescript\nconst mf: ({\n    color: string;\n    other: {\n        color: string;\n    };\n} | {\n    color: string;\n})[]\n```\n"
         },
         "range": {
           "start": {

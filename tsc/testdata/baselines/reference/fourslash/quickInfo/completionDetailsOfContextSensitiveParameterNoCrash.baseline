@@ -85,7 +85,7 @@
 //         return curry(getStylingByKeys, 2)(mergedStyling, ...args);
 //                                                             ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) args: []
 // | ```
 // | 
@@ -107,7 +107,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) args: []\n```\n"
+        "value": "```typescript\n(parameter) args: []\n```\n"
       },
       "range": {
         "start": {

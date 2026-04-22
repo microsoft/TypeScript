@@ -4,7 +4,7 @@
 //  * @callback cb
 //              ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type cb = (x: string) => any
 // | ```
 // | 
@@ -16,7 +16,7 @@
 //  * @param {cb} bar -callback comment
 //            ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type cb = (x: string) => any
 // | ```
 // | 
@@ -39,7 +39,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype cb = (x: string) => any\n```\n"
+        "value": "```typescript\ntype cb = (x: string) => any\n```\n"
       },
       "range": {
         "start": {
@@ -66,7 +66,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype cb = (x: string) => any\n```\n"
+        "value": "```typescript\ntype cb = (x: string) => any\n```\n"
       },
       "range": {
         "start": {

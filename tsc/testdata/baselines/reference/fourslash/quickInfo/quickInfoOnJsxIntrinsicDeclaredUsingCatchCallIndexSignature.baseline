@@ -6,7 +6,7 @@
 // <div class="democlass" />;
 //  ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | any
 // | ```
 // | 
@@ -25,7 +25,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nany\n```\n"
+        "value": "```typescript\nany\n```\n"
       },
       "range": {
         "start": {

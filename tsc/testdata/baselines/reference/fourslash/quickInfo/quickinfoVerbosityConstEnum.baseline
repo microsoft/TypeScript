@@ -4,7 +4,7 @@
 // const enum Direction {
 //            ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const enum Direction {
 // |     Up = "UP",
 // |     Down = "DOWN",
@@ -17,7 +17,7 @@
 // | ----------------------------------------------------------------------
 //            ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const enum Direction
 // | ```
 // | 
@@ -32,7 +32,7 @@
 // enum NumericEnum {
 //      ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | enum NumericEnum {
 // |     A = 0,
 // |     B = 10,
@@ -44,7 +44,7 @@
 // | ----------------------------------------------------------------------
 //      ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | enum NumericEnum
 // | ```
 // | 
@@ -70,7 +70,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst enum Direction\n```\n"
+          "value": "```typescript\nconst enum Direction\n```\n"
         },
         "range": {
           "start": {
@@ -101,7 +101,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst enum Direction {\n    Up = \"UP\",\n    Down = \"DOWN\",\n    Left = \"LEFT\",\n    Right = \"RIGHT\"\n}\n```\n"
+          "value": "```typescript\nconst enum Direction {\n    Up = \"UP\",\n    Down = \"DOWN\",\n    Left = \"LEFT\",\n    Right = \"RIGHT\"\n}\n```\n"
         },
         "range": {
           "start": {
@@ -131,7 +131,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nenum NumericEnum\n```\n"
+          "value": "```typescript\nenum NumericEnum\n```\n"
         },
         "range": {
           "start": {
@@ -162,7 +162,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nenum NumericEnum {\n    A = 0,\n    B = 10,\n    C = 11\n}\n```\n"
+          "value": "```typescript\nenum NumericEnum {\n    A = 0,\n    B = 10,\n    C = 11\n}\n```\n"
         },
         "range": {
           "start": {

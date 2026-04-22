@@ -3,14 +3,14 @@
 // var x = a => 10;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var x: (a: any) => number
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //         ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: any
 // | ```
 // | 
@@ -18,21 +18,21 @@
 // var y = (a, b) => 10;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var y: (a: any, b: any) => number
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: any
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //             ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) b: any
 // | ```
 // | 
@@ -40,14 +40,14 @@
 // var z = (a: number) => 10;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var z: (a: number) => number
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: number
 // | ```
 // | 
@@ -55,7 +55,7 @@
 // var z2 = () => 10;
 //     ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var z2: () => number
 // | ```
 // | 
@@ -74,7 +74,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar x: (a: any) => number\n```\n"
+        "value": "```typescript\nvar x: (a: any) => number\n```\n"
       },
       "range": {
         "start": {
@@ -101,7 +101,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: any\n```\n"
+        "value": "```typescript\n(parameter) a: any\n```\n"
       },
       "range": {
         "start": {
@@ -128,7 +128,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar y: (a: any, b: any) => number\n```\n"
+        "value": "```typescript\nvar y: (a: any, b: any) => number\n```\n"
       },
       "range": {
         "start": {
@@ -155,7 +155,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: any\n```\n"
+        "value": "```typescript\n(parameter) a: any\n```\n"
       },
       "range": {
         "start": {
@@ -182,7 +182,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) b: any\n```\n"
+        "value": "```typescript\n(parameter) b: any\n```\n"
       },
       "range": {
         "start": {
@@ -209,7 +209,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar z: (a: number) => number\n```\n"
+        "value": "```typescript\nvar z: (a: number) => number\n```\n"
       },
       "range": {
         "start": {
@@ -236,7 +236,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: number\n```\n"
+        "value": "```typescript\n(parameter) a: number\n```\n"
       },
       "range": {
         "start": {
@@ -263,7 +263,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar z2: () => number\n```\n"
+        "value": "```typescript\nvar z2: () => number\n```\n"
       },
       "range": {
         "start": {

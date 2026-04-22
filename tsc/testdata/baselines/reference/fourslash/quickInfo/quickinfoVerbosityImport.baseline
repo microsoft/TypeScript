@@ -4,7 +4,7 @@
 // const b = zero;
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const b: {
 // |     readonly a: {
 // |         a: number;
@@ -23,7 +23,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const b: {
 // |     readonly a: zero.Apple;
 // |     Color: typeof zero.Color;
@@ -34,7 +34,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const b: typeof zero
 // | ```
 // | 
@@ -44,7 +44,7 @@
 // import { a } from "./0";
 //          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) const a: {
 // |     a: number;
 // |     b: string;
@@ -55,7 +55,7 @@
 // | ----------------------------------------------------------------------
 //          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) const a: Apple
 // | ```
 // | 
@@ -64,7 +64,7 @@
 // import { Color } from "./0";
 //          ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) enum Color {
 // |     Red = 0,
 // |     Green = 1,
@@ -76,7 +76,7 @@
 // | ----------------------------------------------------------------------
 //          ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) enum Color
 // | ```
 // | 
@@ -88,7 +88,7 @@
 // import Foo from "./3";
 //        ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) class default
 // | ```
 // | 
@@ -97,7 +97,7 @@
 // const f = new Foo();
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     a: boolean;
 // | }
@@ -107,7 +107,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: Foo
 // | ```
 // | 
@@ -115,7 +115,7 @@
 // | ----------------------------------------------------------------------
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) constructor default(): {
 // |     a: boolean;
 // | }
@@ -125,7 +125,7 @@
 // | ----------------------------------------------------------------------
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) constructor default(): Foo
 // | ```
 // | 
@@ -148,7 +148,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst b: typeof zero\n```\n"
+          "value": "```typescript\nconst b: typeof zero\n```\n"
         },
         "range": {
           "start": {
@@ -179,7 +179,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst b: {\n    readonly a: zero.Apple;\n    Color: typeof zero.Color;\n}\n```\n"
+          "value": "```typescript\nconst b: {\n    readonly a: zero.Apple;\n    Color: typeof zero.Color;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -210,7 +210,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst b: {\n    readonly a: {\n        a: number;\n        b: string;\n    };\n    Color: {\n        readonly [x: number]: string;\n        readonly Red: zero.Color.Red;\n        readonly Green: zero.Color.Green;\n        readonly Blue: zero.Color.Blue;\n    };\n}\n```\n"
+          "value": "```typescript\nconst b: {\n    readonly a: {\n        a: number;\n        b: string;\n    };\n    Color: {\n        readonly [x: number]: string;\n        readonly Red: zero.Color.Red;\n        readonly Green: zero.Color.Green;\n        readonly Blue: zero.Color.Blue;\n    };\n}\n```\n"
         },
         "range": {
           "start": {
@@ -240,7 +240,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(alias) const a: Apple\n```\n"
+          "value": "```typescript\n(alias) const a: Apple\n```\n"
         },
         "range": {
           "start": {
@@ -271,7 +271,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(alias) const a: {\n    a: number;\n    b: string;\n}\n```\n"
+          "value": "```typescript\n(alias) const a: {\n    a: number;\n    b: string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -301,7 +301,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(alias) enum Color\n```\n"
+          "value": "```typescript\n(alias) enum Color\n```\n"
         },
         "range": {
           "start": {
@@ -332,7 +332,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(alias) enum Color {\n    Red = 0,\n    Green = 1,\n    Blue = 2\n}\n```\n"
+          "value": "```typescript\n(alias) enum Color {\n    Red = 0,\n    Green = 1,\n    Blue = 2\n}\n```\n"
         },
         "range": {
           "start": {
@@ -362,7 +362,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(alias) class default\n```\n"
+          "value": "```typescript\n(alias) class default\n```\n"
         },
         "range": {
           "start": {
@@ -393,7 +393,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: Foo\n```\n"
+          "value": "```typescript\nconst f: Foo\n```\n"
         },
         "range": {
           "start": {
@@ -424,7 +424,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    a: boolean;\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    a: boolean;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -454,7 +454,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(alias) constructor default(): Foo\n```\n"
+          "value": "```typescript\n(alias) constructor default(): Foo\n```\n"
         },
         "range": {
           "start": {
@@ -485,7 +485,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(alias) constructor default(): {\n    a: boolean;\n}\n```\n"
+          "value": "```typescript\n(alias) constructor default(): {\n    a: boolean;\n}\n```\n"
         },
         "range": {
           "start": {

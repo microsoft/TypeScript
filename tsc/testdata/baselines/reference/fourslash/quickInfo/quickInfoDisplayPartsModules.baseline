@@ -3,7 +3,7 @@
 // namespace m {
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace m
 // | ```
 // | 
@@ -11,7 +11,7 @@
 //     var namespaceElemWithoutExport = 10;
 //         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var namespaceElemWithoutExport: number
 // | ```
 // | 
@@ -19,7 +19,7 @@
 //     export var namespaceElemWithExport = 10;
 //                ^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var namespaceElemWithExport: number
 // | ```
 // | 
@@ -28,14 +28,14 @@
 // var a = m;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var a: typeof m
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //         ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace m
 // | ```
 // | 
@@ -43,14 +43,14 @@
 // var b: typeof m;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var b: typeof m
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //               ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace m
 // | ```
 // | 
@@ -58,14 +58,14 @@
 // namespace m1.m2 {
 //           ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace m1
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //              ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace m2
 // | ```
 // | 
@@ -73,7 +73,7 @@
 //     var namespaceElemWithoutExport = 10;
 //         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var namespaceElemWithoutExport: number
 // | ```
 // | 
@@ -81,7 +81,7 @@
 //     export var namespaceElemWithExport = 10;
 //                ^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var namespaceElemWithExport: number
 // | ```
 // | 
@@ -90,21 +90,21 @@
 // var x = m1.m2;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var x: typeof m1.m2
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //         ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace m1
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace m1.m2
 // | ```
 // | 
@@ -112,21 +112,21 @@
 // var y: typeof m1.m2;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var y: typeof m1.m2
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //               ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace m1
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                  ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace m1.m2
 // | ```
 // | 
@@ -145,7 +145,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nnamespace m\n```\n"
+        "value": "```typescript\nnamespace m\n```\n"
       },
       "range": {
         "start": {
@@ -173,7 +173,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar namespaceElemWithoutExport: number\n```\n"
+        "value": "```typescript\nvar namespaceElemWithoutExport: number\n```\n"
       },
       "range": {
         "start": {
@@ -200,7 +200,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar namespaceElemWithExport: number\n```\n"
+        "value": "```typescript\nvar namespaceElemWithExport: number\n```\n"
       },
       "range": {
         "start": {
@@ -227,7 +227,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar a: typeof m\n```\n"
+        "value": "```typescript\nvar a: typeof m\n```\n"
       },
       "range": {
         "start": {
@@ -255,7 +255,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nnamespace m\n```\n"
+        "value": "```typescript\nnamespace m\n```\n"
       },
       "range": {
         "start": {
@@ -283,7 +283,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar b: typeof m\n```\n"
+        "value": "```typescript\nvar b: typeof m\n```\n"
       },
       "range": {
         "start": {
@@ -311,7 +311,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nnamespace m\n```\n"
+        "value": "```typescript\nnamespace m\n```\n"
       },
       "range": {
         "start": {
@@ -339,7 +339,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nnamespace m1\n```\n"
+        "value": "```typescript\nnamespace m1\n```\n"
       },
       "range": {
         "start": {
@@ -367,7 +367,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nnamespace m2\n```\n"
+        "value": "```typescript\nnamespace m2\n```\n"
       },
       "range": {
         "start": {
@@ -395,7 +395,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar namespaceElemWithoutExport: number\n```\n"
+        "value": "```typescript\nvar namespaceElemWithoutExport: number\n```\n"
       },
       "range": {
         "start": {
@@ -422,7 +422,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar namespaceElemWithExport: number\n```\n"
+        "value": "```typescript\nvar namespaceElemWithExport: number\n```\n"
       },
       "range": {
         "start": {
@@ -449,7 +449,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar x: typeof m1.m2\n```\n"
+        "value": "```typescript\nvar x: typeof m1.m2\n```\n"
       },
       "range": {
         "start": {
@@ -477,7 +477,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nnamespace m1\n```\n"
+        "value": "```typescript\nnamespace m1\n```\n"
       },
       "range": {
         "start": {
@@ -505,7 +505,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nnamespace m1.m2\n```\n"
+        "value": "```typescript\nnamespace m1.m2\n```\n"
       },
       "range": {
         "start": {
@@ -533,7 +533,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar y: typeof m1.m2\n```\n"
+        "value": "```typescript\nvar y: typeof m1.m2\n```\n"
       },
       "range": {
         "start": {
@@ -561,7 +561,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nnamespace m1\n```\n"
+        "value": "```typescript\nnamespace m1\n```\n"
       },
       "range": {
         "start": {
@@ -589,7 +589,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nnamespace m1.m2\n```\n"
+        "value": "```typescript\nnamespace m1.m2\n```\n"
       },
       "range": {
         "start": {

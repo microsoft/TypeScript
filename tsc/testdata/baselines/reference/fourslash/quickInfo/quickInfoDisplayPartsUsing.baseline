@@ -3,7 +3,7 @@
 // using a = "a";
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | using a: "a"
 // | ```
 // | 
@@ -12,7 +12,7 @@
 //     await using b = { async [Symbol.asyncDispose]() {} };
 //                 ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | await using b: {
 // |     [Symbol.asyncDispose](): Promise<void>;
 // | }
@@ -34,7 +34,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nusing a: \"a\"\n```\n"
+        "value": "```typescript\nusing a: \"a\"\n```\n"
       },
       "range": {
         "start": {
@@ -61,7 +61,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nawait using b: {\n    [Symbol.asyncDispose](): Promise<void>;\n}\n```\n"
+        "value": "```typescript\nawait using b: {\n    [Symbol.asyncDispose](): Promise<void>;\n}\n```\n"
       },
       "range": {
         "start": {

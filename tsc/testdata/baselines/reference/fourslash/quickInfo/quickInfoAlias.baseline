@@ -4,7 +4,7 @@
 // x;
 // ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) const x: 0
 // | ```
 // | Doc
@@ -27,7 +27,7 @@
 // x;
 // ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) const x: 0
 // | ```
 // | Doc
@@ -51,7 +51,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text\n"
+        "value": "```typescript\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text\n"
       },
       "range": {
         "start": {
@@ -78,7 +78,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text\n"
+        "value": "```typescript\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text\n"
       },
       "range": {
         "start": {

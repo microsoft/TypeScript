@@ -3,7 +3,7 @@
 // class  {
 // ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class __missing
 // | ```
 // | 
@@ -27,7 +27,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass __missing\n```\n"
+        "value": "```typescript\nclass __missing\n```\n"
       },
       "range": {
         "start": {

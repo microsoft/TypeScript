@@ -3,7 +3,7 @@
 // interface LargeInterface {
 //           ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface LargeInterface {
 // |     prop1: any;
 // |     prop2: any;
@@ -63,7 +63,7 @@
 // | ----------------------------------------------------------------------
 //           ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface LargeInterface
 // | ```
 // | 
@@ -383,7 +383,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface LargeInterface\n```\n"
+          "value": "```typescript\ninterface LargeInterface\n```\n"
         },
         "range": {
           "start": {
@@ -414,7 +414,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface LargeInterface {\n    prop1: any;\n    prop2: any;\n    prop3: any;\n    prop4: any;\n    prop5: any;\n    prop6: any;\n    prop7: any;\n    prop8: any;\n    prop9: any;\n    prop10: any;\n    prop11: any;\n    prop12: any;\n    prop13: any;\n    prop14: any;\n    prop15: any;\n    prop16: any;\n    prop17: any;\n    prop18: any;\n    prop19: any;\n    prop20: any;\n    prop21: any;\n    prop22: any;\n    prop23: any;\n    prop24: any;\n    prop25: any;\n    prop26: any;\n    prop27: any;\n    prop28: any;\n    prop29: any;\n    prop30: any;\n    prop31: any;\n    prop32: any;\n    prop33: any;\n    prop34: any;\n    prop35: any;\n    prop36: any;\n    prop37: any;\n    prop38: any;\n    prop39: any;\n    prop40: any;\n    prop41: any;\n    prop42: any;\n    prop43: any;\n    prop44: any;\n    prop45: any;\n    prop46: any;\n    prop47: any;\n    prop48: any;\n    prop49: any;\n    ... 248 more ...;\n    prop298: any;\n}\n```\n"
+          "value": "```typescript\ninterface LargeInterface {\n    prop1: any;\n    prop2: any;\n    prop3: any;\n    prop4: any;\n    prop5: any;\n    prop6: any;\n    prop7: any;\n    prop8: any;\n    prop9: any;\n    prop10: any;\n    prop11: any;\n    prop12: any;\n    prop13: any;\n    prop14: any;\n    prop15: any;\n    prop16: any;\n    prop17: any;\n    prop18: any;\n    prop19: any;\n    prop20: any;\n    prop21: any;\n    prop22: any;\n    prop23: any;\n    prop24: any;\n    prop25: any;\n    prop26: any;\n    prop27: any;\n    prop28: any;\n    prop29: any;\n    prop30: any;\n    prop31: any;\n    prop32: any;\n    prop33: any;\n    prop34: any;\n    prop35: any;\n    prop36: any;\n    prop37: any;\n    prop38: any;\n    prop39: any;\n    prop40: any;\n    prop41: any;\n    prop42: any;\n    prop43: any;\n    prop44: any;\n    prop45: any;\n    prop46: any;\n    prop47: any;\n    prop48: any;\n    prop49: any;\n    ... 248 more ...;\n    prop298: any;\n}\n```\n"
         },
         "range": {
           "start": {

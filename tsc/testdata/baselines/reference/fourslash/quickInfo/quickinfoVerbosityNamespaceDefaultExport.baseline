@@ -4,7 +4,7 @@
 // declare namespace ns {
 //                   ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace ns {
 // |     let circle: Shape;
 // |     export { circle as default };
@@ -16,7 +16,7 @@
 // | ----------------------------------------------------------------------
 //                   ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace ns
 // | ```
 // | 
@@ -45,7 +45,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nnamespace ns\n```\n"
+          "value": "```typescript\nnamespace ns\n```\n"
         },
         "range": {
           "start": {
@@ -76,7 +76,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nnamespace ns {\n    let circle: Shape;\n    export { circle as default };\n    export { Shape };\n}\n```\n"
+          "value": "```typescript\nnamespace ns {\n    let circle: Shape;\n    export { circle as default };\n    export { Shape };\n}\n```\n"
         },
         "range": {
           "start": {

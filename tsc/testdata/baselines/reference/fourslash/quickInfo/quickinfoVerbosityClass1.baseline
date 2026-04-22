@@ -7,7 +7,7 @@
 //     const f = new Foo();
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     a: "a" | "c";
 // | }
@@ -17,7 +17,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: Foo
 // | ```
 // | 
@@ -35,7 +35,7 @@
 //     const f = new Foo("");
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     x: string;
 // |     foo(p: "a" | "b"): void;
@@ -46,7 +46,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     x: string;
 // |     foo(p: FooParam): void;
@@ -57,7 +57,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: Foo
 // | ```
 // | 
@@ -68,7 +68,7 @@
 //     class Bar {
 //           ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class Bar {
 // |     a: string;
 // |     bar(): void;
@@ -80,7 +80,7 @@
 // | ----------------------------------------------------------------------
 //           ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class Bar
 // | ```
 // | 
@@ -97,7 +97,7 @@
 //     const f = new Foo();
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     b: boolean;
 // |     baz(param: string | number): void;
@@ -110,7 +110,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: Foo
 // | ```
 // | 
@@ -128,7 +128,7 @@
 //     const b = new Bar();
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const b: {
 // |     bar(param: string): void;
 // |     baz(): Bar<string>;
@@ -139,7 +139,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const b: Bar<string>
 // | ```
 // | 
@@ -148,7 +148,7 @@
 //     const f = new Foo();
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: {
 // |     foo(): Foo;
 // |     bar(param: "foo"): void;
@@ -160,7 +160,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const f: Foo
 // | ```
 // | 
@@ -175,7 +175,7 @@
 //     const noname = new (class extends Bar<"foo"> {
 //           ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const noname: {
 // |     foo(): (Anonymous class);
 // |     bar(param: "foo"): void;
@@ -187,7 +187,7 @@
 // | ----------------------------------------------------------------------
 //           ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const noname: (Anonymous class)
 // | ```
 // | 
@@ -201,7 +201,7 @@
 //     const k = new klass();
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const k: {
 // |     foo(): klass;
 // |     bar(param: "foo"): void;
@@ -213,7 +213,7 @@
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const k: klass
 // | ```
 // | 
@@ -235,7 +235,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: Foo\n```\n"
+          "value": "```typescript\nconst f: Foo\n```\n"
         },
         "range": {
           "start": {
@@ -266,7 +266,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    a: \"a\" | \"c\";\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    a: \"a\" | \"c\";\n}\n```\n"
         },
         "range": {
           "start": {
@@ -296,7 +296,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: Foo\n```\n"
+          "value": "```typescript\nconst f: Foo\n```\n"
         },
         "range": {
           "start": {
@@ -327,7 +327,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    x: string;\n    foo(p: FooParam): void;\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    x: string;\n    foo(p: FooParam): void;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -358,7 +358,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    x: string;\n    foo(p: \"a\" | \"b\"): void;\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    x: string;\n    foo(p: \"a\" | \"b\"): void;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -388,7 +388,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nclass Bar\n```\n"
+          "value": "```typescript\nclass Bar\n```\n"
         },
         "range": {
           "start": {
@@ -419,7 +419,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nclass Bar {\n    a: string;\n    bar(): void;\n    baz(param: string): void;\n}\n```\n"
+          "value": "```typescript\nclass Bar {\n    a: string;\n    bar(): void;\n    baz(param: string): void;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -449,7 +449,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: Foo\n```\n"
+          "value": "```typescript\nconst f: Foo\n```\n"
         },
         "range": {
           "start": {
@@ -480,7 +480,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    b: boolean;\n    baz(param: string | number): void;\n    a: string;\n    bar(): void;\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    b: boolean;\n    baz(param: string | number): void;\n    a: string;\n    bar(): void;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -510,7 +510,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst b: Bar<string>\n```\n"
+          "value": "```typescript\nconst b: Bar<string>\n```\n"
         },
         "range": {
           "start": {
@@ -541,7 +541,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst b: {\n    bar(param: string): void;\n    baz(): Bar<string>;\n}\n```\n"
+          "value": "```typescript\nconst b: {\n    bar(param: string): void;\n    baz(): Bar<string>;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -571,7 +571,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: Foo\n```\n"
+          "value": "```typescript\nconst f: Foo\n```\n"
         },
         "range": {
           "start": {
@@ -602,7 +602,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst f: {\n    foo(): Foo;\n    bar(param: \"foo\"): void;\n    baz(): Foo;\n}\n```\n"
+          "value": "```typescript\nconst f: {\n    foo(): Foo;\n    bar(param: \"foo\"): void;\n    baz(): Foo;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -632,7 +632,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst noname: (Anonymous class)\n```\n"
+          "value": "```typescript\nconst noname: (Anonymous class)\n```\n"
         },
         "range": {
           "start": {
@@ -663,7 +663,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst noname: {\n    foo(): (Anonymous class);\n    bar(param: \"foo\"): void;\n    baz(): (Anonymous class);\n}\n```\n"
+          "value": "```typescript\nconst noname: {\n    foo(): (Anonymous class);\n    bar(param: \"foo\"): void;\n    baz(): (Anonymous class);\n}\n```\n"
         },
         "range": {
           "start": {
@@ -693,7 +693,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst k: klass\n```\n"
+          "value": "```typescript\nconst k: klass\n```\n"
         },
         "range": {
           "start": {
@@ -724,7 +724,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst k: {\n    foo(): klass;\n    bar(param: \"foo\"): void;\n    baz(): klass;\n}\n```\n"
+          "value": "```typescript\nconst k: {\n    foo(): klass;\n    bar(param: \"foo\"): void;\n    baz(): klass;\n}\n```\n"
         },
         "range": {
           "start": {

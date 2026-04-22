@@ -3,7 +3,7 @@
 // export enum LargeEnum {
 //             ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | enum LargeEnum {
 // |     Member1 = 0,
 // |     Member2 = 1,
@@ -64,7 +64,7 @@
 // export interface LargeInterface {
 //                  ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface LargeInterface {
 // |     property1: string;
 // |     property2: number;
@@ -141,7 +141,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nenum LargeEnum {\n    Member1 = 0,\n    Member2 = 1,\n    Member3 = 2,\n    Member4 = 3,\n    Member5 = 4,\n    Member6 = 5,\n    Member7 = 6,\n    Member8 = 7,\n    Member9 = 8,\n    Member10 = 9,\n    Member11 = 10,\n    Member12 = 11,\n    Member13 = 12,\n    Member14 = 13,\n    Member15 = 14,\n    Member16 = 15,\n    Member17 = 16,\n    Member18 = 17,\n    Member19 = 18,\n    Member20 = 19,\n    Member21 = 20,\n    Member22 = 21,\n    Member23 = 22,\n    Member24 = 23,\n    Member25 = 24\n}\n```\n"
+          "value": "```typescript\nenum LargeEnum {\n    Member1 = 0,\n    Member2 = 1,\n    Member3 = 2,\n    Member4 = 3,\n    Member5 = 4,\n    Member6 = 5,\n    Member7 = 6,\n    Member8 = 7,\n    Member9 = 8,\n    Member10 = 9,\n    Member11 = 10,\n    Member12 = 11,\n    Member13 = 12,\n    Member14 = 13,\n    Member15 = 14,\n    Member16 = 15,\n    Member17 = 16,\n    Member18 = 17,\n    Member19 = 18,\n    Member20 = 19,\n    Member21 = 20,\n    Member22 = 21,\n    Member23 = 22,\n    Member24 = 23,\n    Member25 = 24\n}\n```\n"
         },
         "range": {
           "start": {
@@ -171,7 +171,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface LargeInterface {\n    property1: string;\n    property2: number;\n    property3: boolean;\n    property4: Date;\n    property5: string[];\n    property6: number[];\n    property7: boolean[];\n    property8: {\n        [key: string]: unknown;\n    };\n    property9: string | null;\n    property10: number | null;\n    property11: boolean | null;\n    property12: Date | null;\n    property13: string | number;\n    property14: number | boolean;\n    property15: string | boolean;\n    property16: {\n        id: number;\n        name: string;\n    }[];\n    property17: {\n        key: string;\n        value: unknown;\n    }[];\n    property18: {\n        nestedProp1: string;\n        nestedProp2: number;\n    };\n    property19: {\n        nestedProp3: boolean;\n        nestedProp4: Date;\n    };\n    property20: () => void;\n}\n```\n"
+          "value": "```typescript\ninterface LargeInterface {\n    property1: string;\n    property2: number;\n    property3: boolean;\n    property4: Date;\n    property5: string[];\n    property6: number[];\n    property7: boolean[];\n    property8: {\n        [key: string]: unknown;\n    };\n    property9: string | null;\n    property10: number | null;\n    property11: boolean | null;\n    property12: Date | null;\n    property13: string | number;\n    property14: number | boolean;\n    property15: string | boolean;\n    property16: {\n        id: number;\n        name: string;\n    }[];\n    property17: {\n        key: string;\n        value: unknown;\n    }[];\n    property18: {\n        nestedProp1: string;\n        nestedProp2: number;\n    };\n    property19: {\n        nestedProp3: boolean;\n        nestedProp4: Date;\n    };\n    property20: () => void;\n}\n```\n"
         },
         "range": {
           "start": {

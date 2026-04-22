@@ -3,21 +3,21 @@
 // type List<T> = T[]
 //      ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type List<T> = T[]
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T in type List<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T in type List<T>
 // | ```
 // | 
@@ -25,21 +25,21 @@
 // type List2<T extends string> = T[];
 //      ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type List2<T extends string> = T[]
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T extends string in type List2<T extends string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T extends string in type List2<T extends string>
 // | ```
 // | 
@@ -58,7 +58,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype List<T> = T[]\n```\n"
+        "value": "```typescript\ntype List<T> = T[]\n```\n"
       },
       "range": {
         "start": {
@@ -85,7 +85,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T in type List<T>\n```\n"
+        "value": "```typescript\n(type parameter) T in type List<T>\n```\n"
       },
       "range": {
         "start": {
@@ -112,7 +112,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T in type List<T>\n```\n"
+        "value": "```typescript\n(type parameter) T in type List<T>\n```\n"
       },
       "range": {
         "start": {
@@ -139,7 +139,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype List2<T extends string> = T[]\n```\n"
+        "value": "```typescript\ntype List2<T extends string> = T[]\n```\n"
       },
       "range": {
         "start": {
@@ -166,7 +166,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends string in type List2<T extends string>\n```\n"
+        "value": "```typescript\n(type parameter) T extends string in type List2<T extends string>\n```\n"
       },
       "range": {
         "start": {
@@ -193,7 +193,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends string in type List2<T extends string>\n```\n"
+        "value": "```typescript\n(type parameter) T extends string in type List2<T extends string>\n```\n"
       },
       "range": {
         "start": {

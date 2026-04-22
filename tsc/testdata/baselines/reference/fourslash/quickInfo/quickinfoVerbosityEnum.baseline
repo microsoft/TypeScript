@@ -4,7 +4,7 @@
 // enum Color {
 //      ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | enum Color {
 // |     Red = 0,
 // |     Green = 1,
@@ -16,7 +16,7 @@
 // | ----------------------------------------------------------------------
 //      ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | enum Color
 // | ```
 // | 
@@ -29,7 +29,7 @@
 // const x: Color = Color.Red;
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const x: Color.Red | Color.Green | Color.Blue
 // | ```
 // | 
@@ -37,7 +37,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const x: Color
 // | ```
 // | 
@@ -46,7 +46,7 @@
 // const enum Direction {
 //            ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const enum Direction {
 // |     Up = 0,
 // |     Down = 1
@@ -57,7 +57,7 @@
 // | ----------------------------------------------------------------------
 //            ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const enum Direction
 // | ```
 // | 
@@ -69,7 +69,7 @@
 // const y: Direction = Direction.Up;
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const y: Direction.Up | Direction.Down
 // | ```
 // | 
@@ -77,7 +77,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const y: Direction
 // | ```
 // | 
@@ -86,7 +86,7 @@
 // enum Flags {
 //      ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | enum Flags {
 // |     None = 0,
 // |     IsDirectory = 1 << 0,
@@ -99,7 +99,7 @@
 // | ----------------------------------------------------------------------
 //      ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | enum Flags
 // | ```
 // | 
@@ -115,7 +115,7 @@
 // const c: Color = Color.Red;
 //          ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) enum Color {
 // |     Red = "red"
 // | }
@@ -125,7 +125,7 @@
 // | ----------------------------------------------------------------------
 //          ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) enum Color
 // | ```
 // | 
@@ -148,7 +148,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nenum Color\n```\n"
+          "value": "```typescript\nenum Color\n```\n"
         },
         "range": {
           "start": {
@@ -179,7 +179,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nenum Color {\n    Red = 0,\n    Green = 1,\n    Blue = 2\n}\n```\n"
+          "value": "```typescript\nenum Color {\n    Red = 0,\n    Green = 1,\n    Blue = 2\n}\n```\n"
         },
         "range": {
           "start": {
@@ -209,7 +209,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst x: Color\n```\n"
+          "value": "```typescript\nconst x: Color\n```\n"
         },
         "range": {
           "start": {
@@ -240,7 +240,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst x: Color.Red | Color.Green | Color.Blue\n```\n"
+          "value": "```typescript\nconst x: Color.Red | Color.Green | Color.Blue\n```\n"
         },
         "range": {
           "start": {
@@ -270,7 +270,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst enum Direction\n```\n"
+          "value": "```typescript\nconst enum Direction\n```\n"
         },
         "range": {
           "start": {
@@ -301,7 +301,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst enum Direction {\n    Up = 0,\n    Down = 1\n}\n```\n"
+          "value": "```typescript\nconst enum Direction {\n    Up = 0,\n    Down = 1\n}\n```\n"
         },
         "range": {
           "start": {
@@ -331,7 +331,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst y: Direction\n```\n"
+          "value": "```typescript\nconst y: Direction\n```\n"
         },
         "range": {
           "start": {
@@ -362,7 +362,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst y: Direction.Up | Direction.Down\n```\n"
+          "value": "```typescript\nconst y: Direction.Up | Direction.Down\n```\n"
         },
         "range": {
           "start": {
@@ -392,7 +392,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nenum Flags\n```\n"
+          "value": "```typescript\nenum Flags\n```\n"
         },
         "range": {
           "start": {
@@ -423,7 +423,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nenum Flags {\n    None = 0,\n    IsDirectory = 1 << 0,\n    IsFile = 1 << 1,\n    IsSymlink = 1 << 2\n}\n```\n"
+          "value": "```typescript\nenum Flags {\n    None = 0,\n    IsDirectory = 1 << 0,\n    IsFile = 1 << 1,\n    IsSymlink = 1 << 2\n}\n```\n"
         },
         "range": {
           "start": {
@@ -453,7 +453,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(alias) enum Color\n```\n"
+          "value": "```typescript\n(alias) enum Color\n```\n"
         },
         "range": {
           "start": {
@@ -484,7 +484,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(alias) enum Color {\n    Red = \"red\"\n}\n```\n"
+          "value": "```typescript\n(alias) enum Color {\n    Red = \"red\"\n}\n```\n"
         },
         "range": {
           "start": {

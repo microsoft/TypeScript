@@ -3,14 +3,14 @@
 // class c<T> {
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //         ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T in c<T>
 // | ```
 // | 
@@ -18,21 +18,21 @@
 //     constructor(a: T) {
 //     ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor c<T>(a: T): c<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                 ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: T
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                    ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T in c<T>
 // | ```
 // | 
@@ -41,42 +41,42 @@
 //     method<U>(a: U, b: T) {
 //     ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in c.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //               ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                  ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U in c.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) b: T
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                        ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T in c<T>
 // | ```
 // | 
@@ -84,7 +84,7 @@
 //         return a;
 //                ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
@@ -94,14 +94,14 @@
 // var cInstance = new c("Hello");
 //     ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cInstance: c<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor c<string>(a: string): c<string>
 // | ```
 // | 
@@ -109,14 +109,14 @@
 // var cVal = c;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cVal: typeof c
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c<T>
 // | ```
 // | 
@@ -124,14 +124,14 @@
 // cInstance.method("hello", "cello");
 // ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cInstance: c<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //           ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c<string>.method<"hello">(a: "hello", b: string): "hello"
 // | ```
 // | 
@@ -139,21 +139,21 @@
 // class c2<T extends c<string>> {
 //       ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c2<T extends c<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T extends c<string> in c2<T extends c<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                    ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c<T>
 // | ```
 // | 
@@ -161,21 +161,21 @@
 //     constructor(a: T) {
 //     ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor c2<T extends c<string>>(a: T): c2<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                 ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: T
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                    ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T extends c<string> in c2<T extends c<string>>
 // | ```
 // | 
@@ -184,49 +184,49 @@
 //     method<U extends c<string>>(a: U, b: T) {
 //     ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c2.method<U extends c<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                      ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c<T>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                 ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                    ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) b: T
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                                          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (type parameter) T extends c<string> in c2<T extends c<string>>
 // | ```
 // | 
@@ -234,7 +234,7 @@
 //         return a;
 //                ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) a: U
 // | ```
 // | 
@@ -244,21 +244,21 @@
 // var cInstance1 = new c2(cInstance);
 //     ^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cInstance1: c2<c<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                      ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | constructor c2<c<string>>(a: c<string>): c2<c<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                         ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cInstance: c<string>
 // | ```
 // | 
@@ -266,14 +266,14 @@
 // var cVal2 = c2;
 //     ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cVal2: typeof c2
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //             ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c2<T extends c<string>>
 // | ```
 // | 
@@ -281,28 +281,28 @@
 // cInstance1.method(cInstance, cInstance);
 // ^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cInstance1: c2<c<string>>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c2<c<string>>.method<c<string>>(a: c<string>, b: c<string>): c<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                   ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cInstance: c<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                              ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cInstance: c<string>
 // | ```
 // | 
@@ -321,7 +321,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c<T>\n```\n"
+        "value": "```typescript\nclass c<T>\n```\n"
       },
       "range": {
         "start": {
@@ -349,7 +349,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T in c<T>\n```\n"
+        "value": "```typescript\n(type parameter) T in c<T>\n```\n"
       },
       "range": {
         "start": {
@@ -376,7 +376,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c<T>(a: T): c<T>\n```\n"
+        "value": "```typescript\nconstructor c<T>(a: T): c<T>\n```\n"
       },
       "range": {
         "start": {
@@ -404,7 +404,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: T\n```\n"
+        "value": "```typescript\n(parameter) a: T\n```\n"
       },
       "range": {
         "start": {
@@ -431,7 +431,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T in c<T>\n```\n"
+        "value": "```typescript\n(type parameter) T in c<T>\n```\n"
       },
       "range": {
         "start": {
@@ -458,7 +458,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(method) c.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -485,7 +485,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in c.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in c.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -512,7 +512,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -539,7 +539,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U in c.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in c.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -566,7 +566,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) b: T\n```\n"
+        "value": "```typescript\n(parameter) b: T\n```\n"
       },
       "range": {
         "start": {
@@ -593,7 +593,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T in c<T>\n```\n"
+        "value": "```typescript\n(type parameter) T in c<T>\n```\n"
       },
       "range": {
         "start": {
@@ -620,7 +620,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -647,7 +647,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c<string>\n```\n"
+        "value": "```typescript\nvar cInstance: c<string>\n```\n"
       },
       "range": {
         "start": {
@@ -675,7 +675,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c<string>(a: string): c<string>\n```\n"
+        "value": "```typescript\nconstructor c<string>(a: string): c<string>\n```\n"
       },
       "range": {
         "start": {
@@ -703,7 +703,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cVal: typeof c\n```\n"
+        "value": "```typescript\nvar cVal: typeof c\n```\n"
       },
       "range": {
         "start": {
@@ -731,7 +731,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c<T>\n```\n"
+        "value": "```typescript\nclass c<T>\n```\n"
       },
       "range": {
         "start": {
@@ -759,7 +759,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c<string>\n```\n"
+        "value": "```typescript\nvar cInstance: c<string>\n```\n"
       },
       "range": {
         "start": {
@@ -787,7 +787,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c<string>.method<\"hello\">(a: \"hello\", b: string): \"hello\"\n```\n"
+        "value": "```typescript\n(method) c<string>.method<\"hello\">(a: \"hello\", b: string): \"hello\"\n```\n"
       },
       "range": {
         "start": {
@@ -814,7 +814,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c2<T extends c<string>>\n```\n"
+        "value": "```typescript\nclass c2<T extends c<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -842,7 +842,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends c<string> in c2<T extends c<string>>\n```\n"
+        "value": "```typescript\n(type parameter) T extends c<string> in c2<T extends c<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -870,7 +870,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c<T>\n```\n"
+        "value": "```typescript\nclass c<T>\n```\n"
       },
       "range": {
         "start": {
@@ -898,7 +898,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c2<T extends c<string>>(a: T): c2<T>\n```\n"
+        "value": "```typescript\nconstructor c2<T extends c<string>>(a: T): c2<T>\n```\n"
       },
       "range": {
         "start": {
@@ -926,7 +926,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: T\n```\n"
+        "value": "```typescript\n(parameter) a: T\n```\n"
       },
       "range": {
         "start": {
@@ -954,7 +954,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends c<string> in c2<T extends c<string>>\n```\n"
+        "value": "```typescript\n(type parameter) T extends c<string> in c2<T extends c<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -982,7 +982,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(method) c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1010,7 +1010,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1038,7 +1038,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c<T>\n```\n"
+        "value": "```typescript\nclass c<T>\n```\n"
       },
       "range": {
         "start": {
@@ -1066,7 +1066,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -1094,7 +1094,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1122,7 +1122,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) b: T\n```\n"
+        "value": "```typescript\n(parameter) b: T\n```\n"
       },
       "range": {
         "start": {
@@ -1150,7 +1150,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(type parameter) T extends c<string> in c2<T extends c<string>>\n```\n"
+        "value": "```typescript\n(type parameter) T extends c<string> in c2<T extends c<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1178,7 +1178,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) a: U\n```\n"
+        "value": "```typescript\n(parameter) a: U\n```\n"
       },
       "range": {
         "start": {
@@ -1206,7 +1206,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance1: c2<c<string>>\n```\n"
+        "value": "```typescript\nvar cInstance1: c2<c<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1234,7 +1234,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconstructor c2<c<string>>(a: c<string>): c2<c<string>>\n```\n"
+        "value": "```typescript\nconstructor c2<c<string>>(a: c<string>): c2<c<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1262,7 +1262,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c<string>\n```\n"
+        "value": "```typescript\nvar cInstance: c<string>\n```\n"
       },
       "range": {
         "start": {
@@ -1290,7 +1290,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cVal2: typeof c2\n```\n"
+        "value": "```typescript\nvar cVal2: typeof c2\n```\n"
       },
       "range": {
         "start": {
@@ -1318,7 +1318,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c2<T extends c<string>>\n```\n"
+        "value": "```typescript\nclass c2<T extends c<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1346,7 +1346,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance1: c2<c<string>>\n```\n"
+        "value": "```typescript\nvar cInstance1: c2<c<string>>\n```\n"
       },
       "range": {
         "start": {
@@ -1374,7 +1374,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c2<c<string>>.method<c<string>>(a: c<string>, b: c<string>): c<string>\n```\n"
+        "value": "```typescript\n(method) c2<c<string>>.method<c<string>>(a: c<string>, b: c<string>): c<string>\n```\n"
       },
       "range": {
         "start": {
@@ -1402,7 +1402,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c<string>\n```\n"
+        "value": "```typescript\nvar cInstance: c<string>\n```\n"
       },
       "range": {
         "start": {
@@ -1430,7 +1430,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c<string>\n```\n"
+        "value": "```typescript\nvar cInstance: c<string>\n```\n"
       },
       "range": {
         "start": {

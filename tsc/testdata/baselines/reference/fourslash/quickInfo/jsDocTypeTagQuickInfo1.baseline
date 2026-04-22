@@ -4,7 +4,7 @@
 // var S;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var S: string
 // | ```
 // | 
@@ -13,7 +13,7 @@
 // var N;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var N: number
 // | ```
 // | 
@@ -22,7 +22,7 @@
 // var B;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var B: boolean
 // | ```
 // | 
@@ -31,7 +31,7 @@
 // var V;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var V: void
 // | ```
 // | 
@@ -40,7 +40,7 @@
 // var U;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var U: undefined
 // | ```
 // | 
@@ -49,7 +49,7 @@
 // var Nl;
 //     ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var Nl: null
 // | ```
 // | 
@@ -58,7 +58,7 @@
 // var A;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var A: any[]
 // | ```
 // | 
@@ -67,7 +67,7 @@
 // var P;
 //     ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var P: Promise<any>
 // | ```
 // | 
@@ -76,7 +76,7 @@
 // var Obj;
 //     ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var Obj: Object
 // | ```
 // | 
@@ -85,7 +85,7 @@
 // var Func;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var Func: Function
 // | ```
 // | 
@@ -94,7 +94,7 @@
 // var AnyType;
 //     ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var AnyType: any
 // | ```
 // | 
@@ -103,7 +103,7 @@
 // var QType;
 //     ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var QType: any
 // | ```
 // | 
@@ -112,7 +112,7 @@
 // var SOrN;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var SOrN: string | number
 // | ```
 // | 
@@ -131,7 +131,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar S: string\n```\n"
+        "value": "```typescript\nvar S: string\n```\n"
       },
       "range": {
         "start": {
@@ -158,7 +158,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar N: number\n```\n"
+        "value": "```typescript\nvar N: number\n```\n"
       },
       "range": {
         "start": {
@@ -185,7 +185,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar B: boolean\n```\n"
+        "value": "```typescript\nvar B: boolean\n```\n"
       },
       "range": {
         "start": {
@@ -212,7 +212,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar V: void\n```\n"
+        "value": "```typescript\nvar V: void\n```\n"
       },
       "range": {
         "start": {
@@ -239,7 +239,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar U: undefined\n```\n"
+        "value": "```typescript\nvar U: undefined\n```\n"
       },
       "range": {
         "start": {
@@ -266,7 +266,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar Nl: null\n```\n"
+        "value": "```typescript\nvar Nl: null\n```\n"
       },
       "range": {
         "start": {
@@ -293,7 +293,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar A: any[]\n```\n"
+        "value": "```typescript\nvar A: any[]\n```\n"
       },
       "range": {
         "start": {
@@ -320,7 +320,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar P: Promise<any>\n```\n"
+        "value": "```typescript\nvar P: Promise<any>\n```\n"
       },
       "range": {
         "start": {
@@ -347,7 +347,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar Obj: Object\n```\n"
+        "value": "```typescript\nvar Obj: Object\n```\n"
       },
       "range": {
         "start": {
@@ -374,7 +374,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar Func: Function\n```\n"
+        "value": "```typescript\nvar Func: Function\n```\n"
       },
       "range": {
         "start": {
@@ -401,7 +401,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar AnyType: any\n```\n"
+        "value": "```typescript\nvar AnyType: any\n```\n"
       },
       "range": {
         "start": {
@@ -428,7 +428,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar QType: any\n```\n"
+        "value": "```typescript\nvar QType: any\n```\n"
       },
       "range": {
         "start": {
@@ -455,7 +455,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar SOrN: string | number\n```\n"
+        "value": "```typescript\nvar SOrN: string | number\n```\n"
       },
       "range": {
         "start": {

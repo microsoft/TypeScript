@@ -4,7 +4,7 @@
 // declare namespace NS {
 //                   ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace NS {
 // |     type Mixin = {
 // |         a: string;
@@ -20,7 +20,7 @@
 // | ----------------------------------------------------------------------
 //                   ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace NS
 // | ```
 // | 
@@ -45,7 +45,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nnamespace NS\n```\n"
+          "value": "```typescript\nnamespace NS\n```\n"
         },
         "range": {
           "start": {
@@ -76,7 +76,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nnamespace NS {\n    type Mixin = {\n        a: string;\n    } & {\n        b: number;\n    };\n    interface Config {\n    }\n}\n```\n"
+          "value": "```typescript\nnamespace NS {\n    type Mixin = {\n        a: string;\n    } & {\n        b: number;\n    };\n    interface Config {\n    }\n}\n```\n"
         },
         "range": {
           "start": {

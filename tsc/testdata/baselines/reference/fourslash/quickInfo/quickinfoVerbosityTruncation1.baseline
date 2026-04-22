@@ -27,7 +27,7 @@
 // const obj1: LotsOfProps = undefined as any as LotsOfProps;
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj1: {
 // |     someLongPropertyName1: Str;
 // |     someLongPropertyName2: FooType;
@@ -54,7 +54,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj1: LotsOfProps
 // | ```
 // | 
@@ -75,7 +75,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj1: LotsOfProps\n```\n"
+          "value": "```typescript\nconst obj1: LotsOfProps\n```\n"
         },
         "range": {
           "start": {
@@ -106,7 +106,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj1: {\n    someLongPropertyName1: Str;\n    someLongPropertyName2: FooType;\n    someLongPropertyName3: Sym;\n    someLongPropertyName4: BarType;\n    someLongPropertyName5: Str;\n    someLongPropertyName6: FooType;\n    someLongPropertyName7: Sym;\n    someLongPropertyName8: BarType;\n    someLongMethodName1(a: FooType, b: BarType): Sym;\n    someLongPropertyName9: Str;\n    someLongPropertyName10: FooType;\n    someLongPropertyName11: Sym;\n    someLongPropertyName12: BarType;\n    someLongPropertyName13: Str;\n    someLongPropertyName14: FooType;\n    someLongPropertyName15: Sym;\n    someLongPropertyName16: BarType;\n    someLongMethodName2(a: FooType, b: BarType): Sym;\n}\n```\n"
+          "value": "```typescript\nconst obj1: {\n    someLongPropertyName1: Str;\n    someLongPropertyName2: FooType;\n    someLongPropertyName3: Sym;\n    someLongPropertyName4: BarType;\n    someLongPropertyName5: Str;\n    someLongPropertyName6: FooType;\n    someLongPropertyName7: Sym;\n    someLongPropertyName8: BarType;\n    someLongMethodName1(a: FooType, b: BarType): Sym;\n    someLongPropertyName9: Str;\n    someLongPropertyName10: FooType;\n    someLongPropertyName11: Sym;\n    someLongPropertyName12: BarType;\n    someLongPropertyName13: Str;\n    someLongPropertyName14: FooType;\n    someLongPropertyName15: Sym;\n    someLongPropertyName16: BarType;\n    someLongMethodName2(a: FooType, b: BarType): Sym;\n}\n```\n"
         },
         "range": {
           "start": {

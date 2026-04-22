@@ -16,7 +16,7 @@
 //     prop: string | undefined;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) SubClass.prop: string | undefined
 // | ```
 // | 
@@ -39,7 +39,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) SubClass.prop: string | undefined\n```\n\n\n*@inheritdoc* — SubClass.prop\n"
+        "value": "```typescript\n(property) SubClass.prop: string | undefined\n```\n\n\n*@inheritdoc* — SubClass.prop\n"
       },
       "range": {
         "start": {

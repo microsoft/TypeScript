@@ -5,7 +5,7 @@
 // foo
 // ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const foo: typeof foo
 // | ```
 // | 
@@ -24,7 +24,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst foo: typeof foo\n```\n"
+        "value": "```typescript\nconst foo: typeof foo\n```\n"
       },
       "range": {
         "start": {

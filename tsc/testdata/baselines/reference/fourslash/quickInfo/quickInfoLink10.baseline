@@ -6,7 +6,7 @@
 // const a = () => 1;
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const a: () => number
 // | ```
 // | start [end](https://vscode.dev/)
@@ -25,7 +25,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst a: () => number\n```\nstart [end](https://vscode.dev/)"
+        "value": "```typescript\nconst a: () => number\n```\nstart [end](https://vscode.dev/)"
       },
       "range": {
         "start": {

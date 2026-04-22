@@ -3,14 +3,14 @@
 // import a1 = require("./quickInfoDisplayPartsExternalModuleAlias_file0");
 //        ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) module a1
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | module a1
 // | ```
 // | 
@@ -18,7 +18,7 @@
 // new a1.m1.c();
 //     ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) module a1
 // | ```
 // | 
@@ -26,14 +26,14 @@
 // export import a2 = require("./quickInfoDisplayPartsExternalModuleAlias_file0");
 //               ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) module a1
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | module a1
 // | ```
 // | 
@@ -41,7 +41,7 @@
 // new a2.m1.c();
 //     ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) module a1
 // | ```
 // | 
@@ -60,7 +60,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) module a1\n```\n"
+        "value": "```typescript\n(alias) module a1\n```\n"
       },
       "range": {
         "start": {
@@ -88,7 +88,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nmodule a1\n```\n"
+        "value": "```typescript\nmodule a1\n```\n"
       },
       "range": {
         "start": {
@@ -116,7 +116,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) module a1\n```\n"
+        "value": "```typescript\n(alias) module a1\n```\n"
       },
       "range": {
         "start": {
@@ -144,7 +144,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) module a1\n```\n"
+        "value": "```typescript\n(alias) module a1\n```\n"
       },
       "range": {
         "start": {
@@ -172,7 +172,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nmodule a1\n```\n"
+        "value": "```typescript\nmodule a1\n```\n"
       },
       "range": {
         "start": {
@@ -200,7 +200,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) module a1\n```\n"
+        "value": "```typescript\n(alias) module a1\n```\n"
       },
       "range": {
         "start": {

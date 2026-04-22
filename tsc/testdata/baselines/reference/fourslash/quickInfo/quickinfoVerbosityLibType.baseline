@@ -10,7 +10,7 @@
 // const g = f;
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const g: () => Promise<{
 // |     color: string;
 // |     size: number;
@@ -21,7 +21,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const g: () => Promise<Apple>
 // | ```
 // | 
@@ -30,7 +30,7 @@
 // const u: Map<string, Apple> = new Map;
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const u: Map<string, {
 // |     color: string;
 // |     size: number;
@@ -41,7 +41,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const u: Map<string, Apple>
 // | ```
 // | 
@@ -50,7 +50,7 @@
 // type Foo<T> = Promise<T>;
 //               ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | interface Promise<T>
 // | ```
 // | Represents the completion of an asynchronous operation
@@ -71,7 +71,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst g: () => Promise<Apple>\n```\n"
+          "value": "```typescript\nconst g: () => Promise<Apple>\n```\n"
         },
         "range": {
           "start": {
@@ -102,7 +102,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst g: () => Promise<{\n    color: string;\n    size: number;\n}>\n```\n"
+          "value": "```typescript\nconst g: () => Promise<{\n    color: string;\n    size: number;\n}>\n```\n"
         },
         "range": {
           "start": {
@@ -132,7 +132,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst u: Map<string, Apple>\n```\n"
+          "value": "```typescript\nconst u: Map<string, Apple>\n```\n"
         },
         "range": {
           "start": {
@@ -163,7 +163,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst u: Map<string, {\n    color: string;\n    size: number;\n}>\n```\n"
+          "value": "```typescript\nconst u: Map<string, {\n    color: string;\n    size: number;\n}>\n```\n"
         },
         "range": {
           "start": {
@@ -193,7 +193,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ninterface Promise<T>\n```\nRepresents the completion of an asynchronous operation"
+          "value": "```typescript\ninterface Promise<T>\n```\nRepresents the completion of an asynchronous operation"
         },
         "range": {
           "start": {

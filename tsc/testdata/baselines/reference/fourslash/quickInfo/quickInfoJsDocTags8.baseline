@@ -11,7 +11,7 @@
 // const foo = t => t.y;
 //       ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const foo: (t: T) => number
 // | ```
 // | 
@@ -32,7 +32,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst foo: (t: T) => number\n```\n\n\n*@template* `T`"
+        "value": "```typescript\nconst foo: (t: T) => number\n```\n\n\n*@template* `T`"
       },
       "range": {
         "start": {

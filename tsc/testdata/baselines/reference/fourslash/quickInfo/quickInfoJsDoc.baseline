@@ -41,7 +41,7 @@
 //         this.field;
 //              ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) C.field: string
 // | ```
 // | A field
@@ -51,7 +51,7 @@
 //         this.getter;
 //              ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (accessor) C.getter: void
 // | ```
 // | A getter
@@ -61,7 +61,7 @@
 //         this.m;
 //              ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) C.m(): void
 // | ```
 // | A method
@@ -71,7 +71,7 @@
 //         foo;
 //         ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var foo: string
 // | ```
 // | A constant
@@ -81,7 +81,7 @@
 //         C/;
 //         ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class C
 // | ```
 // | A class
@@ -101,7 +101,7 @@
 //         this.field;
 //              ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) C.field: string
 // | ```
 // | A field
@@ -111,7 +111,7 @@
 //         this.getter;
 //              ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (accessor) C.getter: void
 // | ```
 // | A getter
@@ -121,7 +121,7 @@
 //         this.m;
 //              ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) C.m(): void
 // | ```
 // | A method
@@ -131,7 +131,7 @@
 //         foo;
 //         ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var foo: string
 // | ```
 // | A constant
@@ -141,7 +141,7 @@
 //         C;
 //         ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class C
 // | ```
 // | A class
@@ -151,7 +151,7 @@
 //         fn();
 //         ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function fn(): void
 // | ```
 // | A function
@@ -174,7 +174,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) C.field: string\n```\nA field\n\n*@deprecated*"
+        "value": "```typescript\n(property) C.field: string\n```\nA field\n\n*@deprecated*"
       },
       "range": {
         "start": {
@@ -201,7 +201,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(accessor) C.getter: void\n```\nA getter\n\n*@deprecated*"
+        "value": "```typescript\n(accessor) C.getter: void\n```\nA getter\n\n*@deprecated*"
       },
       "range": {
         "start": {
@@ -228,7 +228,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) C.m(): void\n```\nA method\n\n*@deprecated*"
+        "value": "```typescript\n(method) C.m(): void\n```\nA method\n\n*@deprecated*"
       },
       "range": {
         "start": {
@@ -255,7 +255,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar foo: string\n```\nA constant\n\n*@deprecated*"
+        "value": "```typescript\nvar foo: string\n```\nA constant\n\n*@deprecated*"
       },
       "range": {
         "start": {
@@ -282,7 +282,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass C\n```\nA class\n\n*@deprecated*"
+        "value": "```typescript\nclass C\n```\nA class\n\n*@deprecated*"
       },
       "range": {
         "start": {
@@ -322,7 +322,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) C.field: string\n```\nA field\n\n*@deprecated*"
+        "value": "```typescript\n(property) C.field: string\n```\nA field\n\n*@deprecated*"
       },
       "range": {
         "start": {
@@ -349,7 +349,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(accessor) C.getter: void\n```\nA getter\n\n*@deprecated*"
+        "value": "```typescript\n(accessor) C.getter: void\n```\nA getter\n\n*@deprecated*"
       },
       "range": {
         "start": {
@@ -376,7 +376,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) C.m(): void\n```\nA method\n\n*@deprecated*"
+        "value": "```typescript\n(method) C.m(): void\n```\nA method\n\n*@deprecated*"
       },
       "range": {
         "start": {
@@ -403,7 +403,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar foo: string\n```\nA constant\n\n*@deprecated*"
+        "value": "```typescript\nvar foo: string\n```\nA constant\n\n*@deprecated*"
       },
       "range": {
         "start": {
@@ -430,7 +430,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass C\n```\nA class\n\n*@deprecated*"
+        "value": "```typescript\nclass C\n```\nA class\n\n*@deprecated*"
       },
       "range": {
         "start": {
@@ -458,7 +458,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction fn(): void\n```\nA function\n\n*@deprecated*"
+        "value": "```typescript\nfunction fn(): void\n```\nA function\n\n*@deprecated*"
       },
       "range": {
         "start": {

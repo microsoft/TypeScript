@@ -15,7 +15,7 @@
 //     /** Comment on bar destructuring. */ bar,
 //                                          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const bar: string
 // | ```
 // | This is bar from the interface
@@ -23,7 +23,7 @@
 //     /** Comment on baz destructuring. */ baz
 //                                          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const baz: number
 // | ```
 // | This is baz from the interface
@@ -44,7 +44,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst bar: string\n```\nThis is bar from the interface"
+        "value": "```typescript\nconst bar: string\n```\nThis is bar from the interface"
       },
       "range": {
         "start": {
@@ -71,7 +71,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst baz: number\n```\nThis is baz from the interface"
+        "value": "```typescript\nconst baz: number\n```\nThis is baz from the interface"
       },
       "range": {
         "start": {

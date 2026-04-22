@@ -4,7 +4,7 @@
 // const a = 1;
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const a: 1
 // | ```
 // | 
@@ -25,7 +25,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst a: 1\n```\n\n\n*@satisfies* — comment "
+        "value": "```typescript\nconst a: 1\n```\n\n\n*@satisfies* — comment "
       },
       "range": {
         "start": {

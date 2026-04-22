@@ -6,7 +6,7 @@
 //     const obj: Foo & Bar = { a: "a" };
 //           ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj: {
 // |     a: "a" | "c";
 // | } & {
@@ -18,7 +18,7 @@
 // | ----------------------------------------------------------------------
 //           ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj: Foo & Bar
 // | ```
 // | 
@@ -31,7 +31,7 @@
 //     const obj: Foo & Bar = { a: "" };
 //           ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj: never
 // | ```
 // | 
@@ -45,7 +45,7 @@
 //     const obj: Never = { a: "" };
 //           ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const obj: never
 // | ```
 // | 
@@ -67,7 +67,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj: Foo & Bar\n```\n"
+          "value": "```typescript\nconst obj: Foo & Bar\n```\n"
         },
         "range": {
           "start": {
@@ -98,7 +98,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj: {\n    a: \"a\" | \"c\";\n} & {\n    a: \"a\" | \"b\";\n}\n```\n"
+          "value": "```typescript\nconst obj: {\n    a: \"a\" | \"c\";\n} & {\n    a: \"a\" | \"b\";\n}\n```\n"
         },
         "range": {
           "start": {
@@ -128,7 +128,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj: never\n```\n"
+          "value": "```typescript\nconst obj: never\n```\n"
         },
         "range": {
           "start": {
@@ -158,7 +158,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst obj: never\n```\n"
+          "value": "```typescript\nconst obj: never\n```\n"
         },
         "range": {
           "start": {

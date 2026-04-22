@@ -12,7 +12,7 @@
 // const o: Orchard = {} as any;
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const o: {
 // |     takeOneApple(a: {
 // |         color: string;
@@ -33,7 +33,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const o: {
 // |     takeOneApple(a: Apple): void;
 // |     getApple(): Apple;
@@ -45,7 +45,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const o: Orchard
 // | ```
 // | 
@@ -54,7 +54,7 @@
 // declare function isApple(x: unknown): x is Apple;
 //                  ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function isApple(x: unknown): x is {
 // |     color: string;
 // |     size: number;
@@ -65,7 +65,7 @@
 // | ----------------------------------------------------------------------
 //                  ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function isApple(x: unknown): x is Apple
 // | ```
 // | 
@@ -80,7 +80,7 @@
 // someFun.what = 'what';
 // ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function someFun(a: {
 // |     prop1: string;
 // | }): {
@@ -92,7 +92,7 @@
 // | ----------------------------------------------------------------------
 // ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function someFun(a: SomeType): SomeType
 // | ```
 // | 
@@ -113,7 +113,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst o: Orchard\n```\n"
+          "value": "```typescript\nconst o: Orchard\n```\n"
         },
         "range": {
           "start": {
@@ -144,7 +144,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst o: {\n    takeOneApple(a: Apple): void;\n    getApple(): Apple;\n    getApple(size: number): Apple[];\n}\n```\n"
+          "value": "```typescript\nconst o: {\n    takeOneApple(a: Apple): void;\n    getApple(): Apple;\n    getApple(size: number): Apple[];\n}\n```\n"
         },
         "range": {
           "start": {
@@ -175,7 +175,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst o: {\n    takeOneApple(a: {\n        color: string;\n        size: number;\n    }): void;\n    getApple(): {\n        color: string;\n        size: number;\n    };\n    getApple(size: number): {\n        color: string;\n        size: number;\n    }[];\n}\n```\n"
+          "value": "```typescript\nconst o: {\n    takeOneApple(a: {\n        color: string;\n        size: number;\n    }): void;\n    getApple(): {\n        color: string;\n        size: number;\n    };\n    getApple(size: number): {\n        color: string;\n        size: number;\n    }[];\n}\n```\n"
         },
         "range": {
           "start": {
@@ -205,7 +205,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nfunction isApple(x: unknown): x is Apple\n```\n"
+          "value": "```typescript\nfunction isApple(x: unknown): x is Apple\n```\n"
         },
         "range": {
           "start": {
@@ -236,7 +236,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nfunction isApple(x: unknown): x is {\n    color: string;\n    size: number;\n}\n```\n"
+          "value": "```typescript\nfunction isApple(x: unknown): x is {\n    color: string;\n    size: number;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -266,7 +266,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nfunction someFun(a: SomeType): SomeType\n```\n"
+          "value": "```typescript\nfunction someFun(a: SomeType): SomeType\n```\n"
         },
         "range": {
           "start": {
@@ -297,7 +297,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nfunction someFun(a: {\n    prop1: string;\n}): {\n    prop1: string;\n}\n```\n"
+          "value": "```typescript\nfunction someFun(a: {\n    prop1: string;\n}): {\n    prop1: string;\n}\n```\n"
         },
         "range": {
           "start": {

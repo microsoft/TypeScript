@@ -3,7 +3,7 @@
 // enum E {
 //      ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | enum E
 // | ```
 // | 
@@ -11,7 +11,7 @@
 //     "e1",
 //      ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (enum member) E.e1 = 0
 // | ```
 // | 
@@ -19,7 +19,7 @@
 //     'e2' = 10,
 //      ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (enum member) E.e2 = 10
 // | ```
 // | 
@@ -27,7 +27,7 @@
 //     "e3"
 //      ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (enum member) E.e3 = 11
 // | ```
 // | 
@@ -36,14 +36,14 @@
 // var eInstance: E;
 //     ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var eInstance: E
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | enum E
 // | ```
 // | 
@@ -51,21 +51,21 @@
 // eInstance = E["e1"];
 // ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var eInstance: E
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //             ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | enum E
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (enum member) E.e1 = 0
 // | ```
 // | 
@@ -73,21 +73,21 @@
 // eInstance = E["e2"];
 // ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var eInstance: E
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //             ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | enum E
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (enum member) E.e2 = 10
 // | ```
 // | 
@@ -95,21 +95,21 @@
 // eInstance = E['e3'];
 // ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var eInstance: E
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //             ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | enum E
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (enum member) E.e3 = 11
 // | ```
 // | 
@@ -117,7 +117,7 @@
 // const enum constE {
 //            ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const enum constE
 // | ```
 // | 
@@ -125,7 +125,7 @@
 //     "e1",
 //      ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (enum member) constE.e1 = 0
 // | ```
 // | 
@@ -133,7 +133,7 @@
 //     'e2' = 10,
 //      ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (enum member) constE.e2 = 10
 // | ```
 // | 
@@ -141,7 +141,7 @@
 //     "e3"
 //      ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (enum member) constE.e3 = 11
 // | ```
 // | 
@@ -150,14 +150,14 @@
 // var eInstance1: constE;
 //     ^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var eInstance1: constE
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                 ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const enum constE
 // | ```
 // | 
@@ -165,21 +165,21 @@
 // eInstance1 = constE["e1"];
 // ^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var eInstance1: constE
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //              ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const enum constE
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                      ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (enum member) constE.e1 = 0
 // | ```
 // | 
@@ -187,21 +187,21 @@
 // eInstance1 = constE["e2"];
 // ^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var eInstance1: constE
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //              ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const enum constE
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                      ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (enum member) constE.e2 = 10
 // | ```
 // | 
@@ -209,21 +209,21 @@
 // eInstance1 = constE['e3'];
 // ^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var eInstance1: constE
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //              ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const enum constE
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                      ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (enum member) constE.e3 = 11
 // | ```
 // | 
@@ -242,7 +242,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nenum E\n```\n"
+        "value": "```typescript\nenum E\n```\n"
       },
       "range": {
         "start": {
@@ -270,7 +270,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) E.e1 = 0\n```\n"
+        "value": "```typescript\n(enum member) E.e1 = 0\n```\n"
       },
       "range": {
         "start": {
@@ -297,7 +297,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) E.e2 = 10\n```\n"
+        "value": "```typescript\n(enum member) E.e2 = 10\n```\n"
       },
       "range": {
         "start": {
@@ -324,7 +324,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) E.e3 = 11\n```\n"
+        "value": "```typescript\n(enum member) E.e3 = 11\n```\n"
       },
       "range": {
         "start": {
@@ -351,7 +351,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar eInstance: E\n```\n"
+        "value": "```typescript\nvar eInstance: E\n```\n"
       },
       "range": {
         "start": {
@@ -379,7 +379,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nenum E\n```\n"
+        "value": "```typescript\nenum E\n```\n"
       },
       "range": {
         "start": {
@@ -407,7 +407,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar eInstance: E\n```\n"
+        "value": "```typescript\nvar eInstance: E\n```\n"
       },
       "range": {
         "start": {
@@ -435,7 +435,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nenum E\n```\n"
+        "value": "```typescript\nenum E\n```\n"
       },
       "range": {
         "start": {
@@ -463,7 +463,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) E.e1 = 0\n```\n"
+        "value": "```typescript\n(enum member) E.e1 = 0\n```\n"
       },
       "range": {
         "start": {
@@ -490,7 +490,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar eInstance: E\n```\n"
+        "value": "```typescript\nvar eInstance: E\n```\n"
       },
       "range": {
         "start": {
@@ -518,7 +518,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nenum E\n```\n"
+        "value": "```typescript\nenum E\n```\n"
       },
       "range": {
         "start": {
@@ -546,7 +546,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) E.e2 = 10\n```\n"
+        "value": "```typescript\n(enum member) E.e2 = 10\n```\n"
       },
       "range": {
         "start": {
@@ -573,7 +573,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar eInstance: E\n```\n"
+        "value": "```typescript\nvar eInstance: E\n```\n"
       },
       "range": {
         "start": {
@@ -601,7 +601,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nenum E\n```\n"
+        "value": "```typescript\nenum E\n```\n"
       },
       "range": {
         "start": {
@@ -629,7 +629,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) E.e3 = 11\n```\n"
+        "value": "```typescript\n(enum member) E.e3 = 11\n```\n"
       },
       "range": {
         "start": {
@@ -656,7 +656,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst enum constE\n```\n"
+        "value": "```typescript\nconst enum constE\n```\n"
       },
       "range": {
         "start": {
@@ -684,7 +684,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) constE.e1 = 0\n```\n"
+        "value": "```typescript\n(enum member) constE.e1 = 0\n```\n"
       },
       "range": {
         "start": {
@@ -711,7 +711,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) constE.e2 = 10\n```\n"
+        "value": "```typescript\n(enum member) constE.e2 = 10\n```\n"
       },
       "range": {
         "start": {
@@ -738,7 +738,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) constE.e3 = 11\n```\n"
+        "value": "```typescript\n(enum member) constE.e3 = 11\n```\n"
       },
       "range": {
         "start": {
@@ -765,7 +765,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar eInstance1: constE\n```\n"
+        "value": "```typescript\nvar eInstance1: constE\n```\n"
       },
       "range": {
         "start": {
@@ -793,7 +793,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst enum constE\n```\n"
+        "value": "```typescript\nconst enum constE\n```\n"
       },
       "range": {
         "start": {
@@ -821,7 +821,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar eInstance1: constE\n```\n"
+        "value": "```typescript\nvar eInstance1: constE\n```\n"
       },
       "range": {
         "start": {
@@ -849,7 +849,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst enum constE\n```\n"
+        "value": "```typescript\nconst enum constE\n```\n"
       },
       "range": {
         "start": {
@@ -877,7 +877,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) constE.e1 = 0\n```\n"
+        "value": "```typescript\n(enum member) constE.e1 = 0\n```\n"
       },
       "range": {
         "start": {
@@ -904,7 +904,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar eInstance1: constE\n```\n"
+        "value": "```typescript\nvar eInstance1: constE\n```\n"
       },
       "range": {
         "start": {
@@ -932,7 +932,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst enum constE\n```\n"
+        "value": "```typescript\nconst enum constE\n```\n"
       },
       "range": {
         "start": {
@@ -960,7 +960,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) constE.e2 = 10\n```\n"
+        "value": "```typescript\n(enum member) constE.e2 = 10\n```\n"
       },
       "range": {
         "start": {
@@ -987,7 +987,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar eInstance1: constE\n```\n"
+        "value": "```typescript\nvar eInstance1: constE\n```\n"
       },
       "range": {
         "start": {
@@ -1015,7 +1015,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst enum constE\n```\n"
+        "value": "```typescript\nconst enum constE\n```\n"
       },
       "range": {
         "start": {
@@ -1043,7 +1043,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) constE.e3 = 11\n```\n"
+        "value": "```typescript\n(enum member) constE.e3 = 11\n```\n"
       },
       "range": {
         "start": {

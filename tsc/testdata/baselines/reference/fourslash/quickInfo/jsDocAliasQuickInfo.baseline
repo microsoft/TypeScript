@@ -7,7 +7,7 @@
 // export default 10;
 //        ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) default: 10
 // | ```
 // | Comment
@@ -16,14 +16,14 @@
 // export { default as test } from "./jsDocAliasQuickInfo";
 //          ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) default: 10
 // | ```
 // | Comment
 // | ----------------------------------------------------------------------
 //                     ^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (alias) (property) default: 10
 // | ```
 // | Comment
@@ -44,7 +44,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) default: 10\n```\nComment"
+        "value": "```typescript\n(property) default: 10\n```\nComment"
       },
       "range": {
         "start": {
@@ -71,7 +71,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) default: 10\n```\nComment"
+        "value": "```typescript\n(property) default: 10\n```\nComment"
       },
       "range": {
         "start": {
@@ -98,7 +98,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(alias) (property) default: 10\n```\nComment"
+        "value": "```typescript\n(alias) (property) default: 10\n```\nComment"
       },
       "range": {
         "start": {

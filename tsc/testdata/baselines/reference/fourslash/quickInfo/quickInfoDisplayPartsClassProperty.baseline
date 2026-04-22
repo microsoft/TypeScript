@@ -4,7 +4,7 @@
 //     public publicProperty: string;
 //            ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.publicProperty: string
 // | ```
 // | 
@@ -12,7 +12,7 @@
 //     private privateProperty: string;
 //             ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.privateProperty: string
 // | ```
 // | 
@@ -20,7 +20,7 @@
 //     protected protectedProperty: string;
 //               ^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.protectedProperty: string
 // | ```
 // | 
@@ -28,7 +28,7 @@
 //     static staticProperty: string;
 //            ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.staticProperty: string
 // | ```
 // | 
@@ -36,7 +36,7 @@
 //     private static privateStaticProperty: string;
 //                    ^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.privateStaticProperty: string
 // | ```
 // | 
@@ -44,7 +44,7 @@
 //     protected static protectedStaticProperty: string;
 //                      ^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.protectedStaticProperty: string
 // | ```
 // | 
@@ -53,7 +53,7 @@
 //         this.publicProperty;
 //              ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.publicProperty: string
 // | ```
 // | 
@@ -61,7 +61,7 @@
 //         this.privateProperty;
 //              ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.privateProperty: string
 // | ```
 // | 
@@ -69,7 +69,7 @@
 //         this.protectedProperty;
 //              ^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.protectedProperty: string
 // | ```
 // | 
@@ -77,7 +77,7 @@
 //         c.staticProperty;
 //           ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.staticProperty: string
 // | ```
 // | 
@@ -85,7 +85,7 @@
 //         c.privateStaticProperty;
 //           ^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.privateStaticProperty: string
 // | ```
 // | 
@@ -93,7 +93,7 @@
 //         c.protectedStaticProperty;
 //           ^^^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.protectedStaticProperty: string
 // | ```
 // | 
@@ -104,14 +104,14 @@
 // cInstance.publicProperty;
 // ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cInstance: c
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //           ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.publicProperty: string
 // | ```
 // | 
@@ -119,14 +119,14 @@
 // c.staticProperty;
 // ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //   ^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (property) c.staticProperty: string
 // | ```
 // | 
@@ -145,7 +145,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.publicProperty: string\n```\n"
+        "value": "```typescript\n(property) c.publicProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -172,7 +172,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.privateProperty: string\n```\n"
+        "value": "```typescript\n(property) c.privateProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -199,7 +199,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.protectedProperty: string\n```\n"
+        "value": "```typescript\n(property) c.protectedProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -226,7 +226,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.staticProperty: string\n```\n"
+        "value": "```typescript\n(property) c.staticProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -253,7 +253,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.privateStaticProperty: string\n```\n"
+        "value": "```typescript\n(property) c.privateStaticProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -280,7 +280,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.protectedStaticProperty: string\n```\n"
+        "value": "```typescript\n(property) c.protectedStaticProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -307,7 +307,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.publicProperty: string\n```\n"
+        "value": "```typescript\n(property) c.publicProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -334,7 +334,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.privateProperty: string\n```\n"
+        "value": "```typescript\n(property) c.privateProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -361,7 +361,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.protectedProperty: string\n```\n"
+        "value": "```typescript\n(property) c.protectedProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -388,7 +388,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.staticProperty: string\n```\n"
+        "value": "```typescript\n(property) c.staticProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -415,7 +415,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.privateStaticProperty: string\n```\n"
+        "value": "```typescript\n(property) c.privateStaticProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -442,7 +442,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.protectedStaticProperty: string\n```\n"
+        "value": "```typescript\n(property) c.protectedStaticProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -469,7 +469,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c\n```\n"
+        "value": "```typescript\nvar cInstance: c\n```\n"
       },
       "range": {
         "start": {
@@ -497,7 +497,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.publicProperty: string\n```\n"
+        "value": "```typescript\n(property) c.publicProperty: string\n```\n"
       },
       "range": {
         "start": {
@@ -524,7 +524,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c\n```\n"
+        "value": "```typescript\nclass c\n```\n"
       },
       "range": {
         "start": {
@@ -552,7 +552,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) c.staticProperty: string\n```\n"
+        "value": "```typescript\n(property) c.staticProperty: string\n```\n"
       },
       "range": {
         "start": {

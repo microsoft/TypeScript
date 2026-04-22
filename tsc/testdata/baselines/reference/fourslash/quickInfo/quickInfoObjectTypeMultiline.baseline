@@ -4,7 +4,7 @@
 // type X = {
 //      ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type X = {
 // |     a: number;
 // |     b: string;
@@ -16,7 +16,7 @@
 // | ----------------------------------------------------------------------
 //      ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type X = {
 // |     a: number;
 // |     b: string;
@@ -47,7 +47,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype X = {\n    a: number;\n    b: string;\n    c: C;\n}\n```\n"
+          "value": "```typescript\ntype X = {\n    a: number;\n    b: string;\n    c: C;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -78,7 +78,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype X = {\n    a: number;\n    b: string;\n    c: {};\n}\n```\n"
+          "value": "```typescript\ntype X = {\n    a: number;\n    b: string;\n    c: {};\n}\n```\n"
         },
         "range": {
           "start": {

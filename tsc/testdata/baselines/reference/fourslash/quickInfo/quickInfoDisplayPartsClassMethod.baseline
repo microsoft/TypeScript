@@ -4,7 +4,7 @@
 //     public publicMethod() { }
 //            ^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.publicMethod(): void
 // | ```
 // | 
@@ -12,7 +12,7 @@
 //     private privateMethod() { }
 //             ^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.privateMethod(): void
 // | ```
 // | 
@@ -20,7 +20,7 @@
 //     protected protectedMethod() { }
 //               ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.protectedMethod(): void
 // | ```
 // | 
@@ -28,7 +28,7 @@
 //     static staticMethod() { }
 //            ^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.staticMethod(): void
 // | ```
 // | 
@@ -36,7 +36,7 @@
 //     private static privateStaticMethod() { }
 //                    ^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.privateStaticMethod(): void
 // | ```
 // | 
@@ -44,7 +44,7 @@
 //     protected static protectedStaticMethod() { }
 //                      ^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.protectedStaticMethod(): void
 // | ```
 // | 
@@ -53,7 +53,7 @@
 //         this.publicMethod();
 //              ^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.publicMethod(): void
 // | ```
 // | 
@@ -61,7 +61,7 @@
 //         this.privateMethod();
 //              ^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.privateMethod(): void
 // | ```
 // | 
@@ -69,7 +69,7 @@
 //         this.protectedMethod();
 //              ^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.protectedMethod(): void
 // | ```
 // | 
@@ -77,7 +77,7 @@
 //         c.staticMethod();
 //           ^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.staticMethod(): void
 // | ```
 // | 
@@ -85,7 +85,7 @@
 //         c.privateStaticMethod();
 //           ^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.privateStaticMethod(): void
 // | ```
 // | 
@@ -93,7 +93,7 @@
 //         c.protectedStaticMethod();
 //           ^^^^^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.protectedStaticMethod(): void
 // | ```
 // | 
@@ -104,14 +104,14 @@
 // cInstance.publicMethod();
 // ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | var cInstance: c
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //           ^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.publicMethod(): void
 // | ```
 // | 
@@ -119,14 +119,14 @@
 // c.staticMethod();
 // ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class c
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //   ^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) c.staticMethod(): void
 // | ```
 // | 
@@ -145,7 +145,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.publicMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.publicMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -172,7 +172,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.privateMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.privateMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -199,7 +199,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.protectedMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.protectedMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -226,7 +226,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.staticMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.staticMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -253,7 +253,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.privateStaticMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.privateStaticMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -280,7 +280,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.protectedStaticMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.protectedStaticMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -307,7 +307,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.publicMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.publicMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -334,7 +334,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.privateMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.privateMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -361,7 +361,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.protectedMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.protectedMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -388,7 +388,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.staticMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.staticMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -415,7 +415,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.privateStaticMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.privateStaticMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -442,7 +442,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.protectedStaticMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.protectedStaticMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -469,7 +469,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar cInstance: c\n```\n"
+        "value": "```typescript\nvar cInstance: c\n```\n"
       },
       "range": {
         "start": {
@@ -497,7 +497,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.publicMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.publicMethod(): void\n```\n"
       },
       "range": {
         "start": {
@@ -524,7 +524,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass c\n```\n"
+        "value": "```typescript\nclass c\n```\n"
       },
       "range": {
         "start": {
@@ -552,7 +552,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) c.staticMethod(): void\n```\n"
+        "value": "```typescript\n(method) c.staticMethod(): void\n```\n"
       },
       "range": {
         "start": {

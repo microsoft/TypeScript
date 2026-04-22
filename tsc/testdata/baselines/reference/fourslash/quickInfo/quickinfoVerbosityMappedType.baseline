@@ -12,7 +12,7 @@
 // const x: F<Bar> = { banana: 'hello' };
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const x: {
 // |     banana: string;
 // | }
@@ -22,7 +22,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const x: F<Bar>
 // | ```
 // | 
@@ -30,7 +30,7 @@
 // | ----------------------------------------------------------------------
 //          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type F<T> = { [K in keyof T as T[K] extends number | boolean ? never : K]: T[K]; }
 // | ```
 // | 
@@ -38,7 +38,7 @@
 // | ----------------------------------------------------------------------
 //          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type F<T> = { [K in keyof T as T[K] extends Apple ? never : K]: T[K]; }
 // | ```
 // | 
@@ -47,7 +47,7 @@
 // const y: { [K in keyof Bar]?: Bar[K] } = { banana: 'hello' };
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const y: {
 // |     banana?: string | undefined;
 // |     apple?: boolean | undefined;
@@ -62,7 +62,7 @@
 // const z: G<Bar> = { banana: 'hello', apple: true };
 //          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type G<T> = { [K in keyof T]: T[K] & (number | boolean); }
 // | ```
 // | 
@@ -70,7 +70,7 @@
 // | ----------------------------------------------------------------------
 //          ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type G<T> = { [K in keyof T]: T[K] & Apple; }
 // | ```
 // | 
@@ -91,7 +91,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst x: F<Bar>\n```\n"
+          "value": "```typescript\nconst x: F<Bar>\n```\n"
         },
         "range": {
           "start": {
@@ -122,7 +122,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst x: {\n    banana: string;\n}\n```\n"
+          "value": "```typescript\nconst x: {\n    banana: string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -152,7 +152,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype F<T> = { [K in keyof T as T[K] extends Apple ? never : K]: T[K]; }\n```\n"
+          "value": "```typescript\ntype F<T> = { [K in keyof T as T[K] extends Apple ? never : K]: T[K]; }\n```\n"
         },
         "range": {
           "start": {
@@ -183,7 +183,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype F<T> = { [K in keyof T as T[K] extends number | boolean ? never : K]: T[K]; }\n```\n"
+          "value": "```typescript\ntype F<T> = { [K in keyof T as T[K] extends number | boolean ? never : K]: T[K]; }\n```\n"
         },
         "range": {
           "start": {
@@ -213,7 +213,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst y: {\n    banana?: string | undefined;\n    apple?: boolean | undefined;\n}\n```\n"
+          "value": "```typescript\nconst y: {\n    banana?: string | undefined;\n    apple?: boolean | undefined;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -243,7 +243,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype G<T> = { [K in keyof T]: T[K] & Apple; }\n```\n"
+          "value": "```typescript\ntype G<T> = { [K in keyof T]: T[K] & Apple; }\n```\n"
         },
         "range": {
           "start": {
@@ -274,7 +274,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype G<T> = { [K in keyof T]: T[K] & (number | boolean); }\n```\n"
+          "value": "```typescript\ntype G<T> = { [K in keyof T]: T[K] & (number | boolean); }\n```\n"
         },
         "range": {
           "start": {

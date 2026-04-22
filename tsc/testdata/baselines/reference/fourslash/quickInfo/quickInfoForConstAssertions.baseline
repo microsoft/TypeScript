@@ -3,7 +3,7 @@
 // const a = { a: 1 } as const;
 //                       ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type const
 // | ```
 // | 
@@ -11,7 +11,7 @@
 // const b = 1 as const;
 //                ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type const
 // | ```
 // | 
@@ -19,7 +19,7 @@
 // const c = "c" as const;
 //                  ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type const
 // | ```
 // | 
@@ -27,7 +27,7 @@
 // const d = [1, 2] as const;
 //                     ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type const
 // | ```
 // | 
@@ -46,7 +46,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype const\n```\n"
+        "value": "```typescript\ntype const\n```\n"
       },
       "range": {
         "start": {
@@ -73,7 +73,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype const\n```\n"
+        "value": "```typescript\ntype const\n```\n"
       },
       "range": {
         "start": {
@@ -100,7 +100,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype const\n```\n"
+        "value": "```typescript\ntype const\n```\n"
       },
       "range": {
         "start": {
@@ -127,7 +127,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\ntype const\n```\n"
+        "value": "```typescript\ntype const\n```\n"
       },
       "range": {
         "start": {

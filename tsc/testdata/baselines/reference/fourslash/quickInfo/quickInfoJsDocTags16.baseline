@@ -13,7 +13,7 @@
 //     override foo() { }
 //              ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) B.foo(): void
 // | ```
 // | Description text here.
@@ -26,7 +26,7 @@
 //     override foo() { }
 //              ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) C.foo(): void
 // | ```
 // | Description text here.
@@ -48,7 +48,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) B.foo(): void\n```\nDescription text here.\n\n*@virtual*"
+        "value": "```typescript\n(method) B.foo(): void\n```\nDescription text here.\n\n*@virtual*"
       },
       "range": {
         "start": {
@@ -75,7 +75,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) C.foo(): void\n```\nDescription text here.\n\n*@virtual*"
+        "value": "```typescript\n(method) C.foo(): void\n```\nDescription text here.\n\n*@virtual*"
       },
       "range": {
         "start": {

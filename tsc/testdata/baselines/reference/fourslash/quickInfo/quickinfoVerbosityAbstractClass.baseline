@@ -4,7 +4,7 @@
 // declare abstract class Shape {
 //                        ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | abstract class Shape {
 // |     abstract area(): number;
 // |     abstract perimeter(): number;
@@ -16,7 +16,7 @@
 // | ----------------------------------------------------------------------
 //                        ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | abstract class Shape
 // | ```
 // | 
@@ -42,7 +42,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nabstract class Shape\n```\n"
+          "value": "```typescript\nabstract class Shape\n```\n"
         },
         "range": {
           "start": {
@@ -73,7 +73,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nabstract class Shape {\n    abstract area(): number;\n    abstract perimeter(): number;\n    toString(): string;\n}\n```\n"
+          "value": "```typescript\nabstract class Shape {\n    abstract area(): number;\n    abstract perimeter(): number;\n    toString(): string;\n}\n```\n"
         },
         "range": {
           "start": {

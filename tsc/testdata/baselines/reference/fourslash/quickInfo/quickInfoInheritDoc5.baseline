@@ -9,7 +9,7 @@
 //     static value() {
 //            ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) B.value(): undefined
 // | ```
 // | 
@@ -33,7 +33,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) B.value(): undefined\n```\n\n\n*@inheritdoc*"
+        "value": "```typescript\n(method) B.value(): undefined\n```\n\n\n*@inheritdoc*"
       },
       "range": {
         "start": {

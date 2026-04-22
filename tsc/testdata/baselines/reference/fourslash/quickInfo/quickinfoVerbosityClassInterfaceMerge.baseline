@@ -4,7 +4,7 @@
 // declare class Foo {
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class Foo {
 // |     x: number;
 // |     y: string;
@@ -15,7 +15,7 @@
 // | ----------------------------------------------------------------------
 //               ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class Foo
 // | ```
 // | 
@@ -29,7 +29,7 @@
 // const f: Foo = { x: 1, y: "hello" };
 //          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class Foo {
 // |     x: number;
 // |     y: string;
@@ -40,7 +40,7 @@
 // | ----------------------------------------------------------------------
 //          ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class Foo
 // | ```
 // | 
@@ -62,7 +62,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nclass Foo\n```\n"
+          "value": "```typescript\nclass Foo\n```\n"
         },
         "range": {
           "start": {
@@ -93,7 +93,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nclass Foo {\n    x: number;\n    y: string;\n}\n```\n"
+          "value": "```typescript\nclass Foo {\n    x: number;\n    y: string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -123,7 +123,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nclass Foo\n```\n"
+          "value": "```typescript\nclass Foo\n```\n"
         },
         "range": {
           "start": {
@@ -154,7 +154,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nclass Foo {\n    x: number;\n    y: string;\n}\n```\n"
+          "value": "```typescript\nclass Foo {\n    x: number;\n    y: string;\n}\n```\n"
         },
         "range": {
           "start": {

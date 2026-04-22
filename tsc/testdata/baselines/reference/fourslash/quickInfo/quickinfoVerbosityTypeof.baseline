@@ -8,7 +8,7 @@
 // const b: typeof a = { color: "green", weight: 120 };
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const b: {
 // |     color: string;
 // |     weight: number;
@@ -19,7 +19,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const b: Apple
 // | ```
 // | 
@@ -34,7 +34,7 @@
 // const c: typeof Banana = Banana;
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const c: {
 // |     new (length: number): Banana;
 // | }
@@ -44,7 +44,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const c: typeof Banana
 // | ```
 // | 
@@ -65,7 +65,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst b: Apple\n```\n"
+          "value": "```typescript\nconst b: Apple\n```\n"
         },
         "range": {
           "start": {
@@ -96,7 +96,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst b: {\n    color: string;\n    weight: number;\n}\n```\n"
+          "value": "```typescript\nconst b: {\n    color: string;\n    weight: number;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -126,7 +126,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst c: typeof Banana\n```\n"
+          "value": "```typescript\nconst c: typeof Banana\n```\n"
         },
         "range": {
           "start": {
@@ -157,7 +157,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst c: {\n    new (length: number): Banana;\n}\n```\n"
+          "value": "```typescript\nconst c: {\n    new (length: number): Banana;\n}\n```\n"
         },
         "range": {
           "start": {

@@ -6,7 +6,7 @@
 // const B = 456;
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const B: 456
 // | ```
 // | See | instead
@@ -25,7 +25,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst B: 456\n```\nSee | instead"
+        "value": "```typescript\nconst B: 456\n```\nSee | instead"
       },
       "range": {
         "start": {

@@ -8,7 +8,7 @@
 // const a = {
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const a: {
 // |     prop1: string;
 // | }
@@ -18,7 +18,7 @@
 // | ----------------------------------------------------------------------
 //       ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const a: SomeType
 // | ```
 // | 
@@ -30,7 +30,7 @@
 //  * @typedef {Object} SomeType2
 //                      ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type SomeType2 = {
 // |     prop2: number;
 // |     prop3: {
@@ -43,7 +43,7 @@
 // | ----------------------------------------------------------------------
 //                      ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | type SomeType2 = {
 // |     prop2: number;
 // |     prop3: SomeType;
@@ -60,7 +60,7 @@
 // const d = ss.map((s) => s.prop1);
 //                   ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) s: {
 // |     prop1: string;
 // | }
@@ -70,7 +70,7 @@
 // | ----------------------------------------------------------------------
 //                   ^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (parameter) s: SomeType
 // | ```
 // | 
@@ -82,7 +82,7 @@
 // function someFun(a) {
 //          ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function someFun(a: {
 // |     prop1: string;
 // | }): {
@@ -98,7 +98,7 @@
 // | ----------------------------------------------------------------------
 //          ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | function someFun(a: SomeType): SomeType
 // | ```
 // | 
@@ -114,7 +114,7 @@
 // class SomeClass {
 //       ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class SomeClass {
 // |     b: {
 // |         prop2: number;
@@ -127,7 +127,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class SomeClass {
 // |     b: SomeType2;
 // | }
@@ -137,7 +137,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class SomeClass
 // | ```
 // | 
@@ -161,7 +161,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst a: SomeType\n```\n"
+          "value": "```typescript\nconst a: SomeType\n```\n"
         },
         "range": {
           "start": {
@@ -192,7 +192,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst a: {\n    prop1: string;\n}\n```\n"
+          "value": "```typescript\nconst a: {\n    prop1: string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -222,7 +222,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype SomeType2 = {\n    prop2: number;\n    prop3: SomeType;\n}\n```\n"
+          "value": "```typescript\ntype SomeType2 = {\n    prop2: number;\n    prop3: SomeType;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -253,7 +253,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\ntype SomeType2 = {\n    prop2: number;\n    prop3: {\n        prop1: string;\n    };\n}\n```\n"
+          "value": "```typescript\ntype SomeType2 = {\n    prop2: number;\n    prop3: {\n        prop1: string;\n    };\n}\n```\n"
         },
         "range": {
           "start": {
@@ -283,7 +283,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(parameter) s: SomeType\n```\n"
+          "value": "```typescript\n(parameter) s: SomeType\n```\n"
         },
         "range": {
           "start": {
@@ -314,7 +314,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\n(parameter) s: {\n    prop1: string;\n}\n```\n"
+          "value": "```typescript\n(parameter) s: {\n    prop1: string;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -344,7 +344,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nfunction someFun(a: SomeType): SomeType\n```\n\n\n*@param* `a`\n\n*@returns*"
+          "value": "```typescript\nfunction someFun(a: SomeType): SomeType\n```\n\n\n*@param* `a`\n\n*@returns*"
         },
         "range": {
           "start": {
@@ -375,7 +375,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nfunction someFun(a: {\n    prop1: string;\n}): {\n    prop1: string;\n}\n```\n\n\n*@param* `a`\n\n*@returns*"
+          "value": "```typescript\nfunction someFun(a: {\n    prop1: string;\n}): {\n    prop1: string;\n}\n```\n\n\n*@param* `a`\n\n*@returns*"
         },
         "range": {
           "start": {
@@ -405,7 +405,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nclass SomeClass\n```\n"
+          "value": "```typescript\nclass SomeClass\n```\n"
         },
         "range": {
           "start": {
@@ -436,7 +436,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nclass SomeClass {\n    b: SomeType2;\n}\n```\n"
+          "value": "```typescript\nclass SomeClass {\n    b: SomeType2;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -467,7 +467,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nclass SomeClass {\n    b: {\n        prop2: number;\n        prop3: SomeType;\n    };\n}\n```\n"
+          "value": "```typescript\nclass SomeClass {\n    b: {\n        prop2: number;\n        prop3: SomeType;\n    };\n}\n```\n"
         },
         "range": {
           "start": {

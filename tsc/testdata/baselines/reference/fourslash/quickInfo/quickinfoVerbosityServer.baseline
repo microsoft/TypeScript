@@ -4,7 +4,7 @@
 // const foo: FooType = 1
 //       ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const foo: string | number
 // | ```
 // | 
@@ -12,7 +12,7 @@
 // | ----------------------------------------------------------------------
 //       ^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | const foo: FooType
 // | ```
 // | 
@@ -33,7 +33,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst foo: FooType\n```\n"
+          "value": "```typescript\nconst foo: FooType\n```\n"
         },
         "range": {
           "start": {
@@ -64,7 +64,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nconst foo: string | number\n```\n"
+          "value": "```typescript\nconst foo: string | number\n```\n"
         },
         "range": {
           "start": {

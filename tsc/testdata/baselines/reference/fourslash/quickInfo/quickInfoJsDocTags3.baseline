@@ -16,7 +16,7 @@
 //     method(): void {
 //     ^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | (method) Bar.method(): void
 // | ```
 // | 
@@ -38,7 +38,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) Bar.method(): void\n```\n"
+        "value": "```typescript\n(method) Bar.method(): void\n```\n"
       },
       "range": {
         "start": {

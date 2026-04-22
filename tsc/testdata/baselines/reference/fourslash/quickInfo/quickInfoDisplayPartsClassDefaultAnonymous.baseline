@@ -7,14 +7,14 @@
 // | ----------------------------------------------------------------------
 //        ^^^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class default
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //                ^^^^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | class default
 // | ```
 // | 
@@ -50,7 +50,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass default\n```\n"
+        "value": "```typescript\nclass default\n```\n"
       },
       "range": {
         "start": {
@@ -78,7 +78,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nclass default\n```\n"
+        "value": "```typescript\nclass default\n```\n"
       },
       "range": {
         "start": {

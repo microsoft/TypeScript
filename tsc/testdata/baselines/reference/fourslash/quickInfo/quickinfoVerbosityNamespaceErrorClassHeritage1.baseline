@@ -4,7 +4,7 @@
 // namespace NS {
 //           ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace NS {
 // |     class Derived {
 // |         derivedField: number;
@@ -16,7 +16,7 @@
 // | ----------------------------------------------------------------------
 //           ^^
 // | ----------------------------------------------------------------------
-// | ```tsx
+// | ```typescript
 // | namespace NS
 // | ```
 // | 
@@ -42,7 +42,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nnamespace NS\n```\n"
+          "value": "```typescript\nnamespace NS\n```\n"
         },
         "range": {
           "start": {
@@ -73,7 +73,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```tsx\nnamespace NS {\n    class Derived {\n        derivedField: number;\n    }\n}\n```\n"
+          "value": "```typescript\nnamespace NS {\n    class Derived {\n        derivedField: number;\n    }\n}\n```\n"
         },
         "range": {
           "start": {
