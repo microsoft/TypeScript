@@ -570,6 +570,8 @@ func (b *NodeBuilderImpl) hoverExpressionWithTypeArguments(t *Type, flags ast.Sy
 		reference = b.symbolToExpression(t.Target().symbol, ast.SymbolFlagsType)
 	} else if t.symbol != nil && b.ch.IsSymbolAccessibleByFlags(t.symbol, b.ctx.enclosingDeclaration, flags) {
 		reference = b.symbolToExpression(t.symbol, ast.SymbolFlagsType)
+	} else if t.symbol != nil && t.symbol.Name == ast.InternalSymbolNameClass {
+		reference = b.f.NewIdentifier(b.getNameOfSymbolAsWritten(t.symbol))
 	}
 	if reference != nil {
 		return b.f.NewExpressionWithTypeArguments(reference, b.f.NewNodeList(typeArgs))
