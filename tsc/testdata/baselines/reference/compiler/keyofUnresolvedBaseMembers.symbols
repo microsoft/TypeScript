@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/keyofUnresolvedBaseMembers.ts] ////
+
+=== keyofUnresolvedBaseMembers.ts ===
+// https://github.com/microsoft/typescript-go/issues/3494
+
+declare class STModel<TAttrs extends {} = any, TCreate extends {} = TAttrs> {
+>STModel : Symbol(STModel, Decl(keyofUnresolvedBaseMembers.ts, 0, 0))
+>TAttrs : Symbol(TAttrs, Decl(keyofUnresolvedBaseMembers.ts, 2, 22))
+>TCreate : Symbol(TCreate, Decl(keyofUnresolvedBaseMembers.ts, 2, 46))
+>TAttrs : Symbol(TAttrs, Decl(keyofUnresolvedBaseMembers.ts, 2, 22))
+
+  $add: (propertyKey: string) => void;
+>$add : Symbol(STModel.$add, Decl(keyofUnresolvedBaseMembers.ts, 2, 77))
+>propertyKey : Symbol(propertyKey, Decl(keyofUnresolvedBaseMembers.ts, 3, 9))
+
+  $set: (propertyKey: keyof this) => void;
+>$set : Symbol(STModel.$set, Decl(keyofUnresolvedBaseMembers.ts, 3, 38))
+>propertyKey : Symbol(propertyKey, Decl(keyofUnresolvedBaseMembers.ts, 4, 9))
+
+  data: TAttrs;
+>data : Symbol(STModel.data, Decl(keyofUnresolvedBaseMembers.ts, 4, 42))
+>TAttrs : Symbol(TAttrs, Decl(keyofUnresolvedBaseMembers.ts, 2, 22))
+
+  newAttrs: TCreate;
+>newAttrs : Symbol(STModel.newAttrs, Decl(keyofUnresolvedBaseMembers.ts, 5, 15))
+>TCreate : Symbol(TCreate, Decl(keyofUnresolvedBaseMembers.ts, 2, 46))
+}
+
+interface IBase { id: string }
+>IBase : Symbol(IBase, Decl(keyofUnresolvedBaseMembers.ts, 7, 1))
+>id : Symbol(IBase.id, Decl(keyofUnresolvedBaseMembers.ts, 9, 17))
+
+type Attrs<T extends {}> = { [K in keyof T]: T[K] } & IBase;
+>Attrs : Symbol(Attrs, Decl(keyofUnresolvedBaseMembers.ts, 9, 30))
+>T : Symbol(T, Decl(keyofUnresolvedBaseMembers.ts, 11, 11))
+>K : Symbol(K, Decl(keyofUnresolvedBaseMembers.ts, 11, 30))
+>T : Symbol(T, Decl(keyofUnresolvedBaseMembers.ts, 11, 11))
+>T : Symbol(T, Decl(keyofUnresolvedBaseMembers.ts, 11, 11))
+>K : Symbol(K, Decl(keyofUnresolvedBaseMembers.ts, 11, 30))
+>IBase : Symbol(IBase, Decl(keyofUnresolvedBaseMembers.ts, 7, 1))
+
+type CreateAttrs<T extends {}> = Partial<Attrs<T>>;
+>CreateAttrs : Symbol(CreateAttrs, Decl(keyofUnresolvedBaseMembers.ts, 11, 60))
+>T : Symbol(T, Decl(keyofUnresolvedBaseMembers.ts, 12, 17))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Attrs : Symbol(Attrs, Decl(keyofUnresolvedBaseMembers.ts, 9, 30))
+>T : Symbol(T, Decl(keyofUnresolvedBaseMembers.ts, 12, 17))
+
+abstract class BaseModel<MA extends {}> extends STModel<Attrs<MA>, CreateAttrs<MA>> {}
+>BaseModel : Symbol(BaseModel, Decl(keyofUnresolvedBaseMembers.ts, 12, 51))
+>MA : Symbol(MA, Decl(keyofUnresolvedBaseMembers.ts, 14, 25))
+>STModel : Symbol(STModel, Decl(keyofUnresolvedBaseMembers.ts, 0, 0))
+>Attrs : Symbol(Attrs, Decl(keyofUnresolvedBaseMembers.ts, 9, 30))
+>MA : Symbol(MA, Decl(keyofUnresolvedBaseMembers.ts, 14, 25))
+>CreateAttrs : Symbol(CreateAttrs, Decl(keyofUnresolvedBaseMembers.ts, 11, 60))
+>MA : Symbol(MA, Decl(keyofUnresolvedBaseMembers.ts, 14, 25))
+
+class _Foo extends BaseModel<_Foo> {
+>_Foo : Symbol(_Foo, Decl(keyofUnresolvedBaseMembers.ts, 14, 86))
+>BaseModel : Symbol(BaseModel, Decl(keyofUnresolvedBaseMembers.ts, 12, 51))
+>_Foo : Symbol(_Foo, Decl(keyofUnresolvedBaseMembers.ts, 14, 86))
+
+  declare name: string;
+>name : Symbol(_Foo.name, Decl(keyofUnresolvedBaseMembers.ts, 16, 36))
+}
+
+const ctor: new () => STModel = _Foo;
+>ctor : Symbol(ctor, Decl(keyofUnresolvedBaseMembers.ts, 20, 5))
+>STModel : Symbol(STModel, Decl(keyofUnresolvedBaseMembers.ts, 0, 0))
+>_Foo : Symbol(_Foo, Decl(keyofUnresolvedBaseMembers.ts, 14, 86))
+
+console.log(ctor);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ctor : Symbol(ctor, Decl(keyofUnresolvedBaseMembers.ts, 20, 5))
+

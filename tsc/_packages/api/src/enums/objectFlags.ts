@@ -36,6 +36,7 @@ export var ObjectFlags: any;
     ObjectFlags[ObjectFlags["IsClassInstanceClone"] = 67108864] = "IsClassInstanceClone";
     ObjectFlags[ObjectFlags["IdenticalBaseTypeCalculated"] = 134217728] = "IdenticalBaseTypeCalculated";
     ObjectFlags[ObjectFlags["IdenticalBaseTypeExists"] = 268435456] = "IdenticalBaseTypeExists";
+    ObjectFlags[ObjectFlags["UnresolvedMembers"] = 536870912] = "UnresolvedMembers";
     ObjectFlags[ObjectFlags["IsGenericTypeComputed"] = 4194304] = "IsGenericTypeComputed";
     ObjectFlags[ObjectFlags["IsGenericObjectType"] = 8388608] = "IsGenericObjectType";
     ObjectFlags[ObjectFlags["IsGenericIndexType"] = 16777216] = "IsGenericIndexType";

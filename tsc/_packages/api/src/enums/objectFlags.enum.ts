@@ -36,6 +36,7 @@ export enum ObjectFlags {
     IsClassInstanceClone = 1 << 26,
     IdenticalBaseTypeCalculated = 1 << 27,
     IdenticalBaseTypeExists = 1 << 28,
+    UnresolvedMembers = 1 << 29,
     IsGenericTypeComputed = 1 << 22,
     IsGenericObjectType = 1 << 23,
     IsGenericIndexType = 1 << 24,

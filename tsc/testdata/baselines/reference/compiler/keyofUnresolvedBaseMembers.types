@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/keyofUnresolvedBaseMembers.ts] ////
+
+=== keyofUnresolvedBaseMembers.ts ===
+// https://github.com/microsoft/typescript-go/issues/3494
+
+declare class STModel<TAttrs extends {} = any, TCreate extends {} = TAttrs> {
+>STModel : STModel<TAttrs, TCreate>
+
+  $add: (propertyKey: string) => void;
+>$add : (propertyKey: string) => void
+>propertyKey : string
+
+  $set: (propertyKey: keyof this) => void;
+>$set : (propertyKey: keyof this) => void
+>propertyKey : keyof this
+
+  data: TAttrs;
+>data : TAttrs
+
+  newAttrs: TCreate;
+>newAttrs : TCreate
+}
+
+interface IBase { id: string }
+>id : string
+
+type Attrs<T extends {}> = { [K in keyof T]: T[K] } & IBase;
+>Attrs : Attrs<T>
+
+type CreateAttrs<T extends {}> = Partial<Attrs<T>>;
+>CreateAttrs : Partial<Attrs<T>>
+
+abstract class BaseModel<MA extends {}> extends STModel<Attrs<MA>, CreateAttrs<MA>> {}
+>BaseModel : BaseModel<MA>
+>STModel : STModel<Attrs<MA>, Partial<Attrs<MA>>>
+
+class _Foo extends BaseModel<_Foo> {
+>_Foo : _Foo
+>BaseModel : BaseModel<_Foo>
+
+  declare name: string;
+>name : string
+}
+
+const ctor: new () => STModel = _Foo;
+>ctor : new () => STModel
+>_Foo : typeof _Foo
+
+console.log(ctor);
+>console.log(ctor) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>ctor : new () => STModel
+
