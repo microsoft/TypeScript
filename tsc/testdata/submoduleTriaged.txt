@@ -24,3 +24,115 @@ compiler/argumentsReferenceInMethod4_Js.js.diff
 compiler/argumentsReferenceInMethod5_Js.js.diff
 compiler/argumentsReferenceInMethod6_Js.js.diff
 compiler/argumentsReferenceInMethod7_Js.js.diff
+
+# Bug: test harness doesn't report tsconfig errors
+## https://github.com/microsoft/typescript-go/issues/3475
+compiler/deprecatedCompilerOptions1.errors.txt.diff
+compiler/deprecatedCompilerOptions3.errors.txt.diff
+compiler/deprecatedCompilerOptions4.errors.txt.diff
+compiler/deprecatedCompilerOptions5.errors.txt.diff
+
+# Bug: no error reported on missing tslib helpers
+## https://github.com/microsoft/typescript-go/issues/3476
+compiler/tslibMissingHelper.errors.txt.diff
+compiler/tslibNotFoundDifferentModules.errors.txt.diff
+compiler/tslibMultipleMissingHelper.errors.txt.diff
+conformance/awaitUsingDeclarationsWithImportHelpers.errors.txt.diff
+conformance/exportAsNamespace_missingEmitHelpers.errors.txt.diff
+conformance/nodeModulesAllowJsImportHelpersCollisions1(module=node16).errors.txt.diff
+conformance/nodeModulesAllowJsImportHelpersCollisions1(module=node18).errors.txt.diff
+conformance/nodeModulesAllowJsImportHelpersCollisions1(module=node20).errors.txt.diff
+conformance/nodeModulesAllowJsImportHelpersCollisions1(module=nodenext).errors.txt.diff
+conformance/nodeModulesAllowJsImportHelpersCollisions2(module=node16).errors.txt.diff
+conformance/nodeModulesAllowJsImportHelpersCollisions2(module=node18).errors.txt.diff
+conformance/nodeModulesAllowJsImportHelpersCollisions2(module=node20).errors.txt.diff
+conformance/nodeModulesAllowJsImportHelpersCollisions2(module=nodenext).errors.txt.diff
+conformance/nodeModulesAllowJsImportHelpersCollisions3(module=node16,target=es2015).errors.txt.diff
+conformance/nodeModulesAllowJsImportHelpersCollisions3(module=node18,target=es2015).errors.txt.diff
+conformance/nodeModulesAllowJsImportHelpersCollisions3(module=node20,target=es2015).errors.txt.diff
+conformance/nodeModulesAllowJsImportHelpersCollisions3(module=nodenext,target=es2015).errors.txt.diff
+conformance/nodeModulesImportHelpersCollisions(module=node16).errors.txt.diff
+conformance/nodeModulesImportHelpersCollisions(module=node18).errors.txt.diff
+conformance/nodeModulesImportHelpersCollisions(module=node20).errors.txt.diff
+conformance/nodeModulesImportHelpersCollisions(module=nodenext).errors.txt.diff
+conformance/nodeModulesImportHelpersCollisions2(module=node16).errors.txt.diff
+conformance/nodeModulesImportHelpersCollisions2(module=node18).errors.txt.diff
+conformance/nodeModulesImportHelpersCollisions2(module=node20).errors.txt.diff
+conformance/nodeModulesImportHelpersCollisions2(module=nodenext).errors.txt.diff
+conformance/nodeModulesImportHelpersCollisions3(module=node16,target=es2015).errors.txt.diff
+conformance/nodeModulesImportHelpersCollisions3(module=node18,target=es2015).errors.txt.diff
+conformance/nodeModulesImportHelpersCollisions3(module=node20,target=es2015).errors.txt.diff
+conformance/nodeModulesImportHelpersCollisions3(module=nodenext,target=es2015).errors.txt.diff
+conformance/privateNameEmitHelpers.errors.txt.diff
+conformance/privateNameStaticEmitHelpers.errors.txt.diff
+conformance/usingDeclarationsWithImportHelpers.errors.txt.diff
+
+# Omnibus: Isolated declarations error changes - needs investigation
+## https://github.com/microsoft/typescript-go/issues/3477
+compiler/isolatedDeclarationErrorsExpandoFunctions.errors.txt.diff
+compiler/isolatedDeclarationErrorsReturnTypes.errors.txt.diff
+compiler/isolatedDeclarationErrorsClasses.errors.txt.diff
+compiler/isolatedDeclarationErrorsExpressions.errors.txt.diff
+compiler/isolatedDeclarationErrorsClassesExpressions.errors.txt.diff
+compiler/isolatedDeclarationsAddUndefined.errors.txt.diff
+compiler/isolatedDeclarationErrors.errors.txt.diff
+compiler/computedPropertiesNarrowed.errors.txt.diff
+compiler/declarationEmitTypeofRest.errors.txt.diff
+
+# Stricter module resolution in nodeNext
+## https://github.com/microsoft/typescript-go/issues/3479
+## Corsa emits new TS2307 "Cannot find module" errors for implicit index resolution and package self-name resolution that Strada accepted
+compiler/nodeNextImportModeImplicitIndexResolution2.errors.txt.diff
+compiler/nodeNextPackageSelfNameWithOutDir.errors.txt.diff
+compiler/nodeNextPackageSelfNameWithOutDirDeclDir.errors.txt.diff
+conformance/nodeAllowJsPackageSelfName(module=node16).errors.txt.diff
+conformance/nodeAllowJsPackageSelfName(module=node18).errors.txt.diff
+conformance/nodeAllowJsPackageSelfName(module=node20).errors.txt.diff
+conformance/nodeAllowJsPackageSelfName(module=nodenext).errors.txt.diff
+conformance/nodeModulesAllowJsPackageImports(module=node16).errors.txt.diff
+conformance/nodeModulesAllowJsPackageImports(module=node18).errors.txt.diff
+conformance/nodeModulesAllowJsPackageImports(module=node20).errors.txt.diff
+conformance/nodeModulesAllowJsPackageImports(module=nodenext).errors.txt.diff
+conformance/nodeModulesDeclarationEmitWithPackageExports(module=node16).errors.txt.diff
+conformance/nodeModulesDeclarationEmitWithPackageExports(module=node18).errors.txt.diff
+conformance/nodeModulesDeclarationEmitWithPackageExports(module=node20).errors.txt.diff
+conformance/nodeModulesDeclarationEmitWithPackageExports(module=nodenext).errors.txt.diff
+
+# JSX runtime module resolution change
+## https://github.com/microsoft/typescript-go/issues/3480
+## TS2875 error requiring `react/jsx-runtime` or `react/jsx-dev-runtime` module is no longer emitted for non-module (script) files
+compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=legacy).errors.txt.diff
+compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=legacy).errors.txt.diff
+
+# Corsa changes how module augmentation interacts with export-equals and exported name visibility
+## https://github.com/microsoft/typescript-go/issues/3481
+compiler/augmentExportEquals2.errors.txt.diff
+compiler/exportAssignmentMembersVisibleInAugmentation.errors.txt.diff
+
+# Static property conflicts with built-in Function properties (TS2699) no longer reported when useDefineForClassFields was false
+## https://github.com/microsoft/typescript-go/issues/3484
+conformance/staticPropertyNameConflicts(target=es2015,usedefineforclassfields=false).errors.txt.diff
+
+# Corsa no longer emits the TS-1 internal diagnostic about pre-emit/post-emit diagnostic count mismatches
+## https://github.com/microsoft/typescript-go/issues/3508
+compiler/multiLinePropertyAccessAndArrowFunctionIndent1.errors.txt.diff
+compiler/parseErrorIncorrectReturnToken.errors.txt.diff
+conformance/parserStatementIsNotAMemberVariableDeclaration1(alwaysstrict=true).errors.txt.diff
+
+# TS2690 (with "Did you mean 'P in K'?" mapped type suggestion) changed to TS2693 (generic "refers to a type, but is being used as a value") — mapped type suggestion lost
+## https://github.com/microsoft/typescript-go/issues/3509
+compiler/typeUsedAsTypeLiteralIndex.errors.txt.diff
+
+# `{} == {}` loose equality now also flagged with TS2839 (not just strict equality)
+## https://github.com/microsoft/typescript-go/issues/3510
+conformance/plainJSTypeErrors.errors.txt.diff
+
+# Unicode escapes in identifier names now displayed as literal characters
+## https://github.com/microsoft/typescript-go/issues/3511
+conformance/parser.numericSeparators.decmialNegative.errors.txt.diff
+
+# Instead of the full union type, only the non-iterable constituent(s) are named in the error in for/ofs
+## https://github.com/microsoft/typescript-go/issues/3487
+conformance/ES5For-of30(target=es2015).errors.txt.diff
+conformance/ES5For-ofTypeCheck7(target=es2015).errors.txt.diff
+conformance/ES5For-ofTypeCheck9(target=es2015).errors.txt.diff
