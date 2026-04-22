@@ -1,7 +1,0 @@
-{
-    "extends": "../tsconfig.dev.json",
-    "references": [
-        { "path": ".." },
-        { "path": "../../ast" }
-    ]
-}

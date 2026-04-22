@@ -1,0 +1,6 @@
+{
+    "extends": "../tsconfig.dev.json",
+    "references": [
+        { "path": ".." }
+    ]
+}

@@ -310,21 +310,19 @@ export const generate = task({
 
 /** @type {EnumDef[]} */
 const enumDefs = [
-    // @typescript/api enums
-    { name: "SymbolFlags", goPrefix: "SymbolFlags", goFile: "internal/ast/symbolflags.go", outDir: "_packages/api/src/enums" },
-    { name: "TypeFlags", goPrefix: "TypeFlags", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
-    { name: "ObjectFlags", goPrefix: "ObjectFlags", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
-    { name: "SignatureFlags", goPrefix: "SignatureFlags", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
-    { name: "SignatureKind", goPrefix: "SignatureKind", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
-    { name: "ElementFlags", goPrefix: "ElementFlags", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
-    { name: "TypePredicateKind", goPrefix: "TypePredicateKind", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
-    { name: "DiagnosticCategory", goPrefix: "Category", goFile: "internal/diagnostics/diagnostics.go", outDir: "_packages/api/src/enums" },
-    // @typescript/ast enums
-    { name: "SyntaxKind", goPrefix: "Kind", goFile: "internal/ast/kind_generated.go", outDir: "_packages/ast/src/enums" },
-    { name: "NodeFlags", goPrefix: "NodeFlags", goFile: "internal/ast/nodeflags.go", outDir: "_packages/ast/src/enums" },
-    { name: "OuterExpressionKinds", goPrefix: "OEK", goFile: "internal/ast/utilities.go", outDir: "_packages/ast/src/enums" },
-    { name: "ModifierFlags", goPrefix: "ModifierFlags", goFile: "internal/ast/modifierflags.go", outDir: "_packages/ast/src/enums" },
-    { name: "TokenFlags", goPrefix: "TokenFlags", goFile: "internal/ast/tokenflags.go", outDir: "_packages/ast/src/enums", constEnum: true },
+    { name: "SymbolFlags", goPrefix: "SymbolFlags", goFile: "internal/ast/symbolflags.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "TypeFlags", goPrefix: "TypeFlags", goFile: "internal/checker/types.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "ObjectFlags", goPrefix: "ObjectFlags", goFile: "internal/checker/types.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "SignatureFlags", goPrefix: "SignatureFlags", goFile: "internal/checker/types.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "SignatureKind", goPrefix: "SignatureKind", goFile: "internal/checker/types.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "ElementFlags", goPrefix: "ElementFlags", goFile: "internal/checker/types.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "TypePredicateKind", goPrefix: "TypePredicateKind", goFile: "internal/checker/types.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "DiagnosticCategory", goPrefix: "Category", goFile: "internal/diagnostics/diagnostics.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "SyntaxKind", goPrefix: "Kind", goFile: "internal/ast/kind_generated.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "NodeFlags", goPrefix: "NodeFlags", goFile: "internal/ast/nodeflags.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "OuterExpressionKinds", goPrefix: "OEK", goFile: "internal/ast/utilities.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "ModifierFlags", goPrefix: "ModifierFlags", goFile: "internal/ast/modifierflags.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "TokenFlags", goPrefix: "TokenFlags", goFile: "internal/ast/tokenflags.go", outDir: "_packages/native-preview/src/enums", constEnum: true },
 ];
 
 /**
@@ -706,7 +704,7 @@ async function runTestTools() {
 }
 
 async function runTestAPI() {
-    await $`npm run -w @typescript/api test`;
+    await $`npm run -w @typescript/native-preview test:only`;
 }
 
 export const testTools = task({
@@ -717,23 +715,23 @@ export const testTools = task({
 
 export const buildAPI = task({
     name: "build:api",
-    description: "Builds @typescript/api and @typescript/ast.",
+    description: "Builds @typescript/native-preview JS API.",
     run: async () => {
-        await $`npm run -w @typescript/api build`;
+        await $`npm run -w @typescript/native-preview build`;
     },
 });
 
 export const buildAPITests = task({
     name: "build:api:test",
-    description: "Builds the @typescript/api tests.",
+    description: "Builds the @typescript/native-preview JS API tests.",
     run: async () => {
-        await $`npm run -w @typescript/api build:test`;
+        await $`npm run -w @typescript/native-preview build:test`;
     },
 });
 
 export const testAPI = task({
     name: "test:api",
-    description: "Runs the @typescript/api tests.",
+    description: "Runs the @typescript/native-preview JS API tests.",
     dependencies: [tsgo, buildAPITests],
     run: runTestAPI,
 });
@@ -1470,6 +1468,41 @@ const nativePreviewPlatforms = memoize(() => {
     }
 });
 
+/**
+ * Recursively strips `@typescript/source` export conditions from a package.json object.
+ * Processes `exports` and `imports` fields, skipping past subpath keys (starting with "."
+ * or "#") and recursing into condition objects. After removal, simplifies objects that have
+ * only a single `default` key down to their bare value.
+ * @param {Record<string, any>} packageJson
+ */
+function stripSourceConditions(packageJson) {
+    for (const field of ["exports", "imports"]) {
+        if (packageJson[field] != null && typeof packageJson[field] === "object") {
+            packageJson[field] = stripConditionsFromValue(packageJson[field]);
+        }
+    }
+}
+
+/**
+ * @param {any} value
+ * @returns {any}
+ */
+function stripConditionsFromValue(value) {
+    if (value == null || typeof value !== "object") {
+        return value;
+    }
+    delete value["@typescript/source"];
+    for (const key of Object.keys(value)) {
+        value[key] = stripConditionsFromValue(value[key]);
+    }
+    // Simplify: if only "default" remains, collapse to its value.
+    const keys = Object.keys(value);
+    if (keys.length === 1 && keys[0] === "default") {
+        return value["default"];
+    }
+    return value;
+}
+
 export const buildNativePreviewPackages = task({
     name: "native-preview:build-packages",
     hiddenFromTaskList: true,
@@ -1486,7 +1519,7 @@ async function runBuildNativePreviewPackages() {
     const inputPackageJson = JSON.parse(fs.readFileSync(path.join(inputDir, "package.json"), "utf8"));
     inputPackageJson.version = getVersion();
     delete inputPackageJson.private;
-    delete inputPackageJson.engines;
+    stripSourceConditions(inputPackageJson);
 
     const { stdout: gitHead } = await $pipe`git rev-parse HEAD`;
     inputPackageJson.gitHead = gitHead;
@@ -1500,11 +1533,41 @@ async function runBuildNativePreviewPackages() {
 
     await fs.promises.mkdir(mainPackageDir, { recursive: true });
 
-    await cpWithoutNodeModulesOrTsconfig(inputDir, mainPackageDir);
+    // Copy package contents excluding node_modules and dist (dist is copied separately after build).
+    // The package.json "files" field controls what npm pack actually includes.
+    await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
 
     await fs.promises.writeFile(path.join(mainPackageDir, "package.json"), JSON.stringify(mainPackage, undefined, 4));
     await fs.promises.copyFile("LICENSE", path.join(mainPackageDir, "LICENSE"));
     // No NOTICE.txt here; does not ship the binary or libs. If this changes, we should add it.
+
+    // Build JS API and copy dist into the package.
+    await $`npm run -w @typescript/native-preview build`;
+    await cpRecursive(path.join(inputDir, "dist"), path.join(mainPackageDir, "dist"));
+
+    // Validate that .d.ts files contain no external imports (all imports must start with "." or "#").
+    const dtsFiles = await glob(`${mainPackageDir}/dist/**/*.d.ts`);
+    const importErrors = [];
+    for (const dtsFile of dtsFiles) {
+        const content = await fs.promises.readFile(dtsFile, "utf-8");
+        const relPath = path.relative(mainPackageDir, dtsFile);
+        for (const [i, line] of content.split("\n").entries()) {
+            // Match: import ... from "specifier" / export ... from "specifier"
+            const fromMatch = line.match(/(?:import|export)\s.*?\sfrom\s+["']([^"']+)["']/);
+            if (fromMatch && !fromMatch[1].startsWith(".") && !fromMatch[1].startsWith("#")) {
+                importErrors.push(`${relPath}:${i + 1}: external import declaration "${fromMatch[1]}"`);
+            }
+            // Match: import("specifier")
+            for (const m of line.matchAll(/import\(["']([^"']+)["']\)/g)) {
+                if (!m[1].startsWith(".") && !m[1].startsWith("#")) {
+                    importErrors.push(`${relPath}:${i + 1}: external dynamic import "${m[1]}"`);
+                }
+            }
+        }
+    }
+    if (importErrors.length) {
+        throw new Error(`Found external imports in .d.ts files:\n${importErrors.map(e => "  " + e).join("\n")}`);
+    }
 
     const extraFlags = getReleaseBuildFlags(options.setPrerelease ? getVersion() : undefined);
 
@@ -1513,6 +1576,7 @@ async function runBuildNativePreviewPackages() {
             ...inputPackageJson,
             bin: undefined,
             imports: undefined,
+            dependencies: undefined,
             name: npmPackageName,
             os: [nodeOs],
             cpu: [nodeArch],

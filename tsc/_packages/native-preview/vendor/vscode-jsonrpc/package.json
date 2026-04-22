@@ -1,0 +1,54 @@
+{
+	"name": "vscode-jsonrpc",
+	"description": "A json rpc implementation over streams",
+	"version": "9.0.0-next.11",
+	"author": "Microsoft Corporation",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-languageserver-node.git",
+		"directory": "jsonrpc"
+	},
+	"bugs": {
+		"url": "https://github.com/Microsoft/vscode-languageserver-node/issues"
+	},
+	"engines": {
+		"node": ">=14.0.0"
+	},
+	"exports": {
+		".": {
+			"types": "./lib/common/api.d.ts",
+			"default": "./lib/common/api.js"
+		},
+		"./node": {
+			"types": "./lib/node/main.d.ts",
+			"node": "./lib/node/main.js"
+		},
+		"./browser": {
+			"types": "./lib/browser/main.d.ts",
+			"browser": "./lib/browser/main.js"
+		}
+	},
+	"devDependencies": {
+		"@types/msgpack-lite": "^0.1.11",
+		"msgpack-lite": "^0.1.26"
+	},
+	"scripts": {
+		"prepublishOnly": "echo \"⛔ Can only publish from a secure pipeline ⛔\" && node ../build/npm/fail",
+		"prepack": "npm run all:publish",
+		"preversion": "npm test",
+		"compile": "tsc -b ./tsconfig.json",
+		"watch": "tsc -b ./tsconfig.watch.json -w",
+		"clean": "rimraf lib && rimraf dist",
+		"lint": "eslint --ext ts src",
+		"test": "npm run test:node && npm run test:browser",
+		"test:node": "node ../node_modules/mocha/bin/_mocha",
+		"test:browser": "npm run webpack:test:silent && node ../build/bin/runBrowserTests.js  http://127.0.0.1:8080/jsonrpc/src/browser/test/",
+		"webpack": "node ../build/bin/webpack  --mode none --config ./webpack.config.js",
+		"webpack:test": "node ../build/bin/webpack --mode none --config ./src/browser/test/webpack.config.js",
+		"webpack:test:silent": "node ../build/bin/webpack --no-stats --mode none --config ./src/browser/test/webpack.config.js",
+		"all": "npm run clean && npm run compile && npm run lint && npm run test",
+		"compile:publish": "tsc -b ./tsconfig.publish.json",
+		"all:publish": "git clean -xfd . && npm install && npm run compile:publish && npm run lint && npm run test"
+	}
+}

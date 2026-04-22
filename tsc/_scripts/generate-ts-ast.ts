@@ -1,9 +1,9 @@
 /**
  * Schema-driven TypeScript AST code generator.
  * Reads _scripts/ast.json and produces:
- *   - _packages/ast/src/ast.generated.ts
- *   - _packages/ast/src/factory.generated.ts
- *   - _packages/ast/src/is.generated.ts
+ *   - _packages/native-preview/src/ast/ast.generated.ts
+ *   - _packages/native-preview/src/ast/factory.generated.ts
+ *   - _packages/native-preview/src/ast/is.generated.ts
  *
  * Usage: node --experimental-strip-types _scripts/generate-ts-ast.ts
  */
@@ -1499,10 +1499,10 @@ function writeAndFormat(filePath: string, content: string) {
 export default function main() {
     console.log("Generating TS AST code...");
 
-    const factoryPath = path.join(ROOT, "_packages/ast/src/factory.generated.ts");
-    const isGenPath = path.join(ROOT, "_packages/ast/src/is.generated.ts");
-    const astGenPath = path.join(ROOT, "_packages/ast/src/ast.generated.ts");
-    const visitorPath = path.join(ROOT, "_packages/ast/src/visitor.generated.ts");
+    const factoryPath = path.join(ROOT, "_packages/native-preview/src/ast/factory.generated.ts");
+    const isGenPath = path.join(ROOT, "_packages/native-preview/src/ast/is.generated.ts");
+    const astGenPath = path.join(ROOT, "_packages/native-preview/src/ast/ast.generated.ts");
+    const visitorPath = path.join(ROOT, "_packages/native-preview/src/ast/visitor.generated.ts");
 
     writeAndFormat(astGenPath, generateAstGenerated());
     writeAndFormat(factoryPath, generateFactory());

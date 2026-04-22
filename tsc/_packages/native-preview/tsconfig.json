@@ -1,12 +1,13 @@
 {
+    "extends": "./tsconfig.base.json",
     "compilerOptions": {
         "module": "node16",
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "allowJs": true,
-        "checkJs": true,
-        "noEmit": true,
-        "useUnknownInCatchVariables": false
+        "isolatedDeclarations": true,
+        "sourceMap": true,
+        "declaration": true,
+        "declarationMap": true,
+        "rootDir": "src",
+        "outDir": "dist"
     },
-    "include": ["bin"]
+    "include": ["src"]
 }
