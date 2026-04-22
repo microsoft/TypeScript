@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/deeplyNestedArrayTypes.ts] ////
+
+=== deeplyNestedArrayTypes.ts ===
+// https://github.com/microsoft/typescript-go/issues/3426
+
+namespace A {
+    export type Outer = {
+>Outer : Outer
+
+        inners: Inner[];
+>inners : Inner[]
+    }
+    export type Inner = {
+>Inner : Inner
+
+        mids: Mid[];
+>mids : Mid[]
+    }
+    export type Mid = {
+>Mid : Mid
+
+        leaves: Leaf[];
+>leaves : Leaf[]
+    }
+    export type Leaf = {
+>Leaf : Leaf
+
+        id: string;
+>id : string
+    }
+}
+
+namespace B {
+    export type Outer = {
+>Outer : Outer
+
+        inners: Inner[];
+>inners : Inner[]
+    }
+    export type Inner = {
+>Inner : Inner
+
+        mids: Mid[];
+>mids : Mid[]
+    }
+    export type Mid = {
+>Mid : Mid
+
+        leaves: Leaf[];
+>leaves : Leaf[]
+    }
+    export type Leaf = {
+>Leaf : Leaf
+
+        id: number;
+>id : number
+    }
+}
+
+function test(a: A.Outer, b: B.Outer) {
+>test : (a: A.Outer, b: B.Outer) => void
+>a : A.Outer
+>A : any
+>b : B.Outer
+>B : any
+
+    a = b
+>a = b : B.Outer
+>a : A.Outer
+>b : B.Outer
+}
+

@@ -839,12 +839,14 @@ func getRecursionIdentity(t *Type) RecursionId {
 			// unique AST node.
 			return asRecursionId(t.AsTypeReference().node)
 		}
-		if t.symbol != nil && !(t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol.Flags&ast.SymbolFlagsClass != 0) {
+		if t.symbol != nil && !(t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol.Flags&ast.SymbolFlagsClass != 0) && t.objectFlags&ObjectFlagsFromTypeNode == 0 {
 			// We track object types that have a symbol by that symbol (representing the origin of the type), but
-			// exclude the static side of a class since it shares its symbol with the instance side.
+			// exclude the static sides of classes (since they share their symbols with the instance sides) and type
+			// references that originate in resolution of AST type nodes (since such type nodes cannot be the source
+			// of generative recursion without first being instantiated).
 			return asRecursionId(t.symbol)
 		}
-		if isTupleType(t) {
+		if isTupleType(t) && t.objectFlags&ObjectFlagsFromTypeNode == 0 {
 			return asRecursionId(t.Target())
 		}
 	}
