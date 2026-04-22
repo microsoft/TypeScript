@@ -503,6 +503,21 @@ func (s *Snapshot) ref() {
 	}
 }
 
+// tryRef attempts to increment the snapshot's reference count. If the
+// snapshot is already disposed (refCount == 0), it returns false without
+// modifying the count. On success the caller must eventually call Deref.
+func (s *Snapshot) tryRef() bool {
+	for {
+		rc := s.refCount.Load()
+		if rc <= 0 {
+			return false
+		}
+		if s.refCount.CompareAndSwap(rc, rc+1) {
+			return true
+		}
+	}
+}
+
 // Deref decrements the snapshot's reference count. When the count reaches
 // zero, the snapshot is disposed and its resources are released.
 func (s *Snapshot) Deref(session *Session) {
