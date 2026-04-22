@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/conditionalContextualReturnSubstitutionCache.ts] ////
+
+=== conditionalContextualReturnSubstitutionCache.ts ===
+// https://github.com/microsoft/typescript-go/issues/3488
+
+export function cast<T>(value: T): {
+>cast : <T>(value: T) => { as: <K extends T>() => null extends T ? K | null : undefined extends T ? K | undefined : K; }
+>value : T
+
+    as: <K extends T>() => null extends T ? K | null : undefined extends T ? K | undefined : K;
+>as : <K extends T>() => null extends T ? K | null : undefined extends T ? K | undefined : K
+
+} {
+    return {
+>{        as: <K extends T>(): null extends T ? K | null : undefined extends T ? K | undefined : K => {            return value as K;        },    } : { as: <K extends T>() => null extends T ? K | null : undefined extends T ? K | undefined : K; }
+
+        as: <K extends T>(): null extends T ? K | null : undefined extends T ? K | undefined : K => {
+>as : <K extends T>() => null extends T ? K | null : undefined extends T ? K | undefined : K
+><K extends T>(): null extends T ? K | null : undefined extends T ? K | undefined : K => {            return value as K;        } : <K extends T>() => null extends T ? K | null : undefined extends T ? K | undefined : K
+
+            return value as K;
+>value as K : K
+>value : T
+
+        },
+    };
+}
+
