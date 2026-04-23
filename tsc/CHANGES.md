@@ -28,6 +28,17 @@ function f() {}
 f.called = false;
 ```
 
+## Declaration Emit
+
+We've fundamentally rewritten core parts of the declaration emit *and* JavaScript parsing components.
+As a result, declaration (`.d.ts`) emit based on `.js` input files has substantially changed behavior.
+While it's still expected that supported tags (see below) are emitted with correct semantics in Corsa, it's a non-goal to exactly match Strada's output.
+
+This also has effects on how `.d.ts` is emitted in the presence of errors, which tends to be more common in `.js` and JSDoc scenarios.
+Declaration file generation isn't well-defined in the presence of errors (including those suppressed with `ts-ignore`/`ts-expect-error`), and you can expect Corsa and Strada to be quite different depending on the situation.
+
+However, if you see **_incorrect_** `.d.ts` output from a `.js` file, **please file an issue**.
+
 ## JSDoc Tags and Types
 
 | Name                       | Example | Substitute  | Note |
