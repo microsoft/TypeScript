@@ -130,9 +130,3 @@ conformance/plainJSTypeErrors.errors.txt.diff
 # Unicode escapes in identifier names now displayed as literal characters
 ## https://github.com/microsoft/typescript-go/issues/3511
 conformance/parser.numericSeparators.decmialNegative.errors.txt.diff
-
-# Instead of the full union type, only the non-iterable constituent(s) are named in the error in for/ofs
-## https://github.com/microsoft/typescript-go/issues/3487
-conformance/ES5For-of30(target=es2015).errors.txt.diff
-conformance/ES5For-ofTypeCheck7(target=es2015).errors.txt.diff
-conformance/ES5For-ofTypeCheck9(target=es2015).errors.txt.diff

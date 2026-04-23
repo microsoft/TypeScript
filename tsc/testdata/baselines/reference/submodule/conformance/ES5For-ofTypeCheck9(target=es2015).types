@@ -5,6 +5,6 @@ declare var union: string | string[] | number | symbol;
 >union : string | number | symbol | string[]
 
 for (let v of union) { }
->v : string
+>v : any
 >union : string | number | symbol | string[]
 

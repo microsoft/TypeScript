@@ -6094,7 +6094,20 @@ func (c *Checker) getIterationTypesOfIterable(t *Type, use IterationUse, errorNo
 
 func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, errorNode *ast.Node, noCache bool) IterationTypes {
 	if t.flags&TypeFlagsUnion != 0 {
-		return c.combineIterationTypes(core.Map(t.Types(), func(t *Type) IterationTypes { return c.getIterationTypesOfIterableWorker(t, use, errorNode, noCache) }))
+		allIterationTypes := make([]IterationTypes, 0, len(t.Types()))
+		for _, constituent := range t.Types() {
+			iterationTypes := c.getIterationTypesOfIterableWorker(constituent, use, nil, noCache)
+			if !iterationTypes.hasTypes() {
+				if errorNode != nil {
+					c.addDeferredDiagnostic(func() {
+						c.reportTypeNotIterableError(errorNode, t, use&IterationUseAllowsAsyncIterablesFlag != 0)
+					})
+				}
+				return IterationTypes{}
+			}
+			allIterationTypes = append(allIterationTypes, iterationTypes)
+		}
+		return c.combineIterationTypes(allIterationTypes)
 	}
 	var diags []*ast.Diagnostic
 	if use&IterationUseAllowsAsyncIterablesFlag != 0 {
