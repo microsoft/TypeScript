@@ -12,10 +12,7 @@ import {
 } from "./util";
 
 import { TelemetryReporter as VSCodeTelemetryReporter } from "@vscode/extension-telemetry";
-import {
-    promptUseWorkspaceVersion,
-    SessionManager,
-} from "./session";
+import { SessionManager } from "./session";
 import { createTelemetryReporter } from "./telemetryReporting";
 
 export interface ExtensionAPI {
@@ -113,11 +110,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     }
 
     await sessionManager.start(context);
-
-    // Prompt user to use workspace version if one is detected and they haven't opted in yet.
-    promptUseWorkspaceVersion(context).catch(err => {
-        output.appendLine(`Error prompting to use workspace version: ${err}`);
-    });
 
     function onLanguageServerInitialized(listener: () => void): vscode.Disposable {
         if (sessionManager.currentSession?.client.isInitialized) {

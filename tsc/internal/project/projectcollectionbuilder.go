@@ -213,7 +213,7 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 		b.markFilesChanged(entry, changedFiles, lsproto.FileChangeTypeChanged, logger)
 		if entry.Value().Kind == KindInferred && summary.Closed.Len() > 0 {
 			rootFilesMap := entry.Value().CommandLine.FileNamesByPath()
-			newRootFiles := entry.Value().CommandLine.FileNames()
+			newRootFiles := slices.Clone(entry.Value().CommandLine.FileNames())
 			for uri := range summary.Closed.Keys() {
 				fileName := uri.FileName()
 				path := b.toPath(fileName)

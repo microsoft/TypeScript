@@ -454,6 +454,49 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		})
 	})
 
+	t.Run("closing file from inferred project does not corrupt old snapshot", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/project/a.ts": `export const a = 1;`,
+			"/project/b.ts": `export const b = 1;`,
+		}
+
+		session, _ := projecttestutil.Setup(files)
+
+		// Open two files with no tsconfig → inferred project
+		session.DidOpenFile(context.Background(), "file:///project/a.ts", 1, files["/project/a.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.DidOpenFile(context.Background(), "file:///project/b.ts", 1, files["/project/b.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		// Force snapshot creation via GetLanguageService
+		_, err := session.GetLanguageService(context.Background(), "file:///project/a.ts")
+		assert.NilError(t, err)
+
+		oldSnapshot := session.Snapshot()
+		oldInferred := oldSnapshot.ProjectCollection.InferredProject()
+		assert.Assert(t, oldInferred != nil)
+		oldFileNames := oldInferred.CommandLine.FileNames()
+		assert.DeepEqual(t, oldFileNames, []string{
+			"/project/a.ts",
+			"/project/b.ts",
+		})
+
+		// Close one file and trigger a new snapshot
+		session.DidCloseFile(context.Background(), "file:///project/b.ts")
+		_, err = session.GetLanguageService(context.Background(), "file:///project/a.ts")
+		assert.NilError(t, err)
+
+		newSnapshot := session.Snapshot()
+		assert.Assert(t, newSnapshot != oldSnapshot, "snapshot should have changed")
+
+		// The old snapshot's inferred project FileNames must not have been mutated
+		// by processing the close. slices.Delete in DidChangeFiles currently corrupts
+		// the shared underlying array.
+		assert.DeepEqual(t, oldFileNames, []string{
+			"/project/a.ts",
+			"/project/b.ts",
+		})
+	})
+
 	t.Run("project lookup terminates", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{

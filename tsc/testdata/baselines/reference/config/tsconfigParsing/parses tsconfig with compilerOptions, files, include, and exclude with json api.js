@@ -49,7 +49,6 @@ CompilerOptions::
   },
   "strict": true,
   "target": 4,
-  "maxNodeModuleJsDepth": 1,
   "configFilePath": "/apath/tsconfig.json",
   "pathsBasePath": "/apath"
 }

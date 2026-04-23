@@ -80,7 +80,6 @@ export class Client implements vscode.Disposable {
                 sendNotification: sendNotificationMiddleware,
                 provideHover: () => undefined,
             },
-            diagnosticCollectionName: "typescript",
             diagnosticPullOptions: {
                 onChange: true,
                 onSave: true,
@@ -247,10 +246,6 @@ export class Client implements vscode.Disposable {
 
     getCurrentExe(): { path: string; version: string; } | undefined {
         return this.exe;
-    }
-
-    get serverPid(): number | undefined {
-        return (this.client as any)?._serverProcess?.pid;
     }
 
     /**

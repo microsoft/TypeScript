@@ -119,6 +119,10 @@ compiler/multiLinePropertyAccessAndArrowFunctionIndent1.errors.txt.diff
 compiler/parseErrorIncorrectReturnToken.errors.txt.diff
 conformance/parserStatementIsNotAMemberVariableDeclaration1(alwaysstrict=true).errors.txt.diff
 
+# TS2690 (with "Did you mean 'P in K'?" mapped type suggestion) changed to TS2693 (generic "refers to a type, but is being used as a value") — mapped type suggestion lost
+## https://github.com/microsoft/typescript-go/issues/3509
+compiler/typeUsedAsTypeLiteralIndex.errors.txt.diff
+
 # `{} == {}` loose equality now also flagged with TS2839 (not just strict equality)
 ## https://github.com/microsoft/typescript-go/issues/3510
 conformance/plainJSTypeErrors.errors.txt.diff

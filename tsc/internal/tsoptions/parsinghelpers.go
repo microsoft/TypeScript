@@ -63,10 +63,6 @@ func parseNumber(value any) *int {
 	if num, ok := value.(int); ok {
 		return &num
 	}
-	if num, ok := value.(float64); ok {
-		n := int(num)
-		return &n
-	}
 	return nil
 }
 

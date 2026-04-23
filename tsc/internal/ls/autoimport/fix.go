@@ -859,69 +859,6 @@ func (v *View) shouldUseRequire() bool {
 	return shouldUseRequire
 }
 
-// fileSyntaxKind represents the detected module syntax of a source file.
-type fileSyntaxKind int
-
-const (
-	fileSyntaxKindAmbiguous fileSyntaxKind = iota
-	fileSyntaxKindESM
-	fileSyntaxKindCJS
-)
-
-// detectSyntax returns whether a source file has unambiguous ESM or CJS syntax.
-// When moduleDetection is "force", ExternalModuleIndicator may be set to the
-// source file node itself rather than a genuine syntax indicator, so we fall back
-// to inspecting the file's Imports() to find actual import/export declarations.
-func detectSyntax(file *ast.SourceFile, options *core.CompilerOptions) fileSyntaxKind {
-	hasESM, hasCJS := detectSyntaxIndicators(file, options)
-	switch {
-	case hasCJS && !hasESM:
-		return fileSyntaxKindCJS
-	case hasESM && !hasCJS:
-		return fileSyntaxKindESM
-	default:
-		return fileSyntaxKindAmbiguous
-	}
-}
-
-// detectSyntaxIndicators checks whether a source file contains genuine ESM
-// and/or CJS syntax. Under moduleDetection "force", the cached
-// ExternalModuleIndicator may be the source file itself rather than a real
-// statement, so we look at Imports() for actual import/export declarations.
-func detectSyntaxIndicators(file *ast.SourceFile, options *core.CompilerOptions) (hasESM bool, hasCJS bool) {
-	hasCJS = file.CommonJSModuleIndicator != nil
-	if options.GetEmitModuleDetectionKind() != core.ModuleDetectionKindForce {
-		// ExternalModuleIndicator is reliable when moduleDetection is not "force"
-		hasESM = file.ExternalModuleIndicator != nil
-		return hasESM, hasCJS
-	}
-	// Under moduleDetection "force", ExternalModuleIndicator is set to
-	// file.AsNode() when there is no genuine ESM syntax, so only trust it
-	// when it points to a real statement node.
-	if file.ExternalModuleIndicator != nil && file.ExternalModuleIndicator != file.AsNode() {
-		return true, hasCJS
-	}
-	// Fall back to scanning Imports() for actual import/export declarations
-	// (not require() calls or dynamic imports).
-	for _, imp := range file.Imports() {
-		if imp.Flags&ast.NodeFlagsSynthesized != 0 {
-			continue
-		}
-		parent := imp.Parent
-		if parent == nil {
-			continue
-		}
-		switch parent.Kind {
-		case ast.KindImportDeclaration, ast.KindJSImportDeclaration, ast.KindExportDeclaration:
-			return true, hasCJS
-		case ast.KindExternalModuleReference:
-			// import x = require("...") — this is ESM-ish syntax
-			return true, hasCJS
-		}
-	}
-	return hasESM, hasCJS
-}
-
 func (v *View) computeShouldUseRequire() bool {
 	// 1. TypeScript files don't use require variable declarations
 	if !tspath.HasJSFileExtension(v.importingFile.FileName()) {
@@ -929,14 +866,20 @@ func (v *View) computeShouldUseRequire() bool {
 	}
 
 	// 2. If the current source file is unambiguously CJS or ESM, go with that
-	switch detectSyntax(v.importingFile, v.program.Options()) {
-	case fileSyntaxKindCJS:
+	switch {
+	case v.importingFile.CommonJSModuleIndicator != nil && v.importingFile.ExternalModuleIndicator == nil:
 		return true
-	case fileSyntaxKindESM:
+	case v.importingFile.ExternalModuleIndicator != nil && v.importingFile.CommonJSModuleIndicator == nil:
 		return false
 	}
 
-	// 3. Use the implied node format to determine CJS vs ESM
+	// 3. If there's a tsconfig/jsconfig, use its module setting
+	if v.program.Options().ConfigFilePath != "" {
+		return v.program.Options().GetEmitModuleKind() < core.ModuleKindES2015
+	}
+
+	// 4. In --module nodenext, assume we're not emitting JS -> JS, so use
+	//    whatever syntax Node expects based on the detected module kind
 	//    TODO: consider removing `impliedNodeFormatForEmit`
 	switch v.program.GetImpliedNodeFormatForEmit(v.importingFile) {
 	case core.ModuleKindCommonJS:
@@ -945,21 +888,14 @@ func (v *View) computeShouldUseRequire() bool {
 		return false
 	}
 
-	// 4. If there's a tsconfig/jsconfig, use its module setting
-	if v.program.Options().ConfigFilePath != "" {
-		return v.program.Options().GetEmitModuleKind() < core.ModuleKindES2015
-	}
-
 	// 5. Match the first other JS file in the program that's unambiguously CJS or ESM
 	for _, otherFile := range v.program.GetSourceFiles() {
 		switch {
 		case otherFile == v.importingFile, !ast.IsSourceFileJS(otherFile), v.program.IsSourceFileFromExternalLibrary(otherFile):
 			continue
-		}
-		switch detectSyntax(otherFile, v.program.Options()) {
-		case fileSyntaxKindCJS:
+		case otherFile.CommonJSModuleIndicator != nil && otherFile.ExternalModuleIndicator == nil:
 			return true
-		case fileSyntaxKindESM:
+		case otherFile.ExternalModuleIndicator != nil && otherFile.CommonJSModuleIndicator == nil:
 			return false
 		}
 	}

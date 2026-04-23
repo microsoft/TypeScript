@@ -37,7 +37,6 @@ export enum ObjectFlags {
     IdenticalBaseTypeCalculated = 1 << 27,
     IdenticalBaseTypeExists = 1 << 28,
     UnresolvedMembers = 1 << 29,
-    FromTypeNode = 1 << 30,
     IsGenericTypeComputed = 1 << 22,
     IsGenericObjectType = 1 << 23,
     IsGenericIndexType = 1 << 24,
