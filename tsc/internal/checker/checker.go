@@ -12160,7 +12160,9 @@ func (c *Checker) checkBinaryLikeExpression(left *ast.Node, operatorToken *ast.N
 		// control flow analysis it is possible for operands to temporarily have narrower types, and those narrower
 		// types may cause the operands to not be comparable. We don't want such errors reported (see #46475).
 		if checkMode&CheckModeTypeOnly == 0 {
-			if isLiteralExpressionOfObject(left) || isLiteralExpressionOfObject(right) {
+			if (isLiteralExpressionOfObject(left) || isLiteralExpressionOfObject(right)) &&
+				// only report for === and !== in JS, not == or !=
+				(!ast.IsInJSFile(left) || (operator == ast.KindEqualsEqualsEqualsToken || operator == ast.KindExclamationEqualsEqualsToken)) {
 				eqType := operator == ast.KindEqualsEqualsToken || operator == ast.KindEqualsEqualsEqualsToken
 				c.error(errorNode, diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, core.IfElse(eqType, "false", "true"))
 			}

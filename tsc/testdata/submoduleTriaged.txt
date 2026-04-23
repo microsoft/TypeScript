@@ -123,10 +123,6 @@ conformance/parserStatementIsNotAMemberVariableDeclaration1(alwaysstrict=true).e
 ## https://github.com/microsoft/typescript-go/issues/3509
 compiler/typeUsedAsTypeLiteralIndex.errors.txt.diff
 
-# `{} == {}` loose equality now also flagged with TS2839 (not just strict equality)
-## https://github.com/microsoft/typescript-go/issues/3510
-conformance/plainJSTypeErrors.errors.txt.diff
-
 # Unicode escapes in identifier names now displayed as literal characters
 ## https://github.com/microsoft/typescript-go/issues/3511
 conformance/parser.numericSeparators.decmialNegative.errors.txt.diff
