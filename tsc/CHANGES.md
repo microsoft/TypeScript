@@ -123,18 +123,6 @@ function f(x) {
 f(); // Still allowed
 ```
 
-#### Strada's JS-specific rules for inferring type arguments no longer apply in Corsa.
-
-Inferred type arguments may change. For example:
-
-```js
-/** @type {any} */
-var x = { a: 1, b: 2 };
-var entries = Object.entries(x);
-```
-
-In Strada, `entries: Array<[string, any]>`. In Corsa it has type `Array<[string, unknown]>`, the same as in TypeScript.
-
 #### Values are no longer resolved as types in JSDoc type positions.
 
 ```js

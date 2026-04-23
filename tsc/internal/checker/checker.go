@@ -8847,7 +8847,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 					continue
 				}
 			} else {
-				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, InferenceFlagsNone /*flags*/, nil)
+				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, core.IfElse(ast.IsInJSFile(s.node), InferenceFlagsAnyDefault, InferenceFlagsNone) /*flags*/, nil)
 				typeArgumentTypes = c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode|CheckModeSkipGenericFunctions, inferenceContext)
 				if inferenceContext.flags&InferenceFlagsSkippedGenericFunction != 0 {
 					s.argCheckMode |= CheckModeSkipGenericFunctions
@@ -9368,7 +9368,7 @@ func (c *Checker) getTypeArgumentsFromNodes(typeArgumentNodes []*ast.Node, typeP
 }
 
 func (c *Checker) inferSignatureInstantiationForOverloadFailure(node *ast.Node, typeParameters []*Type, candidate *Signature, args []*ast.Node, checkMode CheckMode) *Signature {
-	inferenceContext := c.newInferenceContext(typeParameters, candidate, InferenceFlagsNone, nil)
+	inferenceContext := c.newInferenceContext(typeParameters, candidate, core.IfElse(ast.IsInJSFile(node), InferenceFlagsAnyDefault, InferenceFlagsNone), nil)
 	typeArgumentTypes := c.inferTypeArguments(node, candidate, args, checkMode|CheckModeSkipContextSensitive|CheckModeSkipGenericFunctions, inferenceContext)
 	return c.createSignatureInstantiation(candidate, typeArgumentTypes)
 }

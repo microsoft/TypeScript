@@ -12,7 +12,7 @@
 // find('');
 //        ^
 // | ----------------------------------------------------------------------
-// | find(**l: unknown[]**, x: unknown): unknown
+// | find(**l: any[]**, x: any): any
 // | Find an item
 // | ----------------------------------------------------------------------
 [
@@ -29,17 +29,17 @@
     "item": {
       "signatures": [
         {
-          "label": "find(l: unknown[], x: unknown): unknown",
+          "label": "find(l: any[], x: any): any",
           "documentation": {
             "kind": "markdown",
             "value": "Find an item"
           },
           "parameters": [
             {
-              "label": "l: unknown[]"
+              "label": "l: any[]"
             },
             {
-              "label": "x: unknown"
+              "label": "x: any"
             }
           ],
           "activeParameter": 0
