@@ -1045,7 +1045,15 @@ func (r *resolutionState) loadModuleFromImmediateNodeModulesDirectory(extensions
 }
 
 func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensions, moduleName string, nodeModulesDirectory string) *resolved {
-	candidate := tspath.NormalizePath(tspath.CombinePaths(nodeModulesDirectory, moduleName))
+	// Strip any trailing directory separator so that imports like `pkg/` and `pkg`
+	// produce identical `candidate` and `packageDirectory` strings. Otherwise the
+	// `package.json` info cache (which is keyed by normalized path but stores the
+	// caller's `PackageDirectory` verbatim) can hand back, under concurrent
+	// inserts, an entry whose `PackageDirectory` doesn't match `candidate`,
+	// causing `loadNodeModuleFromDirectoryWorker`'s `ComparePaths(candidate, ...)`
+	// check to fail and skip loading the package's `main`/`types` entry.
+	// https://github.com/microsoft/typescript-go/issues/3526
+	candidate := tspath.RemoveTrailingDirectorySeparator(tspath.NormalizePath(tspath.CombinePaths(nodeModulesDirectory, moduleName)))
 	packageName, rest := ParsePackageName(moduleName)
 	packageDirectory := tspath.CombinePaths(nodeModulesDirectory, packageName)
 	if packageName == "" {
