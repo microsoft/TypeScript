@@ -167,3 +167,35 @@ function getExplicitUseTsgo(section: string): boolean | undefined {
     if (explicitValues.some(v => v === false)) return false;
     return undefined;
 }
+
+/**
+ * Read a setting following the standard `js/ts > [typescript|javascript]` precedence:
+ * the unified `js/ts.<key>` setting wins if explicitly set at any scope, otherwise
+ * the per-language `<fallbackSection>.<fallbackKey>` setting is used (including its
+ * declared default).
+ *
+ * Note: we intentionally ignore the unified setting's registered default
+ * (`defaultValue`/`defaultLanguageValue` from `inspect()`) so that the per-language
+ * fallback's value/default can apply when the user hasn't explicitly set the
+ * unified key. Both keys typically declare the same default, so this is observably
+ * equivalent in the unset case.
+ */
+export function readUnifiedConfig<T>(
+    key: string,
+    fallbackSection: "typescript" | "javascript",
+    fallbackKey: string,
+    scope: vscode.ConfigurationScope | undefined,
+    defaultValue: T,
+): T {
+    const unified = vscode.workspace.getConfiguration("js/ts", scope).inspect<T>(key);
+    const explicit = unified && (
+        unified.workspaceFolderLanguageValue
+            ?? unified.workspaceFolderValue
+            ?? unified.workspaceLanguageValue
+            ?? unified.workspaceValue
+            ?? unified.globalLanguageValue
+            ?? unified.globalValue
+    );
+    if (explicit !== undefined) return explicit;
+    return vscode.workspace.getConfiguration(fallbackSection, scope).get<T>(fallbackKey, defaultValue);
+}

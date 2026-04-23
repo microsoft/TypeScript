@@ -87,6 +87,10 @@ const x =
 // @Filename: /9.tsx
 // Generic tag with no attributes
 const x = <SomeComponent<number>>/*9*/
+
+// @Filename: /10.tsx
+// Tag name containing $ (must be snippet-escaped)
+const x = <$Foo>/*10*/
 `
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
