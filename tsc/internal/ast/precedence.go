@@ -707,7 +707,8 @@ func GetTypeNodePrecedence(n *TypeNode) TypePrecedence {
 		KindMappedType,
 		KindNamedTupleMember,
 		KindTemplateLiteralType,
-		KindImportType:
+		KindImportType,
+		KindPropertyAccessExpression:
 		return TypePrecedenceNonArray
 	default:
 		panic(fmt.Sprintf("unhandled TypeNode: %v", n.Kind))

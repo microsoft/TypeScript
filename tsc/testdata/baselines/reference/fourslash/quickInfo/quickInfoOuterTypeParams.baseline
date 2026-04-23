@@ -1,0 +1,53 @@
+// === QuickInfo ===
+=== /quickInfoOuterTypeParams.ts ===
+// 
+// function namedSchemaError<Tag extends string>(tag: Tag) {
+//   class NamedSchemaError extends Error {
+// 		public static isInstance(input: unknown) {
+// 			return input instanceof NamedSchemaError
+//     }
+//   }
+//   return NamedSchemaError;
+// }
+// 
+// function t() {
+//     const schemaError = namedSchemaError("MyError");
+//     const isInstance = schemaError.isInstance({});
+//                                    ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) NamedSchemaError<"MyError">.isInstance(input: unknown): input is namedSchemaError<any>.NamedSchemaError
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 338,
+      "LSPosition": {
+        "line": 12,
+        "character": 41
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) NamedSchemaError<\"MyError\">.isInstance(input: unknown): input is namedSchemaError<any>.NamedSchemaError\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 35
+        },
+        "end": {
+          "line": 12,
+          "character": 45
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

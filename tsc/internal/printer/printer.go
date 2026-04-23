@@ -2325,6 +2325,8 @@ func (p *Printer) emitTypeNode(node *ast.TypeNode, precedence ast.TypePrecedence
 	case ast.KindExpressionWithTypeArguments:
 		// !!! Should this actually be considered a type?
 		p.emitExpressionWithTypeArguments(node.AsExpressionWithTypeArguments())
+	case ast.KindPropertyAccessExpression:
+		p.emitPropertyAccessExpression(node.AsPropertyAccessExpression())
 
 	case ast.KindJSDocAllType:
 		p.emitJSDocAllType(node)
