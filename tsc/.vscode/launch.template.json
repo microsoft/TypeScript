@@ -61,6 +61,29 @@
                 "-testDir",
                 "path_to_project_dir"
             ]
+        },
+        {
+            "name": "Launch tsgo CLI",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/tsgo",
+            "cwd": "${workspaceFolder}",
+            "args": "${input:tsgoArgs}"
+        },
+        {
+            "name": "Attach to Go process",
+            "type": "go",
+            "request": "attach",
+            "mode": "local",
+            "processId": "${command:pickGoProcess}"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "tsgoArgs",
+            "type": "promptString",
+            "description": "Enter arguments for tsgo"
         }
     ]
 }
