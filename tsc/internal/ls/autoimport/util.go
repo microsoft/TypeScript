@@ -155,6 +155,12 @@ func getResolvedPackageNames(ctx context.Context, program *compiler.Program) *co
 		resolvedPackageNames.Add(module.GetPackageNameFromTypesPackageName(name))
 	}
 
+	for _, name := range program.Options().Types {
+		if name != "*" {
+			resolvedPackageNames.Add(module.GetPackageNameFromTypesPackageName(name))
+		}
+	}
+
 	if unresolvedPackageNames.Len() > 0 {
 		checker, done := program.GetTypeChecker(ctx)
 		defer done()
