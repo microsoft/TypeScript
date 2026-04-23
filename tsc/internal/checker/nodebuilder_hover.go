@@ -451,7 +451,7 @@ func (b *NodeBuilderImpl) expandModuleDecl(symbol *ast.Symbol) *ast.Node {
 
 		// Handle alias/re-export symbols
 		if m.Flags&ast.SymbolFlagsAlias != 0 {
-			aliasDecl := core.FirstOrNil(m.Declarations)
+			aliasDecl := b.ch.getDeclarationOfAliasSymbol(m)
 			target := b.ch.getMergedSymbol(b.ch.getTargetOfAliasDeclaration(aliasDecl))
 			if target != nil {
 				// If the alias target is a local symbol (not itself an export), emit its declaration first
