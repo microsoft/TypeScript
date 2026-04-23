@@ -240,6 +240,7 @@ compiler/expressionWithJSDocTypeArguments.errors.txt.diff
 compiler/expressionWithJSDocTypeArguments.js.diff
 compiler/expressionWithJSDocTypeArguments.symbols.diff
 compiler/expressionWithJSDocTypeArguments.types.diff
+compiler/genericDefaultsJs.types.diff
 compiler/importAssertionsDeprecatedIgnored.errors.txt.diff
 compiler/importTypeAssertionDeprecationIgnored.errors.txt.diff
 compiler/inexistentPropertyInsideToStringType.errors.txt.diff
