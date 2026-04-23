@@ -1,6 +1,7 @@
 package lsp
 
 import (
+	"regexp"
 	"strings"
 	"testing"
 
@@ -40,7 +41,7 @@ github.com/microsoft/typescript-go/internal/lsp.(*Server).dispatchLoop.func1()
 created by github.com/microsoft/typescript-go/internal/lsp.(*Server).dispatchLoop in goroutine 19
         /workspaces/typescript-go/internal/lsp/server.go:438 +0x60`
 
-	baseline.Run(t, "completionsDebugStackTrace.md", sanitizedStackTraceBaselineContents(t, input), baseline.Options{
+	baseline.Run(t, "completionsDebugStackTrace.md", sanitizedStackTraceBaselineContents(t, input, sanitizeStackTrace(input)), baseline.Options{
 		Subfolder: "lsp/stackSanitizer/",
 	})
 }
@@ -77,19 +78,55 @@ github.com/microsoft/typescript-go/internal/lsp.(*Server).dispatchLoop.func1()
 created by github.com/microsoft/typescript-go/internal/lsp.(*Server).dispatchLoop in goroutine 35
 	github.com/microsoft/typescript-go/internal/lsp/server.go:438 +0x9f1`
 
-	baseline.Run(t, "completionsReleaseStackTrace.md", sanitizedStackTraceBaselineContents(t, input), baseline.Options{
+	baseline.Run(t, "completionsReleaseStackTrace.md", sanitizedStackTraceBaselineContents(t, input, sanitizeStackTrace(input)), baseline.Options{
 		Subfolder: "lsp/stackSanitizer/",
 	})
 }
 
-func sanitizedStackTraceBaselineContents(t *testing.T, input string) string {
+func sanitizedStackTraceBaselineContents(t *testing.T, input string, output string) string {
 	builder := strings.Builder{}
 	builder.WriteString("Test name: `")
 	builder.WriteString(t.Name())
 	builder.WriteString("`\n\n# Unsanitized input:\n\n````\n")
 	builder.WriteString(input)
 	builder.WriteString("\n````\n\n# Sanitized output:\n\n````\n")
-	builder.WriteString(sanitizeStackTrace(input))
+	builder.WriteString(output)
 	builder.WriteString("\n````\n")
 	return builder.String()
+}
+
+// Mirror of the "Generic Secret" pattern from VS Code's
+// removePropertiesWithPossibleUserInfo. If this matches the sanitized output,
+// VS Code's telemetry pipeline will replace the entire string with
+// `<REDACTED: Generic Secret>`, destroying the stack trace.
+var vscodeGenericSecretRegex = regexp.MustCompile(`(?i)(key|token|sig|secret|signature|password|passwd|pwd|android:value)[^a-zA-Z0-9]`)
+
+func TestSanitizedStackTraceDefeatsVSCodeGenericSecretRegex(t *testing.T) {
+	t.Parallel()
+
+	// Frame names contain identifiers that contain trigger keywords:
+	// `getSignatureHelp` (signature), `LookupKey` (key), `validateToken` (token),
+	// `signRequest` (sig), `setPwd` (pwd), and a file `signature.go`.
+	input := `goroutine 7 [running]:
+runtime/debug.Stack()
+	runtime/debug/stack.go:26 +0x5e
+github.com/microsoft/typescript-go/internal/ls.(*LanguageService).getSignatureHelp(0x1)
+	github.com/microsoft/typescript-go/internal/ls/signature.go:42 +0x10
+github.com/microsoft/typescript-go/internal/ls.LookupKey(0x2)
+	github.com/microsoft/typescript-go/internal/ls/keys.go:7 +0x10
+github.com/microsoft/typescript-go/internal/ls.validateToken(0x3)
+	github.com/microsoft/typescript-go/internal/ls/token.go:9 +0x10
+github.com/microsoft/typescript-go/internal/ls.signRequest(0x4)
+	github.com/microsoft/typescript-go/internal/ls/sig.go:11 +0x10
+github.com/microsoft/typescript-go/internal/ls.setPwd(0x5)
+	github.com/microsoft/typescript-go/internal/ls/pwd.go:13 +0x10`
+
+	output := sanitizeStackTrace(input)
+	if loc := vscodeGenericSecretRegex.FindStringIndex(output); loc != nil {
+		t.Fatalf("sanitized stack trace would be redacted by VS Code's Generic Secret regex at %v: %q\nfull output:\n%s", loc, output[loc[0]:loc[1]], output)
+	}
+
+	baseline.Run(t, "genericSecretWorkaround.md", sanitizedStackTraceBaselineContents(t, input, output), baseline.Options{
+		Subfolder: "lsp/stackSanitizer/",
+	})
 }
