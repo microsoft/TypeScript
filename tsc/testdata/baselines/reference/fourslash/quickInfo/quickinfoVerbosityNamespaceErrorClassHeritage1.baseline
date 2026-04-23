@@ -6,7 +6,7 @@
 // | ----------------------------------------------------------------------
 // | ```typescript
 // | namespace NS {
-// |     class Derived {
+// |     class Derived extends NonExistentClass {
 // |         derivedField: number;
 // |     }
 // | }
@@ -73,7 +73,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nnamespace NS {\n    class Derived {\n        derivedField: number;\n    }\n}\n```\n"
+          "value": "```typescript\nnamespace NS {\n    class Derived extends NonExistentClass {\n        derivedField: number;\n    }\n}\n```\n"
         },
         "range": {
           "start": {

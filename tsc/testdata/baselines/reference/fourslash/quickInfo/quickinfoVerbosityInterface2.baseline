@@ -124,9 +124,7 @@
 //               ^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | interface Foo extends Bar<{
-// |     param: "a" | "c";
-// | }> {
+// | interface Foo extends Bar<FooParam> {
 // |     a: "a" | "c";
 // |     foo: (a: {
 // |         param: "a" | "c";
@@ -589,7 +587,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\ninterface Foo extends Bar<{\n    param: \"a\" | \"c\";\n}> {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: \"a\" | \"c\";\n    }) => number;\n}\n```\n"
+          "value": "```typescript\ninterface Foo extends Bar<FooParam> {\n    a: \"a\" | \"c\";\n    foo: (a: {\n        param: \"a\" | \"c\";\n    }) => number;\n}\n```\n"
         },
         "range": {
           "start": {

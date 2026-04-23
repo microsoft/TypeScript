@@ -11,7 +11,7 @@
 // |     } & {
 // |         b: number;
 // |     };
-// |     interface Config {
+// |     interface Config extends Mixin {
 // |     }
 // | }
 // | ```
@@ -76,7 +76,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nnamespace NS {\n    type Mixin = {\n        a: string;\n    } & {\n        b: number;\n    };\n    interface Config {\n    }\n}\n```\n"
+          "value": "```typescript\nnamespace NS {\n    type Mixin = {\n        a: string;\n    } & {\n        b: number;\n    };\n    interface Config extends Mixin {\n    }\n}\n```\n"
         },
         "range": {
           "start": {

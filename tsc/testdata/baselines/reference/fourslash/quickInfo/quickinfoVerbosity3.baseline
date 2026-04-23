@@ -123,7 +123,7 @@
 //           ^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | class Opt {
+// | class Opt extends React.Component<OptionProp, {}> {
 // |     render(): any;
 // | }
 // | ```
@@ -133,7 +133,7 @@
 //           ^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | class Opt {
+// | class Opt extends React.Component<OptionProp, {}> {
 // |     render(): any;
 // | }
 // | ```
@@ -226,7 +226,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nclass Opt {\n    render(): any;\n}\n```\n"
+          "value": "```typescript\nclass Opt extends React.Component<OptionProp, {}> {\n    render(): any;\n}\n```\n"
         },
         "range": {
           "start": {
@@ -256,7 +256,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nclass Opt {\n    render(): any;\n}\n```\n"
+          "value": "```typescript\nclass Opt extends React.Component<OptionProp, {}> {\n    render(): any;\n}\n```\n"
         },
         "range": {
           "start": {

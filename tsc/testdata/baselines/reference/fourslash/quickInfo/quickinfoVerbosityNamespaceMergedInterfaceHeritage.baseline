@@ -1,22 +1,27 @@
 // === QuickInfo ===
-=== /quickinfoVerbosityNamespaceAnonymousClassHeritage1.ts ===
+=== /quickinfoVerbosityNamespaceMergedInterfaceHeritage.ts ===
 // 
-// namespace NS {
-//           ^^
+// declare namespace NS {
+//                   ^^
 // | ----------------------------------------------------------------------
 // | ```typescript
 // | namespace NS {
-// |     class Derived extends class {
-// |         baseField: string;
-// |     } {
-// |         derivedField: number;
+// |     interface Config extends A, B {
+// |         a: string;
+// |         b: number;
+// |     }
+// |     interface A {
+// |         a: string;
+// |     }
+// |     interface B {
+// |         b: number;
 // |     }
 // | }
 // | ```
 // | 
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
-//           ^^
+//                   ^^
 // | ----------------------------------------------------------------------
 // | ```typescript
 // | namespace NS
@@ -24,20 +29,30 @@
 // | 
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
-//     export class Derived extends class {
-//         baseField: string;
-//     } {
-//         derivedField: number;
+//     interface Config extends A {
+//         a: string;
+//     }
+// 
+//     interface Config extends B {
+//         b: number;
+//     }
+// 
+//     interface A {
+//         a: string;
+//     }
+// 
+//     interface B {
+//         b: number;
 //     }
 // }
 // 
 [
   {
     "marker": {
-      "Position": 13,
+      "Position": 21,
       "LSPosition": {
         "line": 1,
-        "character": 12
+        "character": 20
       },
       "Name": "1",
       "Data": {}
@@ -51,11 +66,11 @@
         "range": {
           "start": {
             "line": 1,
-            "character": 10
+            "character": 18
           },
           "end": {
             "line": 1,
-            "character": 12
+            "character": 20
           }
         },
         "canIncreaseVerbosity": true
@@ -65,10 +80,10 @@
   },
   {
     "marker": {
-      "Position": 13,
+      "Position": 21,
       "LSPosition": {
         "line": 1,
-        "character": 12
+        "character": 20
       },
       "Name": "1",
       "Data": {}
@@ -77,16 +92,16 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nnamespace NS {\n    class Derived extends class {\n        baseField: string;\n    } {\n        derivedField: number;\n    }\n}\n```\n"
+          "value": "```typescript\nnamespace NS {\n    interface Config extends A, B {\n        a: string;\n        b: number;\n    }\n    interface A {\n        a: string;\n    }\n    interface B {\n        b: number;\n    }\n}\n```\n"
         },
         "range": {
           "start": {
             "line": 1,
-            "character": 10
+            "character": 18
           },
           "end": {
             "line": 1,
-            "character": 12
+            "character": 20
           }
         }
       },

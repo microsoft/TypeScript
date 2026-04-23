@@ -6,7 +6,7 @@
 // | ----------------------------------------------------------------------
 // | ```typescript
 // | namespace NS {
-// |     interface Config extends þtype {
+// |     interface Config extends Record<string, any> {
 // |     }
 // | }
 // | ```
@@ -70,7 +70,7 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nnamespace NS {\n    interface Config extends ï¿½type {\n    }\n}\n```\n"
+          "value": "```typescript\nnamespace NS {\n    interface Config extends Record<string, any> {\n    }\n}\n```\n"
         },
         "range": {
           "start": {

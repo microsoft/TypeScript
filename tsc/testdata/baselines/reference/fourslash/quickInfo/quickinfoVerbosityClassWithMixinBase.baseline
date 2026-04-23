@@ -1,43 +1,36 @@
 // === QuickInfo ===
-=== /quickinfoVerbosityNamespaceAnonymousClassHeritage1.ts ===
+=== /quickinfoVerbosityClassWithMixinBase.ts ===
 // 
-// namespace NS {
-//           ^^
+// class Base {}
+// 
+// declare const Mixin: new () => Base & { mixed: string };
+// 
+// class Derived extends Mixin {}
+//       ^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | namespace NS {
-// |     class Derived extends class {
-// |         baseField: string;
-// |     } {
-// |         derivedField: number;
-// |     }
+// | class Derived extends Mixin {
 // | }
 // | ```
 // | 
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
-//           ^^
+//       ^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | namespace NS
+// | class Derived
 // | ```
 // | 
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
-//     export class Derived extends class {
-//         baseField: string;
-//     } {
-//         derivedField: number;
-//     }
-// }
 // 
 [
   {
     "marker": {
-      "Position": 13,
+      "Position": 87,
       "LSPosition": {
-        "line": 1,
-        "character": 12
+        "line": 5,
+        "character": 13
       },
       "Name": "1",
       "Data": {}
@@ -46,16 +39,16 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nnamespace NS\n```\n"
+          "value": "```typescript\nclass Derived\n```\n"
         },
         "range": {
           "start": {
-            "line": 1,
-            "character": 10
+            "line": 5,
+            "character": 6
           },
           "end": {
-            "line": 1,
-            "character": 12
+            "line": 5,
+            "character": 13
           }
         },
         "canIncreaseVerbosity": true
@@ -65,10 +58,10 @@
   },
   {
     "marker": {
-      "Position": 13,
+      "Position": 87,
       "LSPosition": {
-        "line": 1,
-        "character": 12
+        "line": 5,
+        "character": 13
       },
       "Name": "1",
       "Data": {}
@@ -77,16 +70,16 @@
       "hover": {
         "contents": {
           "kind": "markdown",
-          "value": "```typescript\nnamespace NS {\n    class Derived extends class {\n        baseField: string;\n    } {\n        derivedField: number;\n    }\n}\n```\n"
+          "value": "```typescript\nclass Derived extends Mixin {\n}\n```\n"
         },
         "range": {
           "start": {
-            "line": 1,
-            "character": 10
+            "line": 5,
+            "character": 6
           },
           "end": {
-            "line": 1,
-            "character": 12
+            "line": 5,
+            "character": 13
           }
         }
       },
