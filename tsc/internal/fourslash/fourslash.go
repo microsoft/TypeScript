@@ -1582,6 +1582,40 @@ func (f *FourslashTest) VerifyCodeFixAvailable(t *testing.T, expectedDescription
 	}
 }
 
+// VerifyCodeFixAvailableExact verifies that the exact set of code fix descriptions matches.
+// Unlike VerifyCodeFixAvailable, this checks both that all expected descriptions are present
+// and that no additional unexpected code fixes exist (exact count match).
+func (f *FourslashTest) VerifyCodeFixAvailableExact(t *testing.T, expectedDescriptions []string) {
+	t.Helper()
+
+	actions := f.getCodeFixActions(t)
+
+	if len(actions) != len(expectedDescriptions) {
+		var titles []string
+		for _, a := range actions {
+			titles = append(titles, a.Title)
+		}
+		t.Fatalf("Expected exactly %d code fixes, but got %d. Available fixes: %v", len(expectedDescriptions), len(actions), titles)
+	}
+
+	for _, expected := range expectedDescriptions {
+		found := false
+		for _, action := range actions {
+			if action.Title == expected {
+				found = true
+				break
+			}
+		}
+		if !found {
+			var titles []string
+			for _, a := range actions {
+				titles = append(titles, a.Title)
+			}
+			t.Fatalf("Expected code fix with description %q not found. Available fixes: %v", expected, titles)
+		}
+	}
+}
+
 // VerifyCodeFixAll verifies that applying all code fixes with the given fixId produces the expected file content.
 // It gets all quickfix code actions for the file (which includes per-fixId "Fix all" entries when
 // multiple diagnostics match the same provider), finds the fix-all entry, and applies its edits.

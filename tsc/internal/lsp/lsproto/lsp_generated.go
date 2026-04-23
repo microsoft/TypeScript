@@ -3,6 +3,7 @@
 package lsproto
 
 import (
+	"cmp"
 	"fmt"
 	"strings"
 
@@ -7530,6 +7531,13 @@ func (s *TextEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	return nil
 }
 
+func (s *TextEdit) Compare(other *TextEdit) int {
+	if c := s.Range.Compare(&other.Range); c != 0 {
+		return c
+	}
+	return cmp.Compare(s.NewText, other.NewText)
+}
+
 // The watched files change notification's parameters.
 type DidChangeWatchedFilesParams struct {
 	// The actual file events.
@@ -13162,6 +13170,13 @@ func (s *Range) UnmarshalJSONFrom(dec *json.Decoder) error {
 	return nil
 }
 
+func (s *Range) Compare(other *Range) int {
+	if c := s.Start.Compare(&other.Start); c != 0 {
+		return c
+	}
+	return s.End.Compare(&other.End)
+}
+
 type ImplementationOptions struct {
 	WorkDoneProgress *bool `json:"workDoneProgress,omitzero"`
 }
@@ -13777,6 +13792,13 @@ func (s *Position) UnmarshalJSONFrom(dec *json.Decoder) error {
 	}
 
 	return nil
+}
+
+func (s *Position) Compare(other *Position) int {
+	if c := cmp.Compare(s.Line, other.Line); c != 0 {
+		return c
+	}
+	return cmp.Compare(s.Character, other.Character)
 }
 
 type SelectionRangeOptions struct {

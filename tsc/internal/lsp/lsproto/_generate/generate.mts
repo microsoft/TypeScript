@@ -610,6 +610,16 @@ const customRequests: Request[] = [
     },
 ];
 
+// compareStructures is the set of generated structures for which a Compare method should be emitted.
+// The Compare method defines a total ordering by comparing fields in declaration order.
+// All listed structures (and any structure-typed fields they reference) must contain only
+// comparable fields: base scalar types, or other structures that are themselves in this set.
+const compareStructures = new Set<string>([
+    "Position",
+    "Range",
+    "TextEdit",
+]);
+
 const customTypeAliases: TypeAlias[] = [
     {
         name: "TelemetryEvent",
@@ -2008,6 +2018,7 @@ function generateCode() {
     writeLine("package lsproto");
     writeLine("");
     writeLine(`import (`);
+    writeLine(`\t"cmp"`);
     writeLine(`\t"fmt"`);
     writeLine(`\t"strings"`);
     writeLine("");
@@ -2345,6 +2356,60 @@ function generateCode() {
             writeLine(`}`);
             writeLine("");
         }
+
+        if (compareStructures.has(structure.name)) {
+            generateCompareMethod(structure);
+        }
+    }
+
+    function generateCompareMethod(structure: Structure) {
+        const props = structure.properties ?? [];
+        writeLine(`func (s *${structure.name}) Compare(other *${structure.name}) int {`);
+        for (let i = 0; i < props.length; i++) {
+            const prop = props[i];
+            const isLast = i === props.length - 1;
+            const fieldName = goFieldName(prop);
+            const expr = compareExpressionForProperty(structure.name, prop, fieldName);
+            if (isLast) {
+                writeLine(`\treturn ${expr}`);
+            }
+            else {
+                writeLine(`\tif c := ${expr}; c != 0 {`);
+                writeLine(`\t\treturn c`);
+                writeLine(`\t}`);
+            }
+        }
+        writeLine(`}`);
+        writeLine("");
+    }
+
+    function compareExpressionForProperty(structName: string, prop: Property, fieldName: string): string {
+        const resolved = resolveType(prop.type);
+        const isPointerField = (prop.optional || resolved.needsPointer) && !prop.omitzeroValue;
+
+        if (prop.type.kind === "reference") {
+            const refName = prop.type.name;
+            if (compareStructures.has(refName)) {
+                if (isPointerField) {
+                    return `s.${fieldName}.Compare(other.${fieldName})`;
+                }
+                return `s.${fieldName}.Compare(&other.${fieldName})`;
+            }
+        }
+
+        if (prop.type.kind === "base") {
+            switch (prop.type.name) {
+                case "string":
+                case "URI":
+                case "DocumentUri":
+                case "integer":
+                case "uinteger":
+                case "decimal":
+                    return `cmp.Compare(s.${fieldName}, other.${fieldName})`;
+            }
+        }
+
+        throw new Error(`Cannot generate Compare for ${structName}.${fieldName}: unsupported field type ${JSON.stringify(prop.type)}. Add support in compareExpressionForProperty.`);
     }
 
     // Helper function to detect if an enum is a bitflag enum

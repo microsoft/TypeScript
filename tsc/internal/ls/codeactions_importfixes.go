@@ -60,7 +60,7 @@ type fixInfo struct {
 	isJsxNamespaceFix   bool
 }
 
-func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]CodeAction, error) {
+func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]*CodeAction, error) {
 	info, err := getFixInfos(ctx, fixContext, fixContext.ErrorCode, fixContext.Span.Pos())
 	if err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]Co
 		return nil, nil
 	}
 
-	var actions []CodeAction
+	var actions []*CodeAction
 	for _, fixInfo := range info {
 		edits, description := fixInfo.fix.Edits(
 			ctx,
@@ -80,7 +80,7 @@ func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]Co
 			fixContext.LS.UserPreferences(),
 		)
 
-		actions = append(actions, CodeAction{
+		actions = append(actions, &CodeAction{
 			Description:       description,
 			Changes:           edits,
 			FixID:             importFixID,
