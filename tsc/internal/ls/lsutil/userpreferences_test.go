@@ -326,3 +326,58 @@ func TestUserPreferencesParseUnstable(t *testing.T) {
 		})
 	}
 }
+
+func TestUserPreferencesParseATA(t *testing.T) {
+	t.Parallel()
+
+	t.Run("ParseUserPreferences with unified ATA setting in js/ts section", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"tsserver": map[string]any{
+					"automaticTypeAcquisition": map[string]any{
+						"enabled": false,
+					},
+				},
+			},
+		})
+		assert.Assert(t, prefs.IsATADisabled())
+		assert.Equal(t, prefs.AutomaticTypeAcquisitionEnabled, core.TSFalse)
+	})
+
+	t.Run("ParseUserPreferences with deprecated disableAutomaticTypeAcquisition in typescript section", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"disableAutomaticTypeAcquisition": true,
+			},
+		})
+		assert.Assert(t, prefs.IsATADisabled())
+		assert.Equal(t, prefs.DisableAutomaticTypeAcquisition, core.TSTrue)
+	})
+
+	t.Run("unified setting takes precedence over deprecated setting", func(t *testing.T) {
+		t.Parallel()
+		// Both settings set: unified (js/ts) should take precedence
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"disableAutomaticTypeAcquisition": true,
+			},
+			"js/ts": map[string]any{
+				"tsserver": map[string]any{
+					"automaticTypeAcquisition": map[string]any{
+						"enabled": true,
+					},
+				},
+			},
+		})
+		assert.Assert(t, !prefs.IsATADisabled())
+		assert.Equal(t, prefs.AutomaticTypeAcquisitionEnabled, core.TSTrue)
+	})
+
+	t.Run("IsATADisabled returns false when neither setting is configured", func(t *testing.T) {
+		t.Parallel()
+		prefs := NewDefaultUserPreferences()
+		assert.Assert(t, !prefs.IsATADisabled())
+	})
+}
