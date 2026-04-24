@@ -218,7 +218,7 @@ func createCheckerPool(program checker.Program) (getChecker func() (*checker.Che
 					return ch, func() { pool <- ch }
 				}
 				if created.CompareAndSwap(current, current+1) {
-					ch := core.FirstResult(checker.NewChecker(program))
+					ch := core.FirstResult(checker.NewChecker(program, nil))
 					return ch, func() { pool <- ch }
 				}
 			}

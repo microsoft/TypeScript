@@ -159,6 +159,13 @@ func (vfs *wrappedFS) WriteFile(path string, data string) error {
 	return vfs.fs.WriteFile(path, data)
 }
 
+func (vfs *wrappedFS) AppendFile(path string, data string) error {
+	if _, ok := splitPath(path); ok {
+		panic("cannot write to embedded file system")
+	}
+	return vfs.fs.AppendFile(path, data)
+}
+
 func (vfs *wrappedFS) Remove(path string) error {
 	if _, ok := splitPath(path); ok {
 		panic("cannot remove from embedded file system")

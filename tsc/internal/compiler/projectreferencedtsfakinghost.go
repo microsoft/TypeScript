@@ -79,6 +79,11 @@ func (fs *projectReferenceDtsFakingVfs) WriteFile(path string, data string) erro
 	panic("should not be called by resolver")
 }
 
+// AppendFile implements vfs.FS.
+func (fs *projectReferenceDtsFakingVfs) AppendFile(path string, data string) error {
+	panic("should not be called by resolver")
+}
+
 // Remove implements vfs.FS.
 func (fs *projectReferenceDtsFakingVfs) Remove(path string) error {
 	panic("should not be called by resolver")

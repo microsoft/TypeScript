@@ -11,6 +11,7 @@ type Replacements struct {
 	FileExists                func(string) bool
 	ReadFile                  func(string) (string, bool)
 	WriteFile                 func(string, string) error
+	AppendFile                func(string, string) error
 	Remove                    func(string) error
 	Chtimes                   func(string, time.Time, time.Time) error
 	DirectoryExists           func(string) bool
@@ -62,6 +63,14 @@ func (w *wrappedFS) WriteFile(path string, data string) error {
 		return w.replacements.WriteFile(path, data)
 	}
 	return w.fs.WriteFile(path, data)
+}
+
+// AppendFile implements [vfs.FS].
+func (w *wrappedFS) AppendFile(path string, data string) error {
+	if w.replacements.AppendFile != nil {
+		return w.replacements.AppendFile(path, data)
+	}
+	return w.fs.AppendFile(path, data)
 }
 
 // Remove implements [vfs.FS].

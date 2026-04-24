@@ -969,7 +969,7 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 					// no-op
 				},
 			)
-			ch, _ := checker.NewChecker(aliasResolver)
+			ch, _ := checker.NewChecker(aliasResolver, nil)
 			br.possibleFailedAmbientModuleLookupSources.Range(func(path tspath.Path, source *failedAmbientModuleLookupSource) bool {
 				sourceFile := aliasResolver.GetSourceFile(source.fileName)
 				extractor := b.newExportExtractor(source.packageName, ch, moduleResolver, b.host.FS().Realpath)
@@ -1374,7 +1374,7 @@ func (b *registryBuilder) extractPackage(
 		}
 	})
 
-	ch, _ := checker.NewChecker(aliasResolver)
+	ch, _ := checker.NewChecker(aliasResolver, nil)
 	extractor := b.newExportExtractor(packageName, ch, resolver, toRealpath)
 
 	for _, entrypoint := range aliasResolver.rootFiles {

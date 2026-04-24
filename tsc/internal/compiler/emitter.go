@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/stringutil"
+	"github.com/microsoft/typescript-go/internal/tracing"
 	"github.com/microsoft/typescript-go/internal/transformers"
 	"github.com/microsoft/typescript-go/internal/transformers/declarations"
 	"github.com/microsoft/typescript-go/internal/transformers/estransforms"
@@ -38,10 +39,13 @@ type emitter struct {
 	sourceFile         *ast.SourceFile
 	emitResult         EmitResult
 	writeFile          func(fileName string, text string, data *WriteFileData) error
+	tr                 *tracing.Tracing
 }
 
 func (e *emitter) emit() {
-	// !!! tracing
+	if e.tr != nil {
+		defer e.tr.Push(tracing.PhaseEmit, "emit", map[string]any{"path": string(e.sourceFile.Path())}, true)()
+	}
 	e.emitJSFile(e.sourceFile, e.paths.JsFilePath(), e.paths.SourceMapFilePath())
 	e.emitDeclarationFile(e.sourceFile, e.paths.DeclarationFilePath(), e.paths.DeclarationMapPath())
 	e.emitResult.Diagnostics = e.emitterDiagnostics.GetDiagnostics()
@@ -50,6 +54,28 @@ func (e *emitter) emit() {
 func (e *emitter) getDeclarationTransformers(emitContext *printer.EmitContext, declarationFilePath string, declarationMapPath string) []*declarations.DeclarationTransformer {
 	transform := declarations.NewDeclarationTransformer(e.host, emitContext, e.host.Options(), declarationFilePath, declarationMapPath)
 	return []*declarations.DeclarationTransformer{transform}
+}
+
+func (e *emitter) runScriptTransformers(emitContext *printer.EmitContext, sourceFile *ast.SourceFile) *ast.SourceFile {
+	if e.tr != nil {
+		defer e.tr.Push(tracing.PhaseEmit, "transformNodes", map[string]any{"path": string(sourceFile.Path())}, false)()
+	}
+	for _, transformer := range getScriptTransformers(emitContext, e.host, sourceFile) {
+		sourceFile = transformer.TransformSourceFile(sourceFile)
+	}
+	return sourceFile
+}
+
+func (e *emitter) runDeclarationTransformers(emitContext *printer.EmitContext, sourceFile *ast.SourceFile, declarationFilePath, declarationMapPath string) (*ast.SourceFile, []*ast.Diagnostic) {
+	if e.tr != nil {
+		defer e.tr.Push(tracing.PhaseEmit, "transformNodes", map[string]any{"path": string(sourceFile.Path())}, false)()
+	}
+	var diags []*ast.Diagnostic
+	for _, transformer := range e.getDeclarationTransformers(emitContext, declarationFilePath, declarationMapPath) {
+		sourceFile = transformer.TransformSourceFile(sourceFile)
+		diags = append(diags, transformer.GetDiagnostics()...)
+	}
+	return sourceFile, diags
 }
 
 func getModuleTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
@@ -156,12 +182,14 @@ func (e *emitter) emitJSFile(sourceFile *ast.SourceFile, jsFilePath string, sour
 		return
 	}
 
+	if e.tr != nil {
+		defer e.tr.Push(tracing.PhaseEmit, "emitJsFileOrBundle", map[string]any{"jsFilePath": jsFilePath}, true)()
+	}
+
 	emitContext, putEmitContext := printer.GetEmitContext()
 	defer putEmitContext()
 
-	for _, transformer := range getScriptTransformers(emitContext, e.host, sourceFile) {
-		sourceFile = transformer.TransformSourceFile(sourceFile)
-	}
+	sourceFile = e.runScriptTransformers(emitContext, sourceFile)
 
 	printerOptions := printer.PrinterOptions{
 		RemoveComments:  options.RemoveComments.IsTrue(),
@@ -194,13 +222,13 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 		return
 	}
 
-	var diags []*ast.Diagnostic
+	if e.tr != nil {
+		defer e.tr.Push(tracing.PhaseEmit, "emitDeclarationFileOrBundle", map[string]any{"declarationFilePath": declarationFilePath}, true)()
+	}
+
 	emitContext, putEmitContext := printer.GetEmitContext()
 	defer putEmitContext()
-	for _, transformer := range e.getDeclarationTransformers(emitContext, declarationFilePath, declarationMapPath) {
-		sourceFile = transformer.TransformSourceFile(sourceFile)
-		diags = append(diags, transformer.GetDiagnostics()...)
-	}
+	sourceFile, diags := e.runDeclarationTransformers(emitContext, sourceFile, declarationFilePath, declarationMapPath)
 
 	// !!! strada skipped emit if there were diagnostics
 

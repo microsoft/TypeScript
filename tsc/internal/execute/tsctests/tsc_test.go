@@ -4473,3 +4473,58 @@ func TestTypeAcquisition(t *testing.T) {
 		commandLineArgs: []string{},
 	}).run(t, "typeAcquisition")
 }
+
+func TestGenerateTrace(t *testing.T) {
+	t.Parallel()
+	cases := []*tscInput{
+		{
+			subScenario: "generateTrace generates types file",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"strict": true,
+						"noEmit": true
+					}
+				}`),
+				"/home/src/workspaces/project/a.ts": stringtestutil.Dedent(`
+				interface Person {
+					name: string;
+					age: number;
+				}
+				const p: Person = { name: "Alice", age: 30 };
+				`),
+			},
+			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
+		},
+		{
+			subScenario: "generateTrace with multiple files and complex types",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"strict": true,
+						"noEmit": true
+					}
+				}`),
+				"/home/src/workspaces/project/types.ts": stringtestutil.Dedent(`
+				export interface Container<T> {
+					value: T;
+					map<U>(fn: (x: T) => U): Container<U>;
+				}
+				export type Nullable<T> = T | null | undefined;
+				`),
+				"/home/src/workspaces/project/main.ts": stringtestutil.Dedent(`
+				import { Container, Nullable } from "./types";
+				const c: Container<number> = { value: 42, map: (fn) => ({ value: fn(42), map: c.map }) };
+				const n: Nullable<string> = "hello";
+				`),
+			},
+			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
+		},
+	}
+
+	for _, c := range cases {
+		c.run(t, "generateTrace")
+	}
+}

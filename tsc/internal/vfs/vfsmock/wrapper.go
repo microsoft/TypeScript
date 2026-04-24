@@ -16,5 +16,6 @@ func Wrap(fs vfs.FS) *FSMock {
 		UseCaseSensitiveFileNamesFunc: fs.UseCaseSensitiveFileNames,
 		WalkDirFunc:                   fs.WalkDir,
 		WriteFileFunc:                 fs.WriteFile,
+		AppendFileFunc:                fs.AppendFile,
 	}
 }

@@ -753,6 +753,11 @@ func (fs *sourceFS) WriteFile(path string, data string) error {
 	panic("unimplemented")
 }
 
+// AppendFile implements vfs.FS.
+func (fs *sourceFS) AppendFile(path string, data string) error {
+	panic("unimplemented")
+}
+
 // Remove implements vfs.FS.
 func (fs *sourceFS) Remove(path string) error {
 	panic("unimplemented")

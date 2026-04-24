@@ -200,6 +200,11 @@ func (fs *callbackFS) WriteFile(path string, data string) error {
 	return fs.base.WriteFile(path, data)
 }
 
+// AppendFile implements vfs.FS - always delegates to base (no callback support).
+func (fs *callbackFS) AppendFile(path string, data string) error {
+	return fs.base.AppendFile(path, data)
+}
+
 // Remove implements vfs.FS - always delegates to base (no callback support).
 func (fs *callbackFS) Remove(path string) error {
 	return fs.base.Remove(path)

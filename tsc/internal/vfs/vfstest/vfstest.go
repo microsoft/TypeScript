@@ -546,6 +546,55 @@ func (m *MapFS) WriteFile(path string, data string, perm fs.FileMode) error {
 	return nil
 }
 
+func (m *MapFS) AppendFile(path string, data string, perm fs.FileMode) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	if parent := dirName(path); parent != "" {
+		canonical := m.getCanonicalPath(parent)
+		parentFile, _, err := m.getFollowingSymlinks(canonical)
+		if err != nil {
+			return fmt.Errorf("append %q: %w", path, err)
+		}
+		if !parentFile.Mode.IsDir() {
+			return fmt.Errorf("append %q: parent path exists but is not a directory", path)
+		}
+	}
+
+	var existing []byte
+	var existingMode fs.FileMode
+	file, cp, err := m.getFollowingSymlinks(m.getCanonicalPath(path))
+	if err != nil {
+		if !errors.Is(err, fs.ErrNotExist) && !isBrokenSymlinkError(err) {
+			// No other errors are possible.
+			panic(err)
+		}
+	} else {
+		if !file.Mode.IsRegular() {
+			return fmt.Errorf("append %q: path exists but is not a regular file", path)
+		}
+		existing = file.Data
+		existingMode = file.Mode
+	}
+
+	combined := make([]byte, 0, len(existing)+len(data))
+	combined = append(combined, existing...)
+	combined = append(combined, data...)
+
+	mode := existingMode
+	if mode == 0 {
+		mode = perm &^ umask
+	}
+
+	m.setEntry(path, cp, fstest.MapFile{
+		Data:    combined,
+		ModTime: m.clock.Now(),
+		Mode:    mode,
+	})
+
+	return nil
+}
+
 func (m *MapFS) Remove(path string) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()

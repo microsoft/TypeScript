@@ -22,6 +22,9 @@ type FS interface {
 
 	WriteFile(path string, data string) error
 
+	// AppendFile appends data to the file at path, creating it if it does not exist.
+	AppendFile(path string, data string) error
+
 	// Removes `path` and all its contents. Will return the first error it encounters.
 	Remove(path string) error
 

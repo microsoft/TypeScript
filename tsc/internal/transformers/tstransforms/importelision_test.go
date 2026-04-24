@@ -257,7 +257,7 @@ func TestImportElision(t *testing.T) {
 					}
 					return nil
 				},
-			})
+			}, nil)
 
 			emitResolver := c.GetEmitResolver()
 			emitResolver.MarkLinkedReferencesRecursively(file)

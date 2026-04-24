@@ -148,3 +148,7 @@ func (fsys *FS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
 func (fsys *FS) WriteFile(path string, data string) error {
 	return fsys.fs.WriteFile(path, data)
 }
+
+func (fsys *FS) AppendFile(path string, data string) error {
+	return fsys.fs.AppendFile(path, data)
+}
