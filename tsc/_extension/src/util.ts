@@ -1,3 +1,5 @@
+import { exec } from "child_process";
+import { get } from "http";
 import * as path from "path";
 import * as vscode from "vscode";
 
@@ -37,8 +39,20 @@ export interface ExeInfo {
     version: string;
 }
 
-export function getBuiltinExePath(context: vscode.ExtensionContext): string {
-    return context.asAbsolutePath(path.join("./lib", `tsgo${process.platform === "win32" ? ".exe" : ""}`));
+export async function getBuiltinExePath(context: vscode.ExtensionContext): Promise<{ path: string; version: string; }> {
+    if (context.extensionMode === vscode.ExtensionMode.Development) {
+        const exeName = `tsgo${process.platform === "win32" ? ".exe" : ""}`;
+        const exe = context.asAbsolutePath(path.join("../", "built", "local", exeName));
+        try {
+            await vscode.workspace.fs.stat(vscode.Uri.file(exe));
+            return { path: exe, version: "(local)" };
+        }
+        catch {}
+    }
+    return {
+        path: context.asAbsolutePath(path.join("./lib", `tsgo${process.platform === "win32" ? ".exe" : ""}`)),
+        version: context.extension.packageJSON.version,
+    };
 }
 
 function workspaceResolve(relativePath: string): vscode.Uri {
@@ -52,41 +66,50 @@ function workspaceResolve(relativePath: string): vscode.Uri {
     return vscode.Uri.file(relativePath);
 }
 
+export const useWorkspaceTsdkStorageKey = "typescript.native-preview.useWorkspaceTsdk";
+
 export async function getExe(context: vscode.ExtensionContext): Promise<ExeInfo> {
     const config = vscode.workspace.getConfiguration("typescript.native-preview");
-    const exeName = `tsgo${process.platform === "win32" ? ".exe" : ""}`;
 
-    let exe = config.get<string>("tsdk");
-    if (exe) {
-        if (exe.endsWith("/@typescript/native-preview")) {
-            try {
-                const packagePath = workspaceResolve(exe);
-                const packageJsonPath = vscode.Uri.joinPath(packagePath, "package.json");
-                const packageJson = JSON.parse(await vscode.workspace.fs.readFile(packageJsonPath).then(buffer => buffer.toString()));
-                const getExePath = (await import(vscode.Uri.joinPath(packagePath, "lib", "getExePath.js").toString())).default;
-                return { path: getExePath(), version: packageJson.version };
-            }
-            catch {}
+    let tsdk = config.get<string>("tsdk");
+    const exeInspection = config.inspect<string>("tsdk");
+
+    // If tsdk is set at the workspace level, require the user to have
+    // explicitly opted in via the version picker (stored in workspace state).
+    if (tsdk && (exeInspection?.workspaceValue !== undefined || exeInspection?.workspaceFolderValue !== undefined)) {
+        const useWorkspaceTsdk = context.workspaceState.get<boolean>(useWorkspaceTsdkStorageKey, false);
+        if (!useWorkspaceTsdk) {
+            tsdk = exeInspection.globalValue;
         }
+    }
+
+    if (tsdk) {
+        const exe = await resolveTsdkPathToExe(tsdk);
+        if (exe) {
+            return exe;
+        }
+    }
+
+    return getBuiltinExePath(context);
+}
+
+export async function resolveTsdkPathToExe(tsdkPath: string): Promise<{ path: string; version: string; } | undefined> {
+    if (tsdkPath.endsWith("/@typescript/native-preview")) {
         try {
-            const exePath = workspaceResolve(path.join(exe, exeName));
-            await vscode.workspace.fs.stat(exePath);
-            return { path: exePath.fsPath, version: "(local)" };
+            const packagePath = workspaceResolve(tsdkPath);
+            const packageJsonPath = vscode.Uri.joinPath(packagePath, "package.json");
+            const packageJson = JSON.parse(await vscode.workspace.fs.readFile(packageJsonPath).then(buffer => buffer.toString()));
+            const getExePath = (await import(vscode.Uri.joinPath(packagePath, "lib", "getExePath.js").toString())).default;
+            return { path: getExePath(), version: packageJson.version };
         }
         catch {}
     }
-
-    exe = context.asAbsolutePath(path.join("../", "built", "local", exeName));
     try {
-        await vscode.workspace.fs.stat(vscode.Uri.file(exe));
-        return { path: exe, version: "(local)" };
+        const exePath = workspaceResolve(path.join(tsdkPath, `tsgo${process.platform === "win32" ? ".exe" : ""}`));
+        await vscode.workspace.fs.stat(exePath);
+        return { path: exePath.fsPath, version: "(local)" };
     }
     catch {}
-
-    return {
-        path: getBuiltinExePath(context),
-        version: context.extension.packageJSON.version,
-    };
 }
 
 export function getLanguageForUri(uri: vscode.Uri): string | undefined {
