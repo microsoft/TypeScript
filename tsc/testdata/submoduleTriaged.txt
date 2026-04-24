@@ -126,3 +126,157 @@ compiler/typeUsedAsTypeLiteralIndex.errors.txt.diff
 # Unicode escapes in identifier names now displayed as literal characters
 ## https://github.com/microsoft/typescript-go/issues/3511
 conformance/parser.numericSeparators.decmialNegative.errors.txt.diff
+
+# JS declaration emit adds `export import` modifier for require-style import assignments
+## https://github.com/microsoft/typescript-go/issues/3542
+conformance/nodeModulesAllowJsImportAssignment(module=node16).js.diff
+conformance/nodeModulesAllowJsImportAssignment(module=node18).js.diff
+conformance/nodeModulesAllowJsImportAssignment(module=node20).js.diff
+conformance/nodeModulesAllowJsImportAssignment(module=nodenext).js.diff
+
+# CJS `module.exports = {}` now emits `export = _default` with inlined object type instead of named exports
+## https://github.com/microsoft/typescript-go/issues/3543
+compiler/jsDeclarationEmitExportAssignedArray.js.diff
+compiler/jsDeclarationEmitExportAssignedFunctionWithExtraTypedefsMembers.js.diff
+conformance/jsDeclarationsCommonjsRelativePath.js.diff
+conformance/jsDeclarationsDocCommentsOnConsts(target=es2015).js.diff
+conformance/jsDeclarationsExportAssignmentWithKeywordName(target=es2015).js.diff
+conformance/jsDeclarationsExportedClassAliases.js.diff
+conformance/jsDeclarationsExportAssignmentExpressionPlusSecondary(target=es2015).js.diff
+conformance/jsDeclarationsReexportedCjsAlias(target=es2015).js.diff
+conformance/jsDeclarationsTypeReferences(target=es2015).js.diff
+conformance/jsDeclarationsTypeReferences2(target=es2015).js.diff
+conformance/jsDeclarationsTypeAliases.js.diff
+conformance/jsDeclarationsTypedefAndImportTypes.js.diff
+conformance/jsDeclarationsTypedefPropertyAndExportAssignment.js.diff
+conformance/jsDeclarationsReferenceToClassInstanceCrossFile.js.diff
+conformance/jsDeclarationsImportAliasExposedWithinNamespaceCjs.js.diff
+
+# CJS class expression exports now emit anonymous constructor types instead of named class declarations
+## https://github.com/microsoft/typescript-go/issues/3544
+conformance/commonJSImportExportedClassExpression.js.diff
+conformance/jsDeclarationsExportAssignedClassExpression(target=es2015).js.diff
+conformance/jsDeclarationsExportAssignedClassExpressionAnonymous(target=es2015).js.diff
+conformance/jsDeclarationsExportAssignedClassExpressionAnonymousWithSub(target=es2015).js.diff
+conformance/jsDeclarationsExportAssignedClassExpressionShadowing(target=es2015).js.diff
+conformance/jsDeclarationsExportAssignedVisibility(target=es2015).js.diff
+
+# CJS export alias and element access patterns changed
+## https://github.com/microsoft/typescript-go/issues/3545
+conformance/moduleExportAliasElementAccessExpression.js.diff
+conformance/moduleExportDuplicateAlias.js.diff
+conformance/moduleExportDuplicateAlias2.js.diff
+conformance/moduleExportDuplicateAlias3.js.diff
+conformance/moduleExportsElementAccessAssignment.js.diff
+
+# Namespace-to-const restructuring with DtsFileErrors (redeclaration errors)
+## https://github.com/microsoft/typescript-go/issues/3547
+conformance/typeFromPropertyAssignment39.js.diff
+
+# Decorator metadata reflects stable union type ordering
+## https://github.com/microsoft/typescript-go/issues/3548
+compiler/metadataOfUnionWithNull(strictnullchecks=true).js.diff
+compiler/metadataReferencedWithinFilteredUnion(strictnullchecks=true,target=es2015).js.diff
+
+# Missing generic type arguments no longer auto-filled with any (produces TS2314 errors)
+## https://github.com/microsoft/typescript-go/issues/3549
+conformance/jsDeclarationsMissingGenerics(target=es2015).js.diff
+
+# Optional property types in JS declarations drop | undefined
+## https://github.com/microsoft/typescript-go/issues/3550
+conformance/jsDeclarationsOptionalTypeLiteralProps1.js.diff
+conformance/jsDeclarationsOptionalTypeLiteralProps2.js.diff
+
+# Output file ordering changed + declaration types resolve to any instead of typeof references
+## https://github.com/microsoft/typescript-go/issues/3551
+conformance/nodeModulesDeclarationEmitWithPackageExports(module=node16).js.diff
+conformance/nodeModulesDeclarationEmitWithPackageExports(module=node18).js.diff
+conformance/nodeModulesDeclarationEmitWithPackageExports(module=node20).js.diff
+conformance/nodeModulesDeclarationEmitWithPackageExports(module=nodenext).js.diff
+
+# export = a reordered; ESM side-effect import replaces export {}
+## https://github.com/microsoft/typescript-go/issues/3552
+conformance/nodeModulesAllowJsExportAssignment(module=node16).js.diff
+conformance/nodeModulesAllowJsExportAssignment(module=node18).js.diff
+conformance/nodeModulesAllowJsExportAssignment(module=node20).js.diff
+conformance/nodeModulesAllowJsExportAssignment(module=nodenext).js.diff
+
+# JSX factory call changed from indirect (0, _a.jsx)(...) to direct _jsx(...) call
+## https://github.com/microsoft/typescript-go/issues/3553
+compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=legacy).js.diff
+
+# @overload handling changes in JS declaration emit
+## https://github.com/microsoft/typescript-go/issues/3555
+compiler/jsFileAlternativeUseOfOverloadTag.js.diff
+compiler/jsFileFunctionOverloads.js.diff
+compiler/jsFileFunctionOverloads2.js.diff
+compiler/jsFileMethodOverloads.js.diff
+compiler/jsFileMethodOverloads2.js.diff
+compiler/jsFileMethodOverloads5.js.diff
+conformance/overloadTag1.js.diff
+conformance/overloadTag2.js.diff
+
+# @callback/@overload tags reordered and restructured in declaration emit
+## https://github.com/microsoft/typescript-go/issues/3556
+conformance/callbackTagNestedParameter.js.diff
+conformance/callbackTagVariadicType.js.diff
+
+# @satisfies tag handling changes: functions become const declarations
+## https://github.com/microsoft/typescript-go/issues/3557
+conformance/checkJsdocSatisfiesTag15.js.diff
+
+# Labeled statement followed by export declaration loses original text
+## https://github.com/microsoft/typescript-go/issues/3558
+conformance/labeledStatementExportDeclarationNoCrash1(module=commonjs).js.diff
+
+# CJS exports pattern changes in declaration emit
+## https://github.com/microsoft/typescript-go/issues/3559
+compiler/jsExportAssignmentNonMutableLocation.js.diff
+conformance/commonJSImportClassTypeReference.js.diff
+conformance/commonJSImportNestedClassTypeReference.js.diff
+conformance/jsDeclarationsExportDoubleAssignmentInClosure.js.diff
+
+# exportNonInitializedVariables crash in declaration emit
+## https://github.com/microsoft/typescript-go/issues/3560
+conformance/exportNonInitializedVariablesInIfThenStatementNoCrash1(module=commonjs).js.diff
+
+# noImplicitThis functions returning this now fully expand the object type
+## https://github.com/microsoft/typescript-go/issues/3561
+compiler/noImplicitThisBigThis.js.diff
+
+# JSDoc module namepath module:A emits as unresolved module instead of any
+## https://github.com/microsoft/typescript-go/issues/3562
+conformance/jsDeclarationsModuleReferenceHasEmit(target=es2015).js.diff
+
+# definiteAssignment shorthand in object literal loses optional modifier
+## https://github.com/microsoft/typescript-go/issues/3563
+conformance/definiteAssignmentAssertionsWithObjectShortHand.js.diff
+
+# Generic function parameter inference change
+## https://github.com/microsoft/typescript-go/issues/3564
+conformance/genericFunctionParameters.js.diff
+
+# Declaration emit trailing comma changes in destructuring parameters
+## https://github.com/microsoft/typescript-go/issues/3565
+compiler/declarationEmitDestructuring5.js.diff
+
+# Late-bound computed property [prop] preserved instead of resolved to plain prop
+## https://github.com/microsoft/typescript-go/issues/3566
+compiler/lateBoundAssignmentCandidateJS2.js.diff
+compiler/lateBoundMethodNameAssigmentJS.js.diff
+
+# Symbol getter/setter declaration emit change
+## https://github.com/microsoft/typescript-go/issues/3567
+conformance/symbolDeclarationEmit12.js.diff
+
+# export as namespace added or restructured in declaration emit
+## https://github.com/microsoft/typescript-go/issues/3568
+conformance/jsDeclarationsExportFormsErr(target=es2015).js.diff
+
+# Declaration emit simplification of class extending built-in Array
+## https://github.com/microsoft/typescript-go/issues/3569
+compiler/javascriptThisAssignmentInStaticBlock.js.diff
+
+# Declaration emit type parameter renaming bug (regression)
+## https://github.com/microsoft/typescript-go/issues/3570
+compiler/declarationEmitShadowing.js.diff
