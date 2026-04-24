@@ -273,9 +273,14 @@ func NewProgram(opts ProgramOptions) *Program {
 
 // Return an updated program for which it is known that only the file with the given path has changed.
 // In addition to a new program, return a boolean indicating whether the data of the old program was reused.
-func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHost) (*Program, bool) {
+// createCheckerPool, if non-nil, overrides the CreateCheckerPool stored in the old program's options,
+// ensuring each caller uses a fresh closure and avoiding data races on captured variables.
+func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHost, createCheckerPool func(*Program) CheckerPool) (*Program, bool) {
 	newOpts := p.opts
 	newOpts.Host = newHost
+	if createCheckerPool != nil {
+		newOpts.CreateCheckerPool = createCheckerPool
+	}
 
 	oldFile := p.filesByPath[changedFilePath]
 	newFile := newHost.GetSourceFile(oldFile.ParseOptions())

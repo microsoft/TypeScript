@@ -87,6 +87,7 @@ func newAutoImportRegistryCloneHost(
 		projectCollection: projectCollection,
 		parseCache:        parseCache,
 		fs:                newSourceFS(false, &autoImportBuilderFS{snapshotFSBuilder: snapshotFSBuilder}, toPath),
+		currentDirectory:  currentDirectory,
 	}
 }
 

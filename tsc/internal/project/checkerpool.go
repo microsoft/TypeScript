@@ -42,6 +42,9 @@ func newCheckerPool(maxCheckers int, program *compiler.Program, log func(msg str
 		globalDiagCheckerCount: make([]int, maxCheckers),
 	}
 
+	if pool.log == nil {
+		pool.log = func(msg string) {}
+	}
 	pool.cond = sync.NewCond(&pool.mu)
 	return pool
 }
