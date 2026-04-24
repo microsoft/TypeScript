@@ -936,3 +936,6 @@ conformance/mappedTypeProperties.errors.txt.diff
 ## Correct TS2322 errors assigning class prototype to unrelated function type
 conformance/typesWithPrivateConstructor.errors.txt.diff
 conformance/typesWithProtectedConstructor.errors.txt.diff
+
+## Corsa correctly emits `any` type for auto-typed variable with `null` initializer
+compiler/letDeclarations.js.diff
