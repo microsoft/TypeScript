@@ -192,6 +192,9 @@ conformance/typesWithSpecializedCallSignatures.types.diff
 conformance/typesWithSpecializedConstructSignatures.types.diff
 conformance/unionTypeReduction2.types.diff
 
+## Generated JSX factory calls for script files in react-jsx and moduleDetection=legacy are arbitrary ##
+compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=legacy).js.diff
+
 ## _jsxFileName path ##
 compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=auto).js.diff
 compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=legacy).js.diff

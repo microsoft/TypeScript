@@ -201,10 +201,6 @@ conformance/nodeModulesAllowJsExportAssignment(module=node18).js.diff
 conformance/nodeModulesAllowJsExportAssignment(module=node20).js.diff
 conformance/nodeModulesAllowJsExportAssignment(module=nodenext).js.diff
 
-# JSX factory call changed from indirect (0, _a.jsx)(...) to direct _jsx(...) call
-## https://github.com/microsoft/typescript-go/issues/3553
-compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=legacy).js.diff
-
 # @overload handling changes in JS declaration emit
 ## https://github.com/microsoft/typescript-go/issues/3555
 compiler/jsFileAlternativeUseOfOverloadTag.js.diff
