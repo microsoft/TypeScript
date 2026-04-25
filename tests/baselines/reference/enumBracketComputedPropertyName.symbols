@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/enumBracketComputedPropertyName.ts] ////
+
+=== enumBracketComputedPropertyName.ts ===
+// Enum members with non-identifier names should be usable as computed property
+// keys in type literals, interfaces, and class members (GH#25083).
+
+enum E {
+>E : Symbol(E, Decl(enumBracketComputedPropertyName.ts, 0, 0))
+
+    "hello world" = "hw",
+>"hello world" : Symbol(E["hello world"], Decl(enumBracketComputedPropertyName.ts, 3, 8))
+
+    "3x14" = "pi",
+>"3x14" : Symbol(E["3x14"], Decl(enumBracketComputedPropertyName.ts, 4, 25))
+
+    normal = "n",
+>normal : Symbol(E.normal, Decl(enumBracketComputedPropertyName.ts, 5, 18))
+}
+
+// type literal
+type T1 = { [E["hello world"]]: string };
+>T1 : Symbol(T1, Decl(enumBracketComputedPropertyName.ts, 7, 1))
+>[E["hello world"]] : Symbol([E["hello world"]], Decl(enumBracketComputedPropertyName.ts, 10, 11))
+>E : Symbol(E, Decl(enumBracketComputedPropertyName.ts, 0, 0))
+>"hello world" : Symbol(E["hello world"], Decl(enumBracketComputedPropertyName.ts, 3, 8))
+
+type T2 = { [E["3x14"]]: boolean };
+>T2 : Symbol(T2, Decl(enumBracketComputedPropertyName.ts, 10, 41))
+>[E["3x14"]] : Symbol([E["3x14"]], Decl(enumBracketComputedPropertyName.ts, 11, 11))
+>E : Symbol(E, Decl(enumBracketComputedPropertyName.ts, 0, 0))
+>"3x14" : Symbol(E["3x14"], Decl(enumBracketComputedPropertyName.ts, 4, 25))
+
+type T3 = { [E["normal"]]: number };   // bracket access to a normal-identifier member
+>T3 : Symbol(T3, Decl(enumBracketComputedPropertyName.ts, 11, 35))
+>[E["normal"]] : Symbol([E["normal"]], Decl(enumBracketComputedPropertyName.ts, 12, 11))
+>E : Symbol(E, Decl(enumBracketComputedPropertyName.ts, 0, 0))
+>"normal" : Symbol(E.normal, Decl(enumBracketComputedPropertyName.ts, 5, 18))
+
+// interface
+interface I1 {
+>I1 : Symbol(I1, Decl(enumBracketComputedPropertyName.ts, 12, 36))
+
+    [E["hello world"]]: string;
+>[E["hello world"]] : Symbol(I1[E["hello world"]], Decl(enumBracketComputedPropertyName.ts, 15, 14))
+>E : Symbol(E, Decl(enumBracketComputedPropertyName.ts, 0, 0))
+>"hello world" : Symbol(E["hello world"], Decl(enumBracketComputedPropertyName.ts, 3, 8))
+}
+
+// access back through the computed key
+declare const t1: T1;
+>t1 : Symbol(t1, Decl(enumBracketComputedPropertyName.ts, 20, 13))
+>T1 : Symbol(T1, Decl(enumBracketComputedPropertyName.ts, 7, 1))
+
+const v1: string = t1[E["hello world"]];
+>v1 : Symbol(v1, Decl(enumBracketComputedPropertyName.ts, 21, 5))
+>t1 : Symbol(t1, Decl(enumBracketComputedPropertyName.ts, 20, 13))
+>E : Symbol(E, Decl(enumBracketComputedPropertyName.ts, 0, 0))
+>"hello world" : Symbol(E["hello world"], Decl(enumBracketComputedPropertyName.ts, 3, 8))
+
+const v2: string = t1["hw"];   // literal value
+>v2 : Symbol(v2, Decl(enumBracketComputedPropertyName.ts, 22, 5))
+>t1 : Symbol(t1, Decl(enumBracketComputedPropertyName.ts, 20, 13))
+>"hw" : Symbol([E["hello world"]], Decl(enumBracketComputedPropertyName.ts, 10, 11))
+

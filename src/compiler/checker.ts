@@ -13790,7 +13790,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
         const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
-        return isEntityNameExpression(expr);
+        if (isEntityNameExpression(expr)) {
+            return true;
+        }
+        // Also allow element access on an entity name with a literal key, e.g. Enum['non-identifier-key'].
+        // This covers enum members whose names are not valid identifiers.
+        return isElementAccessExpression(expr)
+            && isEntityNameExpression(expr.expression)
+            && isStringOrNumericLiteralLike(skipParentheses(expr.argumentExpression));
     }
 
     function isTypeUsableAsIndexSignature(type: Type): boolean {
