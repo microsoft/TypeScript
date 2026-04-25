@@ -94,7 +94,7 @@ interface Math {
     imul(x: number, y: number): number;
 
     /**
-     * Returns the sign of the x, indicating whether x is positive, negative or zero.
+     * Returns the sign of x, indicating whether x is positive, negative, or zero.
      * @param x The numeric expression to test
      */
     sign(x: number): number;
