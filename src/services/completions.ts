@@ -944,10 +944,13 @@ function getJSDocParameterCompletions(
     const isJs = isSourceFileJS(sourceFile);
     const isSnippet = preferences.includeCompletionsWithSnippetText || undefined;
     const paramTagCount = countWhere(jsDoc.tags, tag => isJSDocParameterTag(tag) && tag.getEnd() <= position);
-    return mapDefined(func.parameters, param => {
+    return mapDefined(func.parameters, (param, paramIndex) => {
         if (getJSDocParameterTags(param).length) {
             return undefined; // Parameter is already annotated.
         }
+        // Sort completions by the parameter's declaration order so that
+        // `@param` suggestions appear in the same order as the function signature.
+        const sortText = (SortText.LocationPriority + String(paramIndex).padStart(4, "0")) as SortText;
         if (isIdentifier(param.name)) { // Named parameter
             const tabstopCounter = { tabstop: 1 };
             const paramName = param.name.text;
@@ -983,7 +986,7 @@ function getJSDocParameterCompletions(
             return {
                 name: displayText,
                 kind: ScriptElementKind.parameterElement,
-                sortText: SortText.LocationPriority,
+                sortText,
                 insertText: isSnippet ? snippetText : undefined,
                 isSnippet,
             };
@@ -1023,7 +1026,7 @@ function getJSDocParameterCompletions(
             return {
                 name: displayText,
                 kind: ScriptElementKind.parameterElement,
-                sortText: SortText.LocationPriority,
+                sortText,
                 insertText: isSnippet ? snippetText : undefined,
                 isSnippet,
             };
