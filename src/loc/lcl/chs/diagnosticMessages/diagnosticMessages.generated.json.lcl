@@ -10315,7 +10315,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Object literal may only specify known properties, but '{0}' does not exist in type '{1}'. Did you mean to write '{2}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[对象字面量只能指定已知的属性，但“{0}”中不存在类型“{1}”。是否要写入 {2}?]]></Val>
+            <Val><![CDATA[对象字面量只能指定已知属性，但”{0}”在类型”{1}”中不存在。您是否想写”{2}”？]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
