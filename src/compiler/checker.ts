@@ -53026,10 +53026,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function labelExistsInScope(scope: Node, labelName: __String): boolean {
+        return !!forEachChild(scope, function walk(child): boolean | undefined {
+            if (child.kind === SyntaxKind.LabeledStatement && (child as LabeledStatement).label.escapedText === labelName) {
+                return true;
+            }
+            // Do not descend into nested function scopes — a label there is not accessible.
+            if (!isFunctionLikeOrClassStaticBlockDeclaration(child)) {
+                return forEachChild(child, walk);
+            }
+        });
+    }
+
     function checkGrammarBreakOrContinueStatement(node: BreakOrContinueStatement): boolean {
         let current: Node = node;
         while (current) {
             if (isFunctionLikeOrClassStaticBlockDeclaration(current)) {
+                // If a label was specified and it exists within this function scope (but not
+                // as an enclosing ancestor), emit a more precise diagnostic rather than the
+                // generic "Jump target cannot cross function boundary", which implies the label
+                // lives in an outer function when in reality it is a non-enclosing forward reference.
+                if (node.label && labelExistsInScope(current, node.label.escapedText)) {
+                    const message = node.kind === SyntaxKind.ContinueStatement
+                        ? Diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement
+                        : Diagnostics.A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement;
+                    return grammarErrorOnNode(node, message);
+                }
                 return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
             }
 
