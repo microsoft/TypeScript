@@ -1373,7 +1373,7 @@ interface Keyframe {
     composite?: CompositeOperationOrAuto;
     easing?: string;
     offset?: number | null;
-    [property: string]: string | number | null | undefined;
+    [property: string]: string | number | null | undefined | CSSStyleValue;
 }
 
 interface KeyframeAnimationOptions extends KeyframeEffectOptions {
