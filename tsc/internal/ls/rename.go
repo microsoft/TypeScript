@@ -326,7 +326,7 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 			} else {
 				originalSymbol = ch.GetSymbolAtLocation(originalNode)
 			}
-			if slices.Contains(originalSymbol.Declarations, parent) {
+			if originalSymbol != nil && slices.Contains(originalSymbol.Declarations, parent) {
 				return name + " as " + newText
 			}
 			return newText
