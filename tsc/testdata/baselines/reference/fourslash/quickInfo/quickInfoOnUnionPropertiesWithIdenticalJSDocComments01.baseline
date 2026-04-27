@@ -28,7 +28,7 @@
 //   ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (property) language: string | undefined
+// | (property) language?: string | undefined
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -46,7 +46,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(property) language: string | undefined\n```\n"
+        "value": "```typescript\n(property) language?: string | undefined\n```\n"
       },
       "range": {
         "start": {
