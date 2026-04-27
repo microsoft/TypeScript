@@ -8309,6 +8309,9 @@ func (c *Checker) resolveCallExpression(node *ast.Node, candidatesOutArray *[]*S
 		}
 		return c.resolveUntypedCall(node)
 	}
+	if ast.IsImportCall(node) {
+		return c.resolveUntypedCall(node)
+	}
 	var callChainFlags SignatureFlags
 	funcType := c.checkExpression(node.Expression())
 	if isCallChain(node) {
