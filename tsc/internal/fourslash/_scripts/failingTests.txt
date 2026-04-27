@@ -209,7 +209,6 @@ TestGetJavaScriptQuickInfo4
 TestGetJavaScriptQuickInfo5
 TestGetJavaScriptQuickInfo6
 TestGetJavaScriptQuickInfo7
-TestGetJavaScriptQuickInfo8
 TestGetJavaScriptSyntacticDiagnostics24
 TestGetJSXOutliningSpans
 TestHoverOverComment

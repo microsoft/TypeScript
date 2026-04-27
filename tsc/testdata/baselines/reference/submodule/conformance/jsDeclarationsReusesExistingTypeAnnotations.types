@@ -28,7 +28,7 @@ class С2 {
 
     /** @type {string=} */
     get p1() {
->p1 : undefined
+>p1 : string | undefined
 
         return undefined;
 >undefined : undefined
@@ -36,7 +36,7 @@ class С2 {
 
     /** @type {string | undefined} */
     get p2() {
->p2 : undefined
+>p2 : string | undefined
 
         return undefined;
 >undefined : undefined
@@ -44,14 +44,14 @@ class С2 {
 
     /** @type {?string} */
     get p3() {
->p3 : null
+>p3 : string | null
 
         return null;
     }
 
     /** @type {string | null} */
     get p4() {
->p4 : null
+>p4 : string | null
 
         return null;
     }

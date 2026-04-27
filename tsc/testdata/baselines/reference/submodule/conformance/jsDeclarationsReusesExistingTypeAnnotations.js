@@ -201,13 +201,13 @@ declare class С1 {
 }
 declare class С2 {
     /** @type {string=} */
-    get p1(): undefined;
+    get p1(): string | undefined;
     /** @type {string | undefined} */
-    get p2(): undefined;
+    get p2(): string | undefined;
     /** @type {?string} */
-    get p3(): null;
+    get p3(): string | null;
     /** @type {string | null} */
-    get p4(): null;
+    get p4(): string | null;
 }
 declare class С3 {
     /** @type {string=} */
