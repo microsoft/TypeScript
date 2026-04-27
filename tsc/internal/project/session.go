@@ -277,7 +277,6 @@ func (s *Session) InitializeWithUserConfig(config lsutil.UserPreferences) {
 }
 
 func (s *Session) DidOpenFile(ctx context.Context, uri lsproto.DocumentUri, version int32, content string, languageKind lsproto.LanguageKind) {
-	s.cancelDiagnosticsRefresh()
 	s.cancelWarmAutoImportCache()
 	s.scheduleIdleCacheClean()
 	s.snapshotUpdateMu.Lock()
@@ -302,7 +301,6 @@ func (s *Session) DidOpenFile(ctx context.Context, uri lsproto.DocumentUri, vers
 }
 
 func (s *Session) DidCloseFile(ctx context.Context, uri lsproto.DocumentUri) {
-	s.cancelDiagnosticsRefresh()
 	s.cancelWarmAutoImportCache()
 	s.scheduleIdleCacheClean()
 	s.pendingFileChangesMu.Lock()
@@ -328,7 +326,6 @@ func (s *Session) DidChangeFile(ctx context.Context, uri lsproto.DocumentUri, ve
 }
 
 func (s *Session) DidSaveFile(ctx context.Context, uri lsproto.DocumentUri) {
-	s.cancelDiagnosticsRefresh()
 	s.scheduleIdleCacheClean()
 	s.pendingFileChangesMu.Lock()
 	defer s.pendingFileChangesMu.Unlock()

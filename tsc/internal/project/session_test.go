@@ -910,6 +910,94 @@ func TestSession(t *testing.T) {
 			assert.Equal(t, len(program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), program.GetSourceFile("/home/projects/TS/p1/src/index.ts"))), 1)
 		})
 
+		t.Run("delete sibling folder schedules diagnostics refresh", func(t *testing.T) {
+			t.Parallel()
+			files := map[string]any{
+				"/home/projects/TS/p1/tsconfig.json": `{
+					"compilerOptions": {
+						"noLib": true
+					},
+					"files": ["index.ts"]
+				}`,
+				"/home/projects/TS/p1/index.ts": `import { content } from "./f/content";
+
+export const value = content;`,
+				"/home/projects/TS/p1/f/content.ts": `export const content = 1;`,
+			}
+			session, utils := projecttestutil.Setup(files)
+			contentURI := lsproto.DocumentUri("file:///home/projects/TS/p1/f/content.ts")
+			session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
+			session.DidOpenFile(context.Background(), contentURI, 1, files["/home/projects/TS/p1/f/content.ts"].(string), lsproto.LanguageKindTypeScript)
+
+			_, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/index.ts")
+			assert.NilError(t, err)
+			session.WaitForBackgroundTasks()
+
+			baselineRefreshCount := len(utils.Client().RefreshDiagnosticsCalls())
+
+			err = utils.FS().Remove("/home/projects/TS/p1/f")
+			assert.NilError(t, err)
+
+			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+				{
+					Type: lsproto.FileChangeTypeDeleted,
+					Uri:  "file:///home/projects/TS/p1/f",
+				},
+			})
+			session.DidCloseFile(context.Background(), contentURI)
+			session.WaitForBackgroundTasks()
+
+			refreshCount := len(utils.Client().RefreshDiagnosticsCalls())
+			assert.Assert(t, refreshCount > baselineRefreshCount,
+				"expected RefreshDiagnostics to be called after deleting /home/projects/TS/p1/f, got %d calls (baseline %d)",
+				refreshCount, baselineRefreshCount)
+		})
+
+		t.Run("delete sibling folder schedules diagnostics refresh after opening third file", func(t *testing.T) {
+			t.Parallel()
+			files := map[string]any{
+				"/home/projects/TS/p1/tsconfig.json": `{
+					"compilerOptions": {
+						"noLib": true
+					},
+					"files": ["index.ts", "third.ts"]
+				}`,
+				"/home/projects/TS/p1/index.ts": `import { content } from "./f/content";
+
+export const value = content;`,
+				"/home/projects/TS/p1/f/content.ts": `export const content = 1;`,
+				"/home/projects/TS/p1/third.ts":     `export const third = 3;`,
+			}
+			session, utils := projecttestutil.Setup(files)
+			contentURI := lsproto.DocumentUri("file:///home/projects/TS/p1/f/content.ts")
+			thirdURI := lsproto.DocumentUri("file:///home/projects/TS/p1/third.ts")
+			session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
+			session.DidOpenFile(context.Background(), contentURI, 1, files["/home/projects/TS/p1/f/content.ts"].(string), lsproto.LanguageKindTypeScript)
+
+			_, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/index.ts")
+			assert.NilError(t, err)
+			session.WaitForBackgroundTasks()
+
+			baselineRefreshCount := len(utils.Client().RefreshDiagnosticsCalls())
+
+			err = utils.FS().Remove("/home/projects/TS/p1/f")
+			assert.NilError(t, err)
+
+			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+				{
+					Type: lsproto.FileChangeTypeDeleted,
+					Uri:  "file:///home/projects/TS/p1/f",
+				},
+			})
+			session.DidOpenFile(context.Background(), thirdURI, 1, files["/home/projects/TS/p1/third.ts"].(string), lsproto.LanguageKindTypeScript)
+			session.WaitForBackgroundTasks()
+
+			refreshCount := len(utils.Client().RefreshDiagnosticsCalls())
+			assert.Assert(t, refreshCount > baselineRefreshCount,
+				"expected RefreshDiagnostics to be called after deleting /home/projects/TS/p1/f and opening /home/projects/TS/p1/third.ts, got %d calls (baseline %d)",
+				refreshCount, baselineRefreshCount)
+		})
+
 		t.Run("create explicitly included file", func(t *testing.T) {
 			t.Parallel()
 			files := map[string]any{
