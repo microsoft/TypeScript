@@ -5,9 +5,9 @@
  //// [a.d.ts]
  declare class A {
 -    constructor(...args: any[]);
--    /**
--     * @type Function
--     */
--    callee: Function;
+     /**
+      * @type Function
+      */
+     callee: Function;
 +    constructor();
  }

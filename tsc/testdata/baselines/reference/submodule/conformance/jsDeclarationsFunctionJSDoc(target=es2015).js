@@ -88,6 +88,10 @@ export declare function foo(a: number, b: string): void;
  */
 export declare class Aleph {
     /**
+     * Field is always null
+     */
+    field: any;
+    /**
      * Impossible to construct.
      * @param {Aleph} a
      * @param {null} b

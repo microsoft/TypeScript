@@ -24,6 +24,7 @@ function C() {
 
 //// [thisPropertyAssignmentCircular.d.ts]
 export declare class Foo {
+    foo: string;
     constructor();
     slicey(): void;
     m(): void;

@@ -20,6 +20,7 @@ class B3 {
 
 //// [a.d.ts]
 declare class A {
+    x: number;
     constructor();
 }
 /** @implements A*/
@@ -31,5 +32,6 @@ declare class B2 implements A {
 }
 /** @implements {A}*/
 declare class B3 implements A {
+    x: number;
     constructor();
 }

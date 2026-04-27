@@ -21,6 +21,10 @@ class A {
 //// [a.d.ts]
 declare class A {
     /**
+     * @type object
+     */
+    "arguments": object;
+    /**
      * Constructor
      *
      * @param {object} [foo={}]

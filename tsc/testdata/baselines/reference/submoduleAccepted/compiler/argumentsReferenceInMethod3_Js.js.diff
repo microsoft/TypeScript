@@ -1,6 +1,17 @@
 --- old.argumentsReferenceInMethod3_Js.js
 +++ new.argumentsReferenceInMethod3_Js.js
-@@= skipped -37, +37 lines =@@
+@@= skipped -34, +34 lines =@@
+ }
+ declare class B extends A {
+     /**
++     * @type object
++     */
++    x: object;
++    /**
++     * @type object
++     */
++    y: object;
++    /**
       * @param {object} [foo={}]
       */
      m(foo?: object): void;

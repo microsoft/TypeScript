@@ -15,5 +15,9 @@ class A {
 
 //// [a.d.ts]
 declare class A {
+    /**
+     * @type object
+     */
+    foo: object;
     m(): void;
 }

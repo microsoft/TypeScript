@@ -1,13 +1,10 @@
 --- old.jsdocImplements_missingType.js
 +++ new.jsdocImplements_missingType.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [a.d.ts]
  declare class A {
--    x: number;
+     x: number;
 +    constructor();
  }
  /** @implements */
--declare class B {
-+declare class B implements  {
- }
+ declare class B {

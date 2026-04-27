@@ -83,6 +83,9 @@ export = Conn;
  */
 export type Conn = import("./conn");
 declare class Wrap {
+    connItem: number;
+    /** @type {import("./conn").Whatever} */
+    another: import("./conn").Whatever;
     /**
      * @param {Conn} c
      */

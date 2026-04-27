@@ -5,9 +5,10 @@
  //// [a.d.ts]
  declare class A {
 -    m(...args: any[]): void;
--    /**
--     * @type object
--     */
+     /**
+      * @type object
+      */
 -    foo: object | undefined;
++    foo: object;
 +    m(): void;
  }

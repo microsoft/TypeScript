@@ -31,6 +31,14 @@ declare const bar: {
 };
 declare class A {
     /**
+     * @type object
+     */
+    foo: object;
+    /**
+     * @type object
+     */
+    bar: object;
+    /**
      * @param {object} [foo={}]
      */
     m(foo?: object): void;

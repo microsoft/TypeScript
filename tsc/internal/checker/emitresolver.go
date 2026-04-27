@@ -899,6 +899,17 @@ func (r *EmitResolver) GetElementAccessExpressionName(expression *ast.ElementAcc
 	return r.getReferenceResolver().GetElementAccessExpressionName(expression)
 }
 
+func (r *EmitResolver) GetReferencedMemberValueDeclaration(node *ast.Node) *ast.Declaration {
+	if !ast.IsParseTreeNode(node) {
+		return nil
+	}
+
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+
+	return r.getReferenceResolver().GetReferencedMemberValueDeclaration(node)
+}
+
 // TODO: the emit resolver being responsible for some amount of node construction is a very leaky abstraction,
 // and requires giving it access to a lot of context it's otherwise not required to have, which also further complicates the API
 // and likely reduces performance. There's probably some refactoring that could be done here to simplify this.

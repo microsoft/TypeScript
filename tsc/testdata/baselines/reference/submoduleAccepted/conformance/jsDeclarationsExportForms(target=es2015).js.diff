@@ -33,22 +33,21 @@
 -import * as ns from "./cls";
  //// [cjs.d.ts]
 -export { ns };
--import ns = require("./cls");
-+declare const ns: typeof ns;
+ import ns = require("./cls");
 +declare const _default: {
 +    ns: typeof ns;
 +};
 +export = _default;
  //// [cjs2.d.ts]
-+declare const ns: typeof ns;
++import ns = require("./cls");
  export = ns;
 -import ns = require("./cls");
  //// [cjs3.d.ts]
-+declare const ns: typeof ns;
- export { ns };
--import ns = require("./cls");
+-export { ns };
+ import ns = require("./cls");
++export { ns };
  //// [cjs4.d.ts]
-+declare const ns: typeof ns;
++import ns = require("./cls");
  export { ns as names };
 -import ns = require("./cls");
  //// [includeAll.d.ts]
@@ -63,83 +62,3 @@
 +import "./baz";
 +import "./bar";
 +import "./bar2";
-+
-+
-+//// [DtsFileErrors]
-+
-+
-+out/cjs.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
-+out/cjs2.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
-+out/cjs3.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
-+out/cjs4.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
-+
-+
-+==== out/cls.d.ts (0 errors) ====
-+    export declare class Foo {
-+    }
-+    
-+==== out/func.d.ts (0 errors) ====
-+    export declare function func(): void;
-+    
-+==== out/bar.d.ts (0 errors) ====
-+    export * from "./cls";
-+    
-+==== out/bar2.d.ts (0 errors) ====
-+    export * from "./func";
-+    export * from "./cls";
-+    
-+==== out/baz.d.ts (0 errors) ====
-+    import { Foo } from "./cls";
-+    export { Foo };
-+    
-+==== out/bat.d.ts (0 errors) ====
-+    import * as ns from "./cls";
-+    export default ns;
-+    
-+==== out/ban.d.ts (0 errors) ====
-+    import * as ns from "./cls";
-+    export { ns };
-+    
-+==== out/bol.d.ts (0 errors) ====
-+    import * as ns from "./cls";
-+    export { ns as classContainer };
-+    
-+==== out/cjs.d.ts (1 errors) ====
-+    declare const ns: typeof ns;
-+                  ~~
-+!!! error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
-+    declare const _default: {
-+        ns: typeof ns;
-+    };
-+    export = _default;
-+    
-+==== out/cjs2.d.ts (1 errors) ====
-+    declare const ns: typeof ns;
-+                  ~~
-+!!! error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
-+    export = ns;
-+    
-+==== out/cjs3.d.ts (1 errors) ====
-+    declare const ns: typeof ns;
-+                  ~~
-+!!! error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
-+    export { ns };
-+    
-+==== out/cjs4.d.ts (1 errors) ====
-+    declare const ns: typeof ns;
-+                  ~~
-+!!! error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
-+    export { ns as names };
-+    
-+==== out/includeAll.d.ts (0 errors) ====
-+    import "./cjs4";
-+    import "./cjs3";
-+    import "./cjs2";
-+    import "./cjs";
-+    import "./bol";
-+    import "./ban";
-+    import "./bat";
-+    import "./baz";
-+    import "./bar";
-+    import "./bar2";
-+    

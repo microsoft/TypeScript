@@ -470,18 +470,22 @@ export { J as JJ };
 export declare class J {
 }
 export declare class K {
+    p1: number;
+    p2: string;
     constructor();
     method(): number;
 }
 export declare class L extends K {
 }
 export declare class M extends null {
+    prop: number;
     constructor();
 }
 /**
  * @template T
  */
 export declare class N<T> extends L {
+    another: T;
     /**
      * @param {T} param
      */
@@ -492,6 +496,7 @@ export declare class N<T> extends L {
  * @extends {N<U>}
  */
 export declare class O<U> extends N<U> {
+    another2: U;
     /**
      * @param {U} param
      */

@@ -1,12 +1,15 @@
 --- old.javascriptThisAssignmentInStaticBlock.js
 +++ new.javascriptThisAssignmentInStaticBlock.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -43, +43 lines =@@
+
  //// [a.d.ts]
  declare class Thing {
++    static doSomething: () => void;
  }
 -declare class ElementsArray extends Array<any> {
 -    constructor(arrayLength?: number);
 -    constructor(arrayLength: number);
 -    constructor(...items: any[]);
 +declare class ElementsArray extends Array {
++    static isArray: (arg: any) => arg is any[];
  }

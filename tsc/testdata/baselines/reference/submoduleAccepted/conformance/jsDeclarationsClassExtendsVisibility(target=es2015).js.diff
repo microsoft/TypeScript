@@ -10,20 +10,20 @@
 +export = Bar;
  //// [cls.d.ts]
 -export = Foo;
-+declare const Bar: typeof Bar;
+-declare class Foo extends Bar {
+-}
+-declare namespace Foo {
+-    export { Strings };
+-}
+ import Bar = require("./bar");
+-declare namespace Strings {
+-    let a: string;
+-    let b: string;
 +declare const Strings: {
 +    a: string;
 +    b: string;
 +};
- declare class Foo extends Bar {
++declare class Foo extends Bar {
  }
--declare namespace Foo {
--    export { Strings };
--}
--import Bar = require("./bar");
--declare namespace Strings {
--    let a: string;
--    let b: string;
--}
 +export = Foo;
 +export { Strings };

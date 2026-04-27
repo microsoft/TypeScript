@@ -47,6 +47,22 @@ class A {
 //// [a.d.ts]
 declare class A {
     /**
+     * @type object
+     */
+    foo: object;
+    /**
+     * @type object
+     */
+    bar: object;
+    /**
+     * @type object
+     */
+    baz: object;
+    /**
+     * @type object
+     */
+    options: object;
+    /**
      * Constructor
      *
      * @param {object} [foo={}]

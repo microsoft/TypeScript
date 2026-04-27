@@ -35,6 +35,14 @@ declare class A {
 }
 declare class B extends A {
     /**
+     * @type object
+     */
+    x: object;
+    /**
+     * @type object
+     */
+    y: object;
+    /**
      * @param {object} [foo={}]
      */
     m(foo?: object): void;

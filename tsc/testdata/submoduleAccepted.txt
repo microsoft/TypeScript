@@ -1181,6 +1181,23 @@ conformance/nodeModulesAllowJsPackageImports(module=node18).js.diff
 conformance/nodeModulesAllowJsPackageImports(module=node20).js.diff
 conformance/nodeModulesAllowJsPackageImports(module=nodenext).js.diff
 
+## this.x member ordering changed
+## Strada grouped js declaration members by category, corsa keeps them in source order
+compiler/argumentsReferenceInConstructor1_Js.js.diff
+compiler/argumentsReferenceInConstructor2_Js.js.diff
+compiler/argumentsReferenceInConstructor3_Js.js.diff
+compiler/argumentsReferenceInConstructor4_Js.js.diff
+compiler/argumentsReferenceInConstructor5_Js.js.diff
+compiler/argumentsReferenceInConstructor6_Js.js.diff
+compiler/argumentsReferenceInConstructor7_Js.js.diff
+compiler/argumentsReferenceInMethod1_Js.js.diff
+compiler/argumentsReferenceInMethod2_Js.js.diff
+compiler/argumentsReferenceInMethod3_Js.js.diff
+compiler/argumentsReferenceInMethod4_Js.js.diff
+compiler/argumentsReferenceInMethod5_Js.js.diff
+compiler/argumentsReferenceInMethod6_Js.js.diff
+compiler/argumentsReferenceInMethod7_Js.js.diff
+
 ## BOM character handling fixed (bug fix; Strada was incorrectly mangling the BOM)
 ## BOM is now correctly preserved in output instead of being mangled, and spurious TS1127 errors are removed
 compiler/emitBOM.js.diff

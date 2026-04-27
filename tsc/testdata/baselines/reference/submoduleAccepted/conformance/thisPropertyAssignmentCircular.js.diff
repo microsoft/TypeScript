@@ -5,8 +5,8 @@
 
  //// [thisPropertyAssignmentCircular.d.ts]
 -export class Foo {
--    foo: string;
 +export declare class Foo {
+     foo: string;
 +    constructor();
      slicey(): void;
      m(): void;

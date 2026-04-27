@@ -1,6 +1,25 @@
 --- old.argumentsReferenceInMethod4_Js.js
 +++ new.argumentsReferenceInMethod4_Js.js
-@@= skipped -47, +47 lines =@@
+@@= skipped -44, +44 lines =@@
+ //// [a.d.ts]
+ declare class A {
+     /**
++     * @type object
++     */
++    foo: object;
++    /**
++     * @type object
++     */
++    bar: object;
++    /**
++     * @type object
++     */
++    baz: object;
++    /**
++     * @type object
++     */
++    options: object;
++    /**
       * @param {object} [foo={}]
       */
      m(foo?: object): void;

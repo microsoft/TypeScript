@@ -12,6 +12,7 @@ type ReferenceResolver interface {
 	GetReferencedValueDeclaration(node *ast.IdentifierNode) *ast.Declaration
 	GetReferencedValueDeclarations(node *ast.IdentifierNode) []*ast.Declaration
 	GetElementAccessExpressionName(expression *ast.ElementAccessExpression) string
+	GetReferencedMemberValueDeclaration(node *ast.Node) *ast.Declaration
 }
 
 type ReferenceResolverHooks struct {
@@ -245,4 +246,17 @@ func (r *referenceResolver) GetElementAccessExpressionName(expression *ast.Eleme
 		}
 	}
 	return ""
+}
+
+func (r *referenceResolver) GetReferencedMemberValueDeclaration(node *ast.Node) *ast.Declaration {
+	// member references are `this.something` or `this[something]`, so should always simply have a resolved symbol
+	s := r.getResolvedSymbol(node)
+	if s == nil && node.Symbol() != nil {
+		// might be a declaration instead of a ref, get the merged declaration symbol
+		s = r.getMergedSymbol(node.Symbol())
+	}
+	if s == nil {
+		return nil
+	}
+	return r.getExportSymbolOfValueSymbolIfExported(s).ValueDeclaration
 }

@@ -152,8 +152,6 @@
 -export class J {
 -}
 -export class K {
--    p1: number;
--    p2: string;
 +}
 +declare class G {
 +}
@@ -168,6 +166,8 @@
 +export declare class J {
 +}
 +export declare class K {
+     p1: number;
+     p2: string;
 +    constructor();
      method(): number;
  }
@@ -175,8 +175,8 @@
 +export declare class L extends K {
  }
 -export class M {
--    prop: number;
 +export declare class M extends null {
+     prop: number;
 +    constructor();
  }
  /**
@@ -184,6 +184,7 @@
   */
 -export class N<T> extends L {
 +export declare class N<T> extends L {
++    another: T;
      /**
       * @param {T} param
       */
@@ -195,14 +196,14 @@
   * @extends {N<U>}
   */
 -export class O<U> extends N<U> {
--    another2: U;
++export declare class O<U> extends N<U> {
+     another2: U;
 -}
 -declare const VariableBase_base: any;
 -export class VariableBase extends VariableBase_base {
 -    [x: string]: any;
 -}
 -export class HasStatics {
-+export declare class O<U> extends N<U> {
 +    /**
 +     * @param {U} param
 +     */

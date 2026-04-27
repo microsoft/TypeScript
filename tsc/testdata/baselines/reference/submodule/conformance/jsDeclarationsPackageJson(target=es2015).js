@@ -76,33 +76,52 @@ module.exports = j;
 
 
 //// [index.d.ts]
-declare const j: {
-    name: string;
-    version: string;
-    description: string;
-    main: string;
-    bin: {
-        "cli": string;
-    };
-    engines: {
-        "node": string;
-    };
-    scripts: {
-        "scriptname": string;
-    };
-    devDependencies: {
-        "@ns/dep": string;
-    };
-    dependencies: {
-        "dep": string;
-    };
-    repository: string;
-    keywords: string[];
-    author: string;
-    license: string;
-    homepage: string;
-    config: {
-        "o": string[];
-    };
-};
+import j = require("./package.json");
 export = j;
+
+
+//// [DtsFileErrors]
+
+
+out/index.d.ts(1,20): error TS2307: Cannot find module './package.json' or its corresponding type declarations.
+
+
+==== out/index.d.ts (1 errors) ====
+    import j = require("./package.json");
+                       ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './package.json' or its corresponding type declarations.
+    export = j;
+    
+==== package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.1.0",
+        "description": "A package",
+        "main": "./dist/index.js",
+        "bin": {
+          "cli": "./bin/cli.js",
+        },
+        "engines": {
+          "node": ">=0"
+        },
+        "scripts": {
+          "scriptname": "run && run again",
+        },
+        "devDependencies": {
+          "@ns/dep": "0.1.2",
+        },
+        "dependencies": {
+          "dep": "1.2.3",
+        },
+        "repository": "microsoft/TypeScript",
+        "keywords": [
+          "kw"
+        ],
+        "author": "Auth",
+        "license": "See Licensce",
+        "homepage": "https://site",
+        "config": {
+          "o": ["a"]
+        }
+    }
+      

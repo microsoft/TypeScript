@@ -5,9 +5,10 @@
  //// [a.d.ts]
  declare class A {
 -    m(...args: any[]): void;
--    /**
--     * @type Function
--     */
+     /**
+      * @type Function
+      */
 -    callee: Function | undefined;
++    callee: Function;
 +    m(): void;
  }

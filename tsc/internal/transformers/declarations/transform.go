@@ -507,6 +507,10 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 		return nil
 	}
 
+	if ast.IsHeritageClause(input) && (len(input.AsHeritageClause().Types.Nodes) == 0 || (len(input.AsHeritageClause().Types.Nodes) == 1 && ast.NodeIsMissing(input.AsHeritageClause().Types.Nodes[0]))) {
+		return nil
+	}
+
 	previousEnclosingDeclaration := tx.enclosingDeclaration
 	if isEnclosingDeclaration(input) {
 		tx.enclosingDeclaration = input
@@ -743,6 +747,9 @@ func (tx *DeclarationTransformer) transformTypeParameterDeclaration(input *ast.T
 }
 
 func (tx *DeclarationTransformer) transformVariableDeclaration(input *ast.VariableDeclaration) *ast.Node {
+	if tx.state.currentSourceFile.CommonJSModuleIndicator != nil && ast.IsVariableDeclarationInitializedToRequire(input.AsNode()) {
+		return tx.transformCjsRequireVariableDeclaration(input)
+	}
 	if ast.IsBindingPattern(input.Name()) {
 		return tx.recreateBindingPattern(input.Name().AsBindingPattern())
 	}
@@ -755,6 +762,38 @@ func (tx *DeclarationTransformer) transformVariableDeclaration(input *ast.Variab
 		tx.ensureType(input.AsNode(), false),
 		tx.ensureNoInitializer(input.AsNode()),
 	)
+}
+
+func (tx *DeclarationTransformer) transformCjsRequireVariableDeclaration(input *ast.VariableDeclaration) *ast.Node {
+	specifier := tx.rewriteModuleSpecifier(input.AsNode(), input.Initializer.AsCallExpression().Arguments.Nodes[0])
+	if ast.IsIdentifier(input.Name()) {
+		// `const x = require("something")` -> `import x = require("something")`
+		return tx.Factory().NewImportEqualsDeclaration(nil, false, input.Name(), tx.Factory().NewExternalModuleReference(specifier))
+	} else if ast.IsArrayBindingPattern(input.Name()) {
+		// TODO: Is this actually reachable? should we error on this?
+		return nil
+	} else { // object binding pattern
+
+		// `const {x, y: z} = require("something")` -> `import {x, y as z} from "something"`
+		b := input.Name().AsBindingPattern()
+		var importSpecifiers []*ast.Node
+		for _, elem := range b.Elements.Nodes {
+			if !ast.IsIdentifier(elem.Name()) {
+				continue // nested destructuring, bail
+			}
+			importSpecifiers = append(importSpecifiers, tx.Factory().NewImportSpecifier(false, elem.PropertyName(), elem.Name()))
+		}
+		return tx.Factory().NewImportDeclaration(
+			nil,
+			tx.Factory().NewImportClause(
+				ast.KindUnknown,
+				nil,
+				tx.Factory().NewNamedImports(tx.Factory().NewNodeList(importSpecifiers)),
+			),
+			specifier,
+			nil,
+		)
+	}
 }
 
 func (tx *DeclarationTransformer) recreateBindingPattern(input *ast.BindingPattern) *ast.Node {
@@ -1507,6 +1546,12 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 		)
 	}
 
+	// Collect this.x property assignments from constructors and static blocks in JS files
+	var thisPropertyAssignments []*ast.Node
+	if ast.IsInJSFile(input.AsNode()) {
+		thisPropertyAssignments = tx.collectThisPropertyAssignments(input)
+	}
+
 	lateIndexes := tx.resolver.CreateLateBoundIndexSignatures(
 		tx.EmitContext(),
 		input.AsNode(),
@@ -1522,6 +1567,7 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 	}
 	memberNodes = append(memberNodes, lateIndexes...)
 	memberNodes = append(memberNodes, parameterProperties...)
+	memberNodes = append(memberNodes, thisPropertyAssignments...)
 	visitResult := tx.Visitor().VisitNodes(input.Members)
 	if visitResult != nil && len(visitResult.Nodes) > 0 {
 		memberNodes = append(memberNodes, visitResult.Nodes...)
@@ -1601,6 +1647,86 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 	)
 }
 
+// collectThisPropertyAssignments finds `this.x = expr` assignments in constructors, methods, and static blocks
+// of JS classes and synthesizes PropertyDeclaration nodes for each unique property name.
+func (tx *DeclarationTransformer) collectThisPropertyAssignments(input *ast.ClassDeclaration) []*ast.Node {
+	var result []*ast.Node
+	seen := collections.Set[*ast.Node]{}
+	// Pre-populate seen with existing direct member nodes to avoid duplicates
+	for _, member := range input.Members.Nodes {
+		if member.Name() != nil {
+			seen.Add(member)
+		}
+	}
+	for _, member := range input.Members.Nodes {
+		isStatic := false
+		var body *ast.Node
+		switch member.Kind {
+		case ast.KindConstructor:
+			body = member.AsConstructorDeclaration().Body
+		case ast.KindMethodDeclaration:
+			body = member.AsMethodDeclaration().Body
+			if ast.HasStaticModifier(member) {
+				isStatic = true
+			}
+		case ast.KindClassStaticBlockDeclaration:
+			body = member.AsClassStaticBlockDeclaration().Body
+			isStatic = true
+		default:
+			continue
+		}
+		if body == nil {
+			continue
+		}
+		for _, stmt := range body.AsBlock().Statements.Nodes {
+			if stmt.Kind != ast.KindExpressionStatement {
+				continue
+			}
+			expr := stmt.Expression()
+			if expr == nil || expr.Kind != ast.KindBinaryExpression {
+				continue
+			}
+			if ast.GetAssignmentDeclarationKind(expr) != ast.JSDeclarationKindThisProperty {
+				continue
+			}
+			name := ast.GetNameOfDeclaration(expr)
+			base := tx.resolver.GetReferencedMemberValueDeclaration(expr)
+			if base == nil || seen.Has(base) {
+				continue
+			}
+			seen.Add(base)
+
+			var mods *ast.ModifierList
+			if isStatic {
+				mods = tx.Factory().NewModifierList([]*ast.Node{tx.Factory().NewModifier(ast.KindStaticKeyword)})
+			}
+			if ast.HasDynamicName(expr) {
+				if !transformers.IsSimpleInlineableExpression(name) {
+					continue // Member either becomes an index signature or is a reassignment
+				}
+				tx.checkName(expr)
+				name = tx.Factory().NewComputedPropertyName(name) // Convert `this[foo] = expr` to `[foo]: Type`
+			}
+			if ast.GetTextOfPropertyName(name) == "constructor" {
+				continue // `constructor` is a builtin class member, not allowed to redeclare it
+			}
+			if ast.IsIdentifier(name) && !scanner.IsIdentifierText(name.Text(), core.LanguageVariantStandard) {
+				name = tx.Factory().NewStringLiteralFromNode(name)
+			}
+			prop := tx.Factory().NewPropertyDeclaration(
+				mods,
+				name,
+				nil,
+				tx.ensureType(expr, false),
+				nil,
+			)
+			tx.preserveJsDoc(prop, stmt)
+			result = append(result, prop)
+		}
+	}
+	return result
+}
+
 func (tx *DeclarationTransformer) walkBindingPattern(pattern *ast.BindingPattern, param *ast.Node) []*ast.Node {
 	var elems []*ast.Node
 	for _, elem := range pattern.Elements.Nodes {
@@ -1634,23 +1760,47 @@ func (tx *DeclarationTransformer) transformVariableStatement(input *ast.Variable
 		return nil
 	}
 
-	nodes := tx.Visitor().VisitNodes(input.DeclarationList.AsVariableDeclarationList().Declarations)
-	if nodes != nil && len(nodes.Nodes) == 0 {
+	inputNodes := input.DeclarationList.AsVariableDeclarationList().Declarations.Nodes
+	var extraImports []*ast.Node
+	if tx.state.currentSourceFile.CommonJSModuleIndicator != nil {
+		var normalDeclarations []*ast.Node
+		var imports []*ast.Node
+		for _, n := range inputNodes {
+			if ast.IsVariableDeclarationInitializedToRequire(n) {
+				imports = append(imports, n)
+			} else {
+				normalDeclarations = append(normalDeclarations, n)
+			}
+		}
+		inputNodes = normalDeclarations
+		extraImports, _ = tx.Visitor().VisitSlice(imports)
+	}
+
+	nodes, _ := tx.Visitor().VisitSlice(inputNodes)
+	if len(nodes) == 0 {
+		if len(extraImports) > 0 {
+			return tx.Factory().NewSyntaxList(extraImports)
+		}
 		return nil
 	}
+	nodeList := tx.Factory().NewNodeList(nodes)
 
 	modifiers := tx.ensureModifiers(input.AsNode())
 
 	var declList *ast.Node
 	if ast.IsVarUsing(input.DeclarationList) || ast.IsVarAwaitUsing(input.DeclarationList) {
-		declList = tx.Factory().NewVariableDeclarationList(nodes, ast.NodeFlagsConst)
+		declList = tx.Factory().NewVariableDeclarationList(nodeList, ast.NodeFlagsConst)
 		tx.EmitContext().SetOriginal(declList, input.DeclarationList)
 		tx.EmitContext().SetCommentRange(declList, input.DeclarationList.Loc)
 		declList.Loc = input.DeclarationList.Loc
 	} else {
-		declList = tx.Factory().UpdateVariableDeclarationList(input.DeclarationList.AsVariableDeclarationList(), nodes, input.DeclarationList.Flags)
+		declList = tx.Factory().UpdateVariableDeclarationList(input.DeclarationList.AsVariableDeclarationList(), nodeList, input.DeclarationList.Flags)
 	}
-	return tx.Factory().UpdateVariableStatement(input, modifiers, declList)
+	res := tx.Factory().UpdateVariableStatement(input, modifiers, declList)
+	if len(extraImports) > 0 {
+		return tx.Factory().NewSyntaxList(append(extraImports, res))
+	}
+	return res
 }
 
 func (tx *DeclarationTransformer) transformEnumDeclaration(input *ast.EnumDeclaration) *ast.Node {

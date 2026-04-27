@@ -1,6 +1,11 @@
 --- old.jsFileMethodOverloads.js
 +++ new.jsFileMethodOverloads.js
-@@= skipped -105, +105 lines =@@
+@@= skipped -101, +101 lines =@@
+  * @template T
+  */
+ declare class Example<T> {
++    value: T;
+     /**
       * @param {T} value
       */
      constructor(value: T);

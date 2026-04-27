@@ -11,10 +11,14 @@
   */
 -export class Aleph {
 +export declare class Aleph {
++    /**
++     * Field is always null
++     */
++    field: any;
      /**
       * Impossible to construct.
       * @param {Aleph} a
-@@= skipped -12, +12 lines =@@
+@@= skipped -12, +16 lines =@@
       */
      constructor(a: Aleph, b: null);
      /**

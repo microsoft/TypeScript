@@ -51,6 +51,11 @@ declare const _default: {
 export = _default;
 //// [index.d.ts]
 declare class Render {
+    /**
+     * Object list
+     * @type {Rectangle[]}
+     */
+    objects: Rectangle[];
     constructor();
     /**
      * Adds a rectangle

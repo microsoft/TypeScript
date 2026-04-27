@@ -14,17 +14,17 @@
 +export = _default;
  //// [index.d.ts]
 -export class Render {
--    /**
--     * Object list
--     * @type {Rectangle[]}
--     */
--    objects: Rectangle[];
 +declare class Render {
+     /**
+      * Object list
+      * @type {Rectangle[]}
+      */
+     objects: Rectangle[];
 +    constructor();
      /**
       * Adds a rectangle
       *
-@@= skipped -16, +17 lines =@@
+@@= skipped -16, +22 lines =@@
       */
      addRectangle(): Rectangle;
  }

@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/jsDeclarationsRequireImportForms.ts] ////
+
+=== index.js ===
+const {Obj, Obj: Other} = require("./obj");
+>Obj : Symbol(Obj, Decl(index.js, 0, 7))
+>Obj : Symbol(Obj, Decl(obj.js, 4, 1))
+>Other : Symbol(Other, Decl(index.js, 0, 11))
+>require : Symbol(require)
+>"./obj" : Symbol("./obj", Decl(obj.js, 0, 0))
+
+class Container {
+>Container : Symbol(Container, Decl(index.js, 0, 43))
+
+    constructor() {
+        this.usage = new Obj();
+>this.usage : Symbol(Container.usage, Decl(index.js, 3, 19))
+>this : Symbol(Container, Decl(index.js, 0, 43))
+>usage : Symbol(Container.usage, Decl(index.js, 3, 19))
+>Obj : Symbol(Obj, Decl(index.js, 0, 7))
+
+        /** @type {Other} */
+        this.usage2 = new Other();
+>this.usage2 : Symbol(Container.usage2, Decl(index.js, 4, 31))
+>this : Symbol(Container, Decl(index.js, 0, 43))
+>usage2 : Symbol(Container.usage2, Decl(index.js, 4, 31))
+>Other : Symbol(Other, Decl(index.js, 0, 11))
+    }
+}
+
+module.exports = Container;
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
+>Container : Symbol(Container, Decl(index.js, 0, 43))
+
+=== obj.js ===
+class Obj {
+>Obj : Symbol(Obj, Decl(obj.js, 0, 0))
+
+    constructor() {
+        this.x = 12;
+>this.x : Symbol(Obj.x, Decl(obj.js, 1, 19))
+>this : Symbol(Obj, Decl(obj.js, 0, 0))
+>x : Symbol(Obj.x, Decl(obj.js, 1, 19))
+    }
+}
+module.exports.Obj = Obj
+>module.exports.Obj : Symbol(Obj, Decl(obj.js, 4, 1))
+>module.exports : Symbol(exports, Decl(obj.js, 0, 0))
+>module : Symbol(module, Decl(obj.js, 0, 0))
+>exports : Symbol(exports, Decl(obj.js, 0, 0))
+>Obj : Symbol(Obj, Decl(obj.js, 4, 1))
+>Obj : Symbol(Obj, Decl(obj.js, 0, 0))
+

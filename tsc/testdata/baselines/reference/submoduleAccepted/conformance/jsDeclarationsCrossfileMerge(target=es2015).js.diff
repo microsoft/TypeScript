@@ -16,7 +16,7 @@
  declare function validate(): void;
 +export default validate;
 +//// [index.d.ts]
-+declare const m: typeof m;
++import m = require("./exporter");
 +declare const _default: typeof m.default;
 +export = _default;
 +export declare var memberName: "thing";

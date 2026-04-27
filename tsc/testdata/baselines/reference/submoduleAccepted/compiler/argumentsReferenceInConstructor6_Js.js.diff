@@ -5,9 +5,9 @@
  //// [a.d.ts]
  declare class A {
 -    constructor(...args: any[]);
--    /**
--     * @type object
--     */
--    foo: object;
+     /**
+      * @type object
+      */
+     foo: object;
 +    constructor();
  }

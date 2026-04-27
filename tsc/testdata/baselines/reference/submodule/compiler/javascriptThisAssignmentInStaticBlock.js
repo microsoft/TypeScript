@@ -44,6 +44,8 @@ ElementsArray.isArray(new ElementsArray());
 
 //// [a.d.ts]
 declare class Thing {
+    static doSomething: () => void;
 }
 declare class ElementsArray extends Array {
+    static isArray: (arg: any) => arg is any[];
 }

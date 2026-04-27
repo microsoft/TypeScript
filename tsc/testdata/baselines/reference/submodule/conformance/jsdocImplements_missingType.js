@@ -11,8 +11,9 @@ class B  {
 
 //// [a.d.ts]
 declare class A {
+    x: number;
     constructor();
 }
 /** @implements */
-declare class B implements  {
+declare class B {
 }

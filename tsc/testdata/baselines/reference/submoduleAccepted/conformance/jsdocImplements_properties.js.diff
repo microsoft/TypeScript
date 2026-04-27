@@ -1,18 +1,16 @@
 --- old.jsdocImplements_properties.js
 +++ new.jsdocImplements_properties.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [a.d.ts]
  declare class A {
--    x: number;
+     x: number;
 +    constructor();
  }
  /** @implements A*/
  declare class B implements A {
-@@= skipped -11, +11 lines =@@
- }
+@@= skipped -11, +12 lines =@@
  /** @implements {A}*/
  declare class B3 implements A {
--    x: number;
+     x: number;
 +    constructor();
  }

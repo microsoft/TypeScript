@@ -36,7 +36,7 @@ declare class Bar {
 }
 export = Bar;
 //// [cls.d.ts]
-declare const Bar: typeof Bar;
+import Bar = require("./bar");
 declare const Strings: {
     a: string;
     b: string;
