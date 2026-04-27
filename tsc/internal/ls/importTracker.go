@@ -578,6 +578,9 @@ func getImportOrExportSymbol(node *ast.Node, symbol *ast.Symbol, checker *checke
 		}
 		// Search on the local symbol in the exporting module, not the exported symbol.
 		importedSymbol = skipExportSpecifierSymbol(importedSymbol, checker)
+		if importedSymbol == nil {
+			return nil
+		}
 		// Similarly, skip past the symbol for 'export ='
 		if importedSymbol.Name == "export=" {
 			importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker)

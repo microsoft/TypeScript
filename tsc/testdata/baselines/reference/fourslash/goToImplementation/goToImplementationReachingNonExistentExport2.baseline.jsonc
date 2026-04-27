@@ -1,0 +1,8 @@
+// === goToImplementation ===
+// === /gitGateway.js ===
+// const { transformRecordedData: transformGitHub } = require('./github');
+// 
+// const methods = { github: {
+//     transformData: /*GOTO IMPL*/transformGitHub,
+// }};
+// 
