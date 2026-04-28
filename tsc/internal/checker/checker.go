@@ -22780,7 +22780,7 @@ func (c *Checker) getTypeFromClassOrInterfaceReference(node *ast.Node, symbol *a
 		// of the class or interface.
 		localTypeArguments := c.fillMissingTypeArguments(c.getTypeArgumentsFromNode(node), typeParameters, minTypeArgumentCount, isJs)
 		typeArguments := append(d.OuterTypeParameters(), localTypeArguments...)
-		return c.createTypeReference(t, typeArguments)
+		return c.createTypeReferenceEx(t, typeArguments, ObjectFlagsFromTypeNode)
 	}
 	if c.checkNoTypeArguments(node, symbol) {
 		return t
@@ -22875,11 +22875,11 @@ func (c *Checker) createNormalizedTypeReference(target *Type, typeArguments []*T
 	return c.createTypeReference(target, typeArguments)
 }
 
-func (c *Checker) createNormalizedTupleType(target *Type, elementTypes []*Type) *Type {
+func (c *Checker) createNormalizedTupleTypeEx(target *Type, elementTypes []*Type, objectFlags ObjectFlags) *Type {
 	d := target.AsTupleType()
 	if d.combinedFlags&ElementFlagsNonRequired == 0 {
 		// No need to normalize when we only have regular required elements
-		return c.createTypeReference(target, elementTypes)
+		return c.createTypeReferenceEx(target, elementTypes, objectFlags)
 	}
 	if d.combinedFlags&ElementFlagsVariadic != 0 {
 		for i, e := range elementTypes {
@@ -22893,7 +22893,7 @@ func (c *Checker) createNormalizedTupleType(target *Type, elementTypes []*Type) 
 				})
 				if c.checkCrossProductUnion(checkTypes) {
 					return c.mapType(e, func(t *Type) *Type {
-						return c.createNormalizedTupleType(target, core.ReplaceElement(elementTypes, i, t))
+						return c.createNormalizedTupleTypeEx(target, core.ReplaceElement(elementTypes, i, t), objectFlags)
 					})
 				}
 			}
@@ -22918,9 +22918,13 @@ func (c *Checker) createNormalizedTupleType(target *Type, elementTypes []*Type) 
 	case tupleTarget == c.emptyGenericType:
 		return c.emptyObjectType
 	case len(n.types) != 0:
-		return c.createTypeReference(tupleTarget, n.types)
+		return c.createTypeReferenceEx(tupleTarget, n.types, objectFlags)
 	}
 	return tupleTarget
+}
+
+func (c *Checker) createNormalizedTupleType(target *Type, elementTypes []*Type) *Type {
+	return c.createNormalizedTupleTypeEx(target, elementTypes, ObjectFlagsNone)
 }
 
 type TupleNormalizer struct {
@@ -23701,7 +23705,11 @@ func (c *Checker) getTypeFromArrayOrTupleTypeNode(node *ast.Node) *Type {
 			} else {
 				elementTypes = core.Map(node.Elements(), c.getTypeFromTypeNode)
 			}
-			links.resolvedType = c.createNormalizedTypeReference(target, elementTypes)
+			if target.objectFlags&ObjectFlagsTuple != 0 {
+				links.resolvedType = c.createNormalizedTupleTypeEx(target, elementTypes, ObjectFlagsFromTypeNode)
+			} else {
+				links.resolvedType = c.createTypeReferenceEx(target, elementTypes, ObjectFlagsFromTypeNode)
+			}
 		}
 	}
 	return links.resolvedType
@@ -24667,13 +24675,16 @@ func (c *Checker) tryCreateTypeReference(target *Type, typeArguments []*Type) *T
 }
 
 func (c *Checker) createTypeReference(target *Type, typeArguments []*Type) *Type {
+	return c.createTypeReferenceEx(target, typeArguments, ObjectFlagsNone)
+}
+
+func (c *Checker) createTypeReferenceEx(target *Type, typeArguments []*Type, objectFlags ObjectFlags) *Type {
 	id := getTypeListKey(typeArguments)
 	intf := target.AsInterfaceType()
 	if t, ok := intf.instantiations[id]; ok {
 		return t
 	}
-	t := c.newObjectType(ObjectFlagsReference, target.symbol)
-	t.objectFlags |= c.getPropagatingFlagsOfTypes(typeArguments, TypeFlagsNone)
+	t := c.newObjectType(ObjectFlagsReference|objectFlags|c.getPropagatingFlagsOfTypes(typeArguments, TypeFlagsNone), target.symbol)
 	d := t.AsTypeReference()
 	d.target = target
 	d.resolvedTypeArguments = typeArguments

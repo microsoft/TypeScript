@@ -1104,17 +1104,17 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 					},
 				},
 			},
-			// SemanticTokensProvider: &lsproto.SemanticTokensOptionsOrRegistrationOptions{
-			// 	Options: &lsproto.SemanticTokensOptions{
-			// 		Legend: ls.SemanticTokensLegend(s.clientCapabilities.TextDocument.SemanticTokens),
-			// 		Full: &lsproto.BooleanOrSemanticTokensFullDelta{
-			// 			Boolean: new(true),
-			// 		},
-			// 		Range: &lsproto.BooleanOrEmptyObject{
-			// 			Boolean: new(true),
-			// 		},
-			// 	},
-			// },
+			SemanticTokensProvider: &lsproto.SemanticTokensOptionsOrRegistrationOptions{
+				Options: &lsproto.SemanticTokensOptions{
+					Legend: ls.SemanticTokensLegend(s.clientCapabilities.TextDocument.SemanticTokens),
+					Full: &lsproto.BooleanOrSemanticTokensFullDelta{
+						Boolean: new(true),
+					},
+					Range: &lsproto.BooleanOrEmptyObject{
+						Boolean: new(true),
+					},
+				},
+			},
 		},
 	}
 
