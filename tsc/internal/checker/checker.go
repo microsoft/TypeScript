@@ -17708,9 +17708,10 @@ func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol) *Ty
 			}
 		}
 		if t == nil {
-			t = c.getWidenedType(c.getUnionType(types))
+			t = c.getUnionType(types)
 		}
 	}
+	t = c.getWidenedType(t)
 	// report an all-nullable or empty union as an implicit any in JS files
 	if symbol.ValueDeclaration != nil && ast.IsInJSFile(symbol.ValueDeclaration) &&
 		c.filterType(t, func(c *Type) bool { return c.Flags() & ^TypeFlagsNullable != 0 }) == c.neverType {
