@@ -141,16 +141,16 @@ if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >         : ^^^^^^^^
 >o.prop1.toLowerCase() : string
 >                      : ^^^^^^
->o.prop1.toLowerCase : () => string
->                    : ^^^^^^      
+>o.prop1.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                    : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >o.prop1 : string
 >        : ^^^^^^
 >o : { prop1: number | string; prop2: boolean | string; }
 >  : ^^^^^^^^^               ^^^^^^^^^                ^^^
 >prop1 : string
 >      : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 var prop1 = o.prop1;
 >prop1 : string | number

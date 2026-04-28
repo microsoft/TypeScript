@@ -15,12 +15,12 @@ const t1 = { f: s => s.toLowerCase() }; // should work
 >  : ^^^^^^
 >s.toLowerCase() : string
 >                : ^^^^^^
->s.toLowerCase : () => string
->              : ^^^^^^      
+>s.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >s : string
 >  : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 /** @satisfies {{ f: (x: string) => string }} */
 const t2 = { g: "oops" }; // should error

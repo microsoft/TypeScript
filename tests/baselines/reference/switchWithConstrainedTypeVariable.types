@@ -18,26 +18,26 @@ function function1<T extends 'a' | 'b'>(key: T) {
 >    : ^^^
 
       key.toLowerCase();
->key.toLowerCase() : string
->                  : ^^^^^^
->key.toLowerCase : () => string
->                : ^^^^^^      
+>key.toLowerCase() : "a"
+>                  : ^^^
+>key.toLowerCase : <T_1 extends string>(this: T_1) => string extends T_1 ? string : Lowercase<T_1>
+>                : ^^^^^^^^^^^^^      ^^    ^^   ^^^^^                                            
 >key : "a"
 >    : ^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T_1 extends string>(this: T_1) => string extends T_1 ? string : Lowercase<T_1>
+>            : ^^^^^^^^^^^^^      ^^    ^^   ^^^^^                                            
 
       break;
     default:
       key.toLowerCase();
->key.toLowerCase() : string
->                  : ^^^^^^
->key.toLowerCase : () => string
->                : ^^^^^^      
+>key.toLowerCase() : "b"
+>                  : ^^^
+>key.toLowerCase : <T_1 extends string>(this: T_1) => string extends T_1 ? string : Lowercase<T_1>
+>                : ^^^^^^^^^^^^^      ^^    ^^   ^^^^^                                            
 >key : "b"
 >    : ^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T_1 extends string>(this: T_1) => string extends T_1 ? string : Lowercase<T_1>
+>            : ^^^^^^^^^^^^^      ^^    ^^   ^^^^^                                            
 
       break;
   }

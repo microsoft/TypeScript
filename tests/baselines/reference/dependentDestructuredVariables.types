@@ -58,12 +58,12 @@ function f10({ kind, payload }: Action) {
         payload.toUpperCase();
 >payload.toUpperCase() : string
 >                      : ^^^^^^
->payload.toUpperCase : () => string
->                    : ^^^^^^      
+>payload.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                    : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >payload : string
 >        : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
     }
 }
 
@@ -110,12 +110,12 @@ function f11(action: Action) {
         payload.toUpperCase();
 >payload.toUpperCase() : string
 >                      : ^^^^^^
->payload.toUpperCase : () => string
->                    : ^^^^^^      
+>payload.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                    : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >payload : string
 >        : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
     }
 }
 
@@ -153,12 +153,12 @@ function f12({ kind, payload }: Action) {
             payload.toUpperCase();
 >payload.toUpperCase() : string
 >                      : ^^^^^^
->payload.toUpperCase : () => string
->                    : ^^^^^^      
+>payload.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                    : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >payload : string
 >        : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
             break;
         default:
@@ -206,12 +206,12 @@ function f13<T extends Action>({ kind, payload }: T) {
         payload.toUpperCase();
 >payload.toUpperCase() : string
 >                      : ^^^^^^
->payload.toUpperCase : () => string
->                    : ^^^^^^      
+>payload.toUpperCase : <T_1 extends string>(this: T_1) => string extends T_1 ? string : Uppercase<T_1>
+>                    : ^^^^^^^^^^^^^      ^^    ^^   ^^^^^                                            
 >payload : string
 >        : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T_1 extends string>(this: T_1) => string extends T_1 ? string : Uppercase<T_1>
+>            : ^^^^^^^^^^^^^      ^^    ^^   ^^^^^                                            
     }
 }
 
@@ -258,12 +258,12 @@ function f14<T extends Action>(t: T) {
         payload.toUpperCase();
 >payload.toUpperCase() : string
 >                      : ^^^^^^
->payload.toUpperCase : () => string
->                    : ^^^^^^      
+>payload.toUpperCase : <T_1 extends string>(this: T_1) => string extends T_1 ? string : Uppercase<T_1>
+>                    : ^^^^^^^^^^^^^      ^^    ^^   ^^^^^                                            
 >payload : string
 >        : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T_1 extends string>(this: T_1) => string extends T_1 ? string : Uppercase<T_1>
+>            : ^^^^^^^^^^^^^      ^^    ^^   ^^^^^                                            
     }
 }
 
@@ -324,12 +324,12 @@ function f20({ kind, payload }: Action2) {
             payload.toUpperCase();
 >payload.toUpperCase() : string
 >                      : ^^^^^^
->payload.toUpperCase : () => string
->                    : ^^^^^^      
+>payload.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                    : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >payload : string
 >        : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
         }
     }
 }
@@ -381,12 +381,12 @@ function f21(action: Action2) {
             payload.toUpperCase();
 >payload.toUpperCase() : string
 >                      : ^^^^^^
->payload.toUpperCase : () => string
->                    : ^^^^^^      
+>payload.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                    : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >payload : string
 >        : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
         }
     }
 }
@@ -442,12 +442,12 @@ function f22(action: Action2) {
             payload.toUpperCase();
 >payload.toUpperCase() : string
 >                      : ^^^^^^
->payload.toUpperCase : () => string
->                    : ^^^^^^      
+>payload.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                    : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >payload : string
 >        : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
         }
     }
 }
@@ -490,12 +490,12 @@ function f23({ kind, payload }: Action2) {
                 payload.toUpperCase();
 >payload.toUpperCase() : string
 >                      : ^^^^^^
->payload.toUpperCase : () => string
->                    : ^^^^^^      
+>payload.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                    : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >payload : string
 >        : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
                 break;
             default:
@@ -634,12 +634,12 @@ function f40(...[kind, data]: Args) {
         data.toUpperCase();
 >data.toUpperCase() : string
 >                   : ^^^^^^
->data.toUpperCase : () => string
->                 : ^^^^^^      
+>data.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                 : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >data : string
 >     : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
     }
 }
 
@@ -868,12 +868,12 @@ f50((kind, data) => {
         data.toUpperCase();
 >data.toUpperCase() : string
 >                   : ^^^^^^
->data.toUpperCase : () => string
->                 : ^^^^^^      
+>data.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                 : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >data : string
 >     : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
     }
 });
 
@@ -918,12 +918,12 @@ const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) =>
         payload.toUpperCase();
 >payload.toUpperCase() : string
 >                      : ^^^^^^
->payload.toUpperCase : () => string
->                    : ^^^^^^      
+>payload.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                    : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >payload : string
 >        : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
     }
 };
 
@@ -1451,12 +1451,12 @@ const f60: Func = (kind, payload) => {
         payload.toUpperCase();  // error
 >payload.toUpperCase() : string
 >                      : ^^^^^^
->payload.toUpperCase : () => string
->                    : ^^^^^^      
+>payload.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                    : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >payload : string
 >        : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
     }
 };
 

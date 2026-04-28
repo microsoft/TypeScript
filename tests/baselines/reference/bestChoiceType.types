@@ -32,12 +32,12 @@
 >  : ^^^^^^
 >s.toLowerCase() : string
 >                : ^^^^^^
->s.toLowerCase : () => string
->              : ^^^^^^      
+>s.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >s : string
 >  : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 // Similar cases
 
@@ -86,12 +86,12 @@ function f1() {
 >  : ^^^^^^
 >s.toLowerCase() : string
 >                : ^^^^^^
->s.toLowerCase : () => string
->              : ^^^^^^      
+>s.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >s : string
 >  : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 }
 
 function f2() {
@@ -141,11 +141,11 @@ function f2() {
 >  : ^^^^^^
 >s.toLowerCase() : string
 >                : ^^^^^^
->s.toLowerCase : () => string
->              : ^^^^^^      
+>s.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >s : string
 >  : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 }
 

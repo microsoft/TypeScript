@@ -28,12 +28,12 @@ function test1(arg: string | undefined) {
 >                          : ^^^^^^^
 >arg.toUpperCase() : string
 >                  : ^^^^^^
->arg.toUpperCase : () => string
->                : ^^^^^^      
+>arg.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >arg : string
 >    : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >"A" : "A"
 >    : ^^^
 
@@ -46,12 +46,12 @@ function test1(arg: string | undefined) {
 >                          : ^^^^^^^
 >arg.toUpperCase() : string
 >                  : ^^^^^^
->arg.toUpperCase : () => string
->                : ^^^^^^      
+>arg.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >arg : string
 >    : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >"B" : "B"
 >    : ^^^
 
@@ -60,12 +60,12 @@ function test1(arg: string | undefined) {
 >                          : ^^^^^^^
 >arg.toUpperCase() : string
 >                  : ^^^^^^
->arg.toUpperCase : () => string
->                : ^^^^^^      
+>arg.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >arg : string
 >    : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >"C" : "C"
 >    : ^^^
 
@@ -74,12 +74,12 @@ function test1(arg: string | undefined) {
 >                          : ^^^^^^^
 >arg.toUpperCase() : string
 >                  : ^^^^^^
->arg.toUpperCase : () => string
->                : ^^^^^^      
+>arg.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >arg : string
 >    : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >"D" : "D"
 >    : ^^^
 
@@ -118,12 +118,12 @@ function test2(arg: string | undefined) {
 >                          : ^^^^^^^
 >arg.toUpperCase() : string
 >                  : ^^^^^^
->arg.toUpperCase : () => string
->                : ^^^^^^      
+>arg.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >arg : string
 >    : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >"A" : "A"
 >    : ^^^
 
@@ -132,12 +132,12 @@ function test2(arg: string | undefined) {
 >                          : ^^^^^^^
 >arg.toUpperCase() : string
 >                  : ^^^^^^
->arg.toUpperCase : () => string
->                : ^^^^^^      
+>arg.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >arg : string
 >    : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >"B" : "B"
 >    : ^^^
 
@@ -146,12 +146,12 @@ function test2(arg: string | undefined) {
 >                          : ^^^^^^^
 >arg.toUpperCase() : string
 >                  : ^^^^^^
->arg.toUpperCase : () => string
->                : ^^^^^^      
+>arg.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >arg : string
 >    : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >"C" : "C"
 >    : ^^^
 
@@ -164,12 +164,12 @@ function test2(arg: string | undefined) {
 >                          : ^^^^^^^
 >arg.toUpperCase() : string
 >                  : ^^^^^^
->arg.toUpperCase : () => string
->                : ^^^^^^      
+>arg.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >arg : string
 >    : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >"D" : "D"
 >    : ^^^
 

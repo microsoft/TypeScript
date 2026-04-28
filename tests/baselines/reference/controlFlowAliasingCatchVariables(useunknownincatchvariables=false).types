@@ -23,12 +23,12 @@ catch (e) {
         e.toUpperCase(); // e string
 >e.toUpperCase() : string
 >                : ^^^^^^
->e.toUpperCase : () => string
->              : ^^^^^^      
+>e.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >e : string
 >  : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
     }
 
     if (typeof e === 'string') {
@@ -43,12 +43,12 @@ catch (e) {
         e.toUpperCase(); // e string
 >e.toUpperCase() : string
 >                : ^^^^^^
->e.toUpperCase : () => string
->              : ^^^^^^      
+>e.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >e : string
 >  : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
     }
 }
 
@@ -99,12 +99,12 @@ catch (e) {
         e.toUpperCase(); // e string
 >e.toUpperCase() : string
 >                : ^^^^^^
->e.toUpperCase : () => string
->              : ^^^^^^      
+>e.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >e : string
 >  : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
     }
 }
 

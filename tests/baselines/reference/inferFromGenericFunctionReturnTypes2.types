@@ -766,12 +766,12 @@ const t1 = testSet.transform(
 >  : ^^^^^^
 >x.toUpperCase() : string
 >                : ^^^^^^
->x.toUpperCase : () => string
->              : ^^^^^^      
+>x.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >x : string
 >  : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
   )
 )
@@ -851,12 +851,12 @@ const t2 = testSet.transform(
 >  : ^^^^^^
 >x.toUpperCase() : string
 >                : ^^^^^^
->x.toUpperCase : () => string
->              : ^^^^^^      
+>x.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >x : string
 >  : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
   )
 )

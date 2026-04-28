@@ -22,20 +22,20 @@ f = g;
 >  : ^ ^^^^^^^   
 
 var s = f("str").toUpperCase();
->s : string
->  : ^^^^^^
->f("str").toUpperCase() : string
->                       : ^^^^^^
->f("str").toUpperCase : () => string
->                     : ^^^^^^      
+>s : "STR"
+>  : ^^^^^
+>f("str").toUpperCase() : "STR"
+>                       : ^^^^^
+>f("str").toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                     : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >f("str") : "str"
 >         : ^^^^^
 >f : <T>(x: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
 >"str" : "str"
 >      : ^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 console.log(s);
 >console.log(s) : void
@@ -46,6 +46,6 @@ console.log(s);
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->s : string
->  : ^^^^^^
+>s : "STR"
+>  : ^^^^^
 

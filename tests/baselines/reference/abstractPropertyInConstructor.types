@@ -32,16 +32,16 @@ abstract class AbstractClass {
 >    : ^^^^^^
 >this.prop.toLowerCase() : string
 >                        : ^^^^^^
->this.prop.toLowerCase : () => string
->                      : ^^^^^^      
+>this.prop.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                      : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >this.prop : string
 >          : ^^^^^^
 >this : this
 >     : ^^^^
 >prop : string
 >     : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
         if (!str) {
 >!str : boolean
@@ -215,16 +215,16 @@ abstract class DerivedAbstractClass extends AbstractClass {
 >   : ^ ^^      ^^^^^^^^^
 >this.prop.toLowerCase() : string
 >                        : ^^^^^^
->this.prop.toLowerCase : () => string
->                      : ^^^^^^      
+>this.prop.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                      : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >this.prop : string
 >          : ^^^^^^
 >this : this
 >     : ^^^^
 >prop : string
 >     : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
         this.method(1);
 >this.method(1) : void

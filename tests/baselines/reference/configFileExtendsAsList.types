@@ -14,10 +14,10 @@ let y: string;
 y.toLowerCase(); // strictNullChecks error
 >y.toLowerCase() : string
 >                : ^^^^^^
->y.toLowerCase : () => string
->              : ^^^^^^      
+>y.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >y : string
 >  : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 

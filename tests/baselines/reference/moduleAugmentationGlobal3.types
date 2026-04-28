@@ -38,8 +38,8 @@ let y = x.getCountAsString().toLowerCase();
 >  : ^^^^^^
 >x.getCountAsString().toLowerCase() : string
 >                                   : ^^^^^^
->x.getCountAsString().toLowerCase : () => string
->                                 : ^^^^^^      
+>x.getCountAsString().toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                                 : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >x.getCountAsString() : string
 >                     : ^^^^^^
 >x.getCountAsString : () => string
@@ -48,6 +48,6 @@ let y = x.getCountAsString().toLowerCase();
 >  : ^^^^^^^^
 >getCountAsString : () => string
 >                 : ^^^^^^      
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
