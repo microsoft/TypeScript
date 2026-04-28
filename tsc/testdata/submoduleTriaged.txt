@@ -103,10 +103,6 @@ compiler/multiLinePropertyAccessAndArrowFunctionIndent1.errors.txt.diff
 compiler/parseErrorIncorrectReturnToken.errors.txt.diff
 conformance/parserStatementIsNotAMemberVariableDeclaration1(alwaysstrict=true).errors.txt.diff
 
-# TS2690 (with "Did you mean 'P in K'?" mapped type suggestion) changed to TS2693 (generic "refers to a type, but is being used as a value") — mapped type suggestion lost
-## https://github.com/microsoft/typescript-go/issues/3509
-compiler/typeUsedAsTypeLiteralIndex.errors.txt.diff
-
 # Unicode escapes in identifier names now displayed as literal characters
 ## https://github.com/microsoft/typescript-go/issues/3511
 conformance/parser.numericSeparators.decmialNegative.errors.txt.diff

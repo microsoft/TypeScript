@@ -1653,12 +1653,15 @@ func isES2015OrLaterConstructorName(s string) bool {
 }
 
 func (c *Checker) maybeMappedType(node *ast.Node, symbol *ast.Symbol) bool {
-	for ast.IsComputedPropertyName(node) || ast.IsPropertySignatureDeclaration(node) {
+	for {
 		node = node.Parent
+		if !(ast.IsComputedPropertyName(node) || ast.IsPropertySignatureDeclaration(node)) {
+			break
+		}
 	}
 	if ast.IsTypeLiteralNode(node) && len(node.Members()) == 1 {
 		t := c.getDeclaredTypeOfSymbol(symbol)
-		return t.flags&TypeFlagsUnion != 0 && c.allTypesAssignableToKind(t, TypeFlagsStringOrNumberLiteral)
+		return t.flags&TypeFlagsUnion != 0 && c.allTypesAssignableToKindEx(t, TypeFlagsStringOrNumberLiteral, true /*strict*/)
 	}
 	return false
 }
