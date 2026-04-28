@@ -105,14 +105,14 @@
 //     ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (method) I.method<U>(a: U, b: T): U
+// | (method) I<T>.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (type parameter) U in I.method<U>(a: U, b: T): U
+// | (type parameter) U in I<T>.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -126,7 +126,7 @@
 //                  ^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (type parameter) U in I.method<U>(a: U, b: T): U
+// | (type parameter) U in I<T>.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -147,7 +147,7 @@
 //                            ^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (type parameter) U in I.method<U>(a: U, b: T): U
+// | (type parameter) U in I<T>.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -324,14 +324,14 @@
 //     ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (method) I1.method<U extends I<string>>(a: U, b: T): U
+// | (method) I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U
+// | (type parameter) U extends I<string> in I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -352,7 +352,7 @@
 //                                    ^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U
+// | (type parameter) U extends I<string> in I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -373,7 +373,7 @@
 //                                              ^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U
+// | (type parameter) U extends I<string> in I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -866,7 +866,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(method) I.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(method) I<T>.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -893,7 +893,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(type parameter) U in I.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in I<T>.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -947,7 +947,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(type parameter) U in I.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in I<T>.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1028,7 +1028,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(type parameter) U in I.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in I<T>.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1696,7 +1696,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(method) I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(method) I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1724,7 +1724,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends I<string> in I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1808,7 +1808,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends I<string> in I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1892,7 +1892,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(type parameter) U extends I<string> in I1.method<U extends I<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends I<string> in I1<T extends I<string>>.method<U extends I<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {

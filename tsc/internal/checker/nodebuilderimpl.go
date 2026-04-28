@@ -3480,7 +3480,13 @@ func (b *NodeBuilderImpl) lookupExpressionChainTypeArgumentNodes(chain []*ast.Sy
 		}
 
 		b.ctx.typeParameterSymbolList[symbolId] = struct{}{}
-		return b.lookupInstantiatedTypeArgumentNodes(chain, index)
+		if typeArgumentNodes := b.lookupInstantiatedTypeArgumentNodes(chain, index); typeArgumentNodes != nil {
+			return typeArgumentNodes
+		}
+		typeParameterNodes := b.typeParametersToTypeParameterDeclarations(symbol)
+		if len(typeParameterNodes) > 0 {
+			return b.f.NewNodeList(typeParameterNodes)
+		}
 	}
 	return nil
 }

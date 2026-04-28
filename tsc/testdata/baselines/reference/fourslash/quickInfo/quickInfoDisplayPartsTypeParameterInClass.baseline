@@ -42,14 +42,14 @@
 //     ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (method) c.method<U>(a: U, b: T): U
+// | (method) c<T>.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (type parameter) U in c.method<U>(a: U, b: T): U
+// | (type parameter) U in c<T>.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -63,7 +63,7 @@
 //                  ^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (type parameter) U in c.method<U>(a: U, b: T): U
+// | (type parameter) U in c<T>.method<U>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -185,14 +185,14 @@
 //     ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (method) c2.method<U extends c<string>>(a: U, b: T): U
+// | (method) c2<T extends c<string>>.method<U extends c<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U
+// | (type parameter) U extends c<string> in c2<T extends c<string>>.method<U extends c<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -213,7 +213,7 @@
 //                                    ^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U
+// | (type parameter) U extends c<string> in c2<T extends c<string>>.method<U extends c<string>>(a: U, b: T): U
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -458,7 +458,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(method) c.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(method) c<T>.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -485,7 +485,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(type parameter) U in c.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in c<T>.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -539,7 +539,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(type parameter) U in c.method<U>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U in c<T>.method<U>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -982,7 +982,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(method) c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(method) c2<T extends c<string>>.method<U extends c<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1010,7 +1010,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends c<string> in c2<T extends c<string>>.method<U extends c<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {
@@ -1094,7 +1094,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(type parameter) U extends c<string> in c2.method<U extends c<string>>(a: U, b: T): U\n```\n"
+        "value": "```typescript\n(type parameter) U extends c<string> in c2<T extends c<string>>.method<U extends c<string>>(a: U, b: T): U\n```\n"
       },
       "range": {
         "start": {

@@ -13,7 +13,7 @@
 //     ^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (method) Foo.bar(): void
+// | (method) Foo<T>.bar(): void
 // | ```
 // | [Foo](file:///quickInfoLink3.ts#1,7-1,10)
 // | [<T>](file:///quickInfoLink3.ts#1,7-1,10)
@@ -37,7 +37,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(method) Foo.bar(): void\n```\n[Foo](file:///quickInfoLink3.ts#1,7-1,10)\n[<T>](file:///quickInfoLink3.ts#1,7-1,10)\n[<Array<X>>](file:///quickInfoLink3.ts#1,7-1,10)\n[<>](file:///quickInfoLink3.ts#1,7-1,10)\n[>](file:///quickInfoLink3.ts#1,7-1,10)\n[<](file:///quickInfoLink3.ts#1,7-1,10)"
+        "value": "```typescript\n(method) Foo<T>.bar(): void\n```\n[Foo](file:///quickInfoLink3.ts#1,7-1,10)\n[<T>](file:///quickInfoLink3.ts#1,7-1,10)\n[<Array<X>>](file:///quickInfoLink3.ts#1,7-1,10)\n[<>](file:///quickInfoLink3.ts#1,7-1,10)\n[>](file:///quickInfoLink3.ts#1,7-1,10)\n[<](file:///quickInfoLink3.ts#1,7-1,10)"
       },
       "range": {
         "start": {
