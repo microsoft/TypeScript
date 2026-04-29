@@ -1,0 +1,25 @@
+intlCollatorCompareAccessor.ts(7,7): error TS2322: Type '(this: Intl.Collator, x: string, y: string) => number' is not assignable to type '(this: void, x: string, y: string) => number'.
+  The 'this' types of each signature are incompatible.
+    Type 'void' is not assignable to type 'Collator'.
+intlCollatorCompareAccessor.ts(11,10): error TS2540: Cannot assign to 'compare' because it is a read-only property.
+
+
+==== intlCollatorCompareAccessor.ts (2 errors) ====
+    declare const collator: Intl.Collator;
+    
+    collator.compare("a", "b");
+    ["a", "b"].sort(collator.compare);
+    
+    const compare: (this: void, x: string, y: string) => number = collator.compare;
+    const compareWithThis: Intl.Collator["compare"] = function (this: Intl.Collator, x: string, y: string) {
+          ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(this: Intl.Collator, x: string, y: string) => number' is not assignable to type '(this: void, x: string, y: string) => number'.
+!!! error TS2322:   The 'this' types of each signature are incompatible.
+!!! error TS2322:     Type 'void' is not assignable to type 'Collator'.
+        return 0;
+    };
+    
+    collator.compare = (x: string, y: string) => 0;
+             ~~~~~~~
+!!! error TS2540: Cannot assign to 'compare' because it is a read-only property.
+    
