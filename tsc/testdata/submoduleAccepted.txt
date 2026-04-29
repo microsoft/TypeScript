@@ -261,11 +261,6 @@ compiler/contravariantOnlyInferenceFromAnnotatedFunctionJs.types.diff
 ## more accurate types/symbols ##
 compiler/allowJscheckJsTypeParameterNoCrash.symbols.diff
 compiler/abstractClassInLocalScopeIsAbstract.types.diff
-compiler/argumentsReferenceInConstructor1_Js.types.diff
-compiler/argumentsReferenceInConstructor2_Js.types.diff
-compiler/argumentsReferenceInConstructor3_Js.types.diff
-compiler/argumentsReferenceInConstructor4_Js.types.diff
-compiler/argumentsReferenceInConstructor5_Js.types.diff
 compiler/argumentsReferenceInFunction1_Js.errors.txt.diff
 compiler/argumentsReferenceInFunction1_Js.types.diff
 compiler/argumentsReferenceInMethod1_Js.types.diff

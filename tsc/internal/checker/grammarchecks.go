@@ -705,10 +705,9 @@ func (c *Checker) checkGrammarParameterList(parameters *ast.NodeList) bool {
 				return c.grammarErrorOnNode(parameter.Name(), diagnostics.A_rest_parameter_cannot_have_an_initializer)
 			}
 		} else if isOptionalDeclaration(parameter.AsNode()) {
-			// !!!
-			// used to be hasEffectiveQuestionToken for JSDoc
 			seenOptionalParameter = true
-			if parameter.QuestionToken != nil && parameter.Initializer != nil {
+			// A reparsed '?' token indicates a bracketed name in @param tag
+			if parameter.QuestionToken != nil && parameter.QuestionToken.Flags&ast.NodeFlagsReparsed == 0 && parameter.Initializer != nil {
 				return c.grammarErrorOnNode(parameter.Name(), diagnostics.Parameter_cannot_have_question_mark_and_initializer)
 			}
 		} else if seenOptionalParameter && parameter.Initializer == nil {

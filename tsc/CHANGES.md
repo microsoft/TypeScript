@@ -247,18 +247,6 @@ var f = (x) => x,
   g = (x) => x;
 ```
 
-#### Optional marking on parameter names now makes the parameter both optional and undefined:
-
-```js
-/** @param {number} [x] */
-function f(x) {
-  return x;
-}
-```
-
-This behaves the same as TypeScript's `x?: number` syntax.
-Strada makes the parameter optional but does not add `undefined` to the type.
-
 #### Type assertions with `@type` tags now prevent narrowing of the type.
 
 ```js

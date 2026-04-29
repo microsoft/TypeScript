@@ -24,7 +24,7 @@ class B extends A {
 	 * @param {object} [foo={}]
 	 */
 	constructor(foo = {}) {
->foo : object
+>foo : object | undefined
 >{} : {}
 
 		super();

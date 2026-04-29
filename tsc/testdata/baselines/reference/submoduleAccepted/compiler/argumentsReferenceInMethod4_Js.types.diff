@@ -1,15 +1,6 @@
 --- old.argumentsReferenceInMethod4_Js.types
 +++ new.argumentsReferenceInMethod4_Js.types
-@@= skipped -8, +8 lines =@@
- 	 */
- 	m(foo = {}) {
- >m : (foo?: object) => void
-->foo : object | undefined
-+>foo : object
- >{} : {}
-
- 		const key = "bar";
-@@= skipped -12, +12 lines =@@
+@@= skipped -20, +20 lines =@@
  		 */
  		this.foo = foo;
  >this.foo = foo : object
