@@ -380,11 +380,12 @@ func (b *NodeBuilderImpl) mapToTypeNodes(list []*Type, isBareList bool) *ast.Nod
 	result := make([]*ast.Node, 0, len(list))
 
 	for i, t := range list {
-		if b.checkTruncationLength() && (i+2 < len(list)-1) {
+		displayIndex := i + 1
+		if b.checkTruncationLength() && (displayIndex+2 < len(list)-1) {
 			if b.ctx.flags&nodebuilder.FlagsNoTruncation != 0 {
-				result = append(result, b.e.AddSyntheticLeadingComment(b.f.NewKeywordTypeNode(ast.KindAnyKeyword), ast.KindMultiLineCommentTrivia, fmt.Sprintf("... %d more elided ...", len(list)-i), false /*hasTrailingNewLine*/))
+				result = append(result, b.e.AddSyntheticLeadingComment(b.f.NewKeywordTypeNode(ast.KindAnyKeyword), ast.KindMultiLineCommentTrivia, fmt.Sprintf("... %d more elided ...", len(list)-displayIndex), false /*hasTrailingNewLine*/))
 			} else {
-				text := fmt.Sprintf("... %d more ...", len(list)-i)
+				text := fmt.Sprintf("... %d more ...", len(list)-displayIndex)
 				result = append(result, b.f.NewTypeReferenceNode(b.f.NewIdentifier(text), nil /*typeArguments*/))
 			}
 			typeNode := b.typeToTypeNode(list[len(list)-1])
