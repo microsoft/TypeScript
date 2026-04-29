@@ -9559,6 +9559,10 @@ func (c *Checker) getArgumentArityError(node *ast.Node, signatures []*Signature,
 		parameterRange = strconv.Itoa(minCount)
 	}
 	isVoidPromiseError := !hasRestParameter && parameterRange == "1" && len(args) == 0 && c.isPromiseResolveArityError(node)
+	errorNode := getErrorNodeForCallNode(node)
+	if isVoidPromiseError && ast.IsInJSFile(node) {
+		return NewDiagnosticForNode(errorNode, diagnostics.Expected_1_argument_but_got_0_new_Promise_needs_a_JSDoc_hint_to_produce_a_resolve_that_can_be_called_without_arguments)
+	}
 	var message *diagnostics.Message
 	switch {
 	case ast.IsDecorator(node):
@@ -9574,7 +9578,6 @@ func (c *Checker) getArgumentArityError(node *ast.Node, signatures []*Signature,
 	default:
 		message = diagnostics.Expected_0_arguments_but_got_1
 	}
-	errorNode := getErrorNodeForCallNode(node)
 	switch {
 	case minCount < len(args) && len(args) < maxCount:
 		// between min and max, but with no matching overload
