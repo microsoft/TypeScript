@@ -9,6 +9,7 @@
 /// <reference path="../node/node.ts" preserve="true" />
 import { DiagnosticCategory } from "#enums/diagnosticCategory";
 import { ElementFlags } from "#enums/elementFlags";
+import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
 import { ObjectFlags } from "#enums/objectFlags";
 import { SignatureFlags } from "#enums/signatureFlags";
 import { SignatureKind } from "#enums/signatureKind";
@@ -96,7 +97,7 @@ import type {
     UnionType,
 } from "./types.ts";
 
-export { DiagnosticCategory, ElementFlags, ModifierFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
+export { DiagnosticCategory, ElementFlags, ModifierFlags, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
 export type { APIOptions, ClientSocketOptions, ClientSpawnOptions, DocumentIdentifier, DocumentPosition, LSPConnectionOptions };
 export type { AssertsIdentifierTypePredicate, AssertsThisTypePredicate, ConditionalType, Diagnostic, IdentifierTypePredicate, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, LiteralType, ObjectType, StringMappingType, SubstitutionType, TemplateLiteralType, ThisTypePredicate, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
@@ -546,6 +547,15 @@ export class Checker {
         return data.map(d => this.objectRegistry.getOrCreateSignature(d));
     }
 
+    getResolvedSignature(node: Node): Signature | undefined {
+        const data = this.client.apiRequest<SignatureResponse | null>("getResolvedSignature", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            location: getNodeId(node),
+        });
+        return data ? this.objectRegistry.getOrCreateSignature(data) : undefined;
+    }
+
     getTypeAtPosition(file: DocumentIdentifier, position: number): Type | undefined;
     getTypeAtPosition(file: DocumentIdentifier, positions: readonly number[]): (Type | undefined)[];
     getTypeAtPosition(file: DocumentIdentifier, positionOrPositions: number | readonly number[]): Type | (Type | undefined)[] | undefined {
@@ -610,6 +620,51 @@ export class Checker {
             type: type.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    getNonNullableType(type: Type): Type | undefined {
+        const data = this.client.apiRequest<TypeResponse | null>("getNonNullableType", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            type: type.id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    getTypeFromTypeNode(node: TypeNode): Type | undefined {
+        const data = this.client.apiRequest<TypeResponse | null>("getTypeFromTypeNode", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            location: getNodeId(node),
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    getWidenedType(type: Type): Type | undefined {
+        const data = this.client.apiRequest<TypeResponse | null>("getWidenedType", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            type: type.id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    getParameterType(signature: Signature, index: number): Type | undefined {
+        const data = this.client.apiRequest<TypeResponse | null>("getParameterType", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            signature: signature.id,
+            index,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    isArrayLikeType(type: Type): boolean {
+        return this.client.apiRequest<boolean>("isArrayLikeType", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            type: type.id,
+        });
     }
 
     getShorthandAssignmentValueSymbol(node: Node): Symbol | undefined {
@@ -683,6 +738,19 @@ export class Checker {
         });
         if (!binaryData) return undefined;
         return decodeNode(binaryData) as TypeNode;
+    }
+
+    signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Node | undefined {
+        const binaryData = this.client.apiRequestBinary("signatureToSignatureDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            signature: signature.id,
+            kind,
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as Node;
     }
 
     typeToString(type: Type, enclosingDeclaration?: Node, flags?: number): string {

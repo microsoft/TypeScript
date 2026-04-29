@@ -880,6 +880,11 @@ func (c *Checker) GetCandidateSignaturesForStringLiteralCompletions(call *ast.Ca
 	return candidates
 }
 
+// GetTypeAtPosition returns the type of a parameter at a given index in a signature.
+func (c *Checker) GetTypeAtPosition(s *Signature, pos int) *Type {
+	return c.getTypeAtPosition(s, pos)
+}
+
 func (c *Checker) GetTypeParameterAtPosition(s *Signature, pos int) *Type {
 	t := c.getTypeAtPosition(s, pos)
 	if t.IsIndex() && isThisTypeParameter(t.AsIndexType().target) {

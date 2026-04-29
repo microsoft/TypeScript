@@ -323,6 +323,7 @@ const enumDefs = [
     { name: "OuterExpressionKinds", goPrefix: "OEK", goFile: "internal/ast/utilities.go", outDir: "_packages/native-preview/src/enums" },
     { name: "ModifierFlags", goPrefix: "ModifierFlags", goFile: "internal/ast/modifierflags.go", outDir: "_packages/native-preview/src/enums" },
     { name: "TokenFlags", goPrefix: "TokenFlags", goFile: "internal/ast/tokenflags.go", outDir: "_packages/native-preview/src/enums", constEnum: true },
+    { name: "NodeBuilderFlags", goPrefix: "Flags", goFile: "internal/nodebuilder/types.go", outDir: "_packages/native-preview/src/enums" },
 ];
 
 /**

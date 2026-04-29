@@ -357,6 +357,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSymbolOfType(ctx, parsed.(*GetSymbolOfTypeParams))
 	case string(MethodGetSignaturesOfType):
 		return s.handleGetSignaturesOfType(ctx, parsed.(*GetSignaturesOfTypeParams))
+	case string(MethodGetResolvedSignature):
+		return s.handleGetResolvedSignature(ctx, parsed.(*GetResolvedSignatureParams))
 	case string(MethodGetTypeAtLocation):
 		return s.handleGetTypeAtLocation(ctx, parsed.(*GetTypeAtLocationParams))
 	case string(MethodGetTypeAtLocations):
@@ -391,12 +393,24 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetContextualType(ctx, parsed.(*GetContextualTypeParams))
 	case string(MethodGetBaseTypeOfLiteralType):
 		return s.handleGetBaseTypeOfLiteralType(ctx, parsed.(*GetBaseTypeOfLiteralTypeParams))
+	case string(MethodGetNonNullableType):
+		return s.handleGetNonNullableType(ctx, parsed.(*GetNonNullableTypeParams))
+	case string(MethodGetTypeFromTypeNode):
+		return s.handleGetTypeFromTypeNode(ctx, parsed.(*GetTypeFromTypeNodeParams))
+	case string(MethodGetWidenedType):
+		return s.handleGetWidenedType(ctx, parsed.(*GetWidenedTypeParams))
+	case string(MethodGetParameterType):
+		return s.handleGetParameterType(ctx, parsed.(*GetParameterTypeParams))
+	case string(MethodIsArrayLikeType):
+		return s.handleIsArrayLikeType(ctx, parsed.(*IsArrayLikeTypeParams))
 	case string(MethodGetShorthandAssignmentValueSymbol):
 		return s.handleGetShorthandAssignmentValueSymbol(ctx, parsed.(*GetTypeAtLocationParams))
 	case string(MethodGetTypeOfSymbolAtLocation):
 		return s.handleGetTypeOfSymbolAtLocation(ctx, parsed.(*GetTypeOfSymbolAtLocationParams))
 	case string(MethodTypeToTypeNode):
 		return s.handleTypeToTypeNode(ctx, parsed.(*TypeToTypeNodeParams))
+	case string(MethodSignatureToSignatureDeclaration):
+		return s.handleSignatureToSignatureDeclaration(ctx, parsed.(*SignatureToSignatureDeclarationParams))
 	case string(MethodTypeToString):
 		return s.handleTypeToString(ctx, parsed.(*TypeToTypeNodeParams))
 	case string(MethodPrintNode):
@@ -997,6 +1011,26 @@ func (s *Session) handleGetSignaturesOfType(ctx context.Context, params *GetSign
 	return results, nil
 }
 
+// handleGetResolvedSignature returns the resolved signature of a call-like expression.
+func (s *Session) handleGetResolvedSignature(ctx context.Context, params *GetResolvedSignatureParams) (*SignatureResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := s.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if node == nil {
+		return nil, nil
+	}
+
+	sig := setup.checker.GetResolvedSignature(node)
+	return setup.sd.registerSignature(sig), nil
+}
+
 // handleGetTypeAtLocation returns the type at a node location.
 func (s *Session) handleGetTypeAtLocation(ctx context.Context, params *GetTypeAtLocationParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
@@ -1254,6 +1288,113 @@ func (s *Session) handleGetBaseTypeOfLiteralType(ctx context.Context, params *Ge
 	return setup.sd.registerType(result), nil
 }
 
+// handleGetNonNullableType returns the type with null and undefined removed.
+func (s *Session) handleGetNonNullableType(ctx context.Context, params *GetNonNullableTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.sd.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	result := setup.checker.GetNonNullableType(t)
+	if result == nil {
+		return nil, nil
+	}
+
+	return setup.sd.registerType(result), nil
+}
+
+// handleGetTypeFromTypeNode returns the type for a type node.
+func (s *Session) handleGetTypeFromTypeNode(ctx context.Context, params *GetTypeFromTypeNodeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := s.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if node == nil {
+		return nil, nil
+	}
+
+	t := setup.checker.GetTypeFromTypeNode(node)
+	if t == nil {
+		return nil, nil
+	}
+
+	return setup.sd.registerType(t), nil
+}
+
+// handleGetWidenedType returns the widened type.
+func (s *Session) handleGetWidenedType(ctx context.Context, params *GetWidenedTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.sd.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	result := setup.checker.GetWidenedType(t)
+	if result == nil {
+		return nil, nil
+	}
+
+	return setup.sd.registerType(result), nil
+}
+
+// handleGetParameterType returns the type of a parameter at a given index in a signature.
+func (s *Session) handleGetParameterType(ctx context.Context, params *GetParameterTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	sig, err := setup.sd.resolveSignatureHandle(params.Signature)
+	if err != nil {
+		return nil, err
+	}
+
+	if params.Index < 0 {
+		return nil, fmt.Errorf("%w: invalid parameter index", ErrClientError)
+	}
+
+	t := setup.checker.GetTypeAtPosition(sig, int(params.Index))
+	if t == nil {
+		return nil, nil
+	}
+
+	return setup.sd.registerType(t), nil
+}
+
+// handleIsArrayLikeType returns whether a type is array-like.
+func (s *Session) handleIsArrayLikeType(ctx context.Context, params *IsArrayLikeTypeParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	t, err := setup.sd.resolveTypeHandle(params.Type)
+	if err != nil {
+		return false, err
+	}
+
+	return setup.checker.IsArrayLikeType(t), nil
+}
+
 // handleGetShorthandAssignmentValueSymbol returns the value symbol of a shorthand property assignment.
 func (s *Session) handleGetShorthandAssignmentValueSymbol(ctx context.Context, params *GetTypeAtLocationParams) (*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
@@ -1339,6 +1480,44 @@ func (s *Session) handleTypeToTypeNode(ctx context.Context, params *TypeToTypeNo
 	data, err := encoder.EncodeNode(typeNode.AsNode(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to encode type node: %w", err)
+	}
+
+	if s.useBinaryResponses {
+		return RawBinary(data), nil
+	}
+	return &SourceFileResponse{
+		Data: base64.StdEncoding.EncodeToString(data),
+	}, nil
+}
+
+func (s *Session) handleSignatureToSignatureDeclaration(ctx context.Context, params *SignatureToSignatureDeclarationParams) (any, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	sig, err := setup.sd.resolveSignatureHandle(params.Signature)
+	if err != nil {
+		return nil, err
+	}
+
+	var enclosingDeclaration *ast.Node
+	if params.Location != "" {
+		enclosingDeclaration, err = s.resolveNodeHandle(setup.program, params.Location)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	node := setup.checker.SignatureToSignatureDeclaration(sig, ast.Kind(params.Kind), enclosingDeclaration, nodebuilder.Flags(params.Flags))
+	if node == nil {
+		return nil, nil
+	}
+
+	data, err := encoder.EncodeNode(node.AsNode(), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to encode signature declaration: %w", err)
 	}
 
 	if s.useBinaryResponses {

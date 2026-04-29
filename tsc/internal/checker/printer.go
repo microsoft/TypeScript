@@ -404,6 +404,11 @@ func (c *Checker) TypeToTypeNode(t *Type, enclosingDeclaration *ast.Node, flags 
 	return nodeBuilder.TypeToTypeNode(t, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
 }
 
+func (c *Checker) SignatureToSignatureDeclaration(signature *Signature, kind ast.Kind, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
+	nodeBuilder := c.getNodeBuilder()
+	return nodeBuilder.SignatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
+}
+
 // ExpandSymbolForHover produces declaration strings for a symbol with verbosity support for expandable hover.
 func (c *Checker) ExpandSymbolForHover(symbol *ast.Symbol, meaning ast.SymbolFlags, vc *VerbosityContext) string {
 	nodeBuilder := c.getNodeBuilder()

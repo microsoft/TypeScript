@@ -112,6 +112,7 @@ const (
 	MethodGetExportSymbolOfSymbol  Method = "getExportSymbolOfSymbol"
 	MethodGetSymbolOfType          Method = "getSymbolOfType"
 	MethodGetSignaturesOfType      Method = "getSignaturesOfType"
+	MethodGetResolvedSignature     Method = "getResolvedSignature"
 	MethodGetTypeAtLocation        Method = "getTypeAtLocation"
 	MethodGetTypeAtLocations       Method = "getTypeAtLocations"
 	MethodGetTypeAtPosition        Method = "getTypeAtPosition"
@@ -133,9 +134,15 @@ const (
 	// Checker methods
 	MethodGetContextualType                 Method = "getContextualType"
 	MethodGetBaseTypeOfLiteralType          Method = "getBaseTypeOfLiteralType"
+	MethodGetNonNullableType                Method = "getNonNullableType"
+	MethodGetTypeFromTypeNode               Method = "getTypeFromTypeNode"
+	MethodGetWidenedType                    Method = "getWidenedType"
+	MethodGetParameterType                  Method = "getParameterType"
+	MethodIsArrayLikeType                   Method = "isArrayLikeType"
 	MethodGetShorthandAssignmentValueSymbol Method = "getShorthandAssignmentValueSymbol"
 	MethodGetTypeOfSymbolAtLocation         Method = "getTypeOfSymbolAtLocation"
 	MethodTypeToTypeNode                    Method = "typeToTypeNode"
+	MethodSignatureToSignatureDeclaration   Method = "signatureToSignatureDeclaration"
 	MethodTypeToString                      Method = "typeToString"
 	MethodIsContextSensitive                Method = "isContextSensitive"
 	MethodGetReturnTypeOfSignature          Method = "getReturnTypeOfSignature"
@@ -330,6 +337,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetExportSymbolOfSymbol:  unmarshallerFor[GetExportSymbolOfSymbolParams],
 	MethodGetSymbolOfType:          unmarshallerFor[GetSymbolOfTypeParams],
 	MethodGetSignaturesOfType:      unmarshallerFor[GetSignaturesOfTypeParams],
+	MethodGetResolvedSignature:     unmarshallerFor[GetResolvedSignatureParams],
 	MethodGetTypeAtLocation:        unmarshallerFor[GetTypeAtLocationParams],
 	MethodGetTypeAtLocations:       unmarshallerFor[GetTypeAtLocationsParams],
 	MethodGetTypeAtPosition:        unmarshallerFor[GetTypeAtPositionParams],
@@ -348,9 +356,15 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetConstraintOfType:               unmarshallerFor[GetTypePropertyParams],
 	MethodGetContextualType:                 unmarshallerFor[GetContextualTypeParams],
 	MethodGetBaseTypeOfLiteralType:          unmarshallerFor[GetBaseTypeOfLiteralTypeParams],
+	MethodGetNonNullableType:                unmarshallerFor[GetNonNullableTypeParams],
+	MethodGetTypeFromTypeNode:               unmarshallerFor[GetTypeFromTypeNodeParams],
+	MethodGetWidenedType:                    unmarshallerFor[GetWidenedTypeParams],
+	MethodGetParameterType:                  unmarshallerFor[GetParameterTypeParams],
+	MethodIsArrayLikeType:                   unmarshallerFor[IsArrayLikeTypeParams],
 	MethodGetShorthandAssignmentValueSymbol: unmarshallerFor[GetTypeAtLocationParams],
 	MethodGetTypeOfSymbolAtLocation:         unmarshallerFor[GetTypeOfSymbolAtLocationParams],
 	MethodTypeToTypeNode:                    unmarshallerFor[TypeToTypeNodeParams],
+	MethodSignatureToSignatureDeclaration:   unmarshallerFor[SignatureToSignatureDeclarationParams],
 	MethodTypeToString:                      unmarshallerFor[TypeToTypeNodeParams],
 	MethodIsContextSensitive:                unmarshallerFor[GetContextualTypeParams],
 	MethodGetReturnTypeOfSignature:          unmarshallerFor[CheckerSignatureParams],
@@ -704,11 +718,53 @@ type GetBaseTypeOfLiteralTypeParams struct {
 	Type     Handle[checker.Type]     `json:"type"`
 }
 
+// GetNonNullableTypeParams are the parameters for the getNonNullableType method.
+type GetNonNullableTypeParams struct {
+	Snapshot Handle[project.Snapshot] `json:"snapshot"`
+	Project  Handle[project.Project]  `json:"project"`
+	Type     Handle[checker.Type]     `json:"type"`
+}
+
+// GetTypeFromTypeNodeParams are the parameters for the getTypeFromTypeNode method.
+type GetTypeFromTypeNodeParams struct {
+	Snapshot Handle[project.Snapshot] `json:"snapshot"`
+	Project  Handle[project.Project]  `json:"project"`
+	Location Handle[ast.Node]         `json:"location"`
+}
+
+// GetWidenedTypeParams are the parameters for the getWidenedType method.
+type GetWidenedTypeParams struct {
+	Snapshot Handle[project.Snapshot] `json:"snapshot"`
+	Project  Handle[project.Project]  `json:"project"`
+	Type     Handle[checker.Type]     `json:"type"`
+}
+
+// GetParameterTypeParams are the parameters for the getParameterType method.
+type GetParameterTypeParams struct {
+	Snapshot  Handle[project.Snapshot]  `json:"snapshot"`
+	Project   Handle[project.Project]   `json:"project"`
+	Signature Handle[checker.Signature] `json:"signature"`
+	Index     int32                     `json:"index"`
+}
+
+// IsArrayLikeTypeParams checks whether a type is array-like.
+type IsArrayLikeTypeParams struct {
+	Snapshot Handle[project.Snapshot] `json:"snapshot"`
+	Project  Handle[project.Project]  `json:"project"`
+	Type     Handle[checker.Type]     `json:"type"`
+}
+
 type GetSignaturesOfTypeParams struct {
 	Snapshot Handle[project.Snapshot] `json:"snapshot"`
 	Project  Handle[project.Project]  `json:"project"`
 	Type     Handle[checker.Type]     `json:"type"`
 	Kind     int32                    `json:"kind"`
+}
+
+type GetResolvedSignatureParams struct {
+	Snapshot Handle[project.Snapshot] `json:"snapshot"`
+	Project  Handle[project.Project]  `json:"project"`
+	Location Handle[ast.Node]         `json:"location"`
 }
 
 type GetTypeAtLocationParams struct {
@@ -744,6 +800,16 @@ type TypeToTypeNodeParams struct {
 	Type     Handle[checker.Type]     `json:"type"`
 	Location Handle[ast.Node]         `json:"location,omitempty"`
 	Flags    int32                    `json:"flags,omitempty"`
+}
+
+// SignatureToSignatureDeclarationParams are the parameters for the signatureToSignatureDeclaration method.
+type SignatureToSignatureDeclarationParams struct {
+	Snapshot  Handle[project.Snapshot]  `json:"snapshot"`
+	Project   Handle[project.Project]   `json:"project"`
+	Signature Handle[checker.Signature] `json:"signature"`
+	Kind      int32                     `json:"kind"`
+	Location  Handle[ast.Node]          `json:"location,omitempty"`
+	Flags     int32                     `json:"flags,omitempty"`
 }
 
 // PrintNodeParams are the parameters for the printNode method.

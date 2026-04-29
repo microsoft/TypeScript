@@ -306,3 +306,7 @@ func (c *Checker) RequiresAddingImplicitUndefined(node *ast.Node) bool {
 func (c *Checker) RemoveMissingOrUndefinedType(t *Type) *Type {
 	return c.removeMissingOrUndefinedType(t)
 }
+
+func (c *Checker) GetWidenedType(t *Type) *Type {
+	return c.getWidenedType(t)
+}
