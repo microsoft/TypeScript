@@ -137,6 +137,12 @@
                 "category": "TypeScript Native Preview"
             },
             {
+                "command": "typescript.native-preview.selectVersion",
+                "title": "Select TypeScript Version...",
+                "enablement": "typescript.native-preview.serverRunning",
+                "category": "TypeScript Native Preview"
+            },
+            {
                 "command": "typescript.native-preview.goToSourceDefinition",
                 "title": "Go to Source Definition",
                 "enablement": "typescript.native-preview.serverRunning",

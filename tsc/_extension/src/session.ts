@@ -158,7 +158,7 @@ class Session implements vscode.Disposable {
             this.traceOutputChannel.show();
         }));
 
-        this.disposables.push(vscode.commands.registerCommand("typescript.selectTypeScriptVersion", async () => {
+        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.selectVersion", async () => {
             await promptSelectVersion(this.context, this.client, this.outputChannel);
         }));
 
@@ -291,7 +291,7 @@ async function showCommands(client: Client): Promise<void> {
         {
             label: "$(versions) Select Version",
             description: "Choose between bundled and workspace versions",
-            command: "typescript.selectTypeScriptVersion",
+            command: "typescript.native-preview.selectVersion",
         },
         {
             label: "$(stop-circle) Disable TypeScript Native Preview",
