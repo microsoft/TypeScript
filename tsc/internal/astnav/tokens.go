@@ -8,6 +8,18 @@ import (
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
+func shouldRescanLessThanLessThanToken(s *scanner.Scanner, containingNode *ast.Node, token ast.Kind) bool {
+	return token == ast.KindLessThanLessThanToken && ast.IsJsxChild(containingNode)
+}
+
+func scanNavigationToken(s *scanner.Scanner, containingNode *ast.Node) ast.Kind {
+	token := s.Token()
+	if shouldRescanLessThanLessThanToken(s, containingNode, token) {
+		return s.ReScanJsxToken(true /*allowMultilineJsxText*/)
+	}
+	return token
+}
+
 func GetTouchingPropertyName(sourceFile *ast.SourceFile, position int) *ast.Node {
 	return getTokenAtPosition(sourceFile, position, false /*allowPositionInLeadingTrivia*/, func(node *ast.Node) bool {
 		return ast.IsPropertyNameLiteral(node) || ast.IsKeywordKind(node.Kind) || ast.IsPrivateIdentifier(node)
@@ -215,7 +227,7 @@ func getTokenAtPosition(
 				end = nodeAfterLeft.Pos()
 			}
 			for left < end {
-				token := scanner.Token()
+				token := scanNavigationToken(scanner, current)
 				tokenFullStart := scanner.TokenFullStart()
 				tokenStart := core.IfElse(allowPositionInLeadingTrivia, tokenFullStart, scanner.TokenStart())
 				tokenEnd := scanner.TokenEnd()
@@ -539,11 +551,11 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 			for _, visitedNode := range rightmostVisitedNodes {
 				// Trailing tokens that occur before this node.
 				for startPos < min(visitedNode.Pos(), position) {
+					token := scanNavigationToken(scanner, n)
 					tokenStart := scanner.TokenStart()
 					if tokenStart >= position {
 						break
 					}
-					token := scanner.Token()
 					tokenFullStart := scanner.TokenFullStart()
 					tokenEnd := scanner.TokenEnd()
 					startPos = tokenEnd
@@ -557,11 +569,11 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 			}
 			// Trailing tokens after last visited node.
 			for startPos < min(endPos, position) {
+				token := scanNavigationToken(scanner, n)
 				tokenStart := scanner.TokenStart()
 				if tokenStart >= position {
 					break
 				}
-				token := scanner.Token()
 				tokenFullStart := scanner.TokenFullStart()
 				tokenEnd := scanner.TokenEnd()
 				startPos = tokenEnd
