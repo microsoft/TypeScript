@@ -1,7 +1,7 @@
 // This file requires a modern version of node 14+, and grep to be available.
 
 // node scripts/find-unused-diagnostic-messages.mjs
-import { execSync } from "child_process";
+import { execFileSync } from "child_process";
 import { readFileSync } from "fs";
 import { EOL } from "os";
 
@@ -15,7 +15,7 @@ startOfDiags.split(EOL).forEach(line => {
     const diagName = line.split(":")[0].trim();
 
     try {
-        execSync(`grep -rnw 'src' -e 'Diagnostics.${diagName}'`).toString();
+        execFileSync("grep", ["-rnw", "src", "-e", `Diagnostics.${diagName}`]);
         process.stdout.write(".");
     }
     catch {
