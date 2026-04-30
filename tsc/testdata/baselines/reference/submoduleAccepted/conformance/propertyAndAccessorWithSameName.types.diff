@@ -1,0 +1,20 @@
+--- old.propertyAndAccessorWithSameName.types
++++ new.propertyAndAccessorWithSameName.types
+@@= skipped -18, +18 lines =@@
+ >D : D
+
+     x: number;
+->x : number
++>x : any
+
+     set x(v) { } // error
+ >x : any
+@@= skipped -20, +20 lines =@@
+ >1 : 1
+     }
+     set x(v) { }
+->x : any
+->v : any
++>x : number
++>v : number
+ }

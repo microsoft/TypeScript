@@ -1,6 +1,32 @@
 --- old.privateNameDuplicateField.symbols
 +++ new.privateNameDuplicateField.symbols
-@@= skipped -102, +102 lines =@@
+@@= skipped -30, +30 lines =@@
+ >A_Field_Getter : Symbol(A_Field_Getter, Decl(privateNameDuplicateField.ts, 12, 5))
+
+         #foo = "foo";
+->#foo : Symbol(A_Field_Getter.#foo, Decl(privateNameDuplicateField.ts, 15, 26))
++>#foo : Symbol(A_Field_Getter.#foo, Decl(privateNameDuplicateField.ts, 15, 26), Decl(privateNameDuplicateField.ts, 16, 21))
+
+         get #foo() { return ""}
+->#foo : Symbol(A_Field_Getter.#foo, Decl(privateNameDuplicateField.ts, 16, 21))
++>#foo : Symbol(A_Field_Getter.#foo, Decl(privateNameDuplicateField.ts, 15, 26), Decl(privateNameDuplicateField.ts, 16, 21))
+     }
+
+     // Error
+@@= skipped -11, +11 lines =@@
+ >A_Field_Setter : Symbol(A_Field_Setter, Decl(privateNameDuplicateField.ts, 18, 5))
+
+         #foo = "foo";
+->#foo : Symbol(A_Field_Setter.#foo, Decl(privateNameDuplicateField.ts, 21, 26))
++>#foo : Symbol(A_Field_Setter.#foo, Decl(privateNameDuplicateField.ts, 21, 26), Decl(privateNameDuplicateField.ts, 22, 21))
+
+         set #foo(value: string) { }
+->#foo : Symbol(A_Field_Setter.#foo, Decl(privateNameDuplicateField.ts, 22, 21))
++>#foo : Symbol(A_Field_Setter.#foo, Decl(privateNameDuplicateField.ts, 21, 26), Decl(privateNameDuplicateField.ts, 22, 21))
+ >value : Symbol(value, Decl(privateNameDuplicateField.ts, 23, 17))
+     }
+
+@@= skipped -61, +61 lines =@@
  >A_Method_Field : Symbol(A_Method_Field, Decl(privateNameDuplicateField.ts, 51, 19))
 
          #foo() { }
@@ -13,34 +39,33 @@
      }
 
      // Error
-@@= skipped -95, +95 lines =@@
- >A_Getter_Field : Symbol(A_Getter_Field, Decl(privateNameDuplicateField.ts, 102, 19))
+@@= skipped -358, +358 lines =@@
+ >A_StaticField_StaticGetter : Symbol(A_StaticField_StaticGetter, Decl(privateNameDuplicateField.ts, 237, 5))
 
-         get #foo() { return ""}
-->#foo : Symbol(A_Getter_Field.#foo, Decl(privateNameDuplicateField.ts, 104, 26), Decl(privateNameDuplicateField.ts, 105, 31))
-+>#foo : Symbol(A_Getter_Field.#foo, Decl(privateNameDuplicateField.ts, 104, 26))
+         static #foo = "foo";
+->#foo : Symbol(A_StaticField_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 240, 38))
++>#foo : Symbol(A_StaticField_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 240, 38), Decl(privateNameDuplicateField.ts, 241, 28))
 
-         #foo = "foo";
-->#foo : Symbol(A_Getter_Field.#foo, Decl(privateNameDuplicateField.ts, 104, 26), Decl(privateNameDuplicateField.ts, 105, 31))
-+>#foo : Symbol(A_Getter_Field.#foo, Decl(privateNameDuplicateField.ts, 105, 31))
+         static get #foo() { return ""}
+->#foo : Symbol(A_StaticField_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 241, 28))
++>#foo : Symbol(A_StaticField_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 240, 38), Decl(privateNameDuplicateField.ts, 241, 28))
      }
 
      // Error
-@@= skipped -94, +94 lines =@@
- >A_Setter_Field : Symbol(A_Setter_Field, Decl(privateNameDuplicateField.ts, 152, 19))
+@@= skipped -11, +11 lines =@@
+ >A_StaticField_StaticSetter : Symbol(A_StaticField_StaticSetter, Decl(privateNameDuplicateField.ts, 243, 5))
 
-         set #foo(value: string) { }
-->#foo : Symbol(A_Setter_Field.#foo, Decl(privateNameDuplicateField.ts, 154, 26), Decl(privateNameDuplicateField.ts, 155, 35))
-+>#foo : Symbol(A_Setter_Field.#foo, Decl(privateNameDuplicateField.ts, 154, 26))
- >value : Symbol(value, Decl(privateNameDuplicateField.ts, 155, 17))
+         static #foo = "foo";
+->#foo : Symbol(A_StaticField_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 246, 38))
++>#foo : Symbol(A_StaticField_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 246, 38), Decl(privateNameDuplicateField.ts, 247, 28))
 
-         #foo = "foo";
-->#foo : Symbol(A_Setter_Field.#foo, Decl(privateNameDuplicateField.ts, 154, 26), Decl(privateNameDuplicateField.ts, 155, 35))
-+>#foo : Symbol(A_Setter_Field.#foo, Decl(privateNameDuplicateField.ts, 155, 35))
+         static set #foo(value: string) { }
+->#foo : Symbol(A_StaticField_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 247, 28))
++>#foo : Symbol(A_StaticField_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 246, 38), Decl(privateNameDuplicateField.ts, 247, 28))
+ >value : Symbol(value, Decl(privateNameDuplicateField.ts, 248, 24))
      }
-
-     // Error
-@@= skipped -241, +241 lines =@@
+ }
+@@= skipped -61, +61 lines =@@
  >A_StaticMethod_StaticField : Symbol(A_StaticMethod_StaticField, Decl(privateNameDuplicateField.ts, 275, 5))
 
          static #foo() { }
@@ -50,20 +75,6 @@
          static #foo = "foo";
 ->#foo : Symbol(A_StaticMethod_StaticField.#foo, Decl(privateNameDuplicateField.ts, 278, 38), Decl(privateNameDuplicateField.ts, 279, 25))
 +>#foo : Symbol(A_StaticMethod_StaticField.#foo, Decl(privateNameDuplicateField.ts, 279, 25))
-     }
-
-     // Error
-@@= skipped -192, +192 lines =@@
- >A_StaticSetter_StaticField : Symbol(A_StaticSetter_StaticField, Decl(privateNameDuplicateField.ts, 376, 5))
-
-         static set #foo(value: string) { }
-->#foo : Symbol(A_StaticSetter_StaticField.#foo, Decl(privateNameDuplicateField.ts, 379, 38), Decl(privateNameDuplicateField.ts, 380, 42))
-+>#foo : Symbol(A_StaticSetter_StaticField.#foo, Decl(privateNameDuplicateField.ts, 379, 38))
- >value : Symbol(value, Decl(privateNameDuplicateField.ts, 380, 24))
-
-         static #foo = "foo";
-->#foo : Symbol(A_StaticSetter_StaticField.#foo, Decl(privateNameDuplicateField.ts, 379, 38), Decl(privateNameDuplicateField.ts, 380, 42))
-+>#foo : Symbol(A_StaticSetter_StaticField.#foo, Decl(privateNameDuplicateField.ts, 380, 42))
      }
 
      // Error

@@ -285,8 +285,8 @@ const o5 = {
 }
 
 const o6 = {
->o6 : { readonly x: number; }
->{    set x(value: number) { },    x: 0,    get x() { return 0 }} : { readonly x: number; }
+>o6 : { x: number; }
+>{    set x(value: number) { },    x: 0,    get x() { return 0 }} : { x: number; }
 
     set x(value: number) { },
 >x : number

@@ -1,0 +1,20 @@
+--- old.autoAccessor11.symbols
++++ new.autoAccessor11.symbols
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(autoAccessor11.ts, 0, 0))
+
+     accessor
+->accessor : Symbol(C.accessor, Decl(autoAccessor11.ts, 0, 9))
++>accessor : Symbol(C.accessor, Decl(autoAccessor11.ts, 0, 9), Decl(autoAccessor11.ts, 9, 5))
+
+     a
+ >a : Symbol(C.a, Decl(autoAccessor11.ts, 1, 12))
+@@= skipped -19, +19 lines =@@
+ >c : Symbol(C.c, Decl(autoAccessor11.ts, 8, 12))
+
+     accessor accessor
+->accessor : Symbol(C.accessor, Decl(autoAccessor11.ts, 9, 5))
++>accessor : Symbol(C.accessor, Decl(autoAccessor11.ts, 0, 9), Decl(autoAccessor11.ts, 9, 5))
+
+     d;
+ >d : Symbol(C.d, Decl(autoAccessor11.ts, 11, 21))

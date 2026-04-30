@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/propertyAndAccessorMerging.ts] ////
+
+=== propertyAndAccessorMerging.ts ===
+// https://github.com/microsoft/typescript-go/issues/3613
+
+interface EntityMetadata1 {
+    get tableName(): string;
+>tableName : string
+
+    set tableName(name: string);
+>tableName : string
+>name : string
+}
+
+interface EntityMetadata1 {
+    tableName: string;
+>tableName : string
+}
+
+interface EntityMetadata2 {
+    tableName: string;
+>tableName : string
+}
+
+interface EntityMetadata2 {
+    get tableName(): string;
+>tableName : string
+
+    set tableName(name: string);
+>tableName : string
+>name : string
+}
+
+class Foo1 {
+>Foo1 : Foo1
+
+    accessor x: string = "abc"
+>x : string
+>"abc" : "abc"
+}
+
+interface Foo1 {
+    x: string
+>x : string
+}
+
+interface Foo2 {
+    x: string
+>x : string
+}
+
+class Foo2 {
+>Foo2 : Foo2
+
+    accessor x: string = "abc"
+>x : string
+>"abc" : "abc"
+}
+

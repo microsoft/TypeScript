@@ -17,7 +17,7 @@ class a {
 >b : () => void
     }
     public x;
->x : any
+>x : number
 
     get x() {
 >x : number
@@ -66,7 +66,7 @@ class a {
 >_x : number
     }
     public x2;
->x2 : any
+>x2 : number
 
     get z2() {
 >z2 : string

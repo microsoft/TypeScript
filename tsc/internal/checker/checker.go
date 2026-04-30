@@ -3081,7 +3081,7 @@ func (c *Checker) checkObjectTypeForDuplicateDeclarations(node *ast.Node, checkP
 	var staticNames map[string]int
 	var privateNames map[string]int
 	nodeInAmbientContext := node.Flags&ast.NodeFlagsAmbient != 0
-	checkProperty := func(symbol *ast.Symbol, isStatic bool) {
+	checkPropertyOrAccessor := func(symbol *ast.Symbol, kind int, isStatic bool) {
 		if len(symbol.Declarations) > 1 {
 			var names map[string]int
 			if isStatic {
@@ -3095,11 +3095,16 @@ func (c *Checker) checkObjectTypeForDuplicateDeclarations(node *ast.Node, checkP
 				}
 				names = instanceNames
 			}
-			if state := names[symbol.Name]; state != 2 {
-				if state == 1 {
-					c.reportDuplicateMemberErrors(node, symbol.Name, true, isStatic, diagnostics.Duplicate_identifier_0)
-				}
-				names[symbol.Name] = state + 1
+			state := names[symbol.Name]
+			switch {
+			case state == 0:
+				// On first occurrence just record the kind
+				names[symbol.Name] = kind
+			case state == 1 || state == 2 && kind != 2:
+				// Error on second property or combination of property and accessor
+				c.reportDuplicateMemberErrors(node, symbol.Name, true, isStatic, diagnostics.Duplicate_identifier_0)
+				// Record that errors have been reported
+				names[symbol.Name] = 3
 			}
 		}
 	}
@@ -3107,7 +3112,7 @@ func (c *Checker) checkObjectTypeForDuplicateDeclarations(node *ast.Node, checkP
 		if ast.IsConstructorDeclaration(member) {
 			for _, param := range member.Parameters() {
 				if ast.IsParameterPropertyDeclaration(param, member) && !ast.IsBindingPattern(param.Name()) {
-					checkProperty(c.getSymbolOfDeclaration(param), false /*isStatic*/)
+					checkPropertyOrAccessor(c.getSymbolOfDeclaration(param), 1, false /*isStatic*/)
 				}
 			}
 		} else {
@@ -3117,10 +3122,12 @@ func (c *Checker) checkObjectTypeForDuplicateDeclarations(node *ast.Node, checkP
 			if !nodeInAmbientContext && isStatic && symbol != nil && symbol.Name == "prototype" {
 				c.error(member.Name(), diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1, symbol.Name, c.symbolToString(c.getSymbolOfDeclaration(node)))
 			}
-			// When a property has multiple declarations, check that only one of those declarations is in this object
-			// type declaration (multiple merged object types are permitted to each declare the same property).
+			// Check that this object type declaration doesn't contain multiple declarations of the same property,
+			// or accessor and property declarations with the same name.
 			if ast.IsPropertyDeclaration(member) && !ast.HasAccessorModifier(member) || ast.IsPropertySignatureDeclaration(member) {
-				checkProperty(symbol, isStatic)
+				checkPropertyOrAccessor(symbol, 1, isStatic)
+			} else if ast.IsAccessor(member) || ast.IsPropertyDeclaration(member) && ast.HasAccessorModifier(member) {
+				checkPropertyOrAccessor(symbol, 2, isStatic)
 			}
 			// Check that each private identifier is used only for instance members or only for static members. It is an
 			// error for an instance and a static member to have the same private identifier.
@@ -16118,6 +16125,9 @@ func (c *Checker) getTypeOfSymbol(symbol *ast.Symbol) *Type {
 	if symbol.CheckFlags&ast.CheckFlagsReverseMapped != 0 {
 		return c.getTypeOfReverseMappedSymbol(symbol)
 	}
+	if symbol.Flags&ast.SymbolFlagsAccessor != 0 {
+		return c.getTypeOfAccessors(symbol)
+	}
 	if symbol.Flags&(ast.SymbolFlagsVariable|ast.SymbolFlagsProperty) != 0 {
 		return c.getTypeOfVariableOrParameterOrProperty(symbol)
 	}
@@ -16126,9 +16136,6 @@ func (c *Checker) getTypeOfSymbol(symbol *ast.Symbol) *Type {
 	}
 	if symbol.Flags&ast.SymbolFlagsEnumMember != 0 {
 		return c.getTypeOfEnumMember(symbol)
-	}
-	if symbol.Flags&ast.SymbolFlagsAccessor != 0 {
-		return c.getTypeOfAccessors(symbol)
 	}
 	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
 		return c.getTypeOfAlias(symbol)

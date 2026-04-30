@@ -324,8 +324,6 @@ compiler/genericFunctionSpecializations1.types.diff
 compiler/genericMemberFunction.types.diff
 compiler/genericOverloadSignatures.types.diff
 compiler/genericSpecializationToTypeLiteral1.types.diff
-compiler/gettersAndSettersErrors.symbols.diff
-compiler/gettersAndSettersErrors.types.diff
 compiler/indexTypeNoSubstitutionTemplateLiteral.symbols.diff
 compiler/indexTypeNoSubstitutionTemplateLiteral.types.diff
 compiler/inferenceDoesNotAddUndefinedOrNull.types.diff
@@ -1353,3 +1351,14 @@ conformance/privateNameStaticMethod.js.diff
 conformance/jsdocDisallowedInTypescript.js.diff
 ## Corsa correctly emits `any` type for auto-typed variable with `null` initializer
 compiler/letDeclarations.js.diff
+
+## Fix checks for disallowed property/accessor duplicate declarations
+## https://github.com/microsoft/typescript-go/pull/3672
+compiler/allowJscheckJsTypeParameterNoCrash.types.diff
+compiler/fieldAndGetterWithSameName.symbols.diff
+conformance/autoAccessor11.symbols.diff
+conformance/objectLiteralErrors(target=es2015).errors.txt.diff
+conformance/objectLiteralErrors(target=es2015).symbols.diff
+conformance/objectLiteralErrors(target=es2015).types.diff
+conformance/propertyAndAccessorWithSameName.symbols.diff
+conformance/propertyAndAccessorWithSameName.types.diff

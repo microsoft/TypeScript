@@ -12,14 +12,14 @@
 +duplicateClassElements.ts(29,9): error TS2300: Duplicate identifier 'x2'.
 +duplicateClassElements.ts(32,9): error TS2300: Duplicate identifier 'x2'.
  duplicateClassElements.ts(34,12): error TS2300: Duplicate identifier 'x2'.
--duplicateClassElements.ts(34,12): error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
+ duplicateClassElements.ts(34,12): error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
  duplicateClassElements.ts(36,9): error TS2300: Duplicate identifier 'z2'.
- duplicateClassElements.ts(39,9): error TS2300: Duplicate identifier 'z2'.
+@@= skipped -7, +9 lines =@@
  duplicateClassElements.ts(41,12): error TS2300: Duplicate identifier 'z2'.
 
 
 -==== duplicateClassElements.ts (14 errors) ====
-+==== duplicateClassElements.ts (16 errors) ====
++==== duplicateClassElements.ts (17 errors) ====
      class a {
          public a;
 +               ~
@@ -27,7 +27,7 @@
          public a;
                 ~
  !!! error TS2300: Duplicate identifier 'a'.
-@@= skipped -55, +58 lines =@@
+@@= skipped -48, +50 lines =@@
          }
      
          get x2() {
@@ -41,10 +41,3 @@
          }
          public x2;
                 ~~
- !!! error TS2300: Duplicate identifier 'x2'.
--               ~~
--!!! error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
--!!! related TS6203 duplicateClassElements.ts:29:9: 'x2' was also declared here.
-     
-         get z2() {
-             ~~

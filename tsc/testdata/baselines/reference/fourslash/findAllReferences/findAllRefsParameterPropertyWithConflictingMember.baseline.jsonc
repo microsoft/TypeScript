@@ -56,7 +56,7 @@
 //   get /*FIND ALL REFS*/[|x|](): void
 // }
 // class C2 {
-//   constructor(public x: number) {
+//   constructor(public [|x|]: number) {
 //     [|x|]++;
 //   }
 // }
@@ -68,14 +68,14 @@
 // === findAllReferences ===
 // === /c2.ts ===
 // interface C2 {
-//   get x(): void
+//   get [|x|](): void
 // }
 // class C2 {
 //   constructor(public /*FIND ALL REFS*/[|x|]: number) {
 //     [|x|]++;
 //   }
 // }
-// new C2(1).x;
+// new C2(1).[|x|];
 // 
 
 
@@ -101,7 +101,7 @@
 //   get [|x|](): void
 // }
 // class C2 {
-//   constructor(public x: number) {
+//   constructor(public [|x|]: number) {
 //     [|x|]++;
 //   }
 // }

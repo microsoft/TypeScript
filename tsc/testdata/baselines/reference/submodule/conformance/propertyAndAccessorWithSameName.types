@@ -19,7 +19,7 @@ class D {
 >D : D
 
     x: number;
->x : number
+>x : any
 
     set x(v) { } // error
 >x : any
@@ -39,6 +39,6 @@ class E {
 >1 : 1
     }
     set x(v) { }
->x : any
->v : any
+>x : number
+>v : number
 }
