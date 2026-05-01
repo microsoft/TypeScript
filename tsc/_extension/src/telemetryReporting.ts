@@ -1,4 +1,5 @@
 import type { TelemetryReporter as VSCodeTelemetryReporter } from "@vscode/extension-telemetry";
+import type { IExperimentationTelemetry } from "vscode-tas-client";
 
 // As new events are added, update the TelemetryReporter interface below.
 // This helps ensure that the telemetry events used in the codebase are
@@ -27,21 +28,45 @@ export interface TelemetryReporter {
     dispose(): void;
 }
 
-export function createTelemetryReporter(vscReporter: VSCodeTelemetryReporter): TelemetryReporter {
+export interface ExperimentationTelemetryReporter extends TelemetryReporter, IExperimentationTelemetry {}
+
+// Note:
+// This reporter *supports* experimentation telemetry,
+// but will only do so when passed to an `ExperimentationService` which
+// will set shared properties on this reporter.
+export function createTelemetryReporter(vscReporter: VSCodeTelemetryReporter): ExperimentationTelemetryReporter {
+    let sharedProperties: Record<string, string> = Object.create(null);
+
     return {
+        // Primary reporting methods for the extension.
         sendTelemetryEvent,
         sendTelemetryErrorEvent,
         sendTelemetryEventUntyped: sendTelemetryEvent,
         sendTelemetryErrorEventUntyped: sendTelemetryErrorEvent,
 
+        // Required for the experimentation telemetry service interface.
+        setSharedProperty,
+        postEvent,
+
         dispose: () => vscReporter.dispose(),
     };
 
+    function setSharedProperty(key: string, value: string): void {
+        sharedProperties[key] = value;
+    }
+
+    function postEvent(eventName: string, props: Map<string, string>): void {
+        const propsAsObj = { ...sharedProperties, ...Object.fromEntries(props) };
+        vscReporter.sendTelemetryEvent(eventName, propsAsObj);
+    }
+
     function sendTelemetryEvent(eventName: string, data?: Record<string, string>, measurements?: Record<string, number>): void {
+        data = { ...sharedProperties, ...data };
         vscReporter.sendTelemetryEvent(eventName, data, measurements);
     }
 
     function sendTelemetryErrorEvent(eventName: string, data?: Record<string, string>, measurements?: Record<string, number>): void {
+        data = { ...sharedProperties, ...data };
         vscReporter.sendTelemetryErrorEvent(eventName, data, measurements);
     }
 }

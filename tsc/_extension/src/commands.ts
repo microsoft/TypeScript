@@ -6,7 +6,6 @@ import type {
     Position,
 } from "vscode-languageclient";
 
-import { Client } from "./client";
 import type * as tr from "./telemetryReporting";
 import { restartExtHostOnChangeIfNeeded } from "./util";
 

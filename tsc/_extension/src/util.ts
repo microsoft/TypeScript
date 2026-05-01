@@ -1,5 +1,3 @@
-import { exec } from "child_process";
-import { get } from "http";
 import * as path from "path";
 import * as vscode from "vscode";
 
@@ -221,4 +219,9 @@ export function readUnifiedConfig<T>(
     );
     if (explicit !== undefined) return explicit;
     return vscode.workspace.getConfiguration(fallbackSection, scope).get<T>(fallbackKey, defaultValue);
+}
+
+export interface PackageInfo {
+    name: string;
+    version: string;
 }
