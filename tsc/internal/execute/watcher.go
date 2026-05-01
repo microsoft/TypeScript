@@ -115,6 +115,10 @@ func (w *Watcher) start() {
 		w.configFilePaths = append([]string{w.configFileName}, w.config.ExtendedSourceFiles()...)
 	}
 
+	if w.sys.GetEnvironmentVariable("TS_WATCH_DEBUG") != "" {
+		w.fileWatcher.SetDebugLog(w.sys.Writer())
+	}
+
 	w.reportWatchStatus(ast.NewCompilerDiagnostic(diagnostics.Starting_compilation_in_watch_mode))
 	w.doBuild()
 	w.mu.Unlock()

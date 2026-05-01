@@ -45,7 +45,7 @@ const (
 )
 
 func (w *WatchOptions) WatchInterval() time.Duration {
-	watchInterval := 1000 * time.Millisecond
+	watchInterval := 2000 * time.Millisecond
 	if w != nil && w.Interval != nil {
 		watchInterval = time.Duration(*w.Interval) * time.Millisecond
 	}
