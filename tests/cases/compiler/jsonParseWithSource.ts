@@ -19,6 +19,18 @@ JSON.parse('{"key":123}', (key, value, context) => {
     return value;
 });
 
+// Test coverage for reviver context on array elements
+JSON.parse('[1, 2, 3]', (key, value, context) => {
+    const src: string = context.source;
+    return value;
+});
+
+// Test coverage for reviver context on nested objects
+JSON.parse('{"a": {"b": 1}}', (key, value, context) => {
+    const src: string = context.source;
+    return value;
+});
+
 // Existing JSON.parse overloads still work
 JSON.parse("{}");
 JSON.parse('{"a":1}', (key, value) => value);

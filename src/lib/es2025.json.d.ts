@@ -19,7 +19,6 @@ interface JSON {
      * If a member contains nested objects, the nested objects are transformed before the parent object is.
      * For primitive values the reviver also receives a `context` object whose `source` property is the original JSON
      * text of that value.
-     * @throws {SyntaxError} If `text` is not valid JSON.
      */
     parse(text: string, reviver: (this: any, key: string, value: any, context: { source: string }) => any): any;
 
