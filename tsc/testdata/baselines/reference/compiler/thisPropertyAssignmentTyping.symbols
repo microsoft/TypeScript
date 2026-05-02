@@ -1,0 +1,200 @@
+//// [tests/cases/compiler/thisPropertyAssignmentTyping.ts] ////
+
+=== main.js ===
+class C1 {
+>C1 : Symbol(C1, Decl(main.js, 0, 0))
+
+    constructor() {
+        this.foo = [3];
+>this.foo : Symbol(C1.foo, Decl(main.js, 1, 19), Decl(main.js, 2, 23))
+>this : Symbol(C1, Decl(main.js, 0, 0))
+>foo : Symbol(C1.foo, Decl(main.js, 1, 19), Decl(main.js, 2, 23))
+
+        this.foo = [this.foo[0] * 2];
+>this.foo : Symbol(C1.foo, Decl(main.js, 1, 19), Decl(main.js, 2, 23))
+>this : Symbol(C1, Decl(main.js, 0, 0))
+>foo : Symbol(C1.foo, Decl(main.js, 1, 19), Decl(main.js, 2, 23))
+>this.foo : Symbol(C1.foo, Decl(main.js, 1, 19), Decl(main.js, 2, 23))
+>this : Symbol(C1, Decl(main.js, 0, 0))
+>foo : Symbol(C1.foo, Decl(main.js, 1, 19), Decl(main.js, 2, 23))
+
+        this.foo;  // number[]
+>this.foo : Symbol(C1.foo, Decl(main.js, 1, 19), Decl(main.js, 2, 23))
+>this : Symbol(C1, Decl(main.js, 0, 0))
+>foo : Symbol(C1.foo, Decl(main.js, 1, 19), Decl(main.js, 2, 23))
+    }
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(main.js, 6, 1))
+
+    constructor() {
+        this.foo = [3];
+>this.foo : Symbol(C2.foo, Decl(main.js, 9, 19), Decl(main.js, 13, 15))
+>this : Symbol(C2, Decl(main.js, 6, 1))
+>foo : Symbol(C2.foo, Decl(main.js, 9, 19), Decl(main.js, 13, 15))
+
+        this.foo;  // number[]
+>this.foo : Symbol(C2.foo, Decl(main.js, 9, 19), Decl(main.js, 13, 15))
+>this : Symbol(C2, Decl(main.js, 6, 1))
+>foo : Symbol(C2.foo, Decl(main.js, 9, 19), Decl(main.js, 13, 15))
+    }
+    method1() {
+>method1 : Symbol(C2.method1, Decl(main.js, 12, 5))
+
+        this.foo = [this.foo[0] * 2];
+>this.foo : Symbol(C2.foo, Decl(main.js, 9, 19), Decl(main.js, 13, 15))
+>this : Symbol(C2, Decl(main.js, 6, 1))
+>foo : Symbol(C2.foo, Decl(main.js, 9, 19), Decl(main.js, 13, 15))
+>this.foo : Symbol(C2.foo, Decl(main.js, 9, 19), Decl(main.js, 13, 15))
+>this : Symbol(C2, Decl(main.js, 6, 1))
+>foo : Symbol(C2.foo, Decl(main.js, 9, 19), Decl(main.js, 13, 15))
+    }
+}
+
+class C4 {
+>C4 : Symbol(C4, Decl(main.js, 16, 1))
+
+    constructor() {
+        this.bar = [];
+>this.bar : Symbol(C4.bar, Decl(main.js, 19, 19))
+>this : Symbol(C4, Decl(main.js, 16, 1))
+>bar : Symbol(C4.bar, Decl(main.js, 19, 19))
+
+        this.bar.push("baz");
+>this.bar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.bar : Symbol(C4.bar, Decl(main.js, 19, 19))
+>this : Symbol(C4, Decl(main.js, 16, 1))
+>bar : Symbol(C4.bar, Decl(main.js, 19, 19))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+        this.bar;  // string[]
+>this.bar : Symbol(C4.bar, Decl(main.js, 19, 19))
+>this : Symbol(C4, Decl(main.js, 16, 1))
+>bar : Symbol(C4.bar, Decl(main.js, 19, 19))
+    }
+}
+
+// When this.xxx assignment declarations occur only in methods, the declared type of the
+// property is a union of the types of all assigned values, excluding values from self-referential
+// assignments, plus undefined. Local CFA removes the undefined when possible.
+
+class C5 {
+>C5 : Symbol(C5, Decl(main.js, 24, 1))
+
+    method1() {
+>method1 : Symbol(C5.method1, Decl(main.js, 30, 10))
+
+        this.foo;  // number[] | undefined
+>this.foo : Symbol(C5.foo, Decl(main.js, 32, 17), Decl(main.js, 33, 22))
+>this : Symbol(C5, Decl(main.js, 24, 1))
+>foo : Symbol(C5.foo, Decl(main.js, 32, 17), Decl(main.js, 33, 22))
+
+        this.foo = [3]
+>this.foo : Symbol(C5.foo, Decl(main.js, 32, 17), Decl(main.js, 33, 22))
+>this : Symbol(C5, Decl(main.js, 24, 1))
+>foo : Symbol(C5.foo, Decl(main.js, 32, 17), Decl(main.js, 33, 22))
+
+        this.foo = [this.foo[0] * 2]
+>this.foo : Symbol(C5.foo, Decl(main.js, 32, 17), Decl(main.js, 33, 22))
+>this : Symbol(C5, Decl(main.js, 24, 1))
+>foo : Symbol(C5.foo, Decl(main.js, 32, 17), Decl(main.js, 33, 22))
+>this.foo : Symbol(C5.foo, Decl(main.js, 32, 17), Decl(main.js, 33, 22))
+>this : Symbol(C5, Decl(main.js, 24, 1))
+>foo : Symbol(C5.foo, Decl(main.js, 32, 17), Decl(main.js, 33, 22))
+
+        this.foo;  // number[]
+>this.foo : Symbol(C5.foo, Decl(main.js, 32, 17), Decl(main.js, 33, 22))
+>this : Symbol(C5, Decl(main.js, 24, 1))
+>foo : Symbol(C5.foo, Decl(main.js, 32, 17), Decl(main.js, 33, 22))
+    }
+}
+
+class C6 {
+>C6 : Symbol(C6, Decl(main.js, 37, 1))
+
+    method1() {
+>method1 : Symbol(C6.method1, Decl(main.js, 39, 10))
+
+        this.foo = [3];
+>this.foo : Symbol(C6.foo, Decl(main.js, 40, 15), Decl(main.js, 45, 17))
+>this : Symbol(C6, Decl(main.js, 37, 1))
+>foo : Symbol(C6.foo, Decl(main.js, 40, 15), Decl(main.js, 45, 17))
+
+        this.foo;  // number[]
+>this.foo : Symbol(C6.foo, Decl(main.js, 40, 15), Decl(main.js, 45, 17))
+>this : Symbol(C6, Decl(main.js, 37, 1))
+>foo : Symbol(C6.foo, Decl(main.js, 40, 15), Decl(main.js, 45, 17))
+    }
+    method2() {
+>method2 : Symbol(C6.method2, Decl(main.js, 43, 5))
+
+        this.foo;  // number[] | undefined
+>this.foo : Symbol(C6.foo, Decl(main.js, 40, 15), Decl(main.js, 45, 17))
+>this : Symbol(C6, Decl(main.js, 37, 1))
+>foo : Symbol(C6.foo, Decl(main.js, 40, 15), Decl(main.js, 45, 17))
+
+        this.foo = [this.foo[0] * 2];  // Error: Object is possibly undefined
+>this.foo : Symbol(C6.foo, Decl(main.js, 40, 15), Decl(main.js, 45, 17))
+>this : Symbol(C6, Decl(main.js, 37, 1))
+>foo : Symbol(C6.foo, Decl(main.js, 40, 15), Decl(main.js, 45, 17))
+>this.foo : Symbol(C6.foo, Decl(main.js, 40, 15), Decl(main.js, 45, 17))
+>this : Symbol(C6, Decl(main.js, 37, 1))
+>foo : Symbol(C6.foo, Decl(main.js, 40, 15), Decl(main.js, 45, 17))
+
+        this.foo;  // number[]
+>this.foo : Symbol(C6.foo, Decl(main.js, 40, 15), Decl(main.js, 45, 17))
+>this : Symbol(C6, Decl(main.js, 37, 1))
+>foo : Symbol(C6.foo, Decl(main.js, 40, 15), Decl(main.js, 45, 17))
+    }
+}
+
+class C7 {
+>C7 : Symbol(C7, Decl(main.js, 49, 1))
+
+    method1() {
+>method1 : Symbol(C7.method1, Decl(main.js, 51, 10))
+
+        this.foo = 0;
+>this.foo : Symbol(C7.foo, Decl(main.js, 52, 15), Decl(main.js, 53, 21))
+>this : Symbol(C7, Decl(main.js, 49, 1))
+>foo : Symbol(C7.foo, Decl(main.js, 52, 15), Decl(main.js, 53, 21))
+
+        this.foo = this.foo + "abc";  // Error, 'string' not assignable to 'number'
+>this.foo : Symbol(C7.foo, Decl(main.js, 52, 15), Decl(main.js, 53, 21))
+>this : Symbol(C7, Decl(main.js, 49, 1))
+>foo : Symbol(C7.foo, Decl(main.js, 52, 15), Decl(main.js, 53, 21))
+>this.foo : Symbol(C7.foo, Decl(main.js, 52, 15), Decl(main.js, 53, 21))
+>this : Symbol(C7, Decl(main.js, 49, 1))
+>foo : Symbol(C7.foo, Decl(main.js, 52, 15), Decl(main.js, 53, 21))
+    }
+}
+
+// When this.xxx assigmment declarations occur only in methods, an assigned empty array
+// literal value is given type 'any[]'.
+
+class C8 {
+>C8 : Symbol(C8, Decl(main.js, 56, 1))
+
+    method1() {
+>method1 : Symbol(C8.method1, Decl(main.js, 61, 10))
+
+        this.bar = [];  // Error: Implicit any[]
+>this.bar : Symbol(C8.bar, Decl(main.js, 62, 15))
+>this : Symbol(C8, Decl(main.js, 56, 1))
+>bar : Symbol(C8.bar, Decl(main.js, 62, 15))
+
+        this.bar.push("baz");
+>this.bar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.bar : Symbol(C8.bar, Decl(main.js, 62, 15))
+>this : Symbol(C8, Decl(main.js, 56, 1))
+>bar : Symbol(C8.bar, Decl(main.js, 62, 15))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+        this.bar;  // any[]
+>this.bar : Symbol(C8.bar, Decl(main.js, 62, 15))
+>this : Symbol(C8, Decl(main.js, 56, 1))
+>bar : Symbol(C8.bar, Decl(main.js, 62, 15))
+    }    
+}
+

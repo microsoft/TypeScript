@@ -17706,10 +17706,11 @@ func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol) *Ty
 				t = c.getTypeFromTypeNode(declaration.Type())
 				break
 			}
-			assignedType := c.getAssignmentDeclarationInitializerType(declaration)
-			// We ignore initial assignments of undefined to CommonJS exports when there are multiple assignment declarations
-			if ast.GetAssignmentDeclarationKind(declaration) != ast.JSDeclarationKindExportsProperty || i != 0 || len(symbol.Declarations) == 1 || assignedType.flags&TypeFlagsUndefined == 0 {
-				types = core.AppendIfUnique(types, assignedType)
+			if assignedType := c.getAssignmentDeclarationInitializerType(declaration); assignedType != nil {
+				// We ignore initial assignments of undefined to CommonJS exports when there are multiple assignment declarations
+				if ast.GetAssignmentDeclarationKind(declaration) != ast.JSDeclarationKindExportsProperty || i != 0 || len(symbol.Declarations) == 1 || assignedType.flags&TypeFlagsUndefined == 0 {
+					types = core.AppendIfUnique(types, assignedType)
+				}
 			}
 		}
 		if kind == thisAssignmentDeclarationMethod && len(types) > 0 {
@@ -17718,7 +17719,10 @@ func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol) *Ty
 			}
 		}
 		if t == nil {
-			t = c.getUnionType(types)
+			t = c.anyType
+			if len(types) != 0 {
+				t = c.getUnionType(types)
+			}
 		}
 	}
 	t = c.getWidenedType(t)
@@ -17733,16 +17737,42 @@ func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol) *Ty
 
 func (c *Checker) getAssignmentDeclarationInitializerType(node *ast.Node) *Type {
 	if ast.IsBinaryExpression(node) {
+		var t *Type
 		switch ast.GetAssignmentDeclarationKind(node) {
 		case ast.JSDeclarationKindModuleExports, ast.JSDeclarationKindExportsProperty:
-			return c.getRegularTypeOfLiteralType(c.checkExpressionCached(ast.GetRightMostAssignedExpression(node)))
+			t = c.getRegularTypeOfLiteralType(c.checkExpressionCached(ast.GetRightMostAssignedExpression(node)))
+		case ast.JSDeclarationKindThisProperty:
+			if c.containsSameNamedThisProperty(node.AsBinaryExpression().Left, node.AsBinaryExpression().Right) {
+				return nil
+			}
+			fallthrough
+		default:
+			t = c.checkExpressionForMutableLocation(node.AsBinaryExpression().Right, CheckModeNormal)
 		}
-		return c.checkExpressionForMutableLocation(node.AsBinaryExpression().Right, CheckModeNormal)
+		if c.isEmptyArrayLiteralType(t) {
+			c.reportImplicitAny(node, c.anyArrayType, WideningKindNormal)
+			return c.anyArrayType
+		}
+		return t
 	}
 	if ast.IsCallExpression(node) {
 		return c.getTypeFromPropertyDescriptor(node.Arguments()[2])
 	}
-	return c.neverType
+	return nil
+}
+
+func (c *Checker) containsSameNamedThisProperty(thisProperty *ast.Node, expression *ast.Node) bool {
+	var visit func(node *ast.Node) bool
+	visit = func(node *ast.Node) bool {
+		if c.isMatchingReference(thisProperty, node) {
+			return true
+		}
+		if ast.IsFunctionLike(node) {
+			return false
+		}
+		return node.ForEachChild(visit)
+	}
+	return visit(expression)
 }
 
 func (c *Checker) getTypeFromPropertyDescriptor(node *ast.Node) *Type {
