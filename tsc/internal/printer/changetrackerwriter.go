@@ -88,12 +88,11 @@ func (ct *ChangeTrackerWriter) getEnd(node triviaPositionKey) int {
 func (ct *ChangeTrackerWriter) setLastNonTriviaPosition(s string, force bool) {
 	if force || scanner.SkipTrivia(s, 0) != len(s) {
 		ct.lastNonTriviaPosition = ct.textWriter.GetTextPos()
-		i := 0
-		for stringutil.IsWhiteSpaceLike(rune(s[len(s)-i-1])) {
-			i++
-		}
 		// trim trailing whitespaces
-		ct.lastNonTriviaPosition -= i
+		pos := len(s) - 1
+		for ; pos >= 0 && stringutil.IsWhiteSpaceLike(rune(s[pos])); pos-- {
+		}
+		ct.lastNonTriviaPosition -= len(s) - 1 - pos
 	}
 }
 
