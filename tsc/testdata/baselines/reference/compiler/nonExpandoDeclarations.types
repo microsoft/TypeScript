@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/nonExpandoDeclarations.ts] ////
+
+=== main.js ===
+function f1() {
+>f1 : () => Record<string, boolean>
+
+    /** @type {Record<string, boolean>} */
+    let merged_props = {};
+>merged_props : Record<string, boolean>
+>{} : {}
+
+    merged_props.foo = true;
+>merged_props.foo = true : true
+>merged_props.foo : boolean
+>merged_props : Record<string, boolean>
+>foo : boolean
+>true : true
+
+    return merged_props;
+>merged_props : Record<string, boolean>
+}
+
+function f2() {}
+>f2 : { (): void; merged_props: Record<string, boolean>; }
+
+/** @type {Record<string, boolean>} */
+f2.merged_props = {};
+>f2.merged_props = {} : {}
+>f2.merged_props : Record<string, boolean>
+>f2 : { (): void; merged_props: Record<string, boolean>; }
+>merged_props : Record<string, boolean>
+>{} : {}
+
+f2.merged_props.foo = true;
+>f2.merged_props.foo = true : true
+>f2.merged_props.foo : boolean
+>f2.merged_props : Record<string, boolean>
+>f2 : { (): void; merged_props: Record<string, boolean>; }
+>merged_props : Record<string, boolean>
+>foo : boolean
+>true : true
+
+f2.merged_props
+>f2.merged_props : Record<string, boolean>
+>f2 : { (): void; merged_props: Record<string, boolean>; }
+>merged_props : Record<string, boolean>
+

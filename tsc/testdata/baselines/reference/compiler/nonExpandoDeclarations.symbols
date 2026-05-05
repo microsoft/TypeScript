@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/nonExpandoDeclarations.ts] ////
+
+=== main.js ===
+function f1() {
+>f1 : Symbol(f1, Decl(main.js, 0, 0))
+
+    /** @type {Record<string, boolean>} */
+    let merged_props = {};
+>merged_props : Symbol(merged_props, Decl(main.js, 2, 7))
+
+    merged_props.foo = true;
+>merged_props : Symbol(merged_props, Decl(main.js, 2, 7))
+
+    return merged_props;
+>merged_props : Symbol(merged_props, Decl(main.js, 2, 7))
+}
+
+function f2() {}
+>f2 : Symbol(f2, Decl(main.js, 5, 1))
+
+/** @type {Record<string, boolean>} */
+f2.merged_props = {};
+>f2.merged_props : Symbol(f2.merged_props, Decl(main.js, 7, 16))
+>f2 : Symbol(f2, Decl(main.js, 5, 1))
+>merged_props : Symbol(f2.merged_props, Decl(main.js, 7, 16))
+
+f2.merged_props.foo = true;
+>f2.merged_props : Symbol(f2.merged_props, Decl(main.js, 7, 16))
+>f2 : Symbol(f2, Decl(main.js, 5, 1))
+>merged_props : Symbol(f2.merged_props, Decl(main.js, 7, 16))
+
+f2.merged_props
+>f2.merged_props : Symbol(f2.merged_props, Decl(main.js, 7, 16))
+>f2 : Symbol(f2, Decl(main.js, 5, 1))
+>merged_props : Symbol(f2.merged_props, Decl(main.js, 7, 16))
+
