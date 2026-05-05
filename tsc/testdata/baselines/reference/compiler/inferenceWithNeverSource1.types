@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/inferenceWithNeverSource1.ts] ////
+
+=== inferenceWithNeverSource1.ts ===
+// https://github.com/microsoft/typescript-go/issues/3688
+type Paths<T> = unknown extends T ? string : string;
+>Paths : Paths<T>
+
+declare function f<
+>f : <R extends { p: any; }, const T extends string = string>(opts: { from?: (T & Paths<R["p"]>) | Paths<R["p"]>; via: string extends T ? "wide" : "narrow"; }) => void
+
+    R extends { p: any },
+>p : any
+
+    const T extends string = string,
+>(opts: {
+>opts : { from?: (T & Paths<R["p"]>) | Paths<R["p"]>; via: string extends T ? "wide" : "narrow"; }
+
+    from?: (T & Paths<R["p"]>) | Paths<R["p"]>;
+>from : Paths<R["p"]> | (T & Paths<R["p"]>) | undefined
+
+    via: string extends T ? "wide" : "narrow";
+>via : string extends T ? "wide" : "narrow"
+
+}): void;
+
+f({ from: "x", via: "narrow" });
+>f({ from: "x", via: "narrow" }) : void
+>f : <R extends { p: any; }, const T extends string = string>(opts: { from?: (T & Paths<R["p"]>) | Paths<R["p"]>; via: string extends T ? "wide" : "narrow"; }) => void
+>{ from: "x", via: "narrow" } : { from: string; via: "narrow"; }
+>from : string
+>"x" : "x"
+>via : "narrow"
+>"narrow" : "narrow"
+
+f({ from: "x" as "x", via: "narrow" });
+>f({ from: "x" as "x", via: "narrow" }) : void
+>f : <R extends { p: any; }, const T extends string = string>(opts: { from?: (T & Paths<R["p"]>) | Paths<R["p"]>; via: string extends T ? "wide" : "narrow"; }) => void
+>{ from: "x" as "x", via: "narrow" } : { from: "x"; via: "narrow"; }
+>from : "x"
+>"x" as "x" : "x"
+>"x" : "x"
+>via : "narrow"
+>"narrow" : "narrow"
+
+f({ from: "x" as never, via: "narrow" });
+>f({ from: "x" as never, via: "narrow" }) : void
+>f : <R extends { p: any; }, const T extends string = string>(opts: { from?: (T & Paths<R["p"]>) | Paths<R["p"]>; via: string extends T ? "wide" : "narrow"; }) => void
+>{ from: "x" as never, via: "narrow" } : { from: never; via: "narrow"; }
+>from : never
+>"x" as never : never
+>"x" : "x"
+>via : "narrow"
+>"narrow" : "narrow"
+

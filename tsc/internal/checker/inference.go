@@ -98,10 +98,16 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 		}
 		return
 	}
-	if target.flags&TypeFlagsUnion != 0 && source.flags&TypeFlagsNever == 0 {
+	if target.flags&TypeFlagsUnion != 0 {
+		var sourceTypes []*Type
+		if source.flags&TypeFlagsUnion != 0 {
+			sourceTypes = source.Types()
+		} else {
+			sourceTypes = []*Type{source}
+		}
 		// First, infer between identically matching source and target constituents and remove the
 		// matching types.
-		tempSources, tempTargets := c.inferFromMatchingTypes(n, source.Distributed(), target.Distributed(), (*Checker).isTypeOrBaseIdenticalTo)
+		tempSources, tempTargets := c.inferFromMatchingTypes(n, sourceTypes, target.Distributed(), (*Checker).isTypeOrBaseIdenticalTo)
 		// Next, infer between closely matching source and target constituents and remove
 		// the matching types. Types closely match when they are instantiations of the same
 		// object type or instantiations of the same type alias.
@@ -386,7 +392,12 @@ func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets 
 	typeVariableCount := 0
 	if targetFlags&TypeFlagsUnion != 0 {
 		var nakedTypeVariable *Type
-		sources := source.Distributed()
+		var sources []*Type
+		if source.flags&TypeFlagsUnion != 0 {
+			sources = source.Types()
+		} else {
+			sources = []*Type{source}
+		}
 		matched := make([]bool, len(sources))
 		inferenceCircularity := false
 		// First infer to types that are not naked type variables. For each source type we

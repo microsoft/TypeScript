@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/inferenceWithNeverSource1.ts] ////
+
+=== inferenceWithNeverSource1.ts ===
+// https://github.com/microsoft/typescript-go/issues/3688
+type Paths<T> = unknown extends T ? string : string;
+>Paths : Symbol(Paths, Decl(inferenceWithNeverSource1.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceWithNeverSource1.ts, 1, 11))
+>T : Symbol(T, Decl(inferenceWithNeverSource1.ts, 1, 11))
+
+declare function f<
+>f : Symbol(f, Decl(inferenceWithNeverSource1.ts, 1, 52))
+
+    R extends { p: any },
+>R : Symbol(R, Decl(inferenceWithNeverSource1.ts, 3, 19))
+>p : Symbol(p, Decl(inferenceWithNeverSource1.ts, 4, 15))
+
+    const T extends string = string,
+>T : Symbol(T, Decl(inferenceWithNeverSource1.ts, 4, 25))
+
+>(opts: {
+>opts : Symbol(opts, Decl(inferenceWithNeverSource1.ts, 6, 2))
+
+    from?: (T & Paths<R["p"]>) | Paths<R["p"]>;
+>from : Symbol(from, Decl(inferenceWithNeverSource1.ts, 6, 9))
+>T : Symbol(T, Decl(inferenceWithNeverSource1.ts, 4, 25))
+>Paths : Symbol(Paths, Decl(inferenceWithNeverSource1.ts, 0, 0))
+>R : Symbol(R, Decl(inferenceWithNeverSource1.ts, 3, 19))
+>Paths : Symbol(Paths, Decl(inferenceWithNeverSource1.ts, 0, 0))
+>R : Symbol(R, Decl(inferenceWithNeverSource1.ts, 3, 19))
+
+    via: string extends T ? "wide" : "narrow";
+>via : Symbol(via, Decl(inferenceWithNeverSource1.ts, 7, 47))
+>T : Symbol(T, Decl(inferenceWithNeverSource1.ts, 4, 25))
+
+}): void;
+
+f({ from: "x", via: "narrow" });
+>f : Symbol(f, Decl(inferenceWithNeverSource1.ts, 1, 52))
+>from : Symbol(from, Decl(inferenceWithNeverSource1.ts, 11, 3))
+>via : Symbol(via, Decl(inferenceWithNeverSource1.ts, 11, 14))
+
+f({ from: "x" as "x", via: "narrow" });
+>f : Symbol(f, Decl(inferenceWithNeverSource1.ts, 1, 52))
+>from : Symbol(from, Decl(inferenceWithNeverSource1.ts, 12, 3))
+>via : Symbol(via, Decl(inferenceWithNeverSource1.ts, 12, 21))
+
+f({ from: "x" as never, via: "narrow" });
+>f : Symbol(f, Decl(inferenceWithNeverSource1.ts, 1, 52))
+>from : Symbol(from, Decl(inferenceWithNeverSource1.ts, 13, 3))
+>via : Symbol(via, Decl(inferenceWithNeverSource1.ts, 13, 23))
+
