@@ -31,10 +31,10 @@ function foo(v) {
 
 //// [typeParametersAvailableInNestedScope3.d.ts]
 declare function foo<T>(v: T): {
-    a: <T>(a: T) => T;
+    a: <T_1>(a: T_1) => T_1;
     b: () => T;
-    c: <T>(v: T) => {
-        a: <T_1>(a: T_1) => T_1;
-        b: () => T;
+    c: <T_1>(v: T_1) => {
+        a: <T_2>(a: T_2) => T_2;
+        b: () => T_1;
     };
 };

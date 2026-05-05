@@ -1056,11 +1056,6 @@ compiler/declarationEmitClassMemberWithComputedPropertyName.js.diff
 compiler/isolatedDeclarationsLiterals.js.diff
 conformance/constAssertions.js.diff
 
-## Type parameter disambiguation suffixes (`_1`, `_2`) removed in nested/overlapping scopes (shadowing matches runtime semantics; `_1` suffixes were unnecessary)
-## Inner generic type parameters shadow outer ones with the same name instead of being renamed
-compiler/declarationEmitNestedGenerics.js.diff
-conformance/typeParametersAvailableInNestedScope3.js.diff
-
 ## Comma expressions in emitted JS are now parenthesized for correctness (parenthesizing comma expressions prevents precedence bugs)
 ## `a, b` in computed properties and JSX context now emitted as `(a, b)`
 conformance/jsxCheckJsxNoTypeArgumentsAllowed.js.diff

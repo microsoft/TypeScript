@@ -252,7 +252,3 @@ conformance/jsDeclarationsExportFormsErr(target=es2015).js.diff
 # Declaration emit simplification of class extending built-in Array
 ## https://github.com/microsoft/typescript-go/issues/3569
 compiler/javascriptThisAssignmentInStaticBlock.js.diff
-
-# Declaration emit type parameter renaming bug (regression)
-## https://github.com/microsoft/typescript-go/issues/3570
-compiler/declarationEmitShadowing.js.diff
