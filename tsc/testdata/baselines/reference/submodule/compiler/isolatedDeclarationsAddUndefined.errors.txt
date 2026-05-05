@@ -1,4 +1,3 @@
-file2.ts(1,26): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 file2.ts(4,27): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 
 
@@ -11,11 +10,8 @@ file2.ts(4,27): error TS9025: Declaration emit for this parameter requires impli
         f = 2;
     }
     
-==== file2.ts (2 errors) ====
+==== file2.ts (1 errors) ====
     export function foo(p = (ip = 10, v: number): void => {}): void{
-                             ~~~~~~~
-!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
-!!! related TS9028 file2.ts:1:26: Add a type annotation to the parameter ip.
     }
     type T = number
     export function foo2(p = (ip = 10 as T, v: number): void => {}): void{}

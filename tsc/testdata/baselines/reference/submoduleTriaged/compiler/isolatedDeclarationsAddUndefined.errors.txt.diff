@@ -2,21 +2,11 @@
 +++ new.isolatedDeclarationsAddUndefined.errors.txt
 @@= skipped -0, +0 lines =@@
 -file2.ts(4,38): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
-+file2.ts(1,26): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 +file2.ts(4,27): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 
 
  ==== file1.ts (0 errors) ====
-@@= skipped -9, +10 lines =@@
-         f = 2;
-     }
-     
--==== file2.ts (1 errors) ====
-+==== file2.ts (2 errors) ====
-     export function foo(p = (ip = 10, v: number): void => {}): void{
-+                             ~~~~~~~
-+!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
-+!!! related TS9028 file2.ts:1:26: Add a type annotation to the parameter ip.
+@@= skipped -14, +14 lines =@@
      }
      type T = number
      export function foo2(p = (ip = 10 as T, v: number): void => {}): void{}
