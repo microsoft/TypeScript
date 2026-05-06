@@ -82,12 +82,10 @@ type NodeBuilderContext struct {
 	remappedSymbolReferences        map[ast.SymbolId]*ast.Symbol
 
 	// per signature scope state
-	hasCreatedTypeParameterSymbolList     bool
-	hasCreatedTypeParametersNamesLookups  bool
-	typeParameterNames                    map[TypeId]*ast.Identifier
-	typeParameterNamesByText              map[string]struct{}
-	typeParameterNamesByTextNextNameCount map[string]int
-	typeParameterSymbolList               map[ast.SymbolId]struct{}
+	typeParameterNames                    collections.CopyOnWriteMap[TypeId, *ast.Identifier]
+	typeParameterNamesByText              collections.CopyOnWriteSet[string]
+	typeParameterNamesByTextNextNameCount collections.CopyOnWriteMap[string, int]
+	typeParameterSymbolList               collections.CopyOnWriteSet[ast.SymbolId]
 }
 
 type NodeBuilderImpl struct {
@@ -1046,15 +1044,10 @@ func (b *NodeBuilderImpl) lookupTypeParameterNodes(chain []*ast.Symbol, index in
 	debug.Assert(chain != nil && 0 <= index && index < len(chain))
 	symbol := chain[index]
 	symbolId := ast.GetSymbolId(symbol)
-	if !b.ctx.hasCreatedTypeParameterSymbolList {
-		b.ctx.hasCreatedTypeParameterSymbolList = true
-		b.ctx.typeParameterSymbolList = make(map[ast.SymbolId]struct{})
-	}
-	_, ok := b.ctx.typeParameterSymbolList[symbolId]
-	if ok {
+	if b.ctx.typeParameterSymbolList.Has(symbolId) {
 		return nil
 	}
-	b.ctx.typeParameterSymbolList[symbolId] = struct{}{}
+	b.ctx.typeParameterSymbolList.Add(symbolId)
 
 	if b.ctx.flags&nodebuilder.FlagsWriteTypeParametersInQualifiedName != 0 && index < (len(chain)-1) {
 		if typeArgumentNodes := b.lookupInstantiatedTypeArgumentNodes(chain, index); typeArgumentNodes != nil {
@@ -1420,9 +1413,8 @@ func (b *NodeBuilderImpl) typeParameterShadowsOtherTypeParameterInScope(name str
 }
 
 func (b *NodeBuilderImpl) typeParameterToName(typeParameter *Type) *ast.Identifier {
-	if b.ctx.flags&nodebuilder.FlagsGenerateNamesForShadowedTypeParams != 0 && b.ctx.typeParameterNames != nil {
-		cached, ok := b.ctx.typeParameterNames[typeParameter.id]
-		if ok {
+	if b.ctx.flags&nodebuilder.FlagsGenerateNamesForShadowedTypeParams != 0 {
+		if cached, ok := b.ctx.typeParameterNames.Get(typeParameter.id); ok {
 			return cached
 		}
 	}
@@ -1437,24 +1429,12 @@ func (b *NodeBuilderImpl) typeParameterToName(typeParameter *Type) *ast.Identifi
 		}
 	}
 	if b.ctx.flags&nodebuilder.FlagsGenerateNamesForShadowedTypeParams != 0 {
-		if !b.ctx.hasCreatedTypeParametersNamesLookups {
-			b.ctx.hasCreatedTypeParametersNamesLookups = true
-			b.ctx.typeParameterNames = make(map[TypeId]*ast.Identifier)
-			b.ctx.typeParameterNamesByText = make(map[string]struct{})
-			b.ctx.typeParameterNamesByTextNextNameCount = make(map[string]int)
-		}
-
 		rawText := result.Text()
-		i := 0
-		cached, ok := b.ctx.typeParameterNamesByTextNextNameCount[rawText]
-		if ok {
-			i = cached
-		}
+		i, _ := b.ctx.typeParameterNamesByTextNextNameCount.Get(rawText)
 		text := rawText
 
 		for true {
-			_, present := b.ctx.typeParameterNamesByText[text]
-			if !present && !b.typeParameterShadowsOtherTypeParameterInScope(text, typeParameter) {
+			if !b.ctx.typeParameterNamesByText.Has(text) && !b.typeParameterShadowsOtherTypeParameterInScope(text, typeParameter) {
 				break
 			}
 			i++
@@ -1470,9 +1450,9 @@ func (b *NodeBuilderImpl) typeParameterToName(typeParameter *Type) *ast.Identifi
 
 		// avoiding iterations of the above loop turns out to be worth it when `i` starts to get large, so we cache the max
 		// `i` we've used thus far, to save work later
-		b.ctx.typeParameterNamesByTextNextNameCount[rawText] = i
-		b.ctx.typeParameterNames[typeParameter.id] = result.AsIdentifier()
-		b.ctx.typeParameterNamesByText[text] = struct{}{}
+		b.ctx.typeParameterNamesByTextNextNameCount.Set(rawText, i)
+		b.ctx.typeParameterNames.Set(typeParameter.id, result.AsIdentifier())
+		b.ctx.typeParameterNamesByText.Add(text)
 	}
 
 	return result.AsIdentifier()
@@ -3470,16 +3450,11 @@ func (b *NodeBuilderImpl) lookupExpressionChainTypeArgumentNodes(chain []*ast.Sy
 	if b.shouldWriteTypeParametersInQualifiedName(chain, index) {
 		symbol := chain[index]
 		symbolId := ast.GetSymbolId(symbol)
-		if !b.ctx.hasCreatedTypeParameterSymbolList {
-			b.ctx.hasCreatedTypeParameterSymbolList = true
-			b.ctx.typeParameterSymbolList = make(map[ast.SymbolId]struct{})
-		}
-
-		if _, ok := b.ctx.typeParameterSymbolList[symbolId]; ok {
+		if b.ctx.typeParameterSymbolList.Has(symbolId) {
 			return nil
 		}
 
-		b.ctx.typeParameterSymbolList[symbolId] = struct{}{}
+		b.ctx.typeParameterSymbolList.Add(symbolId)
 		if typeArgumentNodes := b.lookupInstantiatedTypeArgumentNodes(chain, index); typeArgumentNodes != nil {
 			return typeArgumentNodes
 		}
