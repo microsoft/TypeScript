@@ -8,8 +8,7 @@ For example, Corsa uses the same rule for checking calls in both TypeScript and 
 And because Corsa uses the same rule for optional parameters, it fixes subtle Strada bugs with `"strict": true` in JavaScript.
 
 We primarily want to support people writing modern JavaScript, using things like ES modules, classes, destructuring, etc.
-Not CommonJS modules and constructor functions, although those do still work.
-However, we have trimmed a lot of unused or underused features.
+To that end, we have trimmed a lot of unused or underused features.
 This makes the implementation much simpler and more like TypeScript.
 
 The biggest single removed area is support for Closure header files--most Closure-specific features, in fact.
@@ -26,6 +25,26 @@ An expando declaration is when you declare a property just by assigning to it, o
 ```js
 function f() {}
 f.called = false;
+```
+
+One important use of expando declarations is no longer supported: constructor functions.
+
+```js
+function C() {
+  this.property = 1;
+}
+C.prototype.method = function() {}
+```
+
+Use classes instead:
+
+```js
+class C {
+  constructor() {
+    this.property = 1;
+  }
+  method() {}
+}
 ```
 
 ## Declaration Emit
@@ -46,11 +65,8 @@ However, if you see **_incorrect_** `.d.ts` output from a `.js` file, **please f
 | UnknownType                | `?` | `any` | |
 | NamepathType               | `Module:file~id` | `import("file").id` | TS has never had semantics for this. |
 | `@class`                   | <pre><code>/** @class */</code><br/><code>function C() {</code><br/>  <code>this.p = 1;</code><br/><code>}</code></pre> | <pre><code>class C {</code><br/><code>  constructor() {</code><br/><code>    this.p = 1;</code><br/><code>  }</code><br/><code>}</code></pre> | Use regular `class` declarations. |
-| `@throws`                  | <pre><code>/** @throws {E} */</pre></code> | Keep the same. | TS never had semantics for this. |
 | `@enum`                    | <pre><code>/\** @enum {number} */</code><br/><code>const E = { A: 1, B: 2 };</code></pre> | <pre><code>/** @typedef {number} E \*/</code><br/><code>/** @type {Record<string, E>} */</code><br/><code>const E = { A: 1, B: 2 };</code></pre> | Closure feature. |
 | `@author`                  | <pre><code>/** @author Finn <finn@treehouse.com> */</pre></code> | Keep the same. | `@treehouse` parses as a new tag in Corsa. |
-| Postfix optional type      | `T?` | `T \| undefined` | This was legacy in Closure. |
-| Postfix definite type      | `T!` | `T` | This was legacy in Closure. |
 | Identifier-named typedefs  |<pre><code>`/** @typedef {T} */ typeName;</pre></code> | <pre><code>/** @typedef {T} typeName */</pre></code> | Closure feature. |
 | Closure function type syntax | <pre><code>/* @type {function(string): void} */</pre></code> | <pre><code>/* @type {(s: string) => void} */</pre></code> | |
 | Automatic typeof insertion | <pre><code>const o = { a: 1 };</code><br/><code>/\** @type {o} */</code><br/><code>var o2 = { a: 1 };</code></pre> | <pre><code>const o = { a: 1 };</code><br/><code>/\** @type {typeof o} */</code><br/><code>var o2 = { a: 1 };</code></pre> | |
@@ -60,10 +76,9 @@ However, if you see **_incorrect_** `.d.ts` output from a `.js` file, **please f
 
 | Name                       | Example | Substitute  | Note |
 | -------------------------- | ------- | ----------- |----- |
+| Constructor functions | <pre><code>function C() {</code><br/><code>  this.p = 1;</code><br/><code>}</code><br/><code>C.prototype.m = function() { };</code></pre> | <pre><code>class C {</code><br/><code>  p = 1;</code><br/><code>  m() { }</code><br/><code>}</code></pre> | Use regular `class` declarations. |
 | Fallback initialisers      | <pre><code>f.x = f.x \|\| init;</pre></code> | <pre><code>if (!f.x) f.x = init;</pre></code> | |
 | Nested, undeclared expandos | <pre><code>var N = {};</code><br/><code>N.X.Y = {};</code></pre> | <pre><code>var N = {};</code><br/><code>N.X = {};</code><br/><code>N.X.Y = {};</code></pre> | All intermediate expandos have to be assigned. Closure feature. |
-| Constructor function prototype assignment | <pre><code>function C() { }</code><br><code>C.prototype.m = function() { };</code></pre> | <pre><code>class C {</code><br><code>  m() { }</code><br/><code>}</code></pre> | Use regular `class` declarations. |
-| Constructor function prototype assignment | <pre><code>function C() { }</code><br><code>C.prototype = {</code><br/>  <code>m: function() { }</code><br/><code>};</code></pre> | <pre><code>class C {</code><br><code>  m() { }</code><br/><code>}</code></pre> | Use regular `class` declarations. |
 | Identifier declarations    | <pre><code>class C {</code><br/>  <code>constructor() {</code><br/>    <code>/\** @type {T} */</code><br/>    <code>this.identifier;</code><br/>  <code>}</code><br/><code>}</code></pre> | <pre><code>class C {</code><br/>  <code>/\** @type {T} */</code><br/>  <code>identifier;</code><br/>  <code>constructor() { }</code><br/><code>}</code></pre> | Closure feature. |
 | `this` aliases             | <pre><code>class C() {</code><br/><code>  constructor() {</code><br><code>    var that = this;</code><br/><code>    that.x = 12;</code><br/><code>  }</code><br><code>}</code></pre> | <pre><code>class C() {</code><br/><code>  constructor() {</code><br><code>    this.x = 12;</code><br/><code>  }</code><br><code>}</code></pre> | |
 | `this` alias for `globalThis` | <pre><code>this.globby = true;</pre></code> | <pre><code>globalThis.globby = true;</pre></code> | When used at the top level of a script. |
@@ -98,17 +113,15 @@ However, if you see **_incorrect_** `.d.ts` output from a `.js` file, **please f
 
 JSDoc types are parsed in normal type annotation position but show a grammar error. Corsa no longer parses the JSDoc types below, giving a parse error instead of a grammar error.
 
-1. No postfix `T?` and `T!` types. Prefix `?T` and `!T` are still parsed and `!T` continues to have no semantics.
-2. No Closure `function(string,string): void` types.
-3. No JSDoc standalone `?` type.
-4. No JSDoc module namepaths: `module:folder/file.C`
+1. No Closure `function(string,string): void` types.
+2. No JSDoc standalone `?` type.
+3. No JSDoc module namepaths: `module:folder/file.C`
 
 Corsa no longer parses the following JSDoc tags with a specific node type. They now parse as generic JSDocTag nodes.
 
 1. `@class`/`@constructor`
-2. `@throws`
-3. `@author`
-4. `@enum`
+2. `@author`
+3. `@enum`
 
 ## Checker
 
@@ -234,7 +247,7 @@ This means the declarations are accessible outside the class and may conflict wi
 
 #### `@class` or `@constructor` does not make a function into a constructor function.
 
-Corsa ignores `@class` and `@constructor`. This makes a difference on a function without this-property assignments or associated prototype-function assignments.
+Constructor functions are no longer supported. See the Expandos section.
 
 #### `@param` tags now apply to at most one function.
 
@@ -262,6 +275,40 @@ In Strada, `cu` incorrectly narrows to `C` inside the `if` block, unlike with TS
 In Corsa, the behaviour is the same between TS and JS.
 
 ### Expandos
+
+#### Constructor functions are no longer supported
+
+Previously, you could create a constructor function either by assigning an expando property in the constructor, or an expando property to the function's prototype:
+
+```js
+function C() {
+  this.property = 1;
+}
+C.prototype.method = function() {}
+```
+
+Less common patterns, like assigning an object literal to the prototype, also need to be rewritten to use standard class syntax:
+
+```js
+function Foo() {}
+Foo.prototype = {
+  /** @param {number} x */
+  bar(x) {
+    return x;
+  },
+};
+```
+
+Classes are a much better way to write this code:
+
+```js
+class Foo {
+  /** @param {number} x */
+  bar(x) {
+    return x;
+  }
+}
+```
 
 #### Expando assignments of `void 0` are no longer ignored as a special case:
 
@@ -298,41 +345,7 @@ class SharedClass2 {
 }
 ```
 
-#### Assigning to the `prototype` property of a function no longer makes it a constructor function:
-
-```js
-function Foo() {}
-Foo.prototype = {
-  /** @param {number} x */
-  bar(x) {
-    return x;
-  },
-};
-```
-
-Classes are a much better way to write this code.
-
-```js
-class Foo {
-  /** @param {number} x */
-  bar(x) {
-    return x;
-  }
-}
-```
-
 ### CommonJS
-
-#### Initializing exports to `undefined`:
-
-To accommodate the pattern of initializing CommonJS exports to `undefined` (sometimes written as `void 0`) and then subsequently assigning their intended values, when CommonJS exports have multiple assignments and an initial assignment of `undefined`, the `undefined` is ignored when determining the type of the export.
-
-```js
-exports.foo = exports.bar = void 0;
-// Later in the same file...
-exports.foo = 123  // Exported type is `123`
-exports.bar = "abc"  // Exported type is `"abc"`
-```
 
 #### Mixing module.exports assignments
 
