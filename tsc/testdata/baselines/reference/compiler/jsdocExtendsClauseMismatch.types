@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/jsdocExtendsClauseMismatch.ts] ////
+
+=== react.d.ts ===
+declare namespace React {
+>React : typeof React
+
+    class Component {}
+>Component : Component
+
+    class PureComponent {}
+>PureComponent : PureComponent
+}
+
+=== main.js ===
+/**
+ * @extends {React.Component}
+ */
+class C extends React.PureComponent {}
+>C : C
+>React.PureComponent : React.PureComponent
+>React : typeof React
+>PureComponent : typeof React.PureComponent
+
+/**
+ * @extends {React.Component}
+ */
+class D extends React.Component {}
+>D : D
+>React.Component : React.Component
+>React : typeof React
+>Component : typeof React.Component
+

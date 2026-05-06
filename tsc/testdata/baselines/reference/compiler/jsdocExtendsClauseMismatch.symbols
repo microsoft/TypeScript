@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/jsdocExtendsClauseMismatch.ts] ////
+
+=== react.d.ts ===
+declare namespace React {
+>React : Symbol(React, Decl(react.d.ts, 0, 0))
+
+    class Component {}
+>Component : Symbol(Component, Decl(react.d.ts, 0, 25))
+
+    class PureComponent {}
+>PureComponent : Symbol(PureComponent, Decl(react.d.ts, 1, 22))
+}
+
+=== main.js ===
+/**
+ * @extends {React.Component}
+ */
+class C extends React.PureComponent {}
+>C : Symbol(C, Decl(main.js, 0, 0))
+>React.PureComponent : Symbol(React.PureComponent, Decl(react.d.ts, 1, 22))
+>React : Symbol(React, Decl(react.d.ts, 0, 0))
+>PureComponent : Symbol(React.PureComponent, Decl(react.d.ts, 1, 22))
+
+/**
+ * @extends {React.Component}
+ */
+class D extends React.Component {}
+>D : Symbol(D, Decl(main.js, 3, 38))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 0, 25))
+>React : Symbol(React, Decl(react.d.ts, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 0, 25))
+

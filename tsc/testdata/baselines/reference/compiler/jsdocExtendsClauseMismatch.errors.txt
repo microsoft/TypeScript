@@ -1,0 +1,22 @@
+main.js(2,20): error TS8023: JSDoc '@extends Component' does not match the 'extends PureComponent' clause.
+
+
+==== react.d.ts (0 errors) ====
+    declare namespace React {
+        class Component {}
+        class PureComponent {}
+    }
+    
+==== main.js (1 errors) ====
+    /**
+     * @extends {React.Component}
+                       ~~~~~~~~~
+!!! error TS8023: JSDoc '@extends Component' does not match the 'extends PureComponent' clause.
+     */
+    class C extends React.PureComponent {}
+    
+    /**
+     * @extends {React.Component}
+     */
+    class D extends React.Component {}
+    
