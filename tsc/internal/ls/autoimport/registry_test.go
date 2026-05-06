@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/ls/autoimport"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
@@ -633,10 +634,21 @@ export declare const otherValue: string;`,
 			{WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: `export declare function otherFunction(): void;`}},
 		})
 
-		// other-pkg should trigger a full rebuild (multipleFilesDirty), not a granular update
-		_, err = session.GetLanguageService(ctx, projectAURI)
+		// other-pkg should trigger a full rebuild (multipleFilesDirty), not a granular update.
+		// Read stats from the request-time snapshot (held by ref via WithLanguageServiceAndSnapshot)
+		// rather than session.Snapshot(), so a background auto-import warm task — which would
+		// walk otherPkgURI's ancestor chain through project-a's node_modules and rebuild that
+		// bucket — cannot race with the assertion by adopting a freshly-cleaned snapshot
+		// before we read it.
+		_, err = session.WithLanguageServiceAndSnapshot(
+			ctx,
+			projectAURI,
+			func(_ *ls.LanguageService, snapshot *project.Snapshot) (func() error, error) {
+				stats = snapshot.AutoImportRegistry().GetCacheStats()
+				return nil, nil
+			},
+		)
 		assert.NilError(t, err)
-		stats = autoImportStats(t, session)
 		nodeModulesBucket = singleBucket(t, stats.NodeModulesBuckets)
 		assert.Equal(t, nodeModulesBucket.State.Dirty(), true, "bucket should be dirty after registry package change")
 		dirtyPackages = nodeModulesBucket.State.DirtyPackages()
