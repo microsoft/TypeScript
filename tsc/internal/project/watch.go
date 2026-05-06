@@ -29,6 +29,81 @@ type fileSystemWatcherValue struct {
 	id    WatcherID
 }
 
+// watchRegistry tracks the current watch globs and how many individual
+// WatchedFiles reference each glob. It provides ref-count helpers so callers
+// don't manipulate the map directly.
+//
+// All methods are safe for concurrent use; locking is handled internally.
+type watchRegistry struct {
+	mu      sync.Mutex
+	entries map[fileSystemWatcherKey]*fileSystemWatcherValue
+	pending map[WatcherID]struct{}
+}
+
+func newWatchRegistry() *watchRegistry {
+	return &watchRegistry{
+		entries: make(map[fileSystemWatcherKey]*fileSystemWatcherValue),
+		pending: make(map[WatcherID]struct{}),
+	}
+}
+
+// Acquire increments the ref count for a watcher. If this is the first
+// reference (count goes from 0 to 1), it returns true so the caller knows
+// to register the watcher with the client.
+func (r *watchRegistry) Acquire(watcher *lsproto.FileSystemWatcher, id WatcherID) (isNew bool) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	key := toFileSystemWatcherKey(watcher)
+	value := r.entries[key]
+	if value == nil {
+		value = &fileSystemWatcherValue{id: id}
+		r.entries[key] = value
+	}
+	value.count++
+	return value.count == 1
+}
+
+// Release decrements the ref count for a watcher. If no references remain,
+// the entry is removed and the function returns the WatcherID and true so
+// the caller knows to unregister the watcher from the client.
+func (r *watchRegistry) Release(watcher *lsproto.FileSystemWatcher) (id WatcherID, removed bool) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	key := toFileSystemWatcherKey(watcher)
+	value := r.entries[key]
+	if value == nil {
+		return "", false
+	}
+	if value.count <= 1 {
+		delete(r.entries, key)
+		return value.id, true
+	}
+	value.count--
+	return "", false
+}
+
+// MarkPending records that a watcher's registration failed and needs retry.
+func (r *watchRegistry) MarkPending(id WatcherID) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	r.pending[id] = struct{}{}
+}
+
+// ClearPending removes a watcher from the pending set after successful registration.
+func (r *watchRegistry) ClearPending(id WatcherID) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	delete(r.pending, id)
+}
+
+// IsPending returns true if the watcher needs retry due to a previous failure.
+func (r *watchRegistry) IsPending(id WatcherID) bool {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	_, ok := r.pending[id]
+	return ok
+}
+
 type PatternsAndIgnored struct {
 	directoriesOutsideWorkspace []string
 	patternsInsideWorkspace     []string
@@ -118,7 +193,7 @@ func (w *WatchedFiles[T]) Watchers() Watchers {
 		w.mu.Lock()
 		defer w.mu.Unlock()
 		result := w.computeGlobPatterns(w.input)
-		globs := result.patternsInsideWorkspace
+		globs := slices.Compact(slices.Sorted(slices.Values(result.patternsInsideWorkspace)))
 
 		ignored := result.ignored
 		// ignored is only used for logging and doesn't affect watcher identity
@@ -137,7 +212,7 @@ func (w *WatchedFiles[T]) Watchers() Watchers {
 			})
 			changed = true
 		}
-		dirsOutside := result.directoriesOutsideWorkspace
+		dirsOutside := slices.Compact(slices.Sorted(slices.Values(result.directoriesOutsideWorkspace)))
 		if !slices.EqualFunc(w.outsideWorkspaceWatchers, dirsOutside, func(a *lsproto.FileSystemWatcher, b string) bool {
 			return fileSystemWatcherGlobString(a) == recursiveDirectoryGlobPattern(b, w.hasRelativePatternCapability)
 		}) {

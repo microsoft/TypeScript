@@ -45,6 +45,10 @@ const (
 	UpdateReasonIdleCleanDiskCache
 )
 
+// watchRequestTimeout is the maximum time to wait for the client to respond to
+// a WatchFiles or UnwatchFiles request while holding the watches mutex.
+const watchRequestTimeout = time.Second
+
 // SessionOptions are the immutable initialization options for a session.
 // Snapshots may reference them as a pointer since they never change.
 type SessionOptions struct {
@@ -156,8 +160,7 @@ type Session struct {
 
 	// watches tracks the current watch globs and how many individual WatchedFiles
 	// are using each glob.
-	watches   map[fileSystemWatcherKey]*fileSystemWatcherValue
-	watchesMu sync.Mutex
+	watches *watchRegistry
 
 	// globalDiagPublishPending is set to true when a global diagnostics publish
 	// task should be enqueued. It is reset when the task runs, coalescing multiple
@@ -222,7 +225,7 @@ func NewSession(init *SessionInit) *Session {
 		initialUserPreferences:   lsutil.NewDefaultUserPreferences(),
 		workspaceUserPreferences: lsutil.NewDefaultUserPreferences(),
 		pendingATAChanges:        make(map[tspath.Path]*ATAStateChange),
-		watches:                  make(map[fileSystemWatcherKey]*fileSystemWatcherValue),
+		watches:                  newWatchRegistry(),
 	}
 
 	if init.Options.TypingsLocation != "" && init.NpmExecutor != nil {
@@ -1133,29 +1136,26 @@ func (s *Session) WaitForBackgroundTasks() {
 
 func updateWatch[T any](ctx context.Context, session *Session, logger logging.Logger, oldWatcher, newWatcher *WatchedFiles[T]) []error {
 	var errors []error
-	session.watchesMu.Lock()
-	defer session.watchesMu.Unlock()
 	if newWatcher != nil {
 		w := newWatcher.Watchers()
 		watchers := append(w.WorkspaceWatchers, w.OutsideWorkspaceWatchers...)
 		if len(watchers) > 0 {
 			var newWatchers collections.OrderedMap[WatcherID, *lsproto.FileSystemWatcher]
 			for i, watcher := range watchers {
-				key := toFileSystemWatcherKey(watcher)
-				value := session.watches[key]
 				globId := WatcherID(fmt.Sprintf("%s.%d", w.WatcherID, i))
-				if value == nil {
-					value = &fileSystemWatcherValue{id: globId}
-					session.watches[key] = value
-				}
-				value.count++
-				if value.count == 1 {
+				if session.watches.Acquire(watcher, globId) {
 					newWatchers.Set(globId, watcher)
 				}
 			}
+			var watchErrors []error
 			for id, watcher := range newWatchers.Entries() {
-				if err := session.client.WatchFiles(ctx, id, []*lsproto.FileSystemWatcher{watcher}); err != nil {
-					errors = append(errors, err)
+				// Create a fresh timeout per client call so earlier calls
+				// don't consume the deadline for later ones.
+				callCtx, callCancel := context.WithTimeout(ctx, watchRequestTimeout)
+				err := session.client.WatchFiles(callCtx, id, []*lsproto.FileSystemWatcher{watcher})
+				callCancel()
+				if err != nil {
+					watchErrors = append(watchErrors, err)
 				} else if logger != nil {
 					if oldWatcher == nil {
 						logger.Log(fmt.Sprintf("Added new watch: %s", id))
@@ -1165,6 +1165,19 @@ func updateWatch[T any](ctx context.Context, session *Session, logger logging.Lo
 					logger.Log("\t" + fileSystemWatcherGlobString(watcher))
 					logger.Log("")
 				}
+			}
+			if len(watchErrors) > 0 {
+				// Roll back ALL newly-acquired watchers on any failure to keep
+				// refcounts clean. On retry, Acquire will see them as new again.
+				// Re-registering an already-registered watcher with the client
+				// is harmless (registerCapability with the same ID replaces it).
+				for _, watcher := range newWatchers.Entries() {
+					session.watches.Release(watcher)
+				}
+				session.watches.MarkPending(w.WatcherID)
+				errors = append(errors, watchErrors...)
+			} else {
+				session.watches.ClearPending(w.WatcherID)
 			}
 			if len(w.IgnoredPaths) > 0 {
 				logger.Logf("%d paths ineligible for watching", len(w.IgnoredPaths))
@@ -1180,22 +1193,17 @@ func updateWatch[T any](ctx context.Context, session *Session, logger logging.Lo
 		w := oldWatcher.Watchers()
 		watchers := append(w.WorkspaceWatchers, w.OutsideWorkspaceWatchers...)
 		if len(watchers) > 0 {
-			var removedWatchers []WatcherID
+			var removedIDs []WatcherID
 			for _, watcher := range watchers {
-				key := toFileSystemWatcherKey(watcher)
-				value := session.watches[key]
-				if value == nil {
-					continue
-				}
-				if value.count <= 1 {
-					delete(session.watches, key)
-					removedWatchers = append(removedWatchers, value.id)
-				} else {
-					value.count--
+				if id, removed := session.watches.Release(watcher); removed {
+					removedIDs = append(removedIDs, id)
 				}
 			}
-			for _, id := range removedWatchers {
-				if err := session.client.UnwatchFiles(ctx, id); err != nil {
+			for _, id := range removedIDs {
+				callCtx, callCancel := context.WithTimeout(ctx, watchRequestTimeout)
+				err := session.client.UnwatchFiles(callCtx, id)
+				callCancel()
+				if err != nil {
 					errors = append(errors, err)
 				} else if logger != nil && newWatcher == nil {
 					logger.Log(fmt.Sprintf("Removed watch: %s", id))
@@ -1226,6 +1234,16 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 			errors = append(errors, updateWatch(ctx, s, s.logger, oldEntry.rootFilesWatch, newEntry.rootFilesWatch)...)
 		},
 	)
+	// Retry config watchers whose IDs didn't change but whose previous registration failed.
+	for path, newEntry := range newSnapshot.ConfigFileRegistry.configs {
+		if oldEntry, ok := oldSnapshot.ConfigFileRegistry.configs[path]; ok {
+			if oldEntry.rootFilesWatch.ID() == newEntry.rootFilesWatch.ID() {
+				if s.watches.IsPending(newEntry.rootFilesWatch.ID()) {
+					errors = append(errors, updateWatch(ctx, s, s.logger, nil, newEntry.rootFilesWatch)...)
+				}
+			}
+		}
+	}
 
 	collections.DiffOrderedMaps(
 		oldSnapshot.ProjectCollection.ProjectsByPath(),
@@ -1241,15 +1259,27 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 		func(_ tspath.Path, oldProject, newProject *Project) {
 			if oldProject.programFilesWatch.ID() != newProject.programFilesWatch.ID() {
 				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.programFilesWatch, newProject.programFilesWatch)...)
+			} else {
+				if s.watches.IsPending(newProject.programFilesWatch.ID()) {
+					errors = append(errors, updateWatch(ctx, s, s.logger, nil, newProject.programFilesWatch)...)
+				}
 			}
 			if oldProject.typingsWatch.ID() != newProject.typingsWatch.ID() {
 				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.typingsWatch, newProject.typingsWatch)...)
+			} else {
+				if s.watches.IsPending(newProject.typingsWatch.ID()) {
+					errors = append(errors, updateWatch(ctx, s, s.logger, nil, newProject.typingsWatch)...)
+				}
 			}
 		},
 	)
 
 	if oldSnapshot.autoImportsWatch.ID() != newSnapshot.autoImportsWatch.ID() {
 		errors = append(errors, updateWatch(ctx, s, s.logger, oldSnapshot.autoImportsWatch, newSnapshot.autoImportsWatch)...)
+	} else {
+		if s.watches.IsPending(newSnapshot.autoImportsWatch.ID()) {
+			errors = append(errors, updateWatch(ctx, s, s.logger, nil, newSnapshot.autoImportsWatch)...)
+		}
 	}
 
 	if len(errors) > 0 {
