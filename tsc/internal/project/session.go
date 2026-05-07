@@ -465,7 +465,7 @@ func (s *Session) scheduleIdleCacheClean() {
 			cleanDiskCache: true,
 		})
 
-		runtime.GC()
+		go func() { runtime.GC() }()
 	})
 }
 
