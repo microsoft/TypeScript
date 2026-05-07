@@ -54,7 +54,7 @@ class Class2 {
 exports.Class2 = Class2;
 __decorate([
     decorate,
-    __metadata("design:type", Class1_1.Class1),
+    __metadata("design:type", Object),
     __metadata("design:paramtypes", [])
 ], Class2.prototype, "maybeProp", null);
 __decorate([

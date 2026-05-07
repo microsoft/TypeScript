@@ -260,7 +260,7 @@ func (s *metadataSerializer) serializeUnionOrIntersectionConstituents(types []*a
 			return s.f.NewIdentifier("Object") // Reduce to `any` in a union or intersection
 		}
 
-		if !s.strictNullChecks && (ast.IsLiteralTypeNode(typeNode) && typeNode.AsLiteralTypeNode().Literal.Kind == ast.KindNullKeyword) || typeNode.Kind == ast.KindUndefinedKeyword {
+		if !s.strictNullChecks && ((ast.IsLiteralTypeNode(typeNode) && typeNode.AsLiteralTypeNode().Literal.Kind == ast.KindNullKeyword) || typeNode.Kind == ast.KindUndefinedKeyword) {
 			continue // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
 		}
 

@@ -70,7 +70,7 @@ __decorate([
 ], B.prototype, "y", void 0);
 __decorate([
     PropDeco,
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], B.prototype, "z", void 0);
 __decorate([
     PropDeco,

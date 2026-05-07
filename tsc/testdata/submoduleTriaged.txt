@@ -153,11 +153,6 @@ conformance/moduleExportsElementAccessAssignment.js.diff
 ## https://github.com/microsoft/typescript-go/issues/3547
 conformance/typeFromPropertyAssignment39.js.diff
 
-# Decorator metadata reflects stable union type ordering
-## https://github.com/microsoft/typescript-go/issues/3548
-compiler/metadataOfUnionWithNull(strictnullchecks=true).js.diff
-compiler/metadataReferencedWithinFilteredUnion(strictnullchecks=true,target=es2015).js.diff
-
 # Missing generic type arguments no longer auto-filled with any (produces TS2314 errors)
 ## https://github.com/microsoft/typescript-go/issues/3549
 conformance/jsDeclarationsMissingGenerics(target=es2015).js.diff
