@@ -44,6 +44,9 @@ func runLSP(args []string) int {
 	defaultLibraryPath := bundled.LibPath()
 	typingsLocation := osvfs.GetGlobalTypingsCacheLocation()
 
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
 	s := lsp.NewServer(&lsp.ServerOptions{
 		In:                 lsp.ToReader(os.Stdin),
 		Out:                lsp.ToWriter(os.Stdout),
@@ -58,14 +61,39 @@ func runLSP(args []string) int {
 			return cmd.Output()
 		},
 		ProgressDelay: 250 * time.Millisecond,
+		SetParentProcessID: func(parentPID int) {
+			startParentProcessWatchdog(ctx, stop, parentPID)
+		},
 	})
-
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
 
 	if err := s.Run(ctx); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return 1
 	}
 	return 0
+}
+
+// startParentProcessWatchdog starts a goroutine that monitors the parent process
+// and cancels the context if the parent dies. This prevents orphaned language
+// server processes when the editor crashes or is killed.
+func startParentProcessWatchdog(ctx context.Context, stop context.CancelFunc, parentPID int) {
+	if parentPID <= 0 {
+		return
+	}
+	go func() {
+		ticker := time.NewTicker(5 * time.Second)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-ticker.C:
+				if !isProcessAlive(parentPID) {
+					fmt.Fprintf(os.Stderr, "Parent process %d has exited, shutting down.\n", parentPID)
+					stop()
+					return
+				}
+			}
+		}
+	}()
 }
