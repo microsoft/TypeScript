@@ -499,6 +499,29 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 		}},
 	},
 	{
+		title:               "reports errors for incorrectly cased option names",
+		noSubmoduleBaseline: true,
+		input: []testConfig{{
+			jsonText: `{
+			    "compilerOptions": {
+				"sourcemap": true,
+				"declarationmap": true,
+				"nouncheckedindexedaccess": true,
+				"exactoptionalpropertytypes": true,
+				"verbatimmodulesyntax": true,
+				"isolatedmodules": true,
+				"nouncheckedsideeffectimports": true,
+				"moduledetection": "force",
+				"skiplibcheck": true,
+				"checkjs": true
+			    }
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/app.ts": ""},
+		}},
+	},
+	{
 		title:               "handles empty types array",
 		noSubmoduleBaseline: true,
 		input: []testConfig{{

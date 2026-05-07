@@ -214,15 +214,25 @@ func parseOwnConfigOfJsonSourceFile(
 			} else if keyText != "" && extraKeyDiagnostics(parentOption.Name) != nil {
 				unknownNameDiag := extraKeyDiagnostics(parentOption.Name)
 				if parentOption.ElementOptions != nil {
-					// !!! TODO: support suggestion
-					propertySetErrors = append(propertySetErrors, createUnknownOptionError(
-						keyText,
-						unknownNameDiag,
-						"", /*unknownOptionErrorText*/
-						propertyAssignment.Name(),
-						sourceFile,
-						nil, /*alternateMode*/
-					))
+					possibleOption := parentOption.ElementOptions.Get(keyText)
+					if possibleOption != nil && possibleOption.Name != keyText {
+						propertySetErrors = append(propertySetErrors, CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
+							sourceFile,
+							propertyAssignment.Name(),
+							extraKeyDidYouMeanDiagnostics(parentOption.Name),
+							keyText,
+							possibleOption.Name,
+						))
+					} else {
+						propertySetErrors = append(propertySetErrors, createUnknownOptionError(
+							keyText,
+							unknownNameDiag,
+							"", /*unknownOptionErrorText*/
+							propertyAssignment.Name(),
+							sourceFile,
+							nil, /*alternateMode*/
+						))
+					}
 				} else {
 					// errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Unknown_compiler_option_0_Did_you_mean_1, keyText, core.FindKey(parentOption.ElementOptions, keyText)))
 				}
@@ -611,8 +621,12 @@ func convertOptionsFromJson[O optionParser](optionsNameMap CommandLineOptionName
 	var errors []*ast.Diagnostic
 	for key, value := range jsonMap.Entries() {
 		opt := optionsNameMap.Get(key)
+		if opt != nil && opt.Name != key {
+			// Case-insensitive match found but exact case doesn't match - provide "did you mean" suggestion
+			errors = append(errors, CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(nil, nil, result.UnknownDidYouMeanDiagnostic(), key, opt.Name))
+			continue
+		}
 		if opt == nil {
-			// !!! TODO?: support suggestion
 			errors = append(errors, createUnknownOptionError(key, result.UnknownOptionDiagnostic(), "", nil, nil, nil))
 			continue
 		}
@@ -746,6 +760,9 @@ func convertObjectLiteralExpressionToJson(
 		var option *CommandLineOption = nil
 		if keyText != "" && objectOption != nil && objectOption.ElementOptions != nil {
 			option = objectOption.ElementOptions.Get(keyText)
+			if option != nil && option.Name != keyText {
+				option = nil
+			}
 		}
 		value, err := convertPropertyValueToJson(sourceFile, element.AsPropertyAssignment().Initializer, option, returnValue, jsonConversionNotifier)
 		errors = append(errors, err...)

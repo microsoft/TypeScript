@@ -122,6 +122,7 @@ func parseJsonToStringKey(json any) *collections.OrderedMap[string, any] {
 type optionParser interface {
 	ParseOption(key string, value any) []*ast.Diagnostic
 	UnknownOptionDiagnostic() *diagnostics.Message
+	UnknownDidYouMeanDiagnostic() *diagnostics.Message
 }
 
 type compilerOptionsParser struct {
@@ -136,6 +137,10 @@ func (o *compilerOptionsParser) UnknownOptionDiagnostic() *diagnostics.Message {
 	return extraKeyDiagnostics("compilerOptions")
 }
 
+func (o *compilerOptionsParser) UnknownDidYouMeanDiagnostic() *diagnostics.Message {
+	return extraKeyDidYouMeanDiagnostics("compilerOptions")
+}
+
 type watchOptionsParser struct {
 	*core.WatchOptions
 }
@@ -146,6 +151,10 @@ func (o *watchOptionsParser) ParseOption(key string, value any) []*ast.Diagnosti
 
 func (o *watchOptionsParser) UnknownOptionDiagnostic() *diagnostics.Message {
 	return extraKeyDiagnostics("watchOptions")
+}
+
+func (o *watchOptionsParser) UnknownDidYouMeanDiagnostic() *diagnostics.Message {
+	return extraKeyDidYouMeanDiagnostics("watchOptions")
 }
 
 type typeAcquisitionParser struct {
@@ -160,6 +169,10 @@ func (o *typeAcquisitionParser) UnknownOptionDiagnostic() *diagnostics.Message {
 	return extraKeyDiagnostics("typeAcquisition")
 }
 
+func (o *typeAcquisitionParser) UnknownDidYouMeanDiagnostic() *diagnostics.Message {
+	return extraKeyDidYouMeanDiagnostics("typeAcquisition")
+}
+
 type buildOptionsParser struct {
 	*core.BuildOptions
 }
@@ -170,6 +183,10 @@ func (o *buildOptionsParser) ParseOption(key string, value any) []*ast.Diagnosti
 
 func (o *buildOptionsParser) UnknownOptionDiagnostic() *diagnostics.Message {
 	return extraKeyDiagnostics("buildOptions")
+}
+
+func (o *buildOptionsParser) UnknownDidYouMeanDiagnostic() *diagnostics.Message {
+	return extraKeyDidYouMeanDiagnostics("buildOptions")
 }
 
 func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOptions) []*ast.Diagnostic {
