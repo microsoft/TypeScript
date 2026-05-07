@@ -103,18 +103,18 @@ export declare const fn3: (a: string, b: never) => void;
  * @param {string} a
  * @param {number} b
  */
-export declare const fn4: (a: string, b: never) => void;
+export declare const fn4: (a: string, b: number) => void;
 /**
  * @satisfies {(a: string, ...args: number[]) => void}
  * @param {string} a
  * @param {string} b
  */
-export declare const fn5: (a: string, b: number) => void;
+export declare const fn5: (a: string, b: string) => void;
 /**
  * @satisfies {(a: string, ...args: number[]) => void}
  * @param {string} a
  * @param {string | number} b
  */
-export declare const fn6: (a: string, b: number) => void;
+export declare const fn6: (a: string, b: string | number) => void;
 /** @satisfies {(uuid: string) => void} */
 export declare function fn7(uuid: any): void;

@@ -44,10 +44,10 @@ export const fn3 = (a, b) => {};
  * @param {number} b
  */
 export const fn4 = (a, b) => {};
->fn4 : (a: string, b: never) => void
->(a, b) => {} : (a: string, b: never) => void
+>fn4 : (a: string, b: number) => void
+>(a, b) => {} : (a: string, b: number) => void
 >a : string
->b : never
+>b : number
 
 /** 
  * @satisfies {(a: string, ...args: number[]) => void}
@@ -55,10 +55,10 @@ export const fn4 = (a, b) => {};
  * @param {string} b
  */
 export const fn5 = (a, b) => {};
->fn5 : (a: string, b: number) => void
->(a, b) => {} : (a: string, b: number) => void
+>fn5 : (a: string, b: string) => void
+>(a, b) => {} : (a: string, b: string) => void
 >a : string
->b : number
+>b : string
 
 /** 
  * @satisfies {(a: string, ...args: number[]) => void}
@@ -66,10 +66,10 @@ export const fn5 = (a, b) => {};
  * @param {string | number} b
  */
 export const fn6 = (a, b) => {};
->fn6 : (a: string, b: number) => void
->(a, b) => {} : (a: string, b: number) => void
+>fn6 : (a: string, b: string | number) => void
+>(a, b) => {} : (a: string, b: string | number) => void
 >a : string
->b : number
+>b : string | number
 
 /** @satisfies {(uuid: string) => void} */
 export function fn7(uuid) {}
