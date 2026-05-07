@@ -2845,14 +2845,14 @@ func (p *Parser) parseJSDocAllType() *ast.Node {
 func (p *Parser) parseJSDocNonNullableType() *ast.TypeNode {
 	pos := p.nodePos()
 	p.nextToken()
-	return p.finishNode(p.factory.NewJSDocNonNullableType(p.parseNonArrayType()), pos)
+	return p.finishNode(p.factory.NewJSDocNonNullableType(p.parseTypeOperatorOrHigher()), pos)
 }
 
 func (p *Parser) parseJSDocNullableType() *ast.Node {
 	pos := p.nodePos()
 	// skip the ?
 	p.nextToken()
-	return p.finishNode(p.factory.NewJSDocNullableType(p.parseType()), pos)
+	return p.finishNode(p.factory.NewJSDocNullableType(p.parseTypeOperatorOrHigher()), pos)
 }
 
 func (p *Parser) parseJSDocType() *ast.TypeNode {

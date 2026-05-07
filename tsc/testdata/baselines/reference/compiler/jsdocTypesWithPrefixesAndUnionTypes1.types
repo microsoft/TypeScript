@@ -1,0 +1,184 @@
+//// [tests/cases/compiler/jsdocTypesWithPrefixesAndUnionTypes1.ts] ////
+
+=== src/question.js ===
+/** @param {?} x */
+export function f0(x) {}
+>f0 : (x: any | null) => void
+>x : any
+
+/** @param {?never} x */
+export function f1(x) {}
+>f1 : (x: never | null) => void
+>x : null
+
+/** @param {never?} x */
+export function f2(x) {}
+>f2 : (x: never | null) => void
+>x : null
+
+/** @param {? | never} x */
+export function f3(x) {}
+>f3 : (x: (any | null) | never) => void
+>x : any
+
+/** @param {? | string} x */
+export function f4(x) {}
+>f4 : (x: (any | null) | string) => void
+>x : any
+
+/** @param {number | ? | string} x */
+export function f5(x) {}
+>f5 : (x: number | (any | null) | string) => void
+>x : any
+
+/** @param {number | string | ?} x */
+export function f6(x) {}
+>f6 : (x: number | string | (any | null)) => void
+>x : any
+
+/** @param {? number | string} x */
+export function f7(x) {}
+>f7 : (x: (number | null) | string) => void
+>x : string | number | null
+
+/** @param {number? | string} x */
+export function f8(x) {}
+>f8 : (x: number) => void
+>x : number
+
+/** @param {number | ? string} x */
+export function f9(x) {}
+>f9 : (x: number | (string | null)) => void
+>x : string | number | null
+
+/** @param {? { a: number } & { b: number }} x */
+export function f10(x) {}
+>f10 : (x: ({ a: number; } | null) & { b: number; }) => void
+>x : { a: number; } & { b: number; }
+
+/** @param {{ a: number } & ? { b: number }} x */
+export function f11(x) {}
+>f11 : (x: { a: number; } & ({ b: number; } | null)) => void
+>x : { a: number; } & { b: number; }
+
+/** @param {? { a: number } & { b: number } | string} x */
+export function f12(x) {}
+>f12 : (x: (({ a: number; } | null) & { b: number; }) | string) => void
+>x : string | ({ a: number; } & { b: number; })
+
+/** @param {{ a: number } & ? { b: number } | string} x */
+export function f13(x) {}
+>f13 : (x: ({ a: number; } & ({ b: number; } | null)) | string) => void
+>x : string | ({ a: number; } & { b: number; })
+
+/** @param {?readonly number[]} x */
+export function f14(x) {}
+>f14 : (x: readonly number[] | null) => void
+>x : readonly number[] | null
+
+/** @param {string | ?readonly number[]} x */
+export function f15(x) {}
+>f15 : (x: string | (readonly number[] | null)) => void
+>x : string | readonly number[] | null
+
+/** @param {?readonly number[] | string} x */
+export function f16(x) {}
+>f16 : (x: (readonly number[] | null) | string) => void
+>x : string | readonly number[] | null
+
+/** @param {?readonly ?number[] | string} x */
+export function f17(x) {}
+>f17 : (x: (readonly (number[] | null) | null) | string) => void
+>x : string | number[] | null
+
+=== src/exclamation.js ===
+/** @param {!} x */
+export function g0(x) {}
+>g0 : (x: any) => void
+>x : any
+
+/** @param {!never} x */
+export function g1(x) {}
+>g1 : (x: never) => void
+>x : never
+
+/** @param {never!} x */
+export function g2(x) {}
+>g2 : (x: never) => void
+>x : never
+
+/** @param {! | never} x */
+export function g3(x) {}
+>g3 : (x: any | never) => void
+>x : any
+
+/** @param {! | string} x */
+export function g4(x) {}
+>g4 : (x: any | string) => void
+>x : any
+
+/** @param {number | ! | string} x */
+export function g5(x) {}
+>g5 : (x: number | any | string) => void
+>x : any
+
+/** @param {number | string | !} x */
+export function g6(x) {}
+>g6 : (x: number | string | any) => void
+>x : any
+
+/** @param {! number | string} x */
+export function g7(x) {}
+>g7 : (x: number | string) => void
+>x : string | number
+
+/** @param {number! | string} x */
+export function g8(x) {}
+>g8 : (x: number | string) => void
+>x : string | number
+
+/** @param {number | ! string} x */
+export function g9(x) {}
+>g9 : (x: number | string) => void
+>x : string | number
+
+/** @param {! { a: number } & { b: number }} x */
+export function g10(x) {}
+>g10 : (x: { a: number; } & { b: number; }) => void
+>x : { a: number; } & { b: number; }
+
+/** @param {{ a: number } & ! { b: number }} x */
+export function g11(x) {}
+>g11 : (x: { a: number; } & { b: number; }) => void
+>x : { a: number; } & { b: number; }
+
+/** @param {! { a: number } & { b: number } | string} x */
+export function g12(x) {}
+>g12 : (x: ({ a: number; } & { b: number; }) | string) => void
+>x : string | ({ a: number; } & { b: number; })
+
+/** @param {{ a: number } & ! { b: number } | string} x */
+export function g13(x) {}
+>g13 : (x: ({ a: number; } & { b: number; }) | string) => void
+>x : string | ({ a: number; } & { b: number; })
+
+/** @param {!readonly number[]} x */
+export function g14(x) {}
+>g14 : (x: readonly number[]) => void
+>x : readonly number[]
+
+/** @param {string | !readonly number[]} x */
+export function g15(x) {}
+>g15 : (x: string | readonly number[]) => void
+>x : string | readonly number[]
+
+/** @param {!readonly number[] | string} x */
+export function g16(x) {}
+>g16 : (x: readonly number[] | string) => void
+>x : string | readonly number[]
+
+/** @param {!readonly !number[] | string} x */
+export function g17(x) {}
+>g17 : (x: readonly number[] | string) => void
+>x : string | number[]
+
