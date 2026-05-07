@@ -1506,4 +1506,43 @@ export const value = content;`,
 			assert.Equal(t, sourceFile.Text(), `const greeting: string = "hello";`)
 		})
 	})
+
+	t.Run("jsconfig.json used for JS files when tsconfig.json exists in same directory", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/TS/p1/tsconfig.json": `{
+				"compilerOptions": {
+					"noLib": true,
+					"strict": true
+				}
+			}`,
+			"/home/projects/TS/p1/jsconfig.json": `{
+				"compilerOptions": {
+					"noLib": true,
+					"checkJs": true
+				}
+			}`,
+			"/home/projects/TS/p1/index.ts": `export const x: number = 1;`,
+			"/home/projects/TS/p1/app.js":   `/** @type {number} */ var y = "not a number";`,
+		}
+		session, _ := projecttestutil.Setup(files)
+
+		// Open the JS file - it should be assigned to the jsconfig.json project, not tsconfig.json
+		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/app.js", 1, files["/home/projects/TS/p1/app.js"].(string), lsproto.LanguageKindJavaScript)
+
+		snapshot := session.Snapshot()
+		jsURI := lsproto.DocumentUri("file:///home/projects/TS/p1/app.js")
+		defaultProject := snapshot.GetDefaultProject(jsURI)
+		assert.Assert(t, defaultProject != nil, "JS file should have a default project")
+		assert.Equal(t, defaultProject.Name(), "/home/projects/TS/p1/jsconfig.json", "JS file should belong to jsconfig.json project, not tsconfig.json")
+
+		// Open the TS file - it should be assigned to tsconfig.json project
+		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot = session.Snapshot()
+		tsURI := lsproto.DocumentUri("file:///home/projects/TS/p1/index.ts")
+		defaultTSProject := snapshot.GetDefaultProject(tsURI)
+		assert.Assert(t, defaultTSProject != nil, "TS file should have a default project")
+		assert.Equal(t, defaultTSProject.Name(), "/home/projects/TS/p1/tsconfig.json", "TS file should belong to tsconfig.json project")
+	})
 }

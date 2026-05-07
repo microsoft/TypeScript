@@ -601,13 +601,20 @@ func (c *configFileRegistryBuilder) computeConfigFileName(fileName string, skipS
 		}
 	}
 
-	skip := skipSearchInDirectoryOfFile
+	// When searching for ancestor of a config file, determine which config types to skip
+	// in the starting directory. This matches TSServer's forEachConfigFileLocation behavior:
+	// - For ancestor of tsconfig.json: skip tsconfig.json but still check jsconfig.json
+	// - For ancestor of jsconfig.json: skip both tsconfig.json and jsconfig.json
+	skipTsconfig := skipSearchInDirectoryOfFile
+	skipJsconfig := skipSearchInDirectoryOfFile && !strings.HasSuffix(fileName, "/tsconfig.json")
 	result, _ := tspath.ForEachAncestorDirectory(searchPath, func(directory string) (result string, stop bool) {
-		if !skip {
+		if !skipTsconfig {
 			tsconfigPath := tspath.CombinePaths(directory, "tsconfig.json")
 			if c.FS().FileExists(tsconfigPath) {
 				return tsconfigPath, true
 			}
+		}
+		if !skipJsconfig {
 			jsconfigPath := tspath.CombinePaths(directory, "jsconfig.json")
 			if c.FS().FileExists(jsconfigPath) {
 				return jsconfigPath, true
@@ -616,7 +623,8 @@ func (c *configFileRegistryBuilder) computeConfigFileName(fileName string, skipS
 		if strings.HasSuffix(directory, "/node_modules") {
 			return "", true
 		}
-		skip = false
+		skipTsconfig = false
+		skipJsconfig = false
 		return "", false
 	})
 	logger.Logf("computeConfigFileName:: File: %s:: Result: %s", fileName, result)
