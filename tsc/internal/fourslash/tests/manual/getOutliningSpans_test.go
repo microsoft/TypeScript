@@ -79,7 +79,7 @@ function foo(): number[| {
 
 }|])|]
 
-// trivia handeling
+// trivia handling
 class ClassFooWithTrivia[| /*  some comments */
    /* more trivia */ {
 

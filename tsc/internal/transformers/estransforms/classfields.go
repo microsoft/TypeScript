@@ -607,7 +607,7 @@ func (tx *classFieldsTransformer) visitExportAssignment(node *ast.ExportAssignme
 	//        a. Let _value_ be ? NamedEvaluation of |AssignmentExpression| with argument `"default"`.
 	//     ...
 
-	// NOTE: Since emit for `export =` translates to `module.exports = ...`, the assigned nameof the class
+	// NOTE: Since emit for `export =` translates to `module.exports = ...`, the assigned name of the class
 	// is `""`.
 
 	if isNamedEvaluationAnd(tx.EmitContext(), node.AsNode(), tx.isAnonymousClassNeedingAssignedName) {
