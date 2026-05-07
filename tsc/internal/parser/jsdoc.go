@@ -197,6 +197,8 @@ func (p *Parser) parseJSDocCommentWorker(start int, end int, fullStart int, inde
 	tagsPos := -1
 	tagsEnd := -1
 	state := jsdocStateSawAsterisk
+	backtickCount := 0
+	inFencedCodeBlock := false
 	commentParts := p.nodeSliceArena.NewSlice(1)[:0]
 	comments := p.jsdocCommentsSpace
 	commentsPos := -1
@@ -219,10 +221,22 @@ func (p *Parser) parseJSDocCommentWorker(start int, end int, fullStart int, inde
 	}
 loop:
 	for {
+		// Detect fenced code blocks by counting consecutive backtick tokens.
+		// Three or more consecutive backticks toggle the fenced code block state.
+		if p.token != ast.KindBacktickToken && backtickCount > 0 {
+			if backtickCount >= 3 {
+				inFencedCodeBlock = !inFencedCodeBlock
+			}
+			backtickCount = 0
+		}
 		switch p.token {
 		case ast.KindAtToken:
-			if !p.scanner.CanFollowJSDocAt() {
-				state = jsdocStateSavingComments
+			if inFencedCodeBlock || !p.scanner.CanFollowJSDocAt() {
+				if inFencedCodeBlock {
+					state = jsdocStateSavingBackticks
+				} else {
+					state = jsdocStateSavingComments
+				}
 				pushComment(p.scanner.TokenText())
 				break
 			}
@@ -280,10 +294,15 @@ loop:
 			break loop
 		case ast.KindJSDocCommentTextToken:
 			if state != jsdocStateSavingBackticks {
-				state = jsdocStateSavingComments
+				if inFencedCodeBlock {
+					state = jsdocStateSavingBackticks
+				} else {
+					state = jsdocStateSavingComments
+				}
 			}
 			pushComment(p.scanner.TokenValue())
 		case ast.KindBacktickToken:
+			backtickCount++
 			if state == jsdocStateSavingBackticks {
 				state = jsdocStateSavingComments
 			} else {
@@ -291,6 +310,11 @@ loop:
 			}
 			pushComment(p.scanner.TokenText())
 		case ast.KindOpenBraceToken:
+			if inFencedCodeBlock {
+				state = jsdocStateSavingBackticks
+				pushComment(p.scanner.TokenText())
+				break
+			}
 			state = jsdocStateSavingComments
 			commentEnd := p.scanner.TokenFullStart()
 			linkStart := p.scanner.TokenEnd() - 1
@@ -311,7 +335,11 @@ loop:
 			// wasn't a tag, we can no longer parse a tag on this line until we hit the next
 			// line break.
 			if state != jsdocStateSavingBackticks {
-				state = jsdocStateSavingComments
+				if inFencedCodeBlock {
+					state = jsdocStateSavingBackticks
+				} else {
+					state = jsdocStateSavingComments
+				}
 			}
 			pushComment(p.scanner.TokenText())
 		}
@@ -523,6 +551,8 @@ func (p *Parser) parseTagComments(indent int, initialMargin *string) *ast.NodeLi
 	p.jsdocTagCommentsPartsSpace = nil
 	linkEnd := -1
 	state := jsdocStateBeginningOfLine
+	backtickCount := 0
+	inFencedCodeBlock := false
 	if indent < 0 {
 		panic("indent must be a natural number")
 	}
@@ -545,6 +575,14 @@ func (p *Parser) parseTagComments(indent int, initialMargin *string) *ast.NodeLi
 	tok := p.token
 loop:
 	for {
+		// Detect fenced code blocks by counting consecutive backtick tokens.
+		// Three or more consecutive backticks toggle the fenced code block state.
+		if tok != ast.KindBacktickToken && backtickCount > 0 {
+			if backtickCount >= 3 {
+				inFencedCodeBlock = !inFencedCodeBlock
+			}
+			backtickCount = 0
+		}
 		switch tok {
 		case ast.KindNewLineTrivia:
 			state = jsdocStateBeginningOfLine
@@ -552,11 +590,15 @@ loop:
 			comments = append(comments, p.scanner.TokenText())
 			indent = 0
 		case ast.KindAtToken:
-			if p.scanner.CanFollowJSDocAt() {
+			if !inFencedCodeBlock && p.scanner.CanFollowJSDocAt() {
 				p.scanner.ResetPos(p.scanner.TokenEnd() - 1)
 				break loop
 			}
-			state = jsdocStateSavingComments
+			if inFencedCodeBlock {
+				state = jsdocStateSavingBackticks
+			} else {
+				state = jsdocStateSavingComments
+			}
 			pushComment(p.scanner.TokenText())
 		case ast.KindEndOfFile:
 			// Done
@@ -569,10 +611,19 @@ loop:
 			// if the whitespace crosses the margin, take only the whitespace that passes the margin
 			if margin > -1 && indent+len(whitespace) > margin {
 				comments = append(comments, whitespace[max(margin-indent, 0):])
-				state = jsdocStateSavingComments
+				if inFencedCodeBlock {
+					state = jsdocStateSavingBackticks
+				} else {
+					state = jsdocStateSavingComments
+				}
 			}
 			indent += len(whitespace)
 		case ast.KindOpenBraceToken:
+			if inFencedCodeBlock {
+				state = jsdocStateSavingBackticks
+				pushComment(p.scanner.TokenText())
+				break
+			}
 			state = jsdocStateSavingComments
 			commentEnd := p.scanner.TokenFullStart()
 			linkStart := p.scanner.TokenEnd() - 1
@@ -593,6 +644,7 @@ loop:
 				pushComment(p.scanner.TokenText())
 			}
 		case ast.KindBacktickToken:
+			backtickCount++
 			if state == jsdocStateSavingBackticks {
 				state = jsdocStateSavingComments
 			} else {
@@ -601,7 +653,11 @@ loop:
 			pushComment(p.scanner.TokenText())
 		case ast.KindJSDocCommentTextToken:
 			if state != jsdocStateSavingBackticks {
-				state = jsdocStateSavingComments
+				if inFencedCodeBlock {
+					state = jsdocStateSavingBackticks
+				} else {
+					state = jsdocStateSavingComments
+				}
 				// leading identifiers start recording as well
 			}
 			pushComment(p.scanner.TokenValue())
@@ -616,7 +672,11 @@ loop:
 			fallthrough
 		default:
 			if state != jsdocStateSavingBackticks {
-				state = jsdocStateSavingComments
+				if inFencedCodeBlock {
+					state = jsdocStateSavingBackticks
+				} else {
+					state = jsdocStateSavingComments
+				}
 				// leading identifiers start recording as well
 			}
 			pushComment(p.scanner.TokenText())

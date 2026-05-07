@@ -1,0 +1,113 @@
+// === QuickInfo ===
+=== /quickInfoJSDocCodefenceAtSign.ts ===
+// /**
+//  * text
+//  * @example Foo
+//  * ```
+//  * @Embed[asfasdfasf]
+//  * ```
+//  * becomes
+//  * ```html
+//  * <div></div>
+//  * ```
+//  */
+// const x = 1;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const x: 1
+// | ```
+// | text
+// | 
+// | *@example*
+// | ````tsx
+// | Foo
+// | ```
+// | @Embed[asfasdfasf]
+// | ```
+// | becomes
+// | ```html
+// | <div></div>
+// | ```
+// | ````
+// | 
+// | ----------------------------------------------------------------------
+// 
+// /**
+//  * Some text
+//  * ```
+//  * @tag inside code
+//  * ```
+//  * @param y - a number
+//  */
+// function foo(y: number) {}
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo(y: number): void
+// | ```
+// | Some text
+// | ```
+// | @tag inside code
+// | ```
+// | 
+// | *@param* `y` - a number
+// | 
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 118,
+      "LSPosition": {
+        "line": 11,
+        "character": 6
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst x: 1\n```\ntext\n\n*@example*\n````tsx\nFoo\n```\n@Embed[asfasdfasf]\n```\nbecomes\n```html\n<div></div>\n```\n````\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 6
+        },
+        "end": {
+          "line": 11,
+          "character": 7
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 213,
+      "LSPosition": {
+        "line": 20,
+        "character": 9
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(y: number): void\n```\nSome text\n```\n@tag inside code\n```\n\n*@param* `y` - a number\n"
+      },
+      "range": {
+        "start": {
+          "line": 20,
+          "character": 9
+        },
+        "end": {
+          "line": 20,
+          "character": 12
+        }
+      }
+    }
+  }
+]
