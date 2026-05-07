@@ -76,11 +76,11 @@ func (v *NodeVisitor) VisitEmbeddedStatement(node *Statement) *Statement {
 		return node
 	}
 
-	if v.Visit != nil {
-		return v.liftToBlock(v.Visit(node))
+	visited := v.Visit(node)
+	if visited == nil {
+		return nil
 	}
-
-	return node
+	return v.liftToBlock(visited)
 }
 
 // Visits a NodeList, possibly returning a new NodeList in its place.

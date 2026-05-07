@@ -1,11 +1,8 @@
 --- old.declarationEmitInvalidExport.js
 +++ new.declarationEmitInvalidExport.js
-@@= skipped -11, +11 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -13, +13 lines =@@
  if (false) {
--    exports.myClass = 0;
-+    export var myClass = 0;
+     exports.myClass = 0;
  }
 +
 +

@@ -220,6 +220,9 @@ func ConvertVariableDeclarationToAssignmentExpression(emitContext *printer.EmitC
 }
 
 func SingleOrMany(nodes []*ast.Node, factory *printer.NodeFactory) *ast.Node {
+	if nodes == nil {
+		return nil
+	}
 	if len(nodes) == 1 {
 		return nodes[0]
 	}

@@ -12,6 +12,5 @@ export default cssExports;
 "use strict";
 // https://github.com/microsoft/TypeScript/issues/59373
 Object.defineProperty(exports, "__esModule", { value: true });
-if (true)
-    export const cssExports;
+if (true) { }
 exports.default = exports.cssExports;
