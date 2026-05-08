@@ -28,6 +28,18 @@ func (b *NodeBuilderImpl) pseudoTypeToNodeWithCheckerFallback(t *pseudochecker.P
 		result := b.typeToTypeNode(checkerType)
 		b.ctx.suppressReportInferenceFallback = oldSuppress
 		return result
+	} else if t.Kind == pseudochecker.PseudoTypeKindDirect {
+		existing := t.AsPseudoTypeDirect().TypeNode
+		if !b.existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, checkerType) {
+			if !b.ctx.suppressReportInferenceFallback {
+				b.ctx.tracker.ReportInferenceFallback(existing)
+			}
+			oldSuppress := b.ctx.suppressReportInferenceFallback
+			b.ctx.suppressReportInferenceFallback = true
+			result := b.typeToTypeNode(checkerType)
+			b.ctx.suppressReportInferenceFallback = oldSuppress
+			return result
+		}
 	}
 	return b.pseudoTypeToNode(t)
 }
