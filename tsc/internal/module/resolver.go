@@ -1098,7 +1098,6 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 			fromDirectory.packageId = r.getPackageId(fromDirectory.path, packageInfo)
 			return fromDirectory
 		}
-		// !!! this is ported exactly, but checking for null seems wrong?
 		if rest == "" && packageInfo.Exists() &&
 			(packageInfo.Contents.Exports.Type == packagejson.JSONValueTypeNotPresent || packageInfo.Contents.Exports.Type == packagejson.JSONValueTypeNull) &&
 			r.esmMode {
@@ -1123,8 +1122,10 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 		r.resolvedPackageDirectory = true
 		if r.features&NodeResolutionFeaturesExports != 0 &&
 			packageInfo.Exists() &&
-			packageInfo.Contents.Exports.Type != packagejson.JSONValueTypeNotPresent {
-			// package exports are higher priority than file/directory/typesVersions lookups and (and, if there's exports present, blocks them)
+			!packageInfo.Contents.Exports.IsFalsy() {
+			// package exports are higher priority than file/directory/typesVersions lookups and (and, if there's exports present*, blocks them)
+			// *Well, weirdly enough a top-level `"exports": null` does NOT block fallback resolution.
+			// https://github.com/microsoft/TypeScript/pull/49327
 			return r.loadModuleFromExports(packageInfo, ext, tspath.CombinePaths(".", rest))
 		}
 		if rest != "" {

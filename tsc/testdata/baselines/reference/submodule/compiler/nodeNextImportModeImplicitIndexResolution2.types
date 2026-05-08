@@ -24,7 +24,7 @@ import dedent2 from "dedent2";
 >dedent2 : typeof dedent2
 
 import dedent3 from "dedent3";
->dedent3 : any
+>dedent3 : typeof dedent3
 
 import dedent4 from "dedent4"; // Error
 >dedent4 : any
@@ -37,7 +37,7 @@ import dedent2 from "dedent2";
 >dedent2 : typeof dedent2
 
 import dedent3 from "dedent3";
->dedent3 : any
+>dedent3 : typeof dedent3
 
 import dedent4 from "dedent4"; // Error
 >dedent4 : any

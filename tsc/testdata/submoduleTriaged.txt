@@ -63,25 +63,6 @@ compiler/isolatedDeclarationErrors.errors.txt.diff
 compiler/computedPropertiesNarrowed.errors.txt.diff
 compiler/declarationEmitTypeofRest.errors.txt.diff
 
-# Stricter module resolution in nodeNext
-## https://github.com/microsoft/typescript-go/issues/3479
-## Corsa emits new TS2307 "Cannot find module" errors for implicit index resolution and package self-name resolution that Strada accepted
-compiler/nodeNextImportModeImplicitIndexResolution2.errors.txt.diff
-compiler/nodeNextPackageSelfNameWithOutDir.errors.txt.diff
-compiler/nodeNextPackageSelfNameWithOutDirDeclDir.errors.txt.diff
-conformance/nodeAllowJsPackageSelfName(module=node16).errors.txt.diff
-conformance/nodeAllowJsPackageSelfName(module=node18).errors.txt.diff
-conformance/nodeAllowJsPackageSelfName(module=node20).errors.txt.diff
-conformance/nodeAllowJsPackageSelfName(module=nodenext).errors.txt.diff
-conformance/nodeModulesAllowJsPackageImports(module=node16).errors.txt.diff
-conformance/nodeModulesAllowJsPackageImports(module=node18).errors.txt.diff
-conformance/nodeModulesAllowJsPackageImports(module=node20).errors.txt.diff
-conformance/nodeModulesAllowJsPackageImports(module=nodenext).errors.txt.diff
-conformance/nodeModulesDeclarationEmitWithPackageExports(module=node16).errors.txt.diff
-conformance/nodeModulesDeclarationEmitWithPackageExports(module=node18).errors.txt.diff
-conformance/nodeModulesDeclarationEmitWithPackageExports(module=node20).errors.txt.diff
-conformance/nodeModulesDeclarationEmitWithPackageExports(module=nodenext).errors.txt.diff
-
 # JSX runtime module resolution change
 ## https://github.com/microsoft/typescript-go/issues/3480
 ## TS2875 error requiring `react/jsx-runtime` or `react/jsx-dev-runtime` module is no longer emitted for non-module (script) files
