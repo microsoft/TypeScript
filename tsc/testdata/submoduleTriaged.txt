@@ -217,10 +217,6 @@ compiler/lateBoundMethodNameAssigmentJS.js.diff
 ## https://github.com/microsoft/typescript-go/issues/3567
 conformance/symbolDeclarationEmit12.js.diff
 
-# export as namespace added or restructured in declaration emit
-## https://github.com/microsoft/typescript-go/issues/3568
-conformance/jsDeclarationsExportFormsErr(target=es2015).js.diff
-
 # Declaration emit simplification of class extending built-in Array
 ## https://github.com/microsoft/typescript-go/issues/3569
 compiler/javascriptThisAssignmentInStaticBlock.js.diff

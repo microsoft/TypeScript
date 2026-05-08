@@ -940,6 +940,7 @@ compiler/jsEmitIntersectionProperty.js.diff
 compiler/lateBoundAssignmentCandidateJS3.js.diff
 conformance/jsDeclarationsClassesErr(target=es2015).js.diff
 conformance/jsDeclarationsClassLeadingOptional(target=es2015).js.diff
+conformance/jsDeclarationsExportFormsErr(target=es2015).js.diff
 conformance/jsDeclarationsExportSpecifierNonlocal(target=es2015).js.diff
 conformance/jsDeclarationsSubclassWithExplicitNoArgumentConstructor.js.diff
 conformance/jsDeclarationsThisTypes.js.diff
