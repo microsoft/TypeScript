@@ -36,13 +36,6 @@ function f(k) {
 
 
 //// [mod1.d.ts]
-declare namespace NS {
-    var K: {
-        new (): {
-            values(): /*elided*/ any;
-        };
-    };
-}
 export declare var K: {
     new (): {
         values(): /*elided*/ any;
