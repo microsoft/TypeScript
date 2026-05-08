@@ -4,6 +4,14 @@
  /** @implements {A} */
  declare class B3 implements A {
  }
+-declare namespace Ns {
+-    export { C1 };
+-    export let C5: {
+-        new (): {
+-            method(): number;
+-        };
+-    };
+-}
 +declare var Ns: {
 +    /** @implements {A} */
 +    C1: {
@@ -18,14 +26,9 @@
 +        };
 +    };
 +};
- declare namespace Ns {
--    export { C1 };
--    export let C5: {
-+    var C1: {
-         new (): {
-             method(): number;
-         };
-@@= skipped -14, +27 lines =@@
+ /** @implements {A} */
+ declare var C2: {
+     new (): {
          method(): number;
      };
  };
@@ -43,7 +46,7 @@
  declare class CC {
      /** @implements {A} */
      C4: {
-@@= skipped -12, +17 lines =@@
+@@= skipped -26, +37 lines =@@
      };
  }
  declare var C5: any;
@@ -52,10 +55,4 @@
 -}
 -declare class C3 implements A {
 -    method(): number;
-+declare namespace Ns {
-+    var C5: {
-+        new (): {
-+            method(): number;
-+        };
-+    };
- }
+-}

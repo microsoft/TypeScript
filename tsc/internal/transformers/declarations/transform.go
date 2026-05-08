@@ -2216,6 +2216,14 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		return nil
 	}
 
+	if ast.IsFunctionDeclaration(declaration) && declaration.FunctionLikeData().FullSignature != nil {
+		return nil
+	}
+
+	if ast.IsVariableDeclaration(declaration) && !ast.IsFunctionLike(declaration.Initializer()) {
+		return nil // We're going to add a type, no need to dupe members with a namespace
+	}
+
 	host := declaration.Symbol()
 	if host == nil {
 		return nil
