@@ -285,6 +285,8 @@ export class Client implements vscode.Disposable {
             this.outputChannel.appendLine(`Graceful shutdown failed, forcing restart: ${err}`);
             await this.client.start();
         }
+        this.isInitialized = true;
+        this.initializedEventEmitter.fire();
         return true;
     }
 
