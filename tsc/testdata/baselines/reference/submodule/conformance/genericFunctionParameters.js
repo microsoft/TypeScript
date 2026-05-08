@@ -29,7 +29,7 @@ declare function f2<T>(cb: <S extends number>(x: S) => T): T;
 declare function f3<T>(cb: <S extends Array<S>>(x: S) => T): T;
 declare let x1: unknown;
 declare let x2: number;
-declare let x3: any[][];
+declare let x3: any[];
 declare const s: <R>(go: <S>(ops: {
     init(): S;
 }) => R) => R;

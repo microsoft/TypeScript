@@ -33,8 +33,8 @@ let x2 = f2(x => x);  // number
 >x : S
 
 let x3 = f3(x => x);  // Array<any>
->x3 : any[][]
->f3(x => x) : any[][]
+>x3 : any[]
+>f3(x => x) : any[]
 >f3 : <T>(cb: <S extends Array<S>>(x: S) => T) => T
 >x => x : <S extends S[]>(x: S) => S
 >x : S
