@@ -1619,6 +1619,10 @@ func IsAmbientModule(node *Node) bool {
 	return IsModuleDeclaration(node) && (node.AsModuleDeclaration().Name().Kind == KindStringLiteral || IsGlobalScopeAugmentation(node))
 }
 
+func IsAmbientModuleSymbolName(s string) bool {
+	return strings.HasPrefix(s, "\"") && strings.HasSuffix(s, "\"")
+}
+
 func IsExternalModule(file *SourceFile) bool {
 	return file.ExternalModuleIndicator != nil
 }

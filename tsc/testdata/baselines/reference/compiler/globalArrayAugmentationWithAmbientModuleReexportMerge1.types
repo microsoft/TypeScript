@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/globalArrayAugmentationWithAmbientModuleReexportMerge1.ts] ////
+
+=== /node_modules/foo/index.d.ts ===
+declare function foo(): void;
+>foo : typeof foo
+
+declare namespace foo { export const items: string[]; }
+>foo : typeof foo
+>items : string[]
+
+export = foo;
+>foo : typeof foo
+
+=== /a.d.ts ===
+declare module 'mymod' { import * as foo from 'foo'; export { foo }; }
+>'mymod' : typeof import("mymod")
+>foo : typeof foo
+>foo : typeof foo
+
+=== /b.d.ts ===
+declare module 'mymod' { export const foo: number; }
+>'mymod' : typeof import("mymod")
+>foo : number
+
+=== /augment.ts ===
+declare global {
+>global : any
+
+    interface Array<T> {
+        customMethod(): T;
+>customMethod : () => T
+    }
+}
+export {};
+
+=== /index.ts ===
+import * as foo from 'foo';
+>foo : typeof foo
+
+const items = foo.items;
+>items : string[]
+>foo.items : string[]
+>foo : typeof foo
+>items : string[]
+
+const result: string = items.customMethod();
+>result : string
+>items.customMethod() : string
+>items.customMethod : () => string
+>items : string[]
+>customMethod : () => string
+
+const fresh: string[] = [];
+>fresh : string[]
+>[] : never[]
+
+const result2: string = fresh.customMethod();
+>result2 : string
+>fresh.customMethod() : string
+>fresh.customMethod : () => string
+>fresh : string[]
+>customMethod : () => string
+

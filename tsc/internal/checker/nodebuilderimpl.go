@@ -1176,10 +1176,6 @@ func (b_ *NodeBuilderImpl) sortByBestName(a sortedSymbolNamePair, b sortedSymbol
 	return b_.ch.compareSymbols(a.sym, b.sym) // must sort symbols for stable ordering
 }
 
-func isAmbientModuleSymbolName(s string) bool {
-	return strings.HasPrefix(s, "\"") && strings.HasSuffix(s, "\"")
-}
-
 func canHaveModuleSpecifier(node *ast.Node) bool {
 	if node == nil {
 		return false
@@ -1269,12 +1265,12 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	}
 
 	if file == nil {
-		if isAmbientModuleSymbolName(symbol.Name) {
+		if ast.IsAmbientModuleSymbolName(symbol.Name) {
 			return stringutil.StripQuotes(symbol.Name)
 		}
 	}
 	if b.ctx.enclosingFile == nil {
-		if isAmbientModuleSymbolName(symbol.Name) {
+		if ast.IsAmbientModuleSymbolName(symbol.Name) {
 			return stringutil.StripQuotes(symbol.Name)
 		}
 		return ast.GetSourceFileOfModule(symbol).FileName()

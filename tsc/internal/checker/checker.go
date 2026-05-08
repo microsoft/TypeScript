@@ -1284,6 +1284,7 @@ func (c *Checker) initializeIterationResolvers() {
 
 func (c *Checker) initializeChecker() {
 	// Initialize global symbol table
+	var ambientModuleSymbols []*ast.Symbol
 	augmentations := make([][]*ast.Node, 0, len(c.files))
 	for _, file := range c.files {
 		if !ast.IsExternalOrCommonJSModule(file) {
@@ -1293,7 +1294,15 @@ func (c *Checker) initializeChecker() {
 					c.diagnostics.Add(NewDiagnosticForNode(d, diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, "globalThis"))
 				}
 			}
-			c.mergeSymbolTable(c.globals, file.Locals, false, nil)
+			for _, symbol := range file.Locals {
+				// We defer merging of global ambient module declarations since they may require other global symbols
+				// and types to be resolved. See https://github.com/microsoft/typescript-go/issues/2953.
+				if symbol.Flags&ast.SymbolFlagsModule != 0 && ast.IsAmbientModuleSymbolName(symbol.Name) {
+					ambientModuleSymbols = append(ambientModuleSymbols, symbol)
+				} else {
+					c.mergeGlobalSymbol(symbol)
+				}
+			}
 		}
 		c.patternAmbientModules = append(c.patternAmbientModules, file.PatternAmbientModules...)
 		augmentations = append(augmentations, file.ModuleAugmentations)
@@ -1348,6 +1357,10 @@ func (c *Checker) initializeChecker() {
 	}
 	c.anyReadonlyArrayType = c.createTypeFromGenericGlobalType(c.globalReadonlyArrayType, []*Type{c.anyType})
 	c.globalThisType = c.getGlobalType("ThisType", 1 /*arity*/, false /*reportErrors*/)
+	// Now merge global ambient module declarations
+	for _, symbol := range ambientModuleSymbols {
+		c.mergeGlobalSymbol(symbol)
+	}
 	// merge _nonglobal_ module augmentations.
 	// this needs to be done after global symbol table is initialized to make sure that all ambient modules are indexed
 	for _, list := range augmentations {
@@ -1357,6 +1370,17 @@ func (c *Checker) initializeChecker() {
 			}
 		}
 	}
+}
+
+func (c *Checker) mergeGlobalSymbol(symbol *ast.Symbol) {
+	globalSymbol := c.globals[symbol.Name]
+	var merged *ast.Symbol
+	if globalSymbol != nil {
+		merged = c.mergeSymbol(globalSymbol, symbol, false /*unidirectional*/)
+	} else {
+		merged = c.getMergedSymbol(symbol)
+	}
+	c.globals[symbol.Name] = merged
 }
 
 func (c *Checker) mergeModuleAugmentation(moduleName *ast.Node) {
