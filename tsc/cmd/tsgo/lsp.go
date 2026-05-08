@@ -60,10 +60,8 @@ func runLSP(args []string) int {
 			cmd.Dir = cwd
 			return cmd.Output()
 		},
-		ProgressDelay: 250 * time.Millisecond,
-		SetParentProcessID: func(parentPID int) {
-			startParentProcessWatchdog(ctx, stop, parentPID)
-		},
+		ProgressDelay:      250 * time.Millisecond,
+		SetParentProcessID: newParentProcessWatchdog(ctx, stop),
 	})
 
 	if err := s.Run(ctx); err != nil {
@@ -71,6 +69,17 @@ func runLSP(args []string) int {
 		return 1
 	}
 	return 0
+}
+
+// newParentProcessWatchdog returns a SetParentProcessID callback if the platform
+// supports process-alive checking, or nil otherwise.
+func newParentProcessWatchdog(ctx context.Context, stop context.CancelFunc) func(int) {
+	if !processAliveSupported {
+		return nil
+	}
+	return func(parentPID int) {
+		startParentProcessWatchdog(ctx, stop, parentPID)
+	}
 }
 
 // startParentProcessWatchdog starts a goroutine that monitors the parent process

@@ -8,6 +8,8 @@ import (
 	"syscall"
 )
 
+const processAliveSupported = true
+
 // isProcessAlive checks if a process with the given PID is still running.
 // On Unix, FindProcess always succeeds, so we send signal 0 to probe the
 // process. If the signal returns nil or EPERM, the process exists (EPERM

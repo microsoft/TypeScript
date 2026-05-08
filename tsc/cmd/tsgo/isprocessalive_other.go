@@ -2,9 +2,8 @@
 
 package main
 
-// isProcessAlive on unsupported platforms always returns true,
-// meaning the watchdog will never fire. This is safe: the server
-// simply won't detect a dead parent on these platforms.
+const processAliveSupported = false
+
 func isProcessAlive(pid int) bool {
-	return true
+	panic("isProcessAlive is not supported on this platform")
 }

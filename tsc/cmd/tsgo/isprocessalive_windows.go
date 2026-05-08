@@ -4,6 +4,8 @@ package main
 
 import "syscall"
 
+const processAliveSupported = true
+
 // isProcessAlive checks if a process with the given PID is still running.
 // On Windows, we open the process with SYNCHRONIZE access and use
 // WaitForSingleObject with a zero timeout. If the wait times out, the
