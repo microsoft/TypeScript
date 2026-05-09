@@ -3830,6 +3830,10 @@
         "category": "Error",
         "code": 2823
     },
+    "'super' cannot be used with 'new' keyword.": {
+        "category": "Error",
+        "code": 2824
+    },
     "Cannot find namespace '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 2833

@@ -6801,6 +6801,17 @@ namespace Parser {
     function parseNewExpressionOrNewDotTarget(): NewExpression | MetaProperty {
         const pos = getNodePos();
         parseExpected(SyntaxKind.NewKeyword);
+        
+        // Validate that 'new' is not used with 'super' - this is not JavaScript syntax
+        if (token() === SyntaxKind.SuperKeyword) {
+            parseErrorAtCurrentToken(Diagnostics.super_cannot_be_used_with_new_keyword);
+            return finishNode(factoryCreateNewExpression(
+                createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false),
+                /*typeArguments*/ undefined,
+                /*argumentsArray*/ undefined
+            ), pos);
+        }
+        
         if (parseOptional(SyntaxKind.DotToken)) {
             const name = parseIdentifierName();
             return finishNode(factory.createMetaProperty(SyntaxKind.NewKeyword, name), pos);
