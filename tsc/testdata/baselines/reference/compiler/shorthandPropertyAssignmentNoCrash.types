@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/shorthandPropertyAssignmentNoCrash.ts] ////
+
+=== shorthandPropertyAssignmentNoCrash.ts ===
+// https://github.com/microsoft/typescript-go/issues/3789
+
+function ff(f: any) {
+>ff : (f: any) => void
+>f : any
+
+    let g;
+>g : any
+
+    ({ g = (x: any, y: any) => x + y } = f);
+>({ g = (x: any, y: any) => x + y } = f) : any
+>{ g = (x: any, y: any) => x + y } = f : any
+>{ g = (x: any, y: any) => x + y } : { g?: any; }
+>g : any
+>(x: any, y: any) => x + y : (x: any, y: any) => any
+>x : any
+>y : any
+>x + y : any
+>x : any
+>y : any
+>f : any
+}
+

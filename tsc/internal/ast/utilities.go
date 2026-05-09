@@ -4021,24 +4021,16 @@ func GetHostSignatureFromJSDoc(node *Node) *Node {
 // Finds the declaration that owns the JSDoc for a function-like node.
 // Keep these hosts aligned with JSDoc parameter reparsing so unmatched @param diagnostics use the same attachment rules.
 func GetNextJSDocCommentLocation(node *Node) *Node {
-	parent := node.Parent
-	if parent == nil {
-		return nil
-	}
-	switch parent.Kind {
-	case KindPropertyAssignment, KindExportAssignment, KindPropertyDeclaration, KindReturnStatement:
-		return parent
-	case KindExpressionStatement:
-		if node.Kind == KindPropertyAccessExpression {
+	if parent := node.Parent; parent != nil {
+		switch parent.Kind {
+		case KindPropertyAssignment, KindExportAssignment, KindPropertyDeclaration, KindVariableDeclaration,
+			KindSatisfiesExpression, KindReturnStatement, KindVariableStatement, KindExpressionStatement:
 			return parent
+		case KindVariableDeclarationList:
+			if parent.AsVariableDeclarationList().Declarations.Nodes[0] == node {
+				return parent
+			}
 		}
-	case KindVariableStatement:
-		if HasSyntacticModifier(parent, ModifierFlagsExport) {
-			return parent
-		}
-	}
-	if IsVariableLike(parent) && parent.Initializer() == node {
-		return parent
 	}
 	return nil
 }

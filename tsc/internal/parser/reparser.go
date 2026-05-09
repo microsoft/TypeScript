@@ -573,25 +573,19 @@ func skipSatisfiesExpressions(node *ast.Node) *ast.Node {
 
 func getFunctionLikeHost(host *ast.Node) *ast.Node {
 	fun := host
-	if host.Kind == ast.KindVariableStatement && host.AsVariableStatement().DeclarationList != nil {
-		for _, declaration := range host.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes {
-			initializer := skipSatisfiesExpressions(declaration.Initializer())
-			if ast.IsFunctionLike(initializer) {
-				fun = initializer
-				break
-			}
+	switch host.Kind {
+	case ast.KindVariableStatement:
+		if nodes := host.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes; len(nodes) != 0 {
+			fun = nodes[0].Initializer()
 		}
-	} else if host.Kind == ast.KindPropertyAssignment {
-		fun = skipSatisfiesExpressions(host.Initializer())
-	} else if host.Kind == ast.KindPropertyDeclaration {
-		fun = skipSatisfiesExpressions(host.Initializer())
-	} else if host.Kind == ast.KindExportAssignment {
+	case ast.KindPropertyAssignment, ast.KindPropertyDeclaration:
+		fun = host.Initializer()
+	case ast.KindExportAssignment, ast.KindReturnStatement:
 		fun = host.Expression()
-	} else if host.Kind == ast.KindReturnStatement {
-		fun = host.Expression()
-	} else if host.Kind == ast.KindExpressionStatement {
+	case ast.KindExpressionStatement:
 		fun = ast.GetRightMostAssignedExpression(host.Expression())
 	}
+	fun = skipSatisfiesExpressions(fun)
 	if ast.IsFunctionLike(fun) {
 		return fun
 	}

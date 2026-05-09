@@ -82,14 +82,16 @@ func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 }
 
 func getAllJSDocTags(node *ast.Node) []*ast.Node {
-	for current := node; current != nil; current = ast.GetNextJSDocCommentLocation(current) {
-		jsdocs := current.JSDoc(nil)
-		if len(jsdocs) == 0 {
-			continue
-		}
-		lastJSDoc := jsdocs[len(jsdocs)-1].AsJSDoc()
-		if lastJSDoc.Tags != nil {
-			return lastJSDoc.Tags.Nodes
+	if node.Flags&ast.NodeFlagsJSDoc == 0 {
+		for current := node; current != nil; current = ast.GetNextJSDocCommentLocation(current) {
+			jsdocs := current.JSDoc(nil)
+			if len(jsdocs) == 0 {
+				continue
+			}
+			lastJSDoc := jsdocs[len(jsdocs)-1].AsJSDoc()
+			if lastJSDoc.Tags != nil {
+				return lastJSDoc.Tags.Nodes
+			}
 		}
 	}
 	return nil
