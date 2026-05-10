@@ -5,7 +5,6 @@ import {
     createMissingMemberNodes,
     getNoopSymbolTrackerWithResolver,
     registerCodeFix,
-    TypeConstructionContext,
 } from "../_namespaces/ts.codefix.js";
 import {
     addToSeen,
@@ -13,6 +12,7 @@ import {
     ClassElement,
     ClassLikeDeclaration,
     CodeFixAction,
+    CodeFixContextBase,
     createSymbolTable,
     Debug,
     Diagnostics,
@@ -30,6 +30,7 @@ import {
     isConstructorDeclaration,
     mapDefined,
     ModifierFlags,
+    Node,
     SourceFile,
     Symbol,
     SymbolTable,
@@ -76,7 +77,7 @@ function symbolPointsToNonPrivateMember(symbol: Symbol) {
 }
 
 function addMissingDeclarations(
-    context: TypeConstructionContext,
+    context: CodeFixContextBase,
     implementedTypeNode: ExpressionWithTypeArguments,
     sourceFile: SourceFile,
     classDeclaration: ClassLikeDeclaration,
@@ -90,6 +91,12 @@ function addMissingDeclarations(
     const implementedType = checker.getTypeAtLocation(implementedTypeNode) as InterfaceType;
     const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
     const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)));
+    if (
+        hasBlockingSemanticError(context, implementedTypeNode) ||
+        nonPrivateAndNotExistedInHeritageClauseMembers.some(symbol => symbol.getDeclarations()?.some(declaration => hasBlockingSemanticError(context, declaration)))
+    ) {
+        return;
+    }
 
     const classType = checker.getTypeAtLocation(classDeclaration);
     const constructor = find(classDeclaration.members, m => isConstructorDeclaration(m));
@@ -121,6 +128,12 @@ function addMissingDeclarations(
             changeTracker.insertMemberAtStart(sourceFile, cls, newElement);
         }
     }
+}
+
+function hasBlockingSemanticError(context: CodeFixContextBase, node: Node): boolean {
+    return context.program
+        .getSemanticDiagnostics(node.getSourceFile(), context.cancellationToken, [node])
+        .some(diagnostic => !errorCodes.includes(diagnostic.code));
 }
 
 function getHeritageClauseSymbolTable(classDeclaration: ClassLikeDeclaration, checker: TypeChecker): SymbolTable {

@@ -15,5 +15,4 @@
 // Since we can't guess the programmer's intent here, we do nothing.
 
 // TODO: (aozgaa) Acknowledge other errors on class/implemented interface/extended abstract class.
-// Should be verify.codeFixAvailable([]);
-verify.codeFixAvailable([{ description: "Implement interface 'I'" }]);
+verify.codeFixAvailable([]);
