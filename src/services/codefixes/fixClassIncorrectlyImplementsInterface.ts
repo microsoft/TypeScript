@@ -15,6 +15,7 @@ import {
     CodeFixContextBase,
     createSymbolTable,
     Debug,
+    Diagnostic,
     Diagnostics,
     ExpressionWithTypeArguments,
     find,
@@ -91,9 +92,10 @@ function addMissingDeclarations(
     const implementedType = checker.getTypeAtLocation(implementedTypeNode) as InterfaceType;
     const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
     const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)));
+    const semanticDiagnostics = new Map<SourceFile, readonly Diagnostic[]>();
     if (
-        hasBlockingSemanticError(context, implementedTypeNode) ||
-        nonPrivateAndNotExistedInHeritageClauseMembers.some(symbol => symbol.getDeclarations()?.some(declaration => hasBlockingSemanticError(context, declaration)))
+        hasBlockingSemanticError(context, semanticDiagnostics, implementedTypeNode) ||
+        nonPrivateAndNotExistedInHeritageClauseMembers.some(symbol => symbol.getDeclarations()?.some(declaration => hasBlockingSemanticError(context, semanticDiagnostics, declaration)))
     ) {
         return;
     }
@@ -130,10 +132,20 @@ function addMissingDeclarations(
     }
 }
 
-function hasBlockingSemanticError(context: CodeFixContextBase, node: Node): boolean {
-    return context.program
-        .getSemanticDiagnostics(node.getSourceFile(), context.cancellationToken, [node])
-        .some(diagnostic => !errorCodes.includes(diagnostic.code));
+function hasBlockingSemanticError(context: CodeFixContextBase, semanticDiagnostics: Map<SourceFile, readonly Diagnostic[]>, node: Node): boolean {
+    const sourceFile = node.getSourceFile();
+    let diagnostics = semanticDiagnostics.get(sourceFile);
+    if (!diagnostics) {
+        diagnostics = context.program.getSemanticDiagnostics(sourceFile, context.cancellationToken);
+        semanticDiagnostics.set(sourceFile, diagnostics);
+    }
+    return diagnostics.some(diagnostic =>
+        diagnostic.start !== undefined &&
+        diagnostic.length !== undefined &&
+        !errorCodes.includes(diagnostic.code) &&
+        diagnostic.start >= node.pos &&
+        diagnostic.start + diagnostic.length <= node.end
+    );
 }
 
 function getHeritageClauseSymbolTable(classDeclaration: ClassLikeDeclaration, checker: TypeChecker): SymbolTable {
