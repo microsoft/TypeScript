@@ -1,0 +1,76 @@
+labelReferenceDiagnostics.ts(2,5): error TS18001: A label cannot be referenced prior to its declared location.
+labelReferenceDiagnostics.ts(8,5): error TS18001: A label cannot be referenced prior to its declared location.
+labelReferenceDiagnostics.ts(14,5): error TS1107: Jump target cannot cross function boundary.
+labelReferenceDiagnostics.ts(18,5): error TS1107: Jump target cannot cross function boundary.
+labelReferenceDiagnostics.ts(23,9): error TS1107: Jump target cannot cross function boundary.
+labelReferenceDiagnostics.ts(30,5): error TS1107: Jump target cannot cross function boundary.
+labelReferenceDiagnostics.ts(37,9): error TS1107: Jump target cannot cross function boundary.
+labelReferenceDiagnostics.ts(44,9): error TS1107: Jump target cannot cross function boundary.
+
+
+==== labelReferenceDiagnostics.ts (8 errors) ====
+    function breakToLaterLabel() {
+        break target;
+        ~~~~~~~~~~~~~
+!!! error TS18001: A label cannot be referenced prior to its declared location.
+!!! related TS2728 labelReferenceDiagnostics.ts:3:5: 'target' is declared here.
+        target:
+        while (true) {}
+    }
+    
+    function continueToLaterLabel() {
+        continue target;
+        ~~~~~~~~~~~~~~~~
+!!! error TS18001: A label cannot be referenced prior to its declared location.
+!!! related TS2728 labelReferenceDiagnostics.ts:9:5: 'target' is declared here.
+        target:
+        while (true) {}
+    }
+    
+    function breakToMissingLabel() {
+        break target;
+        ~~~~~~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+    }
+    
+    function breakToFunctionNameLabel() {
+        break breakToFunctionNameLabel;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+    }
+    
+    function continueToMissingLabel() {
+        while (true) {
+            continue target;
+            ~~~~~~~~~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+        }
+    }
+    
+    function breakToNonEnclosingLabel() {
+        target:
+        console.log("target");
+        break target;
+        ~~~~~~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+    }
+    
+    function continueToNonEnclosingLabel() {
+        target:
+        while (true) {}
+        while (true) {
+            continue target;
+            ~~~~~~~~~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+        }
+    }
+    
+    target:
+    while (true) {
+        function crossesFunctionBoundary() {
+            break target;
+            ~~~~~~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+        }
+    }
+    

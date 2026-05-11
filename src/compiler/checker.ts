@@ -53030,6 +53030,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let current: Node = node;
         while (current) {
             if (isFunctionLikeOrClassStaticBlockDeclaration(current)) {
+                if (node.label && !hasContainingLabel(node, current)) {
+                    const label = findLabelInCurrentFunction(node);
+                    if (label && label.pos > node.pos) {
+                        return grammarErrorOnNodeWithRelatedLabel(node, Diagnostics.A_label_cannot_be_referenced_prior_to_its_declared_location, label);
+                    }
+                }
+
                 return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
             }
 
@@ -53078,6 +53085,64 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 : Diagnostics.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement;
             return grammarErrorOnNode(node, message);
         }
+    }
+
+    function hasContainingLabel(node: BreakOrContinueStatement, boundary: Node): boolean {
+        Debug.assert(!!node.label);
+
+        for (let current = boundary.parent; current; current = current.parent) {
+            if (
+                current.kind === SyntaxKind.LabeledStatement &&
+                current.pos <= boundary.pos &&
+                boundary.end <= current.end &&
+                (current as LabeledStatement).label.escapedText === node.label.escapedText
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function findLabelInCurrentFunction(node: BreakOrContinueStatement): LabeledStatement | undefined {
+        Debug.assert(!!node.label);
+
+        for (let current: Node = node; current && !isFunctionLikeOrClassStaticBlockDeclaration(current); current = current.parent) {
+            if (!current.parent) {
+                break;
+            }
+            const statements = getStatementContainerStatements(current.parent);
+            if (statements) {
+                const label = find(statements, statement => statement.kind === SyntaxKind.LabeledStatement && (statement as LabeledStatement).label.escapedText === node.label!.escapedText) as LabeledStatement | undefined;
+                if (label) {
+                    return label;
+                }
+            }
+        }
+
+        return undefined;
+    }
+
+    function getStatementContainerStatements(node: Node): NodeArray<Statement> | undefined {
+        switch (node.kind) {
+            case SyntaxKind.SourceFile:
+                return (node as SourceFile).statements;
+            case SyntaxKind.Block:
+            case SyntaxKind.ModuleBlock:
+                return (node as Block | ModuleBlock).statements;
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+                return (node as CaseOrDefaultClause).statements;
+        }
+    }
+
+    function grammarErrorOnNodeWithRelatedLabel(node: BreakOrContinueStatement, message: DiagnosticMessage, label: LabeledStatement): boolean {
+        const sourceFile = getSourceFileOfNode(node);
+        if (!hasParseDiagnostics(sourceFile)) {
+            addRelatedInfo(error(node, message), createDiagnosticForNode(label.label, Diagnostics._0_is_declared_here, idText(label.label)));
+            return true;
+        }
+        return false;
     }
 
     function checkGrammarBindingElement(node: BindingElement) {

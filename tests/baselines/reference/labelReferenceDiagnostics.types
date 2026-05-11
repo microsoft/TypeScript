@@ -1,0 +1,134 @@
+//// [tests/cases/compiler/labelReferenceDiagnostics.ts] ////
+
+=== labelReferenceDiagnostics.ts ===
+function breakToLaterLabel() {
+>breakToLaterLabel : () => void
+>                  : ^^^^^^^^^^
+
+    break target;
+>target : any
+>       : ^^^
+
+    target:
+>target : any
+>       : ^^^
+
+    while (true) {}
+>true : true
+>     : ^^^^
+}
+
+function continueToLaterLabel() {
+>continueToLaterLabel : () => void
+>                     : ^^^^^^^^^^
+
+    continue target;
+>target : any
+>       : ^^^
+
+    target:
+>target : any
+>       : ^^^
+
+    while (true) {}
+>true : true
+>     : ^^^^
+}
+
+function breakToMissingLabel() {
+>breakToMissingLabel : () => void
+>                    : ^^^^^^^^^^
+
+    break target;
+>target : any
+>       : ^^^
+}
+
+function breakToFunctionNameLabel() {
+>breakToFunctionNameLabel : () => void
+>                         : ^^^^^^^^^^
+
+    break breakToFunctionNameLabel;
+>breakToFunctionNameLabel : any
+>                         : ^^^
+}
+
+function continueToMissingLabel() {
+>continueToMissingLabel : () => void
+>                       : ^^^^^^^^^^
+
+    while (true) {
+>true : true
+>     : ^^^^
+
+        continue target;
+>target : any
+>       : ^^^
+    }
+}
+
+function breakToNonEnclosingLabel() {
+>breakToNonEnclosingLabel : () => void
+>                         : ^^^^^^^^^^
+
+    target:
+>target : any
+>       : ^^^
+
+    console.log("target");
+>console.log("target") : void
+>                      : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"target" : "target"
+>         : ^^^^^^^^
+
+    break target;
+>target : any
+>       : ^^^
+}
+
+function continueToNonEnclosingLabel() {
+>continueToNonEnclosingLabel : () => void
+>                            : ^^^^^^^^^^
+
+    target:
+>target : any
+>       : ^^^
+
+    while (true) {}
+>true : true
+>     : ^^^^
+
+    while (true) {
+>true : true
+>     : ^^^^
+
+        continue target;
+>target : any
+>       : ^^^
+    }
+}
+
+target:
+>target : any
+>       : ^^^
+
+while (true) {
+>true : true
+>     : ^^^^
+
+    function crossesFunctionBoundary() {
+>crossesFunctionBoundary : () => void
+>                        : ^^^^^^^^^^
+
+        break target;
+>target : any
+>       : ^^^
+    }
+}
+
