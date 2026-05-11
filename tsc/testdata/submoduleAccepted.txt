@@ -384,6 +384,7 @@ compiler/arrayIterationLibES5TargetDifferent(nolib=true,target=esnext).errors.tx
 
 ## emit differences of no consequence ##
 compiler/assignmentToInstantiationExpression.js.diff
+compiler/javascriptThisAssignmentInStaticBlock.js.diff
 compiler/asyncArrowInClassES5(target=es2015).js.diff
 compiler/augmentedTypesVar.js.diff
 compiler/constructorWithIncompleteTypeAnnotation.js.diff

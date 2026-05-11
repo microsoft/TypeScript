@@ -193,4 +193,3 @@ conformance/definiteAssignmentAssertionsWithObjectShortHand.js.diff
 
 # Declaration emit simplification of class extending built-in Array
 ## https://github.com/microsoft/typescript-go/issues/3569
-compiler/javascriptThisAssignmentInStaticBlock.js.diff
