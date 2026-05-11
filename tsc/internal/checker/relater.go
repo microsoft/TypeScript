@@ -10,7 +10,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/tracing"
@@ -3035,6 +3034,8 @@ func (r *Relater) eachTypeRelatedToSomeType(source *Type, target *Type) Ternary 
 // and issue an error. Otherwise, actually compare the structure of the two types.
 func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportErrors bool, intersectionState IntersectionState, recursionFlags RecursionFlags) Ternary {
 	if r.overflow {
+		// Note that stack depth overflows can cause _any_ relation involving structured types to become false, so it is
+		// important to have well-defined behavior even in cases that shouldn't normally occur.
 		return TernaryFalse
 	}
 	id, constrained := getRelationKey(source, target, intersectionState, r.relation == r.c.identityRelation, false /*ignoreConstraints*/)
@@ -4722,7 +4723,6 @@ func (r *Relater) reportRelationError(message *diagnostics.Message, source *Type
 	// to be displayed for use-cases like 'assertNever'.
 	if target.flags&TypeFlagsNever == 0 && isLiteralType(source) && !r.c.typeCouldHaveTopLevelSingletonTypes(target) {
 		generalizedSource = r.c.getBaseTypeOfLiteralType(source)
-		debug.Assert(!r.c.isTypeAssignableTo(generalizedSource, target), "generalized source shouldn't be assignable")
 		generalizedSourceType = r.c.getTypeNameForErrorDisplay(generalizedSource)
 	}
 	// If `target` is of indexed access type (and `source` it is not), we use the object type of `target` for better error reporting
