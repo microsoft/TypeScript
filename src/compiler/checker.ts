@@ -53032,9 +53032,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isFunctionLikeOrClassStaticBlockDeclaration(current)) {
                 if (node.label && !hasContainingLabel(node, current)) {
                     const label = findLabelInCurrentFunction(node);
-                    if (label && label.pos > node.pos) {
-                        return grammarErrorOnNodeWithRelatedLabel(node, Diagnostics.A_label_cannot_be_referenced_prior_to_its_declared_location, label);
+                    if (label) {
+                        const message = label.pos > node.pos
+                            ? Diagnostics.A_label_cannot_be_referenced_prior_to_its_declared_location
+                            : node.kind === SyntaxKind.BreakStatement
+                            ? Diagnostics.A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement
+                            : Diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement;
+                        return grammarErrorOnNodeWithRelatedLabel(node, message, label);
                     }
+
+                    return grammarErrorOnNode(node, Diagnostics.Cannot_find_label_0, idText(node.label));
                 }
 
                 return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);

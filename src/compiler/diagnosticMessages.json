@@ -311,6 +311,10 @@
         "category": "Error",
         "code": 18001
     },
+    "Cannot find label '{0}'.": {
+        "category": "Error",
+        "code": 18005
+    },
     "A 'return' statement can only be used within a function body.": {
         "category": "Error",
         "code": 1108

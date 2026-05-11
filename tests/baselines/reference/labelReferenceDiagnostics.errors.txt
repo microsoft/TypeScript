@@ -1,10 +1,10 @@
 labelReferenceDiagnostics.ts(2,5): error TS18001: A label cannot be referenced prior to its declared location.
 labelReferenceDiagnostics.ts(8,5): error TS18001: A label cannot be referenced prior to its declared location.
-labelReferenceDiagnostics.ts(14,5): error TS1107: Jump target cannot cross function boundary.
-labelReferenceDiagnostics.ts(18,5): error TS1107: Jump target cannot cross function boundary.
-labelReferenceDiagnostics.ts(23,9): error TS1107: Jump target cannot cross function boundary.
-labelReferenceDiagnostics.ts(30,5): error TS1107: Jump target cannot cross function boundary.
-labelReferenceDiagnostics.ts(37,9): error TS1107: Jump target cannot cross function boundary.
+labelReferenceDiagnostics.ts(14,5): error TS18005: Cannot find label 'target'.
+labelReferenceDiagnostics.ts(18,5): error TS18005: Cannot find label 'breakToFunctionNameLabel'.
+labelReferenceDiagnostics.ts(23,9): error TS18005: Cannot find label 'target'.
+labelReferenceDiagnostics.ts(30,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+labelReferenceDiagnostics.ts(37,9): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
 labelReferenceDiagnostics.ts(44,9): error TS1107: Jump target cannot cross function boundary.
 
 
@@ -30,20 +30,20 @@ labelReferenceDiagnostics.ts(44,9): error TS1107: Jump target cannot cross funct
     function breakToMissingLabel() {
         break target;
         ~~~~~~~~~~~~~
-!!! error TS1107: Jump target cannot cross function boundary.
+!!! error TS18005: Cannot find label 'target'.
     }
     
     function breakToFunctionNameLabel() {
         break breakToFunctionNameLabel;
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1107: Jump target cannot cross function boundary.
+!!! error TS18005: Cannot find label 'breakToFunctionNameLabel'.
     }
     
     function continueToMissingLabel() {
         while (true) {
             continue target;
             ~~~~~~~~~~~~~~~~
-!!! error TS1107: Jump target cannot cross function boundary.
+!!! error TS18005: Cannot find label 'target'.
         }
     }
     
@@ -52,7 +52,8 @@ labelReferenceDiagnostics.ts(44,9): error TS1107: Jump target cannot cross funct
         console.log("target");
         break target;
         ~~~~~~~~~~~~~
-!!! error TS1107: Jump target cannot cross function boundary.
+!!! error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+!!! related TS2728 labelReferenceDiagnostics.ts:28:5: 'target' is declared here.
     }
     
     function continueToNonEnclosingLabel() {
@@ -61,7 +62,8 @@ labelReferenceDiagnostics.ts(44,9): error TS1107: Jump target cannot cross funct
         while (true) {
             continue target;
             ~~~~~~~~~~~~~~~~
-!!! error TS1107: Jump target cannot cross function boundary.
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+!!! related TS2728 labelReferenceDiagnostics.ts:34:5: 'target' is declared here.
         }
     }
     
