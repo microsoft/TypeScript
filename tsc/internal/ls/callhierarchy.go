@@ -208,35 +208,7 @@ func getCallHierarchyItemName(program *compiler.Program, node *ast.Node) (text s
 		debug.Assert(declName != nil, "Expected call hierarchy item to have a name")
 	}
 
-	if ast.IsIdentifier(declName) {
-		text = declName.Text()
-	} else if ast.IsStringOrNumericLiteralLike(declName) {
-		text = declName.Text()
-	} else if ast.IsComputedPropertyName(declName) {
-		expr := declName.Expression()
-		if ast.IsStringOrNumericLiteralLike(expr) {
-			text = expr.Text()
-		}
-	}
-
-	if text == "" {
-		c, done := program.GetTypeCheckerForFile(context.Background(), ast.GetSourceFileOfNode(node))
-		defer done()
-		symbol := c.GetSymbolAtLocation(declName)
-		if symbol != nil {
-			text = c.SymbolToString(symbol)
-		}
-	}
-
-	// get the text from printing the node on a single line without comments...
-	if text == "" {
-		sourceFile := ast.GetSourceFileOfNode(node)
-		writer, putWriter := printer.GetSingleLineStringWriter()
-		defer putWriter()
-		p := printer.NewPrinter(printer.PrinterOptions{RemoveComments: true}, printer.PrintHandlers{}, nil)
-		p.Write(node, sourceFile, writer, nil)
-		text = writer.String()
-	}
+	text = getTextOfCallHierarchyName(program, node, declName, node)
 
 	sourceFile := ast.GetSourceFileOfNode(node)
 	namePos := scanner.SkipTrivia(sourceFile.Text(), declName.Pos())
@@ -244,17 +216,46 @@ func getCallHierarchyItemName(program *compiler.Program, node *ast.Node) (text s
 	return text, namePos, declName.End()
 }
 
-func getCallHierarchyItemContainerName(node *ast.Node) string {
+func getTextOfCallHierarchyName(program *compiler.Program, sourceNode *ast.Node, name *ast.Node, printNode *ast.Node) string {
+	if ast.IsIdentifier(name) || ast.IsStringOrNumericLiteralLike(name) {
+		return name.Text()
+	}
+	if ast.IsComputedPropertyName(name) {
+		expr := name.Expression()
+		if ast.IsStringOrNumericLiteralLike(expr) {
+			return expr.Text()
+		}
+	}
+
+	c, done := program.GetTypeCheckerForFile(context.Background(), ast.GetSourceFileOfNode(sourceNode))
+	defer done()
+	symbol := c.GetSymbolAtLocation(name)
+	if symbol != nil {
+		text := c.SymbolToString(symbol)
+		if text != "" {
+			return text
+		}
+	}
+
+	sourceFile := ast.GetSourceFileOfNode(sourceNode)
+	writer, putWriter := printer.GetSingleLineStringWriter()
+	defer putWriter()
+	p := printer.NewPrinter(printer.PrinterOptions{RemoveComments: true}, printer.PrintHandlers{}, nil)
+	p.Write(printNode, sourceFile, writer, nil)
+	return writer.String()
+}
+
+func getCallHierarchyItemContainerName(program *compiler.Program, node *ast.Node) string {
 	if isAssignedExpression(node) {
 		parent := node.Parent
 		if ast.IsPropertyDeclaration(parent) && ast.IsClassLike(parent.Parent) {
 			if ast.IsClassExpression(parent.Parent) {
 				if assignedName := ast.GetAssignedName(parent.Parent); assignedName != nil {
-					return assignedName.Text()
+					return getTextOfCallHierarchyName(program, node, assignedName, assignedName)
 				}
 			} else {
 				if name := parent.Parent.Name(); name != nil {
-					return name.Text()
+					return getTextOfCallHierarchyName(program, node, name, name)
 				}
 			}
 		}
@@ -273,11 +274,11 @@ func getCallHierarchyItemContainerName(node *ast.Node) string {
 	case ast.KindGetAccessor, ast.KindSetAccessor, ast.KindMethodDeclaration:
 		if node.Parent.Kind == ast.KindObjectLiteralExpression {
 			if assignedName := ast.GetAssignedName(node.Parent); assignedName != nil {
-				return assignedName.Text()
+				return getTextOfCallHierarchyName(program, node, assignedName, assignedName)
 			}
 		}
 		if name := ast.GetNameOfDeclaration(node.Parent); name != nil {
-			return name.Text()
+			return getTextOfCallHierarchyName(program, node, name, name)
 		}
 	case ast.KindFunctionDeclaration, ast.KindClassDeclaration, ast.KindModuleDeclaration:
 		if ast.IsModuleBlock(node.Parent) {
@@ -498,7 +499,7 @@ func resolveCallHierarchyDeclaration(program *compiler.Program, location *ast.No
 func (l *LanguageService) createCallHierarchyItem(program *compiler.Program, node *ast.Node) *lsproto.CallHierarchyItem {
 	sourceFile := ast.GetSourceFileOfNode(node)
 	nameText, namePos, nameEnd := getCallHierarchyItemName(program, node)
-	containerName := getCallHierarchyItemContainerName(node)
+	containerName := getCallHierarchyItemContainerName(program, node)
 
 	kind := getSymbolKindFromNode(node)
 
