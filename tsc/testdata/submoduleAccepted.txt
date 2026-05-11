@@ -751,6 +751,7 @@ conformance/privateNamesUnique-3.errors.txt.diff
 conformance/stringLiteralTypesInImplementationSignatures2.errors.txt.diff
 conformance/stringNamedPropertyDuplicates.errors.txt.diff
 conformance/symbolDeclarationEmit12.errors.txt.diff
+conformance/symbolDeclarationEmit12.js.diff
 conformance/symbolProperty37.errors.txt.diff
 conformance/symbolProperty44.errors.txt.diff
 conformance/uniqueSymbolsPropertyNames.errors.txt.diff

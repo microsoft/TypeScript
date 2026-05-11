@@ -192,7 +192,6 @@ compiler/lateBoundMethodNameAssigmentJS.js.diff
 
 # Symbol getter/setter declaration emit change
 ## https://github.com/microsoft/typescript-go/issues/3567
-conformance/symbolDeclarationEmit12.js.diff
 
 # Declaration emit simplification of class extending built-in Array
 ## https://github.com/microsoft/typescript-go/issues/3569
