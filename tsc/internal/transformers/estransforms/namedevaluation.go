@@ -55,14 +55,6 @@ func classHasDeclaredOrExplicitlyAssignedName(emitContext *printer.EmitContext, 
 	return node.Name() != nil || classHasExplicitlyAssignedName(emitContext, node)
 }
 
-// Indicates whether a property name is the special `__proto__` property.
-// Per the ECMA-262 spec, this only matters for property assignments whose name is
-// the Identifier `__proto__`, or the string literal `"__proto__"`, but not for
-// computed property names.
-func isProtoSetter(node *ast.PropertyName) bool {
-	return (ast.IsIdentifier(node) || ast.IsStringLiteral(node)) && node.Text() == "__proto__"
-}
-
 type anonymousFunctionDefinition = ast.Node // ClassExpression | FunctionExpression | ArrowFunction
 
 // Indicates whether an expression is an anonymous function definition.
@@ -92,39 +84,12 @@ func isAnonymousFunctionDefinition(emitContext *printer.EmitContext, node *ast.E
 	return true
 }
 
-// Indicates whether a node is a potential source of an assigned name for a class, function, or arrow function.
-func isNamedEvaluationSource(node *ast.Node) bool {
-	switch node.Kind {
-	case ast.KindPropertyAssignment:
-		return !isProtoSetter(node.AsPropertyAssignment().Name())
-	case ast.KindShorthandPropertyAssignment:
-		return node.AsShorthandPropertyAssignment().ObjectAssignmentInitializer != nil
-	case ast.KindVariableDeclaration:
-		return ast.IsIdentifier(node.AsVariableDeclaration().Name()) && node.Initializer() != nil
-	case ast.KindParameter:
-		return ast.IsIdentifier(node.AsParameterDeclaration().Name()) && node.Initializer() != nil && node.AsParameterDeclaration().DotDotDotToken == nil
-	case ast.KindBindingElement:
-		return ast.IsIdentifier(node.AsBindingElement().Name()) && node.Initializer() != nil && node.AsBindingElement().DotDotDotToken == nil
-	case ast.KindPropertyDeclaration:
-		return node.Initializer() != nil
-	case ast.KindBinaryExpression:
-		switch node.AsBinaryExpression().OperatorToken.Kind {
-		case ast.KindEqualsToken, ast.KindAmpersandAmpersandEqualsToken, ast.KindBarBarEqualsToken, ast.KindQuestionQuestionEqualsToken:
-			return ast.IsIdentifier(node.AsBinaryExpression().Left)
-		}
-		break
-	case ast.KindExportAssignment:
-		return true
-	}
-	return false
-}
-
 func isNamedEvaluation(emitContext *printer.EmitContext, node *ast.Node) bool {
 	return isNamedEvaluationAnd(emitContext, node, nil)
 }
 
 func isNamedEvaluationAnd(emitContext *printer.EmitContext, node *ast.Node, cb func(*anonymousFunctionDefinition) bool) bool {
-	if !isNamedEvaluationSource(node) {
+	if !ast.IsNamedEvaluationSource(node) {
 		return false
 	}
 	switch node.Kind {

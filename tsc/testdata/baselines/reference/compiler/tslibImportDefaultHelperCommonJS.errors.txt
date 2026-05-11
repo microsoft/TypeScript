@@ -1,0 +1,46 @@
+/combined.ts(1,1): error TS2343: This syntax requires an imported helper named '__importStar' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+/main.ts(1,1): error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "target": "es2015",
+            "module": "commonjs",
+            "importHelpers": true,
+        }
+    }
+    
+==== /main.ts (1 errors) ====
+    import greet from "./dependency";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+    
+    export const message = greet("world");
+    
+==== /combined.ts (1 errors) ====
+    import greet, * as dependency from "./dependency";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2343: This syntax requires an imported helper named '__importStar' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+    
+    export const message = greet("world");
+    export const namespaceMessage = dependency.default("namespace");
+    
+==== /dependency.ts (0 errors) ====
+    export default function greet(name: string) {
+        return `hello, ${name}`;
+    }
+    
+==== /node_modules/tslib/package.json (0 errors) ====
+    {
+        "name": "tslib",
+        "main": "tslib.js",
+        "typings": "tslib.d.ts"
+    }
+    
+==== /node_modules/tslib/tslib.d.ts (0 errors) ====
+    export const notAHelper: any;
+    
+==== /node_modules/tslib/tslib.js (0 errors) ====
+    module.exports.notAHelper = 3;
+    

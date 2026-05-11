@@ -16,40 +16,6 @@ compiler/deprecatedCompilerOptions3.errors.txt.diff
 compiler/deprecatedCompilerOptions4.errors.txt.diff
 compiler/deprecatedCompilerOptions5.errors.txt.diff
 
-# Bug: no error reported on missing tslib helpers
-## https://github.com/microsoft/typescript-go/issues/3476
-compiler/tslibMissingHelper.errors.txt.diff
-compiler/tslibNotFoundDifferentModules.errors.txt.diff
-compiler/tslibMultipleMissingHelper.errors.txt.diff
-conformance/awaitUsingDeclarationsWithImportHelpers.errors.txt.diff
-conformance/exportAsNamespace_missingEmitHelpers.errors.txt.diff
-conformance/nodeModulesAllowJsImportHelpersCollisions1(module=node16).errors.txt.diff
-conformance/nodeModulesAllowJsImportHelpersCollisions1(module=node18).errors.txt.diff
-conformance/nodeModulesAllowJsImportHelpersCollisions1(module=node20).errors.txt.diff
-conformance/nodeModulesAllowJsImportHelpersCollisions1(module=nodenext).errors.txt.diff
-conformance/nodeModulesAllowJsImportHelpersCollisions2(module=node16).errors.txt.diff
-conformance/nodeModulesAllowJsImportHelpersCollisions2(module=node18).errors.txt.diff
-conformance/nodeModulesAllowJsImportHelpersCollisions2(module=node20).errors.txt.diff
-conformance/nodeModulesAllowJsImportHelpersCollisions2(module=nodenext).errors.txt.diff
-conformance/nodeModulesAllowJsImportHelpersCollisions3(module=node16,target=es2015).errors.txt.diff
-conformance/nodeModulesAllowJsImportHelpersCollisions3(module=node18,target=es2015).errors.txt.diff
-conformance/nodeModulesAllowJsImportHelpersCollisions3(module=node20,target=es2015).errors.txt.diff
-conformance/nodeModulesAllowJsImportHelpersCollisions3(module=nodenext,target=es2015).errors.txt.diff
-conformance/nodeModulesImportHelpersCollisions(module=node16).errors.txt.diff
-conformance/nodeModulesImportHelpersCollisions(module=node18).errors.txt.diff
-conformance/nodeModulesImportHelpersCollisions(module=node20).errors.txt.diff
-conformance/nodeModulesImportHelpersCollisions(module=nodenext).errors.txt.diff
-conformance/nodeModulesImportHelpersCollisions2(module=node16).errors.txt.diff
-conformance/nodeModulesImportHelpersCollisions2(module=node18).errors.txt.diff
-conformance/nodeModulesImportHelpersCollisions2(module=node20).errors.txt.diff
-conformance/nodeModulesImportHelpersCollisions2(module=nodenext).errors.txt.diff
-conformance/nodeModulesImportHelpersCollisions3(module=node16,target=es2015).errors.txt.diff
-conformance/nodeModulesImportHelpersCollisions3(module=node18,target=es2015).errors.txt.diff
-conformance/nodeModulesImportHelpersCollisions3(module=node20,target=es2015).errors.txt.diff
-conformance/nodeModulesImportHelpersCollisions3(module=nodenext,target=es2015).errors.txt.diff
-conformance/privateNameEmitHelpers.errors.txt.diff
-conformance/privateNameStaticEmitHelpers.errors.txt.diff
-conformance/usingDeclarationsWithImportHelpers.errors.txt.diff
 
 # Omnibus: Isolated declarations error changes - needs investigation
 ## https://github.com/microsoft/typescript-go/issues/3477

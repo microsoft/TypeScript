@@ -348,8 +348,6 @@ var restHelper = &EmitHelper{
 };`,
 }
 
-// !!! ES2017 Helpers
-
 var awaiterHelper = &EmitHelper{
 	Name:       "typescript:awaiter",
 	ImportName: "__awaiter",

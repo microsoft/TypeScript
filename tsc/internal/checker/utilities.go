@@ -1810,3 +1810,11 @@ func CreateModeMismatchDetails(program Program, file *ast.SourceFile) Diagnostic
 		Args:    nil,
 	}
 }
+
+func walkUpOuterExpressions(node *ast.Node) *ast.Node {
+	parent := node.Parent
+	for parent != nil && ast.IsOuterExpression(parent, ast.OEKAll) {
+		parent = parent.Parent
+	}
+	return parent
+}

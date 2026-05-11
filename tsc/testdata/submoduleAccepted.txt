@@ -684,15 +684,6 @@ compiler/declarationEmitUnknownImport2(target=es2015).errors.txt.diff
 conformance/circular1.errors.txt.diff
 conformance/circular3.errors.txt.diff
 
-## Corsa no longer requires tslib helpers for esModuleInterop, decorators at ES6+, or default re-exports
-## due to those flags being removed (or mandatory)
-compiler/esModuleInteropTslibHelpers.errors.txt.diff
-compiler/ctsFileInEsnextHelpers.errors.txt.diff
-compiler/importHelpersES6.errors.txt.diff
-compiler/importHelpersWithImportOrExportDefaultNoTslib.1(esmoduleinterop=true,module=commonjs).errors.txt.diff
-compiler/importHelpersWithImportOrExportDefaultNoTslib.2(esmoduleinterop=true,module=commonjs).errors.txt.diff
-compiler/importHelpersWithImportOrExportDefaultNoTslib.3(esmoduleinterop=true,module=commonjs).errors.txt.diff
-
 ## Related spans in various errors changed (these baselines are all --pretty)
 compiler/deeplyNestedAssignabilityIssue.errors.txt.diff
 compiler/esModuleInteropPrettyErrorRelatedInformation.errors.txt.diff
@@ -1392,3 +1383,10 @@ conformance/nodeModulesDeclarationEmitWithPackageExports(module=nodenext).errors
 conformance/jsDeclarationsModuleReferenceHasEmit(target=es2015).js.diff
 compiler/lateBoundAssignmentCandidateJS2.js.diff
 compiler/lateBoundMethodNameAssigmentJS.js.diff
+
+## tslib helper checks now per-file to avoid multiple checker inconsistencies
+compiler/tslibMissingHelper.errors.txt.diff
+compiler/tslibMultipleMissingHelper.errors.txt.diff
+
+## tslib helper check missing in Strada fixed in Corsa
+compiler/esModuleInteropTslibHelpers.errors.txt.diff

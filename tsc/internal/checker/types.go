@@ -111,6 +111,46 @@ const (
 	SymbolFormatFlagsDoNotIncludeSymbolChain SymbolFormatFlags = 1 << 5
 )
 
+type ExternalEmitHelpers uint32
+
+const (
+	ExternalEmitHelpersRest                                     ExternalEmitHelpers           = 1 << iota // __rest (used by ESNext object rest transformation)
+	ExternalEmitHelpersDecorate                                                                           // __decorate (used by TypeScript decorators transformation)
+	ExternalEmitHelpersMetadata                                                                           // __metadata (used by TypeScript decorators transformation)
+	ExternalEmitHelpersParam                                                                              // __param (used by TypeScript decorators transformation)
+	ExternalEmitHelpersAwaiter                                                                            // __awaiter (used by ES2017 async functions transformation)
+	ExternalEmitHelpersAwait                                                                              // __await (used by ES2017 async generator transformation)
+	ExternalEmitHelpersAsyncGenerator                                                                     // __asyncGenerator (used by ES2017 async generator transformation)
+	ExternalEmitHelpersAsyncDelegator                                                                     // __asyncDelegator (used by ES2017 async generator yield* transformation)
+	ExternalEmitHelpersAsyncValues                                                                        // __asyncValues (used by ES2017 for..await..of transformation)
+	ExternalEmitHelpersExportStar                                                                         // __exportStar (used by CommonJS/AMD/UMD module transformation)
+	ExternalEmitHelpersImportStar                                                                         // __importStar (used by CommonJS/AMD/UMD module transformation)
+	ExternalEmitHelpersImportDefault                                                                      // __importDefault (used by CommonJS/AMD/UMD module transformation)
+	ExternalEmitHelpersMakeTemplateObject                                                                 // __makeTemplateObject (used for constructing template string array objects)
+	ExternalEmitHelpersClassPrivateFieldGet                                                               // __classPrivateFieldGet (used by the class private field transformation)
+	ExternalEmitHelpersClassPrivateFieldSet                                                               // __classPrivateFieldSet (used by the class private field transformation)
+	ExternalEmitHelpersClassPrivateFieldIn                                                                // __classPrivateFieldIn (used by the class private field transformation)
+	ExternalEmitHelpersSetFunctionName                                                                    // __setFunctionName (used by class fields and ECMAScript decorators)
+	ExternalEmitHelpersPropKey                                                                            // __propKey (used by class fields and ECMAScript decorators)
+	ExternalEmitHelpersAddDisposableResourceAndDisposeResources                                           // __addDisposableResource and __disposeResources (used by ESNext transformations)
+	ExternalEmitHelpersRewriteRelativeImportExtension                                                     // __rewriteRelativeImportExtension (used by --rewriteRelativeImportExtensions)
+	ExternalEmitHelpersESDecorateAndRunInitializers             = ExternalEmitHelpersDecorate             // __esDecorate and __runInitializers (used by ECMAScript decorators transformation)
+
+	ExternalEmitHelpersFirstEmitHelper = ExternalEmitHelpersRest
+	ExternalEmitHelpersLastEmitHelper  = ExternalEmitHelpersRewriteRelativeImportExtension
+
+	// Helpers included by ES2017 for..await..of
+	ExternalEmitHelpersForAwaitOfIncludes = ExternalEmitHelpersAsyncValues
+
+	// Helpers included by ES2017 async generators
+	ExternalEmitHelpersAsyncGeneratorIncludes = ExternalEmitHelpersAwait | ExternalEmitHelpersAsyncGenerator
+
+	// Helpers included by yield* in ES2017 async generators
+	ExternalEmitHelpersAsyncDelegatorIncludes = ExternalEmitHelpersAwait | ExternalEmitHelpersAsyncDelegator | ExternalEmitHelpersAsyncValues
+)
+
+const externalHelpersModuleNameText = "tslib"
+
 // Ids
 
 type TypeId uint32
@@ -346,15 +386,17 @@ type AssertionLinks struct {
 // SourceFile links
 
 type SourceFileLinks struct {
-	typeChecked               bool
-	unusedChecked             bool
-	deferredNodes             collections.OrderedSet[*ast.Node]
-	identifierCheckNodes      []*ast.Node
-	localJsxNamespace         string
-	localJsxFragmentNamespace string
-	localJsxFactory           *ast.EntityName
-	localJsxFragmentFactory   *ast.EntityName
-	jsxFragmentType           *Type
+	typeChecked                  bool
+	unusedChecked                bool
+	externalHelpersModule        *ast.Symbol
+	requestedExternalEmitHelpers ExternalEmitHelpers
+	deferredNodes                collections.OrderedSet[*ast.Node]
+	identifierCheckNodes         []*ast.Node
+	localJsxNamespace            string
+	localJsxFragmentNamespace    string
+	localJsxFactory              *ast.EntityName
+	localJsxFragmentFactory      *ast.EntityName
+	jsxFragmentType              *Type
 }
 
 // Signature specific links
