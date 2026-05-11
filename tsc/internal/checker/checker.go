@@ -16105,7 +16105,8 @@ func (c *Checker) GetTypeOfSymbolAtLocation(symbol *ast.Symbol, location *ast.No
 		// an dotted name expression, and if the location is not an assignment target, obtain the type
 		// of the expression (which will reflect control flow analysis). If the expression indeed
 		// resolved to the given symbol, return the narrowed type.
-		if ast.IsIdentifier(location) || ast.IsPrivateIdentifier(location) {
+		if (ast.IsIdentifier(location) || ast.IsPrivateIdentifier(location)) &&
+			!(ast.IsJsxTagName(location) || ast.IsJsxAttribute(location.Parent) || ast.IsJsxNamespacedName(location.Parent)) {
 			if ast.IsRightSideOfQualifiedNameOrPropertyAccess(location) {
 				location = location.Parent
 			}
