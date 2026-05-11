@@ -383,7 +383,7 @@ interface RegExpConstructor {
 
 interface String {
     /**
-     * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point
+     * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the Unicode code point
      * value of the UTF-16 encoded code point starting at the string element at position pos in
      * the String resulting from converting this object to a String.
      * If there is no element at that position, the result is undefined.
