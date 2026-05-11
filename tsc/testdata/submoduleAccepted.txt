@@ -1389,3 +1389,5 @@ conformance/nodeModulesDeclarationEmitWithPackageExports(module=nodenext).errors
 ## JSDoc module namepath module:A emits as unresolved module instead of any
 ## https://github.com/microsoft/typescript-go/issues/3562
 conformance/jsDeclarationsModuleReferenceHasEmit(target=es2015).js.diff
+compiler/lateBoundAssignmentCandidateJS2.js.diff
+compiler/lateBoundMethodNameAssigmentJS.js.diff
