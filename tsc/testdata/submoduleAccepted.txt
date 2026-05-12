@@ -1373,3 +1373,10 @@ compiler/jsExportAssignmentNonMutableLocation.js.diff
 conformance/commonJSImportClassTypeReference.js.diff
 conformance/commonJSImportNestedClassTypeReference.js.diff
 conformance/jsDeclarationsExportDoubleAssignmentInClosure.js.diff
+
+# Output file ordering changed + declaration types resolve to any instead of typeof references due to respecting `out` in package self-name resolution
+## https://github.com/microsoft/typescript-go/issues/3551
+conformance/nodeModulesDeclarationEmitWithPackageExports(module=node16).js.diff
+conformance/nodeModulesDeclarationEmitWithPackageExports(module=node18).js.diff
+conformance/nodeModulesDeclarationEmitWithPackageExports(module=node20).js.diff
+conformance/nodeModulesDeclarationEmitWithPackageExports(module=nodenext).js.diff
