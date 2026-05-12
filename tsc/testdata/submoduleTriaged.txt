@@ -29,12 +29,6 @@ compiler/isolatedDeclarationErrors.errors.txt.diff
 compiler/computedPropertiesNarrowed.errors.txt.diff
 compiler/declarationEmitTypeofRest.errors.txt.diff
 
-# JSX runtime module resolution change
-## https://github.com/microsoft/typescript-go/issues/3480
-## TS2875 error requiring `react/jsx-runtime` or `react/jsx-dev-runtime` module is no longer emitted for non-module (script) files
-compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=legacy).errors.txt.diff
-compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=legacy).errors.txt.diff
-
 # Corsa changes how module augmentation interacts with export-equals and exported name visibility
 ## https://github.com/microsoft/typescript-go/issues/3481
 compiler/augmentExportEquals2.errors.txt.diff

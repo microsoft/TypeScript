@@ -1,0 +1,12 @@
+--- old.jsxFindAllReferencesOnRuntimeImportWithPaths1.baseline.jsonc
++++ new.jsxFindAllReferencesOnRuntimeImportWithPaths1.baseline.jsonc
+@@= skipped -13, +13 lines =@@
+ // === /project/src/baz.tsx ===
+ // export default [|<></>|];
+
+-// === /project/src/dir/jsx-runtime.ts ===
+-// [|export {}|]
+-
+ // === /project/src/foo.ts ===
+-// [|import * as x from /*FIND ALL REFS*/"[|@foo/dir/jsx-runtime|]";|]
++// import * as x from /*FIND ALL REFS*/"[|@foo/dir/jsx-runtime|]";

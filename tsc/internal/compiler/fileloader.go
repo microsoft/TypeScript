@@ -516,7 +516,9 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 			moduleNames = append(moduleNames, specifier)
 			t.importHelpersImportSpecifier = specifier
 		}
+	}
 
+	if file.ScriptKind == core.ScriptKindJSX || file.ScriptKind == core.ScriptKindTSX {
 		jsxImport := ast.GetJSXRuntimeImport(ast.GetJSXImplicitImportBase(optionsForFile, file), optionsForFile)
 		if jsxImport != "" {
 			specifier := p.createSyntheticImport(jsxImport, file)
