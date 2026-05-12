@@ -1,0 +1,4 @@
+//// [declarationMapInlineSourcesContent.js.map]
+{"version":3,"file":"declarationMapInlineSourcesContent.js","sourceRoot":"","sources":["../declarationMapInlineSourcesContent.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,MAAM,QAAQ,GAAG,OAAO,CAAC","sourcesContent":["export const greeting = \"hello\";\n"]}
+//// [declarationMapInlineSourcesContent.d.ts.map]
+{"version":3,"file":"declarationMapInlineSourcesContent.d.ts","sourceRoot":"","sources":["../declarationMapInlineSourcesContent.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,QAAQ,UAAU,CAAC"}

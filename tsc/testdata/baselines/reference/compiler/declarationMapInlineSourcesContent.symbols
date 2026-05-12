@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/declarationMapInlineSourcesContent.ts] ////
+
+=== declarationMapInlineSourcesContent.ts ===
+export const greeting = "hello";
+>greeting : Symbol(greeting, Decl(declarationMapInlineSourcesContent.ts, 0, 12))
+

@@ -1,34 +1,6 @@
 --- old.declarationMaps.sourcemap.txt
 +++ new.declarationMaps.sourcemap.txt
-@@= skipped -12, +12 lines =@@
- 2 >^^^^^^^^^^^^^^^^^^
- 3 >                  ^^
- 4 >                    ^
--5 >                     ^^^^^^^^^->
-+5 >                     ^
-+6 >                      ^^^^^^^^->
- 1 >
- 2 >namespace 
- 3 >                  m2
- 4 >                     
-+5 >                     {
- 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
- 2 >Emitted(1, 19) Source(1, 11) + SourceIndex(0)
- 3 >Emitted(1, 21) Source(1, 13) + SourceIndex(0)
- 4 >Emitted(1, 22) Source(1, 14) + SourceIndex(0)
-+5 >Emitted(1, 23) Source(1, 15) + SourceIndex(0)
- ---
- >>>    interface connectModule {
- 1->^^^^
- 2 >    ^^^^^^^^^^
- 3 >              ^^^^^^^^^^^^^
- 4 >                           ^^^^^^^^^^^^^^^^^^^^->
--1->{
-+1->
-   >    
- 2 >    export interface 
- 3 >              connectModule
-@@= skipped -267, +270 lines =@@
+@@= skipped -279, +279 lines =@@
  2 >Emitted(14, 3) Source(16, 3) + SourceIndex(0)
  ---
  >>>export = m2;
