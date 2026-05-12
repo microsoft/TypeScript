@@ -4268,6 +4268,13 @@ func (c *Checker) checkClassLikeDeclaration(node *ast.Node) {
 	c.checkTypeParameterListsIdentical(symbol)
 	c.checkFunctionOrConstructorSymbol(symbol)
 	c.checkObjectTypeForDuplicateDeclarations(node, true /*checkPrivateNames*/)
+
+	// Only check for reserved static identifiers on non-ambient context.
+	nodeInAmbientContext := node.Flags&ast.NodeFlagsAmbient != 0
+	if !nodeInAmbientContext {
+		c.checkClassForStaticPropertyNameConflicts(node)
+	}
+
 	baseTypeNode := ast.GetExtendsHeritageClauseElement(node)
 	if baseTypeNode != nil {
 		c.checkSourceElements(baseTypeNode.TypeArguments())
@@ -4345,6 +4352,28 @@ func (c *Checker) checkClassLikeDeclaration(node *ast.Node) {
 	c.checkIndexConstraints(staticType, symbol, true /*isStaticIndex*/)
 	c.checkClassOrInterfaceForDuplicateIndexSignatures(node)
 	c.checkPropertyInitialization(node)
+}
+
+func (c *Checker) checkClassForStaticPropertyNameConflicts(node *ast.Node) {
+	if c.compilerOptions.GetUseDefineForClassFields() {
+		return
+	}
+	for _, member := range node.Members() {
+		memberNameNode := member.Name()
+		isStaticMember := ast.IsStatic(member)
+		if isStaticMember && memberNameNode != nil {
+			memberName, _ := c.getEffectivePropertyNameForPropertyNameNode(memberNameNode)
+			switch memberName {
+			case "name", "length", "caller", "arguments":
+				c.error(
+					memberNameNode,
+					diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1,
+					memberName,
+					c.symbolToString(c.getSymbolOfDeclaration(node)),
+				)
+			}
+		}
+	}
 }
 
 // Check that type parameter lists are identical across multiple declarations

@@ -34,10 +34,6 @@ compiler/declarationEmitTypeofRest.errors.txt.diff
 compiler/augmentExportEquals2.errors.txt.diff
 compiler/exportAssignmentMembersVisibleInAugmentation.errors.txt.diff
 
-# Static property conflicts with built-in Function properties (TS2699) no longer reported when useDefineForClassFields was false
-## https://github.com/microsoft/typescript-go/issues/3484
-conformance/staticPropertyNameConflicts(target=es2015,usedefineforclassfields=false).errors.txt.diff
-
 # Corsa no longer emits the TS-1 internal diagnostic about pre-emit/post-emit diagnostic count mismatches
 ## https://github.com/microsoft/typescript-go/issues/3508
 compiler/multiLinePropertyAccessAndArrowFunctionIndent1.errors.txt.diff
