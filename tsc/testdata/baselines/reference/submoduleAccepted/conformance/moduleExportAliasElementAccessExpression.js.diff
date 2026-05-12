@@ -1,0 +1,11 @@
+--- old.moduleExportAliasElementAccessExpression.js
++++ new.moduleExportAliasElementAccessExpression.js
+@@= skipped -15, +15 lines =@@
+
+
+ //// [moduleExportAliasElementAccessExpression.d.ts]
+-export function D(): void;
+-export { D as _Does_not_work_yet };
++declare function D(): void;
++export { D };
++export { D as "Does not work yet" };

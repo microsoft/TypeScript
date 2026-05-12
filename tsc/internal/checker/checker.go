@@ -5357,7 +5357,9 @@ func (c *Checker) checkModuleExportName(name *ast.Node, allowStringLiteral bool)
 	if !allowStringLiteral {
 		c.grammarErrorOnNode(name, diagnostics.Identifier_expected)
 	} else if c.moduleKind == core.ModuleKindES2015 || c.moduleKind == core.ModuleKindES2020 {
-		c.grammarErrorOnNode(name, diagnostics.String_literal_import_and_export_names_are_not_supported_when_the_module_flag_is_set_to_es2015_or_es2020)
+		if !ast.GetSourceFileOfNode(name).IsDeclarationFile {
+			c.grammarErrorOnNode(name, diagnostics.String_literal_import_and_export_names_are_not_supported_when_the_module_flag_is_set_to_es2015_or_es2020)
+		}
 	}
 }
 

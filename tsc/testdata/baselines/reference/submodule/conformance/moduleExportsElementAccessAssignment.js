@@ -23,19 +23,16 @@ mod1.default;
 export declare var a: {
     x: string;
 };
-declare const _exported: {
+export declare var b: {
     x: string;
 };
-export { _exported as "b" };
-declare const _exported_1: {
+declare const _default: {
     x: string;
 };
-export { _exported_1 as "default" };
-declare const _exported_2: {
+export default _default;
+export declare var c: {
     x: string;
 };
-export { _exported_2 as "c" };
-declare const _exported_3: {};
-export { _exported_3 as "d" };
+export declare var d: {};
 //// [mod2.d.ts]
 export {};

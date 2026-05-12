@@ -15,7 +15,16 @@
 -    let x_2: string;
 -    export { x_2 as x };
 -}
--export default _default;
++export declare var a: {
++    x: string;
++};
++export declare var b: {
++    x: string;
++};
++declare const _default: {
++    x: string;
++};
+ export default _default;
 -export namespace c {
 -    let x_3: string;
 -    export { x_3 as x };
@@ -23,22 +32,9 @@
 -export namespace d {
 -    let e: number;
 -}
-+export declare var a: {
++export declare var c: {
 +    x: string;
 +};
-+declare const _exported: {
-+    x: string;
-+};
-+export { _exported as "b" };
-+declare const _exported_1: {
-+    x: string;
-+};
-+export { _exported_1 as "default" };
-+declare const _exported_2: {
-+    x: string;
-+};
-+export { _exported_2 as "c" };
-+declare const _exported_3: {};
-+export { _exported_3 as "d" };
++export declare var d: {};
  //// [mod2.d.ts]
  export {};

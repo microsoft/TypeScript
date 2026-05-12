@@ -1374,6 +1374,14 @@ conformance/commonJSImportClassTypeReference.js.diff
 conformance/commonJSImportNestedClassTypeReference.js.diff
 conformance/jsDeclarationsExportDoubleAssignmentInClosure.js.diff
 
+# CJS export alias and element access patterns changed, for the better
+## https://github.com/microsoft/typescript-go/issues/3545
+conformance/moduleExportAliasElementAccessExpression.js.diff
+conformance/moduleExportDuplicateAlias.js.diff
+conformance/moduleExportDuplicateAlias2.js.diff
+conformance/moduleExportDuplicateAlias3.js.diff
+conformance/moduleExportsElementAccessAssignment.js.diff
+
 # Output file ordering changed + declaration types resolve to any instead of typeof references due to respecting `out` in package self-name resolution
 ## https://github.com/microsoft/typescript-go/issues/3551
 conformance/nodeModulesDeclarationEmitWithPackageExports(module=node16).js.diff
