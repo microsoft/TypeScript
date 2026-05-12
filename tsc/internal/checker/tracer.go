@@ -1,6 +1,8 @@
 package checker
 
 import (
+	"maps"
+
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/tracing"
 )
@@ -9,14 +11,15 @@ import (
 // is a valid no-op, so call sites can use `if tr := c.tracer; tr != nil` to
 // gate work that only matters under --generateTrace.
 type Tracer struct {
-	tracing  *tracing.Tracing
-	recorder tracing.Tracer
+	tracing      *tracing.Tracing
+	recorder     tracing.Tracer
+	checkerIndex int
 }
 
 // NewTracer creates a Tracer for the given checker index that records both
 // type-creation events and trace events through the provided tracing session.
 func NewTracer(tr *tracing.Tracing, checkerIndex int) *Tracer {
-	return &Tracer{tracing: tr, recorder: tr.NewTypeTracer(checkerIndex)}
+	return &Tracer{tracing: tr, recorder: tr.NewTypeTracer(checkerIndex), checkerIndex: checkerIndex}
 }
 
 func (t *Tracer) RecordType(typ *Type) {
@@ -24,11 +27,47 @@ func (t *Tracer) RecordType(typ *Type) {
 }
 
 func (t *Tracer) Push(phase tracing.Phase, name string, args map[string]any, separateBeginAndEnd bool) func() {
-	return t.tracing.Push(phase, name, args, separateBeginAndEnd)
+	if !separateBeginAndEnd {
+		return t.tracing.Push(phase, name, t.copyWithCheckerIndex(args), separateBeginAndEnd)
+	}
+
+	args, restore := t.temporarilyAddCheckerIndex(args)
+	pop := t.tracing.Push(phase, name, args, separateBeginAndEnd)
+	restore()
+
+	return func() {
+		_, restoreEndArgs := t.temporarilyAddCheckerIndex(args)
+		defer restoreEndArgs()
+		pop()
+	}
 }
 
 func (t *Tracer) Instant(phase tracing.Phase, name string, args map[string]any) {
-	t.tracing.Instant(phase, name, args)
+	t.tracing.Instant(phase, name, t.copyWithCheckerIndex(args))
+}
+
+func (t *Tracer) copyWithCheckerIndex(args map[string]any) map[string]any {
+	withCheckerIndex := make(map[string]any, len(args)+1)
+	maps.Copy(withCheckerIndex, args)
+	withCheckerIndex["checkerId"] = t.checkerIndex
+	return withCheckerIndex
+}
+
+func (t *Tracer) temporarilyAddCheckerIndex(args map[string]any) (map[string]any, func()) {
+	if args == nil {
+		args = map[string]any{}
+	}
+
+	previous, hadPrevious := args["checkerId"]
+	args["checkerId"] = t.checkerIndex
+
+	return args, func() {
+		if hadPrevious {
+			args["checkerId"] = previous
+		} else {
+			delete(args, "checkerId")
+		}
+	}
 }
 
 // tracedTypeAdapter adapts a Type to the tracing.TracedType interface
