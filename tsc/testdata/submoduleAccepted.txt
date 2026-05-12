@@ -1366,3 +1366,10 @@ compiler/tslibMultipleMissingHelper.errors.txt.diff
 
 ## tslib helper check missing in Strada fixed in Corsa
 compiler/esModuleInteropTslibHelpers.errors.txt.diff
+
+# CJS exports pattern changes in declaration emit
+## https://github.com/microsoft/typescript-go/issues/3559
+compiler/jsExportAssignmentNonMutableLocation.js.diff
+conformance/commonJSImportClassTypeReference.js.diff
+conformance/commonJSImportNestedClassTypeReference.js.diff
+conformance/jsDeclarationsExportDoubleAssignmentInClosure.js.diff

@@ -130,13 +130,6 @@ conformance/callbackTagVariadicType.js.diff
 ## https://github.com/microsoft/typescript-go/issues/3557
 conformance/checkJsdocSatisfiesTag15.js.diff
 
-# CJS exports pattern changes in declaration emit
-## https://github.com/microsoft/typescript-go/issues/3559
-compiler/jsExportAssignmentNonMutableLocation.js.diff
-conformance/commonJSImportClassTypeReference.js.diff
-conformance/commonJSImportNestedClassTypeReference.js.diff
-conformance/jsDeclarationsExportDoubleAssignmentInClosure.js.diff
-
 # noImplicitThis functions returning this now fully expand the object type
 ## https://github.com/microsoft/typescript-go/issues/3561
 compiler/noImplicitThisBigThis.js.diff
