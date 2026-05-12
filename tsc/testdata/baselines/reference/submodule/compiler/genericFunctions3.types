@@ -12,7 +12,7 @@ function from<T>(arg: boolean): Query<T>; // was Error: Overload signature is no
 >arg : boolean
 
 function from<T>(arg: any): Query<T> {
->from : <T>(arg: boolean) => Query<T>
+>from : <T_1>(arg: boolean) => Query<T_1>
 >arg : any
 
     return undefined;

@@ -4,7 +4,7 @@
 declare namespace Windows.Foundation {
     export interface IPromise<T> {
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
->then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
+>then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; }
 >success : ((value: T) => IPromise<U>) | undefined
 >value : T
 >error : ((error: any) => IPromise<U>) | undefined
@@ -15,7 +15,7 @@ declare namespace Windows.Foundation {
 >Foundation : any
 
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
->then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
+>then : { <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; }
 >success : ((value: T) => IPromise<U>) | undefined
 >value : T
 >error : ((error: any) => U) | undefined
@@ -26,7 +26,7 @@ declare namespace Windows.Foundation {
 >Foundation : any
 
         then<U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
->then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
+>then : { <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; }
 >success : ((value: T) => U) | undefined
 >value : T
 >error : ((error: any) => IPromise<U>) | undefined
@@ -37,7 +37,7 @@ declare namespace Windows.Foundation {
 >Foundation : any
 
         then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
->then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
+>then : { <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
 >success : ((value: T) => U) | undefined
 >value : T
 >error : ((error: any) => U) | undefined

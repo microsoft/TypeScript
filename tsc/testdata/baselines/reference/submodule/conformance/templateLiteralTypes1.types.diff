@@ -9,28 +9,7 @@
  >name : `get${Capitalize<T>}`
 
      let s1: string = name;
-@@= skipped -190, +190 lines =@@
- // Inference and property name paths
-
- declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2];
-->getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}`): T_1[P0_1][P1_1]; <T_1, P0_1 extends keyof T_1 & string>(obj: T_1, path: P0_1): T_1[P0_1]; (obj: object, path: string): unknown; }
-+>getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
- >obj : T
- >path : `${P0}.${P1}.${P2}`
-
- declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1];
-->getProp : { <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string, P2 extends keyof T_1[P0_1][P1_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}.${P2}`): T_1[P0_1][P1_1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T_1, P0_1 extends keyof T_1 & string>(obj: T_1, path: P0_1): T_1[P0_1]; (obj: object, path: string): unknown; }
-+>getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
- >obj : T
- >path : `${P0}.${P1}`
-
- declare function getProp<T, P0 extends keyof T & string>(obj: T, path: P0): T[P0];
-->getProp : { <T_1, P0_1 extends keyof T_1 & string, P1 extends keyof T_1[P0_1] & string, P2 extends keyof T_1[P0_1][P1] & string>(obj: T_1, path: `${P0_1}.${P1}.${P2}`): T_1[P0_1][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1}`): T_1[P0_1][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
-+>getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
- >obj : T
- >path : P0
-
-@@= skipped -20, +20 lines =@@
+@@= skipped -210, +210 lines =@@
  >path : string
 
  let p1 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a');

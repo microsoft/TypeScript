@@ -1401,18 +1401,18 @@ class OtherPerson {
 // Modified repro from #12544
 
 function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
->path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2): T_1[K1_1][K2]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1], K3 extends keyof T_1[K1_1][K2]>(obj: T_1, key1: K1_1, key2: K2, key3: K3): T_1[K1_1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
 >obj : T
 >key1 : K1
 
 function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
->path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>path : { <T_1, K1_1 extends keyof T_1>(obj: T_1, key1: K1_1): T_1[K1_1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T_1, K1_1 extends keyof T_1, K2_1 extends keyof T_1[K1_1], K3 extends keyof T_1[K1_1][K2_1]>(obj: T_1, key1: K1_1, key2: K2_1, key3: K3): T_1[K1_1][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
 >obj : T
 >key1 : K1
 >key2 : K2
 
 function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
->path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>path : { <T_1, K1_1 extends keyof T_1>(obj: T_1, key1: K1_1): T_1[K1_1]; <T_1, K1_1 extends keyof T_1, K2_1 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2_1): T_1[K1_1][K2_1]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
 >obj : T
 >key1 : K1
 >key2 : K2

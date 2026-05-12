@@ -124,7 +124,7 @@ export function compose<F extends Function>(f: F): F;
 >f : F
 
 export function compose<A, B, C>(f1: (b: B) => C, f2: (a: A) => B): (a: A) => C;
->compose : { (): <R>(a: R) => R; <F extends Function>(f: F): F; <A, B, C>(f1: (b: B) => C, f2: (a: A) => B): (a: A) => C; <A, B, C, D>(f1: (c: C) => D, f2: (b: B) => C, f3: (a: A) => B): (a: A) => D; <R>(f1: (a: any) => R, ...funcs: Function[]): (...args: any[]) => R; <R>(...funcs: Function[]): (...args: any[]) => R; }
+>compose : { (): <R>(a: R) => R; <F extends Function>(f: F): F; <A, B, C>(f1: (b: B) => C, f2: (a: A) => B): (a: A) => C; <A_1, B_1, C_1, D>(f1: (c: C_1) => D, f2: (b: B_1) => C_1, f3: (a: A_1) => B_1): (a: A_1) => D; <R>(f1: (a: any) => R, ...funcs: Function[]): (...args: any[]) => R; <R>(...funcs: Function[]): (...args: any[]) => R; }
 >f1 : (b: B) => C
 >b : B
 >f2 : (a: A) => B
@@ -132,7 +132,7 @@ export function compose<A, B, C>(f1: (b: B) => C, f2: (a: A) => B): (a: A) => C;
 >a : A
 
 export function compose<A, B, C, D>(
->compose : { (): <R>(a: R) => R; <F extends Function>(f: F): F; <A, B, C>(f1: (b: B) => C, f2: (a: A) => B): (a: A) => C; <A, B, C, D>(f1: (c: C) => D, f2: (b: B) => C, f3: (a: A) => B): (a: A) => D; <R>(f1: (a: any) => R, ...funcs: Function[]): (...args: any[]) => R; <R>(...funcs: Function[]): (...args: any[]) => R; }
+>compose : { (): <R>(a: R) => R; <F extends Function>(f: F): F; <A_1, B_1, C_1>(f1: (b: B_1) => C_1, f2: (a: A_1) => B_1): (a: A_1) => C_1; <A, B, C, D>(f1: (c: C) => D, f2: (b: B) => C, f3: (a: A) => B): (a: A) => D; <R>(f1: (a: any) => R, ...funcs: Function[]): (...args: any[]) => R; <R>(...funcs: Function[]): (...args: any[]) => R; }
 
     f1: (c: C) => D,
 >f1 : (c: C) => D
@@ -150,14 +150,14 @@ export function compose<A, B, C, D>(
 >a : A
 
 export function compose<R>(f1: (a: any) => R, ...funcs: Function[]): (...args: any[]) => R;
->compose : { (): <R>(a: R) => R; <F extends Function>(f: F): F; <A, B, C>(f1: (b: B) => C, f2: (a: A) => B): (a: A) => C; <A, B, C, D>(f1: (c: C) => D, f2: (b: B) => C, f3: (a: A) => B): (a: A) => D; <R>(f1: (a: any) => R, ...funcs: Function[]): (...args: any[]) => R; <R>(...funcs: Function[]): (...args: any[]) => R; }
+>compose : { (): <R_1>(a: R_1) => R_1; <F extends Function>(f: F): F; <A, B, C>(f1: (b: B) => C, f2: (a: A) => B): (a: A) => C; <A, B, C, D>(f1: (c: C) => D, f2: (b: B) => C, f3: (a: A) => B): (a: A) => D; <R>(f1: (a: any) => R, ...funcs: Function[]): (...args: any[]) => R; <R_1>(...funcs: Function[]): (...args: any[]) => R_1; }
 >f1 : (a: any) => R
 >a : any
 >funcs : Function[]
 >args : any[]
 
 export function compose<R>(...funcs: Function[]): (...args: any[]) => R;
->compose : { (): <R>(a: R) => R; <F extends Function>(f: F): F; <A, B, C>(f1: (b: B) => C, f2: (a: A) => B): (a: A) => C; <A, B, C, D>(f1: (c: C) => D, f2: (b: B) => C, f3: (a: A) => B): (a: A) => D; <R>(f1: (a: any) => R, ...funcs: Function[]): (...args: any[]) => R; <R>(...funcs: Function[]): (...args: any[]) => R; }
+>compose : { (): <R_1>(a: R_1) => R_1; <F extends Function>(f: F): F; <A, B, C>(f1: (b: B) => C, f2: (a: A) => B): (a: A) => C; <A, B, C, D>(f1: (c: C) => D, f2: (b: B) => C, f3: (a: A) => B): (a: A) => D; <R_1>(f1: (a: any) => R_1, ...funcs: Function[]): (...args: any[]) => R_1; <R>(...funcs: Function[]): (...args: any[]) => R; }
 >funcs : Function[]
 >args : any[]
 

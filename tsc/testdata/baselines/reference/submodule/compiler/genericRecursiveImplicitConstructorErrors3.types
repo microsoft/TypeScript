@@ -33,7 +33,7 @@ namespace TypeScript {
 >_elementType : any
 
         public toString<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) {
->toString : <A_1, B_1, C_1>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) => any
+>toString : <A, B, C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) => any
 >scopeSymbol : any
 >useConstraintInName : boolean | undefined
 
@@ -53,7 +53,7 @@ namespace TypeScript {
 >s : any
         }
         public getScopedNameEx<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) {
->getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
+>getScopedNameEx : <A, B, C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
 >scopeSymbol : any
 >useConstraintInName : boolean | undefined
 >getPrettyTypeName : boolean | undefined

@@ -56,8 +56,18 @@ loop:
 					// - Type parameters of a function are in scope in the entire function declaration, including the parameter
 					//   list and return type. However, local types are only in scope in the function body.
 					// - parameters are only in the scope of function body
-					if meaning&result.Flags&ast.SymbolFlagsType != 0 {
-						useResult = result.Flags&ast.SymbolFlagsTypeParameter != 0 && (lastLocation == location.Type() || ast.IsParameterLike(lastLocation))
+					// This restriction does not apply to JSDoc comment types because they are parented
+					// at a higher level than type parameters would normally be
+					if meaning&result.Flags&ast.SymbolFlagsType != 0 && lastLocation.Kind != ast.KindJSDoc {
+						// type parameters are visible in parameter list, return type and type parameter list.
+						// Synthetic fake scopes are added for signatures so type parameters are accessible from them.
+						useResult = result.Flags&ast.SymbolFlagsTypeParameter != 0 &&
+							(lastLocation.Flags&ast.NodeFlagsSynthesized != 0 ||
+								lastLocation == location.Type() ||
+								lastLocation.Kind == ast.KindParameter ||
+								lastLocation.Kind == ast.KindJSDocParameterTag ||
+								lastLocation.Kind == ast.KindJSDocReturnTag ||
+								lastLocation.Kind == ast.KindTypeParameter)
 					}
 					if meaning&result.Flags&ast.SymbolFlagsVariable != 0 {
 						// expression inside parameter will lookup as normal variable scope when targeting es2015+

@@ -477,7 +477,7 @@ namespace Editor {
         }
 
         public MakeEntry<T>(data: T): List<T> {
->MakeEntry : <T_1>(data: T_1) => List<T_1>
+>MakeEntry : <T>(data: T) => List<T>
 >data : T
 
             var entry: List<T> = new List<T>(false, data);
@@ -506,7 +506,7 @@ namespace Editor {
         }
 
         public RemoveEntry<T>(entry: List<T>): List<T> {
->RemoveEntry : <T_1>(entry: List<T_1>) => List<T_1>
+>RemoveEntry : <T>(entry: List<T>) => List<T>
 >entry : List<T>
 
             if (entry == null) {

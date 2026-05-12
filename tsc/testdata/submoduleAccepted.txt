@@ -272,15 +272,10 @@ compiler/argumentsReferenceInMethod6_Js.types.diff
 compiler/argumentsReferenceInMethod7_Js.types.diff
 compiler/assertionFunctionWildcardImport1.symbols.diff
 compiler/assertionFunctionWildcardImport1.types.diff
-compiler/asyncFunctionsAndStrictNullChecks.types.diff
-compiler/awaitedTypeJQuery.types.diff
-compiler/bluebirdStaticThis.types.diff
-compiler/callbacksDontShareTypes.types.diff
 compiler/capturedParametersInInitializers1.types.diff
 compiler/classFieldSuperAccessibleJs1.symbols.diff
 compiler/classFieldSuperAccessibleJs2.symbols.diff
 compiler/classNonUniqueSymbolMethodHasSymbolIndexer.js.diff
-compiler/coAndContraVariantInferences3.types.diff
 compiler/commaOperatorInConditionalExpression.types.diff
 compiler/commonJsExportTypeDeclarationError(target=es2015).symbols.diff
 compiler/commonJsIsolatedModules.symbols.diff
@@ -289,7 +284,6 @@ compiler/commonJsUnusedLocals.symbols.diff
 compiler/computedPropertiesInDestructuring1_ES6.types.diff
 compiler/computedPropertiesInDestructuring1.types.diff
 compiler/conditionalTypeContextualTypeSimplificationsSuceeds.types.diff
-compiler/contravariantInferenceAndTypeGuard.types.diff
 compiler/declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.js.diff
 compiler/declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.types.diff
 compiler/defaultPropsEmptyCurlyBecomesAnyForJs.symbols.diff
@@ -298,7 +292,6 @@ compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes(exactoptional
 compiler/deleteExpressionMustBeOptional(strict=false).symbols.diff
 compiler/deleteExpressionMustBeOptional(strict=true).symbols.diff
 compiler/duplicateObjectLiteralProperty_computedNameNegative1.types.diff
-compiler/duplicateOverloadInTypeAugmentation1.types.diff
 compiler/duplicateStringNamedProperty1.errors.txt.diff
 compiler/expandoFunctionBlockShadowing.symbols.diff
 compiler/expandoFunctionBlockShadowing.types.diff
@@ -312,26 +305,10 @@ compiler/expandoFunctionExpressionsWithDynamicNames.js.diff
 compiler/expandoFunctionExpressionsWithDynamicNames.symbols.diff
 compiler/expandoFunctionExpressionsWithDynamicNames2.symbols.diff
 compiler/expandoFunctionNestedAssigmentsDeclared.symbols.diff
-compiler/fixingTypeParametersRepeatedly2.types.diff
-compiler/fixingTypeParametersRepeatedly3.types.diff
-compiler/functionOverloadsOnGenericArity2.types.diff
-compiler/functionOverloadsRecursiveGenericReturnType.types.diff
 compiler/genericCallOnMemberReturningClosedOverObject.types.diff
-compiler/genericCombinators2.types.diff
-compiler/genericFunctionInference1.types.diff
-compiler/genericFunctions3.types.diff
-compiler/genericFunctionSpecializations1.types.diff
-compiler/genericMemberFunction.types.diff
-compiler/genericOverloadSignatures.types.diff
-compiler/genericSpecializationToTypeLiteral1.types.diff
 compiler/indexTypeNoSubstitutionTemplateLiteral.symbols.diff
 compiler/indexTypeNoSubstitutionTemplateLiteral.types.diff
-compiler/inferenceDoesNotAddUndefinedOrNull.types.diff
 compiler/inferenceFromIncompleteSource.errors.txt.diff
-compiler/infinitelyExpandingTypes5.types.diff
-compiler/ipromise2.types.diff
-compiler/ipromise3.types.diff
-compiler/ipromise4.types.diff
 
 ## more concise errors ##
 compiler/arrayBestCommonTypes.errors.txt.diff
@@ -446,7 +423,6 @@ compiler/checkJsTypeDefNoUnusedLocalMarked.types.diff
 compiler/circularObjectLiteralAccessors(target=es2015).types.diff
 compiler/circularTypeArgumentsLocalAndOuterNoCrash1.types.diff
 compiler/complexRecursiveCollections.errors.txt.diff
-compiler/complexRecursiveCollections.types.diff
 compiler/computedPropertiesNarrowed.js.diff
 compiler/computedPropertiesNarrowed.types.diff
 compiler/contextuallyTypedJsxAttribute2.types.diff

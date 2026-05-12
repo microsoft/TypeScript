@@ -339,11 +339,11 @@ const nestedResult3 = outer3(() => 1)(() => "foo");
 >"foo" : "foo"
 
 declare function overloaded1<const T>(cb: () => T): T;
->overloaded1 : { <const T>(cb: () => T): T; <const T, const U>(cb: () => T, cb2: () => U): [T, U]; }
+>overloaded1 : { <const T>(cb: () => T): T; <const T_1, const U>(cb: () => T_1, cb2: () => U): [T_1, U]; }
 >cb : () => T
 
 declare function overloaded1<const T, const U>(cb: () => T, cb2: () => U): [T, U];
->overloaded1 : { <const T>(cb: () => T): T; <const T, const U>(cb: () => T, cb2: () => U): [T, U]; }
+>overloaded1 : { <const T_1>(cb: () => T_1): T_1; <const T, const U>(cb: () => T, cb2: () => U): [T, U]; }
 >cb : () => T
 >cb2 : () => U
 
@@ -364,11 +364,11 @@ const overloadB = overloaded1(() => "hi", () => true);
 >true : true
 
 declare function overloaded2<T>(cb: () => T): T;
->overloaded2 : { <T>(cb: () => T): T; <T, const U>(cb: () => T, cb2: () => U): [T, U]; }
+>overloaded2 : { <T>(cb: () => T): T; <T_1, const U>(cb: () => T_1, cb2: () => U): [T_1, U]; }
 >cb : () => T
 
 declare function overloaded2<T, const U>(cb: () => T, cb2: () => U): [T, U];
->overloaded2 : { <T>(cb: () => T): T; <T, const U>(cb: () => T, cb2: () => U): [T, U]; }
+>overloaded2 : { <T_1>(cb: () => T_1): T_1; <T, const U>(cb: () => T, cb2: () => U): [T, U]; }
 >cb : () => T
 >cb2 : () => U
 
@@ -389,11 +389,11 @@ const overloadD = overloaded2(() => "hi", () => true);
 >true : true
 
 declare function overloaded3<const T>(cb: () => T): T;
->overloaded3 : { <const T>(cb: () => T): T; <const T, U>(cb: () => T, cb2: () => U): [T, U]; }
+>overloaded3 : { <const T>(cb: () => T): T; <const T_1, U>(cb: () => T_1, cb2: () => U): [T_1, U]; }
 >cb : () => T
 
 declare function overloaded3<const T, U>(cb: () => T, cb2: () => U): [T, U];
->overloaded3 : { <const T>(cb: () => T): T; <const T, U>(cb: () => T, cb2: () => U): [T, U]; }
+>overloaded3 : { <const T_1>(cb: () => T_1): T_1; <const T, U>(cb: () => T, cb2: () => U): [T, U]; }
 >cb : () => T
 >cb2 : () => U
 
@@ -414,11 +414,11 @@ const overloadF = overloaded3(() => "hi", () => true);
 >true : true
 
 declare function overloaded4<const T>(cb: () => T): T;
->overloaded4 : { <const T>(cb: () => T): T; <T, U>(cb: () => T, cb2: () => U): [T, U]; }
+>overloaded4 : { <const T>(cb: () => T): T; <T_1, U>(cb: () => T_1, cb2: () => U): [T_1, U]; }
 >cb : () => T
 
 declare function overloaded4<T, U>(cb: () => T, cb2: () => U): [T, U];
->overloaded4 : { <const T>(cb: () => T): T; <T, U>(cb: () => T, cb2: () => U): [T, U]; }
+>overloaded4 : { <const T_1>(cb: () => T_1): T_1; <T, U>(cb: () => T, cb2: () => U): [T, U]; }
 >cb : () => T
 >cb2 : () => U
 
@@ -439,11 +439,11 @@ const overloadH = overloaded4(() => "hi", () => true);
 >true : true
 
 declare function overloaded5<T>(cb: () => T): T;
->overloaded5 : { <T>(cb: () => T): T; <const T, U>(cb: () => T, cb2: () => U): [T, U]; }
+>overloaded5 : { <T>(cb: () => T): T; <const T_1, U>(cb: () => T_1, cb2: () => U): [T_1, U]; }
 >cb : () => T
 
 declare function overloaded5<const T, U>(cb: () => T, cb2: () => U): [T, U];
->overloaded5 : { <T>(cb: () => T): T; <const T, U>(cb: () => T, cb2: () => U): [T, U]; }
+>overloaded5 : { <T_1>(cb: () => T_1): T_1; <const T, U>(cb: () => T, cb2: () => U): [T, U]; }
 >cb : () => T
 >cb2 : () => U
 

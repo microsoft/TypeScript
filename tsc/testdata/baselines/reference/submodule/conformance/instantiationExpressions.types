@@ -2,16 +2,16 @@
 
 === instantiationExpressions.ts ===
 declare function fx<T>(x: T): T;
->fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>fx : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_1, U>(t: [T_1, U]): [T_1, U]; }
 >x : T
 
 declare function fx<T>(x: T, n: number): T;
->fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>fx : { <T_1>(x: T_1): T_1; <T>(x: T, n: number): T; <T_1, U>(t: [T_1, U]): [T_1, U]; }
 >x : T
 >n : number
 
 declare function fx<T, U>(t: [T, U]): [T, U];
->fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>fx : { <T_1>(x: T_1): T_1; <T_1>(x: T_1, n: number): T_1; <T, U>(t: [T, U]): [T, U]; }
 >t : [T, U]
 
 function f1() {

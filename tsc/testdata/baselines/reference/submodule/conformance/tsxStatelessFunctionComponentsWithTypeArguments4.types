@@ -7,11 +7,11 @@ import React = require('react')
 >React : typeof React
 
 declare function OverloadComponent<U>(): JSX.Element;
->OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
+>OverloadComponent : { <U>(): JSX.Element; <U_1>(attr: { b: U_1; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U_1>(attr: { b: U_1; a: T; }): JSX.Element; }
 >JSX : any
 
 declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boolean}): JSX.Element;
->OverloadComponent : { <U_1>(): JSX.Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
+>OverloadComponent : { <U_1>(): JSX.Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U_1>(attr: { b: U_1; a: T; }): JSX.Element; }
 >attr : { b: U; a: string; "ignore-prop": boolean; }
 >b : U
 >a : string
@@ -19,7 +19,7 @@ declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boo
 >JSX : any
 
 declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
->OverloadComponent : { <U_1>(): JSX.Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
+>OverloadComponent : { <U_1>(): JSX.Element; <U_1>(attr: { b: U_1; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
 >attr : { b: U; a: T; }
 >b : U
 >a : T
