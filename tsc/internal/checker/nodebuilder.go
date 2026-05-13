@@ -286,7 +286,11 @@ func NewNodeBuilderEx(ch *Checker, e *printer.EmitContext, idToSymbol map[*ast.I
 }
 
 func (c *Checker) getNodeBuilder() *NodeBuilder {
-	return c.getNodeBuilderEx(nil /*idToSymbol*/)
+	if c.typeToStringNodebuilder != nil {
+		return c.typeToStringNodebuilder
+	}
+	c.typeToStringNodebuilder = c.getNodeBuilderEx(nil /*idToSymbol*/)
+	return c.typeToStringNodebuilder
 }
 
 func (c *Checker) getNodeBuilderEx(idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *NodeBuilder {

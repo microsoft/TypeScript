@@ -2990,7 +2990,7 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 	// of types allows us to catch circular references to instantiations of the same anonymous type
 
 	key := CompositeTypeCacheIdentity{typeId, b.ctx.flags, b.ctx.internalFlags}
-	if b.ctx.enclosingDeclaration != nil && b.links.Has(b.ctx.enclosingDeclaration) {
+	if b.ctx.maxExpansionDepth <= 0 && b.ctx.enclosingDeclaration != nil && b.links.Has(b.ctx.enclosingDeclaration) {
 		links := b.links.Get(b.ctx.enclosingDeclaration)
 		cachedResult, ok := links.serializedTypes[key]
 		if ok {

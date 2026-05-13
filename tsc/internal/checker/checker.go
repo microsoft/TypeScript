@@ -884,6 +884,7 @@ type Checker struct {
 	reportedUnreachableNodes                    collections.Set[*ast.Node]
 	nonExistentProperties                       collections.Set[NonExistentPropertyKey]
 	deferredDiagnosticCallbacks                 []func()
+	typeToStringNodebuilder                     *NodeBuilder
 
 	mu     sync.Mutex
 	tracer *Tracer // Optional tracer for trace events and type recording (for --generateTrace)
