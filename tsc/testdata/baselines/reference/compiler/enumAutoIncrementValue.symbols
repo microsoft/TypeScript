@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/enumAutoIncrementValue.ts] ////
+
+=== a.ts ===
+enum E {
+>E : Symbol(E, Decl(a.ts, 0, 0))
+
+    A = 0 / 0,
+>A : Symbol(E.A, Decl(a.ts, 0, 8))
+
+    B,
+>B : Symbol(E.B, Decl(a.ts, 1, 14))
+}
+
