@@ -484,7 +484,7 @@ func sourceFileMayBeEmitted(sourceFile *ast.SourceFile, host SourceFileMayBeEmit
 
 	// Otherwise, if rootDir is specified or a config file exists, we know the common source directory and can check if the file would be emitted in the same location
 	if options.RootDir != "" || options.ConfigFilePath != "" {
-		commonDir := tspath.GetNormalizedAbsolutePath(outputpaths.GetCommonSourceDirectory(options, func() []string { return nil }, host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames()), host.GetCurrentDirectory())
+		commonDir := tspath.GetNormalizedAbsolutePath(outputpaths.GetCommonSourceDirectory(options, func() []string { return nil }, host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames(), nil), host.GetCurrentDirectory())
 		outputPath := outputpaths.GetSourceFilePathInNewDirWorker(sourceFile.FileName(), options.OutDir, host.GetCurrentDirectory(), commonDir, host.UseCaseSensitiveFileNames())
 		if tspath.ComparePaths(sourceFile.FileName(), outputPath, tspath.ComparePathsOptions{
 			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),

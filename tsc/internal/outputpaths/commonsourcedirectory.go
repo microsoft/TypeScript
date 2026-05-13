@@ -56,14 +56,20 @@ func GetComputedCommonSourceDirectory(emittedFiles []string, currentDirectory st
 	return commonSourceDirectory
 }
 
-func GetCommonSourceDirectory(options *core.CompilerOptions, files func() []string, currentDirectory string, useCaseSensitiveFileNames bool) string {
+func GetCommonSourceDirectory(options *core.CompilerOptions, files func() []string, currentDirectory string, useCaseSensitiveFileNames bool, checkSourceFilesBelongToPath func([]string, string) bool) string {
 	var commonSourceDirectory string
 	if options.RootDir != "" {
 		// If a rootDir is specified use it as the commonSourceDirectory
 		commonSourceDirectory = options.RootDir
+		if checkSourceFilesBelongToPath != nil {
+			checkSourceFilesBelongToPath(files(), options.RootDir)
+		}
 	} else if options.ConfigFilePath != "" {
 		// If the rootDir is not specified, then the common source directory is the directory of the config file.
 		commonSourceDirectory = tspath.GetDirectoryPath(options.ConfigFilePath)
+		if checkSourceFilesBelongToPath != nil {
+			checkSourceFilesBelongToPath(files(), commonSourceDirectory)
+		}
 	} else {
 		commonSourceDirectory = computeCommonSourceDirectoryOfFilenames(files(), currentDirectory, useCaseSensitiveFileNames)
 	}

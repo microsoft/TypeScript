@@ -9,6 +9,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/glob"
 	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/module"
@@ -120,21 +121,34 @@ func (p *ParsedCommandLine) ParseInputOutputNames() {
 
 func (p *ParsedCommandLine) CommonSourceDirectory() string {
 	p.commonSourceDirectoryOnce.Do(func() {
+		files := func() []string {
+			return core.Filter(p.ParsedConfig.FileNames, func(file string) bool {
+				return !(p.ParsedConfig.CompilerOptions.NoEmitForJsFiles.IsTrue() && tspath.HasJSFileExtension(file)) && !tspath.IsDeclarationFileName(file)
+			})
+		}
+
 		p.commonSourceDirectory = outputpaths.GetCommonSourceDirectory(
 			p.ParsedConfig.CompilerOptions,
-			func() []string {
-				return core.Filter(
-					p.ParsedConfig.FileNames,
-					func(file string) bool {
-						return !(p.ParsedConfig.CompilerOptions.NoEmitForJsFiles.IsTrue() && tspath.HasJSFileExtension(file)) &&
-							!tspath.IsDeclarationFileName(file)
-					})
-			},
+			files,
 			p.GetCurrentDirectory(),
 			p.UseCaseSensitiveFileNames(),
+			p.checkSourceFilesBelongToPath,
 		)
 	})
 	return p.commonSourceDirectory
+}
+
+func (p *ParsedCommandLine) checkSourceFilesBelongToPath(sourceFiles []string, rootDirectory string) bool {
+	allFilesBelongToPath := true
+	for _, file := range sourceFiles {
+		absoluteSourceFilePath := tspath.GetCanonicalFileName(tspath.GetNormalizedAbsolutePath(file, p.GetCurrentDirectory()), p.UseCaseSensitiveFileNames())
+		if !tspath.ContainsPath(rootDirectory, file, p.comparePathsOptions) {
+			p.Errors = append(p.Errors, ast.NewCompilerDiagnostic(diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, absoluteSourceFilePath, rootDirectory))
+			allFilesBelongToPath = false
+		}
+	}
+
+	return allFilesBelongToPath
 }
 
 func (p *ParsedCommandLine) GetCurrentDirectory() string {

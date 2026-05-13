@@ -17,13 +17,18 @@ export { }
 tsgo --p alpha/tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
+[96malpha/src/a.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/home/src/workspaces/project/beta/b.ts' is not under 'rootDir' '/home/src/workspaces/project/alpha'. 'rootDir' is expected to contain all source files.
+
+[7m1[0m import * as b from '../../beta/b'
+[7m [0m [91m                   ~~~~~~~~~~~~~~[0m
+
 [96malpha/src/a.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/home/src/workspaces/project/beta/b.ts' is not listed within the file list of project '/home/src/workspaces/project/alpha/tsconfig.json'. Projects must list all files or use an 'include' pattern.
 
 [7m1[0m import * as b from '../../beta/b'
 [7m [0m [91m                   ~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in alpha/src/a.ts[90m:1[0m
+Found 2 errors in the same file, starting at: alpha/src/a.ts[90m:1[0m
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
