@@ -95,6 +95,15 @@
                         "tags": [
                             "experimental"
                         ]
+                    },
+                    "js/ts.preferences.autoImportEntrypointDirectorySearch": {
+                        "type": "boolean",
+                        "default": false,
+                        "markdownDescription": "Enables recursive directory search for auto-importable files in all packages that lack `exports` in their `package.json`. Enabling this option allows more auto-importable paths to be discovered at the cost of increased scanning time.",
+                        "scope": "window",
+                        "tags": [
+                            "experimental"
+                        ]
                     }
                 }
             }

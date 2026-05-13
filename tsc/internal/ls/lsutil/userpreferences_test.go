@@ -44,8 +44,6 @@ func getValidStringValue(t reflect.Type) string {
 		return string(QuotePreferenceSingle)
 	case "lsutil.JsxAttributeCompletionStyle":
 		return string(JsxAttributeCompletionStyleBraces)
-	case "lsutil.IncludePackageJsonAutoImports":
-		return string(IncludePackageJsonAutoImportsOn)
 	case "lsutil.IncludeInlayParameterNameHints":
 		return string(IncludeInlayParameterNameHintsAll)
 	case "lsutil.SemicolonPreference":

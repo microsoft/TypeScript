@@ -2156,7 +2156,7 @@ func (e *ResolvedEntrypoint) SymlinkOrRealpath() string {
 	return e.ResolvedFileName
 }
 
-func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.InfoCacheEntry, packageName string) []*ResolvedEntrypoint {
+func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.InfoCacheEntry, packageName string, enableDirectorySearch bool) []*ResolvedEntrypoint {
 	extensions := extensionsTypeScript | extensionsDeclaration
 	features := NodeResolutionFeaturesAll
 	state := &resolutionState{resolver: r, extensions: extensions, features: features, compilerOptions: r.compilerOptions}
@@ -2172,16 +2172,6 @@ func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.In
 		packageJson,
 	)
 
-	otherFiles := vfsmatch.ReadDirectory(
-		r.host.FS(),
-		r.host.GetCurrentDirectory(),
-		packageJson.PackageDirectory,
-		extensions.Array(),
-		[]string{"node_modules"},
-		[]string{"**/*"},
-		vfsmatch.UnlimitedDepth,
-	)
-
 	if mainResolution.isResolved() {
 		result = append(result, r.createResolvedEntrypointHandlingSymlink(
 			mainResolution.path,
@@ -2192,19 +2182,31 @@ func (r *Resolver) GetEntrypointsFromPackageJsonInfo(packageJson *packagejson.In
 		))
 	}
 
-	comparePathsOptions := tspath.ComparePathsOptions{UseCaseSensitiveFileNames: r.host.FS().UseCaseSensitiveFileNames()}
-	for _, file := range otherFiles {
-		if mainResolution.isResolved() && tspath.ComparePaths(file, mainResolution.path, comparePathsOptions) == 0 {
-			continue
-		}
+	if enableDirectorySearch {
+		otherFiles := vfsmatch.ReadDirectory(
+			r.host.FS(),
+			r.host.GetCurrentDirectory(),
+			packageJson.PackageDirectory,
+			extensions.Array(),
+			[]string{"node_modules"},
+			[]string{"**/*"},
+			vfsmatch.UnlimitedDepth,
+		)
 
-		result = append(result, r.createResolvedEntrypointHandlingSymlink(
-			file,
-			tspath.ResolvePath(packageName, tspath.GetRelativePathFromDirectory(packageJson.PackageDirectory, file, comparePathsOptions)),
-			nil,
-			nil,
-			EndingChangeable,
-		))
+		comparePathsOptions := tspath.ComparePathsOptions{UseCaseSensitiveFileNames: r.host.FS().UseCaseSensitiveFileNames()}
+		for _, file := range otherFiles {
+			if mainResolution.isResolved() && tspath.ComparePaths(file, mainResolution.path, comparePathsOptions) == 0 {
+				continue
+			}
+
+			result = append(result, r.createResolvedEntrypointHandlingSymlink(
+				file,
+				tspath.ResolvePath(packageName, tspath.GetRelativePathFromDirectory(packageJson.PackageDirectory, file, comparePathsOptions)),
+				nil,
+				nil,
+				EndingChangeable,
+			))
+		}
 	}
 
 	if len(result) > 0 {

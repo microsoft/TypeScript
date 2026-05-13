@@ -2003,12 +2003,6 @@ function parseUserPreferences(arg: ts.ObjectLiteralExpression): string {
                     }
                     moduleSpecifierPreferences.push(`ImportModuleSpecifierEnding: ${prop.initializer.getText()}`);
                     break;
-                case "includePackageJsonAutoImports":
-                    if (!ts.isStringLiteralLike(prop.initializer)) {
-                        throw new Error(`Expected string literal for includePackageJsonAutoImports, got ${prop.initializer.getText()}`);
-                    }
-                    preferences.push(`IncludePackageJsonAutoImports: ${prop.initializer.getText()}`);
-                    break;
                 case "allowRenameOfImportPath":
                     preferences.push(`AllowRenameOfImportPath: ${stringToTristate(prop.initializer.getText())}`);
                     break;

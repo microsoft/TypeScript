@@ -186,7 +186,6 @@ Config File Names::
         "preferences": {
           "importModuleSpecifier": "",
           "importModuleSpecifierEnding": "",
-          "includePackageJsonAutoImports": "",
           "jsxAttributeCompletionStyle": "",
           "organizeImports": {
             "caseFirst": "default",
@@ -639,7 +638,6 @@ Config::
         "preferences": {
           "importModuleSpecifier": "",
           "importModuleSpecifierEnding": "",
-          "includePackageJsonAutoImports": "",
           "jsxAttributeCompletionStyle": "",
           "organizeImports": {
             "caseFirst": "default",

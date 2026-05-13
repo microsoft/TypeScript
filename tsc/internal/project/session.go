@@ -1061,12 +1061,24 @@ func (s *Session) adoptSnapshotChange(baseSnapshot, newSnapshot *Snapshot) {
 		// ref is transferred to become the session's ref for its current snapshot.
 		s.snapshot = newSnapshot
 		s.snapshotMu.Unlock()
+		if s.options.LoggingEnabled {
+			s.logger.Logf("Adopted snapshot %d (parent %d) as current session snapshot (replacing %d)", newSnapshot.id, newSnapshot.parentId, oldSnapshot.id)
+			s.logger.Log(newSnapshot.builderLogs.String())
+		}
 		oldSnapshot.Deref(s)
 	} else {
 		// Session has moved on to a newer snapshot; discard this one.
 		// Release the clone's initial ref. If a handler is still using
 		// the snapshot, its own ref keeps it alive.
 		s.snapshotMu.Unlock()
+		if s.options.LoggingEnabled {
+			s.logger.Logf("Discarded snapshot %d (parent %d); session has moved on to snapshot %d", newSnapshot.id, newSnapshot.parentId, oldSnapshot.id)
+			if logs := newSnapshot.builderLogs.String(); logs != "" {
+				s.logger.Logf("--- Discarded snapshot %d builder logs (NOT adopted) ---", newSnapshot.id)
+				s.logger.Log(logs)
+				s.logger.Logf("--- End discarded snapshot %d builder logs ---", newSnapshot.id)
+			}
+		}
 		newSnapshot.Deref(s)
 	}
 }
@@ -1109,6 +1121,7 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 	// !!! userPreferences/configuration updates
 	s.backgroundQueue.Enqueue(s.backgroundCtx, func(ctx context.Context) {
 		if s.options.LoggingEnabled {
+			s.logger.Logf("Adopted snapshot %d (parent %d) as current session snapshot (replacing %d)", newSnapshot.id, newSnapshot.parentId, oldSnapshot.id)
 			s.logger.Log(newSnapshot.builderLogs.String())
 			s.logProjectChanges(oldSnapshot, newSnapshot)
 			s.logRuntimeMetrics()
@@ -1450,6 +1463,13 @@ func (s *Session) logCacheStats(snapshot *Snapshot) {
 				s.logger.Logf("\t\t\tTotal packages: %d", bucket.PackageNames.Len())
 				s.logger.Logf("\t\t\tFiles: %d", bucket.FileCount)
 				s.logger.Logf("\t\t\tExports: %d", bucket.ExportCount)
+				if bucket.State.RecursiveSearchPackages() == nil {
+					s.logger.Log("\t\t\tRecursive search: all")
+				} else if bucket.State.RecursiveSearchPackages().Len() > 0 {
+					s.logger.Logf("\t\t\tRecursive search: %d packages", bucket.State.RecursiveSearchPackages().Len())
+				} else {
+					s.logger.Log("\t\t\tRecursive search: none")
+				}
 			}
 		}
 	}
