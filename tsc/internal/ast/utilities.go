@@ -4257,7 +4257,7 @@ func ClassElementOrClassElementParameterIsDecorated(useLegacyDecorators bool, no
 		var firstAccessorWithDecorators *Node
 		if HasDecorators(decls.FirstAccessor) {
 			firstAccessorWithDecorators = decls.FirstAccessor
-		} else if HasDecorators(decls.SecondAccessor) {
+		} else if decls.SecondAccessor != nil && HasDecorators(decls.SecondAccessor) {
 			firstAccessorWithDecorators = decls.SecondAccessor
 		}
 		if firstAccessorWithDecorators == nil || node != firstAccessorWithDecorators {
