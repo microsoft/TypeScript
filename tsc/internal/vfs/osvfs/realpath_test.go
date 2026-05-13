@@ -8,7 +8,6 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"gotest.tools/v3/assert"
-	"gotest.tools/v3/assert/cmp"
 )
 
 func TestSymlinkRealpath(t *testing.T) {
@@ -25,7 +24,8 @@ func TestSymlinkRealpath(t *testing.T) {
 	targetRealpath := fs.Realpath(tspath.NormalizePath(targetFile))
 	linkRealpath := fs.Realpath(tspath.NormalizePath(linkFile))
 
-	if !assert.Check(t, cmp.Equal(targetRealpath, linkRealpath)) {
+	if targetRealpath != linkRealpath {
+		t.Errorf("expected realpath of target and link to be equal, got %q and %q", targetRealpath, linkRealpath)
 		cmd := exec.Command("node", "-e", `console.log({ native: fs.realpathSync.native(process.argv[1]), node: fs.realpathSync(process.argv[1]) })`, linkFile)
 		out, err := cmd.CombinedOutput()
 		assert.NilError(t, err)
@@ -109,4 +109,17 @@ func TestGetAccessibleEntries(t *testing.T) {
 
 	assert.DeepEqual(t, entries.Directories, []string{"dir1", "dir2"})
 	assert.DeepEqual(t, entries.Files, []string{"file1", "file2"})
+	assert.Check(t, entries.Symlinks != nil, "expected Symlinks to be set for directory with symlinks")
+	assert.Equal(t, len(entries.Symlinks), 4)
+	for _, name := range []string{"file1", "file2", "dir1", "dir2"} {
+		_, ok := entries.Symlinks[name]
+		assert.Check(t, ok, "expected %q to be in Symlinks", name)
+	}
+
+	// Non-symlink directory should have empty Symlinks.
+	entries = fs.GetAccessibleEntries(tspath.NormalizePath(target))
+	assert.DeepEqual(t, entries.Directories, []string{"dir1", "dir2"})
+	assert.DeepEqual(t, entries.Files, []string{"file1", "file2"})
+	assert.Check(t, entries.Symlinks != nil, "expected Symlinks to be non-nil for directory without symlinks")
+	assert.Equal(t, len(entries.Symlinks), 0)
 }

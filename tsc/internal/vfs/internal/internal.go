@@ -66,31 +66,34 @@ func (vfs *Common) DirectoryExists(path string) bool {
 }
 
 func (vfs *Common) GetAccessibleEntries(path string) (result vfs.Entries) {
-	addToResult := func(name string, mode fs.FileMode) (added bool) {
+	result.Symlinks = map[string]struct{}{}
+
+	addToResult := func(name string, mode fs.FileMode, isLink bool) (added bool) {
 		if mode.IsDir() {
 			result.Directories = append(result.Directories, name)
-			return true
-		}
-
-		if mode.IsRegular() {
+		} else if mode.IsRegular() {
 			result.Files = append(result.Files, name)
-			return true
+		} else {
+			return false
 		}
 
-		return false
+		if isLink {
+			result.Symlinks[name] = struct{}{}
+		}
+		return true
 	}
 
 	for _, entry := range vfs.getEntries(path) {
 		entryType := entry.Type()
 
-		if addToResult(entry.Name(), entryType) {
+		if addToResult(entry.Name(), entryType, false) {
 			continue
 		}
 
 		if entryType&fs.ModeSymlink != 0 {
 			// Easy case; UNIX-like system will clearly mark symlinks.
 			if stat := vfs.Stat(path + "/" + entry.Name()); stat != nil {
-				addToResult(entry.Name(), stat.Mode())
+				addToResult(entry.Name(), stat.Mode(), true)
 			}
 			continue
 		}
@@ -101,7 +104,7 @@ func (vfs *Common) GetAccessibleEntries(path string) (result vfs.Entries) {
 			fullPath := path + "/" + entry.Name()
 			if vfs.IsReparsePoint(fullPath) {
 				if stat := vfs.Stat(fullPath); stat != nil {
-					addToResult(entry.Name(), stat.Mode())
+					addToResult(entry.Name(), stat.Mode(), true)
 				}
 			}
 			continue

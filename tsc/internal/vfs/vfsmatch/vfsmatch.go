@@ -587,9 +587,18 @@ type globVisitor struct {
 	results                   [][]string
 }
 
-func (v *globVisitor) visit(path, absolutePath string, depth int) {
+// visit walks a directory tree, collecting files that match the glob patterns.
+// resolvedRealPath, when non-empty, is the already-resolved real path for this
+// directory (computed incrementally from the parent). When empty, Realpath is
+// called to resolve symlinks.
+func (v *globVisitor) visit(path, absolutePath string, depth int, resolvedRealPath string) {
 	// Detect symlink cycles
-	realPath := v.host.Realpath(absolutePath)
+	var realPath string
+	if resolvedRealPath != "" {
+		realPath = resolvedRealPath
+	} else {
+		realPath = v.host.Realpath(absolutePath)
+	}
 	canonicalPath := tspath.GetCanonicalFileName(realPath, v.useCaseSensitiveFileNames)
 	if v.visited.Has(canonicalPath) {
 		return
@@ -622,7 +631,17 @@ func (v *globVisitor) visit(path, absolutePath string, depth int) {
 			continue
 		}
 		absDir := absPrefix + dir
-		v.visit(pathPrefix+dir, absDir, depth)
+		var childRealPath string
+		if entries.Symlinks != nil {
+			if _, isSymlink := entries.Symlinks[dir]; !isSymlink {
+				// Non-symlink directory: compute realpath incrementally.
+				childRealPath = tspath.CombinePaths(realPath, dir)
+			}
+			// else: symlink directory; leave childRealPath empty to force Realpath call.
+		}
+		// If Symlinks is nil, the FS doesn't track symlinks;
+		// leave childRealPath empty to call Realpath (preserving old behavior).
+		v.visit(pathPrefix+dir, absDir, depth, childRealPath)
 	}
 }
 
@@ -644,7 +663,7 @@ func matchFiles(path string, extensions, excludes, includes []string, useCaseSen
 	}
 
 	for _, basePath := range getBasePaths(path, includes, useCaseSensitiveFileNames) {
-		v.visit(basePath, tspath.CombinePaths(currentDirectory, basePath), depth)
+		v.visit(basePath, tspath.CombinePaths(currentDirectory, basePath), depth, "")
 	}
 
 	// Fast path: a single include bucket (or no includes) doesn't need flattening.
