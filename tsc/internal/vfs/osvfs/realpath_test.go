@@ -74,6 +74,33 @@ func BenchmarkRealpath(b *testing.B) {
 			fs.Realpath(normalizedLinkFile)
 		}
 	})
+
+	// Simulate a deep node_modules path to show scaling with depth.
+	deepDir := b.TempDir()
+	for _, seg := range []string{"project", "node_modules", "@scope", "package", "node_modules", "dep", "lib", "dist", "esm", "internal", "utils"} {
+		deepDir = filepath.Join(deepDir, seg)
+	}
+	assert.NilError(b, os.MkdirAll(deepDir, 0o777))
+	deepFile := filepath.Join(deepDir, "index.js")
+	assert.NilError(b, os.WriteFile(deepFile, []byte("module.exports = {}"), 0o666))
+	normalizedDeepFile := tspath.NormalizePath(deepFile)
+
+	b.Run("deep", func(b *testing.B) {
+		b.ReportAllocs()
+
+		for b.Loop() {
+			fs.Realpath(normalizedDeepFile)
+		}
+	})
+
+	b.Run("deep_evalSymlinks", func(b *testing.B) {
+		b.ReportAllocs()
+		deepNative := filepath.FromSlash(normalizedDeepFile)
+
+		for b.Loop() {
+			filepath.EvalSymlinks(deepNative) //nolint:errcheck
+		}
+	})
 }
 
 func TestGetAccessibleEntries(t *testing.T) {
