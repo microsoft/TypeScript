@@ -1382,6 +1382,17 @@ conformance/moduleExportDuplicateAlias2.js.diff
 conformance/moduleExportDuplicateAlias3.js.diff
 conformance/moduleExportsElementAccessAssignment.js.diff
 
+# @overload handling changes in JS declaration emit (we no longer support @overload on declarations that can't have TS overloads)
+## https://github.com/microsoft/typescript-go/issues/3555
+compiler/jsFileAlternativeUseOfOverloadTag.js.diff
+compiler/jsFileFunctionOverloads.js.diff
+compiler/jsFileFunctionOverloads2.js.diff
+compiler/jsFileMethodOverloads.js.diff
+compiler/jsFileMethodOverloads2.js.diff
+compiler/jsFileMethodOverloads5.js.diff
+conformance/overloadTag1.js.diff
+conformance/overloadTag2.js.diff
+
 # Output file ordering changed + declaration types resolve to any instead of typeof references due to respecting `out` in package self-name resolution
 ## https://github.com/microsoft/typescript-go/issues/3551
 conformance/nodeModulesDeclarationEmitWithPackageExports(module=node16).js.diff
