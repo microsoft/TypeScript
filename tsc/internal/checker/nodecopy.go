@@ -75,13 +75,14 @@ func (b *NodeBuilderImpl) walkNodeForExpandability(node *ast.Node) {
 }
 
 type recoveryBoundary struct {
-	ctx                 *NodeBuilderContext
-	hadError            bool
-	deferredReports     []func()
-	oldTracker          nodebuilder.SymbolTracker
-	oldTrackedSymbols   []*TrackedSymbolArgs
-	trackedSymbols      []*TrackedSymbolArgs
-	oldEncounteredError bool
+	ctx                  *NodeBuilderContext
+	hadError             bool
+	deferredReports      []func()
+	oldTracker           nodebuilder.SymbolTracker
+	oldTrackedSymbols    []*TrackedSymbolArgs
+	trackedSymbols       []*TrackedSymbolArgs
+	oldEncounteredError  bool
+	oldApproximateLength int
 }
 
 func (b *recoveryBoundary) markError(f func()) {
@@ -172,7 +173,7 @@ func newWrappingTracker(inner nodebuilder.SymbolTracker, bound *recoveryBoundary
 
 func (b *NodeBuilderImpl) createRecoveryBoundary() *recoveryBoundary {
 	b.ch.checkNotCanceled()
-	bound := &recoveryBoundary{ctx: b.ctx, oldTracker: b.ctx.tracker, oldTrackedSymbols: b.ctx.trackedSymbols, oldEncounteredError: b.ctx.encounteredError}
+	bound := &recoveryBoundary{ctx: b.ctx, oldTracker: b.ctx.tracker, oldTrackedSymbols: b.ctx.trackedSymbols, oldEncounteredError: b.ctx.encounteredError, oldApproximateLength: b.ctx.approximateLength}
 	newTracker := NewSymbolTrackerImpl(b.ctx, newWrappingTracker(b.ctx.tracker, bound))
 	b.ctx.tracker = newTracker
 	b.ctx.trackedSymbols = nil
@@ -183,6 +184,7 @@ func (b *NodeBuilderImpl) finalizeBoundary(bound *recoveryBoundary) bool {
 	b.ctx.tracker = bound.oldTracker
 	b.ctx.trackedSymbols = bound.oldTrackedSymbols
 	b.ctx.encounteredError = bound.oldEncounteredError
+	b.ctx.approximateLength = bound.oldApproximateLength
 
 	for _, f := range bound.deferredReports {
 		f()
