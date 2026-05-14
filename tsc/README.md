@@ -32,9 +32,9 @@ This is still a work in progress and is not yet at full feature parity with Type
 | Commandline and `tsconfig.json` parsing | done | Done, though `tsconfig` errors may not be as helpful. |
 | Type resolution | done | Same types as TS 6.0. |
 | Type checking | done | Same errors, locations, and messages as TS 6.0. Types printback in errors may display differently. |
-| JavaScript-specific inference and JSDoc | in progress | Mostly complete, but intentionally lacking some features. Declaration emit not complete. |
+| JavaScript-specific inference and JSDoc | done | Complete, but intentionally lacking some features. Declaration emit differs greatly, intentionally, to be closer to TS declarations. |
 | JSX | done | - |
-| Declaration emit | in progress | Done for TypeScript files. Not yet complete for JavaScript files. |
+| Declaration emit | done | - |
 | Emit (JS output) | done | - |
 | Watch mode | prototype | Watches files and rebuilds, but no incremental rechecking. Not optimized. |
 | Build mode / project references | done | - |
