@@ -231,11 +231,13 @@ var CompletionGlobalVars = []fourslash.CompletionsExpectedItem{
 	&lsproto.CompletionItem{
 		Label:    "escape",
 		Kind:     new(lsproto.CompletionItemKindFunction),
+		Tags:     &[]lsproto.CompletionItemTag{lsproto.CompletionItemTagDeprecated},
 		SortText: new(string(ls.DeprecateSortText(ls.SortTextGlobalsOrKeywords))),
 	},
 	&lsproto.CompletionItem{
 		Label:    "unescape",
 		Kind:     new(lsproto.CompletionItemKindFunction),
+		Tags:     &[]lsproto.CompletionItemTag{lsproto.CompletionItemTagDeprecated},
 		SortText: new(string(ls.DeprecateSortText(ls.SortTextGlobalsOrKeywords))),
 	},
 }
@@ -682,6 +684,7 @@ var CompletionGlobalTypeDecls = []fourslash.CompletionsExpectedItem{
 	&lsproto.CompletionItem{
 		Label:    "ImportAssertions",
 		Kind:     new(lsproto.CompletionItemKindInterface),
+		Tags:     &[]lsproto.CompletionItemTag{lsproto.CompletionItemTagDeprecated},
 		SortText: new(string(ls.DeprecateSortText(ls.SortTextGlobalsOrKeywords))),
 	},
 	&lsproto.CompletionItem{

@@ -39,6 +39,7 @@ func TestCompletionListAfterRegularExpressionLiteral1(t *testing.T) {
 				&lsproto.CompletionItem{
 					Label:    "compile",
 					SortText: new(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Tags:     &[]lsproto.CompletionItemTag{lsproto.CompletionItemTagDeprecated},
 				},
 			},
 		},

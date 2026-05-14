@@ -43,6 +43,7 @@ const i: I = {
 					Label:    "a",
 					SortText: new(string(ls.DeprecateSortText(ls.SortTextMemberDeclaredBySpreadAssignment))),
 					Kind:     new(lsproto.CompletionItemKindField),
+					Tags:     &[]lsproto.CompletionItemTag{lsproto.CompletionItemTagDeprecated},
 				},
 			},
 		},

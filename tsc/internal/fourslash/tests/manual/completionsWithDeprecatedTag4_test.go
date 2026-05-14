@@ -38,6 +38,7 @@ declare function f(options: {
 					Label:      "abc?",
 					FilterText: new("abc"),
 					Kind:       new(lsproto.CompletionItemKindField),
+					Tags:       &[]lsproto.CompletionItemTag{lsproto.CompletionItemTagDeprecated},
 					SortText:   new(string(ls.DeprecateSortText(ls.SortTextOptionalMember))),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						InsertReplaceEdit: &lsproto.InsertReplaceEdit{

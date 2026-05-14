@@ -40,6 +40,7 @@ let v = 100;
 				&lsproto.CompletionItem{
 					Label:    "compile",
 					SortText: new(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Tags:     &[]lsproto.CompletionItemTag{lsproto.CompletionItemTagDeprecated},
 				},
 			},
 		},

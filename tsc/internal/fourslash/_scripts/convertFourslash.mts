@@ -1077,8 +1077,8 @@ function parseExpectedCompletionItem(expr: ts.Expression, codeActionArgs?: Verif
         return getGoStringLiteral(strExpr.text);
     }
     if (strExpr = getObjectLiteralExpression(expr)) {
-        let isDeprecated = false; // !!!
         let isOptional = false;
+        const completionItemTags = new Set<string>();
         let sourceInit: ts.StringLiteralLike | undefined;
         let extensions: string[] = []; // !!!
         let itemProps: string[] = [];
@@ -1104,10 +1104,13 @@ function parseExpectedCompletionItem(expr: ts.Expression, codeActionArgs?: Verif
                     break;
                 }
                 case "sortText":
-                    const result = parseSortText(init);
-                    itemProps.push(`SortText: new(string(${result})),`);
-                    if (result === "ls.SortTextOptionalMember") {
+                    const sortText = parseSortText(init);
+                    itemProps.push(`SortText: new(string(${sortText.expression})),`);
+                    if (sortText.expression === "ls.SortTextOptionalMember") {
                         isOptional = true;
+                    }
+                    if (sortText.deprecated) {
+                        completionItemTags.add("lsproto.CompletionItemTagDeprecated");
                     }
                     break;
                 case "insertText": {
@@ -1144,7 +1147,10 @@ function parseExpectedCompletionItem(expr: ts.Expression, codeActionArgs?: Verif
                     break;
                 case "kindModifiers":
                     const modifiers = parseKindModifiers(init);
-                    ({ isDeprecated, isOptional, extensions } = modifiers);
+                    ({ isOptional, extensions } = modifiers);
+                    if (modifiers.isDeprecated) {
+                        completionItemTags.add("lsproto.CompletionItemTagDeprecated");
+                    }
                     break;
                 case "text": {
                     let textInit;
@@ -1258,6 +1264,8 @@ function parseExpectedCompletionItem(expr: ts.Expression, codeActionArgs?: Verif
         }
         if (filterText) itemProps.unshift(`FilterText: new(${getGoStringLiteral(filterText)}),`);
         if (insertText) itemProps.unshift(`InsertText: new(${getGoStringLiteral(insertText)}),`);
+        const tags = formatCompletionItemTags(completionItemTags);
+        if (tags) itemProps.push(tags);
         itemProps.unshift(`Label: ${getGoStringLiteral(name!)},`);
         return `&lsproto.CompletionItem{\n${itemProps.join("\n")}}`;
     }
@@ -3158,11 +3166,24 @@ function parseKindModifiers(expr: ts.Expression): { isOptional: boolean; isDepre
     };
 }
 
-function parseSortText(expr: ts.Expression): string {
+interface ParsedSortText {
+    expression: string;
+    deprecated: boolean;
+}
+
+function parseSortText(expr: ts.Expression): ParsedSortText {
     if (ts.isCallExpression(expr) && expr.expression.getText() === "completion.SortText.Deprecated") {
-        return `ls.DeprecateSortText(${parseSortText(expr.arguments[0])})`;
+        const inner = parseSortText(expr.arguments[0]);
+        return {
+            expression: `ls.DeprecateSortText(${inner.expression})`,
+            deprecated: true,
+        };
     }
-    const text = expr.getText();
+
+    return { expression: parseSortTextExpression(expr.getText()), deprecated: false };
+}
+
+function parseSortTextExpression(text: string): string {
     switch (text) {
         case "completion.SortText.LocalDeclarationPriority":
             return "ls.SortTextLocalDeclarationPriority";
@@ -3185,6 +3206,13 @@ function parseSortText(expr: ts.Expression): string {
         default:
             throw new Error(`Unrecognized sort text: ${text}`); // !!! support deprecated/obj literal prop/etc
     }
+}
+
+function formatCompletionItemTags(tags: Set<string>): string | undefined {
+    if (tags.size === 0) {
+        return undefined;
+    }
+    return `Tags: &[]lsproto.CompletionItemTag{${[...tags].join(", ")}},`;
 }
 
 function parseVerifyNavigateTo(args: ts.NodeArray<ts.Expression>): [VerifyNavToCmd] {
