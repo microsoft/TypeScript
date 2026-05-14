@@ -1822,7 +1822,7 @@ export interface ApplyChangedToOpenFilesRequestArgs {
      */
     openFiles?: ExternalFile[];
     /**
-     * List of open files files that were changes
+     * List of open files that were changed
      */
     changedFiles?: ChangedOpenFile[];
     /**
@@ -1848,7 +1848,7 @@ export interface UpdateOpenRequestArgs {
      */
     openFiles?: OpenRequestArgs[];
     /**
-     * List of open files files that were changes
+     * List of open files that were changed
      */
     changedFiles?: FileCodeEdits[];
     /**
@@ -2002,7 +2002,8 @@ export interface EmitResult {
  */
 export interface QuickInfoRequest extends FileLocationRequest {
     command: CommandTypes.Quickinfo;
-    arguments: FileLocationRequestArgs;
+    // FIX: was FileLocationRequestArgs, which silently dropped verbosityLevel
+    arguments: QuickInfoRequestArgs;
 }
 
 export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
@@ -2595,7 +2596,7 @@ export interface Diagnostic {
     reportsDeprecated?: {};
 
     /**
-     * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
+     * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declaration sites
      */
     relatedInformation?: DiagnosticRelatedInformation[];
 
@@ -2679,7 +2680,7 @@ export interface ConfigFileDiagnosticEventBody {
     configFile: string;
 
     /**
-     * An arry of diagnostic information items for the found config file.
+     * An array of diagnostic information items for the found config file.
      */
     diagnostics: DiagnosticWithFileName[];
 }
@@ -3269,7 +3270,7 @@ export const enum ModuleResolutionKind {
     Node = "node",
     /** @deprecated Renamed to `Node10` */
     NodeJs = "node",
-    /** @deprecated */
+    /** @deprecated Use `Node16` or `NodeNext` for modern module resolution. */
     Node10 = "node10",
     Node16 = "node16",
     NodeNext = "nodenext",
@@ -3308,7 +3309,8 @@ export const enum ScriptTarget {
     LatestStandard = ES2025,
 }
 
-{
+/** @internal */
+namespace _assertTypesComplete {
     type AssertKeysComplete<Source extends { [K in keyof Target]: any; }, Target> = Source;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     type CopiedTypesComplete = [
