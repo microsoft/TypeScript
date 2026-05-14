@@ -147,9 +147,11 @@ export async function restartExtHostOnChangeIfNeeded(): Promise<void> {
  * `typescript.experimental.useTsgo`, using `inspect()` to only consider
  * explicitly set values (ignoring VS Code defaults).
  *
- * Returns `true` if either setting is explicitly `true`, `false` if either
- * is explicitly `false` (and neither is `true`), or `undefined` if neither
- * setting has been explicitly configured.
+ * Each setting key is resolved using standard VS Code precedence (workspace
+ * folder > workspace > global, with language-specific overrides taking
+ * priority within each scope). Returns `true` if either resolved value is
+ * `true`, `false` if either is `false` (and neither is `true`), or
+ * `undefined` if neither setting has been explicitly configured.
  */
 export function getUseTsgo(): boolean | undefined {
     const tsValue = getExplicitUseTsgo("typescript");
@@ -184,8 +186,9 @@ function getExplicitUseTsgo(section: string): boolean | undefined {
         inspected.globalValue,
     ];
 
-    if (explicitValues.some(v => v === true)) return true;
-    if (explicitValues.some(v => v === false)) return false;
+    for (const v of explicitValues) {
+        if (v !== undefined) return v;
+    }
     return undefined;
 }
 
