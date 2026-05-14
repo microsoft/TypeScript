@@ -1,6 +1,6 @@
-import { API } from "@typescript/native-preview/async"; // @sync-skip
+import { API } from "@typescript/native-preview/unstable/async"; // @sync-skip
 // @sync-only-start
-// import { API } from "@typescript/native-preview/sync";
+// import { API } from "@typescript/native-preview/unstable/sync";
 // @sync-only-end
 import {
     findNextToken,
@@ -8,12 +8,12 @@ import {
     formatSyntaxKind,
     getTokenAtPosition,
     getTouchingPropertyName,
-} from "@typescript/native-preview/ast";
+} from "@typescript/native-preview/unstable/ast";
 import type {
     Node,
     SourceFile,
-} from "@typescript/native-preview/ast";
-import { createVirtualFileSystem } from "@typescript/native-preview/fs";
+} from "@typescript/native-preview/unstable/ast";
+import { createVirtualFileSystem } from "@typescript/native-preview/unstable/fs";
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";

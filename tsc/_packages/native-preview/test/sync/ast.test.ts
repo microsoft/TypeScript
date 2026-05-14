@@ -4,17 +4,17 @@ import type {
     Node,
     NodeArray,
     StringLiteralLikeNode,
-} from "@typescript/native-preview/ast";
+} from "@typescript/native-preview/unstable/ast";
 import {
     isImportDeclaration,
     isNamedImports,
     SyntaxKind,
     TokenFlags,
-} from "@typescript/native-preview/ast";
+} from "@typescript/native-preview/unstable/ast";
 import {
     getSynthesizedDeepClone,
     getSynthesizedDeepClones,
-} from "@typescript/native-preview/ast/clone";
+} from "@typescript/native-preview/unstable/ast/clone";
 import {
     cloneNode,
     createBinaryExpression,
@@ -27,14 +27,14 @@ import {
     createStringLiteral,
     createToken,
     NodeObject,
-} from "@typescript/native-preview/ast/factory";
+} from "@typescript/native-preview/unstable/ast/factory";
 import {
     visitEachChild,
     visitNode,
     visitNodes,
-} from "@typescript/native-preview/ast/visitor";
-import { createVirtualFileSystem } from "@typescript/native-preview/fs";
-import { API } from "@typescript/native-preview/sync";
+} from "@typescript/native-preview/unstable/ast/visitor";
+import { createVirtualFileSystem } from "@typescript/native-preview/unstable/fs";
+import { API } from "@typescript/native-preview/unstable/sync";
 import assert from "node:assert";
 import {
     describe,

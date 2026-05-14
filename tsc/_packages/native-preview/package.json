@@ -40,47 +40,47 @@
     },
     "exports": {
         "./package.json": "./package.json",
-        "./sync": {
+        "./unstable/sync": {
             "@typescript/source": "./src/api/sync/api.ts",
             "default": "./dist/api/sync/api.js"
         },
-        "./async": {
+        "./unstable/async": {
             "@typescript/source": "./src/api/async/api.ts",
             "default": "./dist/api/async/api.js"
         },
-        "./fs": {
+        "./unstable/fs": {
             "@typescript/source": "./src/api/fs.ts",
             "default": "./dist/api/fs.js"
         },
-        "./proto": {
+        "./unstable/proto": {
             "@typescript/source": "./src/api/proto.ts",
             "default": "./dist/api/proto.js"
         },
-        "./ast": {
+        "./unstable/ast": {
             "@typescript/source": "./src/ast/index.ts",
             "default": "./dist/ast/index.js"
         },
-        "./ast/is": {
+        "./unstable/ast/is": {
             "@typescript/source": "./src/ast/is.ts",
             "default": "./dist/ast/is.js"
         },
-        "./ast/factory": {
+        "./unstable/ast/factory": {
             "@typescript/source": "./src/ast/factory.generated.ts",
             "default": "./dist/ast/factory.generated.js"
         },
-        "./ast/utils": {
+        "./unstable/ast/utils": {
             "@typescript/source": "./src/ast/utils.ts",
             "default": "./dist/ast/utils.js"
         },
-        "./ast/scanner": {
+        "./unstable/ast/scanner": {
             "@typescript/source": "./src/ast/scanner.ts",
             "default": "./dist/ast/scanner.js"
         },
-        "./ast/visitor": {
+        "./unstable/ast/visitor": {
             "@typescript/source": "./src/ast/visitor.ts",
             "default": "./dist/ast/visitor.js"
         },
-        "./ast/clone": {
+        "./unstable/ast/clone": {
             "@typescript/source": "./src/ast/clone.ts",
             "default": "./dist/ast/clone.js"
         }
