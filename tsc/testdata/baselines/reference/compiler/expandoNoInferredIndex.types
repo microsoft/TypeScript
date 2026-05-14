@@ -8,33 +8,33 @@ export class C {
 >method : () => void
 
         const obj = {};
->obj : { foo: string; bar: string; buzz: any[]; }
->{} : { foo: string; bar: string; buzz: any[]; }
+>obj : { foo: string; bar: string; buzz: any; }
+>{} : { foo: string; bar: string; buzz: any; }
 
         obj.foo = 'foo';
 >obj.foo = 'foo' : "foo"
 >obj.foo : string
->obj : { foo: string; bar: string; buzz: any[]; }
+>obj : { foo: string; bar: string; buzz: any; }
 >foo : string
 >'foo' : "foo"
 
         obj.bar = 'bar';
 >obj.bar = 'bar' : "bar"
 >obj.bar : string
->obj : { foo: string; bar: string; buzz: any[]; }
+>obj : { foo: string; bar: string; buzz: any; }
 >bar : string
 >'bar' : "bar"
 
         obj.buzz = Object.values(obj);
 >obj.buzz = Object.values(obj) : any[]
->obj.buzz : any[]
->obj : { foo: string; bar: string; buzz: any[]; }
->buzz : any[]
+>obj.buzz : any
+>obj : { foo: string; bar: string; buzz: any; }
+>buzz : any
 >Object.values(obj) : any[]
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 >Object : ObjectConstructor
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->obj : { foo: string; bar: string; buzz: any[]; }
+>obj : { foo: string; bar: string; buzz: any; }
     }
 }
 

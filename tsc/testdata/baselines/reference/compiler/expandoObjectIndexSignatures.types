@@ -1,0 +1,114 @@
+//// [tests/cases/compiler/expandoObjectIndexSignatures.ts] ////
+
+=== main.js ===
+/** @param {Record<string, number>} obj */
+function fx(obj) {}
+>fx : (obj: Record<string, number>) => void
+>obj : Record<string, number>
+
+const obj1 = {};
+>obj1 : {}
+>{} : {}
+
+fx(obj1);
+>fx(obj1) : void
+>fx : (obj: Record<string, number>) => void
+>obj1 : {}
+
+const obj2 = {};
+>obj2 : { x: number; }
+>{} : { x: number; }
+
+obj2.x = 1
+>obj2.x = 1 : 1
+>obj2.x : number
+>obj2 : { x: number; }
+>x : number
+>1 : 1
+
+fx(obj2);
+>fx(obj2) : void
+>fx : (obj: Record<string, number>) => void
+>obj2 : { x: number; }
+
+function f1() {
+>f1 : () => void
+
+    const obj1 = {};
+>obj1 : {}
+>{} : {}
+
+    fx(obj1);
+>fx(obj1) : void
+>fx : (obj: Record<string, number>) => void
+>obj1 : {}
+}
+
+function f2() {
+>f2 : () => void
+
+    const obj2 = {};
+>obj2 : { x: number; }
+>{} : { x: number; }
+
+    obj2.x = 1
+>obj2.x = 1 : 1
+>obj2.x : number
+>obj2 : { x: number; }
+>x : number
+>1 : 1
+
+    fx(obj2);
+>fx(obj2) : void
+>fx : (obj: Record<string, number>) => void
+>obj2 : { x: number; }
+}
+
+const obj3 = {};
+>obj3 : { x: number; y: any; }
+>{} : { x: number; y: any; }
+
+obj3.x = 1;
+>obj3.x = 1 : 1
+>obj3.x : number
+>obj3 : { x: number; y: any; }
+>x : number
+>1 : 1
+
+obj3.y = Object.values(obj3);  // Circularity error
+>obj3.y = Object.values(obj3) : any[]
+>obj3.y : any
+>obj3 : { x: number; y: any; }
+>y : any
+>Object.values(obj3) : any[]
+>Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>Object : ObjectConstructor
+>values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>obj3 : { x: number; y: any; }
+
+function f3() {
+>f3 : () => void
+
+    const obj3 = {};
+>obj3 : { x: number; y: any; }
+>{} : { x: number; y: any; }
+
+    obj3.x = 1;
+>obj3.x = 1 : 1
+>obj3.x : number
+>obj3 : { x: number; y: any; }
+>x : number
+>1 : 1
+
+    obj3.y = Object.values(obj3);  // Circularity error
+>obj3.y = Object.values(obj3) : any[]
+>obj3.y : any
+>obj3 : { x: number; y: any; }
+>y : any
+>Object.values(obj3) : any[]
+>Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>Object : ObjectConstructor
+>values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>obj3 : { x: number; y: any; }
+}
+
