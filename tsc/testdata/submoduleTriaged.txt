@@ -40,10 +40,6 @@ compiler/multiLinePropertyAccessAndArrowFunctionIndent1.errors.txt.diff
 compiler/parseErrorIncorrectReturnToken.errors.txt.diff
 conformance/parserStatementIsNotAMemberVariableDeclaration1(alwaysstrict=true).errors.txt.diff
 
-# Unicode escapes in identifier names now displayed as literal characters
-## https://github.com/microsoft/typescript-go/issues/3511
-conformance/parser.numericSeparators.decmialNegative.errors.txt.diff
-
 # JS declaration emit adds `export import` modifier for require-style import assignments
 ## https://github.com/microsoft/typescript-go/issues/3542
 conformance/nodeModulesAllowJsImportAssignment(module=node16).js.diff
