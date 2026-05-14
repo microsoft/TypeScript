@@ -49,6 +49,7 @@ export class Client implements vscode.Disposable {
     isInitialized = false;
 
     private exe: ExeInfo | undefined;
+    private errorHandler: ReportingErrorHandler;
 
     constructor(
         outputChannel: vscode.LogOutputChannel,
@@ -60,6 +61,17 @@ export class Client implements vscode.Disposable {
         this.traceOutputChannel = traceOutputChannel;
         this.initializedEventEmitter = initializedEventEmitter;
         this.telemetryReporter = telemetryReporter;
+        this.errorHandler = new ReportingErrorHandler(this.telemetryReporter, 5);
+
+        // Monkey-patch the output channel's error method to capture recent stderr lines.
+        // When the server crashes, vscode-languageclient pipes stderr to outputChannel.error(),
+        // so the error handler can include the last N lines in crash telemetry.
+        const originalError = this.outputChannel.error.bind(this.outputChannel);
+        this.outputChannel.error = (...args: Parameters<typeof this.outputChannel.error>) => {
+            originalError(...args);
+            this.errorHandler.pushStderrLine(String(args[0]));
+        };
+
         this.documentSelector = [
             ...jsTsLanguageModes.map(language => ({ scheme: "file", language })),
             ...jsTsLanguageModes.map(language => ({ scheme: "untitled", language })),
@@ -72,7 +84,7 @@ export class Client implements vscode.Disposable {
                 codeLensShowLocationsCommandName,
                 enableTelemetry: true,
             },
-            errorHandler: new ReportingErrorHandler(this.telemetryReporter, 5),
+            errorHandler: this.errorHandler,
             middleware: {
                 workspace: {
                     ...configurationMiddleware,
@@ -345,11 +357,43 @@ class ReportingErrorHandler implements ErrorHandler {
     telemetryReporter: tr.TelemetryReporter;
     maxRestartCount: number;
     restarts: number[];
+    private stderrBuffer: string[] = [];
+    private capturingPanic = false;
+    private static readonly maxStderrLines = 40;
+    private static readonly maxStderrLength = 8192;
 
     constructor(telemetryReporter: tr.TelemetryReporter, maxRestartCount: number) {
         this.telemetryReporter = telemetryReporter;
         this.maxRestartCount = maxRestartCount;
         this.restarts = [];
+    }
+
+    pushStderrLine(line: string): void {
+        for (const l of line.split("\n")) {
+            if (!this.capturingPanic) {
+                if (/^panic:/.test(l.trimStart())) {
+                    // Clear any stale data from a previous session/panic.
+                    this.stderrBuffer = [];
+                    this.capturingPanic = true;
+                }
+                else {
+                    continue;
+                }
+            }
+            if (this.stderrBuffer.length < ReportingErrorHandler.maxStderrLines) {
+                this.stderrBuffer.push(l);
+            }
+            else {
+                this.capturingPanic = false;
+            }
+        }
+    }
+
+    private consumeStderrBuffer(): string {
+        const raw = this.stderrBuffer.join("\n");
+        this.stderrBuffer = [];
+        this.capturingPanic = false;
+        return sanitizeStderr(raw).slice(0, ReportingErrorHandler.maxStderrLength);
     }
 
     error(_error: Error, _message: Message | undefined, count: number | undefined): ErrorHandlerResult | Promise<ErrorHandlerResult> {
@@ -405,8 +449,10 @@ class ReportingErrorHandler implements ErrorHandler {
             default:
                 const _: never = resultingAction;
         }
+        const lastStderr = this.consumeStderrBuffer();
         this.telemetryReporter.sendTelemetryErrorEvent("languageServer.connectionClosed", {
             resultingAction: actionString,
+            lastStderr,
         });
 
         if (resultingAction === CloseAction.DoNotRestart) {
@@ -418,4 +464,60 @@ class ReportingErrorHandler implements ErrorHandler {
 
         return { action: resultingAction };
     }
+}
+
+// Matches the server-side sanitizeStackTrace in internal/lsp/stack_sanitizer.go.
+// Strips file path prefixes that may contain PII and redacts frames outside of our module.
+const genericSecretKeywordRegex = /\b(key|token|signature|sig|pwd)([(\[.|])/gi;
+
+function sanitizeStderr(stderr: string): string {
+    if (!stderr) {
+        return "";
+    }
+    return stderr.split("\n").map(sanitizeStderrLine).join("\n");
+}
+
+function sanitizeStderrLine(line: string): string {
+    // Keep "goroutine N [status]:" headers as-is.
+    if (/^goroutine \d+/.test(line)) {
+        return line;
+    }
+    // Redact the panic message itself — assert messages may contain user data.
+    // Keep only "panic:" as a marker.
+    if (/^panic:/.test(line.trimStart())) {
+        return "panic: (REDACTED)";
+    }
+    // Keep "Server process exited" messages from vscode-languageclient.
+    if (line.includes("Server process exited")) {
+        return line;
+    }
+
+    const leadingWhitespace = line.match(/^(\s*)/)?.[1] ?? "";
+
+    // Stack frame file path lines look like: \t/full/path/to/file.go:123 +0x40
+    // Function lines look like: github.com/microsoft/typescript-go/internal/foo.Bar(...)
+    const ourModuleMarker = "typescript-go/internal";
+    const idx = line.indexOf(ourModuleMarker);
+    if (idx >= 0) {
+        let relevantPart = line.slice(idx);
+        // Strip hex offset suffixes like " +0x40"
+        relevantPart = relevantPart.replace(/ \+0x[0-9a-fA-F]+$/, "");
+        // Strip " in goroutine N" suffixes
+        relevantPart = relevantPart.replace(/ in goroutine \d+$/, "");
+        // Strip function arguments (keep parens empty)
+        relevantPart = relevantPart.replace(/\([^)]*\)$/, "()");
+        // Replace / with |> to defeat path-based secret detection
+        relevantPart = relevantPart.replace(/\//g, "|>");
+        // Defeat generic secret keyword regex
+        relevantPart = relevantPart.replace(genericSecretKeywordRegex, "$1X_X$2");
+        return leadingWhitespace + relevantPart;
+    }
+
+    // Preserve completely blank lines.
+    if (line.trim() === "") {
+        return "";
+    }
+
+    // Non-internal frames get fully redacted.
+    return leadingWhitespace + "(REDACTED)";
 }

@@ -961,24 +961,21 @@ func (s *Server) recover(req *lsproto.RequestMessage) {
 		stack := debug.Stack()
 		s.logger.Errorf("panic handling request %s: %v\n%s", req.Method, r, string(stack))
 		if req.ID != nil {
-			err := s.sendError(req.ID, fmt.Errorf("%w: panic handling request %s: %v", lsproto.ErrorCodeInternalError, req.Method, r))
-			if err != nil {
-				return
-			}
-
-			if s.telemetryEnabled {
-				_ = sendNotification(s, lsproto.TelemetryEventInfo, lsproto.TelemetryEvent{
-					RequestFailureTelemetryEvent: &lsproto.RequestFailureTelemetryEvent{
-						Properties: &lsproto.RequestFailureTelemetryProperties{
-							ErrorCode:     lsproto.ErrorCodeInternalError.String(),
-							RequestMethod: strings.ReplaceAll(string(req.Method), "/", "."),
-							Stack:         sanitizeStackTrace(string(stack)),
-						},
-					},
-				})
-			}
+			_ = s.sendError(req.ID, fmt.Errorf("%w: panic handling request %s: %v", lsproto.ErrorCodeInternalError, req.Method, r))
 		} else {
 			s.logger.Error("unhandled panic in notification", req.Method, r)
+		}
+
+		if s.telemetryEnabled {
+			_ = sendNotification(s, lsproto.TelemetryEventInfo, lsproto.TelemetryEvent{
+				RequestFailureTelemetryEvent: &lsproto.RequestFailureTelemetryEvent{
+					Properties: &lsproto.RequestFailureTelemetryProperties{
+						ErrorCode:     lsproto.ErrorCodeInternalError.String(),
+						RequestMethod: strings.ReplaceAll(string(req.Method), "/", "."),
+						Stack:         sanitizeStackTrace(string(stack)),
+					},
+				},
+			})
 		}
 	}
 }

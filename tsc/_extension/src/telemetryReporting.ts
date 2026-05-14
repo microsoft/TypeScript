@@ -81,6 +81,7 @@ export type LSConnectionError = {
 
 export type LSServerConnectionClosed = {
     resultingAction: string;
+    lastStderr: string;
 };
 
 export type LSErrorResponse = {
