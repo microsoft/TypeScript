@@ -102,11 +102,6 @@ compiler/jsFileMethodOverloads5.js.diff
 conformance/overloadTag1.js.diff
 conformance/overloadTag2.js.diff
 
-# @callback/@overload tags reordered and restructured in declaration emit
-## https://github.com/microsoft/typescript-go/issues/3556
-conformance/callbackTagNestedParameter.js.diff
-conformance/callbackTagVariadicType.js.diff
-
 # @satisfies tag handling changes: functions become const declarations
 ## https://github.com/microsoft/typescript-go/issues/3557
 conformance/checkJsdocSatisfiesTag15.js.diff
