@@ -1,0 +1,14 @@
+jsxElementTypeUnexpectedType.tsx(7,12): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+
+
+==== jsxElementTypeUnexpectedType.tsx (1 errors) ====
+    declare namespace JSX {
+      enum ElementType {}
+    }
+    
+    declare const C: () => any;
+    
+    const x = <C />;
+               ~
+!!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+    

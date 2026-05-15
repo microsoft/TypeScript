@@ -1041,7 +1041,7 @@ func (c *Checker) instantiateAliasOrInterfaceWithDefaults(managedSym *ast.Symbol
 			return c.getTypeAliasInstantiation(managedSym, args, nil)
 		}
 	}
-	if len(declaredManagedType.AsInterfaceType().TypeParameters()) >= len(typeArguments) {
+	if declaredManagedType.objectFlags&ObjectFlagsClassOrInterface != 0 && len(declaredManagedType.AsInterfaceType().TypeParameters()) >= len(typeArguments) {
 		args := c.fillMissingTypeArguments(typeArguments, declaredManagedType.AsInterfaceType().TypeParameters(), len(typeArguments), inJavaScript)
 		return c.createTypeReference(declaredManagedType, args)
 	}
