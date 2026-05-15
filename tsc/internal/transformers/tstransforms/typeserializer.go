@@ -50,7 +50,7 @@ func (s *metadataSerializer) SerializeReturnTypeOfNode(ctx metadataSerializerCon
 	return s.serializeReturnTypeOfNode(node)
 }
 
-func getSetAccessorValueParameter(node *ast.SetAccessorDeclaration) *ast.Node {
+func GetSetAccessorValueParameter(node *ast.SetAccessorDeclaration) *ast.Node {
 	if node != nil && len(node.Parameters.Nodes) > 0 {
 		if len(node.Parameters.Nodes) >= 2 && ast.IsThisParameter(node.Parameters.Nodes[0]) {
 			return node.Parameters.Nodes[1]
@@ -66,7 +66,7 @@ func getSetAccessorValueParameter(node *ast.SetAccessorDeclaration) *ast.Node {
  * @internal
  */
 func getSetAccessorTypeAnnotationNode(node *ast.SetAccessorDeclaration) *ast.Node {
-	p := getSetAccessorValueParameter(node)
+	p := GetSetAccessorValueParameter(node)
 	if p != nil && p.Type() != nil {
 		return p.Type()
 	}

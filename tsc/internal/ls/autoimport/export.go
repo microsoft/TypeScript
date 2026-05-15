@@ -3,6 +3,7 @@ package autoimport
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/checker"
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -94,16 +95,48 @@ func (e *Export) IsUnresolvedAlias() bool {
 }
 
 func SymbolToExport(symbol *ast.Symbol, ch *checker.Checker) *Export {
-	if symbol.Parent == nil || !checker.IsExternalModuleSymbol(symbol.Parent) {
+	if symbol.Parent != nil && checker.IsExternalModuleSymbol(symbol.Parent) {
+		if moduleID, moduleFileName, ok := tryGetModuleIDAndFileNameOfModuleSymbol(symbol.Parent); ok {
+			return extractFirstExport(symbol, ch, moduleID, moduleFileName, ast.GetSourceFileOfModule(symbol.Parent))
+		}
 		return nil
 	}
-	moduleID, moduleFileName := getModuleIDAndFileNameOfModuleSymbol(symbol.Parent)
-	extractor := newSymbolExtractor("", ch, nil, nil)
 
-	var exports []*Export
-	extractor.extractFromSymbol(symbol.Name, symbol, moduleID, moduleFileName, ast.GetSourceFileOfModule(symbol.Parent), &exports)
-	if len(exports) > 0 {
-		return exports[0]
+	declaration := core.FirstOrNil(symbol.Declarations)
+	if declaration == nil {
+		return nil
+	}
+
+	file := ast.GetSourceFileOfNode(declaration)
+	if file.Symbol == nil {
+		return nil
+	}
+
+	moduleSymbol := ch.GetMergedSymbol(file.Symbol)
+	moduleID := ModuleID(file.Path())
+	moduleFileName := file.FileName()
+	target := ch.GetMergedSymbol(ch.SkipAlias(symbol))
+
+	if export := tryGetModuleExport(ast.InternalSymbolNameDefault, target, moduleSymbol, ch, moduleID, moduleFileName, file); export != nil {
+		return export
+	}
+	if export := tryGetModuleExport(ast.InternalSymbolNameExportEquals, target, moduleSymbol, ch, moduleID, moduleFileName, file); export != nil {
+		return export
+	}
+	return tryGetModuleExport(symbol.Name, target, moduleSymbol, ch, moduleID, moduleFileName, file)
+}
+
+func tryGetModuleExport(exportName string, target *ast.Symbol, moduleSymbol *ast.Symbol, ch *checker.Checker, moduleID ModuleID, moduleFileName string, file *ast.SourceFile) *Export {
+	exported := ch.TryGetMemberInModuleExportsAndProperties(exportName, moduleSymbol)
+	if exported != nil && ch.GetMergedSymbol(ch.SkipAlias(exported)) == target {
+		return extractFirstExport(exported, ch, moduleID, moduleFileName, file)
 	}
 	return nil
+}
+
+func extractFirstExport(symbol *ast.Symbol, ch *checker.Checker, moduleID ModuleID, moduleFileName string, file *ast.SourceFile) *Export {
+	var exports []*Export
+	extractor := newSymbolExtractor("", ch, nil, nil)
+	extractor.extractFromSymbol(symbol.Name, symbol, moduleID, moduleFileName, file, &exports)
+	return core.FirstOrNil(exports)
 }

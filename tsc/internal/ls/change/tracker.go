@@ -74,6 +74,11 @@ type trackerEdit struct {
 	options   NodeOptions
 }
 
+type nodesInsertedAtStartState struct {
+	node       *ast.Node
+	sourceFile *ast.SourceFile
+}
+
 type Tracker struct {
 	// initialized with
 	formatSettings lsutil.FormatCodeSettings
@@ -83,8 +88,10 @@ type Tracker struct {
 	*printer.EmitContext
 
 	*ast.NodeFactory
-	changes      *collections.MultiMap[*ast.SourceFile, *trackerEdit]
-	deletedNodes []deletedNode
+
+	changes                    *collections.MultiMap[*ast.SourceFile, *trackerEdit]
+	deletedNodes               []deletedNode
+	nodesWithInsertionsAtStart map[*ast.Node]*nodesInsertedAtStartState
 
 	// created during call to getChanges
 	writer *printer.ChangeTrackerWriter
@@ -101,13 +108,14 @@ func NewTracker(ctx context.Context, compilerOptions *core.CompilerOptions, form
 	newLine := compilerOptions.NewLine.GetNewLineCharacter()
 	ctx = format.WithFormatCodeSettings(ctx, formatOptions, newLine) // !!! formatSettings in context?
 	return &Tracker{
-		EmitContext:    emitContext,
-		NodeFactory:    &emitContext.Factory.NodeFactory,
-		changes:        &collections.MultiMap[*ast.SourceFile, *trackerEdit]{},
-		ctx:            ctx,
-		converters:     converters,
-		formatSettings: formatOptions,
-		newLine:        newLine,
+		EmitContext:                emitContext,
+		NodeFactory:                &emitContext.Factory.NodeFactory,
+		changes:                    &collections.MultiMap[*ast.SourceFile, *trackerEdit]{},
+		ctx:                        ctx,
+		converters:                 converters,
+		formatSettings:             formatOptions,
+		newLine:                    newLine,
+		nodesWithInsertionsAtStart: make(map[*ast.Node]*nodesInsertedAtStartState),
 	}
 }
 
@@ -115,7 +123,7 @@ func NewTracker(ctx context.Context, compilerOptions *core.CompilerOptions, form
 // Note: after calling this, the Tracker object must be discarded!
 func (t *Tracker) GetChanges() map[string][]*lsproto.TextEdit {
 	t.finishDeleteDeclarations()
-	// !!! finishClassesWithNodesInsertedAtStart
+	t.finishNodesWithInsertionsAtStart()
 	changes := t.getTextChangesFromChanges()
 	// !!! changes for new files
 	return changes
@@ -494,6 +502,85 @@ func (t *Tracker) InsertAtTopOfFile(sourceFile *ast.SourceFile, insert []*ast.St
 	}
 }
 
+func (t *Tracker) InsertMemberAtStart(sourceFile *ast.SourceFile, node *ast.Node, newElement *ast.Node) {
+	t.insertNodeAtStartWorker(sourceFile, node, newElement)
+}
+
+func (t *Tracker) insertNodeAtStartWorker(sourceFile *ast.SourceFile, node *ast.Node, newElement *ast.Node) {
+	indentation := t.tryComputeIndentationFromExistingMembers(sourceFile, node)
+	if indentation < 0 {
+		indentation = t.tryComputeIndentationForNewMember(sourceFile, node)
+	}
+
+	members := getMembersOrProperties(node)
+	if members == nil {
+		return
+	}
+
+	t.InsertNodeAt(sourceFile, core.TextPos(members.Pos()), newElement, t.getInsertNodeAtStartInsertOptions(sourceFile, node, indentation))
+}
+
+func (t *Tracker) tryComputeIndentationForNewMember(sourceFile *ast.SourceFile, node *ast.Node) int {
+	nodeStart := astnav.GetStartOfNode(node, sourceFile, false)
+	lineStart := format.GetLineStartPositionForPosition(nodeStart, sourceFile)
+
+	tabSize := t.formatSettings.TabSize
+	if tabSize <= 0 {
+		tabSize = 4
+	}
+
+	indentSize := t.formatSettings.IndentSize
+	if indentSize <= 0 {
+		indentSize = 4
+	}
+	return max(findIndentationColumn(sourceFile.Text(), lineStart, nodeStart, tabSize), 0) + indentSize
+}
+
+func (t *Tracker) tryComputeIndentationFromExistingMembers(sourceFile *ast.SourceFile, node *ast.Node) int {
+	members := getMembersOrProperties(node)
+	if members == nil {
+		return -1
+	}
+
+	indentation := -1
+	text := sourceFile.Text()
+	tabSize := t.formatSettings.TabSize
+	last := node
+
+	if tabSize <= 0 {
+		tabSize = 4
+	}
+
+	for _, member := range members.Nodes {
+		if member == nil {
+			continue
+		}
+		if printer.RangeStartPositionsAreOnSameLine(last.Loc, member.Loc, sourceFile) {
+			return -1
+		}
+
+		memberStart := astnav.GetStartOfNode(member, sourceFile, false)
+		lineStart := format.GetLineStartPositionForPosition(memberStart, sourceFile)
+		column := findIndentationColumn(text, lineStart, memberStart, tabSize)
+		if column < 0 {
+			return -1
+		}
+
+		if indentation >= 0 {
+			if indentation != column {
+				return -1
+			}
+			last = member
+			continue
+		}
+
+		indentation = column
+		last = member
+	}
+
+	return indentation
+}
+
 func (t *Tracker) getInsertNodeAfterOptions(sourceFile *ast.SourceFile, node *ast.Node) NodeOptions {
 	newLineChar := t.newLine
 	var options NodeOptions
@@ -521,7 +608,7 @@ func (t *Tracker) getInsertNodeAfterOptions(sourceFile *ast.SourceFile, node *as
 		options = NodeOptions{Suffix: newLineChar}
 	}
 	if node.End() == sourceFile.End() && ast.IsStatement(node) {
-		options.Prefix = "\n" + options.Prefix
+		options.Prefix = t.newLine + options.Prefix
 	}
 
 	return options
@@ -556,10 +643,108 @@ func (t *Tracker) getOptionsForInsertNodeBefore(before *ast.Node, inserted *ast.
 	panic("unimplemented node type " + before.Kind.String() + " in changeTracker.getOptionsForInsertNodeBefore")
 }
 
+func (t *Tracker) getInsertNodeAtStartInsertOptions(sourceFile *ast.SourceFile, node *ast.Node, indentation int) NodeOptions {
+	state := t.nodesWithInsertionsAtStart[node]
+	hasPreviousInsertion := state != nil
+	if state == nil {
+		state = &nodesInsertedAtStartState{
+			node:       node,
+			sourceFile: sourceFile,
+		}
+		t.nodesWithInsertionsAtStart[node] = state
+	}
+
+	members := getMembersOrProperties(node)
+	isObjectLiteral := ast.IsObjectLiteralExpression(node)
+	isJSON := ast.IsJsonSourceFile(sourceFile)
+
+	hasMembers := members != nil && len(members.Nodes) > 0
+
+	insertTrailingComma := isObjectLiteral && (hasMembers || !isJSON)
+	insertLeadingComma := isObjectLiteral && isJSON && !hasMembers && hasPreviousInsertion
+
+	suffix := ""
+	if insertTrailingComma {
+		suffix = ","
+	} else if ast.IsInterfaceDeclaration(node) && !hasMembers {
+		suffix = ";"
+	}
+
+	prefix := t.newLine
+	if insertLeadingComma {
+		prefix = "," + prefix
+	}
+
+	return NodeOptions{indentation: &indentation, Prefix: prefix, Suffix: suffix}
+}
+
+func (t *Tracker) finishNodesWithInsertionsAtStart() {
+	for _, state := range t.nodesWithInsertionsAtStart {
+		if state == nil {
+			continue
+		}
+
+		openBrace := astnav.FindChildOfKind(state.node, ast.KindOpenBraceToken, state.sourceFile)
+		if openBrace == nil {
+			continue
+		}
+
+		closeBrace := astnav.FindChildOfKind(state.node, ast.KindCloseBraceToken, state.sourceFile)
+		if closeBrace == nil {
+			continue
+		}
+
+		members := getMembersOrProperties(state.node)
+		isEmpty := members == nil || len(members.Nodes) == 0
+		isSingleLine := positionsAreOnSameLine(openBrace.End(), closeBrace.End(), state.sourceFile)
+
+		if isEmpty && isSingleLine && openBrace.End() != closeBrace.End()-1 {
+			t.DeleteRange(state.sourceFile, core.NewTextRange(openBrace.End(), closeBrace.End()-1))
+		}
+
+		if isSingleLine {
+			t.InsertText(state.sourceFile, t.converters.PositionToLineAndCharacter(state.sourceFile, core.TextPos(closeBrace.End()-1)), t.newLine)
+		}
+	}
+}
+
+func getMembersOrProperties(node *ast.Node) *ast.NodeList {
+	if ast.IsObjectLiteralExpression(node) {
+		return node.PropertyList()
+	}
+	return node.MemberList()
+}
+
 func rangeContainsRangeExclusive(outer *ast.Node, inner *ast.Node) bool {
 	return outer.Pos() < inner.Pos() && inner.End() < outer.End()
 }
 
 func isSeparator(node *ast.Node, candidate *ast.Node) bool {
 	return candidate != nil && node.Parent != nil && (candidate.Kind == ast.KindCommaToken || (candidate.Kind == ast.KindSemicolonToken && node.Parent.Kind == ast.KindObjectLiteralExpression))
+}
+
+func findIndentationColumn(text string, lineStart, memberStart, tabSize int) int {
+	column := 0
+
+	for i := lineStart; i < memberStart && i < len(text); i++ {
+		ch := rune(text[i])
+
+		if stringutil.IsLineBreak(ch) {
+			return -1
+		}
+		if stringutil.IsWhiteSpaceSingleLine(ch) {
+			column = advanceIndentationColumn(column, ch, tabSize)
+			continue
+		}
+		return column
+	}
+
+	return column
+}
+
+func advanceIndentationColumn(column int, ch rune, tabSize int) int {
+	if ch == '\t' {
+		return column + tabSize - (column % tabSize)
+	}
+	return column + 1
 }

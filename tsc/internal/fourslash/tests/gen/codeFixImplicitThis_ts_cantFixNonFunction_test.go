@@ -18,5 +18,5 @@ func TestCodeFixImplicitThis_ts_cantFixNonFunction(t *testing.T) {
 this;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyCodeFixAvailable(t, []string{})
+	f.VerifyCodeFixNotAvailable(t)
 }

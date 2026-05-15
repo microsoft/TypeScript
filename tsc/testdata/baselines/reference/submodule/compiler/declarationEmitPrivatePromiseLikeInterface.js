@@ -5401,14 +5401,14 @@ export declare class Api<SecurityDataType = unknown> {
                                     };
                                 };
                                 catch<TResult_5 = never>(onrejected?: ((reason: any) => TResult_5 | PromiseLike</*elided*/ any>) | /*... 1 more elided ...*/ any | undefined): Omit</*elided*/ any> & {
-                                    /*elided*/ 
+                                    /*elided*/
                                 };
                             };
                         };
                     };
                 };
                 catch<TResult_2 = never>(onrejected?: ((reason: any) => TResult_2 | PromiseLike</*elided*/ any>) | /*... 1 more elided ...*/ any | undefined): Omit</*elided*/ any> & {
-                    /*elided*/ 
+                    /*elided*/
                 };
             };
         };
@@ -10737,14 +10737,14 @@ export declare class Api<SecurityDataType = unknown> {
                                     };
                                 };
                                 catch<TResult_5 = never>(onrejected?: ((reason: any) => TResult_5 | PromiseLike</*elided*/ any>) | /*... 1 more elided ...*/ any | undefined): Omit</*elided*/ any> & {
-                                    /*elided*/ 
+                                    /*elided*/
                                 };
                             };
                         };
                     };
                 };
                 catch<TResult_2 = never>(onrejected?: ((reason: any) => TResult_2 | PromiseLike</*elided*/ any>) | /*... 1 more elided ...*/ any | undefined): Omit</*elided*/ any> & {
-                    /*elided*/ 
+                    /*elided*/
                 };
             };
         };
@@ -16073,14 +16073,14 @@ export declare class Api<SecurityDataType = unknown> {
                                     };
                                 };
                                 catch<TResult_5 = never>(onrejected?: ((reason: any) => TResult_5 | PromiseLike</*elided*/ any>) | /*... 1 more elided ...*/ any | undefined): Omit</*elided*/ any> & {
-                                    /*elided*/ 
+                                    /*elided*/
                                 };
                             };
                         };
                     };
                 };
                 catch<TResult_2 = never>(onrejected?: ((reason: any) => TResult_2 | PromiseLike</*elided*/ any>) | /*... 1 more elided ...*/ any | undefined): Omit</*elided*/ any> & {
-                    /*elided*/ 
+                    /*elided*/
                 };
             };
         };

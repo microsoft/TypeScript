@@ -1348,7 +1348,7 @@ func (c *Checker) checkGrammarAccessor(accessor *ast.AccessorDeclaration) bool {
 			return c.grammarErrorOnNode(accessor.Name(), diagnostics.A_set_accessor_cannot_have_a_return_type_annotation)
 		}
 
-		parameterNode := getSetAccessorValueParameter(accessor)
+		parameterNode := GetSetAccessorValueParameter(accessor)
 		if parameterNode == nil {
 			panic("Return value does not match parameter count assertion.")
 		}

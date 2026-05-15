@@ -33,6 +33,7 @@ const IMPORT_UTIL = `. "github.com/microsoft/typescript-go/internal/fourslash/te
 const allowedCodeFixIds = new Set([
     "fixMissingImport",
     "fixMissingTypeAnnotationOnExports",
+    "fixClassIncorrectlyImplementsInterface",
 ]);
 
 // File name prefixes for code fix tests that are allowed even without a fixId.
@@ -42,6 +43,7 @@ const allowedCodeFixDescriptionPrefixes = [
     "Import ",
     "Add import from ",
     "Update import from ",
+    "Implement interface '",
     "Change 'import' to 'import type'",
     "Add annotation of type",
     "Add return type",
@@ -240,6 +242,42 @@ function getBadStatementText(statement: ts.Statement): string {
     return statement.getText();
 }
 
+interface VerifyAssertion {
+    name: string;
+    negated: boolean;
+}
+
+function parseVerifyAssertion(access: ts.PropertyAccessExpression): VerifyAssertion | undefined {
+    if (ts.isIdentifier(access.expression) && access.expression.text === "verify") {
+        return {
+            name: access.name.text,
+            negated: false,
+        };
+    }
+
+    if (
+        ts.isPropertyAccessExpression(access.expression) &&
+        ts.isIdentifier(access.expression.expression) &&
+        access.expression.expression.text === "verify" &&
+        access.expression.name.text === "not"
+    ) {
+        return {
+            name: access.name.text,
+            negated: true,
+        };
+    }
+
+    return undefined;
+}
+
+function isVerifyCompletionsCall(expression: ts.Expression): expression is ts.CallExpression {
+    if (!ts.isCallExpression(expression) || !ts.isPropertyAccessExpression(expression.expression)) {
+        return false;
+    }
+    const assertion = parseVerifyAssertion(expression.expression);
+    return !!assertion && !assertion.negated && assertion.name === "completions";
+}
+
 function parseFourslashStatement(statement: ts.Statement): Cmd[] {
     if (ts.isVariableStatement(statement)) {
         // variable declarations (for ranges and markers), e.g. `const range = test.ranges()[0];`
@@ -254,24 +292,27 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] {
         if (!ts.isPropertyAccessExpression(callExpression.expression)) {
             throw new Error(`Expected property access expression, got ${callExpression.expression.getText()}`);
         }
-        const namespace = callExpression.expression.expression;
-        const func = callExpression.expression.name;
-        if (!ts.isIdentifier(namespace)) {
-            switch (func.text) {
+        const accessExpression = callExpression.expression;
+        const verifyAssertion = parseVerifyAssertion(accessExpression);
+
+        if (verifyAssertion?.negated) {
+            switch (verifyAssertion.name) {
                 case "quickInfoExists":
                     return parseQuickInfoArgs("notQuickInfoExists", callExpression.arguments);
-                case "andApplyCodeAction":
-                    // verify.completions({ ... }).andApplyCodeAction(...)
-                    if (!(ts.isCallExpression(namespace) && namespace.expression.getText() === "verify.completions")) {
-                        throw new Error(`Unrecognized fourslash statement: ${getBadStatementText(statement)}`);
-                    }
-                    return parseVerifyCompletionsArgs(namespace.arguments, callExpression.arguments);
+                case "codeFixAvailable":
+                    return parseCodeFixAvailableArgs("notCodeFixAvailable", callExpression.arguments);
             }
             throw new Error(`Unrecognized fourslash statement: ${getBadStatementText(statement)}`);
         }
+
+        const expression = accessExpression.expression;
+        if (isVerifyCompletionsCall(expression) && accessExpression.name.text === "andApplyCodeAction") {
+            return parseVerifyCompletionsArgs(expression.arguments, callExpression.arguments);
+        }
+
         // `verify.(...)`
-        if (namespace.text === "verify") {
-            switch (func.text) {
+        if (verifyAssertion) {
+            switch (verifyAssertion.name) {
                 case "completions":
                     // `verify.completions(...)`
                     return parseVerifyCompletionsArgs(callExpression.arguments);
@@ -289,13 +330,13 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] {
                 case "indentationIs":
                 case "indentationAtPositionIs":
                 case "textAtCaretIs":
-                    return parseCurrentContentIsArgs(func.text, callExpression.arguments);
+                    return parseCurrentContentIsArgs(verifyAssertion.name, callExpression.arguments);
                 case "quickInfoAt":
                 case "quickInfoExists":
                 case "quickInfoIs":
                 case "quickInfos":
                     // `verify.quickInfo...(...)`
-                    return parseQuickInfoArgs(func.text, callExpression.arguments);
+                    return parseQuickInfoArgs(verifyAssertion.name, callExpression.arguments);
                 case "organizeImports":
                     // `verify.organizeImports(...)`
                     return parseOrganizeImportsArgs(callExpression.arguments);
@@ -330,11 +371,11 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] {
                     //  - `verify.baselineGoToDefinition(...)` called getDefinitionAndBoundSpan
                     //  - `verify.baselineGetDefinitionAtPosition(...)` called getDefinitionAtPosition
                     // LSP doesn't have two separate commands though.
-                    return parseBaselineGoToDefinitionArgs(func.text, callExpression.arguments);
+                    return parseBaselineGoToDefinitionArgs(verifyAssertion.name, callExpression.arguments);
                 case "baselineRename":
                 case "baselineRenameAtRangesWithText":
                     // `verify.baselineRename...(...)`
-                    return parseBaselineRenameArgs(func.text, callExpression.arguments);
+                    return parseBaselineRenameArgs(verifyAssertion.name, callExpression.arguments);
                 case "baselineInlayHints":
                     return parseBaselineInlayHints(callExpression.arguments);
                 case "baselineLinkedEditing":
@@ -343,13 +384,13 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] {
                     return parseVerifyLinkedEditing(callExpression.arguments);
                 case "renameInfoSucceeded":
                 case "renameInfoFailed":
-                    return parseRenameInfo(func.text, callExpression.arguments);
+                    return parseRenameInfo(verifyAssertion.name, callExpression.arguments);
                 case "getEditsForFileRename":
                     return parseGetEditsForFileRename(callExpression.arguments);
                 case "getSemanticDiagnostics":
                 case "getSuggestionDiagnostics":
                 case "getSyntacticDiagnostics":
-                    return parseVerifyDiagnostics(func.text, callExpression.arguments);
+                    return parseVerifyDiagnostics(verifyAssertion.name, callExpression.arguments);
                 case "baselineSyntacticDiagnostics":
                 case "baselineSyntacticAndSemanticDiagnostics":
                     return [{ kind: "verifyBaselineDiagnostics" }];
@@ -381,7 +422,9 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] {
                 case "codeFix":
                     return parseCodeFixArgs(callExpression.arguments);
                 case "codeFixAvailable":
-                    return parseCodeFixAvailableArgs(callExpression.arguments);
+                    return parseCodeFixAvailableArgs(verifyAssertion.name, callExpression.arguments);
+                case "rangeAfterCodeFix":
+                    return parseRangeAfterCodeFixArgs(callExpression.arguments);
                 case "codeFixAll":
                     return parseCodeFixAllArgs(callExpression.arguments);
                 case "semanticClassificationsAre":
@@ -390,17 +433,21 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] {
                     return [];
             }
         }
+
+        if (!ts.isIdentifier(expression)) {
+            throw new Error(`Unrecognized fourslash statement: ${getBadStatementText(statement)}`);
+        }
         // `goTo....`
-        if (namespace.text === "goTo") {
-            return parseGoToArgs(callExpression.arguments, func.text);
+        if (expression.text === "goTo") {
+            return parseGoToArgs(callExpression.arguments, accessExpression.name.text);
         }
         // `edit....`
-        if (namespace.text === "edit") {
-            const result = parseEditStatement(func.text, callExpression.arguments);
+        if (expression.text === "edit") {
+            const result = parseEditStatement(accessExpression.name.text, callExpression.arguments);
             return [result];
         }
-        if (namespace.text === "format") {
-            return parseFormatStatement(func.text, callExpression.arguments);
+        if (expression.text === "format") {
+            return parseFormatStatement(accessExpression.name.text, callExpression.arguments);
         }
         // !!! other fourslash commands
     }
@@ -1834,9 +1881,11 @@ function parseCodeFixArgs(args: readonly ts.Expression[]): [VerifyCodeFixCmd] {
 
     const sourceFile = args[0].getSourceFile();
     let description = "";
-    let newFileContent = "";
+    let newFileContent: string | undefined;
+    let newRangeContent: string | undefined;
     let index = 0;
     let applyChanges = false;
+    let preferences = "nil /*preferences*/";
 
     for (const prop of obj.properties) {
         const name = getPropertyName(prop);
@@ -1860,6 +1909,11 @@ function parseCodeFixArgs(args: readonly ts.Expression[]): [VerifyCodeFixCmd] {
                 if (str) newFileContent = str.text;
                 break;
             }
+            case "newRangeContent": {
+                const str = getStringLiteralLike(prop.initializer);
+                if (str) newRangeContent = str.text;
+                break;
+            }
             case "index": {
                 const num = getNumericLiteral(prop.initializer);
                 if (num) index = parseInt(num.text);
@@ -1871,6 +1925,14 @@ function parseCodeFixArgs(args: readonly ts.Expression[]): [VerifyCodeFixCmd] {
                 }
                 break;
             }
+            case "preferences": {
+                const prefs = getObjectLiteralExpression(prop.initializer);
+                if (!prefs) {
+                    throw new Error(`Expected object literal for preferences in verify.codeFix, got ${prop.initializer.getText()}`);
+                }
+                preferences = parseUserPreferences(prefs);
+                break;
+            }
         }
     }
 
@@ -1878,46 +1940,118 @@ function parseCodeFixArgs(args: readonly ts.Expression[]): [VerifyCodeFixCmd] {
         kind: "verifyCodeFix",
         description,
         newFileContent,
+        newRangeContent,
         index,
         applyChanges,
+        preferences,
     }];
 }
 
-function parseCodeFixAvailableArgs(args: readonly ts.Expression[]): [VerifyCodeFixAvailableCmd] {
-    const descriptions: string[] = [];
-    let expectNone = false;
+function parseCodeFixAvailableArgs(funcName: string, args: readonly ts.Expression[]): [VerifyCodeFixAvailableCmd] {
+    switch (funcName) {
+        case "codeFixAvailable": {
+            const descriptions: string[] = [];
+            let expectNone = false;
 
-    if (args.length === 1) {
-        const sourceFile = args[0].getSourceFile();
-        const arrayArg = getArrayLiteralExpression(args[0]);
-        if (arrayArg) {
-            if (arrayArg.elements.length === 0) {
-                expectNone = true;
-            }
-            for (const elem of arrayArg.elements) {
-                const obj = getObjectLiteralExpression(elem);
-                if (obj) {
-                    for (const prop of obj.properties) {
-                        if (getPropertyName(prop) === "description") {
-                            let resolved: string | undefined;
-                            if (ts.isPropertyAssignment(prop)) {
-                                resolved = resolveDescriptionExpression(prop.initializer, sourceFile);
+            if (args.length === 1) {
+                const sourceFile = args[0].getSourceFile();
+                const arrayArg = getArrayLiteralExpression(args[0]);
+                if (arrayArg) {
+                    if (arrayArg.elements.length === 0) {
+                        expectNone = true;
+                    }
+                    for (const elem of arrayArg.elements) {
+                        const obj = getObjectLiteralExpression(elem);
+                        if (obj) {
+                            for (const prop of obj.properties) {
+                                if (getPropertyName(prop) === "description") {
+                                    let resolved: string | undefined;
+                                    if (ts.isPropertyAssignment(prop)) {
+                                        resolved = resolveDescriptionExpression(prop.initializer, sourceFile);
+                                    }
+                                    else if (ts.isShorthandPropertyAssignment(prop)) {
+                                        resolved = resolveDescriptionExpression(prop.name, sourceFile);
+                                    }
+                                    if (resolved) {
+                                        descriptions.push(resolved);
+                                    }
+                                }
                             }
-                            else if (ts.isShorthandPropertyAssignment(prop)) {
-                                resolved = resolveDescriptionExpression(prop.name, sourceFile);
-                            }
-                            if (resolved) descriptions.push(resolved);
                         }
                     }
                 }
             }
+            return [{
+                kind: "verifyCodeFixAvailable",
+                descriptions,
+                unavailableDescriptions: [],
+                expectNone,
+            }];
         }
+        case "notCodeFixAvailable":
+            if (args.length === 0) {
+                return [{
+                    kind: "verifyCodeFixAvailable",
+                    descriptions: [],
+                    unavailableDescriptions: [],
+                    expectNone: true,
+                }];
+            }
+            if (args.length === 1) {
+                const [descriptionExpression] = args;
+                const description = resolveDescriptionExpression(descriptionExpression, descriptionExpression.getSourceFile());
+                if (!description) {
+                    throw new Error(`Unsupported argument in verify.not.codeFixAvailable: ${descriptionExpression.getText()}`);
+                }
+                return [{
+                    kind: "verifyCodeFixAvailable",
+                    descriptions: [],
+                    unavailableDescriptions: [description],
+                    expectNone: false,
+                }];
+            }
+            throw new Error(`Expected 0 or 1 arguments in verify.not.codeFixAvailable, got ${args.map(arg => arg.getText()).join(", ")}`);
+        default:
+            throw new Error(`Unrecognized codeFixAvailable function: ${funcName}`);
+    }
+}
+
+function parseRangeAfterCodeFixArgs(args: readonly ts.Expression[]): [VerifyRangeAfterCodeFixCmd] {
+    const [expectedTextArg, includeWhiteSpaceArg, errorCodeArg, indexArg] = args;
+    const expectedText = expectedTextArg && getStringLiteralLike(expectedTextArg);
+    if (!expectedText) {
+        throw new Error(`Expected string literal argument in verify.rangeAfterCodeFix, got ${expectedTextArg?.getText()}`);
+    }
+
+    let includeWhiteSpace = false;
+    if (includeWhiteSpaceArg !== undefined && includeWhiteSpaceArg.kind !== ts.SyntaxKind.UndefinedKeyword) {
+        includeWhiteSpace = includeWhiteSpaceArg.kind === ts.SyntaxKind.TrueKeyword;
+    }
+
+    let errorCode = 0;
+    if (errorCodeArg !== undefined && errorCodeArg.kind !== ts.SyntaxKind.UndefinedKeyword) {
+        const parsedErrorCode = getNumericLiteral(errorCodeArg);
+        if (!parsedErrorCode) {
+            throw new Error(`Expected numeric literal errorCode in verify.rangeAfterCodeFix, got ${errorCodeArg.getText()}`);
+        }
+        errorCode = parseInt(parsedErrorCode.text);
+    }
+
+    let index = 0;
+    if (indexArg !== undefined && indexArg.kind !== ts.SyntaxKind.UndefinedKeyword) {
+        const parsedIndex = getNumericLiteral(indexArg);
+        if (!parsedIndex) {
+            throw new Error(`Expected numeric literal index in verify.rangeAfterCodeFix, got ${indexArg.getText()}`);
+        }
+        index = parseInt(parsedIndex.text);
     }
 
     return [{
-        kind: "verifyCodeFixAvailable",
-        descriptions,
-        expectNone,
+        kind: "verifyRangeAfterCodeFix",
+        expectedText: expectedText.text,
+        includeWhiteSpace,
+        errorCode,
+        index,
     }];
 }
 
@@ -3669,15 +3803,26 @@ interface VerifyErrorExistsBeforeMarkerCmd {
 interface VerifyCodeFixCmd {
     kind: "verifyCodeFix";
     description: string;
-    newFileContent: string;
+    newFileContent?: string;
+    newRangeContent?: string;
     index: number;
     applyChanges: boolean;
+    preferences: string;
 }
 
 interface VerifyCodeFixAvailableCmd {
     kind: "verifyCodeFixAvailable";
     descriptions: string[];
+    unavailableDescriptions: string[];
     expectNone: boolean;
+}
+
+interface VerifyRangeAfterCodeFixCmd {
+    kind: "verifyRangeAfterCodeFix";
+    expectedText: string;
+    includeWhiteSpace: boolean;
+    errorCode: number;
+    index: number;
 }
 
 interface VerifyCodeFixAllCmd {
@@ -3736,6 +3881,7 @@ type Cmd =
     | VerifyErrorExistsBeforeMarkerCmd
     | VerifyCodeFixCmd
     | VerifyCodeFixAvailableCmd
+    | VerifyRangeAfterCodeFixCmd
     | VerifyCodeFixAllCmd;
 
 function generateVerifyOutliningSpans({ foldingRangeKind }: VerifyOutliningSpansCmd): string {
@@ -4113,20 +4259,32 @@ function generateCmd(cmd: Cmd, imports: Set<string>): string {
         case "verifyCodeFix":
             return `f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
 	Description: ${getGoStringLiteral(cmd.description)},
-	NewFileContent: ${getGoMultiLineStringLiteral(cmd.newFileContent)},
+${
+                cmd.newRangeContent !== undefined
+                    ? `\tNewRangeContent: ${getGoMultiLineStringLiteral(cmd.newRangeContent)},`
+                    : `\tNewFileContent: ${getGoMultiLineStringLiteral(cmd.newFileContent ?? "")},`
+            }
 	Index: ${cmd.index},${
                 cmd.applyChanges ? `
 	ApplyChanges: true,` : ``
+            }${
+                cmd.preferences !== "nil /*preferences*/" ? `
+	UserPreferences: ${cmd.preferences},` : ``
             }
 })`;
         case "verifyCodeFixAvailable":
+            if (cmd.unavailableDescriptions.length > 0) {
+                return `f.VerifyCodeFixNotAvailable(t, ${cmd.unavailableDescriptions.map(d => getGoStringLiteral(d)).join(", ")})`;
+            }
             if (cmd.expectNone) {
-                return `f.VerifyCodeFixAvailable(t, []string{})`;
+                return `f.VerifyCodeFixNotAvailable(t)`;
             }
             if (cmd.descriptions.length === 0) {
                 return `f.VerifyCodeFixAvailable(t, nil)`;
             }
             return `f.VerifyCodeFixAvailable(t, []string{${cmd.descriptions.map(d => getGoStringLiteral(d)).join(", ")}})`;
+        case "verifyRangeAfterCodeFix":
+            return `f.VerifyRangeAfterCodeFix(t, ${getGoMultiLineStringLiteral(cmd.expectedText)}, ${cmd.includeWhiteSpace}, ${cmd.errorCode}, ${cmd.index})`;
         case "verifyCodeFixAll":
             return `f.VerifyCodeFixAll(t, fourslash.VerifyCodeFixAllOptions{
 	FixID: ${getGoStringLiteral(cmd.fixId)},
@@ -4257,6 +4415,24 @@ function resolveDescriptionExpression(expr: ts.Expression, sourceFile: ts.Source
     // String literal
     const str = getStringLiteralLike(expr);
     if (str) return str.text;
+
+    // [ts.Diagnostics.Foo.message, "arg0", "arg1", ...]
+    if (ts.isArrayLiteralExpression(expr) && expr.elements.length > 0) {
+        const [diagnostic] = expr.elements;
+        const template = resolveDescriptionExpression(diagnostic, sourceFile);
+        if (template) {
+            let message = template;
+            for (let i = 1; i < expr.elements.length; i++) {
+                const arg = resolveDescriptionExpression(expr.elements[i], sourceFile);
+                if (arg === undefined) {
+                    return undefined;
+                }
+                message = message.replaceAll(`{${i - 1}}`, arg);
+            }
+            return message;
+        }
+        return undefined;
+    }
 
     // ts.Diagnostics.Foo_bar.message
     if (ts.isPropertyAccessExpression(expr) && expr.name.text === "message") {

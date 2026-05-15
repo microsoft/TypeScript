@@ -99682,7 +99682,7 @@ export declare const c: {
         zy: "fq.zy";
         zz: "fq.zz";
     };
-    /*... 527 more elided ...*/ fr: {
+    fr: {
         aa: "fr.aa";
         ab: "fr.ab";
         ac: "fr.ac";
@@ -100237,10 +100237,10 @@ export declare const c: {
         vf: "fr.vf";
         vg: "fr.vg";
         vh: "fr.vh";
-        /*... 120 more elided ...*/ vi: "fr.vi";
+        vi: "fr.vi"; /*... 120 more elided ...*/
         zz: "fr.zz";
-    };
+    }; /*... 527 more elided ...*/
     zz: {
-        /*elided*/ 
+        /*elided*/
     };
 };

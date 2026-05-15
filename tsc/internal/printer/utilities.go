@@ -335,7 +335,7 @@ func RangeIsOnSingleLine(r core.TextRange, sourceFile *ast.SourceFile) bool {
 	return rangeStartIsOnSameLineAsRangeEnd(r, r, sourceFile)
 }
 
-func rangeStartPositionsAreOnSameLine(range1 core.TextRange, range2 core.TextRange, sourceFile *ast.SourceFile) bool {
+func RangeStartPositionsAreOnSameLine(range1 core.TextRange, range2 core.TextRange, sourceFile *ast.SourceFile) bool {
 	return PositionsAreOnSameLine(
 		getStartPositionOfRange(range1, sourceFile, false /*includeComments*/),
 		getStartPositionOfRange(range2, sourceFile, false /*includeComments*/),

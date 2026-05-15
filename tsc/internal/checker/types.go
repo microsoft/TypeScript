@@ -1302,6 +1302,10 @@ func (s *Signature) HasRestParameter() bool {
 	return s.flags&SignatureFlagsHasRestParameter != 0
 }
 
+func (s *Signature) MinArgumentCount() int {
+	return int(s.minArgumentCount)
+}
+
 type CompositeSignature struct {
 	isUnion    bool         // True for union, false for intersection
 	signatures []*Signature // Individual signatures
