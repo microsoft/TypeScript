@@ -16,11 +16,11 @@ func TestNavto_excludeLib1(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @filename: /index.ts
 import { weirdName as otherName } from "bar";
-const [|weirdName: number = 1|];
+const [|weirdName|]: number = 1;
 // @filename: /tsconfig.json
 {}
 // @filename: /node_modules/bar/index.d.ts
-export const [|weirdName: number|];
+export const [|weirdName|];
 // @filename: /node_modules/bar/package.json
 {}`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

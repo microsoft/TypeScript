@@ -15,14 +15,14 @@ func TestNavigationItemsSpecialPropertyAssignment(t *testing.T) {
 	const content = `// @noLib: true
 // @allowJs: true
 // @Filename: /a.js
-[|exports.x = 0|];
-[|exports.z = function() {}|];
+exports.[|x|] = 0;
+exports.[|z|] = function() {};
 function Cls() {
-    [|this.instanceProp = 0|];
+    this.[|instanceProp|] = 0;
 }
-[|Cls.staticMethod = function() {}|];
-[|Cls.staticProperty = 0|];
-[|Cls.prototype.instanceMethod = function() {}|];`
+Cls.[|staticMethod|] = function() {};
+Cls.[|staticProperty|] = 0;
+Cls.prototype.[|instanceMethod|] = function() {};`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{

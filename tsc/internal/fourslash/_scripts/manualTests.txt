@@ -88,6 +88,9 @@ linkedEditingJsxTag5
 linkedEditingJsxTag6
 linkedEditingJsxTag7
 linkedEditingJsxTag9
+navigateItemsLet
+navigateToImport
+navigateToSymbolIterator
 navigationBarFunctionPrototype
 navigationBarFunctionPrototype2
 navigationBarFunctionPrototype3
@@ -97,9 +100,13 @@ navigationBarFunctionPrototypeInterlaced
 navigationBarFunctionPrototypeNested
 navigationBarJsDoc
 navigationItemsExactMatch2
+navigationItemsInConstructorsExactMatch
+navigationItemsPrefixMatch2
 navigationItemsSpecialPropertyAssignment
+navto_emptyPattern
 navto_excludeLib1
 navto_excludeLib2
+navto_excludeLib3
 navto_excludeLib4
 navto_serverExcludeLib
 nodeModulesImportCompletions1

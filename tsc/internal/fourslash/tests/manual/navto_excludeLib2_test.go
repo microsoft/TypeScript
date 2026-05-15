@@ -15,7 +15,7 @@ func TestNavto_excludeLib2(t *testing.T) {
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @filename: /index.ts
-import { [|someName as weirdName|] } from "bar";
+import { someName as [|weirdName|] } from "bar";
 // @filename: /tsconfig.json
 {}
 // @filename: /node_modules/bar/index.d.ts

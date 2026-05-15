@@ -22,7 +22,7 @@ func TestWorkspaceSymbolMultiProjectNonExistentRef(t *testing.T) {
 }
 
 // @Filename: /home/src/projects/project-a/index.ts
-export const [|myValueA: number = 1|];
+export const [|myValueA|]: number = 1;
 
 // @Filename: /home/src/projects/project-b/tsconfig.json
 {
@@ -31,7 +31,7 @@ export const [|myValueA: number = 1|];
 }
 
 // @Filename: /home/src/projects/project-b/index.ts
-export const [|myValueB: string = "hello"|];
+export const [|myValueB|]: string = "hello";
 `
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

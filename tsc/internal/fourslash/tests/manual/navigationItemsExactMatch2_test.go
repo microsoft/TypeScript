@@ -13,21 +13,21 @@ func TestNavigationItemsExactMatch2(t *testing.T) {
 
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `module Shapes {
-    [|class Point {
-        [|private _origin = 0.0;|]
-        [|private distanceFromA = 0.0;|]
+    class [|Point|] {
+        private [|_origin|] = 0.0;
+        private [|distanceFromA|] = 0.0;
 
-        [|get distance1(distanceParam): number {
+        get [|distance1|](distanceParam): number {
             var [|distanceLocal|];
             return 0;
-        }|]
-    }|]
+        }
+    }
 }
 
-var [|point = new Shapes.Point()|];
-[|function distance2(distanceParam1): void {
+var [|point|] = new Shapes.Point();
+function [|distance2|](distanceParam1): void {
     var [|distanceLocal1|];
-}|]`
+}`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{

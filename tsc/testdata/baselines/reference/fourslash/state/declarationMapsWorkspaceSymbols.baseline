@@ -144,24 +144,24 @@ Config::
 
 // === workspaceSymbol ===
 // === /a/a.ts ===
-// [|{| name: fnA, kind: Function |}export function fnA() {}|]
+// export function [|{| name: fnA, kind: Function |}fnA|]() {}
 // export interface IfaceA {}
 // export const instanceA: IfaceA = {};
 
 // === /b/b.ts ===
-// [|{| name: fnB, kind: Function |}export function fnB() {}|]
+// export function [|{| name: fnB, kind: Function |}fnB|]() {}
 
 // === /b/c.ts ===
-// [|{| name: fnC, kind: Function |}export function fnC() {}|]
+// export function [|{| name: fnC, kind: Function |}fnC|]() {}
 
 // === /user/user.ts ===
 // import * as a from "../a/a";
 // import * as b from "../b/b";
-// [|{| name: fnUser, kind: Function |}export function fnUser() {
+// export function [|{| name: fnUser, kind: Function |}fnUser|]() {
 // 	a.fnA();
 // 	b.fnB();
 // 	a.instanceA;
-// }|]
+// }
 {
   "method": "textDocument/didClose",
   "params": {
