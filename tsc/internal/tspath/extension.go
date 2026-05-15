@@ -1,7 +1,6 @@
 package tspath
 
 import (
-	"path/filepath"
 	"slices"
 	"strings"
 )
@@ -50,8 +49,8 @@ func RemoveFileExtension(path string) string {
 			return path[:len(path)-len(ext)]
 		}
 	}
-	// Otherwise just remove single dot extension, if any
-	return path[:len(path)-len(filepath.Ext(path))] //nolint:forbidigo
+
+	return path
 }
 
 func TryGetExtensionFromPath(p string) string {
