@@ -87,6 +87,22 @@ func TestCommandLineParseResult(t *testing.T) {
 	}
 }
 
+func TestParseCommandLineTypeRootsRelativePath(t *testing.T) {
+	t.Parallel()
+
+	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		"/home/project/bug.ts": `let x = 1;`,
+	}, "/home/project", true)
+
+	cmdLine := tsoptions.ParseCommandLine([]string{"--typeRoots", "t", "bug.ts"}, host)
+
+	typeRoots := cmdLine.CompilerOptions().TypeRoots
+	assert.Assert(t, typeRoots != nil, "typeRoots should not be nil")
+	assert.Equal(t, len(typeRoots), 1)
+	assert.Assert(t, tspath.IsRootedDiskPath(typeRoots[0]), "typeRoots entry should be an absolute path, got: %s", typeRoots[0])
+	assert.Assert(t, strings.HasSuffix(typeRoots[0], "/t"), "typeRoots entry should end with '/t', got: %s", typeRoots[0])
+}
+
 func TestCustomConditionsNullOverride(t *testing.T) {
 	t.Parallel()
 

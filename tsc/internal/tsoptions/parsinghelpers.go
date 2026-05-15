@@ -642,6 +642,14 @@ func ConvertOptionToAbsolutePath(o string, v any, optionMap CommandLineOptionNam
 					return tspath.GetNormalizedAbsolutePath(item, cwd)
 				}), true
 			}
+			if arr, ok := v.([]any); ok {
+				return core.Map(arr, func(item any) any {
+					if s, isStr := item.(string); isStr {
+						return tspath.GetNormalizedAbsolutePath(s, cwd)
+					}
+					return item
+				}), true
+			}
 		}
 	} else if option.IsFilePath {
 		if value, ok := v.(string); ok {
