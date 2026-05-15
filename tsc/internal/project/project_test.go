@@ -326,6 +326,10 @@ func TestPushDiagnostics(t *testing.T) {
 		// Request semantic diagnostics to trigger checking, which triggers the global type resolvers.
 		ls, err := session.GetLanguageService(projecttestutil.WithRequestID(context.Background()), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
+		// Drain background tasks from DidOpenFile (publishProgramDiagnostics, etc.)
+		// before triggering global diagnostics, to avoid racing with publishGlobalDiagnostics.
+		session.WaitForBackgroundTasks()
+
 		_, err = ls.ProvideDiagnostics(projecttestutil.WithRequestID(context.Background()), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
 		// Enqueue global diagnostics publishing (normally done by the LSP server after each request).
