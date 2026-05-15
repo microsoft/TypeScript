@@ -367,12 +367,14 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 		}
 
 		if events.saved {
-			if o == nil {
-				panic("overlay not found for saved file: " + uri)
+			if o != nil {
+				o = newOverlay(o.FileName(), o.Content(), o.Version(), o.kind)
+				o.matchesDiskText = true
+				newOverlays[path] = o
+			} else if !events.watchChanged {
+				// File was saved but never opened via didOpen; treat as a disk change.
+				result.Changed.Add(uri)
 			}
-			o = newOverlay(o.FileName(), o.Content(), o.Version(), o.kind)
-			o.matchesDiskText = true
-			newOverlays[path] = o
 		}
 
 		if events.created && o == nil {

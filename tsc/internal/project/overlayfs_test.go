@@ -197,6 +197,23 @@ func TestProcessChanges(t *testing.T) {
 		assert.Assert(t, !fs.getFile(testURI1.FileName()).MatchesDiskText())
 	})
 
+	t.Run("save without overlay should not panic", func(t *testing.T) {
+		t.Parallel()
+		fs := createOverlayFS()
+
+		// Save a file that was never opened (no overlay exists).
+		// This can happen when an editor sends didSave for a file
+		// that is not managed by the LSP server (e.g., package.json).
+		result, _ := fs.processChanges([]FileChange{
+			{
+				Kind: FileChangeKindSave,
+				URI:  testURI1,
+			},
+		})
+		// Should be treated as a disk change
+		assert.Assert(t, result.Changed.Has(testURI1))
+	})
+
 	t.Run("close then open in same batch marks as changed", func(t *testing.T) {
 		t.Parallel()
 		fs := createOverlayFS()
