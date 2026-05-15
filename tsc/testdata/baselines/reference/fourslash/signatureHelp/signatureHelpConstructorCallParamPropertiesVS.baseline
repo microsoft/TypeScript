@@ -1,0 +1,97 @@
+// === SignatureHelp ===
+=== /signatureHelpConstructorCallParamPropertiesVS.ts ===
+// class Circle {
+//     /**
+//       * Initialize a circle.
+//       * @param  radius The radius of the circle.
+//       */
+//     constructor(private radius: number) {
+//     }
+// }
+// var a = new Circle(
+//                    ^
+// | ----------------------------------------------------------------------
+// | Circle(**radius: number**): Circle
+// | - `radius: number`: The radius of the circle.
+
+// | Initialize a circle.
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 179,
+      "LSPosition": {
+        "line": 8,
+        "character": 19
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Circle(radius: number): Circle",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Initialize a circle."
+          },
+          "parameters": [
+            {
+              "label": "radius: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The radius of the circle.\n"
+              }
+            }
+          ],
+          "activeParameter": 0,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "class name",
+                "Text": "Circle"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "radius"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "Circle"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

@@ -464,6 +464,45 @@ const customStructures: Structure[] = [
         ],
         documentation: "Parameters for the custom/textDocument/multiDocumentHighlight request.",
     },
+    {
+        name: "ClassifiedTextRun",
+        properties: [
+            {
+                name: "ClassificationTypeName",
+                type: { kind: "base", name: "string" },
+                documentation: "The classification type name (e.g. 'keyword', 'class name', 'parameter name').",
+            },
+            {
+                name: "Text",
+                type: { kind: "base", name: "string" },
+                documentation: "The text content of this run.",
+            },
+            {
+                name: "MarkerTagType",
+                type: { kind: "base", name: "string" },
+                optional: true,
+                documentation: "Optional marker tag type.",
+            },
+            {
+                name: "Style",
+                type: { kind: "base", name: "integer" },
+                omitzeroValue: true,
+                documentation: "The style of this text run.",
+            },
+        ],
+        documentation: "A classified text run with text and classification type, used for colorized display in VS.",
+    },
+    {
+        name: "ClassifiedTextElement",
+        properties: [
+            {
+                name: "Runs",
+                type: { kind: "array", element: { kind: "reference", name: "ClassifiedTextRun" } },
+                documentation: "The classified text runs that make up this element.",
+            },
+        ],
+        documentation: "A classified text element containing an array of classified text runs, used for colorized labels in VS.",
+    },
 ];
 
 const customEnumerations: Enumeration[] = [
@@ -514,9 +553,33 @@ const customEnumerations: Enumeration[] = [
             { name: "NotAllowed", value: 4, documentation: "Import cannot be marked type-only." },
         ],
     },
+    {
+        name: "ClassificationTypeName",
+        type: { kind: "base", name: "string" },
+        values: [
+            { name: "Keyword", value: "keyword", documentation: "Language keyword (e.g., function, const, class)." },
+            { name: "Punctuation", value: "punctuation", documentation: "Punctuation characters (e.g., parentheses, commas, semicolons)." },
+            { name: "Operator", value: "operator", documentation: "Operators (e.g., =, +, ?)." },
+            { name: "WhiteSpace", value: "whitespace", documentation: "Whitespace including spaces and line breaks." },
+            { name: "Text", value: "text", documentation: "Plain text with no special classification." },
+            { name: "String", value: "string", documentation: "String and literal values." },
+            { name: "Number", value: "number", documentation: "Numeric literal values." },
+            { name: "Comment", value: "comment", documentation: "Comment text." },
+            { name: "ClassName", value: "class name", documentation: "Class names." },
+            { name: "InterfaceName", value: "interface name", documentation: "Interface names." },
+            { name: "EnumName", value: "enum name", documentation: "Enum names." },
+            { name: "ModuleName", value: "module name", documentation: "Module/namespace names." },
+            { name: "MethodName", value: "method name", documentation: "Method and function names." },
+            { name: "ParameterName", value: "parameter name", documentation: "Parameter names." },
+            { name: "PropertyName", value: "property name", documentation: "Property and accessor names." },
+            { name: "FieldName", value: "field name", documentation: "Field names (e.g., enum members)." },
+            { name: "LocalName", value: "local name", documentation: "Local variable names." },
+            { name: "TypeParameterName", value: "type parameter name", documentation: "Type parameter names." },
+            { name: "Identifier", value: "identifier", documentation: "General identifiers (e.g., type aliases, imports)." },
+        ],
+        documentation: "Roslyn classification type names used by VS for syntax coloring in tooltips and other UI elements.",
+    },
 ];
-
-// Custom requests to add to the model (tsgo-specific)
 const customRequests: Request[] = [
     {
         method: "custom/runGC",
@@ -785,6 +848,16 @@ function patchAndPreprocessModel() {
                 type: { kind: "base", name: "boolean" },
                 optional: true,
                 documentation: "The client supports the `verbosityLevel` property on `HoverParams` and `canIncreaseVerbosity` on `Hover`.",
+            });
+        }
+
+        // Patch SignatureInformation to add VS-specific colorized label
+        if (structure.name === "SignatureInformation") {
+            structure.properties.push({
+                name: "_vs_colorizedLabel",
+                type: { kind: "reference", name: "ClassifiedTextElement" },
+                optional: true,
+                documentation: "A colorized label for the signature, providing classified text runs for VS syntax coloring.",
             });
         }
 

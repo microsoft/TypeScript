@@ -1,0 +1,497 @@
+// === SignatureHelp ===
+=== /jsdocCallbackTag.js ===
+// /**
+//  * @callback FooHandler - A kind of magic
+//  * @param {string} eventName - So many words
+//  * @param eventName2 {number | string} - Silence is golden
+//  * @param eventName3 - Osterreich mos def
+//  * @return {number} - DIVEKICK
+//  */
+// /**
+//  * @type {FooHandler} callback
+//  */
+// var t;
+// 
+// /**
+//  * @callback FooHandler2 - What, another one?
+//  * @param {string=} eventName - it keeps happening
+//  * @param {string} [eventName2] - i WARNED you dog
+//  */
+// /**
+//  * @type {FooHandler2} callback
+//  */
+// var t2;
+// t("!", 12, false);
+//   ^
+// | ----------------------------------------------------------------------
+// | t(**eventName: string**, eventName2: number | string, eventName3: any): number
+// | - `eventName: string`: - So many words
+
+// | ----------------------------------------------------------------------
+//        ^
+// | ----------------------------------------------------------------------
+// | t(eventName: string, **eventName2: number | string**, eventName3: any): number
+// | - `eventName2: number | string`: - Silence is golden
+
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | t(eventName: string, eventName2: number | string, **eventName3: any**): number
+// | - `eventName3: any`: - Osterreich mos def
+
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 480,
+      "LSPosition": {
+        "line": 21,
+        "character": 2
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "t(eventName: string, eventName2: number | string, eventName3: any): number",
+          "parameters": [
+            {
+              "label": "eventName: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- So many words\n"
+              }
+            },
+            {
+              "label": "eventName2: number | string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- Silence is golden\n"
+              }
+            },
+            {
+              "label": "eventName3: any",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- Osterreich mos def\n"
+              }
+            }
+          ],
+          "activeParameter": 0,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "local name",
+                "Text": "t"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "eventName"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "eventName2"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "|"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "eventName3"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 485,
+      "LSPosition": {
+        "line": 21,
+        "character": 7
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "t(eventName: string, eventName2: number | string, eventName3: any): number",
+          "parameters": [
+            {
+              "label": "eventName: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- So many words\n"
+              }
+            },
+            {
+              "label": "eventName2: number | string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- Silence is golden\n"
+              }
+            },
+            {
+              "label": "eventName3: any",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- Osterreich mos def\n"
+              }
+            }
+          ],
+          "activeParameter": 1,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "local name",
+                "Text": "t"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "eventName"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "eventName2"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "|"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "eventName3"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 489,
+      "LSPosition": {
+        "line": 21,
+        "character": 11
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "t(eventName: string, eventName2: number | string, eventName3: any): number",
+          "parameters": [
+            {
+              "label": "eventName: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- So many words\n"
+              }
+            },
+            {
+              "label": "eventName2: number | string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- Silence is golden\n"
+              }
+            },
+            {
+              "label": "eventName3: any",
+              "documentation": {
+                "kind": "markdown",
+                "value": "- Osterreich mos def\n"
+              }
+            }
+          ],
+          "activeParameter": 2,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "local name",
+                "Text": "t"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "eventName"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "eventName2"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "|"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "eventName3"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

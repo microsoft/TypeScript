@@ -1,0 +1,107 @@
+// === SignatureHelp ===
+=== /signatureHelpAnonymousTypeVS.ts ===
+// const comparers: Array<(a: any, b: any) => boolean> = [];
+// 
+// comparers.push((a, b) => true);
+//                   ^
+// | ----------------------------------------------------------------------
+// | þtype(a: any, **b: any**): boolean
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 77,
+      "LSPosition": {
+        "line": 2,
+        "character": 18
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "ï¿½type(a: any, b: any): boolean",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            }
+          ],
+          "activeParameter": 1,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "text",
+                "Text": "ï¿½type"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "b"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "boolean"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

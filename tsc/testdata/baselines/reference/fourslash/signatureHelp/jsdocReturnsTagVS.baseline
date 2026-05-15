@@ -1,0 +1,127 @@
+// === SignatureHelp ===
+=== /dummy.js ===
+// /**
+//  * Find an item
+//  * @template T
+//  * @param {T[]} l
+//  * @param {T} x
+//  * @returns {?T}  The names of the found item(s).
+//  */
+// function find(l, x) {
+// }
+// find('');
+//        ^
+// | ----------------------------------------------------------------------
+// | find(**l: any[]**, x: any): any
+// | Find an item
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 154,
+      "LSPosition": {
+        "line": 9,
+        "character": 7
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "find(l: any[], x: any): any",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Find an item"
+          },
+          "parameters": [
+            {
+              "label": "l: any[]"
+            },
+            {
+              "label": "x: any"
+            }
+          ],
+          "activeParameter": 0,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "find"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "l"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "["
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "]"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "x"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

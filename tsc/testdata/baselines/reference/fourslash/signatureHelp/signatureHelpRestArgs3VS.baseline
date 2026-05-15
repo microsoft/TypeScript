@@ -1,0 +1,706 @@
+// === SignatureHelp ===
+=== /signatureHelpRestArgs3VS.ts ===
+// const layers = Object.assign({}, ...[]);
+//                                  ^
+// | ----------------------------------------------------------------------
+// | assign(target: object, **...sources: any[]**): any
+// | - `...sources: any[]`: One or more source objects from which to copy properties
+
+// | Copy the values of all of the enumerable own properties from one or more source objects to a
+// | target object. Returns the target object.
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 33,
+      "LSPosition": {
+        "line": 0,
+        "character": 33
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "assign<T extends {}, U>(target: T, source: U): T & U",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Copy the values of all of the enumerable own properties from one or more source objects to a\ntarget object. Returns the target object."
+          },
+          "parameters": [
+            {
+              "label": "target: T",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The target object to copy to.\n"
+              }
+            },
+            {
+              "label": "source: U",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The source object from which to copy properties.\n"
+              }
+            }
+          ],
+          "activeParameter": 1,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "assign"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "<"
+              },
+              {
+                "ClassificationTypeName": "type parameter name",
+                "Text": "T extends {}"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "type parameter name",
+                "Text": "U"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ">"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "target"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "T"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "source"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "U"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "T"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "U"
+              }
+            ]
+          }
+        },
+        {
+          "label": "assign<T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Copy the values of all of the enumerable own properties from one or more source objects to a\ntarget object. Returns the target object."
+          },
+          "parameters": [
+            {
+              "label": "target: T",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The target object to copy to.\n"
+              }
+            },
+            {
+              "label": "source1: U",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The first source object from which to copy properties.\n"
+              }
+            },
+            {
+              "label": "source2: V",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The second source object from which to copy properties.\n"
+              }
+            }
+          ],
+          "activeParameter": 1,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "assign"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "<"
+              },
+              {
+                "ClassificationTypeName": "type parameter name",
+                "Text": "T extends {}"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "type parameter name",
+                "Text": "U"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "type parameter name",
+                "Text": "V"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ">"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "target"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "T"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "source1"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "U"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "source2"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "V"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "T"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "U"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "V"
+              }
+            ]
+          }
+        },
+        {
+          "label": "assign<T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Copy the values of all of the enumerable own properties from one or more source objects to a\ntarget object. Returns the target object."
+          },
+          "parameters": [
+            {
+              "label": "target: T",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The target object to copy to.\n"
+              }
+            },
+            {
+              "label": "source1: U",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The first source object from which to copy properties.\n"
+              }
+            },
+            {
+              "label": "source2: V",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The second source object from which to copy properties.\n"
+              }
+            },
+            {
+              "label": "source3: W",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The third source object from which to copy properties.\n"
+              }
+            }
+          ],
+          "activeParameter": 1,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "assign"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "<"
+              },
+              {
+                "ClassificationTypeName": "type parameter name",
+                "Text": "T extends {}"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "type parameter name",
+                "Text": "U"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "type parameter name",
+                "Text": "V"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "type parameter name",
+                "Text": "W"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ">"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "target"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "T"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "source1"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "U"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "source2"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "V"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "source3"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "W"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "T"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "U"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "V"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "&"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "W"
+              }
+            ]
+          }
+        },
+        {
+          "label": "assign(target: object, ...sources: any[]): any",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Copy the values of all of the enumerable own properties from one or more source objects to a\ntarget object. Returns the target object."
+          },
+          "parameters": [
+            {
+              "label": "target: object",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The target object to copy to.\n"
+              }
+            },
+            {
+              "label": "...sources: any[]",
+              "documentation": {
+                "kind": "markdown",
+                "value": "One or more source objects from which to copy properties\n"
+              }
+            }
+          ],
+          "activeParameter": 1,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "assign"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "target"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "object"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "..."
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "sources"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "["
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "]"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 3
+    }
+  }
+]

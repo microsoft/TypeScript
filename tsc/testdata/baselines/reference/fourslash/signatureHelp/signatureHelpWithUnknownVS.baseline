@@ -1,0 +1,89 @@
+// === SignatureHelp ===
+=== /signatureHelpWithUnknownVS.ts ===
+// eval(\
+//       ^
+// | ----------------------------------------------------------------------
+// | eval(**x: string**): any
+// | - `x: string`: A String value that contains valid JavaScript code.
+
+// | Evaluates JavaScript code and executes it.
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 6,
+      "LSPosition": {
+        "line": 0,
+        "character": 6
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "eval(x: string): any",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Evaluates JavaScript code and executes it."
+          },
+          "parameters": [
+            {
+              "label": "x: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "A String value that contains valid JavaScript code.\n"
+              }
+            }
+          ],
+          "activeParameter": 0,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "eval"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "x"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

@@ -1,0 +1,88 @@
+// === SignatureHelp ===
+=== /b.js ===
+// /**
+//  * @import {
+//  *     Foo
+//  * } from './a'
+//  */
+// 
+// /**
+//  * @param {Foo} a
+//  */
+// function foo(a) {}
+// foo()
+//     ^
+// | ----------------------------------------------------------------------
+// | foo(**a: Foo**): void
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 98,
+      "LSPosition": {
+        "line": 10,
+        "character": 4
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "foo(a: Foo): void",
+          "parameters": [
+            {
+              "label": "a: Foo"
+            }
+          ],
+          "activeParameter": 0,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foo"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "text",
+                "Text": "Foo"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "void"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

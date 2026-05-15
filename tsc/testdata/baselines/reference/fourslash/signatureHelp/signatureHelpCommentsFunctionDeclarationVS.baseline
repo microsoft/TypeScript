@@ -1,0 +1,390 @@
+// === SignatureHelp ===
+=== /signatureHelpCommentsFunctionDeclarationVS.ts ===
+// /** This comment should appear for foo*/
+// function foo() {
+// }
+// foo();
+//     ^
+// | ----------------------------------------------------------------------
+// | foo(): void
+// | This comment should appear for foo
+// | ----------------------------------------------------------------------
+// /** This is comment for function signature*/
+// function fooWithParameters(/** this is comment about a*/a: string,
+//     /** this is comment for b*/
+//     b: number) {
+//     var d = a;
+// }
+// fooWithParameters("a",10);
+//                   ^
+// | ----------------------------------------------------------------------
+// | fooWithParameters(**a: string**, b: number): void
+// | - `a: string`: this is comment about a
+// | This is comment for function signature
+// | ----------------------------------------------------------------------
+//                       ^
+// | ----------------------------------------------------------------------
+// | fooWithParameters(a: string, **b: number**): void
+// | - `b: number`: this is comment for b
+// | This is comment for function signature
+// | ----------------------------------------------------------------------
+// /**
+// * Does something
+// * @param a a string
+// */
+// declare function fn(a: string);
+// fn("hello");
+//    ^
+// | ----------------------------------------------------------------------
+// | fn(**a: string**): any
+// | - `a: string`: a string
+
+// | Does something
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 64,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "foo(): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "This comment should appear for foo"
+          },
+          "parameters": [],
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foo"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "void"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 263,
+      "LSPosition": {
+        "line": 10,
+        "character": 18
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fooWithParameters(a: string, b: number): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "This is comment for function signature"
+          },
+          "parameters": [
+            {
+              "label": "a: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "this is comment about a"
+              }
+            },
+            {
+              "label": "b: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "this is comment for b"
+              }
+            }
+          ],
+          "activeParameter": 0,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "fooWithParameters"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "b"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "void"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 267,
+      "LSPosition": {
+        "line": 10,
+        "character": 22
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fooWithParameters(a: string, b: number): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "This is comment for function signature"
+          },
+          "parameters": [
+            {
+              "label": "a: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "this is comment about a"
+              }
+            },
+            {
+              "label": "b: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "this is comment for b"
+              }
+            }
+          ],
+          "activeParameter": 1,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "fooWithParameters"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "b"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "void"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 351,
+      "LSPosition": {
+        "line": 16,
+        "character": 3
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "fn(a: string): any",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Does something"
+          },
+          "parameters": [
+            {
+              "label": "a: string",
+              "documentation": {
+                "kind": "markdown",
+                "value": "a string\n"
+              }
+            }
+          ],
+          "activeParameter": 0,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "fn"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

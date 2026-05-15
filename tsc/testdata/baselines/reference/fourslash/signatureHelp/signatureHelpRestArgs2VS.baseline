@@ -1,0 +1,139 @@
+// === SignatureHelp ===
+=== /index.js ===
+// const promisify = function (thisArg, fnName) {
+//     const fn = thisArg[fnName];
+//     return function () {
+//         return new Promise((resolve) => {
+//             fn.call(thisArg, ...arguments, );
+//                                            ^
+// | ----------------------------------------------------------------------
+// | Function.call(thisArg: any, **...argArray: any[]**): any
+// | - `...argArray: any[]`: A list of arguments to be passed to the method.
+
+// | Calls a method of an object, substituting another object for the current object.
+// | ----------------------------------------------------------------------
+//         });
+//     };
+// };
+[
+  {
+    "marker": {
+      "Position": 189,
+      "LSPosition": {
+        "line": 4,
+        "character": 43
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Function.call(thisArg: any, ...argArray: any[]): any",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Calls a method of an object, substituting another object for the current object."
+          },
+          "parameters": [
+            {
+              "label": "thisArg: any",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The object to be used as the current object.\n"
+              }
+            },
+            {
+              "label": "...argArray: any[]",
+              "documentation": {
+                "kind": "markdown",
+                "value": "A list of arguments to be passed to the method.\n"
+              }
+            }
+          ],
+          "activeParameter": 1,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "Function.call"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "("
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "thisArg"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ","
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "..."
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "argArray"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "["
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "]"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " "
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any"
+              }
+            ]
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

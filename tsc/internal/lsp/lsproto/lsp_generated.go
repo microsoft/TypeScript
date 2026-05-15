@@ -18625,6 +18625,9 @@ type SignatureInformation struct {
 	//
 	// Since: 3.16.0
 	ActiveParameter *UintegerOrNull `json:"activeParameter,omitzero"`
+
+	// A colorized label for the signature, providing classified text runs for VS syntax coloring.
+	VSColorizedLabel *ClassifiedTextElement `json:"_vs_colorizedLabel,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*SignatureInformation)(nil)
@@ -18670,6 +18673,13 @@ func (s *SignatureInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 			}
 		case `"activeParameter"`:
 			if err := json.UnmarshalDecode(dec, &s.ActiveParameter); err != nil {
+				return err
+			}
+		case `"_vs_colorizedLabel"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("_vs_colorizedLabel")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VSColorizedLabel); err != nil {
 				return err
 			}
 		default:
@@ -29573,6 +29583,148 @@ func (s *MultiDocumentHighlightParams) UnmarshalJSONFrom(dec *json.Decoder) erro
 	return nil
 }
 
+// A classified text run with text and classification type, used for colorized display in VS.
+type ClassifiedTextRun struct {
+	// The classification type name (e.g. 'keyword', 'class name', 'parameter name').
+	ClassificationTypeName string `json:"ClassificationTypeName"`
+
+	// The text content of this run.
+	Text string `json:"Text"`
+
+	// Optional marker tag type.
+	MarkerTagType *string `json:"MarkerTagType,omitzero"`
+
+	// The style of this text run.
+	Style int32 `json:"Style,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ClassifiedTextRun)(nil)
+
+func (s *ClassifiedTextRun) UnmarshalJSONFrom(dec *json.Decoder) error {
+	const (
+		missingClassificationTypeName uint = 1 << iota
+		missingText
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"ClassificationTypeName"`:
+			missing &^= missingClassificationTypeName
+			if err := json.UnmarshalDecode(dec, &s.ClassificationTypeName); err != nil {
+				return err
+			}
+		case `"Text"`:
+			missing &^= missingText
+			if err := json.UnmarshalDecode(dec, &s.Text); err != nil {
+				return err
+			}
+		case `"MarkerTagType"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("MarkerTagType")
+			}
+			if err := json.UnmarshalDecode(dec, &s.MarkerTagType); err != nil {
+				return err
+			}
+		case `"Style"`:
+			if err := json.UnmarshalDecode(dec, &s.Style); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingClassificationTypeName != 0 {
+			missingProps = append(missingProps, "ClassificationTypeName")
+		}
+		if missing&missingText != 0 {
+			missingProps = append(missingProps, "Text")
+		}
+		return errMissing(missingProps)
+	}
+
+	return nil
+}
+
+// A classified text element containing an array of classified text runs, used for colorized labels in VS.
+type ClassifiedTextElement struct {
+	// The classified text runs that make up this element.
+	Runs []*ClassifiedTextRun `json:"Runs"`
+}
+
+var _ json.UnmarshalerFrom = (*ClassifiedTextElement)(nil)
+
+func (s *ClassifiedTextElement) UnmarshalJSONFrom(dec *json.Decoder) error {
+	const (
+		missingRuns uint = 1 << iota
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"Runs"`:
+			missing &^= missingRuns
+			if dec.PeekKind() == 'n' {
+				return errNull("Runs")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Runs); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingRuns != 0 {
+			missingProps = append(missingProps, "Runs")
+		}
+		return errMissing(missingProps)
+	}
+
+	return nil
+}
+
 // CallHierarchyItemData is a placeholder for custom data preserved on a CallHierarchyItem.
 type CallHierarchyItemData struct{}
 
@@ -30800,6 +30952,50 @@ func (e AddAsTypeOnly) String() string {
 		return fmt.Sprintf("AddAsTypeOnly(%d)", e)
 	}
 }
+
+// Roslyn classification type names used by VS for syntax coloring in tooltips and other UI elements.
+type ClassificationTypeName string
+
+const (
+	// Language keyword (e.g., function, const, class).
+	ClassificationTypeNameKeyword ClassificationTypeName = "keyword"
+	// Punctuation characters (e.g., parentheses, commas, semicolons).
+	ClassificationTypeNamePunctuation ClassificationTypeName = "punctuation"
+	// Operators (e.g., =, +, ?).
+	ClassificationTypeNameOperator ClassificationTypeName = "operator"
+	// Whitespace including spaces and line breaks.
+	ClassificationTypeNameWhiteSpace ClassificationTypeName = "whitespace"
+	// Plain text with no special classification.
+	ClassificationTypeNameText ClassificationTypeName = "text"
+	// String and literal values.
+	ClassificationTypeNameString ClassificationTypeName = "string"
+	// Numeric literal values.
+	ClassificationTypeNameNumber ClassificationTypeName = "number"
+	// Comment text.
+	ClassificationTypeNameComment ClassificationTypeName = "comment"
+	// Class names.
+	ClassificationTypeNameClassName ClassificationTypeName = "class name"
+	// Interface names.
+	ClassificationTypeNameInterfaceName ClassificationTypeName = "interface name"
+	// Enum names.
+	ClassificationTypeNameEnumName ClassificationTypeName = "enum name"
+	// Module/namespace names.
+	ClassificationTypeNameModuleName ClassificationTypeName = "module name"
+	// Method and function names.
+	ClassificationTypeNameMethodName ClassificationTypeName = "method name"
+	// Parameter names.
+	ClassificationTypeNameParameterName ClassificationTypeName = "parameter name"
+	// Property and accessor names.
+	ClassificationTypeNamePropertyName ClassificationTypeName = "property name"
+	// Field names (e.g., enum members).
+	ClassificationTypeNameFieldName ClassificationTypeName = "field name"
+	// Local variable names.
+	ClassificationTypeNameLocalName ClassificationTypeName = "local name"
+	// Type parameter names.
+	ClassificationTypeNameTypeParameterName ClassificationTypeName = "type parameter name"
+	// General identifiers (e.g., type aliases, imports).
+	ClassificationTypeNameIdentifier ClassificationTypeName = "identifier"
+)
 
 func unmarshalParams(method Method, data []byte) (any, error) {
 	switch method {
