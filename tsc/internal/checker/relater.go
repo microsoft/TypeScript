@@ -1881,6 +1881,9 @@ func (c *Checker) sliceTupleType(t *Type, index int, endSkipCount int) *Type {
 		}
 		return c.createTupleType(nil)
 	}
+	if index >= endIndex {
+		return c.createTupleType(nil)
+	}
 	return c.createTupleTypeEx(c.getTypeArguments(t)[index:endIndex], target.elementInfos[index:endIndex], false /*readonly*/)
 }
 
