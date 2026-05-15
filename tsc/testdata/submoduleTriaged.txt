@@ -47,24 +47,6 @@ conformance/nodeModulesAllowJsImportAssignment(module=node18).js.diff
 conformance/nodeModulesAllowJsImportAssignment(module=node20).js.diff
 conformance/nodeModulesAllowJsImportAssignment(module=nodenext).js.diff
 
-# CJS `module.exports = {}` now emits `export = _default` with inlined object type instead of named exports
-## https://github.com/microsoft/typescript-go/issues/3543
-compiler/jsDeclarationEmitExportAssignedArray.js.diff
-compiler/jsDeclarationEmitExportAssignedFunctionWithExtraTypedefsMembers.js.diff
-conformance/jsDeclarationsCommonjsRelativePath.js.diff
-conformance/jsDeclarationsDocCommentsOnConsts(target=es2015).js.diff
-conformance/jsDeclarationsExportAssignmentWithKeywordName(target=es2015).js.diff
-conformance/jsDeclarationsExportedClassAliases.js.diff
-conformance/jsDeclarationsExportAssignmentExpressionPlusSecondary(target=es2015).js.diff
-conformance/jsDeclarationsReexportedCjsAlias(target=es2015).js.diff
-conformance/jsDeclarationsTypeReferences(target=es2015).js.diff
-conformance/jsDeclarationsTypeReferences2(target=es2015).js.diff
-conformance/jsDeclarationsTypeAliases.js.diff
-conformance/jsDeclarationsTypedefAndImportTypes.js.diff
-conformance/jsDeclarationsTypedefPropertyAndExportAssignment.js.diff
-conformance/jsDeclarationsReferenceToClassInstanceCrossFile.js.diff
-conformance/jsDeclarationsImportAliasExposedWithinNamespaceCjs.js.diff
-
 # CJS class expression exports now emit anonymous constructor types instead of named class declarations
 ## https://github.com/microsoft/typescript-go/issues/3544
 conformance/commonJSImportExportedClassExpression.js.diff
