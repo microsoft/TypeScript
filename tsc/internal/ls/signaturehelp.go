@@ -774,16 +774,46 @@ func containsPrecedingToken(startingToken *ast.Node, sourceFile *ast.SourceFile,
 }
 
 func getContainingArgumentInfo(node *ast.Node, sourceFile *ast.SourceFile, checker *checker.Checker, isManuallyInvoked bool, position int) *argumentListInfo {
+	var firstArgumentInfo *argumentListInfo
 	for n := node; !ast.IsSourceFile(n) && (isManuallyInvoked || !ast.IsBlock(n)); n = n.Parent {
 		// If the node is not a subspan of its parent, this is a big problem.
 		// There have been crashes that might be caused by this violation.
 		debug.Assert(RangeContainsRange(n.Parent.Loc, n.Loc), "Not a subspan. Child: ", n.KindString(), ", parent: ", n.Parent.KindString())
 		argumentInfo := getImmediatelyContainingArgumentOrContextualParameterInfo(n, position, sourceFile, checker)
 		if argumentInfo != nil {
-			return argumentInfo
+			// For contextual invocations (e.g., arrow functions with contextual types),
+			// always return immediately without checking the position.
+			// This ensures that when inside a callback's parameter list, we show the callback's
+			// signature, not the outer call's signature.
+			if argumentInfo.invocation.contextualInvocation != nil {
+				return argumentInfo
+			}
+
+			// Remember the first (innermost) argument info we find
+			if firstArgumentInfo == nil {
+				firstArgumentInfo = argumentInfo
+			}
+
+			// If the position is at the end boundary of an argument list, keep the
+			// innermost call. This covers cases like foo(bar("x"|)) where the cursor is
+			// still inside the inner invocation, just before its closing paren.
+			if argumentInfo.argumentsSpan.End() == position {
+				return argumentInfo
+			}
+
+			// If any call's span contains the position, return it.
+			// We walk from inner to outer, so this naturally prefers the innermost call
+			// when multiple calls contain the position.
+			if argumentInfo.argumentsSpan.Contains(position) {
+				return argumentInfo
+			}
 		}
 	}
-	return nil
+
+	// No call's span contains the position. Fall back to the innermost call we found.
+	// This covers boundary positions that are still syntactically associated with that
+	// invocation, such as being at the end of the argument list or on the close paren.
+	return firstArgumentInfo
 }
 
 func getImmediatelyContainingArgumentOrContextualParameterInfo(node *ast.Node, position int, sourceFile *ast.SourceFile, checker *checker.Checker) *argumentListInfo {
@@ -1062,16 +1092,35 @@ func getApplicableSpanForArguments(argumentList *ast.NodeList, node *ast.Node, s
 	//        |                                               |
 	//
 	// The applicable span is from the first bar to the second bar (inclusive,
-	// but not including parentheses)
+	// but not including parentheses).
 	if argumentList == nil && node != nil {
 		// If the user has just opened a list, and there are no arguments.
 		// For example, foo(    )
 		//                  |  |
-		return core.NewTextRange(node.End(), scanner.SkipTrivia(sourceFile.Text(), node.End()))
+		// The span should include positions inside the parentheses.
+		spanStart := node.End()
+		spanEnd := scanner.SkipTrivia(sourceFile.Text(), node.End())
+		spanEnd = ensureMinimumSpanSize(spanStart, spanEnd)
+		return core.NewTextRange(spanStart, spanEnd)
 	}
 	applicableSpanStart := argumentList.Pos()
 	applicableSpanEnd := scanner.SkipTrivia(sourceFile.Text(), argumentList.End())
+
+	// If the argument list is empty (Pos == End), extend the span to include at least
+	// one position. This handles foo(|) where the cursor is right after the opening paren.
+	applicableSpanEnd = ensureMinimumSpanSize(applicableSpanStart, applicableSpanEnd)
+
 	return core.NewTextRange(applicableSpanStart, applicableSpanEnd)
+}
+
+// ensureMinimumSpanSize ensures that a span includes at least one position.
+// TextRange.Contains uses a half-open interval, so an empty span would not contain
+// the cursor immediately after typing an opening paren in a call like foo(bar(|)).
+func ensureMinimumSpanSize(start, end int) int {
+	if end <= start {
+		return start + 1
+	}
+	return end
 }
 
 type argumentOrParameterListAndIndex struct {
