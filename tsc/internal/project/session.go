@@ -35,6 +35,7 @@ type UpdateReason int
 const (
 	UpdateReasonUnknown UpdateReason = iota
 	UpdateReasonDidOpenFile
+	UpdateReasonDidCloseFile
 	UpdateReasonDidChangeCompilerOptionsForInferredProjects
 	UpdateReasonRequestedLanguageServicePendingChanges
 	UpdateReasonRequestedLanguageServiceProjectNotLoaded
@@ -119,6 +120,12 @@ type Session struct {
 	snapshotMu       sync.RWMutex
 	snapshotUpdateMu sync.Mutex
 
+	// scheduledSnapshotUpdateCancel is the cancelation function for a scheduled
+	// snapshot update. Snapshot updates are scheduled and debounced after file closes.
+	scheduledSnapshotUpdateCancel     context.CancelFunc
+	scheduledSnapshotUpdateGeneration uint64
+	scheduledSnapshotUpdateMu         sync.Mutex
+
 	pendingUserConfigChanges bool
 	userConfigRWMu           sync.Mutex
 
@@ -136,8 +143,9 @@ type Session struct {
 	// diagnosticsRefreshCancel is the cancelation function for a scheduled
 	// diagnostics refresh. Diagnostics refreshes are scheduled and debounced
 	// after file watch changes and ATA updates.
-	diagnosticsRefreshCancel context.CancelFunc
-	diagnosticsRefreshMu     sync.Mutex
+	diagnosticsRefreshCancel     context.CancelFunc
+	diagnosticsRefreshGeneration uint64
+	diagnosticsRefreshMu         sync.Mutex
 
 	// warmAutoImportCancel is the cancelation function for a running
 	// auto-import cache warming task. It is cancelled on file opens,
@@ -282,6 +290,7 @@ func (s *Session) InitializeWithUserConfig(config lsutil.UserPreferences) {
 func (s *Session) DidOpenFile(ctx context.Context, uri lsproto.DocumentUri, version int32, content string, languageKind lsproto.LanguageKind) {
 	s.cancelWarmAutoImportCache()
 	s.scheduleIdleCacheClean()
+	s.cancelScheduledSnapshotUpdate()
 	s.snapshotUpdateMu.Lock()
 	defer s.snapshotUpdateMu.Unlock()
 	s.pendingFileChangesMu.Lock()
@@ -307,11 +316,12 @@ func (s *Session) DidCloseFile(ctx context.Context, uri lsproto.DocumentUri) {
 	s.cancelWarmAutoImportCache()
 	s.scheduleIdleCacheClean()
 	s.pendingFileChangesMu.Lock()
-	defer s.pendingFileChangesMu.Unlock()
 	s.pendingFileChanges = append(s.pendingFileChanges, FileChange{
 		Kind: FileChangeKindClose,
 		URI:  uri,
 	})
+	s.pendingFileChangesMu.Unlock()
+	s.ScheduleSnapshotUpdate(UpdateReasonDidCloseFile)
 }
 
 func (s *Session) DidChangeFile(ctx context.Context, uri lsproto.DocumentUri, version int32, changes []lsproto.TextDocumentContentChangePartialOrWholeDocument) {
@@ -390,6 +400,8 @@ func (s *Session) ScheduleDiagnosticsRefresh() {
 
 	// Create a new cancellable context for the debounce task
 	debounceCtx, cancel := context.WithCancel(s.backgroundCtx)
+	s.diagnosticsRefreshGeneration++
+	generation := s.diagnosticsRefreshGeneration
 	s.diagnosticsRefreshCancel = cancel
 
 	// Enqueue the debounced diagnostics refresh
@@ -406,6 +418,10 @@ func (s *Session) ScheduleDiagnosticsRefresh() {
 
 		// Clear the cancel function since we're about to execute the refresh
 		s.diagnosticsRefreshMu.Lock()
+		if s.diagnosticsRefreshGeneration != generation {
+			s.diagnosticsRefreshMu.Unlock()
+			return
+		}
 		s.diagnosticsRefreshCancel = nil
 		s.diagnosticsRefreshMu.Unlock()
 
@@ -425,6 +441,82 @@ func (s *Session) cancelDiagnosticsRefresh() {
 		s.diagnosticsRefreshCancel()
 		s.logger.Log("Canceled scheduled diagnostics refresh")
 		s.diagnosticsRefreshCancel = nil
+		s.diagnosticsRefreshGeneration++
+	}
+}
+
+func (s *Session) ScheduleSnapshotUpdate(reason UpdateReason) {
+	s.scheduledSnapshotUpdateMu.Lock()
+	defer s.scheduledSnapshotUpdateMu.Unlock()
+
+	// Cancel any existing scheduled snapshot update
+	if s.scheduledSnapshotUpdateCancel != nil {
+		s.scheduledSnapshotUpdateCancel()
+		if s.options.LoggingEnabled {
+			s.logger.Log("Delaying scheduled snapshot update...")
+		}
+	} else if s.options.LoggingEnabled {
+		s.logger.Log("Scheduling new snapshot update...")
+	}
+
+	// Create a new cancellable context for the debounce task
+	debounceCtx, cancel := context.WithCancel(s.backgroundCtx)
+	s.scheduledSnapshotUpdateGeneration++
+	generation := s.scheduledSnapshotUpdateGeneration
+	s.scheduledSnapshotUpdateCancel = cancel
+
+	// Enqueue the debounced snapshot update
+	s.backgroundQueue.Enqueue(debounceCtx, func(ctx context.Context) {
+		defer cancel()
+		// Sleep for the debounce delay
+		select {
+		case <-time.After(s.options.DebounceDelay):
+			// Delay completed, proceed with update
+		case <-ctx.Done():
+			// Context was cancelled, newer events arrived or another snapshot update ran
+			return
+		}
+
+		// Clear the cancel function since we're about to execute the update
+		s.scheduledSnapshotUpdateMu.Lock()
+		if s.scheduledSnapshotUpdateGeneration != generation {
+			s.scheduledSnapshotUpdateMu.Unlock()
+			return
+		}
+		s.scheduledSnapshotUpdateCancel = nil
+		s.scheduledSnapshotUpdateMu.Unlock()
+
+		if s.options.LoggingEnabled {
+			s.logger.Log("Running scheduled snapshot update")
+		}
+
+		s.snapshotUpdateMu.Lock()
+		defer s.snapshotUpdateMu.Unlock()
+
+		fileChanges, overlays, ataChanges, newConfig := s.flushChanges(ctx)
+		if fileChanges.IsEmpty() && len(ataChanges) == 0 && newConfig == nil {
+			return
+		}
+
+		s.UpdateSnapshot(ctx, overlays, SnapshotChange{
+			reason:      reason,
+			fileChanges: fileChanges,
+			ataChanges:  ataChanges,
+			newConfig:   newConfig,
+		})
+	})
+}
+
+func (s *Session) cancelScheduledSnapshotUpdate() {
+	s.scheduledSnapshotUpdateMu.Lock()
+	defer s.scheduledSnapshotUpdateMu.Unlock()
+	if s.scheduledSnapshotUpdateCancel != nil {
+		s.scheduledSnapshotUpdateCancel()
+		if s.options.LoggingEnabled {
+			s.logger.Log("Canceled scheduled snapshot update")
+		}
+		s.scheduledSnapshotUpdateCancel = nil
+		s.scheduledSnapshotUpdateGeneration++
 	}
 }
 
@@ -454,6 +546,7 @@ func (s *Session) scheduleIdleCacheClean() {
 
 		s.snapshotUpdateMu.Lock()
 		defer s.snapshotUpdateMu.Unlock()
+		s.cancelScheduledSnapshotUpdate()
 
 		ctx := s.backgroundCtx
 		fileChanges, overlays, ataChanges, newConfig := s.flushChanges(ctx)
@@ -810,6 +903,7 @@ func (s *Session) getSnapshot(
 ) *Snapshot {
 	s.snapshotUpdateMu.Lock()
 	defer s.snapshotUpdateMu.Unlock()
+	s.cancelScheduledSnapshotUpdate()
 
 	fileChanges, overlays, ataChanges, newConfig := s.flushChanges(ctx)
 	updateSnapshot := !fileChanges.IsEmpty() || len(ataChanges) > 0 || newConfig != nil
@@ -1304,6 +1398,8 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 }
 
 func (s *Session) Close() {
+	// Cancel any pending scheduled snapshot update
+	s.cancelScheduledSnapshotUpdate()
 	// Cancel any pending diagnostics refresh
 	s.cancelDiagnosticsRefresh()
 	// Cancel any pending auto-import cache warming
@@ -1515,11 +1611,15 @@ func (s *Session) publishProgramDiagnostics(oldSnapshot *Snapshot, newSnapshot *
 	}
 
 	ctx := s.backgroundCtx
+	oldProjects := oldSnapshot.ProjectCollection.ProjectsByPath()
+	newProjects := newSnapshot.ProjectCollection.ProjectsByPath()
+	oldOpenProjects := oldSnapshot.ProjectCollection.GetOpenConfiguredProjects()
+	newOpenProjects := newSnapshot.ProjectCollection.GetOpenConfiguredProjects()
 	collections.DiffOrderedMaps(
-		oldSnapshot.ProjectCollection.ProjectsByPath(),
-		newSnapshot.ProjectCollection.ProjectsByPath(),
+		oldProjects,
+		newProjects,
 		func(configFilePath tspath.Path, addedProject *Project) {
-			if !shouldPublishProgramDiagnostics(addedProject, newSnapshot.ID()) {
+			if !shouldPublishProgramDiagnostics(addedProject, newSnapshot.ID()) || !newOpenProjects.Has(configFilePath) {
 				return
 			}
 			s.publishProjectDiagnostics(ctx, string(configFilePath), addedProject.GetProjectDiagnostics(ctx), newSnapshot.converters)
@@ -1531,12 +1631,32 @@ func (s *Session) publishProgramDiagnostics(oldSnapshot *Snapshot, newSnapshot *
 			s.publishProjectDiagnostics(ctx, string(configFilePath), nil, oldSnapshot.converters)
 		},
 		func(configFilePath tspath.Path, oldProject, newProject *Project) {
-			if !shouldPublishProgramDiagnostics(newProject, newSnapshot.ID()) {
+			if !shouldPublishProgramDiagnostics(newProject, newSnapshot.ID()) || !newOpenProjects.Has(configFilePath) {
 				return
 			}
 			s.publishProjectDiagnostics(ctx, string(configFilePath), newProject.GetProjectDiagnostics(ctx), newSnapshot.converters)
 		},
 	)
+	// Sync diagnostics for projects whose open-file state changed without a program update.
+	for configFilePath, newProject := range newProjects.Entries() {
+		if newProject.Kind != KindConfigured {
+			continue
+		}
+		if !oldProjects.Has(configFilePath) {
+			continue // Handled by added project case above
+		}
+		oldProject, _ := oldProjects.Get(configFilePath)
+		newHasOpenFiles := newOpenProjects.Has(configFilePath)
+		oldHasOpenFiles := oldOpenProjects.Has(configFilePath)
+		if newHasOpenFiles && !oldHasOpenFiles &&
+			(newProject == oldProject || !shouldPublishProgramDiagnostics(newProject, newSnapshot.ID())) {
+			// Project reopened without a program update
+			s.publishProjectDiagnostics(ctx, string(configFilePath), newProject.GetProjectDiagnostics(ctx), newSnapshot.converters)
+		} else if !newHasOpenFiles && oldHasOpenFiles {
+			// Project closed
+			s.publishProjectDiagnostics(ctx, string(configFilePath), nil, newSnapshot.converters)
+		}
+	}
 }
 
 func shouldPublishProgramDiagnostics(p *Project, snapshotID uint64) bool {

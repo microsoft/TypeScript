@@ -3,6 +3,7 @@ package project
 import (
 	"cmp"
 	"slices"
+	"sync"
 
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -22,12 +23,18 @@ type ProjectCollection struct {
 	// configuredProjects is the set of loaded projects associated with a tsconfig
 	// file, keyed by the config file path.
 	configuredProjects map[tspath.Path]*Project
+	// openFiles is the set of open file paths associated with the snapshot that owns
+	// this project collection.
+	openFiles collections.Set[tspath.Path]
 	// inferredProject is a fallback project that is used when no configured
 	// project can be found for an open file.
 	inferredProject *Project
 	// apiOpenedProjects is the set of projects that should be kept open for
 	// API clients.
 	apiOpenedProjects map[tspath.Path]struct{}
+
+	openConfiguredProjectsOnce sync.Once
+	openConfiguredProjects     *collections.Set[tspath.Path]
 }
 
 func (c *ProjectCollection) ConfigFileRegistry() *ConfigFileRegistry { return c.configFileRegistry }
@@ -105,6 +112,37 @@ func (c *ProjectCollection) GetProjectsContainingFile(path tspath.Path) []ls.Pro
 		projects = append(projects, c.inferredProject)
 	}
 	return projects
+}
+
+// GetOpenConfiguredProjects returns configured projects containing at least one open file.
+func (c *ProjectCollection) GetOpenConfiguredProjects() *collections.Set[tspath.Path] {
+	c.openConfiguredProjectsOnce.Do(func() {
+		openProjects := collections.NewSetWithSizeHint[tspath.Path](len(c.configuredProjects))
+		for path := range c.openFiles.Keys() {
+			if projectPath, ok := c.fileDefaultProjects[path]; ok && projectPath != inferredProjectName {
+				if _, ok := c.configuredProjects[projectPath]; ok {
+					openProjects.Add(projectPath)
+					continue
+				}
+			}
+
+			for _, project := range c.configuredProjects {
+				if project.containsFile(path) {
+					openProjects.Add(project.configFilePath)
+				}
+			}
+		}
+		c.openConfiguredProjects = openProjects
+	})
+	return c.openConfiguredProjects
+}
+
+func openFilePaths(overlays map[tspath.Path]*Overlay) collections.Set[tspath.Path] {
+	openFiles := collections.Set[tspath.Path]{M: make(map[tspath.Path]struct{}, len(overlays))}
+	for path := range overlays {
+		openFiles.Add(path)
+	}
+	return openFiles
 }
 
 // !!! result could be cached
@@ -230,6 +268,7 @@ func (c *ProjectCollection) clone() *ProjectCollection {
 		toPath:              c.toPath,
 		configFileRegistry:  c.configFileRegistry,
 		configuredProjects:  c.configuredProjects,
+		openFiles:           c.openFiles,
 		inferredProject:     c.inferredProject,
 		fileDefaultProjects: c.fileDefaultProjects,
 		apiOpenedProjects:   c.apiOpenedProjects,

@@ -43,6 +43,7 @@ type ProjectCollectionBuilder struct {
 	newSnapshotID              uint64
 	programStructureChanged    bool
 	defaultProjectsInvalidated bool
+	openFilesChanged           bool
 
 	fileDefaultProjects map[tspath.Path]tspath.Path
 	configuredProjects  *dirty.SyncMap[tspath.Path, *Project]
@@ -96,6 +97,11 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 	if configuredProjects, configuredProjectsChanged := b.configuredProjects.Finalize(); configuredProjectsChanged {
 		ensureCloned()
 		newProjectCollection.configuredProjects = configuredProjects
+	}
+
+	if b.openFilesChanged {
+		ensureCloned()
+		newProjectCollection.openFiles = openFilePaths(b.fs.overlays)
 	}
 
 	if !maps.Equal(b.fileDefaultProjects, b.base.fileDefaultProjects) {
@@ -183,6 +189,8 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 }
 
 func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, logger *logging.LogTree) {
+	b.openFilesChanged = b.openFilesChanged || summary.Opened != "" || summary.Closed.Len() > 0
+
 	changedFiles := make([]tspath.Path, 0, summary.Changed.Len())
 	for uri := range summary.Changed.Keys() {
 		fileName := uri.FileName()
