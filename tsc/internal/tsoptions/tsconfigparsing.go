@@ -152,7 +152,7 @@ type FileExtensionInfo struct {
 }
 
 type ExtendedConfigCache interface {
-	GetExtendedConfig(fileName string, path tspath.Path, resolutionStack []string, host ParseConfigHost) *ExtendedConfigCacheEntry
+	GetExtendedConfig(fileName string, path tspath.Path, resolutionStack []tspath.Path, host ParseConfigHost) *ExtendedConfigCacheEntry
 }
 
 type ExtendedConfigCacheEntry struct {
@@ -963,7 +963,7 @@ func getExtendedConfig(
 	sourceFile *TsConfigSourceFile,
 	extendedConfigFileName string,
 	host ParseConfigHost,
-	resolutionStack []string,
+	resolutionStack []tspath.Path,
 	extendedConfigCache ExtendedConfigCache,
 	result *extendsResult,
 ) (*parsedTsconfig, []*ast.Diagnostic) {
@@ -971,7 +971,11 @@ func getExtendedConfig(
 	extendedConfigPath := tspath.ToPath(extendedConfigFileName, host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames())
 
 	var cacheEntry *ExtendedConfigCacheEntry
-	if extendedConfigCache != nil {
+	// Bypass the cache when we detect a cycle in the resolution stack.
+	// The cache locks entries during parsing, and a cycle would cause the same goroutine
+	// to re-lock the same entry, resulting in a deadlock. Let parseConfig handle the
+	// circularity error via its own resolution stack check.
+	if extendedConfigCache != nil && !slices.Contains(resolutionStack, extendedConfigPath) {
 		cacheEntry = extendedConfigCache.GetExtendedConfig(extendedConfigFileName, extendedConfigPath, resolutionStack, host)
 	} else {
 		cacheEntry = ParseExtendedConfig(extendedConfigFileName, extendedConfigPath, resolutionStack, host, extendedConfigCache)
@@ -995,7 +999,7 @@ func getExtendedConfig(
 func ParseExtendedConfig(
 	fileName string,
 	path tspath.Path,
-	resolutionStack []string,
+	resolutionStack []tspath.Path,
 	host ParseConfigHost,
 	extendedConfigCache ExtendedConfigCache,
 ) *ExtendedConfigCacheEntry {
@@ -1022,11 +1026,11 @@ func parseConfig(
 	host ParseConfigHost,
 	basePath string,
 	configFileName string,
-	resolutionStack []string,
+	resolutionStack []tspath.Path,
 	extendedConfigCache ExtendedConfigCache,
 ) (*parsedTsconfig, []*ast.Diagnostic) {
 	basePath = tspath.NormalizeSlashes(basePath)
-	resolvedPath := tspath.GetNormalizedAbsolutePath(configFileName, basePath)
+	resolvedPath := tspath.ToPath(configFileName, basePath, host.FS().UseCaseSensitiveFileNames())
 	var errors []*ast.Diagnostic
 	if slices.Contains(resolutionStack, resolvedPath) {
 		var result *parsedTsconfig
@@ -1181,8 +1185,7 @@ func parseJsonConfigFileContentWorker(
 	}
 
 	var errors []*ast.Diagnostic
-	resolutionStackString := []string{}
-	parsedConfig, errors := parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStackString, extendedConfigCache)
+	parsedConfig, errors := parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, extendedConfigCache)
 	mergeCompilerOptions(parsedConfig.options, existingOptions, existingOptionsRaw)
 	handleOptionConfigDirTemplateSubstitution(parsedConfig.options, basePathForFileNames)
 	rawConfig := parseJsonToStringKey(parsedConfig.raw)

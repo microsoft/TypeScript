@@ -10,7 +10,7 @@ type ExtendedConfigParseArgs struct {
 	FileName        string
 	Content         string
 	FS              FileSource
-	ResolutionStack []string
+	ResolutionStack []tspath.Path
 	Host            tsoptions.ParseConfigHost
 	Cache           tsoptions.ExtendedConfigCache
 }

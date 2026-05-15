@@ -1248,7 +1248,7 @@ type memoCache struct {
 	m map[tspath.Path]*tsoptions.ExtendedConfigCacheEntry
 }
 
-func (mc *memoCache) GetExtendedConfig(fileName string, path tspath.Path, resolutionStack []string, host tsoptions.ParseConfigHost) *tsoptions.ExtendedConfigCacheEntry {
+func (mc *memoCache) GetExtendedConfig(fileName string, path tspath.Path, resolutionStack []tspath.Path, host tsoptions.ParseConfigHost) *tsoptions.ExtendedConfigCacheEntry {
 	if mc.m == nil {
 		mc.m = make(map[tspath.Path]*tsoptions.ExtendedConfigCacheEntry)
 	}
