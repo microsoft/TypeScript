@@ -257,11 +257,17 @@ func (f *flattener) flattenDestructuringBinding(node *ast.Node, rval *ast.Node, 
 
 	if len(f.expressions) > 0 {
 		temp := f.tx.Factory().NewTempVariable()
-		f.tx.EmitContext().AddVariableDeclaration(temp)
-		last := &f.declarations[len(f.declarations)-1]
-		last.pendingExpressions = append(last.pendingExpressions, f.tx.Factory().NewAssignmentExpression(temp, last.value))
-		last.pendingExpressions = append(last.pendingExpressions, f.expressions...)
-		last.value = temp
+		if f.hoistTempVariables {
+			value := f.tx.Factory().InlineExpressions(f.expressions)
+			f.expressions = nil
+			f.emitBindingOrAssignment(f, temp, value, core.TextRange{}, nil)
+		} else {
+			f.tx.EmitContext().AddVariableDeclaration(temp)
+			last := &f.declarations[len(f.declarations)-1]
+			last.pendingExpressions = append(last.pendingExpressions, f.tx.Factory().NewAssignmentExpression(temp, last.value))
+			last.pendingExpressions = append(last.pendingExpressions, f.expressions...)
+			last.value = temp
+		}
 	}
 
 	decls := make([]*ast.Node, 0, len(f.declarations))

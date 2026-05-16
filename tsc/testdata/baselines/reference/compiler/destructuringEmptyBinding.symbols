@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/destructuringEmptyBinding.ts] ////
+
+=== a.ts ===
+
+export var {...{ }} = x;
+
