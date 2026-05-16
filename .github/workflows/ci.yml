@@ -3,17 +3,16 @@ name: CI
 on:
   push:
     branches:
-      - main
-      - release-*
+
+
   pull_request:
     branches:
-      - main
-      - release-*
+
+      
   merge_group:
     branches:
-      - main
-      # - release-*
 
+      
 permissions:
   contents: read
 
