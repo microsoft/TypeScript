@@ -10,64 +10,41 @@
 // | (parameter) b: number
 // | var lambdaFoo: (a: number, b: number) => number
 // | var lambddaNoVarComment: (a: number, b: number) => number
-// | abstract
-// | any
 // | interface Array<T>
 // | var Array: ArrayConstructor
 // | interface ArrayBuffer
 // | var ArrayBuffer: ArrayBufferConstructor
 // | as
-// | asserts
 // | async
 // | await
-// | bigint
-// | boolean
 // | interface Boolean
 // | var Boolean: BooleanConstructor
-// | break
-// | case
-// | catch
 // | class
-// | const
-// | continue
 // | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
-// | debugger
-// | declare
 // | function decodeURI(encodedURI: string): string
 // | function decodeURIComponent(encodedURIComponent: string): string
-// | default
 // | delete
-// | do
-// | else
 // | function encodeURI(uri: string): string
 // | function encodeURIComponent(uriComponent: string | number | boolean): string
-// | enum
 // | interface Error
 // | var Error: ErrorConstructor
 // | function eval(x: string): any
 // | interface EvalError
 // | var EvalError: EvalErrorConstructor
-// | export
-// | extends
 // | false
-// | finally
 // | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
 // | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
-// | for
 // | function
 // | interface Function
 // | var Function: FunctionConstructor
 // | module globalThis
-// | if
-// | implements
 // | import
 // | in
-// | infer
 // | var Infinity: number
 // | instanceof
 // | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
@@ -76,53 +53,36 @@
 // | var Int16Array: Int16ArrayConstructor
 // | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
-// | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
 // | function isNaN(number: number): boolean
 // | interface JSON
 // | var JSON: JSON
-// | keyof
-// | let
 // | interface Math
 // | var Math: Math
-// | module
-// | namespace
 // | var NaN: number
-// | never
 // | new
 // | null
-// | number
 // | interface Number
 // | var Number: NumberConstructor
-// | object
 // | interface Object
 // | var Object: ObjectConstructor
-// | package
 // | function parseFloat(string: string): number
 // | function parseInt(string: string, radix?: number): number
 // | interface RangeError
 // | var RangeError: RangeErrorConstructor
-// | readonly
 // | interface ReferenceError
 // | var ReferenceError: ReferenceErrorConstructor
 // | interface RegExp
 // | var RegExp: RegExpConstructor
-// | return
 // | satisfies
-// | string
 // | interface String
 // | var String: StringConstructor
 // | super
-// | switch
-// | symbol
 // | interface SyntaxError
 // | var SyntaxError: SyntaxErrorConstructor
 // | this
-// | throw
 // | true
-// | try
-// | type
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
@@ -135,16 +95,9 @@
 // | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
-// | unique
-// | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
-// | using
-// | var
 // | void
-// | while
-// | with
-// | yield
 // | function escape(string: string): string
 // | function unescape(string: string): string
 // | ----------------------------------------------------------------------
@@ -1108,30 +1061,6 @@
           ]
         },
         {
-          "name": "abstract",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "abstract",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "any",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "any",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -1259,18 +1188,6 @@
           ]
         },
         {
-          "name": "asserts",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "asserts",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "async",
           "kind": "keyword",
           "kindModifiers": "",
@@ -1290,30 +1207,6 @@
           "displayParts": [
             {
               "text": "await",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "bigint",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "bigint",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "boolean",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "boolean",
               "kind": "keyword"
             }
           ]
@@ -1368,42 +1261,6 @@
           "documentation": []
         },
         {
-          "name": "break",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "break",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "case",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "case",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "catch",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "catch",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "class",
           "kind": "keyword",
           "kindModifiers": "",
@@ -1411,30 +1268,6 @@
           "displayParts": [
             {
               "text": "class",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "const",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "const",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "continue",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "continue",
               "kind": "keyword"
             }
           ]
@@ -1583,30 +1416,6 @@
             {
               "text": "Enables basic storage and retrieval of dates and times.",
               "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "debugger",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "debugger",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "declare",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "declare",
-              "kind": "keyword"
             }
           ]
         },
@@ -1773,18 +1582,6 @@
           ]
         },
         {
-          "name": "default",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "default",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "delete",
           "kind": "keyword",
           "kindModifiers": "",
@@ -1792,30 +1589,6 @@
           "displayParts": [
             {
               "text": "delete",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "do",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "do",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "else",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "else",
               "kind": "keyword"
             }
           ]
@@ -2015,18 +1788,6 @@
           ]
         },
         {
-          "name": "enum",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "enum",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "Error",
           "kind": "var",
           "kindModifiers": "declare",
@@ -2206,30 +1967,6 @@
           "documentation": []
         },
         {
-          "name": "export",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "export",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "extends",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "extends",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "false",
           "kind": "keyword",
           "kindModifiers": "",
@@ -2237,18 +1974,6 @@
           "displayParts": [
             {
               "text": "false",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "finally",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "finally",
               "kind": "keyword"
             }
           ]
@@ -2450,18 +2175,6 @@
           ]
         },
         {
-          "name": "for",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "for",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "function",
           "kind": "keyword",
           "kindModifiers": "",
@@ -2549,30 +2262,6 @@
           "documentation": []
         },
         {
-          "name": "if",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "if",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "implements",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "implements",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "import",
           "kind": "keyword",
           "kindModifiers": "",
@@ -2592,18 +2281,6 @@
           "displayParts": [
             {
               "text": "in",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "infer",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "infer",
               "kind": "keyword"
             }
           ]
@@ -2948,18 +2625,6 @@
           ]
         },
         {
-          "name": "interface",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "Intl",
           "kind": "module",
           "kindModifiers": "declare",
@@ -3197,30 +2862,6 @@
           ]
         },
         {
-          "name": "keyof",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "keyof",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "let",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "let",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "Math",
           "kind": "var",
           "kindModifiers": "declare",
@@ -3275,30 +2916,6 @@
           ]
         },
         {
-          "name": "module",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "module",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "namespace",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "namespace",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "NaN",
           "kind": "var",
           "kindModifiers": "declare",
@@ -3332,18 +2949,6 @@
           "documentation": []
         },
         {
-          "name": "never",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "never",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "new",
           "kind": "keyword",
           "kindModifiers": "",
@@ -3363,18 +2968,6 @@
           "displayParts": [
             {
               "text": "null",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "number",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "number",
               "kind": "keyword"
             }
           ]
@@ -3434,18 +3027,6 @@
           ]
         },
         {
-          "name": "object",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "object",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "Object",
           "kind": "var",
           "kindModifiers": "declare",
@@ -3496,18 +3077,6 @@
             {
               "text": "Provides functionality common to all JavaScript objects.",
               "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "package",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "package",
-              "kind": "keyword"
             }
           ]
         },
@@ -3768,18 +3337,6 @@
           "documentation": []
         },
         {
-          "name": "readonly",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "readonly",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "ReferenceError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -3878,18 +3435,6 @@
           "documentation": []
         },
         {
-          "name": "return",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "return",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "satisfies",
           "kind": "keyword",
           "kindModifiers": "",
@@ -3897,18 +3442,6 @@
           "displayParts": [
             {
               "text": "satisfies",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "string",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "string",
               "kind": "keyword"
             }
           ]
@@ -3980,30 +3513,6 @@
           ]
         },
         {
-          "name": "switch",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "switch",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "symbol",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "symbol",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "SyntaxError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -4065,18 +3574,6 @@
           ]
         },
         {
-          "name": "throw",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "throw",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "true",
           "kind": "keyword",
           "kindModifiers": "",
@@ -4084,30 +3581,6 @@
           "displayParts": [
             {
               "text": "true",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "try",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "try",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "type",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -4587,30 +4060,6 @@
           "documentation": []
         },
         {
-          "name": "unique",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "unique",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "unknown",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "unknown",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "URIError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -4660,30 +4109,6 @@
           "documentation": []
         },
         {
-          "name": "using",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "using",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "var",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "void",
           "kind": "keyword",
           "kindModifiers": "",
@@ -4691,42 +4116,6 @@
           "displayParts": [
             {
               "text": "void",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "while",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "while",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "with",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "with",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "yield",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "yield",
               "kind": "keyword"
             }
           ]

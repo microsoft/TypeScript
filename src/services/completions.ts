@@ -138,6 +138,7 @@ import {
     isBinaryExpression,
     isBindingElement,
     isBindingPattern,
+    isBlock,
     isBreakOrContinueStatement,
     isCallExpression,
     isCaseBlock,
@@ -598,6 +599,7 @@ const enum KeywordCompletionFilters {
     InterfaceElementKeywords,       // Keywords inside interface body
     ConstructorParameterKeywords,   // Keywords at constructor parameter
     FunctionLikeBodyKeywords,       // Keywords at function like body
+    ArrowFunctionExpressionBodyKeywords, // Keywords valid as expression-position completions in arrow function expression bodies
     TypeAssertionKeywords,
     TypeKeywords,
     TypeKeyword,                    // Literally just `type`
@@ -3982,7 +3984,15 @@ function getCompletionData(
     }
 
     function getGlobalCompletions(): void {
-        keywordFilters = tryGetFunctionLikeBodyCompletionContainer(contextToken) ? KeywordCompletionFilters.FunctionLikeBodyKeywords : KeywordCompletionFilters.All;
+        if (isInArrowFunctionExpressionBody(contextToken)) {
+            keywordFilters = KeywordCompletionFilters.ArrowFunctionExpressionBodyKeywords;
+        }
+        else if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
+            keywordFilters = KeywordCompletionFilters.FunctionLikeBodyKeywords;
+        }
+        else {
+            keywordFilters = KeywordCompletionFilters.All;
+        }
 
         // Get all entities in the current scope.
         completionKind = CompletionKind.Global;
@@ -4831,6 +4841,10 @@ function getCompletionData(
         }
     }
 
+    function isInArrowFunctionExpressionBody(contextToken: Node): boolean {
+        return !!findAncestor(contextToken, (node: Node) => isArrowFunctionBody(node) && !isBlock(node));
+    }
+
     function tryGetContainingJsxElement(contextToken: Node): JsxOpeningLikeElement | undefined {
         if (contextToken) {
             const parent = contextToken.parent;
@@ -5488,6 +5502,8 @@ function getTypescriptKeywordCompletions(keywordFilter: KeywordCompletionFilters
                     || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
             case KeywordCompletionFilters.FunctionLikeBodyKeywords:
                 return isFunctionLikeBodyKeyword(kind);
+            case KeywordCompletionFilters.ArrowFunctionExpressionBodyKeywords:
+                return isArrowFunctionExpressionBodyKeyword(kind);
             case KeywordCompletionFilters.ClassElementKeywords:
                 return isClassMemberCompletionKeyword(kind);
             case KeywordCompletionFilters.InterfaceElementKeywords:
@@ -5569,6 +5585,32 @@ function isFunctionLikeBodyKeyword(kind: SyntaxKind) {
         || kind === SyntaxKind.SatisfiesKeyword
         || kind === SyntaxKind.TypeKeyword
         || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind);
+}
+
+function isArrowFunctionExpressionBodyKeyword(kind: SyntaxKind): boolean {
+    switch (kind) {
+        case SyntaxKind.AsyncKeyword:
+        case SyntaxKind.AwaitKeyword:
+        case SyntaxKind.ClassKeyword:
+        case SyntaxKind.DeleteKeyword:
+        case SyntaxKind.FalseKeyword:
+        case SyntaxKind.FunctionKeyword:
+        case SyntaxKind.ImportKeyword:
+        case SyntaxKind.InKeyword:
+        case SyntaxKind.InstanceOfKeyword:
+        case SyntaxKind.NewKeyword:
+        case SyntaxKind.NullKeyword:
+        case SyntaxKind.SuperKeyword:
+        case SyntaxKind.ThisKeyword:
+        case SyntaxKind.TrueKeyword:
+        case SyntaxKind.TypeOfKeyword:
+        case SyntaxKind.VoidKeyword:
+        case SyntaxKind.AsKeyword:
+        case SyntaxKind.SatisfiesKeyword:
+            return true;
+        default:
+            return false;
+    }
 }
 
 function keywordForNode(node: Node): SyntaxKind {
