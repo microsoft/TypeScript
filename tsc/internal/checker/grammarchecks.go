@@ -1246,9 +1246,6 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 					containingFunc := ast.GetContainingFunction(forInOrOfStatement.AsNode())
 					if containingFunc != nil && containingFunc.Kind != ast.KindConstructor {
 						debug.Assert((ast.GetFunctionFlags(containingFunc)&ast.FunctionFlagsAsync) == 0, "Enclosing function should never be an async function.")
-						if hasAsyncModifier(containingFunc) {
-							panic("Enclosing function should never be an async function.")
-						}
 						relatedInfo := createDiagnosticForNode(containingFunc, diagnostics.Did_you_mean_to_mark_this_function_as_async)
 						diagnostic.AddRelatedInfo(relatedInfo)
 					}

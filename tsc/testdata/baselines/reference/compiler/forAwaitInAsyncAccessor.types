@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/forAwaitInAsyncAccessor.ts] ////
+
+=== a.ts ===
+class C {
+>C : C
+
+    async get x() {
+>x : void
+
+        for await (const y of []) {
+>y : never
+>[] : never[]
+        }
+    }
+}
+
