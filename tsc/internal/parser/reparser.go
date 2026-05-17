@@ -179,6 +179,9 @@ func (p *Parser) reparseJSDocTypeLiteral(t *ast.TypeNode) *ast.Node {
 		isArrayType := jstypeliteral.IsArrayType
 		properties := p.nodeSliceArena.NewSlice(0)
 		for _, prop := range jstypeliteral.JSDocPropertyTags {
+			if prop.Kind != ast.KindJSDocPropertyTag && prop.Kind != ast.KindJSDocParameterTag {
+				continue
+			}
 			jsprop := prop.AsJSDocParameterOrPropertyTag()
 			name := prop.Name()
 			if name.Kind == ast.KindQualifiedName {

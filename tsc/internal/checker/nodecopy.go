@@ -482,6 +482,9 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		if node.Kind == ast.KindJSDocTypeLiteral {
 			var members []*ast.Node
 			for _, t := range node.AsJSDocTypeLiteral().JSDocPropertyTags {
+				if t.Kind != ast.KindJSDocPropertyTag && t.Kind != ast.KindJSDocParameterTag {
+					continue
+				}
 				n := t.Name()
 				var targetName *ast.Node
 				if ast.IsIdentifier(n) {

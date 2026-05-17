@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/jsDocTypedefWithThisTag.ts] ////
+
+=== bug.js ===
+/** @typedef T @this {object} */
+const x = 1;
+>x : 1
+>1 : 1
+
