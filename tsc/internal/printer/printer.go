@@ -4390,7 +4390,7 @@ func (p *Printer) emitJsxAttributeValue(node *ast.JsxAttributeValue) {
 	case ast.KindJsxFragment:
 		p.emitJsxFragment(node.AsJsxFragment())
 	default:
-		panic(fmt.Sprintf("unhandled JsxAttributeValue: %v", node.Kind))
+		p.emitExpression(node, ast.OperatorPrecedenceLowest)
 	}
 }
 
