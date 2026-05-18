@@ -135,6 +135,11 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 			}
 		} else if param.Kind == ast.KindJSDocParameterTag || param.Kind == ast.KindJSDocPropertyTag {
 			jsparam := param.AsJSDocParameterOrPropertyTag()
+			// Skip sub-property parameters (e.g., @param x.y) - these have QualifiedNames
+			// and describe properties of a parent parameter, not standalone parameters.
+			if ast.IsQualifiedName(jsparam.Name()) {
+				continue
+			}
 			var dotDotDotToken *ast.Node
 			var paramType *ast.TypeNode
 
