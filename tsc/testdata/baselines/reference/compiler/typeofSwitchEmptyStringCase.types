@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/typeofSwitchEmptyStringCase.ts] ////
+
+=== typeofSwitchEmptyStringCase.ts ===
+// https://github.com/microsoft/typescript-go/issues/3909
+
+function f(x: string | number) {
+>f : (x: string | number) => void
+>x : string | number
+
+  switch (typeof x) {
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>x : string | number
+
+    case "":
+>"" : ""
+
+    case "string":
+>"string" : "string"
+
+      x.charAt(0);
+>x.charAt(0) : string
+>x.charAt : (pos: number) => string
+>x : string
+>charAt : (pos: number) => string
+>0 : 0
+
+      break;
+  }
+}
+
