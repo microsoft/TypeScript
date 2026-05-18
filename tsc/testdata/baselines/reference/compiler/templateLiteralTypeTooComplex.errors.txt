@@ -1,0 +1,10 @@
+templateLiteralTypeTooComplex.ts(3,10): error TS2590: Expression produces a union type that is too complex to represent.
+
+
+==== templateLiteralTypeTooComplex.ts (1 errors) ====
+    // Large template literal types with combinatorial explosion should produce an error, not hang.
+    type N = 0 | 1 | 2 | 3;
+    type T = `${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}${N}`;
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2590: Expression produces a union type that is too complex to represent.
+    
