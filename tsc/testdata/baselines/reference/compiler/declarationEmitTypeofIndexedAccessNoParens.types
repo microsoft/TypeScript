@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/declarationEmitTypeofIndexedAccessNoParens.ts] ////
+
+=== declarationEmitTypeofIndexedAccessNoParens.ts ===
+export const C = { A: 1 };
+>C : { A: number; }
+>{ A: 1 } : { A: number; }
+>A : number
+>1 : 1
+
+export type C = typeof C[keyof typeof C];
+>C : number
+>C : { A: number; }
+>C : { A: number; }
+
+// Parenthesized form should also round-trip
+export type C2 = (typeof C)[keyof typeof C];
+>C2 : number
+>C : { A: number; }
+>C : { A: number; }
+
+// IndexedAccessType: index access of a parsed typeof should preserve source
+export const arr = [C];
+>arr : { A: number; }[]
+>[C] : { A: number; }[]
+>C : { A: number; }
+
+export type ArrAlias = typeof arr[number];
+>ArrAlias : { A: number; }
+>arr : { A: number; }[]
+
+// ArrayType: array of a parsed typeof should preserve source
+export type CArr = typeof C[];
+>CArr : CArr
+>C : { A: number; }
+
+// Parenthesized array form should also round-trip
+export type CArr2 = (typeof C)[];
+>CArr2 : CArr2
+>C : { A: number; }
+
+// OptionalType (tuple element): optional of a parsed typeof should preserve source
+export type CTuple = [typeof C?];
+>CTuple : CTuple
+>C : { A: number; }
+
+// Parenthesized optional form should also round-trip
+export type CTuple2 = [(typeof C)?];
+>CTuple2 : CTuple2
+>C : { A: number; }
+
+

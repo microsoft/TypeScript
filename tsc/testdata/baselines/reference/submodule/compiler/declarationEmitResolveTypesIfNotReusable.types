@@ -34,8 +34,8 @@ export const o2 = (o: (typeof a)['a']) => {}
 >a : { readonly a: "value of a"; readonly notNecessary: "X"; }
 
 export const o3 = (o:  typeof a['a']) => {}
->o3 : (o: (typeof a)['a']) => void
->(o:  typeof a['a']) => {} : (o: (typeof a)['a']) => void
+>o3 : (o: typeof a['a']) => void
+>(o:  typeof a['a']) => {} : (o: typeof a['a']) => void
 >o : "value of a"
 >a : { readonly a: "value of a"; readonly notNecessary: "X"; }
 

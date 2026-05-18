@@ -44,7 +44,7 @@ declare const a: {
 };
 export declare const o1: (o: A['a']['b']) => void;
 export declare const o2: (o: (typeof a)['a']) => void;
-export declare const o3: (o: (typeof a)['a']) => void;
+export declare const o3: (o: typeof a['a']) => void;
 export declare const o4: (o: keyof (A['a'])) => void;
 export {};
 //// [main.d.ts]

@@ -1962,10 +1962,25 @@ func (p *Printer) emitTypeLiteral(node *ast.TypeLiteralNode) {
 
 func (p *Printer) emitArrayType(node *ast.ArrayTypeNode) {
 	state := p.enterNode(node.AsNode())
-	p.emitTypeNode(node.ElementType, ast.TypePrecedencePostfix)
+	p.emitPostfixTypeOperand(node.ElementType, node.AsNode())
 	p.writePunctuation("[")
 	p.writePunctuation("]")
 	p.exitNode(node.AsNode(), state)
+}
+
+// emitPostfixTypeOperand emits the operand of a postfix type (ArrayType, IndexedAccessType,
+// OptionalType). It is equivalent to `emitTypeNode(operand, TypePrecedencePostfix)` except
+// that it preserves a parsed `typeof X` operand without adding parentheses (e.g.,
+// `typeof C[K]` instead of `(typeof C)[K]`). TypeScript's `parenthesizeNonArrayTypeOfPostfixType`
+// factory rule wraps `TypeQuery` in `ParenthesizedType` only when a postfix type is constructed
+// via the factory, so parsed postfix types preserve the source as written during round-trip
+// emit while synthesized postfix types (e.g., from declaration emit) still get the parentheses.
+func (p *Printer) emitPostfixTypeOperand(operand *ast.TypeNode, parent *ast.Node) {
+	if ast.IsParseTreeNode(parent) && operand.Kind == ast.KindTypeQuery {
+		p.emitTypeNode(operand, ast.TypePrecedenceTypeOperator)
+		return
+	}
+	p.emitTypeNode(operand, ast.TypePrecedencePostfix)
 }
 
 func (p *Printer) emitTupleElementType(node *ast.Node) {
@@ -1991,7 +2006,7 @@ func (p *Printer) emitRestType(node *ast.RestTypeNode) {
 func (p *Printer) emitOptionalType(node *ast.OptionalTypeNode) {
 	state := p.enterNode(node.AsNode())
 	// !!! May need extra parenthesization if we also have JSDocNullableType
-	p.emitTypeNode(node.Type, ast.TypePrecedencePostfix)
+	p.emitPostfixTypeOperand(node.Type, node.AsNode())
 	p.writePunctuation("?")
 	p.exitNode(node.AsNode(), state)
 }
@@ -2089,7 +2104,7 @@ func (p *Printer) emitTypeOperator(node *ast.TypeOperatorNode) {
 
 func (p *Printer) emitIndexedAccessType(node *ast.IndexedAccessTypeNode) {
 	state := p.enterNode(node.AsNode())
-	p.emitTypeNode(node.ObjectType, ast.TypePrecedencePostfix)
+	p.emitPostfixTypeOperand(node.ObjectType, node.AsNode())
 	p.writePunctuation("[")
 	p.emitTypeNodeOutsideExtends(node.IndexType)
 	p.writePunctuation("]")
