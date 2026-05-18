@@ -988,15 +988,16 @@ func (tx *DeclarationTransformer) transformConstructSignatureDeclaration(input *
 func (tx *DeclarationTransformer) omitPrivateMethodType(input *ast.Node) *ast.Node {
 	if input.Symbol() != nil && len(input.Symbol().Declarations) > 0 && input.Symbol().Declarations[0] != input {
 		return nil
-	} else {
-		return tx.Factory().NewPropertyDeclaration(
-			tx.ensureModifiers(input),
-			input.Name(),
-			nil,
-			nil,
-			nil,
-		)
 	}
+	result := tx.Factory().NewPropertyDeclaration(
+		tx.ensureModifiers(input),
+		input.Name(),
+		nil,
+		nil,
+		nil,
+	)
+	tx.preserveJsDoc(result, input)
+	return result
 }
 
 func (tx *DeclarationTransformer) transformMethodSignatureDeclaration(input *ast.MethodSignatureDeclaration) *ast.Node {
