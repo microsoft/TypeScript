@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/enumNaNValues.ts] ////
+
+=== enumNaNValues.ts ===
+enum E {
+>E : E
+
+  A = NaN,
+>A : E.A
+>NaN : number
+
+  B = NaN,
+>B : E.A
+>NaN : number
+}
+
+const a: E.A = E.B;
+>a : E
+>E : any
+>E.B : E
+>E : typeof E
+>B : E
+
+const b: E.B = E.A;
+>b : E
+>E : any
+>E.A : E
+>E : typeof E
+>A : E
+
+enum F {
+>F : F
+
+  X = NaN,
+>X : F.X
+>NaN : number
+}
+
+const c: E.A = F.X; // Error expected - different enums
+>c : E
+>E : any
+>F.X : F
+>F : typeof F
+>X : F
+

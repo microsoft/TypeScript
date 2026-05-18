@@ -79,7 +79,7 @@ enum E5 {
 >0.0 : 0
 
     e = NaN,
->e : E5.e
+>e : E5.d
 >NaN : number
 
     f = Infinity,
@@ -120,7 +120,7 @@ const enum E6 {
 >0.0 : 0
 
     e = NaN,
->e : E6.e
+>e : E6.d
 >NaN : number
 
     f = Infinity,
