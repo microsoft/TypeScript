@@ -943,11 +943,11 @@ func (c *EmitContext) VisitIterationBody(body *ast.Statement, visitor *ast.NodeV
 }
 
 func (c *EmitContext) VisitEmbeddedStatement(node *ast.Statement, visitor *ast.NodeVisitor) *ast.Statement {
-	embeddedStatement := visitor.VisitEmbeddedStatement(node)
-	if embeddedStatement == nil {
+	if node == nil {
 		return nil
 	}
-	if ast.IsNotEmittedStatement(embeddedStatement) {
+	embeddedStatement := visitor.VisitEmbeddedStatement(node)
+	if embeddedStatement == nil || ast.IsNotEmittedStatement(embeddedStatement) {
 		emptyStatement := visitor.Factory.NewEmptyStatement()
 		emptyStatement.Loc = node.Loc
 		c.SetOriginal(emptyStatement, node)
