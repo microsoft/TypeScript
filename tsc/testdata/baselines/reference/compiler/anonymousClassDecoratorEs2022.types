@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/anonymousClassDecoratorEs2022.ts] ////
+
+=== anonymousClassDecoratorEs2022.ts ===
+class {
+  @x
+>x : any
+
+  m() {
+>m : () => void
+
+    // ...
+  }
+};
+
