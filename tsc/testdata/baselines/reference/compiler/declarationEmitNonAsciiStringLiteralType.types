@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/declarationEmitNonAsciiStringLiteralType.ts] ////
+
+=== declarationEmitNonAsciiStringLiteralType.ts ===
+export const IconEmojis = {
+>IconEmojis : { readonly alert_low: "⚠️"; }
+>{    alert_low: "⚠️",} as const : { readonly alert_low: "⚠️"; }
+>{    alert_low: "⚠️",} : { readonly alert_low: "⚠️"; }
+
+    alert_low: "⚠️",
+>alert_low : "⚠️"
+>"⚠️" : "⚠️"
+
+} as const;
+
+export const singleEmoji = "⚠️" as const;
+>singleEmoji : "⚠️"
+>"⚠️" as const : "⚠️"
+>"⚠️" : "⚠️"
+
+export const tuple = ["⚠️", "日本語"] as const;
+>tuple : readonly ["⚠️", "日本語"]
+>["⚠️", "日本語"] as const : readonly ["⚠️", "日本語"]
+>["⚠️", "日本語"] : readonly ["⚠️", "日本語"]
+>"⚠️" : "⚠️"
+>"日本語" : "日本語"
+
+export function returnsEmoji(): "⚠️" {
+>returnsEmoji : () => "⚠️"
+
+    return "⚠️";
+>"⚠️" : "⚠️"
+}
+
+export const templateEmoji = `⚠️` as const;
+>templateEmoji : "⚠️"
+>`⚠️` as const : "⚠️"
+>`⚠️` : "⚠️"
+
+export const templateObj = {
+>templateObj : { readonly alert: `⚠️`; readonly greet: `日本語`; }
+>{    alert: `⚠️`,    greet: `日本語`,} as const : { readonly alert: `⚠️`; readonly greet: `日本語`; }
+>{    alert: `⚠️`,    greet: `日本語`,} : { readonly alert: `⚠️`; readonly greet: `日本語`; }
+
+    alert: `⚠️`,
+>alert : "⚠️"
+>`⚠️` : "⚠️"
+
+    greet: `日本語`,
+>greet : "日本語"
+>`日本語` : "日本語"
+
+} as const;
+
