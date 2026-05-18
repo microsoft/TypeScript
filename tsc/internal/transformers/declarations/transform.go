@@ -2174,6 +2174,10 @@ func (tx *DeclarationTransformer) transformJSDocOptionalType(input *ast.JSDocOpt
 }
 
 func (tx *DeclarationTransformer) getNameExpressionPreferringIdentifier(nameExpr *ast.Node) *ast.Node {
+	if ast.IsNumericLiteral(nameExpr) {
+		// Numeric property names are string properties in JS; convert to string literal
+		nameExpr = tx.Factory().NewStringLiteral(nameExpr.Text(), ast.TokenFlagsNone)
+	}
 	if ast.IsStringLiteralLike(nameExpr) && scanner.IsIdentifierText(nameExpr.Text(), core.LanguageVariantStandard) {
 		result := tx.Factory().NewIdentifier(nameExpr.Text()) // prefer non-string literal names where possible
 		kwKind := scanner.IdentifierToKeywordKind(result.AsIdentifier())
