@@ -387,7 +387,7 @@ func (ch *objectRestSpreadTransformer) visitCatchClause(node *ast.CatchClause) *
 		block := ch.Visitor().VisitNode(node.Block)
 		if visitedBindings != nil {
 			var decls []*ast.Node
-			if visitedBindings.Kind&ast.KindSyntaxList != 0 {
+			if visitedBindings.Kind == ast.KindSyntaxList {
 				decls = visitedBindings.AsSyntaxList().Children
 			} else {
 				decls = []*ast.Node{visitedBindings}
