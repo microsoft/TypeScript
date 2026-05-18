@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/contextuallyTypedFunctionOptionalAndRest.ts] ////
+
+=== contextuallyTypedFunctionOptionalAndRest.ts ===
+const f: () => void = (a?, ...b) => {};
+>f : Symbol(f, Decl(contextuallyTypedFunctionOptionalAndRest.ts, 0, 5))
+>a : Symbol(a, Decl(contextuallyTypedFunctionOptionalAndRest.ts, 0, 23))
+>b : Symbol(b, Decl(contextuallyTypedFunctionOptionalAndRest.ts, 0, 26))
+
