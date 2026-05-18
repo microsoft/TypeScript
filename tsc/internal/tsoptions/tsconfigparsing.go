@@ -1505,7 +1505,9 @@ func ForEachPropertyAssignment[T any](objectLiteral *ast.ObjectLiteralExpression
 func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) *ast.ObjectLiteralExpression {
 	if tsConfigSourceFile != nil && tsConfigSourceFile.Statements != nil && len(tsConfigSourceFile.Statements.Nodes) > 0 {
 		expression := tsConfigSourceFile.Statements.Nodes[0].Expression()
-		return expression.AsObjectLiteralExpression()
+		if ast.IsObjectLiteralExpression(expression) {
+			return expression.AsObjectLiteralExpression()
+		}
 	}
 	return nil
 }
