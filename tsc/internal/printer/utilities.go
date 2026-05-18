@@ -408,14 +408,13 @@ func getPreviousNonWhitespacePosition(pos int, stopPos int, sourceFile *ast.Sour
 	return -1
 }
 
-func siblingNodePositionsAreComparable(previousNode *ast.Node, nextNode *ast.Node) bool {
+func siblingNodePositionsAreComparable(emitContext *EmitContext, previousNode *ast.Node, nextNode *ast.Node) bool {
 	if nextNode.Pos() < previousNode.End() {
 		return false
 	}
 
-	// TODO(rbuckton)
-	// previousNode = getOriginalNode(previousNode);
-	// nextNode = getOriginalNode(nextNode);
+	previousNode = emitContext.MostOriginal(previousNode)
+	nextNode = emitContext.MostOriginal(nextNode)
 	parent := previousNode.Parent
 	if parent == nil || parent != nextNode.Parent {
 		return false
@@ -554,12 +553,12 @@ func canHaveDecorators(node *ast.Node) bool {
 	return false
 }
 
-func originalNodesHaveSameParent(nodeA *ast.Node, nodeB *ast.Node) bool {
-	// TODO(rbuckton): nodeA = getOriginalNode(nodeA)
+func originalNodesHaveSameParent(emitContext *EmitContext, nodeA *ast.Node, nodeB *ast.Node) bool {
+	nodeA = emitContext.MostOriginal(nodeA)
 	if nodeA.Parent != nil {
-		// For performance, do not call `getOriginalNode` for `nodeB` if `nodeA` doesn't even
+		// For performance, do not call `MostOriginal` for `nodeB` if `nodeA` doesn't even
 		// have a parent node.
-		// TODO(rbuckton): nodeB = getOriginalNode(nodeB)
+		nodeB = emitContext.MostOriginal(nodeB)
 		return nodeA.Parent == nodeB.Parent
 	}
 	return false

@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/jsxSpreadWithAssertion.tsx] ////
+
+=== jsxSpreadWithAssertion.tsx ===
+declare const EntryTextDialog: any;
+>EntryTextDialog : any
+
+const c = <EntryTextDialog
+>c : any
+><EntryTextDialog    {...{        first: 0,        foo: 1,        bar: 2 as any,        baz: 3,        last: 4    }}/> : any
+>EntryTextDialog : any
+
+    {...{
+>{        first: 0,        foo: 1,        bar: 2 as any,        baz: 3,        last: 4    } : { first: number; foo: number; bar: any; baz: number; last: number; }
+
+        first: 0,
+>first : number
+>0 : 0
+
+        foo: 1,
+>foo : number
+>1 : 1
+
+        bar: 2 as any,
+>bar : any
+>2 as any : any
+>2 : 2
+
+        baz: 3,
+>baz : number
+>3 : 3
+
+        last: 4
+>last : number
+>4 : 4
+
+    }}
+/>
+

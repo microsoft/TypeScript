@@ -565,7 +565,7 @@ func (p *Printer) getSeparatingLineTerminatorCount(previousNode *ast.Node, nextN
 			// JsxText will be written with its leading whitespace, so don't add more manually.
 			return 0
 		} else if p.currentSourceFile != nil && !ast.NodeIsSynthesized(previousNode) && !ast.NodeIsSynthesized(nextNode) {
-			if p.Options.PreserveSourceNewlines && siblingNodePositionsAreComparable(previousNode, nextNode) {
+			if p.Options.PreserveSourceNewlines && siblingNodePositionsAreComparable(p.emitContext, previousNode, nextNode) {
 				return p.getEffectiveLines(
 					func(includeComments bool) int {
 						return getLinesBetweenRangeEndAndRangeStart(
@@ -576,7 +576,7 @@ func (p *Printer) getSeparatingLineTerminatorCount(previousNode *ast.Node, nextN
 						)
 					},
 				)
-			} else if !p.Options.PreserveSourceNewlines && originalNodesHaveSameParent(previousNode, nextNode) {
+			} else if !p.Options.PreserveSourceNewlines && originalNodesHaveSameParent(p.emitContext, previousNode, nextNode) {
 				// If `preserveSourceNewlines` is `false` we do not intend to preserve the effective lines between the
 				// previous and next node. Instead we naively check whether nodes are on separate lines within the
 				// same node parent. If so, we intend to preserve a single line terminator. This is less precise and
