@@ -49,15 +49,15 @@ line 2";
 
 var stringLiteralWithLineSeparator = "line 1\
 >stringLiteralWithLineSeparator : string
->"line 1\ line 2" : "line 1â��line 2"
+>"line 1\ line 2" : "line 1line 2"
 
 line 2";
 var stringLiteralWithParagraphSeparator = "line 1\
 >stringLiteralWithParagraphSeparator : string
->"line 1\ line 2" : "line 1â��line 2"
+>"line 1\ line 2" : "line 1line 2"
 
 line 2";
 var stringLiteralWithNextLine = "line 1\line 2";
 >stringLiteralWithNextLine : string
->"line 1\line 2" : "line 1Â�line 2"
+>"line 1\line 2" : "line 1\u0085line 2"
 

@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/backslashBeforeNonSpecialChar.ts] ////
+
+=== backslashBeforeNonSpecialChar.ts ===
+const enum Currency {
+>Currency : Currency
+
+  Euro = "\€",
+>Euro : Currency.Euro
+>"\€" : "€"
+}
+
+const currency = Currency.Euro;
+>currency : Currency.Euro
+>Currency.Euro : Currency
+>Currency : typeof Currency
+>Euro : Currency
+
