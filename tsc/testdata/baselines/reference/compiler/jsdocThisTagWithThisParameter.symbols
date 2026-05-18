@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/jsdocThisTagWithThisParameter.ts] ////
+
+=== bug.js ===
+/** @this {object} */
+function f(this) {}
+>f : Symbol(f, Decl(bug.js, 0, 0))
+>this : Symbol(this, Decl(bug.js, 1, 11))
+
