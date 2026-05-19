@@ -849,7 +849,7 @@ func IsRecognizedTripleSlashComment(text string, commentRange ast.CommentRange) 
 
 func isJSDocLikeText(text string, comment ast.CommentRange) bool {
 	return comment.Kind == ast.KindMultiLineCommentTrivia &&
-		comment.Len() > 5 &&
+		comment.Len() >= 5 &&
 		text[comment.Pos()+2] == '*' &&
 		text[comment.Pos()+3] != '/'
 }
