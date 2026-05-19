@@ -984,6 +984,15 @@ func (r *EmitResolver) CreateLiteralConstValue(emitContext *printer.EmitContext,
 	case string:
 		return emitContext.Factory.NewStringLiteral(value, ast.TokenFlagsNone)
 	case jsnum.Number:
+		if value.IsInf() {
+			if value > 0 {
+				return emitContext.Factory.NewIdentifier("Infinity")
+			}
+			return emitContext.Factory.NewPrefixUnaryExpression(ast.KindMinusToken, emitContext.Factory.NewIdentifier("Infinity"))
+		}
+		if value.IsNaN() {
+			return emitContext.Factory.NewIdentifier("NaN")
+		}
 		if value.Abs() != value {
 			// negative
 			return emitContext.Factory.NewPrefixUnaryExpression(
