@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/expandoPropertyEmptyArrayWidening.ts] ////
+
+=== expandoPropertyEmptyArrayWidening.ts ===
+// https://github.com/microsoft/typescript-go/issues/3976
+
+const example: {
+>example : Symbol(example, Decl(expandoPropertyEmptyArrayWidening.ts, 2, 5))
+
+  (): void;
+  items?: string[];
+>items : Symbol(items, Decl(expandoPropertyEmptyArrayWidening.ts, 3, 11))
+
+} = () => undefined;
+>undefined : Symbol(undefined)
+
+example.items = [];
+>example.items : Symbol(items, Decl(expandoPropertyEmptyArrayWidening.ts, 3, 11))
+>example : Symbol(example, Decl(expandoPropertyEmptyArrayWidening.ts, 2, 5))
+>items : Symbol(items, Decl(expandoPropertyEmptyArrayWidening.ts, 3, 11))
+
+function f1() {}
+>f1 : Symbol(f1, Decl(expandoPropertyEmptyArrayWidening.ts, 6, 19))
+
+f1.a = [];  // Implicit any error
+>f1.a : Symbol(f1.a, Decl(expandoPropertyEmptyArrayWidening.ts, 8, 16))
+>f1 : Symbol(f1, Decl(expandoPropertyEmptyArrayWidening.ts, 6, 19))
+>a : Symbol(f1.a, Decl(expandoPropertyEmptyArrayWidening.ts, 8, 16))
+
+const f2 = function() {};
+>f2 : Symbol(f2, Decl(expandoPropertyEmptyArrayWidening.ts, 11, 5))
+
+f2.a = [];  // Implicit any error
+>f2.a : Symbol(f2.a, Decl(expandoPropertyEmptyArrayWidening.ts, 11, 25))
+>f2 : Symbol(f2, Decl(expandoPropertyEmptyArrayWidening.ts, 11, 5))
+>a : Symbol(f2.a, Decl(expandoPropertyEmptyArrayWidening.ts, 11, 25))
+
+const f3 = () => {};
+>f3 : Symbol(f3, Decl(expandoPropertyEmptyArrayWidening.ts, 14, 5))
+
+f3.a = [];  // Implicit any error
+>f3.a : Symbol(f3.a, Decl(expandoPropertyEmptyArrayWidening.ts, 14, 20))
+>f3 : Symbol(f3, Decl(expandoPropertyEmptyArrayWidening.ts, 14, 5))
+>a : Symbol(f3.a, Decl(expandoPropertyEmptyArrayWidening.ts, 14, 20))
+
+const f4: { (): void, a: string[] } = () => {};
+>f4 : Symbol(f4, Decl(expandoPropertyEmptyArrayWidening.ts, 17, 5))
+>a : Symbol(a, Decl(expandoPropertyEmptyArrayWidening.ts, 17, 21))
+
+f4.a = [];
+>f4.a : Symbol(a, Decl(expandoPropertyEmptyArrayWidening.ts, 17, 21))
+>f4 : Symbol(f4, Decl(expandoPropertyEmptyArrayWidening.ts, 17, 5))
+>a : Symbol(a, Decl(expandoPropertyEmptyArrayWidening.ts, 17, 21))
+
+const f5: { (): void, a: string[] } = function() {};
+>f5 : Symbol(f5, Decl(expandoPropertyEmptyArrayWidening.ts, 20, 5))
+>a : Symbol(a, Decl(expandoPropertyEmptyArrayWidening.ts, 20, 21))
+
+f5.a = [];
+>f5.a : Symbol(a, Decl(expandoPropertyEmptyArrayWidening.ts, 20, 21))
+>f5 : Symbol(f5, Decl(expandoPropertyEmptyArrayWidening.ts, 20, 5))
+>a : Symbol(a, Decl(expandoPropertyEmptyArrayWidening.ts, 20, 21))
+

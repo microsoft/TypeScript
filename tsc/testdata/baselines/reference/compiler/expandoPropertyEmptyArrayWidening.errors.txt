@@ -1,0 +1,35 @@
+expandoPropertyEmptyArrayWidening.ts(10,1): error TS7008: Member 'a' implicitly has an 'any[]' type.
+expandoPropertyEmptyArrayWidening.ts(13,1): error TS7008: Member 'a' implicitly has an 'any[]' type.
+expandoPropertyEmptyArrayWidening.ts(16,1): error TS7008: Member 'a' implicitly has an 'any[]' type.
+
+
+==== expandoPropertyEmptyArrayWidening.ts (3 errors) ====
+    // https://github.com/microsoft/typescript-go/issues/3976
+    
+    const example: {
+      (): void;
+      items?: string[];
+    } = () => undefined;
+    example.items = [];
+    
+    function f1() {}
+    f1.a = [];  // Implicit any error
+    ~~~~~~~~~
+!!! error TS7008: Member 'a' implicitly has an 'any[]' type.
+    
+    const f2 = function() {};
+    f2.a = [];  // Implicit any error
+    ~~~~~~~~~
+!!! error TS7008: Member 'a' implicitly has an 'any[]' type.
+    
+    const f3 = () => {};
+    f3.a = [];  // Implicit any error
+    ~~~~~~~~~
+!!! error TS7008: Member 'a' implicitly has an 'any[]' type.
+    
+    const f4: { (): void, a: string[] } = () => {};
+    f4.a = [];
+    
+    const f5: { (): void, a: string[] } = function() {};
+    f5.a = [];
+    
