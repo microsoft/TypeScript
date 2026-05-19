@@ -331,12 +331,13 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 					namedSymbol = s
 				}
 				export.localName = getDefaultLikeExportNameFromDeclaration(namedSymbol)
-				if isUnusableName(export.localName) {
-					export.localName = lsutil.ModuleSpecifierToValidIdentifier(string(export.Target.ModuleID), false)
-				}
-			} else {
-				export.localName = lsutil.ModuleSpecifierToValidIdentifier(string(moduleID), false)
 			}
+		}
+		if isUnusableName(export.localName) {
+			// Last resort: derive identifier from the file name. Use FileName() (original
+			// casing) rather than ModuleID/Path() which is lowercased on case-insensitive
+			// file systems, losing PascalCase.
+			export.localName = lsutil.ModuleSpecifierToValidIdentifier(fileNameForDefaultExportName(targetSymbol, moduleFileName, moduleID), false)
 		}
 	}
 
@@ -440,4 +441,21 @@ func isUnusableName(name string) bool {
 		name == ast.InternalSymbolNameExportStar ||
 		name == ast.InternalSymbolNameDefault ||
 		name == ast.InternalSymbolNameExportEquals
+}
+
+// fileNameForDefaultExportName returns the best file name to use when deriving
+// a fallback identifier for a default-like export. It prefers the target symbol's
+// source file (closest to the export origin), falls back to the module's original
+// file name, and uses the lowercased moduleID only for ambient modules where no
+// original file name is available.
+func fileNameForDefaultExportName(targetSymbol *ast.Symbol, moduleFileName string, moduleID ModuleID) string {
+	if targetSymbol != nil && len(targetSymbol.Declarations) > 0 {
+		if fn := ast.GetSourceFileOfNode(targetSymbol.Declarations[0]).FileName(); fn != "" {
+			return fn
+		}
+	}
+	if moduleFileName != "" {
+		return moduleFileName
+	}
+	return string(moduleID)
 }
