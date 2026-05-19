@@ -94,7 +94,7 @@ interface Set<T> {
      */
     has(value: T): boolean;
     /**
-     * @returns the number of (unique) elements in Set.
+     * @returns the number of (unique) elements in the Set.
      */
     readonly size: number;
 }
