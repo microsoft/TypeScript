@@ -8,6 +8,10 @@
 
 It is acceptable to use AI tools to assist in developing PRs. However, we ask that you disclose this in the PR description. If your PR appears AI-authored and you do not include this disclosure, your PR will be closed without review. Repeated violation of this will be considered disruptive conduct, which may result in being blocked from interaction with the organization.
 
+### Automated Comments
+
+This repo has already been configured with the appropriate level of automation for the project. Automated comments (e.g. posting auto-generated PR or issue "summaries") are not allowed and will result in an immediate block for inauthentic activity.
+
 # Instructions for Logging Issues
 
 ## 1. Read the FAQ
