@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/exportDestructuringIterator.ts] ////
+
+=== exportDestructuringIterator.ts ===
+declare function foo(): any;
+>foo : Symbol(foo, Decl(exportDestructuringIterator.ts, 0, 0))
+
+export const [A, V] = foo();
+>A : Symbol(A, Decl(exportDestructuringIterator.ts, 1, 14))
+>V : Symbol(V, Decl(exportDestructuringIterator.ts, 1, 16))
+>foo : Symbol(foo, Decl(exportDestructuringIterator.ts, 0, 0))
+
+export const { x, y } = foo();
+>x : Symbol(x, Decl(exportDestructuringIterator.ts, 2, 14))
+>y : Symbol(y, Decl(exportDestructuringIterator.ts, 2, 17))
+>foo : Symbol(foo, Decl(exportDestructuringIterator.ts, 0, 0))
+
+export const [a = 1, b = 2] = foo();
+>a : Symbol(a, Decl(exportDestructuringIterator.ts, 3, 14))
+>b : Symbol(b, Decl(exportDestructuringIterator.ts, 3, 20))
+>foo : Symbol(foo, Decl(exportDestructuringIterator.ts, 0, 0))
+
+export const [c, ...d] = foo();
+>c : Symbol(c, Decl(exportDestructuringIterator.ts, 4, 14))
+>d : Symbol(d, Decl(exportDestructuringIterator.ts, 4, 16))
+>foo : Symbol(foo, Decl(exportDestructuringIterator.ts, 0, 0))
+
+export const [, e, , f] = foo();
+>e : Symbol(e, Decl(exportDestructuringIterator.ts, 5, 15))
+>f : Symbol(f, Decl(exportDestructuringIterator.ts, 5, 20))
+>foo : Symbol(foo, Decl(exportDestructuringIterator.ts, 0, 0))
+
+export const [[g, h], { i, j: k }] = foo();
+>g : Symbol(g, Decl(exportDestructuringIterator.ts, 6, 15))
+>h : Symbol(h, Decl(exportDestructuringIterator.ts, 6, 17))
+>i : Symbol(i, Decl(exportDestructuringIterator.ts, 6, 23))
+>k : Symbol(k, Decl(exportDestructuringIterator.ts, 6, 26))
+>foo : Symbol(foo, Decl(exportDestructuringIterator.ts, 0, 0))
+
+export const { m: [n, o], p: { q } } = foo();
+>n : Symbol(n, Decl(exportDestructuringIterator.ts, 7, 19))
+>o : Symbol(o, Decl(exportDestructuringIterator.ts, 7, 21))
+>q : Symbol(q, Decl(exportDestructuringIterator.ts, 7, 30))
+>foo : Symbol(foo, Decl(exportDestructuringIterator.ts, 0, 0))
+

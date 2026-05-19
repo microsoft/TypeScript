@@ -1109,13 +1109,14 @@ func (tx *CommonJSModuleTransformer) transformInitializedVariable(node *ast.Vari
 	}
 	name := node.Name()
 	if ast.IsBindingPattern(name) {
-		return transformers.FlattenDestructuringAssignment(
-			&tx.Transformer,
-			tx.Visitor().VisitNode(node.AsNode()),
-			false, /*needsValue*/
-			transformers.FlattenLevelAll,
-			tx.createAllExportExpressions,
-		)
+		// Convert the binding pattern into an equivalent assignment expression and visit it
+		// as a destructuring assignment. This preserves native destructuring (and therefore
+		// iterator semantics for array patterns) whenever each leaf identifier can be
+		// substituted to an export reference. Only when the destructuring would assign to
+		// re-aliased or multi-exported names (where native destructuring cannot update all
+		// targets) does `visitDestructuringAssignment` fall back to flattening.
+		assignment := transformers.ConvertVariableDeclarationToAssignmentExpression(tx.EmitContext(), node)
+		return tx.visitDestructuringAssignment(assignment.AsBinaryExpression(), true /*valueIsDiscarded*/)
 	}
 	propertyAccess := tx.Factory().NewPropertyAccessExpression(
 		tx.Factory().NewIdentifier("exports"),
@@ -1452,11 +1453,22 @@ func (tx *CommonJSModuleTransformer) destructuringNeedsFlattening(node *ast.Node
 		}
 	} else if ast.IsIdentifier(node) {
 		exportedNames := tx.getExports(node)
-		threshold := 0
 		if transformers.IsExportName(tx.EmitContext(), node) {
-			threshold = 1
+			// The identifier is already wrapped to be an export reference; tolerate up to one
+			// matching export.
+			return len(exportedNames) > 1
 		}
-		return len(exportedNames) > threshold
+		if len(exportedNames) == 0 {
+			return false
+		}
+		// A single direct export whose export name matches the identifier text can be handled
+		// natively: substitution will rewrite the identifier to `exports.X`, so no flattening
+		// is needed. Re-aliased exports (where the export name differs from the local name) or
+		// multi-exported names cannot be expressed natively in a destructuring assignment.
+		if len(exportedNames) == 1 && tx.isDirectExport(node) && exportedNames[0].Text() == node.Text() {
+			return false
+		}
+		return true
 	}
 	return false
 }

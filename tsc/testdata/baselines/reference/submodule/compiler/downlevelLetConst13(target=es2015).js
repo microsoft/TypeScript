@@ -27,10 +27,10 @@ exports.M = exports.bar4 = exports.bar3 = exports.bar2 = exports.bar1 = exports.
 // exported let\const bindings should not be renamed
 exports.foo = 10;
 exports.bar = "123";
-exports.bar1 = [1][0];
-exports.bar2 = [2][0];
-exports.bar3 = { a: 1 }.a;
-exports.bar4 = { a: 1 }.a;
+[exports.bar1] = [1];
+[exports.bar2] = [2];
+({ a: exports.bar3 } = { a: 1 });
+({ a: exports.bar4 } = { a: 1 });
 var M;
 (function (M) {
     M.baz = 100;
