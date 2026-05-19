@@ -582,15 +582,15 @@ func getLocalModuleSpecifier(
 	if preferences.relativePreference == RelativePreferenceExternalNonRelative && !tspath.PathIsRelative(maybeNonRelative) {
 		var projectDirectory tspath.Path
 		if len(compilerOptions.ConfigFilePath) > 0 {
-			projectDirectory = tspath.ToPath(compilerOptions.ConfigFilePath, host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames())
+			projectDirectory = tspath.ToPath(tspath.GetDirectoryPath(compilerOptions.ConfigFilePath), host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames())
 		} else {
 			projectDirectory = tspath.ToPath(host.GetCurrentDirectory(), host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames())
 		}
 		canonicalSourceDirectory := tspath.ToPath(sourceDirectory, host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames())
 		modulePath := tspath.ToPath(moduleFileName, string(projectDirectory), host.UseCaseSensitiveFileNames())
 
-		sourceIsInternal := strings.HasPrefix(string(canonicalSourceDirectory), string(projectDirectory))
-		targetIsInternal := strings.HasPrefix(string(modulePath), string(projectDirectory))
+		sourceIsInternal := projectDirectory.ContainsPath(canonicalSourceDirectory)
+		targetIsInternal := projectDirectory.ContainsPath(modulePath)
 		if sourceIsInternal && !targetIsInternal || !sourceIsInternal && targetIsInternal {
 			// 1. The import path crosses the boundary of the tsconfig.json-containing directory.
 			//
@@ -621,9 +621,8 @@ func getLocalModuleSpecifier(
 			//
 			return maybeNonRelative
 		}
-		if len(fromPackageJsonImports) > 0 {
-			return relativePath
-		}
+
+		return relativePath
 	}
 
 	// Prefer a relative import over a baseUrl import if it has fewer components.
