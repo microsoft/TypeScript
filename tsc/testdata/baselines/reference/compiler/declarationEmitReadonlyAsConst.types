@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/declarationEmitReadonlyAsConst.ts] ////
+
+=== declarationEmitReadonlyAsConst.ts ===
+export const value = {
+>value : { readonly method: () => string; readonly prop: { readonly nested: 1; }; }
+>{  method(): string {    return "a";  },  prop: {    nested: 1,  },} as const : { readonly method: () => string; readonly prop: { readonly nested: 1; }; }
+>{  method(): string {    return "a";  },  prop: {    nested: 1,  },} : { readonly method: () => string; readonly prop: { readonly nested: 1; }; }
+
+  method(): string {
+>method : () => string
+
+    return "a";
+>"a" : "a"
+
+  },
+  prop: {
+>prop : { readonly nested: 1; }
+>{    nested: 1,  } : { readonly nested: 1; }
+
+    nested: 1,
+>nested : 1
+>1 : 1
+
+  },
+} as const;
+

@@ -195,7 +195,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		// something a true syntactic ID emitter couldn't possibly know (since the signature could
 		// be from across files). This can't *really* happen in any cases ID doesn't already error on, though.
 		// Just something to keep in mind if the ID checker keeps growing.
-		isConst := b.ch.isConstContext(elements[0].Name)
+		isConst := b.ch.isConstContext(elements[0].Name.Parent.Parent)
 		newElements := make([]*ast.Node, 0, len(elements))
 
 		for _, e := range elements {
