@@ -397,15 +397,21 @@ type accessibleSymbolChainContext struct {
 }
 
 // symbolTableID uniquely identifies a symbol table by encoding its source.
-// The high 2 bits encode the kind (locals, exports, members, globals),
-// and the remaining bits encode the NodeId or SymbolId of the source.
+// The high 3 bits encode the kind, and the remaining bits encode the
+// NodeId or SymbolId of the source.
 type symbolTableID uint64
 
+const stKindShift = 61
+
 const (
-	stKindLocals symbolTableID = iota << 62
+	stKindLocals symbolTableID = iota << stKindShift
 	stKindExports
 	stKindMembers
 	stKindGlobals
+	stKindResolvedExports // resolved/derived exports from getExportsOfSymbol, distinct from raw sym.Exports
+
+	// stKindMask extracts the kind bits from a symbolTableID.
+	stKindMask symbolTableID = (iota - 1) << stKindShift
 )
 
 func symbolTableIDFromLocals(node *ast.Node) symbolTableID {
@@ -414,6 +420,14 @@ func symbolTableIDFromLocals(node *ast.Node) symbolTableID {
 
 func symbolTableIDFromExports(sym *ast.Symbol) symbolTableID {
 	return stKindExports | symbolTableID(ast.GetSymbolId(sym))
+}
+
+// symbolTableIDFromResolvedExports returns an ID for resolved/derived export tables
+// (e.g. from getExportsOfSymbol/getExportsOfModule which may include export * resolution
+// and late-bound members). This is distinct from symbolTableIDFromExports to prevent
+// cache collisions with raw sym.Exports tables passed by someSymbolTableInScope.
+func symbolTableIDFromResolvedExports(sym *ast.Symbol) symbolTableID {
+	return stKindResolvedExports | symbolTableID(ast.GetSymbolId(sym))
 }
 
 func symbolTableIDFromMembers(sym *ast.Symbol) symbolTableID {
@@ -478,19 +492,54 @@ func (c *Checker) getAccessibleSymbolChainFromSymbolTable(ctx accessibleSymbolCh
 	}
 	visitedSymbolTables[tableId] = struct{}{}
 
-	res := c.trySymbolTable(ctx, t, tableId == stKindGlobals, ignoreQualification, isLocalNameLookup)
+	res := c.trySymbolTable(ctx, t, tableId, ignoreQualification, isLocalNameLookup)
 
 	delete(visitedSymbolTables, tableId)
 	return res
 }
 
+// getSymbolTableAliases returns only the alias symbols from a symbol table,
+// caching the result by tableId to avoid repeated iteration over large tables.
+// Members tables are skipped entirely since someSymbolTableInScope filters them
+// to SymbolFlagsType & ^SymbolFlagsAssignment, which never includes aliases.
+func (c *Checker) getSymbolTableAliases(symbols ast.SymbolTable, tableId symbolTableID) []*ast.Symbol {
+	kind := tableId & stKindMask
+	// Members tables never contain alias symbols; skip entirely.
+	if kind == stKindMembers {
+		return nil
+	}
+	// Cache globals and exports tables (which are large and revisited often).
+	// Locals tables are small and per-scope, so they are filtered but not cached.
+	if kind == stKindGlobals || kind == stKindExports || kind == stKindResolvedExports {
+		if c.symbolTableAliasCache != nil {
+			if aliases, ok := c.symbolTableAliasCache[tableId]; ok {
+				return aliases
+			}
+		}
+	}
+	var aliases []*ast.Symbol
+	for _, sym := range symbols {
+		if sym.Flags&ast.SymbolFlagsAlias != 0 {
+			aliases = append(aliases, sym)
+		}
+	}
+	if kind == stKindGlobals || kind == stKindExports || kind == stKindResolvedExports {
+		if c.symbolTableAliasCache == nil {
+			c.symbolTableAliasCache = make(map[symbolTableID][]*ast.Symbol)
+		}
+		c.symbolTableAliasCache[tableId] = aliases
+	}
+	return aliases
+}
+
 func (c *Checker) trySymbolTable(
 	ctx accessibleSymbolChainContext,
 	symbols ast.SymbolTable,
-	isGlobals bool,
+	tableId symbolTableID,
 	ignoreQualification bool,
 	isLocalNameLookup bool,
 ) []*ast.Symbol {
+	isGlobals := tableId == stKindGlobals
 	// If symbol is directly available by its name in the symbol table
 	res, ok := symbols[ctx.symbol.Name]
 	if ok && res != nil && c.isAccessible(ctx, res /*resolvedAliasSymbol*/, nil, ignoreQualification) {
@@ -498,11 +547,21 @@ func (c *Checker) trySymbolTable(
 	}
 
 	var candidateChains [][]*ast.Symbol
-	// collect all possible chains to sort them and return the shortest/best
-	for _, symbolFromSymbolTable := range symbols {
+
+	// Check for ExportSymbol by direct name lookup rather than discovering it during
+	// the alias iteration below (where it would never match, since only alias-flagged
+	// symbols are iterated).
+	if ok && res != nil && res.ExportSymbol != nil {
+		if c.isAccessible(ctx, c.getMergedSymbol(res.ExportSymbol) /*resolvedAliasSymbol*/, nil, ignoreQualification) {
+			candidateChains = append(candidateChains, []*ast.Symbol{ctx.symbol})
+		}
+	}
+
+	// Iterate only alias symbols from the table (cached per tableId).
+	// This avoids iterating thousands of non-alias symbols in large tables like globals.
+	for _, symbolFromSymbolTable := range c.getSymbolTableAliases(symbols, tableId) {
 		// for every non-default, non-export= alias symbol in scope, check if it refers to or can chain to the target symbol
-		if symbolFromSymbolTable.Flags&ast.SymbolFlagsAlias != 0 &&
-			symbolFromSymbolTable.Name != ast.InternalSymbolNameExportEquals &&
+		if symbolFromSymbolTable.Name != ast.InternalSymbolNameExportEquals &&
 			symbolFromSymbolTable.Name != ast.InternalSymbolNameDefault &&
 			!(isUMDExportSymbol(symbolFromSymbolTable) && ctx.enclosingDeclaration != nil && ast.IsExternalModule(ast.GetSourceFileOfNode(ctx.enclosingDeclaration))) &&
 			// If `!useOnlyExternalAliasing`, we can use any type of alias to get the name
@@ -516,11 +575,6 @@ func (c *Checker) trySymbolTable(
 			candidate := c.getCandidateListForSymbol(ctx, symbolFromSymbolTable, resolvedImportedSymbol, ignoreQualification)
 			if len(candidate) > 0 {
 				candidateChains = append(candidateChains, candidate)
-			}
-		}
-		if symbolFromSymbolTable.Name == ctx.symbol.Name && symbolFromSymbolTable.ExportSymbol != nil {
-			if c.isAccessible(ctx, c.getMergedSymbol(symbolFromSymbolTable.ExportSymbol) /*resolvedAliasSymbol*/, nil, ignoreQualification) {
-				candidateChains = append(candidateChains, []*ast.Symbol{ctx.symbol})
 			}
 		}
 	}
@@ -579,7 +633,7 @@ func (c *Checker) getCandidateListForSymbol(
 	if candidateTable == nil {
 		return nil
 	}
-	candidateTableId := symbolTableIDFromExports(resolvedImportedSymbol)
+	candidateTableId := symbolTableIDFromResolvedExports(resolvedImportedSymbol)
 	accessibleSymbolsFromExports := c.getAccessibleSymbolChainFromSymbolTable(ctx, candidateTable, candidateTableId /*ignoreQualification*/, true, false)
 	if len(accessibleSymbolsFromExports) == 0 {
 		return nil
