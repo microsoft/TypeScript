@@ -5671,10 +5671,7 @@ func (p *Printer) emitDetachedComments(textRange core.TextRange) (result detache
 				}
 			}
 
-			if p.shouldWriteComment(comment) {
-				detachedComments = append(detachedComments, comment)
-			}
-
+			detachedComments = append(detachedComments, comment)
 			lastComment = comment
 		}
 
@@ -5687,11 +5684,21 @@ func (p *Printer) emitDetachedComments(textRange core.TextRange) (result detache
 			if nodeLine >= lastCommentLine+2 {
 				// Valid detachedComments
 
-				if len(leadingComments) > 0 && p.shouldEmitNewLineBeforeLeadingCommentOfPosition(textRange.Pos(), leadingComments[0].Pos()) {
-					p.writeLine()
+				// Filter to only comments that should be written (e.g., JSDoc-style in declaration emit)
+				var commentsToEmit []ast.CommentRange
+				for _, comment := range detachedComments {
+					if p.shouldWriteComment(comment) {
+						commentsToEmit = append(commentsToEmit, comment)
+					}
 				}
 
-				p.emitComments(detachedComments, commentSeparatorAfter)
+				if len(commentsToEmit) > 0 {
+					if p.shouldEmitNewLineBeforeLeadingCommentOfPosition(textRange.Pos(), commentsToEmit[0].Pos()) {
+						p.writeLine()
+					}
+
+					p.emitComments(commentsToEmit, commentSeparatorAfter)
+				}
 				result = detachedCommentsInfo{nodePos: textRange.Pos(), detachedCommentEndPos: core.LastOrNil(detachedComments).End()}
 				hasResult = true
 			}

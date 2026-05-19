@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/jsDocCommentOfElidedImportPreserved.ts] ////
+
+=== index.ts ===
+
+export interface Foo {}
+
+=== main.ts ===
+/**
+ * Some random docs not related to foo
+ */
+/* trigger */
+import * as x from './index.js';
+>x : typeof x
+
+export const foo = 1;
+>foo : 1
+>1 : 1
+
+=== detachedCopyright.ts ===
+/**
+ * Copyright header
+ */
+
+import * as x from './index.js';
+>x : typeof x
+
+export const bar = 2;
+>bar : 2
+>2 : 2
+
+=== detachedCopyrightNonJSDoc.ts ===
+/* Non-JSDoc copyright header */
+
+import * as x from './index.js';
+>x : typeof x
+
+export const baz = 3;
+>baz : 3
+>3 : 3
+
