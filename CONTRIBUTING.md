@@ -12,7 +12,7 @@ We do not accept, under any circumstances, **bulk, agent-driven contributions**:
 
 - Volume scales with the operator's compute budget, not with genuine engagement. In practice we routinely receive several near-identical PRs for the same small issue — for example, five separate PRs fixing the same typo, each opened within hours of the issue being filed — because multiple operators have aimed their agents at the same queue. Triaging and closing the duplicates costs more time than the fix saved.
 - These workflows crowd out contributors we can actually collaborate with and build meaningful relationships with.
-- Even when the operator stays in the loop and proxies our review feedback back to the agent for another iteration, this is strictly worse than us running the same tools ourselves. We are already proficient with these agents; inserting a relay between us and the model adds latency, loses context on every hop, and reduces our visiblity into the agent thought process.
+- Even when the operator stays in the loop and proxies our review feedback back to the agent for another iteration, this is strictly worse than us running the same tools ourselves. We are already proficient with these agents; inserting a relay between us and the model adds latency, loses context on every hop, and reduces our visibility into the agent thought process.
 
 PRs that fit this pattern will be closed with a pointer to this section. Repeated submissions may result in the account being blocked.
 
