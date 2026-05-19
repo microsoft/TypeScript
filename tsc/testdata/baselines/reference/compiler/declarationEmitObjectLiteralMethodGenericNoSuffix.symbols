@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/declarationEmitObjectLiteralMethodGenericNoSuffix.ts] ////
+
+=== declarationEmitObjectLiteralMethodGenericNoSuffix.ts ===
+export const o = {
+>o : Symbol(o, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 0, 12))
+
+    foo<M extends string>(): void { },
+>foo : Symbol(foo, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 0, 18))
+>M : Symbol(M, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 1, 8))
+
+    bar<M extends string>(): void { },
+>bar : Symbol(bar, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 1, 38))
+>M : Symbol(M, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 2, 8))
+
+};
+
+export const o2 = {
+>o2 : Symbol(o2, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 5, 12))
+
+    foo<T>(value: T): T { return value; },
+>foo : Symbol(foo, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 5, 19))
+>T : Symbol(T, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 6, 8))
+>value : Symbol(value, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 6, 11))
+>T : Symbol(T, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 6, 8))
+>T : Symbol(T, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 6, 8))
+>value : Symbol(value, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 6, 11))
+
+    bar<T>(value: T): T { return value; },
+>bar : Symbol(bar, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 6, 42))
+>T : Symbol(T, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 7, 8))
+>value : Symbol(value, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 7, 11))
+>T : Symbol(T, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 7, 8))
+>T : Symbol(T, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 7, 8))
+>value : Symbol(value, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 7, 11))
+
+    baz<T, U>(a: T, b: U): [T, U] { return [a, b]; },
+>baz : Symbol(baz, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 7, 42))
+>T : Symbol(T, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 8, 8))
+>U : Symbol(U, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 8, 10))
+>a : Symbol(a, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 8, 14))
+>T : Symbol(T, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 8, 8))
+>b : Symbol(b, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 8, 19))
+>U : Symbol(U, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 8, 10))
+>T : Symbol(T, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 8, 8))
+>U : Symbol(U, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 8, 10))
+>a : Symbol(a, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 8, 14))
+>b : Symbol(b, Decl(declarationEmitObjectLiteralMethodGenericNoSuffix.ts, 8, 19))
+
+};
+
