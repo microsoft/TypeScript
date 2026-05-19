@@ -2693,7 +2693,17 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 			// The problem is each constituent of the intersection will be associated with typeof Err<number>
 			// And when extracting a type for typeof ErrImpl from typeof Err<number> does not make sense.
 			if ast.IsTypeQueryNode(existing) && b.getTypeFromTypeNode(existing, false) == t {
+				// Guard against unbounded recursion when the existing typeof node fails to be reused
+				// (e.g. its entity name isn't accessible from this scope) and the recovery boundary's
+				// fallback re-enters typeToTypeNode with the very same instantiation type, which would
+				// in turn try to reuse the same node again. Mark the type as visited around the reuse
+				// attempt so the inner recursion bottoms out via the visitedTypes guard below.
+				if b.ctx.visitedTypes.Has(typeId) {
+					return b.createElidedInformationPlaceholder()
+				}
+				b.ctx.visitedTypes.Add(typeId)
 				typeNode := b.tryReuseExistingNonParameterTypeNode(existing, t, nil, nil)
+				b.ctx.visitedTypes.Delete(typeId)
 				if typeNode != nil {
 					return typeNode
 				}
