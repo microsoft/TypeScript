@@ -1247,9 +1247,6 @@ compiler/defaultDeclarationEmitShadowedNamedCorrectly.js.diff
 compiler/es5ExportEqualsDts(target=es2015).js.diff
 compiler/declarationEmitNameConflicts.js.diff
 
-## Properties with __proto__-like names now quoted in declaration emit (it's quoted in the originating sourcefile)
-compiler/escapedReservedCompilerNamedIdentifier.js.diff
-
 ## Nested /*elided*/ type annotation comments removed at deeper nesting levels (`/*elided*/` comments are internal artifacts with no semantic meaning)
 ## Declaration emit no longer preserves elided comments in nested class expressions
 compiler/emitClassExpressionInDeclarationFile.js.diff
