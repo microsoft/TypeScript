@@ -6479,7 +6479,8 @@ func extractPragmas(commentRange ast.CommentRange, text string) []ast.Pragma {
 			}
 			pragmaName := extractName(text, pos+1)
 			if !(pragmaName == "jsx" || pragmaName == "jsxfrag" || pragmaName == "jsximportsource" || pragmaName == "jsxruntime") {
-				break
+				pos++
+				continue
 			}
 			start := skipBlanks(text, pos+len(pragmaName)+1)
 			pos = skipNonBlanks(text, start)
