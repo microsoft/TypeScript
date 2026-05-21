@@ -87,6 +87,25 @@ func TestCommandLineParseResult(t *testing.T) {
 	}
 }
 
+func TestResponseFileDoesNotPanic(t *testing.T) {
+	t.Parallel()
+
+	// Passing `@` with an empty or relative filename should not panic.
+	// It should produce a diagnostic error instead.
+	cwd := t.TempDir()
+	t.Run("empty response file", func(t *testing.T) {
+		t.Parallel()
+		parsed := tsoptions.ParseCommandLineTestWorker(nil, []string{"@"}, osvfs.FS(), cwd)
+		assert.Assert(t, len(parsed.Errors) > 0, "expected an error for empty response file name")
+	})
+
+	t.Run("relative response file", func(t *testing.T) {
+		t.Parallel()
+		parsed := tsoptions.ParseCommandLineTestWorker(nil, []string{"@blah"}, osvfs.FS(), cwd)
+		assert.Assert(t, len(parsed.Errors) > 0, "expected an error for non-existent response file")
+	})
+}
+
 func TestParseCommandLineTypeRootsRelativePath(t *testing.T) {
 	t.Parallel()
 
@@ -233,7 +252,7 @@ func (f commandLineSubScenario) assertParseResult(t *testing.T) {
 		tsBaseline := parseExistingCompilerBaseline(t, originalBaseline)
 
 		// f.workerDiagnostic is either defined or set to default pointer in `createSubScenario`
-		parsed := tsoptions.ParseCommandLineTestWorker(f.optDecls, f.commandLine, osvfs.FS())
+		parsed := tsoptions.ParseCommandLineTestWorker(f.optDecls, f.commandLine, osvfs.FS(), t.TempDir())
 
 		newBaselineFileNames := strings.Join(parsed.FileNames, ",")
 		assert.Equal(t, tsBaseline.fileNames, newBaselineFileNames)

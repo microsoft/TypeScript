@@ -33,6 +33,7 @@ type commandLineParser struct {
 	workerDiagnostics *ParseCommandLineWorkerDiagnostics
 	optionsMap        *NameMap
 	fs                vfs.FS
+	currentDirectory  string
 	options           *collections.OrderedMap[string, any]
 	fileNames         []string
 	errors            []*ast.Diagnostic
@@ -45,7 +46,7 @@ func ParseCommandLine(
 	if commandLine == nil {
 		commandLine = []string{}
 	}
-	parser := parseCommandLineWorker(CompilerOptionsDidYouMeanDiagnostics, commandLine, host.FS())
+	parser := parseCommandLineWorker(CompilerOptionsDidYouMeanDiagnostics, commandLine, host.FS(), host.GetCurrentDirectory())
 	optionsWithAbsolutePaths := convertToOptionsWithAbsolutePaths(parser.options.Clone(), CommandLineCompilerOptionsMap, host.GetCurrentDirectory())
 	compilerOptions := convertMapToOptions(optionsWithAbsolutePaths, &compilerOptionsParser{&core.CompilerOptions{}}).CompilerOptions
 	watchOptions := convertMapToOptions(optionsWithAbsolutePaths, &watchOptionsParser{&core.WatchOptions{}}).WatchOptions
@@ -66,7 +67,7 @@ func ParseBuildCommandLine(
 	if commandLine == nil {
 		commandLine = []string{}
 	}
-	parser := parseCommandLineWorker(buildOptionsDidYouMeanDiagnostics, commandLine, host.FS())
+	parser := parseCommandLineWorker(buildOptionsDidYouMeanDiagnostics, commandLine, host.FS(), host.GetCurrentDirectory())
 	compilerOptions := &core.CompilerOptions{}
 	for key, value := range parser.options.Entries() {
 		buildOption := BuildNameMap.Get(key)
@@ -114,9 +115,11 @@ func parseCommandLineWorker(
 	parseCommandLineWithDiagnostics *ParseCommandLineWorkerDiagnostics,
 	commandLine []string,
 	fs vfs.FS,
+	currentDirectory string,
 ) *commandLineParser {
 	parser := &commandLineParser{
 		fs:                fs,
+		currentDirectory:  currentDirectory,
 		workerDiagnostics: parseCommandLineWithDiagnostics,
 		fileNames:         []string{},
 		options:           &collections.OrderedMap[string, any]{},
@@ -163,6 +166,7 @@ func getInputOptionName(input string) string {
 }
 
 func (p *commandLineParser) parseResponseFile(fileName string) {
+	fileName = tspath.GetNormalizedAbsolutePath(fileName, p.currentDirectory)
 	fileContents, errors := tryReadFile(fileName, func(fileName string) (string, bool) {
 		if p.fs == nil {
 			return "", false

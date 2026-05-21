@@ -17,9 +17,11 @@ func ParseCommandLineTestWorker(
 	decls []*CommandLineOption,
 	commandLine []string,
 	fs vfs.FS,
+	currentDirectory string,
 ) *TestCommandLineParser {
 	parser := &commandLineParser{
 		fs:                fs,
+		currentDirectory:  currentDirectory,
 		workerDiagnostics: CompilerOptionsDidYouMeanDiagnostics,
 		fileNames:         []string{},
 		options:           &collections.OrderedMap[string, any]{},
