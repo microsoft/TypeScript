@@ -4,7 +4,9 @@
 //                       ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | type const
+// | type const = {
+// |     readonly a: 1;
+// | }
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -12,7 +14,7 @@
 //                ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | type const
+// | type const = 1
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -20,7 +22,7 @@
 //                  ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | type const
+// | type const = "c"
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -28,7 +30,7 @@
 //                     ^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | type const
+// | type const = readonly [1, 2]
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -46,7 +48,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\ntype const\n```\n"
+        "value": "```typescript\ntype const = {\n    readonly a: 1;\n}\n```\n"
       },
       "range": {
         "start": {
@@ -73,7 +75,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\ntype const\n```\n"
+        "value": "```typescript\ntype const = 1\n```\n"
       },
       "range": {
         "start": {
@@ -100,7 +102,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\ntype const\n```\n"
+        "value": "```typescript\ntype const = \"c\"\n```\n"
       },
       "range": {
         "start": {
@@ -127,7 +129,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\ntype const\n```\n"
+        "value": "```typescript\ntype const = readonly [1, 2]\n```\n"
       },
       "range": {
         "start": {

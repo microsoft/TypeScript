@@ -683,16 +683,14 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 			b.WriteString("type ")
 			b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
 			writeTypeParams(c.GetTypeAliasTypeParameters(symbol))
-			if len(symbol.Declarations) != 0 {
-				b.WriteString(" = ")
-				var typeAliasType *checker.Type
-				if node.Parent != nil && ast.IsConstTypeReference(node.Parent) {
-					typeAliasType = c.GetTypeAtLocation(node.Parent)
-				} else {
-					typeAliasType = c.GetDeclaredTypeOfSymbol(symbol)
-				}
-				b.WriteString(typeToString(typeAliasType, container, typeFormatFlags|checker.TypeFormatFlagsInTypeAlias))
+			b.WriteString(" = ")
+			var typeAliasType *checker.Type
+			if node.Parent != nil && ast.IsConstTypeReference(node.Parent) {
+				typeAliasType = c.GetTypeAtLocation(node.Parent)
+			} else {
+				typeAliasType = c.GetDeclaredTypeOfSymbol(symbol)
 			}
+			b.WriteString(typeToString(typeAliasType, container, typeFormatFlags|checker.TypeFormatFlagsInTypeAlias))
 			setDeclaration(core.Find(symbol.Declarations, ast.IsTypeOrJSTypeAliasDeclaration))
 		}
 		if flags&ast.SymbolFlagsSignature != 0 {
