@@ -29475,7 +29475,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isIdentifier(expr)) {
                     const symbol = getResolvedSymbol(expr);
                     const declaration = getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
-                    if (declaration && (isBindingElement(declaration) || isParameter(declaration)) && reference === declaration.parent && !declaration.initializer && !declaration.dotDotDotToken) {
+                    if (declaration && (isBindingElement(declaration) || isParameter(declaration)) && reference === declaration.parent && !declaration.dotDotDotToken) {
                         return declaration;
                     }
                 }
@@ -30947,7 +30947,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // the binding pattern AST instance for '{ kind, payload }' as a pseudo-reference and narrow this reference
             // as if it occurred in the specified location. We then recompute the narrowed binding element type by
             // destructuring from the narrowed parent type.
-            if (isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
+            if (isBindingElement(declaration) && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
                 const parent = declaration.parent.parent;
                 const rootDeclaration = getRootDeclaration(parent);
                 if (rootDeclaration.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlagsCached(rootDeclaration) & NodeFlags.Constant || rootDeclaration.kind === SyntaxKind.Parameter) {

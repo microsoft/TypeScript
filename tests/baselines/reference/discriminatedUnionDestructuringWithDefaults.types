@@ -1,0 +1,165 @@
+//// [tests/cases/compiler/discriminatedUnionDestructuringWithDefaults.ts] ////
+
+=== discriminatedUnionDestructuringWithDefaults.ts ===
+// Case 1: the issue #50139 repro — must compile clean after the fix
+function repro({ isText = false, children = 0 }:
+>repro : ({ isText, children }: { isText: true; children?: string; } | { isText: false; children?: number; }) => void
+>      : ^                    ^^                                                                            ^^^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>false : false
+>      : ^^^^^
+>children : string | number
+>         : ^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    { isText: true; children?: string }
+>isText : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+>children : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+
+  | { isText: false; children?: number }
+>isText : false
+>       : ^^^^^
+>false : false
+>      : ^^^^^
+>children : number | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+
+) {
+    if (isText === true) {
+>isText === true : boolean
+>                : ^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        let data: string = children;
+>data : string
+>     : ^^^^^^
+>children : string
+>         : ^^^^^^
+
+    } else if (isText === false) {
+>isText === false : boolean
+>                 : ^^^^^^^
+>isText : false
+>       : ^^^^^
+>false : false
+>      : ^^^^^
+
+        let data: number = children;
+>data : number
+>     : ^^^^^^
+>children : number
+>         : ^^^^^^
+    }
+}
+
+// Case 2: control — no defaults, already worked, must not regress
+function control({ isText, children }:
+>control : ({ isText, children }: { isText: true; children: string; } | { isText: false; children: number; }) => void
+>        : ^                    ^^                                                                          ^^^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>children : string | number
+>         : ^^^^^^^^^^^^^^^
+
+    { isText: true; children: string }
+>isText : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+>children : string
+>         : ^^^^^^
+
+  | { isText: false; children: number }
+>isText : false
+>       : ^^^^^
+>false : false
+>      : ^^^^^
+>children : number
+>         : ^^^^^^
+
+) {
+    if (isText === true) {
+>isText === true : boolean
+>                : ^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        let data: string = children;
+>data : string
+>     : ^^^^^^
+>children : string
+>         : ^^^^^^
+
+    } else if (isText === false) {
+>isText === false : boolean
+>                 : ^^^^^^^
+>isText : false
+>       : ^^^^^
+>false : false
+>      : ^^^^^
+
+        let data: number = children;
+>data : number
+>     : ^^^^^^
+>children : number
+>         : ^^^^^^
+    }
+}
+
+// Case 3: whzx5byb's soundness check — default foreign to one arm must still error
+function soundnessCheck({ isText = false, children = true }: // expect error on `children = true`
+>soundnessCheck : ({ isText, children }: { isText: true; children?: string; } | { isText: false; children?: number; }) => void
+>               : ^                    ^^                                                                            ^^^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>false : false
+>      : ^^^^^
+>children : string | number
+>         : ^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+    { isText: true; children?: string }
+>isText : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+>children : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+
+  | { isText: false; children?: number }
+>isText : false
+>       : ^^^^^
+>false : false
+>      : ^^^^^
+>children : number | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+
+) {
+    if (isText === true) {
+>isText === true : boolean
+>                : ^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        let data: string = children;
+>data : string
+>     : ^^^^^^
+>children : string
+>         : ^^^^^^
+    }
+}
+

@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/discriminatedUnionDestructuringWithDefaults.ts] ////
+
+=== discriminatedUnionDestructuringWithDefaults.ts ===
+// Case 1: the issue #50139 repro — must compile clean after the fix
+function repro({ isText = false, children = 0 }:
+>repro : Symbol(repro, Decl(discriminatedUnionDestructuringWithDefaults.ts, 0, 0))
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 1, 16))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 1, 32))
+
+    { isText: true; children?: string }
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 2, 5))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 2, 19))
+
+  | { isText: false; children?: number }
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 3, 5))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 3, 20))
+
+) {
+    if (isText === true) {
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 1, 16))
+
+        let data: string = children;
+>data : Symbol(data, Decl(discriminatedUnionDestructuringWithDefaults.ts, 6, 11))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 1, 32))
+
+    } else if (isText === false) {
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 1, 16))
+
+        let data: number = children;
+>data : Symbol(data, Decl(discriminatedUnionDestructuringWithDefaults.ts, 8, 11))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 1, 32))
+    }
+}
+
+// Case 2: control — no defaults, already worked, must not regress
+function control({ isText, children }:
+>control : Symbol(control, Decl(discriminatedUnionDestructuringWithDefaults.ts, 10, 1))
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 13, 18))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 13, 26))
+
+    { isText: true; children: string }
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 14, 5))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 14, 19))
+
+  | { isText: false; children: number }
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 15, 5))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 15, 20))
+
+) {
+    if (isText === true) {
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 13, 18))
+
+        let data: string = children;
+>data : Symbol(data, Decl(discriminatedUnionDestructuringWithDefaults.ts, 18, 11))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 13, 26))
+
+    } else if (isText === false) {
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 13, 18))
+
+        let data: number = children;
+>data : Symbol(data, Decl(discriminatedUnionDestructuringWithDefaults.ts, 20, 11))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 13, 26))
+    }
+}
+
+// Case 3: whzx5byb's soundness check — default foreign to one arm must still error
+function soundnessCheck({ isText = false, children = true }: // expect error on `children = true`
+>soundnessCheck : Symbol(soundnessCheck, Decl(discriminatedUnionDestructuringWithDefaults.ts, 22, 1))
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 25, 25))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 25, 41))
+
+    { isText: true; children?: string }
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 26, 5))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 26, 19))
+
+  | { isText: false; children?: number }
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 27, 5))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 27, 20))
+
+) {
+    if (isText === true) {
+>isText : Symbol(isText, Decl(discriminatedUnionDestructuringWithDefaults.ts, 25, 25))
+
+        let data: string = children;
+>data : Symbol(data, Decl(discriminatedUnionDestructuringWithDefaults.ts, 30, 11))
+>children : Symbol(children, Decl(discriminatedUnionDestructuringWithDefaults.ts, 25, 41))
+    }
+}
+
