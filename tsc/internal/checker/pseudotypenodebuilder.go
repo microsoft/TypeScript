@@ -224,7 +224,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 				if isConst {
 					newProp = b.f.NewPropertySignatureDeclaration(
 						modifiers,
-						b.reuseName(e.Name),
+						b.reuseName(e.Name, false /*isMethod*/),
 						nil,
 						b.f.NewFunctionTypeNode(
 							typeParams,
@@ -237,7 +237,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 				}
 				newProp = b.f.NewMethodSignatureDeclaration(
 					modifiers,
-					b.reuseName(e.Name),
+					b.reuseName(e.Name, true /*isMethod*/),
 					nil,
 					typeParams,
 					b.pseudoParametersToNodeList(d.Parameters),
@@ -247,7 +247,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 				d := e.AsPseudoPropertyAssignment()
 				newProp = b.f.NewPropertySignatureDeclaration(
 					modifiers,
-					b.reuseName(e.Name),
+					b.reuseName(e.Name, false /*isMethod*/),
 					nil,
 					b.pseudoTypeToNode(d.Type),
 					nil,
@@ -256,7 +256,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 				d := e.AsPseudoSetAccessor()
 				newProp = b.f.NewSetAccessorDeclaration(
 					nil,
-					b.reuseName(e.Name),
+					b.reuseName(e.Name, false /*isMethod*/),
 					nil,
 					b.f.NewNodeList([]*ast.Node{b.pseudoParameterToNode(d.Parameter)}),
 					nil,
@@ -267,7 +267,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 				d := e.AsPseudoGetAccessor()
 				newProp = b.f.NewGetAccessorDeclaration(
 					nil,
-					b.reuseName(e.Name),
+					b.reuseName(e.Name, false /*isMethod*/),
 					nil,
 					nil,
 					b.pseudoTypeToNode(d.Type),

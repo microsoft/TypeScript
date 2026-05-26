@@ -374,7 +374,6 @@ compiler/declarationEmitDefaultExportWithStaticAssignment.symbols.diff
 compiler/declarationEmitDefaultExportWithStaticAssignment.types.diff
 compiler/decoratorMetadataTypeOnlyExport.symbols.diff
 compiler/decoratorMetadataTypeOnlyImport.symbols.diff
-compiler/emitMethodCalledNew.js.diff
 compiler/es6ImportWithJsDocTags.symbols.diff
 compiler/es2018ObjectAssign.types.diff
 compiler/expandoFunctionSymbolPropertyJs.js.diff

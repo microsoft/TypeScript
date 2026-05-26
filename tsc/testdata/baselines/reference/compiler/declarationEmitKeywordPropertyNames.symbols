@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/declarationEmitKeywordPropertyNames.ts] ////
+
+=== declarationEmitKeywordPropertyNames.ts ===
+export const a = {
+>a : Symbol(a, Decl(declarationEmitKeywordPropertyNames.ts, 0, 12))
+
+    foo: "foo",
+>foo : Symbol(foo, Decl(declarationEmitKeywordPropertyNames.ts, 0, 18))
+
+    bar: "bar",
+>bar : Symbol(bar, Decl(declarationEmitKeywordPropertyNames.ts, 1, 15))
+
+    buzz: "buzz",
+>buzz : Symbol(buzz, Decl(declarationEmitKeywordPropertyNames.ts, 2, 15))
+
+    new: "new",
+>new : Symbol(new, Decl(declarationEmitKeywordPropertyNames.ts, 3, 17))
+
+    delete: "delete",
+>delete : Symbol(delete, Decl(declarationEmitKeywordPropertyNames.ts, 4, 15))
+
+    break: "break",
+>break : Symbol(break, Decl(declarationEmitKeywordPropertyNames.ts, 5, 21))
+
+    continue: "continue",
+>continue : Symbol(continue, Decl(declarationEmitKeywordPropertyNames.ts, 6, 19))
+
+};
+
+export const b = {
+>b : Symbol(b, Decl(declarationEmitKeywordPropertyNames.ts, 10, 12))
+
+    foo: "foo",
+>foo : Symbol(foo, Decl(declarationEmitKeywordPropertyNames.ts, 10, 18))
+
+    bar: "bar",
+>bar : Symbol(bar, Decl(declarationEmitKeywordPropertyNames.ts, 11, 15))
+
+    buzz: "buzz",
+>buzz : Symbol(buzz, Decl(declarationEmitKeywordPropertyNames.ts, 12, 15))
+
+    new: "new",
+>new : Symbol(new, Decl(declarationEmitKeywordPropertyNames.ts, 13, 17))
+
+    delete: "delete",
+>delete : Symbol(delete, Decl(declarationEmitKeywordPropertyNames.ts, 14, 15))
+
+    break: "break",
+>break : Symbol(break, Decl(declarationEmitKeywordPropertyNames.ts, 15, 21))
+
+    continue: "continue",
+>continue : Symbol(continue, Decl(declarationEmitKeywordPropertyNames.ts, 16, 19))
+
+} as const;
+>const : Symbol(const)
+

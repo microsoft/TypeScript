@@ -2281,16 +2281,33 @@ func (b *NodeBuilderImpl) trackComputedName(accessExpression *ast.Node, enclosin
 	}
 }
 
+type propertyNameNodeKind int
+
+const (
+	propertyNameNodeKindIdentifier propertyNameNodeKind = iota
+	propertyNameNodeKindNumericLiteral
+	propertyNameNodeKindStringLiteral
+)
+
+func classifyPropertyName(name string, stringNamed bool, isMethod bool) propertyNameNodeKind {
+	if isMethod && name == "new" {
+		return propertyNameNodeKindStringLiteral
+	}
+	if scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
+		return propertyNameNodeKindIdentifier
+	}
+	return core.IfElse(!stringNamed && isNumericLiteralName(name) && jsnum.FromString(name) >= 0, propertyNameNodeKindNumericLiteral, propertyNameNodeKindStringLiteral)
+}
+
 func (b *NodeBuilderImpl) createPropertyNameNodeForIdentifierOrLiteral(name string, singleQuote bool, stringNamed bool, isMethod bool, symbol *ast.Symbol) *ast.Node {
-	isMethodNamedNew := isMethod && name == "new"
-	if !isMethodNamedNew && scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
+	switch classifyPropertyName(name, stringNamed, isMethod) {
+	case propertyNameNodeKindIdentifier:
 		return b.newIdentifier(name, symbol)
-	}
-	if !stringNamed && !isMethodNamedNew && isNumericLiteralName(name) && jsnum.FromString(name) >= 0 {
+	case propertyNameNodeKindNumericLiteral:
 		return b.f.NewNumericLiteral(name, ast.TokenFlagsNone)
+	default:
+		return b.f.NewStringLiteral(name, core.IfElse(singleQuote, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone))
 	}
-	result := b.f.NewStringLiteral(name, core.IfElse(singleQuote, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone))
-	return result
 }
 
 func (b *NodeBuilderImpl) isStringNamed(d *ast.Declaration) bool {
