@@ -1,0 +1,179 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityIncreaseDecrease.ts ===
+// export const JOB_STATES = ["created", "active", "completed", "failed", "retry", "cancelled", "archive"] as const
+// export type JobState = (typeof JOB_STATES)[number]
+// type Color = "default" | "primary" | "secondary" | "success" | "warning" | "danger"
+// const JobsStateToColor: Record<
+//       ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const JobsStateToColor: Record<"active" | "archive" | "cancelled" | "completed" | "created" | "failed" | "retry", {
+// |     color: Color;
+// |     label: string;
+// |     labelPlural: string;
+// | }>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//       ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const JobsStateToColor: Record<"active" | "archive" | "cancelled" | "completed" | "created" | "failed" | "retry", {
+// |     color: "danger" | "default" | "primary" | "secondary" | "success" | "warning";
+// |     label: string;
+// |     labelPlural: string;
+// | }>
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//       ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const JobsStateToColor: Record<"active" | "archive" | "cancelled" | "completed" | "created" | "failed" | "retry", {
+// |     color: Color;
+// |     label: string;
+// |     labelPlural: string;
+// | }>
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//   JobState,
+//   {
+//     color: Color
+//     label: string
+//     labelPlural: string
+//   }
+// > = {
+//   created: {
+//     color: "success",
+//     label: "Направљен",
+//     labelPlural: "Направљени",
+//   },
+//   active: {
+//     color: "success",
+//     label: "Активан",
+//     labelPlural: "Активни",
+//   },
+//   completed: {
+//     color: "success",
+//     label: "Успешан",
+//     labelPlural: "Успешни",
+//   },
+//   cancelled: {
+//     color: "default",
+//     label: "Отаказан",
+//     labelPlural: "Отаказни",
+//   },
+//   failed: {
+//     color: "danger",
+//     label: "Пао",
+//     labelPlural: "Пали",
+//   },
+//   archive: {
+//     color: "default",
+//     label: "Архивиран",
+//     labelPlural: "Архивирани",
+//   },
+//   retry: {
+//     color: "warning",
+//     label: "Понавља се",
+//     labelPlural: "Понављају се",
+//   },
+// }
+[
+  {
+    "marker": {
+      "Position": 270,
+      "LSPosition": {
+        "line": 3,
+        "character": 22
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst JobsStateToColor: Record<\"active\" | \"archive\" | \"cancelled\" | \"completed\" | \"created\" | \"failed\" | \"retry\", {\n    color: Color;\n    label: string;\n    labelPlural: string;\n}>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 6
+          },
+          "end": {
+            "line": 3,
+            "character": 22
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 270,
+      "LSPosition": {
+        "line": 3,
+        "character": 22
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst JobsStateToColor: Record<\"active\" | \"archive\" | \"cancelled\" | \"completed\" | \"created\" | \"failed\" | \"retry\", {\n    color: \"danger\" | \"default\" | \"primary\" | \"secondary\" | \"success\" | \"warning\";\n    label: string;\n    labelPlural: string;\n}>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 6
+          },
+          "end": {
+            "line": 3,
+            "character": 22
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 270,
+      "LSPosition": {
+        "line": 3,
+        "character": 22
+      },
+      "Name": "a",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst JobsStateToColor: Record<\"active\" | \"archive\" | \"cancelled\" | \"completed\" | \"created\" | \"failed\" | \"retry\", {\n    color: Color;\n    label: string;\n    labelPlural: string;\n}>\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 3,
+            "character": 6
+          },
+          "end": {
+            "line": 3,
+            "character": 22
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  }
+]
