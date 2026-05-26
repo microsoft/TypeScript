@@ -1,7 +1,7 @@
 interface String {
     /**
-     * Pads this string with a given string (repeated and/or truncated, if needed) so that the resulting string has a given length.
-     * The padding is applied from the start of this string.
+     * Pads the current string with a given string (repeated and/or truncated, if needed) so that the resulting string has a given length.
+     * The padding is applied from the start of the current string.
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart)
      *
@@ -15,8 +15,8 @@ interface String {
     padStart(targetLength: number, padString?: string): string;
 
     /**
-     * Pads this string with a given string (repeated and/or truncated, if needed) so that the resulting string has a given length.
-     * The padding is applied from the end of this string.
+     * Pads the current string with a given string (repeated and/or truncated, if needed) so that the resulting string has a given length.
+     * The padding is applied from the end of the current string.
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padEnd)
      *
