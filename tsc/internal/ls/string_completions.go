@@ -1466,10 +1466,18 @@ func (l *LanguageService) getCompletionsForPathMapping(
 	extensionOptions *extensionOptions,
 	program *compiler.Program,
 ) []moduleCompletionNameAndKind {
+	fragmentDirectory := getFragmentDirectory(fragment)
+	if fragmentDirectory != "" {
+		fragmentDirectory = tspath.EnsureTrailingDirectorySeparator(fragmentDirectory)
+	}
 	justPathMappingName := func(name string, kind moduleCompletionKind, extension string) []moduleCompletionNameAndKind {
 		if strings.HasPrefix(name, fragment) {
+			name = tspath.RemoveTrailingDirectorySeparator(name)
+			if fragmentDirectory != "" {
+				name = strings.TrimPrefix(name, fragmentDirectory)
+			}
 			return []moduleCompletionNameAndKind{{
-				name:      tspath.RemoveTrailingDirectorySeparator(name),
+				name:      name,
 				kind:      kind,
 				extension: extension,
 			}}
@@ -1491,10 +1499,6 @@ func (l *LanguageService) getCompletionsForPathMapping(
 
 	pathPrefix := parsedPath.Text[:parsedPath.StarIndex]
 	pathSuffix := parsedPath.Text[parsedPath.StarIndex+1:]
-	fragmentDirectory := getFragmentDirectory(fragment)
-	if fragmentDirectory != "" {
-		fragmentDirectory = tspath.EnsureTrailingDirectorySeparator(fragmentDirectory)
-	}
 	if !strings.HasPrefix(fragment, pathPrefix) {
 		// Fragment doesn't match the path mapping prefix at all:
 		// we cannot extend it via this path.
