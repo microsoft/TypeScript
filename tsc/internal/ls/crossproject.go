@@ -308,6 +308,34 @@ func combineReferences(results iter.Seq[lsproto.ReferencesResponse]) lsproto.Ref
 	return lsproto.LocationsOrNull{Locations: combineResponseLocations(results)}
 }
 
+func combineVsReferences(results iter.Seq[lsproto.VsReferencesResponse]) lsproto.VsReferencesResponse {
+	var combined []*lsproto.VsReferenceItem
+	// Re-number IDs across projects to maintain unique IDs and correct definition references
+	nextId := int32(0)
+	for resp := range results {
+		if resp.VsReferenceItems == nil {
+			continue
+		}
+		// Map old IDs to new IDs for this batch
+		idMap := make(map[int32]int32)
+		for _, item := range *resp.VsReferenceItems {
+			oldId := item.VSId
+			newId := nextId
+			idMap[oldId] = newId
+			nextId++
+
+			newItem := *item
+			newItem.VSId = newId
+			if item.VSDefinitionId != nil {
+				newDefId := idMap[*item.VSDefinitionId]
+				newItem.VSDefinitionId = &newDefId
+			}
+			combined = append(combined, &newItem)
+		}
+	}
+	return lsproto.VsReferencesResponse{VsReferenceItems: &combined}
+}
+
 func combineImplementations(results iter.Seq[lsproto.ImplementationResponse]) lsproto.ImplementationResponse {
 	var combined []*lsproto.LocationLink
 	var seenLocations collections.Set[lsproto.Location]

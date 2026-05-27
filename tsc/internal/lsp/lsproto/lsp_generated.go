@@ -17186,6 +17186,9 @@ type ServerCapabilities struct {
 	// Provider options for the VS auto-insert feature via textDocument/_vs_onAutoInsert.
 	VSOnAutoInsertProvider *VsOnAutoInsertOptions `json:"_vs_onAutoInsertProvider,omitzero"`
 
+	// The server provides VS-specific grouped references via textDocument/_vs_references.
+	VSReferencesProvider *bool `json:"_vs_referencesProvider,omitzero"`
+
 	// The server provides multi-document highlight support via custom/textDocument/multiDocumentHighlight.
 	CustomMultiDocumentHighlightProvider *bool `json:"customMultiDocumentHighlightProvider,omitzero"`
 }
@@ -17456,6 +17459,13 @@ func (s *ServerCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
 				return errNull("_vs_onAutoInsertProvider")
 			}
 			if err := json.UnmarshalDecode(dec, &s.VSOnAutoInsertProvider); err != nil {
+				return err
+			}
+		case `"_vs_referencesProvider"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("_vs_referencesProvider")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VSReferencesProvider); err != nil {
 				return err
 			}
 		case `"customMultiDocumentHighlightProvider"`:
@@ -28476,6 +28486,123 @@ func (s *VsOnAutoInsertOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	return nil
 }
 
+// A VS-specific reference item with grouping support for Find All References.
+type VsReferenceItem struct {
+	// Unique identifier for this reference item.
+	VSId int32 `json:"_vs_id"`
+
+	// The ID of the definition item this reference belongs to. Absent for definition items themselves.
+	VSDefinitionId *int32 `json:"_vs_definitionId,omitzero"`
+
+	// The kind(s) of this reference (read, write, etc.).
+	VSKind *[]VsReferenceKind `json:"_vs_kind,omitzero"`
+
+	// The location of this reference.
+	VSLocation Location `json:"_vs_location"`
+
+	// Classified display text for the definition (used for grouping headers in the UI).
+	VSDefinitionText *ClassifiedTextElement `json:"_vs_definitionText,omitzero"`
+
+	// The project name for this reference.
+	VSProjectName *string `json:"_vs_projectName,omitzero"`
+
+	// The containing type for this reference.
+	VSContainingType *string `json:"_vs_containingType,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*VsReferenceItem)(nil)
+
+func (s *VsReferenceItem) UnmarshalJSONFrom(dec *json.Decoder) error {
+	const (
+		missingVSId uint = 1 << iota
+		missingVSLocation
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"_vs_id"`:
+			missing &^= missingVSId
+			if err := json.UnmarshalDecode(dec, &s.VSId); err != nil {
+				return err
+			}
+		case `"_vs_definitionId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("_vs_definitionId")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VSDefinitionId); err != nil {
+				return err
+			}
+		case `"_vs_kind"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("_vs_kind")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VSKind); err != nil {
+				return err
+			}
+		case `"_vs_location"`:
+			missing &^= missingVSLocation
+			if err := json.UnmarshalDecode(dec, &s.VSLocation); err != nil {
+				return err
+			}
+		case `"_vs_definitionText"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("_vs_definitionText")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VSDefinitionText); err != nil {
+				return err
+			}
+		case `"_vs_projectName"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("_vs_projectName")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VSProjectName); err != nil {
+				return err
+			}
+		case `"_vs_containingType"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("_vs_containingType")
+			}
+			if err := json.UnmarshalDecode(dec, &s.VSContainingType); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingVSId != 0 {
+			missingProps = append(missingProps, "_vs_id")
+		}
+		if missing&missingVSLocation != 0 {
+			missingProps = append(missingProps, "_vs_location")
+		}
+		return errMissing(missingProps)
+	}
+
+	return nil
+}
+
 // Parameters for the textDocument/_vs_onAutoInsert request.
 type VsOnAutoInsertParams struct {
 	// The text document.
@@ -29596,6 +29723,9 @@ type ClassifiedTextRun struct {
 
 	// The style of this text run.
 	Style int32 `json:"Style,omitzero"`
+
+	// VS type discriminator required by ObjectContentConverter for deserialization.
+	VSType string `json:"_vs_type"`
 }
 
 var _ json.UnmarshalerFrom = (*ClassifiedTextRun)(nil)
@@ -29671,6 +29801,9 @@ func (s *ClassifiedTextRun) UnmarshalJSONFrom(dec *json.Decoder) error {
 type ClassifiedTextElement struct {
 	// The classified text runs that make up this element.
 	Runs []*ClassifiedTextRun `json:"Runs"`
+
+	// VS type discriminator required by ObjectContentConverter for deserialization.
+	VSType string `json:"_vs_type"`
 }
 
 var _ json.UnmarshalerFrom = (*ClassifiedTextElement)(nil)
@@ -30864,6 +30997,41 @@ const (
 	TokenFormatRelative TokenFormat = "relative"
 )
 
+type VsReferenceKind int32
+
+const (
+	VsReferenceKindInactive       VsReferenceKind = 0
+	VsReferenceKindComment        VsReferenceKind = 1
+	VsReferenceKindString         VsReferenceKind = 2
+	VsReferenceKindRead           VsReferenceKind = 3
+	VsReferenceKindWrite          VsReferenceKind = 4
+	VsReferenceKindReference      VsReferenceKind = 5
+	VsReferenceKindName           VsReferenceKind = 6
+	VsReferenceKindQualified      VsReferenceKind = 7
+	VsReferenceKindTypeArgument   VsReferenceKind = 8
+	VsReferenceKindTypeConstraint VsReferenceKind = 9
+	VsReferenceKindBaseType       VsReferenceKind = 10
+	VsReferenceKindConstructor    VsReferenceKind = 11
+	VsReferenceKindDestructor     VsReferenceKind = 12
+	VsReferenceKindImport         VsReferenceKind = 13
+	VsReferenceKindDeclaration    VsReferenceKind = 14
+	VsReferenceKindAddressOf      VsReferenceKind = 15
+	VsReferenceKindNotReference   VsReferenceKind = 16
+	VsReferenceKindUnknown        VsReferenceKind = 17
+)
+
+const _VsReferenceKind_name = "InactiveCommentStringReadWriteReferenceNameQualifiedTypeArgumentTypeConstraintBaseTypeConstructorDestructorImportDeclarationAddressOfNotReferenceUnknown"
+
+var _VsReferenceKind_index = [...]uint16{0, 8, 15, 21, 25, 30, 39, 43, 52, 64, 78, 86, 97, 107, 113, 124, 133, 145, 152}
+
+func (e VsReferenceKind) String() string {
+	i := int(e) - 0
+	if i < 0 || i >= len(_VsReferenceKind_index)-1 {
+		return fmt.Sprintf("VsReferenceKind(%d)", e)
+	}
+	return _VsReferenceKind_name[_VsReferenceKind_index[i]:_VsReferenceKind_index[i+1]]
+}
+
 type CodeLensKind string
 
 const (
@@ -31157,6 +31325,8 @@ func unmarshalParams(method Method, data []byte) (any, error) {
 		return unmarshalPtrTo[MultiDocumentHighlightParams](data)
 	case MethodTextDocumentVSOnAutoInsert:
 		return unmarshalPtrTo[VsOnAutoInsertParams](data)
+	case MethodTextDocumentVSReferences:
+		return unmarshalPtrTo[ReferenceParams](data)
 	case MethodWorkspaceDidChangeWorkspaceFolders:
 		return unmarshalPtrTo[DidChangeWorkspaceFoldersParams](data)
 	case MethodWindowWorkDoneProgressCancel:
@@ -31366,6 +31536,8 @@ func unmarshalResult(method Method, data []byte) (any, error) {
 		return unmarshalValue[CustomMultiDocumentHighlightResponse](data)
 	case MethodTextDocumentVSOnAutoInsert:
 		return unmarshalValue[VsOnAutoInsertResponse](data)
+	case MethodTextDocumentVSReferences:
+		return unmarshalValue[VsReferencesResponse](data)
 	default:
 		return unmarshalAny(data)
 	}
@@ -31690,6 +31862,8 @@ const (
 	MethodCustomTextDocumentMultiDocumentHighlight Method = "custom/textDocument/multiDocumentHighlight"
 	// Request for auto-insert when a trigger character is typed (VS-specific).
 	MethodTextDocumentVSOnAutoInsert Method = "textDocument/_vs_onAutoInsert"
+	// VS-specific request for Find All References with grouped reference items.
+	MethodTextDocumentVSReferences Method = "textDocument/_vs_references"
 	// The `workspace/didChangeWorkspaceFolders` notification is sent from the client to the server when the workspace
 	// folder configuration changes.
 	MethodWorkspaceDidChangeWorkspaceFolders Method = "workspace/didChangeWorkspaceFolders"
@@ -32246,6 +32420,12 @@ type VsOnAutoInsertResponse = VsOnAutoInsertResponseItemOrNull
 
 // Type mapping info for `textDocument/_vs_onAutoInsert`
 var TextDocumentVSOnAutoInsertInfo = RequestInfo[*VsOnAutoInsertParams, VsOnAutoInsertResponse]{Method: MethodTextDocumentVSOnAutoInsert}
+
+// Response type for `textDocument/_vs_references`
+type VsReferencesResponse = VsReferenceItemsOrNull
+
+// Type mapping info for `textDocument/_vs_references`
+var TextDocumentVSReferencesInfo = RequestInfo[*ReferenceParams, VsReferencesResponse]{Method: MethodTextDocumentVSReferences}
 
 // Type mapping info for `workspace/didChangeWorkspaceFolders`
 var WorkspaceDidChangeWorkspaceFoldersInfo = NotificationInfo[*DidChangeWorkspaceFoldersParams]{Method: MethodWorkspaceDidChangeWorkspaceFolders}
@@ -35785,6 +35965,36 @@ func (o *VsOnAutoInsertResponseItemOrNull) UnmarshalJSONFrom(dec *json.Decoder) 
 		return json.UnmarshalDecode(dec, o.VsOnAutoInsertResponseItem)
 	default:
 		return errInvalidKind("VsOnAutoInsertResponseItemOrNull", dec.PeekKind())
+	}
+}
+
+type VsReferenceItemsOrNull struct {
+	VsReferenceItems *[]*VsReferenceItem
+}
+
+var _ json.MarshalerTo = (*VsReferenceItemsOrNull)(nil)
+
+func (o *VsReferenceItemsOrNull) MarshalJSONTo(enc *json.Encoder) error {
+	if o.VsReferenceItems != nil {
+		return json.MarshalEncode(enc, o.VsReferenceItems)
+	}
+	return enc.WriteToken(json.Null)
+}
+
+var _ json.UnmarshalerFrom = (*VsReferenceItemsOrNull)(nil)
+
+func (o *VsReferenceItemsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
+	*o = VsReferenceItemsOrNull{}
+
+	switch dec.PeekKind() {
+	case 'n':
+		_, err := dec.ReadToken()
+		return err
+	case '[':
+		o.VsReferenceItems = new([]*VsReferenceItem)
+		return json.UnmarshalDecode(dec, o.VsReferenceItems)
+	default:
+		return errInvalidKind("VsReferenceItemsOrNull", dec.PeekKind())
 	}
 }
 

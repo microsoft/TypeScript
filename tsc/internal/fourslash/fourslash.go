@@ -2330,6 +2330,86 @@ func (f *FourslashTest) VerifyBaselineFindAllReferences(
 	}
 }
 
+func (f *FourslashTest) VerifyBaselineVsFindAllReferences(
+	t *testing.T,
+	markers ...string,
+) {
+	referenceLocations := f.lookupMarkersOrGetRanges(t, markers)
+
+	for _, markerOrRange := range referenceLocations {
+		f.GoToMarkerOrRange(t, markerOrRange)
+
+		params := &lsproto.ReferenceParams{
+			TextDocument: lsproto.TextDocumentIdentifier{
+				Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
+			},
+			Position: f.currentCaretPosition,
+			Context: &lsproto.ReferenceContext{
+				IncludeDeclaration: true,
+			},
+		}
+		result := sendRequest(t, f, lsproto.TextDocumentVSReferencesInfo, params)
+		// Sort cross-project results for deterministic baselines
+		if result.VsReferenceItems != nil && len(*result.VsReferenceItems) > 0 {
+			items := *result.VsReferenceItems
+			slices.SortStableFunc(items, func(a, b *lsproto.VsReferenceItem) int {
+				ap, bp := "", ""
+				if a.VSProjectName != nil {
+					ap = *a.VSProjectName
+				}
+				if b.VSProjectName != nil {
+					bp = *b.VSProjectName
+				}
+				if ap != bp {
+					if ap < bp {
+						return -1
+					}
+					return 1
+				}
+				if a.VSLocation.Uri != b.VSLocation.Uri {
+					if string(a.VSLocation.Uri) < string(b.VSLocation.Uri) {
+						return -1
+					}
+					return 1
+				}
+				if a.VSLocation.Range.Start.Line != b.VSLocation.Range.Start.Line {
+					return int(a.VSLocation.Range.Start.Line) - int(b.VSLocation.Range.Start.Line)
+				}
+				return int(a.VSLocation.Range.Start.Character) - int(b.VSLocation.Range.Start.Character)
+			})
+			// Re-number IDs sequentially after sort
+			idRemap := make(map[int32]int32, len(items))
+			for i, item := range items {
+				idRemap[item.VSId] = int32(i)
+				item.VSId = int32(i)
+			}
+			for _, item := range items {
+				if item.VSDefinitionId != nil {
+					newDefId := idRemap[*item.VSDefinitionId]
+					item.VSDefinitionId = &newDefId
+				}
+			}
+		}
+		// Include file contents with markers
+		var locations []lsproto.Location
+		if result.VsReferenceItems != nil {
+			for _, item := range *result.VsReferenceItems {
+				locations = append(locations, item.VSLocation)
+			}
+		}
+		fileContents := f.getBaselineForLocationsWithFileContents(locations, baselineFourslashLocationsOptions{
+			marker:     markerOrRange,
+			markerName: "/*FIND ALL REFS*/",
+		})
+
+		if jsonStr, err := core.StringifyJson(result, "", "  "); err == nil {
+			f.addResultToBaseline(t, vsFindAllReferencesCmd, fileContents+"\n\n"+jsonStr)
+		} else {
+			t.Fatalf("Failed to stringify VS references result for baseline: %v", err)
+		}
+	}
+}
+
 func (f *FourslashTest) VerifyBaselineCodeLens(t *testing.T, preferences *lsutil.UserPreferences) {
 	if preferences != nil {
 		reset := f.ConfigureWithReset(t, *preferences)

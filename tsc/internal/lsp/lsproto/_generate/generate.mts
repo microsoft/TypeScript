@@ -178,6 +178,52 @@ const customStructures: Structure[] = [
         documentation: "Options for the textDocument/_vs_onAutoInsert provider capability.",
     },
     {
+        name: "VsReferenceItem",
+        properties: [
+            {
+                name: "_vs_id",
+                type: { kind: "base", name: "integer" },
+                documentation: "Unique identifier for this reference item.",
+            },
+            {
+                name: "_vs_definitionId",
+                type: { kind: "base", name: "integer" },
+                optional: true,
+                documentation: "The ID of the definition item this reference belongs to. Absent for definition items themselves.",
+            },
+            {
+                name: "_vs_kind",
+                type: { kind: "array", element: { kind: "reference", name: "VsReferenceKind" } },
+                optional: true,
+                documentation: "The kind(s) of this reference (read, write, etc.).",
+            },
+            {
+                name: "_vs_location",
+                type: { kind: "reference", name: "Location" },
+                documentation: "The location of this reference.",
+            },
+            {
+                name: "_vs_definitionText",
+                type: { kind: "reference", name: "ClassifiedTextElement" },
+                optional: true,
+                documentation: "Classified display text for the definition (used for grouping headers in the UI).",
+            },
+            {
+                name: "_vs_projectName",
+                type: { kind: "base", name: "string" },
+                optional: true,
+                documentation: "The project name for this reference.",
+            },
+            {
+                name: "_vs_containingType",
+                type: { kind: "base", name: "string" },
+                optional: true,
+                documentation: "The containing type for this reference.",
+            },
+        ],
+        documentation: "A VS-specific reference item with grouping support for Find All References.",
+    },
+    {
         name: "VsOnAutoInsertParams",
         properties: [
             {
@@ -486,11 +532,13 @@ const customStructures: Structure[] = [
             {
                 name: "Style",
                 type: { kind: "base", name: "integer" },
+                optional: true,
                 omitzeroValue: true,
                 documentation: "The style of this text run.",
             },
         ],
         documentation: "A classified text run with text and classification type, used for colorized display in VS.",
+        vsTypeDiscriminator: "ClassifiedTextRun",
     },
     {
         name: "ClassifiedTextElement",
@@ -502,10 +550,35 @@ const customStructures: Structure[] = [
             },
         ],
         documentation: "A classified text element containing an array of classified text runs, used for colorized labels in VS.",
+        vsTypeDiscriminator: "ClassifiedTextElement",
     },
 ];
 
 const customEnumerations: Enumeration[] = [
+    {
+        name: "VsReferenceKind",
+        type: { kind: "base", name: "integer" },
+        values: [
+            { name: "Inactive", value: 0 },
+            { name: "Comment", value: 1 },
+            { name: "String", value: 2 },
+            { name: "Read", value: 3 },
+            { name: "Write", value: 4 },
+            { name: "Reference", value: 5 },
+            { name: "Name", value: 6 },
+            { name: "Qualified", value: 7 },
+            { name: "TypeArgument", value: 8 },
+            { name: "TypeConstraint", value: 9 },
+            { name: "BaseType", value: 10 },
+            { name: "Constructor", value: 11 },
+            { name: "Destructor", value: 12 },
+            { name: "Import", value: 13 },
+            { name: "Declaration", value: 14 },
+            { name: "AddressOf", value: 15 },
+            { name: "NotReference", value: 16 },
+            { name: "Unknown", value: 17 },
+        ],
+    },
     {
         name: "CodeLensKind",
         type: {
@@ -671,6 +744,20 @@ const customRequests: Request[] = [
         messageDirection: "clientToServer",
         documentation: "Request for auto-insert when a trigger character is typed (VS-specific).",
     },
+    {
+        method: "textDocument/_vs_references",
+        typeName: "VsReferencesRequest",
+        params: { kind: "reference", name: "ReferenceParams" },
+        result: {
+            kind: "or",
+            items: [
+                { kind: "array", element: { kind: "reference", name: "VsReferenceItem" } },
+                { kind: "base", name: "null" },
+            ],
+        },
+        messageDirection: "clientToServer",
+        documentation: "VS-specific request for Find All References with grouped reference items.",
+    },
 ];
 
 // compareStructures is the set of generated structures for which a Compare method should be emitted.
@@ -780,6 +867,12 @@ function patchAndPreprocessModel() {
                 type: { kind: "reference", name: "VsOnAutoInsertOptions" },
                 optional: true,
                 documentation: "Provider options for the VS auto-insert feature via textDocument/_vs_onAutoInsert.",
+            });
+            structure.properties.push({
+                name: "_vs_referencesProvider",
+                type: { kind: "base", name: "boolean" },
+                optional: true,
+                documentation: "The server provides VS-specific grouped references via textDocument/_vs_references.",
             });
         }
 
@@ -2129,6 +2222,13 @@ function generateCode() {
                 if (includeDocumentation) {
                     writeLine("");
                 }
+            }
+
+            // Special: add _vs_type discriminator field for VS ObjectContentConverter
+            if ((structure as any).vsTypeDiscriminator) {
+                writeLine("");
+                writeLine(`\t// VS type discriminator required by ObjectContentConverter for deserialization.`);
+                writeLine(`\tVSType string \`json:"_vs_type"\``);
             }
 
             // Special: add RegisterOptions field to Registration

@@ -35,6 +35,7 @@ func (w *displayPartsWriter) addRun(classification lsproto.ClassificationTypeNam
 		w.runs = append(w.runs, &lsproto.ClassifiedTextRun{
 			ClassificationTypeName: string(classification),
 			Text:                   text,
+			VSType:                 "ClassifiedTextRun",
 		})
 	}
 	w.lastWritten = text
