@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/cjsExportGenericTypes.ts] ////
+
+=== index.js ===
+const Set = require("./set");
+>Set : typeof SomeGenericClass
+>require("./set") : typeof SomeGenericClass
+>require : any
+>"./set" : "./set"
+
+/** @typedef {Set<string>} MyDefinedType */
+
+=== set.js ===
+/**
+ * @template D
+ * @typedef {(a: D, b: D) => number} SomeUnrelatedGeneric
+ */
+
+/**
+ * @template T
+ */
+class SomeGenericClass {
+>SomeGenericClass : SomeGenericClass<T>
+
+  /**
+   * @param {Set<T>} param
+   */
+  constructor(param) {}
+>param : Set<T>
+}
+
+module.exports = SomeGenericClass;
+>module.exports = SomeGenericClass : typeof SomeGenericClass
+>module.exports : typeof SomeGenericClass
+>module : { exports: typeof SomeGenericClass; }
+>exports : typeof SomeGenericClass
+>SomeGenericClass : typeof SomeGenericClass
+

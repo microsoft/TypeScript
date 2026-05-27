@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/cjsExportGenericTypes.ts] ////
+
+=== index.js ===
+const Set = require("./set");
+>Set : Symbol(Set, Decl(index.js, 0, 5))
+>require : Symbol(require)
+>"./set" : Symbol("./set", Decl(set.js, 0, 0))
+
+/** @typedef {Set<string>} MyDefinedType */
+
+=== set.js ===
+/**
+ * @template D
+ * @typedef {(a: D, b: D) => number} SomeUnrelatedGeneric
+ */
+
+/**
+ * @template T
+ */
+class SomeGenericClass {
+>SomeGenericClass : Symbol(SomeGenericClass, Decl(set.js, 0, 0))
+
+  /**
+   * @param {Set<T>} param
+   */
+  constructor(param) {}
+>param : Symbol(param, Decl(set.js, 12, 14))
+}
+
+module.exports = SomeGenericClass;
+>module.exports : Symbol(exports, Decl(set.js, 0, 0))
+>module : Symbol(module, Decl(set.js, 0, 0))
+>exports : Symbol(exports, Decl(set.js, 0, 0))
+>SomeGenericClass : Symbol(SomeGenericClass, Decl(set.js, 0, 0))
+
