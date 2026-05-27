@@ -95,10 +95,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
                     "The built-in TypeScript extension is disabled. Sync launch.json with launch.template.json to reenable.",
                     "OK",
                 );
+                return;
             }
         }
         else if (useTsgo === false) {
-            const settingName = getUseTsgoFalseSetting() ?? "typescript.experimental.useTsgo";
+            const settingName = getUseTsgoFalseSetting() ?? "js/ts.experimental.useTsgo";
             vscode.window.showWarningMessage(
                 `TypeScript Native Preview is running in development mode with "${settingName}" set to false.`,
                 "Enable Setting",
@@ -108,6 +109,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
                     vscode.commands.executeCommand("typescript.native-preview.enable");
                 }
             });
+            return;
         }
     }
     else if (useTsgo === false) {
