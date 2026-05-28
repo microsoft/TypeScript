@@ -33,7 +33,7 @@ export declare class A {
 }
 export declare const Mixer: {
     new (): {
-        [x: symbol]: () => number;
+        [a]: () => number;
     };
 } & (new (...args: any[]) => {
     mixed: true;

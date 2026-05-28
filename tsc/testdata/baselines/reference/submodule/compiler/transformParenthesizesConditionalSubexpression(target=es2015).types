@@ -6,13 +6,13 @@ var K = 'k'
 >'k' : "k"
 
 var a = { p  : (true ? { [K] : 'v'}        : null) }
->a : { p: { [x: string]: string; } | null; }
->{ p  : (true ? { [K] : 'v'}        : null) } : { p: { [x: string]: string; } | null; }
->p : { [x: string]: string; } | null
->(true ? { [K] : 'v'}        : null) : { [x: string]: string; } | null
->true ? { [K] : 'v'}        : null : { [x: string]: string; } | null
+>a : { p: { [K]: string; } | null; }
+>{ p  : (true ? { [K] : 'v'}        : null) } : { p: { [K]: string; } | null; }
+>p : { [K]: string; } | null
+>(true ? { [K] : 'v'}        : null) : { [K]: string; } | null
+>true ? { [K] : 'v'}        : null : { [K]: string; } | null
 >true : true
->{ [K] : 'v'} : { [x: string]: string; }
+>{ [K] : 'v'} : { [K]: string; }
 >[K] : string
 >K : string
 >'v' : "v"
@@ -25,7 +25,7 @@ var b = { p  : (true ? { [K] : 'v'} as any : null) }
 >true ? { [K] : 'v'} as any : null : any
 >true : true
 >{ [K] : 'v'} as any : any
->{ [K] : 'v'} : { [x: string]: string; }
+>{ [K] : 'v'} : { [K]: string; }
 >[K] : string
 >K : string
 >'v' : "v"

@@ -71,7 +71,7 @@ exports.instanceLookup = (new Holder())["some" + "thing"];
 //// [declarationEmitSimpleComputedNames1.d.ts]
 export declare const fieldName: string;
 export declare const conatainer: {
-    [x: string]: () => string;
+    [fieldName]: () => string;
 };
 declare const classFieldName: string;
 declare const otherField: string;

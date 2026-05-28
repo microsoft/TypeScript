@@ -76,8 +76,8 @@ let u = Symbol();
 >Symbol : SymbolConstructor
 
 export let o4 = {
->o4 : { [x: symbol]: number; }
->{    [u]: 1 // Should error, nut a unique symbol} : { [x: symbol]: number; }
+>o4 : { [u]: number; }
+>{    [u]: 1 // Should error, nut a unique symbol} : { [u]: number; }
 
     [u]: 1 // Should error, nut a unique symbol
 >[u] : number

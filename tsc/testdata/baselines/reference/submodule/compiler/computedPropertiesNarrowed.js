@@ -106,8 +106,9 @@ export declare let o31: {
 export declare let o32: {
     [x: number]: number;
 };
+declare let u: symbol;
 export declare let o4: {
-    [x: symbol]: number;
+    [u]: number;
 };
 export declare let o5: {
     [x: symbol]: number;

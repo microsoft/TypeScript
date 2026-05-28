@@ -2082,6 +2082,66 @@ func (b *NodeBuilderImpl) serializeReturnTypeForSignature(signature *Signature, 
 	return returnTypeNode
 }
 
+func (b *NodeBuilderImpl) isTriviallySerializableComputedName(e *ast.Node) bool {
+	shapeGood := e != nil && e.Name() != nil && ast.IsComputedPropertyName(e.Name()) && ast.IsEntityNameExpression(e.Name().Expression())
+	if !shapeGood {
+		return false
+	}
+	// TODO: going through emit resolver here is weird. Relayer these APIs.
+	return b.ch.GetEmitResolver().isEntityNameVisible(e.Name().Expression(), b.ctx.enclosingDeclaration, false).Accessibility == printer.SymbolAccessibilityAccessible
+}
+
+func (b *NodeBuilderImpl) indexInfoToObjectComputedNamesOrSignatureDeclaration(indexInfo *IndexInfo, typeNode *ast.TypeNode) []*ast.Node {
+	if len(indexInfo.components) > 0 {
+		// Index info is derived from object or class computed property names (plus explicit named members) - we can clone those instead of writing out the result computed index signature
+		allComponentComputedNamesSerializable := b.ctx.enclosingDeclaration != nil && core.Every(indexInfo.components, b.isTriviallySerializableComputedName)
+		if allComponentComputedNamesSerializable {
+			// Only use computed name serialization form if all components are visible and take the `a.b.c` form
+			newComponents := core.Filter(indexInfo.components, func(c *ast.Node) bool {
+				// skip late bound props that contribute to the index signature - they'll be created by property creation anyway
+				return !b.ch.hasLateBindableName(c)
+			})
+			bailed := false
+			results := core.Map(newComponents, func(e *ast.Node) *ast.Node {
+				name := b.reuseNode(e.Name())
+				if name != nil {
+					// Still need to track visibility even if we've already checked it to paint references as used
+					b.trackComputedName(e.Name().Expression(), b.ctx.enclosingDeclaration)
+					var mods *ast.ModifierList
+					if indexInfo.isReadonly {
+						mods = b.f.NewModifierList([]*ast.Node{b.f.NewModifier(ast.KindReadonlyKeyword)})
+					}
+					var postfixToken *ast.Node
+					if e.PostfixToken() != nil {
+						postfixToken = e.PostfixToken().Clone(b.f)
+					}
+					var currentTypeNode *ast.TypeNode
+					if typeNode != nil {
+						currentTypeNode = b.f.DeepCloneNode(typeNode)
+					} else {
+						currentTypeNode = b.typeToTypeNode(b.ch.getTypeOfSymbol(e.Symbol()))
+					}
+					sig := b.f.NewPropertySignatureDeclaration(
+						mods,
+						name,
+						postfixToken,
+						currentTypeNode,
+						nil,
+					)
+					sig.Loc = e.Loc
+					return sig
+				}
+				bailed = true
+				return nil
+			})
+			if !bailed {
+				return results
+			}
+		}
+	}
+	return []*ast.Node{b.indexInfoToIndexSignatureDeclarationHelper(indexInfo, typeNode)}
+}
+
 func (b *NodeBuilderImpl) indexInfoToIndexSignatureDeclarationHelper(indexInfo *IndexInfo, typeNode *ast.TypeNode) *ast.Node {
 	name := getNameFromIndexInfo(indexInfo)
 	indexerTypeNode := b.typeToTypeNode(indexInfo.keyType)
@@ -2551,7 +2611,7 @@ func (b *NodeBuilderImpl) createTypeNodesFromResolvedType(resolvedType *Structur
 		typeElements = append(typeElements, b.signatureToSignatureDeclarationHelper(signature, ast.KindConstructSignature, nil))
 	}
 	for _, info := range resolvedType.indexInfos {
-		typeElements = append(typeElements, b.indexInfoToIndexSignatureDeclarationHelper(info, core.IfElse(resolvedType.objectFlags&ObjectFlagsReverseMapped != 0, b.createElidedInformationPlaceholder(), nil)))
+		typeElements = slices.Concat(typeElements, b.indexInfoToObjectComputedNamesOrSignatureDeclaration(info, core.IfElse(resolvedType.objectFlags&ObjectFlagsReverseMapped != 0, b.createElidedInformationPlaceholder(), nil)))
 	}
 
 	properties := resolvedType.properties

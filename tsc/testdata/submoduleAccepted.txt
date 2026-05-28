@@ -272,17 +272,12 @@ compiler/argumentsReferenceInMethod6_Js.types.diff
 compiler/argumentsReferenceInMethod7_Js.types.diff
 compiler/assertionFunctionWildcardImport1.symbols.diff
 compiler/assertionFunctionWildcardImport1.types.diff
-compiler/capturedParametersInInitializers1.types.diff
 compiler/classFieldSuperAccessibleJs1.symbols.diff
 compiler/classFieldSuperAccessibleJs2.symbols.diff
-compiler/classNonUniqueSymbolMethodHasSymbolIndexer.js.diff
-compiler/commaOperatorInConditionalExpression.types.diff
 compiler/commonJsExportTypeDeclarationError(target=es2015).symbols.diff
 compiler/commonJsIsolatedModules.symbols.diff
 compiler/commonJsIsolatedModules.types.diff
 compiler/commonJsUnusedLocals.symbols.diff
-compiler/computedPropertiesInDestructuring1_ES6.types.diff
-compiler/computedPropertiesInDestructuring1.types.diff
 compiler/conditionalTypeContextualTypeSimplificationsSuceeds.types.diff
 compiler/declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.js.diff
 compiler/declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.types.diff
@@ -291,7 +286,6 @@ compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes(exactoptional
 compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes(exactoptionalpropertytypes=true).symbols.diff
 compiler/deleteExpressionMustBeOptional(strict=false).symbols.diff
 compiler/deleteExpressionMustBeOptional(strict=true).symbols.diff
-compiler/duplicateObjectLiteralProperty_computedNameNegative1.types.diff
 compiler/duplicateStringNamedProperty1.errors.txt.diff
 compiler/expandoFunctionBlockShadowing.symbols.diff
 compiler/expandoFunctionBlockShadowing.types.diff
@@ -331,7 +325,6 @@ compiler/constructorOverloads1.errors.txt.diff
 compiler/destructuringTuple.errors.txt.diff
 compiler/differentTypesWithSameName.errors.txt.diff
 compiler/dissallowSymbolAsWeakType.errors.txt.diff
-compiler/es5-asyncFunctionObjectLiterals(target=es2015).types.diff
 compiler/excessPropertiesInOverloads.errors.txt.diff
 compiler/excessPropertyCheckWithUnions.errors.txt.diff
 compiler/exportDefaultStripsFreshness.errors.txt.diff
@@ -416,14 +409,12 @@ compiler/aliasErrors.types.diff
 compiler/arrayFromAsync.symbols.diff
 compiler/baseClassImprovedMismatchErrors.errors.txt.diff
 compiler/checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.symbols.diff
-compiler/checkJsObjectLiteralIndexSignatures.types.diff
 compiler/checkJsTypeDefNoUnusedLocalMarked.symbols.diff
 compiler/checkJsTypeDefNoUnusedLocalMarked.types.diff
 compiler/circularObjectLiteralAccessors(target=es2015).types.diff
 compiler/circularTypeArgumentsLocalAndOuterNoCrash1.types.diff
 compiler/complexRecursiveCollections.errors.txt.diff
 compiler/computedPropertiesNarrowed.js.diff
-compiler/computedPropertiesNarrowed.types.diff
 compiler/contextuallyTypedJsxAttribute2.types.diff
 compiler/declarationEmitEnumReferenceViaImportEquals.symbols.diff
 compiler/declarationEmitEnumReferenceViaImportEquals.types.diff
@@ -1228,10 +1219,6 @@ conformance/defaultExportsCannotMerge04(target=es2015).js.diff
 ## Numeric string property key uses computed property syntax ["404"] instead of plain "404" (`"404"` and `["404"]` declare the same property; consumers access it identically)
 ## Declaration emit changes how numeric-string-keyed properties are represented
 compiler/declarationEmitPropertyNumericStringKey.js.diff
-
-## Non-literal computed property [fieldName] changed to index signature [x: string] in declaration emit (fieldName is not a legal const to use in a computed position, so this is an error case)
-## Dynamic computed property keys resolved to index signatures
-compiler/declarationEmitSimpleComputedNames1.js.diff
 
 ## `typeof` references resolved to concrete types in declaration emit (concrete types are equivalent to what `typeof` resolves to)
 ## `typeof a` rest parameters and symbol references resolved to tuple/symbol types instead of typeof

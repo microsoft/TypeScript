@@ -22,17 +22,13 @@
 
      // without type annotation
      this._map2 = { [ik]: iv };
-->this._map2 = { [ik]: iv } : { [ik]: V; }
-+>this._map2 = { [ik]: iv } : { [x: string]: V; }
+ >this._map2 = { [ik]: iv } : { [ik]: V; }
  >this._map2 : any
 ->this : this
 +>this : any
  >_map2 : any
-->{ [ik]: iv } : { [ik]: V; }
-+>{ [ik]: iv } : { [x: string]: V; }
+ >{ [ik]: iv } : { [ik]: V; }
  >[ik] : V
- >ik : string
- >iv : V
 @@= skipped -28, +28 lines =@@
  /** @type {Multimap<"a" | "b", number>} with type annotation */
  const map = new Multimap("a", 1);
