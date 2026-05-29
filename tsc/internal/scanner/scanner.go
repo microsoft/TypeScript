@@ -2514,6 +2514,38 @@ func getErrorRangeForArrowFunction(sourceFile *ast.SourceFile, node *ast.Node) c
 	return core.NewTextRange(pos, node.End())
 }
 
+func findOriginatingJSDocSatisfiesTag(sourceFile *ast.SourceFile, node *ast.Node) *ast.Node {
+	targetType := node.AsSatisfiesExpression().Type
+	if targetType.Flags&ast.NodeFlagsReparsed == 0 {
+		return nil
+	}
+	for current := node.Parent; current != nil; current = current.Parent {
+		if current.Flags&ast.NodeFlagsHasJSDoc == 0 {
+			continue
+		}
+		var firstSatisfiesTag *ast.Node
+		for _, jsDoc := range current.EagerJSDoc(sourceFile) {
+			if tags := jsDoc.AsJSDoc().Tags; tags != nil {
+				for _, tag := range tags.Nodes {
+					if !ast.IsJSDocSatisfiesTag(tag) {
+						continue
+					}
+					if firstSatisfiesTag == nil {
+						firstSatisfiesTag = tag
+					}
+					if typeExpr := tag.AsJSDocSatisfiesTag().TypeExpression; typeExpr != nil {
+						if t := typeExpr.Type(); t != nil && t.Loc == targetType.Loc {
+							return tag
+						}
+					}
+				}
+			}
+		}
+		return firstSatisfiesTag
+	}
+	return nil
+}
+
 func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextRange {
 	errorNode := node
 	switch node.Kind {
@@ -2552,6 +2584,10 @@ func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 		pos := SkipTrivia(sourceFile.Text(), node.Pos())
 		return GetRangeOfTokenAtPosition(sourceFile, pos)
 	case ast.KindSatisfiesExpression:
+		if jsDocSatisfiesTag := findOriginatingJSDocSatisfiesTag(sourceFile, node); jsDocSatisfiesTag != nil {
+			pos := SkipTrivia(sourceFile.Text(), jsDocSatisfiesTag.TagName().Pos())
+			return GetRangeOfTokenAtPosition(sourceFile, pos)
+		}
 		pos := SkipTrivia(sourceFile.Text(), node.AsSatisfiesExpression().Expression.End())
 		return GetRangeOfTokenAtPosition(sourceFile, pos)
 	case ast.KindConstructor:
@@ -2565,10 +2601,6 @@ func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 			scanner.Scan()
 		}
 		return core.NewTextRange(start, scanner.TokenEnd())
-		// !!!
-		// case KindJSDocSatisfiesTag:
-		// 	pos := scanner.SkipTrivia(sourceFile.Text(), node.tagName.pos)
-		// 	return scanner.GetRangeOfTokenAtPosition(sourceFile, pos)
 	}
 	if errorNode == nil {
 		// If we don't have a better node, then just set the error on the first token of
