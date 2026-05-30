@@ -1,10 +1,7 @@
-a.js(2,14): error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
 a.js(18,1): error TS2322: Type 'Covariant<unknown>' is not assignable to type 'Covariant<string>'.
   Type 'unknown' is not assignable to type 'string'.
-a.js(21,14): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
 a.js(36,1): error TS2322: Type 'Contravariant<string>' is not assignable to type 'Contravariant<unknown>'.
   Type 'unknown' is not assignable to type 'string'.
-a.js(40,14): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
 a.js(55,1): error TS2322: Type 'Invariant<string>' is not assignable to type 'Invariant<unknown>'.
   Types of property 'f' are incompatible.
     Type '(x: string) => string' is not assignable to type '(x: unknown) => unknown'.
@@ -16,11 +13,9 @@ a.js(56,1): error TS2322: Type 'Invariant<unknown>' is not assignable to type 'I
 a.js(59,14): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
 
 
-==== a.js (8 errors) ====
+==== a.js (5 errors) ====
     /**
      * @template out T
-                 ~~~
-!!! error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
      * @typedef {Object} Covariant
      * @property {T} x
      */
@@ -43,8 +38,6 @@ a.js(59,14): error TS1274: 'in' modifier can only appear on a type parameter of 
     
     /**
      * @template in T
-                 ~~
-!!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
      * @typedef {Object} Contravariant
      * @property {(x: T) => void} f
      */
@@ -67,8 +60,6 @@ a.js(59,14): error TS1274: 'in' modifier can only appear on a type parameter of 
     
     /**
      * @template in out T
-                 ~~
-!!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
      * @typedef {Object} Invariant
      * @property {(x: T) => T} f
      */

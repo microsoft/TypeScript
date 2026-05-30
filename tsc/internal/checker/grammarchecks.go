@@ -301,11 +301,7 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 				if node.Kind != ast.KindEnumDeclaration && node.Kind != ast.KindTypeParameter {
 					return c.grammarErrorOnNode(node, diagnostics.A_class_member_cannot_have_the_0_keyword, scanner.TokenToString(ast.KindConstKeyword))
 				}
-
-				// !!!
-				// parent := (isJSDocTemplateTag(node.Parent) && getEffectiveJSDocHost(node.Parent)) || node.Parent
 				parent := node.Parent
-
 				if node.Kind == ast.KindTypeParameter {
 					if !(ast.IsFunctionLikeDeclaration(parent) || ast.IsClassLike(parent) ||
 						ast.IsFunctionTypeNode(parent) || ast.IsConstructorTypeNode(parent) ||
@@ -532,10 +528,8 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 				} else {
 					inOutText = "out"
 				}
-				// !!!
-				// parent := isJSDocTemplateTag(node.Parent) && (getEffectiveJSDocHost(node.Parent) || core.Find(getJSDocRoot(node.Parent). /* ? */ tags, isJSDocTypedefTag)) || node.Parent
 				parent := node.Parent
-				if node.Kind != ast.KindTypeParameter || parent != nil && !(ast.IsInterfaceDeclaration(parent) || ast.IsClassLike(parent) || ast.IsTypeAliasDeclaration(parent) || isJSDocTypedefTag(parent)) {
+				if node.Kind != ast.KindTypeParameter || parent != nil && !(ast.IsInterfaceDeclaration(parent) || ast.IsClassLike(parent) || ast.IsTypeOrJSTypeAliasDeclaration(parent)) {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_can_only_appear_on_a_type_parameter_of_a_class_interface_or_type_alias, inOutText)
 				}
 				if flags&inOutFlag != 0 {
@@ -570,11 +564,6 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 	if flags&ast.ModifierFlagsAsync != 0 {
 		return c.checkGrammarAsyncModifier(node, lastAsync)
 	}
-	return false
-}
-
-func isJSDocTypedefTag(_ *ast.Node) bool {
-	// !!!
 	return false
 }
 
