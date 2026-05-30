@@ -6,7 +6,7 @@ import { dummy } from './mod1'
 
 /** @type {import('./mod1').Dotted.Name} - should work */
 var dot2
->dot2 : any
+>dot2 : number
 
 === mod1.js ===
 /** @typedef {number} Dotted.Name */

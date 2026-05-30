@@ -1119,6 +1119,8 @@ func (n *Node) TypeExpression() *Node {
 		return n.AsJSDocTypeTag().TypeExpression
 	case KindJSDocTypedefTag:
 		return n.AsJSDocTypedefTag().TypeExpression
+	case KindJSDocCallbackTag:
+		return n.AsJSDocCallbackTag().TypeExpression
 	case KindJSDocSatisfiesTag:
 		return n.AsJSDocSatisfiesTag().TypeExpression
 	case KindJSDocThrowsTag:

@@ -70,7 +70,6 @@ However, if you see **_incorrect_** `.d.ts` output from a `.js` file, **please f
 | Identifier-named typedefs  |<pre><code>`/** @typedef {T} */ typeName;</pre></code> | <pre><code>/** @typedef {T} typeName */</pre></code> | Closure feature. |
 | Closure function type syntax | <pre><code>/* @type {function(string): void} */</pre></code> | <pre><code>/* @type {(s: string) => void} */</pre></code> | |
 | Automatic typeof insertion | <pre><code>const o = { a: 1 };</code><br/><code>/\** @type {o} */</code><br/><code>var o2 = { a: 1 };</code></pre> | <pre><code>const o = { a: 1 };</code><br/><code>/\** @type {typeof o} */</code><br/><code>var o2 = { a: 1 };</code></pre> | |
-| `@typedef` nested names    | <pre><code>/** @typedef {1} NS.T */</pre></code> | Translate to .d.ts file. | Also applies to `@callback`. |
 
 ## Expando declarations
 

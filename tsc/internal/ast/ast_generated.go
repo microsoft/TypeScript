@@ -525,6 +525,7 @@ type (
 	ModuleExportName               = Node // Identifier | StringLiteral
 	PropertyName                   = Node // Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier | BigIntLiteral
 	ModuleBody                     = Node // ModuleBlock | ModuleDeclaration
+	JSDocFullName                  = Node // Identifier | ModuleDeclaration
 	ForInitializer                 = Node // Expression | MissingDeclaration | VariableDeclarationList
 	ModuleReference                = Node // Identifier | QualifiedName | ExternalModuleReference
 	NamedImportBindings            = Node // NamespaceImport | NamedImports
@@ -7980,21 +7981,21 @@ func IsJSDocImportTag(node *Node) bool {
 type JSDocCallbackTag struct {
 	JSDocTagBase
 	TypeExpression *TypeNode
-	FullName       *Node // Optional
+	name           *JSDocFullName // Optional
 }
 
-func (f *NodeFactory) NewJSDocCallbackTag(tagName *IdentifierNode, typeExpression *TypeNode, fullName *Node, comment *NodeList) *Node {
+func (f *NodeFactory) NewJSDocCallbackTag(tagName *IdentifierNode, typeExpression *TypeNode, name *JSDocFullName, comment *NodeList) *Node {
 	data := &JSDocCallbackTag{}
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
-	data.FullName = fullName
+	data.name = name
 	data.Comment = comment
 	return f.newNode(KindJSDocCallbackTag, data)
 }
 
-func (f *NodeFactory) UpdateJSDocCallbackTag(node *JSDocCallbackTag, tagName *IdentifierNode, typeExpression *TypeNode, fullName *Node, comment *NodeList) *Node {
-	if tagName != node.TagName || typeExpression != node.TypeExpression || fullName != node.FullName || comment != node.Comment {
-		return updateNode(f.NewJSDocCallbackTag(tagName, typeExpression, fullName, comment), node.AsNode(), f.hooks)
+func (f *NodeFactory) UpdateJSDocCallbackTag(node *JSDocCallbackTag, tagName *IdentifierNode, typeExpression *TypeNode, name *JSDocFullName, comment *NodeList) *Node {
+	if tagName != node.TagName || typeExpression != node.TypeExpression || name != node.name || comment != node.Comment {
+		return updateNode(f.NewJSDocCallbackTag(tagName, typeExpression, name, comment), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
@@ -8002,16 +8003,20 @@ func (f *NodeFactory) UpdateJSDocCallbackTag(node *JSDocCallbackTag, tagName *Id
 func (node *JSDocCallbackTag) ForEachChild(v Visitor) bool {
 	return visit(v, node.TagName) ||
 		visit(v, node.TypeExpression) ||
-		visit(v, node.FullName) ||
+		visit(v, node.name) ||
 		visitNodeList(v, node.Comment)
 }
 
 func (node *JSDocCallbackTag) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocCallbackTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNode(node.FullName), v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocCallbackTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNode(node.name), v.visitNodes(node.Comment))
 }
 
 func (node *JSDocCallbackTag) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocCallbackTag(node.TagName, node.TypeExpression, node.FullName, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocCallbackTag(node.TagName, node.TypeExpression, node.name, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+}
+
+func (node *JSDocCallbackTag) Name() *DeclarationName {
+	return node.name
 }
 
 func IsJSDocCallbackTag(node *Node) bool {
@@ -8064,11 +8069,11 @@ func IsJSDocOverloadTag(node *Node) bool {
 
 type JSDocTypedefTag struct {
 	JSDocTagBase
-	TypeExpression *Node           // Optional
-	name           *IdentifierNode // Optional
+	TypeExpression *Node          // Optional
+	name           *JSDocFullName // Optional
 }
 
-func (f *NodeFactory) NewJSDocTypedefTag(tagName *IdentifierNode, typeExpression *Node, name *IdentifierNode, comment *NodeList) *Node {
+func (f *NodeFactory) NewJSDocTypedefTag(tagName *IdentifierNode, typeExpression *Node, name *JSDocFullName, comment *NodeList) *Node {
 	data := &JSDocTypedefTag{}
 	data.TagName = tagName
 	data.TypeExpression = typeExpression
@@ -8077,7 +8082,7 @@ func (f *NodeFactory) NewJSDocTypedefTag(tagName *IdentifierNode, typeExpression
 	return f.newNode(KindJSDocTypedefTag, data)
 }
 
-func (f *NodeFactory) UpdateJSDocTypedefTag(node *JSDocTypedefTag, tagName *IdentifierNode, typeExpression *Node, name *IdentifierNode, comment *NodeList) *Node {
+func (f *NodeFactory) UpdateJSDocTypedefTag(node *JSDocTypedefTag, tagName *IdentifierNode, typeExpression *Node, name *JSDocFullName, comment *NodeList) *Node {
 	if tagName != node.TagName || typeExpression != node.TypeExpression || name != node.name || comment != node.Comment {
 		return updateNode(f.NewJSDocTypedefTag(tagName, typeExpression, name, comment), node.AsNode(), f.hooks)
 	}

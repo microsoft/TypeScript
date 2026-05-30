@@ -4,12 +4,14 @@
 
 
  //// [mod1.d.ts]
-+export type Dotted = number;
- /** @typedef {number} Dotted.Name */
+-/** @typedef {number} Dotted.Name */
 -export const dummy: number;
 -export namespace Dotted {
 -    type Name = number;
--}
++export declare namespace Dotted {
++    export type Name = number;
+ }
++/** @typedef {number} Dotted.Name */
 +export declare var dummy: number;
  //// [file.d.ts]
  export {};

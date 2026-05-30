@@ -86,15 +86,7 @@
  >Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
  >WindowDocked : number
      }
-@@= skipped -12, +12 lines =@@
-  * @type {Host.UserMetrics.Bargh}
-  */
- var x = "ok";
-->x : string
-+>x : Host.UserMetrics.Bargh
- >"ok" : "ok"
-
- /**
+@@= skipped -19, +19 lines =@@
   * @type {Host.UserMetrics.Blah}
   */
  var y = "ok";

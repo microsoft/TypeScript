@@ -93,6 +93,7 @@ import type {
     JSDocCallbackTag,
     JSDocComment,
     JSDocDeprecatedTag,
+    JSDocFullName,
     JSDocImplementsTag,
     JSDocImportTag,
     JSDocLink,
@@ -399,9 +400,6 @@ export class NodeObject {
     }
     get finallyBlock(): any {
         return this._data?.finallyBlock;
-    }
-    get fullName(): any {
-        return this._data?.fullName;
     }
     get head(): any {
         return this._data?.head;
@@ -1010,7 +1008,7 @@ function cloneNodeData(node: Node): any {
         case SyntaxKind.JSDocImportTag:
             return { tagName: n.tagName, importClause: n.importClause, moduleSpecifier: n.moduleSpecifier, attributes: n.attributes, comment: n.comment };
         case SyntaxKind.JSDocCallbackTag:
-            return { tagName: n.tagName, typeExpression: n.typeExpression, fullName: n.fullName, comment: n.comment };
+            return { tagName: n.tagName, typeExpression: n.typeExpression, name: n.name, comment: n.comment };
         case SyntaxKind.JSDocOverloadTag:
             return { tagName: n.tagName, typeExpression: n.typeExpression, comment: n.comment };
         case SyntaxKind.JSDocTypedefTag:
@@ -1531,7 +1529,7 @@ const forEachChildTable: Record<number, ForEachChildFunction> = {
     [SyntaxKind.JSDocCallbackTag]: (data, cbNode, cbNodes) =>
         visitNode(cbNode, data.tagName) ||
         visitNode(cbNode, data.typeExpression) ||
-        visitNode(cbNode, data.fullName) ||
+        visitNode(cbNode, data.name) ||
         visitNodes(cbNode, cbNodes, data.comment),
     [SyntaxKind.JSDocOverloadTag]: (data, cbNode, cbNodes) =>
         visitNode(cbNode, data.tagName) ||
@@ -2860,11 +2858,11 @@ export function createJSDocImportTag(tagName: Identifier, importClause: ImportCl
     }) as unknown as JSDocImportTag;
 }
 
-export function createJSDocCallbackTag(tagName: Identifier, typeExpression: TypeNode, fullName?: Node, comment?: readonly JSDocComment[]): JSDocCallbackTag {
+export function createJSDocCallbackTag(tagName: Identifier, typeExpression: TypeNode, name?: JSDocFullName, comment?: readonly JSDocComment[]): JSDocCallbackTag {
     return new NodeObject(SyntaxKind.JSDocCallbackTag, {
         tagName,
         typeExpression,
-        fullName,
+        name,
         comment: comment ? createNodeArray(comment) : undefined,
     }) as unknown as JSDocCallbackTag;
 }
@@ -2877,7 +2875,7 @@ export function createJSDocOverloadTag(tagName: Identifier, typeExpression: Type
     }) as unknown as JSDocOverloadTag;
 }
 
-export function createJSDocTypedefTag(tagName: Identifier, typeExpression?: Node, name?: Identifier, comment?: readonly JSDocComment[]): JSDocTypedefTag {
+export function createJSDocTypedefTag(tagName: Identifier, typeExpression?: Node, name?: JSDocFullName, comment?: readonly JSDocComment[]): JSDocTypedefTag {
     return new NodeObject(SyntaxKind.JSDocTypedefTag, {
         tagName,
         typeExpression,
@@ -3651,15 +3649,15 @@ export function updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier, 
     return node.tagName !== tagName || node.importClause !== importClause || node.moduleSpecifier !== moduleSpecifier || node.attributes !== attributes || node.comment !== comment ? createJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comment) : node;
 }
 
-export function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier, typeExpression: TypeNode, fullName?: Node, comment?: readonly JSDocComment[]): JSDocCallbackTag {
-    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.fullName !== fullName || node.comment !== comment ? createJSDocCallbackTag(tagName, typeExpression, fullName, comment) : node;
+export function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier, typeExpression: TypeNode, name?: JSDocFullName, comment?: readonly JSDocComment[]): JSDocCallbackTag {
+    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.name !== name || node.comment !== comment ? createJSDocCallbackTag(tagName, typeExpression, name, comment) : node;
 }
 
 export function updateJSDocOverloadTag(node: JSDocOverloadTag, tagName: Identifier, typeExpression: TypeNode, comment?: readonly JSDocComment[]): JSDocOverloadTag {
     return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? createJSDocOverloadTag(tagName, typeExpression, comment) : node;
 }
 
-export function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier, typeExpression?: Node, name?: Identifier, comment?: readonly JSDocComment[]): JSDocTypedefTag {
+export function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier, typeExpression?: Node, name?: JSDocFullName, comment?: readonly JSDocComment[]): JSDocTypedefTag {
     return node.tagName !== tagName || node.typeExpression !== typeExpression || node.name !== name || node.comment !== comment ? createJSDocTypedefTag(tagName, typeExpression, name, comment) : node;
 }
 

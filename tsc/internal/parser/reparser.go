@@ -51,7 +51,13 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		if typeExpression == nil {
 			break
 		}
-		typeAlias := p.factory.NewJSTypeAliasDeclaration(nil, p.addDeepCloneReparse(tag.AsJSDocTypedefTag().Name()), nil, nil)
+		fullName := tag.Name()
+		isNamespace := fullName != nil && ast.IsModuleDeclaration(fullName)
+		var modifiers *ast.ModifierList
+		if isNamespace {
+			modifiers = p.createExportModifier(tag)
+		}
+		typeAlias := p.factory.NewJSTypeAliasDeclaration(modifiers, p.addDeepCloneReparse(p.getInnermostNameOfJSDocNamespace(fullName)), nil, nil)
 		typeAlias.AsTypeAliasDeclaration().TypeParameters = p.gatherTypeParameters(jsDoc, tag)
 		var t *ast.Node
 		switch typeExpression.Kind {
@@ -66,19 +72,27 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		p.finishReparsedNode(typeAlias, tag)
 		p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: typeAlias, jsDocs: []*ast.Node{jsDoc}})
 		typeAlias.Flags |= ast.NodeFlagsHasJSDoc
-		p.reparseList = append(p.reparseList, typeAlias)
+		result := p.wrapInJSDocNamespace(fullName, typeAlias, false /*nested*/)
+		p.reparseList = append(p.reparseList, result)
 	case ast.KindJSDocCallbackTag:
-		callbackTag := tag.AsJSDocCallbackTag()
-		if callbackTag.TypeExpression == nil {
+		typeExpression := tag.TypeExpression()
+		if typeExpression == nil {
 			break
 		}
-		functionType := p.reparseJSDocSignature(callbackTag.TypeExpression, tag, jsDoc, tag, nil)
-		typeAlias := p.factory.NewJSTypeAliasDeclaration(nil, p.addDeepCloneReparse(callbackTag.FullName), nil, functionType)
+		fullName := tag.Name()
+		isNamespace := fullName != nil && ast.IsModuleDeclaration(fullName)
+		var modifiers *ast.ModifierList
+		if isNamespace {
+			modifiers = p.createExportModifier(tag)
+		}
+		functionType := p.reparseJSDocSignature(typeExpression, tag, jsDoc, tag, nil)
+		typeAlias := p.factory.NewJSTypeAliasDeclaration(modifiers, p.addDeepCloneReparse(p.getInnermostNameOfJSDocNamespace(fullName)), nil, functionType)
 		typeAlias.AsTypeAliasDeclaration().TypeParameters = p.gatherTypeParameters(jsDoc, tag)
 		p.finishReparsedNode(typeAlias, tag)
 		p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: typeAlias, jsDocs: []*ast.Node{jsDoc}})
 		typeAlias.Flags |= ast.NodeFlagsHasJSDoc
-		p.reparseList = append(p.reparseList, typeAlias)
+		result := p.wrapInJSDocNamespace(fullName, typeAlias, false /*nested*/)
+		p.reparseList = append(p.reparseList, result)
 	case ast.KindJSDocImportTag:
 		importTag := tag.AsJSDocImportTag()
 		if importTag.ImportClause == nil {
@@ -620,4 +634,58 @@ func getClassLikeData(parent *ast.Node) *ast.ClassLikeBase {
 		class = parent.AsClassExpression().ClassLikeData()
 	}
 	return class
+}
+
+func (p *Parser) createExportModifier(locationNode *ast.Node) *ast.ModifierList {
+	exportModifier := p.factory.NewModifier(ast.KindExportKeyword)
+	exportModifier.Loc = locationNode.Loc
+	exportModifier.Flags = p.contextFlags | ast.NodeFlagsReparsed
+	nodes := p.nodeSliceArena.NewSlice1(exportModifier)
+	return p.newModifierList(locationNode.Loc, nodes)
+}
+
+// getInnermostNameOfJSDocNamespace returns the innermost identifier from a
+// JSDoc namespace chain (ModuleDeclaration). For a simple identifier, it returns
+// the identifier itself. For "A.B.C", it returns the identifier "C".
+func (p *Parser) getInnermostNameOfJSDocNamespace(fullName *ast.Node) *ast.Node {
+	if fullName == nil {
+		return nil
+	}
+	for fullName.Kind == ast.KindModuleDeclaration {
+		body := fullName.AsModuleDeclaration().Body
+		if body == nil {
+			return fullName.Name()
+		}
+		fullName = body
+	}
+	return fullName
+}
+
+// wrapInJSDocNamespace wraps a statement (typically a type alias) in namespace
+// declarations corresponding to a JSDoc dotted name. For example, given name
+// "A.B.C" and a type alias for C, this produces:
+//
+//	namespace A { namespace B { type C = ... } }
+//
+// If the name is a simple identifier (not a ModuleDeclaration), it returns the
+// statement as-is.
+func (p *Parser) wrapInJSDocNamespace(fullName *ast.Node, statement *ast.Node, nested bool) *ast.Node {
+	if fullName == nil || !ast.IsModuleDeclaration(fullName) {
+		return statement
+	}
+	// Recursively wrap from outermost to innermost. Inner namespaces always get an export modifier
+	// so members are accessible via dotted access from outside. The outermost namespace is treated as
+	// exported only in module files via IsImplicitlyExportedJSDocDeclaration (in the binder), so it
+	// does not get an explicit export modifier here.
+	wrapped := p.wrapInJSDocNamespace(fullName.Body(), statement, true /*nested*/)
+	block := p.factory.NewModuleBlock(p.newNodeList(fullName.Loc, p.nodeSliceArena.NewSlice1(wrapped)))
+	p.finishReparsedNode(block, fullName)
+	var modifiers *ast.ModifierList
+	if nested {
+		modifiers = p.createExportModifier(fullName)
+	}
+	result := p.factory.NewModuleDeclaration(modifiers, ast.KindNamespaceKeyword, p.addDeepCloneReparse(fullName.Name()), block)
+	p.finishReparsedNode(result, fullName)
+	p.reparsedClones = append(p.reparsedClones, result)
+	return result
 }

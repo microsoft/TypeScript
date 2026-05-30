@@ -1242,7 +1242,7 @@ export interface JSDocImportTag extends JSDocTagBase {
 export interface JSDocCallbackTag extends JSDocTagBase {
     readonly kind: SyntaxKind.JSDocCallbackTag;
     readonly typeExpression: TypeNode;
-    readonly fullName?: Node;
+    readonly name?: JSDocFullName;
 }
 export interface JSDocOverloadTag extends JSDocTagBase {
     readonly kind: SyntaxKind.JSDocOverloadTag;
@@ -1251,7 +1251,7 @@ export interface JSDocOverloadTag extends JSDocTagBase {
 export interface JSDocTypedefTag extends JSDocTagBase {
     readonly kind: SyntaxKind.JSDocTypedefTag;
     readonly typeExpression?: Node;
-    readonly name?: Identifier;
+    readonly name?: JSDocFullName;
 }
 export interface JSDocSignature extends JSDocTypeBase, FunctionLikeBase {
     readonly kind: SyntaxKind.JSDocSignature;
@@ -1342,6 +1342,7 @@ export type ModuleName = Identifier | StringLiteral;
 export type ModuleExportName = Identifier | StringLiteral;
 export type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier | BigIntLiteral;
 export type ModuleBody = ModuleBlock | ModuleDeclaration;
+export type JSDocFullName = Identifier | ModuleDeclaration;
 export type ForInitializer = Expression | MissingDeclaration | VariableDeclarationList;
 export type ModuleReference = Identifier | QualifiedName | ExternalModuleReference;
 export type NamedImportBindings = NamespaceImport | NamedImports;

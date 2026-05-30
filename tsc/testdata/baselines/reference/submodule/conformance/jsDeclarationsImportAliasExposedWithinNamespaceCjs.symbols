@@ -12,7 +12,7 @@ const {myTypes} = require('./file.js');
  * @type {Object<string,*>}
  */
 const testFnTypes = {
->testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5), Decl(file2.js, 11, 4))
+>testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5), Decl(file2.js, 11, 37))
 
     // SOME PROPS HERE
 };
@@ -54,7 +54,7 @@ module.exports = {testFn, testFnTypes};
  * @type {Object<string,*>}
  */
 const myTypes = {
->myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 4), Decl(file.js, 12, 3), Decl(file.js, 17, 4))
+>myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))
 
     // SOME PROPS HERE
 };
@@ -70,8 +70,8 @@ const myTypes = {
 /** @typedef {myTypes.typeB|Function} myTypes.typeC */
 
 exports.myTypes = myTypes;
->exports.myTypes : Symbol(myTypes, Decl(file.js, 7, 2), Decl(file.js, 9, 4))
+>exports.myTypes : Symbol(myTypes, Decl(file.js, 7, 2))
 >exports : Symbol(exports, Decl(file.js, 0, 0))
->myTypes : Symbol(myTypes, Decl(file.js, 7, 2), Decl(file.js, 9, 4))
->myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 4), Decl(file.js, 12, 3), Decl(file.js, 17, 4))
+>myTypes : Symbol(myTypes, Decl(file.js, 7, 2))
+>myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))
 

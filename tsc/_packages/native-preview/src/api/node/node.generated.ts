@@ -653,9 +653,6 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     get finallyBlock(): RemoteNode | undefined {
         return this.getNamedChild("finallyBlock") as RemoteNode;
     }
-    get fullName(): RemoteNode | undefined {
-        return this.getNamedChild("fullName") as RemoteNode;
-    }
     get head(): RemoteNode | undefined {
         return this.getNamedChild("head") as RemoteNode;
     }

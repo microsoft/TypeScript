@@ -1030,9 +1030,9 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		it := newChildIter(childIndices)
 		tagName := d.nodeAt(it.nextIf(mask, 0))
 		typeExpression := d.nodeAt(it.nextIf(mask, 1))
-		fullName := d.nodeAt(it.nextIf(mask, 2))
+		name := d.nodeAt(it.nextIf(mask, 2))
 		comment := d.nodeListAt(it.nextIf(mask, 3))
-		return d.factory.NewJSDocCallbackTag(tagName, typeExpression, fullName, comment), nil
+		return d.factory.NewJSDocCallbackTag(tagName, typeExpression, name, comment), nil
 	case ast.KindJSDocOverloadTag:
 		it := newChildIter(childIndices)
 		tagName := d.nodeAt(it.nextIf(mask, 0))

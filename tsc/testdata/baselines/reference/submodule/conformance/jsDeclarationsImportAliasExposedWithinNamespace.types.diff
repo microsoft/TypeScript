@@ -47,13 +47,6 @@
  >'number' : "number"
 
          return 2 * input;
- >2 * input : number
- >2 : 2
-->input : never
-+>input : number
-
-     } else {
-         return null;
 @@= skipped -20, +20 lines =@@
 
  export {testFn, testFnTypes};

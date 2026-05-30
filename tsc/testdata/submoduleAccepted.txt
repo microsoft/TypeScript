@@ -10,7 +10,6 @@ conformance/callbackOnConstructor.types.diff
 conformance/callbackTag2.errors.txt.diff
 conformance/callbackTag2.types.diff
 conformance/callbackTag4.types.diff
-conformance/callbackTagNamespace.types.diff
 conformance/callOfPropertylessConstructorFunction.errors.txt.diff
 conformance/callOfPropertylessConstructorFunction.types.diff
 conformance/callWithMissingVoidUndefinedUnknownAnyInJs(strict=false).errors.txt.diff

@@ -63,7 +63,7 @@ function testFn(input) {
         return 2 * input;
 >2 * input : number
 >2 : 2
->input : number
+>input : never
 
     } else {
         return null;

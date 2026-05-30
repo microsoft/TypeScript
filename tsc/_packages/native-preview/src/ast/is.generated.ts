@@ -126,6 +126,7 @@ import type {
     JSDocCallbackTag,
     JSDocComment,
     JSDocDeprecatedTag,
+    JSDocFullName,
     JSDocImplementsTag,
     JSDocImportTag,
     JSDocLink,
@@ -1141,6 +1142,10 @@ export function isPropertyName(node: Node): node is PropertyName {
 
 export function isModuleBody(node: Node): node is ModuleBody {
     return node.kind === SyntaxKind.ModuleBlock || node.kind === SyntaxKind.ModuleDeclaration;
+}
+
+export function isJSDocFullName(node: Node): node is JSDocFullName {
+    return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ModuleDeclaration;
 }
 
 export function isModuleReference(node: Node): node is ModuleReference {

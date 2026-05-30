@@ -759,7 +759,7 @@ func (c *Checker) someSymbolTableInScope(
 			if ast.IsSourceFile(location) && !ast.IsExternalOrCommonJSModule(location.AsSourceFile()) {
 				break
 			}
-			sym := c.getSymbolOfDeclaration(location)
+			sym := c.getSymbolOfDeclaration(ast.GetReparsedNodeForNode(location))
 			if callback(sym.Exports, symbolTableIDFromExports(sym), false, true, location) {
 				return true
 			}

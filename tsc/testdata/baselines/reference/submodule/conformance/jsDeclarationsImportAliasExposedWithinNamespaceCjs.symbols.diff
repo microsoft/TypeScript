@@ -1,15 +1,6 @@
 --- old.jsDeclarationsImportAliasExposedWithinNamespaceCjs.symbols
 +++ new.jsDeclarationsImportAliasExposedWithinNamespaceCjs.symbols
-@@= skipped -11, +11 lines =@@
-  * @type {Object<string,*>}
-  */
- const testFnTypes = {
-->testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5), Decl(file2.js, 11, 37))
-+>testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5), Decl(file2.js, 11, 4))
-
-     // SOME PROPS HERE
- };
-@@= skipped -29, +29 lines =@@
+@@= skipped -40, +40 lines =@@
  }
 
  module.exports = {testFn, testFnTypes};
@@ -22,24 +13,11 @@
  >testFn : Symbol(testFn, Decl(file2.js, 27, 18))
  >testFnTypes : Symbol(testFnTypes, Decl(file2.js, 27, 25))
 
-@@= skipped -13, +13 lines =@@
-  * @type {Object<string,*>}
-  */
- const myTypes = {
-->myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))
-+>myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 4), Decl(file.js, 12, 3), Decl(file.js, 17, 4))
-
-     // SOME PROPS HERE
- };
-@@= skipped -16, +16 lines =@@
- /** @typedef {myTypes.typeB|Function} myTypes.typeC */
+@@= skipped -30, +30 lines =@@
 
  exports.myTypes = myTypes;
-->exports.myTypes : Symbol(myTypes, Decl(file.js, 7, 2))
+ >exports.myTypes : Symbol(myTypes, Decl(file.js, 7, 2))
 ->exports : Symbol(myTypes, Decl(file.js, 7, 2))
-->myTypes : Symbol(myTypes, Decl(file.js, 7, 2))
-->myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))
-+>exports.myTypes : Symbol(myTypes, Decl(file.js, 7, 2), Decl(file.js, 9, 4))
 +>exports : Symbol(exports, Decl(file.js, 0, 0))
-+>myTypes : Symbol(myTypes, Decl(file.js, 7, 2), Decl(file.js, 9, 4))
-+>myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 4), Decl(file.js, 12, 3), Decl(file.js, 17, 4))
+ >myTypes : Symbol(myTypes, Decl(file.js, 7, 2))
+ >myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))

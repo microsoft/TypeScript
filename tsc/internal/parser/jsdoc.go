@@ -987,10 +987,38 @@ func (p *Parser) parseThisTag(start int, tagName *ast.IdentifierNode, margin int
 	return p.finishNode(result, start)
 }
 
+func (p *Parser) parseJSDocTypeNameWithNamespace(nested bool) *ast.Node {
+	start := p.scanner.TokenStart()
+	if !tokenIsIdentifierOrKeyword(p.token) {
+		return nil
+	}
+	typeNameOrNamespaceName := p.parseJSDocIdentifierName(nil)
+	if p.parseOptionalJsdoc(ast.KindDotToken) {
+		body := p.parseJSDocTypeNameWithNamespace(true /*nested*/)
+		jsDocNamespaceNode := p.factory.NewModuleDeclaration(
+			nil,                      /*modifiers*/
+			ast.KindNamespaceKeyword, /*keyword*/
+			typeNameOrNamespaceName,
+			body,
+		)
+		if nested {
+			jsDocNamespaceNode.Flags |= ast.NodeFlagsNestedNamespace
+		}
+		return p.finishNode(jsDocNamespaceNode, start)
+	}
+	if nested {
+		typeNameOrNamespaceName.Flags |= ast.NodeFlagsIdentifierIsInJSDocNamespace
+	}
+	return typeNameOrNamespaceName
+}
+
 func (p *Parser) parseTypedefTag(start int, tagName *ast.IdentifierNode, indent int, indentText string) *ast.Node {
 	typeExpression := p.tryParseTypeExpression()
 	p.skipWhitespaceOrAsterisk()
-	fullName := p.parseJSDocIdentifierName(diagnostics.Identifier_expected)
+	fullName := p.parseJSDocTypeNameWithNamespace(false /*nested*/)
+	if fullName == nil {
+		fullName = p.parseJSDocIdentifierName(diagnostics.Identifier_expected)
+	}
 	p.skipWhitespace()
 	comment := p.parseTagComments(indent, nil)
 
@@ -1106,7 +1134,10 @@ func (p *Parser) parseJSDocSignature(start int, indent int) *ast.Node {
 }
 
 func (p *Parser) parseCallbackTag(start int, tagName *ast.IdentifierNode, indent int, indentText string) *ast.Node {
-	fullName := p.parseJSDocIdentifierName(diagnostics.Identifier_expected)
+	fullName := p.parseJSDocTypeNameWithNamespace(false /*nested*/)
+	if fullName == nil {
+		fullName = p.parseJSDocIdentifierName(diagnostics.Identifier_expected)
+	}
 	p.skipWhitespace()
 	comment := p.parseTagComments(indent, nil)
 	typeExpression := p.parseJSDocSignature(p.nodePos(), indent)

@@ -39,4 +39,6 @@ export enum NodeFlags {
     TypeExcludesFlags = YieldContext | AwaitContext,
     PermanentlySetIncrementalFlags = PossiblyContainsDynamicImport | PossiblyContainsImportMeta,
     IdentifierHasExtendedUnicodeEscape = ContainsThis,
+    IdentifierIsInJSDocNamespace = HasAsyncFunctions,
+    NestedNamespace = OptionalChain,
 }

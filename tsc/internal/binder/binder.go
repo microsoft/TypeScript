@@ -379,7 +379,7 @@ func GetSymbolNameForPrivateIdentifier(containingClassSymbol *ast.Symbol, descri
 
 func (b *Binder) declareModuleMember(node *ast.Node, symbolFlags ast.SymbolFlags, symbolExcludes ast.SymbolFlags) *ast.Symbol {
 	container := b.container
-	hasExportModifier := ast.GetCombinedModifierFlags(node)&ast.ModifierFlagsExport != 0 || ast.IsImplicitlyExportedJSTypeAlias(node)
+	hasExportModifier := ast.GetCombinedModifierFlags(node)&ast.ModifierFlagsExport != 0 || ast.IsImplicitlyExportedJSDocDeclaration(node)
 	if symbolFlags&ast.SymbolFlagsAlias != 0 {
 		if node.Kind == ast.KindExportSpecifier || (node.Kind == ast.KindImportEqualsDeclaration && hasExportModifier) {
 			return b.declareSymbol(ast.GetExports(container.Symbol()), container.Symbol(), node, symbolFlags, symbolExcludes)
@@ -426,7 +426,7 @@ func (b *Binder) declareClassMember(node *ast.Node, symbolFlags ast.SymbolFlags,
 }
 
 func (b *Binder) declareSourceFileMember(node *ast.Node, symbolFlags ast.SymbolFlags, symbolExcludes ast.SymbolFlags) *ast.Symbol {
-	if ast.IsExternalOrCommonJSModule(b.file) {
+	if ast.IsExternalModule(b.file) {
 		return b.declareModuleMember(node, symbolFlags, symbolExcludes)
 	}
 	return b.declareSymbol(ast.GetLocals(b.file.AsNode()), nil /*parent*/, node, symbolFlags, symbolExcludes)

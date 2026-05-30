@@ -13,7 +13,9 @@ export var dummy = 1
 
 
 //// [mod1.d.ts]
-export type Dotted = number;
+export declare namespace Dotted {
+    export type Name = number;
+}
 /** @typedef {number} Dotted.Name */
 export declare var dummy: number;
 //// [file.d.ts]

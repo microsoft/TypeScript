@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/jsDocTypedefTagNamespace.ts] ////
+
+=== a.js ===
+/** @typedef {number} NS.T */
+/** @typedef {string} NS.U */
+
+/** @type {NS.T} */
+const x = 1;
+>x : Symbol(x, Decl(a.js, 4, 5))
+
+/** @type {NS.U} */
+const y = "hello";
+>y : Symbol(y, Decl(a.js, 7, 5))
+
+=== b.js ===
+/** @typedef {{age: number}} A.B.MyType */
+
+/** @type {A.B.MyType} */
+const z = { age: 42 };
+>z : Symbol(z, Decl(b.js, 3, 5))
+>age : Symbol(age, Decl(b.js, 3, 11))
+
+=== c.js ===
+/** @callback NS.MyCallback
+ * @param {string} name
+ * @returns {void}
+ */
+
+/** @type {NS.MyCallback} */
+const f = (name) => {};
+>f : Symbol(f, Decl(c.js, 6, 5))
+>name : Symbol(name, Decl(c.js, 6, 11))
+
+=== d.js ===
+/** @typedef {number} M.T */
+
+/** @type {M.T} */
+export const xd = 1;
+>xd : Symbol(xd, Decl(d.js, 3, 12))
+
+=== e.js ===
+import { xd } from "./d.js";
+>xd : Symbol(xd, Decl(e.js, 0, 8))
+
+/** @type {import("./d.js").M.T} */
+export const ed = xd;
+>ed : Symbol(ed, Decl(e.js, 2, 12))
+>xd : Symbol(xd, Decl(e.js, 0, 8))
+

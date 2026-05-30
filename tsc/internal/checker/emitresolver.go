@@ -157,7 +157,7 @@ func (r *EmitResolver) determineIfDeclarationIsVisible(node *ast.Node) bool {
 		}
 		// External module augmentation is always visible
 		// A @typedef at top-level in an external module is always visible
-		if ast.IsExternalModuleAugmentation(node) || ast.IsImplicitlyExportedJSTypeAlias(node) {
+		if ast.IsExternalModuleAugmentation(node) || ast.IsImplicitlyExportedJSDocDeclaration(node) {
 			return true
 		}
 		parent := ast.GetDeclarationContainer(node)
@@ -217,6 +217,15 @@ func (r *EmitResolver) determineIfDeclarationIsVisible(node *ast.Node) bool {
 
 	// Export assignments do not create name bindings outside the module
 	case ast.KindExportAssignment:
+		return false
+
+	// An `export {X}` (without a module specifier) is itself a visible re-export of
+	// the named binding; it contributes to the symbol's external visibility.
+	case ast.KindExportSpecifier:
+		exportDecl := node.Parent.Parent
+		if ast.IsExportDeclaration(exportDecl) && exportDecl.AsExportDeclaration().ModuleSpecifier == nil {
+			return r.isDeclarationVisible(exportDecl.Parent)
+		}
 		return false
 
 	default:
@@ -391,7 +400,6 @@ func (r *EmitResolver) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeA
 		if ast.IsIdentifier(declaration) {
 			continue
 		}
-
 		if !r.isDeclarationVisible(declaration) {
 			// Mark the unexported alias as visible if its parent is visible
 			// because these kind of aliases can be used to name types in declaration file

@@ -99,7 +99,7 @@ Other.Cls = class {
  * @type {Host.UserMetrics.Bargh}
  */
 var x = "ok";
->x : Host.UserMetrics.Bargh
+>x : string
 >"ok" : "ok"
 
 /**

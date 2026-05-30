@@ -39,4 +39,6 @@ export var NodeFlags: any;
     NodeFlags[NodeFlags["TypeExcludesFlags"] = 10240] = "TypeExcludesFlags";
     NodeFlags[NodeFlags["PermanentlySetIncrementalFlags"] = 1572864] = "PermanentlySetIncrementalFlags";
     NodeFlags[NodeFlags["IdentifierHasExtendedUnicodeEscape"] = 128] = "IdentifierHasExtendedUnicodeEscape";
+    NodeFlags[NodeFlags["IdentifierIsInJSDocNamespace"] = 262144] = "IdentifierIsInJSDocNamespace";
+    NodeFlags[NodeFlags["NestedNamespace"] = 32] = "NestedNamespace";
 })(NodeFlags || (NodeFlags = {}));

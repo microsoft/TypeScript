@@ -311,7 +311,6 @@ TestJsDocServices
 TestJsDocTagsWithHyphen
 TestJsdocTemplatePrototypeCompletions
 TestJsdocTypedefTag
-TestJsdocTypedefTag2
 TestJsdocTypedefTagNamespace
 TestJsFileImportNoTypes2
 TestJsQuickInfoGenerallyAcceptableSize

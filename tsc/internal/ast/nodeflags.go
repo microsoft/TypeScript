@@ -64,5 +64,9 @@ const (
 	NodeFlagsPermanentlySetIncrementalFlags NodeFlags = NodeFlagsPossiblyContainsDynamicImport | NodeFlagsPossiblyContainsImportMeta
 
 	// The following flags repurpose other NodeFlags as different meanings for Identifier nodes
-	NodeFlagsIdentifierHasExtendedUnicodeEscape NodeFlags = NodeFlagsContainsThis // Indicates whether the identifier contains an extended unicode escape sequence
+	NodeFlagsIdentifierHasExtendedUnicodeEscape NodeFlags = NodeFlagsContainsThis      // Indicates whether the identifier contains an extended unicode escape sequence
+	NodeFlagsIdentifierIsInJSDocNamespace       NodeFlags = NodeFlagsHasAsyncFunctions // Indicates the identifier is the innermost name of a JSDoc namespace declaration
+
+	// The following flag repurposes other NodeFlags for ModuleDeclaration nodes
+	NodeFlagsNestedNamespace NodeFlags = NodeFlagsOptionalChain // If ModuleDeclaration is a nested namespace (e.g. inner part of A.B.C)
 )
