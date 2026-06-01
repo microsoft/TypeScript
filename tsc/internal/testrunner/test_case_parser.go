@@ -92,7 +92,8 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 				configFileName,
 				nil, /*resolutionStack*/
 				nil, /*extraFileExtensions*/
-				nil /*extendedConfigCache*/)
+				nil, /*extendedConfigCache*/
+			)
 			tsConfigFileUnitData = data
 
 			// delete tsconfig file entry from the list

@@ -37,7 +37,8 @@ fooB/*1*/`
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: CompletionGlobalsPlus(
-				[]fourslash.CompletionsExpectedItem{}, true),
+				[]fourslash.CompletionsExpectedItem{}, true,
+			),
 		},
 	})
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
@@ -61,7 +62,8 @@ fooB/*1*/`
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
-				}, true),
+				}, true,
+			),
 		},
 	})
 	f.VerifyApplyCodeActionFromCompletion(t, new("1"), &fourslash.ApplyCodeActionFromCompletionOptions{

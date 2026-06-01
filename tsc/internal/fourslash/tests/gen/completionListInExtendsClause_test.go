@@ -50,7 +50,8 @@ interface test4 implements Foo./*4*/ {}`
 						Label:    "prototype",
 						SortText: new(string(ls.SortTextLocationPriority)),
 					},
-				}),
+				},
+			),
 		},
 	})
 	f.VerifyCompletions(t, []string{"2", "3", "4"}, nil)

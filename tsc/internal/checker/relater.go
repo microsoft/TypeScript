@@ -1379,8 +1379,8 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 				// invariance, covariance, contravariance or bivariance.
 				typeWithSuper := c.createMarkerType(symbol, tp, c.markerSuperType)
 				typeWithSub := c.createMarkerType(symbol, tp, c.markerSubType)
-				variance = (core.IfElse(c.isTypeAssignableTo(typeWithSub, typeWithSuper), VarianceFlagsCovariant, 0)) |
-					(core.IfElse(c.isTypeAssignableTo(typeWithSuper, typeWithSub), VarianceFlagsContravariant, 0))
+				variance = core.IfElse(c.isTypeAssignableTo(typeWithSub, typeWithSuper), VarianceFlagsCovariant, 0) |
+					core.IfElse(c.isTypeAssignableTo(typeWithSuper, typeWithSub), VarianceFlagsContravariant, 0)
 				// If the instantiations appear to be related bivariantly it may be because the
 				// type parameter is independent (i.e. it isn't witnessed anywhere in the generic
 				// type). To determine this we compare instantiations where the type parameter is
@@ -3444,7 +3444,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			baseObjectType := r.c.getBaseConstraintOrType(objectType)
 			baseIndexType := r.c.getBaseConstraintOrType(indexType)
 			if !r.c.isGenericObjectType(baseObjectType) && !r.c.isGenericIndexType(baseIndexType) {
-				accessFlags := AccessFlagsWriting | (core.IfElse(baseObjectType != objectType, AccessFlagsNoIndexSignatures, 0))
+				accessFlags := AccessFlagsWriting | core.IfElse(baseObjectType != objectType, AccessFlagsNoIndexSignatures, 0)
 				constraint := r.c.getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, accessFlags, nil, nil)
 				if constraint != nil {
 					if reportErrors && originalErrorChain != nil {

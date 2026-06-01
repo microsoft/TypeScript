@@ -60,7 +60,8 @@ class Foo {
 					&lsproto.CompletionItem{
 						Label: "prototype",
 					},
-				}),
+				},
+			),
 		},
 	})
 }

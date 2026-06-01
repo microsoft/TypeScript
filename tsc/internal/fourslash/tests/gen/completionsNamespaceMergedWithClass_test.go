@@ -60,7 +60,8 @@ D./*value*/`
 						Label:    "prototype",
 						SortText: new(string(ls.SortTextLocationPriority)),
 					},
-				}),
+				},
+			),
 		},
 	})
 }

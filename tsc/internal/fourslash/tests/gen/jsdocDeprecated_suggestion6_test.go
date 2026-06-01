@@ -31,25 +31,25 @@ const deprecatedFunction = (options: [|Options|]) => { options }
 	f.GoToFile(t, "a.tsx")
 	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
-			Message: "'Props' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'Props' is deprecated.")},
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
 			Range:   f.Ranges()[0].LSRange,
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 		},
 		{
-			Message: "'Component' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'Component' is deprecated.")},
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
 			Range:   f.Ranges()[1].LSRange,
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 		},
 		{
-			Message: "'Options' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'Options' is deprecated.")},
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
 			Range:   f.Ranges()[2].LSRange,
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 		},
 		{
-			Message: "'deprecatedFunction' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'deprecatedFunction' is deprecated.")},
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
 			Range:   f.Ranges()[3].LSRange,
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},

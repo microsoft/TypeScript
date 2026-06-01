@@ -120,7 +120,8 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 	toRealpath, _ := getPackageRealpathFuncs(fs, "/symlink-bin/pkg")
 
 	// Files inside the package should be converted via string replacement (fast path).
-	assert.Equal(t,
+	assert.Equal(
+		t,
 		toRealpath("/symlink-bin/pkg/index.d.ts"),
 		"/real/bin/pkg/index.d.ts",
 		"package files should be converted via prefix replacement",
@@ -128,7 +129,8 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 
 	// Files outside the package (e.g. node_modules symlinks) should be resolved via
 	// fs.Realpath so the cache key is the canonical realpath, not the symlink path.
-	assert.Equal(t,
+	assert.Equal(
+		t,
 		toRealpath("/real/bin/pkg/node_modules/dep/index.d.ts"),
 		"/real/dep/index.d.ts",
 		"node_modules symlinks must be followed so the same file gets a consistent cache key",
@@ -136,7 +138,8 @@ func TestGetPackageRealpathFuncs_FollowsNodeModulesSymlinks(t *testing.T) {
 
 	// Files in subdirectories of an already-resolved external package should
 	// use the cached prefix mapping without additional realpath calls.
-	assert.Equal(t,
+	assert.Equal(
+		t,
 		toRealpath("/real/bin/pkg/node_modules/dep/src/utils/helper.d.ts"),
 		"/real/dep/src/utils/helper.d.ts",
 		"subdirectories of a resolved external package should use cached prefix mapping",
@@ -201,13 +204,15 @@ func TestGetPackageRealpathFuncs_NonSymlinkedPackageWithSymlinkedDeps(t *testing
 	toRealpath, _ := getPackageRealpathFuncs(fs, "/real/my-pkg")
 
 	// Files inside the (non-symlinked) package should be returned unchanged.
-	assert.Equal(t,
+	assert.Equal(
+		t,
 		toRealpath("/real/my-pkg/index.d.ts"),
 		"/real/my-pkg/index.d.ts",
 	)
 
 	// Files outside the package reached via symlinked node_modules should still be resolved.
-	assert.Equal(t,
+	assert.Equal(
+		t,
 		toRealpath("/real/my-pkg/node_modules/dep/index.d.ts"),
 		"/real/dep/index.d.ts",
 		"symlinked deps must be resolved even when the package dir itself is not a symlink",

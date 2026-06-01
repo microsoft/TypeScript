@@ -33,7 +33,8 @@ f2({ x/*2*/ });`
 				[]fourslash.CompletionsExpectedItem{
 					"f1",
 					"f2",
-				}, false),
+				}, false,
+			),
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{

@@ -34,7 +34,8 @@ console.log(a, B, b, c, C, d, D);
 console.log(e, f, F, g, G, H, h);`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import {
     a,
     b,
@@ -57,7 +58,8 @@ console.log(e, f, F, g, G, H, h);`,
 			OrganizeImportsIgnoreCase: core.TSTrue,
 		},
 	)
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import {
     b as B,
     c as C,

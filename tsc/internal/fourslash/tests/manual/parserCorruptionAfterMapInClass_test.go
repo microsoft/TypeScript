@@ -29,7 +29,7 @@ class C {
 	f.VerifyNonSuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(2558))},
-			Message: "Expected 1 type arguments, but got 2.",
+			Message: lsproto.StringOrMarkupContent{String: new("Expected 1 type arguments, but got 2.")},
 		},
 	})
 }

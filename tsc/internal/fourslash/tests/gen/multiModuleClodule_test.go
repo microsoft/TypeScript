@@ -75,7 +75,8 @@ c./*3*/foo = C./*4*/foo;`
 						Label:    "x",
 						SortText: new(string(ls.SortTextLocationPriority)),
 					},
-				}),
+				},
+			),
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{

@@ -39,13 +39,13 @@ export declare const value3: {
 	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
-			Message: "'SelectorMap' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'SelectorMap' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[0].LSRange,
 		},
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
-			Message: "'SelectorMap' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'SelectorMap' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[1].LSRange,
 		},

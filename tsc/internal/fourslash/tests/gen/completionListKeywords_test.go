@@ -27,7 +27,8 @@ func TestCompletionListKeywords(t *testing.T) {
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: CompletionGlobalsPlus(
-				[]fourslash.CompletionsExpectedItem{}, true),
+				[]fourslash.CompletionsExpectedItem{}, true,
+			),
 		},
 	})
 }

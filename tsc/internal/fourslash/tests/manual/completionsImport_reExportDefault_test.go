@@ -45,7 +45,8 @@ fo/**/`
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{

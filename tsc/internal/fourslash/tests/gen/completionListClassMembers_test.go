@@ -70,7 +70,8 @@ c./*instanceMembersOutsideClassScope*/privateProperty;`
 						Label:    "prototype",
 						SortText: new(string(ls.SortTextLocationPriority)),
 					},
-				}),
+				},
+			),
 		},
 	})
 	f.VerifyCompletions(t, "instanceMembersInsideClassScope", &fourslash.CompletionsExpectedList{
@@ -109,7 +110,8 @@ c./*instanceMembersOutsideClassScope*/privateProperty;`
 						Label:    "prototype",
 						SortText: new(string(ls.SortTextLocationPriority)),
 					},
-				}),
+				},
+			),
 		},
 	})
 	f.VerifyCompletions(t, "instanceMembersOutsideClassScope", &fourslash.CompletionsExpectedList{

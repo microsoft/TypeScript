@@ -35,7 +35,8 @@ export { bFuncA } from "./A";`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.GoToFile(t, "/test.ts")
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`export { A } from "./A";
 export { B } from "./B";
 export { C } from "./C";

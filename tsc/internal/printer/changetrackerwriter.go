@@ -239,7 +239,9 @@ func (ct *ChangeTrackerWriter) GetLine() int                { return ct.textWrit
 func (ct *ChangeTrackerWriter) GetColumn() core.UTF16Offset { return ct.textWriter.GetColumn() }
 func (ct *ChangeTrackerWriter) GetIndent() int              { return ct.textWriter.GetIndent() }
 func (ct *ChangeTrackerWriter) IsAtStartOfLine() bool       { return ct.textWriter.IsAtStartOfLine() }
-func (ct *ChangeTrackerWriter) HasTrailingComment() bool    { return ct.textWriter.HasTrailingComment() }
+
+func (ct *ChangeTrackerWriter) HasTrailingComment() bool { return ct.textWriter.HasTrailingComment() }
+
 func (ct *ChangeTrackerWriter) HasTrailingWhitespace() bool {
 	return ct.textWriter.HasTrailingWhitespace()
 }

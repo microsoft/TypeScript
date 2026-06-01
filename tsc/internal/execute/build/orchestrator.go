@@ -43,7 +43,8 @@ func (b *orchestratorResult) report(o *Orchestrator) {
 				strings.Join(core.Map(b.filesToDelete, func(f string) string {
 					return "\r\n * " + f
 				}), ""),
-			))
+			),
+		)
 	}
 	if !o.opts.Command.CompilerOptions.Diagnostics.IsTrue() && !o.opts.Command.CompilerOptions.ExtendedDiagnostics.IsTrue() {
 		return

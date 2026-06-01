@@ -1341,7 +1341,8 @@ func getReferencesForThisKeyword(thisOrSuperKeyword *ast.Node, sourceFiles []*as
 						return container.Kind == ast.KindSourceFile && !ast.IsExternalModule(container.AsSourceFile()) && !isParameterName(node)
 					}
 					return false
-				})
+				},
+			)
 		}),
 		func(n *ast.Node) *ReferenceEntry { return newNodeEntry(n) },
 	)

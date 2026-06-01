@@ -73,7 +73,8 @@ import "react";
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 }

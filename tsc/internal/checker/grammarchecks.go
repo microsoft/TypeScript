@@ -982,7 +982,7 @@ func (c *Checker) checkGrammarComputedPropertyName(node *ast.Node) bool {
 	}
 
 	computedPropertyName := node.AsComputedPropertyName()
-	if computedPropertyName.Expression.Kind == ast.KindBinaryExpression && (computedPropertyName.Expression.AsBinaryExpression()).OperatorToken.Kind == ast.KindCommaToken {
+	if computedPropertyName.Expression.Kind == ast.KindBinaryExpression && computedPropertyName.Expression.AsBinaryExpression().OperatorToken.Kind == ast.KindCommaToken {
 		return c.grammarErrorOnNode(computedPropertyName.Expression, diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name)
 	}
 	return false
@@ -1362,7 +1362,7 @@ func (c *Checker) checkGrammarAccessor(accessor *ast.AccessorDeclaration) bool {
 func (c *Checker) doesAccessorHaveCorrectParameterCount(accessor *ast.AccessorDeclaration) bool {
 	// `getAccessorThisParameter` returns `nil` if the accessor's arity is incorrect,
 	// even if there is a `this` parameter declared.
-	return c.getAccessorThisParameter(accessor) != nil || len(accessor.Parameters()) == (core.IfElse(accessor.Kind == ast.KindGetAccessor, 0, 1))
+	return c.getAccessorThisParameter(accessor) != nil || len(accessor.Parameters()) == core.IfElse(accessor.Kind == ast.KindGetAccessor, 0, 1)
 }
 
 func (c *Checker) checkGrammarTypeOperatorNode(node *ast.TypeOperatorNode) bool {
@@ -1382,15 +1382,15 @@ func (c *Checker) checkGrammarTypeOperatorNode(node *ast.TypeOperatorNode) bool 
 				return c.grammarErrorOnNode(node.AsNode(), diagnostics.X_unique_symbol_types_are_only_allowed_on_variables_in_a_variable_statement)
 			}
 			if decl.Parent.Flags&ast.NodeFlagsConst == 0 {
-				return c.grammarErrorOnNode((parent.AsVariableDeclaration()).Name(), diagnostics.A_variable_whose_type_is_a_unique_symbol_type_must_be_const)
+				return c.grammarErrorOnNode(parent.AsVariableDeclaration().Name(), diagnostics.A_variable_whose_type_is_a_unique_symbol_type_must_be_const)
 			}
 		case ast.KindPropertyDeclaration:
 			if !ast.IsStatic(parent) || !hasReadonlyModifier(parent) {
-				return c.grammarErrorOnNode((parent.AsPropertyDeclaration()).Name(), diagnostics.A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly)
+				return c.grammarErrorOnNode(parent.AsPropertyDeclaration().Name(), diagnostics.A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly)
 			}
 		case ast.KindPropertySignature:
 			if !ast.HasSyntacticModifier(parent, ast.ModifierFlagsReadonly) {
-				return c.grammarErrorOnNode((parent.AsPropertySignatureDeclaration()).Name(), diagnostics.A_property_of_an_interface_or_type_literal_whose_type_is_a_unique_symbol_type_must_be_readonly)
+				return c.grammarErrorOnNode(parent.AsPropertySignatureDeclaration().Name(), diagnostics.A_property_of_an_interface_or_type_literal_whose_type_is_a_unique_symbol_type_must_be_readonly)
 			}
 		default:
 			return c.grammarErrorOnNode(node.AsNode(), diagnostics.X_unique_symbol_types_are_not_allowed_here)
@@ -1961,7 +1961,7 @@ func (c *Checker) checkAmbientInitializer(node *ast.Node) bool {
 
 	if initializer != nil {
 		isInvalidInitializer := !(isInitializerStringOrNumberLiteralExpression(initializer) || c.isInitializerSimpleLiteralEnumReference(initializer) || initializer.Kind == ast.KindTrueKeyword || initializer.Kind == ast.KindFalseKeyword || isInitializerBigIntLiteralExpression(initializer))
-		isConstOrReadonly := isDeclarationReadonly(node) || ast.IsVariableDeclaration(node) && (c.isVarConstLike(node))
+		isConstOrReadonly := isDeclarationReadonly(node) || ast.IsVariableDeclaration(node) && c.isVarConstLike(node)
 		if isConstOrReadonly && (typeNode == nil) {
 			if isInvalidInitializer {
 				return c.grammarErrorOnNode(initializer, diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal_or_literal_enum_reference)
@@ -1976,7 +1976,7 @@ func (c *Checker) checkAmbientInitializer(node *ast.Node) bool {
 
 func isInitializerStringOrNumberLiteralExpression(expr *ast.Expression) bool {
 	return ast.IsStringOrNumericLiteralLike(expr) ||
-		expr.Kind == ast.KindPrefixUnaryExpression && (expr.AsPrefixUnaryExpression()).Operator == ast.KindMinusToken && (expr.AsPrefixUnaryExpression()).Operand.Kind == ast.KindNumericLiteral
+		expr.Kind == ast.KindPrefixUnaryExpression && expr.AsPrefixUnaryExpression().Operator == ast.KindMinusToken && expr.AsPrefixUnaryExpression().Operand.Kind == ast.KindNumericLiteral
 }
 
 func isInitializerBigIntLiteralExpression(expr *ast.Expression) bool {

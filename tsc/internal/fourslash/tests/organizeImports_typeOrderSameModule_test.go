@@ -29,7 +29,8 @@ export default class Default {}
 export as namespace Package;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import './package';
 import type { Foo } from './package';
 import * as ns from './package';
@@ -65,7 +66,8 @@ export type TypeB = string;
 export declare const b: TypeB;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import './a';
 import type { TypeA } from './a';
 import { a } from './a';

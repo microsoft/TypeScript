@@ -170,7 +170,7 @@ func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []
 				for pIndex, param := range expandedParams {
 					var originalParam *ast.Symbol
 					if pIndex < len(originalParameters) {
-						originalParam = (originalParameters)[pIndex]
+						originalParam = originalParameters[pIndex]
 					}
 					if originalParameters != nil && originalParam != param {
 						// Can't reference parameters that come from an expansion

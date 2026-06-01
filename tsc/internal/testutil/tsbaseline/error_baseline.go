@@ -62,7 +62,8 @@ func GetErrorBaseline[T diagnosticwriter.Diagnostic](t *testing.T, inputFiles []
 		diagnosticwriter.WriteErrorSummaryText(
 			&summaryBuilder,
 			diagnosticwriter.ToDiagnostics(diagnostics),
-			formatOpts)
+			formatOpts,
+		)
 		summary := removeTestPathPrefixes(summaryBuilder.String(), false)
 		outputLines = append(outputLines, summary)
 	}
@@ -161,7 +162,8 @@ func iterateErrorBaseline[T diagnosticwriter.Diagnostic](t *testing.T, inputFile
 		})
 
 		// Header
-		fmt.Fprintf(&outputLines,
+		fmt.Fprintf(
+			&outputLines,
 			"%s==== %s (%d errors) ====",
 			newLine(),
 			removeTestPathPrefixes(inputFile.UnitName, false),
@@ -237,12 +239,14 @@ func iterateErrorBaseline[T diagnosticwriter.Diagnostic](t *testing.T, inputFile
 		diagnostics,
 		func(d T) bool {
 			return d.File() != nil && (isDefaultLibraryFile(d.File().FileName()) || isBuiltFile(d.File().FileName()))
-		})
+		},
+	)
 	numTsconfigDiagnostics := core.CountWhere(
 		diagnostics,
 		func(d T) bool {
 			return d.File() != nil && isTsConfigFile(d.File().FileName())
-		})
+		},
+	)
 	// Verify we didn't miss any errors in total
 	assert.Check(t, cmp.Equal(totalErrorsReportedInNonLibraryNonTsconfigFiles+numLibraryDiagnostics+numTsconfigDiagnostics, len(diagnostics)), "total number of errors")
 

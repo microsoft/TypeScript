@@ -27,13 +27,13 @@ import { [|foo|] } from "./foo";
 	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
-			Message: "'foo' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'foo' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[0].LSRange,
 		},
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
-			Message: "'foo' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'foo' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[1].LSRange,
 		},

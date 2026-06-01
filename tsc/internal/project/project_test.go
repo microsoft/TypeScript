@@ -369,7 +369,7 @@ func TestPushDiagnostics(t *testing.T) {
 		// Should have global diagnostics (e.g., Cannot find global type 'Disposable')
 		hasGlobalDiag := false
 		for _, diag := range lastTsconfigCall.Params.Diagnostics {
-			if strings.Contains(diag.Message, "Cannot find global") {
+			if strings.Contains(diag.Message.AsString(), "Cannot find global") {
 				hasGlobalDiag = true
 				break
 			}

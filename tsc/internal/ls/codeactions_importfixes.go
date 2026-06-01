@@ -207,7 +207,7 @@ func getFixInfos(ctx context.Context, fixContext *CodeFixContext, errorCode int3
 		// (e.g., due to localization), fall back to returning all candidates.
 		diagnosticMessage := ""
 		if fixContext.Diagnostic != nil {
-			diagnosticMessage = fixContext.Diagnostic.Message
+			diagnosticMessage = fixContext.Diagnostic.Message.AsString()
 		}
 		if len(allTypeOnlyFixes) > 1 && diagnosticMessage != "" {
 			for _, fi := range allTypeOnlyFixes {

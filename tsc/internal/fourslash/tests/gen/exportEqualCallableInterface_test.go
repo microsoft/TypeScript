@@ -39,7 +39,8 @@ t2./**/`
 			Exact: CompletionFunctionMembersWithPrototypePlus(
 				[]fourslash.CompletionsExpectedItem{
 					"foo",
-				}),
+				},
+			),
 		},
 	})
 }

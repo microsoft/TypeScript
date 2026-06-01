@@ -124,9 +124,10 @@ func (s *scriptInfo) GetLineContent(line int) string {
 
 const rootDir = "/"
 
-var parseCache = project.NewParseCache(project.RefCountCacheOptions{
-	DisableDeletion: true,
-},
+var parseCache = project.NewParseCache(
+	project.RefCountCacheOptions{
+		DisableDeletion: true,
+	},
 )
 
 func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, content string) (*FourslashTest, func()) {
@@ -955,7 +956,8 @@ func (f *FourslashTest) VerifyCurrentFileContent(t *testing.T, expectedContent s
 func (f *FourslashTest) VerifyCurrentLineContent(t *testing.T, expectedContent string) {
 	t.Helper()
 	actualContent := f.getScriptInfo(f.activeFilename).GetLineContent(int(f.currentCaretPosition.Line))
-	assert.Equal(t, actualContent, expectedContent, fmt.Sprintf(`
+	assert.Equal(t, actualContent, expectedContent, fmt.Sprintf(
+		`
   actual line: "%s"
 expected line: "%s"
 `,
@@ -977,7 +979,8 @@ func getLanguageKind(filename string) lsproto.LanguageKind {
 		[]string{
 			tspath.ExtensionTs, tspath.ExtensionMts, tspath.ExtensionCts,
 			tspath.ExtensionDmts, tspath.ExtensionDcts, tspath.ExtensionDts,
-		}) {
+		},
+	) {
 		return lsproto.LanguageKindTypeScript
 	}
 	if tspath.FileExtensionIsOneOf(filename, []string{tspath.ExtensionJs, tspath.ExtensionMjs, tspath.ExtensionCjs}) {
@@ -1201,7 +1204,8 @@ func verifyCompletionsItemDefaults(t *testing.T, actual *lsproto.CompletionItemD
 					Replace: expectedReplace,
 				},
 			},
-			prefix+"EditRange mismatch:")
+			prefix+"EditRange mismatch:",
+		)
 	case nil:
 		if actual.EditRange != nil {
 			t.Fatalf(prefix+"Expected nil EditRange but got non-nil: %s", cmp.Diff(actual.EditRange, nil))
@@ -4392,10 +4396,10 @@ func (f *FourslashTest) BaselineAutoImportsCompletions(t *testing.T, markerNames
 		marker := f.testData.MarkerPositions[markerName]
 		ext := strings.TrimPrefix(tspath.GetAnyExtensionFromPath(f.activeFilename, nil, true), ".")
 		lang := core.IfElse(ext == "mts" || ext == "cts", "ts", ext)
-		f.writeToBaseline(autoImportsCmd, (codeFence(
+		f.writeToBaseline(autoImportsCmd, codeFence(
 			lang,
 			"// @FileName: "+f.activeFilename+"\n"+fileContent[:marker.Position]+"/*"+markerName+"*/"+fileContent[marker.Position:],
-		)))
+		))
 
 		currentFile := newScriptInfo(f.activeFilename, fileContent)
 		converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *lsconv.LSPLineMap {
@@ -4840,7 +4844,8 @@ func (f *FourslashTest) renameFileOrDirectory(t *testing.T, oldPath string, newP
 			t.Fatalf("failed to write renamed file %s: %v", newFileName, err)
 		}
 
-		fileEvents = append(fileEvents,
+		fileEvents = append(
+			fileEvents,
 			&lsproto.FileEvent{Uri: lsconv.FileNameToDocumentURI(oldFileName), Type: lsproto.FileChangeTypeDeleted},
 			&lsproto.FileEvent{Uri: lsconv.FileNameToDocumentURI(newFileName), Type: lsproto.FileChangeTypeCreated},
 		)
@@ -5317,7 +5322,7 @@ func (f *FourslashTest) toDiagnostic(scriptInfo *scriptInfo, lspDiagnostic *lspr
 		loc:                f.converters.FromLSPRange(scriptInfo, lspDiagnostic.Range),
 		code:               code,
 		category:           category,
-		message:            lspDiagnostic.Message,
+		message:            lspDiagnostic.Message.AsString(),
 		relatedDiagnostics: relatedDiagnostics,
 	}
 	return diagnostic
@@ -5546,7 +5551,7 @@ func (f *FourslashTest) VerifyNoErrors(t *testing.T) {
 		if len(errors) > 0 {
 			var messages []string
 			for _, err := range errors {
-				messages = append(messages, err.Message)
+				messages = append(messages, err.Message.AsString())
 			}
 			t.Fatalf("Expected no errors but found %d in %s: %v", len(errors), fileName, messages)
 		}
@@ -5564,8 +5569,8 @@ func (f *FourslashTest) VerifyErrorExistsAtRange(t *testing.T, rangeMarker *Rang
 				diag.Range.End.Line == rangeMarker.LSRange.End.Line &&
 				diag.Range.End.Character == rangeMarker.LSRange.End.Character {
 				// If message is provided, verify it matches
-				if message != "" && diag.Message != message {
-					t.Fatalf("Error at range has code %d but message mismatch. Expected: %q, Got: %q", code, message, diag.Message)
+				if message != "" && diag.Message.AsString() != message {
+					t.Fatalf("Error at range has code %d but message mismatch. Expected: %q, Got: %q", code, message, diag.Message.AsString())
 				}
 				return
 			}

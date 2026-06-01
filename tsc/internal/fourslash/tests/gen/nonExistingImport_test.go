@@ -32,7 +32,8 @@ namespace m {
 			Exact: CompletionGlobalTypesPlus(
 				[]fourslash.CompletionsExpectedItem{
 					"foo",
-				}),
+				},
+			),
 		},
 	})
 }

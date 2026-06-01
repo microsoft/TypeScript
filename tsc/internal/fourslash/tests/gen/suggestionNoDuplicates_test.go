@@ -27,7 +27,7 @@ module.exports.f = function (x) { return x }`
 	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(7016))},
-			Message: "Could not find a declaration file for module 'm'. '/node_modules/m/index.js' implicitly has an 'any' type.",
+			Message: lsproto.StringOrMarkupContent{String: new("Could not find a declaration file for module 'm'. '/node_modules/m/index.js' implicitly has an 'any' type.")},
 		},
 	})
 }

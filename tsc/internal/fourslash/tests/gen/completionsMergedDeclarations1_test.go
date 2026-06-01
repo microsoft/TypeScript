@@ -57,7 +57,8 @@ var b = point./*3*/equals(p1, p2);`
 				[]fourslash.CompletionsExpectedItem{
 					"equals",
 					"origin",
-				}),
+				},
+			),
 		},
 	})
 }

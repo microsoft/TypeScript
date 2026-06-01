@@ -35,7 +35,8 @@ fooB/*1*/`
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: CompletionGlobalsPlus(
-				[]fourslash.CompletionsExpectedItem{}, true),
+				[]fourslash.CompletionsExpectedItem{}, true,
+			),
 		},
 	})
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{

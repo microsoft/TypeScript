@@ -41,7 +41,8 @@ import './';`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.GoToFile(t, "test.tsx")
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`export default () => <div></div>`,
 		lsproto.CodeActionKindSourceOrganizeImports,
 		nil,

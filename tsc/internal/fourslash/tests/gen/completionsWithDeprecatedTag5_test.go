@@ -44,7 +44,8 @@ Foo./**/`
 						SortText: new(string(ls.DeprecateSortText(ls.SortTextLocalDeclarationPriority))),
 						Tags:     &[]lsproto.CompletionItemTag{lsproto.CompletionItemTagDeprecated},
 					},
-				}),
+				},
+			),
 		},
 	})
 }

@@ -39,7 +39,7 @@ declare class Thing<T> {
 	f.VerifyQuickInfoIs(t, "(local var) x: number", "")
 	f.VerifyNonSuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
-			Message: "Class declarations cannot have more than one '@augments' or '@extends' tag.",
+			Message: lsproto.StringOrMarkupContent{String: new("Class declarations cannot have more than one '@augments' or '@extends' tag.")},
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(8025))},
 		},
 	})

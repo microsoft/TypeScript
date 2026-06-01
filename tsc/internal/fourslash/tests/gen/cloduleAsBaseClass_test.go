@@ -86,7 +86,8 @@ D./*2*/`
 						Label:    "x",
 						SortText: new(string(ls.SortTextLocationPriority)),
 					},
-				}),
+				},
+			),
 		},
 	})
 	f.Insert(t, "bar()")

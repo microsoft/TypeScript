@@ -621,7 +621,8 @@ func (tx *esDecoratorTransformer) transformClassLike(node *ast.Node) *ast.Expres
 			f.NewNodeList(classDecorators),
 			false,
 		)
-		classDefinitionStatements = append(classDefinitionStatements,
+		classDefinitionStatements = append(
+			classDefinitionStatements,
 			tx.createLet(ci.classDecoratorsName, decoratorsArray),
 			tx.createLet(ci.classDescriptorName, nil),
 			tx.createLet(ci.classExtraInitializersName, f.NewArrayLiteralExpression(f.NewNodeList(nil), false)),
@@ -748,14 +749,16 @@ func (tx *esDecoratorTransformer) transformClassLike(node *ast.Node) *ast.Expres
 
 	// Used in class definition steps 5,7,11
 	if ci.staticMethodExtraInitializersName != nil {
-		classDefinitionStatements = append(classDefinitionStatements,
+		classDefinitionStatements = append(
+			classDefinitionStatements,
 			tx.createLet(ci.staticMethodExtraInitializersName, f.NewArrayLiteralExpression(f.NewNodeList(nil), false)),
 		)
 	}
 
 	// Used in class definition steps 6,8, and construction
 	if ci.instanceMethodExtraInitializersName != nil {
-		classDefinitionStatements = append(classDefinitionStatements,
+		classDefinitionStatements = append(
+			classDefinitionStatements,
 			tx.createLet(ci.instanceMethodExtraInitializersName, f.NewArrayLiteralExpression(f.NewNodeList(nil), false)),
 		)
 	}
@@ -960,7 +963,8 @@ func (tx *esDecoratorTransformer) transformClassLike(node *ast.Node) *ast.Expres
 		} else {
 			returnExpr = classReference
 		}
-		classDefinitionStatements = append(classDefinitionStatements,
+		classDefinitionStatements = append(
+			classDefinitionStatements,
 			f.NewVariableStatement(nil, classReferenceVarDeclList),
 			f.NewReturnStatement(returnExpr),
 		)
@@ -1633,14 +1637,16 @@ func (tx *esDecoratorTransformer) visitPropertyDeclaration(node *ast.Node) *ast.
 				} else {
 					thisArg = f.NewThisExpression()
 				}
-				tx.classInfoStack.pendingStaticInitializers = append(tx.classInfoStack.pendingStaticInitializers,
+				tx.classInfoStack.pendingStaticInitializers = append(
+					tx.classInfoStack.pendingStaticInitializers,
 					f.NewRunInitializersHelper(thisArg, result.extraInitializersName, nil),
 				)
 			}
 		} else {
 			initializer = tx.injectPendingInitializers(tx.classInfoStack, false, initializer)
 			if result.extraInitializersName != nil {
-				tx.classInfoStack.pendingInstanceInitializers = append(tx.classInfoStack.pendingInstanceInitializers,
+				tx.classInfoStack.pendingInstanceInitializers = append(
+					tx.classInfoStack.pendingInstanceInitializers,
 					f.NewRunInitializersHelper(f.NewThisExpression(), result.extraInitializersName, nil),
 				)
 			}

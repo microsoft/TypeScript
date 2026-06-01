@@ -52,7 +52,8 @@ Button/**/`
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
-				}, false),
+				}, false,
+			),
 		},
 		UserPreferences: &lsutil.UserPreferences{AutoImportFileExcludePatterns: []string{"/**/index.*"}},
 	})

@@ -59,7 +59,8 @@ l./*7*/prototype = Object.prototype;`
 			Exact: CompletionFunctionMembersPlus(
 				[]fourslash.CompletionsExpectedItem{
 					"prototype",
-				}),
+				},
+			),
 		},
 	})
 }

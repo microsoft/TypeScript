@@ -62,7 +62,8 @@ C3./*2*/;`
 						Label:    "prototype",
 						SortText: new(string(ls.SortTextLocationPriority)),
 					},
-				}),
+				},
+			),
 		},
 	})
 }

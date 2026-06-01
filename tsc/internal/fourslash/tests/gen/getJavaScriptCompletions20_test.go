@@ -59,7 +59,8 @@ Person.getNa/**/ = 10;`
 						Label:    "age",
 						SortText: new(string(ls.SortTextJavascriptIdentifiers)),
 					},
-				}),
+				},
+			),
 		},
 	})
 }

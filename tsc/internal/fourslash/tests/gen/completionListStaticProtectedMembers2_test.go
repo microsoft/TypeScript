@@ -83,7 +83,8 @@ class C2 extends Base {
 						Label:    "prototype",
 						SortText: new(string(ls.SortTextLocationPriority)),
 					},
-				}),
+				},
+			),
 		},
 	})
 	f.VerifyCompletions(t, []string{"2", "3"}, &fourslash.CompletionsExpectedList{
@@ -127,7 +128,8 @@ class C2 extends Base {
 						Label:    "prototype",
 						SortText: new(string(ls.SortTextLocationPriority)),
 					},
-				}),
+				},
+			),
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{

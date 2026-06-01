@@ -1360,7 +1360,8 @@ func getContextualTypeFromParent(node *ast.Expression, typeChecker *checker.Chec
 	case ast.KindBinaryExpression:
 		if isEqualityOperatorKind(parent.AsBinaryExpression().OperatorToken.Kind) {
 			return typeChecker.GetTypeAtLocation(
-				core.IfElse(node == parent.AsBinaryExpression().Right, parent.AsBinaryExpression().Left, parent.AsBinaryExpression().Right))
+				core.IfElse(node == parent.AsBinaryExpression().Right, parent.AsBinaryExpression().Left, parent.AsBinaryExpression().Right),
+			)
 		}
 		return typeChecker.GetContextualType(node, contextFlags)
 	case ast.KindCaseClause:

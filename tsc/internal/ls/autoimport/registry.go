@@ -1015,11 +1015,13 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 			if task.isUpdate {
 				b.updateNodeModulesBucket(
 					ctx, br, task.existingBucket, task.dirtyPackages, task.discovered, extractionCache,
-					targetRecursivePackages, nodeModulesLogger.Fork(task.dirName))
+					targetRecursivePackages, nodeModulesLogger.Fork(task.dirName),
+				)
 			} else {
 				b.buildNodeModulesBucket(
 					ctx, br, task.dependencyNames, task.dirPath, task.discovered, task.directoryPackageNames, extractionCache,
-					targetRecursivePackages, nodeModulesLogger.Fork(task.dirName))
+					targetRecursivePackages, nodeModulesLogger.Fork(task.dirName),
+				)
 			}
 		})
 	}
@@ -1043,7 +1045,8 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 			wg.Go(func() {
 				b.buildProjectBucket(
 					ctx, br, projectPath, resolvedPackageNames,
-					logger.Fork("Building project bucket "+string(projectPath)))
+					logger.Fork("Building project bucket "+string(projectPath)),
+				)
 			})
 		}
 	}

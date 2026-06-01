@@ -34,7 +34,8 @@ let foo = 5 as const /*1*/
 					&lsproto.CompletionItem{
 						Label: "foo",
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 }

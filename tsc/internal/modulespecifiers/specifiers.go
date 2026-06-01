@@ -322,7 +322,8 @@ func GetEachFileNameOfModule(
 						tspath.ComparePathsOptions{
 							UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
 							CurrentDirectory:          cwd,
-						})
+						},
+					)
 					symlinkSet.Range(func(symlinkDirectory string) bool {
 						option := tspath.ResolvePath(symlinkDirectory, relative)
 						results = append(results, ModulePath{

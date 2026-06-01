@@ -38,7 +38,8 @@ const obj2: any = {
 					"bar",
 					"foo",
 					"obj2",
-				}, false),
+				}, false,
+			),
 		},
 	})
 	f.VerifyCompletions(t, []string{"2"}, &fourslash.CompletionsExpectedList{
@@ -53,7 +54,8 @@ const obj2: any = {
 					"bar",
 					"foo",
 					"obj1",
-				}, false),
+				}, false,
+			),
 		},
 	})
 }

@@ -492,7 +492,8 @@ func fromUnionableLiteralType(
 			walkUpParentheses(grandparent.Parent),
 			parent,
 			position,
-			typeChecker)
+			typeChecker,
+		)
 		if result == nil {
 			return nil
 		}
@@ -548,7 +549,8 @@ func stringLiteralCompletionsForObjectLiteral(
 		contextualType,
 		completionsType,
 		objectLiteralExpression,
-		typeChecker)
+		typeChecker,
+	)
 
 	return &completionsFromProperties{
 		symbols:           symbols,

@@ -26,7 +26,8 @@ import "./dep.js";
 	defer done()
 
 	f.GoToFile(t, "/project/main.ts")
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import "./dep.js";
 `,
 		lsproto.CodeActionKindSourceOrganizeImports,

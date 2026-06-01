@@ -956,7 +956,8 @@ func TestAutoImportEntrypointDirectorySearch(t *testing.T) {
 		assert.Assert(t, defaultProject != nil)
 		projectPath := defaultProject.ConfigFilePath()
 		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(
-			projectRoot+"/index.ts", projectPath, prefs)
+			projectRoot+"/index.ts", projectPath, prefs,
+		)
 		assert.Assert(t, !isPrepared, "registry should not be prepared after preference change")
 
 		// Rebuild

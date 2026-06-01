@@ -178,7 +178,8 @@ func getCompilerVaryByMap() map[string]struct{} {
 		}),
 		// explicit variations that do not match above conditions
 		"noEmit",
-		"isolatedModules")
+		"isolatedModules",
+	)
 	varyByMap := make(map[string]struct{})
 	for _, option := range varyByOptions {
 		varyByMap[strings.ToLower(option)] = struct{}{}
@@ -293,7 +294,8 @@ func newCompilerTest(
 	var tsConfig *tsoptions.ParsedCommandLine
 	hasNonDtsFiles := core.Some(
 		units,
-		func(unit *testUnit) bool { return !tspath.FileExtensionIs(unit.name, tspath.ExtensionDts) })
+		func(unit *testUnit) bool { return !tspath.FileExtensionIs(unit.name, tspath.ExtensionDts) },
+	)
 	var tsConfigFiles []*harnessutil.TestFile
 	if testCaseContentWithConfig.tsConfig != nil {
 		tsConfig = testCaseContentWithConfig.tsConfig

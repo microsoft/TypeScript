@@ -29,19 +29,19 @@ foo[[|"bar"|]];`
 	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
-			Message: "'bar' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'bar' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[0].LSRange,
 		},
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
-			Message: "'bar' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'bar' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[1].LSRange,
 		},
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
-			Message: "'bar' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'bar' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[2].LSRange,
 		},

@@ -49,7 +49,8 @@ func (l *LanguageService) ProvideSignatureHelp(
 		int(l.converters.LineAndCharacterToPosition(sourceFile, position)),
 		program,
 		sourceFile,
-		context)
+		context,
+	)
 	return lsproto.SignatureHelpOrNull{SignatureHelp: items}, nil
 }
 
@@ -309,7 +310,7 @@ func (l *LanguageService) createSignatureHelpItems(ctx context.Context, candidat
 	itemSeen := 0
 	for i := range items {
 		item := items[i]
-		if (candidates)[i] == resolvedSignature {
+		if candidates[i] == resolvedSignature {
 			selectedItemIndex = itemSeen
 			if len(item) > 1 {
 				count := 0

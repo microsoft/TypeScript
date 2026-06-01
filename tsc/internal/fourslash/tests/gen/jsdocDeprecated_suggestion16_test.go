@@ -29,13 +29,13 @@ import { [|b|] } from "./a";
 	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
-			Message: "'b' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'b' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[0].LSRange,
 		},
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
-			Message: "'b' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'b' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[1].LSRange,
 		},

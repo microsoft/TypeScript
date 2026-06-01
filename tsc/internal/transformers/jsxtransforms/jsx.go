@@ -251,7 +251,8 @@ func (tx *JSXTransformer) visitSourceFile(file *ast.SourceFile) *ast.Node {
 						tx.Factory().NewIdentifier("require"),
 						nil,
 						nil,
-						tx.Factory().NewNodeList([]*ast.Node{tx.Factory().NewStringLiteral(importSource, ast.TokenFlagsNone)}), ast.NodeFlagsNone),
+						tx.Factory().NewNodeList([]*ast.Node{tx.Factory().NewStringLiteral(importSource, ast.TokenFlagsNone)}), ast.NodeFlagsNone,
+					),
 				)}), ast.NodeFlagsConst))
 				ast.SetParentInChildren(s)
 				newStatements = append(newStatements, s)

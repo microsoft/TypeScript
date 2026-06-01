@@ -80,7 +80,8 @@ writeFile/*test2*/`
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 	f.VerifyCompletions(t, "prefix", &fourslash.CompletionsExpectedList{
@@ -112,7 +113,8 @@ writeFile/*test2*/`
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 	f.VerifyCompletions(t, "mixed1", &fourslash.CompletionsExpectedList{
@@ -144,7 +146,8 @@ writeFile/*test2*/`
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 	f.VerifyCompletions(t, "mixed2", &fourslash.CompletionsExpectedList{
@@ -176,7 +179,8 @@ writeFile/*test2*/`
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 	f.VerifyImportFixModuleSpecifiers(t, "test1", []string{"fs", "fs/promises"}, nil /*preferences*/)
@@ -210,7 +214,8 @@ writeFile/*test2*/`
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 	f.VerifyCompletions(t, "test2", &fourslash.CompletionsExpectedList{
@@ -242,7 +247,8 @@ writeFile/*test2*/`
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 }

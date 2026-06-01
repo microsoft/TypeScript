@@ -32,7 +32,8 @@ a4(...<crash>/**/`
 				[]fourslash.CompletionsExpectedItem{
 					"a4",
 					"array",
-				}, false),
+				}, false,
+			),
 		},
 	})
 }

@@ -537,7 +537,8 @@ func TestSession(t *testing.T) {
 			assert.NilError(t, err)
 			program2 := ls2.GetProgram()
 
-			assert.Equal(t,
+			assert.Equal(
+				t,
 				program1.GetSourceFile("/home/projects/TS/p1/src/x.ts"),
 				program2.GetSourceFile("/home/projects/TS/p1/src/x.ts"),
 			)

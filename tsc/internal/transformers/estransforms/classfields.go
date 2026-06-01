@@ -2838,7 +2838,8 @@ func (tx *classFieldsTransformer) addInstanceMethodStatements(statements []*ast.
 	weakSetName := env.data.weakSetName
 	debug.Assert(weakSetName != nil, "weakSetName should be set in private identifier environment")
 
-	return append(statements,
+	return append(
+		statements,
 		tx.Factory().NewExpressionStatement(
 			createPrivateInstanceMethodInitializer(tx.Factory(), receiver, weakSetName),
 		),
@@ -3203,7 +3204,8 @@ func (tx *classFieldsTransformer) wrapPrivateIdentifierForDestructuringTarget(no
 			Flags: printer.GeneratedIdentifierFlagsReservedInNestedScopes,
 		})
 		tx.EmitContext().AddVariableDeclaration(receiver)
-		tx.pendingExpressions = append(tx.pendingExpressions,
+		tx.pendingExpressions = append(
+			tx.pendingExpressions,
 			tx.Factory().NewAssignmentExpression(receiver, tx.Visitor().VisitNode(prop.Expression)),
 		)
 	}

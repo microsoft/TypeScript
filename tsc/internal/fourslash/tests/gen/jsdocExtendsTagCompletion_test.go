@@ -30,7 +30,8 @@ class A {}`
 			Exact: CompletionGlobalTypesPlus(
 				[]fourslash.CompletionsExpectedItem{
 					"A",
-				}),
+				},
+			),
 		},
 	})
 }

@@ -94,7 +94,8 @@ func FormatNodeGivenIndentation(ctx context.Context, node *ast.Node, file *ast.S
 			FormatRequestKindFormatSelection,
 			func(core.TextRange) bool { return false }, // assume that node does not have any errors
 			file,
-		))
+		),
+	)
 }
 
 func formatNodeLines(ctx context.Context, sourceFile *ast.SourceFile, node *ast.Node, requestKind FormatRequestKind) []core.TextChange {

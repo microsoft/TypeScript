@@ -2864,7 +2864,7 @@ func iterateCommentRanges(f *ast.NodeFactory, text string, pos int, trailing boo
 				}
 				break scan
 			default:
-				if ch > unicode.MaxASCII && (stringutil.IsWhiteSpaceLike(ch)) {
+				if ch > unicode.MaxASCII && stringutil.IsWhiteSpaceLike(ch) {
 					if hasPendingCommentRange && stringutil.IsLineBreak(ch) {
 						pendingHasTrailingNewLine = true
 					}

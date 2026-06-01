@@ -535,7 +535,8 @@ func (b *ProjectCollectionBuilder) ensureProjectTree(
 				childConfig,
 				func(referencePath tspath.Path, config *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
 					return !projectTreeRequest.IsProjectReferenced(referencePath)
-				}) {
+				},
+			) {
 				return
 			}
 

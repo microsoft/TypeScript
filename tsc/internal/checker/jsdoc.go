@@ -64,14 +64,16 @@ func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 
 			if ast.IsQualifiedName(name) {
 				if isJs {
-					c.error(name, diagnostics.Qualified_name_0_is_not_allowed_without_a_leading_param_object_1,
+					c.error(
+						name, diagnostics.Qualified_name_0_is_not_allowed_without_a_leading_param_object_1,
 						entityNameToString(name),
 						entityNameToString(name.AsQualifiedName().Left),
 					)
 				}
 			} else {
 				if !isNameFirst {
-					c.errorOrSuggestion(isJs, name,
+					c.errorOrSuggestion(
+						isJs, name,
 						diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
 						name.Text(),
 					)

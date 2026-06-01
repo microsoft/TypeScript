@@ -37,5 +37,6 @@ function bar() { return "b"; }`,
 		t,
 		makeUnitsFromTest(code, "simpleTest.ts"),
 		testContent,
-		cmp.AllowUnexported(testCaseContent{}, testUnit{}))
+		cmp.AllowUnexported(testCaseContent{}, testUnit{}),
+	)
 }

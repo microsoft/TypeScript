@@ -51,7 +51,8 @@ y/**/`
 						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 }

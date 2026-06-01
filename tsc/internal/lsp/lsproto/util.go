@@ -23,3 +23,15 @@ func CompareRanges(lsRange, other Range) int {
 	}
 	return ComparePositions(lsRange.End, other.End)
 }
+
+// AsString returns the plain text of a StringOrMarkupContent, reading the
+// MarkupContent value when the message is not a plain string.
+func (m StringOrMarkupContent) AsString() string {
+	if m.String != nil {
+		return *m.String
+	}
+	if m.MarkupContent != nil {
+		return m.MarkupContent.Value
+	}
+	return ""
+}

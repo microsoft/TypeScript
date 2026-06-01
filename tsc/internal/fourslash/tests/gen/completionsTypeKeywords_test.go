@@ -30,7 +30,8 @@ type T = /**/`
 				[]fourslash.CompletionsExpectedItem{
 					"T",
 					CompletionGlobalThisItem,
-				}),
+				},
+			),
 		},
 	})
 }

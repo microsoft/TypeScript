@@ -45,7 +45,8 @@ var /*3*/r2 = t./*4*/foo; // t should have 'foo' in dropdown list and be of type
 			Exact: CompletionFunctionMembersWithPrototypePlus(
 				[]fourslash.CompletionsExpectedItem{
 					"foo",
-				}),
+				},
+			),
 		},
 	})
 	f.VerifyNoErrors(t)

@@ -25,7 +25,7 @@ func TestTsconfigComputedPropertyError(t *testing.T) {
 	f.MarkTestAsStradaServer()
 	f.VerifyNonSuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
-			Message: "String literal with double quotes expected.",
+			Message: lsproto.StringOrMarkupContent{String: new("String literal with double quotes expected.")},
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(1327))},
 		},
 	})

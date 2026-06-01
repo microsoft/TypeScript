@@ -30,7 +30,8 @@ var y = this as/*1*/`
 			Exact: CompletionGlobalsPlus(
 				[]fourslash.CompletionsExpectedItem{
 					"x",
-				}, false),
+				}, false,
+			),
 		},
 	})
 }

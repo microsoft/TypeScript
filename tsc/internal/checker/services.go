@@ -414,7 +414,8 @@ func (c *Checker) getImmediateRootSymbols(symbol *ast.Symbol) []*ast.Symbol {
 			c.valueSymbolLinks.Get(symbol).containingType.Types(),
 			func(t *Type) *ast.Symbol {
 				return c.getPropertyOfType(t, symbol.Name)
-			})
+			},
+		)
 	}
 	if symbol.Flags&ast.SymbolFlagsTransient != 0 {
 		if c.spreadLinks.Has(symbol) {
@@ -755,7 +756,8 @@ func (c *Checker) getTypeArgumentConstraint(node *ast.Node) *Type {
 			if constraint != nil {
 				return c.instantiateType(
 					constraint,
-					newTypeMapper(typeParameters, c.getEffectiveTypeArguments(node.Parent, typeParameters)))
+					newTypeMapper(typeParameters, c.getEffectiveTypeArguments(node.Parent, typeParameters)),
+				)
 			}
 		}
 	}
@@ -831,7 +833,8 @@ func (c *Checker) GetConstantValue(node *ast.Node) any {
 			ast.SymbolFlagsValue,
 			true,  /*ignoreErrors*/
 			false, /*dontResolveAlias*/
-			nil /*location*/)
+			nil,   /*location*/
+		)
 	}
 	if symbol != nil && symbol.Flags&ast.SymbolFlagsEnumMember != 0 {
 		// inline property\index accesses only for const enums

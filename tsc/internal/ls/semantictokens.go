@@ -559,7 +559,8 @@ func encodeSemanticTokens(ctx context.Context, tokens []semanticToken, file *ast
 			deltaChar = char
 		}
 
-		encoded = append(encoded,
+		encoded = append(
+			encoded,
 			deltaLine,
 			deltaChar,
 			tokenLength,

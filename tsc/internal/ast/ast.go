@@ -1212,6 +1212,7 @@ func (node *NodeDefault) forEachChildIter(yield func(v *Node) bool) {
 func (node *NodeDefault) IterChildren() iter.Seq[*Node] {
 	return node.forEachChildIter
 }
+
 func (node *NodeDefault) VisitEachChild(v *NodeVisitor) *Node                   { return node.AsNode() }
 func (node *NodeDefault) Clone(v NodeFactoryCoercible) *Node                    { return nil }
 func (node *NodeDefault) Name() *DeclarationName                                { return nil }
@@ -1614,7 +1615,8 @@ func (node *CompositeBase) computeSubtreeFacts() SubtreeFacts {
 
 // TypeSyntaxBase
 
-func (node *TypeSyntaxBase) computeSubtreeFacts() SubtreeFacts   { return SubtreeContainsTypeScript }
+func (node *TypeSyntaxBase) computeSubtreeFacts() SubtreeFacts { return SubtreeContainsTypeScript }
+
 func (node *TypeSyntaxBase) propagateSubtreeFacts() SubtreeFacts { return SubtreeContainsTypeScript }
 
 func (node *Token) computeSubtreeFacts() SubtreeFacts {

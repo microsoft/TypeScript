@@ -314,7 +314,7 @@ func (c *Checker) narrowTypeByTypePredicate(f *FlowState, t *Type, predicate *Ty
 			if c.isMatchingReference(f.reference, predicateArgument) {
 				return c.getNarrowedType(t, predicate.t, assumeTrue, false /*checkDerived*/)
 			}
-			if c.strictNullChecks && c.optionalChainContainsReference(predicateArgument, f.reference) && (assumeTrue && !(c.hasTypeFacts(predicate.t, TypeFactsEQUndefined)) || !assumeTrue && everyType(predicate.t, c.IsNullableType)) {
+			if c.strictNullChecks && c.optionalChainContainsReference(predicateArgument, f.reference) && (assumeTrue && !c.hasTypeFacts(predicate.t, TypeFactsEQUndefined) || !assumeTrue && everyType(predicate.t, c.IsNullableType)) {
 				t = c.getAdjustedTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
 			}
 			access := c.getDiscriminantPropertyAccess(f, predicateArgument, t)

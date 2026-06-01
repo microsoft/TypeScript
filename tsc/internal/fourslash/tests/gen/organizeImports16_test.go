@@ -22,7 +22,8 @@ interface Use extends A {}
 console.log(a, b);`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { a, A, b } from "foo";
 interface Use extends A {}
 console.log(a, b);`,
@@ -30,7 +31,8 @@ console.log(a, b);`,
 		nil,
 	)
 	f.ReplaceLine(t, 0, "import { a, A, b } from \"foo1\";")
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { a, A, b } from "foo1";
 interface Use extends A {}
 console.log(a, b);`,
@@ -40,7 +42,8 @@ console.log(a, b);`,
 		},
 	)
 	f.ReplaceLine(t, 0, "import { a, A, b } from \"foo2\";")
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { a, A, b } from "foo2";
 interface Use extends A {}
 console.log(a, b);`,
@@ -50,7 +53,8 @@ console.log(a, b);`,
 		},
 	)
 	f.ReplaceLine(t, 0, "import { a, A, b } from \"foo3\";")
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { A, a, b } from "foo3";
 interface Use extends A {}
 console.log(a, b);`,

@@ -42,19 +42,19 @@ f[keys]`
 	defer done()
 	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
-			Message: "'f' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'f' is deprecated.")},
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
 			Range:   f.Ranges()[0].LSRange,
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 		},
 		{
-			Message: "'baz' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'baz' is deprecated.")},
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
 			Range:   f.Ranges()[1].LSRange,
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 		},
 		{
-			Message: "'f' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'f' is deprecated.")},
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
 			Range:   f.Ranges()[2].LSRange,
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},

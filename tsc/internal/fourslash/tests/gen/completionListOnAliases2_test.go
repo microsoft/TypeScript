@@ -102,7 +102,8 @@ var tmp2: a./*7Type*/;`
 						Label:    "prototype",
 						SortText: new(string(ls.SortTextLocationPriority)),
 					},
-				}),
+				},
+			),
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{

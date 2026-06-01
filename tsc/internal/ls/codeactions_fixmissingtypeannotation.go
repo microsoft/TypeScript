@@ -940,7 +940,8 @@ func (f *isolatedDeclarationsFixer) getExtraFlags(node *ast.Node, t *checker.Typ
 // createTypeOfFromEntityNameExpression creates a `typeof X` type query node.
 func (f *isolatedDeclarationsFixer) createTypeOfFromEntityNameExpression(node *ast.Node) *ast.TypeNode {
 	return f.changeTracker.NodeFactory.NewTypeQueryNode(
-		f.changeTracker.NodeFactory.DeepCloneNode(node), nil)
+		f.changeTracker.NodeFactory.DeepCloneNode(node), nil,
+	)
 }
 
 // typeFromArraySpreadElements decomposes an array literal with spread elements into

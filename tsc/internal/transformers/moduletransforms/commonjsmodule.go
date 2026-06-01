@@ -687,7 +687,8 @@ func (tx *CommonJSModuleTransformer) createRequireCall(node *ast.Node /*ImportDe
 		nil, /*questionDotToken*/
 		nil, /*typeArguments*/
 		tx.Factory().NewNodeList(args),
-		ast.NodeFlagsNone)
+		ast.NodeFlagsNone,
+	)
 }
 
 func (tx *CommonJSModuleTransformer) getHelperExpressionForExport(node *ast.ExportDeclaration, innerExpr *ast.Expression) *ast.Expression {
@@ -721,7 +722,8 @@ func (tx *CommonJSModuleTransformer) visitTopLevelImportDeclaration(node *ast.Im
 	namespaceDeclaration := ast.GetNamespaceDeclarationNode(node.AsNode())
 	if namespaceDeclaration != nil && !ast.IsDefaultImport(node.AsNode()) {
 		// import * as n from "mod";
-		variables = append(variables,
+		variables = append(
+			variables,
 			tx.Factory().NewVariableDeclaration(
 				namespaceDeclaration.Name().Clone(tx.Factory()),
 				nil, /*exclamationToken*/
@@ -734,7 +736,8 @@ func (tx *CommonJSModuleTransformer) visitTopLevelImportDeclaration(node *ast.Im
 		// import { x, y } from "mod";
 		// import d, { x, y } from "mod";
 		// import d, * as n from "mod";
-		variables = append(variables,
+		variables = append(
+			variables,
 			tx.Factory().NewVariableDeclaration(
 				tx.Factory().NewGeneratedNameForNode(node.AsNode()),
 				nil, /*exclamationToken*/
@@ -744,7 +747,8 @@ func (tx *CommonJSModuleTransformer) visitTopLevelImportDeclaration(node *ast.Im
 		)
 
 		if namespaceDeclaration != nil && ast.IsDefaultImport(node.AsNode()) {
-			variables = append(variables,
+			variables = append(
+				variables,
 				tx.Factory().NewVariableDeclaration(
 					namespaceDeclaration.Name().Clone(tx.Factory()),
 					nil, /*exclamationToken*/
@@ -2035,7 +2039,8 @@ func (tx *CommonJSModuleTransformer) visitShorthandPropertyAssignment(node *ast.
 		tx.EmitContext().AssignCommentAndSourceMapRanges(assignment, node.AsNode())
 		return assignment
 	}
-	return tx.Factory().UpdateShorthandPropertyAssignment(node,
+	return tx.Factory().UpdateShorthandPropertyAssignment(
+		node,
 		nil, /*modifiers*/
 		exportedOrImportedName,
 		nil, /*postfixToken*/

@@ -61,7 +61,8 @@ declare module "foo" {
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
-				}, false),
+				}, false,
+			),
 		},
 		UserPreferences: &lsutil.UserPreferences{AutoImportFileExcludePatterns: []string{"/**/ambient1.d.ts"}},
 	})

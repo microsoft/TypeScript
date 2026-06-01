@@ -145,7 +145,8 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 						Label:  "nc_fnfoo",
 						Detail: new("(method) i2.nc_fnfoo(b: number): string"),
 					},
-				}),
+				},
+			),
 		},
 	})
 	f.VerifyQuickInfoAt(t, "9", "var i2_i_foo: (b: number) => string", "")

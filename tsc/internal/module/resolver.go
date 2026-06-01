@@ -376,14 +376,16 @@ func (r *tracer) traceTypeReferenceDirectiveResult(typeReferenceDirectiveName st
 	if !result.IsResolved() {
 		r.write(diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName)
 	} else if result.PackageId.Name != "" {
-		r.write(diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_with_Package_ID_2_primary_Colon_3,
+		r.write(
+			diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_with_Package_ID_2_primary_Colon_3,
 			typeReferenceDirectiveName,
 			result.ResolvedFileName,
 			result.PackageId.String(),
 			result.Primary,
 		)
 	} else {
-		r.write(diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2,
+		r.write(
+			diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2,
 			typeReferenceDirectiveName,
 			result.ResolvedFileName,
 			result.Primary,
@@ -910,7 +912,8 @@ func (r *resolutionState) tryLoadInputFileForPath(finalPath string, entry string
 			diagnostic := ast.NewDiagnostic(
 				nil,
 				core.TextRange{},
-				core.IfElse(isImports,
+				core.IfElse(
+					isImports,
 					diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_import_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate,
 					diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_export_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate,
 				),
@@ -2295,7 +2298,7 @@ func (r *resolutionState) loadEntrypointsFromExportMap(
 
 				conditionAlwaysMatches := condition == "default" || condition == "types" || IsApplicableVersionedTypesKey(condition)
 				newIncludeConditions := includeConditions
-				if !(conditionAlwaysMatches) {
+				if !conditionAlwaysMatches {
 					newIncludeConditions = includeConditions.Clone()
 					excludeConditions = excludeConditions.Clone()
 					if newIncludeConditions == nil {

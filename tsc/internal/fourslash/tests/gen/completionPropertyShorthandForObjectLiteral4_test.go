@@ -33,7 +33,8 @@ const obj: any = {
 				[]fourslash.CompletionsExpectedItem{
 					"bar",
 					"foo",
-				}, false),
+				}, false,
+			),
 		},
 	})
 }

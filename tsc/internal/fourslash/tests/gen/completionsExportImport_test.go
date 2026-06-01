@@ -45,7 +45,8 @@ export import foo = N.foo;
 						Kind:   new(lsproto.CompletionItemKindModule),
 						Detail: new("namespace N"),
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 }

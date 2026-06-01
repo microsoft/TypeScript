@@ -35,7 +35,8 @@ let foo /*1*/
 					&lsproto.CompletionItem{
 						Label: "foo",
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 }

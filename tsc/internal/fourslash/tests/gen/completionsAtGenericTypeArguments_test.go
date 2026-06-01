@@ -33,7 +33,8 @@ const f = foo</*3*/, /*4*/,`
 			Exact: CompletionGlobalTypesPlus(
 				[]fourslash.CompletionsExpectedItem{
 					"Foo",
-				}),
+				},
+			),
 		},
 	})
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
@@ -46,7 +47,8 @@ const f = foo</*3*/, /*4*/,`
 			Exact: CompletionGlobalTypesPlus(
 				[]fourslash.CompletionsExpectedItem{
 					"Foo",
-				}),
+				},
+			),
 		},
 	})
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
@@ -59,7 +61,8 @@ const f = foo</*3*/, /*4*/,`
 			Exact: CompletionGlobalTypesPlus(
 				[]fourslash.CompletionsExpectedItem{
 					"Foo",
-				}),
+				},
+			),
 		},
 	})
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
@@ -72,7 +75,8 @@ const f = foo</*3*/, /*4*/,`
 			Exact: CompletionGlobalTypesPlus(
 				[]fourslash.CompletionsExpectedItem{
 					"Foo",
-				}),
+				},
+			),
 		},
 	})
 }

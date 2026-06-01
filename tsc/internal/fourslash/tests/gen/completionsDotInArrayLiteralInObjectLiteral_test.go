@@ -21,12 +21,12 @@ func TestCompletionsDotInArrayLiteralInObjectLiteral(t *testing.T) {
 	f.VerifyNonSuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(1109))},
-			Message: "Expression expected.",
+			Message: lsproto.StringOrMarkupContent{String: new("Expression expected.")},
 			Range:   f.Ranges()[0].LSRange,
 		},
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(1003))},
-			Message: "Identifier expected.",
+			Message: lsproto.StringOrMarkupContent{String: new("Identifier expected.")},
 			Range:   f.Ranges()[1].LSRange,
 		},
 	})

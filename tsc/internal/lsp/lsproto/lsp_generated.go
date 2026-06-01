@@ -17828,8 +17828,11 @@ type Diagnostic struct {
 	// appears in the user interface.
 	Source *string `json:"source,omitzero"`
 
-	// The diagnostic's message. It usually appears in the user interface
-	Message string `json:"message"`
+	// The diagnostic's message. It usually appears in the user interface.
+	//
+	// Since: 3.18.0 - support for MarkupContent. This is guarded by the client
+	// capability `textDocument.diagnostic.markupMessageSupport`.
+	Message StringOrMarkupContent `json:"message"`
 
 	// Additional metadata about the diagnostic.
 	//
@@ -20706,7 +20709,7 @@ func (s *DeleteFileOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 // Since: 3.16.0
 type FileOperationPattern struct {
 	// The glob pattern to match. Glob patterns can have the following syntax:
-	// - `*` to match one or more characters in a path segment
+	// - `*` to match zero or more characters in a path segment
 	// - `?` to match on one character in a path segment
 	// - `**` to match any number of path segments, including none
 	// - `{}` to group sub patterns into an OR expression. (e.g. `**​/*.{ts,js}` matches all TypeScript and JavaScript files)
@@ -26140,6 +26143,13 @@ type DiagnosticClientCapabilities struct {
 
 	// Whether the clients supports related documents for document diagnostic pulls.
 	RelatedDocumentSupport *bool `json:"relatedDocumentSupport,omitzero"`
+
+	// Whether the client supports `MarkupContent` in diagnostic messages.
+	//
+	// Since: 3.18.0
+	//
+	// Proposed.
+	MarkupMessageSupport *bool `json:"markupMessageSupport,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*DiagnosticClientCapabilities)(nil)
@@ -26198,6 +26208,13 @@ func (s *DiagnosticClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) erro
 				return errNull("relatedDocumentSupport")
 			}
 			if err := json.UnmarshalDecode(dec, &s.RelatedDocumentSupport); err != nil {
+				return err
+			}
+		case `"markupMessageSupport"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("markupMessageSupport")
+			}
+			if err := json.UnmarshalDecode(dec, &s.MarkupMessageSupport); err != nil {
 				return err
 			}
 		default:
@@ -31972,13 +31989,13 @@ type ConfigurationResponse = []any
 var WorkspaceConfigurationInfo = RequestInfo[*ConfigurationParams, ConfigurationResponse]{Method: MethodWorkspaceConfiguration}
 
 // Response type for `textDocument/documentColor`
-type DocumentColorResponse = []*ColorInformation
+type DocumentColorResponse = ColorInformationsOrNull
 
 // Type mapping info for `textDocument/documentColor`
 var TextDocumentDocumentColorInfo = RequestInfo[*DocumentColorParams, DocumentColorResponse]{Method: MethodTextDocumentDocumentColor}
 
 // Response type for `textDocument/colorPresentation`
-type ColorPresentationResponse = []*ColorPresentation
+type ColorPresentationResponse = ColorPresentationsOrNull
 
 // Type mapping info for `textDocument/colorPresentation`
 var TextDocumentColorPresentationInfo = RequestInfo[*ColorPresentationParams, ColorPresentationResponse]{Method: MethodTextDocumentColorPresentation}
@@ -34821,6 +34838,66 @@ func (o *LocationOrLocationsOrDefinitionLinksOrNull) UnmarshalJSONFrom(dec *json
 
 func (o LocationOrLocationsOrDefinitionLinksOrNull) GetLocations() *[]Location {
 	return o.Locations
+}
+
+type ColorInformationsOrNull struct {
+	ColorInformations *[]*ColorInformation
+}
+
+var _ json.MarshalerTo = (*ColorInformationsOrNull)(nil)
+
+func (o *ColorInformationsOrNull) MarshalJSONTo(enc *json.Encoder) error {
+	if o.ColorInformations != nil {
+		return json.MarshalEncode(enc, o.ColorInformations)
+	}
+	return enc.WriteToken(json.Null)
+}
+
+var _ json.UnmarshalerFrom = (*ColorInformationsOrNull)(nil)
+
+func (o *ColorInformationsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
+	*o = ColorInformationsOrNull{}
+
+	switch dec.PeekKind() {
+	case 'n':
+		_, err := dec.ReadToken()
+		return err
+	case '[':
+		o.ColorInformations = new([]*ColorInformation)
+		return json.UnmarshalDecode(dec, o.ColorInformations)
+	default:
+		return errInvalidKind("ColorInformationsOrNull", dec.PeekKind())
+	}
+}
+
+type ColorPresentationsOrNull struct {
+	ColorPresentations *[]*ColorPresentation
+}
+
+var _ json.MarshalerTo = (*ColorPresentationsOrNull)(nil)
+
+func (o *ColorPresentationsOrNull) MarshalJSONTo(enc *json.Encoder) error {
+	if o.ColorPresentations != nil {
+		return json.MarshalEncode(enc, o.ColorPresentations)
+	}
+	return enc.WriteToken(json.Null)
+}
+
+var _ json.UnmarshalerFrom = (*ColorPresentationsOrNull)(nil)
+
+func (o *ColorPresentationsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
+	*o = ColorPresentationsOrNull{}
+
+	switch dec.PeekKind() {
+	case 'n':
+		_, err := dec.ReadToken()
+		return err
+	case '[':
+		o.ColorPresentations = new([]*ColorPresentation)
+		return json.UnmarshalDecode(dec, o.ColorPresentations)
+	default:
+		return errInvalidKind("ColorPresentationsOrNull", dec.PeekKind())
+	}
 }
 
 type FoldingRangesOrNull struct {
@@ -38357,6 +38434,12 @@ type ResolvedDiagnosticClientCapabilities struct {
 	DynamicRegistration bool `json:"dynamicRegistration,omitzero"`
 	// Whether the clients supports related documents for document diagnostic pulls.
 	RelatedDocumentSupport bool `json:"relatedDocumentSupport,omitzero"`
+	// Whether the client supports `MarkupContent` in diagnostic messages.
+	//
+	// Since: 3.18.0
+	//
+	// Proposed.
+	MarkupMessageSupport bool `json:"markupMessageSupport,omitzero"`
 }
 
 func (v *DiagnosticClientCapabilities) resolve() ResolvedDiagnosticClientCapabilities {
@@ -38370,6 +38453,7 @@ func (v *DiagnosticClientCapabilities) resolve() ResolvedDiagnosticClientCapabil
 		DataSupport:            derefOr(v.DataSupport),
 		DynamicRegistration:    derefOr(v.DynamicRegistration),
 		RelatedDocumentSupport: derefOr(v.RelatedDocumentSupport),
+		MarkupMessageSupport:   derefOr(v.MarkupMessageSupport),
 	}
 }
 

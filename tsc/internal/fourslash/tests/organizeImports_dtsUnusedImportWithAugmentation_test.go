@@ -24,7 +24,8 @@ export interface Keyframes {}
 export interface ThemedStyledComponentsModule {}`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import 'styled-components';
 
 declare module 'styled-components' {

@@ -221,7 +221,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-github.com/go-json-experiment/json v0.0.0-20260214004413-d219187c3433 - BSD-3-Clause
+github.com/go-json-experiment/json v0.0.0-20260520185125-572e7c383686 - BSD-3-Clause
 
 
 Copyright 2010 The Go Authors
@@ -266,7 +266,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/sys v0.43.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/sys v0.45.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 Copyright 2009 The Go Authors
@@ -294,7 +294,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/term v0.42.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/term v0.43.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 Copyright 2009 The Go Authors
@@ -309,7 +309,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/text v0.36.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/text v0.37.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 (c) AeHa (c)

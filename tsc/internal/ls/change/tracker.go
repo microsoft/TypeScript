@@ -334,14 +334,15 @@ func (t *Tracker) finishDeleteDeclarations() {
 }
 
 func (t *Tracker) endPosForInsertNodeAfter(sourceFile *ast.SourceFile, after *ast.Node, newNode *ast.Node) core.TextPos {
-	if (needSemicolonBetween(after, newNode)) && (rune(sourceFile.Text()[after.End()-1]) != ';') {
+	if needSemicolonBetween(after, newNode) && (rune(sourceFile.Text()[after.End()-1]) != ';') {
 		// check if previous statement ends with semicolon
 		// if not - insert semicolon to preserve the code from changing the meaning due to ASI
 		endPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(after.End()))
 		semicolon := t.NewToken(ast.KindSemicolonToken)
 		semicolon.Loc = core.NewTextRange(after.End(), after.End())
 		semicolon.Parent = after.Parent
-		t.ReplaceRange(sourceFile,
+		t.ReplaceRange(
+			sourceFile,
 			lsproto.Range{Start: endPos, End: endPos},
 			semicolon,
 			NodeOptions{},

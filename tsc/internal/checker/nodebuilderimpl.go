@@ -2692,9 +2692,9 @@ func (b *NodeBuilderImpl) createTypeNodeFromObjectType(t *Type) *ast.TypeNode {
 			return b.ch.getOrCreateTypeFromSignature(s)
 		})
 		// count the number of type elements excluding abstract constructors
-		typeElementCount := len(callSigs) + (len(ctorSigs) - len(abstractSignatures)) + len(resolved.indexInfos) + (core.IfElse(b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0, core.CountWhere(resolved.properties, func(p *ast.Symbol) bool {
+		typeElementCount := len(callSigs) + (len(ctorSigs) - len(abstractSignatures)) + len(resolved.indexInfos) + core.IfElse(b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0, core.CountWhere(resolved.properties, func(p *ast.Symbol) bool {
 			return p.Flags&ast.SymbolFlagsPrototype == 0
-		}), len(resolved.properties)))
+		}), len(resolved.properties))
 		// don't include an empty object literal if there were no other static-side
 		// properties to write, i.e. `abstract class C { }` becomes `abstract new () => {}`
 		// and not `(abstract new () => {}) & {}`
@@ -3373,7 +3373,7 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		}
 		var name string
 		if (t == b.ch.markerSuperTypeForCheck || t == b.ch.markerSubTypeForCheck) && b.ch.varianceTypeParameter != nil && b.ch.varianceTypeParameter.symbol != nil {
-			name = (core.IfElse(t == b.ch.markerSubTypeForCheck, "sub-", "super-")) + ast.SymbolName(b.ch.varianceTypeParameter.symbol)
+			name = core.IfElse(t == b.ch.markerSubTypeForCheck, "sub-", "super-") + ast.SymbolName(b.ch.varianceTypeParameter.symbol)
 		} else {
 			name = "?"
 		}

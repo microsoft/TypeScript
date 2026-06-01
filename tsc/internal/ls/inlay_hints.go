@@ -640,7 +640,8 @@ func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node, idToSymbol map[*
 					parts,
 					&lsproto.InlayHintLabelPart{
 						Value: scanner.TokenToString(node.PostfixToken().Kind),
-					})
+					},
+				)
 			}
 			if node.Type() != nil {
 				parts = append(parts, &lsproto.InlayHintLabelPart{Value: ": "})
@@ -665,7 +666,8 @@ func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node, idToSymbol map[*
 					parts,
 					&lsproto.InlayHintLabelPart{
 						Value: scanner.TokenToString(node.PostfixToken().Kind),
-					})
+					},
+				)
 			}
 			visitParametersAndTypeParameters(node)
 			if node.Type() != nil {
@@ -704,7 +706,8 @@ func (s *inlayHintState) getInlayHintLabelParts(node *ast.Node, idToSymbol map[*
 				parts,
 				&lsproto.InlayHintLabelPart{
 					Value: scanner.TokenToString(node.AsPrefixUnaryExpression().Operator),
-				})
+				},
+			)
 			visitForDisplayParts(node.AsPrefixUnaryExpression().Operand)
 		case ast.KindTemplateLiteralType:
 			visitForDisplayParts(node.AsTemplateLiteralTypeNode().Head)

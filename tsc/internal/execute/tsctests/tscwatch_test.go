@@ -572,7 +572,8 @@ func TestTscNoEmitWatch(t *testing.T) {
 	t.Parallel()
 
 	testCases := []*tscInput{
-		noEmitWatchTestInput("syntax errors",
+		noEmitWatchTestInput(
+			"syntax errors",
 			[]string{"-w"},
 			`const a = "hello`,
 			nil,

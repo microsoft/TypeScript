@@ -24,7 +24,8 @@ console.log(Foo, Bar, Foobar);`
 	f, done := fourslash.NewFourslash(t, nil /* capabilities */, content)
 	defer done()
 
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`#!/usr/bin/env node
 import Bar from "bar";
 import Foo from "foo";

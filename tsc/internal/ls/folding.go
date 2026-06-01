@@ -88,7 +88,8 @@ func (l *LanguageService) addNodeOutliningSpans(ctx context.Context, sourceFile 
 				statements.Nodes[lastImport].End(),
 				foldingRangeKind,
 				sourceFile,
-				l))
+				l,
+			))
 		}
 	}
 

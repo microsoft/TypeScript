@@ -33,7 +33,7 @@ function B() {
 	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
-			Message: "'x' is deprecated.",
+			Message: lsproto.StringOrMarkupContent{String: new("'x' is deprecated.")},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 			Range:   f.Ranges()[0].LSRange,
 		},

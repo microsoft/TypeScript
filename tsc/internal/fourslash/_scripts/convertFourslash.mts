@@ -1713,7 +1713,7 @@ function parseExpectedDiagnostic(expr: ts.Expression): string {
                 let messageInit;
                 if (messageInit = getStringLiteralLike(init)) {
                     messageInit.text = messageInit.text.replace("/tests/cases/fourslash", "");
-                    diagnosticProps.push(`Message: ${getGoStringLiteral(messageInit.text)},`);
+                    diagnosticProps.push(`Message: lsproto.StringOrMarkupContent{String: new(${getGoStringLiteral(messageInit.text)})},`);
                 }
                 else {
                     throw new Error(`Expected string literal for diagnostic message, got ${init.getText()}`);

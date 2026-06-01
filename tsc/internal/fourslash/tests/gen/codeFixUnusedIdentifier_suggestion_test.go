@@ -23,18 +23,18 @@ function f([|p|]) {
 	defer done()
 	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
-			Message: "Parameter 'p' implicitly has an 'any' type, but a better type may be inferred from usage.",
+			Message: lsproto.StringOrMarkupContent{String: new("Parameter 'p' implicitly has an 'any' type, but a better type may be inferred from usage.")},
 			Range:   f.Ranges()[0].LSRange,
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(7044))},
 		},
 		{
-			Message: "'p' is declared but its value is never read.",
+			Message: lsproto.StringOrMarkupContent{String: new("'p' is declared but its value is never read.")},
 			Range:   f.Ranges()[0].LSRange,
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6133))},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagUnnecessary},
 		},
 		{
-			Message: "'x' is declared but its value is never read.",
+			Message: lsproto.StringOrMarkupContent{String: new("'x' is declared but its value is never read.")},
 			Range:   f.Ranges()[1].LSRange,
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6133))},
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagUnnecessary},

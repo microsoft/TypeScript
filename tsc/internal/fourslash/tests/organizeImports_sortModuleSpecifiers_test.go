@@ -18,7 +18,8 @@ import y from "lib1";
 x; y;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import y from "lib1";
 import x from "lib2";
 x; y;`,
@@ -35,7 +36,8 @@ import y from "./lib1";
 x; y;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import y from "./lib1";
 import x from "./lib2";
 x; y;`,
@@ -52,7 +54,8 @@ import y from "lib";
 x; y;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import y from "lib";
 import x from "./lib";
 x; y;`,
@@ -70,7 +73,8 @@ import y from "a";
 x; y;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import y from "a";
 import x from "Z";
 x; y;`,
@@ -88,7 +92,8 @@ import y from "A";
 x; y;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import y from "A";
 import x from "z";
 x; y;`,

@@ -37,7 +37,8 @@ fo/**/`
 						Label:  "foo",
 						Detail: new("const foo: 1"),
 					},
-				}, true),
+				}, true,
+			),
 		},
 	})
 }

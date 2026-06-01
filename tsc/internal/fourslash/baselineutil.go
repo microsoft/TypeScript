@@ -742,7 +742,8 @@ func (f *FourslashTest) getBaselineContentForFile(
 		if options.getLocationData != nil {
 			startMarker += options.getLocationData(span)
 		}
-		details = append(details,
+		details = append(
+			details,
 			&baselineDetail{pos: span.textSpan.Start, positionMarker: startMarker, span: &span, kind: detailKindTextStart},
 			&baselineDetail{pos: span.textSpan.End, positionMarker: core.OrElse(options.endMarker, "|]"), span: &span, kind: detailKindTextEnd},
 		)

@@ -25,7 +25,8 @@ something;
 somethingElse;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import * as somethingElse from "anotherpath";
 import * as something from "path"; /**
  * some comment here

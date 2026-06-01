@@ -1866,7 +1866,8 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 
 	var changes SnapshotChanges
 
-	collections.DiffOrderedMaps(prevProjects, nextProjects,
+	collections.DiffOrderedMaps(
+		prevProjects, nextProjects,
 		// onAdded: new project — nothing to retain from previous snapshot.
 		func(_ tspath.Path, _ *project.Project) {},
 		// onRemoved: project removed entirely.
@@ -1886,7 +1887,8 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 				newFiles = p.FilesByPath()
 			}
 			var projectChanges ProjectFileChanges
-			core.DiffMaps(oldFiles, newFiles,
+			core.DiffMaps(
+				oldFiles, newFiles,
 				nil, // onAdded: new file in project, not a change.
 				func(path tspath.Path, _ *ast.SourceFile) {
 					projectChanges.DeletedFiles = append(projectChanges.DeletedFiles, path)

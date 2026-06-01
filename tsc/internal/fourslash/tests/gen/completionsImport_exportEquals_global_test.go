@@ -49,7 +49,8 @@ conso/**/`
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 						SortText:            new(string(ls.SortTextGlobalsOrKeywords)),
 					},
-				}, false),
+				}, false,
+			),
 		},
 	})
 }

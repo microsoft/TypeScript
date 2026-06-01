@@ -449,7 +449,8 @@ func prettyPathForFileError(file FileLike, fileErrors []Diagnostic, formatOpts *
 	if tspath.PathIsAbsolute(fileName) && tspath.PathIsAbsolute(formatOpts.CurrentDirectory) {
 		fileName = tspath.ConvertToRelativePath(file.FileName(), formatOpts.ComparePathsOptions)
 	}
-	return fmt.Sprintf("%s%s:%d%s",
+	return fmt.Sprintf(
+		"%s%s:%d%s",
 		fileName,
 		foregroundColorEscapeGrey,
 		line+1,

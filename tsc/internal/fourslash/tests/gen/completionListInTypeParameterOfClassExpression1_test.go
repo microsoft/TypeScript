@@ -34,7 +34,8 @@ var C4 = class D<T extends /*4*/>{}`
 			Exact: CompletionGlobalTypesPlus(
 				[]fourslash.CompletionsExpectedItem{
 					"D",
-				}),
+				},
+			),
 		},
 	})
 }

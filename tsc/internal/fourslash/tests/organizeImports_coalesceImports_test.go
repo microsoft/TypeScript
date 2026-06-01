@@ -17,7 +17,8 @@ func TestOrganizeImports_coalesceImports_sortSpecifiersCaseInsensitive(t *testin
 M; n; B; y; O;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { B, default as M, a as n, Z as O, y } from "lib";
 M; n; B; y; O;`,
 		lsproto.CodeActionKindSourceSortImports,
@@ -33,7 +34,8 @@ import "lib";
 void 0;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import "lib";
 void 0;`,
 		lsproto.CodeActionKindSourceSortImports,
@@ -51,7 +53,8 @@ import { z } from "aaa";
 x; y; z;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { z } from "aaa";
 import * as x from "lib";
 import * as y from "lib";
@@ -69,7 +72,8 @@ import y from "lib";
 x; y;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { default as x, default as y } from "lib";
 x; y;`,
 		lsproto.CodeActionKindSourceSortImports,
@@ -85,7 +89,8 @@ import { y as z } from "lib";
 x; z;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { x, y as z } from "lib";
 x; z;`,
 		lsproto.CodeActionKindSourceSortImports,
@@ -103,7 +108,8 @@ import { z } from "aaa";
 x; z;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { z } from "aaa";
 import "lib";
 import * as x from "lib";
@@ -123,7 +129,8 @@ import { z } from "aaa";
 x; z;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { z } from "aaa";
 import "lib";
 import x from "lib";
@@ -143,7 +150,8 @@ import { z } from "aaa";
 x; z;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { z } from "aaa";
 import "lib";
 import { x } from "lib";
@@ -162,7 +170,8 @@ import y from "lib";
 x; y;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import y, * as x from "lib";
 x; y;`,
 		lsproto.CodeActionKindSourceSortImports,
@@ -180,7 +189,8 @@ import { z } from "aaa";
 x; y; z;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { z } from "aaa";
 import * as x from "lib";
 import { y } from "lib";
@@ -199,7 +209,8 @@ import { y } from "lib";
 x; y;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import x, { y } from "lib";
 x; y;`,
 		lsproto.CodeActionKindSourceSortImports,
@@ -221,7 +232,8 @@ import { a } from "lib";
 w; x; y; z; a; b;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import "lib";
 import * as x from "lib";
 import * as y from "lib";
@@ -243,7 +255,8 @@ import { w } from "aaa";
 x; y; z; w;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { w } from "aaa";
 import * as x from "lib";
 import * as y from "lib";
@@ -264,7 +277,8 @@ import { z } from "lib";
 x; y; z;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import type { x, y } from "lib";
 import { z } from "lib";
 x; y; z;`,
@@ -283,7 +297,8 @@ import type z from "lib";
 x; y; z;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import type * as y from "lib";
 import type z from "lib";
 import type { x } from "lib";
@@ -300,7 +315,8 @@ func TestOrganizeImports_coalesceImports_sortSpecifiersTypeOnlyInline(t *testing
 z; y; x; c; b; a;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(t,
+	f.VerifyOrganizeImports(
+		t,
 		`import { a, type b, c, type x, y, type z } from "lib";
 z; y; x; c; b; a;`,
 		lsproto.CodeActionKindSourceSortImports,

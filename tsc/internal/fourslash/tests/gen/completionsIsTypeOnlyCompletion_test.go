@@ -33,7 +33,8 @@ function f(Abc: Ab/**/) {}`
 			Exact: CompletionTypeKeywordsPlus(
 				[]fourslash.CompletionsExpectedItem{
 					"Abc",
-				}),
+				},
+			),
 		},
 	})
 }

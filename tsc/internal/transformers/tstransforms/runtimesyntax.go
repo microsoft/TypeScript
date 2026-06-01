@@ -907,7 +907,8 @@ func (tx *RuntimeSyntaxTransformer) visitShorthandPropertyAssignment(node *ast.S
 		tx.EmitContext().AssignCommentAndSourceMapRanges(updated, node.AsNode())
 		return updated
 	}
-	return tx.Factory().UpdateShorthandPropertyAssignment(node,
+	return tx.Factory().UpdateShorthandPropertyAssignment(
+		node,
 		nil, /*modifiers*/
 		exportedOrImportedName,
 		nil, /*postfixToken*/

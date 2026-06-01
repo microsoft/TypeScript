@@ -857,7 +857,8 @@ func (l *LanguageService) getCompletionData(
 							symbol.Declarations,
 							func(decl *ast.Declaration) bool {
 								return decl.Kind != ast.KindSourceFile && decl.Kind != ast.KindModuleDeclaration && decl.Kind != ast.KindEnumDeclaration
-							}) {
+							},
+						) {
 						t := typeChecker.GetNonOptionalType(typeChecker.GetTypeOfSymbolAtLocation(symbol, node))
 						insertQuestionDot := false
 						if typeChecker.IsNullableType(t) {
@@ -915,11 +916,13 @@ func (l *LanguageService) getCompletionData(
 		intersectionTypeNode := core.IfElse(
 			ast.IsIntersectionTypeNode(typeLiteralNode.Parent),
 			typeLiteralNode.Parent,
-			nil)
+			nil,
+		)
 		containerTypeNode := core.IfElse(
 			intersectionTypeNode != nil,
 			intersectionTypeNode,
-			typeLiteralNode)
+			typeLiteralNode,
+		)
 
 		containerExpectedType := getConstraintOfTypeArgumentProperty(containerTypeNode, typeChecker)
 		if containerExpectedType == nil {
@@ -938,7 +941,8 @@ func (l *LanguageService) getCompletionData(
 
 		symbols = append(
 			symbols,
-			core.Filter(members, func(member *ast.Symbol) bool { return !existingMemberNames.Has(member.Name) })...)
+			core.Filter(members, func(member *ast.Symbol) bool { return !existingMemberNames.Has(member.Name) })...,
+		)
 
 		completionKind = CompletionKindObjectPropertyDeclaration
 		isNewIdentifierLocation = true
@@ -1171,7 +1175,8 @@ func (l *LanguageService) getCompletionData(
 		moduleSpecifier := core.IfElse(
 			namedImportsOrExports.Kind == ast.KindNamedImports,
 			namedImportsOrExports.Parent.Parent,
-			namedImportsOrExports.Parent).ModuleSpecifier()
+			namedImportsOrExports.Parent,
+		).ModuleSpecifier()
 		if moduleSpecifier == nil {
 			isNewIdentifierLocation = true
 			if namedImportsOrExports.Kind == ast.KindNamedImports {
@@ -1238,7 +1243,8 @@ func (l *LanguageService) getCompletionData(
 			typeChecker.GetApparentProperties(typeChecker.GetTypeAtLocation(importAttributes)),
 			func(symbol *ast.Symbol) bool {
 				return !existing.Has(ast.SymbolName(symbol))
-			})
+			},
+		)
 		symbols = append(symbols, uniques...)
 		return globalsSearchSuccess, nil
 	}
@@ -1362,7 +1368,8 @@ func (l *LanguageService) getCompletionData(
 					if t.Symbol() != nil {
 						baseSymbols = append(
 							baseSymbols,
-							typeChecker.GetPropertiesOfType(typeChecker.GetTypeOfSymbolAtLocation(t.Symbol(), decl))...)
+							typeChecker.GetPropertiesOfType(typeChecker.GetTypeOfSymbolAtLocation(t.Symbol(), decl))...,
+						)
 					}
 				} else if t != nil {
 					baseSymbols = append(baseSymbols, typeChecker.GetPropertiesOfType(t)...)
@@ -1512,7 +1519,8 @@ func (l *LanguageService) getCompletionData(
 			thisType := typeChecker.TryGetThisTypeAtEx(
 				scopeNode,
 				false, /*includeGlobalThis*/
-				core.IfElse(ast.IsClassLike(scopeNode.Parent), scopeNode, nil))
+				core.IfElse(ast.IsClassLike(scopeNode.Parent), scopeNode, nil),
+			)
 			if thisType != nil && !isProbablyGlobalType(thisType, file, typeChecker) {
 				for _, symbol := range getPropertiesForCompletion(thisType, typeChecker) {
 					symbolId := ast.GetSymbolId(symbol)
@@ -2008,12 +2016,14 @@ func (l *LanguageService) createCompletionItem(
 			insertText = fmt.Sprintf(
 				"this%s[%s]",
 				core.IfElse(insertQuestionDot, "?.", ""),
-				quotePropertyName(file, preferences, name))
+				quotePropertyName(file, preferences, name),
+			)
 		} else {
 			insertText = fmt.Sprintf(
 				"this%s%s",
 				core.IfElse(insertQuestionDot, "?.", "."),
-				name)
+				name,
+			)
 		}
 	} else if data.propertyAccessToConvert != nil && (useBraces || insertQuestionDot) {
 		// We should only have needsConvertPropertyAccess if there's a property access to convert. But see microsoft/TypeScript#21790.
@@ -2087,7 +2097,8 @@ func (l *LanguageService) createCompletionItem(
 		replacementSpan = new(l.createLspRangeFromBounds(
 			astnav.GetStartOfNode(wrapNode, file, false /*includeJSDoc*/),
 			data.propertyAccessToConvert.End(),
-			file))
+			file,
+		))
 	}
 
 	if originIsTypeOnlyAlias(origin) {
@@ -2157,7 +2168,8 @@ func (l *LanguageService) createCompletionItem(
 						func(t *checker.Type) bool {
 							return t.Flags()&(checker.TypeFlagsStringLike|checker.TypeFlagsUndefined) != 0 ||
 								isStringAndEmptyAnonymousObjectIntersection(typeChecker, t)
-						}) {
+						},
+					) {
 				// If type is string-like or undefined, use quotes.
 				insertText = fmt.Sprintf("%s=%s", escapeSnippetText(name), quote(file, preferences, "$1"))
 				isSnippet = true
@@ -2748,7 +2760,8 @@ func nonAliasCanBeReferencedAtTypeLocation(symbol *ast.Symbol, typeChecker *chec
 		symbol.Flags&ast.SymbolFlagsModule != 0 && seenModules.AddIfAbsent(ast.GetSymbolId(symbol)) &&
 			core.Some(
 				typeChecker.GetExportsOfModule(symbol),
-				func(e *ast.Symbol) bool { return symbolCanBeReferencedAtTypeLocation(e, typeChecker, seenModules) })
+				func(e *ast.Symbol) bool { return symbolCanBeReferencedAtTypeLocation(e, typeChecker, seenModules) },
+			)
 }
 
 // Gets all properties on a type, but if that type is a union of several types,
@@ -2777,7 +2790,8 @@ func getFirstSymbolInChain(symbol *ast.Symbol, enclosingDeclaration *ast.Node, t
 		symbol,
 		enclosingDeclaration,
 		ast.SymbolFlagsAll, /*meaning*/
-		false /*useOnlyExternalAliasing*/)
+		false,              /*useOnlyExternalAliasing*/
+	)
 	if len(chain) > 0 {
 		return chain[0]
 	}
@@ -3229,7 +3243,8 @@ func getKeywordCompletions(keywordFilter KeywordCompletionFilters, filterOutTsOn
 		getTypescriptKeywordCompletions(keywordFilter),
 		func(ci *lsproto.CompletionItem) bool {
 			return !isTypeScriptOnlyKeyword(scanner.StringToToken(ci.Label))
-		})
+		},
+	)
 	keywordCompletionsCache.Store(index, result)
 	return cloneItems(result)
 }
@@ -4532,7 +4547,7 @@ func isInStringOrRegularExpressionOrTemplateLiteral(contextToken *ast.Node, posi
 	//   2. at the end position of an unterminated token.
 	//   3. at the end of a regular expression (due to trailing flags like '/foo/g').
 	return (ast.IsRegularExpressionLiteral(contextToken) || ast.IsStringTextContainingNode(contextToken)) &&
-		(contextToken.Loc.ContainsExclusive(position)) ||
+		contextToken.Loc.ContainsExclusive(position) ||
 		position == contextToken.End() &&
 			(ast.IsUnterminatedLiteral(contextToken) || ast.IsRegularExpressionLiteral(contextToken))
 }

@@ -55,7 +55,8 @@ t/**/`
 							Description: new("./a"),
 						},
 					},
-				}, true),
+				}, true,
+			),
 		},
 	}).AndApplyCodeAction(t, &fourslash.CompletionsExpectedCodeAction{
 		Name:        "Test1",
