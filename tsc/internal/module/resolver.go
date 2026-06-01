@@ -1756,15 +1756,7 @@ func (r *resolutionState) getPackageJsonInfo(packageDirectory string) *packagejs
 			if r.tracer != nil {
 				r.tracer.write(diagnostics.File_0_exists_according_to_earlier_cached_lookups, packageJsonPath)
 			}
-			if existing.PackageDirectory == packageDirectory {
-				return existing
-			}
-			// https://github.com/microsoft/TypeScript/pull/50740
-			return &packagejson.InfoCacheEntry{
-				PackageDirectory: packageDirectory,
-				DirectoryExists:  true,
-				Contents:         existing.Contents,
-			}
+			return existing.WithPackageDirectory(packageDirectory)
 		} else {
 			if existing.DirectoryExists && r.tracer != nil {
 				r.tracer.write(diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageJsonPath)
@@ -1790,7 +1782,7 @@ func (r *resolutionState) getPackageJsonInfo(packageDirectory string) *packagejs
 			},
 		}
 		result = r.resolver.packageJsonInfoCache.Set(packageJsonPath, result)
-		return result
+		return result.WithPackageDirectory(packageDirectory)
 	} else {
 		if directoryExists && r.tracer != nil {
 			r.tracer.write(diagnostics.File_0_does_not_exist, packageJsonPath)

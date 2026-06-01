@@ -26,7 +26,7 @@ func (c *moduleResolutionCache) Get(key moduleResolutionCacheKey) (*ResolvedModu
 }
 
 func (c *moduleResolutionCache) Set(key moduleResolutionCacheKey, value *ResolvedModule) {
-	c.cache.Store(key, value)
+	c.cache.LoadOrStore(key, value)
 }
 
 type typeRefDirectiveResolutionCacheKey struct {

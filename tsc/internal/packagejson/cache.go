@@ -144,6 +144,28 @@ func (p *InfoCacheEntry) GetDirectory() string {
 	return p.PackageDirectory
 }
 
+// WithPackageDirectory returns an entry whose PackageDirectory matches the
+// caller's value. The package.json info cache is keyed by the canonical
+// path of the package.json file, but multiple callers may look up the same
+// package.json using directory paths that differ only by a trailing
+// separator (e.g. "node_modules/preact/compat" vs
+// "node_modules/preact/compat/"). Because the cache uses first-writer-wins
+// semantics, a later caller may receive an entry whose PackageDirectory
+// doesn't match its own candidate path. Downstream code compares the
+// candidate against PackageDirectory, so we must return a corrected
+// shallow copy when they diverge.
+// See https://github.com/microsoft/TypeScript/pull/50740.
+func (p *InfoCacheEntry) WithPackageDirectory(packageDirectory string) *InfoCacheEntry {
+	if p.PackageDirectory == packageDirectory {
+		return p
+	}
+	return &InfoCacheEntry{
+		PackageDirectory: packageDirectory,
+		DirectoryExists:  p.DirectoryExists,
+		Contents:         p.Contents,
+	}
+}
+
 type InfoCache struct {
 	cache                     collections.SyncMap[tspath.Path, *InfoCacheEntry]
 	currentDirectory          string

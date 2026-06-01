@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/pathsAliasTrailingSlashConflictWithAtTypes.ts] ////
+
+=== app.ts ===
+import { useState } from "react";
+>useState : <T>(initial: T) => [T, (v: T) => void]
+
+// Verify that paths resolution resolves to preact/compat, not @types/react.
+// The trailing slash in the paths config ("./node_modules/preact/compat/")
+// must not cause cache mismatches in concurrent builds.
+const [count, setCount] = useState(0);
+>count : number
+>setCount : (v: number) => void
+>useState(0) : [number, (v: number) => void]
+>useState : <T>(initial: T) => [T, (v: T) => void]
+>0 : 0
+
+setCount(count + 1);
+>setCount(count + 1) : void
+>setCount : (v: number) => void
+>count + 1 : number
+>count : number
+>1 : 1
+
+=== node_modules/preact/compat/index.d.ts ===
+export declare function createElement(type: string): any;
+>createElement : (type: string) => any
+>type : string
+
+export declare function useState<T>(initial: T): [T, (v: T) => void];
+>useState : <T>(initial: T) => [T, (v: T) => void]
+>initial : T
+>v : T
+
