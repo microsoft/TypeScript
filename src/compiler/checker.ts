@@ -2626,6 +2626,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function addDeprecatedSuggestionWithSignature(location: Node, declaration: Node, deprecatedEntity: string | undefined, signatureString: string) {
         const diagnostic = deprecatedEntity
             ? createDiagnosticForNode(location, Diagnostics.The_signature_0_of_1_is_deprecated, signatureString, deprecatedEntity)
+            : isIdentifier(location)
+            ? createDiagnosticForNode(location, Diagnostics._0_is_deprecated, idText(location))
             : createDiagnosticForNode(location, Diagnostics._0_is_deprecated, signatureString);
         return addDeprecatedSuggestionWorker(declaration, diagnostic);
     }

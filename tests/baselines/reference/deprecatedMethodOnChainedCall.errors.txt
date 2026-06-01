@@ -1,0 +1,22 @@
+deprecatedMethodOnChainedCall.ts(14,32): suggestion TS6385: 'oldMethod' is deprecated.
+
+
+==== deprecatedMethodOnChainedCall.ts (1 errors) ====
+    // Regression test for https://github.com/microsoft/TypeScript/issues/62396
+    // Deprecation message should show the method name, not the type signature
+    
+    interface Builder {
+        configure(value: string): Builder;
+        /** @deprecated use {@link Builder} instead */
+        oldMethod(): void;
+    }
+    
+    declare function createBuilder(): Builder;
+    
+    // When calling a deprecated method on the result of another call (chained call),
+    // the deprecation message should show the method name, not the type signature.
+    createBuilder().configure("x").oldMethod();
+                                   ~~~~~~~~~
+!!! suggestion TS6385: 'oldMethod' is deprecated.
+!!! related TS2798 deprecatedMethodOnChainedCall.ts:6:9: The declaration was marked as deprecated here.
+    

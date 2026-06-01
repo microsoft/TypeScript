@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/deprecatedMethodOnChainedCall.ts] ////
+
+=== deprecatedMethodOnChainedCall.ts ===
+// Regression test for https://github.com/microsoft/TypeScript/issues/62396
+// Deprecation message should show the method name, not the type signature
+
+interface Builder {
+>Builder : Symbol(Builder, Decl(deprecatedMethodOnChainedCall.ts, 0, 0))
+
+    configure(value: string): Builder;
+>configure : Symbol(Builder.configure, Decl(deprecatedMethodOnChainedCall.ts, 3, 19))
+>value : Symbol(value, Decl(deprecatedMethodOnChainedCall.ts, 4, 14))
+>Builder : Symbol(Builder, Decl(deprecatedMethodOnChainedCall.ts, 0, 0))
+
+    /** @deprecated use {@link Builder} instead */
+    oldMethod(): void;
+>oldMethod : Symbol(Builder.oldMethod, Decl(deprecatedMethodOnChainedCall.ts, 4, 38))
+}
+
+declare function createBuilder(): Builder;
+>createBuilder : Symbol(createBuilder, Decl(deprecatedMethodOnChainedCall.ts, 7, 1))
+>Builder : Symbol(Builder, Decl(deprecatedMethodOnChainedCall.ts, 0, 0))
+
+// When calling a deprecated method on the result of another call (chained call),
+// the deprecation message should show the method name, not the type signature.
+createBuilder().configure("x").oldMethod();
+>createBuilder().configure("x").oldMethod : Symbol(Builder.oldMethod, Decl(deprecatedMethodOnChainedCall.ts, 4, 38))
+>createBuilder().configure : Symbol(Builder.configure, Decl(deprecatedMethodOnChainedCall.ts, 3, 19))
+>createBuilder : Symbol(createBuilder, Decl(deprecatedMethodOnChainedCall.ts, 7, 1))
+>configure : Symbol(Builder.configure, Decl(deprecatedMethodOnChainedCall.ts, 3, 19))
+>oldMethod : Symbol(Builder.oldMethod, Decl(deprecatedMethodOnChainedCall.ts, 4, 38))
+
