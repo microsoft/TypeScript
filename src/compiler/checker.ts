@@ -20784,6 +20784,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(target as MappedType, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     instantiateAnonymousType(target, newMapper, newAliasSymbol, newAliasTypeArguments);
                 target.instantiations.set(id, result); // Set cached result early in case we recursively invoke instantiation while eagerly computing type variable visibility below
+                // For anonymous types without aliasTypeArguments, propagate NonInferrableType from the type arguments.
+                // For types with aliasTypeArguments, instantiateAnonymousType already propagates this from aliasTypeArguments.
+                if (!(target.objectFlags & (ObjectFlags.Reference | ObjectFlags.Mapped)) && !newAliasTypeArguments) {
+                    (result as ObjectFlagsType).objectFlags |= getPropagatingFlagsOfTypes(typeArguments) & ObjectFlags.NonInferrableType;
+                }
                 const resultObjectFlags = getObjectFlags(result);
                 if (result.flags & TypeFlags.ObjectFlagsType && !(resultObjectFlags & ObjectFlags.CouldContainTypeVariablesComputed)) {
                     const resultCouldContainTypeVariables = some(typeArguments, couldContainTypeVariables); // one of the input type arguments might be or contain the result

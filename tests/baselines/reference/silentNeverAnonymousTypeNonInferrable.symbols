@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/silentNeverAnonymousTypeNonInferrable.ts] ////
+
+=== silentNeverAnonymousTypeNonInferrable.ts ===
+// Repro from GH#62345 - silentNeverType should not leak from anonymous non-aliased object type instantiations.
+// All foo1-foo5 should consistently produce errors with resolve typed as (value: unknown) => void,
+// not just foo2/foo3 which use type aliases or tuples.
+
+interface P<T> {
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 4, 12))
+
+    then: (onfulfilled: (value: T) => unknown) => unknown;
+>then : Symbol(P.then, Decl(silentNeverAnonymousTypeNonInferrable.ts, 4, 16))
+>onfulfilled : Symbol(onfulfilled, Decl(silentNeverAnonymousTypeNonInferrable.ts, 5, 11))
+>value : Symbol(value, Decl(silentNeverAnonymousTypeNonInferrable.ts, 5, 25))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 4, 12))
+}
+
+interface PConstructor {
+>PConstructor : Symbol(PConstructor, Decl(silentNeverAnonymousTypeNonInferrable.ts, 6, 1))
+
+    new <T>(executor: (resolve: (value: T) => void) => void): P<T>;
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 9, 9))
+>executor : Symbol(executor, Decl(silentNeverAnonymousTypeNonInferrable.ts, 9, 12))
+>resolve : Symbol(resolve, Decl(silentNeverAnonymousTypeNonInferrable.ts, 9, 23))
+>value : Symbol(value, Decl(silentNeverAnonymousTypeNonInferrable.ts, 9, 33))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 9, 9))
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 9, 9))
+}
+
+declare var P: PConstructor;
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>PConstructor : Symbol(PConstructor, Decl(silentNeverAnonymousTypeNonInferrable.ts, 6, 1))
+
+declare function foo1<T>(x: () => P<{ default: T }>): T;
+>foo1 : Symbol(foo1, Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 28))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 14, 22))
+>x : Symbol(x, Decl(silentNeverAnonymousTypeNonInferrable.ts, 14, 25))
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>default : Symbol(default, Decl(silentNeverAnonymousTypeNonInferrable.ts, 14, 37))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 14, 22))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 14, 22))
+
+const result1 = foo1(() => {
+>result1 : Symbol(result1, Decl(silentNeverAnonymousTypeNonInferrable.ts, 16, 5))
+>foo1 : Symbol(foo1, Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 28))
+
+    return new P((resolve) => {
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>resolve : Symbol(resolve, Decl(silentNeverAnonymousTypeNonInferrable.ts, 17, 18))
+
+        resolve;
+>resolve : Symbol(resolve, Decl(silentNeverAnonymousTypeNonInferrable.ts, 17, 18))
+
+    });
+});
+
+type WithDefault<T> = { default: T };
+>WithDefault : Symbol(WithDefault, Decl(silentNeverAnonymousTypeNonInferrable.ts, 20, 3))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 22, 17))
+>default : Symbol(default, Decl(silentNeverAnonymousTypeNonInferrable.ts, 22, 23))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 22, 17))
+
+declare function foo2<T>(x: () => P<WithDefault<T>>): T;
+>foo2 : Symbol(foo2, Decl(silentNeverAnonymousTypeNonInferrable.ts, 22, 37))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 24, 22))
+>x : Symbol(x, Decl(silentNeverAnonymousTypeNonInferrable.ts, 24, 25))
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>WithDefault : Symbol(WithDefault, Decl(silentNeverAnonymousTypeNonInferrable.ts, 20, 3))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 24, 22))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 24, 22))
+
+const result2 = foo2(() => {
+>result2 : Symbol(result2, Decl(silentNeverAnonymousTypeNonInferrable.ts, 26, 5))
+>foo2 : Symbol(foo2, Decl(silentNeverAnonymousTypeNonInferrable.ts, 22, 37))
+
+    return new P((resolve) => {
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>resolve : Symbol(resolve, Decl(silentNeverAnonymousTypeNonInferrable.ts, 27, 18))
+
+        resolve;
+>resolve : Symbol(resolve, Decl(silentNeverAnonymousTypeNonInferrable.ts, 27, 18))
+
+    });
+});
+
+declare function foo3<T>(x: () => P<[T]>): T;
+>foo3 : Symbol(foo3, Decl(silentNeverAnonymousTypeNonInferrable.ts, 30, 3))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 32, 22))
+>x : Symbol(x, Decl(silentNeverAnonymousTypeNonInferrable.ts, 32, 25))
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 32, 22))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 32, 22))
+
+const result3 = foo3(() => {
+>result3 : Symbol(result3, Decl(silentNeverAnonymousTypeNonInferrable.ts, 34, 5))
+>foo3 : Symbol(foo3, Decl(silentNeverAnonymousTypeNonInferrable.ts, 30, 3))
+
+    return new P((resolve) => {
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>resolve : Symbol(resolve, Decl(silentNeverAnonymousTypeNonInferrable.ts, 35, 18))
+
+        resolve;
+>resolve : Symbol(resolve, Decl(silentNeverAnonymousTypeNonInferrable.ts, 35, 18))
+
+    });
+});
+
+declare function foo4<T>(x: () => P<{ default: { prop: T } }>): T;
+>foo4 : Symbol(foo4, Decl(silentNeverAnonymousTypeNonInferrable.ts, 38, 3))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 40, 22))
+>x : Symbol(x, Decl(silentNeverAnonymousTypeNonInferrable.ts, 40, 25))
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>default : Symbol(default, Decl(silentNeverAnonymousTypeNonInferrable.ts, 40, 37))
+>prop : Symbol(prop, Decl(silentNeverAnonymousTypeNonInferrable.ts, 40, 48))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 40, 22))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 40, 22))
+
+const result4 = foo4(() => {
+>result4 : Symbol(result4, Decl(silentNeverAnonymousTypeNonInferrable.ts, 42, 5))
+>foo4 : Symbol(foo4, Decl(silentNeverAnonymousTypeNonInferrable.ts, 38, 3))
+
+    return new P((resolve) => {
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>resolve : Symbol(resolve, Decl(silentNeverAnonymousTypeNonInferrable.ts, 43, 18))
+
+        resolve;
+>resolve : Symbol(resolve, Decl(silentNeverAnonymousTypeNonInferrable.ts, 43, 18))
+
+    });
+});
+
+declare function foo5<T>(x: () => P<{ default: [T] }>): T;
+>foo5 : Symbol(foo5, Decl(silentNeverAnonymousTypeNonInferrable.ts, 46, 3))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 48, 22))
+>x : Symbol(x, Decl(silentNeverAnonymousTypeNonInferrable.ts, 48, 25))
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>default : Symbol(default, Decl(silentNeverAnonymousTypeNonInferrable.ts, 48, 37))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 48, 22))
+>T : Symbol(T, Decl(silentNeverAnonymousTypeNonInferrable.ts, 48, 22))
+
+const result5 = foo5(() => {
+>result5 : Symbol(result5, Decl(silentNeverAnonymousTypeNonInferrable.ts, 50, 5))
+>foo5 : Symbol(foo5, Decl(silentNeverAnonymousTypeNonInferrable.ts, 46, 3))
+
+    return new P((resolve) => {
+>P : Symbol(P, Decl(silentNeverAnonymousTypeNonInferrable.ts, 0, 0), Decl(silentNeverAnonymousTypeNonInferrable.ts, 12, 11))
+>resolve : Symbol(resolve, Decl(silentNeverAnonymousTypeNonInferrable.ts, 51, 18))
+
+        resolve;
+>resolve : Symbol(resolve, Decl(silentNeverAnonymousTypeNonInferrable.ts, 51, 18))
+
+    });
+});
+
