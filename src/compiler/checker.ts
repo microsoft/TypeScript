@@ -4069,7 +4069,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 let symbolFromVariable: Symbol | undefined;
                 // First check if module was specified with "export=". If so, get the member from the resolved type
-                if (moduleSymbol && moduleSymbol.exports && moduleSymbol.exports.get(InternalSymbolName.ExportEquals)) {
+                const isExportEquals = !!(moduleSymbol && moduleSymbol.exports && moduleSymbol.exports.get(InternalSymbolName.ExportEquals));
+                if (isExportEquals) {
                     symbolFromVariable = getPropertyOfType(getTypeOfSymbol(targetSymbol), nameText, /*skipObjectFunctionPropertyAugment*/ true);
                 }
                 else {
@@ -4077,6 +4078,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 // if symbolFromVariable is export - get its final target
                 symbolFromVariable = resolveSymbol(symbolFromVariable, dontResolveAlias);
+                // Check accessibility for named imports from CJS export= modules whose exports are class members
+                if (!dontResolveAlias && isExportEquals && symbolFromVariable && isImportSpecifier(specifier)) {
+                    checkPropertyAccessibilityAtLocation(specifier, /*isSuper*/ false, /*writing*/ false, getTypeOfSymbol(targetSymbol), symbolFromVariable, name);
+                }
 
                 let symbolFromModule = getExportOfModule(targetSymbol, nameText, specifier, dontResolveAlias);
                 if (symbolFromModule === undefined && nameText === InternalSymbolName.Default) {
