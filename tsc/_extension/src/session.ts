@@ -10,8 +10,10 @@ import { TelemetryReporter } from "./telemetryReporting";
 import {
     getBuiltinExePath,
     getExe,
+    resolveTsdkPath,
     resolveTsdkPathToExe,
     useWorkspaceTsdkStorageKey,
+    workspaceConfigBase,
 } from "./util";
 
 /**
@@ -346,7 +348,7 @@ interface VersionQuickPickItem extends vscode.QuickPickItem {
 }
 
 interface DetectedVersion {
-    label: string;
+    folder: vscode.WorkspaceFolder;
     version: string;
     tsdkPath: string;
     exePath: string;
@@ -359,13 +361,42 @@ async function findWorkspaceNativePreviewPackages(): Promise<DetectedVersion[]> 
         const resolved = await resolveTsdkPathToExe(path.normalize(packagePath.fsPath));
         if (!resolved) continue;
         results.push({
-            label: folder.name,
+            folder,
             version: resolved?.version ?? "unknown",
             tsdkPath: path.normalize(packagePath.fsPath),
             exePath: resolved?.path ?? "",
         });
     }
     return results;
+}
+
+/**
+ * Compute the tsdk path to persist in workspace config. Uses a path relative
+ * to the workspace config base directory (the `.code-workspace` file's parent
+ * in multi-root, or the lone workspace folder in single-root). Falls back to
+ * the absolute path if there is no workspace.
+ */
+function tsdkPathForConfig(detected: DetectedVersion): string {
+    const base = workspaceConfigBase();
+    if (!base) {
+        return detected.tsdkPath;
+    }
+    return path.relative(base.fsPath, detected.tsdkPath);
+}
+
+/**
+ * Update the tsdk config to point at the detected version, but only if the
+ * existing value doesn't already resolve to the same absolute path (avoiding
+ * unnecessary config churn from formatting differences like absolute vs
+ * relative, leading ./, etc.).
+ */
+async function updateTsdkConfig(config: vscode.WorkspaceConfiguration, detected: DetectedVersion): Promise<void> {
+    const currentValue = config.inspect<string>("tsdk")?.workspaceValue;
+    const newValue = tsdkPathForConfig(detected);
+    if (currentValue !== undefined && resolveTsdkPath(currentValue) === resolveTsdkPath(newValue)) {
+        return;
+    }
+    await config.update("tsdk", newValue, vscode.ConfigurationTarget.Workspace);
 }
 
 async function promptSelectVersion(context: vscode.ExtensionContext, client: Client, outputChannel: vscode.LogOutputChannel): Promise<void> {
@@ -383,7 +414,6 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
         detail: builtinExe.path,
         run: async () => {
             await context.workspaceState.update(useWorkspaceTsdkStorageKey, false);
-            await config.update("tsdk", undefined, vscode.ConfigurationTarget.Workspace);
             outputChannel.appendLine("Switched to bundled tsgo version.");
         },
     });
@@ -391,14 +421,14 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
     // Workspace versions
     if (vscode.workspace.isTrusted) {
         for (const wsVersion of workspaceVersions) {
-            const isActive = currentExePath === wsVersion.tsdkPath;
+            const isActive = currentExePath === wsVersion.exePath;
             items.push({
                 label: (isActive ? "• " : "") + "Use Workspace Version",
                 description: wsVersion.version,
                 detail: wsVersion.tsdkPath,
                 run: async () => {
                     await context.workspaceState.update(useWorkspaceTsdkStorageKey, true);
-                    await config.update("tsdk", wsVersion.tsdkPath, vscode.ConfigurationTarget.Workspace);
+                    await updateTsdkConfig(config, wsVersion);
                     outputChannel.appendLine(`Switched to workspace tsgo version (${wsVersion.version}).`);
                 },
             });
@@ -457,9 +487,9 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
 }
 
 /**
- * If the workspace has `@typescript/native-preview` installed and the user
- * hasn't already opted in or dismissed the prompt, ask whether they'd like
- * to use the workspace version.
+ * If the workspace has a tsdk setting pending consent, or has
+ * `@typescript/native-preview` installed in node_modules, prompt the user
+ * to allow using it.
  */
 export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext): Promise<void> {
     if (!vscode.workspace.isTrusted) return;
@@ -470,30 +500,63 @@ export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext
     const suppressKey = "typescript.native-preview.suppressPromptWorkspaceTsdk";
     if (context.workspaceState.get<boolean>(suppressKey, false)) return;
 
-    const workspaceVersions = await findWorkspaceNativePreviewPackages();
-    if (workspaceVersions.length === 0) return;
+    const config = vscode.workspace.getConfiguration("typescript.native-preview");
+    const tsdkInspection = config.inspect<string>("tsdk");
+    const workspaceTsdk = tsdkInspection?.workspaceValue;
 
-    const wsVersion = workspaceVersions[0];
-    const allow = "Allow";
-    const dismiss = "Dismiss";
-    const suppress = "Never in this Workspace";
+    if (workspaceTsdk !== undefined) {
+        // The workspace config already specifies a tsdk location, but the
+        // user hasn't consented to using it. Just need their approval.
+        const resolved = await resolveTsdkPathToExe(workspaceTsdk);
+        if (!resolved) return;
 
-    const result = await vscode.window.showInformationMessage(
-        `This workspace contains a TypeScript Native Preview version (${wsVersion.version}). Would you like to use the workspace version?`,
-        allow,
-        dismiss,
-        suppress,
-    );
+        const allow = "Allow";
+        const dismiss = "Dismiss";
+        const suppress = "Never in this Workspace";
 
-    if (result === allow) {
-        if (!vscode.workspace.isTrusted) return;
-        await context.workspaceState.update(useWorkspaceTsdkStorageKey, true);
-        const config = vscode.workspace.getConfiguration("typescript.native-preview");
-        await config.update("tsdk", wsVersion.tsdkPath, vscode.ConfigurationTarget.Workspace);
-        await vscode.commands.executeCommand("typescript.native-preview.restart");
+        const result = await vscode.window.showInformationMessage(
+            `This workspace has a TypeScript Native Preview tsdk configured (${resolved.version}). Would you like to use it?`,
+            allow,
+            dismiss,
+            suppress,
+        );
+
+        if (result === allow) {
+            if (!vscode.workspace.isTrusted) return;
+            await context.workspaceState.update(useWorkspaceTsdkStorageKey, true);
+            await vscode.commands.executeCommand("typescript.native-preview.restart");
+        }
+        else if (result === suppress) {
+            await context.workspaceState.update(suppressKey, true);
+        }
     }
-    else if (result === suppress) {
-        await context.workspaceState.update(suppressKey, true);
+    else {
+        // No workspace tsdk config, but check if native-preview is installed
+        // in the workspace's node_modules.
+        const workspaceVersions = await findWorkspaceNativePreviewPackages();
+        if (workspaceVersions.length === 0) return;
+
+        const wsVersion = workspaceVersions[0];
+        const allow = "Use Workspace Version";
+        const dismiss = "Dismiss";
+        const suppress = "Never in this Workspace";
+
+        const result = await vscode.window.showInformationMessage(
+            `This workspace has TypeScript Native Preview installed (${wsVersion.version}). Would you like to use it?`,
+            allow,
+            dismiss,
+            suppress,
+        );
+
+        if (result === allow) {
+            if (!vscode.workspace.isTrusted) return;
+            await context.workspaceState.update(useWorkspaceTsdkStorageKey, true);
+            await updateTsdkConfig(config, wsVersion);
+            await vscode.commands.executeCommand("typescript.native-preview.restart");
+        }
+        else if (result === suppress) {
+            await context.workspaceState.update(suppressKey, true);
+        }
     }
 }
 

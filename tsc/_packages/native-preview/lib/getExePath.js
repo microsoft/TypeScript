@@ -3,6 +3,7 @@ import module from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+// NOTE: Keep VS Code extension's resolveTsdkPathToExe in sync with this function.
 export default function getExePath() {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
     const normalizedDirname = __dirname.replace(/\\/g, "/");

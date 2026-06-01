@@ -53,17 +53,46 @@ export async function getBuiltinExePath(context: vscode.ExtensionContext): Promi
     };
 }
 
+/**
+ * Returns the base directory for resolving relative paths in workspace config.
+ * - Multi-root workspace: the directory containing the `.code-workspace` file.
+ * - Single-root workspace: the lone workspace folder.
+ * - No workspace: undefined.
+ */
+export function workspaceConfigBase(): vscode.Uri | undefined {
+    const wsFile = vscode.workspace.workspaceFile;
+    if (wsFile && wsFile.scheme === "file") {
+        return vscode.Uri.file(path.dirname(wsFile.fsPath));
+    }
+    if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0) {
+        return vscode.workspace.workspaceFolders[0].uri;
+    }
+    return undefined;
+}
+
 function workspaceResolve(relativePath: string): vscode.Uri {
     if (path.isAbsolute(relativePath)) {
         return vscode.Uri.file(relativePath);
     }
-    if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0) {
-        const workspaceFolder = vscode.workspace.workspaceFolders[0];
-        return vscode.Uri.joinPath(workspaceFolder.uri, relativePath);
+    const base = workspaceConfigBase();
+    if (base) {
+        return vscode.Uri.joinPath(base, relativePath);
     }
     return vscode.Uri.file(relativePath);
 }
 
+/**
+ * Memento used to control whether the user has opted into using a tsdk location defined
+ * in workspace settings. This is *not* a trust boundary - workspace trust is required
+ * before the extension will prompt to set this memento to true. This setting is here to
+ * provide users a way to opt out of using the workspace-provided tsdk without changing
+ * committed workspace settings, e.g. when the workspace tsdk is very outdated or the user
+ * is trialing a nightly TS version. Since the stored value is only a boolean, it does not
+ * protect against executing a different tsdk than the one the user originally opted into
+ * if the workspace settings or node_modules content changes - that's why workspace trust
+ * is always required, and why the prompts that set this value should not be interpreted
+ * as indicating trust for a specific tsdk installation.
+ */
 export const useWorkspaceTsdkStorageKey = "typescript.native-preview.useWorkspaceTsdk";
 
 export async function getExe(context: vscode.ExtensionContext): Promise<ExeInfo> {
@@ -72,11 +101,11 @@ export async function getExe(context: vscode.ExtensionContext): Promise<ExeInfo>
     let tsdk = config.get<string>("tsdk");
     const exeInspection = config.inspect<string>("tsdk");
 
-    // If tsdk is set at the workspace level, require the user to have
-    // explicitly opted in via the version picker (stored in workspace state).
-    if (tsdk && (exeInspection?.workspaceValue !== undefined || exeInspection?.workspaceFolderValue !== undefined)) {
-        const useWorkspaceTsdk = context.workspaceState.get<boolean>(useWorkspaceTsdkStorageKey, false);
-        if (!useWorkspaceTsdk) {
+    // If tsdk is set at the workspace level, require both workspace trust and
+    // explicit user opt-in. Workspace trust can be revoked after the memento is
+    // set, so we must always check both.
+    if (tsdk && exeInspection?.workspaceValue !== undefined) {
+        if (!vscode.workspace.isTrusted || !context.workspaceState.get<boolean>(useWorkspaceTsdkStorageKey, false)) {
             tsdk = exeInspection.globalValue;
         }
     }
@@ -91,23 +120,41 @@ export async function getExe(context: vscode.ExtensionContext): Promise<ExeInfo>
     return getBuiltinExePath(context);
 }
 
+/**
+ * Resolve a tsdk path (which may be relative) to a normalized absolute path.
+ */
+export function resolveTsdkPath(tsdkPath: string): string {
+    return path.normalize(workspaceResolve(tsdkPath).fsPath);
+}
+
 export async function resolveTsdkPathToExe(tsdkPath: string): Promise<{ path: string; version: string; } | undefined> {
-    if (tsdkPath.endsWith("/@typescript/native-preview")) {
+    if (tsdkPath.endsWith("/@typescript/native-preview") || tsdkPath.endsWith("\\@typescript\\native-preview")) {
         try {
             const packagePath = workspaceResolve(tsdkPath);
             const packageJsonPath = vscode.Uri.joinPath(packagePath, "package.json");
             const packageJson = JSON.parse(await vscode.workspace.fs.readFile(packageJsonPath).then(buffer => buffer.toString()));
-            const getExePath = (await import(vscode.Uri.joinPath(packagePath, "lib", "getExePath.js").toString())).default;
-            return { path: getExePath(), version: packageJson.version };
+            // NOTE: Keep in sync with _packages/native-preview/lib/getExePath.js.
+            const exeName = `tsgo${process.platform === "win32" ? ".exe" : ""}`;
+            const platformPackage = `native-preview-${process.platform}-${process.arch}`;
+            const exePath = vscode.Uri.joinPath(packagePath, "..", platformPackage, "lib", exeName);
+            await vscode.workspace.fs.stat(exePath);
+            return { path: withLongPathPrefix(exePath.fsPath), version: packageJson.version };
         }
         catch {}
     }
     try {
         const exePath = workspaceResolve(path.join(tsdkPath, `tsgo${process.platform === "win32" ? ".exe" : ""}`));
         await vscode.workspace.fs.stat(exePath);
-        return { path: exePath.fsPath, version: "(local)" };
+        return { path: withLongPathPrefix(exePath.fsPath), version: "(local)" };
     }
     catch {}
+}
+
+function withLongPathPrefix(exePath: string): string {
+    if (process.platform === "win32" && exePath.length >= 248 && !exePath.startsWith("\\\\?\\")) {
+        return "\\\\?\\" + exePath;
+    }
+    return exePath;
 }
 
 export function getLanguageForUri(uri: vscode.Uri): string | undefined {

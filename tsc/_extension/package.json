@@ -63,6 +63,7 @@
                     },
                     "typescript.native-preview.tsdk": {
                         "type": "string",
+                        "scope": "window",
                         "description": "Path to the @typescript/native-preview package or tsgo binary directory. If not specified, the extension will look for it in the default location.",
                         "tags": [
                             "experimental"
