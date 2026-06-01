@@ -1,0 +1,22 @@
+main.ts(1,13): error TS2445: Property 'b' is protected and only accessible within class 'X' and its subclasses.
+main.ts(1,16): error TS2341: Property 'c' is private and only accessible within class 'X'.
+main.ts(1,25): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
+
+
+==== module.ts (0 errors) ====
+    class X {
+        public static a = 1;
+        protected static b = 2;
+        private static c = 3;
+    }
+    export = X;
+    
+==== main.ts (3 errors) ====
+    import { a, b, c } from "./module";
+                ~
+!!! error TS2445: Property 'b' is protected and only accessible within class 'X' and its subclasses.
+                   ~
+!!! error TS2341: Property 'c' is private and only accessible within class 'X'.
+                            ~~~~~~~~~~
+!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
+    

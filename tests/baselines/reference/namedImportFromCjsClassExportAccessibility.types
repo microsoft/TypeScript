@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/namedImportFromCjsClassExportAccessibility.ts] ////
+
+=== module.ts ===
+class X {
+>X : X
+>  : ^
+
+    public static a = 1;
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    protected static b = 2;
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+    private static c = 3;
+>c : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+}
+export = X;
+>X : X
+>  : ^
+
+=== main.ts ===
+import { a, b, c } from "./module";
+>a : number
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>c : number
+>  : ^^^^^^
+

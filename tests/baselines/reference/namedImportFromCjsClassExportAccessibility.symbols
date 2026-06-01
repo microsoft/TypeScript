@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/namedImportFromCjsClassExportAccessibility.ts] ////
+
+=== module.ts ===
+class X {
+>X : Symbol(X, Decl(module.ts, 0, 0))
+
+    public static a = 1;
+>a : Symbol(X.a, Decl(module.ts, 0, 9))
+
+    protected static b = 2;
+>b : Symbol(X.b, Decl(module.ts, 1, 24))
+
+    private static c = 3;
+>c : Symbol(X.c, Decl(module.ts, 2, 27))
+}
+export = X;
+>X : Symbol(X, Decl(module.ts, 0, 0))
+
+=== main.ts ===
+import { a, b, c } from "./module";
+>a : Symbol(a, Decl(main.ts, 0, 8))
+>b : Symbol(b, Decl(main.ts, 0, 11))
+>c : Symbol(c, Decl(main.ts, 0, 14))
+
