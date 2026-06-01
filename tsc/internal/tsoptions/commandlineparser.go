@@ -217,7 +217,7 @@ func tryReadFile(fileName string, readFile func(string) (string, bool), errors [
 	// this function adds a compiler diagnostic if the file cannot be read
 	text, e := readFile(fileName)
 
-	if !e || text == "" {
+	if !e {
 		// !!! Divergence: the returned error will not give a useful message
 		// errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Cannot_read_file_0_Colon_1, *e));
 		text = ""
