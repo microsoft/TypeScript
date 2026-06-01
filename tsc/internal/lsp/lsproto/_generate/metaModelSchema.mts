@@ -403,12 +403,6 @@ export type Structure = {
 	 * the property contains the deprecation message.
 	 */
 	deprecated?: string;
-
-	/**
-	 * If set, adds a _vs_type field with this value as a type discriminator
-	 * for VS client-side deserialization.
-	 */
-	vsTypeDiscriminator?: string;
 };
 
 /**

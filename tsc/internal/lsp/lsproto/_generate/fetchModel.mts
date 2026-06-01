@@ -36,10 +36,4 @@ metaModelSchema = metaModelSchema.replace(
     `$1\n\n\t/**\n\t * Whether this property uses omitzero without being a pointer.\n\t * Custom extension for special value types.\n\t */\n\tomitzeroValue?: boolean;\n}`,
 );
 
-// Patch the schema to add vsTypeDiscriminator property to Structure type
-metaModelSchema = metaModelSchema.replace(
-    /(export type Structure = \{[\s\S]*?\tdeprecated\?: string;)\n}/m,
-    `$1\n\n\t/**\n\t * If set, adds a _vs_type field with this value as a type discriminator\n\t * for VS client-side deserialization.\n\t */\n\tvsTypeDiscriminator?: string;\n}`,
-);
-
 fs.writeFileSync(metaModelSchemaPath, metaModelSchema);

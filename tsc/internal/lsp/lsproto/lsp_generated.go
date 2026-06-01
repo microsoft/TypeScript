@@ -29742,7 +29742,7 @@ type ClassifiedTextRun struct {
 	Style int32 `json:"Style,omitzero"`
 
 	// VS type discriminator required by ObjectContentConverter for deserialization.
-	VSType string `json:"_vs_type"`
+	VSType StringLiteralClassifiedTextRun `json:"_vs_type"`
 }
 
 var _ json.UnmarshalerFrom = (*ClassifiedTextRun)(nil)
@@ -29751,6 +29751,7 @@ func (s *ClassifiedTextRun) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingClassificationTypeName uint = 1 << iota
 		missingText
+		missingVSType
 		_missingLast
 	)
 	missing := _missingLast - 1
@@ -29789,6 +29790,11 @@ func (s *ClassifiedTextRun) UnmarshalJSONFrom(dec *json.Decoder) error {
 			if err := json.UnmarshalDecode(dec, &s.Style); err != nil {
 				return err
 			}
+		case `"_vs_type"`:
+			missing &^= missingVSType
+			if err := json.UnmarshalDecode(dec, &s.VSType); err != nil {
+				return err
+			}
 		default:
 			if err := dec.SkipValue(); err != nil {
 				return err
@@ -29808,6 +29814,9 @@ func (s *ClassifiedTextRun) UnmarshalJSONFrom(dec *json.Decoder) error {
 		if missing&missingText != 0 {
 			missingProps = append(missingProps, "Text")
 		}
+		if missing&missingVSType != 0 {
+			missingProps = append(missingProps, "_vs_type")
+		}
 		return errMissing(missingProps)
 	}
 
@@ -29820,7 +29829,7 @@ type ClassifiedTextElement struct {
 	Runs []*ClassifiedTextRun `json:"Runs"`
 
 	// VS type discriminator required by ObjectContentConverter for deserialization.
-	VSType string `json:"_vs_type"`
+	VSType StringLiteralClassifiedTextElement `json:"_vs_type"`
 }
 
 var _ json.UnmarshalerFrom = (*ClassifiedTextElement)(nil)
@@ -29828,6 +29837,7 @@ var _ json.UnmarshalerFrom = (*ClassifiedTextElement)(nil)
 func (s *ClassifiedTextElement) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRuns uint = 1 << iota
+		missingVSType
 		_missingLast
 	)
 	missing := _missingLast - 1
@@ -29853,6 +29863,11 @@ func (s *ClassifiedTextElement) UnmarshalJSONFrom(dec *json.Decoder) error {
 			if err := json.UnmarshalDecode(dec, &s.Runs); err != nil {
 				return err
 			}
+		case `"_vs_type"`:
+			missing &^= missingVSType
+			if err := json.UnmarshalDecode(dec, &s.VSType); err != nil {
+				return err
+			}
 		default:
 			if err := dec.SkipValue(); err != nil {
 				return err
@@ -29868,6 +29883,9 @@ func (s *ClassifiedTextElement) UnmarshalJSONFrom(dec *json.Decoder) error {
 		var missingProps []string
 		if missing&missingRuns != 0 {
 			missingProps = append(missingProps, "Runs")
+		}
+		if missing&missingVSType != 0 {
+			missingProps = append(missingProps, "_vs_type")
 		}
 		return errMissing(missingProps)
 	}
@@ -36566,6 +36584,50 @@ func (o *StringLiteralLanguageServerProjectInfo) UnmarshalJSONFrom(dec *json.Dec
 	}
 	if string(v) != `"languageServer.projectInfo"` {
 		return errLiteralMismatch("StringLiteralLanguageServerProjectInfo", `"languageServer.projectInfo"`, v)
+	}
+	return nil
+}
+
+// StringLiteralClassifiedTextRun is a literal type for "ClassifiedTextRun"
+type StringLiteralClassifiedTextRun struct{}
+
+var _ json.MarshalerTo = StringLiteralClassifiedTextRun{}
+
+func (o StringLiteralClassifiedTextRun) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"ClassifiedTextRun"`))
+}
+
+var _ json.UnmarshalerFrom = &StringLiteralClassifiedTextRun{}
+
+func (o *StringLiteralClassifiedTextRun) UnmarshalJSONFrom(dec *json.Decoder) error {
+	v, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	if string(v) != `"ClassifiedTextRun"` {
+		return errLiteralMismatch("StringLiteralClassifiedTextRun", `"ClassifiedTextRun"`, v)
+	}
+	return nil
+}
+
+// StringLiteralClassifiedTextElement is a literal type for "ClassifiedTextElement"
+type StringLiteralClassifiedTextElement struct{}
+
+var _ json.MarshalerTo = StringLiteralClassifiedTextElement{}
+
+func (o StringLiteralClassifiedTextElement) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"ClassifiedTextElement"`))
+}
+
+var _ json.UnmarshalerFrom = &StringLiteralClassifiedTextElement{}
+
+func (o *StringLiteralClassifiedTextElement) UnmarshalJSONFrom(dec *json.Decoder) error {
+	v, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	if string(v) != `"ClassifiedTextElement"` {
+		return errLiteralMismatch("StringLiteralClassifiedTextElement", `"ClassifiedTextElement"`, v)
 	}
 	return nil
 }

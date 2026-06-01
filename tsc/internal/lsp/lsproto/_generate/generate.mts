@@ -536,9 +536,13 @@ const customStructures: Structure[] = [
                 omitzeroValue: true,
                 documentation: "The style of this text run.",
             },
+            {
+                name: "_vs_type",
+                type: { kind: "stringLiteral", value: "ClassifiedTextRun" },
+                documentation: "VS type discriminator required by ObjectContentConverter for deserialization.",
+            },
         ],
         documentation: "A classified text run with text and classification type, used for colorized display in VS.",
-        vsTypeDiscriminator: "ClassifiedTextRun",
     },
     {
         name: "ClassifiedTextElement",
@@ -548,9 +552,13 @@ const customStructures: Structure[] = [
                 type: { kind: "array", element: { kind: "reference", name: "ClassifiedTextRun" } },
                 documentation: "The classified text runs that make up this element.",
             },
+            {
+                name: "_vs_type",
+                type: { kind: "stringLiteral", value: "ClassifiedTextElement" },
+                documentation: "VS type discriminator required by ObjectContentConverter for deserialization.",
+            },
         ],
         documentation: "A classified text element containing an array of classified text runs, used for colorized labels in VS.",
-        vsTypeDiscriminator: "ClassifiedTextElement",
     },
 ];
 
@@ -2222,13 +2230,6 @@ function generateCode() {
                 if (includeDocumentation) {
                     writeLine("");
                 }
-            }
-
-            // Special: add _vs_type discriminator field for VS ObjectContentConverter
-            if ((structure as any).vsTypeDiscriminator) {
-                writeLine("");
-                writeLine(`\t// VS type discriminator required by ObjectContentConverter for deserialization.`);
-                writeLine(`\tVSType string \`json:"_vs_type"\``);
             }
 
             // Special: add RegisterOptions field to Registration

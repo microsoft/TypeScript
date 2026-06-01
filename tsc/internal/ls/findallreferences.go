@@ -797,8 +797,7 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 			node:     node,
 			location: loc,
 			displayText: &lsproto.ClassifiedTextElement{
-				Runs:   []*lsproto.ClassifiedTextRun{{Text: node.Text(), ClassificationTypeName: string(lsproto.ClassificationTypeNameText), VSType: "ClassifiedTextRun"}},
-				VSType: "ClassifiedTextElement",
+				Runs: []*lsproto.ClassifiedTextRun{{Text: node.Text(), ClassificationTypeName: string(lsproto.ClassificationTypeNameText)}},
 			},
 		}
 
@@ -813,8 +812,7 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 			node:     node,
 			location: loc,
 			displayText: &lsproto.ClassifiedTextElement{
-				Runs:   []*lsproto.ClassifiedTextRun{{Text: name, ClassificationTypeName: string(lsproto.ClassificationTypeNameKeyword), VSType: "ClassifiedTextRun"}},
-				VSType: "ClassifiedTextElement",
+				Runs: []*lsproto.ClassifiedTextRun{{Text: name, ClassificationTypeName: string(lsproto.ClassificationTypeNameKeyword)}},
 			},
 		}
 
@@ -845,8 +843,7 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 			node:     node,
 			location: loc,
 			displayText: &lsproto.ClassifiedTextElement{
-				Runs:   []*lsproto.ClassifiedTextRun{{Text: node.Text(), ClassificationTypeName: string(lsproto.ClassificationTypeNameString), VSType: "ClassifiedTextRun"}},
-				VSType: "ClassifiedTextElement",
+				Runs: []*lsproto.ClassifiedTextRun{{Text: node.Text(), ClassificationTypeName: string(lsproto.ClassificationTypeNameString)}},
 			},
 		}
 
@@ -860,8 +857,7 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 			node:     node,
 			location: loc,
 			displayText: &lsproto.ClassifiedTextElement{
-				Runs:   []*lsproto.ClassifiedTextRun{{Text: `"` + def.tripleSlashFileRef.reference.FileName + `"`, ClassificationTypeName: string(lsproto.ClassificationTypeNameString), VSType: "ClassifiedTextRun"}},
-				VSType: "ClassifiedTextElement",
+				Runs: []*lsproto.ClassifiedTextRun{{Text: `"` + def.tripleSlashFileRef.reference.FileName + `"`, ClassificationTypeName: string(lsproto.ClassificationTypeNameString)}},
 			},
 		}
 
@@ -881,13 +877,12 @@ func (l *LanguageService) getDefinitionKindAndDisplayParts(ctx context.Context, 
 	info := getQuickInfoAndDeclarationAtLocation(c, symbol, originalNode, nil, vsCapability, meaning)
 
 	if vsCapability {
-		return &lsproto.ClassifiedTextElement{Runs: info.displayParts.GetRuns(), VSType: "ClassifiedTextElement"}
+		return &lsproto.ClassifiedTextElement{Runs: info.displayParts.GetRuns()}
 	}
 	// Fallback: single unclassified run with the full text
 	text := info.displayParts.String()
 	return &lsproto.ClassifiedTextElement{
-		Runs:   []*lsproto.ClassifiedTextRun{{Text: text, ClassificationTypeName: string(lsproto.ClassificationTypeNameText), VSType: "ClassifiedTextRun"}},
-		VSType: "ClassifiedTextElement",
+		Runs: []*lsproto.ClassifiedTextRun{{Text: text, ClassificationTypeName: string(lsproto.ClassificationTypeNameText)}},
 	}
 }
 
