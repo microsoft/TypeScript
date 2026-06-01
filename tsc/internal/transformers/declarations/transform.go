@@ -2241,6 +2241,10 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		return nil
 	}
 
+	if tx.shouldStripInternal(declaration) {
+		return nil
+	}
+
 	if ast.IsVariableDeclaration(declaration) && declaration.Type() != nil {
 		return nil
 	}

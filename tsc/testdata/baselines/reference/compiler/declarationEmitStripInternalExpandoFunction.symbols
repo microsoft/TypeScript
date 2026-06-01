@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/declarationEmitStripInternalExpandoFunction.ts] ////
+
+=== declarationEmitStripInternalExpandoFunction.ts ===
+/** @internal */
+export function internalFn(): string {
+>internalFn : Symbol(internalFn, Decl(declarationEmitStripInternalExpandoFunction.ts, 0, 0))
+
+    return "hello";
+}
+internalFn.debugFlag = true;
+>internalFn.debugFlag : Symbol(internalFn.debugFlag, Decl(declarationEmitStripInternalExpandoFunction.ts, 3, 1))
+>internalFn : Symbol(internalFn, Decl(declarationEmitStripInternalExpandoFunction.ts, 0, 0))
+>debugFlag : Symbol(internalFn.debugFlag, Decl(declarationEmitStripInternalExpandoFunction.ts, 3, 1))
+
+export function publicFn(): void {}
+>publicFn : Symbol(publicFn, Decl(declarationEmitStripInternalExpandoFunction.ts, 4, 28))
+
+publicFn.metadata = "public";
+>publicFn.metadata : Symbol(publicFn.metadata, Decl(declarationEmitStripInternalExpandoFunction.ts, 6, 35))
+>publicFn : Symbol(publicFn, Decl(declarationEmitStripInternalExpandoFunction.ts, 4, 28))
+>metadata : Symbol(publicFn.metadata, Decl(declarationEmitStripInternalExpandoFunction.ts, 6, 35))
+
