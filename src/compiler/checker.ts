@@ -11512,6 +11512,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return -1;
     }
 
+    // Checks the entire resolution stack (including entries hidden by resolutionStart) for a symbol.
+    // Used to prevent false circularity errors when a contextual type lookup would attempt to resolve
+    // a symbol whose type is already being resolved in an outer scope.
+    function isSymbolTypeResolutionInProgress(symbol: Symbol): boolean {
+        for (let i = resolutionTargets.length - 1; i >= 0; i--) {
+            if (resolutionPropertyNames[i] === TypeSystemPropertyName.Type && resolutionTargets[i] === symbol) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function resolutionTargetHasProperty(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
         switch (propertyName) {
             case TypeSystemPropertyName.Type:
@@ -32450,6 +32462,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeOfConcretePropertyOfContextualType(type: Type, name: __String) {
         const prop = getPropertyOfType(type, name);
         if (!prop || isCircularMappedProperty(prop)) {
+            return;
+        }
+        // If the property's type resolution is already in progress (possibly hidden by resolutionStart
+        // due to an enclosing getResolvedSignature call), avoid calling getTypeOfSymbol. Doing so would
+        // cause a false circularity error for static fields of class expressions passed to generic functions
+        // (see GH#62552).
+        if (isSymbolTypeResolutionInProgress(prop)) {
             return;
         }
         return removeMissingType(getTypeOfSymbol(prop), !!(prop.flags & SymbolFlags.Optional));

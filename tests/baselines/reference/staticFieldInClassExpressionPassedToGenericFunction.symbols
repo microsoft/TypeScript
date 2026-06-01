@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/staticFieldInClassExpressionPassedToGenericFunction.ts] ////
+
+=== staticFieldInClassExpressionPassedToGenericFunction.ts ===
+// Repro from #62552: static fields in class expressions passed to generic functions
+// should not incorrectly report TS7022 (implicitly has type 'any' because it does
+// not have a type annotation and is referenced directly or indirectly in its own initializer)
+
+function id<T>(x: T): T {
+>id : Symbol(id, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 0, 0))
+>T : Symbol(T, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 4, 12))
+>x : Symbol(x, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 4, 15))
+>T : Symbol(T, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 4, 12))
+>T : Symbol(T, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 4, 12))
+
+    return x;
+>x : Symbol(x, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 4, 15))
+}
+
+// Should not error (was incorrectly reporting TS7022 on 'foo')
+const Foo = id(class {
+>Foo : Symbol(Foo, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 9, 5))
+>id : Symbol(id, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 0, 0))
+
+    static readonly foo = id(42);
+>foo : Symbol((Anonymous class).foo, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 9, 22))
+>id : Symbol(id, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 0, 0))
+
+});
+
+// Confirm the inferred type is correct
+const Foo2 = id(class {
+>Foo2 : Symbol(Foo2, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 14, 5))
+>id : Symbol(id, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 0, 0))
+
+    static count = 0;
+>count : Symbol((Anonymous class).count, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 14, 23))
+
+    static name2 = "test";
+>name2 : Symbol((Anonymous class).name2, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 15, 21))
+
+});
+
+// Variants with multiple static fields
+const Foo3 = id(class {
+>Foo3 : Symbol(Foo3, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 20, 5))
+>id : Symbol(id, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 0, 0))
+
+    static a = 1;
+>a : Symbol((Anonymous class).a, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 20, 23))
+
+    static b = "hello";
+>b : Symbol((Anonymous class).b, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 21, 17))
+
+    static c = true;
+>c : Symbol((Anonymous class).c, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 22, 23))
+
+});
+
+// No error without generic wrapper
+const Ok = class {
+>Ok : Symbol(Ok, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 27, 5))
+
+    static readonly foo = id(42);
+>foo : Symbol(Ok.foo, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 27, 18))
+>id : Symbol(id, Decl(staticFieldInClassExpressionPassedToGenericFunction.ts, 0, 0))
+
+};
+
+// Static field referencing another static field of the same class (real circularity, should still error)
+// (This is a true self-reference, not the false positive from #62552)
+

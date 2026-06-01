@@ -1,0 +1,119 @@
+//// [tests/cases/compiler/staticFieldInClassExpressionPassedToGenericFunction.ts] ////
+
+=== staticFieldInClassExpressionPassedToGenericFunction.ts ===
+// Repro from #62552: static fields in class expressions passed to generic functions
+// should not incorrectly report TS7022 (implicitly has type 'any' because it does
+// not have a type annotation and is referenced directly or indirectly in its own initializer)
+
+function id<T>(x: T): T {
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>x : T
+>  : ^
+
+    return x;
+>x : T
+>  : ^
+}
+
+// Should not error (was incorrectly reporting TS7022 on 'foo')
+const Foo = id(class {
+>Foo : typeof (Anonymous class)
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>id(class {    static readonly foo = id(42);}) : typeof (Anonymous class)
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>class {    static readonly foo = id(42);} : typeof (Anonymous class)
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static readonly foo = id(42);
+>foo : 42
+>    : ^^
+>id(42) : 42
+>       : ^^
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>42 : 42
+>   : ^^
+
+});
+
+// Confirm the inferred type is correct
+const Foo2 = id(class {
+>Foo2 : typeof (Anonymous class)
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>id(class {    static count = 0;    static name2 = "test";}) : typeof (Anonymous class)
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>class {    static count = 0;    static name2 = "test";} : typeof (Anonymous class)
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static count = 0;
+>count : number
+>      : ^^^^^^
+>0 : 0
+>  : ^
+
+    static name2 = "test";
+>name2 : string
+>      : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+
+});
+
+// Variants with multiple static fields
+const Foo3 = id(class {
+>Foo3 : typeof (Anonymous class)
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>id(class {    static a = 1;    static b = "hello";    static c = true;}) : typeof (Anonymous class)
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>class {    static a = 1;    static b = "hello";    static c = true;} : typeof (Anonymous class)
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    static a = 1;
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    static b = "hello";
+>b : string
+>  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+    static c = true;
+>c : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+});
+
+// No error without generic wrapper
+const Ok = class {
+>Ok : typeof Ok
+>   : ^^^^^^^^^
+>class {    static readonly foo = id(42);} : typeof Ok
+>                                          : ^^^^^^^^^
+
+    static readonly foo = id(42);
+>foo : 42
+>    : ^^
+>id(42) : 42
+>       : ^^
+>id : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
+>42 : 42
+>   : ^^
+
+};
+
+// Static field referencing another static field of the same class (real circularity, should still error)
+// (This is a true self-reference, not the false positive from #62552)
+
