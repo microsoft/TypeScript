@@ -96,6 +96,16 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 		ast.KindIndexSignature:
 		return nil
 
+	case ast.KindInKeyword, ast.KindOutKeyword:
+		// TypeScript `in`/`out` variance modifiers are elided. These keywords are only
+		// meaningful as modifiers on type parameters (which are themselves elided), but they may
+		// appear as a grammar error on other declarations and must not leak into the emitted JS.
+		// The `in` binary operator shares this token kind, so only elide when used as a modifier.
+		if tx.parentNode == nil || !ast.IsBinaryExpression(tx.parentNode) {
+			return nil
+		}
+		return tx.Visitor().VisitEachChild(node)
+
 	case ast.KindJSImportDeclaration:
 		// reparsed commonjs are elided
 		return nil

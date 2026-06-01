@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/varianceModifiersOnClassMembers.ts] ////
+
+=== varianceModifiersOnClassMembers.ts ===
+// https://github.com/microsoft/typescript-go/issues/4123
+
+class C {
+>C : Symbol(C, Decl(varianceModifiersOnClassMembers.ts, 0, 0))
+
+  in x = 1;
+>x : Symbol(C.x, Decl(varianceModifiersOnClassMembers.ts, 2, 9))
+
+  out y = 2;
+>y : Symbol(C.y, Decl(varianceModifiersOnClassMembers.ts, 3, 11))
+}
+
+const isIn = "x" in { x: 1 };
+>isIn : Symbol(isIn, Decl(varianceModifiersOnClassMembers.ts, 7, 5))
+>x : Symbol(x, Decl(varianceModifiersOnClassMembers.ts, 7, 21))
+
+for (const k in { x: 1 }) {
+>k : Symbol(k, Decl(varianceModifiersOnClassMembers.ts, 8, 10))
+>x : Symbol(x, Decl(varianceModifiersOnClassMembers.ts, 8, 17))
+
+  console.log(k);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>k : Symbol(k, Decl(varianceModifiersOnClassMembers.ts, 8, 10))
+}
+
