@@ -44,7 +44,7 @@ func (r *serverProgressReporter) localize(msg *diagnostics.Message, args ...any)
 }
 
 func (r *serverProgressReporter) createWorkDoneProgress(token string) {
-	_, _ = sendClientRequest(r.server.backgroundCtx, r.server, lsproto.WindowWorkDoneProgressCreateInfo, &lsproto.WorkDoneProgressCreateParams{
+	_ = sendClientRequestFireAndForget(r.server, lsproto.WindowWorkDoneProgressCreateInfo, &lsproto.WorkDoneProgressCreateParams{
 		Token: lsproto.IntegerOrString{String: &token},
 	})
 }
