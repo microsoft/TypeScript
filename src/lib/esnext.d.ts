@@ -5,6 +5,7 @@
 /// <reference lib="esnext.disposable" />
 /// <reference lib="esnext.array" />
 /// <reference lib="esnext.error" />
+/// <reference lib="esnext.math" />
 /// <reference lib="esnext.sharedmemory" />
 /// <reference lib="esnext.typedarrays" />
 /// <reference lib="esnext.temporal" />
