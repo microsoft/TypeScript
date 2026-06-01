@@ -20,15 +20,19 @@
 - * @returns {T[]}
 - */
 -declare function flatMap(): any;
-+type Call = () => any;
++type Oops = {
++    a: T;
++    b: T;
++};
++type Call = (x: T) => T;
  /**
   * @typedef Oops
   * @template T
-@@= skipped -39, +24 lines =@@
+@@= skipped -39, +28 lines =@@
          noooooo: string;
      };
  };
 -type Oops = any;
 -type Call = () => any;
-+declare function flatMap(): any;
-+declare function flatMap(): any;
++declare function flatMap(array: T[], iterable: (x: T) => U[]): U[];
++declare function flatMap(array: T[][]): T[];

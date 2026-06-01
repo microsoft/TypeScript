@@ -127,7 +127,7 @@ export declare class Processor<ParseTree extends Node | undefined = undefined, H
      * @returns {Processor<ParseTree, HeadTree, TailTree, CompileTree, CompileResult>}
      *   Current processor.
      */
-    use(preset?: string | null | undefined): Processor<ParseTree, HeadTree, TailTree, CompileTree, CompileResult>;
+    use<Parameters extends Array<unknown> = [], Input extends Node | string | undefined = undefined, Output = Input>(preset?: string | null | undefined): Processor<ParseTree, HeadTree, TailTree, CompileTree, CompileResult>;
     /**
      * @overload
      * @param {string | null | undefined} [preset]

@@ -55,10 +55,10 @@ const identity = x => x;
  * @returns {unknown[]}
  */
 function flatMap(array, iterable = identity) {
->flatMap : { <T, U>(array: T[], iterable: (x: T) => U[]): U[]; (array: T[][]): T[]; }
+>flatMap : { <T_1, U_1>(array: T_1[], iterable: (x: T_1) => U_1[]): U_1[]; <T_1, U_1>(array: T_1[][]): T_1[]; }
 >array : unknown[]
 >iterable : (x: unknown) => unknown
->identity : <T>(x: T) => T
+>identity : <T_1>(x: T_1) => T_1
 
   /** @type {unknown[]} */
   const result = [];

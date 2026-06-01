@@ -3,20 +3,24 @@
 @@= skipped -0, +0 lines =@@
 -error TS-1: Pre-emit (11) and post-emit (13) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 -templateInsideCallback.js(2,13): error TS8021: JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.
++templateInsideCallback.js(3,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
++templateInsideCallback.js(4,15): error TS2304: Cannot find name 'T'.
++templateInsideCallback.js(5,15): error TS2304: Cannot find name 'T'.
  templateInsideCallback.js(9,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
--templateInsideCallback.js(10,12): error TS2304: Cannot find name 'T'.
+ templateInsideCallback.js(10,12): error TS2304: Cannot find name 'T'.
++templateInsideCallback.js(11,14): error TS2304: Cannot find name 'T'.
  templateInsideCallback.js(15,11): error TS2315: Type 'Call' is not generic.
 +templateInsideCallback.js(15,16): error TS2304: Cannot find name 'T'.
  templateInsideCallback.js(17,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
  templateInsideCallback.js(23,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
-+templateInsideCallback.js(29,5): error TS2394: This overload signature is not compatible with its implementation signature.
-+templateInsideCallback.js(29,5): error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
  templateInsideCallback.js(30,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
--templateInsideCallback.js(32,12): error TS2304: Cannot find name 'T'.
--templateInsideCallback.js(33,16): error TS2304: Cannot find name 'T'.
-+templateInsideCallback.js(37,5): error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
++templateInsideCallback.js(31,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
+ templateInsideCallback.js(32,12): error TS2304: Cannot find name 'T'.
+ templateInsideCallback.js(33,16): error TS2304: Cannot find name 'T'.
++templateInsideCallback.js(33,22): error TS2304: Cannot find name 'U'.
++templateInsideCallback.js(34,14): error TS2304: Cannot find name 'U'.
  templateInsideCallback.js(38,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
--templateInsideCallback.js(39,12): error TS2304: Cannot find name 'T'.
+ templateInsideCallback.js(39,12): error TS2304: Cannot find name 'T'.
 -
 -
 -!!! error TS-1: Pre-emit (11) and post-emit (13) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
@@ -24,26 +28,35 @@
 -!!! related TS7012 templateInsideCallback.js:29:5: This overload implicitly returns the type 'any' because it lacks a return type annotation.
 -!!! related TS7012 templateInsideCallback.js:37:5: This overload implicitly returns the type 'any' because it lacks a return type annotation.
 -==== templateInsideCallback.js (11 errors) ====
++templateInsideCallback.js(40,14): error TS2304: Cannot find name 'T'.
 +
 +
-+==== templateInsideCallback.js (10 errors) ====
++==== templateInsideCallback.js (19 errors) ====
      /**
       * @typedef Oops
 -                ~~~~
 -!!! error TS8021: JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.
       * @template T
++        ~~~~~~~~
++!!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
       * @property {T} a
++                  ~
++!!! error TS2304: Cannot find name 'T'.
       * @property {T} b
-@@= skipped -30, +22 lines =@@
-         ~~~~~~~~
- !!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
-      * @param {T} x
--               ~
--!!! error TS2304: Cannot find name 'T'.
-      * @returns {T}
++                  ~
++!!! error TS2304: Cannot find name 'T'.
       */
      /**
-@@= skipped -9, +7 lines =@@
+      * @callback Call
+@@= skipped -33, +40 lines =@@
+                ~
+ !!! error TS2304: Cannot find name 'T'.
+      * @returns {T}
++                 ~
++!!! error TS2304: Cannot find name 'T'.
+      */
+     /**
+      * @template T
       * @type {Call<T>}
                ~~~~~~~
  !!! error TS2315: Type 'Call' is not generic.
@@ -52,37 +65,32 @@
       */
      const identity = x => x;
                       ~
-@@= skipped -18, +20 lines =@@
-     
-     /**
-      * @overload
-+        ~~~~~~~~
-+!!! error TS2394: This overload signature is not compatible with its implementation signature.
-+!!! related TS2750 templateInsideCallback.js:47:10: The implementation signature is declared here.
-+        ~~~~~~~~
-+!!! error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
-      * @template T
+@@= skipped -28, +32 lines =@@
          ~~~~~~~~
  !!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
       * @template U
++        ~~~~~~~~
++!!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
       * @param {T[]} array
--               ~
--!!! error TS2304: Cannot find name 'T'.
+                ~
+ !!! error TS2304: Cannot find name 'T'.
       * @param {(x: T) => U[]} iterable
--                   ~
--!!! error TS2304: Cannot find name 'T'.
+                    ~
+ !!! error TS2304: Cannot find name 'T'.
++                         ~
++!!! error TS2304: Cannot find name 'U'.
       * @returns {U[]}
++                 ~
++!!! error TS2304: Cannot find name 'U'.
       */
      /**
       * @overload
-+        ~~~~~~~~
-+!!! error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
-      * @template T
-         ~~~~~~~~
- !!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
-      * @param {T[][]} array
--               ~
--!!! error TS2304: Cannot find name 'T'.
+@@= skipped -17, +23 lines =@@
+                ~
+ !!! error TS2304: Cannot find name 'T'.
       * @returns {T[]}
++                 ~
++!!! error TS2304: Cannot find name 'T'.
       */
      /**
+      * @param {unknown[]} array

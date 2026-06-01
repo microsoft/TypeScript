@@ -14,11 +14,7 @@
   */
  function flatMap(array, iterable = identity) {
 ->flatMap : { <T, U>(array: T[], iterable: (x: T) => U[]): U[]; <T, U>(array: T[][]): T[]; }
-+>flatMap : { <T, U>(array: T[], iterable: (x: T) => U[]): U[]; (array: T[][]): T[]; }
++>flatMap : { <T_1, U_1>(array: T_1[], iterable: (x: T_1) => U_1[]): U_1[]; <T_1, U_1>(array: T_1[][]): T_1[]; }
  >array : unknown[]
  >iterable : (x: unknown) => unknown
-->identity : <T_1>(x: T_1) => T_1
-+>identity : <T>(x: T) => T
-
-   /** @type {unknown[]} */
-   const result = [];
+ >identity : <T_1>(x: T_1) => T_1

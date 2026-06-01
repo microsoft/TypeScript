@@ -61,10 +61,3 @@
      /**
       * @template U
       * @overload
-@@= skipped -54, +54 lines =@@
-      * @param {(y: T) => unknown} [fn]
-      * @returns {unknown}
-      */
--    transform<U>(): T;
-+    transform(): T;
- }

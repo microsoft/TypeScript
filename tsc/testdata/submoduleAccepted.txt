@@ -254,8 +254,6 @@ compiler/conflictingDeclarationsImportFromNamespace1.errors.txt.diff
 compiler/conflictingDeclarationsImportFromNamespace1.types.diff
 compiler/conflictingDeclarationsImportFromNamespace2.errors.txt.diff
 compiler/conflictingDeclarationsImportFromNamespace2.types.diff
-compiler/contravariantOnlyInferenceFromAnnotatedFunctionJs.errors.txt.diff
-compiler/contravariantOnlyInferenceFromAnnotatedFunctionJs.types.diff
 
 ## more accurate types/symbols ##
 compiler/allowJscheckJsTypeParameterNoCrash.symbols.diff

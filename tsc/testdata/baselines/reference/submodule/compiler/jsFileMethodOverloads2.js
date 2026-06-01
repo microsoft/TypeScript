@@ -150,5 +150,5 @@ declare class Example<T> {
      * @param {(y: T) => unknown} [fn]
      * @returns {unknown}
      */
-    transform(): T;
+    transform<U>(): T;
 }

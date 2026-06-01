@@ -273,6 +273,42 @@ function f(cu) {
 In Strada, `cu` incorrectly narrows to `C` inside the `if` block, unlike with TS assertion syntax.
 In Corsa, the behaviour is the same between TS and JS.
 
+#### `@overload` with arrow functions and function expressions
+
+In Strada, `@overload` can be used in JSDoc annotations for arrow functions and function expressions. Corsa more closely aligns with TypeScript by internally translating JSDoc constructs into synthetic TypeScript constructs which are then checked. However, since TypeScript itself currently doesn't support overload declarations with arrow function and function expressions, Corsa ignores `@overload` annotations on those constructs. Instead of writing:
+
+```js
+/**
+ * @overload
+ * @param {string} x
+ * @returns {string}
+ *
+ * @overload
+ * @param {number} x
+ * @returns {number}
+ *
+ * @param {string | number} x
+ * @returns {string | number}
+ */
+let f = x => x;
+```
+
+You should write:
+
+```js
+/**
+ * @type {{
+ *   (x: string): string;
+ *   (x: number): number;
+ * }}
+ * @param {string | number} x
+ * @returns {any}
+ */
+const f = x => x;
+```
+
+This works with both TS6 and TS7. Note the change to `any` for the return type annotation. This is to satisfy the assignment check.
+
 ### Expandos
 
 #### Constructor functions are no longer supported

@@ -58,7 +58,7 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 			modifiers = p.createExportModifier(tag)
 		}
 		typeAlias := p.factory.NewJSTypeAliasDeclaration(modifiers, p.addDeepCloneReparse(p.getInnermostNameOfJSDocNamespace(fullName)), nil, nil)
-		typeAlias.AsTypeAliasDeclaration().TypeParameters = p.gatherTypeParameters(jsDoc, tag)
+		typeAlias.AsTypeAliasDeclaration().TypeParameters = p.gatherTypeParameters(jsDoc, true /*typedefOrCallback*/)
 		var t *ast.Node
 		switch typeExpression.Kind {
 		case ast.KindJSDocTypeExpression:
@@ -87,7 +87,7 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		}
 		functionType := p.reparseJSDocSignature(typeExpression, tag, jsDoc, tag, nil)
 		typeAlias := p.factory.NewJSTypeAliasDeclaration(modifiers, p.addDeepCloneReparse(p.getInnermostNameOfJSDocNamespace(fullName)), nil, functionType)
-		typeAlias.AsTypeAliasDeclaration().TypeParameters = p.gatherTypeParameters(jsDoc, tag)
+		typeAlias.AsTypeAliasDeclaration().TypeParameters = p.gatherTypeParameters(jsDoc, true /*typedefOrCallback*/)
 		p.finishReparsedNode(typeAlias, tag)
 		p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: typeAlias, jsDocs: []*ast.Node{jsDoc}})
 		typeAlias.Flags |= ast.NodeFlagsHasJSDoc
@@ -133,7 +133,7 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 	}
 
 	if tag.Kind != ast.KindJSDocCallbackTag {
-		signature.FunctionLikeData().TypeParameters = p.gatherTypeParameters(jsDoc, tag)
+		signature.FunctionLikeData().TypeParameters = p.gatherTypeParameters(jsDoc, false /*typedefOrCallback*/)
 	}
 	parameters := p.nodeSliceArena.NewSlice(0)
 	for _, param := range jsSignature.Parameters() {
@@ -237,26 +237,18 @@ func (p *Parser) reparseJSDocComment(node *ast.Node, tag *ast.Node) {
 	}
 }
 
-func (p *Parser) gatherTypeParameters(j *ast.Node, tagWithTypeParameters *ast.Node) *ast.NodeList {
+func (p *Parser) gatherTypeParameters(j *ast.Node, typedefOrCallback bool) *ast.NodeList {
 	var typeParameters []*ast.Node
 	pos := -1
 	endPos := -1
 	firstTemplate := true
-	// type parameters only apply to the tag or node they occur before, so record a place to stop
-	start := 0
-	for i, other := range j.AsJSDoc().Tags.Nodes {
-		if other == tagWithTypeParameters {
-			break
+	for _, tag := range j.AsJSDoc().Tags.Nodes {
+		// When a JSDoc comment contains an `@typedef` or `@callback` tag, `@template` type parameter
+		// declarations apply to the type being defined.
+		if !typedefOrCallback && (ast.IsJSDocTypedefTag(tag) || ast.IsJSDocCallbackTag(tag)) {
+			return nil
 		}
-		if other.Kind == ast.KindJSDocTypedefTag || other.Kind == ast.KindJSDocCallbackTag || other.Kind == ast.KindJSDocOverloadTag {
-			start = i + 1
-		}
-	}
-	for i, tag := range j.AsJSDoc().Tags.Nodes {
-		if tag == tagWithTypeParameters {
-			break
-		}
-		if i < start || tag.Kind != ast.KindJSDocTemplateTag {
+		if !ast.IsJSDocTemplateTag(tag) {
 			continue
 		}
 		if firstTemplate {
@@ -264,7 +256,6 @@ func (p *Parser) gatherTypeParameters(j *ast.Node, tagWithTypeParameters *ast.No
 			firstTemplate = false
 		}
 		endPos = tag.End()
-
 		constraint := tag.AsJSDocTemplateTag().Constraint
 		firstTypeParameter := true
 		for _, tp := range tag.TypeParameters() {
@@ -403,19 +394,19 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 	case ast.KindJSDocTemplateTag:
 		if fun := getFunctionLikeHost(parent); fun != nil {
 			if fun.TypeParameters() == nil && fun.FunctionLikeData().FullSignature == nil {
-				fun.FunctionLikeData().TypeParameters = p.gatherTypeParameters(jsDoc, nil /*tagWithTypeParameters*/)
+				fun.FunctionLikeData().TypeParameters = p.gatherTypeParameters(jsDoc, false /*typedefOrCallback*/)
 				p.finishMutatedNode(fun)
 			}
 		} else if parent.Kind == ast.KindClassDeclaration {
 			class := parent.AsClassDeclaration()
 			if class.TypeParameters == nil {
-				class.TypeParameters = p.gatherTypeParameters(jsDoc, nil /*tagWithTypeParameters*/)
+				class.TypeParameters = p.gatherTypeParameters(jsDoc, false /*typedefOrCallback*/)
 				p.finishMutatedNode(parent)
 			}
 		} else if parent.Kind == ast.KindClassExpression {
 			class := parent.AsClassExpression()
 			if class.TypeParameters == nil {
-				class.TypeParameters = p.gatherTypeParameters(jsDoc, nil /*tagWithTypeParameters*/)
+				class.TypeParameters = p.gatherTypeParameters(jsDoc, false /*typedefOrCallback*/)
 				p.finishMutatedNode(parent)
 			}
 		}
