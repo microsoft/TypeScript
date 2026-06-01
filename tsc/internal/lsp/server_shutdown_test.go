@@ -75,21 +75,6 @@ func TestServerShutdownNoDeadlock(t *testing.T) {
 	cancel()
 	<-writeLoopDone
 
-	// Fill the queue so any logging attempt would block
-	dummyMsg := lsproto.WindowLogMessageInfo.NewNotificationMessage(&lsproto.LogMessageParams{
-		Type:    lsproto.MessageTypeInfo,
-		Message: "fill",
-	}).Message()
-
-	for range cap(server.outgoingQueue) {
-		select {
-		case server.outgoingQueue <- dummyMsg:
-			// filled one slot
-		default:
-			// queue full
-		}
-	}
-
 	// Trigger operations that would log (these should not block)
 	server.session.DidChangeFile(ctx, "file:///test/index.ts", 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
 		{
@@ -102,4 +87,41 @@ func TestServerShutdownNoDeadlock(t *testing.T) {
 	server.session.WaitForBackgroundTasks()
 
 	server.session.Close()
+}
+
+func TestServerOutgoingQueueDoesNotBlockWithoutWriter(t *testing.T) {
+	t.Parallel()
+
+	server := NewServer(&ServerOptions{
+		In:  shutdownTestReader{},
+		Out: shutdownTestWriter{},
+		Err: io.Discard,
+		Cwd: "/test",
+	})
+	server.backgroundCtx = t.Context()
+
+	msg := lsproto.WindowLogMessageInfo.NewNotificationMessage(&lsproto.LogMessageParams{
+		Type:    lsproto.MessageTypeInfo,
+		Message: "queued",
+	}).Message()
+
+	done := make(chan error, 1)
+	go func() {
+		for range 1000 {
+			if err := server.send(msg); err != nil {
+				done <- err
+				return
+			}
+		}
+		done <- nil
+	}()
+
+	select {
+	case err := <-done:
+		if err != nil {
+			t.Fatal(err)
+		}
+	case <-t.Context().Done():
+		t.Fatal("sending outgoing messages blocked without a writer")
+	}
 }

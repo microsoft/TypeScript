@@ -37,11 +37,10 @@ func (l *logger) sendLogMessage(msgType lsproto.MessageType, message string) {
 		Message: message,
 	})
 
-	select {
-	case l.server.outgoingQueue <- notification.Message():
-		// sent
-	case <-l.server.backgroundCtx.Done():
-		fmt.Fprintln(l.server.stderr, message)
+	if err := l.server.outgoingQueue.Put(l.server.backgroundCtx, notification.Message()); err != nil {
+		if l.server.backgroundCtx.Err() != nil {
+			fmt.Fprintln(l.server.stderr, message)
+		}
 	}
 }
 

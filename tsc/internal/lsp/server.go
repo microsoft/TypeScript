@@ -57,8 +57,8 @@ func NewServer(opts *ServerOptions) *Server {
 		r:                     opts.In,
 		w:                     opts.Out,
 		stderr:                opts.Err,
-		requestQueue:          make(chan *lsproto.RequestMessage, 100),
-		outgoingQueue:         make(chan *lsproto.Message, 100),
+		requestQueue:          newDynamicQueue[*lsproto.RequestMessage](),
+		outgoingQueue:         newDynamicQueue[*lsproto.Message](),
 		pendingClientRequests: make(map[jsonrpc.ID]pendingClientRequest),
 		pendingServerRequests: make(map[jsonrpc.ID]chan *lsproto.ResponseMessage),
 		cwd:                   opts.Cwd,
@@ -158,8 +158,8 @@ type Server struct {
 	logger                  *logger
 	initStarted             atomic.Bool
 	clientSeq               atomic.Int32
-	requestQueue            chan *lsproto.RequestMessage
-	outgoingQueue           chan *lsproto.Message
+	requestQueue            *dynamicQueue[*lsproto.RequestMessage]
+	outgoingQueue           *dynamicQueue[*lsproto.Message]
 	pendingClientRequests   map[jsonrpc.ID]pendingClientRequest
 	pendingClientRequestsMu sync.Mutex
 	pendingServerRequests   map[jsonrpc.ID]chan *lsproto.ResponseMessage
@@ -471,7 +471,9 @@ func (s *Server) readLoop(ctx context.Context) error {
 			if req.Method == lsproto.MethodCancelRequest {
 				s.cancelRequest(req.Params.(*lsproto.CancelParams).Id)
 			} else {
-				s.requestQueue <- req
+				if err := s.requestQueue.Put(ctx, req); err != nil {
+					return err
+				}
 			}
 		}
 	}
@@ -495,72 +497,71 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
 	ctx, lspExit := context.WithCancelCause(ctx)
 	defer lspExit(nil)
 	for {
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		case req := <-s.requestQueue:
-			s.lastRequestTimeMs.Store(time.Now().UnixMilli())
-			requestCtx := locale.WithLocale(ctx, s.locale)
-			var cancel context.CancelFunc
-			if req.ID != nil {
-				requestCtx, cancel = context.WithCancel(core.WithRequestID(requestCtx, req.ID.String()))
-				s.pendingClientRequestsMu.Lock()
-				s.pendingClientRequests[*req.ID] = pendingClientRequest{
-					req:    req,
-					cancel: cancel,
-				}
-				s.pendingClientRequestsMu.Unlock()
-			}
+		req, err := s.requestQueue.Get(ctx)
+		if err != nil {
+			return err
+		}
 
-			handleError := func(err error) {
-				if errors.Is(err, context.Canceled) {
-					if err := s.sendError(req.ID, lsproto.ErrorCodeRequestCancelled); err != nil {
-						lspExit(err)
-					}
-				} else if errors.Is(err, io.EOF) {
-					lspExit(nil)
-				} else {
-					if err := s.sendError(req.ID, err); err != nil {
-						lspExit(err)
-					}
-				}
+		s.lastRequestTimeMs.Store(time.Now().UnixMilli())
+		requestCtx := locale.WithLocale(ctx, s.locale)
+		var cancel context.CancelFunc
+		if req.ID != nil {
+			requestCtx, cancel = context.WithCancel(core.WithRequestID(requestCtx, req.ID.String()))
+			s.pendingClientRequestsMu.Lock()
+			s.pendingClientRequests[*req.ID] = pendingClientRequest{
+				req:    req,
+				cancel: cancel,
 			}
+			s.pendingClientRequestsMu.Unlock()
+		}
 
-			removeRequest := func() {
-				if req.ID != nil {
-					defer cancel()
-					s.pendingClientRequestsMu.Lock()
-					defer s.pendingClientRequestsMu.Unlock()
-					delete(s.pendingClientRequests, *req.ID)
+		handleError := func(err error) {
+			if errors.Is(err, context.Canceled) {
+				if err := s.sendError(req.ID, lsproto.ErrorCodeRequestCancelled); err != nil {
+					lspExit(err)
 				}
-			}
-
-			if doAsyncWork, err := s.handleRequestOrNotification(requestCtx, req); err != nil {
-				handleError(err)
-				removeRequest()
-			} else if doAsyncWork != nil {
-				go func() {
-					if lsError := doAsyncWork(); lsError != nil {
-						handleError(lsError)
-					}
-					removeRequest()
-				}()
+			} else if errors.Is(err, io.EOF) {
+				lspExit(nil)
 			} else {
-				removeRequest()
+				if err := s.sendError(req.ID, err); err != nil {
+					lspExit(err)
+				}
 			}
+		}
+
+		removeRequest := func() {
+			if req.ID != nil {
+				defer cancel()
+				s.pendingClientRequestsMu.Lock()
+				defer s.pendingClientRequestsMu.Unlock()
+				delete(s.pendingClientRequests, *req.ID)
+			}
+		}
+
+		if doAsyncWork, err := s.handleRequestOrNotification(requestCtx, req); err != nil {
+			handleError(err)
+			removeRequest()
+		} else if doAsyncWork != nil {
+			go func() {
+				if lsError := doAsyncWork(); lsError != nil {
+					handleError(lsError)
+				}
+				removeRequest()
+			}()
+		} else {
+			removeRequest()
 		}
 	}
 }
 
 func (s *Server) writeLoop(ctx context.Context) error {
 	for {
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		case msg := <-s.outgoingQueue:
-			if err := s.w.Write(msg); err != nil {
-				return fmt.Errorf("failed to write message: %w", err)
-			}
+		msg, err := s.outgoingQueue.Get(ctx)
+		if err != nil {
+			return err
+		}
+		if err := s.w.Write(msg); err != nil {
+			return fmt.Errorf("failed to write message: %w", err)
 		}
 	}
 }
@@ -653,12 +654,7 @@ func (s *Server) sendResponse(resp *lsproto.ResponseMessage) error {
 
 // send writes a message to the outgoing queue, respecting context cancellation.
 func (s *Server) send(msg *lsproto.Message) error {
-	select {
-	case s.outgoingQueue <- msg:
-		return nil
-	case <-s.backgroundCtx.Done():
-		return s.backgroundCtx.Err()
-	}
+	return s.outgoingQueue.Put(s.backgroundCtx, msg)
 }
 
 // handleRequestOrNotification looks up the handler for the given request or notification, executes its synchronous work
