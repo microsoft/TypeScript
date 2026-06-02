@@ -722,12 +722,25 @@ func (tx *asyncTransformer) transformAsyncFunctionParameterList(node *ast.Node) 
 }
 
 func (tx *asyncTransformer) transformAsyncFunctionBody(node *ast.Node, outerParameters *ast.NodeList) *ast.Node {
+	isArrow := node.Kind == ast.KindArrowFunction
+	savedCapturedSuperProperties := tx.capturedSuperProperties
+	savedHasSuperElementAccess := tx.hasSuperElementAccess
+	savedHasSuperPropertyAssignment := tx.hasSuperPropertyAssignment
+	savedSuperBinding := tx.superBinding
+	savedSuperIndexBinding := tx.superIndexBinding
+	if !isArrow {
+		tx.capturedSuperProperties = &collections.OrderedSet[string]{}
+		tx.hasSuperElementAccess = false
+		tx.hasSuperPropertyAssignment = false
+		tx.superBinding = tx.Factory().NewUniqueNameEx("_super", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic | printer.GeneratedIdentifierFlagsFileLevel})
+		tx.superIndexBinding = tx.Factory().NewUniqueNameEx("_superIndex", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic | printer.GeneratedIdentifierFlagsFileLevel})
+	}
+
 	innerParameters := (*ast.NodeList)(nil)
 	if !isSimpleParameterList(node.Parameters()) {
 		innerParameters = tx.EmitContext().VisitParameters(node.ParameterList(), tx.Visitor())
 	}
 
-	isArrow := node.Kind == ast.KindArrowFunction
 	savedLexicalArguments := tx.lexicalArguments
 	captureLexicalArguments := tx.lexicalArguments.binding == nil
 	if captureLexicalArguments {
@@ -773,19 +786,6 @@ func (tx *asyncTransformer) transformAsyncFunctionBody(node *ast.Node, outerPara
 		tx.recordDeclarationName(parameter, tx.enclosingFunctionParameterNames)
 	}
 
-	savedCapturedSuperProperties := tx.capturedSuperProperties
-	savedHasSuperElementAccess := tx.hasSuperElementAccess
-	savedHasSuperPropertyAssignment := tx.hasSuperPropertyAssignment
-	savedSuperBinding := tx.superBinding
-	savedSuperIndexBinding := tx.superIndexBinding
-	if !isArrow {
-		tx.capturedSuperProperties = &collections.OrderedSet[string]{}
-		tx.hasSuperElementAccess = false
-		tx.hasSuperPropertyAssignment = false
-		tx.superBinding = tx.Factory().NewUniqueNameEx("_super", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic | printer.GeneratedIdentifierFlagsFileLevel})
-		tx.superIndexBinding = tx.Factory().NewUniqueNameEx("_superIndex", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic | printer.GeneratedIdentifierFlagsFileLevel})
-	}
-
 	hasLexicalThis := tx.inHasLexicalThisContext()
 
 	asyncBody := tx.transformAsyncFunctionBodyWorker(node.Body())
@@ -799,6 +799,7 @@ func (tx *asyncTransformer) transformAsyncFunctionBody(node *ast.Node, outerPara
 	emitSuperHelpers := tx.capturedSuperProperties != nil &&
 		(tx.capturedSuperProperties.Size() > 0 || tx.hasSuperElementAccess)
 	if emitSuperHelpers {
+		innerParameters = tx.superAccessVisitor.VisitNodes(innerParameters)
 		asyncBody = tx.substituteSuperAccessesInBody(asyncBody)
 	}
 
