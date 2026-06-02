@@ -1733,9 +1733,12 @@ func GetDiagnosticsOfAnyProgram(
 	configFileParsingDiagnosticsLength := len(allDiagnostics)
 
 	allDiagnostics = append(allDiagnostics, program.GetSyntacticDiagnostics(ctx, file)...)
-	allDiagnostics = append(allDiagnostics, program.GetProgramDiagnostics()...)
 
+	// If we didn't have any syntactic errors, then also try getting the program (options),
+	// global and semantic errors.
 	if len(allDiagnostics) == configFileParsingDiagnosticsLength {
+		allDiagnostics = append(allDiagnostics, program.GetProgramDiagnostics()...)
+
 		// Do binding early so we can track the time.
 		getBindDiagnostics(ctx, file)
 
