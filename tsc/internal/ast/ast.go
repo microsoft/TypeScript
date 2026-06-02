@@ -2151,7 +2151,7 @@ func (node *NewExpression) propagateSubtreeFacts() SubtreeFacts {
 }
 
 func (node *MetaProperty) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.name)
+	return propagateSubtreeFacts(node.name) &^ SubtreeContainsIdentifier
 }
 
 func (node *NonNullExpression) computeSubtreeFacts() SubtreeFacts {
