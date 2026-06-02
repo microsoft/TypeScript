@@ -135,6 +135,9 @@ func (i *includeProcessor) explainRedirectAndImpliedFormat(
 		file = redirectsFile
 	} else {
 		sourceFile = program.GetSourceFileByPath(filePath)
+		if sourceFile == nil {
+			return nil
+		}
 		file = sourceFile
 	}
 	var result []*ast.Diagnostic
