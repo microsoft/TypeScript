@@ -1068,6 +1068,16 @@ func (w *formatSpanWorker) consumeTokenAndAdvanceScanner(currentTokenInfo tokenI
 
 	if len(currentTokenInfo.trailingTrivia) > 0 {
 		w.previousRangeTriviaEnd = core.LastOrNil(currentTokenInfo.trailingTrivia).Loc.End()
+		// If any trailing comment trivia extends past the original range, it won't be
+		// processed by processTrivia (which skips comments not contained by originalRange).
+		// Cap previousRangeTriviaEnd before such comments so the trailing edit contiguity
+		// check in execute() won't pair across unprocessed comment content.
+		for _, trivia := range currentTokenInfo.trailingTrivia {
+			if isComment(trivia.Kind) && !trivia.Loc.ContainedBy(w.originalRange) {
+				w.previousRangeTriviaEnd = trivia.Loc.Pos()
+				break
+			}
+		}
 		w.processTrivia(currentTokenInfo.trailingTrivia, parent, w.childContextNode, dynamicIndenation)
 	}
 

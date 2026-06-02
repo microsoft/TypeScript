@@ -262,6 +262,106 @@ func TestCommentFormatting(t *testing.T) {
 	})
 }
 
+func TestFormatSelectionPreservesComments(t *testing.T) {
+	t.Parallel()
+
+	t.Run("format selection should not delete block comment when selection ends inside comment", func(t *testing.T) {
+		t.Parallel()
+		ctx := format.WithFormatCodeSettings(t.Context(), lsutil.FormatCodeSettings{
+			EditorSettings: lsutil.EditorSettings{
+				TabSize:                4,
+				IndentSize:             4,
+				BaseIndentSize:         0,
+				NewLineCharacter:       "\n",
+				ConvertTabsToSpaces:    core.TSTrue,
+				IndentStyle:            lsutil.IndentStyleSmart,
+				TrimTrailingWhitespace: core.TSTrue,
+			},
+		}, "\n")
+
+		// Reproduce: const test/* comment */=5;
+		// When selecting a range that ends inside the comment (before */), format selection should not delete the comment.
+		originalText := `const test/* comment */=5;`
+
+		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+			FileName: "/test.ts",
+			Path:     "/test.ts",
+		}, originalText, core.ScriptKindTS)
+
+		// Select a range that starts at the beginning of the line and ends inside the block comment.
+		// This covers `const test/* comment`, stopping before the closing `*/`.
+		commentStart := strings.Index(originalText, "/*")
+		selectionEnd := commentStart + len("/* comment") // ends inside the comment, before the closing `*/`
+
+		edits := format.FormatSelection(ctx, sourceFile, 0, selectionEnd)
+		formatted := applyBulkEdits(originalText, edits)
+
+		// The entire statement should be preserved unchanged
+		assert.Equal(t, formatted, originalText, "format selection should not delete the block comment or alter the statement")
+	})
+
+	t.Run("format selection should not delete block comment when selection starts inside comment", func(t *testing.T) {
+		t.Parallel()
+		ctx := format.WithFormatCodeSettings(t.Context(), lsutil.FormatCodeSettings{
+			EditorSettings: lsutil.EditorSettings{
+				TabSize:                4,
+				IndentSize:             4,
+				BaseIndentSize:         0,
+				NewLineCharacter:       "\n",
+				ConvertTabsToSpaces:    core.TSTrue,
+				IndentStyle:            lsutil.IndentStyleSmart,
+				TrimTrailingWhitespace: core.TSTrue,
+			},
+		}, "\n")
+
+		originalText := `const test/* comment */=5;`
+
+		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+			FileName: "/test.ts",
+			Path:     "/test.ts",
+		}, originalText, core.ScriptKindTS)
+
+		// Select from inside the comment to the end
+		commentStart := strings.Index(originalText, "/*")
+		selectionStart := commentStart + 3 // inside the comment
+
+		edits := format.FormatSelection(ctx, sourceFile, selectionStart, len(originalText))
+		formatted := applyBulkEdits(originalText, edits)
+
+		// The entire statement should be preserved unchanged
+		assert.Equal(t, formatted, originalText, "format selection should not delete the block comment or alter the statement")
+	})
+
+	t.Run("full document format should preserve block comment and add spaces", func(t *testing.T) {
+		t.Parallel()
+		ctx := format.WithFormatCodeSettings(t.Context(), lsutil.FormatCodeSettings{
+			EditorSettings: lsutil.EditorSettings{
+				TabSize:                4,
+				IndentSize:             4,
+				BaseIndentSize:         0,
+				NewLineCharacter:       "\n",
+				ConvertTabsToSpaces:    core.TSTrue,
+				IndentStyle:            lsutil.IndentStyleSmart,
+				TrimTrailingWhitespace: core.TSTrue,
+			},
+			InsertSpaceBeforeAndAfterBinaryOperators: core.TSTrue,
+		}, "\n")
+
+		originalText := `const test/* comment */=5;`
+
+		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+			FileName: "/test.ts",
+			Path:     "/test.ts",
+		}, originalText, core.ScriptKindTS)
+
+		edits := format.FormatDocument(ctx, sourceFile)
+		formatted := applyBulkEdits(originalText, edits)
+
+		// Full document format should preserve the comment and add spaces around `=`
+		assert.Equal(t, "const test/* comment */ = 5;", formatted, "full format should preserve the block comment and add spaces")
+	})
+}
+
 func TestSliceBoundsPanic(t *testing.T) {
 	t.Parallel()
 
