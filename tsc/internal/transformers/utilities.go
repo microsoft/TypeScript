@@ -77,6 +77,8 @@ func IsIdentifierReference(name *ast.IdentifierNode, parent *ast.Node) bool {
 		ast.KindJsxAttribute:
 		// only an `Initializer()` child that can be `Identifier` would be an instance of `IdentifierReference`
 		return parent.Initializer() == name
+	case ast.KindShorthandPropertyAssignment:
+		return parent.AsShorthandPropertyAssignment().ObjectAssignmentInitializer == name
 	case ast.KindForStatement:
 		return parent.Initializer() == name ||
 			parent.AsForStatement().Condition == name ||
