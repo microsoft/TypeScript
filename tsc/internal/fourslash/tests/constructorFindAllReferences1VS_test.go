@@ -19,5 +19,5 @@ func TestConstructorFindAllReferences1VS(t *testing.T) {
 new C().foo();`
 	f, done := fourslash.NewFourslash(t, &lsproto.ClientCapabilities{VSSupportsVisualStudioExtensions: new(true)}, content)
 	defer done()
-	f.VerifyBaselineVsFindAllReferences(t, "")
+	f.VerifyBaselineVSFindAllReferences(t, "")
 }

@@ -9,9 +9,9 @@ import (
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
-func (l *LanguageService) ProvideOnAutoInsert(ctx context.Context, params *lsproto.VsOnAutoInsertParams) (lsproto.VsOnAutoInsertResponse, error) {
+func (l *LanguageService) ProvideOnAutoInsert(ctx context.Context, params *lsproto.VSOnAutoInsertParams) (lsproto.VSOnAutoInsertResponse, error) {
 	if params.VSCh != ">" {
-		return lsproto.VsOnAutoInsertResponse{}, nil
+		return lsproto.VSOnAutoInsertResponse{}, nil
 	}
 
 	_, sourceFile := l.getProgramAndFile(params.VSTextDocument.Uri)
@@ -19,7 +19,7 @@ func (l *LanguageService) ProvideOnAutoInsert(ctx context.Context, params *lspro
 
 	token := astnav.FindPrecedingToken(sourceFile, int(position))
 	if token == nil {
-		return lsproto.VsOnAutoInsertResponse{}, nil
+		return lsproto.VSOnAutoInsertResponse{}, nil
 	}
 
 	var closingText string
@@ -48,11 +48,11 @@ func (l *LanguageService) ProvideOnAutoInsert(ctx context.Context, params *lspro
 	}
 
 	if closingText == "" {
-		return lsproto.VsOnAutoInsertResponse{}, nil
+		return lsproto.VSOnAutoInsertResponse{}, nil
 	}
 
-	return lsproto.VsOnAutoInsertResponse{
-		VsOnAutoInsertResponseItem: &lsproto.VsOnAutoInsertResponseItem{
+	return lsproto.VSOnAutoInsertResponse{
+		VSOnAutoInsertResponseItem: &lsproto.VSOnAutoInsertResponseItem{
 			VSTextEditFormat: lsproto.InsertTextFormatSnippet,
 			VSTextEdit: &lsproto.TextEdit{
 				Range: lsproto.Range{Start: params.VSPosition, End: params.VSPosition},

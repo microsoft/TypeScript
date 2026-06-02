@@ -25,5 +25,5 @@ declare namespace JSX {
 var x = /*2*/</*3*/div />;`
 	f, done := fourslash.NewFourslash(t, &lsproto.ClientCapabilities{VSSupportsVisualStudioExtensions: new(true)}, content)
 	defer done()
-	f.VerifyBaselineVsFindAllReferences(t, "1", "2", "3")
+	f.VerifyBaselineVSFindAllReferences(t, "1", "2", "3")
 }

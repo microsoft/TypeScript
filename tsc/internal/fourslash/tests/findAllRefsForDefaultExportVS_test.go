@@ -20,5 +20,5 @@ import /*deg*/g from "./a";
 import { f } from "./a";`
 	f, done := fourslash.NewFourslash(t, &lsproto.ClientCapabilities{VSSupportsVisualStudioExtensions: new(true)}, content)
 	defer done()
-	f.VerifyBaselineVsFindAllReferences(t, "def", "deg")
+	f.VerifyBaselineVSFindAllReferences(t, "def", "deg")
 }

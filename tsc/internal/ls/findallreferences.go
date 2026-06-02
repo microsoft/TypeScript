@@ -669,14 +669,14 @@ func (l *LanguageService) ProvideReferences(ctx context.Context, params *lsproto
 	)
 }
 
-func (l *LanguageService) ProvideVsReferences(ctx context.Context, params *lsproto.ReferenceParams, orchestrator CrossProjectOrchestrator) (lsproto.VsReferencesResponse, error) {
+func (l *LanguageService) ProvideVSReferences(ctx context.Context, params *lsproto.ReferenceParams, orchestrator CrossProjectOrchestrator) (lsproto.VSReferencesResponse, error) {
 	return handleCrossProject(
 		l,
 		ctx,
 		params,
 		orchestrator,
-		(*LanguageService).symbolAndEntriesToVsReferences,
-		combineVsReferences,
+		(*LanguageService).symbolAndEntriesToVSReferences,
+		combineVSReferences,
 		false, /*isRename*/
 		false, /*implementations*/
 		symbolEntryTransformOptions{},
@@ -691,10 +691,10 @@ func (l *LanguageService) symbolAndEntriesToReferences(ctx context.Context, para
 	return lsproto.LocationsOrNull{Locations: &locations}, nil
 }
 
-func (l *LanguageService) symbolAndEntriesToVsReferences(ctx context.Context, params *lsproto.ReferenceParams, data SymbolAndEntriesData, options symbolEntryTransformOptions) (lsproto.VsReferencesResponse, error) {
+func (l *LanguageService) symbolAndEntriesToVSReferences(ctx context.Context, params *lsproto.ReferenceParams, data SymbolAndEntriesData, options symbolEntryTransformOptions) (lsproto.VSReferencesResponse, error) {
 	caps := lsproto.GetClientCapabilities(ctx)
 	vsCapability := caps.VSSupportsVisualStudioExtensions
-	var items []*lsproto.VsReferenceItem
+	var items []*lsproto.VSReferenceItem
 	id := int32(0)
 	projectName := string(l.projectPath)
 
@@ -712,11 +712,11 @@ func (l *LanguageService) symbolAndEntriesToVsReferences(ctx context.Context, pa
 		// Create the definition item
 		definitionId := id
 		emptyStr := ""
-		defItem := &lsproto.VsReferenceItem{
+		defItem := &lsproto.VSReferenceItem{
 			VSId:             definitionId,
 			VSLocation:       defInfo.location,
 			VSDefinitionText: defInfo.displayText,
-			VSKind:           &[]lsproto.VsReferenceKind{lsproto.VsReferenceKindUnknown},
+			VSKind:           &[]lsproto.VSReferenceKind{lsproto.VSReferenceKindUnknown},
 			VSProjectName:    &projectName,
 			VSContainingType: &emptyStr,
 		}
@@ -733,16 +733,16 @@ func (l *LanguageService) symbolAndEntriesToVsReferences(ctx context.Context, pa
 			refLocation := l.getLocationOfEntry(ref)
 
 			// Determine read/write kind
-			kind := lsproto.VsReferenceKindRead
+			kind := lsproto.VSReferenceKindRead
 			if ref.kind != entryKindRange && ref.node != nil && ast.IsWriteAccessForReference(ref.node) {
-				kind = lsproto.VsReferenceKindWrite
+				kind = lsproto.VSReferenceKindWrite
 			}
 
-			refItem := &lsproto.VsReferenceItem{
+			refItem := &lsproto.VSReferenceItem{
 				VSId:           id,
 				VSDefinitionId: &definitionId,
 				VSLocation:     refLocation,
-				VSKind:         &[]lsproto.VsReferenceKind{kind},
+				VSKind:         &[]lsproto.VSReferenceKind{kind},
 				VSProjectName:  &projectName,
 			}
 			items = append(items, refItem)
@@ -750,14 +750,14 @@ func (l *LanguageService) symbolAndEntriesToVsReferences(ctx context.Context, pa
 		}
 	}
 
-	return lsproto.VsReferencesResponse{VsReferenceItems: &items}, nil
+	return lsproto.VSReferencesResponse{VSReferenceItems: &items}, nil
 }
 
 // referencedSymbolDefinitionInfo holds the computed info for a definition
 type referencedSymbolDefinitionInfo struct {
 	node        *ast.Node
 	location    lsproto.Location
-	displayText *lsproto.ClassifiedTextElement
+	displayText *lsproto.VSClassifiedTextElement
 }
 
 // definitionToReferencedSymbolDefinitionInfo converts a Definition to display info
@@ -796,8 +796,8 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 		return &referencedSymbolDefinitionInfo{
 			node:     node,
 			location: loc,
-			displayText: &lsproto.ClassifiedTextElement{
-				Runs: []*lsproto.ClassifiedTextRun{{Text: node.Text(), ClassificationTypeName: string(lsproto.ClassificationTypeNameText)}},
+			displayText: &lsproto.VSClassifiedTextElement{
+				Runs: []*lsproto.VSClassifiedTextRun{{Text: node.Text(), ClassificationTypeName: string(lsproto.ClassificationTypeNameText)}},
 			},
 		}
 
@@ -811,8 +811,8 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 		return &referencedSymbolDefinitionInfo{
 			node:     node,
 			location: loc,
-			displayText: &lsproto.ClassifiedTextElement{
-				Runs: []*lsproto.ClassifiedTextRun{{Text: name, ClassificationTypeName: string(lsproto.ClassificationTypeNameKeyword)}},
+			displayText: &lsproto.VSClassifiedTextElement{
+				Runs: []*lsproto.VSClassifiedTextRun{{Text: name, ClassificationTypeName: string(lsproto.ClassificationTypeNameKeyword)}},
 			},
 		}
 
@@ -842,8 +842,8 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 		return &referencedSymbolDefinitionInfo{
 			node:     node,
 			location: loc,
-			displayText: &lsproto.ClassifiedTextElement{
-				Runs: []*lsproto.ClassifiedTextRun{{Text: node.Text(), ClassificationTypeName: string(lsproto.ClassificationTypeNameString)}},
+			displayText: &lsproto.VSClassifiedTextElement{
+				Runs: []*lsproto.VSClassifiedTextRun{{Text: node.Text(), ClassificationTypeName: string(lsproto.ClassificationTypeNameString)}},
 			},
 		}
 
@@ -856,8 +856,8 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 		return &referencedSymbolDefinitionInfo{
 			node:     node,
 			location: loc,
-			displayText: &lsproto.ClassifiedTextElement{
-				Runs: []*lsproto.ClassifiedTextRun{{Text: `"` + def.tripleSlashFileRef.reference.FileName + `"`, ClassificationTypeName: string(lsproto.ClassificationTypeNameString)}},
+			displayText: &lsproto.VSClassifiedTextElement{
+				Runs: []*lsproto.VSClassifiedTextRun{{Text: `"` + def.tripleSlashFileRef.reference.FileName + `"`, ClassificationTypeName: string(lsproto.ClassificationTypeNameString)}},
 			},
 		}
 
@@ -867,7 +867,7 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 }
 
 // getDefinitionKindAndDisplayParts returns the classified display text for a symbol definition.
-func (l *LanguageService) getDefinitionKindAndDisplayParts(ctx context.Context, symbol *ast.Symbol, originalNode *ast.Node, vsCapability bool) *lsproto.ClassifiedTextElement {
+func (l *LanguageService) getDefinitionKindAndDisplayParts(ctx context.Context, symbol *ast.Symbol, originalNode *ast.Node, vsCapability bool) *lsproto.VSClassifiedTextElement {
 	program := l.GetProgram()
 	c, done := program.GetTypeChecker(ctx)
 	defer done()
@@ -877,12 +877,12 @@ func (l *LanguageService) getDefinitionKindAndDisplayParts(ctx context.Context, 
 	info := getQuickInfoAndDeclarationAtLocation(c, symbol, originalNode, nil, vsCapability, meaning)
 
 	if vsCapability {
-		return &lsproto.ClassifiedTextElement{Runs: info.displayParts.GetRuns()}
+		return &lsproto.VSClassifiedTextElement{Runs: info.displayParts.GetRuns()}
 	}
 	// Fallback: single unclassified run with the full text
 	text := info.displayParts.String()
-	return &lsproto.ClassifiedTextElement{
-		Runs: []*lsproto.ClassifiedTextRun{{Text: text, ClassificationTypeName: string(lsproto.ClassificationTypeNameText)}},
+	return &lsproto.VSClassifiedTextElement{
+		Runs: []*lsproto.VSClassifiedTextRun{{Text: text, ClassificationTypeName: string(lsproto.ClassificationTypeNameText)}},
 	}
 }
 

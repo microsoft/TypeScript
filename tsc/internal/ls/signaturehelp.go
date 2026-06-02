@@ -364,7 +364,7 @@ func (l *LanguageService) createSignatureHelpItems(ctx context.Context, candidat
 
 		// Set VS-specific colorized label if we have classified runs
 		if len(item.ColorizedRuns) > 0 {
-			sigInfo.VSColorizedLabel = &lsproto.ClassifiedTextElement{
+			sigInfo.VSColorizedLabel = &lsproto.VSClassifiedTextElement{
 				Runs: item.ColorizedRuns,
 			}
 		}
@@ -699,7 +699,7 @@ type signatureInformation struct {
 	// Needed only here, not in lsp
 	IsVariadic bool
 	// Classified text runs for VS colorized label
-	ColorizedRuns []*lsproto.ClassifiedTextRun
+	ColorizedRuns []*lsproto.VSClassifiedTextRun
 }
 
 type signatureHelpItemInfo struct {

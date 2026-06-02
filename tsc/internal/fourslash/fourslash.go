@@ -2334,7 +2334,7 @@ func (f *FourslashTest) VerifyBaselineFindAllReferences(
 	}
 }
 
-func (f *FourslashTest) VerifyBaselineVsFindAllReferences(
+func (f *FourslashTest) VerifyBaselineVSFindAllReferences(
 	t *testing.T,
 	markers ...string,
 ) {
@@ -2354,9 +2354,9 @@ func (f *FourslashTest) VerifyBaselineVsFindAllReferences(
 		}
 		result := sendRequest(t, f, lsproto.TextDocumentVSReferencesInfo, params)
 		// Sort cross-project results for deterministic baselines
-		if result.VsReferenceItems != nil && len(*result.VsReferenceItems) > 0 {
-			items := *result.VsReferenceItems
-			slices.SortStableFunc(items, func(a, b *lsproto.VsReferenceItem) int {
+		if result.VSReferenceItems != nil && len(*result.VSReferenceItems) > 0 {
+			items := *result.VSReferenceItems
+			slices.SortStableFunc(items, func(a, b *lsproto.VSReferenceItem) int {
 				ap, bp := "", ""
 				if a.VSProjectName != nil {
 					ap = *a.VSProjectName
@@ -2396,8 +2396,8 @@ func (f *FourslashTest) VerifyBaselineVsFindAllReferences(
 		}
 		// Include file contents with markers
 		var locations []lsproto.Location
-		if result.VsReferenceItems != nil {
-			for _, item := range *result.VsReferenceItems {
+		if result.VSReferenceItems != nil {
+			for _, item := range *result.VSReferenceItems {
 				locations = append(locations, item.VSLocation)
 			}
 		}
@@ -3960,7 +3960,7 @@ func (f *FourslashTest) VerifyQuickInfoIs(t *testing.T, expectedText string, exp
 func (f *FourslashTest) VerifyJsxClosingTag(t *testing.T, markersToNewText map[string]*string) {
 	for marker, expectedText := range markersToNewText {
 		f.GoToMarker(t, marker)
-		params := &lsproto.VsOnAutoInsertParams{
+		params := &lsproto.VSOnAutoInsertParams{
 			VSTextDocument: lsproto.TextDocumentIdentifier{
 				Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
 			},
@@ -3971,7 +3971,7 @@ func (f *FourslashTest) VerifyJsxClosingTag(t *testing.T, markersToNewText map[s
 		requestResult := sendRequest(t, f, lsproto.TextDocumentVSOnAutoInsertInfo, params)
 
 		var actualText *string
-		if item := requestResult.VsOnAutoInsertResponseItem; item != nil && item.VSTextEdit != nil {
+		if item := requestResult.VSOnAutoInsertResponseItem; item != nil && item.VSTextEdit != nil {
 			newText := item.VSTextEdit.NewText
 			if item.VSTextEditFormat == lsproto.InsertTextFormatSnippet {
 				var ok bool
@@ -3990,12 +3990,12 @@ func (f *FourslashTest) VerifyJsxClosingTag(t *testing.T, markersToNewText map[s
 func (f *FourslashTest) VerifyBaselineClosingTags(t *testing.T) {
 	t.Helper()
 
-	markersAndItems := core.MapFiltered(f.Markers(), func(marker *Marker) (markerAndItem[*lsproto.VsOnAutoInsertResponseItem], bool) {
+	markersAndItems := core.MapFiltered(f.Markers(), func(marker *Marker) (markerAndItem[*lsproto.VSOnAutoInsertResponseItem], bool) {
 		if marker.Name == nil {
-			return markerAndItem[*lsproto.VsOnAutoInsertResponseItem]{}, false
+			return markerAndItem[*lsproto.VSOnAutoInsertResponseItem]{}, false
 		}
 
-		params := &lsproto.VsOnAutoInsertParams{
+		params := &lsproto.VSOnAutoInsertParams{
 			VSTextDocument: lsproto.TextDocumentIdentifier{
 				Uri: lsconv.FileNameToDocumentURI(marker.FileName()),
 			},
@@ -4004,17 +4004,17 @@ func (f *FourslashTest) VerifyBaselineClosingTags(t *testing.T) {
 		}
 
 		result := sendRequest(t, f, lsproto.TextDocumentVSOnAutoInsertInfo, params)
-		return markerAndItem[*lsproto.VsOnAutoInsertResponseItem]{Marker: marker, Item: result.VsOnAutoInsertResponseItem}, true
+		return markerAndItem[*lsproto.VSOnAutoInsertResponseItem]{Marker: marker, Item: result.VSOnAutoInsertResponseItem}, true
 	})
 
-	getRange := func(item *lsproto.VsOnAutoInsertResponseItem) *lsproto.Range {
+	getRange := func(item *lsproto.VSOnAutoInsertResponseItem) *lsproto.Range {
 		// Returning nil lets annotateContentWithTooltips render the caret marker at
 		// the marker position. The text edit's range is zero-width at the cursor,
 		// which would render as an empty underline.
 		return nil
 	}
 
-	getTooltipLines := func(item, _prev *lsproto.VsOnAutoInsertResponseItem) []string {
+	getTooltipLines := func(item, _prev *lsproto.VSOnAutoInsertResponseItem) []string {
 		if item == nil || item.VSTextEdit == nil {
 			return []string{"No closing tag"}
 		}

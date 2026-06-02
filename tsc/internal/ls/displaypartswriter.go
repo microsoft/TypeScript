@@ -18,7 +18,7 @@ var _ printer.EmitTextWriter = &displayPartsWriter{}
 // When vsCapability is false, only the plain string is built; runs are skipped.
 type displayPartsWriter struct {
 	builder      strings.Builder
-	runs         []*lsproto.ClassifiedTextRun
+	runs         []*lsproto.VSClassifiedTextRun
 	vsCapability bool
 	lastWritten  string
 }
@@ -32,7 +32,7 @@ func (w *displayPartsWriter) addRun(classification lsproto.ClassificationTypeNam
 		return
 	}
 	if w.vsCapability {
-		w.runs = append(w.runs, &lsproto.ClassifiedTextRun{
+		w.runs = append(w.runs, &lsproto.VSClassifiedTextRun{
 			ClassificationTypeName: string(classification),
 			Text:                   text,
 		})
@@ -57,7 +57,7 @@ func (w *displayPartsWriter) WriteFrom(other *displayPartsWriter) {
 	}
 }
 
-func (w *displayPartsWriter) GetRuns() []*lsproto.ClassifiedTextRun {
+func (w *displayPartsWriter) GetRuns() []*lsproto.VSClassifiedTextRun {
 	return w.runs
 }
 

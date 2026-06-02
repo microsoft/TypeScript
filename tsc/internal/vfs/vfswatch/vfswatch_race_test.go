@@ -35,10 +35,10 @@ func newWatcherWithState(fs vfs.FS) *vfswatch.FileWatcher {
 	return fw
 }
 
-// TestRaceHasChangesVsUpdateWatchState tests for data races between
+// TestRaceHasChangesVSUpdateWatchState tests for data races between
 // concurrent HasChanges reads and UpdateWatchState writes on the
 // WatchState map.
-func TestRaceHasChangesVsUpdateWatchState(t *testing.T) {
+func TestRaceHasChangesVSUpdateWatchState(t *testing.T) {
 	t.Parallel()
 	fs := newTestFS()
 	fw := newWatcherWithState(fs)

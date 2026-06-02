@@ -21,5 +21,5 @@ v./*3*/doStuff();
 v./*4*/propName;`
 	f, done := fourslash.NewFourslash(t, &lsproto.ClientCapabilities{VSSupportsVisualStudioExtensions: new(true)}, content)
 	defer done()
-	f.VerifyBaselineVsFindAllReferences(t, "1", "2", "3", "4")
+	f.VerifyBaselineVSFindAllReferences(t, "1", "2", "3", "4")
 }

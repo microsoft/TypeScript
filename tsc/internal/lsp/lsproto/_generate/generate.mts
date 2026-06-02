@@ -167,7 +167,7 @@ const customStructures: Structure[] = [
         ],
     },
     {
-        name: "VsOnAutoInsertOptions",
+        name: "VSOnAutoInsertOptions",
         properties: [
             {
                 name: "_vs_triggerCharacters",
@@ -178,7 +178,7 @@ const customStructures: Structure[] = [
         documentation: "Options for the textDocument/_vs_onAutoInsert provider capability.",
     },
     {
-        name: "VsReferenceItem",
+        name: "VSReferenceItem",
         properties: [
             {
                 name: "_vs_id",
@@ -193,7 +193,7 @@ const customStructures: Structure[] = [
             },
             {
                 name: "_vs_kind",
-                type: { kind: "array", element: { kind: "reference", name: "VsReferenceKind" } },
+                type: { kind: "array", element: { kind: "reference", name: "VSReferenceKind" } },
                 optional: true,
                 documentation: "The kind(s) of this reference (read, write, etc.).",
             },
@@ -204,7 +204,7 @@ const customStructures: Structure[] = [
             },
             {
                 name: "_vs_definitionText",
-                type: { kind: "reference", name: "ClassifiedTextElement" },
+                type: { kind: "reference", name: "VSClassifiedTextElement" },
                 optional: true,
                 documentation: "Classified display text for the definition (used for grouping headers in the UI).",
             },
@@ -224,7 +224,7 @@ const customStructures: Structure[] = [
         documentation: "A VS-specific reference item with grouping support for Find All References.",
     },
     {
-        name: "VsOnAutoInsertParams",
+        name: "VSOnAutoInsertParams",
         properties: [
             {
                 name: "_vs_textDocument",
@@ -245,7 +245,7 @@ const customStructures: Structure[] = [
         documentation: "Parameters for the textDocument/_vs_onAutoInsert request.",
     },
     {
-        name: "VsOnAutoInsertResponseItem",
+        name: "VSOnAutoInsertResponseItem",
         properties: [
             {
                 name: "_vs_textEditFormat",
@@ -511,7 +511,7 @@ const customStructures: Structure[] = [
         documentation: "Parameters for the custom/textDocument/multiDocumentHighlight request.",
     },
     {
-        name: "ClassifiedTextRun",
+        name: "VSClassifiedTextRun",
         properties: [
             {
                 name: "ClassificationTypeName",
@@ -545,11 +545,11 @@ const customStructures: Structure[] = [
         documentation: "A classified text run with text and classification type, used for colorized display in VS.",
     },
     {
-        name: "ClassifiedTextElement",
+        name: "VSClassifiedTextElement",
         properties: [
             {
                 name: "Runs",
-                type: { kind: "array", element: { kind: "reference", name: "ClassifiedTextRun" } },
+                type: { kind: "array", element: { kind: "reference", name: "VSClassifiedTextRun" } },
                 documentation: "The classified text runs that make up this element.",
             },
             {
@@ -564,7 +564,7 @@ const customStructures: Structure[] = [
 
 const customEnumerations: Enumeration[] = [
     {
-        name: "VsReferenceKind",
+        name: "VSReferenceKind",
         type: { kind: "base", name: "integer" },
         values: [
             { name: "Inactive", value: 0 },
@@ -740,12 +740,12 @@ const customRequests: Request[] = [
     },
     {
         method: "textDocument/_vs_onAutoInsert",
-        typeName: "VsOnAutoInsertRequest",
-        params: { kind: "reference", name: "VsOnAutoInsertParams" },
+        typeName: "VSOnAutoInsertRequest",
+        params: { kind: "reference", name: "VSOnAutoInsertParams" },
         result: {
             kind: "or",
             items: [
-                { kind: "reference", name: "VsOnAutoInsertResponseItem" },
+                { kind: "reference", name: "VSOnAutoInsertResponseItem" },
                 { kind: "base", name: "null" },
             ],
         },
@@ -754,12 +754,12 @@ const customRequests: Request[] = [
     },
     {
         method: "textDocument/_vs_references",
-        typeName: "VsReferencesRequest",
+        typeName: "VSReferencesRequest",
         params: { kind: "reference", name: "ReferenceParams" },
         result: {
             kind: "or",
             items: [
-                { kind: "array", element: { kind: "reference", name: "VsReferenceItem" } },
+                { kind: "array", element: { kind: "reference", name: "VSReferenceItem" } },
                 { kind: "base", name: "null" },
             ],
         },
@@ -872,7 +872,7 @@ function patchAndPreprocessModel() {
             });
             structure.properties.push({
                 name: "_vs_onAutoInsertProvider",
-                type: { kind: "reference", name: "VsOnAutoInsertOptions" },
+                type: { kind: "reference", name: "VSOnAutoInsertOptions" },
                 optional: true,
                 documentation: "Provider options for the VS auto-insert feature via textDocument/_vs_onAutoInsert.",
             });
@@ -956,7 +956,7 @@ function patchAndPreprocessModel() {
         if (structure.name === "SignatureInformation") {
             structure.properties.push({
                 name: "_vs_colorizedLabel",
-                type: { kind: "reference", name: "ClassifiedTextElement" },
+                type: { kind: "reference", name: "VSClassifiedTextElement" },
                 optional: true,
                 documentation: "A colorized label for the signature, providing classified text runs for VS syntax coloring.",
             });
