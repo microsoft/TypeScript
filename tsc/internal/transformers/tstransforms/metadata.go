@@ -15,6 +15,7 @@ type MetadataTransformer struct {
 	resolver         printer.EmitResolver
 
 	serializer          *metadataSerializer
+	languageVersion     core.ScriptTarget
 	strictNullChecks    bool
 	parent              *ast.Node
 	currentLexicalScope *ast.Node
@@ -24,6 +25,7 @@ func NewMetadataTransformer(opt *transformers.TransformOptions) *transformers.Tr
 	tx := &MetadataTransformer{
 		legacyDecorators: opt.CompilerOptions.ExperimentalDecorators.IsTrue(),
 		resolver:         opt.EmitResolver,
+		languageVersion:  opt.CompilerOptions.GetEmitScriptTarget(),
 		strictNullChecks: opt.CompilerOptions.GetStrictOptionValue(opt.CompilerOptions.StrictNullChecks),
 	}
 	return tx.NewTransformer(tx.visit, opt.Context)
@@ -52,7 +54,7 @@ func (tx *MetadataTransformer) visit(node *ast.Node) *ast.Node {
 		defer tx.setParent(nil)
 		tx.currentLexicalScope = node
 		defer tx.setCurrentLexicalScope(nil)
-		tx.serializer = newMetadataSerializer(tx.resolver, tx.Factory(), tx.EmitContext(), tx.strictNullChecks)
+		tx.serializer = newMetadataSerializer(tx.resolver, tx.Factory(), tx.EmitContext(), tx.languageVersion, tx.strictNullChecks)
 		updated := tx.Visitor().VisitEachChild(node)
 		tx.EmitContext().AddEmitHelper(updated, tx.EmitContext().ReadEmitHelpers()...)
 		return updated

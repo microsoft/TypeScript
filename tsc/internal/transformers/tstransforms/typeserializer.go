@@ -2,6 +2,7 @@ package tstransforms
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/transformers"
@@ -9,6 +10,7 @@ import (
 
 type metadataSerializer struct {
 	resolver         printer.EmitResolver
+	languageVersion  core.ScriptTarget
 	strictNullChecks bool
 	f                *printer.NodeFactory
 	ec               *printer.EmitContext
@@ -21,8 +23,8 @@ type metadataSerializerContext struct {
 	serializingConditionalTypeBranch bool
 }
 
-func newMetadataSerializer(resolver printer.EmitResolver, f *printer.NodeFactory, ec *printer.EmitContext, strictNullChecks bool) *metadataSerializer {
-	return &metadataSerializer{resolver: resolver, f: f, ec: ec, strictNullChecks: strictNullChecks}
+func newMetadataSerializer(resolver printer.EmitResolver, f *printer.NodeFactory, ec *printer.EmitContext, languageVersion core.ScriptTarget, strictNullChecks bool) *metadataSerializer {
+	return &metadataSerializer{resolver: resolver, languageVersion: languageVersion, f: f, ec: ec, strictNullChecks: strictNullChecks}
 }
 
 func (s *metadataSerializer) setContext(ctx metadataSerializerContext) {
@@ -203,7 +205,7 @@ func (s *metadataSerializer) serializeTypeNode(node *ast.Node) *ast.Node {
 	case ast.KindNumberKeyword:
 		return s.f.NewIdentifier("Number")
 	case ast.KindBigIntKeyword:
-		return s.f.NewIdentifier("BigInt") // !!! todo: fallback for targets < es2020
+		return s.serializeBigIntConstructor()
 	case ast.KindSymbolKeyword:
 		return s.f.NewIdentifier("Symbol")
 	case ast.KindTypeReference:
@@ -305,7 +307,7 @@ func (s *metadataSerializer) serializeLiteralOfLiteralTypeNode(node *ast.Node) *
 	case ast.KindNumericLiteral:
 		return s.f.NewIdentifier("Number")
 	case ast.KindBigIntLiteral:
-		return s.f.NewIdentifier("BigInt") // !!! todo: fallback for targets < es2020
+		return s.serializeBigIntConstructor()
 	case ast.KindTrueKeyword, ast.KindFalseKeyword:
 		return s.f.NewIdentifier("Boolean")
 	case ast.KindNullKeyword:
@@ -352,7 +354,7 @@ func (s *metadataSerializer) serializeTypeReferenceNode(node *ast.TypeReferenceN
 		return s.f.NewVoidZeroExpression()
 
 	case printer.TypeReferenceSerializationKindBigIntLikeType:
-		return s.f.NewIdentifier("BigInt")
+		return s.serializeBigIntConstructor()
 
 	case printer.TypeReferenceSerializationKindBooleanType:
 		return s.f.NewIdentifier("Boolean")
@@ -381,6 +383,19 @@ func (s *metadataSerializer) serializeTypeReferenceNode(node *ast.TypeReferenceN
 		debug.AssertNever(kind, "unknown type reference serialization kind")
 		return nil
 	}
+}
+
+func (s *metadataSerializer) serializeBigIntConstructor() *ast.Node {
+	if s.languageVersion >= core.ScriptTargetES2020 {
+		return s.f.NewIdentifier("BigInt")
+	}
+	return s.f.NewConditionalExpression(
+		s.f.NewTypeCheck(s.f.NewIdentifier("BigInt"), "function"),
+		s.f.NewToken(ast.KindQuestionToken),
+		s.f.NewIdentifier("BigInt"),
+		s.f.NewToken(ast.KindColonToken),
+		s.f.NewIdentifier("Object"),
+	)
 }
 
 /**
