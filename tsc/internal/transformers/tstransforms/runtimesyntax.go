@@ -196,7 +196,7 @@ func (tx *RuntimeSyntaxTransformer) getExpressionForPropertyName(member *ast.Enu
 		// enums don't support computed properties so we always generate the 'expression' part of the name as-is.
 		return tx.Visitor().VisitNode(n.Expression)
 	case ast.KindIdentifier:
-		return tx.Factory().NewStringLiteralFromNode(name)
+		return tx.Factory().NewStringLiteral(name.Text(), ast.TokenFlagsNone)
 	case ast.KindStringLiteral: // !!! propagate token flags (will produce new diffs)
 		return tx.Factory().NewStringLiteral(name.Text(), ast.TokenFlagsNone)
 	case ast.KindNumericLiteral:
