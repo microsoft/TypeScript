@@ -20,9 +20,8 @@ import (
 //   - fcntl(fd, F_GETPATH, buf) asks the kernel for the canonical path of the
 //     open file descriptor, written into a MAXPATHLEN buffer.
 //
-// unix.FcntlInt takes an int arg, but on darwin amd64/arm64 Go's int is
-// 64 bits — the same width as a pointer — so the buffer address
-// round-trips through int without loss.
+// unix.FcntlInt takes an int arg, so call it through a uintptr-escaping wrapper
+// to keep the buffer pointer valid until fcntl returns.
 
 var hasFGetPath = sync.OnceValue(func() bool {
 	// Verify that F_GETPATH is supported by this kernel version.
@@ -38,8 +37,13 @@ var hasFGetPath = sync.OnceValue(func() bool {
 
 func fcntlGetPath(fd int, buf *[unix.PathMax]byte) (int, error) {
 	return ignoringEINTR(func() (int, error) {
-		return unix.FcntlInt(uintptr(fd), unix.F_GETPATH, int(uintptr(unsafe.Pointer(&buf[0]))))
+		return fcntlGetPathPtr(uintptr(fd), uintptr(unsafe.Pointer(&buf[0])))
 	})
+}
+
+//go:uintptrescapes
+func fcntlGetPathPtr(fd uintptr, buf uintptr) (int, error) {
+	return unix.FcntlInt(fd, unix.F_GETPATH, int(buf))
 }
 
 func realpath(path string) (string, error) {
