@@ -13790,7 +13790,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
         const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
-        return isEntityNameExpression(expr);
+        return isEntityNameExpression(expr) ||
+            isElementAccessExpression(expr) && isStringLiteral(expr.argumentExpression) && isEntityNameExpression(expr.expression);
     }
 
     function isTypeUsableAsIndexSignature(type: Type): boolean {
