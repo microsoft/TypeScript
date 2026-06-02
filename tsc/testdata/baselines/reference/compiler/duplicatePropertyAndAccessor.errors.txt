@@ -1,0 +1,16 @@
+duplicatePropertyAndAccessor.ts(4,3): error TS2300: Duplicate identifier 'y'.
+duplicatePropertyAndAccessor.ts(5,12): error TS2300: Duplicate identifier 'y'.
+
+
+==== duplicatePropertyAndAccessor.ts (2 errors) ====
+    // https://github.com/microsoft/typescript-go/issues/4130
+    
+    class C {
+      y: number = 2;
+      ~
+!!! error TS2300: Duplicate identifier 'y'.
+      accessor y: number = 3;
+               ~
+!!! error TS2300: Duplicate identifier 'y'.
+    }
+    

@@ -18377,11 +18377,7 @@ func (c *Checker) getTypeOfAccessors(symbol *ast.Symbol) *Type {
 		}
 		getter := ast.GetDeclarationOfKind(symbol, ast.KindGetAccessor)
 		setter := ast.GetDeclarationOfKind(symbol, ast.KindSetAccessor)
-		property := ast.GetDeclarationOfKind(symbol, ast.KindPropertyDeclaration)
-		var accessor *ast.Node
-		if property != nil && ast.IsAutoAccessorPropertyDeclaration(property) {
-			accessor = property
-		}
+		accessor := core.Find(symbol.Declarations, ast.IsAutoAccessorPropertyDeclaration)
 		// We try to resolve a getter type annotation, a setter type annotation, or a getter function
 		// body return type inference, in that order.
 		t := c.getAnnotatedAccessorType(getter)

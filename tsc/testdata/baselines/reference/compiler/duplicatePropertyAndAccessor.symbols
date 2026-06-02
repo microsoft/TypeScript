@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/duplicatePropertyAndAccessor.ts] ////
+
+=== duplicatePropertyAndAccessor.ts ===
+// https://github.com/microsoft/typescript-go/issues/4130
+
+class C {
+>C : Symbol(C, Decl(duplicatePropertyAndAccessor.ts, 0, 0))
+
+  y: number = 2;
+>y : Symbol(C.y, Decl(duplicatePropertyAndAccessor.ts, 2, 9), Decl(duplicatePropertyAndAccessor.ts, 3, 16))
+
+  accessor y: number = 3;
+>y : Symbol(C.y, Decl(duplicatePropertyAndAccessor.ts, 2, 9), Decl(duplicatePropertyAndAccessor.ts, 3, 16))
+}
+
