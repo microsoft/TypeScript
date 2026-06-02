@@ -921,7 +921,7 @@ func decodeEntity(entity string) (rune, bool) {
 		}
 
 		base := 10
-		if entity[0] == 'x' || entity[0] == 'X' {
+		if entity[0] == 'x' {
 			base = 16
 			entity = entity[1:]
 		}
