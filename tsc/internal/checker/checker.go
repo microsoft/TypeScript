@@ -28099,6 +28099,9 @@ func (c *Checker) markIdentifierAliasReferenced(location *ast.IdentifierNode) {
 }
 
 func (c *Checker) markPropertyAliasReferenced(location *ast.Node /*PropertyAccessExpression | QualifiedName*/, propSymbol *ast.Symbol, parentType *Type) {
+	if isPartOfImportEqualsModuleReference(location) {
+		return
+	}
 	var left *ast.Node
 	if ast.IsPropertyAccessExpression(location) {
 		left = location.Expression()
@@ -28165,6 +28168,19 @@ func (c *Checker) markPropertyAliasReferenced(location *ast.Node /*PropertyAcces
 	if !(prop != nil && (isConstEnumOrConstEnumOnlyModule(prop) || prop.Flags&ast.SymbolFlagsEnumMember != 0 && location.Parent.Kind == ast.KindEnumMember)) {
 		c.markAliasReferenced(parentSymbol, location)
 	}
+}
+
+func isPartOfImportEqualsModuleReference(location *ast.Node) bool {
+	importEquals := ast.FindAncestorKind(location, ast.KindImportEqualsDeclaration)
+	if importEquals == nil {
+		return false
+	}
+	for node := location; node != nil && node != importEquals; node = node.Parent {
+		if node == importEquals.AsImportEqualsDeclaration().ModuleReference {
+			return true
+		}
+	}
+	return false
 }
 
 func (c *Checker) markExportAssignmentAliasReferenced(location *ast.Node /*ExportAssignment*/) {
