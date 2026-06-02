@@ -136,6 +136,11 @@ func (tx *asyncTransformer) visit(node *ast.Node) *ast.Node {
 	cleanup := tx.descendInto(node)
 	defer cleanup()
 
+	if tx.EmitContext().EmitFlags(node)&printer.EFNoLexicalThis != 0 && tx.inHasLexicalThisContext() {
+		tx.setContextFlag(asyncContextHasLexicalThis, false)
+		defer tx.setContextFlag(asyncContextHasLexicalThis, true)
+	}
+
 	if node.SubtreeFacts()&(ast.SubtreeContainsAnyAwait|ast.SubtreeContainsAwait) == 0 {
 		return tx.fallbackVisitor(node)
 	}

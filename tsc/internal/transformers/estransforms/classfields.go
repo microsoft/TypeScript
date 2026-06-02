@@ -1415,6 +1415,7 @@ func (tx *classFieldsTransformer) transformClassStaticBlockDeclaration(node *ast
 		arrowFunction.AsArrowFunction().Body.AsBlock().Statements.Loc = node.AsClassStaticBlockDeclaration().Body.AsBlock().Statements.Loc
 		tx.EmitContext().SetOriginal(iife, node)
 		tx.EmitContext().AssignSourceMapRange(iife, node)
+		tx.EmitContext().AddEmitFlags(arrowFunction, printer.EFNoLexicalThis)
 		return iife
 	}
 	return nil
@@ -2712,6 +2713,9 @@ func (tx *classFieldsTransformer) generateInitializedPropertyExpressionsOrClassS
 func (tx *classFieldsTransformer) transformProperty(property *ast.PropertyDeclaration, receiver *ast.Expression) *ast.Expression {
 	savedCurrentClassElement := tx.currentClassElement
 	transformed := tx.transformPropertyWorker(property, receiver)
+	if transformed != nil && ast.HasStaticModifier(property.AsNode()) {
+		tx.EmitContext().AddEmitFlags(transformed, printer.EFNoLexicalThis)
+	}
 	if transformed != nil && ast.HasStaticModifier(property.AsNode()) &&
 		tx.lexicalEnvironment != nil && tx.lexicalEnvironment.data != nil && tx.lexicalEnvironment.data.facts != 0 {
 		// capture the lexical environment for the member
