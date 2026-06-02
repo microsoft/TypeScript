@@ -256,6 +256,13 @@ func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) Flow
 		if !c.isReachableFlowNode(flow) {
 			return FlowType{t: c.unreachableNeverType}
 		}
+		// A matching dotted name might also be an expando property on a function *expression*,
+		// in which case we continue control flow analysis back to the function's declaration
+		if ast.IsVariableDeclaration(node) && (ast.IsInJSFile(node) || ast.IsVarConstLike(node)) {
+			if init := node.Initializer(); init != nil && ast.IsFunctionExpressionOrArrowFunction(init) {
+				return c.getTypeAtFlowNode(f, flow.Antecedent)
+			}
+		}
 		return FlowType{t: f.declaredType}
 	}
 	// for (const _ in ref) acts as a nonnull on ref

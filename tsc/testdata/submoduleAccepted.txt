@@ -463,9 +463,6 @@ compiler/invalidUnicodeEscapeSequance2.errors.txt.diff
 compiler/invalidUnicodeEscapeSequance3.errors.txt.diff
 compiler/invalidUnicodeEscapeSequance4.errors.txt.diff
 
-## wrong errors ##
-compiler/classFieldSuperAccessibleJs1.errors.txt.diff
-
 ## deprecated errors ##
 compiler/declarationFileNoCrashOnExtraExportModifier.errors.txt.diff
 compiler/declarationFileNoCrashOnExtraExportModifier.symbols.diff

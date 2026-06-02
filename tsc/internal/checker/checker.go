@@ -11362,18 +11362,21 @@ func (c *Checker) getFlowTypeOfAccessExpression(node *ast.Node, prop *ast.Symbol
 	// and if we are in a constructor of the same class as the property declaration, assume that
 	// the property is uninitialized at the top of the control flow.
 	assumeUninitialized := false
-	initialType := propType
 	if c.strictNullChecks && prop != nil {
-		declaration := prop.ValueDeclaration
-		if declaration != nil && c.strictPropertyInitialization && ast.IsAccessExpression(node) && node.Expression().Kind == ast.KindThisKeyword && c.isPropertyWithoutInitializer(declaration) && !ast.IsStatic(declaration) {
-			flowContainer := c.getControlFlowContainer(node)
-			if ast.IsConstructorDeclaration(flowContainer) && flowContainer.Parent == declaration.Parent && declaration.Flags&ast.NodeFlagsAmbient == 0 {
+		if declaration := prop.ValueDeclaration; declaration != nil {
+			if c.strictPropertyInitialization && ast.IsAccessExpression(node) && node.Expression().Kind == ast.KindThisKeyword &&
+				c.isPropertyWithoutInitializer(declaration) && !ast.IsStatic(declaration) {
+				flowContainer := c.getControlFlowContainer(node)
+				if ast.IsConstructorDeclaration(flowContainer) && flowContainer.Parent == declaration.Parent && declaration.Flags&ast.NodeFlagsAmbient == 0 {
+					assumeUninitialized = true
+				}
+			} else if ast.IsBinaryExpression(declaration) && ast.IsPropertyAccessExpression(declaration.AsBinaryExpression().Left) &&
+				c.getControlFlowContainer(node) == c.getControlFlowContainer(declaration) {
 				assumeUninitialized = true
-				initialType = c.getOptionalType(propType, false /*isProperty*/)
 			}
 		}
 	}
-	flowType := c.getFlowTypeOfReferenceEx(node, propType, initialType, nil, nil)
+	flowType := c.getFlowTypeOfReferenceEx(node, propType, c.addOptionalityEx(propType, false /*isProperty*/, assumeUninitialized), nil, nil)
 	if assumeUninitialized && !c.containsUndefinedType(propType) && c.containsUndefinedType(flowType) {
 		c.error(errorNode, diagnostics.Property_0_is_used_before_being_assigned, c.symbolToString(prop))
 		// Return the declared type to reduce follow-on errors
