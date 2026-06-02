@@ -478,6 +478,9 @@ func convertJsonOption(
 				return convertJsonOption(opt.Elements(), value, basePath, propertyAssignment, valueExpression, sourceFile)
 			}
 		case CommandLineOptionTypeEnum:
+			if value == nil {
+				return nil, nil
+			}
 			return convertJsonOptionOfEnumType(opt, value.(string), valueExpression, sourceFile)
 		}
 
@@ -633,9 +636,16 @@ func convertOptionsFromJson[O optionParser](optionsNameMap CommandLineOptionName
 
 		commandLineOptionEnumMapVal := opt.EnumMap()
 		if commandLineOptionEnumMapVal != nil {
-			val, ok := commandLineOptionEnumMapVal.Get(strings.ToLower(value.(string)))
-			if ok {
-				errors = result.ParseOption(key, val)
+			if value, ok := value.(string); ok {
+				val, ok := commandLineOptionEnumMapVal.Get(strings.ToLower(value))
+				if ok {
+					errors = result.ParseOption(key, val)
+				}
+			} else {
+				convertJson, err := convertJsonOption(opt, value, basePath, nil, nil, nil)
+				errors = append(errors, err...)
+				compilerOptionsErr := result.ParseOption(key, convertJson)
+				errors = append(errors, compilerOptionsErr...)
 			}
 		} else {
 			convertJson, err := convertJsonOption(opt, value, basePath, nil, nil, nil)

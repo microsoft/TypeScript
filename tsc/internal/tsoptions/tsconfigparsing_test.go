@@ -829,6 +829,37 @@ func TestParseJsonSourceFileConfigFileContent(t *testing.T) {
 	}
 }
 
+func TestParseNullEnumCompilerOptions(t *testing.T) {
+	t.Parallel()
+
+	config := testConfig{
+		jsonText: `{
+			"compilerOptions": {
+				"target": null,
+				"module": null
+			}
+		}`,
+		configFileName: "tsconfig.json",
+		basePath:       "/",
+		allFileList:    map[string]string{"/app.ts": ""},
+	}
+	for name, getParsed := range map[string]func(testConfig, tsoptions.ParseConfigHost, string) *tsoptions.ParsedCommandLine{
+		"json api":           getParsedWithJsonApi,
+		"jsonSourceFile api": getParsedWithJsonSourceFileApi,
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			allFileLists := make(map[string]string, len(config.allFileList)+1)
+			maps.Copy(allFileLists, config.allFileList)
+			allFileLists["/tsconfig.json"] = config.jsonText
+			host := tsoptionstest.NewVFSParseConfigHost(allFileLists, config.basePath, true /*useCaseSensitiveFileNames*/)
+			parsedConfigFileContent := getParsed(config, host, config.basePath)
+			assert.Equal(t, len(parsedConfigFileContent.Errors), 0)
+		})
+	}
+}
+
 func getParsedWithJsonSourceFileApi(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {
 	configFileName := tspath.GetNormalizedAbsolutePath(config.configFileName, basePath)
 	path := tspath.ToPath(config.configFileName, basePath, host.FS().UseCaseSensitiveFileNames())
