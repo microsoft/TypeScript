@@ -1392,7 +1392,11 @@ func shouldReportNoInputFiles(fileNames []string, canJsonReportNoInputFiles bool
 func validateSpecs(specs any, disallowTrailingRecursion bool, jsonSourceFile *ast.SourceFile, specKey string) ([]string, []*ast.Diagnostic) {
 	createDiagnostic := func(message *diagnostics.Message, spec string) *ast.Diagnostic {
 		element := GetTsConfigPropArrayElementValue(jsonSourceFile, specKey, spec)
-		return CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(jsonSourceFile, element.AsNode(), message, spec)
+		var node *ast.Node
+		if element != nil {
+			node = element.AsNode()
+		}
+		return CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(jsonSourceFile, node, message, spec)
 	}
 	var errors []*ast.Diagnostic
 	var finalSpecs []string
@@ -1411,11 +1415,10 @@ func validateSpecs(specs any, disallowTrailingRecursion bool, jsonSourceFile *as
 }
 
 func specToDiagnostic(spec string, disallowTrailingRecursion bool) *diagnostics.Message {
-	if disallowTrailingRecursion {
-		if invalidTrailingRecursion(spec) {
-			return diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0
-		}
-	} else if invalidDotDotAfterRecursiveWildcard(spec) {
+	if disallowTrailingRecursion && invalidTrailingRecursion(spec) {
+		return diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0
+	}
+	if invalidDotDotAfterRecursiveWildcard(spec) {
 		return diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0
 	}
 	return nil

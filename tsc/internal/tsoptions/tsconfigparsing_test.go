@@ -237,6 +237,17 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 		}},
 	},
 	{
+		title: "generates errors for include with parent directory after recursive wildcard",
+		input: []testConfig{{
+			jsonText: `{
+                "include": ["**/../*.ts"]
+            }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": ""},
+		}},
+	},
+	{
 		title:               "parses tsconfig with compilerOptions, files, include, and exclude",
 		noSubmoduleBaseline: true,
 		input: []testConfig{{
