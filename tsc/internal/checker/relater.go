@@ -1932,7 +1932,7 @@ func (c *Checker) getParameterNameAtPosition(signature *Signature, pos int) stri
 	restType := c.getTypeOfSymbol(restParameter)
 	if isTupleType(restType) {
 		index := pos - paramCount
-		c.getTupleElementLabel(restType.TargetTupleType().elementInfos[index], restParameter, index)
+		return c.getTupleElementLabel(restType.TargetTupleType().elementInfos[index], restParameter, index)
 	}
 	return restParameter.Name
 }

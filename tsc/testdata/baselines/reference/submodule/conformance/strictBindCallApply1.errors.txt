@@ -39,7 +39,7 @@ strictBindCallApply1.ts(76,5): error TS2769: No overload matches this call.
 strictBindCallApply1.ts(81,5): error TS2769: No overload matches this call.
   The last overload gave the following error.
     The 'this' context of type '(this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void' is not assignable to method's 'this' of type '(this: 1, args_0: unknown) => void'.
-      Types of parameters 'args' and 'args' are incompatible.
+      Types of parameters 'args' and 'args_0' are incompatible.
         Type '[unknown]' is not assignable to type 'T extends 1 ? [unknown] : [unknown, unknown]'.
 
 
@@ -194,7 +194,7 @@ strictBindCallApply1.ts(81,5): error TS2769: No overload matches this call.
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     The 'this' context of type '(this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void' is not assignable to method's 'this' of type '(this: 1, args_0: unknown) => void'.
-!!! error TS2769:       Types of parameters 'args' and 'args' are incompatible.
+!!! error TS2769:       Types of parameters 'args' and 'args_0' are incompatible.
 !!! error TS2769:         Type '[unknown]' is not assignable to type 'T extends 1 ? [unknown] : [unknown, unknown]'.
 !!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
     }
