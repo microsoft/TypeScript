@@ -8737,6 +8737,10 @@ func (c *Checker) resolveDecorator(node *ast.Node, candidatesOutArray *[]*Signat
 		c.invocationErrorRecovery(apparentType, SignatureKindCall, diag)
 		return c.resolveErrorCall(node)
 	}
+	decoratorSignature := c.getDecoratorCallSignature(node)
+	if decoratorSignature == nil {
+		return c.resolveErrorCall(node)
+	}
 	return c.resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlagsNone, headMessage)
 }
 

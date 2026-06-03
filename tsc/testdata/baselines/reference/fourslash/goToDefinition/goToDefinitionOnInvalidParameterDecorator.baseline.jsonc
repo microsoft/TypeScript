@@ -1,0 +1,3 @@
+// === goToDefinition ===
+// === /goToDefinitionOnInvalidParameterDecorator.ts ===
+// <|function [|f|](@/*GOTO DEF*/f) {}|>
