@@ -500,6 +500,10 @@ func (p *Parser) createJSDocCache() map[*ast.Node][]*ast.Node {
 func (p *Parser) parseToplevelStatement(i int) *ast.Node {
 	p.statementHasAwaitIdentifier = false
 	statement := p.parseStatement()
+	// Reparsed nodes (e.g. JSDoc @typedef) produced while parsing this statement are inserted
+	// into the statement list before this statement, so account for them when recording the
+	// statement's index for possibleAwaitSpans.
+	i += len(p.reparseList)
 	if p.statementHasAwaitIdentifier && statement.Flags&ast.NodeFlagsAwaitContext == 0 {
 		if len(p.possibleAwaitSpans) == 0 || p.possibleAwaitSpans[len(p.possibleAwaitSpans)-1] != i {
 			p.possibleAwaitSpans = append(p.possibleAwaitSpans, i, i+1)
