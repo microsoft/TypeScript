@@ -23,7 +23,7 @@ func (p *Pattern) Matches(candidate string) bool {
 	if p.StarIndex == -1 {
 		return p.Text == candidate
 	}
-	return len(candidate) >= p.StarIndex &&
+	return len(candidate) >= len(p.Text)-1 &&
 		strings.HasPrefix(candidate, p.Text[:p.StarIndex]) &&
 		strings.HasSuffix(candidate, p.Text[p.StarIndex+1:])
 }
