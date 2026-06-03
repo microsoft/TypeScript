@@ -310,11 +310,15 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			} else {
 				result.Reopened = uri
 			}
+			scriptKind := lsconv.LanguageKindToScriptKind(events.openChange.LanguageKind)
+			if scriptKind == core.ScriptKindUnknown {
+				scriptKind = core.GetScriptKindFromFileName(uri.FileName())
+			}
 			newOverlays[path] = newOverlay(
 				uri.FileName(),
 				events.openChange.Content,
 				events.openChange.Version,
-				lsconv.LanguageKindToScriptKind(events.openChange.LanguageKind),
+				scriptKind,
 			)
 			continue
 		}

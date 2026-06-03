@@ -3,6 +3,7 @@ package project
 import (
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
@@ -160,6 +161,26 @@ func TestProcessChanges(t *testing.T) {
 		fh := fs.getFile(testURI1.FileName())
 		assert.Assert(t, fh != nil)
 		assert.Assert(t, fh.MatchesDiskText())
+	})
+
+	t.Run("open falls back to file extension for unknown language kind", func(t *testing.T) {
+		t.Parallel()
+		fs := createOverlayFS()
+		uri := lsproto.DocumentUri("file:///test1.mts")
+
+		fs.processChanges([]FileChange{
+			{
+				Kind:         FileChangeKindOpen,
+				URI:          uri,
+				Version:      1,
+				Content:      "export const x = 1;",
+				LanguageKind: lsproto.LanguageKind("mts"),
+			},
+		})
+
+		fh := fs.getFile(uri.FileName())
+		assert.Assert(t, fh != nil)
+		assert.Equal(t, fh.Kind(), core.ScriptKindTS)
 	})
 
 	t.Run("watch change on overlay marks as not matching disk", func(t *testing.T) {
