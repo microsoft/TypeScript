@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/nodeNextPackageSelfNameExportsEqualsDeclarationDir.ts] ////
+
+=== /dist/main.d.cts ===
+
+export {};
+=== /main.cts ===
+import * as s from "self";
+>s : any
+
+s;
+>s : any
+

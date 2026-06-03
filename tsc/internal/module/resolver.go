@@ -931,7 +931,10 @@ func (r *resolutionState) tryLoadInputFileForPath(finalPath string, entry string
 				CurrentDirectory:          r.resolver.host.GetCurrentDirectory(),
 			}) {
 				// The matched export is looking up something in either the out declaration or js dir, now map the written path back into the source dir and source extension
-				pathFragment := finalPath[len(candidateDir)+1:] // +1 to also remove directory separator
+				var pathFragment string
+				if len(finalPath) > len(candidateDir) {
+					pathFragment = finalPath[len(candidateDir)+1:] // +1 to also remove directory separator
+				}
 				possibleInputBase := tspath.CombinePaths(rootDir, pathFragment)
 				jsAndDtsExtensions := []string{tspath.ExtensionMjs, tspath.ExtensionCjs, tspath.ExtensionJs, tspath.ExtensionJson, tspath.ExtensionDmts, tspath.ExtensionDcts, tspath.ExtensionDts}
 				for _, ext := range jsAndDtsExtensions {
