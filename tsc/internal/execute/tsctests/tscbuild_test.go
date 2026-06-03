@@ -1229,6 +1229,99 @@ func TestBuildInferredTypeFromMonorepoReference(t *testing.T) {
 	}
 }
 
+func TestBuildDeclarationEmitForReferencedProjectTypesSubpath(t *testing.T) {
+	t.Parallel()
+	testCases := []*tscInput{
+		{
+			// https://github.com/microsoft/typescript-go/issues/3617
+			// This package.json exposes the same files under two exports subpaths
+			// (`./src/*` and `./types/*`), so both `import("@scope/dep/src/...")` and
+			// `import("@scope/dep/types/...")` are technically valid module specifiers for
+			// the inferred type. The point of this test is not that one is "correct" and
+			// the other "wrong", but that we pick the same one Strada does: when ranking
+			// candidate paths, project-reference redirects (here the emitted `./types`
+			// `.d.ts`) sort ahead of non-redirect paths (the symlinked `./src` source).
+			// A regression in `comparePathsByRedirect` had inverted that ordering, causing
+			// the `./src/*` specifier to win instead.
+			subScenario: "declaration emit names referenced project type via types subpath",
+			files: FileMap{
+				"/home/src/workspaces/solution/packages/dep/package.json": stringtestutil.Dedent(`
+					{
+						"name": "@scope/dep",
+						"version": "1.0.0",
+						"exports": {
+							"./src/*": "./src/*",
+							"./types/*": "./types/*",
+							".": { "types": "./types/index.d.ts", "default": "./src/index.ts" }
+						}
+					}`),
+				"/home/src/workspaces/solution/packages/dep/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true,
+							"declaration": true,
+							"emitDeclarationOnly": true,
+							"module": "esnext",
+							"moduleResolution": "bundler",
+							"rootDir": "src",
+							"outDir": "types",
+							"declarationDir": "types",
+							"strict": true
+						},
+						"include": ["src"]
+					}`),
+				"/home/src/workspaces/solution/packages/dep/src/index.ts": stringtestutil.Dedent(`
+					import type { ComponentTypes as NewComponentTypes } from "./themes/componentTypes/index.js"
+					export type { NewComponentTypes }`),
+				"/home/src/workspaces/solution/packages/dep/src/themes/componentTypes/index.ts": stringtestutil.Dedent(`
+					import type FormFieldLayout from "./formFieldLayout.js"
+					export type ComponentTypes = {
+						formFieldLayout: () => FormFieldLayout
+					}`),
+				"/home/src/workspaces/solution/packages/dep/src/themes/componentTypes/formFieldLayout.ts": stringtestutil.Dedent(`
+					export type FormFieldLayout = {
+						textColor: string
+						fontSize: string
+					}
+					export default FormFieldLayout`),
+				"/home/src/workspaces/solution/packages/consumer/package.json": stringtestutil.Dedent(`
+					{
+						"name": "@scope/consumer",
+						"version": "1.0.0"
+					}`),
+				"/home/src/workspaces/solution/packages/consumer/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true,
+							"declaration": true,
+							"emitDeclarationOnly": true,
+							"module": "esnext",
+							"moduleResolution": "bundler",
+							"rootDir": "src",
+							"outDir": "types",
+							"declarationDir": "types",
+							"strict": true
+						},
+						"include": ["src"],
+						"references": [{ "path": "../dep" }]
+					}`),
+				"/home/src/workspaces/solution/packages/consumer/src/index.ts": stringtestutil.Dedent(`
+					import type { NewComponentTypes } from "@scope/dep"
+					declare const c: NewComponentTypes
+					export const style = c.formFieldLayout()`),
+				"/home/src/workspaces/solution/node_modules/@scope/dep":      vfstest.Symlink("/home/src/workspaces/solution/packages/dep"),
+				"/home/src/workspaces/solution/node_modules/@scope/consumer": vfstest.Symlink("/home/src/workspaces/solution/packages/consumer"),
+			},
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"--b", "packages/consumer", "--verbose"},
+		},
+	}
+
+	for _, test := range testCases {
+		test.run(t, "declarationEmitForReferencedProjectTypesSubpath")
+	}
+}
+
 func TestBuildJavascriptProjectEmit(t *testing.T) {
 	t.Parallel()
 	testCases := []*tscInput{
