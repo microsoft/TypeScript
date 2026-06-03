@@ -195,9 +195,10 @@ export class Client implements vscode.Disposable {
         this.client.registerFeature(
             {
                 fillClientCapabilities(capabilities: ClientCapabilities): void {
-                    capabilities.textDocument = capabilities.textDocument ?? {};
-                    capabilities.textDocument.hover = capabilities.textDocument.hover ?? {};
-                    (capabilities.textDocument.hover as { verbosityLevel?: boolean; }).verbosityLevel = true;
+                    capabilities.experimental = typeof capabilities.experimental === "object" && capabilities.experimental !== null
+                        ? capabilities.experimental
+                        : {};
+                    (capabilities.experimental as { hoverVerbosityLevel?: boolean; }).hoverVerbosityLevel = true;
                 },
                 initialize(): void {},
                 getState() {

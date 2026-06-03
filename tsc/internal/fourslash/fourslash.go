@@ -409,8 +409,10 @@ var (
 		LinkSupport: ptrTrue,
 	}
 	defaultHoverCapabilities = &lsproto.HoverClientCapabilities{
-		ContentFormat:  &[]lsproto.MarkupKind{lsproto.MarkupKindMarkdown, lsproto.MarkupKindPlainText},
-		VerbosityLevel: ptrTrue,
+		ContentFormat: &[]lsproto.MarkupKind{lsproto.MarkupKindMarkdown, lsproto.MarkupKindPlainText},
+	}
+	defaultExperimentalCapabilities = &lsproto.ExperimentalClientCapabilities{
+		HoverVerbosityLevel: ptrTrue,
 	}
 	defaultSignatureHelpCapabilities = &lsproto.SignatureHelpClientCapabilities{
 		SignatureInformation: &lsproto.ClientSignatureInformationOptions{
@@ -469,6 +471,9 @@ func GetDefaultCapabilities() *lsproto.ClientCapabilities {
 	return &lsproto.ClientCapabilities{
 		General: &lsproto.GeneralClientCapabilities{
 			PositionEncodings: &[]lsproto.PositionEncodingKind{lsproto.PositionEncodingKindUTF8},
+		},
+		Experimental: &lsproto.ExperimentalClientCapabilities{
+			HoverVerbosityLevel: ptrTrue,
 		},
 		TextDocument: &lsproto.TextDocumentClientCapabilities{
 			Completion: &lsproto.CompletionClientCapabilities{
@@ -563,6 +568,9 @@ func getCapabilitiesWithDefaults(capabilities *lsproto.ClientCapabilities) *lspr
 	}
 	capabilitiesWithDefaults.General = &lsproto.GeneralClientCapabilities{
 		PositionEncodings: &[]lsproto.PositionEncodingKind{lsproto.PositionEncodingKindUTF8},
+	}
+	if capabilitiesWithDefaults.Experimental == nil {
+		capabilitiesWithDefaults.Experimental = defaultExperimentalCapabilities
 	}
 	if capabilitiesWithDefaults.TextDocument == nil {
 		capabilitiesWithDefaults.TextDocument = &lsproto.TextDocumentClientCapabilities{}

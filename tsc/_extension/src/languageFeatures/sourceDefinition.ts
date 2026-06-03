@@ -12,8 +12,8 @@ const sourceDefinitionContext = "tsSupportsSourceDefinition";
 type SourceDefinitionResponse = Location | Location[] | LocationLink[] | null;
 
 export function registerSourceDefinitionFeature(client: LanguageClient): vscode.Disposable {
-    const capabilities = client.initializeResult?.capabilities as { customSourceDefinitionProvider?: boolean; } | undefined;
-    const enabled = !!capabilities?.customSourceDefinitionProvider;
+    const experimental = client.initializeResult?.capabilities?.experimental as { customSourceDefinitionProvider?: boolean; } | undefined;
+    const enabled = !!experimental?.customSourceDefinitionProvider;
     void vscode.commands.executeCommand("setContext", sourceDefinitionContext, enabled);
 
     if (!enabled) {

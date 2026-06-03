@@ -71,9 +71,9 @@ export function registerMultiDocumentHighlightFeature(
     selector: vscode.DocumentSelector,
     client: LanguageClient,
 ): vscode.Disposable {
-    const capabilities = client.initializeResult?.capabilities as { customMultiDocumentHighlightProvider?: boolean; } | undefined;
+    const experimental = client.initializeResult?.capabilities?.experimental as { customMultiDocumentHighlightProvider?: boolean; } | undefined;
     // registerMultiDocumentHighlightProvider is proposed API; guard against it not being available.
-    if (!capabilities?.customMultiDocumentHighlightProvider || typeof vscode.languages.registerMultiDocumentHighlightProvider !== "function") {
+    if (!experimental?.customMultiDocumentHighlightProvider || typeof vscode.languages.registerMultiDocumentHighlightProvider !== "function") {
         return { dispose() {} };
     }
     return vscode.languages.registerMultiDocumentHighlightProvider(selector, new MultiDocumentHighlightProvider(client));
