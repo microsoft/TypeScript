@@ -29,8 +29,3 @@ interface I {
 }
 export declare function f(): I;
 export {};
-//// [b.d.ts]
-export declare function q(): void;
-export declare namespace q {
-    var val: I;
-}

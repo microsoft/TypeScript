@@ -1,11 +1,8 @@
 --- old.isolatedDeclarationsAllowJs.js
 +++ new.isolatedDeclarationsAllowJs.js
-@@= skipped -10, +10 lines =@@
- exports.x = void 0;
+@@= skipped -11, +11 lines =@@
 
 
-+//// [file1.d.ts]
-+export declare var x: any;
  //// [file2.d.ts]
 -export const y: any;
 +export declare var y: any;

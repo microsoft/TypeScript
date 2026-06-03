@@ -34,7 +34,7 @@ export default ky;
 }
 
 tsgo --explainFiles --listEmittedFiles
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
 
@@ -42,7 +42,6 @@ Output::
 [7m [0m [91m             ~~~[0m
 
 TSFILE:  /home/src/workspaces/project/index.js
-TSFILE:  /home/src/workspaces/project/index.d.ts
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
    Default library for target 'ES2025'
 node_modules/ky/distribution/index.d.ts
@@ -77,11 +76,6 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 declare const console: { log(msg: any): void; };
-//// [/home/src/workspaces/project/index.d.ts] *new* 
-export declare const api: {
-    extend(options: Record<string, unknown>): KyInstance;
-};
-
 //// [/home/src/workspaces/project/index.js] *new* 
 import ky from 'ky';
 export const api = ky.extend({});
@@ -92,7 +86,7 @@ export const api = ky.extend({});
 Edit [0]:: no change
 
 tsgo --explainFiles --listEmittedFiles
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
 
@@ -100,7 +94,6 @@ Output::
 [7m [0m [91m             ~~~[0m
 
 TSFILE:  /home/src/workspaces/project/index.js
-TSFILE:  /home/src/workspaces/project/index.d.ts
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
    Default library for target 'ES2025'
 node_modules/ky/distribution/index.d.ts
@@ -112,7 +105,6 @@ index.ts
 
 Found 1 error in index.ts[90m:2[0m
 
-//// [/home/src/workspaces/project/index.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/index.js] *rewrite with same content*
 
 
@@ -120,7 +112,7 @@ Found 1 error in index.ts[90m:2[0m
 Edit [1]:: build -b
 
 tsgo -b --explainFiles --listEmittedFiles --v
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -135,7 +127,6 @@ Output::
 [7m [0m [91m             ~~~[0m
 
 TSFILE:  /home/src/workspaces/project/index.js
-TSFILE:  /home/src/workspaces/project/index.d.ts
 TSFILE:  /home/src/workspaces/project/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
    Default library for target 'ES2025'
@@ -145,10 +136,11 @@ node_modules/ky/distribution/index.d.ts
 index.ts
    Matched by default include pattern '**/*'
    File is ECMAScript module because 'package.json' has field "type" with value "module"
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
+
 
 Found 1 error in index.ts[90m:2[0m
 
-//// [/home/src/workspaces/project/index.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/index.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","errors":true,"root":["./index.ts"]}

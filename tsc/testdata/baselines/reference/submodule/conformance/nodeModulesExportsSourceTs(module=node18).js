@@ -42,5 +42,3 @@ export interface Thing {
 export declare const x: () => Thing;
 //// [index.d.ts]
 export { x } from "./other.js";
-//// [index.d.ts]
-export declare const a: any;

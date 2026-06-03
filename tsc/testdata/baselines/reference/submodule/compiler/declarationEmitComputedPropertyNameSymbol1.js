@@ -23,9 +23,3 @@ export type Type = {
         [Foo.sym]: 0;
     };
 };
-//// [index.d.ts]
-export declare const foo: {
-    x?: {
-        [Foo.sym]: 0;
-    };
-};

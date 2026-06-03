@@ -59,12 +59,3 @@ export declare class Bar {
     f: number;
 }
 export {};
-//// [file2.d.ts]
-export declare function foo(p?: (ip: number | undefined, v: number) => void): void;
-type T = number;
-export declare function foo2(p?: (ip: T | undefined, v: number) => void): void;
-export declare class Bar2 {
-    readonly r = 1;
-    f: number;
-}
-export {};

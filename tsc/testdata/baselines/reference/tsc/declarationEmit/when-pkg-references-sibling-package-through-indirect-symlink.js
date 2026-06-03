@@ -56,7 +56,7 @@ export const ADMIN = MetadataAccessor.create<boolean>('1');
 }
 
 tsgo -p pkg3 --explainFiles
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2883: [0mThe inferred type of 'ADMIN' cannot be named without a reference to 'IdType' from '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
 
@@ -134,10 +134,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./keys"), exports);
-
-//// [/user/username/projects/myproject/pkg3/dist/keys.d.ts] *new* 
-import { MetadataAccessor } from "@raymondfeng/pkg2";
-export declare const ADMIN: any;
 
 //// [/user/username/projects/myproject/pkg3/dist/keys.js] *new* 
 "use strict";

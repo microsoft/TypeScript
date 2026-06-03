@@ -14,7 +14,3 @@ Object.defineProperty(exports, "__esModule", { value: true });
 if (false) {
     exports.myClass = 0;
 }
-
-
-//// [declarationEmitInvalidExport.d.ts]
-export type MyClass = typeof myClass;

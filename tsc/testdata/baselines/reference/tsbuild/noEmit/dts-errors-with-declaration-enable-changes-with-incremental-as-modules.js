@@ -406,7 +406,7 @@ Output::
 Edit [4]:: Dts Emit with error
 
 tsgo -b -v --declaration
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -427,13 +427,6 @@ Output::
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/projects/project/a.d.ts] *new* 
-export declare const a: {
-    new (): {
-        p: number;
-    };
-};
-
 //// [/home/src/projects/project/a.js] *new* 
 export const a = class {
     p = 10;
@@ -446,7 +439,7 @@ export declare const b = 10;
 export const b = 10;
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };","signature":"797d7267ef7f35dc3f989be23b6d4fe3-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\na\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1}],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["a"]}]}]]]}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };",{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1}],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["a"]}]}]]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -483,13 +476,8 @@ export const b = 10;
     {
       "fileName": "./a.ts",
       "version": "9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };",
-      "signature": "797d7267ef7f35dc3f989be23b6d4fe3-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\na\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };",
-        "signature": "797d7267ef7f35dc3f989be23b6d4fe3-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\na\n",
-        "impliedNodeFormat": 1
-      }
+      "signature": "9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };",
+      "impliedNodeFormat": "CommonJS"
     },
     {
       "fileName": "./b.ts",
@@ -535,13 +523,12 @@ export const b = 10;
       ]
     ]
   ],
-  "size": 1833
+  "size": 1501
 }
 
 tsconfig.json::
 SemanticDiagnostics::
 Signatures::
-(stored at emit) /home/src/projects/project/a.ts
 (stored at emit) /home/src/projects/project/b.ts
 
 

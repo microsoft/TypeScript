@@ -268,7 +268,7 @@ Signatures::
 Edit [6]:: Emit when error
 
 tsgo -b -v
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -286,16 +286,12 @@ Output::
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
+
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/projects/project/a.d.ts] *modified* 
-declare const a: {
-    new (): {
-        p: number;
-    };
-};
-
+//// [/home/src/projects/project/a.d.ts] *mTime changed*
 //// [/home/src/projects/project/a.js] *modified* 
 "use strict";
 const a = class {

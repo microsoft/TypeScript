@@ -506,13 +506,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
-//// [/home/src/projects/project/a.d.ts] *modified* 
-declare const a: {
-    new (): {
-        p: number;
-    };
-};
-
 //// [/home/src/projects/project/a.js] *modified* 
 "use strict";
 const a = class {

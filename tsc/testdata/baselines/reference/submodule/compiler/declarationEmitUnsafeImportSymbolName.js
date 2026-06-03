@@ -18,7 +18,3 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.special = void 0;
 const foo_1 = require("foo");
 exports.special = (0, foo_1.getSpecial)();
-
-
-//// [entry.d.ts]
-export declare const special: any;

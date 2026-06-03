@@ -14,7 +14,7 @@ export const b = 10;
 }
 
 tsgo -b -v --noCheck
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -31,6 +31,8 @@ Output::
   [96ma.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable a.
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
+
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
 
 
 Found 1 error in a.ts[90m:1[0m
@@ -58,13 +60,6 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 declare const console: { log(msg: any): void; };
-//// [/home/src/workspaces/project/a.d.ts] *new* 
-export declare const a: {
-    new (): {
-        p: number;
-    };
-};
-
 //// [/home/src/workspaces/project/a.js] *new* 
 export const a = class {
     p = 10;
@@ -111,7 +106,7 @@ Signatures::
 Edit [0]:: no change
 
 tsgo -b -v --noCheck
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -129,10 +124,11 @@ Output::
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
+
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*
 //// [/home/src/workspaces/project/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/b.js] *rewrite with same content*
@@ -161,7 +157,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-//// [/home/src/workspaces/project/a.d.ts] *modified* 
+//// [/home/src/workspaces/project/a.d.ts] *new* 
 export declare const a = "hello";
 
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -290,7 +286,7 @@ Edit [6]:: Introduce error with noCheck
 export const a = class { private p = 10; };
 
 tsgo -b -v --noCheck
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -308,16 +304,12 @@ Output::
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
+
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/workspaces/project/a.d.ts] *modified* 
-export declare const a: {
-    new (): {
-        p: number;
-    };
-};
-
+//// [/home/src/workspaces/project/a.d.ts] *mTime changed*
 //// [/home/src/workspaces/project/a.js] *modified* 
 export const a = class {
     p = 10;
@@ -360,7 +352,7 @@ Signatures::
 Edit [7]:: no change
 
 tsgo -b -v --noCheck
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -378,10 +370,12 @@ Output::
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
+
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/a.d.ts] *mTime changed*
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*
 //// [/home/src/workspaces/project/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/b.js] *rewrite with same content*
@@ -399,7 +393,7 @@ Signatures::
 Edit [8]:: No Change run with checking
 
 tsgo -b -v
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -417,10 +411,12 @@ Output::
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
+
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
+//// [/home/src/workspaces/project/a.d.ts] *mTime changed*
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*
 //// [/home/src/workspaces/project/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/b.js] *rewrite with same content*
@@ -469,9 +465,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-//// [/home/src/workspaces/project/a.d.ts] *modified* 
-export declare const a = "hello";
-
+//// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/a.js] *modified* 
 export const a = "hello";
 
@@ -629,7 +623,7 @@ Edit [12]:: Introduce error with noCheck
 export const a = class { private p = 10; };
 
 tsgo -b -v --noCheck
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -647,16 +641,12 @@ Output::
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
+
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/workspaces/project/a.d.ts] *modified* 
-export declare const a: {
-    new (): {
-        p: number;
-    };
-};
-
+//// [/home/src/workspaces/project/a.d.ts] *mTime changed*
 //// [/home/src/workspaces/project/a.js] *modified* 
 export const a = class {
     p = 10;
@@ -719,9 +709,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-//// [/home/src/workspaces/project/a.d.ts] *modified* 
-export declare const a = "hello";
-
+//// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/a.js] *modified* 
 export const a = "hello";
 

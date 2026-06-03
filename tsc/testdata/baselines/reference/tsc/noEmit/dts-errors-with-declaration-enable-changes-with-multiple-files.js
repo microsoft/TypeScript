@@ -631,7 +631,7 @@ Signatures::
 Edit [4]:: Dts Emit with error
 
 tsgo --declaration
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -668,13 +668,6 @@ Errors  Files
      1  c.ts[90m:1[0m
      1  d.ts[90m:1[0m
 
-//// [/home/src/projects/project/a.d.ts] *new* 
-export declare const a: {
-    new (): {
-        p: number;
-    };
-};
-
 //// [/home/src/projects/project/a.js] *new* 
 export const a = class {
     p = 10;
@@ -686,23 +679,9 @@ export declare const b = 10;
 //// [/home/src/projects/project/b.js] *new* 
 export const b = 10;
 
-//// [/home/src/projects/project/c.d.ts] *new* 
-export declare const c: {
-    new (): {
-        p: number;
-    };
-};
-
 //// [/home/src/projects/project/c.js] *new* 
 export const c = class {
     p = 10;
-};
-
-//// [/home/src/projects/project/d.d.ts] *new* 
-export declare const d: {
-    new (): {
-        p: number;
-    };
 };
 
 //// [/home/src/projects/project/d.js] *new* 
@@ -711,7 +690,7 @@ export const d = class {
 };
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };","signature":"797d7267ef7f35dc3f989be23b6d4fe3-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\na\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","signature":"e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n","impliedNodeFormat":1}],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["a"]}]}]],[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };",{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };"],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["a"]}]}]],[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -752,13 +731,8 @@ export const d = class {
     {
       "fileName": "./a.ts",
       "version": "9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };",
-      "signature": "797d7267ef7f35dc3f989be23b6d4fe3-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\na\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };",
-        "signature": "797d7267ef7f35dc3f989be23b6d4fe3-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\na\n",
-        "impliedNodeFormat": 1
-      }
+      "signature": "9c1fc7106f3a21aadb5219db8b3209bc-export const a = class { private p = 10; };",
+      "impliedNodeFormat": "CommonJS"
     },
     {
       "fileName": "./b.ts",
@@ -774,24 +748,14 @@ export const d = class {
     {
       "fileName": "./c.ts",
       "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-      "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-        "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
-        "impliedNodeFormat": 1
-      }
+      "signature": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
+      "impliedNodeFormat": "CommonJS"
     },
     {
       "fileName": "./d.ts",
       "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-      "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-        "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
-        "impliedNodeFormat": 1
-      }
+      "signature": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
+      "impliedNodeFormat": "CommonJS"
     }
   ],
   "options": {
@@ -880,16 +844,13 @@ export const d = class {
       ]
     ]
   ],
-  "size": 3303
+  "size": 2307
 }
 
 tsconfig.json::
 SemanticDiagnostics::
 Signatures::
-(stored at emit) /home/src/projects/project/a.ts
 (stored at emit) /home/src/projects/project/b.ts
-(stored at emit) /home/src/projects/project/c.ts
-(stored at emit) /home/src/projects/project/d.ts
 
 
 Edit [5]:: Fix the error
@@ -900,7 +861,7 @@ tsgo --noEmit
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","signature":"e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n","impliedNodeFormat":1}],"emitDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[2]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };"],"emitDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[2]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -963,24 +924,14 @@ Output::
     {
       "fileName": "./c.ts",
       "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-      "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-        "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
-        "impliedNodeFormat": 1
-      }
+      "signature": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
+      "impliedNodeFormat": "CommonJS"
     },
     {
       "fileName": "./d.ts",
       "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-      "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-        "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
-        "impliedNodeFormat": 1
-      }
+      "signature": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
+      "impliedNodeFormat": "CommonJS"
     }
   ],
   "emitDiagnosticsPerFile": [
@@ -1046,7 +997,7 @@ Output::
       2
     ]
   ],
-  "size": 2811
+  "size": 2147
 }
 
 tsconfig.json::
@@ -1087,7 +1038,7 @@ Errors  Files
      1  d.ts[90m:1[0m
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","signature":"e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n","impliedNodeFormat":1}],"options":{"declaration":true},"emitDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[[2,17],[3,16],[4,16],[5,16]]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };"],"options":{"declaration":true},"emitDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[[2,17],[3,16],[4,16],[5,16]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -1150,24 +1101,14 @@ Errors  Files
     {
       "fileName": "./c.ts",
       "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-      "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-        "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
-        "impliedNodeFormat": 1
-      }
+      "signature": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
+      "impliedNodeFormat": "CommonJS"
     },
     {
       "fileName": "./d.ts",
       "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-      "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-        "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
-        "impliedNodeFormat": 1
-      }
+      "signature": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
+      "impliedNodeFormat": "CommonJS"
     }
   ],
   "options": {
@@ -1263,7 +1204,7 @@ Errors  Files
       ]
     ]
   ],
-  "size": 2868
+  "size": 2204
 }
 
 tsconfig.json::
@@ -1302,7 +1243,7 @@ Errors  Files
      1  d.ts[90m:1[0m
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","signature":"e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n","impliedNodeFormat":1}],"options":{"declaration":true,"declarationMap":true},"emitDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[[2,49],[3,48],[4,48],[5,48]]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},"6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };","eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };"],"options":{"declaration":true,"declarationMap":true},"emitDiagnosticsPerFile":[[4,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["c"]}]}]],[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[[2,49],[3,48],[4,48],[5,48]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -1365,24 +1306,14 @@ Errors  Files
     {
       "fileName": "./c.ts",
       "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-      "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
-        "signature": "e1e85d69ff8bbf5440c12f8f1badf3e4-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nc\n",
-        "impliedNodeFormat": 1
-      }
+      "signature": "6f729672e1964d12037938bd07604115-export const c = class { private p = 10; };",
+      "impliedNodeFormat": "CommonJS"
     },
     {
       "fileName": "./d.ts",
       "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-      "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-        "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
-        "impliedNodeFormat": 1
-      }
+      "signature": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
+      "impliedNodeFormat": "CommonJS"
     }
   ],
   "options": {
@@ -1479,7 +1410,7 @@ Errors  Files
       ]
     ]
   ],
-  "size": 2890
+  "size": 2226
 }
 
 tsconfig.json::
@@ -1507,7 +1438,7 @@ Output::
 Found 1 error in d.ts[90m:1[0m
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"dc7165893e9c62cfeea6f0fad1d8b57c-export const c = class { public p = 10; };","signature":"17c24c6640bff8629aa96eed43575ace-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };","signature":"9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n","impliedNodeFormat":1}],"options":{"declaration":true,"declarationMap":true},"emitDiagnosticsPerFile":[[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[[2,49],[3,48],[4,49],[5,48]]}
+{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"257f0ffae056266a216e22aca9e25055-export const a = class { public p = 10; };","signature":"1aa32af20adf1f5d970642bd31541eeb-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1},{"version":"dc7165893e9c62cfeea6f0fad1d8b57c-export const c = class { public p = 10; };","signature":"17c24c6640bff8629aa96eed43575ace-export declare const c: {\n    new (): {\n        p: number;\n    };\n};\n","impliedNodeFormat":1},"eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };"],"options":{"declaration":true,"declarationMap":true},"emitDiagnosticsPerFile":[[5,[{"pos":13,"end":14,"code":4094,"category":1,"messageKey":"Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094","messageArgs":["p"],"relatedInformation":[{"pos":13,"end":14,"code":9027,"category":1,"messageKey":"Add_a_type_annotation_to_the_variable_0_9027","messageArgs":["d"]}]}]]],"affectedFilesPendingEmit":[[2,49],[3,48],[4,49],[5,48]]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -1581,13 +1512,8 @@ Found 1 error in d.ts[90m:1[0m
     {
       "fileName": "./d.ts",
       "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-      "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
-        "signature": "9bb613afbef9c5e40a1cbd833df92c7f-export declare const d: {\n    new (): {\n        p: number;\n    };\n};\n\n(13,1): error4094: Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected_4094\np\n\n(13,1): error9027: Add_a_type_annotation_to_the_variable_0_9027\nd\n",
-        "impliedNodeFormat": 1
-      }
+      "signature": "eee493071f513e65e5368e45a4d35584-export const d = class { private p = 10; };",
+      "impliedNodeFormat": "CommonJS"
     }
   ],
   "options": {
@@ -1657,7 +1583,7 @@ Found 1 error in d.ts[90m:1[0m
       ]
     ]
   ],
-  "size": 2398
+  "size": 2066
 }
 
 tsconfig.json::

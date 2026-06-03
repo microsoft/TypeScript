@@ -34,7 +34,7 @@ export default ky;
 }
 
 tsgo --explainFiles --listEmittedFiles
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
 
@@ -42,7 +42,6 @@ Output::
 [7m [0m [91m             ~~~[0m
 
 TSFILE:  /home/src/workspaces/project/index.js
-TSFILE:  /home/src/workspaces/project/index.d.ts
 TSFILE:  /home/src/workspaces/project/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
    Default library for target 'ES2025'
@@ -78,17 +77,12 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 declare const console: { log(msg: any): void; };
-//// [/home/src/workspaces/project/index.d.ts] *new* 
-export declare const api: {
-    extend(options: Record<string, unknown>): KyInstance;
-};
-
 //// [/home/src/workspaces/project/index.js] *new* 
 import ky from 'ky';
 export const api = ky.extend({});
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b9b50c37c18e43d94b0dd4fb43967f10-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;","impliedNodeFormat":99},{"version":"0f5091e963c17913313e4969c59e6eb4-import ky from 'ky';\nexport const api = ky.extend({});","signature":"80d0207a54fef9a805b5e009ed639094-export declare const api: {\n    extend(options: Record<string, unknown>): KyInstance;\n};\n\n(34,3): error4023: Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named_4023\napi\nKyInstance\n\"/home/src/workspaces/project/node_modules/ky/distribution/index\"\n","impliedNodeFormat":99}],"fileIdsList":[[2]],"options":{"composite":true,"declaration":true,"module":199,"skipLibCheck":true,"skipDefaultLibCheck":true},"referencedMap":[[3,1]],"emitDiagnosticsPerFile":[[3,[{"pos":34,"end":37,"code":4023,"category":1,"messageKey":"Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named_4023","messageArgs":["api","KyInstance","\"/home/src/workspaces/project/node_modules/ky/distribution/index\""]}]]],"latestChangedDtsFile":"./index.d.ts","emitSignatures":[[3,"5229c9e2248679a39697053812e5f6bb-export declare const api: {\n    extend(options: Record<string, unknown>): KyInstance;\n};\n"]]}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b9b50c37c18e43d94b0dd4fb43967f10-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;","impliedNodeFormat":99},{"version":"0f5091e963c17913313e4969c59e6eb4-import ky from 'ky';\nexport const api = ky.extend({});","impliedNodeFormat":99}],"fileIdsList":[[2]],"options":{"composite":true,"declaration":true,"module":199,"skipLibCheck":true,"skipDefaultLibCheck":true},"referencedMap":[[3,1]],"emitDiagnosticsPerFile":[[3,[{"pos":34,"end":37,"code":4023,"category":1,"messageKey":"Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named_4023","messageArgs":["api","KyInstance","\"/home/src/workspaces/project/node_modules/ky/distribution/index\""]}]]],"emitSignatures":[3]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -131,11 +125,10 @@ export const api = ky.extend({});
     {
       "fileName": "./index.ts",
       "version": "0f5091e963c17913313e4969c59e6eb4-import ky from 'ky';\nexport const api = ky.extend({});",
-      "signature": "80d0207a54fef9a805b5e009ed639094-export declare const api: {\n    extend(options: Record<string, unknown>): KyInstance;\n};\n\n(34,3): error4023: Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named_4023\napi\nKyInstance\n\"/home/src/workspaces/project/node_modules/ky/distribution/index\"\n",
+      "signature": "0f5091e963c17913313e4969c59e6eb4-import ky from 'ky';\nexport const api = ky.extend({});",
       "impliedNodeFormat": "ESNext",
       "original": {
         "version": "0f5091e963c17913313e4969c59e6eb4-import ky from 'ky';\nexport const api = ky.extend({});",
-        "signature": "80d0207a54fef9a805b5e009ed639094-export declare const api: {\n    extend(options: Record<string, unknown>): KyInstance;\n};\n\n(34,3): error4023: Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named_4023\napi\nKyInstance\n\"/home/src/workspaces/project/node_modules/ky/distribution/index\"\n",
         "impliedNodeFormat": 99
       }
     }
@@ -176,18 +169,13 @@ export const api = ky.extend({});
       ]
     ]
   ],
-  "latestChangedDtsFile": "./index.d.ts",
   "emitSignatures": [
     {
       "file": "./index.ts",
-      "signature": "5229c9e2248679a39697053812e5f6bb-export declare const api: {\n    extend(options: Record<string, unknown>): KyInstance;\n};\n",
-      "original": [
-        3,
-        "5229c9e2248679a39697053812e5f6bb-export declare const api: {\n    extend(options: Record<string, unknown>): KyInstance;\n};\n"
-      ]
+      "original": 3
     }
   ],
-  "size": 2213
+  "size": 1706
 }
 
 tsconfig.json::
@@ -196,7 +184,6 @@ SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/node_modules/ky/distribution/index.d.ts
 *refresh*    /home/src/workspaces/project/index.ts
 Signatures::
-(stored at emit) /home/src/workspaces/project/index.ts
 
 
 Edit [0]:: no change

@@ -262,7 +262,7 @@ type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
 export default MessageablePerson;
 
 tsgo --incremental
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mMessageablePerson.ts[0m:[93m6[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'message' of exported anonymous class type may not be private or protected.
 
@@ -286,7 +286,6 @@ Output::
 
 Found 3 errors in the same file, starting at: MessageablePerson.ts[90m:6[0m
 
-//// [/home/src/workspaces/project/MessageablePerson.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/MessageablePerson.js] *rewrite with same content*
 //// [/home/src/workspaces/project/main.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/main.js] *rewrite with same content*

@@ -45,7 +45,3 @@ export interface Interface {
     readonly [SYMBOL]: string;
 }
 export declare function createInstance(): Interface;
-//// [index.d.ts]
-export declare const spread: {
-    [SYMBOL]: string;
-};

@@ -217,11 +217,6 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 		return
 	}
 
-	if e.emitOnly != EmitOnlyForcedDts && (options.NoEmit == core.TSTrue || e.host.IsEmitBlocked(declarationFilePath)) {
-		e.emitResult.EmitSkipped = true
-		return
-	}
-
 	if e.tr != nil {
 		defer e.tr.Push(tracing.PhaseEmit, "emitDeclarationFileOrBundle", map[string]any{"declarationFilePath": declarationFilePath}, true)()
 	}
@@ -230,7 +225,21 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 	defer putEmitContext()
 	sourceFile, diags := e.runDeclarationTransformers(emitContext, sourceFile, declarationFilePath, declarationMapPath)
 
-	// !!! strada skipped emit if there were diagnostics
+	for _, elem := range diags {
+		// Add declaration transform diagnostics to emit diagnostics
+		e.emitterDiagnostics.Add(elem)
+	}
+
+	if e.emitOnly != EmitOnlyForcedDts && (options.NoEmit == core.TSTrue || e.host.IsEmitBlocked(declarationFilePath)) {
+		e.emitResult.EmitSkipped = true
+		return
+	}
+
+	declBlocked := len(diags) > 0 && e.emitOnly != EmitOnlyForcedDts
+	if declBlocked {
+		e.emitResult.EmitSkipped = true
+		return
+	}
 
 	printerOptions := printer.PrinterOptions{
 		RemoveComments: options.RemoveComments.IsTrue(),
@@ -252,10 +261,6 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 		// !!!
 	}, emitContext)
 
-	for _, elem := range diags {
-		// Add declaration transform diagnostics to emit diagnostics
-		e.emitterDiagnostics.Add(elem)
-	}
 	e.printSourceFile(declarationFilePath, declarationMapPath, sourceFile, printer, e.emitOnly != EmitOnlyForcedDts && shouldEmitDeclarationSourceMaps(options, sourceFile))
 }
 

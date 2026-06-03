@@ -14,7 +14,7 @@ export const b = 10;
 }
 
 tsgo --noCheck
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -51,13 +51,6 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 declare const console: { log(msg: any): void; };
-//// [/home/src/workspaces/project/a.d.ts] *new* 
-export declare const a: {
-    new (): {
-        p: number;
-    };
-};
-
 //// [/home/src/workspaces/project/a.js] *new* 
 export const a = class {
     p = 10;
@@ -75,7 +68,7 @@ export const b = 10;
 Edit [0]:: no change
 
 tsgo --noCheck
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -89,7 +82,6 @@ Output::
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*
 //// [/home/src/workspaces/project/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/b.js] *rewrite with same content*
@@ -103,7 +95,7 @@ export const a = "hello";
 tsgo --noCheck
 ExitStatus:: Success
 Output::
-//// [/home/src/workspaces/project/a.d.ts] *modified* 
+//// [/home/src/workspaces/project/a.d.ts] *new* 
 export declare const a = "hello";
 
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -167,7 +159,7 @@ Edit [6]:: Introduce error with noCheck
 export const a = class { private p = 10; };
 
 tsgo --noCheck
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -180,13 +172,6 @@ Output::
 
 
 Found 1 error in a.ts[90m:1[0m
-
-//// [/home/src/workspaces/project/a.d.ts] *modified* 
-export declare const a: {
-    new (): {
-        p: number;
-    };
-};
 
 //// [/home/src/workspaces/project/a.js] *modified* 
 export const a = class {
@@ -201,7 +186,7 @@ export const a = class {
 Edit [7]:: no change
 
 tsgo --noCheck
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -215,7 +200,6 @@ Output::
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*
 //// [/home/src/workspaces/project/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/b.js] *rewrite with same content*
@@ -225,7 +209,7 @@ Found 1 error in a.ts[90m:1[0m
 Edit [8]:: No Change run with checking
 
 tsgo 
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -239,7 +223,6 @@ Output::
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*
 //// [/home/src/workspaces/project/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/b.js] *rewrite with same content*
@@ -253,9 +236,7 @@ export const a = "hello";
 tsgo --noCheck
 ExitStatus:: Success
 Output::
-//// [/home/src/workspaces/project/a.d.ts] *modified* 
-export declare const a = "hello";
-
+//// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/a.js] *modified* 
 export const a = "hello";
 
@@ -309,7 +290,7 @@ Edit [12]:: Introduce error with noCheck
 export const a = class { private p = 10; };
 
 tsgo --noCheck
-ExitStatus:: DiagnosticsPresent_OutputsGenerated
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -322,13 +303,6 @@ Output::
 
 
 Found 1 error in a.ts[90m:1[0m
-
-//// [/home/src/workspaces/project/a.d.ts] *modified* 
-export declare const a: {
-    new (): {
-        p: number;
-    };
-};
 
 //// [/home/src/workspaces/project/a.js] *modified* 
 export const a = class {
@@ -349,9 +323,7 @@ export const a = "hello";
 tsgo --noCheck
 ExitStatus:: Success
 Output::
-//// [/home/src/workspaces/project/a.d.ts] *modified* 
-export declare const a = "hello";
-
+//// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/project/a.js] *modified* 
 export const a = "hello";
 

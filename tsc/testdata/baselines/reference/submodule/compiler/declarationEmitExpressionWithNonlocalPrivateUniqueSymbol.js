@@ -26,7 +26,3 @@ type AX = {
 };
 export declare const A: AX;
 export {};
-//// [b.d.ts]
-export declare const A1: {
-    readonly A: unique symbol;
-};

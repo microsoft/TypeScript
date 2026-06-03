@@ -1,0 +1,14 @@
+--- old.exportAssignmentMembersVisibleInAugmentation.js
++++ new.exportAssignmentMembersVisibleInAugmentation.js
+@@= skipped -26, +26 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+
+
+-//// [a.d.ts]
+-declare module "foo" {
+-    function f(): T;
+-}
+-export {};
+ //// [b.d.ts]
+ import * as foo from "foo";
+ declare module "foo" {

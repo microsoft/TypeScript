@@ -28,7 +28,5 @@ const a = x.a;
 const b = x.b;
 
 
-//// [x.d.ts]
-export {};
 //// [y.d.ts]
 export {};

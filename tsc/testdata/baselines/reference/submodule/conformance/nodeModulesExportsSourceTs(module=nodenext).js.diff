@@ -1,8 +1,0 @@
---- old.nodeModulesExportsSourceTs(module=nodenext).js
-+++ new.nodeModulesExportsSourceTs(module=nodenext).js
-@@= skipped -41, +41 lines =@@
- export declare const x: () => Thing;
- //// [index.d.ts]
- export { x } from "./other.js";
-+//// [index.d.ts]
-+export declare const a: any;

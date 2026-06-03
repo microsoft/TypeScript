@@ -92,38 +92,3 @@ export class C {
     set [noParamAnnotationStringName](value) { }
     [("A" + "B")] = 1;
 }
-
-
-//// [isolatedDeclarationErrorsClasses.d.ts]
-export declare class Cls {
-    field: number;
-    method(): void;
-    methodOk(): void;
-    methodParams(p: any): void;
-    methodParams2(p?: number): void;
-    get getOnly(): number;
-    set setOnly(value: any);
-    get getSetBad(): number;
-    set getSetBad(value: number);
-    get getSetOk(): number;
-    set getSetOk(value: number);
-    get getSetOk2(): number;
-    set getSetOk2(value: number);
-    get getSetOk3(): number;
-    set getSetOk3(value: number);
-}
-declare let noAnnotationStringName: string;
-declare let noParamAnnotationStringName: string;
-declare const noAnnotationLiteralName = "noAnnotationLiteralName";
-export declare class C {
-    [noAnnotationStringName]: () => void;
-    [noParamAnnotationStringName]: (v: any) => void;
-    [noAnnotationStringName]: number;
-    [noParamAnnotationStringName]: any;
-    [x: number]: number;
-}
-export interface I {
-    [noAnnotationStringName]: 10;
-    [noAnnotationLiteralName](): any;
-}
-export {};

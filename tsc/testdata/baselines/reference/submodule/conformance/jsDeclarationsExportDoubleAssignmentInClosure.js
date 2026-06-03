@@ -25,7 +25,3 @@ function foo() {
     };
     exports.methods = m;
 }
-
-
-//// [index.d.ts]
-export {};
