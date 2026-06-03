@@ -1744,16 +1744,11 @@ func (c *Checker) tryGetNameFromEntityNameExpression(node *ast.Node) (string, bo
 			return name, true
 		}
 	}
-	if hasOnlyExpressionInitializer(declaration) && c.isBlockScopedNameDeclaredBeforeUse(declaration, node) {
-		initializer := declaration.Initializer()
-		if initializer != nil {
-			var initializerType *Type
-			if ast.IsBindingPattern(declaration.Parent) {
-				initializerType = c.getTypeForBindingElement(declaration)
-			} else {
-				initializerType = c.getTypeOfExpression(initializer)
-			}
-			if initializerType != nil {
+	// We exclude binding elements because their initializers don't solely determine their types and resolving
+	// full types can cause circularities (see https://github.com/microsoft/TypeScript/issues/63192).
+	if hasOnlyExpressionInitializer(declaration) && !ast.IsBindingElement(declaration) && c.isBlockScopedNameDeclaredBeforeUse(declaration, node) {
+		if initializer := declaration.Initializer(); initializer != nil {
+			if initializerType := c.getTypeOfExpression(initializer); initializerType != nil {
 				return tryGetNameFromType(initializerType)
 			}
 		} else if ast.IsEnumMember(declaration) {
