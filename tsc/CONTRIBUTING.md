@@ -72,6 +72,50 @@ To debug and run the VS Code extension without installing it globally:
 * Copy `.vscode/launch.template.json` to `.vscode/launch.json`
 * <kbd>F5</kbd> (or `Debug: Start Debugging` from the command palette)
 
-This will launch a new VS Code instance which uses the Corsa LS as the backend. If correctly set up, you should see "tsgo" in the status bar when a TypeScript or JavaScript file is open:
+This will launch a new VS Code instance which uses the Corsa LS as the backend.
 
-![LSP Server Screenshot](.github/ls-screenshot.png)
+#### Collecting Logs
+
+The extension provides a single output channel, **typescript-native-preview**, in VS Code's Output panel. It shows both server log messages and (optionally) LSP protocol traces.
+
+The output channel's **log level** (the gear icon next to the channel dropdown) controls what is visible:
+
+| Log level | What you'll see |
+|---|---|
+| **Error** | Crashes and internal errors while handling requests |
+| **Warning** | Unexpected conditions, e.g. unknown LSP methods |
+| **Info** (default) | Server lifecycle events, project loading, file changes |
+| **Debug** | All of the above, plus verbose server details (cache statistics, project trees) |
+| **Trace** | All of the above, plus full LSP request/response protocol traces |
+
+The **`typescript.native-preview.trace.server`** setting controls the detail level of LSP traces when the log level is set to Trace:
+
+| Setting value | Effect at Trace log level |
+|---|---|
+| `"off"` | No LSP traces |
+| `"messages"` | Request/response names and timing |
+| **`"verbose"`** (default) | Full JSON bodies of every request and response |
+
+When filing an issue, copy the relevant section of log output and include it in your report.
+
+> [!WARNING]
+> Logs contain personally identifiable information (mostly file paths). When the log level is set to Trace and `typescript.native-preview.trace.server` is set to `"verbose"`, this includes the full contents of open files. Always review log content before sharing.
+
+#### Collecting Heap Profiles
+
+Heap profiles are essential for diagnosing high memory usage. When the language server is consuming too much memory:
+
+1. Open the VS Code command palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> / <kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>P</kbd>).
+2. Run **TypeScript Native Preview: Save Heap Profile**.
+3. Choose a directory to save the profile to.
+4. Attach the resulting `.pb.gz` file to your issue.
+
+#### Collecting CPU Profiles
+
+CPU profiles help diagnose hangs and slow operations:
+
+1. Open the VS Code command palette.
+2. Run **TypeScript Native Preview: Start CPU Profile** and choose a directory.
+3. Reproduce the slow operation.
+4. Run **TypeScript Native Preview: Stop CPU Profile**.
+5. Attach the resulting `.pb.gz` file to your issue.

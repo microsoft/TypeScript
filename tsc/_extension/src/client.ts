@@ -36,7 +36,6 @@ import { getLanguageForUri } from "./util";
 
 export class Client implements vscode.Disposable {
     private outputChannel: vscode.LogOutputChannel;
-    private traceOutputChannel: vscode.LogOutputChannel;
     private initializedEventEmitter: vscode.EventEmitter<void>;
     private telemetryReporter: tr.TelemetryReporter;
 
@@ -53,12 +52,10 @@ export class Client implements vscode.Disposable {
 
     constructor(
         outputChannel: vscode.LogOutputChannel,
-        traceOutputChannel: vscode.LogOutputChannel,
         initializedEventEmitter: vscode.EventEmitter<void>,
         telemetryReporter: tr.TelemetryReporter,
     ) {
         this.outputChannel = outputChannel;
-        this.traceOutputChannel = traceOutputChannel;
         this.initializedEventEmitter = initializedEventEmitter;
         this.telemetryReporter = telemetryReporter;
         this.errorHandler = new ReportingErrorHandler(this.telemetryReporter, 5);
@@ -79,10 +76,10 @@ export class Client implements vscode.Disposable {
         this.clientOptions = {
             documentSelector: this.documentSelector,
             outputChannel: this.outputChannel,
-            traceOutputChannel: this.traceOutputChannel,
             initializationOptions: {
                 codeLensShowLocationsCommandName,
                 enableTelemetry: true,
+                logVerbosity: this.outputChannel.logLevel,
             },
             errorHandler: this.errorHandler,
             middleware: {
@@ -182,6 +179,10 @@ export class Client implements vscode.Disposable {
             },
         };
 
+        // Refresh the initial log verbosity in case the output channel's log
+        // level changed between construction and start.
+        this.clientOptions.initializationOptions.logVerbosity = this.outputChannel.logLevel;
+
         this.client = new LanguageClient(
             "typescript.native-preview",
             "typescript.native-preview-lsp",
@@ -211,9 +212,12 @@ export class Client implements vscode.Disposable {
         this.isInitialized = true;
         this.initializedEventEmitter.fire();
 
-        if (this.traceOutputChannel.logLevel !== vscode.LogLevel.Trace) {
-            this.traceOutputChannel.appendLine(`To see LSP trace output, set this output's log level to "Trace" (gear icon next to the dropdown).`);
-        }
+        // Send the initial log verbosity level to the server, and update it
+        // whenever the output channel's log level changes (via the gear icon).
+        this.sendLogVerbosity();
+        const logLevelListener = this.outputChannel.onDidChangeLogLevel(() => {
+            this.sendLogVerbosity();
+        });
 
         type TelemetryData = {
             eventName: string;
@@ -240,6 +244,7 @@ export class Client implements vscode.Disposable {
         });
 
         this.disposables.push(
+            logLevelListener,
             serverTelemetryListener,
             registerMultiDocumentHighlightFeature(this.documentSelector, this.client),
             registerSourceDefinitionFeature(this.client),
@@ -303,6 +308,15 @@ export class Client implements vscode.Disposable {
     }
 
     // Developer/debugging methods
+
+    private sendLogVerbosity(): void {
+        if (!this.client) {
+            return;
+        }
+        this.client.sendNotification("custom/setLogVerbosity", {
+            verbosity: this.outputChannel.logLevel,
+        });
+    }
 
     async runGC(): Promise<void> {
         if (!this.client) {

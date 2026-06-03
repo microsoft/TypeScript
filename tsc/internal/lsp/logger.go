@@ -11,15 +11,38 @@ import (
 var _ logging.Logger = (*logger)(nil)
 
 type logger struct {
-	server  *Server
-	mu      sync.Mutex
-	verbose bool
+	server    *Server
+	mu        sync.Mutex
+	verbosity lsproto.LogVerbosity
 }
 
 func newLogger(server *Server) *logger {
 	return &logger{
-		server: server,
+		server:    server,
+		verbosity: lsproto.LogVerbosityInfo,
 	}
+}
+
+// maxVerbosityForMessageType returns the least-verbose log level at which
+// messages of the given LSP MessageType should still be sent.
+func maxVerbosityForMessageType(msgType lsproto.MessageType) lsproto.LogVerbosity {
+	switch msgType {
+	case lsproto.MessageTypeError:
+		return lsproto.LogVerbosityError
+	case lsproto.MessageTypeWarning:
+		return lsproto.LogVerbosityWarning
+	case lsproto.MessageTypeInfo:
+		return lsproto.LogVerbosityInfo
+	case lsproto.MessageTypeDebug:
+		return lsproto.LogVerbosityDebug
+	default:
+		return lsproto.LogVerbosityInfo
+	}
+}
+
+// isValidLogVerbosity reports whether v is one of the defined LogVerbosity values.
+func isValidLogVerbosity(v lsproto.LogVerbosity) bool {
+	return v >= lsproto.LogVerbosityOff && v <= lsproto.LogVerbosityError
 }
 
 func (l *logger) sendLogMessage(msgType lsproto.MessageType, message string) {
@@ -29,6 +52,14 @@ func (l *logger) sendLogMessage(msgType lsproto.MessageType, message string) {
 
 	if !l.server.initStarted.Load() {
 		fmt.Fprintln(l.server.stderr, message)
+		return
+	}
+
+	// Don't send messages that the client will filter out anyway.
+	l.mu.Lock()
+	verbosity := l.verbosity
+	l.mu.Unlock()
+	if verbosity == lsproto.LogVerbosityOff || verbosity > maxVerbosityForMessageType(msgType) {
 		return
 	}
 
@@ -48,14 +79,14 @@ func (l *logger) Log(msg ...any) {
 	if l == nil {
 		return
 	}
-	l.sendLogMessage(lsproto.MessageTypeLog, fmt.Sprint(msg...))
+	l.sendLogMessage(lsproto.MessageTypeInfo, fmt.Sprint(msg...))
 }
 
 func (l *logger) Logf(format string, args ...any) {
 	if l == nil {
 		return
 	}
-	l.sendLogMessage(lsproto.MessageTypeLog, fmt.Sprintf(format, args...))
+	l.sendLogMessage(lsproto.MessageTypeInfo, fmt.Sprintf(format, args...))
 }
 
 func (l *logger) Verbose() logging.Logger {
@@ -64,7 +95,7 @@ func (l *logger) Verbose() logging.Logger {
 	}
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	if !l.verbose {
+	if l.verbosity == lsproto.LogVerbosityOff || l.verbosity > lsproto.LogVerbosityDebug {
 		return nil
 	}
 	return l
@@ -76,7 +107,7 @@ func (l *logger) IsVerbose() bool {
 	}
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	return l.verbose
+	return l.verbosity >= lsproto.LogVerbosityTrace && l.verbosity <= lsproto.LogVerbosityDebug
 }
 
 func (l *logger) SetVerbose(verbose bool) {
@@ -85,7 +116,29 @@ func (l *logger) SetVerbose(verbose bool) {
 	}
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	l.verbose = verbose
+	if verbose {
+		l.verbosity = lsproto.LogVerbosityDebug
+	} else {
+		l.verbosity = lsproto.LogVerbosityInfo
+	}
+}
+
+func (l *logger) IsTracing() bool {
+	if l == nil {
+		return false
+	}
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	return l.verbosity == lsproto.LogVerbosityTrace
+}
+
+func (l *logger) SetVerbosity(verbosity lsproto.LogVerbosity) {
+	if l == nil {
+		return
+	}
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.verbosity = verbosity
 }
 
 func (l *logger) Error(msg ...any) {

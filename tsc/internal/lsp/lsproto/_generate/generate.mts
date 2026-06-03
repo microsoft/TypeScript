@@ -62,6 +62,12 @@ const customStructures: Structure[] = [
                 optional: true,
                 documentation: "EnableTelemetry enables sending telemetry events from the server to the client.",
             },
+            {
+                name: "logVerbosity",
+                type: { kind: "reference", name: "LogVerbosity" },
+                optional: true,
+                documentation: "The initial log verbosity level, matching the client's output channel log level at startup. Subsequent changes are sent via custom/setLogVerbosity.",
+            },
         ],
         documentation: "InitializationOptions contains user-provided initialization options.",
     },
@@ -375,6 +381,17 @@ const customStructures: Structure[] = [
         documentation: "Result for the custom/projectInfo request.",
     },
     {
+        name: "SetLogVerbosityParams",
+        properties: [
+            {
+                name: "verbosity",
+                type: { kind: "reference", name: "LogVerbosity" },
+                documentation: "The log verbosity level.",
+            },
+        ],
+        documentation: "Parameters for the custom/setLogVerbosity notification.",
+    },
+    {
         name: "PerformanceStatsTelemetryEvent",
         properties: [
             {
@@ -563,6 +580,19 @@ const customStructures: Structure[] = [
 ];
 
 const customEnumerations: Enumeration[] = [
+    {
+        name: "LogVerbosity",
+        type: { kind: "base", name: "integer" },
+        values: [
+            { name: "Off", value: 0, documentation: "All logging disabled." },
+            { name: "Trace", value: 1, documentation: "Most verbose; includes LSP request/response traces." },
+            { name: "Debug", value: 2, documentation: "Verbose server logs." },
+            { name: "Info", value: 3, documentation: "Normal server logs." },
+            { name: "Warning", value: 4, documentation: "Warnings only." },
+            { name: "Error", value: 5, documentation: "Errors only." },
+        ],
+        documentation: "Log verbosity level, mirroring the VS Code LogLevel enum values.",
+    },
     {
         name: "VSReferenceKind",
         type: { kind: "base", name: "integer" },
@@ -765,6 +795,16 @@ const customRequests: Request[] = [
         },
         messageDirection: "clientToServer",
         documentation: "VS-specific request for Find All References with grouped reference items.",
+    },
+];
+
+const customNotifications: Notification[] = [
+    {
+        method: "custom/setLogVerbosity",
+        typeName: "CustomSetLogVerbosityNotification",
+        params: { kind: "reference", name: "SetLogVerbosityParams" },
+        messageDirection: "clientToServer",
+        documentation: "Notification to set the server's log verbosity level based on the output channel's log level.",
     },
 ];
 
@@ -1033,6 +1073,7 @@ function patchAndPreprocessModel() {
     model.enumerations.push(...customEnumerations);
     model.structures.push(...customStructures, ...syntheticStructures);
     model.requests.push(...customRequests);
+    model.notifications.push(...customNotifications);
 
     // Build structure map for preprocessing
     const structureMap = new Map<string, Structure>();

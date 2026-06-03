@@ -24,19 +24,16 @@ export class SessionManager implements vscode.Disposable {
     currentSession?: Session;
     private disposables: vscode.Disposable[] = [];
     private outputChannel: vscode.LogOutputChannel;
-    private traceOutputChannel: vscode.LogOutputChannel;
     private initializedEventEmitter: vscode.EventEmitter<void>;
     private telemetryReporter: TelemetryReporter;
 
     constructor(
         context: vscode.ExtensionContext,
         outputChannel: vscode.LogOutputChannel,
-        traceOutputChannel: vscode.LogOutputChannel,
         initializedEventEmitter: vscode.EventEmitter<void>,
         telemetryReporter: TelemetryReporter,
     ) {
         this.outputChannel = outputChannel;
-        this.traceOutputChannel = traceOutputChannel;
         this.telemetryReporter = telemetryReporter;
         this.initializedEventEmitter = initializedEventEmitter;
         this.registerCommands(context);
@@ -63,7 +60,7 @@ export class SessionManager implements vscode.Disposable {
             this.outputChannel.appendLine("Restarting TypeScript Native Preview...");
             await this.currentSession.dispose();
         }
-        this.currentSession = new Session(context, this.outputChannel, this.traceOutputChannel, this.initializedEventEmitter, this.telemetryReporter);
+        this.currentSession = new Session(context, this.outputChannel, this.initializedEventEmitter, this.telemetryReporter);
         return this.currentSession.start(context);
     }
 
@@ -101,22 +98,19 @@ class Session implements vscode.Disposable {
     private disposables: vscode.Disposable[] = [];
     private context: vscode.ExtensionContext;
     private outputChannel: vscode.LogOutputChannel;
-    private traceOutputChannel: vscode.LogOutputChannel;
     private telemetryReporter: TelemetryReporter;
     private initializedEventEmitter: vscode.EventEmitter<void>;
 
     constructor(
         context: vscode.ExtensionContext,
         outputChannel: vscode.LogOutputChannel,
-        traceOutputChannel: vscode.LogOutputChannel,
         initializedEventEmitter: vscode.EventEmitter<void>,
         telemetryReporter: TelemetryReporter,
     ) {
-        this.client = new Client(outputChannel, traceOutputChannel, initializedEventEmitter, telemetryReporter);
+        this.client = new Client(outputChannel, initializedEventEmitter, telemetryReporter);
         this.disposables.push(this.client);
         this.context = context;
         this.outputChannel = outputChannel;
-        this.traceOutputChannel = traceOutputChannel;
         this.telemetryReporter = telemetryReporter;
         this.initializedEventEmitter = initializedEventEmitter;
         this.registerCommands();
@@ -154,10 +148,6 @@ class Session implements vscode.Disposable {
 
         this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.output.focus", () => {
             this.outputChannel.show();
-        }));
-
-        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.lsp-trace.focus", () => {
-            this.traceOutputChannel.show();
         }));
 
         this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.selectVersion", async () => {
@@ -276,14 +266,9 @@ async function showCommands(client: Client): Promise<void> {
             command: "typescript.native-preview.restart",
         },
         {
-            label: "$(output) Show TS Server Log",
-            description: "Show the TypeScript Native Preview server log",
+            label: "$(output) Show Output",
+            description: "Show the TypeScript Native Preview output log",
             command: "typescript.native-preview.output.focus",
-        },
-        {
-            label: "$(debug-console) Show LSP Messages",
-            description: "Show the LSP communication trace",
-            command: "typescript.native-preview.lsp-trace.focus",
         },
         {
             label: "$(report) Report Issue",
