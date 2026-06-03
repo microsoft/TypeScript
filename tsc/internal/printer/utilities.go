@@ -909,16 +909,25 @@ func newLineCharacterCache(source sourcemap.Source) *lineCharacterCache {
 // offset from the start of that line for the given byte position.
 func (c *lineCharacterCache) getLineAndCharacter(pos int) (line int, character core.UTF16Offset) {
 	line = scanner.ComputeLineOfPosition(c.lineMap, pos)
-	if c.hasCached && line == c.cachedLine && pos >= c.cachedPos {
+	lineStart := int(c.lineMap[line])
+	// When pos is beyond the source text (e.g., for error-recovery tokens like
+	// missing closing braces), we can't slice past the text end. Compute the
+	// UTF-16 length up to EOF and add the remaining byte offset arithmetically,
+	// matching TypeScript's computeLineAndCharacterOfPosition which uses
+	// arithmetic (position - lineStarts[lineNumber]) and handles this implicitly.
+	endPos := min(pos, len(c.text))
+	if c.hasCached && line == c.cachedLine && endPos >= c.cachedPos {
 		// Incremental: only count UTF-16 code units from the last cached position.
-		character = c.cachedChar + core.UTF16Len(c.text[c.cachedPos:pos])
+		character = c.cachedChar + core.UTF16Len(c.text[c.cachedPos:endPos])
 	} else {
 		// Full computation from line start.
-		character = core.UTF16Len(c.text[c.lineMap[line]:pos])
+		character = core.UTF16Len(c.text[lineStart:endPos])
 	}
+	cachedChar := character
+	character += core.UTF16Offset(pos - endPos)
 	c.cachedLine = line
-	c.cachedPos = pos
-	c.cachedChar = character
+	c.cachedPos = endPos
+	c.cachedChar = cachedChar
 	c.hasCached = true
 	return line, character
 }
