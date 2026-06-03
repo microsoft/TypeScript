@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/declarationMapWithInlineSourceMap.ts] ////
+
+=== declarationMapWithInlineSourceMap.ts ===
+export const x = 1;
+>x : 1
+>1 : 1
+
