@@ -7,7 +7,7 @@ import type { SnapshotChanges } from "./proto.ts";
 /**
  * Builds a composite ref key from a snapshot ID and project ID.
  */
-function refKey(snapshotId: string, projectId: string): string {
+function refKey(snapshotId: number, projectId: string): string {
     return `${snapshotId}:${projectId}`;
 }
 
@@ -44,7 +44,7 @@ export class SourceFileCache {
     /** Map from path to all cached versions of that file */
     private cache: Map<Path, CachedSourceFile[]> = new Map();
     /** Map from snapshotId to (projectId → Set of paths fetched through that project) */
-    private snapshotProjectPaths: Map<string, Map<string, Set<Path>>> = new Map();
+    private snapshotProjectPaths: Map<number, Map<string, Set<Path>>> = new Map();
 
     /**
      * Get a cached source file already retained for the given (snapshot, project) pair.
@@ -55,7 +55,7 @@ export class SourceFileCache {
      * A given (snapshot, project) pair always parses a file the same way, so there is
      * at most one matching entry per ref.
      */
-    getRetained(path: Path, snapshotId: string, projectId: string): SourceFile | undefined {
+    getRetained(path: Path, snapshotId: number, projectId: string): SourceFile | undefined {
         const entries = this.cache.get(path);
         if (!entries) return undefined;
         const key = refKey(snapshotId, projectId);
@@ -67,7 +67,7 @@ export class SourceFileCache {
      * Store a source file in the cache and retain it for the given (snapshot, project) pair.
      * Returns the cached file — which may be an existing entry if the hash matches.
      */
-    set(path: Path, file: SourceFile, parseOptionsKey: string, contentHash: string, snapshotId: string, projectId: string): SourceFile {
+    set(path: Path, file: SourceFile, parseOptionsKey: string, contentHash: string, snapshotId: number, projectId: string): SourceFile {
         let entries = this.cache.get(path);
         if (!entries) {
             entries = [];
@@ -93,7 +93,7 @@ export class SourceFileCache {
      *   - Changed projects: retain refs for files not listed in changedFiles/deletedFiles.
      *   - Unchanged projects: retain all refs.
      */
-    retainForSnapshot(newSnapshotId: string, previousSnapshotId: string, changes: SnapshotChanges | undefined): void {
+    retainForSnapshot(newSnapshotId: number, previousSnapshotId: number, changes: SnapshotChanges | undefined): void {
         const prevProjectMap = this.snapshotProjectPaths.get(previousSnapshotId);
         if (!prevProjectMap) return;
 
@@ -133,7 +133,7 @@ export class SourceFileCache {
      * Only visits paths that the snapshot actually referenced.
      * Entries with no remaining refs are evicted.
      */
-    releaseSnapshot(snapshotId: string): void {
+    releaseSnapshot(snapshotId: number): void {
         const projectMap = this.snapshotProjectPaths.get(snapshotId);
         if (!projectMap) return;
         for (const [projectId, paths] of projectMap) {
@@ -155,7 +155,7 @@ export class SourceFileCache {
         this.snapshotProjectPaths.delete(snapshotId);
     }
 
-    private trackPath(snapshotId: string, projectId: string, path: Path): void {
+    private trackPath(snapshotId: number, projectId: string, path: Path): void {
         let projectMap = this.snapshotProjectPaths.get(snapshotId);
         if (!projectMap) {
             projectMap = new Map();

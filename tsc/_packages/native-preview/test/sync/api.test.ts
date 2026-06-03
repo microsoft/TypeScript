@@ -712,6 +712,111 @@ export class MyClass {
         }
     });
 
+    test("getTypeAtLocation returns property type for parenthesized and chained access (issue #3938)", () => {
+        const files = {
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+interface A {
+    a: number;
+    b: { c: number };
+}
+const obj: A = { a: 1, b: { c: 2 } };
+const a1 = obj.a;
+const a2 = (obj).a;
+const c = obj.b.c;
+`,
+        };
+
+        const api = spawnAPI(files);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+
+            const targetNodes = new Map<string, Node>();
+            sourceFile.forEachChild(function visit(node) {
+                if (node.kind === SyntaxKind.PropertyAccessExpression) {
+                    const text = sourceFile.text.slice(node.pos, node.end).trim();
+                    if (text === "obj.a" || text === "(obj).a" || text === "obj.b.c") {
+                        targetNodes.set(text, node);
+                    }
+                }
+                node.forEachChild(visit);
+            });
+
+            assert.equal(targetNodes.size, 3, "Should find all target property access expressions");
+            for (const expr of ["obj.a", "(obj).a", "obj.b.c"] as const) {
+                const node = targetNodes.get(expr);
+                assert.ok(node, `Should find expression '${expr}'`);
+                const type = project.checker.getTypeAtLocation(node);
+                assert.ok(type, `Should get a type for '${expr}'`);
+                assert.ok(type.flags & TypeFlags.Number, `Expected '${expr}' to have number type flags, got ${type.flags}`);
+            }
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getTypeAtLocation returns call result type for private method call (issue #4041)", () => {
+        const files = {
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true, target: "esnext" } }),
+            "/src/main.ts": `
+type Result = { readonly value: string };
+
+export class Cache {
+    run(): Result {
+        return this.#buildCapabilities();
+    }
+
+    #buildCapabilities(): Result {
+        return { value: "ok" };
+    }
+}
+`,
+        };
+
+        const api = spawnAPI(files);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+
+            let callNode: import("@typescript/native-preview/unstable/ast").CallExpression | undefined;
+            sourceFile.forEachChild(function visit(node) {
+                if (isCallExpression(node)) {
+                    const text = sourceFile.text.slice(node.pos, node.end).trim();
+                    if (text === "this.#buildCapabilities()") {
+                        callNode = node;
+                    }
+                }
+                node.forEachChild(visit);
+            });
+
+            assert.ok(callNode, "Should find private method call expression");
+            const callType = project.checker.getTypeAtLocation(callNode);
+            const calleeType = project.checker.getTypeAtLocation(callNode.expression);
+            assert.ok(callType, "Should get type for call expression");
+            assert.ok(calleeType, "Should get type for callee expression");
+
+            const callSignatures = project.checker.getSignaturesOfType(calleeType, SignatureKind.Call);
+            assert.ok(callSignatures.length > 0, "Callee should be callable");
+            const returnType = project.checker.getReturnTypeOfSignature(callSignatures[0]);
+            assert.ok(returnType, "Should get return type for private method call");
+            const callExprSignatures = project.checker.getSignaturesOfType(callType, SignatureKind.Call);
+
+            assert.ok(callType.flags & TypeFlags.Object, `Expected call expression type to be object-like, got ${callType.flags}`);
+            assert.ok(returnType.flags & TypeFlags.Object, `Expected return type to be object-like, got ${returnType.flags}`);
+            assert.equal(callType.flags, returnType.flags, "Call expression type should have same flags as method return type");
+            assert.equal(callExprSignatures.length, 0, "Call expression result type should not itself be callable");
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("getSignaturesOfType - call signatures", () => {
         const api = spawnAPI(checkerFiles);
         try {

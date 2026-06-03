@@ -1633,7 +1633,7 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`    }`);
     w.write(`    protected _sourceFile: SourceFileInfo;`);
     w.write(`    get id(): string {`);
-    w.write(`        return \`\${this.pos}.\${this.end}.\${this.kind}.\${this.sourceFile.path}\`;`);
+    w.write(`        return \`\${this.index}.\${this.kind}.\${this.sourceFile.path}\`;`);
     w.write(`    }`);
     w.write(``);
     w.write(`    constructor(view: DataView, index: number, parent: RemoteNode, sourceFile: SourceFileInfo, offsetNodes: number) {`);

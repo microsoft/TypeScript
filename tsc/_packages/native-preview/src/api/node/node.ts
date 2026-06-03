@@ -209,30 +209,29 @@ export function findDescendant(root: Node, pos: number, end: number, kind: Synta
  * Parsed components of a node handle.
  */
 export interface ParsedNodeHandle {
-    pos: number;
-    end: number;
+    index: number;
     kind: SyntaxKind;
     path: Path;
 }
 
 /**
  * Parse a node handle string into its components.
- * Handle format: "pos.end.kind.path" where path may contain dots.
+ * Handle format: "index.kind.path" where path may contain dots.
  */
 export function parseNodeHandle(handle: string): ParsedNodeHandle {
-    const dot1 = handle.indexOf(".");
-    const dot2 = handle.indexOf(".", dot1 + 1);
-    const dot3 = handle.indexOf(".", dot2 + 1);
-
-    if (dot1 === -1 || dot2 === -1 || dot3 === -1) {
+    const firstDot = handle.indexOf(".");
+    if (firstDot === -1) {
+        throw new Error(`Invalid node handle: ${handle}`);
+    }
+    const secondDot = handle.indexOf(".", firstDot + 1);
+    if (secondDot === -1) {
         throw new Error(`Invalid node handle: ${handle}`);
     }
 
     return {
-        pos: parseInt(handle.slice(0, dot1), 10),
-        end: parseInt(handle.slice(dot1 + 1, dot2), 10),
-        kind: parseInt(handle.slice(dot2 + 1, dot3), 10) as SyntaxKind,
-        path: handle.slice(dot3 + 1) as Path,
+        index: parseInt(handle.slice(0, firstDot), 10),
+        kind: parseInt(handle.slice(firstDot + 1, secondDot), 10) as SyntaxKind,
+        path: handle.slice(secondDot + 1) as Path,
     };
 }
 

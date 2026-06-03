@@ -19,7 +19,7 @@ import type { Symbol } from "./api.ts";
  */
 export interface Type {
     /** Unique identifier for this type */
-    readonly id: string;
+    readonly id: number;
     /** Type flags — use to determine the specific kind of type */
     readonly flags: TypeFlags;
 
