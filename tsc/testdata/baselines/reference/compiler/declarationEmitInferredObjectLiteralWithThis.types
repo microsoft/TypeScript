@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/declarationEmitInferredObjectLiteralWithThis.ts] ////
+
+=== declarationEmitInferredObjectLiteralWithThis.ts ===
+export class C {
+>C : C
+
+    foo() {
+>foo : () => { self: this; }
+
+        return {
+>{            self: this,        } : { self: this; }
+
+            self: this,
+>self : this
+>this : this
+
+        };
+    }
+
+    prop = {
+>prop : { self: this; }
+>{        self: this,    } : { self: this; }
+
+        self: this,
+>self : this
+>this : this
+
+    };
+}
+

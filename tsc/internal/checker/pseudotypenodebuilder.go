@@ -198,6 +198,12 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 		isConst := b.ch.isConstContext(elements[0].Name.Parent.Parent)
 		newElements := make([]*ast.Node, 0, len(elements))
 
+		// Member types are serialized within an object type literal, so set the
+		// corresponding flag to mirror createTypeNodeFromObjectType. This ensures
+		// inaccessible `this` references inside the members are reported (TS2527).
+		restoreObjectLiteralFlags := b.saveRestoreFlags()
+		b.ctx.flags |= nodebuilder.FlagsInObjectTypeLiteral
+
 		for _, e := range elements {
 			var modifiers *ast.ModifierList
 			if isConst || (e.Kind == pseudochecker.PseudoObjectElementKindPropertyAssignment && e.AsPseudoPropertyAssignment().Readonly) {
@@ -283,6 +289,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 				cleanup()
 			}
 		}
+		restoreObjectLiteralFlags()
 		result := b.f.NewTypeLiteralNode(b.f.NewNodeList(newElements))
 		if b.ctx.flags&nodebuilder.FlagsMultilineObjectLiterals == 0 {
 			b.e.AddEmitFlags(result, printer.EFSingleLine)
