@@ -232,7 +232,7 @@ declare namespace ExpandoMerge {
 declare var n: number;
 declare namespace Ns {
     function ExpandoNamespace(): void;
-    declare namespace ExpandoNamespace {
+    namespace ExpandoNamespace {
         var p6: number;
     }
     export function foo(): typeof ExpandoNamespace;

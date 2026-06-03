@@ -62,12 +62,3 @@
  declare function ExpandoNested(n: number): {
      (m: number): number;
      total: number;
-@@= skipped -40, +55 lines =@@
- declare var n: number;
- declare namespace Ns {
-     function ExpandoNamespace(): void;
--    namespace ExpandoNamespace {
-+    declare namespace ExpandoNamespace {
-         var p6: number;
-     }
-     export function foo(): typeof ExpandoNamespace;
