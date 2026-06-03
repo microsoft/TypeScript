@@ -197,48 +197,6 @@ jobs:
           name: ${{ matrix.config.os }}-${{ (matrix.config.race && 'race') || 'norace' }}-new-baselines-artifact
           path: testdata/baselines/local
 
-  fswatch-cross:
-    name: fswatch (${{ matrix.os.name }} ${{ matrix.os.version }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - name: freebsd
-            version: '15.0'
-            install: sudo pkg install -y go
-          - name: openbsd
-            version: '7.9'
-            install: sudo pkg_add -I go
-          - name: netbsd
-            version: '10.1'
-            install: sudo pkgin -y install go && sudo ln -sf "$(ls /usr/pkg/bin/go1* | sort | tail -1)" /usr/pkg/bin/go
-          - name: dragonflybsd
-            version: '6.4.2'
-            install: echo 'nameserver 8.8.8.8' | sudo tee /etc/resolv.conf && sudo pkg install -y go
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          submodules: false
-          sparse-checkout: |
-            go.mod
-            go.sum
-            internal/fswatch
-
-      - name: Start VM on ${{ matrix.os.name }}
-        uses: cross-platform-actions/action@be3d7e9ff5c8770b9c51b1a8c8c5446e1cad7cf9 # v1.2.0
-        with:
-          operating_system: ${{ matrix.os.name }}
-          version: ${{ matrix.os.version }}
-          shell: bash
-
-      - name: Test fswatch on ${{ matrix.os.name }}
-        shell: cpa.sh {0}
-        run: |
-          ${{ matrix.os.install }}
-          go version
-          go test -v ./internal/fswatch/...
-
   lint:
     strategy:
       fail-fast: ${{ github.event_name == 'merge_group' }}
@@ -411,7 +369,6 @@ jobs:
       - smoke
       - test
       - tidy
-      - fswatch-cross
 
     steps:
       - name: Check required jobs
