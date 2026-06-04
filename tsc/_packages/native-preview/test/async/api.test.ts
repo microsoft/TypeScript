@@ -872,6 +872,15 @@ export class Cache {
             assert.ok(sig.declaration);
             const node = await sig.declaration.resolve(project);
             assert.ok(node);
+
+            const methodPos = src.indexOf("getValue");
+            const methodSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", methodPos);
+            assert.ok(methodSymbol);
+            assert.ok(methodSymbol.valueDeclaration);
+            const methodNode = await methodSymbol.valueDeclaration.resolve(project);
+            assert.ok(methodNode);
+            assert.strictEqual(methodNode.parent.kind, SyntaxKind.ClassDeclaration);
+            assert.strictEqual(methodNode.parent.parent.kind, SyntaxKind.SourceFile);
         }
         finally {
             await api.close();

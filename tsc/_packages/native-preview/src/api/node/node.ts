@@ -21,7 +21,10 @@ import {
     HEADER_OFFSET_STRING_TABLE,
     HEADER_OFFSET_STRING_TABLE_OFFSETS,
     HEADER_OFFSET_STRUCTURED_DATA,
+    KIND_NODE_LIST,
     NODE_LEN,
+    NODE_OFFSET_KIND,
+    NODE_OFFSET_PARENT,
 } from "./protocol.ts";
 
 // Re-export everything consumers need from the other two files.
@@ -111,7 +114,21 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     getOrCreateNodeAtIndex(index: number): Node {
         let node = this.nodes[index];
         if (!node) {
-            node = new RemoteNode(this.view, index, this, this, this._offsetNodes);
+            // Resolve the real parent so that nodes looked up directly by index (e.g. via
+            // NodeHandle.resolve) report the correct `parent`, rather than always pointing at
+            // the source file. The stored parent index can refer to a synthetic NodeList
+            // container; skip those to mirror normal traversal, where list elements take the
+            // list's parent. The walk terminates at the source file, which occupies index 1
+            // and is already cached.
+            let parentIndex = this.view.getUint32(this._offsetNodes + index * NODE_LEN + NODE_OFFSET_PARENT, true);
+            while (
+                parentIndex !== index &&
+                this.view.getUint32(this._offsetNodes + parentIndex * NODE_LEN + NODE_OFFSET_KIND, true) === KIND_NODE_LIST
+            ) {
+                parentIndex = this.view.getUint32(this._offsetNodes + parentIndex * NODE_LEN + NODE_OFFSET_PARENT, true);
+            }
+            const parent = parentIndex === index ? this : this.getOrCreateNodeAtIndex(parentIndex) as RemoteNode;
+            node = new RemoteNode(this.view, index, parent, this, this._offsetNodes);
             this.nodes[index] = node;
         }
         return node as Node;
