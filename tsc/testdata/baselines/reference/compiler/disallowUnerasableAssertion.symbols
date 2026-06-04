@@ -1,0 +1,152 @@
+//// [tests/cases/compiler/disallowUnerasableAssertion.ts] ////
+
+=== disallowUnerasableAssertion.ts ===
+// https://github.com/microsoft/TypeScript/issues/63527
+
+// Expressions of the form 'a ## b as T $$ c' where ## has lower precedence than $$ are errors
+// because 'as T' cannot be erased without changing the meaning of the expressions.
+
+export const x01 = 1 as number * 2;
+>x01 : Symbol(x01, Decl(disallowUnerasableAssertion.ts, 5, 12))
+
+export const x02 = 1 as any as number * 2;
+>x02 : Symbol(x02, Decl(disallowUnerasableAssertion.ts, 6, 12))
+
+export const x03 = 1 + 1 as number * 2;  // Error
+>x03 : Symbol(x03, Decl(disallowUnerasableAssertion.ts, 8, 12))
+
+export const x04 = 1 + 1 as any as number * 2;  // Error
+>x04 : Symbol(x04, Decl(disallowUnerasableAssertion.ts, 9, 12))
+
+export const x05 = 1 as number + 1 * 2;
+>x05 : Symbol(x05, Decl(disallowUnerasableAssertion.ts, 10, 12))
+
+export const x06 = 1 as any as number + 1 * 2;
+>x06 : Symbol(x06, Decl(disallowUnerasableAssertion.ts, 11, 12))
+
+export const x07 = 1 * 1 as number + 2;
+>x07 : Symbol(x07, Decl(disallowUnerasableAssertion.ts, 13, 12))
+
+export const x08 = 1 * 1 as any as number + 2;
+>x08 : Symbol(x08, Decl(disallowUnerasableAssertion.ts, 14, 12))
+
+export const x09 = 1 as number * 1 + 2;
+>x09 : Symbol(x09, Decl(disallowUnerasableAssertion.ts, 15, 12))
+
+export const x10 = 1 as any as number * 1 + 2;
+>x10 : Symbol(x10, Decl(disallowUnerasableAssertion.ts, 16, 12))
+
+export const x11 = (1 + 1 as number) * 2;
+>x11 : Symbol(x11, Decl(disallowUnerasableAssertion.ts, 18, 12))
+
+export const x12 = (1 + 1 as any as number) * 2;
+>x12 : Symbol(x12, Decl(disallowUnerasableAssertion.ts, 19, 12))
+
+export const x13 = (1 as number + 1) * 2;
+>x13 : Symbol(x13, Decl(disallowUnerasableAssertion.ts, 20, 12))
+
+export const x14 = (1 as any as number + 1) * 2;
+>x14 : Symbol(x14, Decl(disallowUnerasableAssertion.ts, 21, 12))
+
+export const x15 = 1 + 1 as number === 2;
+>x15 : Symbol(x15, Decl(disallowUnerasableAssertion.ts, 23, 12))
+
+export const x16 = 1 + 1 as any as number === 2;
+>x16 : Symbol(x16, Decl(disallowUnerasableAssertion.ts, 24, 12))
+
+export const x17 = 1 + 1 as number > 2;
+>x17 : Symbol(x17, Decl(disallowUnerasableAssertion.ts, 25, 12))
+
+export const x18 = 1 + 1 as any as number > 2;
+>x18 : Symbol(x18, Decl(disallowUnerasableAssertion.ts, 26, 12))
+
+export const x19 = 1 + 1 as number >= 2;
+>x19 : Symbol(x19, Decl(disallowUnerasableAssertion.ts, 27, 12))
+
+export const x20 = 1 + 1 as any as number >= 2;
+>x20 : Symbol(x20, Decl(disallowUnerasableAssertion.ts, 28, 12))
+
+export const x21 = 1 + 1 as number >> 2;
+>x21 : Symbol(x21, Decl(disallowUnerasableAssertion.ts, 30, 12))
+
+export const x22 = 1 + 1 as any as number >> 2;
+>x22 : Symbol(x22, Decl(disallowUnerasableAssertion.ts, 31, 12))
+
+export const x23 = 1 >> 1 as number + 2;  // Error
+>x23 : Symbol(x23, Decl(disallowUnerasableAssertion.ts, 32, 12))
+
+export const x24 = 1 >> 1 as any as number + 2;  // Error
+>x24 : Symbol(x24, Decl(disallowUnerasableAssertion.ts, 33, 12))
+
+export const y01 = 1 satisfies number * 2;
+>y01 : Symbol(y01, Decl(disallowUnerasableAssertion.ts, 35, 12))
+
+export const y02 = 1 satisfies any satisfies number * 2;
+>y02 : Symbol(y02, Decl(disallowUnerasableAssertion.ts, 36, 12))
+
+export const y03 = 1 + 1 satisfies number * 2;  // Error
+>y03 : Symbol(y03, Decl(disallowUnerasableAssertion.ts, 38, 12))
+
+export const y04 = 1 + 1 satisfies any satisfies number * 2;  // Error
+>y04 : Symbol(y04, Decl(disallowUnerasableAssertion.ts, 39, 12))
+
+export const y05 = 1 satisfies number + 1 * 2;
+>y05 : Symbol(y05, Decl(disallowUnerasableAssertion.ts, 40, 12))
+
+export const y06 = 1 satisfies any satisfies number + 1 * 2;
+>y06 : Symbol(y06, Decl(disallowUnerasableAssertion.ts, 41, 12))
+
+export const y07 = 1 * 1 satisfies number + 2;
+>y07 : Symbol(y07, Decl(disallowUnerasableAssertion.ts, 43, 12))
+
+export const y08 = 1 * 1 satisfies any satisfies number + 2;
+>y08 : Symbol(y08, Decl(disallowUnerasableAssertion.ts, 44, 12))
+
+export const y09 = 1 satisfies number * 1 + 2;
+>y09 : Symbol(y09, Decl(disallowUnerasableAssertion.ts, 45, 12))
+
+export const y10 = 1 satisfies any satisfies number * 1 + 2;
+>y10 : Symbol(y10, Decl(disallowUnerasableAssertion.ts, 46, 12))
+
+export const y11 = (1 + 1 satisfies number) * 2;
+>y11 : Symbol(y11, Decl(disallowUnerasableAssertion.ts, 48, 12))
+
+export const y12 = (1 + 1 satisfies any satisfies number) * 2;
+>y12 : Symbol(y12, Decl(disallowUnerasableAssertion.ts, 49, 12))
+
+export const y13 = (1 satisfies number + 1) * 2;
+>y13 : Symbol(y13, Decl(disallowUnerasableAssertion.ts, 50, 12))
+
+export const y14 = (1 satisfies any satisfies number + 1) * 2;
+>y14 : Symbol(y14, Decl(disallowUnerasableAssertion.ts, 51, 12))
+
+export const y15 = 1 + 1 satisfies number === 2;
+>y15 : Symbol(y15, Decl(disallowUnerasableAssertion.ts, 53, 12))
+
+export const y16 = 1 + 1 satisfies any satisfies number === 2;
+>y16 : Symbol(y16, Decl(disallowUnerasableAssertion.ts, 54, 12))
+
+export const y17 = 1 + 1 satisfies number > 2;
+>y17 : Symbol(y17, Decl(disallowUnerasableAssertion.ts, 55, 12))
+
+export const y18 = 1 + 1 satisfies any satisfies number > 2;
+>y18 : Symbol(y18, Decl(disallowUnerasableAssertion.ts, 56, 12))
+
+export const y19 = 1 + 1 satisfies number >= 2;
+>y19 : Symbol(y19, Decl(disallowUnerasableAssertion.ts, 57, 12))
+
+export const y20 = 1 + 1 satisfies any satisfies number >= 2;
+>y20 : Symbol(y20, Decl(disallowUnerasableAssertion.ts, 58, 12))
+
+export const y21 = 1 + 1 satisfies number >> 2;
+>y21 : Symbol(y21, Decl(disallowUnerasableAssertion.ts, 60, 12))
+
+export const y22 = 1 + 1 satisfies any satisfies number >> 2;
+>y22 : Symbol(y22, Decl(disallowUnerasableAssertion.ts, 61, 12))
+
+export const y23 = 1 >> 1 satisfies number + 2;  // Error
+>y23 : Symbol(y23, Decl(disallowUnerasableAssertion.ts, 62, 12))
+
+export const y24 = 1 >> 1 satisfies any satisfies number + 2;  // Error
+>y24 : Symbol(y24, Decl(disallowUnerasableAssertion.ts, 63, 12))
+

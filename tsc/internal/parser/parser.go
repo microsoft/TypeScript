@@ -4584,11 +4584,12 @@ func (p *Parser) parseBinaryExpressionOrHigher(precedence ast.OperatorPrecedence
 }
 
 func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, leftOperand *ast.Expression, pos int) *ast.Expression {
+	lastOperand := leftOperand
 	for {
 		// We either have a binary operator here, or we're finished.  We call
 		// reScanGreaterToken so that we merge token sequences like > and = into >=
-		p.reScanGreaterThanToken()
-		newPrecedence := ast.GetBinaryOperatorPrecedence(p.token)
+		operator := p.reScanGreaterThanToken()
+		newPrecedence := ast.GetBinaryOperatorPrecedence(operator)
 		// Check the precedence to see if we should "take" this operator
 		// - For left associative operator (all operator but **), consume the operator,
 		//   recursively call the function below, and parse binaryExpression as a rightOperand
@@ -4611,7 +4612,7 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 		//      a ** b - c
 		//             ^token; leftOperand = b. Return b to the caller as a rightOperand
 		var consumeCurrentOperator bool
-		if p.token == ast.KindAsteriskAsteriskToken {
+		if operator == ast.KindAsteriskAsteriskToken {
 			consumeCurrentOperator = newPrecedence >= precedence
 		} else {
 			consumeCurrentOperator = newPrecedence > precedence
@@ -4619,10 +4620,10 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 		if !consumeCurrentOperator {
 			break
 		}
-		if p.token == ast.KindInKeyword && p.inDisallowInContext() {
+		if operator == ast.KindInKeyword && p.inDisallowInContext() {
 			break
 		}
-		if p.token == ast.KindAsKeyword || p.token == ast.KindSatisfiesKeyword {
+		if operator == ast.KindAsKeyword || operator == ast.KindSatisfiesKeyword {
 			// Make sure we *do* perform ASI for constructs like this:
 			//    var x = foo
 			//    as (Bar)
@@ -4631,16 +4632,28 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 			if p.hasPrecedingLineBreak() {
 				break
 			} else {
-				keywordKind := p.token
 				p.nextToken()
-				if keywordKind == ast.KindSatisfiesKeyword {
+				// When we have 'a ## b as SomeType' or 'a ## b satisfies SomeType', where ## is some binary
+				// operator, we want to stop parsing on any following operator with a higher precedence than ##
+				// because continuing would make it impossible to erase the `as` or `satisfies` without changing
+				// the meaning of the expression. See https://github.com/microsoft/TypeScript/issues/63527.
+				lastPrecedence := ast.OperatorPrecedenceHighest
+				if ast.IsBinaryExpression(lastOperand) {
+					lastPrecedence = ast.GetBinaryOperatorPrecedence(lastOperand.AsBinaryExpression().OperatorToken.Kind)
+				}
+				if operator == ast.KindSatisfiesKeyword {
 					leftOperand = p.makeSatisfiesExpression(leftOperand, p.parseType())
 				} else {
 					leftOperand = p.makeAsExpression(leftOperand, p.parseType())
 				}
+				// Stop if the precedence of the next operator is too high.
+				if ast.GetBinaryOperatorPrecedence(p.reScanGreaterThanToken()) > lastPrecedence {
+					break
+				}
 			}
 		} else {
 			leftOperand = p.makeBinaryExpression(leftOperand, p.parseTokenNode(), p.parseBinaryExpressionOrHigher(newPrecedence), pos)
+			lastOperand = leftOperand
 		}
 	}
 	return leftOperand

@@ -1,0 +1,468 @@
+//// [tests/cases/compiler/disallowUnerasableAssertion.ts] ////
+
+=== disallowUnerasableAssertion.ts ===
+// https://github.com/microsoft/TypeScript/issues/63527
+
+// Expressions of the form 'a ## b as T $$ c' where ## has lower precedence than $$ are errors
+// because 'as T' cannot be erased without changing the meaning of the expressions.
+
+export const x01 = 1 as number * 2;
+>x01 : number
+>1 as number * 2 : number
+>1 as number : number
+>1 : 1
+>2 : 2
+
+export const x02 = 1 as any as number * 2;
+>x02 : number
+>1 as any as number * 2 : number
+>1 as any as number : number
+>1 as any : any
+>1 : 1
+>2 : 2
+
+export const x03 = 1 + 1 as number * 2;  // Error
+>x03 : number
+>1 + 1 as number : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>* 2 : number
+> : any
+>2 : 2
+
+export const x04 = 1 + 1 as any as number * 2;  // Error
+>x04 : number
+>1 + 1 as any as number : number
+>1 + 1 as any : any
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>* 2 : number
+> : any
+>2 : 2
+
+export const x05 = 1 as number + 1 * 2;
+>x05 : number
+>1 as number + 1 * 2 : number
+>1 as number : number
+>1 : 1
+>1 * 2 : number
+>1 : 1
+>2 : 2
+
+export const x06 = 1 as any as number + 1 * 2;
+>x06 : number
+>1 as any as number + 1 * 2 : number
+>1 as any as number : number
+>1 as any : any
+>1 : 1
+>1 * 2 : number
+>1 : 1
+>2 : 2
+
+export const x07 = 1 * 1 as number + 2;
+>x07 : number
+>1 * 1 as number + 2 : number
+>1 * 1 as number : number
+>1 * 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x08 = 1 * 1 as any as number + 2;
+>x08 : number
+>1 * 1 as any as number + 2 : number
+>1 * 1 as any as number : number
+>1 * 1 as any : any
+>1 * 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x09 = 1 as number * 1 + 2;
+>x09 : number
+>1 as number * 1 + 2 : number
+>1 as number * 1 : number
+>1 as number : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x10 = 1 as any as number * 1 + 2;
+>x10 : number
+>1 as any as number * 1 + 2 : number
+>1 as any as number * 1 : number
+>1 as any as number : number
+>1 as any : any
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x11 = (1 + 1 as number) * 2;
+>x11 : number
+>(1 + 1 as number) * 2 : number
+>(1 + 1 as number) : number
+>1 + 1 as number : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x12 = (1 + 1 as any as number) * 2;
+>x12 : number
+>(1 + 1 as any as number) * 2 : number
+>(1 + 1 as any as number) : number
+>1 + 1 as any as number : number
+>1 + 1 as any : any
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x13 = (1 as number + 1) * 2;
+>x13 : number
+>(1 as number + 1) * 2 : number
+>(1 as number + 1) : number
+>1 as number + 1 : number
+>1 as number : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x14 = (1 as any as number + 1) * 2;
+>x14 : number
+>(1 as any as number + 1) * 2 : number
+>(1 as any as number + 1) : number
+>1 as any as number + 1 : number
+>1 as any as number : number
+>1 as any : any
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x15 = 1 + 1 as number === 2;
+>x15 : boolean
+>1 + 1 as number === 2 : boolean
+>1 + 1 as number : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x16 = 1 + 1 as any as number === 2;
+>x16 : boolean
+>1 + 1 as any as number === 2 : boolean
+>1 + 1 as any as number : number
+>1 + 1 as any : any
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x17 = 1 + 1 as number > 2;
+>x17 : boolean
+>1 + 1 as number > 2 : boolean
+>1 + 1 as number : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x18 = 1 + 1 as any as number > 2;
+>x18 : boolean
+>1 + 1 as any as number > 2 : boolean
+>1 + 1 as any as number : number
+>1 + 1 as any : any
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x19 = 1 + 1 as number >= 2;
+>x19 : boolean
+>1 + 1 as number >= 2 : boolean
+>1 + 1 as number : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x20 = 1 + 1 as any as number >= 2;
+>x20 : boolean
+>1 + 1 as any as number >= 2 : boolean
+>1 + 1 as any as number : number
+>1 + 1 as any : any
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x21 = 1 + 1 as number >> 2;
+>x21 : number
+>1 + 1 as number >> 2 : number
+>1 + 1 as number : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x22 = 1 + 1 as any as number >> 2;
+>x22 : number
+>1 + 1 as any as number >> 2 : number
+>1 + 1 as any as number : number
+>1 + 1 as any : any
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const x23 = 1 >> 1 as number + 2;  // Error
+>x23 : number
+>1 >> 1 as number : number
+>1 >> 1 : number
+>1 : 1
+>1 : 1
+>+ 2 : 2
+>2 : 2
+
+export const x24 = 1 >> 1 as any as number + 2;  // Error
+>x24 : number
+>1 >> 1 as any as number : number
+>1 >> 1 as any : any
+>1 >> 1 : number
+>1 : 1
+>1 : 1
+>+ 2 : 2
+>2 : 2
+
+export const y01 = 1 satisfies number * 2;
+>y01 : number
+>1 satisfies number * 2 : number
+>1 satisfies number : 1
+>1 : 1
+>2 : 2
+
+export const y02 = 1 satisfies any satisfies number * 2;
+>y02 : number
+>1 satisfies any satisfies number * 2 : number
+>1 satisfies any satisfies number : 1
+>1 satisfies any : 1
+>1 : 1
+>2 : 2
+
+export const y03 = 1 + 1 satisfies number * 2;  // Error
+>y03 : number
+>1 + 1 satisfies number : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>* 2 : number
+> : any
+>2 : 2
+
+export const y04 = 1 + 1 satisfies any satisfies number * 2;  // Error
+>y04 : number
+>1 + 1 satisfies any satisfies number : number
+>1 + 1 satisfies any : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>* 2 : number
+> : any
+>2 : 2
+
+export const y05 = 1 satisfies number + 1 * 2;
+>y05 : number
+>1 satisfies number + 1 * 2 : number
+>1 satisfies number : 1
+>1 : 1
+>1 * 2 : number
+>1 : 1
+>2 : 2
+
+export const y06 = 1 satisfies any satisfies number + 1 * 2;
+>y06 : number
+>1 satisfies any satisfies number + 1 * 2 : number
+>1 satisfies any satisfies number : 1
+>1 satisfies any : 1
+>1 : 1
+>1 * 2 : number
+>1 : 1
+>2 : 2
+
+export const y07 = 1 * 1 satisfies number + 2;
+>y07 : number
+>1 * 1 satisfies number + 2 : number
+>1 * 1 satisfies number : number
+>1 * 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y08 = 1 * 1 satisfies any satisfies number + 2;
+>y08 : number
+>1 * 1 satisfies any satisfies number + 2 : number
+>1 * 1 satisfies any satisfies number : number
+>1 * 1 satisfies any : number
+>1 * 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y09 = 1 satisfies number * 1 + 2;
+>y09 : number
+>1 satisfies number * 1 + 2 : number
+>1 satisfies number * 1 : number
+>1 satisfies number : 1
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y10 = 1 satisfies any satisfies number * 1 + 2;
+>y10 : number
+>1 satisfies any satisfies number * 1 + 2 : number
+>1 satisfies any satisfies number * 1 : number
+>1 satisfies any satisfies number : 1
+>1 satisfies any : 1
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y11 = (1 + 1 satisfies number) * 2;
+>y11 : number
+>(1 + 1 satisfies number) * 2 : number
+>(1 + 1 satisfies number) : number
+>1 + 1 satisfies number : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y12 = (1 + 1 satisfies any satisfies number) * 2;
+>y12 : number
+>(1 + 1 satisfies any satisfies number) * 2 : number
+>(1 + 1 satisfies any satisfies number) : number
+>1 + 1 satisfies any satisfies number : number
+>1 + 1 satisfies any : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y13 = (1 satisfies number + 1) * 2;
+>y13 : number
+>(1 satisfies number + 1) * 2 : number
+>(1 satisfies number + 1) : number
+>1 satisfies number + 1 : number
+>1 satisfies number : 1
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y14 = (1 satisfies any satisfies number + 1) * 2;
+>y14 : number
+>(1 satisfies any satisfies number + 1) * 2 : number
+>(1 satisfies any satisfies number + 1) : number
+>1 satisfies any satisfies number + 1 : number
+>1 satisfies any satisfies number : 1
+>1 satisfies any : 1
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y15 = 1 + 1 satisfies number === 2;
+>y15 : boolean
+>1 + 1 satisfies number === 2 : boolean
+>1 + 1 satisfies number : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y16 = 1 + 1 satisfies any satisfies number === 2;
+>y16 : boolean
+>1 + 1 satisfies any satisfies number === 2 : boolean
+>1 + 1 satisfies any satisfies number : number
+>1 + 1 satisfies any : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y17 = 1 + 1 satisfies number > 2;
+>y17 : boolean
+>1 + 1 satisfies number > 2 : boolean
+>1 + 1 satisfies number : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y18 = 1 + 1 satisfies any satisfies number > 2;
+>y18 : boolean
+>1 + 1 satisfies any satisfies number > 2 : boolean
+>1 + 1 satisfies any satisfies number : number
+>1 + 1 satisfies any : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y19 = 1 + 1 satisfies number >= 2;
+>y19 : boolean
+>1 + 1 satisfies number >= 2 : boolean
+>1 + 1 satisfies number : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y20 = 1 + 1 satisfies any satisfies number >= 2;
+>y20 : boolean
+>1 + 1 satisfies any satisfies number >= 2 : boolean
+>1 + 1 satisfies any satisfies number : number
+>1 + 1 satisfies any : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y21 = 1 + 1 satisfies number >> 2;
+>y21 : number
+>1 + 1 satisfies number >> 2 : number
+>1 + 1 satisfies number : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y22 = 1 + 1 satisfies any satisfies number >> 2;
+>y22 : number
+>1 + 1 satisfies any satisfies number >> 2 : number
+>1 + 1 satisfies any satisfies number : number
+>1 + 1 satisfies any : number
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>2 : 2
+
+export const y23 = 1 >> 1 satisfies number + 2;  // Error
+>y23 : number
+>1 >> 1 satisfies number : number
+>1 >> 1 : number
+>1 : 1
+>1 : 1
+>+ 2 : 2
+>2 : 2
+
+export const y24 = 1 >> 1 satisfies any satisfies number + 2;  // Error
+>y24 : number
+>1 >> 1 satisfies any satisfies number : number
+>1 >> 1 satisfies any : number
+>1 >> 1 : number
+>1 : 1
+>1 : 1
+>+ 2 : 2
+>2 : 2
+
