@@ -265,6 +265,22 @@ func (p *Project) Clone() *Project {
 	}
 }
 
+// SetCommandLine reassigns the project's command line and resets all state derived
+// from it. Changing the command line always requires a full program rebuild, so the
+// project is marked fully dirty. It also resets:
+//   - the memoized command line augmented with typings files (and its sync.Once, so
+//     the augmented command line is rebuilt from the new command line on next access);
+//   - potentialProjectReferences, the pre-load placeholder derived from the old
+//     command line (always nil for inferred projects, which have no project references).
+func (p *Project) SetCommandLine(commandLine *tsoptions.ParsedCommandLine) {
+	p.CommandLine = commandLine
+	p.commandLineWithTypingsFiles = nil
+	p.commandLineWithTypingsFilesOnce = sync.Once{}
+	p.potentialProjectReferences = nil
+	p.dirty = true
+	p.dirtyFilePath = ""
+}
+
 // getCommandLineWithTypingsFiles returns the command line augmented with typing files if ATA is enabled.
 func (p *Project) getCommandLineWithTypingsFiles() *tsoptions.ParsedCommandLine {
 	if len(p.typingsFiles) == 0 {

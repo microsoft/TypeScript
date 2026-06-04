@@ -188,6 +188,79 @@ func TestProject(t *testing.T) {
 		_, err = session.GetLanguageService(context.Background(), uri2)
 		assert.NilError(t, err)
 	})
+
+	t.Run("inferred project rebuilt twice in one snapshot after typings install does not crash", func(t *testing.T) {
+		t.Parallel()
+		// Reproduces the nil-command-line crash in (*Program).SingleThreaded (issue #3873).
+		//
+		// `getCommandLineWithTypingsFiles` memoizes `commandLineWithTypingsFiles` behind a
+		// `sync.Once`. When `CommandLine` (or the inferred roots) change, the cached value is
+		// reset to nil but the `Once` is NOT reset. `Project.Clone()` produces a fresh `Once`,
+		// so the first mutation of a project within a snapshot normally clears the staleness.
+		// But if the *same* in-snapshot clone has its program built, then its roots change, then
+		// its program is built again, the second build hits a consumed `Once` and reads the nil
+		// cached value, passing a nil command line to `compiler.NewProgram`.
+		//
+		// This sequence is produced within a single snapshot by `DidRequestFile`'s
+		// build -> cleanupInferredProject -> build path, when:
+		//   1. the inferred project has installed typings (so the `Once` path is taken), and
+		//   2. a pending content change marks the inferred project dirty (forcing build #1), and
+		//   3. a pending tsconfig creation moves another open file out of the inferred project,
+		//      so `cleanupInferredProject` changes the inferred roots between the two builds.
+		files := map[string]any{
+			"/user/username/projects/project1/a.js":         ``,
+			"/user/username/projects/project1/package.json": `{"name":"p1","dependencies":{"jquery":"^3.1.0"}}`,
+			"/user/username/projects/project1/b.ts":         `export const y = 1;`,
+		}
+
+		session, utils := projecttestutil.SetupWithTypingsInstaller(files, &projecttestutil.TypingsInstallerOptions{
+			PackageToFile: map[string]string{
+				"jquery": `declare const $: { x: number }`,
+			},
+		})
+
+		aURI := lsproto.DocumentUri("file:///user/username/projects/project1/a.js")
+		bURI := lsproto.DocumentUri("file:///user/username/projects/project1/b.ts")
+
+		// 1) Open the file that triggers ATA, plus another file that joins the inferred project.
+		session.DidOpenFile(context.Background(), aURI, 1, ``, lsproto.LanguageKindJavaScript)
+		session.DidOpenFile(context.Background(), bURI, 1, files["/user/username/projects/project1/b.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		// 2) Let ATA install jquery typings, then build the inferred program so its
+		//    typings files are populated.
+		session.WaitForBackgroundTasks()
+		npmCalls := utils.NpmExecutor().NpmInstallCalls()
+		assert.Assert(t, len(npmCalls) > 0, "expected at least one npm install call from ATA")
+		_, err := session.GetLanguageService(context.Background(), aURI)
+		assert.NilError(t, err)
+
+		// 3) Queue two pending changes that will be flushed together in the next snapshot:
+		//    - a content change to a.js (marks the inferred project dirty -> first program build)
+		//    - creation of a tsconfig.json that captures b.ts (moves it out of the inferred
+		//      project, so cleanupInferredProject shrinks the inferred roots between builds).
+		session.DidChangeFile(context.Background(), aURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+			{WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: `// changed`}},
+		})
+		err = utils.FS().WriteFile("/user/username/projects/project1/tsconfig.json", `{"compilerOptions":{},"files":["b.ts"]}`)
+		assert.NilError(t, err)
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{
+				Type: lsproto.FileChangeTypeCreated,
+				Uri:  "file:///user/username/projects/project1/tsconfig.json",
+			},
+		})
+
+		// 4) Flush the pending changes and the request in a single snapshot. With the bug,
+		//    the inferred project's program is built, its roots change, and it is rebuilt with
+		//    a nil command line, panicking in (*Program).SingleThreaded.
+		defer func() {
+			if r := recover(); r != nil {
+				t.Fatalf("crash reproduced (issue #3873): %v", r)
+			}
+		}()
+		_, err = session.GetLanguageService(context.Background(), aURI)
+		assert.NilError(t, err)
+	})
 }
 
 func TestPushDiagnostics(t *testing.T) {
