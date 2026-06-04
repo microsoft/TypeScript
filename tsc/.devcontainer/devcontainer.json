@@ -6,7 +6,7 @@
     "image": "mcr.microsoft.com/devcontainers/go:dev-1.26-bookworm",
     // Features to add to the dev container. More info: https://containers.dev/features.
     "features": {
-        "ghcr.io/devcontainers/features/node:1": {
+        "ghcr.io/devcontainers/features/node:2": {
             "version": "lts",
             "pnpmVersion": "latest",
             "nvmVersion": "latest"
