@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 # Ensure scripts are run with pipefail. See:
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
@@ -19,12 +20,15 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: azure
+      deployment: false
     if: github.repository == 'microsoft/TypeScript'
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          persist-credentials: false
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: 'lts/*'
@@ -35,12 +39,14 @@ jobs:
           npm --version
 
       - name: Update package-lock.json and push
+        id: update
         run: |
           rm package-lock.json
           npm install
 
           if git diff --exit-code --name-only package-lock.json; then
             echo "No change."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             npm test
             npx hereby LKG
@@ -48,5 +54,32 @@ jobs:
             git config user.name "TypeScript Bot"
             git add -f package-lock.json
             git commit -m "Update package-lock.json"
-            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+      - uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
+        if: steps.update.outputs.changed == 'true'
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Create GitHub App token
+        if: steps.update.outputs.changed == 'true'
+        id: app-token
+        uses: microsoft/create-github-app-token-via-key-vault@5ba0d436e9c3cac52feff4d1f2f66f9698ce4a2d # v1
+        with:
+          client-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID }}
+          key-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID }}
+          owner: microsoft
+          repositories: TypeScript
+          permission-contents: write
+      - name: Push
+        if: steps.update.outputs.changed == 'true'
+        shell: bash
+        env:
+          GITHUB_APP_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          basic_auth="$(node -e 'process.stdout.write(Buffer.from("x-access-token:" + process.env.GITHUB_APP_TOKEN).toString("base64"))')"
+          echo "::add-mask::$basic_auth"
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${basic_auth}"
+          git push
