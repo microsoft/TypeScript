@@ -1,0 +1,50 @@
+// === findAllReferences ===
+// === /index.js ===
+// // Namespaced typedef
+// /** @typedef {string} /*FIND ALL REFS*/[|NS|].T */
+// 
+// // Namespaced typedef aliased to qualified namespaced typedef.
+// /** @typedef {[|NS|].T} [|NS|].U */
+// 
+// // Namespaced typedef aliased to implicitly-resolved typedef.
+// /** @typedef {U} [|NS|].V */
+// 
+
+
+
+// === findAllReferences ===
+// === /index.js ===
+// // Namespaced typedef
+// /** @typedef {string} NS./*FIND ALL REFS*/[|T|] */
+// 
+// // Namespaced typedef aliased to qualified namespaced typedef.
+// /** @typedef {NS.[|T|]} NS.U */
+// 
+// // Namespaced typedef aliased to implicitly-resolved typedef.
+// /** @typedef {U} NS.V */
+// 
+
+
+
+// === findAllReferences ===
+// === /index.js ===
+// // Namespaced typedef
+// /** @typedef {string} NS.T */
+// 
+// // Namespaced typedef aliased to qualified namespaced typedef.
+// /** @typedef {NS.T} NS./*FIND ALL REFS*/[|U|] */
+// 
+// // Namespaced typedef aliased to implicitly-resolved typedef.
+// /** @typedef {[|U|]} NS.V */
+// 
+
+
+
+// === findAllReferences ===
+// === /index.js ===
+// --- (line: 4) skipped ---
+// /** @typedef {NS.T} NS.U */
+// 
+// // Namespaced typedef aliased to implicitly-resolved typedef.
+// /** @typedef {U} NS./*FIND ALL REFS*/[|V|] */
+// 
