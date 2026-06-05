@@ -26744,7 +26744,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 pos += delim.length;
             }
             else if (pos < getSourceText(seg).length) {
-                addMatch(seg, pos + 1);
+                // Consume a whole code point (rune) so that surrogate pairs (e.g. emoji)
+                // are not split in half. A lone surrogate consumes a single code unit.
+                const ch = getSourceText(seg).codePointAt(pos)!;
+                addMatch(seg, pos + (ch >= 0x10000 ? 2 : 1));
             }
             else if (seg < lastSourceIndex) {
                 addMatch(seg + 1, 0);

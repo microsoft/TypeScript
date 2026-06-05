@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/templateLiteralTypesInferenceRunes.ts] ////
+
+=== templateLiteralTypesInferenceRunes.ts ===
+// Template literal type inference should pull off whole code points (runes)
+// rather than splitting surrogate pairs (e.g. emoji) into lone surrogates.
+// https://github.com/microsoft/TypeScript/issues/63533
+
+type Heads<S> = S extends `${infer C}${infer R}` ? [C, R] : never;
+>Heads : Heads<S>
+>      : ^^^^^^^^
+
+type A = Heads<"😀abc">;
+>A : ["😀", "abc"]
+>  : ^^^^^^^^^^^^^
+
+declare let a: A;
+>a : ["😀", "abc"]
+>  : ^^^^^^^^^^^^^
+
+const chk: ["😀", "abc"] = a;
+>chk : ["😀", "abc"]
+>    : ^^^^^^^^^^^^^
+>a : ["😀", "abc"]
+>  : ^^^^^^^^^^^^^
+
+// Multiple surrogate-pair characters in a row
+type B = Heads<"😀😁">;
+>B : ["😀", "😁"]
+>  : ^^^^^^^^^^^^
+
+declare let b: B;
+>b : ["😀", "😁"]
+>  : ^^^^^^^^^^^^
+
+const chk2: ["😀", "😁"] = b;
+>chk2 : ["😀", "😁"]
+>     : ^^^^^^^^^^^^
+>b : ["😀", "😁"]
+>  : ^^^^^^^^^^^^
+
+// Surrogate pair followed by a BMP character
+type Pair<S> = S extends `${infer C1}${infer C2}` ? [C1, C2] : never;
+>Pair : Pair<S>
+>     : ^^^^^^^
+
+type C = Pair<"😀x">;
+>C : ["😀", "x"]
+>  : ^^^^^^^^^^^
+
+declare let c: C;
+>c : ["😀", "x"]
+>  : ^^^^^^^^^^^
+
+const chk3: ["😀", "x"] = c;
+>chk3 : ["😀", "x"]
+>     : ^^^^^^^^^^^
+>c : ["😀", "x"]
+>  : ^^^^^^^^^^^
+
+// A leading BMP character then a surrogate pair
+type D = Pair<"x😀">;
+>D : ["x", "😀"]
+>  : ^^^^^^^^^^^
+
+declare let d: D;
+>d : ["x", "😀"]
+>  : ^^^^^^^^^^^
+
+const chk4: ["x", "😀"] = d;
+>chk4 : ["x", "😀"]
+>     : ^^^^^^^^^^^
+>d : ["x", "😀"]
+>  : ^^^^^^^^^^^
+

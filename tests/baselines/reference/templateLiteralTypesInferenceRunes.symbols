@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/templateLiteralTypesInferenceRunes.ts] ////
+
+=== templateLiteralTypesInferenceRunes.ts ===
+// Template literal type inference should pull off whole code points (runes)
+// rather than splitting surrogate pairs (e.g. emoji) into lone surrogates.
+// https://github.com/microsoft/TypeScript/issues/63533
+
+type Heads<S> = S extends `${infer C}${infer R}` ? [C, R] : never;
+>Heads : Symbol(Heads, Decl(templateLiteralTypesInferenceRunes.ts, 0, 0))
+>S : Symbol(S, Decl(templateLiteralTypesInferenceRunes.ts, 4, 11))
+>S : Symbol(S, Decl(templateLiteralTypesInferenceRunes.ts, 4, 11))
+>C : Symbol(C, Decl(templateLiteralTypesInferenceRunes.ts, 4, 34))
+>R : Symbol(R, Decl(templateLiteralTypesInferenceRunes.ts, 4, 44))
+>C : Symbol(C, Decl(templateLiteralTypesInferenceRunes.ts, 4, 34))
+>R : Symbol(R, Decl(templateLiteralTypesInferenceRunes.ts, 4, 44))
+
+type A = Heads<"😀abc">;
+>A : Symbol(A, Decl(templateLiteralTypesInferenceRunes.ts, 4, 66))
+>Heads : Symbol(Heads, Decl(templateLiteralTypesInferenceRunes.ts, 0, 0))
+
+declare let a: A;
+>a : Symbol(a, Decl(templateLiteralTypesInferenceRunes.ts, 7, 11))
+>A : Symbol(A, Decl(templateLiteralTypesInferenceRunes.ts, 4, 66))
+
+const chk: ["😀", "abc"] = a;
+>chk : Symbol(chk, Decl(templateLiteralTypesInferenceRunes.ts, 8, 5))
+>a : Symbol(a, Decl(templateLiteralTypesInferenceRunes.ts, 7, 11))
+
+// Multiple surrogate-pair characters in a row
+type B = Heads<"😀😁">;
+>B : Symbol(B, Decl(templateLiteralTypesInferenceRunes.ts, 8, 29))
+>Heads : Symbol(Heads, Decl(templateLiteralTypesInferenceRunes.ts, 0, 0))
+
+declare let b: B;
+>b : Symbol(b, Decl(templateLiteralTypesInferenceRunes.ts, 12, 11))
+>B : Symbol(B, Decl(templateLiteralTypesInferenceRunes.ts, 8, 29))
+
+const chk2: ["😀", "😁"] = b;
+>chk2 : Symbol(chk2, Decl(templateLiteralTypesInferenceRunes.ts, 13, 5))
+>b : Symbol(b, Decl(templateLiteralTypesInferenceRunes.ts, 12, 11))
+
+// Surrogate pair followed by a BMP character
+type Pair<S> = S extends `${infer C1}${infer C2}` ? [C1, C2] : never;
+>Pair : Symbol(Pair, Decl(templateLiteralTypesInferenceRunes.ts, 13, 29))
+>S : Symbol(S, Decl(templateLiteralTypesInferenceRunes.ts, 16, 10))
+>S : Symbol(S, Decl(templateLiteralTypesInferenceRunes.ts, 16, 10))
+>C1 : Symbol(C1, Decl(templateLiteralTypesInferenceRunes.ts, 16, 33))
+>C2 : Symbol(C2, Decl(templateLiteralTypesInferenceRunes.ts, 16, 44))
+>C1 : Symbol(C1, Decl(templateLiteralTypesInferenceRunes.ts, 16, 33))
+>C2 : Symbol(C2, Decl(templateLiteralTypesInferenceRunes.ts, 16, 44))
+
+type C = Pair<"😀x">;
+>C : Symbol(C, Decl(templateLiteralTypesInferenceRunes.ts, 16, 69))
+>Pair : Symbol(Pair, Decl(templateLiteralTypesInferenceRunes.ts, 13, 29))
+
+declare let c: C;
+>c : Symbol(c, Decl(templateLiteralTypesInferenceRunes.ts, 18, 11))
+>C : Symbol(C, Decl(templateLiteralTypesInferenceRunes.ts, 16, 69))
+
+const chk3: ["😀", "x"] = c;
+>chk3 : Symbol(chk3, Decl(templateLiteralTypesInferenceRunes.ts, 19, 5))
+>c : Symbol(c, Decl(templateLiteralTypesInferenceRunes.ts, 18, 11))
+
+// A leading BMP character then a surrogate pair
+type D = Pair<"x😀">;
+>D : Symbol(D, Decl(templateLiteralTypesInferenceRunes.ts, 19, 28))
+>Pair : Symbol(Pair, Decl(templateLiteralTypesInferenceRunes.ts, 13, 29))
+
+declare let d: D;
+>d : Symbol(d, Decl(templateLiteralTypesInferenceRunes.ts, 23, 11))
+>D : Symbol(D, Decl(templateLiteralTypesInferenceRunes.ts, 19, 28))
+
+const chk4: ["x", "😀"] = d;
+>chk4 : Symbol(chk4, Decl(templateLiteralTypesInferenceRunes.ts, 24, 5))
+>d : Symbol(d, Decl(templateLiteralTypesInferenceRunes.ts, 23, 11))
+
