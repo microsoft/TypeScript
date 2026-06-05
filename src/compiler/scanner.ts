@@ -3125,9 +3125,6 @@ export function createScanner(
                         mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
                         return;
                     }
-                    else {
-                        error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
-                    }
                     break;
                 default:
                     if (isCharacterComplement && mayContainStrings) {
@@ -3185,21 +3182,18 @@ export function createScanner(
                         }
                         break;
                     case CharacterCodes.ampersand:
-                        start = pos;
-                        pos++;
-                        if (charCodeChecked(pos) === CharacterCodes.ampersand) {
-                            pos++;
+                        if (charCodeChecked(pos + 1) === CharacterCodes.ampersand) {
+                            start = pos;
+                            pos += 2;
                             error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
                             if (charCodeChecked(pos) === CharacterCodes.ampersand) {
                                 error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
                                 pos++;
                             }
+                            operand = text.slice(start, pos);
+                            continue;
                         }
-                        else {
-                            error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos - 1, 1, String.fromCharCode(ch));
-                        }
-                        operand = text.slice(start, pos);
-                        continue;
+                        break;
                 }
                 if (isClassContentExit(charCodeChecked(pos))) {
                     break;
