@@ -1161,10 +1161,6 @@ compiler/nameCollisions.js.diff
 ## `namespace global {}` inside a class no longer generates an empty IIFE in JS output
 compiler/nestedGlobalNamespaceInClass.js.diff
 
-## Inline JSDoc parameter comments no longer emitted in function type declarations (comments are cosmetic; type signatures are identical)
-## Comments like `/** fooFunctionValue param */` stripped from declaration output
-compiler/commentsFunction(target=es2015).js.diff
-
 ## JSDoc @typedef descriptions preserved inline instead of being converted to per-property comments (comment format change only; the type structure is identical)
 ## Full `@typedef`/`@property` JSDoc blocks are now preserved with the type alias
 conformance/jsDeclarationsTypedefDescriptionsPreserved.js.diff
