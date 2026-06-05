@@ -66,8 +66,6 @@ jobs:
           owner: microsoft
           repositories: TypeScript
           permission-contents: write
-          permission-issues: write
-          permission-pull-requests: write
       - name: Configure git for GitHub App token
         shell: bash
         env:
