@@ -44,9 +44,7 @@ jobs:
           key-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID }}
           owner: microsoft
           repositories: TypeScript
-          permission-contents: write
           permission-issues: write
-          permission-pull-requests: write
       - name: Close issues
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}

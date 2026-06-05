@@ -33,7 +33,7 @@ jobs:
       deployment: false
     if: github.repository == 'microsoft/TypeScript'
 
-    # No need to set explicit permissions; we are using typescript-bot's token, not github-actions' token.
+    # No need to set explicit permissions; we are using the GitHub App token, not github-actions' token.
 
     env:
       PR_NUMBER: ${{ github.event.pull_request.number }}
@@ -57,7 +57,6 @@ jobs:
           key-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID }}
           owner: microsoft
           repositories: TypeScript
-          permission-contents: write
           permission-issues: write
           permission-pull-requests: write
       - name: Export GitHub App token
