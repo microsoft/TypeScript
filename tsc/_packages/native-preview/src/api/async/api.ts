@@ -67,12 +67,14 @@ import type {
     AssertsThisTypePredicate,
     ConditionalType,
     Diagnostic,
+    FreshableType,
     IdentifierTypePredicate,
     IndexedAccessType,
     IndexInfo,
     IndexType,
     InterfaceType,
     IntersectionType,
+    IntrinsicType,
     LiteralType,
     ObjectType,
     StringMappingType,
@@ -91,7 +93,7 @@ import type {
 
 export { DiagnosticCategory, ElementFlags, ModifierFlags, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
 export type { APIOptions, ClientSocketOptions, ClientSpawnOptions, DocumentIdentifier, DocumentPosition, LSPConnectionOptions };
-export type { AssertsIdentifierTypePredicate, AssertsThisTypePredicate, ConditionalType, Diagnostic, IdentifierTypePredicate, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, LiteralType, ObjectType, StringMappingType, SubstitutionType, TemplateLiteralType, ThisTypePredicate, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
+export type { AssertsIdentifierTypePredicate, AssertsThisTypePredicate, ConditionalType, Diagnostic, FreshableType, IdentifierTypePredicate, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, LiteralType, ObjectType, StringMappingType, SubstitutionType, TemplateLiteralType, ThisTypePredicate, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 
 /** Type alias for the snapshot-scoped object registry */
@@ -689,6 +691,15 @@ export class Checker {
         });
     }
 
+    async isTypeAssignableTo(source: Type, target: Type): Promise<boolean> {
+        return this.client.apiRequest<boolean>("isTypeAssignableTo", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            source: source.id,
+            target: target.id,
+        });
+    }
+
     async getShorthandAssignmentValueSymbol(node: Node): Promise<Symbol | undefined> {
         const data = await this.client.apiRequest<SymbolResponse | null>("getShorthandAssignmentValueSymbol", {
             snapshot: this.snapshotId,
@@ -980,10 +991,16 @@ class TypeObject implements Type {
     readonly flags: TypeFlags;
     readonly objectFlags!: ObjectFlags;
     readonly value!: string | number | boolean;
+    readonly intrinsicName!: string;
+    readonly isThisType!: boolean;
+    readonly freshType!: number;
+    readonly regularType!: number;
     readonly target!: number;
     readonly typeParameters!: readonly number[];
     readonly outerTypeParameters!: readonly number[];
     readonly localTypeParameters!: readonly number[];
+    readonly aliasTypeArguments!: readonly number[];
+    readonly aliasSymbol!: number;
     readonly elementFlags!: readonly ElementFlags[];
     readonly fixedLength!: number;
     readonly readonly!: boolean;
@@ -1004,10 +1021,16 @@ class TypeObject implements Type {
         this.flags = data.flags;
         if (data.objectFlags !== undefined) this.objectFlags = data.objectFlags;
         if (data.value !== undefined) this.value = data.value;
+        if (data.intrinsicName !== undefined) this.intrinsicName = data.intrinsicName;
+        if (data.isThisType !== undefined) this.isThisType = data.isThisType;
+        if (data.freshType !== undefined) this.freshType = data.freshType;
+        if (data.regularType !== undefined) this.regularType = data.regularType;
         if (data.target !== undefined) this.target = data.target;
         if (data.typeParameters !== undefined) this.typeParameters = data.typeParameters;
         if (data.outerTypeParameters !== undefined) this.outerTypeParameters = data.outerTypeParameters;
         if (data.localTypeParameters !== undefined) this.localTypeParameters = data.localTypeParameters;
+        if (data.aliasTypeArguments !== undefined) this.aliasTypeArguments = data.aliasTypeArguments;
+        if (data.aliasSymbol !== undefined) this.aliasSymbol = data.aliasSymbol;
         if (data.elementFlags !== undefined) this.elementFlags = data.elementFlags;
         if (data.fixedLength !== undefined) this.fixedLength = data.fixedLength;
         if (data.readonly !== undefined) this.readonly = data.readonly;
@@ -1022,6 +1045,14 @@ class TypeObject implements Type {
 
     async getSymbol(): Promise<Symbol | undefined> {
         const data = await this.client.apiRequest<SymbolResponse | null>("getSymbolOfType", { snapshot: this.snapshotId, type: this.id });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    async getAliasSymbol(): Promise<Symbol | undefined> {
+        if (!this.aliasSymbol) return undefined;
+        const cached = this.objectRegistry.getSymbol(this.aliasSymbol);
+        if (cached) return cached;
+        const data = await this.client.apiRequest<SymbolResponse | null>("getAliasSymbolOfType", { snapshot: this.snapshotId, type: this.id });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
@@ -1042,6 +1073,22 @@ class TypeObject implements Type {
         return this.fetchType(this.target, "getTargetOfType");
     }
 
+    async getFreshType(): Promise<FreshableType | undefined> {
+        if (!this.freshType) return undefined;
+        const cached = this.objectRegistry.getType(this.freshType);
+        if (cached) return cached as FreshableType;
+        const data = await this.client.apiRequest<TypeResponse | null>("getFreshTypeOfType", { snapshot: this.snapshotId, type: this.id });
+        return data ? this.objectRegistry.getOrCreateType(data) as FreshableType : undefined;
+    }
+
+    async getRegularType(): Promise<FreshableType | undefined> {
+        if (!this.regularType) return undefined;
+        const cached = this.objectRegistry.getType(this.regularType);
+        if (cached) return cached as FreshableType;
+        const data = await this.client.apiRequest<TypeResponse | null>("getRegularTypeOfType", { snapshot: this.snapshotId, type: this.id });
+        return data ? this.objectRegistry.getOrCreateType(data) as FreshableType : undefined;
+    }
+
     async getTypes(): Promise<readonly Type[]> {
         return this.fetchTypes("getTypesOfType");
     }
@@ -1056,6 +1103,10 @@ class TypeObject implements Type {
 
     async getLocalTypeParameters(): Promise<readonly Type[]> {
         return this.fetchTypes("getLocalTypeParametersOfType");
+    }
+
+    async getAliasTypeArguments(): Promise<readonly Type[]> {
+        return this.fetchTypes("getAliasTypeArgumentsOfType");
     }
 
     async getObjectType(): Promise<Type> {

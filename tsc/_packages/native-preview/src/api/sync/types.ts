@@ -33,10 +33,26 @@ export interface Type {
 
     /** Get the symbol associated with this type, if any */
     getSymbol(): Symbol | undefined;
+
+    /** Get the type arguments of the type alias this type was instantiated from, if any */
+    getAliasTypeArguments(): readonly Type[];
+
+    /** Get the symbol of the type alias this type was instantiated from, if any */
+    getAliasSymbol(): Symbol | undefined;
+}
+
+/**
+ * Freshable types (TypeFlags.Freshable) - literal types (TypeFlags.Literal) and computed enum types (TypeFlags.Enum).
+ */
+export interface FreshableType extends Type {
+    /** Get the fresh version of this type, if any */
+    getFreshType(): FreshableType | undefined;
+    /** Get the regular (non-fresh) version of this type, if any */
+    getRegularType(): FreshableType | undefined;
 }
 
 /** Literal types: StringLiteral, NumberLiteral, BigIntLiteral, BooleanLiteral */
-export interface LiteralType extends Type {
+export interface LiteralType extends FreshableType {
     /** The literal value */
     readonly value: string | number | boolean;
 }
@@ -89,6 +105,8 @@ export interface IntersectionType extends UnionOrIntersectionType {
 
 /** Type parameters (TypeFlags.TypeParameter) */
 export interface TypeParameter extends Type {
+    /** True if this is the synthetic `this` type of an interface, class, or tuple */
+    readonly isThisType?: boolean;
 }
 
 /** Index types — keyof T (TypeFlags.Index) */
@@ -131,6 +149,12 @@ export interface TemplateLiteralType extends Type {
 export interface StringMappingType extends Type {
     /** Get the mapped type */
     getTarget(): Type;
+}
+
+/** Intrinsic types — any, unknown, string, number, bigint, symbol, void, undefined, null, never, object (TypeFlags.Intrinsic) */
+export interface IntrinsicType extends Type {
+    /** The intrinsic type name (e.g. "any", "string", "never") */
+    readonly intrinsicName: string;
 }
 
 /** Base for all type predicates */

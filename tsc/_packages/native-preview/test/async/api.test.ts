@@ -34,8 +34,11 @@ import {
     API,
     type ConditionalType,
     DiagnosticCategory,
+    type FreshableType,
     type IndexedAccessType,
     type IndexType,
+    type IntrinsicType,
+    type LiteralType,
     ModifierFlags,
     ObjectFlags,
     SignatureKind,
@@ -43,6 +46,7 @@ import {
     SymbolFlags,
     type TemplateLiteralType,
     TypeFlags,
+    type TypeParameter,
     TypePredicateKind,
     type TypeReference,
     type UnionOrIntersectionType,
@@ -1966,6 +1970,349 @@ describe("Checker - getTypeArguments", () => {
     });
 });
 
+describe("TypeParameter - isThisType", () => {
+    test("isThisType is true for the polymorphic 'this' type in a class method", async () => {
+        const src = `\nexport class Builder {\n    setName(name: string): this { return this; }\n}\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            // ": this {" — offset 2 past ': ' lands on 't' in the return-type 'this'
+            const pos = src.indexOf(": this {") + 2;
+            const type = await project.checker.getTypeAtPosition("/src/main.ts", pos);
+            assert.ok(type, "Expected a type at the 'this' position");
+            assert.ok(type.flags & TypeFlags.TypeParameter, "Expected TypeParameter");
+            const typeParam = type as TypeParameter;
+            assert.equal(typeParam.isThisType, true);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("isThisType is absent for a regular generic type parameter", async () => {
+        const src = `\nexport function identity<T>(x: T): T { return x; }\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            // Point to 'T' in the type parameter declaration '<T>' — getTypeAtPosition
+            // on a type annotation reference doesn't resolve to TypeParameter, but
+            // the declaration position does.
+            const pos = src.indexOf("<T>") + 1;
+            const type = await project.checker.getTypeAtPosition("/src/main.ts", pos);
+            assert.ok(type, "Expected a type at the 'T' position");
+            assert.ok(type.flags & TypeFlags.TypeParameter, "Expected TypeParameter");
+            const typeParam = type as TypeParameter;
+            assert.ok(!typeParam.isThisType, "Expected isThisType to be absent/false for a regular type parameter");
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("Type - getAliasTypeArguments", () => {
+    test("returns the type arguments of a single-param generic type alias", async () => {
+        const src = `\ntype Box<T> = { value: T };\nexport const x: Box<string> = { value: "hi" };\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("x:");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const aliasArgs = await type.getAliasTypeArguments();
+            assert.equal(aliasArgs.length, 1, "Expected 1 alias type argument");
+            assert.ok(aliasArgs[0].flags & TypeFlags.String, `Expected string, got flags ${aliasArgs[0].flags}`);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("returns multiple type arguments for a multi-param generic type alias", async () => {
+        const src = `\ntype Pair<A, B> = [A, B];\nexport const p: Pair<string, number> = ["hello", 42];\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("p:");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const aliasArgs = await type.getAliasTypeArguments();
+            assert.equal(aliasArgs.length, 2, "Expected 2 alias type arguments");
+            assert.ok(aliasArgs[0].flags & TypeFlags.String, `Expected first arg to be string, got flags ${aliasArgs[0].flags}`);
+            assert.ok(aliasArgs[1].flags & TypeFlags.Number, `Expected second arg to be number, got flags ${aliasArgs[1].flags}`);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("returns empty array for a non-alias generic type", async () => {
+        const src = `\nexport const arr: Array<string> = ["hello"];\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("arr:");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const aliasArgs = await type.getAliasTypeArguments();
+            assert.equal(aliasArgs.length, 0, "Expected no alias type arguments for a direct generic reference");
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("Type - getAliasSymbol", () => {
+    test("returns the symbol for a non-generic type alias", async () => {
+        // Object-type aliases preserve aliasSymbol; primitive aliases (type Foo = string) do not.
+        const src = `\ntype Point = { x: number; y: number };\nexport const p: Point = { x: 1, y: 2 };\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("p:");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const aliasSymbol = await type.getAliasSymbol();
+            assert.ok(aliasSymbol, "Expected alias symbol to exist");
+            assert.equal(aliasSymbol.name, "Point");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("returns the symbol for a generic type alias", async () => {
+        const src = `\ntype Container<T> = { item: T };\nexport const c: Container<number> = { item: 42 };\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("c:");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const aliasSymbol = await type.getAliasSymbol();
+            assert.ok(aliasSymbol, "Expected alias symbol for generic alias");
+            assert.equal(aliasSymbol.name, "Container");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("returns undefined for a non-alias type", async () => {
+        const src = `\nexport const str: string = "test";\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("str:");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const aliasSymbol = await type.getAliasSymbol();
+            assert.equal(aliasSymbol, undefined, "Expected no alias symbol for primitive type");
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("IntrinsicType - intrinsicName", () => {
+    test("intrinsicName matches the primitive type name", async () => {
+        const src = `\nexport const x: string = "hello";\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const stringType = await project.checker.getStringType();
+            assert.equal((stringType as IntrinsicType).intrinsicName, "string");
+            const anyType = await project.checker.getAnyType();
+            assert.equal((anyType as IntrinsicType).intrinsicName, "any");
+            const neverType = await project.checker.getNeverType();
+            assert.equal((neverType as IntrinsicType).intrinsicName, "never");
+            const pos = src.indexOf("x:");
+            const sym = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(sym);
+            const litType = await project.checker.getTypeOfSymbol(sym);
+            assert.ok(litType);
+            assert.ok(litType.flags & TypeFlags.Intrinsic);
+            assert.equal((litType as IntrinsicType).intrinsicName, "string");
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("FreshableType - getFreshType and getRegularType", () => {
+    test("LiteralType.value is accessible via the FreshableType hierarchy", async () => {
+        const src = `\nexport const greeting: "hello" = "hello";\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("greeting:");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.ok(type.flags & TypeFlags.StringLiteral, "Expected StringLiteral");
+            const literal = type as LiteralType;
+            assert.equal(literal.value, "hello");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getFreshType() returns a fresh twin with matching value", async () => {
+        const src = `\nexport const greeting: "hello" = "hello";\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("greeting:");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.ok(type.flags & TypeFlags.Freshable, "Type should be a freshable type");
+            const fresh = await (type as FreshableType).getFreshType();
+            assert.ok(fresh, "Expected getFreshType() to return non-undefined for a literal type");
+            assert.ok(fresh.flags & TypeFlags.StringLiteral, "Fresh type should be a StringLiteral");
+            assert.equal((fresh as LiteralType).value, "hello", "Fresh type should carry the same value");
+            assert.notEqual(fresh.id, type.id, "Fresh type should not be the original type");
+            const freshFresh = await fresh.getFreshType();
+            assert.ok(freshFresh, "Expected getFreshType() to return non-undefined for a fresh type");
+            assert.equal(freshFresh.id, fresh.id, "Fresh type of a fresh type should be the fresh type");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getRegularType() on a fresh literal returns the regular twin", async () => {
+        // The initial type response from getTypeOfSymbol does not always include the
+        // regularType handle, so getRegularType() is tested via the fresh twin which
+        // always includes its regularType in its own response.
+        const src = `\nexport const greeting: "hello" = "hello";\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("greeting:");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.ok(type.flags & TypeFlags.Freshable, "Type should be a freshable type");
+            const fresh = await (type as FreshableType).getFreshType();
+            assert.ok(fresh, "Need fresh type for this test");
+            assert.ok(fresh.flags & TypeFlags.Freshable, "Fresh type should be a freshable type");
+            const regular = await fresh.getRegularType();
+            assert.ok(regular, "Expected getRegularType() on the fresh twin to return non-undefined");
+            assert.ok(regular.flags & TypeFlags.StringLiteral, "Regular type should be a StringLiteral");
+            assert.equal((regular as LiteralType).value, "hello", "Regular type should carry the same value");
+            assert.equal(regular.id, type.id, "Regular type should be the original type");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getFreshType() and getRegularType() work for computed enum types (TypeFlags.Enum)", async () => {
+        // getTypeOfSymbol on an ambient enum member returns the FRESH computed enum type.
+        // For fresh types: getFreshType() returns self, getRegularType() returns the regular twin.
+        const src = `\ndeclare enum Status { Pending }\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("Pending");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.ok(type.flags & TypeFlags.Enum, `Expected TypeFlags.Enum, got ${type.flags}`);
+            assert.ok(type.flags & TypeFlags.Freshable, "Enum type should be freshable");
+            // The returned type IS the fresh type: getFreshType() returns itself
+            const fresh = await (type as FreshableType).getFreshType();
+            assert.ok(fresh, "Expected getFreshType() to return non-undefined");
+            assert.equal(fresh.id, type.id, "getFreshType() on a fresh enum type returns itself");
+            // getRegularType() returns the regular twin (a different type)
+            const regular = await (type as FreshableType).getRegularType();
+            assert.ok(regular, "Expected getRegularType() to return non-undefined");
+            assert.ok(regular.flags & TypeFlags.Enum, "Regular enum type should also have TypeFlags.Enum");
+            assert.notEqual(regular.id, type.id, "Regular type should be distinct from the fresh type");
+            // Round-trip: regular → getFreshType() → back to the original fresh type
+            const backToFresh = await (regular as FreshableType).getFreshType();
+            assert.ok(backToFresh);
+            assert.equal(backToFresh.id, type.id, "Round-trip through regular/fresh returns the original type");
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
 describe("Checker - isContextSensitive", () => {
     test("arrow function with no type annotation is context sensitive", async () => {
         const api = spawnAPI({
@@ -1988,6 +2335,71 @@ describe("Checker - isContextSensitive", () => {
             assert.ok(arrowFn, "Should find an arrow function");
             const result = await project.checker.isContextSensitive(arrowFn);
             assert.equal(result, true);
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("Checker - isTypeAssignableTo", () => {
+    test("returns true when source is assignable to target", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": `export {};`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const stringType = await project.checker.getStringType();
+            const anyType = await project.checker.getAnyType();
+            const neverType = await project.checker.getNeverType();
+            assert.ok(await project.checker.isTypeAssignableTo(stringType, stringType), "string assignable to string");
+            assert.ok(await project.checker.isTypeAssignableTo(stringType, anyType), "string assignable to any");
+            assert.ok(await project.checker.isTypeAssignableTo(neverType, stringType), "never assignable to string (bottom type)");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("returns false when source is not assignable to target", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": `export {};`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const stringType = await project.checker.getStringType();
+            const numberType = await project.checker.getNumberType();
+            assert.ok(!await project.checker.isTypeAssignableTo(numberType, stringType), "number not assignable to string");
+            assert.ok(!await project.checker.isTypeAssignableTo(stringType, numberType), "string not assignable to number");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("a string literal type is assignable to string but not number", async () => {
+        const src = `\nexport const x: "hello" = "hello";\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("x:");
+            const sym = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(sym);
+            const litType = await project.checker.getTypeOfSymbol(sym);
+            assert.ok(litType);
+            assert.ok(litType.flags & TypeFlags.StringLiteral);
+            const stringType = await project.checker.getStringType();
+            const numberType = await project.checker.getNumberType();
+            assert.ok(await project.checker.isTypeAssignableTo(litType, stringType));
+            assert.ok(!await project.checker.isTypeAssignableTo(litType, numberType));
         }
         finally {
             await api.close();

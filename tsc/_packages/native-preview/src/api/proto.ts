@@ -140,6 +140,8 @@ export interface TypeResponse {
     flags: number;
     objectFlags?: number;
     value?: string | number | boolean;
+    freshType?: number;
+    regularType?: number;
     target?: number;
     typeParameters?: number[];
     outerTypeParameters?: number[];
@@ -154,6 +156,10 @@ export interface TypeResponse {
     baseType?: number;
     substConstraint?: number;
     texts?: string[];
+    intrinsicName?: string;
+    isThisType?: boolean;
+    aliasTypeArguments?: number[];
+    aliasSymbol?: number;
     symbol?: number;
 }
 

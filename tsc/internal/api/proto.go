@@ -83,10 +83,14 @@ const (
 
 	// Type sub-property methods
 	MethodGetTargetOfType              Method = "getTargetOfType"
+	MethodGetFreshTypeOfType           Method = "getFreshTypeOfType"
+	MethodGetRegularTypeOfType         Method = "getRegularTypeOfType"
 	MethodGetTypesOfType               Method = "getTypesOfType"
 	MethodGetTypeParametersOfType      Method = "getTypeParametersOfType"
 	MethodGetOuterTypeParametersOfType Method = "getOuterTypeParametersOfType"
 	MethodGetLocalTypeParametersOfType Method = "getLocalTypeParametersOfType"
+	MethodGetAliasTypeArgumentsOfType  Method = "getAliasTypeArgumentsOfType"
+	MethodGetAliasSymbolOfType         Method = "getAliasSymbolOfType"
 	MethodGetObjectTypeOfType          Method = "getObjectTypeOfType"
 	MethodGetIndexTypeOfType           Method = "getIndexTypeOfType"
 	MethodGetCheckTypeOfType           Method = "getCheckTypeOfType"
@@ -102,6 +106,7 @@ const (
 	MethodGetWidenedType                    Method = "getWidenedType"
 	MethodGetParameterType                  Method = "getParameterType"
 	MethodIsArrayLikeType                   Method = "isArrayLikeType"
+	MethodIsTypeAssignableTo                Method = "isTypeAssignableTo"
 	MethodGetShorthandAssignmentValueSymbol Method = "getShorthandAssignmentValueSymbol"
 	MethodGetTypeOfSymbolAtLocation         Method = "getTypeOfSymbolAtLocation"
 	MethodTypeToTypeNode                    Method = "typeToTypeNode"
@@ -312,10 +317,14 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTypesAtPositions:      unmarshallerFor[GetTypesAtPositionsParams],
 
 	MethodGetTargetOfType:                   unmarshallerFor[GetTypePropertyParams],
+	MethodGetFreshTypeOfType:                unmarshallerFor[GetTypePropertyParams],
+	MethodGetRegularTypeOfType:              unmarshallerFor[GetTypePropertyParams],
 	MethodGetTypesOfType:                    unmarshallerFor[GetTypePropertyParams],
 	MethodGetTypeParametersOfType:           unmarshallerFor[GetTypePropertyParams],
 	MethodGetOuterTypeParametersOfType:      unmarshallerFor[GetTypePropertyParams],
 	MethodGetLocalTypeParametersOfType:      unmarshallerFor[GetTypePropertyParams],
+	MethodGetAliasTypeArgumentsOfType:       unmarshallerFor[GetTypePropertyParams],
+	MethodGetAliasSymbolOfType:              unmarshallerFor[GetTypePropertyParams],
 	MethodGetObjectTypeOfType:               unmarshallerFor[GetTypePropertyParams],
 	MethodGetIndexTypeOfType:                unmarshallerFor[GetTypePropertyParams],
 	MethodGetCheckTypeOfType:                unmarshallerFor[GetTypePropertyParams],
@@ -329,6 +338,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetWidenedType:                    unmarshallerFor[GetWidenedTypeParams],
 	MethodGetParameterType:                  unmarshallerFor[GetParameterTypeParams],
 	MethodIsArrayLikeType:                   unmarshallerFor[IsArrayLikeTypeParams],
+	MethodIsTypeAssignableTo:                unmarshallerFor[IsTypeAssignableToParams],
 	MethodGetShorthandAssignmentValueSymbol: unmarshallerFor[GetTypeAtLocationParams],
 	MethodGetTypeOfSymbolAtLocation:         unmarshallerFor[GetTypeOfSymbolAtLocationParams],
 	MethodTypeToTypeNode:                    unmarshallerFor[TypeToTypeNodeParams],
@@ -507,6 +517,20 @@ type TypeResponse struct {
 	// TemplateLiteralType text segments
 	Texts []string `json:"texts,omitempty"`
 
+	// FreshableType data (LiteralType and computed enum types)
+	FreshType   TypeID `json:"freshType,omitempty"`
+	RegularType TypeID `json:"regularType,omitempty"`
+
+	// TypeParameter data
+	IsThisType bool `json:"isThisType,omitempty"`
+
+	// IntrinsicType data
+	IntrinsicName string `json:"intrinsicName,omitempty"`
+
+	// TypeAlias data
+	AliasTypeArguments []TypeID `json:"aliasTypeArguments,omitempty"`
+	AliasSymbol        SymbolID `json:"aliasSymbol,omitempty"`
+
 	// Symbol associated with structured types
 	Symbol SymbolID `json:"symbol,omitempty"`
 }
@@ -521,9 +545,25 @@ func newTypeData(t *checker.Type) *TypeResponse {
 		resp.Symbol = SymbolHandle(t.Symbol())
 	}
 
+	if t.Alias() != nil {
+		resp.AliasTypeArguments = typeHandles(t.Alias().TypeArguments())
+		if t.Alias().Symbol() != nil {
+			resp.AliasSymbol = SymbolHandle(t.Alias().Symbol())
+		}
+	}
+
 	switch flags := t.Flags(); {
-	case flags&checker.TypeFlagsLiteral != 0:
-		resp.Value = literalValueToJSON(t.AsLiteralType().Value())
+	case flags&checker.TypeFlagsFreshable != 0:
+		lit := t.AsLiteralType()
+		if flags&checker.TypeFlagsLiteral != 0 {
+			resp.Value = literalValueToJSON(lit.Value())
+		}
+		if lit.FreshType() != nil {
+			resp.FreshType = TypeHandle(lit.FreshType())
+		}
+		if lit.RegularType() != nil {
+			resp.RegularType = TypeHandle(lit.RegularType())
+		}
 	case flags&checker.TypeFlagsObject != 0:
 		resp.ObjectFlags = uint32(t.ObjectFlags())
 		objectFlags := t.ObjectFlags()
@@ -572,6 +612,10 @@ func newTypeData(t *checker.Type) *TypeResponse {
 		// types omitted; fetched via separate request
 	case flags&checker.TypeFlagsStringMapping != 0:
 		resp.Target = TypeHandle(t.AsStringMappingType().Target())
+	case flags&checker.TypeFlagsTypeParameter != 0:
+		resp.IsThisType = t.AsTypeParameter().IsThisType()
+	case flags&checker.TypeFlagsIntrinsic != 0:
+		resp.IntrinsicName = t.AsIntrinsicType().IntrinsicName()
 	}
 
 	return resp
@@ -723,6 +767,14 @@ type IsArrayLikeTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
 	Project  ProjectID  `json:"project"`
 	Type     TypeID     `json:"type"`
+}
+
+// IsTypeAssignableToParams checks assignability between two types.
+type IsTypeAssignableToParams struct {
+	Snapshot SnapshotID `json:"snapshot"`
+	Project  ProjectID  `json:"project"`
+	Source   TypeID     `json:"source"`
+	Target   TypeID     `json:"target"`
 }
 
 type GetSignaturesOfTypeParams struct {

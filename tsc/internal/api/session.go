@@ -413,6 +413,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTypesAtPositions(ctx, parsed.(*GetTypesAtPositionsParams))
 	case string(MethodGetTargetOfType):
 		return s.handleGetTargetOfType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetFreshTypeOfType):
+		return s.handleGetFreshTypeOfType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetRegularTypeOfType):
+		return s.handleGetRegularTypeOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetTypesOfType):
 		return s.handleGetTypesOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetTypeParametersOfType):
@@ -421,6 +425,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetOuterTypeParametersOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetLocalTypeParametersOfType):
 		return s.handleGetLocalTypeParametersOfType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetAliasTypeArgumentsOfType):
+		return s.handleGetAliasTypeArgumentsOfType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetAliasSymbolOfType):
+		return s.handleGetAliasSymbolOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetObjectTypeOfType):
 		return s.handleGetObjectTypeOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetIndexTypeOfType):
@@ -447,6 +455,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetParameterType(ctx, parsed.(*GetParameterTypeParams))
 	case string(MethodIsArrayLikeType):
 		return s.handleIsArrayLikeType(ctx, parsed.(*IsArrayLikeTypeParams))
+	case string(MethodIsTypeAssignableTo):
+		return s.handleIsTypeAssignableTo(ctx, parsed.(*IsTypeAssignableToParams))
 	case string(MethodGetShorthandAssignmentValueSymbol):
 		return s.handleGetShorthandAssignmentValueSymbol(ctx, parsed.(*GetTypeAtLocationParams))
 	case string(MethodGetTypeOfSymbolAtLocation):
@@ -1264,6 +1274,24 @@ func (s *Session) handleGetTargetOfType(_ context.Context, params *GetTypeProper
 	return s.resolveTypeProperty(params, (*checker.Type).Target)
 }
 
+func (s *Session) handleGetFreshTypeOfType(_ context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
+	return s.resolveTypeProperty(params, func(t *checker.Type) *checker.Type {
+		if t.Flags()&checker.TypeFlagsFreshable == 0 {
+			return nil
+		}
+		return t.AsLiteralType().FreshType()
+	})
+}
+
+func (s *Session) handleGetRegularTypeOfType(_ context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
+	return s.resolveTypeProperty(params, func(t *checker.Type) *checker.Type {
+		if t.Flags()&checker.TypeFlagsFreshable == 0 {
+			return nil
+		}
+		return t.AsLiteralType().RegularType()
+	})
+}
+
 func (s *Session) handleGetTypesOfType(_ context.Context, params *GetTypePropertyParams) ([]*TypeResponse, error) {
 	return s.resolveTypeArrayProperty(params, (*checker.Type).Types)
 }
@@ -1284,6 +1312,33 @@ func (s *Session) handleGetLocalTypeParametersOfType(_ context.Context, params *
 	return s.resolveTypeArrayProperty(params, func(t *checker.Type) []*checker.Type {
 		return t.AsInterfaceType().LocalTypeParameters()
 	})
+}
+
+func (s *Session) handleGetAliasTypeArgumentsOfType(_ context.Context, params *GetTypePropertyParams) ([]*TypeResponse, error) {
+	return s.resolveTypeArrayProperty(params, func(t *checker.Type) []*checker.Type {
+		if t.Alias() == nil {
+			return nil
+		}
+		return t.Alias().TypeArguments()
+	})
+}
+
+func (s *Session) handleGetAliasSymbolOfType(_ context.Context, params *GetTypePropertyParams) (*SymbolResponse, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+
+	t, err := sd.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	if t.Alias() == nil || t.Alias().Symbol() == nil {
+		return nil, nil
+	}
+
+	return sd.registerSymbol(t.Alias().Symbol()), nil
 }
 
 func (s *Session) handleGetObjectTypeOfType(_ context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
@@ -1472,6 +1527,26 @@ func (s *Session) handleIsArrayLikeType(ctx context.Context, params *IsArrayLike
 	}
 
 	return setup.checker.IsArrayLikeType(t), nil
+}
+
+// handleIsTypeAssignableTo returns whether source is assignable to target.
+func (s *Session) handleIsTypeAssignableTo(ctx context.Context, params *IsTypeAssignableToParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	source, err := setup.sd.resolveTypeHandle(params.Source)
+	if err != nil {
+		return false, err
+	}
+	target, err := setup.sd.resolveTypeHandle(params.Target)
+	if err != nil {
+		return false, err
+	}
+
+	return setup.checker.IsTypeAssignableTo(source, target), nil
 }
 
 // handleGetShorthandAssignmentValueSymbol returns the value symbol of a shorthand property assignment.
