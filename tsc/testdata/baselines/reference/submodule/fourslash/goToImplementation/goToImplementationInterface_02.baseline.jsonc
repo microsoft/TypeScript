@@ -4,4 +4,19 @@
 // 
 // let x: number = 9;
 // 
-// --- (line: 5) skipped ---
+// function createFoo(): Foo {
+//     if (x === 2) {
+//         return [|{
+//             hello() {}
+//         }|];
+//     }
+//     return [|{
+//         hello() {}
+//     }|];
+// }
+// 
+// let createFoo2 = (): Foo => [|({hello() {}})|];
+// 
+// function createFooLike() {
+//     return {
+// --- (line: 20) skipped ---

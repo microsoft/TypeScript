@@ -4,4 +4,13 @@
 //     (a: number): void
 // }
 // 
-// --- (line: 5) skipped ---
+// var bar: Foo = [|(a) => {/**0*/}|];
+// 
+// function whatever(x: Foo = [|(a) => {/**1*/}|] ) {
+// }
+// 
+// class Bar {
+//     x: Foo = [|(a) => {/**2*/}|]
+// 
+//     constructor(public f: Foo = [|function(a) {}|] ) {}
+// }

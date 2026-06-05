@@ -5,4 +5,4 @@
 // }|>
 // 
 // 
-// let x: typeof Foo = { hello() {} };
+// let x: typeof Foo = [|{ hello() {} }|];

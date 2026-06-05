@@ -4,4 +4,7 @@
 //     new (a: number): SomeOtherType;
 // }
 // 
-// --- (line: 5) skipped ---
+// interface SomeOtherType {}
+// 
+// let x: Foo = [|class { constructor (a: number) {} }|];
+// let y = <Foo> [|class { constructor (a: number) {} }|];

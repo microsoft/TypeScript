@@ -127,8 +127,23 @@
 //   }
 // --- (line: 7) skipped ---
 
+// === /objectPointable.ts ===
+// import { Pointable } from "./pointable";
+// 
+// let x = 0;
+// let y = 0;
+// const p: Pointable = [|{
+//   getX(): number {
+// 	return x;
+//   },
+//   getY(): number {
+// 	return y;
+//   },
+// }|];
+// 
+
 // === /pointable.ts ===
-// export interface /*CODELENS: 1 implementation*/Pointable {
+// export interface /*CODELENS: 2 implementations*/Pointable {
 //   getX(): number;
 //   getY(): number;
 // }

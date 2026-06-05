@@ -1,4 +1,4 @@
 // === goToImplementation ===
 // === /ref.ts ===
 // import { Interface } from "./def";
-// const c: I/*GOTO IMPL*/nterface = { P: 2 };
+// const c: I/*GOTO IMPL*/nterface = [|{ P: 2 }|];

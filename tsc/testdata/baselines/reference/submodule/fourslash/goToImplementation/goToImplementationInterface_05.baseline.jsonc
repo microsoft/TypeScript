@@ -4,5 +4,5 @@
 //     (a: number): void
 // }
 // 
-// let bar2 = <Foo> function(a) {};
+// let bar2 = <Foo> [|function(a) {}|];
 // 
