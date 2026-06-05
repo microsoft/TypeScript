@@ -1,7 +1,7 @@
 {
     "typesMap": {
         "jquery": {
-            "match": "jquery(-(\\.?\\d+)+)?(\\.intellisense)?(\\.min)?\\.js$",
+            "match": "jquery(-[\\d.]+)?(\\.intellisense)?(\\.min)?\\.js$",
             "types": ["jquery"]
         },
         "WinJS": {
