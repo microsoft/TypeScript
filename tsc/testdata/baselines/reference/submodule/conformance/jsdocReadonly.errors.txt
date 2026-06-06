@@ -1,7 +1,8 @@
+jsdocReadonly.js(13,9): error TS1024: 'readonly' modifier can only appear on a property declaration or index signature.
 jsdocReadonly.js(23,3): error TS2540: Cannot assign to 'y' because it is a read-only property.
 
 
-==== jsdocReadonly.js (1 errors) ====
+==== jsdocReadonly.js (2 errors) ====
     class LOL {
         /**
          * @readonly
@@ -15,6 +16,8 @@ jsdocReadonly.js(23,3): error TS2540: Cannot assign to 'y' because it is a read-
         /** @readonly Definitely not here */
         static z = 3
         /** @readonly This is OK too */
+            ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1024: 'readonly' modifier can only appear on a property declaration or index signature.
         constructor() {
             /** ok */
             this.y = 2

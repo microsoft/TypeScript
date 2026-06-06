@@ -470,7 +470,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			parent = parent.Expression()
 		}
 		switch parent.Kind {
-		case ast.KindPropertyDeclaration, ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindBinaryExpression:
+		case ast.KindPropertyDeclaration, ast.KindMethodDeclaration, ast.KindConstructor, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindBinaryExpression:
 			var keyword ast.Kind
 			switch tag.Kind {
 			case ast.KindJSDocReadonlyTag:

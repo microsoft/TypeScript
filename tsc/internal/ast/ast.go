@@ -1522,7 +1522,8 @@ func (node *ExportableBase) ExportableData() *ExportableBase { return node }
 
 // ModifiersBase
 
-func (node *ModifiersBase) Modifiers() *ModifierList { return node.modifiers }
+func (node *ModifiersBase) Modifiers() *ModifierList             { return node.modifiers }
+func (node *ModifiersBase) setModifiers(modifiers *ModifierList) { node.modifiers = modifiers }
 
 // LocalsContainerBase
 

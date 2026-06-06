@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/jsDocPrivateConstructor.ts] ////
+
+=== main.js ===
+// https://github.com/microsoft/typescript-go/issues/4219
+
+class C {
+>C : Symbol(C, Decl(main.js, 0, 0))
+
+  /** @private */
+  constructor() {}
+}
+new C();
+>C : Symbol(C, Decl(main.js, 0, 0))
+
