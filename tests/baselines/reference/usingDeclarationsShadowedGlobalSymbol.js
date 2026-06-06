@@ -1,14 +1,31 @@
-//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsInForAwaitOf.ts] ////
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsShadowedGlobalSymbol.ts] ////
 
-//// [usingDeclarationsInForAwaitOf.ts]
-async function main() {
-    for await (using d1 of [{ [Symbol.dispose]() {} }, null, undefined]) {
-    }
+//// [usingDeclarationsShadowedGlobalSymbol.ts]
+export class Symbol {
 }
 
+export const output: string[] = [];
 
-//// [usingDeclarationsInForAwaitOf.js]
-"use strict";
+{
+    using _ = {
+        [globalThis.Symbol.dispose]() {
+            output.push("disposed");
+        },
+    };
+}
+
+async function disposeAsync() {
+    await using _ = {
+        async [globalThis.Symbol.asyncDispose]() {
+            output.push("async disposed");
+        },
+    };
+}
+
+disposeAsync();
+
+
+//// [usingDeclarationsShadowedGlobalSymbol.js]
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
         if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -61,18 +78,43 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
     var e = new Error(message);
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
-async function main() {
-    for await (const d1_1 of [{ [Symbol.dispose]() { } }, null, undefined]) {
-        const env_1 = { stack: [], error: void 0, hasError: false };
-        try {
-            const d1 = __addDisposableResource(env_1, d1_1, false);
-        }
-        catch (e_1) {
-            env_1.error = e_1;
-            env_1.hasError = true;
-        }
-        finally {
-            __disposeResources(env_1);
-        }
+export class Symbol {
+}
+export const output = [];
+{
+    const env_1 = { stack: [], error: void 0, hasError: false };
+    try {
+        const _ = __addDisposableResource(env_1, {
+            [globalThis.Symbol.dispose]() {
+                output.push("disposed");
+            },
+        }, false);
+    }
+    catch (e_1) {
+        env_1.error = e_1;
+        env_1.hasError = true;
+    }
+    finally {
+        __disposeResources(env_1);
     }
 }
+async function disposeAsync() {
+    const env_2 = { stack: [], error: void 0, hasError: false };
+    try {
+        const _ = __addDisposableResource(env_2, {
+            async [globalThis.Symbol.asyncDispose]() {
+                output.push("async disposed");
+            },
+        }, true);
+    }
+    catch (e_2) {
+        env_2.error = e_2;
+        env_2.hasError = true;
+    }
+    finally {
+        const result_1 = __disposeResources(env_2);
+        if (result_1)
+            await result_1;
+    }
+}
+disposeAsync();

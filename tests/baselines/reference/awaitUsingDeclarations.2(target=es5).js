@@ -48,13 +48,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
         if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
-        var dispose, inner;
+        var dispose, inner, Symbol = typeof globalThis === "object" ? globalThis.Symbol : void 0;
         if (async) {
-            if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
+            if (!Symbol || !Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
             dispose = value[Symbol.asyncDispose];
         }
         if (dispose === void 0) {
-            if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
+            if (!Symbol || !Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
             dispose = value[Symbol.dispose];
             if (async) inner = dispose;
         }
