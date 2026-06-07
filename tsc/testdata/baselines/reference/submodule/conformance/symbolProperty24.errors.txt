@@ -1,5 +1,5 @@
-symbolProperty24.ts(5,7): error TS2420: Class 'C' incorrectly implements interface 'I'.
-  The types returned by '[Symbol.toPrimitive]()' are incompatible between these types.
+symbolProperty24.ts(6,5): error TS2416: Property '[Symbol.toPrimitive]' in type 'C' is not assignable to the same property in base type 'I'.
+  Type '() => string' is not assignable to type '() => boolean'.
     Type 'string' is not assignable to type 'boolean'.
 
 
@@ -9,11 +9,11 @@ symbolProperty24.ts(5,7): error TS2420: Class 'C' incorrectly implements interfa
     }
     
     class C implements I {
-          ~
-!!! error TS2420: Class 'C' incorrectly implements interface 'I'.
-!!! error TS2420:   The types returned by '[Symbol.toPrimitive]()' are incompatible between these types.
-!!! error TS2420:     Type 'string' is not assignable to type 'boolean'.
         [Symbol.toPrimitive]() {
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2416: Property '[Symbol.toPrimitive]' in type 'C' is not assignable to the same property in base type 'I'.
+!!! error TS2416:   Type '() => string' is not assignable to type '() => boolean'.
+!!! error TS2416:     Type 'string' is not assignable to type 'boolean'.
             return "";
         }
     }
