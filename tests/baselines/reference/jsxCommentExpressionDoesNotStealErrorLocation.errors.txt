@@ -1,0 +1,50 @@
+index.tsx(17,5): error TS2322: Type '{ notAString: true; }' is not assignable to type 'string'.
+index.tsx(18,5): error TS2322: Type 'Element' is not assignable to type 'string'.
+index.tsx(23,5): error TS2322: Type '{ notAString: true; }' is not assignable to type 'string'.
+index.tsx(24,5): error TS2322: Type 'Element' is not assignable to type 'string'.
+index.tsx(28,10): error TS2745: This JSX tag's 'children' prop expects type 'string[]' which requires multiple children, but only a single child was provided.
+
+
+==== index.tsx (5 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    interface Props {
+        children: string[];
+    }
+    
+    export function Comp(props: Props) {
+        return <></>;
+    }
+    
+    declare const badValue: { notAString: true };
+    
+    // Error should be on {badValue}, not on {/*  */}
+    var a = <Comp>
+        {/*  */}
+        {badValue}
+        ~~~~~~~~~~
+!!! error TS2322: Type '{ notAString: true; }' is not assignable to type 'string'.
+        <br />
+        ~~~~~~
+!!! error TS2322: Type 'Element' is not assignable to type 'string'.
+    </Comp>
+    
+    // No comment before — error should also be on {badValue}
+    var b = <Comp>
+        {badValue}
+        ~~~~~~~~~~
+!!! error TS2322: Type '{ notAString: true; }' is not assignable to type 'string'.
+        <br />
+        ~~~~~~
+!!! error TS2322: Type 'Element' is not assignable to type 'string'.
+    </Comp>
+    
+    // Comment after — should not affect error location
+    var c = <Comp>
+             ~~~~
+!!! error TS2745: This JSX tag's 'children' prop expects type 'string[]' which requires multiple children, but only a single child was provided.
+        {badValue}
+        {/*  */}
+    </Comp>
+    

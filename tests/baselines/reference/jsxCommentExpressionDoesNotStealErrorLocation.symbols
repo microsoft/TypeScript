@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/jsxCommentExpressionDoesNotStealErrorLocation.tsx] ////
+
+=== index.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(index.tsx, 1, 6))
+
+interface Props {
+>Props : Symbol(Props, Decl(index.tsx, 1, 31))
+
+    children: string[];
+>children : Symbol(Props.children, Decl(index.tsx, 3, 17))
+}
+
+export function Comp(props: Props) {
+>Comp : Symbol(Comp, Decl(index.tsx, 5, 1))
+>props : Symbol(props, Decl(index.tsx, 7, 21))
+>Props : Symbol(Props, Decl(index.tsx, 1, 31))
+
+    return <></>;
+}
+
+declare const badValue: { notAString: true };
+>badValue : Symbol(badValue, Decl(index.tsx, 11, 13))
+>notAString : Symbol(notAString, Decl(index.tsx, 11, 25))
+
+// Error should be on {badValue}, not on {/*  */}
+var a = <Comp>
+>a : Symbol(a, Decl(index.tsx, 14, 3))
+>Comp : Symbol(Comp, Decl(index.tsx, 5, 1))
+
+    {/*  */}
+    {badValue}
+>badValue : Symbol(badValue, Decl(index.tsx, 11, 13))
+
+    <br />
+>br : Symbol(JSX.IntrinsicElements.br, Decl(react16.d.ts, 2533, 102))
+
+</Comp>
+>Comp : Symbol(Comp, Decl(index.tsx, 5, 1))
+
+// No comment before — error should also be on {badValue}
+var b = <Comp>
+>b : Symbol(b, Decl(index.tsx, 21, 3))
+>Comp : Symbol(Comp, Decl(index.tsx, 5, 1))
+
+    {badValue}
+>badValue : Symbol(badValue, Decl(index.tsx, 11, 13))
+
+    <br />
+>br : Symbol(JSX.IntrinsicElements.br, Decl(react16.d.ts, 2533, 102))
+
+</Comp>
+>Comp : Symbol(Comp, Decl(index.tsx, 5, 1))
+
+// Comment after — should not affect error location
+var c = <Comp>
+>c : Symbol(c, Decl(index.tsx, 27, 3))
+>Comp : Symbol(Comp, Decl(index.tsx, 5, 1))
+
+    {badValue}
+>badValue : Symbol(badValue, Decl(index.tsx, 11, 13))
+
+    {/*  */}
+</Comp>
+>Comp : Symbol(Comp, Decl(index.tsx, 5, 1))
+

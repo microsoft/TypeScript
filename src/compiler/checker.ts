@@ -21702,6 +21702,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (child.kind) {
             case SyntaxKind.JsxExpression:
                 // child is of the type of the expression
+                // empty JsxExpression ({/* comment */}) has no expression — skip it the same way
+                // getSemanticJsxChildren and checkJsxChildren do, so nameType indices stay aligned
+                if (!child.expression) {
+                    break;
+                }
                 return { errorNode: child, innerExpression: child.expression, nameType };
             case SyntaxKind.JsxText:
                 if (child.containsOnlyTriviaWhiteSpaces) {
