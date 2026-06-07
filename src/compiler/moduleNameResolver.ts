@@ -2306,7 +2306,9 @@ function loadEntrypointsFromExportMap(
                 if (target.indexOf("*") !== target.lastIndexOf("*")) {
                     return false;
                 }
-
+                if (hasInvalidPackageJsonExportTargetSegments(target)) {
+                    return false;
+                }
                 state.host.readDirectory(
                     scope.packageDirectory,
                     extensionsToExtensionsArray(extensions),
@@ -2323,8 +2325,7 @@ function loadEntrypointsFromExportMap(
                 });
             }
             else {
-                const partsAfterFirst = getPathComponents(target).slice(2);
-                if (partsAfterFirst.includes("..") || partsAfterFirst.includes(".") || partsAfterFirst.includes("node_modules")) {
+                if (hasInvalidPackageJsonExportTargetSegments(target)) {
                     return false;
                 }
                 const resolvedTarget = combinePaths(scope.packageDirectory, target);
@@ -2354,6 +2355,13 @@ function loadEntrypointsFromExportMap(
             });
         }
     }
+}
+
+function hasInvalidPackageJsonExportTargetSegments(target: string): boolean {
+    // Package export targets are unrooted paths that begin with "./", so the
+    // first two components are the empty root marker and the leading ".".
+    const partsAfterFirst = getPathComponents(target).slice(2);
+    return partsAfterFirst.includes("..") || partsAfterFirst.includes(".") || partsAfterFirst.includes("node_modules");
 }
 
 /** @internal */

@@ -333,6 +333,41 @@ describe("unittests:: tsserver:: autoImportProvider::", () => {
         assert.ok(seenSymbolNames.has("Volume"));
         baselineTsserverLogs("autoImportProvider", "Shared source files between AutoImportProvider and main program", session);
     });
+
+    it("Does not index wildcard export targets outside the package", () => {
+        const files = [
+            {
+                path: "/user/username/projects/project/node_modules/pkg/package.json",
+                content: jsonToReadableText({
+                    name: "pkg",
+                    version: "1.0.0",
+                    exports: {
+                        "./*": "./../../private/*.js",
+                    },
+                }),
+            },
+            { path: "/user/username/projects/project/private/leaked.d.ts", content: `export declare const leakedAutoImport: number;` },
+            { path: "/user/username/projects/project/package.json", content: jsonToReadableText({ dependencies: { pkg: "*" } }) },
+            {
+                path: "/user/username/projects/project/tsconfig.json",
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        module: "nodenext",
+                        lib: ["es5"],
+                    },
+                    files: ["index.ts"],
+                }),
+            },
+            { path: "/user/username/projects/project/index.ts", content: "" },
+        ];
+
+        const { session } = setup(files);
+        openFilesForSession([files[4]], session);
+        const project = session.getProjectService().configuredProjects.get("/user/username/projects/project/tsconfig.json")!;
+        const completions = project.getLanguageService().getCompletionsAtPosition(files[4].path, 0, { includeCompletionsForModuleExports: true });
+        assert.isDefined(completions);
+        assert.isFalse(completions.entries.some(c => c.name === "leakedAutoImport"));
+    });
 });
 
 describe("unittests:: tsserver:: autoImportProvider:: monorepo", () => {
