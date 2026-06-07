@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/exactOptionalPropertyTypesArgumentError.ts] ////
+
+=== exactOptionalPropertyTypesArgumentError.ts ===
+declare function f(o: { y?: string }): void;
+>f : Symbol(f, Decl(exactOptionalPropertyTypesArgumentError.ts, 0, 0))
+>o : Symbol(o, Decl(exactOptionalPropertyTypesArgumentError.ts, 0, 19))
+>y : Symbol(y, Decl(exactOptionalPropertyTypesArgumentError.ts, 0, 23))
+
+f({ y: undefined });
+>f : Symbol(f, Decl(exactOptionalPropertyTypesArgumentError.ts, 0, 0))
+>y : Symbol(y, Decl(exactOptionalPropertyTypesArgumentError.ts, 1, 3))
+>undefined : Symbol(undefined)
+
