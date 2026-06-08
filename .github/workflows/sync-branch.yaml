@@ -58,8 +58,8 @@ jobs:
       # required client_payload members:
       # branch_name - the target branch
       - run: |
-          git config user.email "typescriptbot@microsoft.com"
-          git config user.name "TypeScript Bot"
+          git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
+          git config user.name "typescript-automation[bot]"
           git fetch origin main
           git merge origin/main --no-ff
           npm ci

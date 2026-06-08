@@ -30,8 +30,8 @@ jobs:
 
       - name: Configure Git, Run Tests, Update Baselines, Apply Fixes
         run: |
-          git config user.email "typescriptbot@microsoft.com"
-          git config user.name "TypeScript Bot"
+          git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
+          git config user.name "typescript-automation[bot]"
           npm ci
           git rm -r --quiet tests/baselines/reference
           npx hereby runtests-parallel --ci --fix || true
