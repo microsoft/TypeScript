@@ -59,8 +59,6 @@ jobs:
           repositories: TypeScript
           permission-issues: write
           permission-pull-requests: write
-      - name: Export GitHub App token
-        run: echo "GH_TOKEN=${{ steps.app-token.outputs.token }}" >> "$GITHUB_ENV"
       - name: Check if PR author is in pr_owners.txt
         id: pr_owner
         run: |
@@ -114,6 +112,8 @@ jobs:
 
       - name: Generated DOM files
         if: steps.pr_owner.outputs.pr_owner == 'false'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           if ./is_changed.sh "src/lib/dom.generated.d.ts" \
               "src/lib/dom.iterable.generated.d.ts" \
@@ -130,6 +130,8 @@ jobs:
           fi
 
       - name: Check if PR modifies protocol.ts
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           if ./is_changed.sh "src/server/protocol.ts"; then
             MESSAGE="Thanks for the PR! It looks like you've changed the TSServer protocol in some way."
@@ -145,6 +147,8 @@ jobs:
           fi
 
       - name: Check for breaking changes
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           if ./is_changed.sh "tests/baselines/reference/api/typescript.d.ts"; then
             MESSAGE="Looks like you're introducing a change to the public API surface area."
