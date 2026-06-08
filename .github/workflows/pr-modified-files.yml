@@ -104,7 +104,7 @@ jobs:
             FILENAME=bot_comments.txt
             if [ ! -f $FILENAME ]; then
               gh pr view $PR_NUMBER --repo $REPO \
-                --json 'comments' --jq '.comments[] | select(.author.login == "typescript-bot") | .body' > $FILENAME
+                --json 'comments' --jq '.comments[] | select(.author.login == "typescript-bot" or .author.login == "typescript-automation[bot]") | .body' > $FILENAME
             fi
             exec grep -Fq -m1 "$1" $FILENAME
           EOF

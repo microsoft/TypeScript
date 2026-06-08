@@ -55,5 +55,5 @@ jobs:
       - name: Run sync
         run: ./.github/workflows/sync
         env:
-          PUSHER: typescript-bot <bot@typescriptlang.org>
+          PUSHER: typescript-automation[bot] <290192711+typescript-automation[bot]@users.noreply.github.com>
           AUTH: ${{ steps.app-token.outputs.token }}
