@@ -3001,3 +3001,11 @@ func forEachChild_JSDocParameterOrPropertyTag(node *JSDocParameterOrPropertyTag,
 func visitEachChild_JSDocParameterOrPropertyTag(node *JSDocParameterOrPropertyTag, v *NodeVisitor) *Node {
 	return v.Factory.UpdateJSDocParameterOrPropertyTag(node, v.visitNode(node.TagName), v.visitNode(node.name), node.IsBracketed, v.visitNode(node.TypeExpression), node.IsNameFirst, v.visitNodes(node.Comment))
 }
+
+func (f *NodeFactory) ReleaseArenas() {
+	*f = NodeFactory{
+		hooks:     f.hooks,
+		textCount: f.textCount,
+		nodeCount: f.nodeCount,
+	}
+}

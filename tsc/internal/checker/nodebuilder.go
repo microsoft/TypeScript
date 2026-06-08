@@ -285,12 +285,15 @@ func NewNodeBuilderEx(ch *Checker, e *printer.EmitContext, idToSymbol map[*ast.I
 	return &NodeBuilder{impl: impl, ctxStack: make([]*NodeBuilderContext, 0, 1), host: ch.program}
 }
 
-func (c *Checker) getNodeBuilder() *NodeBuilder {
+func (c *Checker) getNodeBuilder() (*NodeBuilder, func()) {
+	releaseNodes := func() {
+		c.typeToStringNodebuilder.EmitContext().Factory.ReleaseArenas() // Allow any allocated nodes to be freed if they're no longer in a cache
+	}
 	if c.typeToStringNodebuilder != nil {
-		return c.typeToStringNodebuilder
+		return c.typeToStringNodebuilder, releaseNodes
 	}
 	c.typeToStringNodebuilder = c.getNodeBuilderEx(nil /*idToSymbol*/)
-	return c.typeToStringNodebuilder
+	return c.typeToStringNodebuilder, releaseNodes
 }
 
 func (c *Checker) getNodeBuilderEx(idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *NodeBuilder {
