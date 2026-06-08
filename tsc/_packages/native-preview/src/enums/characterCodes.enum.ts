@@ -1,4 +1,4 @@
-export const enum CharacterCodes {
+export enum CharacterCodes {
     EOF = -1,
     nullCharacter = 0,
     maxAsciiCharacter = 0x7F,

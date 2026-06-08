@@ -1,4 +1,4 @@
-export const enum ScriptTarget {
+export enum ScriptTarget {
     ES2015 = 2,
     ES2016 = 3,
     ES2017 = 4,

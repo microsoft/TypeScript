@@ -1,4 +1,4 @@
-export const enum RegularExpressionFlags {
+export enum RegularExpressionFlags {
     None = 0,
     HasIndices = 1 << 0,
     Global = 1 << 1,

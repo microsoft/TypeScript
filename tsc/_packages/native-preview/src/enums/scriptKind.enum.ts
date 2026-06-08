@@ -1,4 +1,4 @@
-export const enum ScriptKind {
+export enum ScriptKind {
     Unknown = 0,
     JS = 1,
     JSX = 2,
