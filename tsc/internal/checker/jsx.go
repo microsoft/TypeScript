@@ -551,7 +551,10 @@ func (c *Checker) resolveJsxOpeningLikeElement(node *ast.Node, candidatesOutArra
 			typeArguments := node.TypeArguments()
 			if len(typeArguments) != 0 {
 				c.checkSourceElements(typeArguments)
-				c.diagnostics.Add(ast.NewDiagnostic(ast.GetSourceFileOfNode(node), node.TypeArgumentList().Loc, diagnostics.Expected_0_type_arguments_but_got_1, 0, len(typeArguments)))
+				sourceFile := ast.GetSourceFileOfNode(node)
+				typeArgumentList := node.TypeArgumentList()
+				loc := core.NewTextRange(scanner.SkipTrivia(sourceFile.Text(), typeArgumentList.Loc.Pos()), typeArgumentList.Loc.End())
+				c.diagnostics.Add(ast.NewDiagnostic(sourceFile, loc, diagnostics.Expected_0_type_arguments_but_got_1, 0, len(typeArguments)))
 			}
 			return fakeSignature
 		}

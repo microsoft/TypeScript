@@ -1,0 +1,17 @@
+jsxIntrinsicElementsTypeArgumentErrorSkipsTrivia.tsx(4,19): error TS2558: Expected 0 type arguments, but got 1.
+jsxIntrinsicElementsTypeArgumentErrorSkipsTrivia.tsx(7,5): error TS2558: Expected 0 type arguments, but got 1.
+
+
+==== jsxIntrinsicElementsTypeArgumentErrorSkipsTrivia.tsx (2 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    const a = <div<   number> />;
+                      ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    const b = <div<
+        number> />;
+        ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
