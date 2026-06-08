@@ -21,8 +21,7 @@ export { a };
 export { b };`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`const a = 1;
 const b = 1;
 export { a, b };

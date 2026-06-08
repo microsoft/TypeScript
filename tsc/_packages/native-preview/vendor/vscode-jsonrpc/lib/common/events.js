@@ -60,7 +60,6 @@ class CallbackList {
                 ret.push(callbacks[i].apply(contexts[i], args));
             }
             catch (e) {
-                // eslint-disable-next-line no-console
                 (0, ral_1.default)().console.error(e);
             }
         }

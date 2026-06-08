@@ -19,8 +19,7 @@ func TestOrganizeImports8(t *testing.T) {
 foo;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import { foo } from "foo";
 foo;`,
 		lsproto.CodeActionKindSourceOrganizeImports,

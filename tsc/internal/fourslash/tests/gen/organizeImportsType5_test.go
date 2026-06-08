@@ -30,8 +30,7 @@ func TestOrganizeImportsType5(t *testing.T) {
 console.log(A, a, B, b, c, C, d, D);`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import {
     type A,
     a,
@@ -49,8 +48,7 @@ console.log(A, a, B, b, c, C, d, D);`,
 			OrganizeImportsTypeOrder:  lsutil.OrganizeImportsTypeOrderInline,
 		},
 	)
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import {
     type A,
     a,

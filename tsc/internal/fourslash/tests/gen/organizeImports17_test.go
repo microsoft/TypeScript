@@ -21,8 +21,7 @@ func TestOrganizeImports17(t *testing.T) {
 import { aa, CaseInsensitively, sorted } from "aardvark";`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import { aa, CaseInsensitively, sorted } from "aardvark";
 import { Both } from "module-specifiers-unsorted";
 `,

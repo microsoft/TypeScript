@@ -60,6 +60,6 @@
         "https://plugins.dprint.dev/typescript-0.96.1.wasm",
         "https://plugins.dprint.dev/json-0.21.3.wasm",
         "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.6.0.wasm",
-        "https://plugins.dprint.dev/jakebailey/gofumpt-v0.0.11.wasm"
+        "https://plugins.dprint.dev/jakebailey/gofumpt-v0.0.12.wasm"
     ]
 }

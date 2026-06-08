@@ -23,8 +23,7 @@ func TestOrganizeImports3(t *testing.T) {
 console.log(Foo, Bar);`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import {
     Bar,
     Foo

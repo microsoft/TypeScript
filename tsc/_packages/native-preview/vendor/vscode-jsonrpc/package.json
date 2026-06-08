@@ -1,7 +1,7 @@
 {
 	"name": "vscode-jsonrpc",
 	"description": "A json rpc implementation over streams",
-	"version": "9.0.0-next.11",
+	"version": "9.0.0",
 	"author": "Microsoft Corporation",
 	"license": "MIT",
 	"repository": {
@@ -30,7 +30,7 @@
 		}
 	},
 	"devDependencies": {
-		"@types/msgpack-lite": "^0.1.11",
+		"@types/msgpack-lite": "^0.1.12",
 		"msgpack-lite": "^0.1.26"
 	},
 	"scripts": {
@@ -40,7 +40,7 @@
 		"compile": "tsc -b ./tsconfig.json",
 		"watch": "tsc -b ./tsconfig.watch.json -w",
 		"clean": "rimraf lib && rimraf dist",
-		"lint": "eslint --ext ts src",
+		"lint": "eslint src",
 		"test": "npm run test:node && npm run test:browser",
 		"test:node": "node ../node_modules/mocha/bin/_mocha",
 		"test:browser": "npm run webpack:test:silent && node ../build/bin/runBrowserTests.js  http://127.0.0.1:8080/jsonrpc/src/browser/test/",

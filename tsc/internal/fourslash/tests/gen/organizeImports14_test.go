@@ -34,8 +34,7 @@ import { foo } from "./a";`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.GoToFile(t, "/b.ts")
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`/**
  * Module doc comment
  *

@@ -26,8 +26,7 @@ const C = "hello";
 export { A, type B, C };`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`type A = string;
 type B = string;
 const C = "hello";
@@ -36,8 +35,7 @@ export { A, C, type B };
 		lsproto.CodeActionKindSourceOrganizeImports,
 		nil,
 	)
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`type A = string;
 type B = string;
 const C = "hello";
@@ -48,8 +46,7 @@ export { A, type B, C };
 			OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline,
 		},
 	)
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`type A = string;
 type B = string;
 const C = "hello";
@@ -60,8 +57,7 @@ export { type B, A, C };
 			OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderFirst,
 		},
 	)
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`type A = string;
 type B = string;
 const C = "hello";

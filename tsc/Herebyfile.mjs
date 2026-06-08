@@ -509,6 +509,34 @@ export const generateAST = task({
     run: () => $`node --experimental-strip-types --no-warnings ./_scripts/generate.ts`,
 });
 
+// ── Vendored npm dependencies ───────────────────────────────────
+
+const vendorJsonrpcDir = "_packages/native-preview/vendor/vscode-jsonrpc";
+const vendorJsonrpcSrc = "node_modules/vscode-jsonrpc";
+// Files copied verbatim from the installed vscode-jsonrpc package into the
+// vendored copy. Only the runtime files needed by the `#vscode-jsonrpc/node`
+// import (lib + typings + package.json) plus license/readme are vendored.
+const vendorJsonrpcFiles = ["package.json", "README.md", "License.txt", "lib", "typings"];
+
+async function runGenerateVendor() {
+    const src = path.join(__dirname, vendorJsonrpcSrc);
+    const dest = path.join(__dirname, vendorJsonrpcDir);
+    if (!fs.existsSync(src)) {
+        throw new Error(`${vendorJsonrpcSrc} is not installed; run \`npm ci\` first.`);
+    }
+    await rimraf(dest);
+    await fs.promises.mkdir(dest, { recursive: true });
+    for (const file of vendorJsonrpcFiles) {
+        await cpRecursive(path.join(src, file), path.join(dest, file));
+    }
+}
+
+export const generateVendor = task({
+    name: "generate:vendor",
+    description: "Updates the vendored copy of vscode-jsonrpc from node_modules.",
+    run: runGenerateVendor,
+});
+
 const coverageDir = path.join(__dirname, "coverage");
 
 const ensureCoverageDirExists = memoize(() => {

@@ -27,8 +27,7 @@ func TestOrganizeImportsUnicode1(t *testing.T) {
 console.log(_aB, _Ab, aB, Ab);`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import {
     Ab,
     _Ab,
@@ -43,8 +42,7 @@ console.log(_aB, _Ab, aB, Ab);`,
 			OrganizeImportsCollation:  lsutil.OrganizeImportsCollationOrdinal,
 		},
 	)
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import {
     _aB,
     _Ab,

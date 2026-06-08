@@ -29,16 +29,14 @@ import { D } from "foo";
 console.log(A, B, C, D, E);`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import { A, C, D, type B, type E } from "foo";
 
 console.log(A, B, C, D, E);`,
 		lsproto.CodeActionKindSourceOrganizeImports,
 		nil,
 	)
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import { A, type B, C, D, type E } from "foo";
 
 console.log(A, B, C, D, E);`,
@@ -47,8 +45,7 @@ console.log(A, B, C, D, E);`,
 			OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline,
 		},
 	)
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import { type B, type E, A, C, D } from "foo";
 
 console.log(A, B, C, D, E);`,
@@ -57,8 +54,7 @@ console.log(A, B, C, D, E);`,
 			OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderFirst,
 		},
 	)
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import { A, C, D, type B, type E } from "foo";
 
 console.log(A, B, C, D, E);`,

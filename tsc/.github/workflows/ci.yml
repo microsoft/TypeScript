@@ -281,6 +281,7 @@ jobs:
       - run: npx hereby generate
       - run: npx hereby generate:enums
       - run: npx hereby generate:ast
+      - run: npx hereby generate:vendor
 
       - run: node --experimental-strip-types ./internal/lsp/lsproto/_generate/fetchModel.mts
       - run: node --experimental-strip-types ./internal/lsp/lsproto/_generate/generate.mts

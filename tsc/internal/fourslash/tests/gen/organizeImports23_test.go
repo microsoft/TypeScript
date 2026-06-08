@@ -25,8 +25,7 @@ type x = bc | Bc;
 console.log(abc, Abc, I, R, M);`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import {
     I,
     M,
@@ -38,8 +37,7 @@ console.log(abc, Abc, I, R, M);`,
 		lsproto.CodeActionKindSourceOrganizeImports,
 		nil,
 	)
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import {
     I,
     M,

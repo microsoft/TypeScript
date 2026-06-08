@@ -1248,7 +1248,6 @@ function createMessageConnection(messageReader, messageWriter, _logger, options)
             messageReader.listen(callback);
         },
         inspect: () => {
-            // eslint-disable-next-line no-console
             (0, ral_1.default)().console.log('inspect');
         }
     };

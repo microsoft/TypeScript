@@ -47,23 +47,8 @@ connection.listen();
 
 # History
 
-### 5.0.0
+For the history please see the [main repository](https://github.com/Microsoft/vscode-languageserver-node/blob/master/README.md)
 
-- add progress support
-- move JS target to ES2017
-
-### 4.0.0
-
-- move JS target to ES6.
-
-### 3.0.0:
-
-- converted the NPM module to use TypeScript 2.0.3.
-- added strict null support.
-- support for passing more than one parameter to a request or notification.
-- Breaking changes:
-  - due to the use of TypeScript 2.0.3 and differences in d.ts generation users of the new version need to move to
-    TypeScript 2.0.3 as well.
 
 ## License
 [MIT](https://github.com/Microsoft/vscode-languageserver-node/blob/master/License.txt)

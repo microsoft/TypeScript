@@ -29,8 +29,7 @@ import * as anotherThingElse from "someotherpath";
 anotherThing;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`/* some comment here
 * and there
 */

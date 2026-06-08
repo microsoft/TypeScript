@@ -25,8 +25,7 @@ import b from "B";
 console.log(a, b, c, d)`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import c from "C";
 
 

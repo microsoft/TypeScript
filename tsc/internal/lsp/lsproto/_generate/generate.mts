@@ -1714,6 +1714,11 @@ function formatDocumentation(s: string | undefined): string {
     for (let line of s.split("\n")) {
         line = line.trimEnd();
         line = line.replace(/(\w ) +/g, "$1");
+        // Some upstream docs include dangling block comment delimiters; remove them
+        // so they don't leak into generated `//` comments.
+        line = line.replace(/\s*\/\*+\s*/g, " ");
+        line = line.replace(/\s*\*+\/\s*/g, " ");
+        line = line.replace(/\s{2,}/g, " ").trimEnd();
         line = line.replace(/\{@link(?:code)?.*?([^} ]+)\}/g, "$1");
         line = line.replace(/^@(since|proposed|deprecated)(.*)/, (_, tag, rest) => {
             lines.push("");

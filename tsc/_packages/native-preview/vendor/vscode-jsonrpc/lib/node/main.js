@@ -198,7 +198,7 @@ function generateRandomPipeName() {
         return `\\\\.\\pipe\\lsp-${(0, crypto_1.randomBytes)(16).toString('hex')}-sock`;
     }
     let randomLength = 32;
-    const fixedLength = 'lsp-.sock'.length;
+    const fixedLength = '/lsp-.sock'.length;
     const tmpDir = fs.realpathSync(XDG_RUNTIME_DIR ?? os.tmpdir());
     const limit = safeIpcPathLengths.get(process.platform);
     if (limit !== undefined) {

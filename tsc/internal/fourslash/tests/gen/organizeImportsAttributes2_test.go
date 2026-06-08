@@ -26,8 +26,7 @@ import { B } from "./a";
 export type G = A | B | C | D | E | F | Z;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyOrganizeImports(
-		t,
+	f.VerifyOrganizeImports(t,
 		`import { A, B } from "./a";
 import { C, E, F } from "./a" with { type: "a" };
 import { A as D } from "./a" with { type: "b" };

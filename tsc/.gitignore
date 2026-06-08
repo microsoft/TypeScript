@@ -178,6 +178,9 @@ go.work.sum
 # Re-add baseline references
 !testdata/baselines/reference/**/*.txt
 
+# Re-add vendored license/notice files (see hereby generate:vendor)
+!_packages/native-preview/vendor/**/*.txt
+
 # Local baselines
 testdata/baselines/local
 testdata/baselines/tmp
