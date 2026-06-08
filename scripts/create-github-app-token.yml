@@ -35,7 +35,7 @@ steps:
       inlineScript: |
         cat << 'GITHUB_APP_TOKEN_CLI_EOF' > /tmp/create-github-app-token.cjs
         "use strict";
-        
+
         // src/api.ts
         var defaultRefreshWindowMs = 5 * 60 * 1e3;
         var defaultGitHubApiUrl = "https://api.github.com";
@@ -343,7 +343,7 @@ steps:
             revokeToken
           };
         }
-        
+
         // src/azureCliSigner.ts
         var import_node_child_process = require("node:child_process");
         var import_node_crypto = require("node:crypto");
@@ -433,7 +433,7 @@ steps:
             return base64ToBase64url(signature);
           };
         }
-        
+
         // src/proxy.ts
         var proxyEnvironmentKeys = [
           "https_proxy",
@@ -455,7 +455,7 @@ steps:
             "A proxy environment variable is set, but Node.js native proxy support is not enabled. Set NODE_USE_ENV_PROXY=1 before running this tool."
           );
         }
-        
+
         // src/cli.ts
         function requiredEnv(name) {
           const value = process.env[name];
@@ -601,7 +601,7 @@ steps:
       AZURE_TOKEN_VARIABLE: ${{ parameters.tokenVariable }}
 
   - ${{ each step in parameters.insertSteps }}:
-    - ${{ step }}
+      - ${{ step }}
 
   - task: Bash@3
     displayName: Revoke GitHub App token
