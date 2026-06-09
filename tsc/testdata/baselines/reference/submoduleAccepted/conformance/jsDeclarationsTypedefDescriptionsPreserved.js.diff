@@ -9,20 +9,21 @@
 + * @property {string} baz - Sylvester McMonkey McBean
   */
  type FooOptions = {
--    /**
--     * - Marvin K Mooney
--     */
--    bar: boolean;
--    /**
--     * - Sylvester McMonkey McBean
--     */
-+    bar: boolean;
-+    baz: string;
-+};
-+type BarOptions = {
-+    bar: boolean;
+     /**
+@@= skipped -11, +14 lines =@@
+      */
      baz: string;
  };
++type BarOptions = {
++    /**
++     * - Marvin K Mooney
++     */
++    bar: boolean;
++    /**
++     * - Sylvester McMonkey McBean
++     */
++    baz: string;
++};
  /**
   * Multiline
   * Options

@@ -190,7 +190,7 @@ func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, sy
 					}
 					comments := tag.Comments()
 					if tag.Kind == ast.KindJSDocUnknownTag && tag.TagName().Text() == "example" {
-						commentText := strings.TrimRight(getCommentText(comments), " \t\r\n")
+						commentText := scanner.GetTextOfJSDocComment(tag.CommentList())
 						if strings.HasPrefix(commentText, "<caption>") {
 							if captionEnd := strings.Index(commentText, "</caption>"); captionEnd > 0 {
 								b.WriteString(" — ")
@@ -237,19 +237,6 @@ func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, sy
 					}
 				}
 			}
-		}
-	}
-	return b.String()
-}
-
-func getCommentText(comments []*ast.Node) string {
-	var b strings.Builder
-	for _, comment := range comments {
-		switch comment.Kind {
-		case ast.KindJSDocText:
-			b.WriteString(comment.Text())
-		case ast.KindJSDocLink, ast.KindJSDocLinkCode, ast.KindJSDocLinkPlain:
-			b.WriteString(scanner.GetTextOfNode(comment))
 		}
 	}
 	return b.String()

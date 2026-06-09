@@ -2,6 +2,7 @@ package scanner
 
 import (
 	"strings"
+	"unicode"
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -79,6 +80,22 @@ func GetTextOfNodeFromSourceText(sourceText string, node *ast.Node, includeTrivi
 
 func GetTextOfNode(node *ast.Node) string {
 	return GetSourceTextOfNodeFromSourceFile(ast.GetSourceFileOfNode(node), node, false /*includeTrivia*/)
+}
+
+func GetTextOfJSDocComment(comment *ast.NodeList) string {
+	if comment == nil {
+		return ""
+	}
+	var b strings.Builder
+	for _, n := range comment.Nodes {
+		switch n.Kind {
+		case ast.KindJSDocText:
+			b.WriteString(n.Text())
+		case ast.KindJSDocLink, ast.KindJSDocLinkCode, ast.KindJSDocLinkPlain:
+			b.WriteString(GetTextOfNode(n))
+		}
+	}
+	return strings.TrimRightFunc(b.String(), unicode.IsSpace)
 }
 
 func DeclarationNameToString(name *ast.Node) string {

@@ -56,7 +56,13 @@ var see3 = true;
  */
 type N = number;
 type D1 = {
+    /**
+     * Just link to {@link NS.R} this time
+     */
     e: 1;
+    /**
+     * Wyatt Earp loved {@link N integers} I bet.
+     */
     m: 1;
 };
 type Z = number;

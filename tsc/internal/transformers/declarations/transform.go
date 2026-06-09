@@ -864,7 +864,7 @@ func (tx *DeclarationTransformer) transformPropertySignatureDeclaration(input *a
 	if ast.IsPrivateIdentifier(input.Name()) {
 		return nil
 	}
-	return tx.Factory().UpdatePropertySignatureDeclaration(
+	result := tx.Factory().UpdatePropertySignatureDeclaration(
 		input,
 		tx.ensureModifiers(input.AsNode()),
 		input.Name(),
@@ -872,6 +872,8 @@ func (tx *DeclarationTransformer) transformPropertySignatureDeclaration(input *a
 		tx.ensureType(input.AsNode(), false),
 		tx.ensureNoInitializer(input.AsNode()), // TODO: possible strada bug (fixed here) - const property signatures never initialized
 	)
+	tx.preservePartialJsDoc(result, input.AsNode())
+	return result
 }
 
 func (tx *DeclarationTransformer) transformPropertyDeclaration(input *ast.PropertyDeclaration) *ast.Node {
@@ -1224,6 +1226,22 @@ func (tx *DeclarationTransformer) tryGetResolutionModeOverride(node *ast.Node) *
 func (tx *DeclarationTransformer) preserveJsDoc(updated *ast.Node, original *ast.Node) {
 	// Copy comment range from original to updated node so JSDoc comments are preserved
 	tx.EmitContext().AssignCommentRange(updated, original)
+}
+
+func (tx *DeclarationTransformer) preservePartialJsDoc(updated *ast.Node, original *ast.Node) {
+	if original.Flags&ast.NodeFlagsReparsed == 0 {
+		return
+	}
+	jsdoc := core.FirstOrNil(original.EagerJSDoc(ast.GetSourceFileOfNode(original)))
+	if jsdoc == nil {
+		return
+	}
+	description := scanner.GetTextOfJSDocComment(jsdoc.AsJSDoc().Comment)
+	if description == "" {
+		return
+	}
+	comment := "*\n * " + strings.ReplaceAll(description, "\n", "\n * ") + "\n "
+	tx.EmitContext().AddSyntheticLeadingComment(updated, ast.KindMultiLineCommentTrivia, comment, true /*hasTrailingNewLine*/)
 }
 
 func (tx *DeclarationTransformer) removeAllComments(node *ast.Node) {

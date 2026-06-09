@@ -63,6 +63,9 @@ declare const Strings: {
 export = Handler;
 export { Strings };
 export type HandlerOptions = {
+    /**
+     * Should be able to export a type alias at the same time.
+     */
     name: string;
 };
 /**

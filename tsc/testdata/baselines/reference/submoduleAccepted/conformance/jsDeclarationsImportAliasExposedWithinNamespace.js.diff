@@ -7,9 +7,6 @@
 -export namespace myTypes {
 -    type typeA = string | RegExp | Array<string | RegExp>;
 -    type typeB = {
--        /**
--         * - Prop 1.
--         */
 +/**
 + * @namespace myTypes
 + * @global
@@ -21,10 +18,11 @@
 +}
 +export declare namespace myTypes {
 +    export type typeB = {
-         prop1: myTypes.typeA;
--        /**
--         * - Prop 2.
--         */
+         /**
+          * - Prop 1.
+          */
+@@= skipped -12, +20 lines =@@
+          */
          prop2: string;
      };
 -    type typeC = myTypes.typeB | Function;
@@ -62,7 +60,7 @@
  }
  /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
  /**
-@@= skipped -33, +44 lines =@@
+@@= skipped -21, +30 lines =@@
   * @param {testFnTypes.input} input - Input.
   * @returns {number|null} Result.
   */

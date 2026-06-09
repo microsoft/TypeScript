@@ -65,7 +65,13 @@ export declare namespace myTypes {
 }
 export declare namespace myTypes {
     export type typeB = {
+        /**
+         * - Prop 1.
+         */
         prop1: myTypes.typeA;
+        /**
+         * - Prop 2.
+         */
         prop2: string;
     };
 }
