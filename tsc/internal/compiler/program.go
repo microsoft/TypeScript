@@ -247,10 +247,10 @@ func (p *Program) GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.Fi
 			}
 		}
 
-		return p.GetSourceFile(fileName)
+		return p.GetSourceFileForResolvedModule(fileName)
 	}
 	if allowNonTsExtensions {
-		extensionless := p.GetSourceFile(fileName)
+		extensionless := p.GetSourceFileForResolvedModule(fileName)
 		if extensionless != nil {
 			return extensionless
 		}
@@ -258,7 +258,7 @@ func (p *Program) GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.Fi
 
 	// Only try adding extensions from the first supported group (which should be .ts/.tsx/.d.ts)
 	for _, ext := range supportedExtensions[0] {
-		result := p.GetSourceFile(fileName + ext)
+		result := p.GetSourceFileForResolvedModule(fileName + ext)
 		if result != nil {
 			return result
 		}

@@ -654,6 +654,27 @@ func TestTscDeclarationEmit(t *testing.T) {
 			commandLineArgs: []string{"--b", "--verbose"},
 		},
 		{
+			subScenario: "when ts file is referenced through triple slash from another project",
+			files: FileMap{
+				"/home/src/workspaces/solution/include/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": { "composite": true, "declaration": true },
+					}`),
+				"/home/src/workspaces/solution/include/include.ts": stringtestutil.Dedent(`
+					export const include = 1;`),
+				"/home/src/workspaces/solution/src/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": { "composite": true, "declaration": true },
+						"references": [{ "path": "../include" }],
+					}`),
+				"/home/src/workspaces/solution/src/main.ts": stringtestutil.Dedent(`
+					/// <reference path="../include/include.ts" preserve="true" />
+					export const main = 23;`),
+			},
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"--b", "src", "--verbose"},
+		},
+		{
 			subScenario: "when declaration file used inferred type from referenced project",
 			files: FileMap{
 				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
