@@ -66,6 +66,13 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'core/tsconfig.json'...
 
+[91merror[0m[90m TS6053: [0mFile '/user/username/projects/sample1/core/anotherModule.ts' not found.
+  The file is in the program because:
+    Part of 'files' list in tsconfig.json
+  [96mcore/tsconfig.json[0m:[93m3[0m:[93m16[0m - File is matched by 'files' list specified here.
+    [7m3[0m      "files": ["anotherModule.ts", "index.ts", "some_decl.d.ts"],
+    [7m [0m [96m               ~~~~~~~~~~~~~~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is out of date because output file 'logic/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project 'logic/tsconfig.json'...
@@ -85,7 +92,7 @@ Output::
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors in 2 files.
+Found 3 errors in 2 files.
 
 Errors  Files
      1  logic/index.ts[90m:5[0m
@@ -125,10 +132,11 @@ export function leftPad(s, n) { return s + n; }
 export function multiply(a, b) { return a * b; }
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"2753a1085d587a7d57069e1105af24ec-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }","signature":"da642d80443e7ccd327091080a82a43c-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","impliedNodeFormat":1},{"version":"6ceab83400a6167be2fb5feab881ded0-declare const dts: any;","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"2753a1085d587a7d57069e1105af24ec-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }","signature":"da642d80443e7ccd327091080a82a43c-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","impliedNodeFormat":1},{"version":"6ceab83400a6167be2fb5feab881ded0-declare const dts: any;","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"}
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -186,8 +194,13 @@ export function multiply(a, b) { return a * b; }
   "options": {
     "composite": true
   },
+  "semanticDiagnosticsPerFile": [
+    "lib.es2025.full.d.ts",
+    "./index.ts",
+    "./some_decl.d.ts"
+  ],
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1551
+  "size": 1602
 }
 //// [/user/username/projects/sample1/logic/index.d.ts] *new* 
 export declare function getSecondsInDay(): number;
@@ -395,9 +408,9 @@ export const m = mod;
 
 core/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-*refresh*    /user/username/projects/sample1/core/index.ts
-*refresh*    /user/username/projects/sample1/core/some_decl.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /user/username/projects/sample1/core/index.ts
+*not cached* /user/username/projects/sample1/core/some_decl.d.ts
 Signatures::
 (stored at emit) /user/username/projects/sample1/core/index.ts
 

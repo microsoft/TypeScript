@@ -1,17 +1,27 @@
 currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
+//// [/home/src/workspaces/project/src/oops.ts] *new* 
+export const abc = 10;
+//// [/home/src/workspaces/project/src/tsconfig.json] *new* 
+{
+                    "extends": "./../tsconfig.base.json",
+                    }
+//// [/home/src/workspaces/project/tsconfig.base.json] *new* 
+{
+                    "files": ["./oops"],
+                    }
 
-tsgo --moduleResolution nodenext  first.ts --module nodenext --target esnext --moduleDetection auto --jsx react --newLine crlf
+tsgo -p ./src/tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[91merror[0m[90m TS6053: [0mFile 'first.ts' not found.
+[91merror[0m[90m TS6231: [0mCould not resolve the path '/home/src/workspaces/project/oops' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
   The file is in the program because:
-    Root file specified for compilation
+    Part of 'files' list in tsconfig.json
 
 Found 1 error.
 
-//// [/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

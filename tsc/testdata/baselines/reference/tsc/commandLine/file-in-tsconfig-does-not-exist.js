@@ -1,17 +1,25 @@
 currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
+//// [/home/src/workspaces/project/tsconfig.json] *new* 
+{
+                    "files": ["./src/doesNotExist.ts"]
+                    }
 
-tsgo --moduleResolution nodenext  first.ts --module nodenext --target esnext --moduleDetection auto --jsx react --newLine crlf
+tsgo -p ./tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[91merror[0m[90m TS6053: [0mFile 'first.ts' not found.
+[91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/project/src/doesNotExist.ts' not found.
   The file is in the program because:
-    Root file specified for compilation
+    Part of 'files' list in tsconfig.json
+  [96mtsconfig.json[0m:[93m2[0m:[93m31[0m - File is matched by 'files' list specified here.
+    [7m2[0m                     "files": ["./src/doesNotExist.ts"]
+    [7m [0m [96m                              ~~~~~~~~~~~~~~~~~~~~~~~[0m
+
 
 Found 1 error.
 
-//// [/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

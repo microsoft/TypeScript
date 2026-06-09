@@ -63,7 +63,17 @@ Edit [0]:: delete file listed in files array
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/project/b.ts' not found.
+  The file is in the program because:
+    Part of 'files' list in tsconfig.json
+  [96mtsconfig.json[0m:[93m3[0m:[93m20[0m - File is matched by 'files' list specified here.
+    [7m3[0m  "files": ["a.ts", "b.ts"]
+    [7m [0m [96m                   ~~~~~~[0m
+
+
+Found 1 error.
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 tsconfig.json::

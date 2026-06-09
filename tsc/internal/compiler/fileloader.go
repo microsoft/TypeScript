@@ -152,7 +152,7 @@ func processAllProgramFiles(
 		defer opts.Tracing.Push(tracing.PhaseProgram, "processRootFiles", map[string]any{"count": len(rootFiles)}, false)()
 	}
 	for index, rootFile := range rootFiles {
-		loader.addRootTask(rootFile, nil, &FileIncludeReason{kind: fileIncludeKindRootFile, data: index})
+		loader.addRootFileTask(rootFile, nil, &FileIncludeReason{kind: fileIncludeKindRootFile, data: index})
 	}
 	if len(rootFiles) > 0 && compilerOptions.NoLib.IsFalseOrUnknown() {
 		if compilerOptions.Lib == nil {
@@ -197,6 +197,33 @@ func (p *fileLoader) addRootTask(fileName string, libFile *LibFile, includeReaso
 			includeReason:      includeReason,
 		})
 	}
+}
+
+func (p *fileLoader) addRootFileTask(fileName string, libFile *LibFile, includeReason *FileIncludeReason) {
+	currDir := p.opts.Host.GetCurrentDirectory()
+	absPath := tspath.GetNormalizedAbsolutePath(fileName, currDir)
+	containingFile := currDir
+	if p.opts.Config.ConfigFile != nil {
+		containingFile = tspath.GetNormalizedAbsolutePath(p.opts.Config.ConfigFile.SourceFile.FileName(), currDir)
+	}
+	resolvedFile, diagnostic := p.getSourceFileFromReference(absPath, fileName, containingFile)
+	rootTask := &parseTask{
+		normalizedFilePath: resolvedFile,
+		libFile:            libFile,
+		includeReason:      includeReason,
+	}
+	if diagnostic != nil {
+		rootTask.normalizedFilePath = absPath
+		rootTask.processingDiagnostics = []*processingDiagnostic{{
+			kind: processingDiagnosticKindExplainingFileInclude,
+			data: &includeExplainingDiagnostic{
+				diagnosticReason: includeReason,
+				message:          diagnostic.message,
+				args:             diagnostic.args,
+			},
+		}}
+	}
+	p.rootTasks = append(p.rootTasks, rootTask)
 }
 
 func (p *fileLoader) addAutomaticTypeDirectiveTasks() {
