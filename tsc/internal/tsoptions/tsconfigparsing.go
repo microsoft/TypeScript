@@ -509,6 +509,10 @@ func getExtendsConfigPathOrArray(
 	if configFileName != "" {
 		newBase = directoryOfCombinedPath(configFileName, basePath)
 	}
+	if value == nil {
+		_, errors := convertJsonOption(extendsOptionDeclaration, value, basePath, propertyAssignment, valueExpression, sourceFile)
+		return extendedConfigPathArray, errors
+	}
 	if reflect.TypeOf(value).Kind() == reflect.String {
 		val, err := getExtendsConfigPath(value.(string), host, newBase, valueExpression, sourceFile)
 		if val != "" {
