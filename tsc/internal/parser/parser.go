@@ -569,12 +569,12 @@ func (p *Parser) reparseTopLevelAwait(sourceFile *ast.SourceFile) *ast.Node {
 				p.nextToken()
 			}
 			if afterAwaitStatement < len(sourceFile.Statements.Nodes) {
-				nonAwaitStatement := sourceFile.Statements.Nodes[afterAwaitStatement]
-				if statement.End() == nonAwaitStatement.Pos() {
+				lastAwaitStatement := sourceFile.Statements.Nodes[afterAwaitStatement-1]
+				if statement.End() == lastAwaitStatement.End() {
 					// done reparsing this section
 					break
 				}
-				if statement.End() > nonAwaitStatement.Pos() {
+				if statement.End() > lastAwaitStatement.End() {
 					// we ate into the next statement, so we must continue reparsing the next span
 					i += 2
 					if i < len(p.possibleAwaitSpans) {

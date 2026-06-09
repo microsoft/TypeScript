@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/topLevelAwaitReparseWithTypedef.ts] ////
+
+=== main.js ===
+// https://github.com/microsoft/typescript-go/issues/4252
+
+const obj = { await: 42 }
+>obj : { await: number; }
+>{ await: 42 } : { await: number; }
+>await : number
+>42 : 42
+
+export const x = obj.await;
+>x : number
+>obj.await : number
+>obj : { await: number; }
+>await : number
+
+/**
+ * @typedef {object} Foo
+ * @property {string} name
+ */
+
+/** @type {Foo} foo */
+let foo;
+>foo : Foo
+
