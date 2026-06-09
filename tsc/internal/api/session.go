@@ -17,6 +17,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/nodebuilder"
 	"github.com/microsoft/typescript-go/internal/pprof"
 	"github.com/microsoft/typescript-go/internal/printer"
@@ -341,6 +342,18 @@ func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, project
 	}, nil
 }
 
+// setupLanguageService creates a LanguageService for the given snapshot/project.
+// Unlike setupChecker, this does NOT acquire a checker from the pool, so callers that
+// only need an LS (and not a Checker) can avoid blocking on / holding a pooled checker.
+func (s *Session) setupLanguageService(sd *snapshotData, program *compiler.Program, projectHandle ProjectID, activeFile string) (*ls.LanguageService, error) {
+	projectName := parseProjectHandle(projectHandle)
+	proj := sd.snapshot.ProjectCollection.GetProjectByPath(projectName)
+	if proj == nil {
+		return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectName)
+	}
+	return ls.NewLanguageService(proj.ConfigFilePath(), program, sd.snapshot, activeFile), nil
+}
+
 // HandleRequest implements Handler.
 func (s *Session) HandleRequest(ctx context.Context, method string, params json.Value) (any, error) {
 	// Handle simple methods that don't need param parsing
@@ -525,6 +538,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleStopCPUProfile(ctx)
 	case string(MethodSaveHeapProfile):
 		return s.handleSaveHeapProfile(ctx, parsed.(*ProfileParams))
+	case string(MethodGetReferencesToSymbolInFile):
+		return s.handleGetReferencesToSymbolInFile(ctx, parsed.(*GetReferencesToSymbolInFileParams))
+	case string(MethodGetReferencedSymbolsForNode):
+		return s.handleGetReferencedSymbolsForNode(ctx, parsed.(*GetReferencedSymbolsForNodeParams))
+	case string(MethodGetSignatureUsages):
+		return s.handleGetSignatureUsages(ctx, parsed.(*GetSignatureUsagesParams))
 	default:
 		return nil, fmt.Errorf("unknown method: %s", method)
 	}
@@ -2213,4 +2232,128 @@ func (s *Session) resolveOptionalSourceFile(program *compiler.Program, file *Doc
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, file)
 	}
 	return sourceFile, nil
+}
+
+// handleGetReferencesToSymbolInFile returns node handles for all identifiers in a file that reference the given symbol.
+func (s *Session) handleGetReferencesToSymbolInFile(ctx context.Context, params *GetReferencesToSymbolInFileParams) ([]NodeHandle, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.sd.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	if symbol == nil {
+		return nil, nil
+	}
+
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	if sourceFile == nil {
+		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
+	}
+
+	nodes := setup.checker.GetReferencesToSymbolInFile(sourceFile, symbol)
+	result := make([]NodeHandle, len(nodes))
+	for i, node := range nodes {
+		result[i] = setup.sd.nodeHandleFrom(node)
+	}
+	return result, nil
+}
+
+func (s *Session) handleGetSignatureUsages(ctx context.Context, params *GetSignatureUsagesParams) ([]SignatureUsageResponse, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+
+	signatureDecl, err := sd.resolveNodeHandle(program, params.SignatureDecl)
+	if err != nil {
+		return nil, err
+	}
+	if signatureDecl == nil {
+		return nil, nil
+	}
+
+	langSvc, err := s.setupLanguageService(sd, program, params.Project, "")
+	if err != nil {
+		return nil, err
+	}
+
+	usages := langSvc.GetSignatureUsages(ctx, signatureDecl)
+	if usages == nil {
+		return nil, nil
+	}
+
+	result := make([]SignatureUsageResponse, 0, len(usages))
+	for _, u := range usages {
+		entry := SignatureUsageResponse{
+			Name: sd.nodeHandleFrom(u.Name),
+		}
+		if u.Call != nil {
+			entry.Call = sd.nodeHandleFrom(u.Call)
+		}
+		result = append(result, entry)
+	}
+	return result, nil
+}
+
+// handleGetReferencedSymbolsForNode returns node handles for all references found at a node.
+func (s *Session) handleGetReferencedSymbolsForNode(ctx context.Context, params *GetReferencedSymbolsForNodeParams) ([]ReferencedSymbolEntry, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+
+	node, err := sd.resolveNodeHandle(program, params.Node)
+	if err != nil {
+		return nil, err
+	}
+	if node == nil {
+		return nil, nil
+	}
+
+	langSvc, err := s.setupLanguageService(sd, program, params.Project, "")
+	if err != nil {
+		return nil, err
+	}
+
+	sourceFiles := program.GetSourceFiles()
+	entries := langSvc.GetReferencedSymbolsForNode(ctx, params.Position, node, sourceFiles)
+	if entries == nil {
+		return nil, nil
+	}
+
+	var result []ReferencedSymbolEntry
+	for _, entry := range entries {
+		defNode := entry.DefinitionNode()
+		if defNode == nil {
+			continue
+		}
+		var refs []NodeHandle
+		for _, ref := range entry.References() {
+			if ref.IsNodeEntry() {
+				refs = append(refs, sd.nodeHandleFrom(ref.Node()))
+			}
+		}
+		re := ReferencedSymbolEntry{
+			Definition: sd.nodeHandleFrom(defNode),
+			References: refs,
+		}
+		if sym := entry.DefinitionSymbol(); sym != nil {
+			re.Symbol = sd.registerSymbol(sym)
+		}
+		result = append(result, re)
+	}
+	return result, nil
 }

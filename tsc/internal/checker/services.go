@@ -572,6 +572,44 @@ func (c *Checker) IsSymbolReferencedInFile(
 	return false
 }
 
+// GetReferencesToSymbolInFile returns all identifier nodes in the file that reference the given symbol.
+func (c *Checker) GetReferencesToSymbolInFile(
+	sourceFile *ast.SourceFile,
+	symbol *ast.Symbol,
+) []*ast.Node {
+	identifierText := symbol.Name
+	var result []*ast.Node
+	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText, sourceFile.AsNode()) {
+		if !ast.IsIdentifier(token) {
+			continue
+		}
+		id := token.AsIdentifier()
+		if id.Text != identifierText {
+			continue
+		}
+		refSymbol := c.GetSymbolAtLocation(token)
+		if refSymbol == symbol {
+			result = append(result, token)
+			continue
+		}
+		if token.Parent != nil && token.Parent.Kind == ast.KindShorthandPropertyAssignment {
+			shorthandSymbol := c.GetShorthandAssignmentValueSymbol(token.Parent)
+			if shorthandSymbol == symbol {
+				result = append(result, token)
+				continue
+			}
+		}
+		if token.Parent != nil && ast.IsExportSpecifier(token.Parent) {
+			localSymbol := c.getLocalSymbolForExportSpecifier(token.AsIdentifier(), refSymbol, token.Parent.AsExportSpecifier())
+			if localSymbol == symbol {
+				result = append(result, token)
+				continue
+			}
+		}
+	}
+	return result
+}
+
 func (c *Checker) getLocalSymbolForExportSpecifier(referenceLocation *ast.Identifier, referenceSymbol *ast.Symbol, exportSpecifier *ast.ExportSpecifier) *ast.Symbol {
 	if isExportSpecifierAlias(referenceLocation, exportSpecifier) {
 		if symbol := c.GetExportSpecifierLocalTargetSymbol(exportSpecifier.AsNode()); symbol != nil {

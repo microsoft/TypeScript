@@ -3098,6 +3098,56 @@ describe("Program - diagnostics", () => {
     });
 });
 
+describe("Checker - getReferencedSymbolsForNode", () => {
+    test("getReferencedSymbolsForNode", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `function greet(name: string) { return name; }\ngreet("world");`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/index.ts");
+            assert.ok(sourceFile);
+            const funcDecl = cast(sourceFile.statements[0], isFunctionDeclaration);
+            const funcName = funcDecl.name!;
+            const refs = project.checker.getReferencedSymbolsForNode(funcName, funcName.pos);
+            assert.ok(refs.length > 0);
+            // Each entry should have a definition and references
+            const entry = refs[0];
+            assert.ok(entry.definition);
+            assert.ok(entry.references.length > 0);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getSignatureUsage", () => {
+    test("getSignatureUsage", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `function greet(name: string) { return name; }\ngreet("world");`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/index.ts");
+            assert.ok(sourceFile);
+            const funcDecl = cast(sourceFile.statements[0], isFunctionDeclaration);
+            const usages = project.checker.getSignatureUsage(funcDecl);
+            assert.ok(usages.length > 0);
+            // The call site should have a call expression
+            const usage = usages.find(u => u.call !== undefined);
+            assert.ok(usage, "Expected at least one usage with a call expression");
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 test("Benchmarks", () => {
     runBenchmarks({ singleIteration: true });
 });

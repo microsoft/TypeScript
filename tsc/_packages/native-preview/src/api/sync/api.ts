@@ -550,6 +550,42 @@ export class Checker {
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
 
+    getReferencesToSymbolInFile(file: DocumentIdentifier, symbol: Symbol): NodeHandle[] {
+        const data = this.client.apiRequest<string[] | null>("getReferencesToSymbolInFile", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            file,
+            symbol: symbol.id,
+        });
+        return (data ?? []).map(h => new NodeHandle(h));
+    }
+
+    getReferencedSymbolsForNode(node: Node, position: number): ReferencedSymbolEntry[] {
+        const data = this.client.apiRequest<{ definition: string; symbol?: SymbolResponse; references: string[]; }[] | null>("getReferencedSymbolsForNode", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            node: getNodeId(node),
+            position,
+        });
+        return (data ?? []).map(entry => ({
+            definition: new NodeHandle(entry.definition),
+            symbol: entry.symbol ? this.objectRegistry.getOrCreateSymbol(entry.symbol) : undefined,
+            references: (entry.references ?? []).map(h => new NodeHandle(h)),
+        }));
+    }
+
+    getSignatureUsage(signatureDecl: Node): SignatureUsage[] {
+        const data = this.client.apiRequest<{ name: string; call?: string; }[] | null>("getSignatureUsages", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            signatureDecl: getNodeId(signatureDecl),
+        });
+        return (data ?? []).map(entry => ({
+            name: new NodeHandle(entry.name),
+            call: entry.call ? new NodeHandle(entry.call) : undefined,
+        }));
+    }
+
     getTypeAtLocation(node: Node): Type | undefined;
     getTypeAtLocation(nodes: readonly Node[]): (Type | undefined)[];
     getTypeAtLocation(nodeOrNodes: Node | readonly Node[]): Type | (Type | undefined)[] | undefined {
@@ -942,6 +978,24 @@ export class NodeHandle {
         }
         return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(this.index);
     }
+}
+
+/** A symbol definition paired with all of its reference nodes. */
+export interface ReferencedSymbolEntry {
+    /** The node handle for the symbol's definition. */
+    definition: NodeHandle;
+    /** The resolved symbol for the definition, if available. */
+    symbol?: Symbol;
+    /** The node handles for each reference to the symbol. */
+    references: NodeHandle[];
+}
+
+/** A single usage of a signature, pairing the reference name with its call expression (if any). */
+export interface SignatureUsage {
+    /** The node handle for the name reference. */
+    name: NodeHandle;
+    /** The node handle for the call expression, if the reference is invoked. */
+    call?: NodeHandle;
 }
 
 export class Symbol {

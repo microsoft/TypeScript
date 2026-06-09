@@ -110,6 +110,42 @@ type ReferenceEntry struct {
 	lspRange  *lsproto.Location
 }
 
+// Node returns the AST node for this reference entry.
+func (e *ReferenceEntry) Node() *ast.Node {
+	return e.node
+}
+
+// IsNodeEntry returns true if this is a node-backed reference entry.
+func (e *ReferenceEntry) IsNodeEntry() bool {
+	return e.node != nil
+}
+
+// References returns the reference entries for this symbol.
+func (s *SymbolAndEntries) References() []*ReferenceEntry {
+	return s.references
+}
+
+// DefinitionNode returns the defining AST node for this symbol, if any.
+func (s *SymbolAndEntries) DefinitionNode() *ast.Node {
+	if s.definition == nil {
+		return nil
+	}
+	if s.definition.node != nil {
+		return s.definition.node
+	}
+	if s.definition.symbol != nil && len(s.definition.symbol.Declarations) > 0 {
+		return s.definition.symbol.Declarations[0]
+	}
+	return nil
+}
+
+func (s *SymbolAndEntries) DefinitionSymbol() *ast.Symbol {
+	if s.definition == nil {
+		return nil
+	}
+	return s.definition.symbol
+}
+
 func (entry *SymbolAndEntries) canUseDefinitionSymbol() bool {
 	if entry.definition == nil {
 		return false
@@ -1048,6 +1084,73 @@ func (l *LanguageService) mergeReferences(program *compiler.Program, referencesT
 				definition: reference.definition,
 				references: sortedRefs,
 			}
+		}
+	}
+	return result
+}
+
+// GetReferencedSymbolsForNode returns all referenced symbols and their reference entries for the given node.
+// It returns all referenced symbols and their reference entries for the given node across the provided source files.
+func (l *LanguageService) GetReferencedSymbolsForNode(ctx context.Context, position int, node *ast.Node, sourceFiles []*ast.SourceFile) []*SymbolAndEntries {
+	return l.getReferencedSymbolsForNode(ctx, position, node, l.program, sourceFiles, refOptions{
+		use: referenceUseReferences,
+	})
+}
+
+// SignatureUsage represents a single usage of a signature declaration,
+// pairing the reference name node with its containing call expression (if any).
+type SignatureUsage struct {
+	Name *ast.Node // The identifier reference node
+	Call *ast.Node // The containing call expression, or nil if not a call usage
+}
+
+// GetSignatureUsages returns all usages of a signature declaration as name-call pairs.
+// For each reference to the signature's name, it returns the reference node and
+// the call expression it appears in (nil if the reference is not in a call position).
+func (l *LanguageService) GetSignatureUsages(ctx context.Context, signatureDecl *ast.Node) []SignatureUsage {
+	name := signatureDecl.Name()
+	if name == nil || !ast.IsIdentifier(name) {
+		return nil
+	}
+
+	sourceFiles := l.program.GetSourceFiles()
+	entries := l.GetReferencedSymbolsForNode(ctx, name.Pos(), name, sourceFiles)
+
+	// Collect all declaration name nodes for the target symbol so we can
+	// filter them out — the caller wants usages, not declarations.
+	declNames := make(map[*ast.Node]bool)
+	for _, entry := range entries {
+		if entry.definition != nil && entry.definition.symbol != nil {
+			for _, decl := range entry.definition.symbol.Declarations {
+				if n := decl.Name(); n != nil {
+					declNames[n] = true
+				}
+			}
+		}
+	}
+
+	var result []SignatureUsage
+	for _, entry := range entries {
+		for _, ref := range entry.References() {
+			if !ref.IsNodeEntry() {
+				continue
+			}
+			node := ref.Node()
+			if node == nil || declNames[node] {
+				continue
+			}
+
+			called := ast.ClimbPastPropertyAccess(node)
+
+			var callExpr *ast.Node
+			if called.Parent != nil && ast.IsCallExpression(called.Parent) && called.Parent.Expression() == called {
+				callExpr = called.Parent
+			}
+
+			result = append(result, SignatureUsage{
+				Name: node,
+				Call: callExpr,
+			})
 		}
 	}
 	return result
