@@ -668,8 +668,8 @@ func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]str
 					if p == fullPath {
 						return nil // already handled above
 					}
-					e := &dirEntry{path: p, isDir: pIsDir}
-					entries[p] = e
+					entry := &dirEntry{path: p, isDir: pIsDir}
+					entries[p] = entry
 					sub.dirWatch.events.create(p)
 					b.watchPath(sub.dirWatch, p, entries)
 					return nil
