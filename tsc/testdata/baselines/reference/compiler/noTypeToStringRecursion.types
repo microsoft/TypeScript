@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/noTypeToStringRecursion.ts] ////
+
+=== noTypeToStringRecursion.ts ===
+// https://github.com/microsoft/typescript-go/issues/3805
+
+const f = () => 42 satisfies typeof f;
+>f : () => any
+>() => 42 satisfies typeof f : () => any
+>42 satisfies typeof f : 42
+>42 : 42
+>f : () => any
+

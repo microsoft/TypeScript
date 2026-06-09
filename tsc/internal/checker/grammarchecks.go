@@ -19,7 +19,7 @@ func (c *Checker) grammarErrorOnFirstToken(node *ast.Node, message *diagnostics.
 	sourceFile := ast.GetSourceFileOfNode(node)
 	if !c.hasParseDiagnostics(sourceFile) {
 		span := scanner.GetRangeOfTokenAtPosition(sourceFile, node.Pos())
-		c.diagnostics.Add(ast.NewDiagnostic(sourceFile, span, message, args...))
+		c.addDiagnostic(ast.NewDiagnostic(sourceFile, span, message, args...))
 		return true
 	}
 	return false
@@ -28,7 +28,7 @@ func (c *Checker) grammarErrorOnFirstToken(node *ast.Node, message *diagnostics.
 func (c *Checker) grammarErrorAtPos(nodeForSourceFile *ast.Node, start int, length int, message *diagnostics.Message, args ...any) bool {
 	sourceFile := ast.GetSourceFileOfNode(nodeForSourceFile)
 	if !c.hasParseDiagnostics(sourceFile) {
-		c.diagnostics.Add(ast.NewDiagnostic(sourceFile, core.NewTextRange(start, start+length), message, args...))
+		c.addDiagnostic(ast.NewDiagnostic(sourceFile, core.NewTextRange(start, start+length), message, args...))
 		return true
 	}
 	return false
@@ -48,7 +48,7 @@ func (c *Checker) grammarErrorOnNodeSkippedOnNoEmit(node *ast.Node, message *dia
 	if !c.hasParseDiagnostics(sourceFile) {
 		d := NewDiagnosticForNode(node, message, args...)
 		d.SetSkippedOnNoEmit()
-		c.diagnostics.Add(d)
+		c.addDiagnostic(d)
 		return true
 	}
 	return false
@@ -81,7 +81,7 @@ func (c *Checker) checkGrammarRegularExpressionLiteral(node *ast.RegularExpressi
 				lastError.AddRelatedInfo(err)
 			} else if lastError == nil || start != lastError.Pos() {
 				lastError = ast.NewDiagnostic(sourceFile, core.NewTextRange(start, start+length), message, args...)
-				c.diagnostics.Add(lastError)
+				c.addDiagnostic(lastError)
 			}
 		})
 		c.regExpScanner.SetText(sourceFile.Text())
@@ -1208,13 +1208,13 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 			if ast.IsInTopLevelContext(asNode) {
 				if !c.hasParseDiagnostics(sourceFile) {
 					if !ast.IsEffectiveExternalModule(sourceFile, c.compilerOptions) {
-						c.diagnostics.Add(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.X_for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module))
+						c.addDiagnostic(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.X_for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module))
 					}
 					switch c.moduleKind {
 					case core.ModuleKindNode16, core.ModuleKindNode18, core.ModuleKindNode20, core.ModuleKindNodeNext:
 						sourceFileMetaData := c.program.GetSourceFileMetaData(sourceFile.Path())
 						if sourceFileMetaData.ImpliedNodeFormat == core.ModuleKindCommonJS {
-							c.diagnostics.Add(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level))
+							c.addDiagnostic(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level))
 							break
 						}
 						fallthrough
@@ -1227,7 +1227,7 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 						}
 						fallthrough
 					default:
-						c.diagnostics.Add(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_node20_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher))
+						c.addDiagnostic(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_node20_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher))
 					}
 				}
 			} else {
@@ -1240,7 +1240,7 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 						relatedInfo := createDiagnosticForNode(containingFunc, diagnostics.Did_you_mean_to_mark_this_function_as_async)
 						diagnostic.AddRelatedInfo(relatedInfo)
 					}
-					c.diagnostics.Add(diagnostic)
+					c.addDiagnostic(diagnostic)
 					return true
 				}
 			}
@@ -1702,7 +1702,7 @@ func (c *Checker) checkGrammarAwaitOrAwaitUsing(node *ast.Node) bool {
 						message = diagnostics.X_await_using_statements_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module
 					}
 					diagnostic := ast.NewDiagnostic(sourceFile, span, message)
-					c.diagnostics.Add(diagnostic)
+					c.addDiagnostic(diagnostic)
 					hasError = true
 				}
 				switch c.moduleKind {
@@ -1715,7 +1715,7 @@ func (c *Checker) checkGrammarAwaitOrAwaitUsing(node *ast.Node) bool {
 						if !spanCalculated {
 							span = scanner.GetRangeOfTokenAtPosition(sourceFile, node.Pos())
 						}
-						c.diagnostics.Add(ast.NewDiagnostic(sourceFile, span, diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level))
+						c.addDiagnostic(ast.NewDiagnostic(sourceFile, span, diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level))
 						hasError = true
 						break
 					}
@@ -1738,7 +1738,7 @@ func (c *Checker) checkGrammarAwaitOrAwaitUsing(node *ast.Node) bool {
 					} else {
 						message = diagnostics.Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_node20_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher
 					}
-					c.diagnostics.Add(ast.NewDiagnostic(sourceFile, span, message))
+					c.addDiagnostic(ast.NewDiagnostic(sourceFile, span, message))
 					hasError = true
 				}
 			}
@@ -1758,7 +1758,7 @@ func (c *Checker) checkGrammarAwaitOrAwaitUsing(node *ast.Node) bool {
 					relatedInfo := NewDiagnosticForNode(container, diagnostics.Did_you_mean_to_mark_this_function_as_async)
 					diagnostic.AddRelatedInfo(relatedInfo)
 				}
-				c.diagnostics.Add(diagnostic)
+				c.addDiagnostic(diagnostic)
 				hasError = true
 			}
 		}

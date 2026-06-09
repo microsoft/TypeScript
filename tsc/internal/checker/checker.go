@@ -543,6 +543,8 @@ type WideningContext struct {
 	widenedTypes       map[*Type]*Type
 }
 
+const maxSerializationLevel = 2
+
 type Program interface {
 	Host
 	Options() *core.CompilerOptions
@@ -589,6 +591,7 @@ type Checker struct {
 	instantiationCount                          uint32
 	instantiationDepth                          uint32
 	inlineLevel                                 int
+	serializationLevel                          int
 	currentNode                                 *ast.Node
 	varianceTypeParameter                       *Type
 	languageVersion                             core.ScriptTarget
@@ -1296,7 +1299,7 @@ func (c *Checker) initializeChecker() {
 			// It is an error for a non-external-module (i.e. script) to declare its own `globalThis`.
 			if fileGlobalThisSymbol := file.Locals["globalThis"]; fileGlobalThisSymbol != nil {
 				for _, d := range fileGlobalThisSymbol.Declarations {
-					c.diagnostics.Add(NewDiagnosticForNode(d, diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, "globalThis"))
+					c.addDiagnostic(NewDiagnosticForNode(d, diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, "globalThis"))
 				}
 			}
 			for _, symbol := range file.Locals {
@@ -1449,7 +1452,7 @@ func (c *Checker) addUndefinedToGlobalsOrErrorOnRedeclaration() {
 	if targetSymbol != nil {
 		for _, declaration := range targetSymbol.Declarations {
 			if !ast.IsTypeDeclaration(declaration) {
-				c.diagnostics.Add(createDiagnosticForNode(declaration, diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, name))
+				c.addDiagnostic(createDiagnosticForNode(declaration, diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, name))
 			}
 		}
 	} else {
@@ -3056,7 +3059,7 @@ func (c *Checker) checkTypePredicate(node *ast.Node) {
 				if typePredicate.t != nil {
 					var diags []*ast.Diagnostic
 					if !c.checkTypeAssignableToEx(typePredicate.t, c.getTypeOfSymbol(signature.parameters[typePredicate.parameterIndex]), node.Type(), nil /*headMessage*/, &diags) {
-						c.diagnostics.Add(ast.NewDiagnosticChain(diags[0], diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type))
+						c.addDiagnostic(ast.NewDiagnosticChain(diags[0], diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type))
 					}
 				}
 			}
@@ -4481,7 +4484,7 @@ func (c *Checker) issueMemberSpecificError(node *ast.Node, typeWithThis *Type, b
 			if prop != nil && baseProp != nil {
 				var diags []*ast.Diagnostic
 				if !c.checkTypeAssignableToEx(c.getTypeOfSymbol(prop), c.getTypeOfSymbol(baseProp), core.OrElse(member.Name(), member), nil /*headMessage*/, &diags) {
-					c.diagnostics.Add(ast.NewDiagnosticChain(diags[0], diagnostics.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2, c.symbolToString(declaredProp), c.TypeToString(typeWithThis), c.TypeToString(baseWithThis)))
+					c.addDiagnostic(ast.NewDiagnosticChain(diags[0], diagnostics.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2, c.symbolToString(declaredProp), c.TypeToString(typeWithThis), c.TypeToString(baseWithThis)))
 					issuedMemberError = true
 				}
 			}
@@ -4828,7 +4831,7 @@ func (c *Checker) checkIndexConstraintForProperty(t *Type, prop *ast.Symbol, pro
 			if propDeclaration != nil && errorNode != propDeclaration {
 				diagnostic.AddRelatedInfo(NewDiagnosticForNode(propDeclaration, diagnostics.X_0_is_declared_here, c.symbolToString(prop)))
 			}
-			c.diagnostics.Add(diagnostic)
+			c.addDiagnostic(diagnostic)
 		}
 	}
 }
@@ -5032,7 +5035,7 @@ func (c *Checker) checkInheritedPropertiesAreIdentical(t *Type, typeNode *ast.No
 					typeName1 := c.TypeToString(existing.containingType)
 					typeName2 := c.TypeToString(base)
 					errorInfo := NewDiagnosticForNode(typeNode, diagnostics.Named_property_0_of_types_1_and_2_are_not_identical, c.symbolToString(prop), typeName1, typeName2)
-					c.diagnostics.Add(ast.NewDiagnosticChain(errorInfo, diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, c.TypeToString(t), typeName1, typeName2))
+					c.addDiagnostic(ast.NewDiagnosticChain(errorInfo, diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, c.TypeToString(t), typeName1, typeName2))
 				}
 			}
 		}
@@ -6287,7 +6290,7 @@ func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, e
 		if iterationTypes.hasTypes() {
 			if len(diags) != 0 {
 				for _, d := range diags {
-					c.diagnostics.Add(d)
+					c.addDiagnostic(d)
 				}
 			}
 			return iterationTypes
@@ -6305,7 +6308,7 @@ func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, e
 		if iterationTypes.hasTypes() {
 			if len(diags) != 0 {
 				for _, d := range diags {
-					c.diagnostics.Add(d)
+					c.addDiagnostic(d)
 				}
 			}
 			if use&IterationUseAllowsAsyncIterablesFlag != 0 {
@@ -7063,11 +7066,11 @@ func (c *Checker) reportUnused(location *ast.Node, kind UnusedKind, diagnostic *
 	if location.Flags&(ast.NodeFlagsAmbient|ast.NodeFlagsThisNodeOrAnySubNodesHasError) == 0 {
 		isError := c.unusedIsError(kind)
 		if isError {
-			c.diagnostics.Add(diagnostic)
+			c.addDiagnostic(diagnostic)
 		} else {
 			suggestion := *diagnostic
 			suggestion.SetCategory(diagnostics.CategorySuggestion)
-			c.suggestionDiagnostics.Add(&suggestion)
+			c.addSuggestionDiagnostic(&suggestion)
 		}
 	}
 }
@@ -7292,7 +7295,7 @@ func (c *Checker) checkUnusedRenamedBindingElements() {
 				// entire parameter does not have type annotation, suggest adding an annotation
 				diagnostic.AddRelatedInfo(ast.NewDiagnostic(ast.GetSourceFileOfNode(wrappingDeclaration), core.NewTextRange(wrappingDeclaration.End(), wrappingDeclaration.End()), diagnostics.We_can_only_write_a_type_for_0_by_adding_a_type_for_the_entire_parameter_here, scanner.DeclarationNameToString(node.PropertyName())))
 			}
-			c.diagnostics.Add(diagnostic)
+			c.addDiagnostic(diagnostic)
 		}
 	}
 }
@@ -8732,7 +8735,7 @@ func (c *Checker) resolveDecorator(node *ast.Node, candidatesOutArray *[]*Signat
 	headMessage := c.getDiagnosticHeadMessageForDecoratorResolution(node)
 	if len(callSignatures) == 0 {
 		diag := ast.NewDiagnosticChain(c.invocationErrorDetails(node.Expression(), apparentType, SignatureKindCall), headMessage)
-		c.diagnostics.Add(diag)
+		c.addDiagnostic(diag)
 		c.invocationErrorRecovery(apparentType, SignatureKindCall, diag)
 		return c.resolveErrorCall(node)
 	}
@@ -9214,7 +9217,7 @@ func (c *Checker) checkTypeArguments(signature *Signature, typeArgumentNodes []*
 					if headMessage != nil {
 						diagnostic = ast.NewDiagnosticChain(diagnostic, diagnostics.Type_0_does_not_satisfy_the_constraint_1)
 					}
-					c.diagnostics.Add(diagnostic)
+					c.addDiagnostic(diagnostic)
 				}
 				return nil
 			}
@@ -9634,10 +9637,10 @@ func (c *Checker) reportCallResolutionErrors(node *ast.Node, s *CallState, signa
 				diagnostic.AddRelatedInfo(NewDiagnosticForNode(last.declaration, diagnostics.The_last_overload_is_declared_here))
 			}
 			c.addImplementationSuccessElaboration(s, last, diagnostic)
-			c.diagnostics.Add(diagnostic)
+			c.addDiagnostic(diagnostic)
 		}
 	case s.candidateForArgumentArityError != nil:
-		c.diagnostics.Add(c.getArgumentArityError(s.node, []*Signature{s.candidateForArgumentArityError}, s.args, headMessage))
+		c.addDiagnostic(c.getArgumentArityError(s.node, []*Signature{s.candidateForArgumentArityError}, s.args, headMessage))
 	case s.candidateForTypeArgumentError != nil:
 		c.checkTypeArguments(s.candidateForTypeArgumentError, s.node.TypeArguments(), true /*reportErrors*/, headMessage)
 	case !ast.IsJsxOpeningFragment(node):
@@ -9645,9 +9648,9 @@ func (c *Checker) reportCallResolutionErrors(node *ast.Node, s *CallState, signa
 			return c.hasCorrectTypeArgumentArity(sig, s.typeArguments)
 		})
 		if len(signaturesWithCorrectTypeArgumentArity) == 0 {
-			c.diagnostics.Add(c.getTypeArgumentArityError(s.node, signatures, s.typeArguments, headMessage))
+			c.addDiagnostic(c.getTypeArgumentArityError(s.node, signatures, s.typeArguments, headMessage))
 		} else {
-			c.diagnostics.Add(c.getArgumentArityError(s.node, signaturesWithCorrectTypeArgumentArity, s.args, headMessage))
+			c.addDiagnostic(c.getArgumentArityError(s.node, signaturesWithCorrectTypeArgumentArity, s.args, headMessage))
 		}
 	}
 }
@@ -9968,7 +9971,7 @@ func (c *Checker) invocationError(errorTarget *ast.Node, apparentType *Type, kin
 	if relatedInformation != nil {
 		diagnostic.AddRelatedInfo(relatedInformation)
 	}
-	c.diagnostics.Add(diagnostic)
+	c.addDiagnostic(diagnostic)
 	c.invocationErrorRecovery(apparentType, kind, diagnostic)
 }
 
@@ -10701,7 +10704,7 @@ func (c *Checker) getInstantiationExpressionType(exprType *Type, node *ast.Node)
 	if errorType != nil {
 		sourceFile := ast.GetSourceFileOfNode(node)
 		loc := core.NewTextRange(scanner.SkipTrivia(sourceFile.Text(), typeArguments.Pos()), typeArguments.End())
-		c.diagnostics.Add(ast.NewDiagnostic(sourceFile, loc, diagnostics.Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable, c.TypeToString(errorType)))
+		c.addDiagnostic(ast.NewDiagnostic(sourceFile, loc, diagnostics.Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable, c.TypeToString(errorType)))
 	}
 	return result
 }
@@ -12250,7 +12253,7 @@ func (c *Checker) classDeclarationExtendsNull(classDecl *ast.Node) bool {
 func (c *Checker) checkAssertion(node *ast.Node, checkMode CheckMode) *Type {
 	if node.Kind == ast.KindTypeAssertionExpression {
 		if c.shouldCheckErasableSyntax(node) {
-			c.diagnostics.Add(ast.NewDiagnostic(ast.GetSourceFileOfNode(node), core.NewTextRange(scanner.SkipTrivia(ast.GetSourceFileOfNode(node).Text(), node.Pos()), node.Expression().Pos()), diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled))
+			c.addDiagnostic(ast.NewDiagnostic(ast.GetSourceFileOfNode(node), core.NewTextRange(scanner.SkipTrivia(ast.GetSourceFileOfNode(node).Text(), node.Pos()), node.Expression().Pos()), diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled))
 		}
 	}
 	typeNode := node.Type()
@@ -13902,9 +13905,23 @@ func (c *Checker) produceDeferredDiagnostics() {
 	c.deferredDiagnosticCallbacks = nil
 }
 
+func (c *Checker) addDiagnostic(diagnostic *ast.Diagnostic) {
+	// Discard diagnostics created while at the maximum number of recursive TypeToString invocations.
+	if c.serializationLevel < maxSerializationLevel {
+		c.diagnostics.Add(diagnostic)
+	}
+}
+
+func (c *Checker) addSuggestionDiagnostic(diagnostic *ast.Diagnostic) {
+	// Discard diagnostics created while at the maximum number of recursive TypeToString invocations.
+	if c.serializationLevel < maxSerializationLevel {
+		c.suggestionDiagnostics.Add(diagnostic)
+	}
+}
+
 func (c *Checker) error(location *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 	diagnostic := NewDiagnosticForNode(location, message, args...)
-	c.diagnostics.Add(diagnostic)
+	c.addDiagnostic(diagnostic)
 	return diagnostic
 }
 
@@ -13928,11 +13945,11 @@ func (c *Checker) errorAndMaybeSuggestAwait(location *ast.Node, maybeMissingAwai
 
 func (c *Checker) addErrorOrSuggestion(isError bool, diagnostic *ast.Diagnostic) {
 	if isError {
-		c.diagnostics.Add(diagnostic)
+		c.addDiagnostic(diagnostic)
 	} else {
 		suggestion := *diagnostic
 		suggestion.SetCategory(diagnostics.CategorySuggestion)
-		c.suggestionDiagnostics.Add(&suggestion)
+		c.addSuggestionDiagnostic(&suggestion)
 	}
 }
 
@@ -13953,7 +13970,7 @@ func (c *Checker) addDeprecatedSuggestionWorker(declarations []*ast.Node, diagno
 			break
 		}
 	}
-	c.suggestionDiagnostics.Add(diagnostic)
+	c.addSuggestionDiagnostic(diagnostic)
 	return diagnostic
 }
 
@@ -14175,7 +14192,7 @@ func (c *Checker) lookupOrIssueError(location *ast.Node, message *diagnostics.Me
 	if existing != nil {
 		return existing
 	}
-	c.diagnostics.Add(diagnostic)
+	c.addDiagnostic(diagnostic)
 	return diagnostic
 }
 
@@ -15239,7 +15256,7 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 								message = diagnostics.The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_referenced_file_is_an_ECMAScript_module_and_cannot_be_imported_with_require_Consider_writing_a_dynamic_import_0_call_instead
 							}
 
-							c.diagnostics.Add(NewDiagnosticChainForNode(diagnosticDetails, errorNode, message, moduleReference))
+							c.addDiagnostic(NewDiagnosticChainForNode(diagnosticDetails, errorNode, message, moduleReference))
 						}
 					}
 				}
@@ -15312,7 +15329,7 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 				}
 			} else if resolvedModule != nil && resolvedModule.AlternateResult != "" {
 				errorInfo := c.createModuleNotFoundChain(resolvedModule, errorNode, moduleReference, mode, moduleReference)
-				c.diagnostics.Add(NewDiagnosticChainForNode(errorInfo, errorNode, moduleNotFoundError, moduleReference))
+				c.addDiagnostic(NewDiagnosticChainForNode(errorInfo, errorNode, moduleNotFoundError, moduleReference))
 			} else {
 				c.error(errorNode, moduleNotFoundError, moduleReference)
 			}
@@ -16052,7 +16069,7 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 					continue
 				}
 				for _, node := range s.exportsWithDuplicate {
-					c.diagnostics.Add(createDiagnosticForNode(node, diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity, s.specifierText, id))
+					c.addDiagnostic(createDiagnosticForNode(node, diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity, s.specifierText, id))
 				}
 			}
 			c.extendExportSymbols(symbols, nestedSymbols, nil, nil)
@@ -19117,7 +19134,7 @@ func (c *Checker) resolveBaseTypesOfClass(t *Type) {
 		errorNode := baseTypeNode.Expression()
 		diagnostic := c.elaborateNeverIntersection(nil, errorNode, baseType)
 		diagnostic = NewDiagnosticChainForNode(diagnostic, errorNode, diagnostics.Base_constructor_return_type_0_is_not_an_object_type_or_intersection_of_object_types_with_statically_known_members, c.TypeToString(reducedBaseType))
-		c.diagnostics.Add(diagnostic)
+		c.addDiagnostic(diagnostic)
 		return
 	}
 	if t == reducedBaseType || c.hasBaseType(reducedBaseType, t) {
@@ -26959,7 +26976,7 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 		if accessExpression != nil && !isConstEnumObjectType(objectType) {
 			if isObjectLiteralType(objectType) {
 				if c.noImplicitAny && indexType.flags&(TypeFlagsStringLiteral|TypeFlagsNumberLiteral) != 0 {
-					c.diagnostics.Add(createDiagnosticForNode(accessExpression, diagnostics.Property_0_does_not_exist_on_type_1, indexType.AsLiteralType().value, c.TypeToString(objectType)))
+					c.addDiagnostic(createDiagnosticForNode(accessExpression, diagnostics.Property_0_does_not_exist_on_type_1, indexType.AsLiteralType().value, c.TypeToString(objectType)))
 					return c.undefinedType
 				} else if indexType.flags&(TypeFlagsNumber|TypeFlagsString) != 0 {
 					types := core.Map(objectType.AsStructuredType().properties, func(prop *ast.Symbol) *Type {
@@ -27002,7 +27019,7 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 							case indexType.flags&(TypeFlagsNumber|TypeFlagsString) != 0:
 								diagnostic = NewDiagnosticForNode(accessExpression, diagnostics.No_index_signature_with_a_parameter_of_type_0_was_found_on_type_1, c.TypeToString(indexType), c.TypeToString(objectType))
 							}
-							c.diagnostics.Add(NewDiagnosticChainForNode(diagnostic, accessExpression, diagnostics.Element_implicitly_has_an_any_type_because_expression_of_type_0_can_t_be_used_to_index_type_1, c.TypeToString(fullIndexType), c.TypeToString(objectType)))
+							c.addDiagnostic(NewDiagnosticChainForNode(diagnostic, accessExpression, diagnostics.Element_implicitly_has_an_any_type_because_expression_of_type_0_can_t_be_used_to_index_type_1, c.TypeToString(fullIndexType), c.TypeToString(objectType)))
 						}
 					}
 				}
@@ -31073,7 +31090,7 @@ func (c *Checker) getAwaitedTypeNoAliasEx(t *Type, errorNode *ast.Node, diagnost
 			if thisTypeForError != nil {
 				diagnostic = NewDiagnosticForNode(errorNode, diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1, c.TypeToString(t), c.TypeToString(thisTypeForError))
 			}
-			c.diagnostics.Add(NewDiagnosticChainForNode(diagnostic, errorNode, diagnosticMessage, args...))
+			c.addDiagnostic(NewDiagnosticChainForNode(diagnostic, errorNode, diagnosticMessage, args...))
 		}
 		return nil
 	}

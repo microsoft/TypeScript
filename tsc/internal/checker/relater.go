@@ -418,7 +418,7 @@ func (c *Checker) reportDiagnostic(diagnostic *ast.Diagnostic, diagnosticOutput 
 		if diagnosticOutput != nil {
 			*diagnosticOutput = append(*diagnosticOutput, diagnostic)
 		} else {
-			c.diagnostics.Add(diagnostic)
+			c.addDiagnostic(diagnostic)
 		}
 	}
 }

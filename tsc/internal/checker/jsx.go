@@ -147,7 +147,7 @@ func (c *Checker) checkJsxOpeningLikeElementOrOpeningFragment(node *ast.Node) {
 			}
 			var diags []*ast.Diagnostic
 			if !c.checkTypeRelatedToEx(tagType, elementTypeConstraint, c.assignableRelation, tagName, diagnostics.Its_type_0_is_not_a_valid_JSX_element_type, &diags) {
-				c.diagnostics.Add(ast.NewDiagnosticChain(diags[0], diagnostics.X_0_cannot_be_used_as_a_JSX_component, scanner.GetTextOfNode(tagName)))
+				c.addDiagnostic(ast.NewDiagnosticChain(diags[0], diagnostics.X_0_cannot_be_used_as_a_JSX_component, scanner.GetTextOfNode(tagName)))
 			}
 		} else {
 			c.checkJsxReturnAssignableToAppropriateBound(c.getJsxReferenceKind(node), c.getReturnTypeOfSignature(sig), node)
@@ -189,7 +189,7 @@ func (c *Checker) checkJsxReturnAssignableToAppropriateBound(refKind JsxReferenc
 		c.checkTypeRelatedToEx(elemInstanceType, combined, c.assignableRelation, openingLikeElement.TagName(), diagnostics.Its_element_type_0_is_not_a_valid_JSX_element, &diags)
 	}
 	if len(diags) != 0 {
-		c.diagnostics.Add(ast.NewDiagnosticChain(diags[0], diagnostics.X_0_cannot_be_used_as_a_JSX_component, scanner.GetTextOfNode(openingLikeElement.TagName())))
+		c.addDiagnostic(ast.NewDiagnosticChain(diags[0], diagnostics.X_0_cannot_be_used_as_a_JSX_component, scanner.GetTextOfNode(openingLikeElement.TagName())))
 	}
 }
 
@@ -554,7 +554,7 @@ func (c *Checker) resolveJsxOpeningLikeElement(node *ast.Node, candidatesOutArra
 				sourceFile := ast.GetSourceFileOfNode(node)
 				typeArgumentList := node.TypeArgumentList()
 				loc := core.NewTextRange(scanner.SkipTrivia(sourceFile.Text(), typeArgumentList.Loc.Pos()), typeArgumentList.Loc.End())
-				c.diagnostics.Add(ast.NewDiagnostic(sourceFile, loc, diagnostics.Expected_0_type_arguments_but_got_1, 0, len(typeArguments)))
+				c.addDiagnostic(ast.NewDiagnostic(sourceFile, loc, diagnostics.Expected_0_type_arguments_but_got_1, 0, len(typeArguments)))
 			}
 			return fakeSignature
 		}
