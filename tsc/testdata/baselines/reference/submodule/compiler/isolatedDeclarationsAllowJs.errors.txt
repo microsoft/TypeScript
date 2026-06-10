@@ -2,6 +2,7 @@ error TS5053: Option 'allowJs' cannot be specified with option 'isolatedDeclarat
 error TS5055: Cannot write file 'file2.js' because it would overwrite input file.
   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
 file1.ts(1,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+file2.js(1,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 
 
 !!! error TS5053: Option 'allowJs' cannot be specified with option 'isolatedDeclarations'.
@@ -12,5 +13,8 @@ file1.ts(1,12): error TS9010: Variable must have an explicit type annotation wit
                ~
 !!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 !!! related TS9027 file1.ts:1:12: Add a type annotation to the variable x.
-==== file2.js (0 errors) ====
+==== file2.js (1 errors) ====
     export var y;
+               ~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 file2.js:1:12: Add a type annotation to the variable y.

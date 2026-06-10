@@ -25,5 +25,6 @@ export declare class Foo extends Base {
 export declare namespace Foo {
     var foo: string;
 }
+export {};
 //// [Bar.d.ts]
 export {};

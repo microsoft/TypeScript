@@ -18,15 +18,15 @@ namespace Outer {
 
 //// [declarationEmitExpandoFunctionInNamespace.d.ts]
 declare namespace NS {
-    export function f(): void;
-    export namespace f {
+    function f(): void;
+    namespace f {
         var a: string;
     }
 }
 declare namespace Outer {
     namespace Inner {
-        export function g(): void;
-        export namespace g {
+        function g(): void;
+        namespace g {
             var b: number;
         }
     }

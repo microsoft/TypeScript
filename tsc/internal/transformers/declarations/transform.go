@@ -60,11 +60,14 @@ type DeclarationTransformer struct {
 	resultHasExternalModuleIndicator bool
 	suppressNewDiagnosticContexts    bool
 	lateStatementReplacementMap      map[ast.NodeId]*ast.Node
-	expandoHosts                     map[ast.NodeId]*ast.Node // store the result of transforming expando hosts so they can be inserted later if the host is actually referenced
+	expandoHosts                     map[ast.NodeId]*ast.Node   // store the result of transforming expando hosts so they can be inserted later if the host is actually referenced
+	expandoMembers                   map[ast.NodeId][]*ast.Node // store any found expando _members_ after transforming them so *if* the host is referenced, they can be emitted alongside it
 	rawReferencedFiles               []ReferencedFilePair
 	rawTypeReferenceDirectives       []*ast.FileReference
 	rawLibReferenceDirectives        []*ast.FileReference
 	bindingNameVisitor               *ast.NodeVisitor
+	expressionVisitor                *ast.NodeVisitor
+	exportStrippingVisitor           *ast.NodeVisitor
 }
 
 // TODO: Convert to transformers.TransformerFactory signature to allow more automatic composition with other transforms
@@ -83,6 +86,9 @@ func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitCo
 		declarationMapPath:  declarationMapPath,
 	}
 	tx.state.reportExpandoFunctionErrors = func(node *ast.Node) {
+		if !tx.state.isolatedDeclarations {
+			return
+		}
 		props := resolver.GetPropertiesOfContainerFunction(node)
 		for _, p := range props {
 			if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration) {
@@ -96,6 +102,8 @@ func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitCo
 	}
 	tx.NewTransformer(tx.visit, context)
 	tx.bindingNameVisitor = tx.EmitContext().NewNodeVisitor(tx.visitBindingName)
+	tx.expressionVisitor = tx.EmitContext().NewNodeVisitor(tx.visitNestedExpression)
+	tx.exportStrippingVisitor = tx.EmitContext().NewNodeVisitor(tx.stripExportModifiers)
 	return tx
 }
 
@@ -253,6 +261,7 @@ func (tx *DeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 	tx.state.lateMarkedStatements = make([]*ast.Node, 0)
 	tx.lateStatementReplacementMap = make(map[ast.NodeId]*ast.Node)
 	tx.expandoHosts = make(map[ast.NodeId]*ast.Node)
+	tx.expandoMembers = make(map[ast.NodeId][]*ast.Node)
 	tx.rawReferencedFiles = make([]ReferencedFilePair, 0)
 	tx.rawTypeReferenceDirectives = make([]*ast.FileReference, 0)
 	tx.rawLibReferenceDirectives = make([]*ast.FileReference, 0)
@@ -271,6 +280,7 @@ func (tx *DeclarationTransformer) collectFileReferences(sourceFile *ast.SourceFi
 }
 
 func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast.Node {
+	tx.expressionVisitor.VisitNode(node.AsNode()) // collect expando members
 	var combinedStatements *ast.StatementList
 	statements := tx.Visitor().VisitNodes(node.Statements)
 	combinedStatements = tx.transformAndReplaceLatePaintedStatements(statements)
@@ -1350,8 +1360,8 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 	}
 	original := tx.EmitContext().MostOriginal(input)
 	id := ast.GetNodeId(original)
-	if n, ok := tx.expandoHosts[id]; ok {
-		return n
+	if _, ok := tx.expandoHosts[id]; ok {
+		return tx.createFullExpandoBlock(id)
 	}
 
 	previousEnclosingDeclaration := tx.enclosingDeclaration
@@ -1418,7 +1428,7 @@ func (tx *DeclarationTransformer) transformInterfaceDeclaration(input *ast.Inter
 }
 
 func (tx *DeclarationTransformer) transformFunctionDeclaration(input *ast.FunctionDeclaration) *ast.Node {
-	if tx.resolver.IsExpandoFunctionDeclaration(input.AsNode()) && tx.state.isolatedDeclarations {
+	if tx.resolver.IsExpandoFunctionDeclaration(input.AsNode()) {
 		tx.state.reportExpandoFunctionErrors(input.AsNode())
 	}
 	return tx.Factory().UpdateFunctionDeclaration(
@@ -1465,7 +1475,7 @@ func (tx *DeclarationTransformer) transformModuleDeclaration(input *ast.ModuleDe
 			if tx.needsScopeFixMarker {
 				lateStatements = tx.Factory().NewNodeList(append(lateStatements.Nodes, createEmptyExports(tx.Factory().AsNodeFactory())))
 			} else {
-				lateStatements = tx.EmitContext().NewNodeVisitor(tx.stripExportModifiers).VisitNodes(lateStatements)
+				lateStatements = tx.exportStrippingVisitor.VisitNodes(lateStatements)
 			}
 		}
 
@@ -1511,7 +1521,8 @@ func (tx *DeclarationTransformer) stripExportModifiers(statement *ast.Node) *ast
 	if statement == nil {
 		return nil
 	}
-	if ast.IsImportEqualsDeclaration(statement) || tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(statement), ast.ModifierFlagsDefault) != 0 || !ast.CanHaveModifiers(statement) {
+	parseNode := tx.EmitContext().ParseNode(statement)
+	if ast.IsImportEqualsDeclaration(statement) || (parseNode != nil && tx.host.GetEffectiveDeclarationFlags(parseNode, ast.ModifierFlagsDefault) != 0) || !ast.CanHaveModifiers(statement) {
 		// `export import` statements should remain as-is, as imports are _not_ implicitly exported in an ambient namespace
 		// Likewise, `export default` classes and the like and just be `default`, so we preserve their `export` modifiers, too
 		return statement
@@ -2231,7 +2242,7 @@ func (tx *DeclarationTransformer) visitExpressionStatement(node *ast.Node) *ast.
 				return tx.transformCommonJSExport(expression, tx.getNameExpressionPreferringIdentifier(ast.GetElementOrPropertyAccessName(expression.AsBinaryExpression().Left)))
 			}
 		case ast.JSDeclarationKindProperty:
-			return tx.transformExpandoAssignment(expression.AsBinaryExpression())
+			return nil // handled in pre-walk
 		case ast.JSDeclarationKindObjectDefinePropertyExports:
 			if ast.IsSourceFile(node.Parent) && node.Parent.AsSourceFile().CommonJSModuleIndicator != nil {
 				return tx.transformCommonJSExport(expression, tx.getNameExpressionPreferringIdentifier(expression.Arguments()[1]))
@@ -2241,84 +2252,102 @@ func (tx *DeclarationTransformer) visitExpressionStatement(node *ast.Node) *ast.
 	return nil
 }
 
-func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExpression) *ast.Node {
+func (tx *DeclarationTransformer) visitNestedExpression(expression *ast.Node) *ast.Node {
+	if expression != nil {
+		switch ast.GetAssignmentDeclarationKind(expression) {
+		case ast.JSDeclarationKindProperty:
+			tx.transformExpandoAssignment(expression.AsBinaryExpression())
+		}
+		return tx.expressionVisitor.VisitEachChild(expression) // recur through the whole tree, looking for special assignments
+	}
+	return nil
+}
+
+func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExpression) {
 	left := node.Left
 
 	symbol := node.Symbol
 	if symbol == nil || symbol.Flags&ast.SymbolFlagsAssignment == 0 {
-		return nil
+		return
 	}
 
 	ns := ast.GetLeftmostAccessExpression(left)
 	if ns == nil || ns.Kind != ast.KindIdentifier {
-		return nil
+		return
 	}
 
 	declaration := tx.resolver.GetReferencedValueDeclaration(ns)
 	if declaration == nil {
-		return nil
+		return
 	}
 
 	if tx.shouldStripInternal(declaration) {
-		return nil
+		return
 	}
 
 	if ast.IsVariableDeclaration(declaration) && declaration.Type() != nil {
-		return nil
+		return
 	}
 
 	if ast.IsFunctionDeclaration(declaration) && declaration.FunctionLikeData().FullSignature != nil {
-		return nil
+		return
 	}
 
 	if ast.IsVariableDeclaration(declaration) && !ast.IsFunctionLike(declaration.Initializer()) {
-		return nil // We're going to add a type, no need to dupe members with a namespace
+		return // We're going to add a type, no need to dupe members with a namespace
 	}
 
 	host := declaration.Symbol()
 	if host == nil {
-		return nil
+		return
 	}
 
 	name := tx.Factory().NewIdentifier(ns.Text())
 	property := tx.tryGetPropertyName(left)
 	if property == "" || !scanner.IsIdentifierText(property, core.LanguageVariantStandard) {
-		return nil
+		return
 	}
 
 	if ast.IsDeclaration(declaration) && isDeclarationAndNotVisible(tx.EmitContext(), tx.resolver, declaration) {
-		return nil
+		return
+	}
+
+	if ast.IsFunctionDeclaration(declaration) && !shouldEmitFunctionProperties(declaration.AsFunctionDeclaration()) {
+		return
 	}
 
 	tx.transformExpandoHost(name, declaration)
 
-	if ast.IsFunctionDeclaration(declaration) && !shouldEmitFunctionProperties(declaration.AsFunctionDeclaration()) {
-		return nil
-	}
-
 	isNonContextualKeywordName := ast.IsNonContextualKeyword(scanner.StringToToken(property))
 	exportName := core.IfElse(isNonContextualKeywordName, tx.Factory().NewGeneratedNameForNode(left), tx.Factory().NewIdentifier(property))
 
+	hostId := tx.getExpandoHostId(declaration)
+	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
+	var varModifiers *ast.ModifierList
+
+	if preexistingExpandoHasExport {
+		varModifiers = tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(ast.ModifierFlagsExport, tx.Factory().NewModifier))
+	}
+
 	synthesizedNamespace := tx.Factory().NewModuleDeclaration(nil /*modifiers*/, ast.KindNamespaceKeyword, name, tx.Factory().NewModuleBlock(tx.Factory().NewNodeList([]*ast.Node{})))
 	synthesizedNamespace.Parent = tx.enclosingDeclaration
-
 	declarationData := synthesizedNamespace.DeclarationData()
 	declarationData.Symbol = host
-
 	containerData := synthesizedNamespace.LocalsContainerData()
 	containerData.Locals = make(ast.SymbolTable, 0)
 
-	saveDiag := tx.state.getSymbolAccessibilityDiagnostic
-	tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(node.AsNode())
-	t := tx.resolver.CreateTypeOfExpression(tx.EmitContext(), left, synthesizedNamespace, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags|nodebuilder.InternalFlagsNoSyntacticPrinter, tx.tracker)
-	tx.state.getSymbolAccessibilityDiagnostic = saveDiag
+	oldEnclosing := tx.enclosingDeclaration
+	tx.enclosingDeclaration = synthesizedNamespace
+	defer func() {
+		tx.enclosingDeclaration = oldEnclosing
+	}()
 
 	statements := []*ast.Statement{
 		tx.Factory().NewVariableStatement(
-			nil, /*modifiers*/
+			varModifiers,
 			tx.Factory().NewVariableDeclarationList(
 				tx.Factory().NewNodeList([]*ast.Node{
-					tx.Factory().NewVariableDeclaration(exportName, nil /*exclamationToken*/, t, nil /*initializer*/),
+					tx.Factory().NewVariableDeclaration(exportName, nil /*exclamationToken*/, tx.ensureType(node.AsNode(), false), nil /*initializer*/),
 				}),
 				ast.NodeFlagsNone,
 			),
@@ -2334,26 +2363,25 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		statements = append(statements, tx.Factory().NewExportDeclaration(nil /*modifiers*/, false /*isTypeOnly*/, namedExports, nil /*moduleSpecifier*/, nil /*attributes*/))
 	}
 
-	flags := tx.host.GetEffectiveDeclarationFlags(tx.EmitContext().ParseNode(declaration), ast.ModifierFlagsAll)
-	modifierFlags := ast.ModifierFlagsNone
-	if tx.needsDeclare {
-		modifierFlags |= ast.ModifierFlagsAmbient
-	}
-
-	if flags&ast.ModifierFlagsExport != 0 {
-		if flags&ast.ModifierFlagsDefault == 0 {
-			modifierFlags |= ast.ModifierFlagsExport
+	if len(statements) > 1 && !preexistingExpandoHasExport {
+		// Add an `export` modifier to all existing expando members so they remain exported after the `export {}` is added
+		for _, decl := range tx.expandoMembers[hostId] {
+			modifierFlags := ast.ModifierFlagsExport | ast.GetCombinedModifierFlags(decl)
+			decl.AsMutable().SetModifiers(tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier)))
 		}
-		tx.resultHasScopeMarker = true
-		tx.resultHasExternalModuleIndicator = true
 	}
+	tx.expandoMembers[hostId] = append(tx.expandoMembers[hostId], statements...)
+}
 
-	return tx.Factory().NewModuleDeclaration(tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier)), ast.KindNamespaceKeyword, name, tx.Factory().NewModuleBlock(tx.Factory().NewNodeList(statements)))
+func (tx *DeclarationTransformer) getExpandoHostId(declaration *ast.Declaration) ast.NodeId {
+	root := core.IfElse(ast.IsVariableDeclaration(declaration), declaration.Parent.Parent, declaration)
+	id := ast.GetNodeId(tx.EmitContext().MostOriginal(root))
+	return id
 }
 
 func (tx *DeclarationTransformer) transformExpandoHost(name *ast.Node, declaration *ast.Declaration) {
 	root := core.IfElse(ast.IsVariableDeclaration(declaration), declaration.Parent.Parent, declaration)
-	id := ast.GetNodeId(tx.EmitContext().MostOriginal(root))
+	id := tx.getExpandoHostId(declaration)
 
 	if _, ok := tx.expandoHosts[id]; ok {
 		return
@@ -2384,19 +2412,64 @@ func (tx *DeclarationTransformer) transformExpandoHost(name *ast.Node, declarati
 		typeParameters, parameters, asteriskToken := extractExpandoHostParams(fn)
 		replacement = append(replacement, tx.Factory().NewFunctionDeclaration(modifiers, asteriskToken, tx.Factory().NewIdentifier(name.Text()), tx.ensureTypeParams(fn, typeParameters), tx.updateParamList(fn, parameters), tx.ensureType(fn, false), nil /*fullSignature*/, nil /*body*/))
 	} else {
+		tx.expandoHosts[id] = tx.transformTopLevelDeclaration(declaration)
 		return
 	}
 
+	tx.state.reportExpandoFunctionErrors(declaration)
+
 	if defaultExport {
+		if ast.IsSourceFile(declaration.Parent) {
+			tx.resultHasExternalModuleIndicator = true
+		}
+		tx.resultHasScopeMarker = true
 		replacement = append(replacement, tx.Factory().NewExportAssignment(nil /*modifiers*/, false /*isExportEquals*/, nil /*typeNode*/, name))
 	}
 
 	// store host result to be added to the output when it's actually visited
 	tx.expandoHosts[id] = tx.Factory().NewSyntaxList(replacement)
 	if _, ok := tx.lateStatementReplacementMap[id]; ok {
-		// host already included in output, revise it
-		tx.lateStatementReplacementMap[id] = tx.expandoHosts[id]
+		tx.lateStatementReplacementMap[id] = tx.createFullExpandoBlock(id)
 	}
+}
+
+func (tx *DeclarationTransformer) createFullExpandoBlock(id ast.NodeId) *ast.Node {
+	n := tx.expandoHosts[id]
+	if addOns, ok := tx.expandoMembers[id]; ok {
+		var modifiers *ast.ModifierList
+		var name *ast.Node
+		var host []*ast.Node
+		if n != nil && n.Kind == ast.KindSyntaxList {
+			// find the first named syntax list element and use its' name & modifiers
+			for c := range n.AsSyntaxList().IterChildren() {
+				if c.Name() != nil {
+					name = c.Name().Clone(tx.Factory())
+					if c.Modifiers() != nil {
+						modifiers = c.Modifiers().Clone(tx.Factory().AsNodeFactory())
+					}
+					break
+				}
+			}
+			host = n.AsSyntaxList().Children
+		} else if n != nil {
+			name = n.Name().Clone(tx.Factory())
+			if n.Modifiers() != nil {
+				modifiers = n.Modifiers().Clone(tx.Factory().AsNodeFactory())
+			}
+			host = []*ast.Node{n}
+		}
+		if name != nil {
+			moduleDecl := tx.Factory().NewModuleDeclaration(
+				modifiers,
+				ast.KindNamespaceKeyword,
+				name,
+				tx.Factory().NewModuleBlock(tx.Factory().NewNodeList(addOns)),
+			)
+			members := append(host, moduleDecl)
+			return tx.Factory().NewSyntaxList(members)
+		}
+	}
+	return n
 }
 
 func extractExpandoHostParams(node *ast.Node) (typeParameters *ast.TypeParameterList, parameters *ast.ParameterList, asteriskToken *ast.TokenNode) {

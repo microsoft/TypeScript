@@ -1,12 +1,9 @@
 --- old.typeFromPropertyAssignment29.js
 +++ new.typeFromPropertyAssignment29.js
-@@= skipped -176, +176 lines =@@
- declare function ExpandoDecl(n: number): string;
- declare namespace ExpandoDecl {
-     var prop: number;
--    var m: (n: number) => number;
--}
--declare var n: number;
+@@= skipped -179, +179 lines =@@
+     var m: (n: number) => number;
+ }
+ declare var n: number;
 -declare const ExpandoExpr: {
 -    (n: number): string;
 -    prop: {
@@ -18,17 +15,6 @@
 -    };
 -    m(n: number): number;
 -};
--declare var n: number;
--declare const ExpandoArrow: {
--    (n: number): string;
--    prop: number;
--    m(n: number): number;
--};
-+}
-+declare namespace ExpandoDecl {
-+    var m: (n: number) => number;
-+}
-+declare var n: number;
 +declare function ExpandoExpr(n: number): string;
 +declare namespace ExpandoExpr {
 +    var prop: {
@@ -38,8 +24,6 @@
 +        x?: undefined;
 +        y: string;
 +    };
-+}
-+declare namespace ExpandoExpr {
 +    var prop: {
 +        x: number;
 +        y?: undefined;
@@ -47,16 +31,17 @@
 +        x?: undefined;
 +        y: string;
 +    };
-+}
-+declare namespace ExpandoExpr {
 +    var m: (n: number) => number;
 +}
-+declare var n: number;
+ declare var n: number;
+-declare const ExpandoArrow: {
+-    (n: number): string;
+-    prop: number;
+-    m(n: number): number;
+-};
 +declare function ExpandoArrow(n: number): string;
 +declare namespace ExpandoArrow {
 +    var prop: number;
-+}
-+declare namespace ExpandoArrow {
 +    var m: (n: number) => number;
 +}
  declare function ExpandoNested(n: number): {

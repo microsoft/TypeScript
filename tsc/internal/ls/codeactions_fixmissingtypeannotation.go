@@ -2,7 +2,6 @@ package ls
 
 import (
 	"context"
-	"slices"
 	"strconv"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -91,17 +90,11 @@ func getIsolatedDeclarationsCodeActions(ctx context.Context, fixContext *CodeFix
 	defer done()
 
 	var fixes []*CodeAction
-	var seen []*CodeAction // sorted for binary search dedup
 
 	addFix := func(action *CodeAction) {
 		if action == nil {
 			return
 		}
-		i, found := slices.BinarySearchFunc(seen, action, (*CodeAction).Compare)
-		if found {
-			return
-		}
-		seen = slices.Insert(seen, i, action)
 		fixes = append(fixes, action)
 	}
 

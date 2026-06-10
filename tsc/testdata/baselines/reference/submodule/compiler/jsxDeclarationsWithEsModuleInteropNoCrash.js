@@ -34,8 +34,6 @@ declare namespace Foo {
     var propTypes: {
         bar: PropTypes.Requireable<boolean>;
     };
-}
-declare namespace Foo {
     var defaultProps: {
         bar: boolean;
     };

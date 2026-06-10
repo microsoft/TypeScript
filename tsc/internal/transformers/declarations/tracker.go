@@ -54,17 +54,16 @@ func (s *SymbolTrackerImpl) ReportInaccessibleUniqueSymbolError() {
 
 // ReportInferenceFallback implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) ReportInferenceFallback(node *ast.Node) {
-	if !s.state.isolatedDeclarations || ast.IsSourceFileJS(s.state.currentSourceFile) {
+	if !s.state.isolatedDeclarations {
 		return
 	}
 	if ast.GetSourceFileOfNode(node) != s.state.currentSourceFile {
 		return // Nested error on a declaration in another file - ignore, will be reemitted if file is in the output file set
 	}
-	if ast.IsVariableDeclaration(node) && s.state.resolver.IsExpandoFunctionDeclarationUnsafe(node) { // within a node builder call that should already lock the checker, use the unsafe call
+	if s.state.resolver.IsExpandoFunctionDeclarationUnsafe(node) { // within a node builder call that should already lock the checker, use the unsafe call
 		s.state.reportExpandoFunctionErrors(node)
-	} else {
-		s.state.addDiagnostic(s.getIsolatedDeclarationError(node))
 	}
+	s.state.addDiagnostic(s.getIsolatedDeclarationError(node))
 }
 
 // ReportLikelyUnsafeImportRequiredError implements checker.SymbolTracker.

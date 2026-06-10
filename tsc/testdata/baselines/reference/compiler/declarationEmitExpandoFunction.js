@@ -37,16 +37,14 @@ B.c = C;
 
 //// [declarationEmitExpandoFunction.d.ts]
 export declare function A(): string;
-export declare function B(): string;
-export declare enum C {
-    C = 0
-}
 export declare namespace A {
     var a: typeof C;
-}
-export declare namespace A {
     var b: typeof C;
 }
+export declare function B(): string;
 export declare namespace B {
     var c: typeof C;
+}
+export declare enum C {
+    C = 0
 }

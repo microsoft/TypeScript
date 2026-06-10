@@ -107,7 +107,5 @@ declare namespace Example {
 export declare function C(): any;
 export declare namespace C {
     var A: () => void;
-}
-export declare namespace C {
     var B: () => void;
 }

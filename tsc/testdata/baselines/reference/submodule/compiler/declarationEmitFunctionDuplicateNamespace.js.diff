@@ -1,0 +1,11 @@
+--- old.declarationEmitFunctionDuplicateNamespace.js
++++ new.declarationEmitFunctionDuplicateNamespace.js
+@@= skipped -19, +19 lines =@@
+
+ //// [declarationEmitFunctionDuplicateNamespace.d.ts]
+ declare function f(a: 0): 0;
+-declare function f(a: 1): 1;
+ declare namespace f {
+     var x: number;
+ }
++declare function f(a: 1): 1;

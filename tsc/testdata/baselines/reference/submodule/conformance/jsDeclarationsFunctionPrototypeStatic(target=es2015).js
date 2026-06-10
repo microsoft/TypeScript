@@ -35,8 +35,6 @@ export = MyClass;
 declare function MyClass(): void;
 declare namespace MyClass {
     var staticMethod: () => void;
-}
-declare namespace MyClass {
     var staticProperty: number;
 }
 export type DoneCB = (failures: number) => any;

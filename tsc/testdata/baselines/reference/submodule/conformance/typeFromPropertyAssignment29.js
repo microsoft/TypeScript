@@ -177,8 +177,6 @@ var n = ExpandoExpr3.prop + ExpandoExpr3.m(13) + new ExpandoExpr3().n;
 declare function ExpandoDecl(n: number): string;
 declare namespace ExpandoDecl {
     var prop: number;
-}
-declare namespace ExpandoDecl {
     var m: (n: number) => number;
 }
 declare var n: number;
@@ -191,8 +189,6 @@ declare namespace ExpandoExpr {
         x?: undefined;
         y: string;
     };
-}
-declare namespace ExpandoExpr {
     var prop: {
         x: number;
         y?: undefined;
@@ -200,16 +196,12 @@ declare namespace ExpandoExpr {
         x?: undefined;
         y: string;
     };
-}
-declare namespace ExpandoExpr {
     var m: (n: number) => number;
 }
 declare var n: number;
 declare function ExpandoArrow(n: number): string;
 declare namespace ExpandoArrow {
     var prop: number;
-}
-declare namespace ExpandoArrow {
     var m: (n: number) => number;
 }
 declare function ExpandoNested(n: number): {

@@ -1,21 +1,12 @@
 --- old.declarationEmitFunctionKeywordProp.js
 +++ new.declarationEmitFunctionKeywordProp.js
-@@= skipped -32, +32 lines =@@
- declare function bar(): void;
- declare namespace bar {
-     var async: boolean;
-+}
-+declare namespace bar {
-     var normal: boolean;
+@@= skipped -36, +36 lines =@@
  }
  declare function baz(): void;
  declare namespace baz {
 -    var _a: boolean;
--    export var normal: boolean;
--    export { _a as class };
 +    var _b: boolean;
 +    export { _b as class };
-+}
-+declare namespace baz {
-+    var normal: boolean;
+     export var normal: boolean;
+-    export { _a as class };
  }

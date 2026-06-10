@@ -1,18 +1,24 @@
 isolatedDeclarationErrors.ts(2,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+isolatedDeclarationErrors.ts(2,1): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+isolatedDeclarationErrors.ts(5,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 isolatedDeclarationErrors.ts(5,1): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrors.ts(7,30): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrors.ts(8,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 isolatedDeclarationErrors.ts(8,1): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 
 
-==== isolatedDeclarationErrors.ts (5 errors) ====
+==== isolatedDeclarationErrors.ts (7 errors) ====
     function errorOnAssignmentBelowDecl(): void {}
     errorOnAssignmentBelowDecl.a = "";
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
     
     const errorOnAssignmentBelow = (): void => {}
     errorOnAssignmentBelow.a = "";
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
     

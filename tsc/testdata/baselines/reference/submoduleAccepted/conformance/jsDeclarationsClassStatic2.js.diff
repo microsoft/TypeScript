@@ -11,12 +11,11 @@
 -}
  declare class Base {
      static foo: string;
- }
--export {};
++}
 +export declare class Foo extends Base {
 +}
 +export declare namespace Foo {
 +    var foo: string;
-+}
- //// [Bar.d.ts]
+ }
  export {};
+ //// [Bar.d.ts]

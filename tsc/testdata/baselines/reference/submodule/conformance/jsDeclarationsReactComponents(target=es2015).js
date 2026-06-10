@@ -191,8 +191,6 @@ declare namespace TabbedShowLayout {
     var propTypes: {
         version: PropTypes.Requireable<number>;
     };
-}
-declare namespace TabbedShowLayout {
     var defaultProps: {
         tabs: undefined;
     };
@@ -236,8 +234,6 @@ declare namespace Tree {
     var propTypes: {
         classes: PropTypes.Requireable<object>;
     };
-}
-declare namespace Tree {
     var defaultProps: {
         classes: {};
         parentSource: string;

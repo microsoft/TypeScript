@@ -14,8 +14,6 @@
 -    let async: boolean;
 -    let normal: boolean;
 +    var async: boolean;
-+}
-+declare namespace bar {
 +    var normal: boolean;
  }
  declare function baz(): void;
@@ -26,7 +24,5 @@
 -    export { normal_1 as normal };
 +    var _b: boolean;
 +    export { _b as class };
-+}
-+declare namespace baz {
-+    var normal: boolean;
++    export var normal: boolean;
  }

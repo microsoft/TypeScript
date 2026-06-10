@@ -20,8 +20,6 @@
 +    var propTypes: {
 +        version: PropTypes.Requireable<number>;
 +    };
-+}
-+declare namespace TabbedShowLayout {
 +    var defaultProps: {
 +        tabs: undefined;
 +    };
@@ -41,7 +39,7 @@
  /**
   * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
   */
-@@= skipped -30, +31 lines =@@
+@@= skipped -30, +29 lines =@@
  } & ((props?: {
      elem: string;
  }) => JSX.Element);
@@ -76,16 +74,13 @@
 -        export { classes_1 as classes };
 -        export let parentSource: string;
 -    }
--}
--import PropTypes from 'prop-types';
 +    var propTypes: {
 +        classes: PropTypes.Requireable<object>;
 +    };
-+}
-+declare namespace Tree {
 +    var defaultProps: {
 +        classes: {};
 +        parentSource: string;
 +    };
-+}
+ }
+-import PropTypes from 'prop-types';
 +export default Tree;

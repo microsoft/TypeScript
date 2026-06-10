@@ -9,11 +9,8 @@
  declare namespace foo {
 -    export { foo };
 -    export { foo as default };
--}
-+    var foo: typeof import(".");
-+}
-+declare namespace foo {
++    export var foo: typeof import(".");
 +    var _a: typeof import(".");
 +    export { _a as default };
-+}
+ }
 +export = foo;
