@@ -842,6 +842,51 @@ func TestParseJsonSourceFileConfigFileContent(t *testing.T) {
 	}
 }
 
+func TestParseJsonSourceFileConfigFileContentReportsInvalidExtendedConfig(t *testing.T) {
+	t.Parallel()
+	files := map[string]string{
+		"/project/tsconfig.json": `{
+  "extends": "./bad.json"
+}`,
+		// The parser recovers from this as object-like JSON, producing expected-token errors for ':', ',', ',', and '}'.
+		"/project/bad.json": "{ this is not json",
+		"/project/main.ts":  "export const x = 1;",
+	}
+	host := tsoptionstest.NewVFSParseConfigHost(files, "/project", true /*useCaseSensitiveFileNames*/)
+	configFileName := "/project/tsconfig.json"
+	configFile := tsoptions.NewTsconfigSourceFileFromFilePath(
+		configFileName,
+		tspath.ToPath(configFileName, host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()),
+		files[configFileName],
+	)
+
+	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
+		configFile,
+		host,
+		host.GetCurrentDirectory(),
+		nil,
+		nil,
+		configFileName,
+		nil,
+		nil,
+		nil,
+	)
+
+	parseErrors := core.Filter(parsed.Errors, func(diagnostic *ast.Diagnostic) bool {
+		return diagnostic.Code() == diagnostics.X_0_expected.Code()
+	})
+	expectedParseErrorMessages := []string{":", ",", ",", "}"}
+	expectedParseErrorPositions := []int{7, 10, 14, 18}
+	assert.Equal(t, len(expectedParseErrorMessages), len(parseErrors))
+	assert.DeepEqual(t, core.Map(parseErrors, func(diagnostic *ast.Diagnostic) string {
+		return diagnostic.MessageArgs()[0]
+	}), expectedParseErrorMessages)
+	assert.DeepEqual(t, core.Map(parseErrors, (*ast.Diagnostic).Pos), expectedParseErrorPositions)
+	for _, diagnostic := range parseErrors {
+		assert.Equal(t, diagnostic.File().FileName(), "/project/bad.json")
+	}
+}
+
 func TestParseJsonSourceFileConfigFileContentDoesNotDuplicateUnquotedKeyDiagnostics(t *testing.T) {
 	t.Parallel()
 	parsed := tsoptionstest.GetParsedCommandLine(t, `{
