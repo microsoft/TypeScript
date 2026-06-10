@@ -2,29 +2,28 @@
 
 === intrinsicStringMappingLoneSurrogate.ts ===
 // Intrinsic string mapping types should preserve lone surrogates, matching tsc.
-// Currently tsgo corrupts them to U+FFFD; this baseline documents that behavior.
-// (Fix tracked separately alongside other intrinsic string mapping work.)
+// A lone surrogate has no case mapping, so it passes through unchanged.
 type U = Uppercase<"\uD800">;
 >U : Symbol(U, Decl(intrinsicStringMappingLoneSurrogate.ts, 0, 0))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
 
 type L = Lowercase<"A\uD800B">;
->L : Symbol(L, Decl(intrinsicStringMappingLoneSurrogate.ts, 3, 29))
+>L : Symbol(L, Decl(intrinsicStringMappingLoneSurrogate.ts, 2, 29))
 >Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
 
 type C = Capitalize<"\uDC00x">;
->C : Symbol(C, Decl(intrinsicStringMappingLoneSurrogate.ts, 4, 31))
+>C : Symbol(C, Decl(intrinsicStringMappingLoneSurrogate.ts, 3, 31))
 >Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
 
 type Un = Uncapitalize<"\uD834X">;
->Un : Symbol(Un, Decl(intrinsicStringMappingLoneSurrogate.ts, 5, 31))
+>Un : Symbol(Un, Decl(intrinsicStringMappingLoneSurrogate.ts, 4, 31))
 >Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
 
 const u: "\uD800" = "x" as unknown as U;
->u : Symbol(u, Decl(intrinsicStringMappingLoneSurrogate.ts, 8, 5))
+>u : Symbol(u, Decl(intrinsicStringMappingLoneSurrogate.ts, 7, 5))
 >U : Symbol(U, Decl(intrinsicStringMappingLoneSurrogate.ts, 0, 0))
 
 const l: "a\uD800b" = "x" as unknown as L;
->l : Symbol(l, Decl(intrinsicStringMappingLoneSurrogate.ts, 9, 5))
->L : Symbol(L, Decl(intrinsicStringMappingLoneSurrogate.ts, 3, 29))
+>l : Symbol(l, Decl(intrinsicStringMappingLoneSurrogate.ts, 8, 5))
+>L : Symbol(L, Decl(intrinsicStringMappingLoneSurrogate.ts, 2, 29))
 

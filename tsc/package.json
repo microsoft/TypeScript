@@ -11,6 +11,7 @@
         "@types/node": "latest",
         "@types/tmp": "^0.2.6",
         "@types/which": "^3.0.4",
+        "@unicode/unicode-15.1.0": "^1.6.16",
         "adm-zip": "^0.5.17",
         "chokidar": "^5.0.0",
         "dprint": "^0.54.0",

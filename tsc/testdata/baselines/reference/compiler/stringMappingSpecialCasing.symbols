@@ -1,0 +1,81 @@
+//// [tests/cases/compiler/stringMappingSpecialCasing.ts] ////
+
+=== stringMappingSpecialCasing.ts ===
+// https://github.com/microsoft/typescript-go/issues/3489
+
+type Lower = Lowercase<"İSPANYOL" | "ΟΣ">;
+>Lower : Symbol(Lower, Decl(stringMappingSpecialCasing.ts, 0, 0))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+const lowerMap: Record<Lower, string> = {
+>lowerMap : Symbol(lowerMap, Decl(stringMappingSpecialCasing.ts, 4, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Lower : Symbol(Lower, Decl(stringMappingSpecialCasing.ts, 0, 0))
+
+	["i̇spanyol"]: "spanish",
+>["i̇spanyol"] : Symbol(["i̇spanyol"], Decl(stringMappingSpecialCasing.ts, 4, 41))
+>"i̇spanyol" : Symbol(["i̇spanyol"], Decl(stringMappingSpecialCasing.ts, 4, 41))
+
+	["ος"]: "greek-final-sigma",
+>["ος"] : Symbol(["ος"], Decl(stringMappingSpecialCasing.ts, 5, 26))
+>"ος" : Symbol(["ος"], Decl(stringMappingSpecialCasing.ts, 5, 26))
+
+};
+
+type Upper = Uppercase<"ßfoo" | "ﬁoo">;
+>Upper : Symbol(Upper, Decl(stringMappingSpecialCasing.ts, 7, 2))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+const upperMap: Record<Upper, string> = {
+>upperMap : Symbol(upperMap, Decl(stringMappingSpecialCasing.ts, 11, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Upper : Symbol(Upper, Decl(stringMappingSpecialCasing.ts, 7, 2))
+
+	["SSFOO"]: "eszett",
+>["SSFOO"] : Symbol(["SSFOO"], Decl(stringMappingSpecialCasing.ts, 11, 41))
+>"SSFOO" : Symbol(["SSFOO"], Decl(stringMappingSpecialCasing.ts, 11, 41))
+
+	["FIOO"]: "ligature",
+>["FIOO"] : Symbol(["FIOO"], Decl(stringMappingSpecialCasing.ts, 12, 21))
+>"FIOO" : Symbol(["FIOO"], Decl(stringMappingSpecialCasing.ts, 12, 21))
+
+};
+
+type Capitalized = Capitalize<"ßfoo" | "ﬁoo">;
+>Capitalized : Symbol(Capitalized, Decl(stringMappingSpecialCasing.ts, 14, 2))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+const capitalizedMap: Record<Capitalized, string> = {
+>capitalizedMap : Symbol(capitalizedMap, Decl(stringMappingSpecialCasing.ts, 18, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Capitalized : Symbol(Capitalized, Decl(stringMappingSpecialCasing.ts, 14, 2))
+
+	["SSfoo"]: "eszett",
+>["SSfoo"] : Symbol(["SSfoo"], Decl(stringMappingSpecialCasing.ts, 18, 53))
+>"SSfoo" : Symbol(["SSfoo"], Decl(stringMappingSpecialCasing.ts, 18, 53))
+
+	["FIoo"]: "ligature",
+>["FIoo"] : Symbol(["FIoo"], Decl(stringMappingSpecialCasing.ts, 19, 21))
+>"FIoo" : Symbol(["FIoo"], Decl(stringMappingSpecialCasing.ts, 19, 21))
+
+};
+
+type Uncapitalized = Uncapitalize<"İfoo" | "ΟΣ">;
+>Uncapitalized : Symbol(Uncapitalized, Decl(stringMappingSpecialCasing.ts, 21, 2))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+
+const uncapitalizedMap: Record<Uncapitalized, string> = {
+>uncapitalizedMap : Symbol(uncapitalizedMap, Decl(stringMappingSpecialCasing.ts, 25, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Uncapitalized : Symbol(Uncapitalized, Decl(stringMappingSpecialCasing.ts, 21, 2))
+
+	["i̇foo"]: "dotted-i",
+>["i̇foo"] : Symbol(["i̇foo"], Decl(stringMappingSpecialCasing.ts, 25, 57))
+>"i̇foo" : Symbol(["i̇foo"], Decl(stringMappingSpecialCasing.ts, 25, 57))
+
+	["οΣ"]: "sigma-prefix",
+>["οΣ"] : Symbol(["οΣ"], Decl(stringMappingSpecialCasing.ts, 26, 23))
+>"οΣ" : Symbol(["οΣ"], Decl(stringMappingSpecialCasing.ts, 26, 23))
+
+};
+

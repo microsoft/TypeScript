@@ -2,29 +2,28 @@
 
 === intrinsicStringMappingLoneSurrogate.ts ===
 // Intrinsic string mapping types should preserve lone surrogates, matching tsc.
-// Currently tsgo corrupts them to U+FFFD; this baseline documents that behavior.
-// (Fix tracked separately alongside other intrinsic string mapping work.)
+// A lone surrogate has no case mapping, so it passes through unchanged.
 type U = Uppercase<"\uD800">;
->U : "���"
+>U : "\uD800"
 
 type L = Lowercase<"A\uD800B">;
->L : "a���b"
+>L : "a\uD800b"
 
 type C = Capitalize<"\uDC00x">;
->C : "�\uFFFD\uFFFDx"
+>C : "\uDC00x"
 
 type Un = Uncapitalize<"\uD834X">;
->Un : "�\uFFFD\uFFFDX"
+>Un : "\uD834X"
 
 const u: "\uD800" = "x" as unknown as U;
 >u : "\uD800"
->"x" as unknown as U : "���"
+>"x" as unknown as U : "\uD800"
 >"x" as unknown : unknown
 >"x" : "x"
 
 const l: "a\uD800b" = "x" as unknown as L;
 >l : "a\uD800b"
->"x" as unknown as L : "a���b"
+>"x" as unknown as L : "a\uD800b"
 >"x" as unknown : unknown
 >"x" : "x"
 

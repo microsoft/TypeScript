@@ -1,0 +1,81 @@
+//// [tests/cases/compiler/stringMappingSpecialCasing.ts] ////
+
+=== stringMappingSpecialCasing.ts ===
+// https://github.com/microsoft/typescript-go/issues/3489
+
+type Lower = Lowercase<"İSPANYOL" | "ΟΣ">;
+>Lower : "i̇spanyol" | "ος"
+
+const lowerMap: Record<Lower, string> = {
+>lowerMap : Record<"i̇spanyol" | "ος", string>
+>{	["i̇spanyol"]: "spanish",	["ος"]: "greek-final-sigma",} : { i̇spanyol: string; ος: string; }
+
+	["i̇spanyol"]: "spanish",
+>["i̇spanyol"] : string
+>"i̇spanyol" : "i̇spanyol"
+>"spanish" : "spanish"
+
+	["ος"]: "greek-final-sigma",
+>["ος"] : string
+>"ος" : "ος"
+>"greek-final-sigma" : "greek-final-sigma"
+
+};
+
+type Upper = Uppercase<"ßfoo" | "ﬁoo">;
+>Upper : "FIOO" | "SSFOO"
+
+const upperMap: Record<Upper, string> = {
+>upperMap : Record<"FIOO" | "SSFOO", string>
+>{	["SSFOO"]: "eszett",	["FIOO"]: "ligature",} : { SSFOO: string; FIOO: string; }
+
+	["SSFOO"]: "eszett",
+>["SSFOO"] : string
+>"SSFOO" : "SSFOO"
+>"eszett" : "eszett"
+
+	["FIOO"]: "ligature",
+>["FIOO"] : string
+>"FIOO" : "FIOO"
+>"ligature" : "ligature"
+
+};
+
+type Capitalized = Capitalize<"ßfoo" | "ﬁoo">;
+>Capitalized : "FIoo" | "SSfoo"
+
+const capitalizedMap: Record<Capitalized, string> = {
+>capitalizedMap : Record<"FIoo" | "SSfoo", string>
+>{	["SSfoo"]: "eszett",	["FIoo"]: "ligature",} : { SSfoo: string; FIoo: string; }
+
+	["SSfoo"]: "eszett",
+>["SSfoo"] : string
+>"SSfoo" : "SSfoo"
+>"eszett" : "eszett"
+
+	["FIoo"]: "ligature",
+>["FIoo"] : string
+>"FIoo" : "FIoo"
+>"ligature" : "ligature"
+
+};
+
+type Uncapitalized = Uncapitalize<"İfoo" | "ΟΣ">;
+>Uncapitalized : "i̇foo" | "οΣ"
+
+const uncapitalizedMap: Record<Uncapitalized, string> = {
+>uncapitalizedMap : Record<"i̇foo" | "οΣ", string>
+>{	["i̇foo"]: "dotted-i",	["οΣ"]: "sigma-prefix",} : { i̇foo: string; οΣ: string; }
+
+	["i̇foo"]: "dotted-i",
+>["i̇foo"] : string
+>"i̇foo" : "i̇foo"
+>"dotted-i" : "dotted-i"
+
+	["οΣ"]: "sigma-prefix",
+>["οΣ"] : string
+>"οΣ" : "οΣ"
+>"sigma-prefix" : "sigma-prefix"
+
+};
+
