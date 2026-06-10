@@ -126,6 +126,31 @@ Corsa no longer parses the following JSDoc tags with a specific node type. They 
 
 ### Miscellaneous
 
+#### Template literal type inference pulls off a full Unicode code point for empty placeholders.
+
+When inferring through a template literal type with an empty delimiter, Corsa consumes a full Unicode code point rather than a single UTF-16 code unit.
+This diverges from Strada, which advances one UTF-16 code unit at a time and therefore splits a supplementary-plane character such as an emoji into its surrogate halves:
+
+```ts
+type Head<S> = S extends `${infer H}${string}` ? H : never;
+type Rest<S> = S extends `${string}${infer R}` ? R : never;
+
+type H = Head<"😀abc">; // Strada: "\uD83D"
+type R = Rest<"😀abc">; // Strada: "\uDE00abc"
+```
+
+In Corsa the emoji stays together:
+
+```ts
+type Head<S> = S extends `${infer H}${string}` ? H : never;
+type Rest<S> = S extends `${string}${infer R}` ? R : never;
+
+type H = Head<"😀abc">; // Corsa: "😀"
+type R = Rest<"😀abc">; // Corsa: "abc"
+```
+
+This means supplementary-plane characters such as emoji are not split into surrogate halves during template literal type inference.
+
 #### With `"strict": false`, Corsa no longer allows omitting arguments for parameters with type `undefined`, `unknown`, or `any`:
 
 ```js

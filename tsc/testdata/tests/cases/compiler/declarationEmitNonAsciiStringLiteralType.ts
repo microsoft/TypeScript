@@ -19,3 +19,5 @@ export const templateObj = {
     alert: `⚠️`,
     greet: `日本語`,
 } as const;
+
+export const speaker = (msg: string) => [`🔈`, `🔈 ${msg}`] as const;

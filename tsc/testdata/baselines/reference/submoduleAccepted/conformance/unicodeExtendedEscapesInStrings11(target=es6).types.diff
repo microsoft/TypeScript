@@ -1,0 +1,8 @@
+--- old.unicodeExtendedEscapesInStrings11(target=es6).types
++++ new.unicodeExtendedEscapesInStrings11(target=es6).types
+@@= skipped -6, +6 lines =@@
+ // this is a useful edge-case test.
+ var x = "\u{DC00}";
+ >x : string
+->"\u{DC00}" : "�"
++>"\u{DC00}" : "\uDC00"

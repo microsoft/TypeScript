@@ -9,31 +9,31 @@ export const highLow = "\ud83d\ude03" as const;
 
 // high surrogate
 export const high = "\ud83d" as const;
->high : "�"
->"\ud83d" as const : "�"
->"\ud83d" : "�"
+>high : "\uD83D"
+>"\ud83d" as const : "\uD83D"
+>"\ud83d" : "\uD83D"
 
 // low surrogate
 export const low = "\ude03" as const;
->low : "�"
->"\ude03" as const : "�"
->"\ude03" : "�"
+>low : "\uDE03"
+>"\ude03" as const : "\uDE03"
+>"\ude03" : "\uDE03"
 
 // two high surrogates
 export const highHigh = "\ud83d\ud83d" as const;
->highHigh : "��"
->"\ud83d\ud83d" as const : "��"
->"\ud83d\ud83d" : "��"
+>highHigh : "\uD83D\uD83D"
+>"\ud83d\ud83d" as const : "\uD83D\uD83D"
+>"\ud83d\ud83d" : "\uD83D\uD83D"
 
 // two low surrogates
 export const lowLow = "\ude03\ude03" as const;
->lowLow : "��"
->"\ude03\ude03" as const : "��"
->"\ude03\ude03" : "��"
+>lowLow : "\uDE03\uDE03"
+>"\ude03\ude03" as const : "\uDE03\uDE03"
+>"\ude03\ude03" : "\uDE03\uDE03"
 
 // swapped expected order of surrogates
 export const lowHigh = "\ude03\ud83d" as const;
->lowHigh : "��"
->"\ude03\ud83d" as const : "��"
->"\ude03\ud83d" : "��"
+>lowHigh : "\uDE03\uD83D"
+>"\ude03\ud83d" as const : "\uDE03\uD83D"
+>"\ude03\ud83d" : "\uDE03\uD83D"
 

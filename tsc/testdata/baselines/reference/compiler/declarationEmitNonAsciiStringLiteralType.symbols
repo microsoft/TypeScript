@@ -40,3 +40,9 @@ export const templateObj = {
 } as const;
 >const : Symbol(const)
 
+export const speaker = (msg: string) => [`🔈`, `🔈 ${msg}`] as const;
+>speaker : Symbol(speaker, Decl(declarationEmitNonAsciiStringLiteralType.ts, 19, 12))
+>msg : Symbol(msg, Decl(declarationEmitNonAsciiStringLiteralType.ts, 19, 24))
+>msg : Symbol(msg, Decl(declarationEmitNonAsciiStringLiteralType.ts, 19, 24))
+>const : Symbol(const)
+

@@ -4,7 +4,6 @@ import (
 	"slices"
 	"strconv"
 	"strings"
-	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
@@ -12,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/jsnum"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tracing"
 )
 
@@ -2403,7 +2403,7 @@ func (c *Checker) inferFromLiteralPartsToTemplateLiteral(sourceTexts []string, s
 	addMatch := func(s int, p int) {
 		var matchType *Type
 		if s == seg {
-			matchType = c.getStringLiteralType(getSourceText(s)[pos:p])
+			matchType = c.getStringLiteralType(stringutil.CombineSurrogatePairs(getSourceText(s)[pos:p]))
 		} else {
 			matchTexts := make([]string, s-seg+1)
 			matchTexts[0] = sourceTexts[seg][pos:]
@@ -2435,7 +2435,23 @@ func (c *Checker) inferFromLiteralPartsToTemplateLiteral(sourceTexts []string, s
 			addMatch(s, p)
 			pos += len(delim)
 		} else if sourceText := getSourceText(seg); pos < len(sourceText) {
-			_, size := utf8.DecodeRuneInString(sourceText[pos:])
+			// Consume one code point at a time, matching the string iterator
+			// (`[x, ..._] = s`) rather than UTF-16 code-unit indexing (`s[0]`).
+			// DecodeJSStringRune is required rather than utf8.DecodeRuneInString
+			// because a lone surrogate is stored as an invalid-UTF-8 sentinel;
+			// utf8 would treat that as an error and advance a single byte,
+			// breaking the sentinel into stray bytes, whereas DecodeJSStringRune
+			// pulls the whole sentinel off as one code point.
+			//
+			// This intentionally diverges from Strada, which advances one UTF-16
+			// code unit at a time (`s[0]` semantics) and therefore splits a
+			// supplementary code point such as an emoji into its surrogate
+			// halves. If we ever need to match that, expand sourceTexts and
+			// targetTexts into code-unit space up front with a SplitSurrogatePairs
+			// helper (the inverse of CombineSurrogatePairs) and decode by code
+			// unit here; the CombineSurrogatePairs call in addMatch already
+			// recombines captured halves back into canonical form.
+			_, size := stringutil.DecodeJSStringRune(sourceText[pos:])
 			addMatch(seg, pos+size)
 		} else if seg < lastSourceIndex {
 			addMatch(seg+1, 0)

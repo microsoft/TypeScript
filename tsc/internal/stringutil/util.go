@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strings"
 	"unicode"
+	"unicode/utf16"
 	"unicode/utf8"
 )
 
@@ -267,4 +268,104 @@ func TruncateByRunes(str string, maxLength int) string {
 		}
 	}
 	return str
+}
+
+const (
+	// SurrogateLowStart is the boundary between the high and low halves of the
+	// UTF-16 surrogate range. unicode/utf16 only exposes IsSurrogate for the
+	// whole range, so this split point is defined here to distinguish the two.
+	SurrogateLowStart = 0xDC00
+)
+
+func IsHighSurrogate(ch rune) bool {
+	return utf16.IsSurrogate(ch) && ch < SurrogateLowStart
+}
+
+func IsLowSurrogate(ch rune) bool {
+	return utf16.IsSurrogate(ch) && ch >= SurrogateLowStart
+}
+
+func IsSurrogate(ch rune) bool {
+	return utf16.IsSurrogate(ch)
+}
+
+func SurrogatePairToCodePoint(high rune, low rune) rune {
+	return utf16.DecodeRune(high, low)
+}
+
+func CodePointToSurrogatePair(ch rune) (high rune, low rune) {
+	return utf16.EncodeRune(ch)
+}
+
+const (
+	// A lone surrogate (U+D800–U+DFFF) cannot be represented in valid UTF-8, so
+	// EncodeJSStringRune stores it as the 3-byte CESU-8/WTF-8 sentinel that UTF-8
+	// would use for that code point if surrogates were encodable. unicode/utf8
+	// and unicode/utf16 deliberately refuse to encode or decode surrogates, so
+	// the byte math is spelled out here.
+	//
+	// Byte layout for a code point cp in U+D000–U+DFFF (lead nibble 0xD):
+	//   byte0 = 0xE0 | (cp >> 12)          == 0xED
+	//   byte1 = 0x80 | ((cp >> 6) & 0x3F)
+	//   byte2 = 0x80 | (cp & 0x3F)
+	surrogateUTF8Lead     = 0xED   // byte0, shared by the whole U+D000–U+DFFF block
+	surrogateUTF8LeadBits = 0xD000 // (surrogateUTF8Lead & 0x0F) << 12, byte0's decoded contribution
+	utf8ContMarker        = 0x80   // continuation byte marker / min value (10xxxxxx)
+	utf8ContMax           = 0xBF   // continuation byte max value
+	utf8ContMask          = 0x3F   // data bits carried by a continuation byte
+
+	// byte1 bounds that pin the block down to the surrogate range U+D800–U+DFFF:
+	// 0xD800 -> 0xA0, 0xDFFF -> 0xBF.
+	surrogateUTF8Byte1Min = 0xA0
+	surrogateUTF8Byte1Max = 0xBF
+)
+
+func EncodeJSStringRune(ch rune) string {
+	if IsSurrogate(ch) {
+		return string([]byte{
+			surrogateUTF8Lead,
+			byte(utf8ContMarker | ((ch >> 6) & utf8ContMask)),
+			byte(utf8ContMarker | (ch & utf8ContMask)),
+		})
+	}
+	return string(ch)
+}
+
+func DecodeJSStringRune(s string) (rune, int) {
+	if len(s) >= 3 &&
+		s[0] == surrogateUTF8Lead &&
+		s[1] >= surrogateUTF8Byte1Min && s[1] <= surrogateUTF8Byte1Max &&
+		s[2] >= utf8ContMarker && s[2] <= utf8ContMax {
+		return surrogateUTF8LeadBits | rune(s[1]&utf8ContMask)<<6 | rune(s[2]&utf8ContMask), 3
+	}
+	return utf8.DecodeRuneInString(s)
+}
+
+// CombineSurrogatePairs canonicalizes a JS-string value produced by
+// concatenation, merging any adjacent high+low surrogate sentinel pair (as
+// written by EncodeJSStringRune) into the single supplementary code point they
+// represent. This mirrors how concatenating two UTF-16 code units forms a
+// surrogate pair in a JavaScript string. It must be applied wherever separately
+// scanned string values are joined, since each half is only a lone surrogate
+// until it meets its partner. Strings without a lone-surrogate sentinel (the
+// common case) are returned unchanged.
+func CombineSurrogatePairs(s string) string {
+	if strings.IndexByte(s, surrogateUTF8Lead) < 0 {
+		return s
+	}
+	var b strings.Builder
+	b.Grow(len(s))
+	for i := 0; i < len(s); {
+		r, size := DecodeJSStringRune(s[i:])
+		if IsHighSurrogate(r) {
+			if low, lowSize := DecodeJSStringRune(s[i+size:]); IsLowSurrogate(low) {
+				b.WriteRune(SurrogatePairToCodePoint(r, low))
+				i += size + lowSize
+				continue
+			}
+		}
+		b.WriteString(s[i : i+size])
+		i += size
+	}
+	return b.String()
 }

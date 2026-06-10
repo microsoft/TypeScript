@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/templateLiteralInferenceLoneSurrogate.ts] ////
+
+=== templateLiteralInferenceLoneSurrogate.ts ===
+// Template literal type inference over a string containing a lone surrogate
+// should preserve the surrogate, matching tsc. This baseline verifies the
+// inferred lone surrogate is preserved rather than corrupted to U+FFFD.
+type Head<S extends string> = S extends `${infer H}${infer _R}` ? H : never;
+>Head : Head<S>
+
+type Rest<S extends string> = S extends `${infer _H}${infer R}` ? R : never;
+>Rest : Rest<S>
+
+type H = Head<"\uD800abc">;
+>H : "\uD800"
+
+type R = Rest<"\uD800abc">;
+>R : "abc"
+
+const h: "\uD800" = "x" as unknown as H;
+>h : "\uD800"
+>"x" as unknown as H : "\uD800"
+>"x" as unknown : unknown
+>"x" : "x"
+
+const r: "abc" = "x" as unknown as R;
+>r : "abc"
+>"x" as unknown as R : "abc"
+>"x" as unknown : unknown
+>"x" : "x"
+

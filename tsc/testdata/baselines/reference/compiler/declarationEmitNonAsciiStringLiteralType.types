@@ -51,3 +51,13 @@ export const templateObj = {
 
 } as const;
 
+export const speaker = (msg: string) => [`🔈`, `🔈 ${msg}`] as const;
+>speaker : (msg: string) => readonly [`🔈`, `🔈 ${string}`]
+>(msg: string) => [`🔈`, `🔈 ${msg}`] as const : (msg: string) => readonly [`🔈`, `🔈 ${string}`]
+>msg : string
+>[`🔈`, `🔈 ${msg}`] as const : readonly ["🔈", `🔈 ${string}`]
+>[`🔈`, `🔈 ${msg}`] : readonly ["🔈", `🔈 ${string}`]
+>`🔈` : "🔈"
+>`🔈 ${msg}` : `🔈 ${string}`
+>msg : string
+

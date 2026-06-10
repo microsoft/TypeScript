@@ -20,6 +20,8 @@ export const templateObj = {
     greet: `日本語`,
 } as const;
 
+export const speaker = (msg: string) => [`🔈`, `🔈 ${msg}`] as const;
+
 
 
 
@@ -35,3 +37,4 @@ export declare const templateObj: {
     readonly alert: `⚠️`;
     readonly greet: `日本語`;
 };
+export declare const speaker: (msg: string) => readonly [`🔈`, `🔈 ${string}`];

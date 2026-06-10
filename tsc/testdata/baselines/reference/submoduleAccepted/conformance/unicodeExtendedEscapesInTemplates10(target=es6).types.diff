@@ -1,0 +1,8 @@
+--- old.unicodeExtendedEscapesInTemplates10(target=es6).types
++++ new.unicodeExtendedEscapesInTemplates10(target=es6).types
+@@= skipped -6, +6 lines =@@
+ // this is a useful edge-case test.
+ var x = `\u{D800}`;
+ >x : string
+->`\u{D800}` : "�"
++>`\u{D800}` : "\uD800"

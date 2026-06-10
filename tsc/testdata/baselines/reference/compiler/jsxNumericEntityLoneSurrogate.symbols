@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/jsxNumericEntityLoneSurrogate.tsx] ////
+
+=== file.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element {}
+>Element : Symbol(Element, Decl(file.tsx, 0, 23))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 21))
+
+		[s: string]: any;
+>s : Symbol(s, Decl(file.tsx, 3, 3))
+	}
+}
+declare var React: any;
+>React : Symbol(React, Decl(file.tsx, 6, 11))
+
+// Numeric character references for lone surrogates should be preserved, not
+// corrupted to U+FFFD. "\uD800" is a lone high surrogate; "\uDC00" a lone low.
+const text = <div>&#xD800;a&#xDC00;</div>;
+>text : Symbol(text, Decl(file.tsx, 10, 5))
+>div : Symbol(JSX.IntrinsicElements[__index], Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements[__index], Decl(file.tsx, 2, 30))
+
+const attr = <div title="&#xD800;"></div>;
+>attr : Symbol(attr, Decl(file.tsx, 11, 5))
+>div : Symbol(JSX.IntrinsicElements[__index], Decl(file.tsx, 2, 30))
+>title : Symbol(title, Decl(file.tsx, 11, 17))
+>div : Symbol(JSX.IntrinsicElements[__index], Decl(file.tsx, 2, 30))
+
+// A non-BMP code point reference is a single supplementary character.
+const supplementary = <div>&#x1F600;</div>;
+>supplementary : Symbol(supplementary, Decl(file.tsx, 14, 5))
+>div : Symbol(JSX.IntrinsicElements[__index], Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements[__index], Decl(file.tsx, 2, 30))
+

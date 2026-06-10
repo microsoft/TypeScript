@@ -28893,7 +28893,7 @@ func (c *Checker) getTemplateLiteralType(texts []string, types []*Type) *Type {
 				sb.WriteString(texts[i+1])
 			case c.isGenericIndexType(t) || c.isPatternLiteralPlaceholderType(t):
 				newTypes = append(newTypes, t)
-				newTexts = append(newTexts, sb.String())
+				newTexts = append(newTexts, stringutil.CombineSurrogatePairs(sb.String()))
 				sb.Reset()
 				sb.WriteString(texts[i+1])
 			default:
@@ -28906,9 +28906,9 @@ func (c *Checker) getTemplateLiteralType(texts []string, types []*Type) *Type {
 		return c.stringType
 	}
 	if len(newTypes) == 0 {
-		return c.getStringLiteralType(sb.String())
+		return c.getStringLiteralType(stringutil.CombineSurrogatePairs(sb.String()))
 	}
-	newTexts = append(newTexts, sb.String())
+	newTexts = append(newTexts, stringutil.CombineSurrogatePairs(sb.String()))
 	if core.Every(newTexts, func(t string) bool { return t == "" }) {
 		if core.Every(newTypes, func(t *Type) bool { return t.flags&TypeFlagsString != 0 }) {
 			return c.stringType

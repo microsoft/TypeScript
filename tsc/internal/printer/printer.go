@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -700,7 +701,18 @@ func (p *Printer) writeCommentRangeWorker(text string, lineMap []core.TextPos, k
 			}
 
 			// Write the comment line text
-			end := min(loc.End(), nextLineStart-1)
+			end := min(loc.End(), nextLineStart)
+			for scan := pos; scan < end; {
+				ch, size := utf8.DecodeRuneInString(text[scan:end])
+				if size == 0 {
+					break
+				}
+				if stringutil.IsLineBreak(ch) {
+					end = scan
+					break
+				}
+				scan += size
+			}
 			currentLineText := strings.TrimSpace(text[pos:end])
 			if len(currentLineText) > 0 {
 				p.writeComment(currentLineText)

@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/templateLiteralInferenceLoneSurrogate.ts] ////
+
+=== templateLiteralInferenceLoneSurrogate.ts ===
+// Template literal type inference over a string containing a lone surrogate
+// should preserve the surrogate, matching tsc. This baseline verifies the
+// inferred lone surrogate is preserved rather than corrupted to U+FFFD.
+type Head<S extends string> = S extends `${infer H}${infer _R}` ? H : never;
+>Head : Symbol(Head, Decl(templateLiteralInferenceLoneSurrogate.ts, 0, 0))
+>S : Symbol(S, Decl(templateLiteralInferenceLoneSurrogate.ts, 3, 10))
+>S : Symbol(S, Decl(templateLiteralInferenceLoneSurrogate.ts, 3, 10))
+>H : Symbol(H, Decl(templateLiteralInferenceLoneSurrogate.ts, 3, 48))
+>_R : Symbol(_R, Decl(templateLiteralInferenceLoneSurrogate.ts, 3, 58))
+>H : Symbol(H, Decl(templateLiteralInferenceLoneSurrogate.ts, 3, 48))
+
+type Rest<S extends string> = S extends `${infer _H}${infer R}` ? R : never;
+>Rest : Symbol(Rest, Decl(templateLiteralInferenceLoneSurrogate.ts, 3, 76))
+>S : Symbol(S, Decl(templateLiteralInferenceLoneSurrogate.ts, 4, 10))
+>S : Symbol(S, Decl(templateLiteralInferenceLoneSurrogate.ts, 4, 10))
+>_H : Symbol(_H, Decl(templateLiteralInferenceLoneSurrogate.ts, 4, 48))
+>R : Symbol(R, Decl(templateLiteralInferenceLoneSurrogate.ts, 4, 59))
+>R : Symbol(R, Decl(templateLiteralInferenceLoneSurrogate.ts, 4, 59))
+
+type H = Head<"\uD800abc">;
+>H : Symbol(H, Decl(templateLiteralInferenceLoneSurrogate.ts, 4, 76))
+>Head : Symbol(Head, Decl(templateLiteralInferenceLoneSurrogate.ts, 0, 0))
+
+type R = Rest<"\uD800abc">;
+>R : Symbol(R, Decl(templateLiteralInferenceLoneSurrogate.ts, 6, 27))
+>Rest : Symbol(Rest, Decl(templateLiteralInferenceLoneSurrogate.ts, 3, 76))
+
+const h: "\uD800" = "x" as unknown as H;
+>h : Symbol(h, Decl(templateLiteralInferenceLoneSurrogate.ts, 9, 5))
+>H : Symbol(H, Decl(templateLiteralInferenceLoneSurrogate.ts, 4, 76))
+
+const r: "abc" = "x" as unknown as R;
+>r : Symbol(r, Decl(templateLiteralInferenceLoneSurrogate.ts, 10, 5))
+>R : Symbol(R, Decl(templateLiteralInferenceLoneSurrogate.ts, 6, 27))
+

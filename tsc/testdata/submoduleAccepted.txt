@@ -45,6 +45,12 @@ fourslash/inlayHints/inlayHintsInteractiveFunctionParameterTypes1.baseline.diff
 
 ## regex checking ##
 
+## preserved escaped lone surrogate code units instead of U+FFFD ##
+conformance/unicodeExtendedEscapesInStrings10(target=es6).types.diff
+conformance/unicodeExtendedEscapesInStrings11(target=es6).types.diff
+conformance/unicodeExtendedEscapesInTemplates10(target=es6).types.diff
+conformance/unicodeExtendedEscapesInTemplates11(target=es6).types.diff
+
 ## find all references ##
 fourslash/findAllReferences/isDefinitionAcrossGlobalProjects.baseline.jsonc.diff
 fourslash/findAllReferences/findAllRefsNonexistentPropertyNoCrash1.baseline.jsonc.diff

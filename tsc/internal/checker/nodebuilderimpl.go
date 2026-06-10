@@ -3422,6 +3422,7 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		texts := t.AsTemplateLiteralType().texts
 		types := t.AsTemplateLiteralType().types
 		templateHead := b.f.NewTemplateHead(texts[0], "", ast.TokenFlagsNone)
+		b.e.AddEmitFlags(templateHead, printer.EFNoAsciiEscaping)
 		templateSpans := b.f.NewNodeList(core.MapIndex(types, func(t *Type, i int) *ast.Node {
 			var res *ast.TemplateMiddleOrTail
 			if i < len(types)-1 {
@@ -3429,6 +3430,7 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 			} else {
 				res = b.f.NewTemplateTail(texts[i+1], "", ast.TokenFlagsNone)
 			}
+			b.e.AddEmitFlags(res, printer.EFNoAsciiEscaping)
 			return b.f.NewTemplateLiteralTypeSpan(b.typeToTypeNode(t), res)
 		}))
 		b.ctx.approximateLength += 2
