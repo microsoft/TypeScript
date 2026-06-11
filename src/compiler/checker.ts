@@ -19656,6 +19656,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return wildcardType;
         }
         objectType = getReducedType(objectType);
+        // If the object type is an intersection with conflicting private properties,
+        // report an error — we shouldn't be able to access those properties via T["key"]
+        if (objectType.flags & TypeFlags.Intersection && !(objectType.flags & TypeFlags.Never)) {
+            const props = getPropertiesOfUnionOrIntersectionType(objectType as IntersectionType);
+            const conflictingPrivate = find(props, isConflictingPrivateProperty);
+            if (conflictingPrivate && accessNode) {
+                error(accessNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1,
+                      symbolToString(conflictingPrivate), typeToString(getDeclaringClass(conflictingPrivate)!));
+                return undefined;
+            }
+        }
         // If the object type has a string index signature and no other members we know that the result will
         // always be the type of that index signature and we can simplify accordingly.
         if (isStringIndexSignatureOnlyType(objectType) && !(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
