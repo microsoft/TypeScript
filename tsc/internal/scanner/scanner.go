@@ -447,6 +447,14 @@ func (s *Scanner) charAt(offset int) rune {
 }
 
 func (s *Scanner) charAndSize() (rune, int) {
+	// Fast path: a single ASCII byte. The vast majority of source bytes are
+	// ASCII; handling them here avoids constructing a string slice header and
+	// calling the non-inlined utf8.DecodeRuneInString on every byte.
+	if s.pos < s.end {
+		if b := s.text[s.pos]; b < utf8.RuneSelf {
+			return rune(b), 1
+		}
+	}
 	r, size := utf8.DecodeRuneInString(s.text[s.pos:])
 	if size > 1 {
 		s.containsNonASCII = true
@@ -454,12 +462,28 @@ func (s *Scanner) charAndSize() (rune, int) {
 	return r, size
 }
 
+// scanASCIIWhile advances s.pos over the longest run of ASCII bytes for which
+// pred returns true. It stops at end-of-text, the first non-ASCII byte, or the
+// first byte where pred is false.
+func (s *Scanner) scanASCIIWhile(pred func(byte) bool) {
+	text := s.text[s.pos:s.end]
+	i := 0
+	for i < len(text) {
+		b := text[i]
+		if b >= utf8.RuneSelf || !pred(b) {
+			break
+		}
+		i++
+	}
+	s.pos += i
+}
+
 func (s *Scanner) Scan() ast.Kind {
 	s.fullStartPos = s.pos
 	s.tokenFlags = ast.TokenFlagsNone
 	for {
-		s.tokenStart = s.pos
 		ch := s.char()
+		s.tokenStart = s.pos
 
 		switch ch {
 		case '\t', '\v', '\f', ' ':
@@ -479,6 +503,9 @@ func (s *Scanner) Scan() ast.Kind {
 			s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
 			if s.skipTrivia {
 				s.pos++
+				s.scanASCIIWhile(func(b byte) bool {
+					return b == ' ' || (b >= '\t' && b <= '\r')
+				})
 				continue
 			}
 			if ch == '\r' && s.charAt(1) == '\n' {
@@ -514,7 +541,8 @@ func (s *Scanner) Scan() ast.Kind {
 				s.token = ast.KindPercentToken
 			}
 		case '&':
-			if s.charAt(1) == '&' {
+			next := s.charAt(1)
+			if next == '&' {
 				if s.charAt(2) == '=' {
 					s.pos += 3
 					s.token = ast.KindAmpersandAmpersandEqualsToken
@@ -522,7 +550,7 @@ func (s *Scanner) Scan() ast.Kind {
 					s.pos += 2
 					s.token = ast.KindAmpersandAmpersandToken
 				}
-			} else if s.charAt(1) == '=' {
+			} else if next == '=' {
 				s.pos += 2
 				s.token = ast.KindAmpersandEqualsToken
 			} else {
@@ -536,10 +564,11 @@ func (s *Scanner) Scan() ast.Kind {
 			s.pos++
 			s.token = ast.KindCloseParenToken
 		case '*':
-			if s.charAt(1) == '=' {
+			next := s.charAt(1)
+			if next == '=' {
 				s.pos += 2
 				s.token = ast.KindAsteriskEqualsToken
-			} else if s.charAt(1) == '*' {
+			} else if next == '*' {
 				if s.charAt(2) == '=' {
 					s.pos += 3
 					s.token = ast.KindAsteriskAsteriskEqualsToken
@@ -558,10 +587,11 @@ func (s *Scanner) Scan() ast.Kind {
 				s.token = ast.KindAsteriskToken
 			}
 		case '+':
-			if s.charAt(1) == '=' {
+			next := s.charAt(1)
+			if next == '=' {
 				s.pos += 2
 				s.token = ast.KindPlusEqualsToken
-			} else if s.charAt(1) == '+' {
+			} else if next == '+' {
 				s.pos += 2
 				s.token = ast.KindPlusPlusToken
 			} else {
@@ -572,10 +602,11 @@ func (s *Scanner) Scan() ast.Kind {
 			s.pos++
 			s.token = ast.KindCommaToken
 		case '-':
-			if s.charAt(1) == '=' {
+			next := s.charAt(1)
+			if next == '=' {
 				s.pos += 2
 				s.token = ast.KindMinusEqualsToken
-			} else if s.charAt(1) == '-' {
+			} else if next == '-' {
 				s.pos += 2
 				s.token = ast.KindMinusMinusToken
 			} else {
@@ -583,9 +614,10 @@ func (s *Scanner) Scan() ast.Kind {
 				s.token = ast.KindMinusToken
 			}
 		case '.':
-			if stringutil.IsDigit(s.charAt(1)) {
+			next := s.charAt(1)
+			if stringutil.IsDigit(next) {
 				s.token = s.scanNumber()
-			} else if s.charAt(1) == '.' && s.charAt(2) == '.' {
+			} else if next == '.' && s.charAt(2) == '.' {
 				s.pos += 3
 				s.token = ast.KindDotDotDotToken
 			} else {
@@ -598,6 +630,9 @@ func (s *Scanner) Scan() ast.Kind {
 				s.pos += 2
 
 				for {
+					s.scanASCIIWhile(func(b byte) bool {
+						return b != '\n' && b != '\r'
+					})
 					ch1, size := s.charAndSize()
 					if size == 0 || stringutil.IsLineBreak(ch1) {
 						break
@@ -621,6 +656,9 @@ func (s *Scanner) Scan() ast.Kind {
 				commentClosed := false
 				lastLineStart := s.tokenStart
 				for {
+					s.scanASCIIWhile(func(b byte) bool {
+						return b != '*' && b != '\n' && b != '\r'
+					})
 					ch1, size := s.charAndSize()
 					if size == 0 {
 						break
@@ -729,7 +767,7 @@ func (s *Scanner) Scan() ast.Kind {
 			s.pos++
 			s.token = ast.KindSemicolonToken
 		case '<':
-			if isConflictMarkerTrivia(s.text, s.pos) {
+			if s.charAt(1) == '<' && isConflictMarkerTrivia(s.text, s.pos) {
 				s.pos = scanConflictMarkerTrivia(s.text, s.pos, s.errorAt)
 				if s.skipTrivia {
 					continue
@@ -757,7 +795,7 @@ func (s *Scanner) Scan() ast.Kind {
 				s.token = ast.KindLessThanToken
 			}
 		case '=':
-			if isConflictMarkerTrivia(s.text, s.pos) {
+			if s.charAt(1) == '=' && isConflictMarkerTrivia(s.text, s.pos) {
 				s.pos = scanConflictMarkerTrivia(s.text, s.pos, s.errorAt)
 				if s.skipTrivia {
 					continue
@@ -782,7 +820,7 @@ func (s *Scanner) Scan() ast.Kind {
 				s.token = ast.KindEqualsToken
 			}
 		case '>':
-			if isConflictMarkerTrivia(s.text, s.pos) {
+			if s.charAt(1) == '>' && isConflictMarkerTrivia(s.text, s.pos) {
 				s.pos = scanConflictMarkerTrivia(s.text, s.pos, s.errorAt)
 				if s.skipTrivia {
 					continue
@@ -827,7 +865,7 @@ func (s *Scanner) Scan() ast.Kind {
 			s.pos++
 			s.token = ast.KindOpenBraceToken
 		case '|':
-			if isConflictMarkerTrivia(s.text, s.pos) {
+			if s.charAt(1) == '|' && isConflictMarkerTrivia(s.text, s.pos) {
 				s.pos = scanConflictMarkerTrivia(s.text, s.pos, s.errorAt)
 				if s.skipTrivia {
 					continue
@@ -994,29 +1032,33 @@ func (s *Scanner) ReScanLessThanToken() ast.Kind {
 
 func (s *Scanner) ReScanGreaterThanToken() ast.Kind {
 	if s.token == ast.KindGreaterThanToken {
-		s.pos = s.tokenStart + 1
-		if s.char() == '>' {
-			if s.charAt(1) == '>' {
-				if s.charAt(2) == '=' {
-					s.pos += 3
-					s.token = ast.KindGreaterThanGreaterThanGreaterThanEqualsToken
-				} else {
-					s.pos += 2
-					s.token = ast.KindGreaterThanGreaterThanGreaterThanToken
-				}
-			} else if s.charAt(1) == '=' {
-				s.pos += 2
-				s.token = ast.KindGreaterThanGreaterThanEqualsToken
-			} else {
-				s.pos++
-				s.token = ast.KindGreaterThanGreaterThanToken
-			}
-		} else if s.char() == '=' {
-			s.pos++
-			s.token = ast.KindGreaterThanEqualsToken
-		}
+		s.reScanGreaterThanTokenInner()
 	}
 	return s.token
+}
+
+func (s *Scanner) reScanGreaterThanTokenInner() {
+	s.pos = s.tokenStart + 1
+	if s.char() == '>' {
+		if s.charAt(1) == '>' {
+			if s.charAt(2) == '=' {
+				s.pos += 3
+				s.token = ast.KindGreaterThanGreaterThanGreaterThanEqualsToken
+			} else {
+				s.pos += 2
+				s.token = ast.KindGreaterThanGreaterThanGreaterThanToken
+			}
+		} else if s.charAt(1) == '=' {
+			s.pos += 2
+			s.token = ast.KindGreaterThanGreaterThanEqualsToken
+		} else {
+			s.pos++
+			s.token = ast.KindGreaterThanGreaterThanToken
+		}
+	} else if s.char() == '=' {
+		s.pos++
+		s.token = ast.KindGreaterThanEqualsToken
+	}
 }
 
 func (s *Scanner) ReScanTemplateToken(isTaggedTemplate bool) ast.Kind {
@@ -1500,13 +1542,11 @@ func (s *Scanner) scanIdentifier(prefixLength int) bool {
 	ch := s.char()
 	// Fast path for simple ASCII identifiers
 	if stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$' {
-		for {
-			s.pos++
-			ch = s.char()
-			if !(isWordCharacter(ch) || ch == '$') {
-				break
-			}
-		}
+		s.pos++
+		s.scanASCIIWhile(func(b byte) bool {
+			return (b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z') || (b >= '0' && b <= '9') || b == '_' || b == '$'
+		})
+		ch = s.char()
 		if ch < utf8.RuneSelf && ch != '\\' {
 			s.tokenValue = s.text[start:s.pos]
 			return true
@@ -1562,14 +1602,15 @@ func (s *Scanner) scanString(jsxAttributeString bool) string {
 	}
 	s.pos++
 	// Fast path for simple strings without escape sequences.
-	strLen := strings.IndexRune(s.text[s.pos:], quote)
+	strLen := strings.IndexByte(s.text[s.pos:], byte(quote))
 	if strLen == 0 {
 		s.pos++
 		return ""
 	}
 	if strLen > 0 {
 		str := s.text[s.pos : s.pos+strLen]
-		if !jsxAttributeString && !strings.ContainsAny(str, "\r\n\\") {
+		if jsxAttributeString ||
+			strings.IndexByte(str, '\\') < 0 && strings.IndexByte(str, '\r') < 0 && strings.IndexByte(str, '\n') < 0 {
 			s.pos += strLen + 1
 			return str
 		}
@@ -1613,6 +1654,9 @@ func (s *Scanner) scanTemplateAndSetTokenValue(shouldEmitInvalidEscapeError bool
 	parts := make([]string, 0, 4)
 	var token ast.Kind
 	for {
+		s.scanASCIIWhile(func(b byte) bool {
+			return b != '`' && b != '$' && b != '\\' && b != '\r'
+		})
 		ch := s.char()
 		if ch < 0 || ch == '`' {
 			parts = append(parts, s.text[start:s.pos])
@@ -2016,6 +2060,14 @@ func (s *Scanner) scanNumberFragment() string {
 	isPreviousTokenSeparator := false
 	var result strings.Builder
 	for {
+		before := s.pos
+		s.scanASCIIWhile(func(b byte) bool {
+			return b >= '0' && b <= '9'
+		})
+		if s.pos > before {
+			allowSeparator = true
+			isPreviousTokenSeparator = false
+		}
 		ch := s.char()
 		if ch == '_' {
 			s.tokenFlags |= ast.TokenFlagsContainsSeparator
@@ -2035,17 +2087,14 @@ func (s *Scanner) scanNumberFragment() string {
 			start = s.pos
 			continue
 		}
-		if stringutil.IsDigit(ch) {
-			allowSeparator = true
-			isPreviousTokenSeparator = false
-			s.pos++
-			continue
-		}
 		break
 	}
 	if isPreviousTokenSeparator {
 		s.tokenFlags |= ast.TokenFlagsContainsInvalidSeparator
 		s.errorAt(diagnostics.Numeric_separators_are_not_allowed_here, s.pos-1, 1)
+	}
+	if result.Len() == 0 {
+		return s.text[start:s.pos]
 	}
 	result.WriteString(s.text[start:s.pos])
 	return result.String()
@@ -2375,12 +2424,20 @@ func isConflictMarkerTrivia(text string, pos int) bool {
 		panic("pos < 0")
 	}
 
-	// Conflict markers must be at the start of a line.
-	var prev rune
-	if pos >= 2 {
-		prev, _ = utf8.DecodeLastRuneInString(text[:pos-2])
+	// Fast reject: a conflict marker is the same byte repeated seven times. If the
+	// second byte differs (the overwhelmingly common case for `<`, `>`, `=`, `|`
+	// tokens), it cannot be a marker, so skip the line-start check entirely.
+	if pos+1 >= len(text) || text[pos+1] != text[pos] {
+		return false
 	}
-	if pos == 0 || stringutil.IsLineBreak(prev) || pos >= 1 && stringutil.IsLineBreak(rune(text[pos-1])) {
+
+	// Conflict markers must be at the start of a line.
+	atLineStart := pos == 0 || stringutil.IsLineBreak(rune(text[pos-1]))
+	if !atLineStart && pos >= 2 {
+		prev, _ := utf8.DecodeLastRuneInString(text[:pos-2])
+		atLineStart = stringutil.IsLineBreak(prev)
+	}
+	if atLineStart {
 		ch := text[pos]
 
 		if (pos + mergeConflictMarkerLength) < len(text) {
@@ -2831,13 +2888,10 @@ func iterateCommentRanges(f *ast.NodeFactory, text string, pos int, trailing boo
 							pos += s
 						}
 					} else {
-						for pos < len(text) {
-							c, s := utf8.DecodeRuneInString(text[pos:])
-							if c == '*' && pos+1 < len(text) && text[pos+1] == '/' {
-								pos += 2
-								break
-							}
-							pos += s
+						if i := strings.Index(text[pos:], "*/"); i >= 0 {
+							pos += i + 2
+						} else {
+							pos = len(text)
 						}
 					}
 
