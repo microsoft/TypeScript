@@ -806,22 +806,37 @@ func isDeclarationReadonly(declaration *ast.Node) bool {
 	return ast.GetCombinedModifierFlags(declaration)&ast.ModifierFlagsReadonly != 0 && !ast.IsParameterPropertyDeclaration(declaration, declaration.Parent)
 }
 
+// orderedSetMapThreshold is the size at which an orderedSet materializes its dedup map.
+// Below this, contains() scans the values slice.
+const orderedSetMapThreshold = 16
+
 type orderedSet[T comparable] struct {
 	valuesByKey map[T]struct{}
 	values      []T
 }
 
 func (s *orderedSet[T]) contains(value T) bool {
+	if s.valuesByKey == nil {
+		return slices.Contains(s.values, value)
+	}
 	_, ok := s.valuesByKey[value]
 	return ok
 }
 
 func (s *orderedSet[T]) add(value T) {
+	s.values = append(s.values, value)
+	// Small sets are served by a linear scan over values; only materialize the map once the set
+	// grows large enough for hashing to win.
 	if s.valuesByKey == nil {
-		s.valuesByKey = make(map[T]struct{})
+		if len(s.values) <= orderedSetMapThreshold {
+			return
+		}
+		s.valuesByKey = make(map[T]struct{}, len(s.values))
+		for _, v := range s.values[:len(s.values)-1] {
+			s.valuesByKey[v] = struct{}{}
+		}
 	}
 	s.valuesByKey[value] = struct{}{}
-	s.values = append(s.values, value)
 }
 
 func getContainingFunctionOrClassStaticBlock(node *ast.Node) *ast.Node {
