@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 )
 
 func tokenIsIdentifierOrKeyword(token ast.Kind) bool {
@@ -30,6 +31,21 @@ func GetTextOfNodeFromSourceText(sourceText string, node *ast.Node, includeTrivi
 		pos = SkipTrivia(sourceText, pos)
 	}
 	text := sourceText[pos:node.End()]
+	if node.Flags&ast.NodeFlagsReparserTransformedLiteral != 0 {
+		// This is similar to `getLiteralTextOfNode` in the printer, but without the context of an `emitContext` to provide overrides
+		if ast.IsStringLiteral(node) {
+			if node.AsStringLiteral().TokenFlags&ast.TokenFlagsSingleQuote != 0 {
+				return "'" + text + "'"
+			}
+			return "\"" + text + "\""
+		} else if ast.IsIdentifier(node) {
+			return node.Text()
+		}
+		// Only the above node kinds are currently transformed into one another by the reparser, requiring the textual remapping.
+		// (Any reamppings done by emit transforms are handled by `getLiteralTextOfNode` in the printer)
+		// Fail on any other kinds.
+		debug.FailBadSyntaxKind(node, "Unexpected reparser-transformed node kind")
+	}
 	// if (isJSDocTypeExpressionOrChild(node)) {
 	//     // strip space + asterisk at line start
 	//     text = text.split(/\r\n|\n|\r/).map(line => line.replace(/^\s*\*/, "").trimStart()).join("\n");

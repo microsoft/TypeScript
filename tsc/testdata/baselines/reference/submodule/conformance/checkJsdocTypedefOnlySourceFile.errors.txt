@@ -1,14 +1,17 @@
+0.js(6,20): error TS1003: Identifier expected.
 0.js(6,21): error TS1003: Identifier expected.
 0.js(10,12): error TS2503: Cannot find namespace 'exports'.
 
 
-==== 0.js (2 errors) ====
+==== 0.js (3 errors) ====
     // @ts-check
     
     var exports = {};
     
     /**
      * @typedef {string}
+                       ~
+!!! error TS1003: Identifier expected.
                         
      */
     

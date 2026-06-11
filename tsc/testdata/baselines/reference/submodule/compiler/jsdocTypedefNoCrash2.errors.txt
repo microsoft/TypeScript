@@ -1,12 +1,15 @@
 export.js(1,13): error TS8008: Type aliases can only be used in TypeScript files.
+export.js(4,5): error TS1003: Identifier expected.
 
 
-==== export.js (1 errors) ====
+==== export.js (2 errors) ====
     export type foo = 5;
                 ~~~
 !!! error TS8008: Type aliases can only be used in TypeScript files.
     /**
      * @typedef {{
      * }}
+        ~
+!!! error TS1003: Identifier expected.
      */
     export const foo = 5;

@@ -1,0 +1,15 @@
+--- old.jsdocTypedefNoCrash.errors.txt
++++ new.jsdocTypedefNoCrash.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++export.js(3,5): error TS1003: Identifier expected.
++
++
++==== export.js (1 errors) ====
++    /**
++     * @typedef {{
++     * }}
++        ~
++!!! error TS1003: Identifier expected.
++     */
++    export const foo = 5;

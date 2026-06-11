@@ -1,8 +1,13 @@
 package parser
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
 func (p *Parser) finishReparsedNode(node *ast.Node, locationNode *ast.Node) {
@@ -24,6 +29,24 @@ func (p *Parser) addDeepCloneReparse(node *ast.Node) *ast.Node {
 		p.reparsedClones = append(p.reparsedClones, clone)
 	}
 	return clone
+}
+
+func (p *Parser) addTransformedReparse(newNode *ast.Node, old *ast.Node) *ast.Node {
+	p.finishReparsedNode(newNode, old)
+	newNode.Flags |= ast.NodeFlagsReparserTransformedLiteral
+	p.reparsedClones = append(p.reparsedClones, newNode)
+	return newNode
+}
+
+func (p *Parser) checkNonIdentifierName(name *ast.Node) *ast.Node {
+	if ast.IsIdentifier(name) && !scanner.IsValidIdentifier(name.AsIdentifier().Text) {
+		errLoc := name.Loc
+		if errLoc.Len() == 0 { // missing name, emit error on the character before the missing name node
+			errLoc = core.NewTextRange(name.Loc.Pos()-1, name.Loc.Pos())
+		}
+		p.parseErrorAtRange(errLoc, diagnostics.Identifier_expected)
+	}
+	return name
 }
 
 // Hosted tags find a host and add their children to the correct location under the host.
@@ -57,7 +80,7 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		if isNamespace {
 			modifiers = p.createExportModifier(tag)
 		}
-		typeAlias := p.factory.NewJSTypeAliasDeclaration(modifiers, p.addDeepCloneReparse(p.getInnermostNameOfJSDocNamespace(fullName)), nil, nil)
+		typeAlias := p.factory.NewJSTypeAliasDeclaration(modifiers, p.addDeepCloneReparse(p.checkNonIdentifierName(p.getInnermostNameOfJSDocNamespace(fullName))), nil, nil)
 		typeAlias.AsTypeAliasDeclaration().TypeParameters = p.gatherTypeParameters(jsDoc, true /*typedefOrCallback*/)
 		var t *ast.Node
 		switch typeExpression.Kind {
@@ -121,9 +144,9 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 	clonedModifiers := p.factory.DeepCloneReparseModifiers(modifiers)
 	switch fun.Kind {
 	case ast.KindFunctionDeclaration:
-		signature = p.factory.NewFunctionDeclaration(clonedModifiers, nil, p.factory.DeepCloneReparse(fun.Name()), nil, nil, nil, nil, nil)
+		signature = p.factory.NewFunctionDeclaration(clonedModifiers, nil, p.factory.DeepCloneReparse(p.checkNonIdentifierName(fun.Name())), nil, nil, nil, nil, nil)
 	case ast.KindMethodDeclaration:
-		signature = p.factory.NewMethodDeclaration(clonedModifiers, nil, p.factory.DeepCloneReparse(fun.Name()), nil, nil, nil, nil, nil, nil)
+		signature = p.factory.NewMethodDeclaration(clonedModifiers, nil, p.factory.DeepCloneReparse(p.checkNonIdentifierName(fun.Name())), nil, nil, nil, nil, nil, nil)
 	case ast.KindConstructor:
 		signature = p.factory.NewConstructorDeclaration(clonedModifiers, nil, nil, nil, nil, nil)
 	case ast.KindJSDocCallbackTag:
@@ -136,7 +159,7 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 		signature.FunctionLikeData().TypeParameters = p.gatherTypeParameters(jsDoc, false /*typedefOrCallback*/)
 	}
 	parameters := p.nodeSliceArena.NewSlice(0)
-	for _, param := range jsSignature.Parameters() {
+	for pi, param := range jsSignature.Parameters() {
 		var parameter *ast.Node
 		if param.Kind == ast.KindJSDocThisTag {
 			thisTag := param.AsJSDocThisTag()
@@ -169,8 +192,33 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 					paramType = p.reparseJSDocTypeLiteral(jsparam.TypeExpression.Type())
 				}
 			}
-
-			parameter = p.factory.NewParameterDeclaration(nil, dotDotDotToken, p.addDeepCloneReparse(jsparam.Name()), p.makeQuestionIfOptional(jsparam), paramType, nil)
+			name := jsparam.Name()
+			if ast.IsIdentifier(name) && !scanner.IsValidIdentifier(name.AsIdentifier().Text) {
+				// drop invalid chars for _, if empty, write _0, etc., so we have a valid param name to emit later
+				result := strings.Builder{}
+				for i, ch := range name.AsIdentifier().Text {
+					if i == 0 {
+						if !scanner.IsIdentifierStart(ch) {
+							result.WriteRune('_')
+						} else {
+							result.WriteRune(ch)
+						}
+						continue
+					} else if !scanner.IsIdentifierPart(ch) {
+						result.WriteRune('_')
+					} else {
+						result.WriteRune(ch)
+					}
+				}
+				if result.Len() == 0 {
+					result.WriteRune('_')
+					result.WriteString(strconv.Itoa(pi))
+				}
+				name = p.addTransformedReparse(p.factory.NewIdentifier(result.String()), name)
+			} else {
+				name = p.addDeepCloneReparse(name)
+			}
+			parameter = p.factory.NewParameterDeclaration(nil, dotDotDotToken, name, p.makeQuestionIfOptional(jsparam), paramType, nil)
 		}
 		p.finishReparsedNode(parameter, param)
 		parameters = append(parameters, parameter)
@@ -206,7 +254,12 @@ func (p *Parser) reparseJSDocTypeLiteral(t *ast.TypeNode) *ast.Node {
 			if name.Kind == ast.KindQualifiedName {
 				name = name.AsQualifiedName().Right
 			}
-			property := p.factory.NewPropertySignatureDeclaration(nil, p.addDeepCloneReparse(name), p.makeQuestionIfOptional(jsprop), nil, nil)
+			if ast.IsIdentifier(name) && !scanner.IsValidIdentifier(name.AsIdentifier().Text) {
+				name = p.addTransformedReparse(p.factory.NewStringLiteral(name.AsIdentifier().Text, ast.TokenFlagsNone), name)
+			} else {
+				name = p.addDeepCloneReparse(name)
+			}
+			property := p.factory.NewPropertySignatureDeclaration(nil, name, p.makeQuestionIfOptional(jsprop), nil, nil)
 			if jsprop.TypeExpression != nil {
 				property.AsPropertySignatureDeclaration().Type = p.reparseJSDocTypeLiteral(jsprop.TypeExpression.Type())
 			}
@@ -263,7 +316,7 @@ func (p *Parser) gatherTypeParameters(j *ast.Node, typedefOrCallback bool) *ast.
 			if constraint != nil && firstTypeParameter {
 				reparse = p.factory.NewTypeParameterDeclaration(
 					p.factory.DeepCloneReparseModifiers(tp.Modifiers()),
-					p.addDeepCloneReparse(tp.Name()),
+					p.addDeepCloneReparse(p.checkNonIdentifierName(tp.Name())),
 					p.addDeepCloneReparse(constraint.Type()),
 					nil, // expression
 					p.addDeepCloneReparse(tp.AsTypeParameterDeclaration().DefaultType),

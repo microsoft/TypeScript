@@ -1,0 +1,20 @@
+--- old.misspelledJsDocTypedefTags.types
++++ new.misspelledJsDocTypedefTags.types
+@@= skipped -2, +2 lines =@@
+ === a.js ===
+ /** @typedef {{ endTime: number, screenshots: number}} A.<b>*/
+ Animation.AnimationModel.ScreenshotCapture.Request;
+->Animation.AnimationModel.ScreenshotCapture.Request : error
++>Animation.AnimationModel.ScreenshotCapture.Request : any
+ >Animation.AnimationModel.ScreenshotCapture : any
+ >Animation.AnimationModel : any
+ >Animation : { new (effect?: AnimationEffect | null, timeline?: AnimationTimeline | null): Animation; prototype: Animation; }
+@@= skipped -10, +10 lines =@@
+
+ /** @typedef {{ endTime: number, screenshots: !B.<string>}} */
+ Animation.AnimationModel.ScreenshotCapture.Request;
+->Animation.AnimationModel.ScreenshotCapture.Request : error
++>Animation.AnimationModel.ScreenshotCapture.Request : any
+ >Animation.AnimationModel.ScreenshotCapture : any
+ >Animation.AnimationModel : any
+ >Animation : { new (effect?: AnimationEffect | null, timeline?: AnimationTimeline | null): Animation; prototype: Animation; }

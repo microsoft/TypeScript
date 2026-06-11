@@ -1,0 +1,11 @@
+export.js(3,5): error TS1003: Identifier expected.
+
+
+==== export.js (1 errors) ====
+    /**
+     * @typedef {{
+     * }}
+        ~
+!!! error TS1003: Identifier expected.
+     */
+    export const foo = 5;

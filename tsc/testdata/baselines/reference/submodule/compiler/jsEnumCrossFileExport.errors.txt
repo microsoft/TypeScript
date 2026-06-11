@@ -1,9 +1,10 @@
+enumDef.js(14,20): error TS1003: Identifier expected.
 enumDef.js(14,21): error TS1003: Identifier expected.
 index.js(4,17): error TS2749: 'Host.UserMetrics.Action' refers to a value, but is being used as a type here. Did you mean 'typeof Host.UserMetrics.Action'?
 index.js(18,11): error TS2749: 'Host.UserMetrics.Blah' refers to a value, but is being used as a type here. Did you mean 'typeof Host.UserMetrics.Blah'?
 
 
-==== enumDef.js (1 errors) ====
+==== enumDef.js (2 errors) ====
     var Host = {};
     Host.UserMetrics = {};
     /** @enum {number} */
@@ -18,6 +19,8 @@ index.js(18,11): error TS2749: 'Host.UserMetrics.Blah' refers to a value, but is
      */
     /**
      * @typedef {string}
+                       ~
+!!! error TS1003: Identifier expected.
                         
      */
     

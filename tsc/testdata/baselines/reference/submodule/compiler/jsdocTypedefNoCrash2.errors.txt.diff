@@ -7,9 +7,10 @@
 -
 -
 -==== export.js (3 errors) ====
++export.js(4,5): error TS1003: Identifier expected.
 +
 +
-+==== export.js (1 errors) ====
++==== export.js (2 errors) ====
      export type foo = 5;
                  ~~~
 -!!! error TS2451: Cannot redeclare block-scoped variable 'foo'.
@@ -18,6 +19,8 @@
      /**
       * @typedef {{
       * }}
++        ~
++!!! error TS1003: Identifier expected.
       */
      export const foo = 5;
 -                 ~~~
