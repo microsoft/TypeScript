@@ -145,6 +145,31 @@ func TestBuildCommandLine(t *testing.T) {
 	testCases := slices.Concat(
 		[]*tscInput{
 			{
+				subScenario: "included tsconfig json can be imported as json input",
+				files: FileMap{
+					"/home/src/workspaces/project/index.ts": `import tsconfig from "./tsconfig.json" with { type: "json" };
+declare global {
+    interface ImportAttributes {
+        type: "json";
+    }
+}
+console.log(tsconfig);`,
+					"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"module": "preserve",
+							"moduleResolution": "bundler",
+							"noEmit": true,
+							"resolveJsonModule": true,
+							"strict": true,
+							"target": "esnext"
+						},
+						"include": ["index.ts", "tsconfig.json"]
+					}`),
+				},
+				commandLineArgs: []string{"--build"},
+			},
+			{
 				subScenario:     "help",
 				files:           FileMap{},
 				commandLineArgs: []string{"--build", "--help"},
