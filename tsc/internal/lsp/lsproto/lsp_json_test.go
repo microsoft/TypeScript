@@ -140,6 +140,11 @@ func TestUnmarshalAcceptsNullForNullableFields(t *testing.T) {
 			input:  `{"userPreferences": null}`,
 			target: new(InitializationOptions),
 		},
+		{
+			name:   "InitializeParams initializationOptions null",
+			input:  `{"processId": null, "rootUri": null, "capabilities": {}, "initializationOptions": null}`,
+			target: new(InitializeParams),
+		},
 	}
 
 	for _, tt := range tests {

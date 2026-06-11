@@ -319,8 +319,10 @@ const showCodeLensLocationsCommandName = "typescript.showCodeLensLocations"
 func (f *FourslashTest) initialize(t *testing.T, capabilities *lsproto.ClientCapabilities) {
 	params := &lsproto.InitializeParams{
 		Locale: new("en-US"),
-		InitializationOptions: &lsproto.InitializationOptions{
-			CodeLensShowLocationsCommandName: new(showCodeLensLocationsCommandName),
+		InitializationOptions: &lsproto.InitializationOptionsOrNull{
+			InitializationOptions: &lsproto.InitializationOptions{
+				CodeLensShowLocationsCommandName: new(showCodeLensLocationsCommandName),
+			},
 		},
 	}
 	params.Capabilities = getCapabilitiesWithDefaults(capabilities)

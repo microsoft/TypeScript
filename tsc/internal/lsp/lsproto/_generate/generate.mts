@@ -1017,9 +1017,17 @@ function patchAndPreprocessModel() {
         }
 
         for (const prop of structure.properties) {
-            // Replace initializationOptions type with custom InitializationOptions
+            // Replace initializationOptions type with custom InitializationOptions.
+            // The spec types this field as LSPAny?, which includes null, so keep
+            // it nullable so a null value sent by loose clients is accepted.
             if (prop.name === "initializationOptions" && prop.type.kind === "reference" && prop.type.name === "LSPAny") {
-                prop.type = { kind: "reference", name: "InitializationOptions" };
+                prop.type = {
+                    kind: "or",
+                    items: [
+                        { kind: "reference", name: "InitializationOptions" },
+                        { kind: "base", name: "null" },
+                    ],
+                };
             }
 
             // Replace Data *any fields with custom typed Data fields
