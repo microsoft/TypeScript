@@ -115,7 +115,7 @@ export class ProjectStatus implements vscode.Disposable {
             case ProjectInfoState.Type.Pending: {
                 const statusItem = this.ensureStatusItem();
                 statusItem.severity = vscode.LanguageStatusSeverity.Information;
-                statusItem.text = "Loading project info...";
+                statusItem.text = vscode.l10n.t("Loading project info...");
                 statusItem.detail = undefined;
                 statusItem.command = undefined;
                 statusItem.busy = true;
@@ -125,15 +125,15 @@ export class ProjectStatus implements vscode.Disposable {
                 const currentLanguageId = this.activeEditorTracker.activeJsTsEditor?.document.languageId;
                 const isTypeScript = currentLanguageId === "typescript"
                     || currentLanguageId === "typescriptreact";
-                const noConfigFileText = isTypeScript ? "No tsconfig" : "No jsconfig";
+                const noConfigFileText = isTypeScript ? vscode.l10n.t("No tsconfig") : vscode.l10n.t("No jsconfig");
 
                 const rootPath = this.getWorkspaceRootForResource(this.state.resource);
                 if (!rootPath) {
                     if (this.statusItem) {
                         this.statusItem.text = noConfigFileText;
                         this.statusItem.detail = !vscode.workspace.workspaceFolders
-                            ? "No opened folders"
-                            : "File is not part of opened folders";
+                            ? vscode.l10n.t("No opened folders")
+                            : vscode.l10n.t("File is not part of opened folders");
                         this.statusItem.busy = false;
                     }
                     return;
@@ -148,7 +148,7 @@ export class ProjectStatus implements vscode.Disposable {
                     statusItem.text = vscode.workspace.asRelativePath(this.state.configFile);
                     statusItem.command = {
                         command: "vscode.open",
-                        title: "Open Config File",
+                        title: vscode.l10n.t("Open Config File"),
                         arguments: [vscode.Uri.file(this.state.configFile)],
                     };
                 }
@@ -164,7 +164,7 @@ export class ProjectStatus implements vscode.Disposable {
     private ensureStatusItem(): vscode.LanguageStatusItem {
         if (!this.statusItem) {
             this.statusItem = vscode.languages.createLanguageStatusItem("typescript.native-preview.projectStatus", jsTsLanguageModes);
-            this.statusItem.name = "TypeScript Native Preview Project Status";
+            this.statusItem.name = vscode.l10n.t("TypeScript Native Preview Project Status");
         }
         return this.statusItem;
     }

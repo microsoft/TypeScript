@@ -46,6 +46,7 @@
         "**/node_modules",
         "**/*-lock.json",
         "**/testdata",
+        "_extension/l10n/**",
         "_submodules/**",
         "internal/bundled/libs/**",
         "internal/lsp/lsproto/_generate/*.json",

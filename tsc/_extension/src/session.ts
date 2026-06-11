@@ -73,7 +73,7 @@ export class SessionManager implements vscode.Disposable {
 
     async initializeAPIConnection(pipe?: string): Promise<string> {
         if (!this.currentSession) {
-            throw new Error("Language server is not running.");
+            throw new Error(vscode.l10n.t("Language server is not running."));
         }
         const result = await this.currentSession.client.initializeAPISession(pipe);
         return result.pipe;
@@ -168,10 +168,10 @@ class Session implements vscode.Disposable {
         this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.dev.runGC", async () => {
             try {
                 await this.client.runGC();
-                vscode.window.showInformationMessage("Garbage collection triggered");
+                vscode.window.showInformationMessage(vscode.l10n.t(`Garbage collection triggered`));
             }
             catch (error) {
-                vscode.window.showErrorMessage(`Failed to run GC: ${error}`);
+                vscode.window.showErrorMessage(vscode.l10n.t(`Failed to run GC: {0}`, String(error)));
             }
         }));
 
@@ -180,10 +180,10 @@ class Session implements vscode.Disposable {
             if (!dir) return;
             try {
                 const file = await this.client.saveHeapProfile(dir);
-                vscode.window.showInformationMessage(`Heap profile saved to: ${file}`);
+                vscode.window.showInformationMessage(vscode.l10n.t(`Heap profile saved to: {0}`, file));
             }
             catch (error) {
-                vscode.window.showErrorMessage(`Failed to save heap profile: ${error}`);
+                vscode.window.showErrorMessage(vscode.l10n.t(`Failed to save heap profile: {0}`, String(error)));
             }
         }));
 
@@ -192,10 +192,10 @@ class Session implements vscode.Disposable {
             if (!dir) return;
             try {
                 const file = await this.client.saveAllocProfile(dir);
-                vscode.window.showInformationMessage(`Allocation profile saved to: ${file}`);
+                vscode.window.showInformationMessage(vscode.l10n.t(`Allocation profile saved to: {0}`, file));
             }
             catch (error) {
-                vscode.window.showErrorMessage(`Failed to save allocation profile: ${error}`);
+                vscode.window.showErrorMessage(vscode.l10n.t(`Failed to save allocation profile: {0}`, String(error)));
             }
         }));
 
@@ -205,10 +205,10 @@ class Session implements vscode.Disposable {
             try {
                 await this.client.startCPUProfile(dir);
                 vscode.commands.executeCommand("setContext", "typescript.native-preview.cpuProfileRunning", true);
-                vscode.window.showInformationMessage(`CPU profiling started. Profile will be saved to: ${dir}`);
+                vscode.window.showInformationMessage(vscode.l10n.t(`CPU profiling started. Profile will be saved to: {0}`, dir));
             }
             catch (error) {
-                vscode.window.showErrorMessage(`Failed to start CPU profile: ${error}`);
+                vscode.window.showErrorMessage(vscode.l10n.t(`Failed to start CPU profile: {0}`, String(error)));
                 vscode.commands.executeCommand("setContext", "typescript.native-preview.cpuProfileRunning", false);
             }
         }));
@@ -217,10 +217,10 @@ class Session implements vscode.Disposable {
             try {
                 const file = await this.client.stopCPUProfile();
                 vscode.commands.executeCommand("setContext", "typescript.native-preview.cpuProfileRunning", false);
-                vscode.window.showInformationMessage(`CPU profile saved to: ${file}`);
+                vscode.window.showInformationMessage(vscode.l10n.t(`CPU profile saved to: {0}`, file));
             }
             catch (error) {
-                vscode.window.showErrorMessage(`Failed to stop CPU profile: ${error}`);
+                vscode.window.showErrorMessage(vscode.l10n.t(`Failed to stop CPU profile: {0}`, String(error)));
             }
         }));
 
@@ -232,14 +232,15 @@ class Session implements vscode.Disposable {
         this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.initializeAPIConnection.ui", async () => {
             try {
                 const result = await this.client.initializeAPISession();
-                const copy = await vscode.window.showInformationMessage(`API session initialized. Listening on: ${result.pipe}`, "Copy");
-                if (copy === "Copy") {
+                const copyString = vscode.l10n.t("Copy");
+                const copy = await vscode.window.showInformationMessage(vscode.l10n.t(`API session initialized. Listening on: {0}`, result.pipe), copyString);
+                if (copy === copyString) {
                     await vscode.env.clipboard.writeText(result.pipe);
                 }
             }
             catch (error) {
                 const message = error instanceof Error ? error.message : String(error);
-                vscode.window.showErrorMessage(`Failed to initialize API session: ${message}`);
+                vscode.window.showErrorMessage(vscode.l10n.t(`Failed to initialize API session: {0}`, message));
             }
         }));
     }
@@ -261,28 +262,28 @@ async function showCommands(client: Client): Promise<void> {
     }
     const commands: CommandItem[] = [
         {
-            label: "$(refresh) Restart Server",
-            description: "Restart the TypeScript Native Preview language server",
+            label: vscode.l10n.t("$(refresh) Restart Server"),
+            description: vscode.l10n.t("Restart the TypeScript Native Preview language server"),
             command: "typescript.native-preview.restart",
         },
         {
-            label: "$(output) Show Output",
-            description: "Show the TypeScript Native Preview output log",
+            label: vscode.l10n.t("$(output) Show Output"),
+            description: vscode.l10n.t("Show the TypeScript Native Preview output log"),
             command: "typescript.native-preview.output.focus",
         },
         {
-            label: "$(report) Report Issue",
-            description: "Report an issue with TypeScript Native Preview",
+            label: vscode.l10n.t("$(report) Report Issue"),
+            description: vscode.l10n.t("Report an issue with TypeScript Native Preview"),
             command: "typescript.native-preview.reportIssue",
         },
         {
-            label: "$(versions) Select Version",
-            description: "Choose between bundled and workspace versions",
+            label: vscode.l10n.t("$(versions) Select Version"),
+            description: vscode.l10n.t("Choose between bundled and workspace versions"),
             command: "typescript.native-preview.selectVersion",
         },
         {
-            label: "$(stop-circle) Disable TypeScript Native Preview",
-            description: "Switch back to the built-in TypeScript extension",
+            label: vscode.l10n.t("$(stop-circle) Disable TypeScript Native Preview"),
+            description: vscode.l10n.t("Switch back to the built-in TypeScript extension"),
             command: "typescript.native-preview.disable",
         },
     ];
@@ -294,28 +295,28 @@ async function showCommands(client: Client): Promise<void> {
         commands.push({ label: "", kind: vscode.QuickPickItemKind.Separator });
         if (exe) {
             commands.push({
-                label: `Executable`,
+                label: vscode.l10n.t(`Executable`),
                 description: exe.path,
                 action: async () => {
                     await vscode.env.clipboard.writeText(exe.path);
-                    vscode.window.showInformationMessage("Executable path copied to clipboard.");
+                    vscode.window.showInformationMessage(vscode.l10n.t("Executable path copied to clipboard."));
                 },
             });
         }
         if (pid) {
             commands.push({
-                label: `PID`,
+                label: vscode.l10n.t(`PID`),
                 description: `${pid}`,
                 action: async () => {
                     await vscode.env.clipboard.writeText(`${pid}`);
-                    vscode.window.showInformationMessage("Server PID copied to clipboard.");
+                    vscode.window.showInformationMessage(vscode.l10n.t("Server PID copied to clipboard."));
                 },
             });
         }
     }
 
     const selected = await vscode.window.showQuickPick(commands, {
-        placeHolder: "TypeScript Native Preview Commands",
+        placeHolder: vscode.l10n.t("{0} Commands", "TypeScript Native Preview"),
     });
 
     if (selected) {
@@ -394,7 +395,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
 
     // Bundled version
     items.push({
-        label: (currentExePath === builtinExe.path ? "• " : "") + "Use Bundled Version",
+        label: (currentExePath === builtinExe.path ? "• " : "") + vscode.l10n.t("Use Bundled Version"),
         description: bundledVersion,
         detail: builtinExe.path,
         run: async () => {
@@ -408,7 +409,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
         for (const wsVersion of workspaceVersions) {
             const isActive = currentExePath === wsVersion.exePath;
             items.push({
-                label: (isActive ? "• " : "") + "Use Workspace Version",
+                label: (isActive ? "• " : "") + vscode.l10n.t("Use Workspace Version"),
                 description: wsVersion.version,
                 detail: wsVersion.tsdkPath,
                 run: async () => {
@@ -426,7 +427,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
             run: async () => {},
         });
         items.push({
-            label: "$(lock) Manage Workspace Trust to select a workspace version",
+            label: vscode.l10n.t("$(lock) Manage Workspace Trust to select a workspace version"),
             run: async () => {
                 await vscode.commands.executeCommand("workbench.trust.manage");
             },
@@ -448,7 +449,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
             if (workspaceVersions.some(ws => ws.exePath === resolved.path)) continue;
             const isActive = currentExePath === resolved.path;
             items.push({
-                label: (isActive ? "• " : "") + "Use Custom Version",
+                label: (isActive ? "• " : "") + vscode.l10n.t("Use Custom Version"),
                 description: resolved.version,
                 detail: resolved.path,
                 run: async () => {
@@ -461,7 +462,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
     }
 
     const selected = await vscode.window.showQuickPick<VersionQuickPickItem>(items, {
-        placeHolder: "Select the TypeScript Native Preview version to use",
+        placeHolder: vscode.l10n.t("Select the TypeScript Native Preview version to use"),
     });
 
     if (selected) {
@@ -488,19 +489,17 @@ export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext
     const config = vscode.workspace.getConfiguration("typescript.native-preview");
     const tsdkInspection = config.inspect<string>("tsdk");
     const workspaceTsdk = tsdkInspection?.workspaceValue;
-
     if (workspaceTsdk !== undefined) {
         // The workspace config already specifies a tsdk location, but the
         // user hasn't consented to using it. Just need their approval.
         const resolved = await resolveTsdkPathToExe(workspaceTsdk);
         if (!resolved) return;
-
-        const allow = "Allow";
-        const dismiss = "Dismiss";
-        const suppress = "Never in this Workspace";
+        const allow = vscode.l10n.t("Allow");
+        const dismiss = vscode.l10n.t("Dismiss");
+        const suppress = vscode.l10n.t("Never in this Workspace");
 
         const result = await vscode.window.showInformationMessage(
-            `This workspace has a TypeScript Native Preview tsdk configured (${resolved.version}). Would you like to use it?`,
+            vscode.l10n.t(`This workspace has a TypeScript Native Preview tsdk configured ({0}). Would you like to use it?`, resolved.version),
             allow,
             dismiss,
             suppress,
@@ -548,11 +547,11 @@ export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext
 async function promptForProfileDirectory(): Promise<string | undefined> {
     const defaultDir = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath ?? "";
     const dir = await vscode.window.showInputBox({
-        prompt: "Enter directory path for profile output",
+        prompt: vscode.l10n.t("Enter directory path for profile output"),
         value: defaultDir,
         validateInput: value => {
             if (!value.trim()) {
-                return "Directory path is required";
+                return vscode.l10n.t("Directory path is required");
             }
             return undefined;
         },

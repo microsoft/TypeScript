@@ -286,6 +286,9 @@ jobs:
       - run: node --experimental-strip-types ./internal/lsp/lsproto/_generate/fetchModel.mts
       - run: node --experimental-strip-types ./internal/lsp/lsproto/_generate/generate.mts
 
+      - name: generate files for extension
+        run: npx hereby generate:extension
+
       - name: Regenerate fourslash tests and update failing test list
         run: |
           set -x

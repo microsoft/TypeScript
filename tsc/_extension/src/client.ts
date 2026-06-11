@@ -208,7 +208,7 @@ export class Client implements vscode.Disposable {
             } satisfies StaticFeature,
         );
 
-        this.outputChannel.appendLine(`Starting language server...`);
+        this.outputChannel.appendLine(vscode.l10n.t(`Starting language server...`));
         await this.client.start();
         this.isInitialized = true;
         this.initializedEventEmitter.fire();
@@ -276,7 +276,7 @@ export class Client implements vscode.Disposable {
      */
     async initializeAPISession(pipe?: string): Promise<{ sessionId: string; pipe: string; }> {
         if (!this.client) {
-            throw new Error("Language client is not initialized");
+            throw new Error(vscode.l10n.t("Language client is not initialized"));
         }
         return this.client.sendRequest<{ sessionId: string; pipe: string; }>("custom/initializeAPISession", { pipe });
     }
@@ -287,7 +287,7 @@ export class Client implements vscode.Disposable {
      */
     async tryRestart(context: vscode.ExtensionContext): Promise<boolean> {
         if (!this.client) {
-            return Promise.reject(new Error("Language client is not initialized"));
+            return Promise.reject(new Error(vscode.l10n.t("Language client is not initialized")));
         }
         const exe = await getExe(context);
         if (exe.path !== this.exe?.path) {
@@ -295,12 +295,12 @@ export class Client implements vscode.Disposable {
         }
 
         this.isInitialized = false;
-        this.outputChannel.appendLine(`Restarting language server...`);
+        this.outputChannel.appendLine(vscode.l10n.t("Restarting language server..."));
         try {
             await this.client.restart();
         }
         catch (err) {
-            this.outputChannel.appendLine(`Graceful shutdown failed, forcing restart: ${err}`);
+            this.outputChannel.appendLine(vscode.l10n.t(`Graceful shutdown failed, forcing restart: {0}`, String(err)));
             await this.client.start();
         }
         this.isInitialized = true;
@@ -321,14 +321,14 @@ export class Client implements vscode.Disposable {
 
     async runGC(): Promise<void> {
         if (!this.client) {
-            throw new Error("Language client is not initialized");
+            throw new Error(vscode.l10n.t("Language client is not initialized"));
         }
         await this.client.sendRequest("custom/runGC");
     }
 
     async saveHeapProfile(dir: string): Promise<string> {
         if (!this.client) {
-            throw new Error("Language client is not initialized");
+            throw new Error(vscode.l10n.t("Language client is not initialized"));
         }
         const result = await this.client.sendRequest<{ file: string; }>("custom/saveHeapProfile", { dir });
         return result.file;
@@ -336,7 +336,7 @@ export class Client implements vscode.Disposable {
 
     async saveAllocProfile(dir: string): Promise<string> {
         if (!this.client) {
-            throw new Error("Language client is not initialized");
+            throw new Error(vscode.l10n.t("Language client is not initialized"));
         }
         const result = await this.client.sendRequest<{ file: string; }>("custom/saveAllocProfile", { dir });
         return result.file;
@@ -344,14 +344,14 @@ export class Client implements vscode.Disposable {
 
     async startCPUProfile(dir: string): Promise<void> {
         if (!this.client) {
-            throw new Error("Language client is not initialized");
+            throw new Error(vscode.l10n.t("Language client is not initialized"));
         }
         await this.client.sendRequest("custom/startCPUProfile", { dir });
     }
 
     async stopCPUProfile(): Promise<string> {
         if (!this.client) {
-            throw new Error("Language client is not initialized");
+            throw new Error(vscode.l10n.t("Language client is not initialized"));
         }
         const result = await this.client.sendRequest<{ file: string; }>("custom/stopCPUProfile");
         return result.file;
@@ -359,7 +359,7 @@ export class Client implements vscode.Disposable {
 
     async getProjectInfo(uri: string, token?: vscode.CancellationToken): Promise<{ configFilePath: string; }> {
         if (!this.client) {
-            throw new Error("Language client is not initialized");
+            throw new Error(vscode.l10n.t("Language client is not initialized"));
         }
         return this.client.sendRequest<{ configFilePath: string; }>("custom/projectInfo", {
             textDocument: { uri },
@@ -473,7 +473,7 @@ class ReportingErrorHandler implements ErrorHandler {
         if (resultingAction === CloseAction.DoNotRestart) {
             return {
                 action: resultingAction,
-                message: `The typescript.native-preview-lsp server crashed ${this.maxRestartCount + 1} times in the last 3 minutes. The server will not be restarted. See the output for more information.`,
+                message: vscode.l10n.t(`The typescript.native-preview-lsp server crashed {0} times in the last 3 minutes. The server will not be restarted. See the output for more information.`, String(this.maxRestartCount + 1)),
             };
         }
 

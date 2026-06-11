@@ -67,7 +67,7 @@ export function registerCodeLensShowLocationsCommand(): vscode.Disposable {
 
     function showCodeLensLocations(...args: unknown[]): void {
         if (args.length !== 3) {
-            throw new Error("Unexpected number of arguments.");
+            throw new Error(vscode.l10n.t("Unexpected number of arguments."));
         }
 
         const lspUri = args[0] as DocumentUri;

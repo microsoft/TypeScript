@@ -296,6 +296,14 @@ export const generate = task({
     },
 });
 
+export const generateExtension = task({
+    name: "generate:extension",
+    description: "Generates files in the extension",
+    run: async () => {
+        await $`npm run -w _extension generateLocBundle`;
+    },
+});
+
 // ── Enum generation from Go source ──────────────────────────────
 
 /**

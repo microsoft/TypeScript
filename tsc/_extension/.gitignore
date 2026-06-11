@@ -1,3 +1,5 @@
 *.vsix
 dist/
 lib/
+package.nls.qps-ploc.json
+l10n/bundle.l10n.qps-ploc.json

@@ -3,11 +3,12 @@
     "displayName": "TypeScript (Native Preview)",
     "publisher": "TypeScriptTeam",
     "author": "Microsoft Corp.",
-    "description": "Preview of the native TypeScript language server for Visual Studio Code.",
+    "description": "%description%",
     "icon": "logo.png",
     "private": true,
     "version": "0.0.0",
     "type": "commonjs",
+    "l10n": "./l10n",
     "repository": {
         "type": "git",
         "url": "https://github.com/microsoft/typescript-go"
@@ -38,7 +39,7 @@
                     "typescript.native-preview.customConfigFileName": {
                         "type": "string",
                         "default": "",
-                        "description": "Custom config file name to use e.g. 'tsconfig.all.json', before defaulting to tsconfig.json/jsconfig.json.",
+                        "description": "%native-preview.trace.customConfigFileName.description%",
                         "tags": ["experimental"]
                     },
                     "typescript.native-preview.trace.server": {
@@ -49,22 +50,22 @@
                             "verbose"
                         ],
                         "default": "verbose",
-                        "description": "Trace TypeScript Go server communication.",
+                        "description": "%native-preview.trace.server.description%",
                         "tags": [
                             "experimental"
                         ]
                     },
                     "typescript.native-preview.pprofDir": {
                         "type": "string",
-                        "description": "Directory to write pprof profiles to.",
+                        "description": "%native-preview.pprofDir.description%",
                         "tags": [
                             "experimental"
                         ]
                     },
                     "typescript.native-preview.tsdk": {
                         "type": "string",
+                        "description": "%native-preview.tsserver.tsdk.description%",
                         "scope": "window",
-                        "description": "Path to the @typescript/native-preview package or tsgo binary directory. If not specified, the extension will look for it in the default location.",
                         "tags": [
                             "experimental"
                         ]
@@ -75,7 +76,7 @@
                             "type": "string"
                         },
                         "default": [],
-                        "description": "Additional paths to tsgo binary directories or @typescript/native-preview packages that should appear in the version selector.",
+                        "description": "%native-preview.additionalTsdkLocations.description%",
                         "tags": [
                             "experimental"
                         ]
@@ -83,16 +84,16 @@
                     "typescript.native-preview.showDebugInfo": {
                         "type": "boolean",
                         "default": false,
-                        "description": "Show debug information (PID, executable path) in the server menu.",
+                        "description": "%native-preview.showDebugInfo.description%",
                         "tags": [
                             "experimental"
                         ]
                     },
                     "typescript.native-preview.goMemLimit": {
                         "type": "string",
-                        "description": "Set GOMEMLIMIT for the language server (e.g., '2048MiB', '4GiB'). See https://pkg.go.dev/runtime#hdr-Environment_Variables for more information.",
+                        "description": "%native-preview.goMemLimit.description%",
                         "pattern": "^[0-9]+(([KMGT]i)?B)?$",
-                        "patternErrorMessage": "Must be a valid memory limit (e.g., '2048MiB', '4GiB').",
+                        "patternErrorMessage": "%native-preview.goMemLimit.error%",
                         "tags": [
                             "experimental"
                         ]
@@ -112,86 +113,86 @@
         "commands": [
             {
                 "command": "typescript.native-preview.enable",
-                "title": "Enable (Experimental)",
+                "title": "%native-preview.enable.title%",
                 "enablement": "!typescript.native-preview.serverRunning",
                 "category": "TypeScript Native Preview"
             },
             {
                 "command": "typescript.native-preview.disable",
-                "title": "Disable",
+                "title": "%native-preview.disable.title%",
                 "enablement": "typescript.native-preview.serverRunning",
                 "category": "TypeScript Native Preview"
             },
             {
                 "command": "typescript.native-preview.restart",
-                "title": "Restart Language Server",
+                "title": "%native-preview.restart.title%",
                 "enablement": "typescript.native-preview.serverRunning",
                 "category": "TypeScript Native Preview"
             },
             {
                 "command": "typescript.native-preview.output.focus",
-                "title": "Show Output",
+                "title": "%native-preview.output.focus.title%",
                 "enablement": "typescript.native-preview.serverRunning",
                 "category": "TypeScript Native Preview"
             },
             {
                 "command": "typescript.native-preview.reportIssue",
-                "title": "Report Issue",
+                "title": "%native-preview.reportIssue.title%",
                 "enablement": "typescript.native-preview.serverRunning",
                 "category": "TypeScript Native Preview"
             },
             {
                 "command": "typescript.native-preview.selectVersion",
-                "title": "Select TypeScript Version...",
+                "title": "%native-preview.selectVersion.title%",
                 "enablement": "typescript.native-preview.serverRunning",
                 "category": "TypeScript Native Preview"
             },
             {
                 "command": "typescript.native-preview.goToSourceDefinition",
-                "title": "Go to Source Definition",
+                "title": "%native-preview.goToSourceDefinition.title%",
                 "enablement": "typescript.native-preview.serverRunning",
                 "category": "TypeScript Native Preview"
             },
             {
-                "title": "Show References of CodeLens",
                 "command": "typescript.native-preview.codeLens.showLocations",
+                "title": "%native-preview.codeLens.showLocations.title%",
                 "enablement": "false"
             },
             {
                 "command": "typescript.native-preview.dev.runGC",
-                "title": "TypeScript Native Preview: Run Garbage Collection",
+                "title": "%native-preview.dev.runGC.title%",
                 "enablement": "typescript.native-preview.serverRunning",
-                "category": "Developer"
+                "category": "%developer%"
             },
             {
                 "command": "typescript.native-preview.dev.saveHeapProfile",
-                "title": "TypeScript Native Preview: Save Heap Profile",
+                "title": "%native-preview.dev.saveHeapProfile.title%",
                 "enablement": "typescript.native-preview.serverRunning",
-                "category": "Developer"
+                "category": "%developer%"
             },
             {
                 "command": "typescript.native-preview.dev.saveAllocProfile",
-                "title": "TypeScript Native Preview: Save Allocation Profile",
+                "title": "%native-preview.dev.saveAllocProfile.title%",
                 "enablement": "typescript.native-preview.serverRunning",
-                "category": "Developer"
+                "category": "%developer%"
             },
             {
                 "command": "typescript.native-preview.dev.startCPUProfile",
-                "title": "TypeScript Native Preview: Start CPU Profile",
+                "title": "%native-preview.dev.startCPUProfile.title%",
                 "enablement": "typescript.native-preview.serverRunning && !typescript.native-preview.cpuProfileRunning",
-                "category": "Developer"
+                "category": "%developer%"
             },
             {
                 "command": "typescript.native-preview.dev.stopCPUProfile",
-                "title": "TypeScript Native Preview: Stop CPU Profile",
+                "title": "%native-preview.dev.stopCPUProfile.title%",
                 "enablement": "typescript.native-preview.cpuProfileRunning",
-                "category": "Developer"
+                "category": "%developer%"
             },
             {
                 "command": "typescript.native-preview.initializeAPIConnection.ui",
-                "title": "Initialize API Connection",
+                "title": "%native-preview.initializeAPIConnection.ui.title%",
                 "enablement": "typescript.native-preview.serverRunning",
-                "category": "Developer: TypeScript Native Preview"
+                "category": "%developer%"
             }
         ],
         "menus": {
@@ -216,12 +217,16 @@
         "lib",
         "LICENSE",
         "NOTICE.txt",
-        "logo.png"
+        "logo.png",
+        "l10n/bundle.l10n.json",
+        "package.nls.json"
     ],
     "scripts": {
         "build": "tsc && npm run bundle",
         "bundle": "esbuild src/extension.ts --bundle --external:vscode --platform=node --format=cjs --outfile=dist/extension.bundle.js --sourcemap",
         "watch": "npm run bundle -- --watch",
+        "generateLocTest": "npx @vscode/l10n-dev generate-pseudo -o ./l10n/ ./l10n/bundle.l10n.json ./package.nls.json",
+        "generateLocBundle": "npx @vscode/l10n-dev export --outDir ./l10n ./src",
         "//vscode:prepublish": "we do not use this hook; the Herebyfile runs bundle:release once instead",
         "bundle:release": "npm run bundle -- --minify"
     },
