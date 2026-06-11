@@ -24,7 +24,11 @@
  };
  /**
   * @typedef {Object} Options
-@@= skipped -23, +23 lines =@@
+  * @property {typeof import("./Test.js").default} [test]
+  */
+ declare class X extends Test {
++    test: import("./Test.js").default | undefined;
+     /**
       * @param {Options} options
       */
      constructor(options: Options);

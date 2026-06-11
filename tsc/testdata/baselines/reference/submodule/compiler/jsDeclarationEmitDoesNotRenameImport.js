@@ -53,6 +53,7 @@ export type Options = {
  * @property {typeof import("./Test.js").default} [test]
  */
 declare class X extends Test {
+    test: import("./Test.js").default | undefined;
     /**
      * @param {Options} options
      */

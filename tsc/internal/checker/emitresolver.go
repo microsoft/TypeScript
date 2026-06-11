@@ -1259,3 +1259,30 @@ func (r *EmitResolver) TryJSTypeNodeToTypeNode(emitContext *printer.EmitContext,
 	requestNodeBuilder := NewNodeBuilder(r.checker, emitContext) // TODO: cache per-context
 	return requestNodeBuilder.TryJSTypeNodeToTypeNode(typeNode, enclosingDeclaration, flags, internalFlags, tracker)
 }
+
+func (r *EmitResolver) GetBaseDeclarationsForPropertyDeclaration(node *ast.Node) []*ast.Node {
+	if node == nil {
+		return nil
+	}
+
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+
+	s := r.checker.getSymbolOfDeclaration(node)
+	if s == nil || s.Parent == nil {
+		return nil
+	}
+	parentType := r.checker.getDeclaredTypeOfSymbol(s.Parent)
+	if parentType == nil {
+		return nil
+	}
+	bases := r.checker.getBaseTypes(parentType)
+	for _, b := range bases {
+		baseProp := r.checker.getPropertyOfObjectType(b, s.Name)
+		if baseProp != nil {
+			return baseProp.Declarations
+			// TODO: return base declarations from all base types if any callers actually look at the list
+		}
+	}
+	return nil
+}

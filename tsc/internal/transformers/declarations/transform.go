@@ -62,12 +62,15 @@ type DeclarationTransformer struct {
 	lateStatementReplacementMap      map[ast.NodeId]*ast.Node
 	expandoHosts                     map[ast.NodeId]*ast.Node   // store the result of transforming expando hosts so they can be inserted later if the host is actually referenced
 	expandoMembers                   map[ast.NodeId][]*ast.Node // store any found expando _members_ after transforming them so *if* the host is referenced, they can be emitted alongside it
+	seenProperties                   collections.Set[*ast.Node]
+	thisPropertyAssignmentsCollected []*ast.Node
 	rawReferencedFiles               []ReferencedFilePair
 	rawTypeReferenceDirectives       []*ast.FileReference
 	rawLibReferenceDirectives        []*ast.FileReference
 	bindingNameVisitor               *ast.NodeVisitor
 	expressionVisitor                *ast.NodeVisitor
 	exportStrippingVisitor           *ast.NodeVisitor
+	thisPropertyVisitor              *ast.NodeVisitor
 }
 
 // TODO: Convert to transformers.TransformerFactory signature to allow more automatic composition with other transforms
@@ -104,6 +107,7 @@ func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitCo
 	tx.bindingNameVisitor = tx.EmitContext().NewNodeVisitor(tx.visitBindingName)
 	tx.expressionVisitor = tx.EmitContext().NewNodeVisitor(tx.visitNestedExpression)
 	tx.exportStrippingVisitor = tx.EmitContext().NewNodeVisitor(tx.stripExportModifiers)
+	tx.thisPropertyVisitor = tx.EmitContext().NewNodeVisitor(tx.visitThisPropertyAssignments)
 	return tx
 }
 
@@ -1685,10 +1689,98 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 	)
 }
 
+func (tx *DeclarationTransformer) visitThisPropertyAssignments(node *ast.Node) *ast.Node {
+	var thisTarget *ast.Node
+	isStatic := false
+	thisContainer := ast.GetThisContainer(node, false, false)
+	thisTarget = thisContainer.Parent
+	if thisTarget == nil {
+		return nil // thisContainer was source file, can't have expando-this
+	}
+	if ast.HasStaticModifier(thisContainer) || ast.IsClassStaticBlockDeclaration(thisContainer) {
+		isStatic = true
+	}
+	if thisTarget != tx.enclosingDeclaration {
+		return nil // stop searching within new `this` contexts
+	}
+caseBlock:
+	switch ast.GetAssignmentDeclarationKind(node) {
+	case ast.JSDeclarationKindThisProperty:
+		name := ast.GetNameOfDeclaration(node)
+		base := tx.resolver.GetReferencedMemberValueDeclaration(node)
+		if base == nil || tx.seenProperties.Has(base) {
+			break
+		}
+		tx.seenProperties.Add(base)
+
+		// problem: this prop might be overriding a prop from a base type. The checker has special bails for override compat comparisons for binary expression properties,
+		// but what we transform to won't - so we either need to match the base type (for example, if it's a getter/setter) or emit nothing
+		// See `checkKindsOfPropertyMemberOverrides` in the checker for what we're trying to satisfy here
+		if thisTarget.ClassLikeData().HeritageClauses != nil && len(thisTarget.ClassLikeData().HeritageClauses.Nodes) > 0 && !isClassExtendingNull(thisTarget) {
+			// there is a base type any assignments might be "from"
+			tx.tracker.ReportInferenceFallback(thisTarget) // Add an isolated declarations error on this class - we can't know how to transform this prop into an assignment without referring to type information
+			decls := tx.resolver.GetBaseDeclarationsForPropertyDeclaration(node)
+			if len(decls) > 0 {
+				break caseBlock // property lightly overrides a property in a base type - skip it
+				// TODO: If the property has an explicit `@type` annotation, we should probably emit it (maybe with an `override` modifier) instead of skipping it
+			}
+		}
+
+		var mods *ast.ModifierList
+		if isStatic {
+			mods = tx.Factory().NewModifierList([]*ast.Node{tx.Factory().NewModifier(ast.KindStaticKeyword)})
+		}
+		if ast.HasDynamicName(node) {
+			if !transformers.IsSimpleInlineableExpression(name) {
+				break // Member either becomes an index signature or is a reassignment
+			}
+			tx.checkName(node)
+			name = tx.Factory().NewComputedPropertyName(name) // Convert `this[foo] = expr` to `[foo]: Type`
+		}
+		if ast.GetTextOfPropertyName(name) == "constructor" {
+			break // `constructor` is a builtin class member, not allowed to redeclare it
+		}
+		if ast.IsIdentifier(name) && !scanner.IsIdentifierText(name.Text(), core.LanguageVariantStandard) {
+			name = tx.Factory().NewStringLiteralFromNode(name)
+		}
+		prop := tx.Factory().NewPropertyDeclaration(
+			mods,
+			name,
+			nil,
+			tx.ensureType(node, false),
+			nil,
+		)
+		if ast.IsExpressionStatement(node.Parent) {
+			tx.preserveJsDoc(prop, node.Parent)
+		}
+		tx.thisPropertyAssignmentsCollected = append(tx.thisPropertyAssignmentsCollected, prop)
+	}
+	return tx.thisPropertyVisitor.VisitEachChild(node)
+}
+
+func isClassExtendingNull(node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	heritage := node.ClassLikeData().HeritageClauses
+	if heritage == nil {
+		return false
+	}
+	if len(heritage.Nodes) > 1 || len(heritage.Nodes) == 0 {
+		return false
+	}
+	for _, expA := range heritage.Nodes[0].AsHeritageClause().Types.Nodes {
+		expr := expA.AsExpressionWithTypeArguments().Expression
+		if expr != nil && expr.Kind == ast.KindNullKeyword {
+			return true
+		}
+	}
+	return false
+}
+
 // collectThisPropertyAssignments finds `this.x = expr` assignments in constructors, methods, and static blocks
 // of JS classes and synthesizes PropertyDeclaration nodes for each unique property name.
 func (tx *DeclarationTransformer) collectThisPropertyAssignments(input *ast.ClassDeclaration) []*ast.Node {
-	var result []*ast.Node
 	seen := collections.Set[*ast.Node]{}
 	// Pre-populate seen with existing direct member nodes to avoid duplicates
 	for _, member := range input.Members.Nodes {
@@ -1696,73 +1788,17 @@ func (tx *DeclarationTransformer) collectThisPropertyAssignments(input *ast.Clas
 			seen.Add(member)
 		}
 	}
-	for _, member := range input.Members.Nodes {
-		isStatic := false
-		var body *ast.Node
-		switch member.Kind {
-		case ast.KindConstructor:
-			body = member.AsConstructorDeclaration().Body
-		case ast.KindMethodDeclaration:
-			body = member.AsMethodDeclaration().Body
-			if ast.HasStaticModifier(member) {
-				isStatic = true
-			}
-		case ast.KindClassStaticBlockDeclaration:
-			body = member.AsClassStaticBlockDeclaration().Body
-			isStatic = true
-		default:
-			continue
-		}
-		if body == nil {
-			continue
-		}
-		for _, stmt := range body.AsBlock().Statements.Nodes {
-			if stmt.Kind != ast.KindExpressionStatement {
-				continue
-			}
-			expr := stmt.Expression()
-			if expr == nil || expr.Kind != ast.KindBinaryExpression {
-				continue
-			}
-			if ast.GetAssignmentDeclarationKind(expr) != ast.JSDeclarationKindThisProperty {
-				continue
-			}
-			name := ast.GetNameOfDeclaration(expr)
-			base := tx.resolver.GetReferencedMemberValueDeclaration(expr)
-			if base == nil || seen.Has(base) {
-				continue
-			}
-			seen.Add(base)
+	tx.seenProperties = seen
+	defer tx.seenProperties.Clear()
+	tx.thisPropertyAssignmentsCollected = []*ast.Node{}
+	defer func() {
+		tx.thisPropertyAssignmentsCollected = nil
+	}()
 
-			var mods *ast.ModifierList
-			if isStatic {
-				mods = tx.Factory().NewModifierList([]*ast.Node{tx.Factory().NewModifier(ast.KindStaticKeyword)})
-			}
-			if ast.HasDynamicName(expr) {
-				if !transformers.IsSimpleInlineableExpression(name) {
-					continue // Member either becomes an index signature or is a reassignment
-				}
-				tx.checkName(expr)
-				name = tx.Factory().NewComputedPropertyName(name) // Convert `this[foo] = expr` to `[foo]: Type`
-			}
-			if ast.GetTextOfPropertyName(name) == "constructor" {
-				continue // `constructor` is a builtin class member, not allowed to redeclare it
-			}
-			if ast.IsIdentifier(name) && !scanner.IsIdentifierText(name.Text(), core.LanguageVariantStandard) {
-				name = tx.Factory().NewStringLiteralFromNode(name)
-			}
-			prop := tx.Factory().NewPropertyDeclaration(
-				mods,
-				name,
-				nil,
-				tx.ensureType(expr, false),
-				nil,
-			)
-			tx.preserveJsDoc(prop, stmt)
-			result = append(result, prop)
-		}
+	for _, n := range input.Members.Nodes {
+		tx.thisPropertyVisitor.VisitEachChild(n)
 	}
-	return result
+	return tx.thisPropertyAssignmentsCollected
 }
 
 func (tx *DeclarationTransformer) walkBindingPattern(pattern *ast.BindingPattern, param *ast.Node) []*ast.Node {
