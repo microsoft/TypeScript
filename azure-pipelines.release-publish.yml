@@ -28,6 +28,10 @@ variables:
     value: ${{ parameters.RELEASE_TITLE_NAME }}
   - name: TAG_NAME
     value: ${{ parameters.TAG_NAME }}
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
+    value: 'Iv23li4GolzJSEp1mzHI'
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID
+    value: 'https://jststeam-passwords.vault.azure.net/keys/typescript-automation'
 
 resources:
   pipelines:
@@ -133,26 +137,86 @@ extends:
                     echo "##vso[task.setvariable variable=GIT_COMMIT_HASH]$GIT_COMMIT_HASH"
                     echo "Git commit hash: $GIT_COMMIT_HASH"
 
-              - task: GitHubRelease@1
-                displayName: GitHub release (create)
-                inputs:
-                  # This must match the service connection name.
-                  gitHubConnection: typescript-bot connection
-                  repositoryName: microsoft/TypeScript
-                  tagSource: userSpecifiedTag
-                  tag: $(TAG_NAME)
-                  title: TypeScript $(RELEASE_TITLE_NAME)
-                  target: $(GIT_COMMIT_HASH)
-                  releaseNotesSource: inline
-                  releaseNotesInline: |
-                    <!---
-                    For release notes, check out the [release announcement]().
-                    For new features, check out the [What's new in TypeScript $(TAG_NAME)]().
-                    For the complete list of fixed issues, check out the
-                    * [fixed issues query for TypeScript $(TAG_NAME)](https://github.com/microsoft/TypeScript/issues?utf8=%E2%9C%93&q=is%3Aissue+milestone%3A%22TypeScript+3.3%22+is%3Aclosed+).
-                    Downloads are available on:
-                    * [npm](https://www.npmjs.com/package/typescript)
-                    -->
-                  assets: $(Pipeline.Workspace)/tgz/**/typescript-*.tgz
-                  isDraft: ${{ not(eq(parameters.PUBLISH_TAG, 'latest')) }}
-                  addChangeLog: false
+              - template: scripts/create-github-app-token.yml
+                parameters:
+                  repositories: TypeScript
+                  permissions: contents:write
+                  insertSteps:
+                    - task: CmdLine@2
+                      displayName: GitHub release (create)
+                      inputs:
+                        script: |
+                          set -euo pipefail
+
+                          TARBALL=$(find "$(Pipeline.Workspace)/tgz" -maxdepth 2 -name 'typescript-*.tgz' -type f | head -1)
+                          if [ -z "$TARBALL" ] || [ ! -f "$TARBALL" ]; then
+                            echo "ERROR: no typescript-*.tgz tarball found under $(Pipeline.Workspace)/tgz" >&2
+                            exit 1
+                          fi
+                          TARBALL_NAME=$(basename "$TARBALL")
+
+                          if [ "$PUBLISH_TAG" = "latest" ]; then
+                            FINAL_DRAFT=false
+                          else
+                            FINAL_DRAFT=true
+                          fi
+
+                          RELEASE_BODY='<!---
+                          For release notes, check out the [release announcement]().
+                          For new features, check out the [What'\''s new in TypeScript '"$TAG_NAME"']().
+                          For the complete list of fixed issues, check out the
+                          * [fixed issues query for TypeScript '"$TAG_NAME"'](https://github.com/microsoft/TypeScript/issues?utf8=%E2%9C%93&q=is%3Aissue+milestone%3A%22TypeScript+3.3%22+is%3Aclosed+).
+                          Downloads are available on:
+                          * [npm](https://www.npmjs.com/package/typescript)
+                          -->'
+                          export RELEASE_BODY
+
+                          echo "Creating draft release $TAG_NAME at $GIT_COMMIT_HASH"
+
+                          # Create as draft first, then upload asset, then set final draft state.
+                          # This avoids a half-created non-draft release if the upload fails.
+                          RESPONSE=$(curl -fsS \
+                            -X POST \
+                            -H "Authorization: Bearer $GH_TOKEN" \
+                            -H "Accept: application/vnd.github+json" \
+                            -H "X-GitHub-Api-Version: 2022-11-28" \
+                            "https://api.github.com/repos/microsoft/TypeScript/releases" \
+                            -d "$(node -e "process.stdout.write(JSON.stringify({
+                              tag_name: process.env.TAG_NAME,
+                              target_commitish: process.env.GIT_COMMIT_HASH,
+                              name: 'TypeScript ' + process.env.RELEASE_TITLE_NAME,
+                              body: process.env.RELEASE_BODY,
+                              draft: true
+                            }))")")
+
+                          RELEASE_ID=$(node -e "process.stdout.write(String(JSON.parse(process.argv[1]).id))" "$RESPONSE")
+                          UPLOAD_URL=$(node -e "process.stdout.write(JSON.parse(process.argv[1]).upload_url.replace('{?name,label}',''))" "$RESPONSE")
+                          echo "Release ID: $RELEASE_ID"
+                          echo "Upload URL: $UPLOAD_URL"
+                          echo "Uploading $TARBALL_NAME"
+
+                          curl -fsS \
+                            -X POST \
+                            -H "Authorization: Bearer $GH_TOKEN" \
+                            -H "Accept: application/vnd.github+json" \
+                            -H "Content-Type: application/gzip" \
+                            -H "X-GitHub-Api-Version: 2022-11-28" \
+                            "${UPLOAD_URL}?name=${TARBALL_NAME}" \
+                            --data-binary "@${TARBALL}"
+
+                          # Set the final draft state (may undraft the release).
+                          curl -fsS \
+                            -X PATCH \
+                            -H "Authorization: Bearer $GH_TOKEN" \
+                            -H "Accept: application/vnd.github+json" \
+                            -H "X-GitHub-Api-Version: 2022-11-28" \
+                            "https://api.github.com/repos/microsoft/TypeScript/releases/${RELEASE_ID}" \
+                            -d "{\"draft\": ${FINAL_DRAFT}}"
+
+                          echo "Release created (draft=$FINAL_DRAFT) and tarball uploaded."
+                      env:
+                        GH_TOKEN: $(GH_TOKEN)
+                        TAG_NAME: $(TAG_NAME)
+                        GIT_COMMIT_HASH: $(GIT_COMMIT_HASH)
+                        PUBLISH_TAG: $(PUBLISH_TAG)
+                        RELEASE_TITLE_NAME: $(RELEASE_TITLE_NAME)
