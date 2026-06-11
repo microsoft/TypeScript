@@ -19661,9 +19661,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (objectType.flags & TypeFlags.Intersection && !(objectType.flags & TypeFlags.Never)) {
             const props = getPropertiesOfUnionOrIntersectionType(objectType as IntersectionType);
             const conflictingPrivate = find(props, isConflictingPrivateProperty);
-            if (conflictingPrivate && accessNode) {
-                error(accessNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1,
-                      symbolToString(conflictingPrivate), typeToString(getDeclaringClass(conflictingPrivate)!));
+            if (conflictingPrivate) {
+                if (accessNode) {
+                    const declaringClass = getDeclaringClass(conflictingPrivate);
+                    if (declaringClass) {
+                        error(accessNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1,
+                              symbolToString(conflictingPrivate), typeToString(declaringClass));
+                    }
+                }
                 return undefined;
             }
         }
