@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/asyncJsxArgumentsAttributeName.ts] ////
+
+=== test.tsx ===
+declare namespace JSX {
+  interface IntrinsicElements { div: any; }
+>div : any
+}
+
+async function f() {
+>f : () => Promise<any>
+
+  return <div arguments={42} />;
+><div arguments={42} /> : error
+>div : any
+>arguments : number
+>42 : 42
+}
+
