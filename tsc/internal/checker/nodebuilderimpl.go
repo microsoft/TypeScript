@@ -2166,6 +2166,10 @@ func (b *NodeBuilderImpl) indexInfoToIndexSignatureDeclarationHelper(indexInfo *
 	return b.f.NewIndexSignatureDeclaration(modifiers, b.f.NewNodeList([]*ast.Node{indexingParameter}), typeNode)
 }
 
+func hasTypeAnnotation(declaration *ast.Declaration) bool {
+	return declaration != nil && declaration.Type() != nil
+}
+
 /**
 * Unlike `typeToTypeNodeHelper`, this handles setting up the `AllowUniqueESSymbolType` flag
 * so a `unique symbol` is returned when appropriate for the input symbol, rather than `typeof sym`
@@ -2222,6 +2226,12 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 			pt = b.pc.GetTypeOfAccessor(declaration)
 		} else {
 			pt = b.pc.GetTypeOfDeclaration(declaration)
+		}
+		if (pt == nil || pt.Kind == pseudochecker.PseudoTypeKindNoResult) && ast.IsBinaryExpression(declaration) {
+			if decl := core.Find(symbol.Declarations, hasTypeAnnotation); decl != nil {
+				// Binary expressions have a first-in-wins type annotation system. The first one with an annotation supplies the type for the rest.
+				pt = b.pc.GetTypeOfDeclaration(decl)
+			}
 		}
 		reportErrors := !b.ctx.suppressReportInferenceFallback
 		if b.pseudoTypeEquivalentToType(pt, t, !requiresAddingUndefined && (ast.IsParameterDeclaration(declaration) || ast.IsPropertySignatureDeclaration(declaration) || ast.IsPropertyDeclaration(declaration)) && isOptionalDeclaration(declaration), reportErrors) {
