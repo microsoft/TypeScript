@@ -3,7 +3,10 @@ import type { ElementFlags } from "#enums/elementFlags";
 import type { ObjectFlags } from "#enums/objectFlags";
 import type { TypeFlags } from "#enums/typeFlags";
 import type { TypePredicateKind } from "#enums/typePredicateKind";
-import type { Symbol } from "./api.ts";
+import type {
+    NodeHandle,
+    Symbol,
+} from "./api.ts";
 
 /**
  * A TypeScript type.
@@ -198,6 +201,8 @@ export interface IndexInfo {
     readonly valueType: Type;
     /** Whether the index signature is readonly */
     readonly isReadonly: boolean;
+    /** The index signature declaration, if any */
+    readonly declaration?: NodeHandle;
 }
 
 /**

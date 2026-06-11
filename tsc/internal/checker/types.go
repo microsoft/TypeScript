@@ -1378,6 +1378,10 @@ func (info *IndexInfo) IsReadonly() bool {
 	return info.isReadonly
 }
 
+func (info *IndexInfo) Declaration() *ast.Node {
+	return info.declaration
+}
+
 /**
  * Ternary values are defined such that
  * x & y picks the lesser in the order False < Unknown < Maybe < True, and

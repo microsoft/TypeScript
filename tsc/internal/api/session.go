@@ -1932,6 +1932,9 @@ func (s *Session) handleGetIndexInfosOfType(ctx context.Context, params *Checker
 			ValueType:  *setup.sd.registerType(info.ValueType()),
 			IsReadonly: info.IsReadonly(),
 		}
+		if info.Declaration() != nil {
+			results[i].Declaration = setup.sd.nodeHandleFrom(info.Declaration())
+		}
 	}
 
 	return results, nil

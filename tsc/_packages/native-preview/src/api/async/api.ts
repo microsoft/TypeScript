@@ -902,6 +902,7 @@ export class Checker {
             keyType: this.objectRegistry.getOrCreateType(d.keyType),
             valueType: this.objectRegistry.getOrCreateType(d.valueType),
             isReadonly: d.isReadonly ?? false,
+            declaration: d.declaration ? new NodeHandle(d.declaration) : undefined,
         }));
     }
 

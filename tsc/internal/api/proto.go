@@ -911,9 +911,10 @@ type TypePredicateResponse struct {
 
 // IndexInfoResponse represents a single index signature.
 type IndexInfoResponse struct {
-	KeyType    TypeResponse `json:"keyType"`
-	ValueType  TypeResponse `json:"valueType"`
-	IsReadonly bool         `json:"isReadonly,omitempty"`
+	KeyType     TypeResponse `json:"keyType"`
+	ValueType   TypeResponse `json:"valueType"`
+	IsReadonly  bool         `json:"isReadonly,omitempty"`
+	Declaration NodeHandle   `json:"declaration,omitempty"`
 }
 
 // SourceFileResponse contains the binary-encoded AST data for a source file.
