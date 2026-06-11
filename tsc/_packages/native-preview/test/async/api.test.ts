@@ -2407,6 +2407,89 @@ describe("Checker - isTypeAssignableTo", () => {
     });
 });
 
+describe("Checker - getCompletionsAtPosition", () => {
+    test("returns member completions after a dot", async () => {
+        const src = `\nconst obj = { name: "hello", age: 42 };\nobj.\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            // Position right after "obj." — member completion trigger
+            const pos = src.indexOf("obj.") + "obj.".length;
+            const completions = await project.checker.getCompletionsAtPosition("/src/main.ts", pos, { triggerCharacter: "." });
+            assert.ok(completions, "Expected completions to be returned");
+            assert.ok(completions.entries.length > 0, "Expected at least one completion entry");
+            assert.ok(completions.entries.some(e => e.name === "name"), "Expected 'name' property in completions");
+            assert.ok(completions.entries.some(e => e.name === "age"), "Expected 'age' property in completions");
+            assert.ok(completions.entries.every(e => e.symbol === undefined), "Expected no symbol information");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("completion entries include sortText", async () => {
+        const src = `\nconst obj = { value: 1 };\nobj.\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("obj.") + "obj.".length;
+            const completions = await project.checker.getCompletionsAtPosition("/src/main.ts", pos, { triggerCharacter: "." });
+            assert.ok(completions);
+            assert.ok(completions.entries.length > 0);
+            assert.ok(completions.entries.some(e => e.sortText !== undefined), "Expected sortText on all entries");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("returns undefined for a non-existent file", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": `export {};`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const completions = await project.checker.getCompletionsAtPosition("/src/does-not-exist.ts", 0);
+            assert.equal(completions, undefined, "Expected undefined for non-existent file");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("includeSymbol: true populates symbol on property completions", async () => {
+        const src = `\nconst obj = { name: "hello", age: 42 };\nobj.\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = src.indexOf("obj.") + "obj.".length;
+            const completions = await project.checker.getCompletionsAtPosition("/src/main.ts", pos, { triggerCharacter: ".", includeSymbol: true });
+            assert.ok(completions, "Expected completions");
+            const nameEntry = completions.entries.find(e => e.name === "name");
+            assert.ok(nameEntry, "Expected 'name' entry");
+            assert.ok(nameEntry.symbol, "Expected symbol to be set on 'name' entry when includeSymbol: true");
+            assert.equal(nameEntry.symbol.name, "name", "Symbol name should match completion name");
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
 describe("Emitter - printNode", () => {
     const emitterFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),

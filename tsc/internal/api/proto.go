@@ -127,6 +127,9 @@ const (
 	MethodGetReferencedSymbolsForNode Method = "getReferencedSymbolsForNode"
 	MethodGetSignatureUsages          Method = "getSignatureUsages"
 
+	// Language service methods
+	MethodGetCompletionsAtPosition Method = "getCompletionsAtPosition"
+
 	// Diagnostic methods
 	MethodGetSyntacticDiagnostics         Method = "getSyntacticDiagnostics"
 	MethodGetSemanticDiagnostics          Method = "getSemanticDiagnostics"
@@ -361,6 +364,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetReferencesToSymbolInFile:       unmarshallerFor[GetReferencesToSymbolInFileParams],
 	MethodGetReferencedSymbolsForNode:       unmarshallerFor[GetReferencedSymbolsForNodeParams],
 	MethodGetSignatureUsages:                unmarshallerFor[GetSignatureUsagesParams],
+	MethodGetCompletionsAtPosition:          unmarshallerFor[GetCompletionsAtPositionParams],
 	MethodPrintNode:                         unmarshallerFor[PrintNodeParams],
 	MethodGetAnyType:                        unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetStringType:                     unmarshallerFor[GetIntrinsicTypeParams],
@@ -762,6 +766,40 @@ type GetSignatureUsagesParams struct {
 type SignatureUsageResponse struct {
 	Name NodeHandle `json:"name"`
 	Call NodeHandle `json:"call,omitempty"`
+}
+
+// GetCompletionsAtPositionParams are the parameters for the getCompletionsAtPosition method.
+type GetCompletionsAtPositionParams struct {
+	Snapshot         SnapshotID         `json:"snapshot"`
+	Project          ProjectID          `json:"project"`
+	File             DocumentIdentifier `json:"file"`
+	Position         uint32             `json:"position"`
+	TriggerCharacter *string            `json:"triggerCharacter,omitempty"`
+	IncludeSymbol    bool               `json:"includeSymbol,omitempty"`
+}
+
+// CompletionEntryLabelDetailsResponse holds additional label display text for a completion entry.
+type CompletionEntryLabelDetailsResponse struct {
+	Detail      *string `json:"detail,omitempty"`
+	Description *string `json:"description,omitempty"`
+}
+
+// CompletionEntryResponse represents a single completion item.
+type CompletionEntryResponse struct {
+	Name         string                               `json:"name"`
+	Kind         uint32                               `json:"kind,omitempty"`
+	SortText     *string                              `json:"sortText,omitempty"`
+	InsertText   *string                              `json:"insertText,omitempty"`
+	FilterText   *string                              `json:"filterText,omitempty"`
+	Detail       *string                              `json:"detail,omitempty"`
+	LabelDetails *CompletionEntryLabelDetailsResponse `json:"labelDetails,omitempty"`
+	Symbol       *SymbolResponse                      `json:"symbol,omitempty"`
+}
+
+// CompletionInfoResponse wraps a list of completion entries.
+type CompletionInfoResponse struct {
+	IsIncomplete bool                       `json:"isIncomplete"`
+	Entries      []*CompletionEntryResponse `json:"entries"`
 }
 
 // GetIntrinsicTypeParams is used for intrinsic type getters (anyType, stringType, etc.).

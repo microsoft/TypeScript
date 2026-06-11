@@ -1,3 +1,4 @@
+import type { CompletionItemKind } from "#enums/completionItemKind";
 import type { DiagnosticCategory } from "#enums/diagnosticCategory";
 import type { ElementFlags } from "#enums/elementFlags";
 import type { ObjectFlags } from "#enums/objectFlags";
@@ -203,6 +204,37 @@ export interface IndexInfo {
     readonly isReadonly: boolean;
     /** The index signature declaration, if any */
     readonly declaration?: NodeHandle;
+}
+
+export interface CompletionEntryLabelDetails {
+    detail?: string;
+    description?: string;
+}
+
+/** Options for {@link Checker.getCompletionsAtPosition}. */
+export interface CompletionOptions {
+    triggerCharacter?: string;
+    /** Include a `symbol` property on each completion entry. Only populated for symbol-based completions (not keywords or literals). */
+    includeSymbol?: boolean;
+}
+
+/** A single completion item returned by {@link Checker.getCompletionsAtPosition}. */
+export interface CompletionEntry {
+    readonly name: string;
+    readonly kind?: CompletionItemKind;
+    readonly sortText?: string;
+    readonly insertText?: string;
+    readonly filterText?: string;
+    readonly detail?: string;
+    readonly labelDetails?: CompletionEntryLabelDetails;
+    /** The symbol associated with this completion entry. Only set when `includeSymbol: true` is passed and a symbol is available. */
+    readonly symbol?: Symbol;
+}
+
+/** The result of {@link Checker.getCompletionsAtPosition}. */
+export interface CompletionInfo {
+    readonly isIncomplete: boolean;
+    readonly entries: readonly CompletionEntry[];
 }
 
 /**
