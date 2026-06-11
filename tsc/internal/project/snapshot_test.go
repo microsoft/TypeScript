@@ -171,6 +171,45 @@ func TestSnapshot(t *testing.T) {
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, otherIndexURI)
 		assert.NilError(t, err)
 	})
+
+	t.Run("fallback rebuild with recomputed parse options is safe for later clone", func(t *testing.T) {
+		t.Parallel()
+
+		testFiles := map[string]any{
+			"/project/node_modules/pkg/index.ts": `export const pkg = 0;`,
+			"/project/src/other.ts":              `export const other = 1;`,
+		}
+		session := setup(testFiles)
+		pkgURI := lsproto.DocumentUri("file:///project/node_modules/pkg/index.ts")
+		otherURI := lsproto.DocumentUri("file:///project/src/other.ts")
+
+		session.DidOpenFile(context.Background(), pkgURI, 1, testFiles["/project/node_modules/pkg/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.DidOpenFile(context.Background(), otherURI, 1, testFiles["/project/src/other.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), pkgURI)
+		assert.NilError(t, err)
+
+		err = session.fs.fs.WriteFile("/project/node_modules/pkg/package.json", `{ "type": "module" }`)
+		assert.NilError(t, err)
+		session.DidChangeFile(context.Background(), pkgURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+			{
+				WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{
+					Text: `import "./missing"; export const pkg = 1;`,
+				},
+			},
+		})
+		_, err = session.GetLanguageService(context.Background(), pkgURI)
+		assert.NilError(t, err)
+
+		session.DidChangeFile(context.Background(), otherURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+			{
+				WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{
+					Text: `export const other = 2;`,
+				},
+			},
+		})
+		_, err = session.GetLanguageService(context.Background(), otherURI)
+		assert.NilError(t, err)
+	})
 }
 
 func BenchmarkSnapshotCloneRefCost(b *testing.B) {

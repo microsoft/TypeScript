@@ -189,12 +189,16 @@ func NewSession(init *SessionInit) *Session {
 	}
 	extendedConfigCache := NewExtendedConfigCache()
 
+	sessionLogger := init.Logger
+	if sessionLogger == nil {
+		sessionLogger = logging.NewNopLogger()
+	}
 	session := &Session{
 		backgroundCtx:       init.BackgroundCtx,
 		options:             init.Options,
 		toPath:              toPath,
 		client:              init.Client,
-		logger:              init.Logger,
+		logger:              sessionLogger,
 		npmExecutor:         init.NpmExecutor,
 		fs:                  overlayFS,
 		parseCache:          parseCache,

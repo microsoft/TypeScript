@@ -366,11 +366,14 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	commandLine := p.getCommandLineWithTypingsFiles()
 
 	if p.dirtyFilePath != "" && p.Program != nil && p.Program.CommandLine() == commandLine {
-		newProgram, programCloned = p.Program.UpdateProgram(p.dirtyFilePath, p.host, createCheckerPool)
+		var dirtyFile *ast.SourceFile
+		newProgram, dirtyFile, programCloned = p.Program.UpdateProgram(p.dirtyFilePath, p.host, createCheckerPool)
 		if programCloned {
 			updateKind = ProgramUpdateKindCloned
 			for _, file := range newProgram.SourceFiles() {
-				if file.Path() != p.dirtyFilePath {
+				// Use pointer identity: dirtyFile is the exact instance UpdateProgram acquired,
+				// and it is the only file whose refcount is already accounted for.
+				if file != dirtyFile {
 					// UpdateProgram acquired the changed file only, so we need to ref everything else
 					p.host.builder.parseCache.Ref(NewParseCacheKey(file.ParseOptions(), file.Hash, file.ScriptKind))
 				}
@@ -378,11 +381,11 @@ func (p *Project) CreateProgram() CreateProgramResult {
 			for _, file := range newProgram.DuplicateSourceFiles() {
 				p.host.builder.parseCache.Ref(NewParseCacheKey(file.ParseOptions, file.Hash, file.ScriptKind))
 			}
-		} else if newFile := newProgram.GetSourceFileByPath(p.dirtyFilePath); newFile != nil {
+		} else if dirtyFile != nil {
 			// UpdateProgram always acquires the dirty file before deciding whether it can
 			// reuse the old program. If it falls back to a full rebuild, release that
 			// speculative acquire so the rebuilt program is the only remaining owner.
-			p.host.builder.parseCache.Deref(NewParseCacheKey(newFile.ParseOptions(), newFile.Hash, newFile.ScriptKind))
+			p.host.builder.parseCache.Deref(NewParseCacheKey(dirtyFile.ParseOptions(), dirtyFile.Hash, dirtyFile.ScriptKind))
 		}
 	} else {
 		var typingsLocation string

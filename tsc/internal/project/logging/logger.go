@@ -124,6 +124,12 @@ func NewLogger(output io.Writer) Logger {
 	}
 }
 
+// NewNopLogger returns a no-op Logger that discards all log messages.
+// It is safe to call any method on the returned Logger.
+func NewNopLogger() Logger {
+	return (*logger)(nil)
+}
+
 func formatTime(t time.Time) string {
 	return fmt.Sprintf("[%s]", t.Format("15:04:05.000"))
 }
