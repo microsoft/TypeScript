@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/modulespecifiers"
+	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -180,6 +181,9 @@ func (v *View) GetCompletions(ctx context.Context, prefix string, position lspro
 outer:
 	for _, e := range results {
 		name := e.Name()
+		if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
+			continue
+		}
 		if forJSX && !(unicode.IsUpper(rune(name[0])) || e.IsRenameable()) {
 			continue
 		}
