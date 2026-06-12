@@ -1,0 +1,6 @@
+lib.esnext.d.ts(--,--): error TS2726: Cannot find lib definition for 'esnext.core'.
+
+
+==== libCompileChecks.ts (0 errors) ====
+    // This test is effectively the 'lib check' for all our .d.ts files because we use skipLibCheck
+    // as false everywhere.
