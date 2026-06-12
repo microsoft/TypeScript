@@ -101,8 +101,8 @@
         // Default libraries
         "es5.full",
         "esnext.collection",
-    "esnext.core",
-    "esnext.date",
+        "esnext.core",
+        "esnext.date",
         "es2015.full",
         "es2016.full",
         "es2017.full",
