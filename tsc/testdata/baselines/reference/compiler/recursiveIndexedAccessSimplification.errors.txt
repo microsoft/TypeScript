@@ -1,0 +1,42 @@
+recursiveIndexedAccessSimplification.ts(5,5): error TS4109: Type arguments for 'Array' circularly reference themselves.
+recursiveIndexedAccessSimplification.ts(5,9): error TS2536: Type 'number' cannot be used to index type 'Recur<T>'.
+recursiveIndexedAccessSimplification.ts(8,5): error TS2322: Type '[string, ...Recur<T>[]]' is not assignable to type 'Recur<T>'.
+  Type '[string, ...Recur<T>[]]' is not assignable to type 'Recur<T>[number][]'.
+    Type 'string | Recur<T>' is not assignable to type 'Recur<T>[number] & (T extends unknown[] ? {} : { [K in keyof T]?: Recur<T[K]> | undefined; })[number]'.
+      Type 'string' is not assignable to type 'Recur<T>[number] & (T extends unknown[] ? {} : { [K in keyof T]?: Recur<T[K]> | undefined; })[number]'.
+        Type 'string' is not assignable to type 'Recur<T>[number] & (T extends unknown[] ? {} : { [K in keyof T]?: Recur<T[K]> | undefined; })[number]'.
+          Type 'string' is not assignable to type '(T extends unknown[] ? {} : { [K in keyof T]?: Recur<T[K]> | undefined; })[number]'.
+recursiveIndexedAccessSimplification.ts(8,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+recursiveIndexedAccessSimplification.ts(12,37): error TS2589: Type instantiation is excessively deep and possibly infinite.
+
+
+==== recursiveIndexedAccessSimplification.ts (5 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/63270
+    
+    type Recur<T> =
+        (T extends  (unknown[]) ? {} : { [K in keyof T]?: Recur<T[K]>}) |
+        [...Recur<T>[number][]];
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4109: Type arguments for 'Array' circularly reference themselves.
+            ~~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'number' cannot be used to index type 'Recur<T>'.
+    
+    function join<T>(l: Recur<T>[]): Recur<T> {
+        return ['marker', ...l];
+        ~~~~~~
+!!! error TS2322: Type '[string, ...Recur<T>[]]' is not assignable to type 'Recur<T>'.
+!!! error TS2322:   Type '[string, ...Recur<T>[]]' is not assignable to type 'Recur<T>[number][]'.
+!!! error TS2322:     Type 'string | Recur<T>' is not assignable to type 'Recur<T>[number] & (T extends unknown[] ? {} : { [K in keyof T]?: Recur<T[K]> | undefined; })[number]'.
+!!! error TS2322:       Type 'string' is not assignable to type 'Recur<T>[number] & (T extends unknown[] ? {} : { [K in keyof T]?: Recur<T[K]> | undefined; })[number]'.
+!!! error TS2322:         Type 'string' is not assignable to type 'Recur<T>[number] & (T extends unknown[] ? {} : { [K in keyof T]?: Recur<T[K]> | undefined; })[number]'.
+!!! error TS2322:           Type 'string' is not assignable to type '(T extends unknown[] ? {} : { [K in keyof T]?: Recur<T[K]> | undefined; })[number]'.
+               ~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+    }
+    
+    function a<T>(l: Recur<T>[]): void {
+        const x: Recur<T> | undefined = join(l);
+                                        ~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+    }
+    
