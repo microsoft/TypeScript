@@ -43,6 +43,11 @@ declare const console: { log(msg: any): void; };
 export const helper = "v1";
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project
+  /home/src/workspaces/project/src (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -60,6 +65,10 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/workspaces/project
+  /home/src/workspaces/project/src (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 Signatures::
@@ -88,6 +97,11 @@ Output::
 export const helper = "v2";
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project
+  /home/src/workspaces/project/src (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts

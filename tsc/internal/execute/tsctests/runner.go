@@ -1,6 +1,7 @@
 package tsctests
 
 import (
+	"context"
 	"fmt"
 	"path/filepath"
 	"slices"
@@ -42,7 +43,7 @@ type tscInput struct {
 
 func (test *tscInput) executeCommand(sys *TestSys, baselineBuilder *strings.Builder, commandLineArgs []string) tsc.CommandLineResult {
 	fmt.Fprint(baselineBuilder, "tsgo ", strings.Join(commandLineArgs, " "), "\n")
-	result := execute.CommandLine(sys, commandLineArgs, sys)
+	result := execute.CommandLine(context.Background(), sys, commandLineArgs, sys)
 	switch result.Status {
 	case tsc.ExitStatusSuccess:
 		baselineBuilder.WriteString("ExitStatus:: Success")
@@ -80,6 +81,9 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 		sys.baselineFSwithDiff(baselineBuilder)
 		result := test.executeCommand(sys, baselineBuilder, test.commandLineArgs)
 		sys.serializeState(baselineBuilder)
+		if result.Watcher != nil && sys.mockWatchBackend.HasWatches() {
+			baselineBuilder.WriteString(sys.mockWatchBackend.WatchState())
+		}
 		var unexpectedDiff strings.Builder
 		unexpectedDiff.WriteString(sys.baselinePrograms(baselineBuilder, "Initial build"))
 
@@ -93,14 +97,19 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 				if do.edit != nil {
 					do.edit(sys)
 				}
+				changedPaths := sys.fsDiffer.ChangedPaths()
 				sys.baselineFSwithDiff(baselineBuilder)
 
 				if result.Watcher == nil {
 					test.executeCommand(sys, baselineBuilder, commandLineArgs)
 				} else {
+					sys.mockWatchBackend.SendChangedPaths(changedPaths)
 					result.Watcher.DoCycle()
 				}
 				sys.serializeState(baselineBuilder)
+				if result.Watcher != nil && sys.mockWatchBackend.HasWatches() {
+					baselineBuilder.WriteString(sys.mockWatchBackend.WatchState())
+				}
 				unexpectedDiff.WriteString(sys.baselinePrograms(baselineBuilder, fmt.Sprintf("Edit [%d]:: %s\n", index, do.caption)))
 			})
 			wg.Queue(func() {
@@ -111,7 +120,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 						test.edits[i].edit(nonIncrementalSys)
 					}
 				}
-				execute.CommandLine(nonIncrementalSys, commandLineArgs, nonIncrementalSys)
+				execute.CommandLine(context.Background(), nonIncrementalSys, commandLineArgs, nonIncrementalSys)
 			})
 			wg.RunAndWait()
 

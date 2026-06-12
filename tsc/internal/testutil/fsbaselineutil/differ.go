@@ -137,3 +137,41 @@ func (d *FSDiffer) addFsEntryDiff(diffs map[string]string, newDirContent *DiffEn
 		diffs[path] = "*Lib*\n" + newDirContent.Content
 	}
 }
+
+// FileChange represents a filesystem change detected between snapshots.
+type FileChange struct {
+	Path    string
+	Deleted bool
+}
+
+func (d *FSDiffer) ChangedPaths() []FileChange {
+	if d.serializedDiff == nil {
+		return nil
+	}
+
+	var changes []FileChange
+	oldSnap := d.serializedDiff
+
+	// Check current files against previous snapshot.
+	for path, file := range d.MapFs().Entries() {
+		if file.Mode&fs.ModeSymlink != 0 || !file.Mode.IsRegular() {
+			continue
+		}
+		if old, ok := oldSnap.Snap[path]; !ok {
+			// New file.
+			changes = append(changes, FileChange{Path: path})
+		} else if string(file.Data) != old.Content || file.ModTime != old.MTime {
+			// Modified or touched file.
+			changes = append(changes, FileChange{Path: path})
+		}
+	}
+
+	// Check for deleted files.
+	for path := range oldSnap.Snap {
+		if fileInfo := d.MapFs().GetFileInfo(path); fileInfo == nil {
+			changes = append(changes, FileChange{Path: path, Deleted: true})
+		}
+	}
+
+	return changes
+}

@@ -1,7 +1,10 @@
 package main
 
 import (
+	"context"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/execute"
@@ -22,6 +25,8 @@ func runMain() int {
 			return runAPI(args[1:])
 		}
 	}
-	result := execute.CommandLine(newSystem(), args, nil)
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+	result := execute.CommandLine(ctx, newSystem(), args, nil)
 	return int(result.Status)
 }

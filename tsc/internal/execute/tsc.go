@@ -49,17 +49,17 @@ func stopTracing(sys tsc.System, tr *tracing.Tracing) {
 	}
 }
 
-func CommandLine(sys tsc.System, commandLineArgs []string, testing tsc.CommandLineTesting) tsc.CommandLineResult {
+func CommandLine(ctx context.Context, sys tsc.System, commandLineArgs []string, testing tsc.CommandLineTesting) tsc.CommandLineResult {
 	if len(commandLineArgs) > 0 {
 		switch strings.ToLower(commandLineArgs[0]) {
 		case "-b", "--b", "-build", "--build":
-			return tscBuildCompilation(sys, tsoptions.ParseBuildCommandLine(commandLineArgs, sys), testing)
+			return tscBuildCompilation(ctx, sys, tsoptions.ParseBuildCommandLine(commandLineArgs, sys), testing)
 			// case "-f":
 			// 	return fmtMain(sys, commandLineArgs[1], commandLineArgs[1])
 		}
 	}
 
-	return tscCompilation(sys, tsoptions.ParseCommandLine(commandLineArgs, sys), testing)
+	return tscCompilation(ctx, sys, tsoptions.ParseCommandLine(commandLineArgs, sys), testing)
 }
 
 func fmtMain(sys tsc.System, input, output string) tsc.ExitStatus {
@@ -87,7 +87,7 @@ func fmtMain(sys tsc.System, input, output string) tsc.ExitStatus {
 	return tsc.ExitStatusSuccess
 }
 
-func tscBuildCompilation(sys tsc.System, buildCommand *tsoptions.ParsedBuildCommandLine, testing tsc.CommandLineTesting) tsc.CommandLineResult {
+func tscBuildCompilation(ctx context.Context, sys tsc.System, buildCommand *tsoptions.ParsedBuildCommandLine, testing tsc.CommandLineTesting) tsc.CommandLineResult {
 	locale := buildCommand.Locale()
 	reportDiagnostic := tsc.CreateDiagnosticReporter(sys, sys.Writer(), locale, buildCommand.CompilerOptions)
 
@@ -115,10 +115,10 @@ func tscBuildCompilation(sys tsc.System, buildCommand *tsoptions.ParsedBuildComm
 		Command: buildCommand,
 		Testing: testing,
 	})
-	return orchestrator.Start()
+	return orchestrator.Start(ctx)
 }
 
-func tscCompilation(sys tsc.System, commandLine *tsoptions.ParsedCommandLine, testing tsc.CommandLineTesting) tsc.CommandLineResult {
+func tscCompilation(ctx context.Context, sys tsc.System, commandLine *tsoptions.ParsedCommandLine, testing tsc.CommandLineTesting) tsc.CommandLineResult {
 	configFileName := ""
 	locale := commandLine.Locale()
 	reportDiagnostic := tsc.CreateDiagnosticReporter(sys, sys.Writer(), locale, commandLine.CompilerOptions())
@@ -201,9 +201,9 @@ func tscCompilation(sys tsc.System, commandLine *tsoptions.ParsedCommandLine, te
 	configForCompilation := commandLine
 	extendedConfigCache := &tsc.ExtendedConfigCache{}
 	var compileTimes tsc.CompileTimes
+	var commandLineRaw *collections.OrderedMap[string, any]
 	if configFileName != "" {
 		configStart := sys.Now()
-		var commandLineRaw *collections.OrderedMap[string, any]
 		if raw, ok := commandLine.Raw.(*collections.OrderedMap[string, any]); ok {
 			// Wrap command line options in a "compilerOptions" key to match tsconfig.json structure
 			wrapped := &collections.OrderedMap[string, any]{}
@@ -234,11 +234,12 @@ func tscCompilation(sys tsc.System, commandLine *tsoptions.ParsedCommandLine, te
 			sys,
 			configForCompilation,
 			compilerOptionsFromCommandLine,
+			commandLineRaw,
 			reportDiagnostic,
 			reportErrorSummary,
 			testing,
 		)
-		watcher.start()
+		watcher.start(ctx)
 		return tsc.CommandLineResult{Status: tsc.ExitStatusSuccess, Watcher: watcher}
 	} else if configForCompilation.CompilerOptions().IsIncremental() {
 		return performIncrementalCompilation(

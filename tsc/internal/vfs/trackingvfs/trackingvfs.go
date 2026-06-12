@@ -70,4 +70,7 @@ func (fs *FS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
 	})
 }
 
-func (fs *FS) Realpath(path string) string { return fs.Inner.Realpath(path) }
+func (fs *FS) Realpath(path string) string {
+	fs.SeenFiles.Add(path)
+	return fs.Inner.Realpath(path)
+}

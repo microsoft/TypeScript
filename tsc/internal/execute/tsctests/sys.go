@@ -1,6 +1,7 @@
 package tsctests
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"maps"
@@ -102,7 +103,7 @@ func GetFileMapWithBuild(files FileMap, commandLineArgs []string) FileMap {
 	sys := newTestSys(&tscInput{
 		files: maps.Clone(files),
 	}, false)
-	execute.CommandLine(sys, commandLineArgs, sys)
+	execute.CommandLine(context.Background(), sys, commandLineArgs, sys)
 	sys.fs.writtenFiles.Range(func(key string) bool {
 		if text, ok := sys.fsFromFileMap().ReadFile(key); ok {
 			files[key] = text
@@ -131,6 +132,8 @@ func newTestSys(tscInput *tscInput, forIncrementalCorrectness bool) *TestSys {
 	}, currentWrite)
 	sys.env = tscInput.env
 	sys.forIncrementalCorrectness = forIncrementalCorrectness
+	sys.mockWatchBackend = NewMockWatchBackend()
+	sys.mockWatchBackend.DirectoryExists = sys.fs.FS.DirectoryExists
 	sys.fsDiffer = &fsbaselineutil.FSDiffer{
 		FS:           sys.fs.FS.(iovfs.FsWithSys),
 		DefaultLibs:  func() *collections.SyncSet[string] { return sys.fs.defaultLibs },
@@ -155,6 +158,7 @@ type TestSys struct {
 	tracer                    *harnessutil.TracerForBaselining
 	fsDiffer                  *fsbaselineutil.FSDiffer
 	forIncrementalCorrectness bool
+	mockWatchBackend          *MockWatchBackend
 
 	fs                 *testFs
 	defaultLibraryPath string
@@ -311,6 +315,10 @@ func (s *TestSys) writeHeaderToBaseline(builder *strings.Builder, program *incre
 		}))
 		builder.WriteString("::\n")
 	}
+}
+
+func (s *TestSys) WatchBackend() execute.WatchBackend {
+	return s.mockWatchBackend
 }
 
 func (s *TestSys) OnProgram(program *incremental.Program) {

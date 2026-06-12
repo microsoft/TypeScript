@@ -43,6 +43,11 @@ declare const console: { log(msg: any): void; };
 export const a = 1;
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project
+  /home/src/workspaces/project/src (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -64,6 +69,11 @@ Output::
 export const b = 2;
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project
+  /home/src/workspaces/project/src (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/src/b.ts

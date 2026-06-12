@@ -2,12 +2,9 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 //// [/home/src/workspaces/project/index.ts] *new* 
-import { shared } from "./link";
-//// [/home/src/workspaces/project/link.ts] -> /home/src/workspaces/shared/index.ts *new*
+const x: number = 1;
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
-{}
-//// [/home/src/workspaces/shared/index.ts] *new* 
-export const shared = "v1";
+{ "include": ["*.ts", "deep/nested/dir/**/*"] }
 
 tsgo --watch
 ExitStatus:: Success
@@ -40,23 +37,24 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/index.js] *new* 
-export {};
-
-//// [/home/src/workspaces/project/link.js] *new* 
-export const shared = "v1";
+"use strict";
+const x = 1;
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-*refresh*    /home/src/workspaces/project/link.ts
 *refresh*    /home/src/workspaces/project/index.ts
 Signatures::
 
 
-Edit [0]:: modify symlink target
-//// [/home/src/workspaces/shared/index.ts] *modified* 
-export const shared = "v2";
+Edit [0]:: create deeply nested file matching include
+//// [/home/src/workspaces/project/deep/nested/dir/added.ts] *new* 
+export const added = 1;
 
 
 Output::
@@ -64,15 +62,19 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/home/src/workspaces/project/index.js] *rewrite with same content*
-//// [/home/src/workspaces/project/link.js] *modified* 
-export const shared = "v2";
+//// [/home/src/workspaces/project/deep/nested/dir/added.js] *new* 
+export const added = 1;
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project
+  /home/src/workspaces/project/deep
+  /home/src/workspaces/project/deep/nested
+  /home/src/workspaces/project/deep/nested/dir (recursive)
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/workspaces/project/link.ts
-*refresh*    /home/src/workspaces/project/index.ts
+*refresh*    /home/src/workspaces/project/deep/nested/dir/added.ts
 Signatures::
-(computed .d.ts) /home/src/workspaces/project/link.ts
-(computed .d.ts) /home/src/workspaces/project/index.ts
+(computed .d.ts) /home/src/workspaces/project/deep/nested/dir/added.ts

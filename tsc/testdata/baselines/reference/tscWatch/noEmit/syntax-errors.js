@@ -49,6 +49,10 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -67,6 +71,10 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -94,6 +102,10 @@ Output::
 const a = "hello";
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 Signatures::
@@ -115,6 +127,10 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 Signatures::
@@ -139,6 +155,10 @@ Found 1 error in a.ts[90m:1[0m
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *not cached* /home/src/workspaces/project/a.ts
@@ -172,6 +192,10 @@ Found 1 error in a.ts[90m:1[0m
 const a = "hello;
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *not cached* /home/src/workspaces/project/a.ts
@@ -203,6 +227,10 @@ Found 1 error in a.ts[90m:1[0m
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *not cached* /home/src/workspaces/project/a.ts

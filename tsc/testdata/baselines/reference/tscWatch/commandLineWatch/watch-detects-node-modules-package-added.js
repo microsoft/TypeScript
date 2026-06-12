@@ -48,6 +48,10 @@ declare const console: { log(msg: any): void; };
 export {};
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -71,6 +75,10 @@ Output::
 
 //// [/home/src/workspaces/project/index.js] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/node_modules/mylib/index.d.ts

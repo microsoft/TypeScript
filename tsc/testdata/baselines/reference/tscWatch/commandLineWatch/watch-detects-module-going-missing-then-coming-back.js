@@ -45,6 +45,10 @@ export {};
 export const util = "v1";
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -72,6 +76,10 @@ Found 1 error in index.ts[90m:1[0m
 
 //// [/home/src/workspaces/project/index.js] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/index.ts
@@ -104,6 +112,10 @@ Output::
 export const util = "v2";
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/project/util.ts
