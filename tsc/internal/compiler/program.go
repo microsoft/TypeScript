@@ -307,6 +307,9 @@ func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHos
 	if !canReplaceFileInProgram(oldFile, newFile) {
 		return NewProgram(newOpts), newFile, false
 	}
+	if oldNeedsImportHelpers := p.importHelpersImportSpecifiers[oldFile.Path()] != nil; oldNeedsImportHelpers != p.needsImportHelpersImportSpecifier(newFile) {
+		return NewProgram(newOpts), newFile, false
+	}
 	// TODO: reverify compiler options when config has changed?
 	result := &Program{
 		opts:                        newOpts,
@@ -354,6 +357,20 @@ func canReplaceFileInProgram(file1 *ast.SourceFile, file2 *ast.SourceFile) bool 
 		slices.EqualFunc(file1.TypeReferenceDirectives, file2.TypeReferenceDirectives, equalFileReferences) &&
 		slices.EqualFunc(file1.LibReferenceDirectives, file2.LibReferenceDirectives, equalFileReferences) &&
 		equalCheckJSDirectives(file1.CheckJsDirective, file2.CheckJsDirective)
+}
+
+func (p *Program) needsImportHelpersImportSpecifier(file *ast.SourceFile) bool {
+	redirect, _ := p.projectReferenceFileMapper.getRedirectForResolution(file)
+	optionsForFile := module.GetCompilerOptionsWithRedirect(p.opts.Config.CompilerOptions(), redirect)
+	if !optionsForFile.ImportHelpers.IsTrue() {
+		return false
+	}
+	isJavaScriptFile := ast.IsSourceFileJS(file)
+	isExternalModuleFile := ast.IsExternalModule(file)
+	if !isJavaScriptFile && (file.IsDeclarationFile || (!optionsForFile.GetIsolatedModules() && !isExternalModuleFile)) {
+		return false
+	}
+	return true
 }
 
 func equalModuleSpecifiers(n1 *ast.Node, n2 *ast.Node) bool {
