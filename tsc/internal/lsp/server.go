@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/fswatch"
 	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/jsonrpc"
 	"github.com/microsoft/typescript-go/internal/locale"
@@ -25,6 +26,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/lsp/lspwatcher"
 	"github.com/microsoft/typescript-go/internal/pprof"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/project/ata"
@@ -180,6 +182,12 @@ type Server struct {
 	telemetryEnabled bool
 	watcherID        atomic.Uint32
 	watchers         collections.SyncSet[project.WatcherID]
+	// builtinWatcher is non-nil when the server is running its own
+	// in-process file watcher instead of using LSP-based watching. It
+	// is enabled when the client lacks DynamicRegistration for
+	// workspace/didChangeWatchedFiles and the builtin watcher backend
+	// supports efficient recursive watching (Windows or FSEvents).
+	builtinWatcher *lspwatcher.Watcher
 
 	lastRequestTimeMs atomic.Int64
 
@@ -220,6 +228,13 @@ func (s *Server) InitComplete() <-chan struct{} { return s.initComplete }
 
 // WatchFiles implements project.Client.
 func (s *Server) WatchFiles(ctx context.Context, id project.WatcherID, watchers []*lsproto.FileSystemWatcher) error {
+	if s.builtinWatcher != nil {
+		if err := s.builtinWatcher.WatchFiles(string(id), watchers); err != nil {
+			return fmt.Errorf("failed to register file watcher: %w", err)
+		}
+		s.watchers.Add(id)
+		return nil
+	}
 	_, err := sendClientRequest(ctx, s, lsproto.ClientRegisterCapabilityInfo, &lsproto.RegistrationParams{
 		Registrations: []*lsproto.Registration{
 			{
@@ -242,6 +257,16 @@ func (s *Server) WatchFiles(ctx context.Context, id project.WatcherID, watchers 
 
 // UnwatchFiles implements project.Client.
 func (s *Server) UnwatchFiles(ctx context.Context, id project.WatcherID) error {
+	if s.builtinWatcher != nil {
+		if !s.watchers.Has(id) {
+			return fmt.Errorf("no file watcher exists with ID %s", id)
+		}
+		if err := s.builtinWatcher.UnwatchFiles(string(id)); err != nil {
+			return fmt.Errorf("failed to unregister file watcher: %w", err)
+		}
+		s.watchers.Delete(id)
+		return nil
+	}
 	if s.watchers.Has(id) {
 		_, err := sendClientRequest(ctx, s, lsproto.ClientUnregisterCapabilityInfo, &lsproto.UnregistrationParams{
 			Unregisterations: []*lsproto.Unregistration{
@@ -1164,8 +1189,33 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 }
 
 func (s *Server) handleInitialized(ctx context.Context, params *lsproto.InitializedParams) error {
-	if s.clientCapabilities.Workspace.DidChangeWatchedFiles.DynamicRegistration {
+	var disablePushDiagnostics bool
+	var enableTelemetry bool
+	if s.initializationOptions.DisablePushDiagnostics != nil {
+		disablePushDiagnostics = *s.initializationOptions.DisablePushDiagnostics
+	}
+	if s.initializationOptions.EnableTelemetry != nil {
+		enableTelemetry = *s.initializationOptions.EnableTelemetry
+	}
+	hasDynamicWatchRegistration := s.clientCapabilities.Workspace.DidChangeWatchedFiles.DynamicRegistration
+	if hasDynamicWatchRegistration {
+		s.logger.Logf("file watching: using LSP client-side watching (client supports dynamic registration)")
 		s.watchEnabled = true
+	} else if fswatch.Default().HasFastRecursiveBackend() {
+		// The client cannot watch files itself, but the builtin watcher has a
+		// backend with efficient recursive watching (Windows or FSEvents), so
+		// fall back to watching files in-process.
+		s.logger.Logf("file watching: using builtin in-process watcher (client lacks dynamic watch registration)")
+		s.watchEnabled = true
+		s.builtinWatcher = lspwatcher.New(s.fs, func(changes []*lsproto.FileEvent) {
+			if s.session != nil {
+				s.session.DidChangeWatchedFiles(s.backgroundCtx, changes)
+			}
+		}, s.logger)
+	} else {
+		// The client cannot watch files and the builtin watcher backend lacks
+		// efficient recursive watching, so file watching is disabled.
+		s.logger.Logf("file watching: disabled (client lacks dynamic watch registration and builtin watcher backend is not fast-recursive)")
 	}
 
 	cwd := s.cwd
@@ -1183,14 +1233,6 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		cwd = s.cwd
 	}
 
-	var disablePushDiagnostics bool
-	var enableTelemetry bool
-	if s.initializationOptions.DisablePushDiagnostics != nil {
-		disablePushDiagnostics = *s.initializationOptions.DisablePushDiagnostics
-	}
-	if s.initializationOptions.EnableTelemetry != nil {
-		enableTelemetry = *s.initializationOptions.EnableTelemetry
-	}
 	s.telemetryEnabled = enableTelemetry
 
 	s.session = project.NewSession(&project.SessionInit{
@@ -1252,6 +1294,9 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 }
 
 func (s *Server) handleShutdown(ctx context.Context, _ lsproto.NoParams, _ *lsproto.RequestMessage) (lsproto.ShutdownResponse, error) {
+	if s.builtinWatcher != nil {
+		s.builtinWatcher.Close()
+	}
 	s.session.Close()
 	return lsproto.ShutdownResponse{}, nil
 }
