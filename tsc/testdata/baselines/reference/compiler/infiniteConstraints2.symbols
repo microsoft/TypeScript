@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/infiniteConstraints2.ts] ////
+
+=== infiniteConstraints2.ts ===
+// https://github.com/microsoft/TypeScript/issues/63269
+
+export type Prepend<Elm, T extends unknown[]> =
+>Prepend : Symbol(Prepend, Decl(infiniteConstraints2.ts, 0, 0))
+>Elm : Symbol(Elm, Decl(infiniteConstraints2.ts, 2, 20))
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 2, 24))
+
+ T extends unknown ?
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 2, 24))
+
+ ((arg: Elm, ...rest: T) => void) extends ((...args: infer T2) => void) ? T2 : 
+>arg : Symbol(arg, Decl(infiniteConstraints2.ts, 4, 3))
+>Elm : Symbol(Elm, Decl(infiniteConstraints2.ts, 2, 20))
+>rest : Symbol(rest, Decl(infiniteConstraints2.ts, 4, 12))
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 2, 24))
+>args : Symbol(args, Decl(infiniteConstraints2.ts, 4, 44))
+>T2 : Symbol(T2, Decl(infiniteConstraints2.ts, 4, 58))
+>T2 : Symbol(T2, Decl(infiniteConstraints2.ts, 4, 58))
+
+ never :
+ never;
+export type ExactExtract<T, U> = (T extends U ? U extends T ? T : never : never) & string;
+>ExactExtract : Symbol(ExactExtract, Decl(infiniteConstraints2.ts, 6, 7))
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 7, 25))
+>U : Symbol(U, Decl(infiniteConstraints2.ts, 7, 27))
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 7, 25))
+>U : Symbol(U, Decl(infiniteConstraints2.ts, 7, 27))
+>U : Symbol(U, Decl(infiniteConstraints2.ts, 7, 27))
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 7, 25))
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 7, 25))
+
+type Conv<T, U = T> = {
+>Conv : Symbol(Conv, Decl(infiniteConstraints2.ts, 7, 90))
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 8, 10))
+>U : Symbol(U, Decl(infiniteConstraints2.ts, 8, 12))
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 8, 10))
+
+    0: [T];
+>0 : Symbol(0, Decl(infiniteConstraints2.ts, 8, 23))
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 8, 10))
+
+    1: Prepend<T, Conv<ExactExtract<U, T>, {a: number}>>;
+>1 : Symbol(1, Decl(infiniteConstraints2.ts, 9, 11))
+>Prepend : Symbol(Prepend, Decl(infiniteConstraints2.ts, 0, 0))
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 8, 10))
+>Conv : Symbol(Conv, Decl(infiniteConstraints2.ts, 7, 90))
+>ExactExtract : Symbol(ExactExtract, Decl(infiniteConstraints2.ts, 6, 7))
+>U : Symbol(U, Decl(infiniteConstraints2.ts, 8, 12))
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 8, 10))
+>a : Symbol(a, Decl(infiniteConstraints2.ts, 10, 44))
+
+}[U extends T ? 0 : 1];
+>U : Symbol(U, Decl(infiniteConstraints2.ts, 8, 12))
+>T : Symbol(T, Decl(infiniteConstraints2.ts, 8, 10))
+
