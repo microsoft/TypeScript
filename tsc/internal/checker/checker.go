@@ -14289,7 +14289,12 @@ func (c *Checker) recordMergedSymbol(target *ast.Symbol, source *ast.Symbol) {
 }
 
 func (c *Checker) getSymbolIfSameReference(s1 *ast.Symbol, s2 *ast.Symbol) *ast.Symbol {
-	if c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(s1))) == c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(s2))) {
+	// An instantiated symbol (e.g. a parameter of a signature instantiated to substitute `this`)
+	// refers to the same declaration as its instantiation target. Whether a given context yields the
+	// original symbol or an instantiated copy can depend on incidental checker cache state (see
+	// instantiateSymbol, whose reuse shortcut is gated on the type already being resolved), so unwrap
+	// instantiations here to keep "same reference" answers deterministic.
+	if c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(c.getTargetSymbol(s1)))) == c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(c.getTargetSymbol(s2)))) {
 		return s1
 	}
 	return nil
@@ -21544,7 +21549,7 @@ func (c *Checker) getTargetSymbol(s *ast.Symbol) *ast.Symbol {
 	// if symbol is instantiated its flags are not copied from the 'target'
 	// so we'll need to get back original 'target' symbol to work with correct set of flags
 	// NOTE: cast to TransientSymbol should be safe because only TransientSymbols have CheckFlags.Instantiated
-	if s.CheckFlags&ast.CheckFlagsInstantiated != 0 {
+	if s != nil && s.CheckFlags&ast.CheckFlagsInstantiated != 0 {
 		return c.valueSymbolLinks.Get(s).target
 	}
 	return s

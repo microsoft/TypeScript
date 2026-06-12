@@ -333,7 +333,7 @@ func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, project
 		return checkerSetup{}, err
 	}
 
-	c, done := program.GetTypeChecker(ctx)
+	c, done := program.GetTypeChecker(core.WithCheckerLifetime(ctx, core.CheckerLifetimeAPI))
 	return checkerSetup{
 		sd:      sd,
 		program: program,
@@ -2128,6 +2128,7 @@ func (s *Session) toFileChangeSummary(changes *APIFileChanges) project.FileChang
 
 // handleGetSyntacticDiagnostics returns syntactic diagnostics for a file or all files.
 func (s *Session) handleGetSyntacticDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
+	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
@@ -2149,6 +2150,7 @@ func (s *Session) handleGetSyntacticDiagnostics(ctx context.Context, params *Get
 
 // handleGetSemanticDiagnostics returns semantic diagnostics for a file or all files.
 func (s *Session) handleGetSemanticDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
+	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
@@ -2170,6 +2172,7 @@ func (s *Session) handleGetSemanticDiagnostics(ctx context.Context, params *GetD
 
 // handleGetSuggestionDiagnostics returns suggestion diagnostics for a file or all files.
 func (s *Session) handleGetSuggestionDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
+	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
@@ -2191,6 +2194,7 @@ func (s *Session) handleGetSuggestionDiagnostics(ctx context.Context, params *Ge
 
 // handleGetDeclarationDiagnostics returns declaration diagnostics for a file or all files.
 func (s *Session) handleGetDeclarationDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
+	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err

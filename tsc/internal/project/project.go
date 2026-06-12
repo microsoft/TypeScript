@@ -77,7 +77,7 @@ type Project struct {
 	programFilesWatch *WatchedFiles[*collections.SyncSet[tspath.Path]]
 	typingsWatch      *WatchedFiles[PatternsAndIgnored]
 
-	checkerPool *CheckerPool
+	checkerPool *checkerPool
 
 	// installedTypingsInfo is the value of `project.ComputeTypingsInfo()` that was
 	// used during the most recently completed typings installation.
@@ -342,15 +342,13 @@ func (p *Project) hasPotentialProjectReference(projectTreeRequest *ProjectTreeRe
 }
 
 type CreateProgramResult struct {
-	Program     *compiler.Program
-	UpdateKind  ProgramUpdateKind
-	CheckerPool *CheckerPool
+	Program    *compiler.Program
+	UpdateKind ProgramUpdateKind
 }
 
 func (p *Project) CreateProgram() CreateProgramResult {
 	updateKind := ProgramUpdateKindNewFiles
 	var programCloned bool
-	var checkerPool *CheckerPool
 	var newProgram *compiler.Program
 
 	// Define a fresh CreateCheckerPool closure for this call. Each invocation of
@@ -358,8 +356,7 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	// the same project never share a captured variable through a stale closure
 	// stored in the old program's options.
 	createCheckerPool := func(program *compiler.Program) compiler.CheckerPool {
-		checkerPool = newCheckerPool(4, program, nil)
-		return checkerPool
+		return newCheckerPool(p.host.sessionOptions.CheckerPoolOptions, program, p.log)
 	}
 
 	// Create the command line, potentially augmented with typing files
@@ -410,9 +407,8 @@ func (p *Project) CreateProgram() CreateProgramResult {
 	newProgram.BindSourceFiles()
 
 	return CreateProgramResult{
-		Program:     newProgram,
-		UpdateKind:  updateKind,
-		CheckerPool: checkerPool,
+		Program:    newProgram,
+		UpdateKind: updateKind,
 	}
 }
 

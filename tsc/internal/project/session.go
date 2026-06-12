@@ -63,6 +63,7 @@ type SessionOptions struct {
 	PushDiagnosticsEnabled bool
 	DebounceDelay          time.Duration
 	Locale                 locale.Locale
+	CheckerPoolOptions     CheckerPoolOptions
 }
 
 type SessionInit struct {
