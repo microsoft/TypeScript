@@ -1000,9 +1000,17 @@ type DiagnosticResponse struct {
 
 // NewDiagnosticResponse converts an ast.Diagnostic to a DiagnosticResponse.
 func NewDiagnosticResponse(d *ast.Diagnostic) *DiagnosticResponse {
+	pos := d.Pos()
+	end := d.End()
+	file := d.File()
+	if file != nil {
+		positionMap := file.GetPositionMap()
+		pos = positionMap.UTF8ToUTF16(pos)
+		end = positionMap.UTF8ToUTF16(end)
+	}
 	resp := &DiagnosticResponse{
-		Pos:                d.Pos(),
-		End:                d.End(),
+		Pos:                pos,
+		End:                end,
 		Code:               d.Code(),
 		Category:           d.Category(),
 		Text:               d.Localize(locale.Default),
@@ -1010,8 +1018,8 @@ func NewDiagnosticResponse(d *ast.Diagnostic) *DiagnosticResponse {
 		ReportsDeprecated:  d.ReportsDeprecated(),
 	}
 
-	if d.File() != nil {
-		resp.FileName = d.File().FileName()
+	if file != nil {
+		resp.FileName = file.FileName()
 	}
 
 	if chain := d.MessageChain(); len(chain) > 0 {
