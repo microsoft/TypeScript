@@ -488,6 +488,28 @@ func (tx *DeclarationTransformer) getTypeReferences() (result []*ast.FileReferen
 	return result
 }
 
+func (tx *DeclarationTransformer) setupDiagnosticContext(input *ast.Node) (bool, func()) {
+	canProdiceDiagnostic := canProduceDiagnostics(input)
+	oldWithinObjectLiteralType := tx.suppressNewDiagnosticContexts
+	shouldEnterSuppressNewDiagnosticsContextContext := (input.Kind == ast.KindTypeLiteral || input.Kind == ast.KindMappedType) && !(input.Parent.Kind == ast.KindTypeAliasDeclaration || input.Parent.Kind == ast.KindJSTypeAliasDeclaration)
+
+	oldDiag := tx.state.getSymbolAccessibilityDiagnostic
+	if canProdiceDiagnostic && !tx.suppressNewDiagnosticContexts {
+		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input)
+	}
+	oldName := tx.state.errorNameNode
+
+	if shouldEnterSuppressNewDiagnosticsContextContext {
+		tx.suppressNewDiagnosticContexts = true
+	}
+
+	return canProdiceDiagnostic, func() {
+		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+		tx.state.errorNameNode = oldName
+		tx.suppressNewDiagnosticContexts = oldWithinObjectLiteralType
+	}
+}
+
 func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.Node {
 	if tx.shouldStripInternal(input) {
 		return nil
@@ -534,19 +556,8 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 		tx.enclosingDeclaration = input
 	}
 
-	canProdiceDiagnostic := canProduceDiagnostics(input)
-	oldWithinObjectLiteralType := tx.suppressNewDiagnosticContexts
-	shouldEnterSuppressNewDiagnosticsContextContext := (input.Kind == ast.KindTypeLiteral || input.Kind == ast.KindMappedType) && !(input.Parent.Kind == ast.KindTypeAliasDeclaration || input.Parent.Kind == ast.KindJSTypeAliasDeclaration)
-
-	oldDiag := tx.state.getSymbolAccessibilityDiagnostic
-	if canProdiceDiagnostic && !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input)
-	}
-	oldName := tx.state.errorNameNode
-
-	if shouldEnterSuppressNewDiagnosticsContextContext {
-		tx.suppressNewDiagnosticContexts = true
-	}
+	canProdiceDiagnostic, cleanupDiagnosticContext := tx.setupDiagnosticContext(input)
+	defer cleanupDiagnosticContext()
 
 	var result *ast.Node
 
@@ -626,9 +637,6 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 	}
 
 	tx.enclosingDeclaration = previousEnclosingDeclaration
-	tx.state.getSymbolAccessibilityDiagnostic = oldDiag
-	tx.state.errorNameNode = oldName
-	tx.suppressNewDiagnosticContexts = oldWithinObjectLiteralType
 	return result
 }
 
@@ -2278,6 +2286,8 @@ func (tx *DeclarationTransformer) getNameExpressionPreferringIdentifier(nameExpr
 
 func (tx *DeclarationTransformer) visitExpressionStatement(node *ast.Node) *ast.Node {
 	if expression := node.Expression(); expression != nil {
+		_, cleanupDiagnosticContext := tx.setupDiagnosticContext(expression)
+		defer cleanupDiagnosticContext()
 		switch ast.GetAssignmentDeclarationKind(expression) {
 		case ast.JSDeclarationKindModuleExports:
 			if ast.IsSourceFile(node.Parent) && node.Parent.AsSourceFile().CommonJSModuleIndicator != nil {
@@ -2388,6 +2398,9 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		tx.enclosingDeclaration = oldEnclosing
 	}()
 
+	_, cleanupDiagnosticContext := tx.setupDiagnosticContext(node.AsNode())
+	defer cleanupDiagnosticContext()
+
 	statements := []*ast.Statement{
 		tx.Factory().NewVariableStatement(
 			varModifiers,
@@ -2446,6 +2459,9 @@ func (tx *DeclarationTransformer) transformExpandoHost(name *ast.Node, declarati
 		modifierFlags ^= ast.ModifierFlagsDefault
 		modifierFlags ^= ast.ModifierFlagsExport
 	}
+
+	_, cleanupDiagnosticContext := tx.setupDiagnosticContext(declaration)
+	defer cleanupDiagnosticContext()
 
 	modifiers := tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier))
 	replacement := make([]*ast.Node, 0)

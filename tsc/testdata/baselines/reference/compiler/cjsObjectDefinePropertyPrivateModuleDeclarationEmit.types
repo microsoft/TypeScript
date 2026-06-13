@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/cjsObjectDefinePropertyPrivateModuleDeclarationEmit.ts] ////
+
+=== /index.cjs ===
+Object.defineProperty(exports, "api", { value: require("pkg") });
+>Object.defineProperty(exports, "api", { value: require("pkg") }) : typeof import("./index.cjs")
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>exports : typeof import("./index.cjs")
+>"api" : "api"
+>{ value: require("pkg") } : { value: { fn(x: Private): void; }; }
+>value : { fn(x: Private): void; }
+>require("pkg") : { fn(x: Private): void; }
+>require : any
+>"pkg" : "pkg"
+
+=== /node_modules/@types/pkg/index.d.ts ===
+interface Private {}
+declare const obj: { fn(x: Private): void };
+>obj : { fn(x: Private): void; }
+>fn : (x: Private) => void
+>x : Private
+
+export = obj;
+>obj : { fn(x: Private): void; }
+

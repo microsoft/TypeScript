@@ -44,7 +44,8 @@ func canProduceDiagnostics(node *ast.Node) bool {
 		ast.IsIndexSignatureDeclaration(node) ||
 		ast.IsPropertyAccessExpression(node) ||
 		ast.IsElementAccessExpression(node) ||
-		ast.IsBinaryExpression(node) // || // !!! TODO: JSDoc support
+		ast.IsBinaryExpression(node) ||
+		ast.IsCallExpression(node) // || // !!! TODO: JSDoc support
 	/* ast.IsJSDocTypeAlias(node); */
 }
 
