@@ -925,6 +925,13 @@ conformance/nodeModulesAllowJsTopLevelAwait(module=node18).js.diff
 conformance/nodeModulesAllowJsTopLevelAwait(module=node20).js.diff
 conformance/nodeModulesAllowJsTopLevelAwait(module=nodenext).js.diff
 
+## JS declaration emit adds `export import` modifier for require-style import assignments
+## https://github.com/microsoft/typescript-go/issues/3542
+conformance/nodeModulesAllowJsImportAssignment(module=node16).js.diff
+conformance/nodeModulesAllowJsImportAssignment(module=node18).js.diff
+conformance/nodeModulesAllowJsImportAssignment(module=node20).js.diff
+conformance/nodeModulesAllowJsImportAssignment(module=nodenext).js.diff
+
 ## JS declaration emit now preserves side-effect imports, declaration order changes inconsequentially
 conformance/nodeModulesAllowJsExportAssignment(module=node16).js.diff
 conformance/nodeModulesAllowJsExportAssignment(module=node18).js.diff
