@@ -14289,12 +14289,7 @@ func (c *Checker) recordMergedSymbol(target *ast.Symbol, source *ast.Symbol) {
 }
 
 func (c *Checker) getSymbolIfSameReference(s1 *ast.Symbol, s2 *ast.Symbol) *ast.Symbol {
-	// An instantiated symbol (e.g. a parameter of a signature instantiated to substitute `this`)
-	// refers to the same declaration as its instantiation target. Whether a given context yields the
-	// original symbol or an instantiated copy can depend on incidental checker cache state (see
-	// instantiateSymbol, whose reuse shortcut is gated on the type already being resolved), so unwrap
-	// instantiations here to keep "same reference" answers deterministic.
-	if c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(c.getTargetSymbol(s1)))) == c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(c.getTargetSymbol(s2)))) {
+	if c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(s1))) == c.getMergedSymbol(c.resolveSymbol(c.getMergedSymbol(s2))) {
 		return s1
 	}
 	return nil
@@ -19003,7 +18998,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 	} else {
 		instantiated = true
 		mapper = newTypeMapper(typeParameters, typeArguments)
-		members = c.instantiateSymbolTable(resolved.declaredMembers, mapper, len(typeParameters) == 1 /*mappingThisOnly*/)
+		members = c.instantiateSymbolTable(resolved.declaredMembers, mapper)
 		callSignatures = c.instantiateSignatures(resolved.declaredCallSignatures, mapper)
 		constructSignatures = c.instantiateSignatures(resolved.declaredConstructSignatures, mapper)
 		indexInfos = c.instantiateIndexInfos(resolved.declaredIndexInfos, mapper)
@@ -20610,8 +20605,6 @@ func (c *Checker) resolveAnonymousTypeMembers(t *Type) {
 	}
 }
 
-// The mappingThisOnly flag indicates that the only type parameter being mapped is "this". When the flag is true,
-// we check symbols to see if we can quickly conclude they are free of "this" references, thus needing no instantiation.
 func (c *Checker) createInstantiatedSymbolTable(symbols []*ast.Symbol, m *TypeMapper) ast.SymbolTable {
 	if len(symbols) == 0 {
 		return nil
@@ -20623,20 +20616,14 @@ func (c *Checker) createInstantiatedSymbolTable(symbols []*ast.Symbol, m *TypeMa
 	return result
 }
 
-// The mappingThisOnly flag indicates that the only type parameter being mapped is "this". When the flag is true,
-// we check symbols to see if we can quickly conclude they are free of "this" references, thus needing no instantiation.
-func (c *Checker) instantiateSymbolTable(symbols ast.SymbolTable, m *TypeMapper, mappingThisOnly bool) ast.SymbolTable {
+func (c *Checker) instantiateSymbolTable(symbols ast.SymbolTable, m *TypeMapper) ast.SymbolTable {
 	if len(symbols) == 0 {
 		return nil
 	}
 	result := make(ast.SymbolTable, len(symbols))
 	for id, symbol := range symbols {
 		if c.isNamedMember(symbol, id) {
-			if mappingThisOnly && isThisless(symbol) {
-				result[id] = symbol
-			} else {
-				result[id] = c.instantiateSymbol(symbol, m)
-			}
+			result[id] = c.instantiateSymbol(symbol, m)
 		}
 	}
 	return result
@@ -20647,6 +20634,9 @@ func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symb
 		return nil
 	}
 	links := c.valueSymbolLinks.Get(symbol)
+	if m != nil && m.MapsThisOnly() && isThisless(symbol) {
+		return symbol
+	}
 	// If the type of the symbol is already resolved, and if that type could not possibly
 	// be affected by instantiation, simply return the symbol itself.
 	if links.resolvedType != nil && !c.couldContainTypeVariables(links.resolvedType) {
@@ -20679,7 +20669,7 @@ func (c *Checker) instantiateSymbol(symbol *ast.Symbol, m *TypeMapper) *ast.Symb
 	return result
 }
 
-// Returns true if the class or interface member given by the symbol is free of "this" references. The
+// Returns true if the parameter or class/interface member given by the symbol is free of "this" references. The
 // function may return false for symbols that are actually free of "this" references because it is not
 // feasible to perform a complete analysis in all cases. In particular, property members with types
 // inferred from their initializers and function members with inferred return types are conservatively
@@ -20689,6 +20679,8 @@ func isThisless(symbol *ast.Symbol) bool {
 		declaration := symbol.Declarations[0]
 		if declaration != nil {
 			switch declaration.Kind {
+			case ast.KindParameter:
+				return isThislessVariableLikeDeclaration(declaration)
 			case ast.KindPropertyDeclaration, ast.KindPropertySignature:
 				return isThislessVariableLikeDeclaration(declaration)
 			case ast.KindMethodDeclaration, ast.KindMethodSignature, ast.KindConstructor, ast.KindGetAccessor, ast.KindSetAccessor:

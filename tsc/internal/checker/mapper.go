@@ -25,12 +25,14 @@ type TypeMapper struct {
 
 func (m *TypeMapper) Map(t *Type) *Type    { return m.data.Map(t) }
 func (m *TypeMapper) Kind() TypeMapperKind { return m.data.Kind() }
+func (m *TypeMapper) MapsThisOnly() bool   { return m.data.MapsThisOnly() }
 
 // TypeMapperData
 
 type TypeMapperData interface {
 	Map(t *Type) *Type
 	Kind() TypeMapperKind
+	MapsThisOnly() bool
 }
 
 // Factory functions
@@ -88,6 +90,7 @@ type TypeMapperBase struct {
 
 func (m *TypeMapperBase) Map(t *Type) *Type    { return t }
 func (m *TypeMapperBase) Kind() TypeMapperKind { return TypeMapperKindUnknown }
+func (m *TypeMapperBase) MapsThisOnly() bool   { return false }
 
 // SimpleTypeMapper
 
@@ -114,6 +117,10 @@ func (m *SimpleTypeMapper) Map(t *Type) *Type {
 
 func (m *SimpleTypeMapper) Kind() TypeMapperKind {
 	return TypeMapperKindSimple
+}
+
+func (m *SimpleTypeMapper) MapsThisOnly() bool {
+	return isThisTypeParameter(m.source)
 }
 
 // ArrayTypeMapper
@@ -145,6 +152,10 @@ func (m *ArrayTypeMapper) Kind() TypeMapperKind {
 	return TypeMapperKindArray
 }
 
+func (m *ArrayTypeMapper) MapsThisOnly() bool {
+	return len(m.sources) == 1 && isThisTypeParameter(m.sources[0])
+}
+
 // ArrayToSingleTypeMapper
 
 type ArrayToSingleTypeMapper struct {
@@ -166,6 +177,10 @@ func (m *ArrayToSingleTypeMapper) Map(t *Type) *Type {
 		return m.target
 	}
 	return t
+}
+
+func (m *ArrayToSingleTypeMapper) MapsThisOnly() bool {
+	return len(m.sources) == 1 && isThisTypeParameter(m.sources[0])
 }
 
 // DeferredTypeMapper
@@ -191,6 +206,10 @@ func (m *DeferredTypeMapper) Map(t *Type) *Type {
 		}
 	}
 	return t
+}
+
+func (m *DeferredTypeMapper) MapsThisOnly() bool {
+	return len(m.sources) == 1 && isThisTypeParameter(m.sources[0])
 }
 
 // FunctionTypeMapper
