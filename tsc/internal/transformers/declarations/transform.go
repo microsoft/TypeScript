@@ -2200,7 +2200,9 @@ func (tx *DeclarationTransformer) ensureModifiers(node *ast.Node) *ast.ModifierL
 		if mods == nil {
 			return mods
 		}
-		return tx.Factory().NewModifierList(core.Filter(mods.Nodes, ast.IsModifier))
+		if canReuseModifierNodes(mods.Nodes) {
+			return tx.Factory().NewModifierList(core.Filter(mods.Nodes, ast.IsModifier))
+		}
 	}
 	result := ast.CreateModifiersFromModifierFlags(newFlags, tx.Factory().NewModifier)
 	if len(result) == 0 {
