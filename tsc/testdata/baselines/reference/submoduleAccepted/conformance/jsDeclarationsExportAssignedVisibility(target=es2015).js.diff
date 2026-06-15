@@ -1,0 +1,17 @@
+--- old.jsDeclarationsExportAssignedVisibility(target=es2015).js
++++ new.jsDeclarationsExportAssignedVisibility(target=es2015).js
+@@= skipped -38, +38 lines =@@
+ export = Obj;
+ declare class Obj {
+     x: number;
++    constructor();
+ }
+ //// [index.d.ts]
+-export = Container;
++import Obj = require("./obj");
+ declare class Container {
+     usage: Obj;
++    constructor();
+ }
+-import Obj = require("./obj");
++export = Container;

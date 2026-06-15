@@ -1,0 +1,11 @@
+--- old.jsDeclarationsExportAssignedClassExpression(target=es2015).types
++++ new.jsDeclarationsExportAssignedClassExpression(target=es2015).types
+@@= skipped -6, +6 lines =@@
+ >module : { exports: typeof import("."); }
+ >exports : typeof import(".")
+ >class Thing {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import(".")
+->Thing : typeof import(".")
++>Thing : typeof Thing
+
+     /**
+      * @param {number} p

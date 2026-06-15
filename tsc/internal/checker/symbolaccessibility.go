@@ -785,10 +785,46 @@ func (c *Checker) someSymbolTableInScope(
 			if table != nil && callback(table, symbolTableIDFromMembers(sym), false, false, location) {
 				return true
 			}
+			// Class expression names (e.g., `B` in `class B {}`) are not stored in any
+			// scope table — the binder uses bindAnonymousDeclaration. Expose the name
+			// binding here so getAccessibleSymbolChain can resolve self-references.
+			// This mirrors the special casing of class expression names in
+			// (*NameResolver).Resolve; if class names are ever bound differently
+			// (e.g., via class-local type aliases), both sites should be updated.
+			if ast.IsClassExpression(location) && location.AsClassExpression().Name() != nil {
+				nameTable := c.getClassExpressionNameTable(location)
+				if nameTable != nil && callback(nameTable, symbolTableIDFromLocals(location.AsNode()), false, true, location) {
+					return true
+				}
+			}
 		}
 	}
 
 	return callback(c.globals, symbolTableIDFromGlobals(), false, true, nil)
+}
+
+// getClassExpressionNameTable returns a cached symbol table containing the class
+// expression's name binding. Class expression names are bound via
+// bindAnonymousDeclaration and aren't stored in any container's locals, so this
+// synthesized table lets someSymbolTableInScope expose them during accessibility checks.
+func (c *Checker) getClassExpressionNameTable(location *ast.Node) ast.SymbolTable {
+	nodeId := ast.GetNodeId(location)
+	if c.classExpressionNameTables != nil {
+		if table, ok := c.classExpressionNameTables[nodeId]; ok {
+			return table
+		}
+	}
+	classSymbol := c.getSymbolOfDeclaration(location)
+	nameText := location.AsClassExpression().Name().Text()
+	if len(nameText) == 0 || classSymbol == nil {
+		return nil
+	}
+	table := ast.SymbolTable{nameText: classSymbol}
+	if c.classExpressionNameTables == nil {
+		c.classExpressionNameTables = make(map[ast.NodeId]ast.SymbolTable)
+	}
+	c.classExpressionNameTables[nodeId] = table
+	return table
 }
 
 /**

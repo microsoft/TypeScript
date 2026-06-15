@@ -22,7 +22,7 @@ module.exports = class Q {
 >module : { exports: typeof import("."); }
 >exports : typeof import(".")
 >class Q {    constructor() {        this.x = new A();    }} : typeof import(".")
->Q : typeof import(".")
+>Q : typeof Q
 
     constructor() {
         this.x = new A();

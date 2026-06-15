@@ -104,6 +104,7 @@ type EmitResolver interface {
 	IsLiteralConstDeclaration(node *ast.Node) bool
 	RequiresAddingImplicitUndefined(node *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool
 	IsDeclarationVisible(node *ast.Node) bool
+	IsNameResolvedToDeclaration(location *ast.Node, name string, declaration *ast.Node) bool
 	IsImportRequiredByAugmentation(decl *ast.ImportDeclaration) bool
 	IsDefinitelyReferenceToGlobalSymbolObject(node *ast.Node) bool
 	IsImplementationOfOverload(node *ast.SignatureDeclaration) bool

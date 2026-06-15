@@ -7,7 +7,7 @@ module.exports = class Thing {
 >module : { exports: typeof import("."); }
 >exports : typeof import(".")
 >class Thing {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import(".")
->Thing : typeof import(".")
+>Thing : typeof Thing
 
     /**
      * @param {number} p

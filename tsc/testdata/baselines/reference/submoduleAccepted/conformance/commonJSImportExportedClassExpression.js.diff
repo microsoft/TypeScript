@@ -1,0 +1,11 @@
+--- old.commonJSImportExportedClassExpression.js
++++ new.commonJSImportExportedClassExpression.js
+@@= skipped -29, +29 lines =@@
+
+
+ //// [mod1.d.ts]
+-export class K {
++export declare class K {
+     values(): void;
+ }
+ //// [main.d.ts]

@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/cjsExportNamedClassExpressionNoAssignment.ts] ////
+
+=== index.js ===
+// Named class expression exports without module.exports assignment.
+// The class expression name B should be preserved via namespace isolation
+// even without a module.exports = ... in the file.
+module.exports.A = class B {f1 = 1; self = new B();}
+>module.exports.A : Symbol(A, Decl(index.js, 0, 0))
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
+>A : Symbol(A, Decl(index.js, 0, 0))
+>B : Symbol(B, Decl(index.js, 3, 18))
+>f1 : Symbol(B.f1, Decl(index.js, 3, 28))
+>self : Symbol(B.self, Decl(index.js, 3, 35))
+>B : Symbol(B, Decl(index.js, 3, 18))
+

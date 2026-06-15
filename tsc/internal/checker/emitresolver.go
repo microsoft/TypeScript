@@ -896,6 +896,24 @@ func (r *EmitResolver) GetReferencedValueDeclarations(node *ast.IdentifierNode) 
 	return r.getReferenceResolver().GetReferencedValueDeclarations(node)
 }
 
+// IsNameResolvedToDeclaration checks whether `name` resolved at `location`
+// resolves to a symbol that includes `declaration` among its declarations.
+// When `declaration` is nil, checks whether the name resolves to any symbol.
+// This is used by the declaration emitter to check for naming conflicts at file scope.
+func (r *EmitResolver) IsNameResolvedToDeclaration(location *ast.Node, name string, declaration *ast.Node) bool {
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+
+	symbol := r.checker.resolveName(location, name, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
+	if symbol == nil {
+		return false
+	}
+	if declaration == nil {
+		return true
+	}
+	return slices.Contains(symbol.Declarations, declaration)
+}
+
 func (r *EmitResolver) GetElementAccessExpressionName(expression *ast.ElementAccessExpression) string {
 	if !ast.IsParseTreeNode(expression.AsNode()) {
 		return ""

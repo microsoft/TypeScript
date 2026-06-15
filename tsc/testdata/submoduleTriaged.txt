@@ -39,15 +39,6 @@ compiler/multiLinePropertyAccessAndArrowFunctionIndent1.errors.txt.diff
 compiler/parseErrorIncorrectReturnToken.errors.txt.diff
 conformance/parserStatementIsNotAMemberVariableDeclaration1(alwaysstrict=true).errors.txt.diff
 
-# CJS class expression exports now emit anonymous constructor types instead of named class declarations
-## https://github.com/microsoft/typescript-go/issues/3544
-conformance/commonJSImportExportedClassExpression.js.diff
-conformance/jsDeclarationsExportAssignedClassExpression(target=es2015).js.diff
-conformance/jsDeclarationsExportAssignedClassExpressionAnonymous(target=es2015).js.diff
-conformance/jsDeclarationsExportAssignedClassExpressionAnonymousWithSub(target=es2015).js.diff
-conformance/jsDeclarationsExportAssignedClassExpressionShadowing(target=es2015).js.diff
-conformance/jsDeclarationsExportAssignedVisibility(target=es2015).js.diff
-
 # Namespace-to-const restructuring with DtsFileErrors (redeclaration errors)
 ## https://github.com/microsoft/typescript-go/issues/3547
 conformance/typeFromPropertyAssignment39.js.diff

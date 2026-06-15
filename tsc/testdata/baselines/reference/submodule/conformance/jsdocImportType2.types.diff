@@ -1,0 +1,11 @@
+--- old.jsdocImportType2.types
++++ new.jsdocImportType2.types
+@@= skipped -46, +46 lines =@@
+ >module : { exports: typeof import("./mod1"); }
+ >exports : typeof import("./mod1")
+ >class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("./mod1")
+->Chunk : typeof import("./mod1")
++>Chunk : typeof Chunk
+
+     constructor() {
+         this.chunk = 1;

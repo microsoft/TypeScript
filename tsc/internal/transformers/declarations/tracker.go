@@ -15,6 +15,11 @@ type SymbolTrackerImpl struct {
 	host          DeclarationEmitHost
 	fallbackStack []*ast.Node
 
+	// For detecting class expression self-references during member serialization.
+	// When set, TrackSymbol will record usage without reporting accessibility errors.
+	watchedClassSymbol *ast.Symbol
+	classSymbolTracked bool
+
 	getIsolatedDeclarationError func(node *ast.Node) *ast.Diagnostic
 }
 
@@ -155,6 +160,13 @@ func (s *SymbolTrackerImpl) errorDeclarationNameWithFallback() string {
 // TrackSymbol implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags) bool {
 	if symbol.Flags&ast.SymbolFlagsTypeParameter != 0 {
+		return false
+	}
+	// When watching for a class expression symbol, record its usage without
+	// reporting accessibility errors — the caller will handle visibility by
+	// wrapping the class in a namespace.
+	if s.watchedClassSymbol != nil && symbol == s.watchedClassSymbol {
+		s.classSymbolTracked = true
 		return false
 	}
 	issuedDiagnostic := s.handleSymbolAccessibilityError(s.resolver.IsSymbolAccessible(symbol, enclosingDeclaration, meaning /*shouldComputeAliasToMarkVisible*/, true))

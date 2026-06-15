@@ -1,0 +1,11 @@
+--- old.jsDeclarationsExportAssignedVisibility(target=es2015).types
++++ new.jsDeclarationsExportAssignedVisibility(target=es2015).types
+@@= skipped -34, +34 lines =@@
+ >module : { exports: typeof import("./obj"); }
+ >exports : typeof import("./obj")
+ >class Obj {    constructor() {        this.x = 12;    }} : typeof import("./obj")
+->Obj : typeof import("./obj")
++>Obj : typeof Obj
+
+     constructor() {
+         this.x = 12;

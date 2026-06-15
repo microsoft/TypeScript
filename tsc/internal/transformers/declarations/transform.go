@@ -72,6 +72,8 @@ type DeclarationTransformer struct {
 	expressionVisitor                *ast.NodeVisitor
 	exportStrippingVisitor           *ast.NodeVisitor
 	thisPropertyVisitor              *ast.NodeVisitor
+	cjsExportAssignmentName          *ast.Node // tracks the name node used for `export =` in CJS module.exports assignments
+	inClassExpressionDeclaration     bool      // true when serializing members of a class expression kept as a class declaration
 }
 
 // TODO: Convert to transformers.TransformerFactory signature to allow more automatic composition with other transforms
@@ -252,6 +254,7 @@ func throwDiagnostic(result printer.SymbolAccessibilityResult) *SymbolAccessibil
 }
 
 func (tx *DeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
+	tx.cjsExportAssignmentName = nil
 	if node.IsDeclarationFile {
 		return node.AsNode()
 	}
@@ -274,9 +277,44 @@ func (tx *DeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 	tx.state.currentSourceFile = node
 	tx.collectFileReferences(node)
 	tx.resolver.PrecalculateDeclarationEmitVisibility(node)
+	tx.prescanCJSExportAssignment(node)
 	updated := tx.transformSourceFile(node)
 	tx.state.currentSourceFile = nil
 	return updated
+}
+
+// prescanCJSExportAssignment scans the source file for a `module.exports = class X {}`
+// statement and pre-creates the cjsExportAssignmentName so that all CJS property exports
+// (both before and after the assignment in source order) can reference it.
+func (tx *DeclarationTransformer) prescanCJSExportAssignment(node *ast.SourceFile) {
+	if !ast.IsExternalOrCommonJSModule(node) || node.CommonJSModuleIndicator == nil || !ast.IsInJSFile(node.AsNode()) {
+		return
+	}
+	for _, stmt := range node.Statements.Nodes {
+		if stmt.Kind != ast.KindExpressionStatement {
+			continue
+		}
+		expr := stmt.Expression()
+		if expr == nil || ast.GetAssignmentDeclarationKind(expr) != ast.JSDeclarationKindModuleExports {
+			continue
+		}
+		rhs := unwrapParenthesizedExpression(expr.AsBinaryExpression().Right)
+		if !ast.IsClassExpression(rhs) {
+			continue
+		}
+		ce := rhs.AsClassExpression()
+		if ce.Name() != nil && len(ce.Name().Text()) > 0 {
+			nameText := ce.Name().Text()
+			if tx.resolver.IsNameResolvedToDeclaration(node.AsNode(), nameText, nil) {
+				tx.cjsExportAssignmentName = tx.Factory().NewUniqueNameEx(nameText, printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+			} else {
+				tx.cjsExportAssignmentName = tx.Factory().NewIdentifier(nameText)
+			}
+		} else {
+			tx.cjsExportAssignmentName = tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+		}
+		return
+	}
 }
 
 func (tx *DeclarationTransformer) collectFileReferences(sourceFile *ast.SourceFile) {
@@ -1106,6 +1144,37 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		tx.preserveJsDoc(exportAssignment, input)
 		return exportAssignment
 	}
+
+	// Check if the expression is a class expression - emit as a class declaration + export assignment
+	if unwrapped := unwrapParenthesizedExpression(expression); ast.IsClassExpression(unwrapped) {
+		// Reuse the name pre-created by prescanCJSExportAssignment if available
+		className := tx.cjsExportAssignmentName
+		if className == nil {
+			ce := unwrapped.AsClassExpression()
+			if ce.Name() != nil && len(ce.Name().Text()) > 0 {
+				nameText := ce.Name().Text()
+				if tx.resolver.IsNameResolvedToDeclaration(tx.enclosingDeclaration, nameText, nil) {
+					className = tx.Factory().NewUniqueNameEx(nameText, printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+				} else {
+					className = tx.Factory().NewIdentifier(nameText)
+				}
+			} else {
+				className = tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+			}
+			tx.cjsExportAssignmentName = className
+		}
+		var mods []*ast.Node
+		if tx.needsDeclare {
+			mods = append(mods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
+		}
+		classDecl := tx.transformClassExpressionToDeclaration(unwrapped, className, tx.Factory().NewModifierList(mods))
+		tx.preserveJsDoc(classDecl, input)
+		// Reuse the same name node for the export so unique names resolve consistently
+		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, className)
+		tx.removeAllComments(exportAssignment)
+		return tx.Factory().NewSyntaxList([]*ast.Node{exportAssignment, classDecl})
+	}
+
 	// expression is non-identifier, create _default typed variable to reference
 	newId := tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
 	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
@@ -1156,8 +1225,113 @@ func (tx *DeclarationTransformer) transformCommonJSExport(input *ast.Node, name 
 			propertyName = nil
 		}
 		exportSpecifier := tx.Factory().NewExportSpecifier(false, propertyName, name)
-		return tx.Factory().NewExportDeclaration(nil, false, tx.Factory().NewNamedExports(tx.Factory().NewNodeList([]*ast.Node{exportSpecifier})), nil, nil)
-	} else if ast.IsIdentifier(name) {
+		exportDecl := tx.Factory().NewExportDeclaration(nil, false, tx.Factory().NewNamedExports(tx.Factory().NewNodeList([]*ast.Node{exportSpecifier})), nil, nil)
+		return tx.wrapInCJSExportNamespace(exportDecl)
+	}
+
+	// Check if the RHS is a class expression - emit as a class declaration instead of a typed variable
+	if ast.IsBinaryExpression(input) {
+		if rhs := unwrapParenthesizedExpression(input.AsBinaryExpression().Right); ast.IsClassExpression(rhs) {
+			ce := rhs.AsClassExpression()
+			classExprName := ce.Name()
+			hasExprName := classExprName != nil && len(classExprName.Text()) > 0
+
+			if hasExprName {
+				// Set up TrackSymbol watch to detect if the class expression's own
+				// symbol is referenced during member type serialization.
+				tx.tracker.watchedClassSymbol = rhs.Symbol()
+				tx.tracker.classSymbolTracked = false
+				defer func() {
+					tx.tracker.watchedClassSymbol = nil
+					tx.tracker.classSymbolTracked = false
+				}()
+
+				// Serialize class members using the class expression name, which
+				// triggers TrackSymbol for any self-referential member types.
+				className := tx.Factory().NewIdentifier(classExprName.Text())
+				classMods := []*ast.Node{tx.Factory().NewModifier(ast.KindExportKeyword)}
+				classDecl := tx.transformClassExpressionToDeclaration(rhs, className, tx.Factory().NewModifierList(classMods))
+				tx.preserveJsDoc(classDecl, input)
+
+				// Determine if namespace isolation is needed:
+				// - The class expression name differs from the export name, OR
+				// - The class's own symbol was used in a member's serialized type
+				namesDiffer := !ast.IsIdentifier(name) || classExprName.Text() != name.Text()
+				needsIsolation := namesDiffer || tx.tracker.classSymbolTracked
+
+				if needsIsolation {
+					nsName := tx.Factory().NewUniqueNameEx("_ns", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+					var nsMods []*ast.Node
+					if tx.needsDeclare {
+						nsMods = append(nsMods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
+					}
+					nsDecl := tx.Factory().NewModuleDeclaration(
+						tx.Factory().NewModifierList(nsMods),
+						ast.KindNamespaceKeyword,
+						nsName,
+						tx.Factory().NewModuleBlock(tx.Factory().NewNodeList([]*ast.Node{classDecl})),
+					)
+
+					aliasBase := "_exported"
+					if nameText := name.Text(); ast.IsIdentifier(name) && scanner.IsIdentifierText("_"+nameText, core.LanguageVariantStandard) {
+						aliasBase = "_" + nameText
+					}
+					importAlias := tx.Factory().NewUniqueNameEx(aliasBase, printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+					qualifiedName := tx.Factory().NewQualifiedName(nsName, className)
+					importDecl := tx.Factory().NewImportEqualsDeclaration(nil, false, importAlias, qualifiedName)
+
+					exportSpecifier := tx.Factory().NewExportSpecifier(false, importAlias, name)
+					exportDecl := tx.Factory().NewExportDeclaration(nil, false, tx.Factory().NewNamedExports(tx.Factory().NewNodeList([]*ast.Node{exportSpecifier})), nil, nil)
+					tx.removeAllComments(exportDecl)
+
+					result := []*ast.Node{nsDecl, importDecl}
+					if tx.cjsExportAssignmentName != nil {
+						result = append(result, tx.wrapInCJSExportNamespace(exportDecl))
+					} else {
+						result = append(result, exportDecl)
+					}
+					return tx.Factory().NewSyntaxList(result)
+				}
+
+				// No isolation needed: names match and no self-references.
+				// Update modifiers to include declare if needed.
+				var mods []*ast.Node
+				mods = append(mods, tx.Factory().NewModifier(ast.KindExportKeyword))
+				if tx.needsDeclare {
+					mods = append(mods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
+				}
+				classDecl = tx.Factory().UpdateClassDeclaration(
+					classDecl.AsClassDeclaration(),
+					tx.Factory().NewModifierList(mods),
+					classDecl.AsClassDeclaration().Name(),
+					classDecl.AsClassDeclaration().TypeParameters,
+					classDecl.AsClassDeclaration().HeritageClauses,
+					classDecl.AsClassDeclaration().Members,
+				)
+				return classDecl
+			}
+			var mods []*ast.Node
+			mods = append(mods, tx.Factory().NewModifier(ast.KindExportKeyword))
+			if tx.needsDeclare {
+				mods = append(mods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
+			}
+			className := name
+			if !ast.IsIdentifier(className) {
+				className = tx.Factory().NewUniqueNameEx("_class", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+			}
+			classDecl := tx.transformClassExpressionToDeclaration(rhs, className, tx.Factory().NewModifierList(mods))
+			tx.preserveJsDoc(classDecl, input)
+			if !ast.IsIdentifier(name) {
+				// Non-identifier name: emit class declaration + named export
+				exportDecl := tx.Factory().NewExportDeclaration(nil, false, tx.Factory().NewNamedExports(tx.Factory().NewNodeList([]*ast.Node{tx.Factory().NewExportSpecifier(false, className, name)})), nil, nil)
+				tx.removeAllComments(exportDecl)
+				return tx.Factory().NewSyntaxList([]*ast.Node{classDecl, exportDecl})
+			}
+			return classDecl
+		}
+	}
+
+	if ast.IsIdentifier(name) {
 		if name.Text() == "default" {
 			// const _default: Type; export default _default;
 			newId := tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
@@ -1227,6 +1401,30 @@ func (tx *DeclarationTransformer) transformCommonJSExport(input *ast.Node, name 
 	return tx.Factory().NewSyntaxList([]*ast.Node{statement, assignment})
 }
 
+func (tx *DeclarationTransformer) wrapInCJSExportNamespace(content *ast.Node) *ast.Node {
+	if tx.cjsExportAssignmentName == nil {
+		return content
+	}
+	// Reuse the same name node so unique names resolve consistently with the class/export
+	nsName := tx.cjsExportAssignmentName
+	var members []*ast.Node
+	if content.Kind == ast.KindSyntaxList {
+		members = content.AsSyntaxList().Children
+	} else {
+		members = []*ast.Node{content}
+	}
+	var nsMods []*ast.Node
+	if tx.needsDeclare {
+		nsMods = append(nsMods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
+	}
+	return tx.Factory().NewModuleDeclaration(
+		tx.Factory().NewModifierList(nsMods),
+		ast.KindNamespaceKeyword,
+		nsName,
+		tx.Factory().NewModuleBlock(tx.Factory().NewNodeList(members)),
+	)
+}
+
 func isCommonJSAliasExport(node *ast.Node) bool {
 	if ast.IsBinaryExpression(node) && ast.IsIdentifier(node.AsBinaryExpression().Right) {
 		if symbol := node.Symbol(); symbol != nil && len(symbol.Declarations) == 1 {
@@ -1234,6 +1432,36 @@ func isCommonJSAliasExport(node *ast.Node) bool {
 		}
 	}
 	return false
+}
+
+// transformClassExpressionToDeclaration converts a class expression into a class declaration
+// for use in CJS export declarations (e.g., exports.K = class K {} or module.exports = class Thing {}).
+// This delegates to the shared buildClassMembers helper to stay in sync with transformClassDeclaration.
+func (tx *DeclarationTransformer) transformClassExpressionToDeclaration(classExpr *ast.Node, className *ast.Node, modifiers *ast.ModifierList) *ast.Node {
+	previousEnclosingDeclaration := tx.enclosingDeclaration
+	tx.enclosingDeclaration = classExpr
+	previousInClassExpressionDeclaration := tx.inClassExpressionDeclaration
+	tx.inClassExpressionDeclaration = true
+	defer func() {
+		tx.enclosingDeclaration = previousEnclosingDeclaration
+		tx.inClassExpressionDeclaration = previousInClassExpressionDeclaration
+	}()
+
+	var extraMembers []*ast.Node
+	if ast.IsInJSFile(classExpr) {
+		extraMembers = tx.collectThisPropertyAssignments(classExpr)
+	}
+	members := tx.buildClassMembers(classExpr, extraMembers...)
+	typeParameters := tx.ensureTypeParams(classExpr, classExpr.AsClassExpression().TypeParameters)
+	heritageClauses := tx.Visitor().VisitNodes(classExpr.AsClassExpression().HeritageClauses)
+
+	return tx.Factory().NewClassDeclaration(
+		modifiers,
+		className,
+		typeParameters,
+		heritageClauses,
+		members,
+	)
 }
 
 func (tx *DeclarationTransformer) rewriteModuleSpecifier(parent *ast.Node, input *ast.Node) *ast.Node {
@@ -1300,7 +1528,11 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 		if tx.state.currentSourceFile.IsJS() {
 			// JS types have a heap of constructs we can't directly emit into .d.ts files; the node builder contains logic to remap those where possible, so we invoke it here
 			// In strada we always built js declarations symbolically, so all js type nodes went through this postprocessing
-			res := tx.resolver.TryJSTypeNodeToTypeNode(tx.EmitContext(), node.Type(), tx.enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
+			jsFlags := declarationEmitNodeBuilderFlags
+			if tx.inClassExpressionDeclaration {
+				jsFlags &^= nodebuilder.FlagsWriteClassExpressionAsTypeLiteral
+			}
+			res := tx.resolver.TryJSTypeNodeToTypeNode(tx.EmitContext(), node.Type(), tx.enclosingDeclaration, jsFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
 			if res != nil {
 				return res
 			}
@@ -1321,10 +1553,14 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 	}
 	var typeNode *ast.Node
 
+	flags := declarationEmitNodeBuilderFlags
+	if tx.inClassExpressionDeclaration {
+		flags &^= nodebuilder.FlagsWriteClassExpressionAsTypeLiteral
+	}
 	if ast.HasInferredType(node) {
-		typeNode = tx.resolver.CreateTypeOfDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
+		typeNode = tx.resolver.CreateTypeOfDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, flags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
 	} else if ast.IsFunctionLike(node) {
-		typeNode = tx.resolver.CreateReturnTypeOfSignatureDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
+		typeNode = tx.resolver.CreateReturnTypeOfSignatureDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, flags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
 	} else {
 		debug.AssertNever(node)
 	}
@@ -1559,14 +1795,11 @@ func (tx *DeclarationTransformer) stripExportModifiers(statement *ast.Node) *ast
 	return ast.ReplaceModifiers(tx.Factory().AsNodeFactory(), statement, tx.Factory().NewModifierList(modifiers))
 }
 
-func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDeclaration) *ast.Node {
-	tx.state.errorNameNode = input.Name()
-	tx.tracker.PushErrorFallbackNode(input.AsNode())
-	defer tx.tracker.PopErrorFallbackNode()
-
-	modifiers := tx.ensureModifiers(input.AsNode())
-	typeParameters := tx.ensureTypeParams(input.AsNode(), input.TypeParameters)
-	ctor := ast.GetFirstConstructorWithBody(input.AsNode())
+// buildClassMembers builds the member list for a class-like node (ClassDeclaration or ClassExpression).
+// It handles parameter properties, private identifiers, late-bound index signatures, and visited members.
+// Extra members (e.g., this-property assignments from JS files) can be passed via extraMembers.
+func (tx *DeclarationTransformer) buildClassMembers(classNode *ast.Node, extraMembers ...*ast.Node) *ast.NodeList {
+	ctor := ast.GetFirstConstructorWithBody(classNode)
 	var parameterProperties []*ast.Node
 	if ctor != nil {
 		oldDiag := tx.state.getSymbolAccessibilityDiagnostic
@@ -1596,43 +1829,54 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 	// When the class has at least one private identifier, create a unique constant identifier to retain the nominal typing behavior
 	// Prevents other classes with the same public members from being used in place of the current class
 	var privateIdentifier *ast.Node
-	if core.Some(input.Members.Nodes, func(member *ast.Node) bool { return member.Name() != nil && ast.IsPrivateIdentifier(member.Name()) }) {
-		privateIdentifier = tx.Factory().NewPropertyDeclaration(
-			nil,
-			tx.Factory().NewPrivateIdentifier("#private"),
-			nil,
-			nil,
-			nil,
-		)
-	}
-
-	// Collect this.x property assignments from constructors and static blocks in JS files
-	var thisPropertyAssignments []*ast.Node
-	if ast.IsInJSFile(input.AsNode()) {
-		thisPropertyAssignments = tx.collectThisPropertyAssignments(input)
+	if core.Some(classNode.ClassLikeData().Members.Nodes, func(member *ast.Node) bool {
+		return member.Name() != nil && ast.IsPrivateIdentifier(member.Name())
+	}) {
+		privateIdentifier = tx.Factory().NewPropertyDeclaration(nil, tx.Factory().NewPrivateIdentifier("#private"), nil, nil, nil)
 	}
 
 	lateIndexes := tx.resolver.CreateLateBoundIndexSignatures(
 		tx.EmitContext(),
-		input.AsNode(),
+		classNode,
 		tx.enclosingDeclaration,
 		declarationEmitNodeBuilderFlags,
 		declarationEmitInternalNodeBuilderFlags,
 		tx.tracker,
 	)
 
-	memberNodes := make([]*ast.Node, 0, len(input.Members.Nodes))
+	memberNodes := make([]*ast.Node, 0, len(classNode.ClassLikeData().Members.Nodes))
 	if privateIdentifier != nil {
 		memberNodes = append(memberNodes, privateIdentifier)
 	}
 	memberNodes = append(memberNodes, lateIndexes...)
 	memberNodes = append(memberNodes, parameterProperties...)
-	memberNodes = append(memberNodes, thisPropertyAssignments...)
-	visitResult := tx.Visitor().VisitNodes(input.Members)
+	memberNodes = append(memberNodes, extraMembers...)
+	visitResult := tx.Visitor().VisitNodes(classNode.ClassLikeData().Members)
 	if visitResult != nil && len(visitResult.Nodes) > 0 {
 		memberNodes = append(memberNodes, visitResult.Nodes...)
 	}
-	members := tx.Factory().NewNodeList(memberNodes)
+	return tx.Factory().NewNodeList(memberNodes)
+}
+
+func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDeclaration) *ast.Node {
+	previousEnclosingDeclaration := tx.enclosingDeclaration
+	tx.enclosingDeclaration = input.AsNode()
+	defer func() { tx.enclosingDeclaration = previousEnclosingDeclaration }()
+
+	tx.state.errorNameNode = input.Name()
+	tx.tracker.PushErrorFallbackNode(input.AsNode())
+	defer tx.tracker.PopErrorFallbackNode()
+
+	modifiers := tx.ensureModifiers(input.AsNode())
+	typeParameters := tx.ensureTypeParams(input.AsNode(), input.TypeParameters)
+
+	// Collect this.x property assignments from constructors and static blocks in JS files
+	var extraMembers []*ast.Node
+	if ast.IsInJSFile(input.AsNode()) {
+		extraMembers = tx.collectThisPropertyAssignments(input.AsNode())
+	}
+
+	members := tx.buildClassMembers(input.AsNode(), extraMembers...)
 
 	extendsClause := getEffectiveBaseTypeNode(input.AsNode())
 
@@ -1798,10 +2042,11 @@ func isClassExtendingNull(node *ast.Node) bool {
 
 // collectThisPropertyAssignments finds `this.x = expr` assignments in constructors, methods, and static blocks
 // of JS classes and synthesizes PropertyDeclaration nodes for each unique property name.
-func (tx *DeclarationTransformer) collectThisPropertyAssignments(input *ast.ClassDeclaration) []*ast.Node {
+func (tx *DeclarationTransformer) collectThisPropertyAssignments(classNode *ast.Node) []*ast.Node {
+	members := classNode.ClassLikeData().Members
 	seen := collections.Set[*ast.Node]{}
 	// Pre-populate seen with existing direct member nodes to avoid duplicates
-	for _, member := range input.Members.Nodes {
+	for _, member := range members.Nodes {
 		if member.Name() != nil {
 			seen.Add(member)
 		}
@@ -1813,7 +2058,7 @@ func (tx *DeclarationTransformer) collectThisPropertyAssignments(input *ast.Clas
 		tx.thisPropertyAssignmentsCollected = nil
 	}()
 
-	for _, n := range input.Members.Nodes {
+	for _, n := range members.Nodes {
 		tx.thisPropertyVisitor.VisitEachChild(n)
 	}
 	return tx.thisPropertyAssignmentsCollected

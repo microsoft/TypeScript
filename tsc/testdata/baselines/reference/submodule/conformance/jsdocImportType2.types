@@ -47,7 +47,7 @@ module.exports = class Chunk {
 >module : { exports: typeof import("./mod1"); }
 >exports : typeof import("./mod1")
 >class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("./mod1")
->Chunk : typeof import("./mod1")
+>Chunk : typeof Chunk
 
     constructor() {
         this.chunk = 1;

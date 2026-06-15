@@ -1401,6 +1401,15 @@ conformance/nodeModulesDeclarationEmitWithPackageExports(module=node18).js.diff
 conformance/nodeModulesDeclarationEmitWithPackageExports(module=node20).js.diff
 conformance/nodeModulesDeclarationEmitWithPackageExports(module=nodenext).js.diff
 
+# CJS class expressions emit named class declarations instead of anonymous constructor types
+## https://github.com/microsoft/typescript-go/issues/3544
+conformance/commonJSImportExportedClassExpression.js.diff
+conformance/jsDeclarationsExportAssignedClassExpression(target=es2015).js.diff
+conformance/jsDeclarationsExportAssignedClassExpressionAnonymous(target=es2015).js.diff
+conformance/jsDeclarationsExportAssignedClassExpressionAnonymousWithSub(target=es2015).js.diff
+conformance/jsDeclarationsExportAssignedClassExpressionShadowing(target=es2015).js.diff
+conformance/jsDeclarationsExportAssignedVisibility(target=es2015).js.diff
+
 # @callback/@overload variadic intepreted differently than strada
 ## https://github.com/microsoft/typescript-go/issues/3556
 conformance/callbackTagNestedParameter.js.diff

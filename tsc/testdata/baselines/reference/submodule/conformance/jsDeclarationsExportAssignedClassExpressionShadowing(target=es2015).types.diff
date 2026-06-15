@@ -1,6 +1,15 @@
 --- old.jsDeclarationsExportAssignedClassExpressionShadowing(target=es2015).types
 +++ new.jsDeclarationsExportAssignedClassExpressionShadowing(target=es2015).types
-@@= skipped -35, +35 lines =@@
+@@= skipped -21, +21 lines =@@
+ >module : { exports: typeof import("."); }
+ >exports : typeof import(".")
+ >class Q {    constructor() {        this.x = new A();    }} : typeof import(".")
+->Q : typeof import(".")
++>Q : typeof Q
+
+     constructor() {
+         this.x = new A();
+@@= skipped -14, +14 lines =@@
  }
  module.exports.Another = Q;
  >module.exports.Another = Q : typeof Q

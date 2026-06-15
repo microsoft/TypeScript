@@ -1,0 +1,13 @@
+--- old.jsDeclarationsExportAssignedClassExpression(target=es2015).js
++++ new.jsDeclarationsExportAssignedClassExpression(target=es2015).js
+@@= skipped -24, +24 lines =@@
+ //// [index.d.ts]
+ export = Thing;
+ declare class Thing {
++    t: number;
+     /**
+      * @param {number} p
+      */
+     constructor(p: number);
+-    t: number;
+ }
