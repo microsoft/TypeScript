@@ -26,13 +26,13 @@ func ToLowerJS(str string) string {
 			// bytes because WriteRune would re-encode the surrogate as U+FFFD.
 			builder.WriteString(EncodeJSStringRune(r))
 		} else if mapping, ok := specialCasingMappings[r]; ok {
-			if mapping.condition == specialCasingConditionFinalSigma && !isFinalSigmaContext(casedBefore, str, i) {
-				builder.WriteRune(unicode.ToLower(r))
+			if mapping.condition == specialCasingConditionFinalSigma && isFinalSigmaContext(casedBefore, str, i) {
+				builder.WriteString(mapping.conditionalLower)
 			} else {
 				builder.WriteString(mapping.lower)
 			}
 		} else {
-			builder.WriteRune(unicode.ToLower(r))
+			builder.WriteRune(r)
 		}
 		if !isUnicodeCaseIgnorable(r) {
 			casedBefore = isSigmaCased(r)
@@ -58,10 +58,11 @@ func ToUpperJS(str string) string {
 		} else if mapping, ok := specialCasingMappings[r]; ok {
 			builder.WriteString(mapping.upper)
 		} else {
-			builder.WriteRune(unicode.ToUpper(r))
+			builder.WriteRune(r)
 		}
 		i += size
 	}
+
 	return builder.String()
 }
 
