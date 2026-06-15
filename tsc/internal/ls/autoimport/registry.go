@@ -633,11 +633,6 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 			})
 		}
 
-		if packageJsonChanged {
-			// package.json changes affecting node_modules are handled by comparing dependencies in updateIndexes
-			return
-		}
-
 		if hasNodeModules {
 			if _, ok := b.nodeModules.Get(dirPath); !ok {
 				b.nodeModules.Add(dirPath, newRegistryBucket())
@@ -648,12 +643,15 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 	}
 
 	var addedNodeModulesDirs, removedNodeModulesDirs []tspath.Path
+	packageJsonChanged := func(dirName string) bool {
+		uri := lsconv.FileNameToDocumentURI(tspath.CombinePaths(dirName, "package.json"))
+		return change.Changed.Has(uri) || change.Deleted.Has(uri) || change.Created.Has(uri)
+	}
 	core.DiffMapsFunc(
 		b.base.directories,
 		neededDirectories,
 		func(dir *directory, dirName string) bool {
-			packageJsonUri := lsconv.FileNameToDocumentURI(tspath.CombinePaths(dirName, "package.json"))
-			return !change.Changed.Has(packageJsonUri) && !change.Deleted.Has(packageJsonUri) && !change.Created.Has(packageJsonUri)
+			return !packageJsonChanged(dirName) && dir.hasNodeModules == b.host.FS().DirectoryExists(tspath.CombinePaths(dirName, "node_modules"))
 		},
 		func(dirPath tspath.Path, dirName string) {
 			// Need and don't have
@@ -679,13 +677,13 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 			}
 		},
 		func(dirPath tspath.Path, dir *directory, dirName string) {
-			// package.json may have changed
-			updateDirectory(dirPath, dirName, true)
+			updateDirectory(dirPath, dirName, packageJsonChanged(dirName))
 			if logger != nil {
 				logger.Logf("Changed directory: %s", dirPath)
 			}
 		},
 	)
+
 	if logger != nil {
 		for _, dirPath := range addedNodeModulesDirs {
 			logger.Logf("Added node_modules bucket: %s", dirPath)
@@ -797,7 +795,6 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 		packageNames          *collections.Set[string]
 		directoryPackageNames *collections.Set[string]
 		discovered            []*discoveredPackage
-		discoverErr           error
 	}
 
 	projectPath, _ := b.host.GetDefaultProject(change.RequestedFile)
@@ -890,12 +887,7 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 			if task.isUpdate {
 				task.packageNames = task.dirtyPackages
 			} else {
-				var err error
-				task.directoryPackageNames, err = getPackageNamesInNodeModules(tspath.CombinePaths(task.dirName, "node_modules"), b.host.FS())
-				if err != nil {
-					task.discoverErr = err
-					return
-				}
+				task.directoryPackageNames = getPackageNamesInNodeModules(tspath.CombinePaths(task.dirName, "node_modules"), b.host.FS())
 				task.packageNames = core.Coalesce(task.dependencyNames, task.directoryPackageNames)
 			}
 			task.discovered = b.discoverBucketPackages(task.packageNames, task.dirName, task.dirPath)
@@ -918,9 +910,6 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 	// filter to only those whose main extraction failed, then deduplicate by typesRealpath.
 	var typesFallbackCandidates []*discoveredPackage
 	for _, task := range nodeModulesTasks {
-		if task.discoverErr != nil {
-			continue
-		}
 		for _, pkg := range task.discovered {
 			if pkg.realpath != "" {
 				if !seen[pkg.realpath] {
@@ -1007,10 +996,6 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 	for _, task := range nodeModulesTasks {
 		br := &bucketBuildResult{entry: task.entry}
 		allResults = append(allResults, br)
-		if task.discoverErr != nil {
-			br.err = task.discoverErr
-			continue
-		}
 		wg.Go(func() {
 			if task.isUpdate {
 				b.updateNodeModulesBucket(

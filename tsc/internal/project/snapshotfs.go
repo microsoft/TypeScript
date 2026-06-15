@@ -554,7 +554,10 @@ func (s *snapshotFSBuilder) expandAndFilterWatchEvents(change FileChangeSummary)
 			path := s.toPath(uri.FileName())
 			if _, ok := s.diskDirectories.Get(path); ok {
 				s.collectFilesRecursive(path, &filteredDeleted)
-			} else if s.isRelevantFileName(uri) {
+			} else if s.isRelevantFileName(uri) || isNodeModulesPath(path) {
+				// node_modules deletions must always be preserved for auto-import registry change handlers.
+				// They won't be in diskDirectories since the registry doesn't use the snapshotFSBuilder for
+				// its file system, since we don't want to retain files read there.
 				filteredDeleted.Add(uri)
 			}
 		}
@@ -576,6 +579,14 @@ func (s *snapshotFSBuilder) expandAndFilterWatchEvents(change FileChangeSummary)
 	// are directories if they fall within a config's wildcard directories.
 
 	return change
+}
+
+// isNodeModulesPath reports whether path is a node_modules directory itself or
+// lives inside one. Used to preserve node_modules watch deletions, whose package
+// files are read transiently and therefore never tracked in diskDirectories.
+func isNodeModulesPath(path tspath.Path) bool {
+	s := string(path)
+	return strings.HasSuffix(s, "/node_modules") || strings.Contains(s, "/node_modules/")
 }
 
 // collectFilesRecursive recursively collects all cached file URIs under the

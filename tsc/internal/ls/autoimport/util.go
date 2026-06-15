@@ -85,14 +85,14 @@ func wordIndices(s string) []int {
 	return indices
 }
 
-func getPackageNamesInNodeModules(nodeModulesDir string, fs vfs.FS) (*collections.Set[string], error) {
+func getPackageNamesInNodeModules(nodeModulesDir string, fs vfs.FS) *collections.Set[string] {
 	packageNames := &collections.Set[string]{}
 	if tspath.GetBaseFileName(nodeModulesDir) != "node_modules" {
 		panic("nodeModulesDir is not a node_modules directory")
 	}
-	if !fs.DirectoryExists(nodeModulesDir) {
-		return nil, vfs.ErrNotExist
-	}
+	// A missing node_modules directory yields no entries (GetAccessibleEntries returns
+	// empty), so there's no need to check existence first: a deleted node_modules is
+	// handled upstream in updateBucketAndDirectoryExistence, which drops the bucket.
 	entries := fs.GetAccessibleEntries(nodeModulesDir)
 	for _, baseName := range entries.Directories {
 		if baseName[0] == '.' {
@@ -112,7 +112,7 @@ func getPackageNamesInNodeModules(nodeModulesDir string, fs vfs.FS) (*collection
 		}
 		packageNames.Add(baseName)
 	}
-	return packageNames, nil
+	return packageNames
 }
 
 func getDefaultLikeExportNameFromDeclaration(symbol *ast.Symbol) string {
