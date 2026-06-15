@@ -154,6 +154,18 @@
                 "category": "TypeScript Native Preview"
             },
             {
+                "command": "typescript.native-preview.sortImports",
+                "title": "%native-preview.sortImports.title%",
+                "enablement": "typescript.native-preview.serverRunning && (resourceLangId == typescript || resourceLangId == typescriptreact || resourceLangId == javascript || resourceLangId == javascriptreact)",
+                "category": "TypeScript Native Preview"
+            },
+            {
+                "command": "typescript.native-preview.removeUnusedImports",
+                "title": "%native-preview.removeUnusedImports.title%",
+                "enablement": "typescript.native-preview.serverRunning && (resourceLangId == typescript || resourceLangId == typescriptreact || resourceLangId == javascript || resourceLangId == javascriptreact)",
+                "category": "TypeScript Native Preview"
+            },
+            {
                 "command": "typescript.native-preview.codeLens.showLocations",
                 "title": "%native-preview.codeLens.showLocations.title%",
                 "enablement": "false"
@@ -200,6 +212,14 @@
                 {
                     "command": "typescript.native-preview.goToSourceDefinition",
                     "when": "typescript.native-preview.serverRunning && tsSupportsSourceDefinition"
+                },
+                {
+                    "command": "typescript.native-preview.sortImports",
+                    "when": "typescript.native-preview.serverRunning && supportedCodeAction =~ /(\\s|^)source\\.sortImports\\b/ && editorLangId =~ /^(typescript|javascript)(react)?$/"
+                },
+                {
+                    "command": "typescript.native-preview.removeUnusedImports",
+                    "when": "typescript.native-preview.serverRunning && supportedCodeAction =~ /(\\s|^)source\\.removeUnusedImports\\b/ && editorLangId =~ /^(typescript|javascript)(react)?$/"
                 }
             ],
             "editor/context": [

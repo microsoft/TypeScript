@@ -158,6 +158,20 @@ class Session implements vscode.Disposable {
             showCommands(this.client);
         }));
 
+        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.sortImports", () => {
+            return vscode.commands.executeCommand("editor.action.sourceAction", {
+                kind: "source.sortImports",
+                apply: "first",
+            });
+        }));
+
+        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.removeUnusedImports", () => {
+            return vscode.commands.executeCommand("editor.action.sourceAction", {
+                kind: "source.removeUnusedImports",
+                apply: "first",
+            });
+        }));
+
         this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.reportIssue", () => {
             this.telemetryReporter.sendTelemetryEvent("command.reportIssue");
             vscode.commands.executeCommand("workbench.action.openIssueReporter", {
