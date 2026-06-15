@@ -8,6 +8,7 @@
 //
 import {
     cast,
+    type Expression,
     getSynthesizedDeepClone,
     isCallExpression,
     isFunctionDeclaration,
@@ -533,6 +534,61 @@ describe("Source file caching", () => {
             assert.ok(sf2);
             assert.equal(sf2.text, `export const foo = "hello";`);
             assert.notStrictEqual(sf1, sf2, "invalidateAll should produce new source file objects");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("node handles from a cached source file should be valid in a new snapshot", () => {
+        const { api, fs } = spawnAPIWithFS({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `function foo(x: number) {}\nfoo(42);`,
+            "/src/other.ts": `export const x = 1;`,
+        });
+        try {
+            // Snapshot 1: get a node and verify getContextualType works
+            const snap1 = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const proj1 = snap1.getProject("/tsconfig.json")!;
+
+            const sf1 = proj1.program.getSourceFile("/src/main.ts");
+            assert.ok(sf1);
+
+            let numLiteral: Expression | undefined;
+            sf1.forEachChild(function visit(node) {
+                if (isCallExpression(node)) numLiteral = node.arguments[0];
+                node.forEachChild(visit);
+            });
+            assert.ok(numLiteral, "should find the 42 argument");
+
+            const type1 = proj1.checker.getContextualType(numLiteral);
+            assert.ok(type1);
+            assert.ok(type1.flags & TypeFlags.Number);
+
+            // Snapshot 2: change a different file
+            fs.writeFile!("/src/other.ts", `export const x = 2;`);
+            const snap2 = api.updateSnapshot({
+                fileChanges: { changed: ["/src/other.ts"] },
+            });
+            const proj2 = snap2.getProject("/tsconfig.json")!;
+
+            // main.ts is unchanged — client returns the cached SourceFile (same object)
+            const sf2 = proj2.program.getSourceFile("/src/main.ts");
+            assert.ok(sf2);
+            assert.strictEqual(sf1, sf2, "unchanged file should be served from client cache");
+
+            let numLiteral2: Expression | undefined;
+            sf2.forEachChild(function visit(node) {
+                if (isCallExpression(node)) numLiteral2 = node.arguments[0];
+                node.forEachChild(visit);
+            });
+            assert.ok(numLiteral2, "should find the 42 argument");
+            assert.strictEqual(numLiteral, numLiteral2, "unchanged file should be served from client cache");
+
+            // A type from new snapshot should be resolved
+            const type2 = proj2.checker.getContextualType(numLiteral);
+            assert.ok(type2);
+            assert.ok(type2.flags & TypeFlags.Number);
         }
         finally {
             api.close();

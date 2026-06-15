@@ -307,6 +307,8 @@ type NodeIndexTable struct {
 	sortedIdx  []uint32 // indices into Nodes, sorted by node ID; built lazily
 }
 
+var nodeIndexTableKey = ast.NewSourceFileDataKey[*NodeIndexTable]()
+
 // GetIndex returns the encoder index for the given node.
 // On the first call the sortedIdx array is built (O(n log n) sort on a flat []uint32),
 // then subsequent calls use binary search (O(log n)). This turns out to be much faster than
@@ -385,10 +387,21 @@ func BuildNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
 	return &NodeIndexTable{Nodes: nodeTable}
 }
 
+func GetNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
+	return ast.GetOrComputeSourceFileData(sourceFile, nodeIndexTableKey, BuildNodeIndexTable)
+}
+
 // EncodeSourceFile encodes an entire source file AST into the binary format.
 // Returns the encoded bytes and a NodeIndexTable mapping encoder indices to AST nodes.
 func EncodeSourceFile(sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, error) {
-	return encodeTree(sourceFile.AsNode(), sourceFile)
+	data, nodeTable, err := encodeTree(sourceFile.AsNode(), sourceFile)
+	if err != nil {
+		return nil, nil, err
+	}
+	nodeTable = ast.GetOrComputeSourceFileData(sourceFile, nodeIndexTableKey, func(*ast.SourceFile) *NodeIndexTable {
+		return nodeTable
+	})
+	return data, nodeTable, nil
 }
 
 // EncodeNode encodes an arbitrary AST node and its descendants into the binary format.

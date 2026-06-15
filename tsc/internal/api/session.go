@@ -45,12 +45,6 @@ type snapshotData struct {
 	signatureRegistry   map[SignatureID]*checker.Signature
 	signatureNextID     uint64
 	signatureRegistryMu sync.RWMutex
-
-	// nodeTablesByPath maps file paths to node index tables used for index-based node handles.
-	// Tables are populated when a file is encoded (getSourceFile) and may also be built lazily
-	// on-demand when generating handles before getSourceFile is called.
-	nodeTablesByPath   map[tspath.Path]*encoder.NodeIndexTable
-	nodeTablesByPathMu sync.RWMutex
 }
 
 // getProgram looks up a program from a project handle within this snapshot.
@@ -74,22 +68,7 @@ func (sd *snapshotData) getProgram(projectHandle ProjectID) (*compiler.Program, 
 func (sd *snapshotData) nodeHandleFrom(node *ast.Node) NodeHandle {
 	sourceFile := ast.GetSourceFileOfNode(node)
 	path := sourceFile.Path()
-
-	sd.nodeTablesByPathMu.RLock()
-	table := sd.nodeTablesByPath[path]
-	sd.nodeTablesByPathMu.RUnlock()
-
-	if table == nil {
-		// Eagerly build node index table for this file.
-		newTable := encoder.BuildNodeIndexTable(sourceFile)
-		sd.nodeTablesByPathMu.Lock()
-		if sd.nodeTablesByPath[path] == nil {
-			sd.nodeTablesByPath[path] = newTable
-		}
-		table = sd.nodeTablesByPath[path]
-		sd.nodeTablesByPathMu.Unlock()
-	}
-
+	table := encoder.GetNodeIndexTable(sourceFile)
 	idx := table.GetIndex(node)
 	return NodeHandle(fmt.Sprintf("%d.%d.%s", idx, node.Kind, path))
 }
@@ -636,7 +615,6 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 			symbolRegistry:    make(map[SymbolID]*ast.Symbol),
 			typeRegistry:      make(map[TypeID]*checker.Type),
 			signatureRegistry: make(map[SignatureID]*checker.Signature),
-			nodeTablesByPath:  make(map[tspath.Path]*encoder.NodeIndexTable),
 		}
 		s.snapshots[handle] = sd
 	}
@@ -762,15 +740,10 @@ func (s *Session) handleGetSourceFile(ctx context.Context, params *GetSourceFile
 	}
 
 	// Encode the full source file
-	data, nodeTable, err := encoder.EncodeSourceFile(sourceFile)
+	data, _, err := encoder.EncodeSourceFile(sourceFile)
 	if err != nil {
 		return nil, fmt.Errorf("failed to encode source file: %w", err)
 	}
-
-	// Store the node table for O(1) handle resolution
-	sd.nodeTablesByPathMu.Lock()
-	sd.nodeTablesByPath[sourceFile.Path()] = nodeTable
-	sd.nodeTablesByPathMu.Unlock()
 
 	// Return raw binary for msgpack protocol, or base64 for JSON
 	if s.useBinaryResponses {
@@ -2008,9 +1981,11 @@ func (sd *snapshotData) resolveNodeHandle(program *compiler.Program, handle Node
 	}
 	path := tspath.Path(s[secondDot+1:])
 
-	sd.nodeTablesByPathMu.RLock()
-	table := sd.nodeTablesByPath[path]
-	sd.nodeTablesByPathMu.RUnlock()
+	sourceFile := program.GetSourceFileByPath(path)
+	if sourceFile == nil {
+		return nil, fmt.Errorf("%w: node handle %q could not be resolved (file may not be loaded or handle may be stale)", ErrClientError, handle)
+	}
+	table := encoder.GetNodeIndexTable(sourceFile)
 
 	if table != nil && idx < uint64(len(table.Nodes)) {
 		node := table.Nodes[idx]
@@ -2018,7 +1993,7 @@ func (sd *snapshotData) resolveNodeHandle(program *compiler.Program, handle Node
 			return node, nil
 		}
 	}
-	return nil, fmt.Errorf("%w: node handle %q could not be resolved (file may not be loaded)", ErrClientError, handle)
+	return nil, fmt.Errorf("%w: node handle %q could not be resolved (file may not be loaded or handle may be stale)", ErrClientError, handle)
 }
 
 // computeSnapshotChanges computes the per-project source file differences between

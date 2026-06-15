@@ -2402,6 +2402,53 @@ type SourceFileMetaData struct {
 	ImpliedNodeFormat    core.ResolutionMode
 }
 
+// SourceFileDataKey identifies lazily-computed data attached to a SourceFile by
+// another package. Prefer regular SourceFile fields for ast-owned data.
+type SourceFileDataKey[T any] struct {
+	key sourceFileDataKey
+	_   [0]T
+}
+
+type sourceFileDataKey uint64
+
+var sourceFileDataKeyCounter atomic.Uint64
+
+type sourceFileDataCell[T any] struct {
+	once  sync.Once
+	value T
+}
+
+func NewSourceFileDataKey[T any]() *SourceFileDataKey[T] {
+	return &SourceFileDataKey[T]{key: sourceFileDataKey(sourceFileDataKeyCounter.Add(1))}
+}
+
+func GetOrComputeSourceFileData[T any](file *SourceFile, key *SourceFileDataKey[T], compute func(*SourceFile) T) T {
+	cell := getSourceFileDataCell(file, key)
+	cell.once.Do(func() {
+		cell.value = compute(file)
+	})
+	return cell.value
+}
+
+func getSourceFileDataCell[T any](file *SourceFile, key *SourceFileDataKey[T]) *sourceFileDataCell[T] {
+	if key == nil || key.key == 0 {
+		panic("invalid SourceFileDataKey; use NewSourceFileDataKey")
+	}
+
+	file.dataMu.Lock()
+	defer file.dataMu.Unlock()
+
+	if file.data == nil {
+		file.data = make(map[sourceFileDataKey]any)
+	}
+	if cell, ok := file.data[key.key]; ok {
+		return cell.(*sourceFileDataCell[T])
+	}
+	cell := &sourceFileDataCell[T]{}
+	file.data[key.key] = cell
+	return cell
+}
+
 type CheckJsDirective struct {
 	Enabled bool
 	Range   CommentRange
@@ -2429,6 +2476,10 @@ type SourceFile struct {
 	text           string
 	Statements     *NodeList  // NodeList[*Statement]
 	EndOfFileToken *TokenNode // TokenNode[*EndOfFileToken]
+
+	// Fields for lazily-computed data owned by packages outside ast.
+	dataMu sync.Mutex
+	data   map[sourceFileDataKey]any
 
 	// Fields set by parser
 	diagnostics                 []*Diagnostic
