@@ -499,7 +499,7 @@ type TypeResponse struct {
 	ObjectFlags uint32 `json:"objectFlags,omitempty"`
 
 	// LiteralType data
-	Value any `json:"value,omitempty"`
+	Value any `json:"value"`
 
 	// ObjectType / TypeReference / StringMappingType / IndexType target
 	Target TypeID `json:"target,omitempty"`

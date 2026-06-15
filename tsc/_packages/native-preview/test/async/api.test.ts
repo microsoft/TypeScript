@@ -2191,6 +2191,28 @@ describe("IntrinsicType - intrinsicName", () => {
 });
 
 describe("FreshableType - getFreshType and getRegularType", () => {
+    test("LiteralType.value is empty string for the empty-string literal type", async () => {
+        const src = `\nexport const empty: "" = "";\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("empty:"));
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.ok(type.flags & TypeFlags.StringLiteral, "Expected StringLiteral");
+            const literal = type as LiteralType;
+            assert.equal(literal.value, "", "value should be empty string, not undefined");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("LiteralType.value is accessible via the FreshableType hierarchy", async () => {
         const src = `\nexport const greeting: "hello" = "hello";\n`;
         const api = spawnAPI({
