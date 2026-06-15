@@ -256,6 +256,7 @@ const libEntries: [string, string][] = [
     ["esnext.disposable", "lib.esnext.disposable.d.ts"],
     ["esnext.error", "lib.esnext.error.d.ts"],
     ["esnext.intl", "lib.esnext.intl.d.ts"],
+    ["esnext.math", "lib.esnext.math.d.ts"],
     ["esnext.sharedmemory", "lib.esnext.sharedmemory.d.ts"],
     ["esnext.temporal", "lib.esnext.temporal.d.ts"],
     ["esnext.typedarrays", "lib.esnext.typedarrays.d.ts"],

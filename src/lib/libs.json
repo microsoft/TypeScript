@@ -92,6 +92,7 @@
         "esnext.decorators",
         "esnext.disposable",
         "esnext.error",
+        "esnext.math",
         "esnext.intl",
         "esnext.sharedmemory",
         "esnext.temporal",
