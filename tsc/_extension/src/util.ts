@@ -48,7 +48,7 @@ export async function getBuiltinExePath(context: vscode.ExtensionContext): Promi
         catch {}
     }
     return {
-        path: context.asAbsolutePath(path.join("./lib", `tsgo${process.platform === "win32" ? ".exe" : ""}`)),
+        path: context.asAbsolutePath(path.join("./lib", `tsc${process.platform === "win32" ? ".exe" : ""}`)),
         version: context.extension.packageJSON.version,
     };
 }
@@ -128,22 +128,42 @@ export function resolveTsdkPath(tsdkPath: string): string {
 }
 
 export async function resolveTsdkPathToExe(tsdkPath: string): Promise<{ path: string; version: string; } | undefined> {
-    if (tsdkPath.endsWith("/@typescript/native-preview") || tsdkPath.endsWith("\\@typescript\\native-preview")) {
+    // tsdkPath may point at either the package directory (e.g. node_modules/typescript)
+    // or, following the built-in TypeScript extension's convention, the package's lib
+    // directory (e.g. node_modules/typescript/lib). Try to resolve it as an installed
+    // `typescript` package: it has a package.json with a `bin` entry and depends on a
+    // platform-specific package named `@typescript/<baseName>-<os>-<arch>` containing
+    // the binary.
+    // NOTE: Keep this algorithm in sync with _packages/native-preview/lib/getExePath.js.
+    const resolved = workspaceResolve(tsdkPath);
+    for (const packagePath of [resolved, vscode.Uri.joinPath(resolved, "..")]) {
         try {
-            const packagePath = workspaceResolve(tsdkPath);
             const packageJsonPath = vscode.Uri.joinPath(packagePath, "package.json");
             const packageJson = JSON.parse(await vscode.workspace.fs.readFile(packageJsonPath).then(buffer => buffer.toString()));
-            // NOTE: Keep in sync with _packages/native-preview/lib/getExePath.js.
-            const exeName = `tsgo${process.platform === "win32" ? ".exe" : ""}`;
-            const platformPackage = `native-preview-${process.platform}-${process.arch}`;
-            const exePath = vscode.Uri.joinPath(packagePath, "..", platformPackage, "lib", exeName);
+            const name: unknown = packageJson.name;
+            const bin: unknown = packageJson.bin;
+            if (typeof name !== "string" || !bin || typeof bin !== "object") {
+                continue;
+            }
+            const baseName = name.startsWith("@") ? name.split("/")[1] : name;
+            const binName = Object.keys(bin)[0];
+            const exeName = `${binName}${process.platform === "win32" ? ".exe" : ""}`;
+            const platformPackage = `${baseName}-${process.platform}-${process.arch}`;
+            // The platform package lives at <node_modules>/@typescript/<platformPackage>.
+            // Walk out of the (possibly scoped) package directory to <node_modules>.
+            const nodeModules = name.startsWith("@")
+                ? vscode.Uri.joinPath(packagePath, "..", "..")
+                : vscode.Uri.joinPath(packagePath, "..");
+            const exePath = vscode.Uri.joinPath(nodeModules, "@typescript", platformPackage, "lib", exeName);
             await vscode.workspace.fs.stat(exePath);
-            return { path: withLongPathPrefix(exePath.fsPath), version: packageJson.version };
+            return { path: withLongPathPrefix(exePath.fsPath), version: typeof packageJson.version === "string" ? packageJson.version : "unknown" };
         }
         catch {}
     }
+    // Otherwise, treat tsdkPath as a directory directly containing the binary
+    // (e.g. the repo's `built/local`).
     try {
-        const exePath = workspaceResolve(path.join(tsdkPath, `tsgo${process.platform === "win32" ? ".exe" : ""}`));
+        const exePath = vscode.Uri.joinPath(resolved, `tsgo${process.platform === "win32" ? ".exe" : ""}`);
         await vscode.workspace.fs.stat(exePath);
         return { path: withLongPathPrefix(exePath.fsPath), version: "(local)" };
     }

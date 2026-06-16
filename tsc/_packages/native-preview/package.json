@@ -1,7 +1,6 @@
 {
-    "private": true,
     "name": "@typescript/native-preview",
-    "version": "0.0.0",
+    "version": "7.0.1-rc",
     "license": "Apache-2.0",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
@@ -36,7 +35,7 @@
         "vendor"
     ],
     "bin": {
-        "tsgo": "./bin/tsgo.js"
+        "tsc": "./bin/tsc"
     },
     "exports": {
         "./package.json": "./package.json",

@@ -12,7 +12,6 @@ import os from "node:os";
 import path from "node:path";
 import url from "node:url";
 import { parseArgs } from "node:util";
-import pLimit from "p-limit";
 import pc from "picocolors";
 import tmp from "tmp";
 import which from "which";
@@ -83,10 +82,6 @@ const { values: rawOptions } = parseArgs({
  * @typedef {{ [K in keyof typeof rawOptions as {} extends Record<K, 1> ? never : K]: typeof rawOptions[K] }} Options
  */
 const options = /** @type {Options} */ (rawOptions);
-
-if (options.forRelease && !options.setPrerelease) {
-    throw new Error("forRelease requires setPrerelease");
-}
 
 const defaultGoBuildTags = [
     ...(options.noembed ? ["noembed"] : []),
@@ -752,10 +747,12 @@ export const testTools = task({
 export const buildAPI = task({
     name: "build:api",
     description: "Builds @typescript/native-preview JS API.",
-    run: async () => {
-        await $`npm run -w @typescript/native-preview build`;
-    },
+    run: runBuildAPI,
 });
+
+async function runBuildAPI() {
+    await $`npm run -w @typescript/native-preview build`;
+}
 
 export const buildAPITests = task({
     name: "build:api:test",
@@ -1146,28 +1143,35 @@ export class Debouncer {
 }
 
 const getVersion = memoize(() => {
-    const f = fs.readFileSync("./internal/core/version.go", "utf8");
-
-    const match = f.match(/var version\s*=\s*"(\d+\.\d+\.\d+)(-[^"]+)?"/);
+    const packageJson = JSON.parse(fs.readFileSync("./_packages/native-preview/package.json", "utf8"));
+    const match = packageJson.version.match(/^(\d+\.\d+\.\d+)(-[^"]+)?$/);
     if (!match) {
-        throw new Error("Failed to extract version from version.go");
+        throw new Error("Failed to extract version from _packages/native-preview/package.json");
     }
 
     let version = match[1];
     if (options.setPrerelease) {
-        version += `-${options.setPrerelease}`;
+        console.warn(pc.yellow("Warning: --setPrerelease is ignored; version is read from _packages/native-preview/package.json"));
     }
-    else if (match[2]) {
+    if (match[2]) {
         version += match[2];
     }
 
     return version;
 });
 
+function getPublishTag() {
+    // This only works for TS7 builds published as `typescript`; it is not
+    // suitable for real releases of `@typescript/native-preview`.
+    const match = getVersion().match(/-(dev|beta|rc)(?:[.-]|$)/);
+    return match ? match[1] : "latest";
+}
+
 const extensionDir = path.resolve("./_extension");
 const builtNpm = path.resolve("./built/npm");
 const builtVsix = path.resolve("./built/vsix");
 const builtSignTmp = path.resolve("./built/sign-tmp");
+const produceNativePreviewVsixes = false;
 
 const getSignTempDir = memoize(async () => {
     const dir = path.resolve(builtSignTmp);
@@ -1398,22 +1402,26 @@ function cpWithoutNodeModulesOrTsconfig(src, dest) {
 }
 
 const mainNativePreviewPackage = {
-    npmPackageName: "@typescript/native-preview",
-    npmDir: path.join(builtNpm, "native-preview"),
-    npmTarball: path.join(builtNpm, "native-preview.tgz"),
+    npmPackageName: "typescript",
+    npmDir: path.join(builtNpm, "typescript"),
+    npmTarball: path.join(builtNpm, "typescript.tgz"),
 };
 
 /**
- * @typedef {"win32" | "linux" | "darwin"} OS
- * @typedef {"x64" | "arm" | "arm64"} Arch
+ * @typedef {"win32" | "linux" | "darwin" | "aix" | "android" | "freebsd" | "netbsd" | "openbsd" | "sunos"} OS
+ * @typedef {"x64" | "arm" | "arm64" | "ia32" | "ppc64" | "loong64" | "mips64el" | "riscv64" | "s390x"} Arch
  * @typedef {"Microsoft400" | "LinuxSign" | "MacDeveloperHarden" | "8020" | "VSCodePublisher"} Cert
  * @typedef {`${OS | "alpine"}-${Exclude<Arch, "arm"> | "armhf"}`} VSCodeTarget
+ * @typedef {{ vscodeTarget: string; extensionDir: string; vsixPath: string; vsixManifestPath: string; vsixSignaturePath: string }} NativePreviewExtension
  */
 void 0;
 
 const nativePreviewPlatforms = memoize(() => {
-    /** @type {[os: OS, arch: Arch, cert: Cert, alpine?: boolean][]} */
-    let supportedPlatforms = [
+    /**
+     * Platforms that produce npm packages and can produce vsix extensions.
+     * @type {[os: OS, arch: Arch, cert: Cert, alpine?: boolean][]}
+     */
+    const vsixPlatforms = [
         ["win32", "x64", "Microsoft400"],
         ["win32", "arm64", "Microsoft400"],
         ["linux", "x64", "LinuxSign", true],
@@ -1421,45 +1429,72 @@ const nativePreviewPlatforms = memoize(() => {
         ["linux", "arm64", "LinuxSign", true],
         ["darwin", "x64", "MacDeveloperHarden"],
         ["darwin", "arm64", "MacDeveloperHarden"],
-        // Wasm?
     ];
 
-    if (!options.forRelease) {
-        supportedPlatforms = supportedPlatforms.filter(([os, arch]) => os === process.platform && arch === process.arch);
-        assert.equal(supportedPlatforms.length, 1, "No supported platforms found");
-    }
+    /**
+     * Additional platforms that produce npm packages only (no vsix).
+     * Mirrors esbuild's platform matrix (minus android and ia32).
+     * @type {[os: OS, arch: Arch][]}
+     */
+    const npmOnlyPlatforms = [
+        ["aix", "ppc64"],
+        ["freebsd", "arm64"],
+        ["freebsd", "x64"],
+        ["linux", "loong64"],
+        ["linux", "mips64el"],
+        ["linux", "ppc64"],
+        ["linux", "riscv64"],
+        ["linux", "s390x"],
+        ["netbsd", "arm64"],
+        ["netbsd", "x64"],
+        ["openbsd", "arm64"],
+        ["openbsd", "x64"],
+        ["sunos", "x64"],
+    ];
 
-    return supportedPlatforms.map(([os, arch, cert, alpine]) => {
-        const npmDirName = `native-preview-${os}-${arch}`;
+    /** @type {typeof vsixPlatforms} */
+    const allPlatforms = [
+        ...vsixPlatforms,
+        ...npmOnlyPlatforms.map(([os, arch]) => /** @type {[OS, Arch, Cert]} */ ([os, arch, "LinuxSign"])),
+    ];
+
+    return allPlatforms.map(([os, arch, cert, alpine]) => {
+        const npmDirName = `typescript-${os}-${arch}`;
         const npmDir = path.join(builtNpm, npmDirName);
         const npmTarball = `${npmDir}.tgz`;
         const npmPackageName = `@typescript/${npmDirName}`;
 
-        /** @type {VSCodeTarget[]} */
-        const vscodeTargets = [`${os}-${arch === "arm" ? "armhf" : arch}`];
-        if (alpine) {
-            vscodeTargets.push(`alpine-${arch === "arm" ? "armhf" : arch}`);
-        }
+        const isVsixPlatform = vsixPlatforms.some(([vo, va]) => vo === os && va === arch);
 
-        const extensions = vscodeTargets.map(vscodeTarget => {
-            const extensionDir = path.join(builtVsix, `typescript-native-preview-${vscodeTarget}`);
-            const vsixPath = extensionDir + ".vsix";
-            const vsixManifestPath = extensionDir + ".manifest";
-            const vsixSignaturePath = extensionDir + ".signature.p7s";
-            return {
-                vscodeTarget,
-                extensionDir,
-                vsixPath,
-                vsixManifestPath,
-                vsixSignaturePath,
-            };
-        });
+        /** @type {NativePreviewExtension[]} */
+        let extensions = [];
+        if (produceNativePreviewVsixes && isVsixPlatform) {
+            /** @type {string[]} */
+            const vscodeTargets = [`${os}-${arch === "arm" ? "armhf" : arch}`];
+            if (alpine) {
+                vscodeTargets.push(`alpine-${arch === "arm" ? "armhf" : arch}`);
+            }
+
+            extensions = vscodeTargets.map(vscodeTarget => {
+                const extensionDir = path.join(builtVsix, `typescript-native-preview-${vscodeTarget}`);
+                const vsixPath = extensionDir + ".vsix";
+                const vsixManifestPath = extensionDir + ".manifest";
+                const vsixSignaturePath = extensionDir + ".signature.p7s";
+                return {
+                    vscodeTarget,
+                    extensionDir,
+                    vsixPath,
+                    vsixManifestPath,
+                    vsixSignaturePath,
+                };
+            });
+        }
 
         return {
             nodeOs: os,
             nodeArch: arch,
             goos: nodeToGOOS(os),
-            goarch: nodeToGOARCH(arch),
+            goarch: nodeToGOARCH(arch, os),
             npmPackageName,
             npmDirName,
             npmDir,
@@ -1471,16 +1506,22 @@ const nativePreviewPlatforms = memoize(() => {
 
     /**
      * @param {string} os
-     * @returns {"darwin" | "linux" | "windows"}
+     * @returns {"windows" | "illumos" | "darwin" | "linux" | "aix" | "android" | "freebsd" | "netbsd" | "openbsd"}
      */
     function nodeToGOOS(os) {
         switch (os) {
-            case "darwin":
-                return "darwin";
-            case "linux":
-                return "linux";
             case "win32":
                 return "windows";
+            case "sunos":
+                return "illumos";
+            case "darwin":
+            case "linux":
+            case "aix":
+            case "android":
+            case "freebsd":
+            case "netbsd":
+            case "openbsd":
+                return os;
             default:
                 throw new Error(`Unsupported OS: ${os}`);
         }
@@ -1488,16 +1529,26 @@ const nativePreviewPlatforms = memoize(() => {
 
     /**
      * @param {string} arch
-     * @returns {"amd64" | "arm" | "arm64"}
+     * @param {string} os
+     * @returns {"amd64" | "386" | "mips64le" | "ppc64" | "ppc64le" | "arm" | "arm64" | "loong64" | "riscv64" | "s390x"}
      */
-    function nodeToGOARCH(arch) {
+    function nodeToGOARCH(arch, os) {
         switch (arch) {
             case "x64":
                 return "amd64";
+            case "ia32":
+                return "386";
+            case "mips64el":
+                return "mips64le";
+            case "ppc64":
+                // AIX uses big-endian ppc64; Linux uses little-endian ppc64le
+                return os === "aix" ? "ppc64" : "ppc64le";
             case "arm":
-                return "arm";
             case "arm64":
-                return "arm64";
+            case "loong64":
+            case "riscv64":
+            case "s390x":
+                return arch;
             default:
                 throw new Error(`Unsupported ARCH: ${arch}`);
         }
@@ -1547,6 +1598,7 @@ export const buildNativePreviewPackages = task({
 
 async function runBuildNativePreviewPackages() {
     await rimraf(builtNpm);
+    await runBuildAPI();
 
     const platforms = nativePreviewPlatforms();
 
@@ -1556,6 +1608,8 @@ async function runBuildNativePreviewPackages() {
     inputPackageJson.version = getVersion();
     delete inputPackageJson.private;
     inputPackageJson.files = [...new Set([...(inputPackageJson.files ?? []), "NOTICE.txt"])];
+    delete inputPackageJson.scripts;
+    delete inputPackageJson.devDependencies;
     stripSourceConditions(inputPackageJson);
 
     const { stdout: gitHead } = await $pipe`git rev-parse HEAD`;
@@ -1570,43 +1624,18 @@ async function runBuildNativePreviewPackages() {
 
     await fs.promises.mkdir(mainPackageDir, { recursive: true });
 
-    // Copy package contents excluding node_modules and dist (dist is copied separately after build).
+    // Copy package contents excluding node_modules and src.
     // The package.json "files" field controls what npm pack actually includes.
-    await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
+    await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.includes("/src"));
+
+    // Override the package name for publishing as "typescript".
+    mainPackage.name = mainNativePreviewPackage.npmPackageName;
 
     await fs.promises.writeFile(path.join(mainPackageDir, "package.json"), JSON.stringify(mainPackage, undefined, 4));
     await fs.promises.copyFile("LICENSE", path.join(mainPackageDir, "LICENSE"));
     await fs.promises.copyFile("NOTICE.txt", path.join(mainPackageDir, "NOTICE.txt"));
 
-    // Build JS API and copy dist into the package.
-    await $`npm run -w @typescript/native-preview build`;
-    await cpRecursive(path.join(inputDir, "dist"), path.join(mainPackageDir, "dist"));
-
-    // Validate that .d.ts files contain no external imports (all imports must start with "." or "#").
-    const dtsFiles = await glob(`${mainPackageDir}/dist/**/*.d.ts`);
-    const importErrors = [];
-    for (const dtsFile of dtsFiles) {
-        const content = await fs.promises.readFile(dtsFile, "utf-8");
-        const relPath = path.relative(mainPackageDir, dtsFile);
-        for (const [i, line] of content.split("\n").entries()) {
-            // Match: import ... from "specifier" / export ... from "specifier"
-            const fromMatch = line.match(/(?:import|export)\s.*?\sfrom\s+["']([^"']+)["']/);
-            if (fromMatch && !fromMatch[1].startsWith(".") && !fromMatch[1].startsWith("#")) {
-                importErrors.push(`${relPath}:${i + 1}: external import declaration "${fromMatch[1]}"`);
-            }
-            // Match: import("specifier")
-            for (const m of line.matchAll(/import\(["']([^"']+)["']\)/g)) {
-                if (!m[1].startsWith(".") && !m[1].startsWith("#")) {
-                    importErrors.push(`${relPath}:${i + 1}: external dynamic import "${m[1]}"`);
-                }
-            }
-        }
-    }
-    if (importErrors.length) {
-        throw new Error(`Found external imports in .d.ts files:\n${importErrors.map(e => "  " + e).join("\n")}`);
-    }
-
-    const extraFlags = getReleaseBuildFlags(options.setPrerelease ? getVersion() : undefined);
+    const extraFlags = getReleaseBuildFlags(getVersion());
 
     const platformBuilders = platforms.map(({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) => async () => {
         const packageJson = {
@@ -1639,8 +1668,9 @@ async function runBuildNativePreviewPackages() {
 
         await generateLibs(out);
 
+        const exeName = nodeOs === "win32" ? "tsc.exe" : "tsc";
         await buildTsgo({
-            out,
+            out: path.join(out, exeName),
             env: { GOOS: goos, GOARCH: goarch, GOARM: "6", CGO_ENABLED: "0" },
             extraFlags,
         });
@@ -1655,8 +1685,9 @@ async function runBuildNativePreviewPackages() {
         }
     }
     else {
-        const buildLimit = pLimit(os.availableParallelism());
-        await Promise.all(platformBuilders.map(f => buildLimit(f)));
+        for (const f of platformBuilders) {
+            await f();
+        }
     }
 }
 
@@ -1682,7 +1713,7 @@ async function runSignNativePreviewPackages() {
         }
         certFilelist.push({
             tmpName: npmDirName,
-            path: path.join(npmDir, "lib", nodeOs === "win32" ? "tsgo.exe" : "tsgo"),
+            path: path.join(npmDir, "lib", nodeOs === "win32" ? "tsc.exe" : "tsc"),
         });
     }
 
@@ -1805,7 +1836,7 @@ async function runPackNativePreviewPackages() {
 
     const publishManifest = publishOrder.map(pkg => ({
         filename: pkg,
-        tag: "latest",
+        tag: getPublishTag(),
     }));
 
     const publishOrderPath = path.join(builtNpm, "publish-order.json");
@@ -1819,9 +1850,22 @@ export const packNativePreviewExtensions = task({
     run: runPackNativePreviewExtensions,
 });
 
+/**
+ * @returns {({ npmDir: string } & NativePreviewExtension)[]}
+ */
+function nativePreviewExtensions() {
+    return nativePreviewPlatforms().flatMap(({ npmDir, extensions }) => extensions.map(e => ({ npmDir, ...e })));
+}
+
 async function runPackNativePreviewExtensions() {
     await rimraf(builtVsix);
     await fs.promises.mkdir(builtVsix, { recursive: true });
+
+    const extensions = nativePreviewExtensions();
+    if (!extensions.length) {
+        console.log("No VSIX targets configured; skipping extension packaging.");
+        return;
+    }
 
     // We don't use vscode:prepublish, as that would run the build for each package below.
     await $({ cwd: extensionDir })`npm run bundle:release`;
@@ -1843,9 +1887,6 @@ async function runPackNativePreviewExtensions() {
     }
 
     console.log("Version:", version);
-
-    const platforms = nativePreviewPlatforms();
-    const extensions = platforms.flatMap(({ npmDir, extensions }) => extensions.map(e => ({ npmDir, ...e })));
 
     await Promise.all(extensions.map(async ({ npmDir, vscodeTarget, extensionDir: thisExtensionDir, vsixPath, vsixManifestPath, vsixSignaturePath }) => {
         const npmLibDir = path.join(npmDir, "lib");
@@ -1883,8 +1924,11 @@ async function runSignNativePreviewExtensions() {
         throw new Error("This task should not be run in non-release builds.");
     }
 
-    const platforms = nativePreviewPlatforms();
-    const extensions = platforms.flatMap(({ npmDir, extensions }) => extensions.map(e => ({ npmDir, ...e })));
+    const extensions = nativePreviewExtensions();
+    if (!extensions.length) {
+        console.log("No VSIX targets configured; skipping extension signing.");
+        return;
+    }
 
     await sign({
         SignFileRecordList: [

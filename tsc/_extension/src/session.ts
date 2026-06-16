@@ -354,17 +354,18 @@ interface DetectedVersion {
     exePath: string;
 }
 
-async function findWorkspaceNativePreviewPackages(): Promise<DetectedVersion[]> {
+async function findWorkspaceTypeScriptPackages(): Promise<DetectedVersion[]> {
     const results: DetectedVersion[] = [];
     for (const folder of vscode.workspace.workspaceFolders ?? []) {
-        const packagePath = vscode.Uri.joinPath(folder.uri, "node_modules", "@typescript", "native-preview");
-        const resolved = await resolveTsdkPathToExe(path.normalize(packagePath.fsPath));
+        const packagePath = vscode.Uri.joinPath(folder.uri, "node_modules", "typescript");
+        const tsdkPath = path.normalize(packagePath.fsPath);
+        const resolved = await resolveTsdkPathToExe(tsdkPath);
         if (!resolved) continue;
         results.push({
             folder,
-            version: resolved?.version ?? "unknown",
-            tsdkPath: path.normalize(packagePath.fsPath),
-            exePath: resolved?.path ?? "",
+            version: resolved.version ?? "unknown",
+            tsdkPath,
+            exePath: resolved.path ?? "",
         });
     }
     return results;
@@ -403,7 +404,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
     const config = vscode.workspace.getConfiguration("typescript.native-preview");
     const currentExePath = client.getCurrentExe()?.path;
     const builtinExe = await getBuiltinExePath(context);
-    const workspaceVersions = await findWorkspaceNativePreviewPackages();
+    const workspaceVersions = await findWorkspaceTypeScriptPackages();
     const bundledVersion = context.extension.packageJSON.version as string;
     const items: VersionQuickPickItem[] = [];
 
@@ -531,7 +532,7 @@ export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext
     else {
         // No workspace tsdk config, but check if native-preview is installed
         // in the workspace's node_modules.
-        const workspaceVersions = await findWorkspaceNativePreviewPackages();
+        const workspaceVersions = await findWorkspaceTypeScriptPackages();
         if (workspaceVersions.length === 0) return;
 
         const wsVersion = workspaceVersions[0];
