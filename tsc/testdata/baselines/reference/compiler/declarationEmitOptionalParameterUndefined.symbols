@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/declarationEmitOptionalParameterUndefined.ts] ////
+
+=== declarationEmitOptionalParameterUndefined.ts ===
+export function simple_primitive(
+>simple_primitive : Symbol(simple_primitive, Decl(declarationEmitOptionalParameterUndefined.ts, 0, 0))
+
+    foo: number | boolean | null = 2,
+>foo : Symbol(foo, Decl(declarationEmitOptionalParameterUndefined.ts, 0, 33))
+
+    _: string,
+>_ : Symbol(_, Decl(declarationEmitOptionalParameterUndefined.ts, 1, 37))
+
+) {}
+
+export function simple_primitive_with_explicit_undefined(
+>simple_primitive_with_explicit_undefined : Symbol(simple_primitive_with_explicit_undefined, Decl(declarationEmitOptionalParameterUndefined.ts, 3, 4))
+
+    foo: number | boolean | null | undefined = 2,
+>foo : Symbol(foo, Decl(declarationEmitOptionalParameterUndefined.ts, 5, 57))
+
+    _: string,
+>_ : Symbol(_, Decl(declarationEmitOptionalParameterUndefined.ts, 6, 49))
+
+) {}
+
+export function simple_nonPrimitive(
+>simple_nonPrimitive : Symbol(simple_nonPrimitive, Decl(declarationEmitOptionalParameterUndefined.ts, 8, 4))
+
+    foo: number | RegExp | null = 2,
+>foo : Symbol(foo, Decl(declarationEmitOptionalParameterUndefined.ts, 10, 36))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 3 more)
+
+    _: string,
+>_ : Symbol(_, Decl(declarationEmitOptionalParameterUndefined.ts, 11, 36))
+
+) {}
+
+export function simple_nonPrimitive_with_explicit_undefined(
+>simple_nonPrimitive_with_explicit_undefined : Symbol(simple_nonPrimitive_with_explicit_undefined, Decl(declarationEmitOptionalParameterUndefined.ts, 13, 4))
+
+    foo: number | RegExp | null | undefined = 2,
+>foo : Symbol(foo, Decl(declarationEmitOptionalParameterUndefined.ts, 15, 60))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 3 more)
+
+    _: string,
+>_ : Symbol(_, Decl(declarationEmitOptionalParameterUndefined.ts, 16, 48))
+
+) {}
+
+export function curry(
+>curry : Symbol(curry, Decl(declarationEmitOptionalParameterUndefined.ts, 18, 4))
+
+    foo: number | RegExp | null = 2,
+>foo : Symbol(foo, Decl(declarationEmitOptionalParameterUndefined.ts, 20, 22))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 3 more)
+
+    _: string,
+>_ : Symbol(_, Decl(declarationEmitOptionalParameterUndefined.ts, 21, 36))
+
+) {
+    return (bar = foo, _: string) => (buzz = bar, _: string) => {}
+>bar : Symbol(bar, Decl(declarationEmitOptionalParameterUndefined.ts, 24, 12))
+>foo : Symbol(foo, Decl(declarationEmitOptionalParameterUndefined.ts, 20, 22))
+>_ : Symbol(_, Decl(declarationEmitOptionalParameterUndefined.ts, 24, 22))
+>buzz : Symbol(buzz, Decl(declarationEmitOptionalParameterUndefined.ts, 24, 38))
+>bar : Symbol(bar, Decl(declarationEmitOptionalParameterUndefined.ts, 24, 12))
+>_ : Symbol(_, Decl(declarationEmitOptionalParameterUndefined.ts, 24, 49))
+}
+
+export function curry_with_explicit_undefined(
+>curry_with_explicit_undefined : Symbol(curry_with_explicit_undefined, Decl(declarationEmitOptionalParameterUndefined.ts, 25, 1))
+
+    foo: number | RegExp | null | undefined = 2,
+>foo : Symbol(foo, Decl(declarationEmitOptionalParameterUndefined.ts, 27, 46))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 3 more)
+
+    _: string,
+>_ : Symbol(_, Decl(declarationEmitOptionalParameterUndefined.ts, 28, 48))
+
+) {
+    return (bar = foo, _: string) => (buzz = bar, _: string) => {}
+>bar : Symbol(bar, Decl(declarationEmitOptionalParameterUndefined.ts, 31, 12))
+>foo : Symbol(foo, Decl(declarationEmitOptionalParameterUndefined.ts, 27, 46))
+>_ : Symbol(_, Decl(declarationEmitOptionalParameterUndefined.ts, 31, 22))
+>buzz : Symbol(buzz, Decl(declarationEmitOptionalParameterUndefined.ts, 31, 38))
+>bar : Symbol(bar, Decl(declarationEmitOptionalParameterUndefined.ts, 31, 12))
+>_ : Symbol(_, Decl(declarationEmitOptionalParameterUndefined.ts, 31, 49))
+}
+

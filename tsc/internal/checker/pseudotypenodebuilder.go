@@ -110,7 +110,24 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 	case pseudochecker.PseudoTypeKindUnion:
 		var res []*ast.Node
 		var hasElidedType bool
+		var hasUndefined bool
 		members := t.AsPseudoTypeUnion().Types
+		var appendTypeNode func(node *ast.Node)
+		appendTypeNode = func(node *ast.Node) {
+			if ast.IsUnionTypeNode(node) {
+				for _, node := range node.AsUnionTypeNode().Types.Nodes {
+					appendTypeNode(node)
+				}
+				return
+			}
+			if node.Kind == ast.KindUndefinedKeyword {
+				if hasUndefined {
+					return
+				}
+				hasUndefined = true
+			}
+			res = append(res, node)
+		}
 		for _, m := range members {
 			if !b.ch.strictNullChecks {
 				if m.Kind == pseudochecker.PseudoTypeKindUndefined || m.Kind == pseudochecker.PseudoTypeKindNull {
@@ -118,7 +135,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNode(t *pseudochecker.PseudoType) *ast.Nod
 					continue
 				}
 			}
-			res = append(res, b.pseudoTypeToNode(m))
+			appendTypeNode(b.pseudoTypeToNode(m))
 		}
 		if len(res) == 1 {
 			return res[0]

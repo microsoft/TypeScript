@@ -582,13 +582,13 @@ func typeNodeCouldReferToUndefined(node *ast.Node) bool {
 }
 
 // see this as the inverse of `canAddUndefined` in `expressionToTypeNode` in strada
-func couldAlreadyReferToUndefinedType(t *PseudoType) bool {
+func CouldAlreadyReferToUndefinedType(t *PseudoType) bool {
 	if t.Kind == PseudoTypeKindNoResult || t.Kind == PseudoTypeKindInferred || isUndefinedPseudoType(t) {
 		return true
 	}
 	if t.Kind == PseudoTypeKindMaybeConstLocation {
 		mc := t.AsPseudoTypeMaybeConstLocation()
-		return couldAlreadyReferToUndefinedType(mc.RegularType) // if we're even asking this question, it's not a `const` location
+		return CouldAlreadyReferToUndefinedType(mc.RegularType) // if we're even asking this question, it's not a `const` location
 	}
 	if t.Kind == PseudoTypeKindDirect {
 		// inspect the direct type node
@@ -596,7 +596,7 @@ func couldAlreadyReferToUndefinedType(t *PseudoType) bool {
 		return typeNodeCouldReferToUndefined(node)
 	}
 	if t.Kind == PseudoTypeKindUnion {
-		return core.Some(t.AsPseudoTypeUnion().Types, couldAlreadyReferToUndefinedType)
+		return core.Some(t.AsPseudoTypeUnion().Types, CouldAlreadyReferToUndefinedType)
 	}
 	return false
 }
@@ -628,7 +628,7 @@ func addUndefinedIfDefinitelyRequired(expr *PseudoType) *PseudoType {
 	// in Strada, this reached into the checker to see if `undefined` was necessary, using `isRequiredOptionalParameter` from the emit resolver,
 	// but that's not required on top of the syntactic checks to get the same behavior. (If we get the type wrong, it'll mismatch later and be discarded
 	// for an inference error since corsa actually validates that pseudotypes semantically match the inferred type the checker produces)
-	if couldAlreadyReferToUndefinedType(expr) {
+	if CouldAlreadyReferToUndefinedType(expr) {
 		return expr // will just error later, more like than not, unless the `undefined` is explicit in the pseudo
 	}
 	// Explicitly add an `| undefined`
