@@ -11,6 +11,8 @@ npm install @typescript/native-preview
 npx tsgo # Use this as you would tsc.
 ```
 
+For TypeScript 7.0 RC and later, the command name is `tsc`.
+
 A preview VS Code extension is [available on the VS Code marketplace](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview).
 
 To use this, set this in your VS Code settings:

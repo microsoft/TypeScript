@@ -8,7 +8,9 @@ It will eventually be replaced by the official TypeScript package.
 
 ## Usage
 
-Use the `tsgo` command just like you would use `tsc`:
+For TypeScript 7.0 RC and later, use `tsc` just like for TypeScript 6.0.
+
+For other builds, use the `tsgo` command just like you would use `tsc`:
 
 ```sh
 npx tsgo --help
