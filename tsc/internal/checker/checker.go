@@ -586,6 +586,7 @@ type Checker struct {
 	compareSymbolChains                         func([]*ast.Symbol, []*ast.Symbol) int
 	TypeCount                                   uint32
 	SymbolCount                                 uint32
+	SignatureCount                              uint32
 	TotalInstantiationCount                     uint32
 	instantiationCount                          uint32
 	instantiationDepth                          uint32
@@ -25128,7 +25129,9 @@ func (c *Checker) newSubstitutionType(baseType *Type, constraint *Type) *Type {
 }
 
 func (c *Checker) newSignature(flags SignatureFlags, declaration *ast.Node, typeParameters []*Type, thisParameter *ast.Symbol, parameters []*ast.Symbol, resolvedReturnType *Type, resolvedTypePredicate *TypePredicate, minArgumentCount int) *Signature {
+	c.SignatureCount++
 	sig := c.signatureArena.New()
+	sig.id = SignatureId(c.SignatureCount)
 	sig.flags = flags
 	sig.declaration = declaration
 	sig.typeParameters = typeParameters

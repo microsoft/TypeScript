@@ -66,14 +66,6 @@ export class ObjectRegistry<
         return type;
     }
 
-    getType(id: number): TType | undefined {
-        return this.types.get(id);
-    }
-
-    getSymbol(id: number): TSymbol | undefined {
-        return this.symbols.get(id);
-    }
-
     getOrCreateSignature(data: SignatureResponse): TSignature {
         let signature = this.signatures.get(data.id);
         if (signature) {
@@ -83,6 +75,18 @@ export class ObjectRegistry<
         signature = this.factories.createSignature(data);
         this.signatures.set(data.id, signature);
         return signature;
+    }
+
+    getType(id: number): TType | undefined {
+        return this.types.get(id);
+    }
+
+    getSymbol(id: number): TSymbol | undefined {
+        return this.symbols.get(id);
+    }
+
+    getSignature(id: number): TSignature | undefined {
+        return this.signatures.get(id);
     }
 
     clear(): void {

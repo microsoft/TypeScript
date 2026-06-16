@@ -45,8 +45,8 @@ func TypeHandle(t *checker.Type) TypeID {
 	return TypeID(t.Id())
 }
 
-func SignatureHandle(id uint64) SignatureID {
-	return SignatureID(id)
+func SignatureHandle(sig *checker.Signature) SignatureID {
+	return SignatureID(sig.Id())
 }
 
 func parseProjectHandle(handle ProjectID) tspath.Path {
@@ -69,11 +69,6 @@ const (
 	MethodGetDeclaredTypeOfSymbol  Method = "getDeclaredTypeOfSymbol"
 	MethodGetSourceFile            Method = "getSourceFile"
 	MethodResolveName              Method = "resolveName"
-	MethodGetParentOfSymbol        Method = "getParentOfSymbol"
-	MethodGetMembersOfSymbol       Method = "getMembersOfSymbol"
-	MethodGetExportsOfSymbol       Method = "getExportsOfSymbol"
-	MethodGetExportSymbolOfSymbol  Method = "getExportSymbolOfSymbol"
-	MethodGetSymbolOfType          Method = "getSymbolOfType"
 	MethodGetSignaturesOfType      Method = "getSignaturesOfType"
 	MethodGetResolvedSignature     Method = "getResolvedSignature"
 	MethodGetTypeAtLocation        Method = "getTypeAtLocation"
@@ -81,7 +76,14 @@ const (
 	MethodGetTypeAtPosition        Method = "getTypeAtPosition"
 	MethodGetTypesAtPositions      Method = "getTypesAtPositions"
 
+	// Symbol sub-property methods
+	MethodGetParentOfSymbol       Method = "getParentOfSymbol"
+	MethodGetMembersOfSymbol      Method = "getMembersOfSymbol"
+	MethodGetExportsOfSymbol      Method = "getExportsOfSymbol"
+	MethodGetExportSymbolOfSymbol Method = "getExportSymbolOfSymbol"
+
 	// Type sub-property methods
+	MethodGetSymbolOfType              Method = "getSymbolOfType"
 	MethodGetTargetOfType              Method = "getTargetOfType"
 	MethodGetFreshTypeOfType           Method = "getFreshTypeOfType"
 	MethodGetRegularTypeOfType         Method = "getRegularTypeOfType"
@@ -97,6 +99,12 @@ const (
 	MethodGetExtendsTypeOfType         Method = "getExtendsTypeOfType"
 	MethodGetBaseTypeOfType            Method = "getBaseTypeOfType"
 	MethodGetConstraintOfType          Method = "getConstraintOfType"
+
+	// Signature sub-property methods
+	MethodGetTypeParametersOfSignature Method = "getTypeParametersOfSignature"
+	MethodGetParametersOfSignature     Method = "getParametersOfSignature"
+	MethodGetThisParameterOfSignature  Method = "getThisParameterOfSignature"
+	MethodGetTargetOfSignature         Method = "getTargetOfSignature"
 
 	// Checker methods
 	MethodGetContextualType                 Method = "getContextualType"
@@ -312,11 +320,6 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTypesOfSymbols:        unmarshallerFor[GetTypesOfSymbolsParams],
 	MethodGetDeclaredTypeOfSymbol:  unmarshallerFor[GetTypeOfSymbolParams],
 	MethodResolveName:              unmarshallerFor[ResolveNameParams],
-	MethodGetParentOfSymbol:        unmarshallerFor[GetParentOfSymbolParams],
-	MethodGetMembersOfSymbol:       unmarshallerFor[GetMembersOfSymbolParams],
-	MethodGetExportsOfSymbol:       unmarshallerFor[GetExportsOfSymbolParams],
-	MethodGetExportSymbolOfSymbol:  unmarshallerFor[GetExportSymbolOfSymbolParams],
-	MethodGetSymbolOfType:          unmarshallerFor[GetSymbolOfTypeParams],
 	MethodGetSignaturesOfType:      unmarshallerFor[GetSignaturesOfTypeParams],
 	MethodGetResolvedSignature:     unmarshallerFor[GetResolvedSignatureParams],
 	MethodGetTypeAtLocation:        unmarshallerFor[GetTypeAtLocationParams],
@@ -324,21 +327,33 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTypeAtPosition:        unmarshallerFor[GetTypeAtPositionParams],
 	MethodGetTypesAtPositions:      unmarshallerFor[GetTypesAtPositionsParams],
 
-	MethodGetTargetOfType:                   unmarshallerFor[GetTypePropertyParams],
-	MethodGetFreshTypeOfType:                unmarshallerFor[GetTypePropertyParams],
-	MethodGetRegularTypeOfType:              unmarshallerFor[GetTypePropertyParams],
-	MethodGetTypesOfType:                    unmarshallerFor[GetTypePropertyParams],
-	MethodGetTypeParametersOfType:           unmarshallerFor[GetTypePropertyParams],
-	MethodGetOuterTypeParametersOfType:      unmarshallerFor[GetTypePropertyParams],
-	MethodGetLocalTypeParametersOfType:      unmarshallerFor[GetTypePropertyParams],
-	MethodGetAliasTypeArgumentsOfType:       unmarshallerFor[GetTypePropertyParams],
-	MethodGetAliasSymbolOfType:              unmarshallerFor[GetTypePropertyParams],
-	MethodGetObjectTypeOfType:               unmarshallerFor[GetTypePropertyParams],
-	MethodGetIndexTypeOfType:                unmarshallerFor[GetTypePropertyParams],
-	MethodGetCheckTypeOfType:                unmarshallerFor[GetTypePropertyParams],
-	MethodGetExtendsTypeOfType:              unmarshallerFor[GetTypePropertyParams],
-	MethodGetBaseTypeOfType:                 unmarshallerFor[GetTypePropertyParams],
-	MethodGetConstraintOfType:               unmarshallerFor[GetTypePropertyParams],
+	MethodGetParentOfSymbol:       unmarshallerFor[GetSymbolPropertyParams],
+	MethodGetMembersOfSymbol:      unmarshallerFor[GetSymbolPropertyParams],
+	MethodGetExportsOfSymbol:      unmarshallerFor[GetSymbolPropertyParams],
+	MethodGetExportSymbolOfSymbol: unmarshallerFor[GetSymbolPropertyParams],
+
+	MethodGetSymbolOfType:              unmarshallerFor[GetTypePropertyParams],
+	MethodGetTargetOfType:              unmarshallerFor[GetTypePropertyParams],
+	MethodGetFreshTypeOfType:           unmarshallerFor[GetTypePropertyParams],
+	MethodGetRegularTypeOfType:         unmarshallerFor[GetTypePropertyParams],
+	MethodGetTypesOfType:               unmarshallerFor[GetTypePropertyParams],
+	MethodGetTypeParametersOfType:      unmarshallerFor[GetTypePropertyParams],
+	MethodGetOuterTypeParametersOfType: unmarshallerFor[GetTypePropertyParams],
+	MethodGetLocalTypeParametersOfType: unmarshallerFor[GetTypePropertyParams],
+	MethodGetAliasTypeArgumentsOfType:  unmarshallerFor[GetTypePropertyParams],
+	MethodGetAliasSymbolOfType:         unmarshallerFor[GetTypePropertyParams],
+	MethodGetObjectTypeOfType:          unmarshallerFor[GetTypePropertyParams],
+	MethodGetIndexTypeOfType:           unmarshallerFor[GetTypePropertyParams],
+	MethodGetCheckTypeOfType:           unmarshallerFor[GetTypePropertyParams],
+	MethodGetExtendsTypeOfType:         unmarshallerFor[GetTypePropertyParams],
+	MethodGetBaseTypeOfType:            unmarshallerFor[GetTypePropertyParams],
+	MethodGetConstraintOfType:          unmarshallerFor[GetTypePropertyParams],
+
+	MethodGetTypeParametersOfSignature: unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetParametersOfSignature:     unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetThisParameterOfSignature:  unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetTargetOfSignature:         unmarshallerFor[GetSignaturePropertyParams],
+
 	MethodGetContextualType:                 unmarshallerFor[GetContextualTypeParams],
 	MethodGetBaseTypeOfLiteralType:          unmarshallerFor[GetBaseTypeOfLiteralTypeParams],
 	MethodGetNonNullableType:                unmarshallerFor[GetNonNullableTypeParams],
@@ -463,22 +478,19 @@ type SymbolResponse struct {
 	CheckFlags       uint32       `json:"checkFlags"`
 	Declarations     []NodeHandle `json:"declarations,omitempty"`
 	ValueDeclaration NodeHandle   `json:"valueDeclaration,omitempty"`
+	Parent           SymbolID     `json:"parent,omitzero"`
+	ExportSymbol     SymbolID     `json:"exportSymbol,omitzero"`
 }
 
-func NewSymbolResponse(symbol *ast.Symbol) *SymbolResponse {
-	resp := &SymbolResponse{
-		Id:         SymbolHandle(symbol),
-		Name:       symbol.Name,
-		Flags:      uint32(symbol.Flags),
-		CheckFlags: uint32(symbol.CheckFlags),
+func symbolHandles(symbols []*ast.Symbol) []SymbolID {
+	if len(symbols) == 0 {
+		return nil
 	}
-
-	// Allocate declaration slices; callers fill in the handles.
-	if len(symbol.Declarations) > 0 {
-		resp.Declarations = make([]NodeHandle, len(symbol.Declarations))
+	handles := make([]SymbolID, len(symbols))
+	for i, t := range symbols {
+		handles[i] = SymbolHandle(t)
 	}
-
-	return resp
+	return handles
 }
 
 type GetTypeOfSymbolParams struct {
@@ -502,7 +514,7 @@ type TypeResponse struct {
 	Value any `json:"value"`
 
 	// ObjectType / TypeReference / StringMappingType / IndexType target
-	Target TypeID `json:"target,omitempty"`
+	Target TypeID `json:"target,omitzero"`
 
 	// InterfaceType type parameters
 	TypeParameters      []TypeID `json:"typeParameters,omitempty"`
@@ -515,23 +527,23 @@ type TypeResponse struct {
 	TupleReadonly *bool                  `json:"readonly,omitempty"`
 
 	// IndexedAccessType data
-	ObjectType TypeID `json:"objectType,omitempty"`
-	IndexType  TypeID `json:"indexType,omitempty"`
+	ObjectType TypeID `json:"objectType,omitzero"`
+	IndexType  TypeID `json:"indexType,omitzero"`
 
 	// ConditionalType data
-	CheckType   TypeID `json:"checkType,omitempty"`
-	ExtendsType TypeID `json:"extendsType,omitempty"`
+	CheckType   TypeID `json:"checkType,omitzero"`
+	ExtendsType TypeID `json:"extendsType,omitzero"`
 
 	// SubstitutionType data
-	BaseType        TypeID `json:"baseType,omitempty"`
-	SubstConstraint TypeID `json:"substConstraint,omitempty"`
+	BaseType        TypeID `json:"baseType,omitzero"`
+	SubstConstraint TypeID `json:"substConstraint,omitzero"`
 
 	// TemplateLiteralType text segments
 	Texts []string `json:"texts,omitempty"`
 
 	// FreshableType data (LiteralType and computed enum types)
-	FreshType   TypeID `json:"freshType,omitempty"`
-	RegularType TypeID `json:"regularType,omitempty"`
+	FreshType   TypeID `json:"freshType,omitzero"`
+	RegularType TypeID `json:"regularType,omitzero"`
 
 	// TypeParameter data
 	IsThisType bool `json:"isThisType,omitempty"`
@@ -541,15 +553,15 @@ type TypeResponse struct {
 
 	// TypeAlias data
 	AliasTypeArguments []TypeID `json:"aliasTypeArguments,omitempty"`
-	AliasSymbol        SymbolID `json:"aliasSymbol,omitempty"`
+	AliasSymbol        SymbolID `json:"aliasSymbol,omitzero"`
 
 	// Symbol associated with structured types
-	Symbol SymbolID `json:"symbol,omitempty"`
+	Symbol SymbolID `json:"symbol,omitzero"`
 }
 
-func newTypeData(t *checker.Type) *TypeResponse {
+func newTypeResponse(t *checker.Type, id TypeID) *TypeResponse {
 	resp := &TypeResponse{
-		Id:    TypeHandle(t),
+		Id:    id,
 		Flags: uint32(t.Flags()),
 	}
 
@@ -665,8 +677,8 @@ type SignatureResponse struct {
 	Declaration    NodeHandle  `json:"declaration,omitempty"`
 	TypeParameters []TypeID    `json:"typeParameters,omitempty"`
 	Parameters     []SymbolID  `json:"parameters,omitempty"`
-	ThisParameter  SymbolID    `json:"thisParameter,omitempty"`
-	Target         SignatureID `json:"target,omitempty"`
+	ThisParameter  SymbolID    `json:"thisParameter,omitzero"`
+	Target         SignatureID `json:"target,omitzero"`
 }
 
 type GetSourceFileParams struct {
@@ -686,35 +698,22 @@ type ResolveNameParams struct {
 	ExcludeGlobals bool                `json:"excludeGlobals,omitempty"` // Whether to exclude global symbols
 }
 
-type GetParentOfSymbolParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Symbol   SymbolID   `json:"symbol"`
-}
-
-type GetMembersOfSymbolParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Symbol   SymbolID   `json:"symbol"`
-}
-
-type GetExportsOfSymbolParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Symbol   SymbolID   `json:"symbol"`
-}
-
-type GetExportSymbolOfSymbolParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Symbol   SymbolID   `json:"symbol"`
-}
-
-type GetSymbolOfTypeParams struct {
-	Snapshot SnapshotID `json:"snapshot"`
-	Type     TypeID     `json:"type"`
-}
-
 // GetTypePropertyParams is used for all type sub-property endpoints.
 type GetTypePropertyParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
-	Type     TypeID     `json:"type"`
+	Type     TypeID     `json:"objectId"`
+}
+
+// GetSymbolPropertyParams is used for all symbol sub-property endpoints.
+type GetSymbolPropertyParams struct {
+	Snapshot SnapshotID `json:"snapshot"`
+	Symbol   SymbolID   `json:"objectId"`
+}
+
+// GetSignaturePropertyParams is used for all signature sub-property endpoints.
+type GetSignaturePropertyParams struct {
+	Snapshot  SnapshotID  `json:"snapshot"`
+	Signature SignatureID `json:"objectId"`
 }
 
 // GetContextualTypeParams returns the contextual type for a node.

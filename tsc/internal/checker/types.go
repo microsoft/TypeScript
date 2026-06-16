@@ -153,7 +153,10 @@ const externalHelpersModuleNameText = "tslib"
 
 // Ids
 
-type TypeId uint32
+type (
+	TypeId      uint32
+	SignatureId uint32
+)
 
 // Links for referenced symbols
 
@@ -1271,6 +1274,7 @@ const (
 // Signature
 
 type Signature struct {
+	id                       SignatureId
 	flags                    SignatureFlags
 	minArgumentCount         int32
 	resolvedMinArgumentCount int32
@@ -1284,6 +1288,10 @@ type Signature struct {
 	mapper                   *TypeMapper
 	isolatedSignatureType    *Type
 	composite                *CompositeSignature
+}
+
+func (s *Signature) Id() SignatureId {
+	return s.id
 }
 
 func (s *Signature) Flags() SignatureFlags {

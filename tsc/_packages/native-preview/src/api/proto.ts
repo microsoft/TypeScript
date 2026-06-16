@@ -134,6 +134,8 @@ export interface SymbolResponse {
     checkFlags: number;
     declarations?: string[];
     valueDeclaration?: string;
+    parent?: number;
+    exportSymbol?: number;
 }
 
 export interface TypeResponse {
