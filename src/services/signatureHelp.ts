@@ -28,12 +28,14 @@ import {
     getInvokedExpression,
     getPossibleGenericSignatures,
     getPossibleTypeArgumentsInfo,
+    getTextOfIdentifierOrLiteral,
     Identifier,
     identity,
     InternalSymbolName,
     isArrayBindingPattern,
     isBinaryExpression,
     isBindingElement,
+    isBindingPattern,
     isBlock,
     isCallOrNewExpression,
     isFunctionTypeNode,
@@ -45,6 +47,7 @@ import {
     isMethodDeclaration,
     isNoSubstitutionTemplateLiteral,
     isObjectBindingPattern,
+    isOmittedExpression,
     isParameter,
     isPropertyAccessExpression,
     isSourceFile,
@@ -59,6 +62,7 @@ import {
     JsxTagNameExpression,
     last,
     lastOrUndefined,
+    lineBreakPart,
     ListFormat,
     map,
     mapToDisplayParts,
@@ -85,6 +89,7 @@ import {
     SyntaxKind,
     TaggedTemplateExpression,
     TemplateExpression,
+    textPart,
     TextSpan,
     tryCast,
     TupleTypeReference,
@@ -795,7 +800,43 @@ function createSignatureHelpParameterForParameter(parameter: Symbol, checker: Ty
     });
     const isOptional = checker.isOptionalParameter(parameter.valueDeclaration as ParameterDeclaration);
     const isRest = isTransientSymbol(parameter) && !!(parameter.links.checkFlags & CheckFlags.RestParameter);
-    return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional, isRest };
+    let documentation = parameter.getDocumentationComment(checker);
+    // A destructured parameter (binding pattern) carries the per-property descriptions on nested
+    // `@param parent.child` tags, which are not part of the parameter symbol's own documentation.
+    // Surface those alongside the parameter doc, matching how quick info resolves them on hover.
+    const destructuredDocumentation = getDestructuredParameterDocumentation(parameter, checker);
+    if (destructuredDocumentation.length) {
+        documentation = documentation.length
+            ? [...documentation, lineBreakPart(), ...destructuredDocumentation]
+            : destructuredDocumentation;
+    }
+    return { name: parameter.name, documentation, displayParts, isOptional, isRest };
+}
+
+function getDestructuredParameterDocumentation(parameter: Symbol, checker: TypeChecker): SymbolDisplayPart[] {
+    const declaration = parameter.valueDeclaration;
+    if (!declaration || !isParameter(declaration) || !isBindingPattern(declaration.name)) {
+        return emptyArray;
+    }
+    const objectType = checker.getTypeAtLocation(declaration.name);
+    const types = objectType.isUnion() ? objectType.types : [objectType];
+    const parts: SymbolDisplayPart[] = [];
+    for (const element of declaration.name.elements) {
+        if (isOmittedExpression(element)) continue;
+        const nameNode = element.propertyName || element.name;
+        if (!isIdentifier(nameNode)) continue;
+        const propertyName = getTextOfIdentifierOrLiteral(nameNode);
+        const propertyDocumentation = firstDefined(types, type => {
+            const property = type.getProperty(propertyName);
+            const doc = property && property.getDocumentationComment(checker);
+            return doc && doc.length ? doc : undefined;
+        });
+        if (propertyDocumentation) {
+            if (parts.length) parts.push(lineBreakPart());
+            parts.push(textPart(propertyName), textPart(": "), ...propertyDocumentation);
+        }
+    }
+    return parts;
 }
 
 function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile, printer: Printer): SignatureHelpParameter {
