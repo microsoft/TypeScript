@@ -216,7 +216,7 @@ func (r *aliasResolver) GetSourceOfProjectReferenceIfOutputIncluded(file ast.Has
 
 // IsSourceFileDefaultLibrary implements checker.Program.
 func (r *aliasResolver) IsSourceFileDefaultLibrary(path tspath.Path) bool {
-	panic("unimplemented")
+	return false
 }
 
 // IsSourceFromProjectReference implements checker.Program.
