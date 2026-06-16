@@ -50,6 +50,7 @@ import {
     isOmittedExpression,
     isParameter,
     isPropertyAccessExpression,
+    isPropertyNameLiteral,
     isSourceFile,
     isSourceFileJS,
     isSpreadElement,
@@ -823,8 +824,13 @@ function getDestructuredParameterDocumentation(parameter: Symbol, checker: TypeC
     const parts: SymbolDisplayPart[] = [];
     for (const element of declaration.name.elements) {
         if (isOmittedExpression(element)) continue;
+        // A rest element (`...rest`) captures the remaining properties; its name is not a property
+        // of the object type, so never attempt to resolve documentation for it.
+        if (element.dotDotDotToken) continue;
         const nameNode = element.propertyName || element.name;
-        if (!isIdentifier(nameNode)) continue;
+        // Property names may be identifiers, string literals or numeric literals; computed and
+        // private names cannot be resolved statically and are skipped.
+        if (!isPropertyNameLiteral(nameNode)) continue;
         const propertyName = getTextOfIdentifierOrLiteral(nameNode);
         const propertyDocumentation = firstDefined(types, type => {
             const property = type.getProperty(propertyName);
