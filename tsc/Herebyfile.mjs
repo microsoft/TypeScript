@@ -1555,6 +1555,7 @@ async function runBuildNativePreviewPackages() {
     const inputPackageJson = JSON.parse(fs.readFileSync(path.join(inputDir, "package.json"), "utf8"));
     inputPackageJson.version = getVersion();
     delete inputPackageJson.private;
+    inputPackageJson.files = [...new Set([...(inputPackageJson.files ?? []), "NOTICE.txt"])];
     stripSourceConditions(inputPackageJson);
 
     const { stdout: gitHead } = await $pipe`git rev-parse HEAD`;
@@ -1575,7 +1576,7 @@ async function runBuildNativePreviewPackages() {
 
     await fs.promises.writeFile(path.join(mainPackageDir, "package.json"), JSON.stringify(mainPackage, undefined, 4));
     await fs.promises.copyFile("LICENSE", path.join(mainPackageDir, "LICENSE"));
-    // No NOTICE.txt here; does not ship the binary or libs. If this changes, we should add it.
+    await fs.promises.copyFile("NOTICE.txt", path.join(mainPackageDir, "NOTICE.txt"));
 
     // Build JS API and copy dist into the package.
     await $`npm run -w @typescript/native-preview build`;
@@ -1611,6 +1612,7 @@ async function runBuildNativePreviewPackages() {
         const packageJson = {
             ...inputPackageJson,
             bin: undefined,
+            files: ["lib", "NOTICE.txt"],
             imports: undefined,
             dependencies: undefined,
             name: npmPackageName,
