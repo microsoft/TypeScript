@@ -1,0 +1,238 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariablesWithDefaults.ts] ////
+
+=== dependentDestructuredVariablesWithDefaults.ts ===
+// https://github.com/microsoft/TypeScript/issues/50139
+// A default on a *required* discriminant must not disable discriminant narrowing of siblings.
+
+type Props =
+>Props : Symbol(Props, Decl(dependentDestructuredVariablesWithDefaults.ts, 0, 0))
+
+    | { isText: true, children: string }
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 4, 7))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 4, 21))
+
+    | { isText: false, children: number };
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 5, 7))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 5, 22))
+
+// Baseline: no default — narrows (already worked).
+function noDefault({ isText, children }: Props) {
+>noDefault : Symbol(noDefault, Decl(dependentDestructuredVariablesWithDefaults.ts, 5, 42))
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 8, 20))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 8, 28))
+>Props : Symbol(Props, Decl(dependentDestructuredVariablesWithDefaults.ts, 0, 0))
+
+    if (isText === true) {
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 8, 20))
+
+        const s: string = children;
+>s : Symbol(s, Decl(dependentDestructuredVariablesWithDefaults.ts, 10, 13))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 8, 28))
+
+    } else {
+        const n: number = children;
+>n : Symbol(n, Decl(dependentDestructuredVariablesWithDefaults.ts, 12, 13))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 8, 28))
+    }
+}
+
+// The bug: default on a required discriminant should still narrow siblings.
+function withDefault({ isText = false, children }: Props) {
+>withDefault : Symbol(withDefault, Decl(dependentDestructuredVariablesWithDefaults.ts, 14, 1))
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 17, 22))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 17, 38))
+>Props : Symbol(Props, Decl(dependentDestructuredVariablesWithDefaults.ts, 0, 0))
+
+    if (isText === true) {
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 17, 22))
+
+        const s: string = children;
+>s : Symbol(s, Decl(dependentDestructuredVariablesWithDefaults.ts, 19, 13))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 17, 38))
+
+    } else {
+        const n: number = children;
+>n : Symbol(n, Decl(dependentDestructuredVariablesWithDefaults.ts, 21, 13))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 17, 38))
+    }
+}
+
+// switch form.
+function withDefaultSwitch({ isText = false, children }: Props) {
+>withDefaultSwitch : Symbol(withDefaultSwitch, Decl(dependentDestructuredVariablesWithDefaults.ts, 23, 1))
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 26, 28))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 26, 44))
+>Props : Symbol(Props, Decl(dependentDestructuredVariablesWithDefaults.ts, 0, 0))
+
+    switch (isText) {
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 26, 28))
+
+        case true: { const s: string = children; break; }
+>s : Symbol(s, Decl(dependentDestructuredVariablesWithDefaults.ts, 28, 26))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 26, 44))
+
+        case false: { const n: number = children; break; }
+>n : Symbol(n, Decl(dependentDestructuredVariablesWithDefaults.ts, 29, 27))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 26, 44))
+    }
+}
+
+// Renamed binding `{ isText: t = false }`.
+function renamed({ isText: t = false, children }: Props) {
+>renamed : Symbol(renamed, Decl(dependentDestructuredVariablesWithDefaults.ts, 31, 1))
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 4, 7), Decl(dependentDestructuredVariablesWithDefaults.ts, 5, 7))
+>t : Symbol(t, Decl(dependentDestructuredVariablesWithDefaults.ts, 34, 18))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 34, 37))
+>Props : Symbol(Props, Decl(dependentDestructuredVariablesWithDefaults.ts, 0, 0))
+
+    if (t === true) {
+>t : Symbol(t, Decl(dependentDestructuredVariablesWithDefaults.ts, 34, 18))
+
+        const s: string = children;
+>s : Symbol(s, Decl(dependentDestructuredVariablesWithDefaults.ts, 36, 13))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 34, 37))
+
+    } else {
+        const n: number = children;
+>n : Symbol(n, Decl(dependentDestructuredVariablesWithDefaults.ts, 38, 13))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 34, 37))
+    }
+}
+
+// Three-way union with a string discriminant.
+type Three =
+>Three : Symbol(Three, Decl(dependentDestructuredVariablesWithDefaults.ts, 40, 1))
+
+    | { t: "i", v: number }
+>t : Symbol(t, Decl(dependentDestructuredVariablesWithDefaults.ts, 44, 7))
+>v : Symbol(v, Decl(dependentDestructuredVariablesWithDefaults.ts, 44, 15))
+
+    | { t: "s", v: string }
+>t : Symbol(t, Decl(dependentDestructuredVariablesWithDefaults.ts, 45, 7))
+>v : Symbol(v, Decl(dependentDestructuredVariablesWithDefaults.ts, 45, 15))
+
+    | { t: "b", v: boolean };
+>t : Symbol(t, Decl(dependentDestructuredVariablesWithDefaults.ts, 46, 7))
+>v : Symbol(v, Decl(dependentDestructuredVariablesWithDefaults.ts, 46, 15))
+
+function threeWay({ t = "i", v }: Three) {
+>threeWay : Symbol(threeWay, Decl(dependentDestructuredVariablesWithDefaults.ts, 46, 29))
+>t : Symbol(t, Decl(dependentDestructuredVariablesWithDefaults.ts, 48, 19))
+>v : Symbol(v, Decl(dependentDestructuredVariablesWithDefaults.ts, 48, 28))
+>Three : Symbol(Three, Decl(dependentDestructuredVariablesWithDefaults.ts, 40, 1))
+
+    if (t === "s") {
+>t : Symbol(t, Decl(dependentDestructuredVariablesWithDefaults.ts, 48, 19))
+
+        const s: string = v;
+>s : Symbol(s, Decl(dependentDestructuredVariablesWithDefaults.ts, 50, 13))
+>v : Symbol(v, Decl(dependentDestructuredVariablesWithDefaults.ts, 48, 28))
+    }
+}
+
+// const destructuring (not a parameter).
+declare const props: Props;
+>props : Symbol(props, Decl(dependentDestructuredVariablesWithDefaults.ts, 55, 13))
+>Props : Symbol(Props, Decl(dependentDestructuredVariablesWithDefaults.ts, 0, 0))
+
+function constDestructure() {
+>constDestructure : Symbol(constDestructure, Decl(dependentDestructuredVariablesWithDefaults.ts, 55, 27))
+
+    const { isText = false, children } = props;
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 57, 11))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 57, 27))
+>props : Symbol(props, Decl(dependentDestructuredVariablesWithDefaults.ts, 55, 13))
+
+    if (isText === true) {
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 57, 11))
+
+        const s: string = children;
+>s : Symbol(s, Decl(dependentDestructuredVariablesWithDefaults.ts, 59, 13))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 57, 27))
+    }
+}
+
+// --- Soundness boundary: these must still error ---
+
+// Optional discriminant + default: calling with the property omitted yields the default,
+// so the sibling cannot be safely narrowed.
+type OptDisc =
+>OptDisc : Symbol(OptDisc, Decl(dependentDestructuredVariablesWithDefaults.ts, 61, 1))
+
+    | { kind?: "a", x: string }
+>kind : Symbol(kind, Decl(dependentDestructuredVariablesWithDefaults.ts, 68, 7))
+>x : Symbol(x, Decl(dependentDestructuredVariablesWithDefaults.ts, 68, 19))
+
+    | { kind?: "b", x: number };
+>kind : Symbol(kind, Decl(dependentDestructuredVariablesWithDefaults.ts, 69, 7))
+>x : Symbol(x, Decl(dependentDestructuredVariablesWithDefaults.ts, 69, 19))
+
+function optionalDiscriminant({ kind = "a", x }: OptDisc) {
+>optionalDiscriminant : Symbol(optionalDiscriminant, Decl(dependentDestructuredVariablesWithDefaults.ts, 69, 32))
+>kind : Symbol(kind, Decl(dependentDestructuredVariablesWithDefaults.ts, 71, 31))
+>x : Symbol(x, Decl(dependentDestructuredVariablesWithDefaults.ts, 71, 43))
+>OptDisc : Symbol(OptDisc, Decl(dependentDestructuredVariablesWithDefaults.ts, 61, 1))
+
+    if (kind === "a") {
+>kind : Symbol(kind, Decl(dependentDestructuredVariablesWithDefaults.ts, 71, 31))
+
+        const s: string = x; // error
+>s : Symbol(s, Decl(dependentDestructuredVariablesWithDefaults.ts, 73, 13))
+>x : Symbol(x, Decl(dependentDestructuredVariablesWithDefaults.ts, 71, 43))
+    }
+}
+
+// Discriminant whose type already includes undefined.
+type UndefDisc =
+>UndefDisc : Symbol(UndefDisc, Decl(dependentDestructuredVariablesWithDefaults.ts, 75, 1))
+
+    | { kind: "a" | undefined, x: string }
+>kind : Symbol(kind, Decl(dependentDestructuredVariablesWithDefaults.ts, 79, 7))
+>x : Symbol(x, Decl(dependentDestructuredVariablesWithDefaults.ts, 79, 30))
+
+    | { kind: "b", x: number };
+>kind : Symbol(kind, Decl(dependentDestructuredVariablesWithDefaults.ts, 80, 7))
+>x : Symbol(x, Decl(dependentDestructuredVariablesWithDefaults.ts, 80, 18))
+
+function undefinedDiscriminant({ kind = "a", x }: UndefDisc) {
+>undefinedDiscriminant : Symbol(undefinedDiscriminant, Decl(dependentDestructuredVariablesWithDefaults.ts, 80, 31))
+>kind : Symbol(kind, Decl(dependentDestructuredVariablesWithDefaults.ts, 82, 32))
+>x : Symbol(x, Decl(dependentDestructuredVariablesWithDefaults.ts, 82, 44))
+>UndefDisc : Symbol(UndefDisc, Decl(dependentDestructuredVariablesWithDefaults.ts, 75, 1))
+
+    if (kind === "a") {
+>kind : Symbol(kind, Decl(dependentDestructuredVariablesWithDefaults.ts, 82, 32))
+
+        const s: string = x; // error
+>s : Symbol(s, Decl(dependentDestructuredVariablesWithDefaults.ts, 84, 13))
+>x : Symbol(x, Decl(dependentDestructuredVariablesWithDefaults.ts, 82, 44))
+    }
+}
+
+// Sibling has its OWN default: it must not be narrowed from the parent.
+type PropsOpt =
+>PropsOpt : Symbol(PropsOpt, Decl(dependentDestructuredVariablesWithDefaults.ts, 86, 1))
+
+    | { isText: true, children?: string }
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 90, 7))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 90, 21))
+
+    | { isText: false, children?: number };
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 91, 7))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 91, 22))
+
+function siblingDefault({ isText = false, children = 0 }: PropsOpt) {
+>siblingDefault : Symbol(siblingDefault, Decl(dependentDestructuredVariablesWithDefaults.ts, 91, 43))
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 93, 25))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 93, 41))
+>PropsOpt : Symbol(PropsOpt, Decl(dependentDestructuredVariablesWithDefaults.ts, 86, 1))
+
+    if (isText === true) {
+>isText : Symbol(isText, Decl(dependentDestructuredVariablesWithDefaults.ts, 93, 25))
+
+        const s: string = children; // error
+>s : Symbol(s, Decl(dependentDestructuredVariablesWithDefaults.ts, 95, 13))
+>children : Symbol(children, Decl(dependentDestructuredVariablesWithDefaults.ts, 93, 41))
+    }
+}
+

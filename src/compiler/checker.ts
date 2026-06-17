@@ -29475,7 +29475,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isIdentifier(expr)) {
                     const symbol = getResolvedSymbol(expr);
                     const declaration = getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
-                    if (declaration && (isBindingElement(declaration) || isParameter(declaration)) && reference === declaration.parent && !declaration.initializer && !declaration.dotDotDotToken) {
+                    if (
+                        declaration && (isBindingElement(declaration) || isParameter(declaration)) && reference === declaration.parent && !declaration.dotDotDotToken &&
+                        (!declaration.initializer || isBindingElement(declaration) && bindingElementDefaultNeverApplies(declaration))
+                    ) {
                         return declaration;
                     }
                 }
@@ -29508,6 +29511,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function getCandidateVariableDeclarationInitializer(node: Node) {
                 return isVariableDeclaration(node) && !node.type && node.initializer ? skipParentheses(node.initializer) : undefined;
+            }
+
+            function bindingElementDefaultNeverApplies(declaration: BindingElement) {
+                // A binding element with a default initializer (e.g. `{ kind = "a" }`) only faithfully mirrors its
+                // source property for discriminant narrowing when the default can never substitute for a real value,
+                // i.e. the property is present and non-undefined in every constituent of the declared union. For an
+                // optional or possibly-undefined property the default stands in for `undefined`, so narrowing the
+                // parent by this binding would be unsound.
+                const name = getAccessedPropertyName(declaration);
+                if (name === undefined) {
+                    return false;
+                }
+                const prop = getPropertyOfType(declaredType, name);
+                return !!prop && !(prop.flags & SymbolFlags.Optional) && !(getCheckFlags(prop) & CheckFlags.Partial) &&
+                    !maybeTypeOfKind(getTypeOfSymbol(prop), TypeFlags.Undefined);
             }
         }
 

@@ -1,0 +1,383 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariablesWithDefaults.ts] ////
+
+=== dependentDestructuredVariablesWithDefaults.ts ===
+// https://github.com/microsoft/TypeScript/issues/50139
+// A default on a *required* discriminant must not disable discriminant narrowing of siblings.
+
+type Props =
+>Props : Props
+>      : ^^^^^
+
+    | { isText: true, children: string }
+>isText : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+>children : string
+>         : ^^^^^^
+
+    | { isText: false, children: number };
+>isText : false
+>       : ^^^^^
+>false : false
+>      : ^^^^^
+>children : number
+>         : ^^^^^^
+
+// Baseline: no default — narrows (already worked).
+function noDefault({ isText, children }: Props) {
+>noDefault : ({ isText, children }: Props) => void
+>          : ^                    ^^     ^^^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>children : string | number
+>         : ^^^^^^^^^^^^^^^
+
+    if (isText === true) {
+>isText === true : boolean
+>                : ^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        const s: string = children;
+>s : string
+>  : ^^^^^^
+>children : string
+>         : ^^^^^^
+
+    } else {
+        const n: number = children;
+>n : number
+>  : ^^^^^^
+>children : number
+>         : ^^^^^^
+    }
+}
+
+// The bug: default on a required discriminant should still narrow siblings.
+function withDefault({ isText = false, children }: Props) {
+>withDefault : ({ isText, children }: Props) => void
+>            : ^                    ^^     ^^^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>false : false
+>      : ^^^^^
+>children : string | number
+>         : ^^^^^^^^^^^^^^^
+
+    if (isText === true) {
+>isText === true : boolean
+>                : ^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        const s: string = children;
+>s : string
+>  : ^^^^^^
+>children : string
+>         : ^^^^^^
+
+    } else {
+        const n: number = children;
+>n : number
+>  : ^^^^^^
+>children : number
+>         : ^^^^^^
+    }
+}
+
+// switch form.
+function withDefaultSwitch({ isText = false, children }: Props) {
+>withDefaultSwitch : ({ isText, children }: Props) => void
+>                  : ^                    ^^     ^^^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>false : false
+>      : ^^^^^
+>children : string | number
+>         : ^^^^^^^^^^^^^^^
+
+    switch (isText) {
+>isText : boolean
+>       : ^^^^^^^
+
+        case true: { const s: string = children; break; }
+>true : true
+>     : ^^^^
+>s : string
+>  : ^^^^^^
+>children : string
+>         : ^^^^^^
+
+        case false: { const n: number = children; break; }
+>false : false
+>      : ^^^^^
+>n : number
+>  : ^^^^^^
+>children : number
+>         : ^^^^^^
+    }
+}
+
+// Renamed binding `{ isText: t = false }`.
+function renamed({ isText: t = false, children }: Props) {
+>renamed : ({ isText: t, children }: Props) => void
+>        : ^                       ^^     ^^^^^^^^^
+>isText : any
+>       : ^^^
+>t : boolean
+>  : ^^^^^^^
+>false : false
+>      : ^^^^^
+>children : string | number
+>         : ^^^^^^^^^^^^^^^
+
+    if (t === true) {
+>t === true : boolean
+>           : ^^^^^^^
+>t : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        const s: string = children;
+>s : string
+>  : ^^^^^^
+>children : string
+>         : ^^^^^^
+
+    } else {
+        const n: number = children;
+>n : number
+>  : ^^^^^^
+>children : number
+>         : ^^^^^^
+    }
+}
+
+// Three-way union with a string discriminant.
+type Three =
+>Three : Three
+>      : ^^^^^
+
+    | { t: "i", v: number }
+>t : "i"
+>  : ^^^
+>v : number
+>  : ^^^^^^
+
+    | { t: "s", v: string }
+>t : "s"
+>  : ^^^
+>v : string
+>  : ^^^^^^
+
+    | { t: "b", v: boolean };
+>t : "b"
+>  : ^^^
+>v : boolean
+>  : ^^^^^^^
+
+function threeWay({ t = "i", v }: Three) {
+>threeWay : ({ t, v }: Three) => void
+>         : ^        ^^     ^^^^^^^^^
+>t : "i" | "s" | "b"
+>  : ^^^^^^^^^^^^^^^
+>"i" : "i"
+>    : ^^^
+>v : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (t === "s") {
+>t === "s" : boolean
+>          : ^^^^^^^
+>t : "i" | "s" | "b"
+>  : ^^^^^^^^^^^^^^^
+>"s" : "s"
+>    : ^^^
+
+        const s: string = v;
+>s : string
+>  : ^^^^^^
+>v : string
+>  : ^^^^^^
+    }
+}
+
+// const destructuring (not a parameter).
+declare const props: Props;
+>props : Props
+>      : ^^^^^
+
+function constDestructure() {
+>constDestructure : () => void
+>                 : ^^^^^^^^^^
+
+    const { isText = false, children } = props;
+>isText : boolean
+>       : ^^^^^^^
+>false : false
+>      : ^^^^^
+>children : string | number
+>         : ^^^^^^^^^^^^^^^
+>props : Props
+>      : ^^^^^
+
+    if (isText === true) {
+>isText === true : boolean
+>                : ^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        const s: string = children;
+>s : string
+>  : ^^^^^^
+>children : string
+>         : ^^^^^^
+    }
+}
+
+// --- Soundness boundary: these must still error ---
+
+// Optional discriminant + default: calling with the property omitted yields the default,
+// so the sibling cannot be safely narrowed.
+type OptDisc =
+>OptDisc : OptDisc
+>        : ^^^^^^^
+
+    | { kind?: "a", x: string }
+>kind : "a" | undefined
+>     : ^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+
+    | { kind?: "b", x: number };
+>kind : "b" | undefined
+>     : ^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+
+function optionalDiscriminant({ kind = "a", x }: OptDisc) {
+>optionalDiscriminant : ({ kind, x }: OptDisc) => void
+>                     : ^           ^^       ^^^^^^^^^
+>kind : "b" | "a"
+>     : ^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    if (kind === "a") {
+>kind === "a" : boolean
+>             : ^^^^^^^
+>kind : "b" | "a"
+>     : ^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+        const s: string = x; // error
+>s : string
+>  : ^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+    }
+}
+
+// Discriminant whose type already includes undefined.
+type UndefDisc =
+>UndefDisc : UndefDisc
+>          : ^^^^^^^^^
+
+    | { kind: "a" | undefined, x: string }
+>kind : "a" | undefined
+>     : ^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+
+    | { kind: "b", x: number };
+>kind : "b"
+>     : ^^^
+>x : number
+>  : ^^^^^^
+
+function undefinedDiscriminant({ kind = "a", x }: UndefDisc) {
+>undefinedDiscriminant : ({ kind, x }: UndefDisc) => void
+>                      : ^           ^^         ^^^^^^^^^
+>kind : "b" | "a"
+>     : ^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    if (kind === "a") {
+>kind === "a" : boolean
+>             : ^^^^^^^
+>kind : "b" | "a"
+>     : ^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+        const s: string = x; // error
+>s : string
+>  : ^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+    }
+}
+
+// Sibling has its OWN default: it must not be narrowed from the parent.
+type PropsOpt =
+>PropsOpt : PropsOpt
+>         : ^^^^^^^^
+
+    | { isText: true, children?: string }
+>isText : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+>children : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+
+    | { isText: false, children?: number };
+>isText : false
+>       : ^^^^^
+>false : false
+>      : ^^^^^
+>children : number | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+
+function siblingDefault({ isText = false, children = 0 }: PropsOpt) {
+>siblingDefault : ({ isText, children }: PropsOpt) => void
+>               : ^                    ^^        ^^^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>false : false
+>      : ^^^^^
+>children : string | number
+>         : ^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    if (isText === true) {
+>isText === true : boolean
+>                : ^^^^^^^
+>isText : boolean
+>       : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        const s: string = children; // error
+>s : string
+>  : ^^^^^^
+>children : string | number
+>         : ^^^^^^^^^^^^^^^
+    }
+}
+
