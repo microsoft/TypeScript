@@ -1925,6 +1925,33 @@ export const pkg9 = 9;
   "size": 3576
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject (recursive)
+  /user/username/projects/myproject/pkg0 (recursive)
+  /user/username/projects/myproject/pkg1 (recursive)
+  /user/username/projects/myproject/pkg10 (recursive)
+  /user/username/projects/myproject/pkg11 (recursive)
+  /user/username/projects/myproject/pkg12 (recursive)
+  /user/username/projects/myproject/pkg13 (recursive)
+  /user/username/projects/myproject/pkg14 (recursive)
+  /user/username/projects/myproject/pkg15 (recursive)
+  /user/username/projects/myproject/pkg16 (recursive)
+  /user/username/projects/myproject/pkg17 (recursive)
+  /user/username/projects/myproject/pkg18 (recursive)
+  /user/username/projects/myproject/pkg19 (recursive)
+  /user/username/projects/myproject/pkg2 (recursive)
+  /user/username/projects/myproject/pkg20 (recursive)
+  /user/username/projects/myproject/pkg21 (recursive)
+  /user/username/projects/myproject/pkg22 (recursive)
+  /user/username/projects/myproject/pkg3 (recursive)
+  /user/username/projects/myproject/pkg4 (recursive)
+  /user/username/projects/myproject/pkg5 (recursive)
+  /user/username/projects/myproject/pkg6 (recursive)
+  /user/username/projects/myproject/pkg7 (recursive)
+  /user/username/projects/myproject/pkg8 (recursive)
+  /user/username/projects/myproject/pkg9 (recursive)
 pkg0/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -2323,6 +2350,33 @@ const someConst2 = 10;
 //// [/user/username/projects/myproject/pkg9/tsconfig.tsbuildinfo] *mTime changed*
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo] *mTime changed*
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject (recursive)
+  /user/username/projects/myproject/pkg0 (recursive)
+  /user/username/projects/myproject/pkg1 (recursive)
+  /user/username/projects/myproject/pkg10 (recursive)
+  /user/username/projects/myproject/pkg11 (recursive)
+  /user/username/projects/myproject/pkg12 (recursive)
+  /user/username/projects/myproject/pkg13 (recursive)
+  /user/username/projects/myproject/pkg14 (recursive)
+  /user/username/projects/myproject/pkg15 (recursive)
+  /user/username/projects/myproject/pkg16 (recursive)
+  /user/username/projects/myproject/pkg17 (recursive)
+  /user/username/projects/myproject/pkg18 (recursive)
+  /user/username/projects/myproject/pkg19 (recursive)
+  /user/username/projects/myproject/pkg2 (recursive)
+  /user/username/projects/myproject/pkg20 (recursive)
+  /user/username/projects/myproject/pkg21 (recursive)
+  /user/username/projects/myproject/pkg22 (recursive)
+  /user/username/projects/myproject/pkg3 (recursive)
+  /user/username/projects/myproject/pkg4 (recursive)
+  /user/username/projects/myproject/pkg5 (recursive)
+  /user/username/projects/myproject/pkg6 (recursive)
+  /user/username/projects/myproject/pkg7 (recursive)
+  /user/username/projects/myproject/pkg8 (recursive)
+  /user/username/projects/myproject/pkg9 (recursive)
 pkg0/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/myproject/pkg0/index.ts
@@ -2335,6 +2389,33 @@ Edit [1]:: no change
 
 Output::
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject (recursive)
+  /user/username/projects/myproject/pkg0 (recursive)
+  /user/username/projects/myproject/pkg1 (recursive)
+  /user/username/projects/myproject/pkg10 (recursive)
+  /user/username/projects/myproject/pkg11 (recursive)
+  /user/username/projects/myproject/pkg12 (recursive)
+  /user/username/projects/myproject/pkg13 (recursive)
+  /user/username/projects/myproject/pkg14 (recursive)
+  /user/username/projects/myproject/pkg15 (recursive)
+  /user/username/projects/myproject/pkg16 (recursive)
+  /user/username/projects/myproject/pkg17 (recursive)
+  /user/username/projects/myproject/pkg18 (recursive)
+  /user/username/projects/myproject/pkg19 (recursive)
+  /user/username/projects/myproject/pkg2 (recursive)
+  /user/username/projects/myproject/pkg20 (recursive)
+  /user/username/projects/myproject/pkg21 (recursive)
+  /user/username/projects/myproject/pkg22 (recursive)
+  /user/username/projects/myproject/pkg3 (recursive)
+  /user/username/projects/myproject/pkg4 (recursive)
+  /user/username/projects/myproject/pkg5 (recursive)
+  /user/username/projects/myproject/pkg6 (recursive)
+  /user/username/projects/myproject/pkg7 (recursive)
+  /user/username/projects/myproject/pkg8 (recursive)
+  /user/username/projects/myproject/pkg9 (recursive)
 
 
 Edit [2]:: dts change
@@ -2931,6 +3012,33 @@ export const someConst = 10;
   "size": 3614
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject (recursive)
+  /user/username/projects/myproject/pkg0 (recursive)
+  /user/username/projects/myproject/pkg1 (recursive)
+  /user/username/projects/myproject/pkg10 (recursive)
+  /user/username/projects/myproject/pkg11 (recursive)
+  /user/username/projects/myproject/pkg12 (recursive)
+  /user/username/projects/myproject/pkg13 (recursive)
+  /user/username/projects/myproject/pkg14 (recursive)
+  /user/username/projects/myproject/pkg15 (recursive)
+  /user/username/projects/myproject/pkg16 (recursive)
+  /user/username/projects/myproject/pkg17 (recursive)
+  /user/username/projects/myproject/pkg18 (recursive)
+  /user/username/projects/myproject/pkg19 (recursive)
+  /user/username/projects/myproject/pkg2 (recursive)
+  /user/username/projects/myproject/pkg20 (recursive)
+  /user/username/projects/myproject/pkg21 (recursive)
+  /user/username/projects/myproject/pkg22 (recursive)
+  /user/username/projects/myproject/pkg3 (recursive)
+  /user/username/projects/myproject/pkg4 (recursive)
+  /user/username/projects/myproject/pkg5 (recursive)
+  /user/username/projects/myproject/pkg6 (recursive)
+  /user/username/projects/myproject/pkg7 (recursive)
+  /user/username/projects/myproject/pkg8 (recursive)
+  /user/username/projects/myproject/pkg9 (recursive)
 pkg0/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/myproject/pkg0/index.ts
@@ -3037,3 +3145,30 @@ Edit [3]:: no change
 
 Output::
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject (recursive)
+  /user/username/projects/myproject/pkg0 (recursive)
+  /user/username/projects/myproject/pkg1 (recursive)
+  /user/username/projects/myproject/pkg10 (recursive)
+  /user/username/projects/myproject/pkg11 (recursive)
+  /user/username/projects/myproject/pkg12 (recursive)
+  /user/username/projects/myproject/pkg13 (recursive)
+  /user/username/projects/myproject/pkg14 (recursive)
+  /user/username/projects/myproject/pkg15 (recursive)
+  /user/username/projects/myproject/pkg16 (recursive)
+  /user/username/projects/myproject/pkg17 (recursive)
+  /user/username/projects/myproject/pkg18 (recursive)
+  /user/username/projects/myproject/pkg19 (recursive)
+  /user/username/projects/myproject/pkg2 (recursive)
+  /user/username/projects/myproject/pkg20 (recursive)
+  /user/username/projects/myproject/pkg21 (recursive)
+  /user/username/projects/myproject/pkg22 (recursive)
+  /user/username/projects/myproject/pkg3 (recursive)
+  /user/username/projects/myproject/pkg4 (recursive)
+  /user/username/projects/myproject/pkg5 (recursive)
+  /user/username/projects/myproject/pkg6 (recursive)
+  /user/username/projects/myproject/pkg7 (recursive)
+  /user/username/projects/myproject/pkg8 (recursive)
+  /user/username/projects/myproject/pkg9 (recursive)

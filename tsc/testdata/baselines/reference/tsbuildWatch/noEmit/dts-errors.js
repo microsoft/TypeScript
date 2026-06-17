@@ -74,6 +74,9 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -114,6 +117,9 @@ Output::
   "size": 45
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -153,6 +159,9 @@ const a = "hello";
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -185,6 +194,9 @@ Output::
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -235,6 +247,9 @@ Output::
   "size": 59
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -285,6 +300,9 @@ const a = class {
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -326,6 +344,9 @@ Output::
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts

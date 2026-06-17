@@ -94,6 +94,9 @@ declare const console: { log(msg: any): void; };
   "size": 109
 }
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/noEmitOnError (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -127,6 +130,9 @@ Output::
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/noEmitOnError (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -197,6 +203,9 @@ export {};
   "size": 95
 }
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/noEmitOnError (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -228,6 +237,9 @@ Output::
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/noEmitOnError (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -289,6 +301,9 @@ Output::
   "semanticErrors": true
 }
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/noEmitOnError (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -322,6 +337,9 @@ Output::
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/noEmitOnError (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -383,6 +401,9 @@ export {};
   "size": 95
 }
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/noEmitOnError (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -414,6 +435,9 @@ Output::
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/noEmitOnError (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -451,6 +475,9 @@ export const a = class {
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/noEmitOnError (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -482,6 +509,9 @@ Output::
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/noEmitOnError (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -515,6 +545,9 @@ Output::
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/noEmitOnError (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -546,6 +579,9 @@ Output::
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/noEmitOnError (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts

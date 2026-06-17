@@ -130,6 +130,10 @@ export class myClass {
   "size": 1430
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/solution/app (recursive)
 app/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -272,6 +276,10 @@ export var myClassWithError = class {
   "size": 2167
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/solution/app (recursive)
 app/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/solution/app/fileWithError.ts
@@ -362,6 +370,10 @@ export var myClassWithError = class {
   "size": 1434
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/solution/app (recursive)
 app/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/solution/app/fileWithError.ts

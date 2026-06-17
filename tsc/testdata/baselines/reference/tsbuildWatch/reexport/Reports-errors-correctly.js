@@ -193,6 +193,12 @@ export {};
   "size": 1475
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/reexport/src
+  /user/username/projects/reexport/src/main (recursive)
+  /user/username/projects/reexport/src/pure (recursive)
 src/pure/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -348,6 +354,12 @@ export interface Session {
   "size": 1492
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/reexport/src
+  /user/username/projects/reexport/src/main (recursive)
+  /user/username/projects/reexport/src/pure (recursive)
 src/pure/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/reexport/src/pure/session.ts
@@ -491,6 +503,12 @@ export interface Session {
   "size": 1477
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/reexport/src
+  /user/username/projects/reexport/src/main (recursive)
+  /user/username/projects/reexport/src/pure (recursive)
 src/pure/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/reexport/src/pure/session.ts

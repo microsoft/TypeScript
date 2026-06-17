@@ -387,6 +387,12 @@ export const m = mod;
   "size": 2050
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/sample1/core (recursive)
+  /user/username/projects/sample1/logic (recursive)
+  /user/username/projects/sample1/tests
 core/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -546,6 +552,12 @@ let y = 10;
 }
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] *mTime changed*
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/sample1/core (recursive)
+  /user/username/projects/sample1/logic (recursive)
+  /user/username/projects/sample1/tests
 logic/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/sample1/logic/index.ts
@@ -685,6 +697,12 @@ let x = 10;
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] *mTime changed*
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] *mTime changed*
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/sample1/core (recursive)
+  /user/username/projects/sample1/logic (recursive)
+  /user/username/projects/sample1/tests
 core/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/sample1/core/index.ts
@@ -805,6 +823,12 @@ export const m = mod;
 }
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] *mTime changed*
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/sample1/core (recursive)
+  /user/username/projects/sample1/logic (recursive)
+  /user/username/projects/sample1/tests
 logic/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/sample1/logic/index.ts

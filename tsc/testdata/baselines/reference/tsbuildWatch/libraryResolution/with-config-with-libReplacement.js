@@ -840,6 +840,17 @@ export const z = 10;
   "size": 1564
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/workspace/projects/node_modules/@typescript/lib-dom
+  /home/src/workspace/projects/node_modules/@typescript/lib-es5
+  /home/src/workspace/projects/node_modules/@typescript/lib-esnext
+  /home/src/workspace/projects/node_modules/@typescript/lib-scripthost
+  /home/src/workspace/projects/node_modules/@typescript/lib-webworker
+  /home/src/workspace/projects/project1 (recursive)
+  /home/src/workspace/projects/project2 (recursive)
+  /home/src/workspace/projects/project3 (recursive)
+  /home/src/workspace/projects/project4 (recursive)
 project1/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts

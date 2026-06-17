@@ -2,12 +2,8 @@ package execute
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"io"
 	"reflect"
-	"strings"
-	"sync"
 	"time"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -17,39 +13,13 @@ import (
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/execute/incremental"
 	"github.com/microsoft/typescript-go/internal/execute/tsc"
+	"github.com/microsoft/typescript-go/internal/execute/watchmanager"
 	"github.com/microsoft/typescript-go/internal/fswatch"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs/cachedvfs"
 	"github.com/microsoft/typescript-go/internal/vfs/trackingvfs"
 )
-
-// WatchBackend abstracts fswatch.Watcher for testing
-type WatchBackend interface {
-	WatchDirectory(dir string, fn fswatch.WatchCallback, recursive bool, ignore func(string) bool) (io.Closer, error)
-}
-
-type commandLineTestingWithWatchBackend interface {
-	WatchBackend() WatchBackend
-}
-
-type fswatchBackend struct{ inner fswatch.Watcher }
-
-func (b *fswatchBackend) WatchDirectory(dir string, fn fswatch.WatchCallback, recursive bool, ignore func(string) bool) (io.Closer, error) {
-	var opts []fswatch.WatchOption
-	if recursive {
-		opts = append(opts, fswatch.WithRecursive())
-	}
-	if ignore != nil {
-		opts = append(opts, fswatch.WithIgnore(ignore))
-	}
-	return b.inner.WatchDirectory(dir, fn, opts...)
-}
-
-type watchedDir struct {
-	closer    io.Closer
-	recursive bool
-}
 
 type cachedSourceFile struct {
 	file    *ast.SourceFile
@@ -85,7 +55,6 @@ func (h *watchCompilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.
 }
 
 type Watcher struct {
-	mu                             sync.Mutex
 	sys                            tsc.System
 	configFileName                 string
 	config                         *tsoptions.ParsedCommandLine
@@ -104,16 +73,9 @@ type Watcher struct {
 
 	sourceFileCache *collections.SyncMap[tspath.Path, *cachedSourceFile]
 
-	backend      WatchBackend
-	watchedDirs  map[string]*watchedDir        // dir path → watch state
+	wm           *watchmanager.WatchManager
 	seenFiles    *collections.Set[tspath.Path] // all build dependencies (for event filtering)
 	configMtimes map[string]time.Time
-	doCycleCh    chan struct{}
-	debugLog     io.Writer // nil = silent; set via TS_WATCH_DEBUG
-
-	changedMu       sync.Mutex
-	changedPaths    map[string]fswatch.EventKind // event path → last event kind
-	changedOverflow bool                         // true on ErrOverflow; forces full scan fallback
 }
 
 var _ tsc.Watcher = (*Watcher)(nil)
@@ -127,6 +89,10 @@ func createWatcher(
 	reportErrorSummary tsc.DiagnosticsReporter,
 	testing tsc.CommandLineTesting,
 ) *Watcher {
+	wm := watchmanager.NewWatchManager(sys.Writer(), sys.FS().DirectoryExists)
+	if t, ok := testing.(watchmanager.CommandLineTestingWithWatchBackend); ok {
+		wm.SetBackend(t.WatchBackend())
+	}
 	w := &Watcher{
 		sys:                            sys,
 		config:                         configParseResult,
@@ -137,20 +103,16 @@ func createWatcher(
 		reportWatchStatus:              tsc.CreateWatchStatusReporter(sys, configParseResult.Locale(), configParseResult.CompilerOptions(), testing),
 		testing:                        testing,
 		sourceFileCache:                &collections.SyncMap[tspath.Path, *cachedSourceFile]{},
-		doCycleCh:                      make(chan struct{}, 1),
-		watchedDirs:                    make(map[string]*watchedDir),
+		wm:                             wm,
 	}
 	if configParseResult.ConfigFile != nil {
 		w.configFileName = configParseResult.ConfigFile.SourceFile.FileName()
-	}
-	if t, ok := testing.(commandLineTestingWithWatchBackend); ok {
-		w.backend = t.WatchBackend()
 	}
 	return w
 }
 
 func (w *Watcher) start(ctx context.Context) {
-	w.mu.Lock()
+	w.wm.Lock()
 	w.extendedConfigCache = &tsc.ExtendedConfigCache{}
 	host := compiler.NewCompilerHost(w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), w.extendedConfigCache, getTraceFromSys(w.sys, w.config.Locale(), w.testing))
 	w.program = incremental.ReadBuildInfoProgram(w.config, incremental.NewBuildInfoReader(host), host)
@@ -160,31 +122,21 @@ func (w *Watcher) start(ctx context.Context) {
 	}
 
 	if w.sys.GetEnvironmentVariable("TS_WATCH_DEBUG") != "" {
-		w.debugLog = w.sys.Writer()
+		w.wm.DebugLog = w.sys.Writer()
 	}
 
-	if w.testing == nil && w.backend == nil {
-		fsw := fswatch.Default()
-		w.backend = &fswatchBackend{inner: fsw}
-		if w.debugLog != nil {
-			fmt.Fprintf(w.debugLog, "[watch] using %s backend\n", fsw.Name())
-		}
+	if w.testing == nil {
+		w.wm.EnsureDefaultBackend()
 	}
 
 	w.reportWatchStatus(ast.NewCompilerDiagnostic(diagnostics.Starting_compilation_in_watch_mode))
-	w.doBuild()
-	w.mu.Unlock()
+	if err := w.doBuild(); err != nil {
+		w.wm.ForceOverflow()
+	}
+	w.wm.Unlock()
 
 	if w.testing == nil {
-		for {
-			select {
-			case <-ctx.Done():
-				w.closeAllWatches()
-				return
-			case <-w.doCycleCh:
-				w.DoCycle()
-			}
-		}
+		w.wm.RunLoop(ctx, w.DoCycle)
 	}
 }
 
@@ -230,68 +182,25 @@ func (w *Watcher) computeDesiredWatches(seenFilePaths []string) map[string]bool 
 
 	// Add parent directories for seen files not covered by existing dir watches.
 	// Resolve ancestor fallbacks first so coverage checks use final dirs.
-	resolvedDirs := w.resolveDesiredDirs(desiredDirs)
+	resolvedDirs := w.wm.ResolveDesiredDirs(desiredDirs)
 
 	opts := w.comparePathsOptions()
 	for _, filePath := range seenFilePaths {
 		dir := tspath.GetDirectoryPath(filePath)
-		covered := false
-		for wdir, recursive := range resolvedDirs {
-			if recursive {
-				if tspath.ContainsPath(wdir, dir, opts) {
-					covered = true
-					break
-				}
-			} else if dir == wdir {
-				covered = true
-				break
-			}
-		}
-		if !covered {
-			if canWatchDirectory(dir) {
+		if !watchmanager.IsDirCoveredByWatch(resolvedDirs, dir, opts) {
+			if watchmanager.CanWatchDirectory(dir) {
 				resolvedDirs[dir] = false
 			}
 		}
 	}
 
 	// Re-resolve in case newly added dirs don't exist
-	return w.resolveDesiredDirs(resolvedDirs)
+	return w.wm.ResolveDesiredDirs(resolvedDirs)
 }
 
-func (w *Watcher) reconcileWatches(seenFilePaths []string) {
-	if w.backend == nil {
-		return
-	}
-
+func (w *Watcher) reconcileWatches(seenFilePaths []string) error {
 	desiredDirs := w.computeDesiredWatches(seenFilePaths)
-
-	// Reconcile directory watches using DiffMaps, performing effects inline
-	core.DiffMapsFunc(
-		w.watchedDirs,
-		desiredDirs,
-		func(wd *watchedDir, recursive bool) bool { return wd.recursive == recursive },
-		func(dir string, recursive bool) {
-			if w.debugLog != nil {
-				fmt.Fprintf(w.debugLog, "[watch] watching directory %s (recursive=%v)\n", dir, recursive)
-			}
-			w.createDirWatch(dir, recursive)
-		},
-		func(dir string, wd *watchedDir) {
-			if w.debugLog != nil {
-				fmt.Fprintf(w.debugLog, "[watch] closing stale dir watch: %s\n", dir)
-			}
-			wd.closer.Close()
-			delete(w.watchedDirs, dir)
-		},
-		func(dir string, wd *watchedDir, recursive bool) {
-			if w.debugLog != nil {
-				fmt.Fprintf(w.debugLog, "[watch] recreating dir watch %s (recursive %v→%v)\n", dir, wd.recursive, recursive)
-			}
-			wd.closer.Close()
-			delete(w.watchedDirs, dir)
-			w.createDirWatch(dir, recursive)
-		},
-	)
+	return w.wm.ReconcileWatches(desiredDirs)
 }
 
 func (w *Watcher) comparePathsOptions() tspath.ComparePathsOptions {
@@ -301,204 +210,11 @@ func (w *Watcher) comparePathsOptions() tspath.ComparePathsOptions {
 	}
 }
 
-func (w *Watcher) resolveDesiredDirs(desiredDirs map[string]bool) map[string]bool {
-	resolved := make(map[string]bool, len(desiredDirs))
-	for dir, recursive := range desiredDirs {
-		watchDir := dir
-		watchRecursive := recursive
-		for !w.sys.FS().DirectoryExists(watchDir) {
-			parent := tspath.GetDirectoryPath(watchDir)
-			if parent == watchDir {
-				break
-			}
-			watchDir = parent
-			watchRecursive = false // ancestor fallbacks are always non-recursive
-		}
-		if !w.sys.FS().DirectoryExists(watchDir) || !canWatchDirectory(watchDir) {
-			if w.debugLog != nil {
-				fmt.Fprintf(w.debugLog, "[watch] no watchable ancestor for %s\n", dir)
-			}
-			continue
-		}
-		if watchDir != dir && w.debugLog != nil {
-			fmt.Fprintf(w.debugLog, "[watch] resolved %s to ancestor %s\n", dir, watchDir)
-		}
-		if existing, has := resolved[watchDir]; has {
-			resolved[watchDir] = existing || watchRecursive
-		} else {
-			resolved[watchDir] = watchRecursive
-		}
-	}
-	return resolved
-}
-
-func canWatchDirectory(dir string) bool {
-	components := tspath.GetPathComponents(dir, "")
-	length := len(components)
-	if length <= 2 {
-		return false
-	}
-	rootLength := perceivedOsRootLengthForWatching(components)
-	return length > rootLength+1
-}
-
-func perceivedOsRootLengthForWatching(components []string) int {
-	length := len(components)
-	if length <= 1 {
-		return 1
-	}
-	root := components[0]
-	indexAfterOsRoot := 1
-	isDosStyle := len(root) >= 2 && tspath.IsVolumeCharacter(root[0]) && root[1] == ':'
-
-	if root != "/" && !isDosStyle && len(components) > 1 {
-		// Check for UNC-like paths: //server/c$/...
-		if len(components[1]) >= 2 && tspath.IsVolumeCharacter(components[1][0]) && strings.HasSuffix(components[1], "$") {
-			if length == 2 {
-				return 2
-			}
-			indexAfterOsRoot = 2
-			isDosStyle = true
-		}
-	}
-
-	if isDosStyle && (indexAfterOsRoot >= length || !strings.EqualFold(components[indexAfterOsRoot], "users")) {
-		return indexAfterOsRoot
-	}
-
-	if indexAfterOsRoot < length && strings.EqualFold(components[indexAfterOsRoot], "workspaces") {
-		// Codespaces: /workspaces repos are hoisted here
-		return indexAfterOsRoot + 1
-	}
-
-	// /home/username or C:/Users/username
-	return indexAfterOsRoot + 2
-}
-
-func (w *Watcher) createDirWatch(dir string, recursive bool) {
-	entry := &watchedDir{recursive: recursive}
-	cb := func(events []fswatch.Event, err error) {
-		if err != nil && errors.Is(err, fswatch.ErrWatchTerminated) {
-			w.handleWatchTerminated(dir, entry)
-			return
-		}
-		w.onWatchEvents(events, err)
-	}
-	watch, err := w.backend.WatchDirectory(dir, cb, recursive, shouldIgnoreWatchPath)
-	if err != nil {
-		if w.debugLog != nil {
-			fmt.Fprintf(w.debugLog, "[watch] failed to watch directory %s: %v\n", dir, err)
-		}
-		return
-	}
-	entry.closer = watch
-	w.watchedDirs[dir] = entry
-}
-
-func (w *Watcher) closeAllWatches() {
-	w.mu.Lock()
-	dirs := make([]io.Closer, 0, len(w.watchedDirs))
-	for dir, wd := range w.watchedDirs {
-		dirs = append(dirs, wd.closer)
-		delete(w.watchedDirs, dir)
-	}
-	w.mu.Unlock()
-	for _, c := range dirs {
-		c.Close()
-	}
-}
-
-func (w *Watcher) handleWatchTerminated(dir string, identity *watchedDir) {
-	if w.debugLog != nil {
-		fmt.Fprintf(w.debugLog, "[watch] watch terminated: %s\n", dir)
-	}
-	var staleCloser io.Closer
-	w.mu.Lock()
-	if wd, ok := w.watchedDirs[dir]; ok && wd == identity {
-		staleCloser = wd.closer
-		delete(w.watchedDirs, dir)
-	}
-	w.mu.Unlock()
-	if staleCloser != nil {
-		staleCloser.Close()
-	}
-	w.changedMu.Lock()
-	w.changedOverflow = true
-	w.changedMu.Unlock()
-	w.signalDoCycle()
-}
-
-func shouldIgnoreWatchPath(path string) bool {
-	p := tspath.NormalizeSlashes(path)
-	return strings.HasSuffix(p, "/.git") ||
-		strings.Contains(p, "/.git/") ||
-		strings.Contains(p, "/node_modules/.") ||
-		strings.Contains(p, "/.#")
-}
-
-func (w *Watcher) onWatchEvents(events []fswatch.Event, err error) {
-	if err != nil {
-		if errors.Is(err, fswatch.ErrOverflow) {
-			if w.debugLog != nil {
-				fmt.Fprintf(w.debugLog, "[watch] event overflow, triggering rebuild\n")
-			}
-			w.changedMu.Lock()
-			w.changedOverflow = true
-			w.changedMu.Unlock()
-			w.signalDoCycle()
-			return
-		}
-		fmt.Fprintf(w.sys.Writer(), "Warning: File watch error: %v\n", err)
-		return
-	}
-
-	if len(events) > 0 {
-		if w.debugLog != nil {
-			fmt.Fprintf(w.debugLog, "[watch] %d event(s): ", len(events))
-			for i, e := range events {
-				if i > 0 {
-					fmt.Fprint(w.debugLog, ", ")
-				}
-				if i >= 5 {
-					fmt.Fprintf(w.debugLog, "... and %d more", len(events)-i)
-					break
-				}
-				fmt.Fprintf(w.debugLog, "%s %s", e.Kind, e.Path)
-			}
-			fmt.Fprintln(w.debugLog)
-		}
-		w.changedMu.Lock()
-		if w.changedPaths == nil {
-			w.changedPaths = make(map[string]fswatch.EventKind, len(events))
-		}
-		for _, e := range events {
-			w.changedPaths[e.Path] = e.Kind
-		}
-		w.changedMu.Unlock()
-		w.signalDoCycle()
-	}
-}
-
-func (w *Watcher) signalDoCycle() {
-	select {
-	case w.doCycleCh <- struct{}{}:
-		// Signal sent; the DoCycle loop will pick it up.
-	default:
-		// A signal is already pending; coalesced.
-	}
-}
-
 func (w *Watcher) DoCycle() {
-	w.mu.Lock()
-	defer w.mu.Unlock()
+	w.wm.Lock()
+	defer w.wm.Unlock()
 
-	w.changedMu.Lock()
-	changedPaths := w.changedPaths
-	overflow := w.changedOverflow
-	w.changedPaths = nil
-	w.changedOverflow = false
-	w.changedMu.Unlock()
-
+	changedPaths, overflow := w.wm.DrainEvents()
 	hasEvents := len(changedPaths) > 0 || overflow
 
 	if w.recheckTsConfig() {
@@ -510,8 +226,8 @@ func (w *Watcher) DoCycle() {
 		if w.isRelevantChange(changedPaths) {
 			w.evictChangedSourceFiles(changedPaths)
 		} else {
-			if w.debugLog != nil {
-				fmt.Fprintf(w.debugLog, "[watch] DoCycle: %d event(s) not relevant to compilation, skipping rebuild\n", len(changedPaths))
+			if w.wm.DebugLog != nil {
+				fmt.Fprintf(w.wm.DebugLog, "[watch] DoCycle: %d event(s) not relevant to compilation, skipping rebuild\n", len(changedPaths))
 			}
 			if w.testing != nil {
 				w.testing.OnProgram(w.program)
@@ -523,8 +239,8 @@ func (w *Watcher) DoCycle() {
 		w.sourceFileCache = &collections.SyncMap[tspath.Path, *cachedSourceFile]{}
 	} else if !hasEvents && !w.configModified {
 		// No events and no config change
-		if w.debugLog != nil {
-			fmt.Fprintf(w.debugLog, "[watch] DoCycle: no events, skipping\n")
+		if w.wm.DebugLog != nil {
+			fmt.Fprintf(w.wm.DebugLog, "[watch] DoCycle: no events, skipping\n")
 		}
 		if w.testing != nil {
 			w.testing.OnProgram(w.program)
@@ -533,7 +249,10 @@ func (w *Watcher) DoCycle() {
 	}
 
 	w.reportWatchStatus(ast.NewCompilerDiagnostic(diagnostics.File_change_detected_Starting_incremental_compilation))
-	w.doBuild()
+	if err := w.doBuild(); err != nil {
+		// Mid-cycle watch failure; force a full rebuild on the next event
+		w.wm.ForceOverflow()
+	}
 }
 
 func (w *Watcher) isRelevantChange(changedPaths map[string]fswatch.EventKind) bool {
@@ -551,23 +270,16 @@ func (w *Watcher) isRelevantChange(changedPaths map[string]fswatch.EventKind) bo
 		if w.config.ConfigFile != nil && w.config.PossiblyMatchesDirectoryName(p) {
 			return true
 		}
-		// If a directory was created under an ancestor fallback watch,
-		// treat it as relevant — it may be on the path to a previously
-		// non-existent directory we want to watch. Err on the side of
-		// false positives (unnecessary rebuild) over false negatives
-		// (missed rebuild).
 		if w.sys.FS().DirectoryExists(eventPath) {
-			for dir := range w.watchedDirs {
-				if tspath.ContainsPath(dir, eventPath, opts) {
-					return true
-				}
+			if w.wm.IsPathUnderWatch(eventPath, opts) {
+				return true
 			}
 		}
 	}
 	return false
 }
 
-func (w *Watcher) doBuild() {
+func (w *Watcher) doBuild() error {
 	if w.configModified {
 		w.sourceFileCache = &collections.SyncMap[tspath.Path, *cachedSourceFile]{}
 	}
@@ -614,7 +326,10 @@ func (w *Watcher) doBuild() {
 		}
 	}
 
-	w.reconcileWatches(seenSlice)
+	if err := w.reconcileWatches(seenSlice); err != nil {
+		fmt.Fprintf(w.sys.Writer(), "%v\n", err)
+		return err
+	}
 	w.configModified = false
 
 	programFiles := w.program.GetProgram().FilesByPath()
@@ -635,6 +350,7 @@ func (w *Watcher) doBuild() {
 	if w.testing != nil {
 		w.testing.OnProgram(w.program)
 	}
+	return nil
 }
 
 func (w *Watcher) evictChangedSourceFiles(changedPaths map[string]fswatch.EventKind) {
@@ -643,8 +359,8 @@ func (w *Watcher) evictChangedSourceFiles(changedPaths map[string]fswatch.EventK
 	for eventPath := range changedPaths {
 		p := tspath.ToPath(eventPath, cwd, caseSensitive)
 		if _, ok := w.sourceFileCache.Load(p); ok {
-			if w.debugLog != nil {
-				fmt.Fprintf(w.debugLog, "[watch] evicting cached source file: %s\n", p)
+			if w.wm.DebugLog != nil {
+				fmt.Fprintf(w.wm.DebugLog, "[watch] evicting cached source file: %s\n", p)
 			}
 			w.sourceFileCache.Delete(p)
 		}

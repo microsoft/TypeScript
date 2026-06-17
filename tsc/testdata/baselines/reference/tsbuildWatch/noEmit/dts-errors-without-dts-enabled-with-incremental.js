@@ -104,6 +104,10 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
+  /home/src/tslibs/TS/Lib
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -185,6 +189,10 @@ Output::
   "size": 1125
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
+  /home/src/tslibs/TS/Lib
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -269,6 +277,10 @@ const a = "hello";
   "size": 1094
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
+  /home/src/tslibs/TS/Lib
 tsconfig.json::
 SemanticDiagnostics::
 Signatures::
@@ -300,6 +312,10 @@ Output::
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *mTime changed*
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
+  /home/src/tslibs/TS/Lib
 tsconfig.json::
 SemanticDiagnostics::
 Signatures::
@@ -379,6 +395,10 @@ Output::
   "size": 1352
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
+  /home/src/tslibs/TS/Lib
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -465,6 +485,10 @@ const a = class {
   "size": 1321
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
+  /home/src/tslibs/TS/Lib
 tsconfig.json::
 SemanticDiagnostics::
 Signatures::
@@ -496,6 +520,10 @@ Output::
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *mTime changed*
 
+Watch Registrations::
+Directory watches::
+  /home/src/projects/project (recursive)
+  /home/src/tslibs/TS/Lib
 tsconfig.json::
 SemanticDiagnostics::
 Signatures::

@@ -603,6 +603,13 @@ export const z = 10;
   "size": 1462
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspace/projects/project1 (recursive)
+  /home/src/workspace/projects/project2 (recursive)
+  /home/src/workspace/projects/project3 (recursive)
+  /home/src/workspace/projects/project4 (recursive)
 project1/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es5.d.ts

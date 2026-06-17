@@ -2,7 +2,6 @@ package build
 
 import (
 	"fmt"
-	"slices"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -17,14 +16,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/execute/tsc"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
-)
-
-type updateKind uint
-
-const (
-	updateKindNone updateKind = iota
-	updateKindConfig
-	updateKindUpdate
 )
 
 type buildKind uint
@@ -69,11 +60,6 @@ type BuildTask struct {
 	result       *taskResult
 	prevReporter *BuildTask
 	reportDone   chan struct{}
-
-	// Watching things
-	configTime          time.Time
-	extendedConfigTimes []time.Time
-	inputFiles          []time.Time
 
 	buildInfoEntry   *buildInfoEntry
 	buildInfoEntryMu sync.Mutex
@@ -710,14 +696,7 @@ func (t *BuildTask) cleanProjectOutput(orchestrator *Orchestrator, outputFile st
 }
 
 func (t *BuildTask) updateWatch(orchestrator *Orchestrator, oldCache *collections.SyncMap[tspath.Path, time.Time]) {
-	t.configTime = orchestrator.host.loadOrStoreMTime(t.config, oldCache, false)
 	if t.resolved != nil {
-		t.extendedConfigTimes = core.Map(t.resolved.ExtendedSourceFiles(), func(p string) time.Time {
-			return orchestrator.host.loadOrStoreMTime(p, oldCache, false)
-		})
-		t.inputFiles = core.Map(t.resolved.FileNames(), func(p string) time.Time {
-			return orchestrator.host.loadOrStoreMTime(p, oldCache, false)
-		})
 		if t.canUpdateJsDtsOutputTimestamps() {
 			for outputFile := range t.resolved.GetOutputFileNames() {
 				orchestrator.host.storeMTimeFromOldCache(outputFile, oldCache)
@@ -735,45 +714,6 @@ func (t *BuildTask) resetStatus() {
 func (t *BuildTask) resetConfig(orchestrator *Orchestrator, path tspath.Path) {
 	t.dirty = true
 	orchestrator.host.resolvedReferences.delete(path)
-}
-
-func (t *BuildTask) hasUpdate(orchestrator *Orchestrator, path tspath.Path) updateKind {
-	var needsConfigUpdate bool
-	var needsUpdate bool
-	if configTime := orchestrator.host.GetMTime(t.config); configTime != t.configTime {
-		t.resetConfig(orchestrator, path)
-		needsConfigUpdate = true
-	}
-	if t.resolved != nil {
-		for index, file := range t.resolved.ExtendedSourceFiles() {
-			if orchestrator.host.GetMTime(file) != t.extendedConfigTimes[index] {
-				t.resetConfig(orchestrator, path)
-				needsConfigUpdate = true
-			}
-		}
-		for index, file := range t.resolved.FileNames() {
-			if orchestrator.host.GetMTime(file) != t.inputFiles[index] {
-				t.resetStatus()
-				needsUpdate = true
-			}
-		}
-		if !needsConfigUpdate {
-			configStart := orchestrator.opts.Sys.Now()
-			newConfig := t.resolved.ReloadFileNamesOfParsedCommandLine(orchestrator.host.FS())
-			configTime := orchestrator.opts.Sys.Now().Sub(configStart)
-			// Make new channels if needed later
-			t.reportDone = make(chan struct{})
-			t.done = make(chan struct{})
-			if !slices.Equal(t.resolved.FileNames(), newConfig.FileNames()) {
-				orchestrator.host.resolvedReferences.store(path, newConfig)
-				orchestrator.host.configTimes.Store(path, configTime)
-				t.resolved = newConfig
-				t.resetStatus()
-				needsUpdate = true
-			}
-		}
-	}
-	return core.IfElse(needsConfigUpdate, updateKindConfig, core.IfElse(needsUpdate, updateKindUpdate, updateKindNone))
 }
 
 func (t *BuildTask) loadOrStoreBuildInfo(orchestrator *Orchestrator, configPath tspath.Path, buildInfoFileName string) (*incremental.BuildInfo, time.Time) {

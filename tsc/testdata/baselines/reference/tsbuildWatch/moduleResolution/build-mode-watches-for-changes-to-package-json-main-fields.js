@@ -243,6 +243,11 @@ export {};
   "size": 1576
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject/packages/pkg1 (recursive)
+  /user/username/projects/myproject/packages/pkg2 (recursive)
 packages/pkg2/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -274,6 +279,11 @@ Edit [0]:: reports import errors after change to package file
 
 Output::
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject/packages/pkg1 (recursive)
+  /user/username/projects/myproject/packages/pkg2 (recursive)
 
 
 Diff:: Package.json watch pending, so no change detected yet
@@ -297,3 +307,8 @@ Edit [1]:: removes those errors when a package file is changed back
 
 Output::
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject/packages/pkg1 (recursive)
+  /user/username/projects/myproject/packages/pkg2 (recursive)

@@ -336,6 +336,15 @@ export function randomFn(str) {
   "size": 1649
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/solution
+  /home/src/workspaces/solution/projects/server
+  /home/src/workspaces/solution/projects/server/src (recursive)
+  /home/src/workspaces/solution/projects/shared
+  /home/src/workspaces/solution/projects/shared/dist/src
+  /home/src/workspaces/solution/projects/shared/src (recursive)
 projects/shared/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -363,6 +372,15 @@ Edit [0]:: no change
 
 Output::
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/solution
+  /home/src/workspaces/solution/projects/server
+  /home/src/workspaces/solution/projects/server/src (recursive)
+  /home/src/workspaces/solution/projects/shared
+  /home/src/workspaces/solution/projects/shared/dist/src
+  /home/src/workspaces/solution/projects/shared/src (recursive)
 
 
 Edit [1]:: edit logging file
@@ -614,6 +632,15 @@ export const x = 10;
   "size": 1700
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/solution
+  /home/src/workspaces/solution/projects/server
+  /home/src/workspaces/solution/projects/server/src (recursive)
+  /home/src/workspaces/solution/projects/shared
+  /home/src/workspaces/solution/projects/shared/dist/src
+  /home/src/workspaces/solution/projects/shared/src (recursive)
 projects/shared/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/workspaces/solution/projects/shared/src/logging.ts
@@ -632,6 +659,15 @@ Edit [2]:: no change
 
 Output::
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/solution
+  /home/src/workspaces/solution/projects/server
+  /home/src/workspaces/solution/projects/server/src (recursive)
+  /home/src/workspaces/solution/projects/shared
+  /home/src/workspaces/solution/projects/shared/dist/src
+  /home/src/workspaces/solution/projects/shared/src (recursive)
 
 
 Edit [3]:: delete random file
@@ -839,6 +875,15 @@ projects/shared/dist/src/logging.d.ts
   "size": 1444
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/solution
+  /home/src/workspaces/solution/projects/server
+  /home/src/workspaces/solution/projects/server/src (recursive)
+  /home/src/workspaces/solution/projects/shared
+  /home/src/workspaces/solution/projects/shared/dist/src
+  /home/src/workspaces/solution/projects/shared/src (recursive)
 projects/shared/tsconfig.json::
 SemanticDiagnostics::
 Signatures::
@@ -853,3 +898,12 @@ Edit [4]:: no change
 
 Output::
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /home/src/workspaces/solution
+  /home/src/workspaces/solution/projects/server
+  /home/src/workspaces/solution/projects/server/src (recursive)
+  /home/src/workspaces/solution/projects/shared
+  /home/src/workspaces/solution/projects/shared/dist/src
+  /home/src/workspaces/solution/projects/shared/src (recursive)

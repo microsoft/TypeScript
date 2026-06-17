@@ -404,6 +404,12 @@ export const m = mod;
   "size": 2050
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/sample1/core (recursive)
+  /user/username/projects/sample1/logic (recursive)
+  /user/username/projects/sample1/tests
 core/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -553,6 +559,12 @@ function someFn() { }
 }
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] *mTime changed*
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/sample1/core (recursive)
+  /user/username/projects/sample1/logic (recursive)
+  /user/username/projects/sample1/tests
 logic/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/sample1/logic/index.ts
@@ -776,6 +788,12 @@ export function someFn() { }
   "size": 2091
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/sample1/core (recursive)
+  /user/username/projects/sample1/logic (recursive)
+  /user/username/projects/sample1/tests
 logic/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/sample1/logic/index.ts

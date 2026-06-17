@@ -485,6 +485,15 @@ export const pkg4 = 4;
   "size": 1471
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject (recursive)
+  /user/username/projects/myproject/pkg0 (recursive)
+  /user/username/projects/myproject/pkg1 (recursive)
+  /user/username/projects/myproject/pkg2 (recursive)
+  /user/username/projects/myproject/pkg3 (recursive)
+  /user/username/projects/myproject/pkg4 (recursive)
 pkg0/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -631,6 +640,15 @@ const someConst2 = 10;
 //// [/user/username/projects/myproject/pkg4/tsconfig.tsbuildinfo] *mTime changed*
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo] *mTime changed*
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject (recursive)
+  /user/username/projects/myproject/pkg0 (recursive)
+  /user/username/projects/myproject/pkg1 (recursive)
+  /user/username/projects/myproject/pkg2 (recursive)
+  /user/username/projects/myproject/pkg3 (recursive)
+  /user/username/projects/myproject/pkg4 (recursive)
 pkg0/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/myproject/pkg0/index.ts
@@ -643,6 +661,15 @@ Edit [1]:: no change
 
 Output::
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject (recursive)
+  /user/username/projects/myproject/pkg0 (recursive)
+  /user/username/projects/myproject/pkg1 (recursive)
+  /user/username/projects/myproject/pkg2 (recursive)
+  /user/username/projects/myproject/pkg3 (recursive)
+  /user/username/projects/myproject/pkg4 (recursive)
 
 
 Edit [2]:: dts change
@@ -861,6 +888,15 @@ export const someConst = 10;
   "size": 1509
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject (recursive)
+  /user/username/projects/myproject/pkg0 (recursive)
+  /user/username/projects/myproject/pkg1 (recursive)
+  /user/username/projects/myproject/pkg2 (recursive)
+  /user/username/projects/myproject/pkg3 (recursive)
+  /user/username/projects/myproject/pkg4 (recursive)
 pkg0/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/myproject/pkg0/index.ts
@@ -895,3 +931,12 @@ Edit [3]:: no change
 
 Output::
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject (recursive)
+  /user/username/projects/myproject/pkg0 (recursive)
+  /user/username/projects/myproject/pkg1 (recursive)
+  /user/username/projects/myproject/pkg2 (recursive)
+  /user/username/projects/myproject/pkg3 (recursive)
+  /user/username/projects/myproject/pkg4 (recursive)

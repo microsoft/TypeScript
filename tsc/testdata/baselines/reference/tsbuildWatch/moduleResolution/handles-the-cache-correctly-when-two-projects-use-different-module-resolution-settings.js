@@ -249,6 +249,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "size": 1344
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject
+  /user/username/projects/myproject/node_modules/@types/bar
+  /user/username/projects/myproject/node_modules/@types/foo
+  /user/username/projects/myproject/project1
+  /user/username/projects/myproject/project1/node_modules/file
+  /user/username/projects/myproject/project2
+  /user/username/projects/myproject/project2/node_modules/file
 project1/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -372,6 +382,16 @@ export {};
   "size": 1444
 }
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/myproject
+  /user/username/projects/myproject/node_modules/@types/bar
+  /user/username/projects/myproject/node_modules/@types/foo
+  /user/username/projects/myproject/project1
+  /user/username/projects/myproject/project1/node_modules/file
+  /user/username/projects/myproject/project2
+  /user/username/projects/myproject/project2/node_modules/file
 project1/tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /user/username/projects/myproject/project1/index.ts

@@ -662,6 +662,15 @@ function createZoo() {
 }
 
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/demo
+  /user/username/projects/demo/animals (recursive)
+  /user/username/projects/demo/core (recursive)
+  /user/username/projects/demo/lib/animals
+  /user/username/projects/demo/lib/core
+  /user/username/projects/demo/zoo (recursive)
 core/tsconfig.json::
 SemanticDiagnostics::
 *not cached* /home/src/tslibs/TS/Lib/lib.d.ts
@@ -886,6 +895,15 @@ Output::
 //// [/user/username/projects/demo/lib/core/utilities.js] *rewrite with same content*
 //// [/user/username/projects/demo/lib/zoo/tsconfig.tsbuildinfo] *mTime changed*
 
+Watch Registrations::
+Directory watches::
+  /home/src/tslibs/TS/Lib
+  /user/username/projects/demo
+  /user/username/projects/demo/animals (recursive)
+  /user/username/projects/demo/core (recursive)
+  /user/username/projects/demo/lib/animals
+  /user/username/projects/demo/lib/core
+  /user/username/projects/demo/zoo (recursive)
 core/tsconfig.json::
 SemanticDiagnostics::
 *not cached* /home/src/tslibs/TS/Lib/lib.d.ts

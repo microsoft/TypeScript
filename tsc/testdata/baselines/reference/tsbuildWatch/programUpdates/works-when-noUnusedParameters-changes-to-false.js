@@ -66,6 +66,9 @@ const fn = (a, b) => b;
   "semanticErrors": true
 }
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/myproject (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -104,6 +107,9 @@ Output::
   "size": 49
 }
 
+Watch Registrations::
+Directory watches::
+  /user/username/projects/myproject (recursive)
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
