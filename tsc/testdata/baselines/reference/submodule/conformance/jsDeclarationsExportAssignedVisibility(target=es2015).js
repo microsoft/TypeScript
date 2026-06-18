@@ -42,9 +42,9 @@ declare class Obj {
     constructor();
 }
 //// [index.d.ts]
+export = Container;
 import Obj = require("./obj");
 declare class Container {
     usage: Obj;
     constructor();
 }
-export = Container;

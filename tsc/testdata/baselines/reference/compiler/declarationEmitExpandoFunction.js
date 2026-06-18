@@ -38,12 +38,12 @@ B.c = C;
 //// [declarationEmitExpandoFunction.d.ts]
 export declare function A(): string;
 export declare namespace A {
-    var a: typeof C;
-    var b: typeof C;
+    export { C as a };
+    export { C as b };
 }
 export declare function B(): string;
 export declare namespace B {
-    var c: typeof C;
+    export { C as c };
 }
 export declare enum C {
     C = 0

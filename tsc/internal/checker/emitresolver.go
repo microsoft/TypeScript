@@ -313,7 +313,8 @@ func getMeaningOfEntityNameReference(entityName *ast.Node) ast.SymbolFlags {
 	if entityName.Parent.Kind == ast.KindTypeQuery ||
 		entityName.Parent.Kind == ast.KindExpressionWithTypeArguments && !ast.IsPartOfTypeNode(entityName.Parent) ||
 		entityName.Parent.Kind == ast.KindComputedPropertyName ||
-		entityName.Parent.Kind == ast.KindTypePredicate && entityName.Parent.AsTypePredicateNode().ParameterName == entityName {
+		entityName.Parent.Kind == ast.KindTypePredicate && entityName.Parent.AsTypePredicateNode().ParameterName == entityName ||
+		entityName.Parent.Kind == ast.KindBinaryExpression {
 		// Typeof value
 		return ast.SymbolFlagsValue | ast.SymbolFlagsExportValue
 	}
@@ -896,22 +897,13 @@ func (r *EmitResolver) GetReferencedValueDeclarations(node *ast.IdentifierNode) 
 	return r.getReferenceResolver().GetReferencedValueDeclarations(node)
 }
 
-// IsNameResolvedToDeclaration checks whether `name` resolved at `location`
-// resolves to a symbol that includes `declaration` among its declarations.
-// When `declaration` is nil, checks whether the name resolves to any symbol.
-// This is used by the declaration emitter to check for naming conflicts at file scope.
-func (r *EmitResolver) IsNameResolvedToDeclaration(location *ast.Node, name string, declaration *ast.Node) bool {
+// IsNameResolvable returns `true` if the given `name` resolves to any symbol at `location`
+func (r *EmitResolver) IsNameResolvable(location *ast.Node, name string) bool {
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
 	symbol := r.checker.resolveName(location, name, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
-	if symbol == nil {
-		return false
-	}
-	if declaration == nil {
-		return true
-	}
-	return slices.Contains(symbol.Declarations, declaration)
+	return symbol != nil
 }
 
 func (r *EmitResolver) GetElementAccessExpressionName(expression *ast.ElementAccessExpression) string {

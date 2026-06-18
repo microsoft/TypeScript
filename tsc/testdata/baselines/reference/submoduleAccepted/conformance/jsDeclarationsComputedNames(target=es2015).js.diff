@@ -1,24 +1,8 @@
 --- old.jsDeclarationsComputedNames(target=es2015).js
 +++ new.jsDeclarationsComputedNames(target=es2015).js
-@@= skipped -61, +61 lines =@@
-
-
- //// [index.d.ts]
--declare const _exports: {
-+declare const TopLevelSym: unique symbol;
-+declare const InnerSym: unique symbol;
-+declare const _default: {
-     [TopLevelSym](x?: number): number;
-     items: {
-         [InnerSym]: (arg?: {
-@@= skipped -8, +10 lines =@@
-         }) => number;
-     };
- };
--export = _exports;
--declare const TopLevelSym: unique symbol;
--declare const InnerSym: unique symbol;
-+export = _default;
+@@= skipped -73, +73 lines =@@
+ declare const TopLevelSym: unique symbol;
+ declare const InnerSym: unique symbol;
  //// [index2.d.ts]
 -export class MyClass {
 +declare const TopLevelSym: unique symbol;

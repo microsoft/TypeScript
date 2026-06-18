@@ -7,9 +7,9 @@
 -export namespace chalk {
 -    let grey: {};
 -}
++export { chalk };
 +declare const chalk: {
 +    grey: {};
 +};
-+export { chalk };
  //// [main.d.ts]
  export {};

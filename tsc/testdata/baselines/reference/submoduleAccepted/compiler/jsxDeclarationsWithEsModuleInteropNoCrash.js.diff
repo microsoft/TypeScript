@@ -6,13 +6,19 @@
  /// <reference path="../.lib/react16.d.ts" preserve="true" />
 -export default Foo;
 +import PropTypes from 'prop-types';
++declare const propTypes: {
++    bar: PropTypes.Requireable<boolean>;
++};
++declare const defaultProps: {
++    bar: boolean;
++};
  declare function Foo({ bar }: {
      bar: any;
  }): JSX.Element;
- declare namespace Foo {
--    export { propTypes };
--    export { defaultProps };
--}
+@@= skipped -8, +14 lines =@@
+     export { propTypes };
+     export { defaultProps };
+ }
 -declare namespace propTypes {
 -    let bar: PropTypes.Requireable<boolean>;
 -}
@@ -21,11 +27,4 @@
 -    export { bar_1 as bar };
 -}
 -import PropTypes from 'prop-types';
-+    var propTypes: {
-+        bar: PropTypes.Requireable<boolean>;
-+    };
-+    var defaultProps: {
-+        bar: boolean;
-+    };
-+}
 +export default Foo;

@@ -141,11 +141,11 @@ module.exports = Hook;
 
 
 //// [timer.d.ts]
+export = Timer;
 /**
  * @param {number} timeout
  */
 declare function Timer(timeout: number): void;
-export = Timer;
 //// [context.d.ts]
 /**
  * Imports
@@ -154,6 +154,7 @@ export = Timer;
  * @typedef {import("./hook")} Hook
  * @typedef {import("./hook").HookHandler} HookHandler
  */
+export = Context;
 export type Timer = import("./timer");
 export type Hook = import("./hook");
 export type HookHandler = import("./hook").HookHandler;
@@ -196,8 +197,8 @@ declare namespace Context {
         construct(input: Input, handle?: HookHandler | undefined): State;
     };
 }
-export = Context;
 //// [hook.d.ts]
+export = Hook;
 export type HookHandler = (arg: import("./context")) => void;
 /**
  * @typedef {(arg: import("./context")) => void} HookHandler
@@ -206,4 +207,3 @@ export type HookHandler = (arg: import("./context")) => void;
  * @param {HookHandler} handle
  */
 declare function Hook(handle: HookHandler): void;
-export = Hook;

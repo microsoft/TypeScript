@@ -23,11 +23,11 @@ module.exports = {
 
 
 //// [index.d.ts]
-declare const _default: {
+declare const _exports: {
     extends: string;
     more: {
         others: string[];
     };
     x: number;
 };
-export = _default;
+export = _exports;

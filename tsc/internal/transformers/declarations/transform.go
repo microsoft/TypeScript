@@ -87,10 +87,15 @@ type DeclarationTransformer struct {
 	rawLibReferenceDirectives        []*ast.FileReference
 	bindingNameVisitor               *ast.NodeVisitor
 	expressionVisitor                *ast.NodeVisitor
+	cjsExportAssignmentVisitor       *ast.NodeVisitor
 	exportStrippingVisitor           *ast.NodeVisitor
 	thisPropertyVisitor              *ast.NodeVisitor
-	cjsExportAssignmentName          *ast.Node // tracks the name node used for `export =` in CJS module.exports assignments
-	inClassExpressionDeclaration     bool      // true when serializing members of a class expression kept as a class declaration
+
+	cjsExportAssignment          *ast.Node
+	cjsExportMembers             []*ast.Node
+	cjsExportAssignmentName      *ast.Node // tracks the name node used for `export =` in CJS module.exports assignments
+	declareStrippingVisitor      *ast.NodeVisitor
+	inClassExpressionDeclaration bool // true when serializing members of a class expression kept as a class declaration
 }
 
 // TODO: Convert to transformers.TransformerFactory signature to allow more automatic composition with other transforms
@@ -128,6 +133,8 @@ func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitCo
 	tx.expressionVisitor = tx.EmitContext().NewNodeVisitor(tx.visitNestedExpression)
 	tx.exportStrippingVisitor = tx.EmitContext().NewNodeVisitor(tx.stripExportModifiers)
 	tx.thisPropertyVisitor = tx.EmitContext().NewNodeVisitor(tx.visitThisPropertyAssignments)
+	tx.cjsExportAssignmentVisitor = tx.EmitContext().NewNodeVisitor(tx.visitCJSExportAssignments)
+	tx.declareStrippingVisitor = tx.EmitContext().NewNodeVisitor(tx.stripDeclareModifiers)
 	return tx
 }
 
@@ -256,10 +263,9 @@ func (tx *DeclarationTransformer) visit(node *ast.Node) *ast.Node {
 		ast.KindWithStatement,
 		ast.KindNotEmittedStatement,
 		ast.KindBlock,
-		ast.KindMissingDeclaration:
+		ast.KindMissingDeclaration,
+		ast.KindExpressionStatement:
 		return nil
-	case ast.KindExpressionStatement:
-		return tx.visitExpressionStatement(node)
 	// parts of things, things we just visit children of
 	default:
 		return tx.visitDeclarationSubtree(node)
@@ -294,44 +300,9 @@ func (tx *DeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 	tx.state.currentSourceFile = node
 	tx.collectFileReferences(node)
 	tx.resolver.PrecalculateDeclarationEmitVisibility(node)
-	tx.prescanCJSExportAssignment(node)
 	updated := tx.transformSourceFile(node)
 	tx.state.currentSourceFile = nil
 	return updated
-}
-
-// prescanCJSExportAssignment scans the source file for a `module.exports = class X {}`
-// statement and pre-creates the cjsExportAssignmentName so that all CJS property exports
-// (both before and after the assignment in source order) can reference it.
-func (tx *DeclarationTransformer) prescanCJSExportAssignment(node *ast.SourceFile) {
-	if !ast.IsExternalOrCommonJSModule(node) || node.CommonJSModuleIndicator == nil || !ast.IsInJSFile(node.AsNode()) {
-		return
-	}
-	for _, stmt := range node.Statements.Nodes {
-		if stmt.Kind != ast.KindExpressionStatement {
-			continue
-		}
-		expr := stmt.Expression()
-		if expr == nil || ast.GetAssignmentDeclarationKind(expr) != ast.JSDeclarationKindModuleExports {
-			continue
-		}
-		rhs := unwrapParenthesizedExpression(expr.AsBinaryExpression().Right)
-		if !ast.IsClassExpression(rhs) {
-			continue
-		}
-		ce := rhs.AsClassExpression()
-		if ce.Name() != nil && len(ce.Name().Text()) > 0 {
-			nameText := ce.Name().Text()
-			if tx.resolver.IsNameResolvedToDeclaration(node.AsNode(), nameText, nil) {
-				tx.cjsExportAssignmentName = tx.Factory().NewUniqueNameEx(nameText, printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
-			} else {
-				tx.cjsExportAssignmentName = tx.Factory().NewIdentifier(nameText)
-			}
-		} else {
-			tx.cjsExportAssignmentName = tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
-		}
-		return
-	}
 }
 
 func (tx *DeclarationTransformer) collectFileReferences(sourceFile *ast.SourceFile) {
@@ -340,11 +311,46 @@ func (tx *DeclarationTransformer) collectFileReferences(sourceFile *ast.SourceFi
 	tx.rawLibReferenceDirectives = append(tx.rawLibReferenceDirectives, sourceFile.LibReferenceDirectives...)
 }
 
+func nodeOrSyntaxListChildren(node *ast.Node) []*ast.Node {
+	if ast.IsSyntaxList(node) {
+		return node.AsSyntaxList().Children
+	}
+	return []*ast.Node{node}
+}
+
+func flattenSyntaxLists(nodes []*ast.Node) []*ast.Node {
+	return core.FlatMap(nodes, nodeOrSyntaxListChildren)
+}
+
+func (tx *DeclarationTransformer) appendCjsExports(combinedStatements *ast.StatementList) *ast.StatementList {
+	result := []*ast.Node{}
+	if tx.cjsExportAssignment != nil {
+		result = append(result, tx.cjsExportAssignment)
+	}
+	result = append(result, tx.cjsExportMembers...)
+	result = append(result, combinedStatements.Nodes...)
+	statementNodes := flattenSyntaxLists(result)
+	if len(statementNodes) != len(combinedStatements.Nodes) {
+		combinedStatements = tx.Factory().NewNodeList(statementNodes)
+	}
+	return combinedStatements
+}
+
 func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast.Node {
-	tx.expressionVisitor.VisitNode(node.AsNode()) // collect expando members
+	tx.cjsExportAssignment = nil
+	tx.cjsExportAssignmentName = nil
+	tx.cjsExportMembers = nil
+	defer func() {
+		tx.cjsExportAssignment = nil
+		tx.cjsExportAssignmentName = nil
+		tx.cjsExportMembers = nil
+	}()
+	tx.cjsExportAssignmentVisitor.VisitNode(node.AsNode()) // collect nested module.exports= assignments
+	tx.expressionVisitor.VisitNode(node.AsNode())          // collect expando members (requires any export assignment be located in advance)
 	var combinedStatements *ast.StatementList
 	statements := tx.Visitor().VisitNodes(node.Statements)
 	combinedStatements = tx.transformAndReplaceLatePaintedStatements(statements)
+	combinedStatements = tx.appendCjsExports(combinedStatements)
 	combinedStatements.Loc = statements.Loc // setTextRange
 	if ast.IsExternalOrCommonJSModule(node) {
 		if ast.IsInJSFile(node.AsNode()) {
@@ -352,9 +358,6 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast
 				for _, node := range exportEquals.Declarations {
 					tx.state.addDiagnostic(createDiagnosticForNode(node, diagnostics.Multiple_module_exports_assignments_cannot_be_serialized_for_declaration_emit))
 				}
-			}
-			for _, node := range node.NestedCJSExports {
-				tx.state.addDiagnostic(createDiagnosticForNode(node, diagnostics.Nested_CommonJS_export_constructs_cannot_be_serialized_for_declaration_emit))
 			}
 		}
 		if !tx.resultHasExternalModuleIndicator || (tx.needsScopeFixMarker && !tx.resultHasScopeMarker) {
@@ -1151,55 +1154,88 @@ func (tx *DeclarationTransformer) visitDeclarationStatements(input *ast.Node) *a
 	}
 }
 
+func (tx *DeclarationTransformer) tryGetNameOfAssignedExpression(unwrapped *ast.Node) *ast.Node {
+	var nameNode *ast.Node
+	var nameText string
+	if !ast.IsPropertyAccessExpression(unwrapped) && unwrapped.Name() != nil {
+		nameText = unwrapped.Name().Text()
+	} else if ast.IsIdentifier(unwrapped) {
+		nameText = unwrapped.Text()
+	}
+	if nameText != "" && nameText != "default" {
+		if tx.resolver.IsNameResolvable(tx.enclosingDeclaration, nameText) {
+			// create a unique name that shares the same text as its' base
+			nameNode = tx.Factory().NewUniqueNameEx(nameText, printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+		} else {
+			// use the node's name as-is, since it's not otherwise in-scope
+			nameNode = tx.Factory().NewIdentifier(nameText)
+		}
+	}
+	return nameNode
+}
+
+func (tx *DeclarationTransformer) getNameOfExportedAssignedExpression(unwrapped *ast.Node, isExportEquals bool) *ast.Node {
+	nameNode := tx.tryGetNameOfAssignedExpression(unwrapped)
+	if nameNode == nil {
+		// fallback to a default name
+		if isExportEquals && ast.IsSourceFileJS(tx.state.currentSourceFile) {
+			// only JS files prefer to use `_exports` for export assignments - TS has always used `_default` for both `export=` and `export default`
+			nameNode = tx.Factory().NewUniqueNameEx("_exports", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+		} else {
+			nameNode = tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+		}
+	}
+	tx.cjsExportAssignmentName = nameNode
+	return nameNode
+}
+
 func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, assignment *ast.Node, expression *ast.Node, isExportEquals bool) *ast.Node {
 	if ast.IsSourceFile(input.Parent) {
 		tx.resultHasExternalModuleIndicator = true
 	}
 	tx.resultHasScopeMarker = true
-	if ast.IsIdentifier(expression) {
+	if ast.IsIdentifier(expression) && (ast.IsSourceFile(input.Parent) || ast.IsModuleBlock(input.Parent)) {
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, expression)
 		tx.preserveJsDoc(exportAssignment, input)
 		return exportAssignment
 	}
 
 	// Check if the expression is a class expression - emit as a class declaration + export assignment
-	if unwrapped := unwrapParenthesizedExpression(expression); ast.IsClassExpression(unwrapped) {
-		// Reuse the name pre-created by prescanCJSExportAssignment if available
-		className := tx.cjsExportAssignmentName
-		if className == nil {
-			ce := unwrapped.AsClassExpression()
-			if ce.Name() != nil && len(ce.Name().Text()) > 0 {
-				nameText := ce.Name().Text()
-				if tx.resolver.IsNameResolvedToDeclaration(tx.enclosingDeclaration, nameText, nil) {
-					className = tx.Factory().NewUniqueNameEx(nameText, printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
-				} else {
-					className = tx.Factory().NewIdentifier(nameText)
-				}
-			} else {
-				className = tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
-			}
-			tx.cjsExportAssignmentName = className
-		}
+	unwrapped := ast.SkipOuterExpressions(expression, ast.OEKExpressionTypePassthrough)
+	newId := tx.getNameOfExportedAssignedExpression(unwrapped, isExportEquals)
+	if ast.IsClassExpression(unwrapped) {
 		var mods []*ast.Node
 		if tx.needsDeclare {
 			mods = append(mods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
 		}
-		classDecl := tx.transformClassExpressionToDeclaration(unwrapped, className, tx.Factory().NewModifierList(mods))
+		classDecl := tx.transformClassExpressionToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods))
 		tx.preserveJsDoc(classDecl, input)
 		// Reuse the same name node for the export so unique names resolve consistently
-		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, className)
+		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
 		tx.removeAllComments(exportAssignment)
 		return tx.Factory().NewSyntaxList([]*ast.Node{exportAssignment, classDecl})
+	} else if ast.IsFunctionLike(unwrapped) {
+		// Promote function or arrow function expressions to a function declaration
+		var mods []*ast.Node
+		if tx.needsDeclare {
+			mods = append(mods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
+		}
+		funcDecl := tx.transformFunctionLikeToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods))
+		tx.preserveJsDoc(funcDecl, input)
+		// Reuse the same name node for the export so unique names resolve consistently
+		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
+		tx.removeAllComments(exportAssignment)
+		return tx.Factory().NewSyntaxList([]*ast.Node{exportAssignment, funcDecl})
 	}
 
 	// expression is non-identifier, create _default typed variable to reference
-	newId := tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
 	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 		return &SymbolAccessibilityDiagnostic{
 			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
 			errorNode:         input,
 		}
 	}
+	tx.cjsExportAssignmentName = newId
 	tx.tracker.PushErrorFallbackNode(assignment)
 	var type_, initializer *ast.Node
 	if ast.IsPrimitiveLiteralValue(unwrapParenthesizedExpression(expression), true) {
@@ -1223,7 +1259,48 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 	return tx.Factory().NewSyntaxList([]*ast.Node{statement, exportAssignment})
 }
 
+func (tx *DeclarationTransformer) transformFunctionLikeToDeclaration(unwrapped *ast.Node, funcName *ast.Node, mods *ast.ModifierList) *ast.Node {
+	d := unwrapped.FunctionLikeData()
+	return tx.Factory().NewFunctionDeclaration(
+		mods,
+		nil,
+		funcName,
+		tx.ensureTypeParams(unwrapped, d.TypeParameters),
+		tx.updateParamList(unwrapped, d.Parameters),
+		tx.ensureType(unwrapped, false),
+		tx.Visitor().VisitNode(d.FullSignature),
+		nil,
+	)
+}
+
+func (tx *DeclarationTransformer) transformBinaryExpressionToExportDeclaration(input *ast.Node, name *ast.Node) *ast.Node {
+	propertyName := input.AsBinaryExpression().Right
+
+	// track alias target so referenced declarations are included in the output
+	tx.tracker.handleSymbolAccessibilityError(tx.resolver.IsEntityNameVisible(propertyName, tx.enclosingDeclaration))
+
+	if ast.IsIdentifier(name) && propertyName.Text() == name.Text() {
+		propertyName = nil
+	}
+
+	return tx.Factory().NewExportDeclaration(
+		nil,
+		false,
+		tx.Factory().NewNamedExports(tx.Factory().NewNodeList([]*ast.Node{tx.Factory().NewExportSpecifier(false, propertyName, name)})),
+		nil,
+		nil,
+	)
+}
+
 func (tx *DeclarationTransformer) transformCommonJSExport(input *ast.Node, name *ast.Node) *ast.Node {
+	res := tx.transformCommonJSExportWorker(input, name)
+	if res == nil {
+		return res
+	}
+	return tx.wrapInCJSExportNamespace(res)
+}
+
+func (tx *DeclarationTransformer) transformCommonJSExportWorker(input *ast.Node, name *ast.Node) *ast.Node {
 	var nameText string
 	if ast.IsIdentifier(name) || ast.IsStringLiteral(name) {
 		nameText = name.Text()
@@ -1234,16 +1311,11 @@ func (tx *DeclarationTransformer) transformCommonJSExport(input *ast.Node, name 
 	tx.witnessedCjsExports.Add(nameText)
 	tx.resultHasExternalModuleIndicator = true
 	tx.resultHasScopeMarker = true
-	if isCommonJSAliasExport(input) {
+	// only transform cjs exports to shorthand at the top-level of a source file, otherwise we uniformly emit nested exports with a type annotation
+	if isCommonJSAliasExport(input) && ast.IsExpressionStatement(input.Parent) && ast.IsSourceFile(input.Parent.Parent) {
 		// export { name }
 		// export { source as name }
-		propertyName := input.AsBinaryExpression().Right
-		if ast.IsIdentifier(name) && propertyName.Text() == name.Text() {
-			propertyName = nil
-		}
-		exportSpecifier := tx.Factory().NewExportSpecifier(false, propertyName, name)
-		exportDecl := tx.Factory().NewExportDeclaration(nil, false, tx.Factory().NewNamedExports(tx.Factory().NewNodeList([]*ast.Node{exportSpecifier})), nil, nil)
-		return tx.wrapInCJSExportNamespace(exportDecl)
+		return tx.transformBinaryExpressionToExportDeclaration(input, name)
 	}
 
 	// Check if the RHS is a class expression - emit as a class declaration instead of a typed variable
@@ -1301,13 +1373,7 @@ func (tx *DeclarationTransformer) transformCommonJSExport(input *ast.Node, name 
 					exportDecl := tx.Factory().NewExportDeclaration(nil, false, tx.Factory().NewNamedExports(tx.Factory().NewNodeList([]*ast.Node{exportSpecifier})), nil, nil)
 					tx.removeAllComments(exportDecl)
 
-					result := []*ast.Node{nsDecl, importDecl}
-					if tx.cjsExportAssignmentName != nil {
-						result = append(result, tx.wrapInCJSExportNamespace(exportDecl))
-					} else {
-						result = append(result, exportDecl)
-					}
-					return tx.Factory().NewSyntaxList(result)
+					return tx.Factory().NewSyntaxList(append([]*ast.Node{nsDecl, importDecl}, exportDecl))
 				}
 
 				// No isolation needed: names match and no self-references.
@@ -1434,6 +1500,7 @@ func (tx *DeclarationTransformer) wrapInCJSExportNamespace(content *ast.Node) *a
 	if tx.needsDeclare {
 		nsMods = append(nsMods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
 	}
+	members, _ = tx.declareStrippingVisitor.VisitSlice(members)
 	return tx.Factory().NewModuleDeclaration(
 		tx.Factory().NewModifierList(nsMods),
 		ast.KindNamespaceKeyword,
@@ -2550,35 +2617,66 @@ func (tx *DeclarationTransformer) getNameExpressionPreferringIdentifier(nameExpr
 	return nameExpr
 }
 
-func (tx *DeclarationTransformer) visitExpressionStatement(node *ast.Node) *ast.Node {
-	if expression := node.Expression(); expression != nil {
+func isNotDeclareModifier(mod *ast.Modifier) bool {
+	return mod.Kind != ast.KindDeclareKeyword
+}
+
+func (tx *DeclarationTransformer) stripDeclareModifiers(node *ast.Node) *ast.Node {
+	if node == nil {
+		return nil
+	}
+	mods := node.Modifiers()
+	if mods != nil {
+		flags := node.ModifierFlags()
+		if flags&ast.ModifierFlagsAmbient != 0 {
+			filtered := core.Filter(mods.Nodes, isNotDeclareModifier)
+			node.AsMutable().SetModifiers(tx.Factory().NewModifierList(filtered))
+		}
+	}
+	return node // no need to recur into children, only strip at top-level
+}
+
+func (tx *DeclarationTransformer) visitCJSExportAssignments(expression *ast.Node) *ast.Node {
+	if expression != nil {
 		_, cleanupDiagnosticContext := tx.setupDiagnosticContext(expression)
 		defer cleanupDiagnosticContext()
 		switch ast.GetAssignmentDeclarationKind(expression) {
 		case ast.JSDeclarationKindModuleExports:
-			if ast.IsSourceFile(node.Parent) && node.Parent.AsSourceFile().CommonJSModuleIndicator != nil {
-				return tx.transformExportAssignment(node, expression, expression.AsBinaryExpression().Right, true /*isExportEquals*/)
-			}
-		case ast.JSDeclarationKindExportsProperty:
-			if ast.IsSourceFile(node.Parent) && node.Parent.AsSourceFile().CommonJSModuleIndicator != nil {
-				return tx.transformCommonJSExport(expression, tx.getNameExpressionPreferringIdentifier(ast.GetElementOrPropertyAccessName(expression.AsBinaryExpression().Left)))
-			}
-		case ast.JSDeclarationKindProperty:
-			return nil // handled in pre-walk
-		case ast.JSDeclarationKindObjectDefinePropertyExports:
-			if ast.IsSourceFile(node.Parent) && node.Parent.AsSourceFile().CommonJSModuleIndicator != nil {
-				return tx.transformCommonJSExport(expression, tx.getNameExpressionPreferringIdentifier(expression.Arguments()[1]))
+			if tx.state.currentSourceFile.CommonJSModuleIndicator != nil {
+				result := tx.transformExportAssignment(expression.Parent, expression, expression.AsBinaryExpression().Right, true /*isExportEquals*/)
+				if result != nil {
+					tx.cjsExportAssignment = result
+					tx.resultHasScopeMarker = true
+					tx.resultHasExternalModuleIndicator = true
+				}
 			}
 		}
+		return tx.cjsExportAssignmentVisitor.VisitEachChild(expression) // recur through the whole tree, looking for module.exports=
 	}
 	return nil
 }
 
 func (tx *DeclarationTransformer) visitNestedExpression(expression *ast.Node) *ast.Node {
 	if expression != nil {
+		_, cleanupDiagnosticContext := tx.setupDiagnosticContext(expression)
+		defer cleanupDiagnosticContext()
 		switch ast.GetAssignmentDeclarationKind(expression) {
 		case ast.JSDeclarationKindProperty:
 			tx.transformExpandoAssignment(expression.AsBinaryExpression())
+		case ast.JSDeclarationKindExportsProperty:
+			if tx.state.currentSourceFile.CommonJSModuleIndicator != nil {
+				result := tx.transformCommonJSExport(expression, tx.getNameExpressionPreferringIdentifier(ast.GetElementOrPropertyAccessName(expression.AsBinaryExpression().Left)))
+				if result != nil {
+					tx.cjsExportMembers = append(tx.cjsExportMembers, result)
+				}
+			}
+		case ast.JSDeclarationKindObjectDefinePropertyExports:
+			if tx.state.currentSourceFile.CommonJSModuleIndicator != nil {
+				result := tx.transformCommonJSExport(expression, tx.getNameExpressionPreferringIdentifier(expression.Arguments()[1]))
+				if result != nil {
+					tx.cjsExportMembers = append(tx.cjsExportMembers, result)
+				}
+			}
 		}
 		return tx.expressionVisitor.VisitEachChild(expression) // recur through the whole tree, looking for special assignments
 	}
@@ -2640,10 +2738,28 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 
 	tx.transformExpandoHost(name, declaration)
 
-	isNonContextualKeywordName := ast.IsNonContextualKeyword(scanner.StringToToken(property))
-	exportName := core.IfElse(isNonContextualKeywordName, tx.Factory().NewGeneratedNameForNode(left), tx.Factory().NewIdentifier(property))
+	exportName := tx.Factory().NewIdentifier(property)
+	localName := tx.tryGetNameOfAssignedExpression(node.AsNode())
+	if localName == nil && !tx.resolver.IsNameResolvable(tx.enclosingDeclaration, property) && !ast.IsNonContextualKeyword(scanner.StringToToken(exportName.Text())) {
+		// use exportName as localName if there won't be any conflicts or keyword issues
+		localName = exportName
+	}
+	if localName == nil || ast.IsNonContextualKeyword(scanner.StringToToken(localName.Text())) {
+		// fallback to a generated name if the localName doesn't exist or is a keyword
+		localName = tx.Factory().NewGeneratedNameForNode(node.AsNode())
+	}
 
 	hostId := tx.getExpandoHostId(declaration)
+	_, cleanupDiagnosticContext := tx.setupDiagnosticContext(node.AsNode())
+	defer cleanupDiagnosticContext()
+
+	if ast.IsIdentifier(node.Right) {
+		// alias-like, emit an `export {name}` or `export {name as alias}`
+		result := tx.transformBinaryExpressionToExportDeclaration(node.AsNode(), exportName)
+		tx.expandoMembers[hostId] = append(tx.expandoMembers[hostId], result)
+		return
+	}
+
 	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
 	var varModifiers *ast.ModifierList
 
@@ -2657,6 +2773,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 	declarationData.Symbol = host
 	containerData := synthesizedNamespace.LocalsContainerData()
 	containerData.Locals = make(ast.SymbolTable, 0)
+	containerData.Locals[localName.Text()] = symbol
 
 	oldEnclosing := tx.enclosingDeclaration
 	tx.enclosingDeclaration = synthesizedNamespace
@@ -2664,25 +2781,22 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		tx.enclosingDeclaration = oldEnclosing
 	}()
 
-	_, cleanupDiagnosticContext := tx.setupDiagnosticContext(node.AsNode())
-	defer cleanupDiagnosticContext()
-
 	statements := []*ast.Statement{
 		tx.Factory().NewVariableStatement(
 			varModifiers,
 			tx.Factory().NewVariableDeclarationList(
 				tx.Factory().NewNodeList([]*ast.Node{
-					tx.Factory().NewVariableDeclaration(exportName, nil /*exclamationToken*/, tx.ensureType(node.AsNode(), false), nil /*initializer*/),
+					tx.Factory().NewVariableDeclaration(localName, nil /*exclamationToken*/, tx.ensureType(node.AsNode(), false), nil /*initializer*/),
 				}),
 				ast.NodeFlagsNone,
 			),
 		),
 	}
 
-	if isNonContextualKeywordName {
+	if localName.Text() != exportName.Text() {
 		namedExports := tx.Factory().NewNamedExports(tx.Factory().NewNodeList(
 			[]*ast.Node{
-				tx.Factory().NewExportSpecifier(false /*isTypeOnly*/, exportName, tx.Factory().NewIdentifier(property)),
+				tx.Factory().NewExportSpecifier(false /*isTypeOnly*/, localName, exportName),
 			},
 		))
 		statements = append(statements, tx.Factory().NewExportDeclaration(nil /*modifiers*/, false /*isTypeOnly*/, namedExports, nil /*moduleSpecifier*/, nil /*attributes*/))

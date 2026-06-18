@@ -36,12 +36,6 @@ module.exports.Another = Q;
 
 
 //// [index.d.ts]
-declare class A {
-    member: Q;
-}
-declare class Q {
-    x: number;
-}
 export = Q_1;
 declare class Q_1 {
     x: A;
@@ -49,4 +43,10 @@ declare class Q_1 {
 }
 declare namespace Q_1 {
     export { Q as Another };
+}
+declare class A {
+    member: Q;
+}
+declare class Q {
+    x: number;
 }

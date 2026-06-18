@@ -82,10 +82,11 @@ C.B = B;
 export declare class Foo {
 }
 //// [index1.d.ts]
+import { Foo } from './foo';
 declare function Example(): void;
 export default Example;
 declare namespace Example {
-    var Foo: typeof import("./foo").Foo;
+    export { Foo };
 }
 //// [index2.d.ts]
 import { Foo } from './foo';
@@ -93,7 +94,7 @@ export { Foo };
 declare function Example(): void;
 export default Example;
 declare namespace Example {
-    var Foo: typeof import("./foo").Foo;
+    export { Foo };
 }
 //// [index3.d.ts]
 export declare class Bar {
@@ -101,11 +102,14 @@ export declare class Bar {
 declare function Example(): void;
 export default Example;
 declare namespace Example {
-    var Bar: typeof import("./index3").Bar;
+    export { Bar };
 }
 //// [index4.d.ts]
+declare function A(): void;
+declare function B(): void;
 export declare function C(): any;
 export declare namespace C {
-    var A: () => void;
-    var B: () => void;
+    export { A };
+    export { B };
 }
+export {};

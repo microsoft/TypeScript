@@ -43,15 +43,14 @@
   */
 -export function f<T>(a: T): T;
 -export namespace f {
--    export { f as self };
--}
++export declare function f<T>(a: T): T;
++export declare namespace f {
+     export { f as self };
+ }
 -export function i(): void;
 -export function j(): void;
 -declare class Cls {
-+export declare function f<T>(a: T): T;
-+export declare namespace f {
-+    var self: typeof f;
- }
+-}
  /**
   * @param {{x: string}} a
   * @param {{y: typeof b}} b

@@ -6,6 +6,6 @@
  //// [moduleExportAliasElementAccessExpression.d.ts]
 -export function D(): void;
 -export { D as _Does_not_work_yet };
-+declare function D(): void;
 +export { D };
 +export { D as "Does not work yet" };
++declare function D(): void;

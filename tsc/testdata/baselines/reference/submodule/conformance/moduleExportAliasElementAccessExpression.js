@@ -16,6 +16,6 @@ exports["Does not work yet"] = D;
 
 
 //// [moduleExportAliasElementAccessExpression.d.ts]
-declare function D(): void;
 export { D };
 export { D as "Does not work yet" };
+declare function D(): void;

@@ -21,8 +21,9 @@ if (true) {
 //// [declarationEmitNestedExpandoPropsRegression.d.ts]
 declare function Foo(): void;
 declare namespace Foo {
-    var top: number;
-    var inInitializer: number;
-    var inBlock: number;
+    var _a: number;
+    export { _a as top };
+    export var inInitializer: number;
+    export var inBlock: number;
 }
 declare let d: number;

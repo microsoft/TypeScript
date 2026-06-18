@@ -30,6 +30,12 @@
 +export declare var d: (a: number, b: number) => string;
 +export declare var e: <T, U>(a: T, b: U) => T & U;
 +export declare var f: <T>(a: T) => T;
++export { g };
++export { hh as h };
++export declare var i: () => void;
++export declare var ii: () => void;
++export declare var jj: () => void;
++export declare var j: () => void;
  /**
   * @param {{x: string}} a
   * @param {{y: typeof module.exports.b}} b
@@ -44,11 +50,9 @@
 -    };
 +    y: () => void;
  }): void | "";
-+export { g };
  /**
   * @param {{x: string}} a
-  * @param {{y: typeof module.exports.b}} b
-@@= skipped -39, +23 lines =@@
+@@= skipped -39, +28 lines =@@
  declare function hh(a: {
      x: string;
  }, b: {
@@ -59,8 +63,3 @@
 +    y: () => void;
  }): void | "";
 -export { hh as h, i as ii, j as jj };
-+export { hh as h };
-+export declare var i: () => void;
-+export declare var ii: () => void;
-+export declare var jj: () => void;
-+export declare var j: () => void;

@@ -7,7 +7,7 @@
 -export const thing: Something;
 -import Something_1 = require("fs");
 -import Something = Something_1.Something;
-+declare const _default: {
++declare const _exports: {
 +    thing: import("fs").Something;
 +};
-+export = _default;
++export = _exports;

@@ -120,6 +120,12 @@ export declare var c: () => void;
 export declare var d: (a: number, b: number) => string;
 export declare var e: <T, U>(a: T, b: U) => T & U;
 export declare var f: <T>(a: T) => T;
+export { g };
+export { hh as h };
+export declare var i: () => void;
+export declare var ii: () => void;
+export declare var jj: () => void;
+export declare var j: () => void;
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
@@ -129,7 +135,6 @@ declare function g(a: {
 }, b: {
     y: () => void;
 }): void | "";
-export { g };
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
@@ -139,8 +144,3 @@ declare function hh(a: {
 }, b: {
     y: () => void;
 }): void | "";
-export { hh as h };
-export declare var i: () => void;
-export declare var ii: () => void;
-export declare var jj: () => void;
-export declare var j: () => void;

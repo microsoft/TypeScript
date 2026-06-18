@@ -220,7 +220,6 @@ conformance/tsxReactEmit8(jsx=react-jsxdev).js.diff
 
 ## deprecated features ##
 compiler/allowJsClassThisTypeCrash.symbols.diff
-compiler/amdLikeInputDeclarationEmit.errors.txt.diff
 compiler/amdLikeInputDeclarationEmit.js.diff
 compiler/amdLikeInputDeclarationEmit.symbols.diff
 compiler/amdLikeInputDeclarationEmit.types.diff
@@ -974,12 +973,9 @@ compiler/nodeNextPackageSelfNameWithOutDirDeclDirNestedDirs.js.diff
 conformance/exportDefaultNamespace.js.diff
 conformance/jsDeclarationsClassStatic2.js.diff
 conformance/jsDeclarationsComputedNames(target=es2015).js.diff
-conformance/jsDeclarationsExportAssignedClassInstance1(target=es2015).js.diff
-conformance/jsDeclarationsExportAssignedClassInstance2(target=es2015).js.diff
 conformance/jsDeclarationsJson(target=es2015).js.diff
 conformance/jsDeclarationsPrivateFields01.js.diff
 conformance/jsDeclarationsReexportAliases(target=es2015).js.diff
-conformance/jsDeclarationsTypeReassignmentFromDeclaration.js.diff
 conformance/typedefOnStatements.js.diff
 conformance/typeTagNoErasure.js.diff
 conformance/recursiveTypeReferences2.js.diff
@@ -1258,7 +1254,6 @@ conformance/jsDeclarationsClassStaticMethodAugmentation(target=es2015).js.diff
 conformance/jsDeclarationsCrossfileMerge(target=es2015).js.diff
 conformance/jsDeclarationsDefaultsErr(target=es2015).js.diff
 conformance/jsDeclarationsFunctions.js.diff
-conformance/jsDeclarationsFunctionWithDefaultAssignedMember.js.diff
 conformance/jsDeclarationsFunctionJSDoc(target=es2015).js.diff
 conformance/jsDeclarationsClassAccessor.js.diff
 conformance/jsDeclarationsExportAssignedClassInstance3(target=es2015).js.diff
@@ -1367,7 +1362,6 @@ conformance/moduleExportsElementAccessAssignment.js.diff
 
 # CJS `module.exports = {}` now emits `export = _default` with inlined object type instead of named exports
 ## https://github.com/microsoft/typescript-go/issues/3543
-compiler/jsDeclarationEmitExportAssignedArray.js.diff
 compiler/jsDeclarationEmitExportAssignedFunctionWithExtraTypedefsMembers.js.diff
 conformance/jsDeclarationsCommonjsRelativePath.js.diff
 conformance/jsDeclarationsDocCommentsOnConsts(target=es2015).js.diff

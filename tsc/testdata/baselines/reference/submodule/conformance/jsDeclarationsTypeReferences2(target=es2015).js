@@ -39,7 +39,7 @@ export declare const o: {
     m: number;
 };
 //// [index.d.ts]
-declare const _default: {
+declare const _exports: {
     thing: number;
 };
-export = _default;
+export = _exports;

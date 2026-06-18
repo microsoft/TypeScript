@@ -49,6 +49,8 @@ module.exports.Strings = Strings;
 
 
 //// [source.d.ts]
+export = Handler;
+export { Strings };
 declare class Handler {
     static get OPTIONS(): number;
     process(): void;
@@ -60,8 +62,6 @@ declare const Strings: {
     a: string;
     b: string;
 };
-export = Handler;
-export { Strings };
 export type HandlerOptions = {
     /**
      * Should be able to export a type alias at the same time.

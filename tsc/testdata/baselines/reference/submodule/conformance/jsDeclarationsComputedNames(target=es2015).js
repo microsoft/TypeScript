@@ -62,9 +62,7 @@ MyClass[_a] = 12;
 
 
 //// [index.d.ts]
-declare const TopLevelSym: unique symbol;
-declare const InnerSym: unique symbol;
-declare const _default: {
+declare const _exports: {
     [TopLevelSym](x?: number): number;
     items: {
         [InnerSym]: (arg?: {
@@ -72,7 +70,9 @@ declare const _default: {
         }) => number;
     };
 };
-export = _default;
+export = _exports;
+declare const TopLevelSym: unique symbol;
+declare const InnerSym: unique symbol;
 //// [index2.d.ts]
 declare const TopLevelSym: unique symbol;
 declare const InnerSym: unique symbol;

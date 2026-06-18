@@ -25,3 +25,11 @@ function foo() {
     };
     exports.methods = m;
 }
+
+
+//// [index.d.ts]
+export = _exports;
+declare function _exports(o: any): any;
+declare namespace _exports {
+    export var methods: () => void;
+}

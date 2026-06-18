@@ -80,7 +80,6 @@ type Binder struct {
 	flowListArena           core.Arena[ast.FlowList]
 	singleDeclarationsArena core.Arena[*ast.Node]
 	expandoAssignments      []ExpandoAssignmentInfo
-	nestedCJSExports        []*ast.Node
 }
 
 type ActiveLabel struct {
@@ -129,7 +128,6 @@ func bindSourceFile(file *ast.SourceFile) {
 		b.bindDeferredExpandoAssignments()
 		file.SymbolCount = b.symbolCount
 		file.ClassifiableNames = b.classifiableNames
-		file.NestedCJSExports = b.nestedCJSExports
 	})
 }
 
@@ -876,12 +874,6 @@ func (b *Binder) bindExportAssignment(node *ast.Node) {
 	}
 }
 
-func (b *Binder) trackNestedCJSExport(node *ast.Node) {
-	if !(ast.IsSourceFile(node.Parent) || ast.IsExpressionStatement(node.Parent) && ast.IsSourceFile(node.Parent.Parent)) {
-		b.nestedCJSExports = append(b.nestedCJSExports, node)
-	}
-}
-
 func (b *Binder) bindJsxAttributes(node *ast.Node) {
 	b.bindAnonymousDeclaration(node, ast.SymbolFlagsObjectLiteral, ast.InternalSymbolNameJSXAttributes)
 }
@@ -1023,7 +1015,6 @@ func (b *Binder) addLateBoundAssignmentDeclarationToSymbol(node *ast.Node, symbo
 
 func (b *Binder) bindModuleExportsAssignment(node *ast.Node) {
 	if b.setCommonJSModuleIndicator(node) {
-		b.trackNestedCJSExport(node)
 		container := b.file.AsNode()
 		flags := core.IfElse(ast.ExpressionIsAlias(node.AsBinaryExpression().Right), ast.SymbolFlagsAlias, ast.SymbolFlagsProperty)
 		symbol := b.declareSymbol(ast.GetExports(container.Symbol()), container.Symbol(), node, flags, 0)
@@ -1094,7 +1085,6 @@ func getParentOfPropertyAssignment(node *ast.Node) *ast.Node {
 
 func (b *Binder) bindExportsOrObjectDefineProperty(node *ast.Node) {
 	if b.setCommonJSModuleIndicator(node) {
-		b.trackNestedCJSExport(node)
 		container := b.file.AsNode()
 		flags := core.IfElse(ast.IsBinaryExpression(node) && ast.ExpressionIsAlias(node.AsBinaryExpression().Right), ast.SymbolFlagsAlias, ast.SymbolFlagsFunctionScopedVariable)
 		b.declareSymbol(ast.GetExports(container.Symbol()), container.Symbol(), node, flags, ast.SymbolFlagsFunctionScopedVariableExcludes)

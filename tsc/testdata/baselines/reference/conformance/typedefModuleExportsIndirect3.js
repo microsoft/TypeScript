@@ -23,13 +23,13 @@ var c;
 
 
 //// [typedefModuleExportsIndirect3.d.ts]
+export = o;
 export type C = {
     a: 1;
     m: 1;
 };
 /** @typedef {{ a: 1, m: 1 }} C */
 declare const o: {};
-export = o;
 //// [use.d.ts]
 type C = import('./typedefModuleExportsIndirect3').C;
 /** @typedef {import('./typedefModuleExportsIndirect3').C} C */

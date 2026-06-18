@@ -28,7 +28,9 @@ module.exports.memberName = "thing";
 declare function validate(): void;
 export default validate;
 //// [index.d.ts]
+declare const _exports: typeof m.default;
+export = _exports;
+declare namespace _exports {
+    export var memberName: "thing";
+}
 import m = require("./exporter");
-declare const _default: typeof m.default;
-export = _default;
-export declare var memberName: "thing";

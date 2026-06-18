@@ -4,19 +4,19 @@
  module.exports.memberName = "thing";
 
 
--//// [index.d.ts]
--declare const _exports: typeof m.default;
--export = _exports;
--import m = require("./exporter");
++//// [exporter.d.ts]
++declare function validate(): void;
++export default validate;
+ //// [index.d.ts]
+ declare const _exports: typeof m.default;
+ export = _exports;
++declare namespace _exports {
++    export var memberName: "thing";
++}
+ import m = require("./exporter");
 -
 -
 -!!!! File out/exporter.d.ts missing from original emit, but present in noCheck emit
- //// [exporter.d.ts]
+-//// [exporter.d.ts]
 -export default validate;
- declare function validate(): void;
-+export default validate;
-+//// [index.d.ts]
-+import m = require("./exporter");
-+declare const _default: typeof m.default;
-+export = _default;
-+export declare var memberName: "thing";
+-declare function validate(): void;

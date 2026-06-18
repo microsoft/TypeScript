@@ -5,9 +5,8 @@
 
  //// [mod1.d.ts]
 -export class K {
++export { K };
 +declare class K {
      values(): K;
  }
-+export { K };
  //// [main.d.ts]
- export {};

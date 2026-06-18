@@ -6,9 +6,9 @@ module.exports = [{ name: 'other', displayName: 'Other', defaultEnabled: true }]
 
 
 //// [file.d.ts]
-declare const _default: {
+declare const _exports: {
     name: string;
     displayName: string;
     defaultEnabled: boolean;
 }[];
-export = _default;
+export = _exports;

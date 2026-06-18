@@ -13,8 +13,10 @@ exports.customSymbol2 = Symbol("custom");
 
 
 //// [file.d.ts]
-declare const _default: {
+declare const _exports: {
     customSymbol: symbol;
 };
-export = _default;
-export declare var customSymbol2: symbol;
+export = _exports;
+declare namespace _exports {
+    export var customSymbol2: symbol;
+}

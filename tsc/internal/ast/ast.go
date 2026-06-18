@@ -2522,7 +2522,6 @@ type SourceFile struct {
 	SymbolCount               int
 	ClassifiableNames         collections.Set[string]
 	PatternAmbientModules     []*PatternAmbientModule
-	NestedCJSExports          []*Node
 	GlobalExports             SymbolTable
 
 	// Fields set by ECMALineMap

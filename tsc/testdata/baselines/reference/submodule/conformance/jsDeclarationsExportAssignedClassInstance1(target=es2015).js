@@ -13,7 +13,7 @@ module.exports = new Foo();
 
 
 //// [index.d.ts]
+declare const _exports: Foo;
+export = _exports;
 declare class Foo {
 }
-declare const _default: Foo;
-export = _default;

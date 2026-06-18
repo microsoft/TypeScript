@@ -34,9 +34,9 @@ function f(k) {
 
 
 //// [mod1.d.ts]
+export { K };
 declare class K {
     values(): K;
 }
-export { K };
 //// [main.d.ts]
 export {};

@@ -20,9 +20,9 @@ module.exports = new Foo();
 
 
 //// [index.d.ts]
+declare const _exports: Foo;
+export = _exports;
 declare class Foo {
     static stat: number;
     member: number;
 }
-declare const _default: Foo;
-export = _default;
