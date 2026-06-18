@@ -43,6 +43,23 @@ type DeclarationEmitHost interface {
 	GetEmitResolver() printer.EmitResolver
 }
 
+type thisPropertyAssignmentKey struct {
+	name      string
+	node      *ast.Node
+	isStatic  bool
+	isPrivate bool
+}
+
+func getThisPropertyAssignmentKey(name *ast.Node, node *ast.Node, isStatic bool) thisPropertyAssignmentKey {
+	isPrivate := ast.IsPrivateIdentifier(name)
+	if name != nil && !ast.IsDynamicName(name) {
+		if nameText, ok := ast.TryGetTextOfPropertyName(name); ok {
+			return thisPropertyAssignmentKey{name: nameText, isStatic: isStatic, isPrivate: isPrivate}
+		}
+	}
+	return thisPropertyAssignmentKey{node: node, isStatic: isStatic, isPrivate: isPrivate}
+}
+
 type DeclarationTransformer struct {
 	transformers.Transformer
 	host                DeclarationEmitHost
@@ -63,7 +80,7 @@ type DeclarationTransformer struct {
 	lateStatementReplacementMap      map[ast.NodeId]*ast.Node
 	expandoHosts                     map[ast.NodeId]*ast.Node   // store the result of transforming expando hosts so they can be inserted later if the host is actually referenced
 	expandoMembers                   map[ast.NodeId][]*ast.Node // store any found expando _members_ after transforming them so *if* the host is referenced, they can be emitted alongside it
-	seenProperties                   collections.Set[*ast.Node]
+	seenProperties                   collections.Set[thisPropertyAssignmentKey]
 	thisPropertyAssignmentsCollected []*ast.Node
 	rawReferencedFiles               []ReferencedFilePair
 	rawTypeReferenceDirectives       []*ast.FileReference
@@ -1970,10 +1987,11 @@ caseBlock:
 	case ast.JSDeclarationKindThisProperty:
 		name := ast.GetNameOfDeclaration(node)
 		base := tx.resolver.GetReferencedMemberValueDeclaration(node)
-		if base == nil || tx.seenProperties.Has(base) {
+		key := getThisPropertyAssignmentKey(name, node, isStatic)
+		if base == nil || tx.seenProperties.Has(key) {
 			break
 		}
-		tx.seenProperties.Add(base)
+		tx.seenProperties.Add(key)
 
 		// problem: this prop might be overriding a prop from a base type. The checker has special bails for override compat comparisons for binary expression properties,
 		// but what we transform to won't - so we either need to match the base type (for example, if it's a getter/setter) or emit nothing
@@ -2044,11 +2062,12 @@ func isClassExtendingNull(node *ast.Node) bool {
 // of JS classes and synthesizes PropertyDeclaration nodes for each unique property name.
 func (tx *DeclarationTransformer) collectThisPropertyAssignments(classNode *ast.Node) []*ast.Node {
 	members := classNode.ClassLikeData().Members
-	seen := collections.Set[*ast.Node]{}
+	seen := collections.Set[thisPropertyAssignmentKey]{}
 	// Pre-populate seen with existing direct member nodes to avoid duplicates
 	for _, member := range members.Nodes {
 		if member.Name() != nil {
-			seen.Add(member)
+			isStatic := ast.IsStatic(member)
+			seen.Add(getThisPropertyAssignmentKey(member.Name(), member, isStatic))
 		}
 	}
 	tx.seenProperties = seen
