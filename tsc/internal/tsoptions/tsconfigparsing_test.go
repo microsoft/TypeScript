@@ -887,6 +887,40 @@ func TestParseJsonSourceFileConfigFileContentReportsInvalidExtendedConfig(t *tes
 	}
 }
 
+// Extending an empty config file used to panic on nil Statements (#4265).
+func TestParseJsonSourceFileConfigFileContentWithEmptyExtendedConfig(t *testing.T) {
+	t.Parallel()
+	files := map[string]string{
+		"/project/tsconfig.json": `{
+  "extends": "./base.json"
+}`,
+		"/project/base.json": "",
+		"/project/main.ts":   "export const x = 1;",
+	}
+	host := tsoptionstest.NewVFSParseConfigHost(files, "/project", true /*useCaseSensitiveFileNames*/)
+	configFileName := "/project/tsconfig.json"
+	configFile := tsoptions.NewTsconfigSourceFileFromFilePath(
+		configFileName,
+		tspath.ToPath(configFileName, host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()),
+		files[configFileName],
+	)
+
+	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
+		configFile,
+		host,
+		host.GetCurrentDirectory(),
+		nil,
+		nil,
+		configFileName,
+		nil,
+		nil,
+		nil,
+	)
+
+	assert.Assert(t, parsed != nil)
+	assert.DeepEqual(t, parsed.FileNames(), []string{"/project/main.ts"})
+}
+
 func TestParseJsonSourceFileConfigFileContentDoesNotDuplicateUnquotedKeyDiagnostics(t *testing.T) {
 	t.Parallel()
 	parsed := tsoptionstest.GetParsedCommandLine(t, `{

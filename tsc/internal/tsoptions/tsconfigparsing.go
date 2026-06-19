@@ -960,8 +960,9 @@ func readJsonConfigFile(fileName string, path tspath.Path, readFile func(fileNam
 			}, text, core.ScriptKindJSON),
 		}, diagnostic
 	} else {
+		factory := &ast.NodeFactory{}
 		file := &TsConfigSourceFile{
-			SourceFile: (&ast.NodeFactory{}).NewSourceFile(ast.SourceFileParseOptions{FileName: fileName, Path: path}, "", nil, (&ast.NodeFactory{}).NewToken(ast.KindEndOfFile)).AsSourceFile(),
+			SourceFile: factory.NewSourceFile(ast.SourceFileParseOptions{FileName: fileName, Path: path}, "", factory.NewNodeList([]*ast.Node{}), factory.NewToken(ast.KindEndOfFile)).AsSourceFile(),
 		}
 		file.SourceFile.SetDiagnostics(diagnostic)
 		return file, diagnostic
