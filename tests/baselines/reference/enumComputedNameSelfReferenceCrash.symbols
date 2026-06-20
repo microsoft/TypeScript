@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/enumComputedNameSelfReferenceCrash.ts] ////
+
+=== enumComputedNameSelfReferenceCrash.ts ===
+// Computed enum member names are not allowed, but a computed name that refers back to a member of
+// the same enum must not send the checker into infinite recursion while resolving the enum type.
+// https://github.com/microsoft/TypeScript/issues/63173
+
+declare const enum E {
+>E : Symbol(E, Decl(enumComputedNameSelfReferenceCrash.ts, 0, 0))
+
+    [object] = 1,
+>[object] : Symbol(E[object], Decl(enumComputedNameSelfReferenceCrash.ts, 4, 22))
+>object : Symbol(E.object, Decl(enumComputedNameSelfReferenceCrash.ts, 6, 6))
+
+    A,
+>A : Symbol(E.A, Decl(enumComputedNameSelfReferenceCrash.ts, 5, 17))
+
+    object = 10,
+>object : Symbol(E.object, Decl(enumComputedNameSelfReferenceCrash.ts, 6, 6))
+}
+E.A.toString();
+>E.A.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>E.A : Symbol(E.A, Decl(enumComputedNameSelfReferenceCrash.ts, 5, 17))
+>E : Symbol(E, Decl(enumComputedNameSelfReferenceCrash.ts, 0, 0))
+>A : Symbol(E.A, Decl(enumComputedNameSelfReferenceCrash.ts, 5, 17))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+const enum F {
+>F : Symbol(F, Decl(enumComputedNameSelfReferenceCrash.ts, 9, 15))
+
+    [F.A] = 1,
+>[F.A] : Symbol(F[F.A], Decl(enumComputedNameSelfReferenceCrash.ts, 11, 14))
+>F.A : Symbol(F.A, Decl(enumComputedNameSelfReferenceCrash.ts, 12, 14))
+>F : Symbol(F, Decl(enumComputedNameSelfReferenceCrash.ts, 9, 15))
+>A : Symbol(F.A, Decl(enumComputedNameSelfReferenceCrash.ts, 12, 14))
+
+    A = 2,
+>A : Symbol(F.A, Decl(enumComputedNameSelfReferenceCrash.ts, 12, 14))
+}
+F.A.toString();
+>F.A.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>F.A : Symbol(F.A, Decl(enumComputedNameSelfReferenceCrash.ts, 12, 14))
+>F : Symbol(F, Decl(enumComputedNameSelfReferenceCrash.ts, 9, 15))
+>A : Symbol(F.A, Decl(enumComputedNameSelfReferenceCrash.ts, 12, 14))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+enum G {
+>G : Symbol(G, Decl(enumComputedNameSelfReferenceCrash.ts, 15, 15))
+
+    [G.b] = 1,
+>[G.b] : Symbol(G[G.b], Decl(enumComputedNameSelfReferenceCrash.ts, 17, 8))
+>G.b : Symbol(G.b, Decl(enumComputedNameSelfReferenceCrash.ts, 18, 14))
+>G : Symbol(G, Decl(enumComputedNameSelfReferenceCrash.ts, 15, 15))
+>b : Symbol(G.b, Decl(enumComputedNameSelfReferenceCrash.ts, 18, 14))
+
+    b = 2,
+>b : Symbol(G.b, Decl(enumComputedNameSelfReferenceCrash.ts, 18, 14))
+}
+G.b;
+>G.b : Symbol(G.b, Decl(enumComputedNameSelfReferenceCrash.ts, 18, 14))
+>G : Symbol(G, Decl(enumComputedNameSelfReferenceCrash.ts, 15, 15))
+>b : Symbol(G.b, Decl(enumComputedNameSelfReferenceCrash.ts, 18, 14))
+

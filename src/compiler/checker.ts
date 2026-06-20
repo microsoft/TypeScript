@@ -2063,6 +2063,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var evolvingArrayTypes: EvolvingArrayType[] = [];
     var undefinedProperties: SymbolTable = new Map();
     var markerTypes = new Set<number>();
+    // Enum symbols whose member names are currently being late-bound, used to break the recursion
+    // that a computed enum member name referring back to the same enum would otherwise cause.
+    var enumsResolvingLateBoundNames = new Set<Symbol>();
 
     var unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
     var resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
@@ -13544,12 +13547,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getDeclaredTypeOfEnum(symbol: Symbol): Type {
         const links = getSymbolLinks(symbol);
         if (!links.declaredType) {
+            // A member with a dynamic (computed) name can refer back to a member of the same enum
+            // (e.g. `enum E { [object] = 1, object = 2 }`). Determining whether that name is
+            // late-bindable resolves the referenced member's type, which re-enters this function;
+            // while that resolution is in progress we must not try to late-bind such names again,
+            // otherwise we recurse until the stack overflows. Computed names are not permitted on
+            // enum members anyway (a separate error is reported), so treating them as non-bindable
+            // here only affects already-invalid code.
+            const resolvingLateBoundNames = enumsResolvingLateBoundNames.has(symbol);
+            if (!resolvingLateBoundNames) {
+                enumsResolvingLateBoundNames.add(symbol);
+            }
             const memberTypeList: Type[] = [];
             if (symbol.declarations) {
                 for (const declaration of symbol.declarations) {
                     if (declaration.kind === SyntaxKind.EnumDeclaration) {
                         for (const member of (declaration as EnumDeclaration).members) {
-                            if (hasBindableName(member)) {
+                            const bindable = resolvingLateBoundNames ? !hasDynamicName(member) : hasBindableName(member);
+                            if (bindable) {
                                 const memberSymbol = getSymbolOfDeclaration(member);
                                 const value = getEnumMemberValue(member).value;
                                 const memberType = getFreshTypeOfLiteralType(
@@ -13564,6 +13579,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
+            if (!resolvingLateBoundNames) {
+                enumsResolvingLateBoundNames.delete(symbol);
+            }
             const enumType = memberTypeList.length ?
                 getUnionType(memberTypeList, UnionReduction.Literal, symbol, /*aliasTypeArguments*/ undefined) :
                 createComputedEnumType(symbol);
@@ -13571,7 +13589,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 enumType.flags |= TypeFlags.EnumLiteral;
                 enumType.symbol = symbol;
             }
-            links.declaredType = enumType;
+            links.declaredType ??= enumType;
         }
         return links.declaredType;
     }

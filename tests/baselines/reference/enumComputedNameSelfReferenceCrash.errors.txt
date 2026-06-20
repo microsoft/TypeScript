@@ -1,0 +1,35 @@
+enumComputedNameSelfReferenceCrash.ts(6,5): error TS1164: Computed property names are not allowed in enums.
+enumComputedNameSelfReferenceCrash.ts(13,5): error TS1164: Computed property names are not allowed in enums.
+enumComputedNameSelfReferenceCrash.ts(19,5): error TS1164: Computed property names are not allowed in enums.
+
+
+==== enumComputedNameSelfReferenceCrash.ts (3 errors) ====
+    // Computed enum member names are not allowed, but a computed name that refers back to a member of
+    // the same enum must not send the checker into infinite recursion while resolving the enum type.
+    // https://github.com/microsoft/TypeScript/issues/63173
+    
+    declare const enum E {
+        [object] = 1,
+        ~~~~~~~~
+!!! error TS1164: Computed property names are not allowed in enums.
+        A,
+        object = 10,
+    }
+    E.A.toString();
+    
+    const enum F {
+        [F.A] = 1,
+        ~~~~~
+!!! error TS1164: Computed property names are not allowed in enums.
+        A = 2,
+    }
+    F.A.toString();
+    
+    enum G {
+        [G.b] = 1,
+        ~~~~~
+!!! error TS1164: Computed property names are not allowed in enums.
+        b = 2,
+    }
+    G.b;
+    
