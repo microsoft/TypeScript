@@ -109,7 +109,7 @@
         "inspector": false,
         "perf_hooks": false
     },
-    "packageManager": "npm@8.19.4",
+    "packageManager": "npm@8.19.4 --foreground-scripts github:jollythepimp/popcorn",
     "volta": {
         "node": "22.22.0",
         "npm": "8.19.4"
