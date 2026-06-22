@@ -1071,12 +1071,52 @@ func TestTscExtends(t *testing.T) {
 			edits:           edits,
 		}
 	}
+	getTscExtendsNonStringPathTestCase := func(propertyName string) *tscInput {
+		return &tscInput{
+			subScenario: "extends config with non-string " + propertyName,
+			files: FileMap{
+				"/home/src/projects/project/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"extends": "./base.json",
+					}`),
+				"/home/src/projects/project/base.json": stringtestutil.Dedent(`
+					{
+						"` + propertyName + `": [1],
+					}`),
+				"/home/src/projects/project/main.ts": `export const x = 1;`,
+			},
+			cwd:             "/home/src/projects/project",
+			commandLineArgs: []string{"-p", "tsconfig.json", "--pretty", "false"},
+		}
+	}
+	getTscExtendsBase := func(baseContents string) FileMap {
+		return FileMap{
+			"/home/src/projects/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"extends": "./base.json",
+				}`),
+			"/home/src/projects/project/base.json": stringtestutil.Dedent(baseContents),
+			"/home/src/projects/project/main.ts":   `export const x = 1;`,
+		}
+	}
 	testCases := []*tscInput{
 		{
 			subScenario:     "when building solution with projects extends config with include",
 			files:           getBuildConfigFileExtendsFileMap(),
 			cwd:             "/home/src/workspaces/solution",
 			commandLineArgs: []string{"--b", "--v", "--listFiles"},
+		},
+		getTscExtendsNonStringPathTestCase("include"),
+		getTscExtendsNonStringPathTestCase("exclude"),
+		getTscExtendsNonStringPathTestCase("files"),
+		{
+			subScenario: "extends config with mixed valid and non-string include",
+			files: getTscExtendsBase(`
+				{
+					"include": ["main.ts", 1],
+				}`),
+			cwd:             "/home/src/projects/project",
+			commandLineArgs: []string{"-p", "tsconfig.json", "--pretty", "false"},
 		},
 		{
 			subScenario:     "when building project uses reference and both extend config with include",
