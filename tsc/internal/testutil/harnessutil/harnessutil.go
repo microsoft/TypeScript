@@ -661,6 +661,7 @@ func compileFilesWithHost(
 	ctx := context.Background()
 	program := createProgram(host, config)
 	var diagnostics []*ast.Diagnostic
+	diagnostics = append(diagnostics, program.GetConfigFileParsingDiagnostics()...)
 	diagnostics = append(diagnostics, program.GetProgramDiagnostics()...)
 	diagnostics = append(diagnostics, program.GetSyntacticDiagnostics(ctx, nil)...)
 	diagnostics = append(diagnostics, program.GetSemanticDiagnostics(ctx, nil)...)
