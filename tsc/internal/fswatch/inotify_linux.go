@@ -89,9 +89,10 @@ const (
 
 // inotifySubscription.
 type inotifySubscription struct {
-	path     string
-	dirWatch *dirWatch
-	wd       int
+	path      string
+	watchPath string
+	dirWatch  *dirWatch
+	wd        int
 }
 
 // inotifyBackend.
@@ -213,7 +214,7 @@ func (b *inotifyBackend) shutdown() {
 // virtual dispatch under b.mu (so it's serialized against handleEvent).
 func (b *inotifyBackend) subscribe(w *dirWatch) error {
 	if !w.recursive {
-		if _, err := b.watchDir(w, w.dir); err != nil {
+		if _, err := b.watchDir(w, w.dir, w.physicalDir); err != nil {
 			return &dirWatchError{
 				err:      fmt.Errorf("inotify_add_watch on '%s' failed: %w", w.dir, err),
 				dirWatch: w,
@@ -221,11 +222,12 @@ func (b *inotifyBackend) subscribe(w *dirWatch) error {
 		}
 		return nil
 	}
-	if err := walkDir(w.dir, true, func(path string, isDir bool) error {
+	if err := walkDir(w.physicalDir, true, func(watchPath string, isDir bool) error {
 		if !isDir {
 			return nil
 		}
-		if _, err := b.watchDir(w, path); err != nil {
+		path := w.displayPath(watchPath)
+		if _, err := b.watchDir(w, path, watchPath); err != nil {
 			return &dirWatchError{
 				err:      fmt.Errorf("inotify_add_watch on '%s' failed: %w", path, err),
 				dirWatch: w,
@@ -241,12 +243,12 @@ func (b *inotifyBackend) subscribe(w *dirWatch) error {
 
 // watchDir registers an inotify watch on path and records the resulting
 // subscription. Returns the kernel watch descriptor on success.
-func (b *inotifyBackend) watchDir(w *dirWatch, path string) (int, error) {
-	wd, err := unix.InotifyAddWatch(b.inotify, path, inotifyMask)
+func (b *inotifyBackend) watchDir(w *dirWatch, path string, watchPath string) (int, error) {
+	wd, err := unix.InotifyAddWatch(b.inotify, watchPath, inotifyMask)
 	if err != nil {
 		return 0, err
 	}
-	sub := &inotifySubscription{path: path, dirWatch: w, wd: wd}
+	sub := &inotifySubscription{path: path, watchPath: watchPath, dirWatch: w, wd: wd}
 	b.subscriptions[wd] = append(b.subscriptions[wd], sub)
 	return wd, nil
 }
@@ -328,20 +330,22 @@ func (b *inotifyBackend) handleEvent(ev *unix.InotifyEvent, name string, touched
 func (b *inotifyBackend) handleSubscription(ev *unix.InotifyEvent, name string, sub *inotifySubscription) bool {
 	w := sub.dirWatch
 	path := sub.path
+	watchPath := sub.watchPath
 	isDir := ev.Mask&unix.IN_ISDIR != 0
 	if name != "" {
 		path = path + "/" + name
+		watchPath = watchPath + "/" + name
 	}
 
 	switch {
 	case ev.Mask&(unix.IN_CREATE|unix.IN_MOVED_TO) != 0:
 		w.events.create(path)
 		if isDir && w.recursive {
-			_ = walkDir(path, true, func(p string, pIsDir bool) error {
+			_ = walkDir(watchPath, true, func(p string, pIsDir bool) error {
 				if !pIsDir {
 					return nil
 				}
-				_, _ = b.watchDir(w, p)
+				_, _ = b.watchDir(w, w.displayPath(p), p)
 				return nil
 			})
 		}

@@ -12,6 +12,7 @@ import (
 	"unicode"
 
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/nativepath"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/microsoft/typescript-go/internal/vfs/internal"
@@ -159,7 +160,7 @@ func osFSRealpath(path string) string {
 
 	orig := path
 	path = filepath.FromSlash(path)
-	path, err := realpath(path)
+	path, err := nativepath.Realpath(path)
 	if err != nil {
 		return orig
 	}
@@ -168,6 +169,10 @@ func osFSRealpath(path string) string {
 		return orig
 	}
 	return tspath.NormalizeSlashes(path)
+}
+
+func isReparsePoint(path string) bool {
+	return nativepath.IsSymlinkOrReparsePoint(filepath.FromSlash(path))
 }
 
 func (vfs *osFS) writeFileWithFlag(path string, content string, flag int) error {

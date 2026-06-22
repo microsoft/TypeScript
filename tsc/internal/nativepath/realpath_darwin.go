@@ -1,4 +1,4 @@
-package osvfs
+package nativepath
 
 import (
 	"path/filepath"
@@ -46,7 +46,7 @@ func fcntlGetPathPtr(fd uintptr, buf uintptr) (int, error) {
 	return unix.FcntlInt(fd, unix.F_GETPATH, int(buf))
 }
 
-func realpath(path string) (string, error) {
+func Realpath(path string) (string, error) {
 	if !hasFGetPath() {
 		return filepath.EvalSymlinks(path)
 	}

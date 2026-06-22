@@ -1,4 +1,4 @@
-package osvfs
+package nativepath
 
 import (
 	"errors"
@@ -10,7 +10,7 @@ import (
 
 // This implementation is based on what Node's fs.realpath.native does, via libuv: https://github.com/libuv/libuv/blob/ec5a4b54f7da7eeb01679005c615fee9633cdb3b/src/win/fs.c#L2937
 
-func realpath(path string) (string, error) {
+func Realpath(path string) (string, error) {
 	var h windows.Handle
 	if len(path) < 248 {
 		var err error

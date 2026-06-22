@@ -1,11 +1,11 @@
-package osvfs
+package nativepath
 
 import (
 	"syscall"
 	"unsafe"
 )
 
-func isReparsePoint(path string) bool {
+func IsSymlinkOrReparsePoint(path string) bool {
 	if len(path) >= 248 {
 		path = `\\?\` + path
 	}

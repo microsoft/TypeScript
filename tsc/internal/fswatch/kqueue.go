@@ -95,9 +95,10 @@ func openForEvents(path string) (int, error) {
 
 // dirEntry tracks a watched path for kqueue's fd↔path mapping.
 type dirEntry struct {
-	path  string
-	isDir bool
-	state any // stores the open fd
+	path      string
+	watchPath string
+	isDir     bool
+	state     any // stores the open fd
 }
 
 // kqueueSubscription.
@@ -373,7 +374,7 @@ func (b *kqueueBackend) closeDescendantFDsLocked(w *dirWatch, entries map[string
 // and returns true. The caller should emit update instead of delete.
 func (b *kqueueBackend) tryRewatchLocked(entry *dirEntry) bool {
 	var st unix.Stat_t
-	if unix.Lstat(entry.path, &st) != nil {
+	if unix.Lstat(entry.watchPath, &st) != nil {
 		return false
 	}
 
@@ -384,7 +385,7 @@ func (b *kqueueBackend) tryRewatchLocked(entry *dirEntry) bool {
 		return false
 	}
 
-	fd, err := openForEvents(entry.path)
+	fd, err := openForEvents(entry.watchPath)
 	if err != nil {
 		return false
 	}
@@ -459,8 +460,9 @@ func (b *kqueueBackend) subscribe(w *dirWatch) error {
 	// publishes the entries map to the event loop (via subsByPath),
 	// which could read it via compareDir while we're still populating it.
 	entries := map[string]*dirEntry{}
-	if err := walkDir(w.dir, w.recursive, func(path string, isDir bool) error {
-		entries[path] = &dirEntry{path: path, isDir: isDir}
+	if err := walkDir(w.physicalDir, w.recursive, func(watchPath string, isDir bool) error {
+		path := w.displayPath(watchPath)
+		entries[path] = &dirEntry{path: path, watchPath: watchPath, isDir: isDir}
 		return nil
 	}); err != nil {
 		return err
@@ -474,7 +476,7 @@ func (b *kqueueBackend) subscribe(w *dirWatch) error {
 	defer b.mu.Unlock()
 
 	for path, entry := range entries {
-		fd, err := openForEvents(path)
+		fd, err := openForEvents(entry.watchPath)
 		if err != nil {
 			if path == w.dir {
 				b.cleanupEntriesLocked(entries)
@@ -537,7 +539,7 @@ func (b *kqueueBackend) watchPath(w *dirWatch, path string, entries map[string]*
 
 	sub := &kqueueSubscription{dirWatch: w, path: path, entries: entries}
 	if entry.state == nil {
-		fd, err := openForEvents(path)
+		fd, err := openForEvents(entry.watchPath)
 		if err != nil {
 			return false
 		}
@@ -584,24 +586,43 @@ func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]str
 	subs = filteredSubs
 
 	dirStart := path + string(filepath.Separator)
-
-	// Read the current dir contents from disk.
-	diskEntries, err := readEntries(path)
-	if err != nil {
-		return false
+	type diskSnapshot struct {
+		entries             []os.DirEntry
+		currentDisplayPaths map[string]struct{}
 	}
+	snapshots := map[string]diskSnapshot{}
 
 	// Each subscription has its own entries map (built in subscribe).
 	// Multiple subs at the same path arise from multiple dirWatches
 	// covering overlapping subtrees; their maps are always distinct, so
 	// we iterate subs directly rather than trying to dedup by map identity.
-	currentSet := map[string]struct{}{}
-	for _, ent := range diskEntries {
-		fullPath := dirStart + ent.Name()
-		currentSet[fullPath] = struct{}{}
+	for _, sub := range subs {
+		baseEntry := sub.entries[path]
+		if baseEntry == nil {
+			continue
+		}
+		watchPath := baseEntry.watchPath
+		watchDirStart := watchPath + string(filepath.Separator)
 
-		for _, sub := range subs {
-			entries := sub.entries
+		snapshot, ok := snapshots[watchPath]
+		if !ok {
+			diskEntries, err := readEntries(watchPath)
+			if err != nil {
+				continue
+			}
+			snapshot.entries = diskEntries
+			snapshot.currentDisplayPaths = make(map[string]struct{}, len(diskEntries))
+			for _, ent := range diskEntries {
+				snapshot.currentDisplayPaths[dirStart+ent.Name()] = struct{}{}
+			}
+			snapshots[watchPath] = snapshot
+		}
+
+		entries := sub.entries
+		for _, ent := range snapshot.entries {
+			fullPath := dirStart + ent.Name()
+			fullWatchPath := watchDirStart + ent.Name()
+
 			existing := entries[fullPath]
 			if existing != nil {
 				if existing.state != nil {
@@ -612,7 +633,7 @@ func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]str
 					// (now unlinked) inode.
 					if fd, ok := existing.state.(int); ok {
 						var fdSt, pathSt unix.Stat_t
-						if unix.Fstat(fd, &fdSt) == nil && unix.Lstat(fullPath, &pathSt) == nil {
+						if unix.Fstat(fd, &fdSt) == nil && unix.Lstat(fullWatchPath, &pathSt) == nil {
 							if fdSt.Dev != pathSt.Dev || fdSt.Ino != pathSt.Ino {
 								// Inode changed: path was replaced.
 								b.mu.Lock()
@@ -638,20 +659,21 @@ func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]str
 				sub.dirWatch.events.update(fullPath)
 				touched[sub.dirWatch] = struct{}{}
 				if ent.IsDir() && sub.dirWatch.recursive {
-					_ = walkDir(fullPath, true, func(p string, pIsDir bool) error {
-						if p == fullPath {
+					_ = walkDir(fullWatchPath, true, func(p string, pIsDir bool) error {
+						if p == fullWatchPath {
 							return nil
 						}
-						e := &dirEntry{path: p, isDir: pIsDir}
-						entries[p] = e
-						sub.dirWatch.events.create(p)
-						b.watchPath(sub.dirWatch, p, entries)
+						displayPath := sub.dirWatch.displayPath(p)
+						e := &dirEntry{path: displayPath, watchPath: p, isDir: pIsDir}
+						entries[displayPath] = e
+						sub.dirWatch.events.create(displayPath)
+						b.watchPath(sub.dirWatch, displayPath, entries)
 						return nil
 					})
 				}
 				continue
 			}
-			e := &dirEntry{path: fullPath, isDir: ent.IsDir()}
+			e := &dirEntry{path: fullPath, watchPath: fullWatchPath, isDir: ent.IsDir()}
 			entries[fullPath] = e
 			if !b.watchPath(sub.dirWatch, fullPath, entries) {
 				delete(entries, fullPath)
@@ -664,24 +686,22 @@ func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]str
 			// to catch pre-populated subdirectories (e.g. a directory
 			// tree moved into the watched area).
 			if ent.IsDir() && sub.dirWatch.recursive {
-				_ = walkDir(fullPath, true, func(p string, pIsDir bool) error {
-					if p == fullPath {
+				_ = walkDir(fullWatchPath, true, func(p string, pIsDir bool) error {
+					if p == fullWatchPath {
 						return nil // already handled above
 					}
-					entry := &dirEntry{path: p, isDir: pIsDir}
-					entries[p] = entry
-					sub.dirWatch.events.create(p)
-					b.watchPath(sub.dirWatch, p, entries)
+					displayPath := sub.dirWatch.displayPath(p)
+					entry := &dirEntry{path: displayPath, watchPath: p, isDir: pIsDir}
+					entries[displayPath] = entry
+					sub.dirWatch.events.create(displayPath)
+					b.watchPath(sub.dirWatch, displayPath, entries)
 					return nil
 				})
 			}
 		}
-	}
 
-	// Detect removals: entries directly under dirStart that no longer
-	// exist on disk.
-	for _, sub := range subs {
-		entries := sub.entries
+		// Detect removals: entries directly under dirStart that no longer
+		// exist on disk.
 		var toRemove []string
 		for p := range entries {
 			if !strings.HasPrefix(p, dirStart) {
@@ -691,7 +711,7 @@ func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]str
 			if strings.Contains(rest, string(filepath.Separator)) {
 				continue
 			}
-			if _, ok := currentSet[p]; ok {
+			if _, ok := snapshot.currentDisplayPaths[p]; ok {
 				continue
 			}
 			toRemove = append(toRemove, p)

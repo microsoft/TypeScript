@@ -320,15 +320,12 @@ func TestWatcher_NonRecursiveGlobIsNotRecursive(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	realDir := tspath.NormalizeSlashes(fs.Realpath(dirNorm))
-	realSub := tspath.NormalizeSlashes(fs.Realpath(subNorm))
-
 	backend.mu.Lock()
 	defer backend.mu.Unlock()
-	if got := backend.optCount[realDir]; got != 1 {
+	if got := backend.optCount[dirNorm]; got != 1 {
 		t.Errorf("recursive glob %q: expected 1 watch option (WithRecursive), got %d", recursive, got)
 	}
-	if got := backend.optCount[realSub]; got != 0 {
+	if got := backend.optCount[subNorm]; got != 0 {
 		t.Errorf("non-recursive glob %q: expected 0 watch options, got %d", nonRecursive, got)
 	}
 }
@@ -402,7 +399,7 @@ func TestWatcher_MissingDirectoryTracksAncestor(t *testing.T) {
 	t.Cleanup(w.Close)
 
 	base := t.TempDir()
-	baseReal := tspath.NormalizeSlashes(fs.Realpath(tspath.NormalizeSlashes(base)))
+	baseNorm := tspath.NormalizeSlashes(base)
 	target := tspath.NormalizeSlashes(filepath.Join(base, "pkg"))
 	pattern := target + "/*"
 
@@ -414,8 +411,8 @@ func TestWatcher_MissingDirectoryTracksAncestor(t *testing.T) {
 
 	// A missing target directory installs an ancestor watch on the nearest
 	// existing ancestor (the base dir), not on the target.
-	if !backend.isWatching(baseReal) {
-		t.Fatalf("expected ancestor watch on ancestor %q, watched: %v", baseReal, backend.watchedDirs())
+	if !backend.isWatching(baseNorm) {
+		t.Fatalf("expected ancestor watch on ancestor %q, watched: %v", baseNorm, backend.watchedDirs())
 	}
 	if dirs := backend.watchedDirs(); len(dirs) != 1 {
 		t.Fatalf("expected exactly one (ancestor) watch, got %v", dirs)
@@ -446,7 +443,7 @@ func TestWatcher_MissingDirectoryPromotesOnCreate(t *testing.T) {
 	t.Cleanup(w.Close)
 
 	base := t.TempDir()
-	baseReal := tspath.NormalizeSlashes(fs.Realpath(tspath.NormalizeSlashes(base)))
+	baseNorm := tspath.NormalizeSlashes(base)
 	target := tspath.NormalizeSlashes(filepath.Join(base, "pkg"))
 	pattern := target + "/*"
 	kind := lsproto.WatchKindCreate | lsproto.WatchKindChange | lsproto.WatchKindDelete
@@ -465,12 +462,11 @@ func TestWatcher_MissingDirectoryPromotesOnCreate(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(base, "pkg", "index.ts"), []byte("export {}"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	backend.emit(baseReal, []fswatch.Event{
+	backend.emit(baseNorm, []fswatch.Event{
 		{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "pkg")},
 	}, nil)
 
-	targetReal := tspath.NormalizeSlashes(fs.Realpath(target))
-	waitFor(t, func() bool { return backend.isWatching(targetReal) }, "promotion to target watch")
+	waitFor(t, func() bool { return backend.isWatching(target) }, "promotion to target watch")
 
 	// Synthetic creates must cover the target dir and its immediate child so
 	// the session re-resolves files created before the watch was installed.
@@ -503,7 +499,7 @@ func TestWatcher_MultiLevelDescend(t *testing.T) {
 	t.Cleanup(w.Close)
 
 	base := t.TempDir()
-	baseReal := tspath.NormalizeSlashes(fs.Realpath(tspath.NormalizeSlashes(base)))
+	baseNorm := tspath.NormalizeSlashes(base)
 	target := tspath.NormalizeSlashes(filepath.Join(base, "a", "b", "c"))
 	pattern := target + "/*"
 
@@ -512,30 +508,30 @@ func TestWatcher_MultiLevelDescend(t *testing.T) {
 	}}); err != nil {
 		t.Fatal(err)
 	}
-	if !backend.isWatching(baseReal) {
-		t.Fatalf("expected initial ancestor watch on %q, got %v", baseReal, backend.watchedDirs())
+	if !backend.isWatching(baseNorm) {
+		t.Fatalf("expected initial ancestor watch on %q, got %v", baseNorm, backend.watchedDirs())
 	}
 
 	// Reveal one path component at a time; the ancestor watch should descend.
-	mkdirAndRealpath := func(rel string) string {
+	mkdirAndPath := func(rel string) string {
 		p := filepath.Join(base, rel)
 		if err := os.MkdirAll(p, 0o755); err != nil {
 			t.Fatal(err)
 		}
-		return tspath.NormalizeSlashes(fs.Realpath(tspath.NormalizeSlashes(p)))
+		return tspath.NormalizeSlashes(p)
 	}
 
-	aReal := mkdirAndRealpath("a")
-	backend.emit(baseReal, []fswatch.Event{{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "a")}}, nil)
-	waitFor(t, func() bool { return backend.isWatching(aReal) }, "descend to a")
+	aDir := mkdirAndPath("a")
+	backend.emit(baseNorm, []fswatch.Event{{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "a")}}, nil)
+	waitFor(t, func() bool { return backend.isWatching(aDir) }, "descend to a")
 
-	abReal := mkdirAndRealpath(filepath.Join("a", "b"))
-	backend.emit(aReal, []fswatch.Event{{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "a", "b")}}, nil)
-	waitFor(t, func() bool { return backend.isWatching(abReal) }, "descend to a/b")
+	abDir := mkdirAndPath(filepath.Join("a", "b"))
+	backend.emit(aDir, []fswatch.Event{{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "a", "b")}}, nil)
+	waitFor(t, func() bool { return backend.isWatching(abDir) }, "descend to a/b")
 
-	abcReal := mkdirAndRealpath(filepath.Join("a", "b", "c"))
-	backend.emit(abReal, []fswatch.Event{{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "a", "b", "c")}}, nil)
-	waitFor(t, func() bool { return backend.isWatching(abcReal) }, "promote to target a/b/c")
+	abcDir := mkdirAndPath(filepath.Join("a", "b", "c"))
+	backend.emit(abDir, []fswatch.Event{{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "a", "b", "c")}}, nil)
+	waitFor(t, func() bool { return backend.isWatching(abcDir) }, "promote to target a/b/c")
 }
 
 func TestWatcher_AtomicTreeCreateRace(t *testing.T) {
@@ -547,7 +543,7 @@ func TestWatcher_AtomicTreeCreateRace(t *testing.T) {
 	t.Cleanup(w.Close)
 
 	base := t.TempDir()
-	baseReal := tspath.NormalizeSlashes(fs.Realpath(tspath.NormalizeSlashes(base)))
+	baseNorm := tspath.NormalizeSlashes(base)
 	target := tspath.NormalizeSlashes(filepath.Join(base, "a", "b", "c"))
 	pattern := target + "/*"
 
@@ -563,10 +559,9 @@ func TestWatcher_AtomicTreeCreateRace(t *testing.T) {
 	if err := os.MkdirAll(filepath.Join(base, "a", "b", "c"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	backend.emit(baseReal, []fswatch.Event{{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "a")}}, nil)
+	backend.emit(baseNorm, []fswatch.Event{{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "a")}}, nil)
 
-	targetReal := tspath.NormalizeSlashes(fs.Realpath(target))
-	waitFor(t, func() bool { return backend.isWatching(targetReal) }, "promote to target in one pass")
+	waitFor(t, func() bool { return backend.isWatching(target) }, "promote to target in one pass")
 }
 
 func TestWatcher_SyntheticCreateDepth(t *testing.T) {
@@ -589,7 +584,7 @@ func TestWatcher_SyntheticCreateDepth(t *testing.T) {
 			t.Cleanup(w.Close)
 
 			base := t.TempDir()
-			baseReal := tspath.NormalizeSlashes(fs.Realpath(tspath.NormalizeSlashes(base)))
+			baseNorm := tspath.NormalizeSlashes(base)
 			target := tspath.NormalizeSlashes(filepath.Join(base, "pkg"))
 			kind := lsproto.WatchKindCreate | lsproto.WatchKindChange | lsproto.WatchKindDelete
 			var pattern string
@@ -616,10 +611,9 @@ func TestWatcher_SyntheticCreateDepth(t *testing.T) {
 			if err := os.WriteFile(filepath.Join(base, "pkg", "sub", "deep.ts"), []byte("export {}"), 0o644); err != nil {
 				t.Fatal(err)
 			}
-			backend.emit(baseReal, []fswatch.Event{{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "pkg")}}, nil)
+			backend.emit(baseNorm, []fswatch.Event{{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "pkg")}}, nil)
 
-			targetReal := tspath.NormalizeSlashes(fs.Realpath(target))
-			waitFor(t, func() bool { return backend.isWatching(targetReal) }, "promotion")
+			waitFor(t, func() bool { return backend.isWatching(target) }, "promotion")
 
 			created := func() map[string]bool {
 				mu.Lock()
@@ -687,12 +681,11 @@ func TestWatcher_TerminatedFallsBackAndRecovers(t *testing.T) {
 	t.Cleanup(w.Close)
 
 	base := t.TempDir()
-	baseReal := tspath.NormalizeSlashes(fs.Realpath(tspath.NormalizeSlashes(base)))
+	baseNorm := tspath.NormalizeSlashes(base)
 	target := tspath.NormalizeSlashes(filepath.Join(base, "pkg"))
 	if err := os.MkdirAll(filepath.Join(base, "pkg"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	targetReal := tspath.NormalizeSlashes(fs.Realpath(target))
 	pattern := target + "/*"
 	kind := lsproto.WatchKindCreate | lsproto.WatchKindChange | lsproto.WatchKindDelete
 
@@ -702,8 +695,8 @@ func TestWatcher_TerminatedFallsBackAndRecovers(t *testing.T) {
 	}}); err != nil {
 		t.Fatal(err)
 	}
-	if !backend.isWatching(targetReal) {
-		t.Fatalf("expected target watch on %q, got %v", targetReal, backend.watchedDirs())
+	if !backend.isWatching(target) {
+		t.Fatalf("expected target watch on %q, got %v", target, backend.watchedDirs())
 	}
 
 	// Delete the directory and deliver ErrWatchTerminated together with the
@@ -711,7 +704,7 @@ func TestWatcher_TerminatedFallsBackAndRecovers(t *testing.T) {
 	if err := os.RemoveAll(filepath.Join(base, "pkg")); err != nil {
 		t.Fatal(err)
 	}
-	backend.emit(targetReal, []fswatch.Event{
+	backend.emit(target, []fswatch.Event{
 		{Kind: fswatch.EventDelete, Path: filepath.Join(base, "pkg")},
 	}, errors.Join(fswatch.ErrWatchTerminated, errors.New("removed")))
 
@@ -727,15 +720,14 @@ func TestWatcher_TerminatedFallsBackAndRecovers(t *testing.T) {
 		}
 		return false
 	}, "forwarded delete of terminated dir")
-	waitFor(t, func() bool { return backend.isWatching(baseReal) && !backend.isWatching(targetReal) }, "fallback to ancestor watch")
+	waitFor(t, func() bool { return backend.isWatching(baseNorm) && !backend.isWatching(target) }, "fallback to ancestor watch")
 
 	// Recreate the directory; the ancestor watch must promote back to target.
 	if err := os.MkdirAll(filepath.Join(base, "pkg"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	recreatedReal := tspath.NormalizeSlashes(fs.Realpath(target))
-	backend.emit(baseReal, []fswatch.Event{{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "pkg")}}, nil)
-	waitFor(t, func() bool { return backend.isWatching(recreatedReal) }, "recovery to target watch after recreation")
+	backend.emit(baseNorm, []fswatch.Event{{Kind: fswatch.EventUpdate, Path: filepath.Join(base, "pkg")}}, nil)
+	waitFor(t, func() bool { return backend.isWatching(target) }, "recovery to target watch after recreation")
 }
 
 func TestWatcher_GenuineFailureRollsBackForRetry(t *testing.T) {
@@ -747,12 +739,12 @@ func TestWatcher_GenuineFailureRollsBackForRetry(t *testing.T) {
 	t.Cleanup(w.Close)
 
 	dir := t.TempDir()
-	dirReal := tspath.NormalizeSlashes(fs.Realpath(tspath.NormalizeSlashes(dir)))
-	pattern := tspath.NormalizeSlashes(dir) + "/*"
+	dirNorm := tspath.NormalizeSlashes(dir)
+	pattern := dirNorm + "/*"
 
 	// Inject a genuine backend failure for the existing directory.
 	backend.mu.Lock()
-	backend.failDirs[dirReal] = errors.New("too many open files")
+	backend.failDirs[dirNorm] = errors.New("too many open files")
 	backend.mu.Unlock()
 
 	err := w.WatchFiles("id", []*lsproto.FileSystemWatcher{{
@@ -766,7 +758,7 @@ func TestWatcher_GenuineFailureRollsBackForRetry(t *testing.T) {
 	// (rather than hitting the duplicate-id error). Clear the injected failure
 	// to simulate the resource pressure easing on retry.
 	backend.mu.Lock()
-	delete(backend.failDirs, dirReal)
+	delete(backend.failDirs, dirNorm)
 	backend.mu.Unlock()
 
 	if err := w.WatchFiles("id", []*lsproto.FileSystemWatcher{{
@@ -774,8 +766,8 @@ func TestWatcher_GenuineFailureRollsBackForRetry(t *testing.T) {
 	}}); err != nil {
 		t.Fatalf("retry after rollback should succeed, got %v", err)
 	}
-	if !backend.isWatching(dirReal) {
-		t.Fatalf("expected watch on %q after successful retry, got %v", dirReal, backend.watchedDirs())
+	if !backend.isWatching(dirNorm) {
+		t.Fatalf("expected watch on %q after successful retry, got %v", dirNorm, backend.watchedDirs())
 	}
 }
 

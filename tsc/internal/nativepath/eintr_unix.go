@@ -1,6 +1,6 @@
 //go:build linux || darwin
 
-package osvfs
+package nativepath
 
 import "syscall"
 

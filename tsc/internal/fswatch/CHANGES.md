@@ -22,6 +22,16 @@ default**, watching only direct children. Pass `WithRecursive()` to watch the
 entire tree. This matches TypeScript's `watchDirectory(path, cb, recursive?)`
 where recursive is opt-in.
 
+### Symlinked watch roots
+
+When `WatchDirectory` is called with a symlink or reparse point to a directory,
+Go follows the link for the OS subscription but reports events under the
+caller-provided path. This matches TypeScript/Node's behavior for watch roots
+while keeping the logical paths stable for callers.
+
+Userspace recursive traversal still does not follow symlinked descendant
+directories.
+
 ### Event kinds
 
 C++ has three event kinds: create, update, delete. Go has two: **`EventUpdate`**

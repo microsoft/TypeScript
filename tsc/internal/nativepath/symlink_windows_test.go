@@ -1,15 +1,16 @@
-package osvfs
+package nativepath
 
 import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"gotest.tools/v3/assert"
 )
 
-func TestIsReparsePoint(t *testing.T) {
+func TestIsSymlinkOrReparsePoint(t *testing.T) {
 	t.Parallel()
 
 	tmp := t.TempDir()
@@ -18,14 +19,14 @@ func TestIsReparsePoint(t *testing.T) {
 		t.Parallel()
 		file := filepath.Join(tmp, "regular.txt")
 		assert.NilError(t, os.WriteFile(file, []byte("hello"), 0o666))
-		assert.Equal(t, isReparsePoint(file), false)
+		assert.Equal(t, IsSymlinkOrReparsePoint(file), false)
 	})
 
 	t.Run("regular directory", func(t *testing.T) {
 		t.Parallel()
 		dir := filepath.Join(tmp, "regular-dir")
 		assert.NilError(t, os.MkdirAll(dir, 0o777))
-		assert.Equal(t, isReparsePoint(dir), false)
+		assert.Equal(t, IsSymlinkOrReparsePoint(dir), false)
 	})
 
 	t.Run("junction point", func(t *testing.T) {
@@ -34,7 +35,7 @@ func TestIsReparsePoint(t *testing.T) {
 		link := filepath.Join(tmp, "junction-link")
 		assert.NilError(t, os.MkdirAll(target, 0o777))
 		mklink(t, target, link, true)
-		assert.Equal(t, isReparsePoint(link), true)
+		assert.Equal(t, IsSymlinkOrReparsePoint(link), true)
 	})
 
 	t.Run("file symlink", func(t *testing.T) {
@@ -43,7 +44,7 @@ func TestIsReparsePoint(t *testing.T) {
 		link := filepath.Join(tmp, "symlink-link.txt")
 		assert.NilError(t, os.WriteFile(target, []byte("hello"), 0o666))
 		mklink(t, target, link, false)
-		assert.Equal(t, isReparsePoint(link), true)
+		assert.Equal(t, IsSymlinkOrReparsePoint(link), true)
 	})
 
 	t.Run("directory symlink", func(t *testing.T) {
@@ -52,27 +53,27 @@ func TestIsReparsePoint(t *testing.T) {
 		link := filepath.Join(tmp, "dir-symlink-link")
 		assert.NilError(t, os.MkdirAll(target, 0o777))
 		mklink(t, target, link, false)
-		assert.Equal(t, isReparsePoint(link), true)
+		assert.Equal(t, IsSymlinkOrReparsePoint(link), true)
 	})
 
 	t.Run("nonexistent path", func(t *testing.T) {
 		t.Parallel()
 		nonexistent := filepath.Join(tmp, "does-not-exist")
-		assert.Equal(t, isReparsePoint(nonexistent), false)
+		assert.Equal(t, IsSymlinkOrReparsePoint(nonexistent), false)
 	})
 
 	t.Run("empty path", func(t *testing.T) {
 		t.Parallel()
-		assert.Equal(t, isReparsePoint(""), false)
+		assert.Equal(t, IsSymlinkOrReparsePoint(""), false)
 	})
 
 	t.Run("invalid path with null byte", func(t *testing.T) {
 		t.Parallel()
-		assert.Equal(t, isReparsePoint("invalid\x00path"), false)
+		assert.Equal(t, IsSymlinkOrReparsePoint("invalid\x00path"), false)
 	})
 }
 
-func TestIsReparsePointLongPath(t *testing.T) {
+func TestIsSymlinkOrReparsePointLongPath(t *testing.T) {
 	t.Parallel()
 
 	tmp := t.TempDir()
@@ -96,10 +97,10 @@ func TestIsReparsePointLongPath(t *testing.T) {
 	assert.NilError(t, exec.Command("cmd", "/c", "mklink", "/J", longLink, longTarget).Run())
 
 	// With long path support enabled, this should work even for paths >= 248 chars
-	assert.Equal(t, isReparsePoint(link), true)
+	assert.Equal(t, IsSymlinkOrReparsePoint(link), true)
 }
 
-func TestIsReparsePointNestedInSymlink(t *testing.T) {
+func TestIsSymlinkOrReparsePointNestedInSymlink(t *testing.T) {
 	t.Parallel()
 
 	tmp := t.TempDir()
@@ -118,10 +119,10 @@ func TestIsReparsePointNestedInSymlink(t *testing.T) {
 
 	// Check the junction through the symlink path
 	nestedPath := filepath.Join(link, "inner-link")
-	assert.Equal(t, isReparsePoint(nestedPath), true)
+	assert.Equal(t, IsSymlinkOrReparsePoint(nestedPath), true)
 }
 
-func TestIsReparsePointRelativePath(t *testing.T) { //nolint:paralleltest // Cannot use t.Parallel() with t.Chdir()
+func TestIsSymlinkOrReparsePointRelativePath(t *testing.T) { //nolint:paralleltest // Cannot use t.Parallel() with t.Chdir()
 	tmp := t.TempDir()
 	t.Chdir(tmp)
 
@@ -130,8 +131,8 @@ func TestIsReparsePointRelativePath(t *testing.T) { //nolint:paralleltest // Can
 	assert.NilError(t, os.MkdirAll(target, 0o777))
 	mklink(t, target, link, true)
 
-	assert.Equal(t, isReparsePoint(link), true)
-	assert.Equal(t, isReparsePoint(target), false)
+	assert.Equal(t, IsSymlinkOrReparsePoint(link), true)
+	assert.Equal(t, IsSymlinkOrReparsePoint(target), false)
 }
 
 func BenchmarkIsSymlinkOrJunction(b *testing.B) {
@@ -148,14 +149,14 @@ func BenchmarkIsSymlinkOrJunction(b *testing.B) {
 	b.Run("regular file", func(b *testing.B) {
 		b.ReportAllocs()
 		for b.Loop() {
-			isReparsePoint(regularFile)
+			IsSymlinkOrReparsePoint(regularFile)
 		}
 	})
 
 	b.Run("junction", func(b *testing.B) {
 		b.ReportAllocs()
 		for b.Loop() {
-			isReparsePoint(link)
+			IsSymlinkOrReparsePoint(link)
 		}
 	})
 
@@ -163,7 +164,22 @@ func BenchmarkIsSymlinkOrJunction(b *testing.B) {
 		b.ReportAllocs()
 		nonexistent := filepath.Join(tmp, "does-not-exist")
 		for b.Loop() {
-			isReparsePoint(nonexistent)
+			IsSymlinkOrReparsePoint(nonexistent)
 		}
 	})
+}
+
+func mklink(tb testing.TB, target, link string, isDir bool) {
+	tb.Helper()
+
+	if isDir {
+		assert.NilError(tb, exec.Command("cmd", "/c", "mklink", "/J", link, target).Run())
+	} else {
+		err := os.Symlink(target, link)
+		if err != nil && strings.Contains(err.Error(), "A required privilege is not held by the client") {
+			tb.Log(err)
+			tb.Skip("file symlink support is not enabled without elevation or developer mode")
+		}
+		assert.NilError(tb, err)
+	}
 }

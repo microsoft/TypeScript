@@ -1,4 +1,4 @@
-package osvfs
+package nativepath
 
 import (
 	"os"
@@ -36,7 +36,7 @@ var hasProcSelfFD = sync.OnceValue(func() bool {
 	return unix.Stat(_procSelfFD, &stat) == nil
 })
 
-func realpath(path string) (string, error) {
+func Realpath(path string) (string, error) {
 	if !hasProcSelfFD() {
 		return filepath.EvalSymlinks(path)
 	}

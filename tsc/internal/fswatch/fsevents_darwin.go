@@ -189,7 +189,7 @@ func (b *fsEventsBackend) start() error {
 
 // checkWatcher mirrors the helper of the same name.
 func checkWatcher(w *dirWatch) error {
-	info, err := os.Stat(w.dir)
+	info, err := os.Stat(w.physicalDir)
 	if err != nil {
 		return &dirWatchError{err: err, dirWatch: w}
 	}
@@ -223,7 +223,7 @@ func (b *fsEventsBackend) startStream(w *dirWatch, since uint64) error {
 		return errMissingFSEventsState
 	}
 
-	dirCStr := append([]byte(w.dir), 0)
+	dirCStr := append([]byte(w.physicalDir), 0)
 	cfDir := cfStringCreate(0, unsafe.Pointer(&dirCStr[0]), cfStringEncodingUTF8)
 	defer cfRelease(cfDir)
 
@@ -386,6 +386,9 @@ func fsEventsCallback(cb *streamCallback, payload *fsEventsCallbackPayload) {
 		// the directory, not the dir's own metadata churn.
 		// (A removal of the dir is still propagated because Watcher
 		// relies on it to tear down the stream.)
+		rawPath := path
+		path = w.displayPath(path)
+
 		if path == w.dir && !isRemoved && !isRenamed {
 			continue
 		}
@@ -402,7 +405,7 @@ func fsEventsCallback(cb *streamCallback, payload *fsEventsCallbackPayload) {
 			// moved in (update); remove+create could mean replaced.
 			// Stat to check existence.
 			var st unix.Stat_t
-			if unix.Lstat(path, &st) != nil {
+			if unix.Lstat(rawPath, &st) != nil {
 				w.events.remove(path)
 				if path == w.dir {
 					deletedRoot = true
