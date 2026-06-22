@@ -227,14 +227,27 @@ export function getExplicitConfigTarget(
     return undefined;
 }
 
+export enum ConfigName {
+    JsTsConfigName = "js/ts.experimental.useTsgo",
+    DeprecatedTypeScriptConfigName = "typescript.experimental.useTsgo",
+}
+
 /**
- * Returns the name of the setting that is explicitly set to `false`,
- * preferring `js/ts` over `typescript`. Returns `undefined` if neither
- * is explicitly `false`.
+ * Returns the name of the setting with the appropriate precedence that is explicitly set,
+ * preferring `js/ts` over `typescript`.
+ * Returns `undefined` if neither is explicitly specified.
  */
-export function getUseTsgoFalseSetting(): string | undefined {
-    if (getExplicitUseTsgo("js/ts") === false) return "js/ts.experimental.useTsgo";
-    if (getExplicitUseTsgo("typescript") === false) return "typescript.experimental.useTsgo";
+export function getWinningTsgoConfigKey(): ConfigName | undefined {
+    const jsTsValue = getExplicitUseTsgo("js/ts");
+    const tsValue = getExplicitUseTsgo("typescript");
+
+    if (jsTsValue !== undefined || tsValue !== undefined) {
+        const jsTsTarget = getExplicitConfigTarget(vscode.workspace.getConfiguration("js/ts"), "experimental.useTsgo");
+        const tsTarget = getExplicitConfigTarget(vscode.workspace.getConfiguration("typescript"), "experimental.useTsgo");
+        const mostSpecific = Math.max(jsTsTarget ?? vscode.ConfigurationTarget.Global, tsTarget ?? vscode.ConfigurationTarget.Global);
+        return jsTsTarget === mostSpecific ? ConfigName.JsTsConfigName : ConfigName.DeprecatedTypeScriptConfigName;
+    }
+
     return undefined;
 }
 
