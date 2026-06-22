@@ -561,7 +561,6 @@ function generateClone(w: CodeWriter, node: NodeType) {
             return "node.Kind";
         }
         const type = m.declaredType;
-        const isPrivate = m.inherited ? (m.inheritedField?.private || false) : (m.private || false);
 
         if (m.inherited && type?.kind === "alias" && type.name === "ModifierLike") {
             return "node.Modifiers()";
@@ -607,13 +606,9 @@ function generateIsFunction(w: CodeWriter, node: NodeType) {
         w.write(`func Is${node.name}(node *Node) bool {`);
         w.push();
         w.write("switch node.Kind {");
-        w.push();
-        for (const kind of kindTypes) {
-            w.write(`case ${kind.formatGoConstant()}:`);
-        }
+        w.write(`case ${kindTypes.map(kind => kind.formatGoConstant()).join(", ")}:`);
         w.push();
         w.write("return true");
-        w.pop();
         w.pop();
         w.write("}");
         w.write("return false");

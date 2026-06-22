@@ -607,173 +607,7 @@ func (node *Token) Clone(f NodeFactoryCoercible) *Node {
 
 func IsToken(node *Node) bool {
 	switch node.Kind {
-	case KindUnknown:
-	case KindEndOfFile:
-	case KindSingleLineCommentTrivia:
-	case KindMultiLineCommentTrivia:
-	case KindNewLineTrivia:
-	case KindWhitespaceTrivia:
-	case KindConflictMarkerTrivia:
-	case KindNonTextFileMarkerTrivia:
-	case KindNumericLiteral:
-	case KindBigIntLiteral:
-	case KindStringLiteral:
-	case KindJsxText:
-	case KindJsxTextAllWhiteSpaces:
-	case KindRegularExpressionLiteral:
-	case KindNoSubstitutionTemplateLiteral:
-	case KindTemplateHead:
-	case KindTemplateMiddle:
-	case KindTemplateTail:
-	case KindOpenBraceToken:
-	case KindCloseBraceToken:
-	case KindOpenParenToken:
-	case KindCloseParenToken:
-	case KindOpenBracketToken:
-	case KindCloseBracketToken:
-	case KindDotToken:
-	case KindDotDotDotToken:
-	case KindSemicolonToken:
-	case KindCommaToken:
-	case KindQuestionDotToken:
-	case KindLessThanToken:
-	case KindLessThanSlashToken:
-	case KindGreaterThanToken:
-	case KindLessThanEqualsToken:
-	case KindGreaterThanEqualsToken:
-	case KindEqualsEqualsToken:
-	case KindExclamationEqualsToken:
-	case KindEqualsEqualsEqualsToken:
-	case KindExclamationEqualsEqualsToken:
-	case KindEqualsGreaterThanToken:
-	case KindPlusToken:
-	case KindMinusToken:
-	case KindAsteriskToken:
-	case KindAsteriskAsteriskToken:
-	case KindSlashToken:
-	case KindPercentToken:
-	case KindPlusPlusToken:
-	case KindMinusMinusToken:
-	case KindLessThanLessThanToken:
-	case KindGreaterThanGreaterThanToken:
-	case KindGreaterThanGreaterThanGreaterThanToken:
-	case KindAmpersandToken:
-	case KindBarToken:
-	case KindCaretToken:
-	case KindExclamationToken:
-	case KindTildeToken:
-	case KindAmpersandAmpersandToken:
-	case KindBarBarToken:
-	case KindQuestionToken:
-	case KindColonToken:
-	case KindAtToken:
-	case KindQuestionQuestionToken:
-	case KindBacktickToken:
-	case KindHashToken:
-	case KindEqualsToken:
-	case KindPlusEqualsToken:
-	case KindMinusEqualsToken:
-	case KindAsteriskEqualsToken:
-	case KindAsteriskAsteriskEqualsToken:
-	case KindSlashEqualsToken:
-	case KindPercentEqualsToken:
-	case KindLessThanLessThanEqualsToken:
-	case KindGreaterThanGreaterThanEqualsToken:
-	case KindGreaterThanGreaterThanGreaterThanEqualsToken:
-	case KindAmpersandEqualsToken:
-	case KindBarEqualsToken:
-	case KindBarBarEqualsToken:
-	case KindAmpersandAmpersandEqualsToken:
-	case KindQuestionQuestionEqualsToken:
-	case KindCaretEqualsToken:
-	case KindIdentifier:
-	case KindPrivateIdentifier:
-	case KindJSDocCommentTextToken:
-	case KindBreakKeyword:
-	case KindCaseKeyword:
-	case KindCatchKeyword:
-	case KindClassKeyword:
-	case KindConstKeyword:
-	case KindContinueKeyword:
-	case KindDebuggerKeyword:
-	case KindDefaultKeyword:
-	case KindDeleteKeyword:
-	case KindDoKeyword:
-	case KindElseKeyword:
-	case KindEnumKeyword:
-	case KindExportKeyword:
-	case KindExtendsKeyword:
-	case KindFalseKeyword:
-	case KindFinallyKeyword:
-	case KindForKeyword:
-	case KindFunctionKeyword:
-	case KindIfKeyword:
-	case KindImportKeyword:
-	case KindInKeyword:
-	case KindInstanceOfKeyword:
-	case KindNewKeyword:
-	case KindNullKeyword:
-	case KindReturnKeyword:
-	case KindSuperKeyword:
-	case KindSwitchKeyword:
-	case KindThisKeyword:
-	case KindThrowKeyword:
-	case KindTrueKeyword:
-	case KindTryKeyword:
-	case KindTypeOfKeyword:
-	case KindVarKeyword:
-	case KindVoidKeyword:
-	case KindWhileKeyword:
-	case KindWithKeyword:
-	case KindImplementsKeyword:
-	case KindInterfaceKeyword:
-	case KindLetKeyword:
-	case KindPackageKeyword:
-	case KindPrivateKeyword:
-	case KindProtectedKeyword:
-	case KindPublicKeyword:
-	case KindStaticKeyword:
-	case KindYieldKeyword:
-	case KindAbstractKeyword:
-	case KindAccessorKeyword:
-	case KindAsKeyword:
-	case KindAssertsKeyword:
-	case KindAssertKeyword:
-	case KindAnyKeyword:
-	case KindAsyncKeyword:
-	case KindAwaitKeyword:
-	case KindBooleanKeyword:
-	case KindConstructorKeyword:
-	case KindDeclareKeyword:
-	case KindGetKeyword:
-	case KindImmediateKeyword:
-	case KindInferKeyword:
-	case KindIntrinsicKeyword:
-	case KindIsKeyword:
-	case KindKeyOfKeyword:
-	case KindModuleKeyword:
-	case KindNamespaceKeyword:
-	case KindNeverKeyword:
-	case KindOutKeyword:
-	case KindReadonlyKeyword:
-	case KindRequireKeyword:
-	case KindNumberKeyword:
-	case KindObjectKeyword:
-	case KindSatisfiesKeyword:
-	case KindSetKeyword:
-	case KindStringKeyword:
-	case KindSymbolKeyword:
-	case KindTypeKeyword:
-	case KindUndefinedKeyword:
-	case KindUniqueKeyword:
-	case KindUnknownKeyword:
-	case KindUsingKeyword:
-	case KindFromKeyword:
-	case KindGlobalKeyword:
-	case KindBigIntKeyword:
-	case KindOverrideKeyword:
-	case KindOfKeyword:
-	case KindDeferKeyword:
+	case KindUnknown, KindEndOfFile, KindSingleLineCommentTrivia, KindMultiLineCommentTrivia, KindNewLineTrivia, KindWhitespaceTrivia, KindConflictMarkerTrivia, KindNonTextFileMarkerTrivia, KindNumericLiteral, KindBigIntLiteral, KindStringLiteral, KindJsxText, KindJsxTextAllWhiteSpaces, KindRegularExpressionLiteral, KindNoSubstitutionTemplateLiteral, KindTemplateHead, KindTemplateMiddle, KindTemplateTail, KindOpenBraceToken, KindCloseBraceToken, KindOpenParenToken, KindCloseParenToken, KindOpenBracketToken, KindCloseBracketToken, KindDotToken, KindDotDotDotToken, KindSemicolonToken, KindCommaToken, KindQuestionDotToken, KindLessThanToken, KindLessThanSlashToken, KindGreaterThanToken, KindLessThanEqualsToken, KindGreaterThanEqualsToken, KindEqualsEqualsToken, KindExclamationEqualsToken, KindEqualsEqualsEqualsToken, KindExclamationEqualsEqualsToken, KindEqualsGreaterThanToken, KindPlusToken, KindMinusToken, KindAsteriskToken, KindAsteriskAsteriskToken, KindSlashToken, KindPercentToken, KindPlusPlusToken, KindMinusMinusToken, KindLessThanLessThanToken, KindGreaterThanGreaterThanToken, KindGreaterThanGreaterThanGreaterThanToken, KindAmpersandToken, KindBarToken, KindCaretToken, KindExclamationToken, KindTildeToken, KindAmpersandAmpersandToken, KindBarBarToken, KindQuestionToken, KindColonToken, KindAtToken, KindQuestionQuestionToken, KindBacktickToken, KindHashToken, KindEqualsToken, KindPlusEqualsToken, KindMinusEqualsToken, KindAsteriskEqualsToken, KindAsteriskAsteriskEqualsToken, KindSlashEqualsToken, KindPercentEqualsToken, KindLessThanLessThanEqualsToken, KindGreaterThanGreaterThanEqualsToken, KindGreaterThanGreaterThanGreaterThanEqualsToken, KindAmpersandEqualsToken, KindBarEqualsToken, KindBarBarEqualsToken, KindAmpersandAmpersandEqualsToken, KindQuestionQuestionEqualsToken, KindCaretEqualsToken, KindIdentifier, KindPrivateIdentifier, KindJSDocCommentTextToken, KindBreakKeyword, KindCaseKeyword, KindCatchKeyword, KindClassKeyword, KindConstKeyword, KindContinueKeyword, KindDebuggerKeyword, KindDefaultKeyword, KindDeleteKeyword, KindDoKeyword, KindElseKeyword, KindEnumKeyword, KindExportKeyword, KindExtendsKeyword, KindFalseKeyword, KindFinallyKeyword, KindForKeyword, KindFunctionKeyword, KindIfKeyword, KindImportKeyword, KindInKeyword, KindInstanceOfKeyword, KindNewKeyword, KindNullKeyword, KindReturnKeyword, KindSuperKeyword, KindSwitchKeyword, KindThisKeyword, KindThrowKeyword, KindTrueKeyword, KindTryKeyword, KindTypeOfKeyword, KindVarKeyword, KindVoidKeyword, KindWhileKeyword, KindWithKeyword, KindImplementsKeyword, KindInterfaceKeyword, KindLetKeyword, KindPackageKeyword, KindPrivateKeyword, KindProtectedKeyword, KindPublicKeyword, KindStaticKeyword, KindYieldKeyword, KindAbstractKeyword, KindAccessorKeyword, KindAsKeyword, KindAssertsKeyword, KindAssertKeyword, KindAnyKeyword, KindAsyncKeyword, KindAwaitKeyword, KindBooleanKeyword, KindConstructorKeyword, KindDeclareKeyword, KindGetKeyword, KindImmediateKeyword, KindInferKeyword, KindIntrinsicKeyword, KindIsKeyword, KindKeyOfKeyword, KindModuleKeyword, KindNamespaceKeyword, KindNeverKeyword, KindOutKeyword, KindReadonlyKeyword, KindRequireKeyword, KindNumberKeyword, KindObjectKeyword, KindSatisfiesKeyword, KindSetKeyword, KindStringKeyword, KindSymbolKeyword, KindTypeKeyword, KindUndefinedKeyword, KindUniqueKeyword, KindUnknownKeyword, KindUsingKeyword, KindFromKeyword, KindGlobalKeyword, KindBigIntKeyword, KindOverrideKeyword, KindOfKeyword, KindDeferKeyword:
 		return true
 	}
 	return false
@@ -3742,12 +3576,7 @@ func (node *KeywordExpression) Clone(f NodeFactoryCoercible) *Node {
 
 func IsKeywordExpression(node *Node) bool {
 	switch node.Kind {
-	case KindNullKeyword:
-	case KindTrueKeyword:
-	case KindFalseKeyword:
-	case KindThisKeyword:
-	case KindSuperKeyword:
-	case KindImportKeyword:
+	case KindNullKeyword, KindTrueKeyword, KindFalseKeyword, KindThisKeyword, KindSuperKeyword, KindImportKeyword:
 		return true
 	}
 	return false
@@ -5279,18 +5108,7 @@ func (node *KeywordTypeNode) Clone(f NodeFactoryCoercible) *Node {
 
 func IsKeywordTypeNode(node *Node) bool {
 	switch node.Kind {
-	case KindAnyKeyword:
-	case KindBigIntKeyword:
-	case KindBooleanKeyword:
-	case KindIntrinsicKeyword:
-	case KindNeverKeyword:
-	case KindNumberKeyword:
-	case KindObjectKeyword:
-	case KindStringKeyword:
-	case KindSymbolKeyword:
-	case KindUndefinedKeyword:
-	case KindUnknownKeyword:
-	case KindVoidKeyword:
+	case KindAnyKeyword, KindBigIntKeyword, KindBooleanKeyword, KindIntrinsicKeyword, KindNeverKeyword, KindNumberKeyword, KindObjectKeyword, KindStringKeyword, KindSymbolKeyword, KindUndefinedKeyword, KindUnknownKeyword, KindVoidKeyword:
 		return true
 	}
 	return false
