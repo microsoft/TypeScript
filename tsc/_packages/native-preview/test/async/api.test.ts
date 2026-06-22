@@ -33,6 +33,7 @@ import {
 import { visitEachChild } from "@typescript/native-preview/unstable/ast/visitor";
 import {
     API,
+    type BigIntLiteralType,
     type ConditionalType,
     DiagnosticCategory,
     type FreshableType,
@@ -2441,6 +2442,39 @@ describe("FreshableType - getFreshType and getRegularType", () => {
             assert.ok(type.flags & TypeFlags.StringLiteral, "Expected StringLiteral");
             const literal = type as LiteralType;
             assert.equal(literal.value, "hello");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("BigIntLiteralType.value is a bigint (positive and negative)", async () => {
+        const src = `\nexport const pos = 123n;\nexport const neg = -123n;\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+
+            const posSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("pos ="));
+            assert.ok(posSymbol);
+            const posType = await project.checker.getTypeOfSymbol(posSymbol);
+            assert.ok(posType);
+            assert.ok(posType.flags & TypeFlags.BigIntLiteral, "Expected BigIntLiteral");
+            const posLiteral = posType as BigIntLiteralType;
+            assert.equal(typeof posLiteral.value, "bigint");
+            assert.equal(posLiteral.value, 123n);
+
+            const negSymbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("neg ="));
+            assert.ok(negSymbol);
+            const negType = await project.checker.getTypeOfSymbol(negSymbol);
+            assert.ok(negType);
+            assert.ok(negType.flags & TypeFlags.BigIntLiteral, "Expected BigIntLiteral");
+            const negLiteral = negType as BigIntLiteralType;
+            assert.equal(typeof negLiteral.value, "bigint");
+            assert.equal(negLiteral.value, -123n);
         }
         finally {
             await api.close();

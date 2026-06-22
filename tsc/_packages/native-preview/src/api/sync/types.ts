@@ -25,7 +25,7 @@ import type {
  *
  * ```ts
  * if (type.flags & TypeFlags.StringLiteral) {
- *     console.log((type as LiteralType).value); // string
+ *     console.log((type as StringLiteralType).value); // string
  * }
  * ```
  */
@@ -57,8 +57,32 @@ export interface FreshableType extends Type {
 
 /** Literal types: StringLiteral, NumberLiteral, BigIntLiteral, BooleanLiteral */
 export interface LiteralType extends FreshableType {
-    /** The literal value */
-    readonly value: string | number | boolean;
+    /** The literal value. Use TypeFlags to narrow to a specific literal subtype with a concrete value type. */
+    readonly value: string | number | boolean | bigint;
+}
+
+/** String literal types (TypeFlags.StringLiteral) */
+export interface StringLiteralType extends LiteralType {
+    /** The string value of the literal */
+    readonly value: string;
+}
+
+/** Numeric literal types (TypeFlags.NumberLiteral) */
+export interface NumberLiteralType extends LiteralType {
+    /** The numeric value of the literal */
+    readonly value: number;
+}
+
+/** BigInt literal types (TypeFlags.BigIntLiteral) */
+export interface BigIntLiteralType extends LiteralType {
+    /** The bigint value of the literal */
+    readonly value: bigint;
+}
+
+/** Boolean literal types (TypeFlags.BooleanLiteral) */
+export interface BooleanLiteralType extends LiteralType {
+    /** The boolean value of the literal */
+    readonly value: boolean;
 }
 
 /** Object types (TypeFlags.Object) */

@@ -78,6 +78,8 @@ import {
 import type {
     AssertsIdentifierTypePredicate,
     AssertsThisTypePredicate,
+    BigIntLiteralType,
+    BooleanLiteralType,
     CompletionEntry,
     CompletionInfo,
     CompletionOptions,
@@ -92,7 +94,9 @@ import type {
     IntersectionType,
     IntrinsicType,
     LiteralType,
+    NumberLiteralType,
     ObjectType,
+    StringLiteralType,
     StringMappingType,
     SubstitutionType,
     TemplateLiteralType,
@@ -109,7 +113,7 @@ import type {
 
 export { CompletionItemKind, DiagnosticCategory, ElementFlags, ModifierFlags, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
 export type { APIOptions, ClientSocketOptions, ClientSpawnOptions, DocumentIdentifier, DocumentPosition, LSPConnectionOptions };
-export type { AssertsIdentifierTypePredicate, AssertsThisTypePredicate, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, FreshableType, IdentifierTypePredicate, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, LiteralType, ObjectType, StringMappingType, SubstitutionType, TemplateLiteralType, ThisTypePredicate, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
+export type { AssertsIdentifierTypePredicate, AssertsThisTypePredicate, BigIntLiteralType, BooleanLiteralType, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, FreshableType, IdentifierTypePredicate, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, LiteralType, NumberLiteralType, ObjectType, StringLiteralType, StringMappingType, SubstitutionType, TemplateLiteralType, ThisTypePredicate, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 
 export class API<FromLSP extends boolean = false> {
@@ -1176,7 +1180,7 @@ class TypeObject implements Type {
     readonly flags: TypeFlags;
     readonly objectFlags!: ObjectFlags;
     readonly symbol!: number;
-    readonly value!: string | number | boolean;
+    readonly value!: string | number | boolean | bigint;
     readonly intrinsicName!: string;
     readonly isThisType!: boolean;
     readonly freshType!: number;
@@ -1205,7 +1209,11 @@ class TypeObject implements Type {
         this.flags = data.flags;
         if (data.objectFlags !== undefined) this.objectFlags = data.objectFlags;
         if (data.symbol !== undefined) this.symbol = data.symbol;
-        if (data.value !== undefined) this.value = data.value;
+        if (data.value != null) {
+            // BigInt literal values are serialized as decimal strings (e.g. "-123") because
+            // JSON cannot represent bigint. Decode them back into a real bigint here.
+            this.value = (data.flags & TypeFlags.BigIntLiteral) ? BigInt(data.value) : data.value;
+        }
         if (data.intrinsicName !== undefined) this.intrinsicName = data.intrinsicName;
         if (data.isThisType !== undefined) this.isThisType = data.isThisType;
         if (data.freshType !== undefined) this.freshType = data.freshType;

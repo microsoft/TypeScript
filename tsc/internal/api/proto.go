@@ -665,6 +665,8 @@ func literalValueToJSON(value any) any {
 	case bool:
 		return v
 	case jsnum.PseudoBigInt:
+		// Encode bigint literals as a signed decimal string (e.g. "-123"); the
+		// API client decodes this back into a real bigint. JSON has no bigint.
 		return v.String()
 	default:
 		return nil
