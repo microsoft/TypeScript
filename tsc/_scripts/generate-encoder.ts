@@ -1474,6 +1474,7 @@ function generateTSNodeGenerated(): string {
 
 function emitNodeGeneratedImports(w: CodeWriter) {
     w.write(`import {`);
+    w.write(`    getTokenPosOfNode,`);
     w.write(`    ModifierFlags,`);
     w.write(`    type Node,`);
     w.write(`    type NodeArray,`);
@@ -1689,6 +1690,39 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(``);
     w.write(`    getSourceFile(): SourceFile {`);
     w.write(`        return this.sourceFile as unknown as SourceFile;`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number {`);
+    w.write(`        return getTokenPosOfNode(this as unknown as Node, sourceFile ?? this.getSourceFile(), includeJsDocComment);`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getFullStart(): number {`);
+    w.write(`        return this.pos;`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getEnd(): number {`);
+    w.write(`        return this.end;`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getWidth(sourceFile?: SourceFile): number {`);
+    w.write(`        return this.getEnd() - this.getStart(sourceFile);`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getFullWidth(): number {`);
+    w.write(`        return this.end - this.pos;`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getLeadingTriviaWidth(sourceFile?: SourceFile): number {`);
+    w.write(`        return this.getStart(sourceFile) - this.pos;`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getFullText(sourceFile?: SourceFile): string {`);
+    w.write(`        return (sourceFile ?? this.getSourceFile()).text.substring(this.pos, this.end);`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getText(sourceFile?: SourceFile): string {`);
+    w.write(`        sourceFile ??= this.getSourceFile();`);
+    w.write(`        return sourceFile.text.substring(this.getStart(sourceFile), this.end);`);
     w.write(`    }`);
     w.write(``);
     w.write(`    protected getString(index: number): string {`);

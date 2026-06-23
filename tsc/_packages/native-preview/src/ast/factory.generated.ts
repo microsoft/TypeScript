@@ -257,6 +257,7 @@ import type {
     WithStatement,
     YieldExpression,
 } from "./ast.ts";
+import { getTokenPosOfNode } from "./astnav.ts";
 import {
     forEachChildOfJSDocParameterTag,
     forEachChildOfJSDocPropertyTag,
@@ -666,6 +667,39 @@ export class NodeObject {
         let node: Node = this as unknown as Node;
         while (node.parent) node = node.parent;
         return node as unknown as SourceFile;
+    }
+
+    getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number {
+        return getTokenPosOfNode(this as unknown as Node, sourceFile ?? this.getSourceFile(), includeJsDocComment);
+    }
+
+    getFullStart(): number {
+        return this.pos;
+    }
+
+    getEnd(): number {
+        return this.end;
+    }
+
+    getWidth(sourceFile?: SourceFile): number {
+        return this.getEnd() - this.getStart(sourceFile);
+    }
+
+    getFullWidth(): number {
+        return this.end - this.pos;
+    }
+
+    getLeadingTriviaWidth(sourceFile?: SourceFile): number {
+        return this.getStart(sourceFile) - this.pos;
+    }
+
+    getFullText(sourceFile?: SourceFile): string {
+        return (sourceFile ?? this.getSourceFile()).text.substring(this.pos, this.end);
+    }
+
+    getText(sourceFile?: SourceFile): string {
+        sourceFile ??= this.getSourceFile();
+        return sourceFile.text.substring(this.getStart(sourceFile), this.end);
     }
 }
 

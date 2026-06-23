@@ -517,6 +517,7 @@ function generateFactory(): string {
         out.push(`    ${t},`);
     }
     out.push(`} from "./ast.ts";`);
+    out.push(`import { getTokenPosOfNode } from "./astnav.ts";`);
 
     // Import hand-written forEachChild functions
     const handWrittenForEachChildImports: string[] = [];
@@ -572,6 +573,39 @@ function generateFactory(): string {
     out.push(`        let node: Node = this as unknown as Node;`);
     out.push(`        while (node.parent) node = node.parent;`);
     out.push(`        return node as unknown as SourceFile;`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number {`);
+    out.push(`        return getTokenPosOfNode(this as unknown as Node, sourceFile ?? this.getSourceFile(), includeJsDocComment);`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getFullStart(): number {`);
+    out.push(`        return this.pos;`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getEnd(): number {`);
+    out.push(`        return this.end;`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getWidth(sourceFile?: SourceFile): number {`);
+    out.push(`        return this.getEnd() - this.getStart(sourceFile);`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getFullWidth(): number {`);
+    out.push(`        return this.end - this.pos;`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getLeadingTriviaWidth(sourceFile?: SourceFile): number {`);
+    out.push(`        return this.getStart(sourceFile) - this.pos;`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getFullText(sourceFile?: SourceFile): string {`);
+    out.push(`        return (sourceFile ?? this.getSourceFile()).text.substring(this.pos, this.end);`);
+    out.push(`    }`);
+    out.push(``);
+    out.push(`    getText(sourceFile?: SourceFile): string {`);
+    out.push(`        sourceFile ??= this.getSourceFile();`);
+    out.push(`        return sourceFile.text.substring(this.getStart(sourceFile), this.end);`);
     out.push(`    }`);
     out.push(`}`);
     out.push(``);

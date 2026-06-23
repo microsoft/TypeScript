@@ -3,7 +3,9 @@ import type {
     Identifier,
     Node,
     NodeArray,
+    SourceFile,
     StringLiteralLikeNode,
+    VariableStatement,
 } from "@typescript/native-preview/unstable/ast";
 import {
     isImportDeclaration,
@@ -656,6 +658,190 @@ describe("RemoteNode + getSynthesizedDeepClone", () => {
                 assert.ok(node instanceof NodeObject);
                 node.forEachChild(visit);
             });
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+// ---------------------------------------------------------------------------
+// RemoteNode: position and text getters
+// ---------------------------------------------------------------------------
+
+// Relationships that must hold between the position/text getters on any node.
+function assertGetterInvariants(node: Node, sf: SourceFile) {
+    const fullStart = node.getFullStart();
+    const start = node.getStart(sf);
+    const end = node.getEnd();
+
+    assert.strictEqual(fullStart, node.pos);
+    assert.strictEqual(end, node.end);
+    assert.ok(start >= fullStart, `getStart (${start}) must be >= getFullStart (${fullStart})`);
+    assert.ok(end >= start, `getEnd (${end}) must be >= getStart (${start})`);
+
+    assert.strictEqual(node.getFullWidth(), end - fullStart);
+    assert.strictEqual(node.getWidth(sf), end - start);
+    assert.strictEqual(node.getLeadingTriviaWidth(sf), start - fullStart);
+
+    const fullText = node.getFullText(sf);
+    const text = node.getText(sf);
+    assert.strictEqual(fullText.length, node.getFullWidth());
+    assert.strictEqual(text, fullText.slice(node.getLeadingTriviaWidth(sf)));
+
+    // No-argument variants resolve the source file themselves and must agree.
+    assert.strictEqual(node.getStart(), start);
+    assert.strictEqual(node.getFullText(), fullText);
+    assert.strictEqual(node.getText(), text);
+
+    node.forEachChild(child => {
+        assertGetterInvariants(child, sf);
+        return undefined;
+    });
+}
+
+describe("RemoteNode + position/text getters", () => {
+    const source = "/* lead */ const value = 123;";
+    const files = {
+        "/tsconfig.json": "{}",
+        "/src/getters.ts": source,
+    };
+
+    test("position and text getters on a parsed statement", () => {
+        const api = spawnAPI(files);
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/getters.ts");
+            const stmt = sf.statements[0];
+            assert.ok(stmt);
+
+            const tokenStart = source.indexOf("const");
+
+            // Full start includes leading trivia; start skips it.
+            assert.strictEqual(stmt.getFullStart(), 0);
+            assert.strictEqual(stmt.getStart(), tokenStart);
+            assert.strictEqual(stmt.getStart(sf), tokenStart);
+            assert.strictEqual(stmt.getLeadingTriviaWidth(), tokenStart);
+
+            // End and widths.
+            assert.strictEqual(stmt.getEnd(), source.length);
+            assert.strictEqual(stmt.getFullWidth(), source.length);
+            assert.strictEqual(stmt.getWidth(), source.length - tokenStart);
+
+            // Text slices, with and without leading trivia.
+            assert.strictEqual(stmt.getFullText(), source);
+            assert.strictEqual(stmt.getText(), source.slice(tokenStart));
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getText/getFullText on a nested node", () => {
+        const api = spawnAPI(files);
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/getters.ts");
+            const stmt = sf.statements[0] as VariableStatement;
+            const name = stmt.declarationList.declarations[0].name;
+
+            assert.strictEqual(name.getText(), "value");
+            // getFullText keeps the leading whitespace trivia before the identifier.
+            assert.strictEqual(name.getFullText().trimStart(), "value");
+            assert.ok(name.getFullText().endsWith("value"));
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getStart can include leading JSDoc comments", () => {
+        const docSource = "/** doc */\nfunction f() {}\n";
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/doc.ts": docSource,
+        });
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/doc.ts");
+            const fn = sf.statements[0];
+            assert.ok(fn);
+
+            // By default the JSDoc comment is treated as leading trivia and skipped.
+            assert.strictEqual(fn.getStart(), docSource.indexOf("function"));
+
+            // With includeJsDocComment, the start moves back to the JSDoc comment.
+            assert.ok(fn.jsDoc && fn.jsDoc.length > 0, "function declaration should have attached JSDoc");
+            assert.strictEqual(fn.getStart(sf, /*includeJsDocComment*/ true), 0);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("a node without leading trivia has zero leading trivia width", () => {
+        const api = spawnAPI({ "/tsconfig.json": "{}", "/src/plain.ts": "const x = 1;\n" });
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/plain.ts");
+            const stmt = sf.statements[0];
+            assert.ok(stmt);
+
+            assert.strictEqual(stmt.getFullStart(), 0);
+            assert.strictEqual(stmt.getStart(), 0);
+            assert.strictEqual(stmt.getLeadingTriviaWidth(), 0);
+            assert.strictEqual(stmt.getText(), "const x = 1;");
+            assert.strictEqual(stmt.getText(), stmt.getFullText());
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("the SourceFile node spans the whole file text", () => {
+        const text = "/* head */ const y = 2;\n";
+        const api = spawnAPI({ "/tsconfig.json": "{}", "/src/whole.ts": text });
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/whole.ts");
+
+            assert.strictEqual(sf.getFullStart(), 0);
+            assert.strictEqual(sf.getFullText(), sf.text);
+            assert.strictEqual(sf.getEnd(), sf.text.length);
+            // getStart skips the file's leading comment trivia.
+            assert.strictEqual(sf.getStart(), text.indexOf("const"));
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getter invariants hold for every node in a representative tree", () => {
+        const treeSource = [
+            `import { foo } from "./foo";`,
+            ``,
+            `/** docs */`,
+            `export function add(a: number, b: number): number {`,
+            `    // body comment`,
+            `    return a + b;`,
+            `}`,
+            ``,
+            `const obj = { x: 1, y: "two" };`,
+            ``,
+        ].join("\n");
+        const api = spawnAPI({ "/tsconfig.json": "{}", "/src/tree.ts": treeSource });
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/tree.ts");
+            assertGetterInvariants(sf, sf);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getter invariants hold even for malformed source with missing nodes", () => {
+        // Error recovery produces zero-width / missing nodes; the getters must
+        // still satisfy their invariants and must not throw.
+        const malformed = "const a = b +;\nfunction (";
+        const api = spawnAPI({ "/tsconfig.json": "{}", "/src/broken.ts": malformed });
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/broken.ts");
+            assertGetterInvariants(sf, sf);
         }
         finally {
             api.close();
