@@ -1,0 +1,101 @@
+//// [tests/cases/compiler/parametersAliasOverTypeofPreservedAsIsInDeclarations.ts] ////
+
+=== parametersAliasOverTypeofPreservedAsIsInDeclarations.ts ===
+interface OverloadUnion {
+    (arg: string): Promise<boolean>;
+>arg : string
+
+    (arg: string, callback: (error: Error | null, result: boolean) => void): void;
+>arg : string
+>callback : (error: Error | null, result: boolean) => void
+>error : Error | null
+>result : boolean
+}
+
+declare let overloadInterface: OverloadUnion;
+>overloadInterface : OverloadUnion
+
+declare let overloadInline:
+>overloadInline : ((arg: string) => Promise<boolean>) | ((arg: string, callback: (error: Error | null, result: boolean) => void) => void)
+
+    | ((arg: string) => Promise<boolean>)
+>arg : string
+
+    | ((arg: string, callback: (error: Error | null, result: boolean) => void) => void)
+>arg : string
+>callback : (error: Error | null, result: boolean) => void
+>error : Error | null
+>result : boolean
+
+export class C {
+>C : C
+
+    classMethodInterface(...args: Parameters<typeof overloadInterface>) {}
+>classMethodInterface : (arg: string, callback: (error: Error | null, result: boolean) => void) => void
+>args : [arg: string, callback: (error: Error | null, result: boolean) => void]
+>overloadInterface : OverloadUnion
+
+    classMethodInline(...args: Parameters<typeof overloadInline>) {}
+>classMethodInline : (...args: Parameters<typeof overloadInline>) => void
+>args : [arg: string] | [arg: string, callback: (error: Error | null, result: boolean) => void]
+>overloadInline : ((arg: string) => Promise<boolean>) | ((arg: string, callback: (error: Error | null, result: boolean) => void) => void)
+
+    classFieldFunctionInterface = function (...args: Parameters<typeof overloadInterface>) {}
+>classFieldFunctionInterface : (arg: string, callback: (error: Error | null, result: boolean) => void) => void
+>function (...args: Parameters<typeof overloadInterface>) {} : (arg: string, callback: (error: Error | null, result: boolean) => void) => void
+>args : [arg: string, callback: (error: Error | null, result: boolean) => void]
+>overloadInterface : OverloadUnion
+
+    classFieldFunctionInline = function (...args: Parameters<typeof overloadInline>) {}
+>classFieldFunctionInline : (...args: Parameters<typeof overloadInline>) => void
+>function (...args: Parameters<typeof overloadInline>) {} : (...args: Parameters<typeof overloadInline>) => void
+>args : [arg: string] | [arg: string, callback: (error: Error | null, result: boolean) => void]
+>overloadInline : ((arg: string) => Promise<boolean>) | ((arg: string, callback: (error: Error | null, result: boolean) => void) => void)
+
+    classFieldArrowInterface = (...args: Parameters<typeof overloadInterface>) => {}
+>classFieldArrowInterface : (arg: string, callback: (error: Error | null, result: boolean) => void) => void
+>(...args: Parameters<typeof overloadInterface>) => {} : (arg: string, callback: (error: Error | null, result: boolean) => void) => void
+>args : [arg: string, callback: (error: Error | null, result: boolean) => void]
+>overloadInterface : OverloadUnion
+
+    classFieldArrowInline = (...args: Parameters<typeof overloadInline>) => {}
+>classFieldArrowInline : (...args: Parameters<typeof overloadInline>) => void
+>(...args: Parameters<typeof overloadInline>) => {} : (...args: Parameters<typeof overloadInline>) => void
+>args : [arg: string] | [arg: string, callback: (error: Error | null, result: boolean) => void]
+>overloadInline : ((arg: string) => Promise<boolean>) | ((arg: string, callback: (error: Error | null, result: boolean) => void) => void)
+}
+
+export function FunctionInterface(...args: Parameters<typeof overloadInterface>) {}
+>FunctionInterface : (arg: string, callback: (error: Error | null, result: boolean) => void) => void
+>args : [arg: string, callback: (error: Error | null, result: boolean) => void]
+>overloadInterface : OverloadUnion
+
+export function FunctionInline(...args: Parameters<typeof overloadInline>) {}
+>FunctionInline : (...args: Parameters<typeof overloadInline>) => void
+>args : [arg: string] | [arg: string, callback: (error: Error | null, result: boolean) => void]
+>overloadInline : ((arg: string) => Promise<boolean>) | ((arg: string, callback: (error: Error | null, result: boolean) => void) => void)
+
+export const FunctionAssignInterface = function (...args: Parameters<typeof overloadInterface>) {}
+>FunctionAssignInterface : (arg: string, callback: (error: Error | null, result: boolean) => void) => void
+>function (...args: Parameters<typeof overloadInterface>) {} : (arg: string, callback: (error: Error | null, result: boolean) => void) => void
+>args : [arg: string, callback: (error: Error | null, result: boolean) => void]
+>overloadInterface : OverloadUnion
+
+export const FunctionAssignInline = function (...args: Parameters<typeof overloadInline>) {}
+>FunctionAssignInline : (...args: Parameters<typeof overloadInline>) => void
+>function (...args: Parameters<typeof overloadInline>) {} : (...args: Parameters<typeof overloadInline>) => void
+>args : [arg: string] | [arg: string, callback: (error: Error | null, result: boolean) => void]
+>overloadInline : ((arg: string) => Promise<boolean>) | ((arg: string, callback: (error: Error | null, result: boolean) => void) => void)
+
+export const ArrowInterface = (...args: Parameters<typeof overloadInterface>) => {}
+>ArrowInterface : (arg: string, callback: (error: Error | null, result: boolean) => void) => void
+>(...args: Parameters<typeof overloadInterface>) => {} : (arg: string, callback: (error: Error | null, result: boolean) => void) => void
+>args : [arg: string, callback: (error: Error | null, result: boolean) => void]
+>overloadInterface : OverloadUnion
+
+export const ArrowInline = (...args: Parameters<typeof overloadInline>) => {}
+>ArrowInline : (...args: Parameters<typeof overloadInline>) => void
+>(...args: Parameters<typeof overloadInline>) => {} : (...args: Parameters<typeof overloadInline>) => void
+>args : [arg: string] | [arg: string, callback: (error: Error | null, result: boolean) => void]
+>overloadInline : ((arg: string) => Promise<boolean>) | ((arg: string, callback: (error: Error | null, result: boolean) => void) => void)
+
