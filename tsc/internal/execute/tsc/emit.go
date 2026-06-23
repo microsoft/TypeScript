@@ -139,7 +139,7 @@ func listFiles(input EmitInput, emitResult *compiler.EmitResult) {
 	options := input.Program.Options()
 	if options.ListEmittedFiles.IsTrue() {
 		for _, file := range emitResult.EmittedFiles {
-			fmt.Fprintln(input.Writer, "TSFILE: ", tspath.GetNormalizedAbsolutePath(file, input.Program.GetCurrentDirectory()))
+			fmt.Fprintln(input.Writer, "TSFILE:", tspath.GetNormalizedAbsolutePath(file, input.Program.GetCurrentDirectory()))
 		}
 	}
 	if options.ExplainFiles.IsTrue() {

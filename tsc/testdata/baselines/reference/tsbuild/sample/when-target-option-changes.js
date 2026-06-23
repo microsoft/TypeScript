@@ -76,9 +76,9 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'core/tsconfig.json'...
 
-TSFILE:  /user/username/projects/sample1/core/anotherModule.js
-TSFILE:  /user/username/projects/sample1/core/index.js
-TSFILE:  /user/username/projects/sample1/core/tsconfig.tsbuildinfo
+TSFILE: /user/username/projects/sample1/core/anotherModule.js
+TSFILE: /user/username/projects/sample1/core/index.js
+TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
 /home/src/tslibs/TS/Lib/lib.esnext.d.ts
 /home/src/tslibs/TS/Lib/lib.esnext.full.d.ts
 /user/username/projects/sample1/core/anotherModule.ts
@@ -226,9 +226,9 @@ Output::
 [7m6[0m         "target": "es5",
 [7m [0m [91m                  ~~~~~[0m
 
-TSFILE:  /user/username/projects/sample1/core/anotherModule.js
-TSFILE:  /user/username/projects/sample1/core/index.js
-TSFILE:  /user/username/projects/sample1/core/tsconfig.tsbuildinfo
+TSFILE: /user/username/projects/sample1/core/anotherModule.js
+TSFILE: /user/username/projects/sample1/core/index.js
+TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
 /home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/tslibs/TS/Lib/lib.esnext.d.ts
 /user/username/projects/sample1/core/anotherModule.ts

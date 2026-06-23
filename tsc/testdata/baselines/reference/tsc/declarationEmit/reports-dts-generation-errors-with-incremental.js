@@ -41,8 +41,8 @@ Output::
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
-TSFILE:  /home/src/workspaces/project/index.js
-TSFILE:  /home/src/workspaces/project/tsconfig.tsbuildinfo
+TSFILE: /home/src/workspaces/project/index.js
+TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
    Default library for target 'ES2025'
 node_modules/ky/distribution/index.d.ts

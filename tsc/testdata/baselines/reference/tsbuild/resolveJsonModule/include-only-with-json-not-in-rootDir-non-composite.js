@@ -33,8 +33,8 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'project/tsconfig.json'...
 
-TSFILE:  /home/src/workspaces/solution/project/dist/index.js
-TSFILE:  /home/src/workspaces/solution/project/tsconfig.tsbuildinfo
+TSFILE: /home/src/workspaces/solution/project/dist/index.js
+TSFILE: /home/src/workspaces/solution/project/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
    Default library for target 'ES2025'
 project/hello.json
