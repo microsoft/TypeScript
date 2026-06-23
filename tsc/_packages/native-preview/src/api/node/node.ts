@@ -45,6 +45,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     readonly _offsetExtendedData: number;
     readonly _offsetStructuredData: number;
     readonly _decoder: TextDecoder;
+    private _cachedText: string | undefined;
 
     constructor(data: Uint8Array, decoder: TextDecoder) {
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
@@ -197,6 +198,13 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     get isDeclarationFile(): boolean {
         return (this.flags & NodeFlags.Ambient) !== 0;
+    }
+
+    get text(): string {
+        if (this._cachedText !== undefined) return this._cachedText;
+        const text = super.text!;
+        this._cachedText = text;
+        return text;
     }
 }
 
