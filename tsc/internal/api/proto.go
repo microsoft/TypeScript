@@ -140,9 +140,12 @@ const (
 
 	// Diagnostic methods
 	MethodGetSyntacticDiagnostics         Method = "getSyntacticDiagnostics"
+	MethodGetBindDiagnostics              Method = "getBindDiagnostics"
 	MethodGetSemanticDiagnostics          Method = "getSemanticDiagnostics"
 	MethodGetSuggestionDiagnostics        Method = "getSuggestionDiagnostics"
 	MethodGetDeclarationDiagnostics       Method = "getDeclarationDiagnostics"
+	MethodGetProgramDiagnostics           Method = "getProgramDiagnostics"
+	MethodGetGlobalDiagnostics            Method = "getGlobalDiagnostics"
 	MethodGetConfigFileParsingDiagnostics Method = "getConfigFileParsingDiagnostics"
 
 	// Emitter methods
@@ -410,9 +413,12 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetBigIntType:                     unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetESSymbolType:                   unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetSyntacticDiagnostics:           unmarshallerFor[GetDiagnosticsParams],
+	MethodGetBindDiagnostics:                unmarshallerFor[GetDiagnosticsParams],
 	MethodGetSemanticDiagnostics:            unmarshallerFor[GetDiagnosticsParams],
 	MethodGetSuggestionDiagnostics:          unmarshallerFor[GetDiagnosticsParams],
 	MethodGetDeclarationDiagnostics:         unmarshallerFor[GetDiagnosticsParams],
+	MethodGetProgramDiagnostics:             unmarshallerFor[GetProjectDiagnosticsParams],
+	MethodGetGlobalDiagnostics:              unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetConfigFileParsingDiagnostics:   unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodStartCPUProfile:                   unmarshallerFor[ProfileParams],
 	MethodStopCPUProfile:                    noParams,

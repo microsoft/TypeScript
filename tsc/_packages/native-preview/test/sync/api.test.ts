@@ -3598,6 +3598,113 @@ describe("Program - diagnostics", () => {
             api.close();
         }
     });
+
+    test("getBindDiagnostics", () => {
+        const source = `let x = 1;\nlet x = 2;`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": source,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getBindDiagnostics("/src/index.ts");
+            assert.deepEqual(diags, [
+                {
+                    fileName: "/src/index.ts",
+                    ...rangeOf(source, "x", 0),
+                    code: 2451,
+                    category: DiagnosticCategory.Error,
+                    text: "Cannot redeclare block-scoped variable 'x'.",
+                },
+                {
+                    fileName: "/src/index.ts",
+                    ...rangeOf(source, "x", 1),
+                    code: 2451,
+                    category: DiagnosticCategory.Error,
+                    text: "Cannot redeclare block-scoped variable 'x'.",
+                },
+            ]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getProgramDiagnostics", () => {
+        const config = `{ "compilerOptions": { "moduleResolution": "bundler", "module": "nodenext" } }`;
+        const api = spawnAPI({
+            "/tsconfig.json": config,
+            "/src/index.ts": `export const x = 1;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getProgramDiagnostics();
+            assert.deepEqual(diags, [
+                {
+                    fileName: "/tsconfig.json",
+                    ...rangeOf(config, `"bundler"`),
+                    code: 5095,
+                    category: DiagnosticCategory.Error,
+                    text: "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
+                },
+                {
+                    fileName: "/tsconfig.json",
+                    ...rangeOf(config, `"bundler"`),
+                    code: 5109,
+                    category: DiagnosticCategory.Error,
+                    text: "Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.",
+                },
+            ]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getGlobalDiagnostics", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `export const x = 1;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getGlobalDiagnostics();
+            assert.deepEqual(diags, []);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getGlobalDiagnostics returns file-less diagnostics from the checker", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+            "/src/index.ts": `export const x = [1, 2, 3];`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getGlobalDiagnostics();
+            // With noLib, the checker reports "Cannot find global type" diagnostics that
+            // are not associated with any source file.
+            assert.ok(diags.length > 0, "expected global diagnostics to be reported");
+            for (const diag of diags) {
+                assert.equal(diag.fileName, undefined);
+                assert.equal(diag.code, 2318);
+                assert.equal(diag.category, DiagnosticCategory.Error);
+            }
+            assert.ok(
+                diags.some(d => d.text === "Cannot find global type 'Array'."),
+                "expected a global diagnostic for the 'Array' type",
+            );
+        }
+        finally {
+            api.close();
+        }
+    });
 });
 
 describe("Checker - getReferencedSymbolsForNode", () => {

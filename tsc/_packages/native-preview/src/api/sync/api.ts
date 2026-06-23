@@ -605,6 +605,19 @@ export class Program {
     }
 
     /**
+     * Get binder diagnostics for a specific file or all files.
+     * @param file - Optional file to get diagnostics for. If omitted, returns diagnostics for all files.
+     */
+    getBindDiagnostics(file?: DocumentIdentifier): readonly Diagnostic[] {
+        const data = this.client.apiRequest<Diagnostic[]>("getBindDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            ...(file !== undefined ? { file } : {}),
+        });
+        return data ?? [];
+    }
+
+    /**
      * Get semantic (type-check) diagnostics for a specific file or all files.
      * @param file - Optional file to get diagnostics for. If omitted, returns diagnostics for all files.
      */
@@ -639,6 +652,28 @@ export class Program {
             snapshot: this.snapshotId,
             project: this.projectId,
             ...(file !== undefined ? { file } : {}),
+        });
+        return data ?? [];
+    }
+
+    /**
+     * Get program-wide diagnostics for the project, including compiler options diagnostics.
+     */
+    getProgramDiagnostics(): readonly Diagnostic[] {
+        const data = this.client.apiRequest<Diagnostic[]>("getProgramDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+        });
+        return data ?? [];
+    }
+
+    /**
+     * Get global (non-file-specific) semantic diagnostics for the project.
+     */
+    getGlobalDiagnostics(): readonly Diagnostic[] {
+        const data = this.client.apiRequest<Diagnostic[]>("getGlobalDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
         });
         return data ?? [];
     }
