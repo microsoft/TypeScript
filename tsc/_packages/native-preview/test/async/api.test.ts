@@ -3642,6 +3642,138 @@ describe("Checker - getSignatureUsage", () => {
     });
 });
 
+describe("getDefaultProjectForFile", () => {
+    test("finds inferred project for d.ts in node_modules after openFiles", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const x = 1;`,
+            "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
+            "/node_modules/my-lib/index.d.ts": `export declare const foo: string;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+
+            // The d.ts is not imported, so it is not in the project's program
+            const dtsSf = await project.program.getSourceFile("/node_modules/my-lib/index.d.ts");
+            assert.equal(dtsSf, undefined, "d.ts not in import graph should not be found via project.program.getSourceFile");
+
+            // Before opening the file, getDefaultProjectForFile returns undefined (no error)
+            const noProject = await snapshot.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts");
+            assert.equal(noProject, undefined, "getDefaultProjectForFile returns undefined for unloaded file");
+
+            // Load the file into the inferred project via updateSnapshot openFiles
+            const snapshot2 = await api.updateSnapshot({ openFiles: ["/node_modules/my-lib/index.d.ts"] });
+            const defaultProject = await snapshot2.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts");
+            assert.ok(defaultProject, "getDefaultProjectForFile should find inferred project after openFiles");
+
+            const fooPos = `export declare const foo: string;`.indexOf("foo");
+            const fooType = await defaultProject.checker.getTypeAtPosition("/node_modules/my-lib/index.d.ts", fooPos);
+            assert.ok(fooType);
+            assert.ok(fooType.flags & TypeFlags.String);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("keeps previously opened files open across subsequent openFiles calls", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const x = 1;`,
+            "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
+            "/node_modules/my-lib/index.d.ts": `export declare const foo: string;`,
+            "/node_modules/other-lib/package.json": JSON.stringify({ name: "other-lib", types: "./index.d.ts" }),
+            "/node_modules/other-lib/index.d.ts": `export declare const bar: number;`,
+        });
+        try {
+            await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            await api.updateSnapshot({ openFiles: ["/node_modules/my-lib/index.d.ts"] });
+
+            // Opening a second file in a later snapshot must not close the first one.
+            const snapshot = await api.updateSnapshot({ openFiles: ["/node_modules/other-lib/index.d.ts"] });
+
+            const firstProject = await snapshot.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts");
+            assert.ok(firstProject, "previously opened file should remain in the inferred project");
+            const secondProject = await snapshot.getDefaultProjectForFile("/node_modules/other-lib/index.d.ts");
+            assert.ok(secondProject, "newly opened file should be in the inferred project");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("opening a file resolves to a configured project via ancestor search", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const x = 1;`,
+        });
+        try {
+            // Open the file without first opening the project. Like LSP's didOpen, this
+            // should search ancestor directories for a tsconfig that contains the file.
+            const snapshot = await api.updateSnapshot({ openFiles: ["/src/index.ts"] });
+            const defaultProject = await snapshot.getDefaultProjectForFile("/src/index.ts");
+            assert.ok(defaultProject, "should find a project for the opened file");
+            assert.equal(
+                defaultProject.configFileName,
+                "/tsconfig.json",
+                "opened file should resolve to the containing configured project, not the inferred project",
+            );
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("closeProjects releases a project opened via openProjects", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const x = 1;`,
+        });
+        try {
+            const opened = await api.updateSnapshot({ openProjects: ["/tsconfig.json"] });
+            assert.ok(opened.getProject("/tsconfig.json"), "project should be open after openProjects");
+
+            const closed = await api.updateSnapshot({ closeProjects: ["/tsconfig.json"] });
+            assert.equal(
+                closed.getProject("/tsconfig.json"),
+                undefined,
+                "project should be unloaded after closeProjects",
+            );
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("closeFiles releases a file opened via openFiles", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const x = 1;`,
+            "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
+            "/node_modules/my-lib/index.d.ts": `export declare const foo: string;`,
+        });
+        try {
+            await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const opened = await api.updateSnapshot({ openFiles: ["/node_modules/my-lib/index.d.ts"] });
+            assert.ok(
+                await opened.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts"),
+                "file should resolve to a project after openFiles",
+            );
+
+            const closed = await api.updateSnapshot({ closeFiles: ["/node_modules/my-lib/index.d.ts"] });
+            assert.equal(
+                await closed.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts"),
+                undefined,
+                "file should no longer resolve to a project after closeFiles",
+            );
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
 test("Benchmarks", async () => {
     await runBenchmarks({ singleIteration: true });
 });

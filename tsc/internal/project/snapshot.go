@@ -159,6 +159,8 @@ func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []st
 type APISnapshotRequest struct {
 	OpenProjects  *collections.Set[string]
 	CloseProjects *collections.Set[tspath.Path]
+	OpenFiles     *collections.Set[lsproto.DocumentUri]
+	CloseFiles    *collections.Set[tspath.Path]
 }
 
 type ProjectTreeRequest struct {
@@ -327,7 +329,7 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 		fs,
 		s.ProjectCollection,
 		s.ConfigFileRegistry,
-		s.ProjectCollection.apiOpenedProjects,
+		s.ProjectCollection.apiState,
 		compilerOptionsForInferredProjects,
 		s.sessionOptions,
 		customConfigFileName,

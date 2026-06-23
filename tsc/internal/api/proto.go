@@ -227,11 +227,14 @@ func (d DocumentIdentifier) ToFileName() string {
 	return d.FileName
 }
 
-func (d DocumentIdentifier) ToURI() lsproto.DocumentUri {
+// ToURI returns the document URI for this identifier. An explicitly provided URI
+// is returned as-is; a file name is first normalized to an absolute path against
+// cwd before being converted to a URI.
+func (d DocumentIdentifier) ToURI(cwd string) lsproto.DocumentUri {
 	if d.URI != "" {
 		return d.URI
 	}
-	return lsconv.FileNameToDocumentURI(d.FileName)
+	return lsconv.FileNameToDocumentURI(tspath.GetNormalizedAbsolutePath(d.FileName, cwd))
 }
 
 func (d DocumentIdentifier) ToAbsoluteFileName(cwd string) string {
@@ -268,10 +271,24 @@ type APIFileChanges struct {
 // UpdateSnapshotParams are the parameters for creating a new snapshot.
 // All fields are optional. With no fields set, the server adopts the latest LSP state.
 type UpdateSnapshotParams struct {
-	// OpenProject is the path to a tsconfig.json file to open/load in the new snapshot.
-	OpenProject string `json:"openProject,omitempty"`
+	// OpenProjects lists tsconfig.json files to open/load in the new snapshot.
+	// Opens are ref-counted and persist across snapshots until closed.
+	OpenProjects []DocumentIdentifier `json:"openProjects,omitempty"`
+	// CloseProjects lists tsconfig.json files to release in the new snapshot.
+	// A project is only unloaded once every API client that opened it closes it.
+	CloseProjects []DocumentIdentifier `json:"closeProjects,omitempty"`
 	// FileChanges describes file system changes since the last snapshot.
 	FileChanges *APIFileChanges `json:"fileChanges,omitempty"`
+	// OpenFiles lists files to keep open for the API client, mirroring LSP's
+	// textDocument/didOpen. For each file, ancestor directories are searched for a
+	// tsconfig that contains it; if found, that configured project is loaded and
+	// becomes the file's default project. Otherwise the file is loaded into the
+	// inferred project (e.g. a node_modules d.ts not in any project's import graph).
+	// Opens persist across snapshots until the file is closed.
+	OpenFiles []DocumentIdentifier `json:"openFiles,omitempty"`
+	// CloseFiles lists files to release in the new snapshot. A file is only fully
+	// closed once every API client that opened it closes it.
+	CloseFiles []DocumentIdentifier `json:"closeFiles,omitempty"`
 }
 
 // ProjectFileChanges describes what source files changed within a single project.

@@ -56,7 +56,10 @@ import type {
     UpdateSnapshotParams,
     UpdateSnapshotResponse,
 } from "../proto.ts";
-import { resolveFileName } from "../proto.ts";
+import {
+    resolveFileName,
+    toUpdateSnapshotRequest,
+} from "../proto.ts";
 import { SourceFileCache } from "../sourceFileCache.ts";
 import {
     Client,
@@ -147,11 +150,7 @@ export class API<FromLSP extends boolean = false> {
     async updateSnapshot(params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Promise<Snapshot> {
         await this.ensureInitialized();
 
-        const requestParams: UpdateSnapshotParams = params ?? {};
-        if (requestParams.openProject) {
-            requestParams.openProject = resolveFileName(requestParams.openProject);
-        }
-
+        const requestParams = toUpdateSnapshotRequest(params);
         const data = await this.client.apiRequest<UpdateSnapshotResponse>("updateSnapshot", requestParams);
 
         // Retain cached source files from previous snapshot for unchanged files
