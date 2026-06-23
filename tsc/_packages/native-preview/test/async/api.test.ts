@@ -701,6 +701,43 @@ describe("Source file cache keying across projects", () => {
     });
 });
 
+describe("Checker - symbol identity across projects", () => {
+    const sharedSymbolFiles = {
+        "/projectA/tsconfig.json": JSON.stringify({ files: ["../src/shared.ts"] }),
+        "/projectB/tsconfig.json": JSON.stringify({ files: ["../src/shared.ts"] }),
+        "/src/shared.ts": `export const sharedVar = 42;`,
+    };
+
+    test("getSymbolAtPosition returns same Symbol instance across projects", async () => {
+        const api = spawnAPI(sharedSymbolFiles);
+        try {
+            await api.updateSnapshot({ openProject: "/projectA/tsconfig.json" });
+            const snapshot = await api.updateSnapshot({ openProject: "/projectB/tsconfig.json" });
+
+            const projectA = snapshot.getProject("/projectA/tsconfig.json")!;
+            const projectB = snapshot.getProject("/projectB/tsconfig.json")!;
+            assert.ok(projectA, "projectA should exist");
+            assert.ok(projectB, "projectB should exist");
+
+            const src = sharedSymbolFiles["/src/shared.ts"];
+            const varPos = src.indexOf("sharedVar");
+
+            const symbolA = await projectA.checker.getSymbolAtPosition("/src/shared.ts", varPos);
+            const symbolB = await projectB.checker.getSymbolAtPosition("/src/shared.ts", varPos);
+
+            assert.ok(symbolA, "symbolA should exist");
+            assert.ok(symbolB, "symbolB should exist");
+            assert.equal(symbolA.name, "sharedVar");
+            assert.equal(symbolB.name, "sharedVar");
+
+            assert.strictEqual(symbolA, symbolB, "Same source symbol queried from two projects should be the same object");
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
 describe("Checker - types and signatures", () => {
     const checkerFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -1548,6 +1585,121 @@ describe("Checker - intrinsic type getters", () => {
             const type = await project.checker.getESSymbolType();
             assert.ok(type);
             assert.ok(type.flags & TypeFlags.ESSymbol);
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("Checker - multi-project type ID uniqueness", () => {
+    test("intrinsic types from 3 projects in the same snapshot have non-colliding IDs", async () => {
+        const api = spawnAPI({
+            "/proj1/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/proj1/src/index.ts": `export const x = 1;`,
+            "/proj2/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/proj2/src/index.ts": `export const y = "hello";`,
+            "/proj3/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/proj3/src/index.ts": `export const z = true;`,
+        });
+        try {
+            // Open all 3 projects — each updateSnapshot accumulates open projects
+            await api.updateSnapshot({ openProject: "/proj1/tsconfig.json" });
+            await api.updateSnapshot({ openProject: "/proj2/tsconfig.json" });
+            const snapshot = await api.updateSnapshot({ openProject: "/proj3/tsconfig.json" });
+
+            const proj1 = snapshot.getProject("/proj1/tsconfig.json")!;
+            const proj2 = snapshot.getProject("/proj2/tsconfig.json")!;
+            const proj3 = snapshot.getProject("/proj3/tsconfig.json")!;
+            assert.ok(proj1, "proj1 should be in final snapshot");
+            assert.ok(proj2, "proj2 should be in final snapshot");
+            assert.ok(proj3, "proj3 should be in final snapshot");
+
+            // Fetch several intrinsic types from each checker.
+            // If type IDs collide across checkers, registerType panics → API error.
+            const num1 = await proj1.checker.getNumberType();
+            const str1 = await proj1.checker.getStringType();
+            const bool1 = await proj1.checker.getBooleanType();
+            const any1 = await proj1.checker.getAnyType();
+            const num2 = await proj2.checker.getNumberType();
+            const str2 = await proj2.checker.getStringType();
+            const bool2 = await proj2.checker.getBooleanType();
+            const any2 = await proj2.checker.getAnyType();
+            const num3 = await proj3.checker.getNumberType();
+            const str3 = await proj3.checker.getStringType();
+            const bool3 = await proj3.checker.getBooleanType();
+            const any3 = await proj3.checker.getAnyType();
+
+            assert.ok(num1.flags & TypeFlags.Number, "proj1 number type");
+            assert.ok(str1.flags & TypeFlags.String, "proj1 string type");
+            assert.ok(bool1.flags & TypeFlags.Boolean, "proj1 boolean type");
+            assert.ok(any1.flags & TypeFlags.Any, "proj1 any type");
+
+            assert.ok(num2.flags & TypeFlags.Number, "proj2 number type");
+            assert.ok(str2.flags & TypeFlags.String, "proj2 string type");
+            assert.ok(bool2.flags & TypeFlags.Boolean, "proj2 boolean type");
+            assert.ok(any2.flags & TypeFlags.Any, "proj2 any type");
+
+            assert.ok(num3.flags & TypeFlags.Number, "proj3 number type");
+            assert.ok(str3.flags & TypeFlags.String, "proj3 string type");
+            assert.ok(bool3.flags & TypeFlags.Boolean, "proj3 boolean type");
+            assert.ok(any3.flags & TypeFlags.Any, "proj3 any type");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("symbol and signature handles from 3 projects in the same snapshot have non-colliding IDs", async () => {
+        const api = spawnAPI({
+            "/proj1/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/proj1/src/index.ts": `export function add(a: number, b: number): number { return a + b; }`,
+            "/proj2/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/proj2/src/index.ts": `export function greet(name: string): string { return "hello " + name; }`,
+            "/proj3/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/proj3/src/index.ts": `export function toggle(b: boolean): boolean { return !b; }`,
+        });
+        try {
+            await api.updateSnapshot({ openProject: "/proj1/tsconfig.json" });
+            await api.updateSnapshot({ openProject: "/proj2/tsconfig.json" });
+            const snapshot = await api.updateSnapshot({ openProject: "/proj3/tsconfig.json" });
+
+            const proj1 = snapshot.getProject("/proj1/tsconfig.json")!;
+            const proj2 = snapshot.getProject("/proj2/tsconfig.json")!;
+            const proj3 = snapshot.getProject("/proj3/tsconfig.json")!;
+
+            // Get a symbol from each project (exercises symbol registry)
+            const src1 = `export function add(a: number, b: number): number { return a + b; }`;
+            const src2 = `export function greet(name: string): string { return "hello " + name; }`;
+            const src3 = `export function toggle(b: boolean): boolean { return !b; }`;
+
+            const sym1 = await proj1.checker.getSymbolAtPosition("/proj1/src/index.ts", src1.indexOf("add"));
+            const sym2 = await proj2.checker.getSymbolAtPosition("/proj2/src/index.ts", src2.indexOf("greet"));
+            const sym3 = await proj3.checker.getSymbolAtPosition("/proj3/src/index.ts", src3.indexOf("toggle"));
+            assert.ok(sym1, "proj1 symbol");
+            assert.ok(sym2, "proj2 symbol");
+            assert.ok(sym3, "proj3 symbol");
+            assert.equal(sym1.name, "add", "proj1 symbol name");
+            assert.equal(sym2.name, "greet", "proj2 symbol name");
+            assert.equal(sym3.name, "toggle", "proj3 symbol name");
+
+            // Get type of each symbol, then signatures (exercises type + signature registries)
+            const type1 = await proj1.checker.getTypeOfSymbol(sym1);
+            const type2 = await proj2.checker.getTypeOfSymbol(sym2);
+            const type3 = await proj3.checker.getTypeOfSymbol(sym3);
+            assert.ok(type1, "proj1 function type");
+            assert.ok(type2, "proj2 function type");
+            assert.ok(type3, "proj3 function type");
+
+            const sigs1 = await proj1.checker.getSignaturesOfType(type1, SignatureKind.Call);
+            const sigs2 = await proj2.checker.getSignaturesOfType(type2, SignatureKind.Call);
+            const sigs3 = await proj3.checker.getSignaturesOfType(type3, SignatureKind.Call);
+            assert.equal(sigs1.length, 1, "proj1 has 1 call signature");
+            assert.equal(sigs2.length, 1, "proj2 has 1 call signature");
+            assert.equal(sigs3.length, 1, "proj3 has 1 call signature");
+            assert.equal(sigs1[0].parameters.length, 2, "proj1 add() has 2 params");
+            assert.equal(sigs2[0].parameters.length, 1, "proj2 greet() has 1 param");
+            assert.equal(sigs3[0].parameters.length, 1, "proj3 toggle() has 1 param");
         }
         finally {
             await api.close();
