@@ -9965,7 +9965,7 @@ export function getScriptKindFromFileName(fileName: string): ScriptKind {
 }
 
 /**
- *  Groups of supported extensions in order of file resolution precedence. (eg, TS > TSX > DTS and seperately, CTS > DCTS)
+ *  Groups of supported extensions in order of file resolution precedence. (eg, TS > TSX > DTS and separately, CTS > DCTS)
  */
 const supportedTSExtensions: readonly Extension[][] = [[Extension.Ts, Extension.Tsx, Extension.Dts], [Extension.Cts, Extension.Dcts], [Extension.Mts, Extension.Dmts]];
 /** @internal */
@@ -10570,7 +10570,7 @@ export function isValidBigIntString(s: string, roundTripOnly: boolean): boolean 
     // * scanning proceeded without error
     // * a bigint can be scanned, and that when it is scanned, it is
     // * the full length of the input string (so the scanner is one character beyond the augmented input length)
-    // * it does not contain a numeric seperator (the `BigInt` constructor does not accept a numeric seperator in its input)
+    // * it does not contain a numeric separator (the `BigInt` constructor does not accept a numeric separator in its input)
     return success && result === SyntaxKind.BigIntLiteral && scanner.getTokenEnd() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
         && (!roundTripOnly || s === pseudoBigIntToString({ negative, base10Value: parsePseudoBigInt(scanner.getTokenValue()) }));
 }
