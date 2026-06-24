@@ -641,12 +641,34 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetBaseTypes(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetPropertiesOfType):
 		return s.handleGetPropertiesOfType(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodGetPropertyOfType):
+		return s.handleGetPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
 	case string(MethodGetIndexInfosOfType):
 		return s.handleGetIndexInfosOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetConstraintOfTypeParameter):
 		return s.handleGetConstraintOfTypeParameter(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodGetBaseConstraintOfType):
+		return s.handleGetBaseConstraintOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetTypeArguments):
 		return s.handleGetTypeArguments(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodGetConstantValue):
+		return s.handleGetConstantValue(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetSignatureFromDeclaration):
+		return s.handleGetSignatureFromDeclaration(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetExportSpecifierLocalTarget):
+		return s.handleGetExportSpecifierLocalTargetSymbol(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetAliasedSymbol):
+		return s.handleGetAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetExportsOfModule):
+		return s.handleGetExportsOfModule(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetJSDocTags):
+		return s.handleGetJSDocTags(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetDocumentationComment):
+		return s.handleGetDocumentationComment(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodIsArrayType):
+		return s.handleIsArrayType(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodIsTupleType):
+		return s.handleIsTupleType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetAnyType):
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetAnyType)
 	case string(MethodGetStringType):
@@ -2117,6 +2139,38 @@ func (s *Session) handleGetTypePredicateOfSignature(ctx context.Context, params 
 	return resp, nil
 }
 
+// handleIsArrayType returns whether a type is Array<T> or ReadonlyArray<T>.
+func (s *Session) handleIsArrayType(ctx context.Context, params *CheckerTypeParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return false, err
+	}
+
+	return setup.checker.IsArrayType(t), nil
+}
+
+// handleIsTupleType returns whether a type is a tuple type.
+func (s *Session) handleIsTupleType(ctx context.Context, params *CheckerTypeParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return false, err
+	}
+
+	return checker.IsTupleType(t), nil
+}
+
 // handleGetBaseTypes returns the base types of an interface/class type.
 func (s *Session) handleGetBaseTypes(ctx context.Context, params *CheckerTypeParams) ([]*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
@@ -2221,6 +2275,225 @@ func (s *Session) handleGetConstraintOfTypeParameter(ctx context.Context, params
 	}
 
 	return setup.newTypeResponse(constraint), nil
+}
+
+// handleGetBaseConstraintOfType returns the base constraint of an instantiable type.
+func (s *Session) handleGetBaseConstraintOfType(ctx context.Context, params *CheckerTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	constraint := setup.checker.GetBaseConstraintOfType(t)
+	if constraint == nil {
+		return nil, nil
+	}
+
+	return setup.newTypeResponse(constraint), nil
+}
+
+// handleGetPropertyOfType returns a named property symbol of a type.
+func (s *Session) handleGetPropertyOfType(ctx context.Context, params *GetPropertyOfTypeParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	prop := setup.checker.GetPropertyOfType(t, params.Name)
+	if prop == nil {
+		return nil, nil
+	}
+
+	return setup.newSymbolResponse(prop), nil
+}
+
+// handleGetConstantValue returns the constant value of an enum member or const enum access.
+func (s *Session) handleGetConstantValue(ctx context.Context, params *CheckerNodeParams) (any, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if node == nil {
+		return nil, nil
+	}
+
+	return literalValueToJSON(setup.checker.GetConstantValue(node)), nil
+}
+
+// handleGetSignatureFromDeclaration returns the signature of a function-like declaration.
+func (s *Session) handleGetSignatureFromDeclaration(ctx context.Context, params *CheckerNodeParams) (*SignatureResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if node == nil {
+		return nil, nil
+	}
+
+	sig := setup.checker.GetSignatureFromDeclaration(node)
+	if sig == nil {
+		return nil, nil
+	}
+
+	return setup.newSignatureResponse(sig), nil
+}
+
+// handleGetExportSpecifierLocalTargetSymbol returns the local target symbol of an export specifier.
+func (s *Session) handleGetExportSpecifierLocalTargetSymbol(ctx context.Context, params *CheckerNodeParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if node == nil {
+		return nil, nil
+	}
+
+	symbol := setup.checker.GetExportSpecifierLocalTargetSymbol(node)
+	if symbol == nil {
+		return nil, nil
+	}
+
+	return setup.newSymbolResponse(symbol), nil
+}
+
+// handleGetAliasedSymbol resolves an alias symbol to its target.
+func (s *Session) handleGetAliasedSymbol(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	if symbol == nil {
+		return nil, nil
+	}
+
+	aliased := setup.checker.GetAliasedSymbol(symbol)
+	if aliased == nil {
+		return nil, nil
+	}
+
+	return setup.newSymbolResponse(aliased), nil
+}
+
+// handleGetExportsOfModule returns the resolved exports of a module symbol,
+// including those introduced by `export *` and re-exports.
+func (s *Session) handleGetExportsOfModule(ctx context.Context, params *CheckerSymbolParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	if symbol == nil {
+		return nil, nil
+	}
+
+	exports := setup.checker.GetExportsOfModule(symbol)
+	if len(exports) == 0 {
+		return nil, nil
+	}
+
+	results := make([]*SymbolResponse, len(exports))
+	for i, exp := range exports {
+		results[i] = setup.newSymbolResponse(exp)
+	}
+
+	return results, nil
+}
+
+// handleGetJSDocTags returns the JSDoc tags of a symbol as structured name/text pairs.
+func (s *Session) handleGetJSDocTags(ctx context.Context, params *CheckerSymbolParams) ([]*JSDocTagInfo, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	if symbol == nil {
+		return nil, nil
+	}
+
+	langSvc, err := s.setupLanguageService(setup.sd, setup.program, params.Project, "")
+	if err != nil {
+		return nil, err
+	}
+
+	tags := langSvc.GetSymbolJSDocTags(symbol)
+	if len(tags) == 0 {
+		return nil, nil
+	}
+	results := make([]*JSDocTagInfo, len(tags))
+	for i, tag := range tags {
+		results[i] = &JSDocTagInfo{Name: tag.Name, Text: tag.Text}
+	}
+	return results, nil
+}
+
+// handleGetDocumentationComment returns the rendered documentation comment of a symbol as plain text.
+func (s *Session) handleGetDocumentationComment(ctx context.Context, params *CheckerSymbolParams) (string, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return "", err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return "", err
+	}
+	if symbol == nil {
+		return "", nil
+	}
+
+	langSvc, err := s.setupLanguageService(setup.sd, setup.program, params.Project, "")
+	if err != nil {
+		return "", err
+	}
+
+	return langSvc.GetSymbolDocumentationComment(setup.checker, symbol), nil
 }
 
 // handleGetTypeArguments returns the type arguments of a type reference.

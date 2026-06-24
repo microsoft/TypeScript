@@ -92,6 +92,7 @@ import type {
     InterfaceType,
     IntersectionType,
     IntrinsicType,
+    JSDocTagInfo,
     LiteralType,
     NumberLiteralType,
     ObjectType,
@@ -112,7 +113,7 @@ import type {
 
 export { CompletionItemKind, DiagnosticCategory, ElementFlags, ModifierFlags, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
 export type { APIOptions, ClientSocketOptions, ClientSpawnOptions, DocumentIdentifier, DocumentPosition, LSPConnectionOptions };
-export type { AssertsIdentifierTypePredicate, AssertsThisTypePredicate, BigIntLiteralType, BooleanLiteralType, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, FreshableType, IdentifierTypePredicate, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, LiteralType, NumberLiteralType, ObjectType, StringLiteralType, StringMappingType, SubstitutionType, TemplateLiteralType, ThisTypePredicate, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
+export type { AssertsIdentifierTypePredicate, AssertsThisTypePredicate, BigIntLiteralType, BooleanLiteralType, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, FreshableType, IdentifierTypePredicate, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, JSDocTagInfo, LiteralType, NumberLiteralType, ObjectType, StringLiteralType, StringMappingType, SubstitutionType, TemplateLiteralType, ThisTypePredicate, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 
 export class API<FromLSP extends boolean = false> {
@@ -1097,6 +1098,22 @@ export class Checker {
         });
     }
 
+    isArrayType(type: Type): boolean {
+        return this.client.apiRequest<boolean>("isArrayType", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            type: type.id,
+        });
+    }
+
+    isTupleType(type: Type): boolean {
+        return this.client.apiRequest<boolean>("isTupleType", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            type: type.id,
+        });
+    }
+
     getReturnTypeOfSignature(signature: Signature): Type | undefined {
         const data = this.client.apiRequest<TypeResponse | null>("getReturnTypeOfSignature", {
             snapshot: this.snapshotId,
@@ -1170,6 +1187,87 @@ export class Checker {
             type: type.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    getBaseConstraintOfType(type: Type): Type | undefined {
+        const data = this.client.apiRequest<TypeResponse | null>("getBaseConstraintOfType", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            type: type.id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    getPropertyOfType(type: Type, name: string): Symbol | undefined {
+        const data = this.client.apiRequest<SymbolResponse | null>("getPropertyOfType", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            type: type.id,
+            name,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    getConstantValue(node: Node): string | number | undefined {
+        const data = this.client.apiRequest<string | number | null>("getConstantValue", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            location: getNodeId(node),
+        });
+        return data ?? undefined;
+    }
+
+    getSignatureFromDeclaration(node: Node): Signature | undefined {
+        const data = this.client.apiRequest<SignatureResponse | null>("getSignatureFromDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            location: getNodeId(node),
+        });
+        return data ? this.objectRegistry.getOrCreateSignature(data) : undefined;
+    }
+
+    getExportSpecifierLocalTargetSymbol(node: Node): Symbol | undefined {
+        const data = this.client.apiRequest<SymbolResponse | null>("getExportSpecifierLocalTargetSymbol", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            location: getNodeId(node),
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    getAliasedSymbol(symbol: Symbol): Symbol | undefined {
+        const data = this.client.apiRequest<SymbolResponse | null>("getAliasedSymbol", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            symbol: symbol.id,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    getExportsOfModule(symbol: Symbol): readonly Symbol[] {
+        const data = this.client.apiRequest<SymbolResponse[] | null>("getExportsOfModule", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            symbol: symbol.id,
+        });
+        return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
+    }
+
+    getJsDocTagsOfSymbol(symbol: Symbol): readonly JSDocTagInfo[] {
+        const data = this.client.apiRequest<JSDocTagInfo[] | null>("getJsDocTags", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            symbol: symbol.id,
+        });
+        return data ?? [];
+    }
+
+    getDocumentationCommentOfSymbol(symbol: Symbol): string {
+        return this.client.apiRequest<string>("getDocumentationComment", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            symbol: symbol.id,
+        });
     }
 
     getTypeArguments(type: Type): readonly Type[] {
@@ -1289,6 +1387,14 @@ export class Symbol {
     getExportSymbol(): Symbol {
         if (!this.exportSymbol) return this;
         return this.objectRegistry.fetchSymbol(this, "getExportSymbolOfSymbol", this.exportSymbol);
+    }
+
+    getJsDocTags(checker: Checker): readonly JSDocTagInfo[] {
+        return checker.getJsDocTagsOfSymbol(this);
+    }
+
+    getDocumentationComment(checker: Checker): string {
+        return checker.getDocumentationCommentOfSymbol(this);
     }
 }
 

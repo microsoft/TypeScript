@@ -238,6 +238,16 @@ export interface IndexInfo {
     readonly declaration?: NodeHandle;
 }
 
+/**
+ * A single JSDoc tag attached to a symbol — e.g. `@param`, `@returns`.
+ */
+export interface JSDocTagInfo {
+    /** The tag name, without the leading `@` — e.g. `"param"`. */
+    readonly name: string;
+    /** The rendered tag text, if any — e.g. `"a the first number"` for `@param a the first number`. */
+    readonly text?: string;
+}
+
 export interface CompletionEntryLabelDetails {
     detail?: string;
     description?: string;
