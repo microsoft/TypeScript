@@ -190,6 +190,7 @@ Config File Names::
           "organizeImports": {
             "caseFirst": "default",
             "locale": "",
+            "sort": "auto",
             "typeOrder": "auto",
             "unicodeCollation": "ordinal"
           },
@@ -642,6 +643,7 @@ Config::
           "organizeImports": {
             "caseFirst": "default",
             "locale": "",
+            "sort": "auto",
             "typeOrder": "auto",
             "unicodeCollation": "ordinal"
           },

@@ -1450,7 +1450,7 @@ export const value = content;`,
 				"quoteStyle":           "single",
 			},
 			"unstable": map[string]any{
-				"organizeImportsIgnoreCase": true,
+				"organizeImportsSort": "ordinalIgnoreCase",
 			},
 		}
 		session.Configure(lsutil.ParseUserPreferences(map[string]any{"js/ts": configMap1}))
@@ -1458,7 +1458,7 @@ export const value = content;`,
 		expectedPrefs1 := lsutil.NewDefaultUserPreferences()
 		expectedPrefs1.UseAliasesForRename = core.TSTrue
 		expectedPrefs1.QuotePreference = lsutil.QuotePreferenceSingle
-		expectedPrefs1.OrganizeImportsIgnoreCase = core.TSTrue
+		expectedPrefs1.OrganizeImportsSort = lsutil.OrganizeImportsSortOrdinalIgnoreCase
 
 		assert.DeepEqual(t, actualConfig1, expectedPrefs1)
 
@@ -1468,7 +1468,7 @@ export const value = content;`,
 				"quoteStyle":           "double",
 			},
 			"unstable": map[string]any{
-				"organizeImportsIgnoreCase": false,
+				"organizeImportsSort": "ordinal",
 			},
 		}
 		session.Configure(lsutil.ParseUserPreferences(map[string]any{"js/ts": configMap2}))
@@ -1476,7 +1476,7 @@ export const value = content;`,
 		expectedPrefs2 := lsutil.NewDefaultUserPreferences()
 		expectedPrefs2.UseAliasesForRename = core.TSFalse
 		expectedPrefs2.QuotePreference = lsutil.QuotePreferenceDouble
-		expectedPrefs2.OrganizeImportsIgnoreCase = core.TSFalse
+		expectedPrefs2.OrganizeImportsSort = lsutil.OrganizeImportsSortOrdinal
 
 		assert.DeepEqual(t, actualConfig2, expectedPrefs2)
 	})

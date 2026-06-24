@@ -84,19 +84,21 @@ type UserPreferences struct {
 
 	// ------- OrganizeImports -------
 
+	// Indicates which deterministic preset should be used to sort imports.
+	// "auto" detects the existing ordinal case sensitivity where possible.
+	OrganizeImportsSort OrganizeImportsSort `raw:"organizeImportsSort" config:"preferences.organizeImports.sort"` // !!!
 	// Indicates whether imports should be organized in a case-insensitive manner.
 	//
 	// Default: TSUnknown ("auto" in strada), will perform detection
 	OrganizeImportsIgnoreCase core.Tristate `raw:"organizeImportsIgnoreCase" config:"preferences.organizeImports.caseSensitivity"` // !!!
 	// Indicates whether imports should be organized via an "ordinal" (binary) comparison using the numeric value of their
-	// code points, or via "unicode" collation (via the Unicode Collation Algorithm (https://unicode.org/reports/tr10/#Scope))
-	//
-	// using rules associated with the locale specified in organizeImportsCollationLocale.
+	// code points, or via "unicode" natural sorting. This implementation is locale-agnostic and approximates the practical
+	// import-sorting behavior rather than the full Unicode Collation Algorithm.
 	//
 	// Default: Ordinal
 	OrganizeImportsCollation OrganizeImportsCollation `raw:"organizeImportsCollation" config:"preferences.organizeImports.unicodeCollation"` // !!!
-	// Indicates the locale to use for "unicode" collation. If not specified, the locale `"en"` is used as an invariant
-	// for the sake of consistent sorting. Use `"auto"` to use the detected UI locale.
+	// Indicates the locale to use for "unicode" collation in legacy clients. This is accepted for compatibility, but
+	// currently ignored because organize-import sorting is deterministic and locale-agnostic.
 	//
 	// This preference is ignored if organizeImportsCollation is not `unicode`.
 	//
@@ -109,16 +111,13 @@ type UserPreferences struct {
 	//
 	// Default: `false`
 	OrganizeImportsNumericCollation core.Tristate `raw:"organizeImportsNumericCollation" config:"preferences.organizeImports.numericCollation"` // !!!
-	// Indicates whether accents and other diacritic marks are considered unequal for the purpose of collation. When
-	// `true`, characters with accents and other diacritics will be collated in the order defined by the locale specified
-	// in organizeImportsCollationLocale.
+	// Indicates whether accents and other diacritic marks are considered unequal for the purpose of sorting.
 	//
 	// This preference is ignored if organizeImportsCollation is not `unicode`.
 	//
 	// Default: `true`
 	OrganizeImportsAccentCollation core.Tristate `raw:"organizeImportsAccentCollation" config:"preferences.organizeImports.accentCollation"` // !!!
-	// Indicates whether upper case or lower case should sort first. When `false`, the default order for the locale
-	// specified in organizeImportsCollationLocale is used.
+	// Indicates whether upper case or lower case should sort first.
 	//
 	// This permission is ignored if:
 	//	- organizeImportsCollation is not `unicode`
@@ -240,6 +239,16 @@ const (
 	IncludeInlayParameterNameHintsLiterals IncludeInlayParameterNameHints = "literals"
 )
 
+type OrganizeImportsSort int
+
+const (
+	OrganizeImportsSortAuto OrganizeImportsSort = iota
+	OrganizeImportsSortOrdinal
+	OrganizeImportsSortOrdinalIgnoreCase
+	OrganizeImportsSortNatural
+	OrganizeImportsSortNaturalIgnoreCase
+)
+
 type OrganizeImportsCollation bool
 
 const (
@@ -318,6 +327,21 @@ var typeParsers = map[reflect.Type]func(any) any{
 		}
 		return IncludeInlayParameterNameHintsNone
 	},
+	reflect.TypeFor[OrganizeImportsSort](): func(val any) any {
+		if s, ok := val.(string); ok {
+			switch strings.ToLower(s) {
+			case "ordinal":
+				return OrganizeImportsSortOrdinal
+			case "ordinalignorecase":
+				return OrganizeImportsSortOrdinalIgnoreCase
+			case "natural":
+				return OrganizeImportsSortNatural
+			case "naturalignorecase":
+				return OrganizeImportsSortNaturalIgnoreCase
+			}
+		}
+		return OrganizeImportsSortAuto
+	},
 	reflect.TypeFor[OrganizeImportsCollation](): func(val any) any {
 		if s, ok := val.(string); ok && strings.ToLower(s) == "unicode" {
 			return OrganizeImportsCollationUnicode
@@ -387,6 +411,20 @@ var typeSerializers = map[reflect.Type]func(any) any{
 			return false
 		default:
 			return nil
+		}
+	},
+	reflect.TypeFor[OrganizeImportsSort](): func(val any) any {
+		switch val.(OrganizeImportsSort) {
+		case OrganizeImportsSortOrdinal:
+			return "ordinal"
+		case OrganizeImportsSortOrdinalIgnoreCase:
+			return "ordinalIgnoreCase"
+		case OrganizeImportsSortNatural:
+			return "natural"
+		case OrganizeImportsSortNaturalIgnoreCase:
+			return "naturalIgnoreCase"
+		default:
+			return "auto"
 		}
 	},
 	reflect.TypeFor[OrganizeImportsCollation](): func(val any) any {
@@ -546,27 +584,34 @@ func setNestedValue(config map[string]any, path string, value any) {
 	current[parts[len(parts)-1]] = value
 }
 
+func setRawFieldsFromConfig(v reflect.Value, infos []fieldInfo, settings map[string]any) {
+	index := unstableNameIndex()
+	for name, value := range settings {
+		if idx, found := index[name]; found {
+			info := infos[idx]
+			field := getFieldByPath(v, info.fieldPath)
+			if info.rawInvert {
+				if b, ok := value.(bool); ok {
+					value = !b
+				}
+			}
+			setFieldFromValue(field, value)
+		}
+	}
+}
+
 func (p UserPreferences) withConfig(config map[string]any) UserPreferences {
 	v := reflect.ValueOf(&p).Elem()
 	infos := fieldInfoCache()
+
+	// Raw UserPreferences can be provided directly, notably via LSP initializationOptions.
+	setRawFieldsFromConfig(v, infos, config)
 
 	// Process "unstable" section first - allows any field to be set by raw name.
 	// This mirrors VS Code's behavior: { ...config.get('unstable'), ...stableOptions }
 	// where stable options are spread after and take precedence.
 	if unstable, ok := config["unstable"].(map[string]any); ok {
-		index := unstableNameIndex()
-		for name, value := range unstable {
-			if idx, found := index[name]; found {
-				info := infos[idx]
-				field := getFieldByPath(v, info.fieldPath)
-				if info.rawInvert {
-					if b, ok := value.(bool); ok {
-						value = !b
-					}
-				}
-				setFieldFromValue(field, value)
-			}
-		}
+		setRawFieldsFromConfig(v, infos, unstable)
 	}
 
 	// Process path-based config (VS Code style nested paths).
@@ -618,7 +663,7 @@ func setFieldFromValue(field reflect.Value, val any) {
 		return
 	}
 
-	// Check custom parsers first (for types like Tristate, OrganizeImportsCollation, etc.)
+	// Check custom parsers first (for types like Tristate, enums, etc.)
 	if parser, ok := typeParsers[field.Type()]; ok {
 		field.Set(reflect.ValueOf(parser(val)))
 		return
@@ -687,7 +732,7 @@ func (p *UserPreferences) MarshalJSONTo(enc *json.Encoder) error {
 }
 
 func serializeField(field reflect.Value) any {
-	// Check custom serializers first (for types like Tristate, OrganizeImportsCollation, etc.)
+	// Check custom serializers first (for types like Tristate, enums, etc.)
 	if serializer, ok := typeSerializers[field.Type()]; ok {
 		return serializer(field.Interface())
 	}

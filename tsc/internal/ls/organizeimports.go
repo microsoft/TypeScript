@@ -37,24 +37,25 @@ func (l *LanguageService) OrganizeImports(
 	preferences := l.UserPreferences()
 	comparersToTest, typeOrdersToTest := lsutil.GetDetectionLists(preferences)
 	defaultComparer := comparersToTest[0]
+	sort := lsutil.ResolveOrganizeImportsSort(preferences)
 
 	var moduleSpecifierComparer func(a, b string) int
 	var namedImportComparer func(a, b string) int
-	if !preferences.OrganizeImportsIgnoreCase.IsUnknown() {
+	if sort != lsutil.OrganizeImportsSortAuto {
 		moduleSpecifierComparer = defaultComparer
 		namedImportComparer = defaultComparer
 	}
 	typeOrder := preferences.OrganizeImportsTypeOrder
 
-	if preferences.OrganizeImportsIgnoreCase.IsUnknown() {
+	if sort == lsutil.OrganizeImportsSortAuto {
 		result, _ := lsutil.DetectModuleSpecifierCaseBySort(topLevelImportGroupDecls, comparersToTest)
 		moduleSpecifierComparer = result
 	}
 
-	if typeOrder == lsutil.OrganizeImportsTypeOrderAuto || preferences.OrganizeImportsIgnoreCase.IsUnknown() {
+	if typeOrder == lsutil.OrganizeImportsTypeOrderAuto || sort == lsutil.OrganizeImportsSortAuto {
 		namedImportComparer2, typeOrder2, found := lsutil.DetectNamedImportOrganizationBySort(topLevelImportDecls, comparersToTest, typeOrdersToTest)
 		if found {
-			if namedImportComparer == nil || preferences.OrganizeImportsIgnoreCase.IsUnknown() {
+			if namedImportComparer == nil || sort == lsutil.OrganizeImportsSortAuto {
 				namedImportComparer = namedImportComparer2
 			}
 			if typeOrder == lsutil.OrganizeImportsTypeOrderAuto {

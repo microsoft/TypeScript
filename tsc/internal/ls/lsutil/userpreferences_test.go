@@ -309,6 +309,105 @@ func TestUserPreferencesParseUnstable(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "old raw organize imports unicode preferences load as raw state",
+			json: `{
+				"unstable": {
+					"organizeImportsCollation": "unicode",
+					"organizeImportsCaseFirst": "upper",
+					"organizeImportsIgnoreCase": false,
+					"organizeImportsNumericCollation": true
+				}
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsCollation:        OrganizeImportsCollationUnicode,
+				OrganizeImportsCaseFirst:        OrganizeImportsCaseFirstUpper,
+				OrganizeImportsIgnoreCase:       core.TSFalse,
+				OrganizeImportsNumericCollation: core.TSTrue,
+			},
+		},
+		{
+			name: "old top-level raw organize imports unicode preferences load as raw state",
+			json: `{
+				"organizeImportsCollation": "unicode",
+				"organizeImportsIgnoreCase": true
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsCollation:  OrganizeImportsCollationUnicode,
+				OrganizeImportsIgnoreCase: core.TSTrue,
+			},
+		},
+		{
+			name: "new top-level raw organize imports sort is accepted",
+			json: `{
+				"organizeImportsSort": "natural"
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsSort: OrganizeImportsSortNatural,
+			},
+		},
+		{
+			name: "old raw organize imports ignore case loads as raw state",
+			json: `{
+				"unstable": {
+					"organizeImportsIgnoreCase": true
+				}
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsIgnoreCase: core.TSTrue,
+			},
+		},
+		{
+			name: "new raw organize imports sort loads alongside old raw preferences",
+			json: `{
+				"unstable": {
+					"organizeImportsSort": "ordinal",
+					"organizeImportsCollation": "unicode",
+					"organizeImportsIgnoreCase": true
+				}
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsSort:       OrganizeImportsSortOrdinal,
+				OrganizeImportsCollation:  OrganizeImportsCollationUnicode,
+				OrganizeImportsIgnoreCase: core.TSTrue,
+			},
+		},
+		{
+			name: "old nested organize imports unicode preferences load as raw state",
+			json: `{
+				"preferences": {
+					"organizeImports": {
+						"unicodeCollation": "unicode",
+						"caseSensitivity": "caseSensitive",
+						"numericCollation": true,
+						"caseFirst": "upper"
+					}
+				}
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsCollation:        OrganizeImportsCollationUnicode,
+				OrganizeImportsIgnoreCase:       core.TSFalse,
+				OrganizeImportsNumericCollation: core.TSTrue,
+				OrganizeImportsCaseFirst:        OrganizeImportsCaseFirstUpper,
+			},
+		},
+		{
+			name: "new nested organize imports sort loads alongside old nested preferences",
+			json: `{
+				"preferences": {
+					"organizeImports": {
+						"sort": "ordinalIgnoreCase",
+						"unicodeCollation": "unicode",
+						"caseSensitivity": "caseSensitive"
+					}
+				}
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsSort:       OrganizeImportsSortOrdinalIgnoreCase,
+				OrganizeImportsCollation:  OrganizeImportsCollationUnicode,
+				OrganizeImportsIgnoreCase: core.TSFalse,
+			},
+		},
 	}
 
 	for _, tt := range tests {
