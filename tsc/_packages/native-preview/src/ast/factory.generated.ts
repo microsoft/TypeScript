@@ -258,6 +258,7 @@ import type {
     YieldExpression,
 } from "./ast.ts";
 import { getTokenPosOfNode } from "./astnav.ts";
+import { cloneSourceFileData } from "./utils.ts";
 import {
     forEachChildOfJSDocParameterTag,
     forEachChildOfJSDocPropertyTag,
@@ -1094,7 +1095,7 @@ function cloneNodeData(node: Node): any {
         case SyntaxKind.JSDocPropertyTag:
             return { tagName: n.tagName, name: n.name, isBracketed: n.isBracketed, typeExpression: n.typeExpression, isNameFirst: n.isNameFirst, comment: n.comment };
         case SyntaxKind.SourceFile:
-            return { statements: n.statements, endOfFileToken: n.endOfFileToken, text: n.text, fileName: n.fileName, path: n.path };
+            return cloneSourceFileData(n);
         default:
             return undefined;
     }
@@ -3793,8 +3794,16 @@ export function createSourceFile(statements: readonly Statement[], endOfFileToke
     }) as unknown as SourceFile;
 }
 
+function cloneSourceFileWithChanges(source: SourceFile, statements: readonly Statement[], endOfFileToken: EndOfFile): SourceFile {
+    return new NodeObject(SyntaxKind.SourceFile, {
+        ...cloneSourceFileData(source),
+        statements: createNodeArray(statements),
+        endOfFileToken,
+    }) as unknown as SourceFile;
+}
+
 export function updateSourceFile(node: SourceFile, statements: readonly Statement[], endOfFileToken: EndOfFile): SourceFile {
     return node.statements !== statements || node.endOfFileToken !== endOfFileToken
-        ? createSourceFile(statements, endOfFileToken, node.text, node.fileName, node.path)
+        ? cloneSourceFileWithChanges(node, statements, endOfFileToken)
         : node;
 }

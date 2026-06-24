@@ -499,6 +499,9 @@ function generateFactory(): string {
     for (const t of ["Node", "NodeArray", "KeywordTypeSyntaxKind", "Token", "SourceFile", "KeywordTypeNode", "EndOfFile", "ImportPhaseModifierSyntaxKind", "Path", "Statement"]) {
         importTypes.add(t);
     }
+    const handWrittenCloneHelpers = api.nodes()
+        .filter(node => node.handWritten && !isVariantNode(node))
+        .map(node => ({ node, helperName: `clone${node.name}Data` }));
     // Remove enum types that are imported separately
     importTypes.delete("NodeFlags");
     importTypes.delete("SyntaxKind");
@@ -518,6 +521,13 @@ function generateFactory(): string {
     }
     out.push(`} from "./ast.ts";`);
     out.push(`import { getTokenPosOfNode } from "./astnav.ts";`);
+    if (handWrittenCloneHelpers.length > 0) {
+        out.push(`import {`);
+        for (const helperName of [...new Set(handWrittenCloneHelpers.map(h => h.helperName))].sort((a, b) => a.localeCompare(b))) {
+            out.push(`    ${helperName},`);
+        }
+        out.push(`} from "./utils.ts";`);
+    }
 
     // Import hand-written forEachChild functions
     const handWrittenForEachChildImports: string[] = [];
@@ -660,9 +670,12 @@ function generateFactory(): string {
         out.push(`        case SyntaxKind.${v.syntaxKind}:`);
         out.push(`            return { ${propStr} };`);
     }
-    // SourceFile is handWritten so we add its case manually
-    out.push(`        case SyntaxKind.SourceFile:`);
-    out.push(`            return { statements: n.statements, endOfFileToken: n.endOfFileToken, text: n.text, fileName: n.fileName, path: n.path };`);
+    for (const { node, helperName } of handWrittenCloneHelpers) {
+        for (const sk of node.allKinds()) {
+            out.push(`        case ${sk.formatTypeScript()}:`);
+        }
+        out.push(`            return ${helperName}(n);`);
+    }
     out.push(`        default:`);
     out.push(`            return undefined;`);
     out.push(`    }`);
@@ -1029,10 +1042,19 @@ function generateFactory(): string {
     out.push(`}`);
     out.push(``);
 
+    out.push(`function cloneSourceFileWithChanges(source: SourceFile, statements: readonly Statement[], endOfFileToken: EndOfFile): SourceFile {`);
+    out.push(`    return new NodeObject(SyntaxKind.SourceFile, {`);
+    out.push(`        ...cloneSourceFileData(source),`);
+    out.push(`        statements: createNodeArray(statements),`);
+    out.push(`        endOfFileToken,`);
+    out.push(`    }) as unknown as SourceFile;`);
+    out.push(`}`);
+    out.push(``);
+
     // ── updateSourceFile (hand-written in schema) ──
     out.push(`export function updateSourceFile(node: SourceFile, statements: readonly Statement[], endOfFileToken: EndOfFile): SourceFile {`);
     out.push(`    return node.statements !== statements || node.endOfFileToken !== endOfFileToken`);
-    out.push(`        ? createSourceFile(statements, endOfFileToken, node.text, node.fileName, node.path)`);
+    out.push(`        ? cloneSourceFileWithChanges(node, statements, endOfFileToken)`);
     out.push(`        : node;`);
     out.push(`}`);
     out.push(``);
@@ -1058,7 +1080,6 @@ function generateIsGenerated(): string {
     const guards: { funcName: string; typeName: string; kindChecks: string[]; kindAliasConstraint?: string; }[] = [];
 
     for (const node of api.nodes()) {
-        if (node.handWritten) continue;
         if (isVariantNode(node)) continue;
 
         const typeName = node.name;
