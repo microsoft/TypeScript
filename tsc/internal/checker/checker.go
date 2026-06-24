@@ -287,7 +287,8 @@ type InferenceContext struct {
 
 type InferenceInfo struct {
 	typeParameter    *Type             // Type parameter for which inferences are being made
-	candidates       []*Type           // Candidates in covariant positions
+	candidates       []*Type           // Candidates in covariant positions in decreasing depth order
+	candidateDepths  []int             // Type argument depths of covariant inferences
 	contraCandidates []*Type           // Candidates in contravariant positions
 	inferredType     *Type             // Cache for resolved inferred type
 	priority         InferencePriority // Priority of current inference set
