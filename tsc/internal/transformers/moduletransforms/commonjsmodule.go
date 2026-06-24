@@ -1120,6 +1120,8 @@ func (tx *CommonJSModuleTransformer) transformInitializedVariable(node *ast.Vari
 		// re-aliased or multi-exported names (where native destructuring cannot update all
 		// targets) does `visitDestructuringAssignment` fall back to flattening.
 		assignment := transformers.ConvertVariableDeclarationToAssignmentExpression(tx.EmitContext(), node)
+		grandparentNode := tx.pushNode(assignment)
+		defer tx.popNode(grandparentNode)
 		return tx.visitDestructuringAssignment(assignment.AsBinaryExpression(), true /*valueIsDiscarded*/)
 	}
 	propertyAccess := tx.Factory().NewPropertyAccessExpression(
