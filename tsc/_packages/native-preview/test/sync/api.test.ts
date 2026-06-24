@@ -94,6 +94,29 @@ describe("API", () => {
     });
 });
 
+describe("Checker - getImmediateAliasedSymbol", () => {
+    test("resolves one level of alias indirection", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/foo.ts": `export const foo = 42;`,
+            "/src/main.ts": `import { foo } from "./foo";\nexport const usage = foo;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = `import { foo } from "./foo";`.indexOf("foo }");
+            const aliasSymbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(aliasSymbol);
+            const aliased = project.checker.getImmediateAliasedSymbol(aliasSymbol);
+            assert.ok(aliased, "Should resolve the immediate aliased symbol");
+            assert.equal(aliased.name, "foo");
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 describe("Snapshot", () => {
     test("updateSnapshot returns snapshot with projects", () => {
         const api = spawnAPI();
@@ -163,7 +186,87 @@ describe("Snapshot", () => {
     });
 });
 
+describe("Checker - getApparentType", () => {
+    test("returns the apparent type of a literal type", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const x = "hello" as const;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = `export const x = "hello" as const;`.indexOf("x =");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.equal(type.isLiteralType(), true);
+            assert.equal(type.isStringLiteralType(), true);
+            assert.equal(type.isIntrinsicType(), false);
+            const apparent = project.checker.getApparentType(type);
+            assert.ok(apparent);
+            assert.ok(apparent.id > 0);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getMemberInModuleExports", () => {
+    test("returns a named export when present", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const direct = 1;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/index.ts");
+            assert.ok(sourceFile);
+            const moduleSymbol = project.checker.getSymbolAtLocation(sourceFile);
+            assert.ok(moduleSymbol);
+            const found = project.checker.getMemberInModuleExports(moduleSymbol, "direct");
+            assert.ok(found);
+            assert.equal(found.name, "direct");
+            const missing = project.checker.getMemberInModuleExports(moduleSymbol, "missing");
+            assert.equal(missing, undefined);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 describe("SourceFile", () => {
+    test("getSourceFileNames returns all program files, not just root files", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    moduleResolution: "node10",
+                    noLib: true,
+                },
+            }),
+            "/src/index.ts": `import { foo } from "./foo";\nimport { bar } from "my-lib";\nexport const result = foo + bar;`,
+            "/src/foo.ts": `export const foo = 42;`,
+            "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
+            "/node_modules/my-lib/index.d.ts": `export declare const bar: number;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const fileNames = project.program.getSourceFileNames();
+            assert.deepEqual(fileNames, [
+                "/src/foo.ts",
+                "/node_modules/my-lib/index.d.ts",
+                "/src/index.ts",
+            ]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("file properties", () => {
         const api = spawnAPI();
         try {
@@ -1287,6 +1390,9 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
             assert.ok(type.flags & TypeFlags.Object);
             const ref = type as TypeReference;
             assert.ok(ref.objectFlags & ObjectFlags.Reference);
+            assert.equal(type.isObjectType(), true);
+            assert.equal(type.isTypeReference(), true);
+            assert.equal(type.isLiteralType(), false);
             const target = ref.getTarget();
             assert.ok(target);
             assert.ok(target.flags & TypeFlags.Object);
@@ -1303,6 +1409,8 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
             const union = type as UnionOrIntersectionType;
             const types = union.getTypes();
             assert.ok(types.length >= 2);
+            assert.equal(type.isUnionType(), true);
+            assert.equal(type.isIntersectionType(), false);
         }
         finally {
             api.close();
@@ -1353,6 +1461,7 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
             assert.ok(type);
             assert.ok(type.flags & TypeFlags.IndexedAccess, `Expected IndexedAccessType, got flags ${type.flags}`);
             const ia = type as IndexedAccessType;
+            assert.equal(type.isIndexedAccessType(), true);
             const objectType = ia.getObjectType();
             assert.ok(objectType);
             const indexType = ia.getIndexType();
@@ -1374,6 +1483,7 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
             assert.ok(type);
             assert.ok(type.flags & TypeFlags.Conditional, `Expected ConditionalType, got flags ${type.flags}`);
             const cond = type as ConditionalType;
+            assert.equal(type.isConditionalType(), true);
             const checkType = cond.getCheckType();
             assert.ok(checkType);
             const extendsType = cond.getExtendsType();

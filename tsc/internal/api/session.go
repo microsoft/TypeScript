@@ -525,6 +525,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetDefaultProjectForFile(ctx, parsed.(*GetDefaultProjectForFileParams))
 	case string(MethodGetSourceFile):
 		return s.handleGetSourceFile(ctx, parsed.(*GetSourceFileParams))
+	case string(MethodGetSourceFileNames):
+		return s.handleGetSourceFileNames(ctx, parsed.(*GetSourceFileNamesParams))
 	case string(MethodGetSymbolAtPosition):
 		return s.handleGetSymbolAtPosition(ctx, parsed.(*GetSymbolAtPositionParams))
 	case string(MethodGetSymbolsAtPositions):
@@ -641,6 +643,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetBaseTypes(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetPropertiesOfType):
 		return s.handleGetPropertiesOfType(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodGetApparentType):
+		return s.handleGetApparentType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetPropertyOfType):
 		return s.handleGetPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
 	case string(MethodGetIndexInfosOfType):
@@ -659,8 +663,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetExportSpecifierLocalTargetSymbol(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodGetAliasedSymbol):
 		return s.handleGetAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetImmediateAliasedSymbol):
+		return s.handleGetImmediateAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetExportsOfModule):
 		return s.handleGetExportsOfModule(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetMemberInModuleExports):
+		return s.handleGetMemberInModuleExports(ctx, parsed.(*GetMemberInModuleExportsParams))
 	case string(MethodGetJSDocTags):
 		return s.handleGetJSDocTags(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetDocumentationComment):
@@ -1019,6 +1027,26 @@ func (s *Session) handleGetSourceFile(ctx context.Context, params *GetSourceFile
 	return &SourceFileResponse{
 		Data: base64.StdEncoding.EncodeToString(data),
 	}, nil
+}
+
+// handleGetSourceFileNames returns file names of all source files in a project.
+func (s *Session) handleGetSourceFileNames(ctx context.Context, params *GetSourceFileNamesParams) ([]string, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+
+	sourceFiles := program.GetSourceFiles()
+	result := make([]string, len(sourceFiles))
+	for i, sourceFile := range sourceFiles {
+		result[i] = sourceFile.FileName()
+	}
+	return result, nil
 }
 
 // handleGetSymbolAtPosition returns the symbol at a position in a file.
@@ -2223,6 +2251,27 @@ func (s *Session) handleGetPropertiesOfType(ctx context.Context, params *Checker
 	return results, nil
 }
 
+// handleGetApparentType returns the apparent type of a type.
+func (s *Session) handleGetApparentType(ctx context.Context, params *CheckerTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	apparent := setup.checker.GetApparentType(t)
+	if apparent == nil {
+		return nil, nil
+	}
+
+	return setup.newTypeResponse(apparent), nil
+}
+
 // handleGetIndexInfosOfType returns the index infos of a type.
 func (s *Session) handleGetIndexInfosOfType(ctx context.Context, params *CheckerTypeParams) ([]*IndexInfoResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
@@ -2410,6 +2459,30 @@ func (s *Session) handleGetAliasedSymbol(ctx context.Context, params *CheckerSym
 	return setup.newSymbolResponse(aliased), nil
 }
 
+// handleGetImmediateAliasedSymbol resolves one level of alias indirection.
+func (s *Session) handleGetImmediateAliasedSymbol(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	if symbol == nil {
+		return nil, nil
+	}
+
+	aliased := setup.checker.GetImmediateAliasedSymbol(symbol)
+	if aliased == nil {
+		return nil, nil
+	}
+
+	return setup.newSymbolResponse(aliased), nil
+}
+
 // handleGetExportsOfModule returns the resolved exports of a module symbol,
 // including those introduced by `export *` and re-exports.
 func (s *Session) handleGetExportsOfModule(ctx context.Context, params *CheckerSymbolParams) ([]*SymbolResponse, error) {
@@ -2438,6 +2511,30 @@ func (s *Session) handleGetExportsOfModule(ctx context.Context, params *CheckerS
 	}
 
 	return results, nil
+}
+
+// handleGetMemberInModuleExports returns an export by name from a module symbol.
+func (s *Session) handleGetMemberInModuleExports(ctx context.Context, params *GetMemberInModuleExportsParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	if symbol == nil {
+		return nil, nil
+	}
+
+	member := setup.checker.TryGetMemberInModuleExports(params.Name, symbol)
+	if member == nil {
+		return nil, nil
+	}
+
+	return setup.newSymbolResponse(member), nil
 }
 
 // handleGetJSDocTags returns the JSDoc tags of a symbol as structured name/text pairs.
