@@ -187,6 +187,22 @@ const FORWARD = 1,
   BACKWARD = 2;
 ```
 
+#### `arguments` usage within a JS function body no longer implies a `...args: any[]` parameter
+```js
+function f() {
+  return arguments[0];
+}
+f("something"); // Previously allowed, now an error
+```
+
+Instead, explicitly use a spread parameter:
+```js
+function f(...args) {
+  return args[0];
+}
+f("something"); // Still allowed
+```
+
 ### JSDoc Types
 
 #### JSDoc variadic types are now only synonyms for array types.
