@@ -19065,7 +19065,7 @@ func findIndexInfo(indexInfos []*IndexInfo, keyType *Type) *IndexInfo {
 }
 
 func (c *Checker) getBaseTypes(t *Type) []*Type {
-	if t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) == 0 {
+	if t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsTuple) == 0 {
 		return nil
 	}
 	data := t.AsInterfaceType()

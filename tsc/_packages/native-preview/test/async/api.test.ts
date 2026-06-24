@@ -13,6 +13,7 @@ import {
     isTemplateHead,
     isTemplateMiddle,
     isTemplateTail,
+    isTypeAliasDeclaration,
     isTypeNode,
     isVariableDeclarationList,
     type Node,
@@ -2175,6 +2176,33 @@ export interface Dog extends Animal {
             const baseSymbol = await baseTypes[0].getSymbol();
             assert.ok(baseSymbol);
             assert.equal(baseSymbol.name, "Animal");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("does not panic for a type alias to a generic interface instantiation", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+export interface Box<T> {
+    value: T;
+}
+export type BoxOfString = Box<string>;
+`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const typeAlias = sourceFile.statements.find(isTypeAliasDeclaration);
+            assert.ok(typeAlias);
+            const type = await project.checker.getTypeAtLocation(typeAlias);
+            assert.ok(type);
+            const baseTypes = await project.checker.getBaseTypes(type);
+            assert.deepEqual(baseTypes, []);
         }
         finally {
             await api.close();
