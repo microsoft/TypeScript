@@ -80,6 +80,7 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 	defer done()
 
 	quotePreference := lsutil.GetQuotePreference(sourceFile, l.UserPreferences())
+	useAliasesForRename := l.UserPreferences().UseAliasesForRename.IsTrueOrUnknown()
 
 	for _, entry := range entries {
 		uri := l.getFileNameOfEntry(entry)
@@ -88,7 +89,7 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 		}
 		textEdit := &lsproto.TextEdit{
 			Range:   l.getRangeOfEntry(entry),
-			NewText: l.getTextForRename(data.OriginalNode, entry, params.NewName, ch, quotePreference),
+			NewText: l.getTextForRename(data.OriginalNode, entry, params.NewName, ch, quotePreference, useAliasesForRename),
 		}
 		changes[uri] = append(changes[uri], textEdit)
 	}
@@ -186,7 +187,7 @@ func isDefinedInLibraryFile(program *compiler.Program, declaration *ast.Node) bo
 // wouldRenameInOtherNodeModules checks if renaming the symbol would affect node_modules.
 func wouldRenameInOtherNodeModules(originalFile *ast.SourceFile, symbol *ast.Symbol, ch *checker.Checker, preferences lsutil.UserPreferences) *diagnostics.Message {
 	sym := symbol
-	if !preferences.UseAliasesForRename.IsTrue() && sym.Flags&ast.SymbolFlagsAlias != 0 {
+	if !preferences.UseAliasesForRename.IsTrueOrUnknown() && sym.Flags&ast.SymbolFlagsAlias != 0 {
 		importSpecifier := core.Find(sym.Declarations, ast.IsImportSpecifier)
 		if importSpecifier != nil && importSpecifier.AsImportSpecifier().PropertyName == nil {
 			sym = ch.GetAliasedSymbol(sym)
@@ -293,8 +294,8 @@ func (l *LanguageService) getNewFileNameForModuleRename(oldPath, specifierText, 
 	return newPath
 }
 
-func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *ReferenceEntry, newText string, ch *checker.Checker, quotePreference lsutil.QuotePreference) string {
-	if entry.kind != entryKindRange && (ast.IsIdentifier(originalNode) || ast.IsStringLiteralLike(originalNode)) {
+func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *ReferenceEntry, newText string, ch *checker.Checker, quotePreference lsutil.QuotePreference, useAliasesForRename bool) string {
+	if useAliasesForRename && entry.kind != entryKindRange && (ast.IsIdentifier(originalNode) || ast.IsStringLiteralLike(originalNode)) {
 		node := ast.GetReparsedNodeForNode(entry.node)
 		kind := entry.kind
 		parent := node.Parent
