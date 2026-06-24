@@ -9,6 +9,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/zeebo/xxh3"
 )
@@ -2554,6 +2555,7 @@ func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, st
 	data.fileName = opts.FileName
 	data.parseOptions = opts
 	data.text = text
+	data.ContainsNonASCII = stringutil.ContainsNonASCII(text)
 	data.Statements = statements
 	data.EndOfFileToken = endOfFileToken
 	return f.newNode(KindSourceFile, data)

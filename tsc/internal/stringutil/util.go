@@ -84,6 +84,15 @@ func IsASCIILetter(ch rune) bool {
 	return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z'
 }
 
+func ContainsNonASCII(s string) bool {
+	for i := range len(s) {
+		if s[i] >= utf8.RuneSelf {
+			return true
+		}
+	}
+	return false
+}
+
 func SplitLines(text string) []string {
 	lines := make([]string, 0, strings.Count(text, "\n")+1) // preallocate
 	start := 0

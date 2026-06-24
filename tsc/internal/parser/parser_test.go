@@ -5,6 +5,7 @@ import (
 	"iter"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -199,10 +200,34 @@ test("", async function () {
 			t.Errorf("duplicate ReparsedClones at [%d] and [%d]: %s pos=%d end=%d", i-1, i, a.Kind.String(), a.Pos(), a.End())
 		}
 	}
+
 	for _, imp := range file.Imports() {
 		reparsed := ast.GetReparsedNodeForNode(imp)
 		if ast.GetSourceFileOfNode(reparsed) == nil {
 			t.Errorf("reparsed import at pos=%d has broken parent chain", imp.Pos())
 		}
 	}
+}
+
+func TestSourceFileContainsNonASCIIInStringLiteralFastPath(t *testing.T) {
+	t.Parallel()
+	sourceText := `const x = "─";
+
+namespace N {
+  export const y = x;
+}
+`
+	opts := ast.SourceFileParseOptions{
+		FileName: "/index.ts",
+		Path:     "/index.ts",
+	}
+
+	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindTS)
+
+	assert.Assert(t, file.ContainsNonASCII)
+	positionMap := file.GetPositionMap()
+	assert.Assert(t, !positionMap.IsAsciiOnly())
+	afterBoxDrawingCharacter := strings.Index(sourceText, "─") + len("─")
+	assert.Equal(t, positionMap.UTF8ToUTF16(afterBoxDrawingCharacter), afterBoxDrawingCharacter-2)
+	assert.Equal(t, positionMap.UTF8ToUTF16(len(sourceText)), len(sourceText)-2)
 }
