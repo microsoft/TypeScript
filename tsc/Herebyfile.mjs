@@ -1560,6 +1560,10 @@ async function runBuildNativePreviewPackages() {
 
     const { stdout: gitHead } = await $pipe`git rev-parse HEAD`;
     inputPackageJson.gitHead = gitHead;
+    inputPackageJson.publishConfig = {
+        access: "public",
+        tag: "latest",
+    };
 
     const mainPackage = {
         ...inputPackageJson,
@@ -1796,20 +1800,23 @@ async function runPackNativePreviewPackages() {
         await fs.promises.rename(filename, npmTarball);
     }));
 
-    // npm packages need to be published in reverse dep order, e.g. such that no package
-    // is published before its dependencies.
-    const publishOrder = [
-        ...platforms.map(p => p.npmTarball),
-        mainNativePreviewPackage.npmTarball,
-    ].map(p => path.basename(p));
+    // npm packages need to be published in dependency order: platform packages
+    // first, then the main package that references them as optionalDependencies.
+    const publishManifest = {
+        stages: [
+            platforms.map(p => ({
+                filename: path.basename(p.npmTarball),
+            })),
+            [
+                {
+                    filename: path.basename(mainNativePreviewPackage.npmTarball),
+                },
+            ],
+        ],
+    };
 
-    const publishManifest = publishOrder.map(pkg => ({
-        filename: pkg,
-        tag: "latest",
-    }));
-
-    const publishOrderPath = path.join(builtNpm, "publish-order.json");
-    await fs.promises.writeFile(publishOrderPath, JSON.stringify(publishManifest, undefined, 4) + "\n");
+    const publishManifestPath = path.join(builtNpm, "publish-manifest.json");
+    await fs.promises.writeFile(publishManifestPath, JSON.stringify(publishManifest, undefined, 4) + "\n");
 }
 
 export const packNativePreviewExtensions = task({
