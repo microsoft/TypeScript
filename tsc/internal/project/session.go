@@ -1602,7 +1602,8 @@ func (s *Session) refreshCodeLensIfNeeded(oldPrefs lsutil.UserPreferences, newPr
 }
 
 func (s *Session) refreshDiagnosticsIfNeeded(oldPrefs lsutil.UserPreferences, newPrefs lsutil.UserPreferences) {
-	if oldPrefs.CustomConfigFileName != newPrefs.CustomConfigFileName {
+	if oldPrefs.CustomConfigFileName != newPrefs.CustomConfigFileName ||
+		oldPrefs.ReportStyleChecksAsWarnings != newPrefs.ReportStyleChecksAsWarnings {
 		s.ScheduleDiagnosticsRefresh()
 	}
 }

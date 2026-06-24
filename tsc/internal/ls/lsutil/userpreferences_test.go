@@ -325,6 +325,38 @@ func TestUserPreferencesParseUnstable(t *testing.T) {
 	}
 }
 
+func TestUserPreferencesReportStyleChecksAsWarnings(t *testing.T) {
+	t.Parallel()
+
+	t.Run("reportStyleChecksAsWarnings via config path", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"reportStyleChecksAsWarnings": false,
+			},
+		})
+		assert.Equal(t, prefs.ReportStyleChecksAsWarnings, core.TSFalse)
+	})
+
+	t.Run("reportStyleChecksAsWarnings defaults to true", func(t *testing.T) {
+		t.Parallel()
+		prefs := NewDefaultUserPreferences()
+		assert.Equal(t, prefs.ReportStyleChecksAsWarnings, core.TSTrue)
+	})
+
+	t.Run("reportStyleChecksAsWarnings via unstable section", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"unstable": map[string]any{
+					"reportStyleChecksAsWarnings": false,
+				},
+			},
+		})
+		assert.Equal(t, prefs.ReportStyleChecksAsWarnings, core.TSFalse)
+	})
+}
+
 func TestUserPreferencesParseATA(t *testing.T) {
 	t.Parallel()
 

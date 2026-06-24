@@ -166,7 +166,7 @@ type UserPreferences struct {
 	DisableSuggestions          core.Tristate `raw:"disableSuggestions"`          // !!!
 	DisableLineTextInReferences core.Tristate `raw:"disableLineTextInReferences"` // !!!
 	DisplayPartsForJSDoc        core.Tristate `raw:"displayPartsForJSDoc"`        // !!!
-	ReportStyleChecksAsWarnings core.Tristate `raw:"reportStyleChecksAsWarnings"` // !!! If this changes, we need to ask the client to recompute diagnostics
+	ReportStyleChecksAsWarnings core.Tristate `raw:"reportStyleChecksAsWarnings" config:"reportStyleChecksAsWarnings"`
 
 	// ------- ATA -------
 

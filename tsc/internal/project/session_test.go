@@ -1406,6 +1406,33 @@ export const value = content;`,
 		assert.Equal(t, len(inlayHintsRefreshCalls), 1, "expected one RefreshInlayHints call after inlay hints preference change")
 	})
 
+	t.Run("schedules diagnostics refresh when reportStyleChecksAsWarnings changes", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/src/tsconfig.json": "{}",
+			"/src/index.ts":      "export const x = 1;",
+		}
+		session, utils := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		// Record the baseline count of RefreshDiagnostics calls.
+		baselineRefreshCount := len(utils.Client().RefreshDiagnosticsCalls())
+
+		// Toggle reportStyleChecksAsWarnings (default is true, so set it to false).
+		prefs := lsutil.NewDefaultUserPreferences()
+		prefs.ReportStyleChecksAsWarnings = core.TSFalse
+		session.Configure(prefs)
+		session.WaitForBackgroundTasks()
+
+		refreshCount := len(utils.Client().RefreshDiagnosticsCalls())
+		assert.Assert(t, refreshCount > baselineRefreshCount,
+			"expected RefreshDiagnostics to be called after reportStyleChecksAsWarnings change, got %d calls (baseline %d)",
+			refreshCount, baselineRefreshCount)
+	})
+
 	t.Run("config parsing", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{
