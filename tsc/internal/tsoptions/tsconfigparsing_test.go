@@ -1531,3 +1531,38 @@ func TestExtendedConfigErrorsAppearOnCacheHit(t *testing.T) {
 		assert.Assert(t, len(second.Errors) > 0, "expected diagnostics for projB parse (cache hit on base), got 0")
 	})
 }
+
+func TestExtendedConfigConfigDirPathsAreNotCached(t *testing.T) {
+	t.Parallel()
+
+	files := map[string]string{
+		"/tsconfig.base.json": `{
+  "compilerOptions": {
+    "paths": {
+      "@pkg/*": ["${configDir}/src/*"]
+    }
+  }
+}`,
+		"/packages/a/tsconfig.json": `{
+  "extends": "../../tsconfig.base.json"
+}`,
+		"/packages/b/tsconfig.json": `{
+  "extends": "../../tsconfig.base.json"
+}`,
+		"/packages/a/index.ts": "export {}",
+		"/packages/b/index.ts": "export {}",
+	}
+
+	host := tsoptionstest.NewVFSParseConfigHost(files, "/", true /*useCaseSensitiveFileNames*/)
+	cache := &memoCache{}
+
+	parseConfig := func(configFileName string) *tsoptions.ParsedCommandLine {
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, nil, nil, host, cache)
+		assert.Assert(t, len(errors) == 0, "unexpected errors parsing %s: %v", configFileName, errors)
+		return parsed
+	}
+
+	parseConfig("/packages/a/tsconfig.json")
+	paths := parseConfig("/packages/b/tsconfig.json").CompilerOptions().Paths
+	assert.DeepEqual(t, paths.GetOrZero("@pkg/*"), []string{"/packages/b/src/*"})
+}
