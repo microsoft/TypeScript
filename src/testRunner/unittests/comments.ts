@@ -36,7 +36,7 @@ describe("comment parsing", () => {
             "file.ts",
             `${endingInHyphen}\nconst x = 1;`,
             ts.ScriptTarget.ESNext,
-            true,
+            /*setParentNodes*/ true,
         );
 
         assert.strictEqual(sourceFile.parseDiagnostics.length, 0);
