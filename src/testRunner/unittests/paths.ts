@@ -318,6 +318,10 @@ describe("unittests:: core paths", () => {
         assert.strictEqual(ts.getNormalizedAbsolutePath(".", ""), "");
         assert.strictEqual(ts.getNormalizedAbsolutePath("./", ""), "");
         assert.strictEqual(ts.getNormalizedAbsolutePath("./a", ""), "a");
+        // A `./` followed by a redundant separator must stay relative, not become rooted.
+        assert.strictEqual(ts.getNormalizedAbsolutePath(".//a", ""), "a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath(".//a/b", ""), "a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("././/a", ""), "a");
         // Strangely, these do not normalize to the empty string.
         assert.strictEqual(ts.getNormalizedAbsolutePath("..", ""), "..");
         assert.strictEqual(ts.getNormalizedAbsolutePath("../", ""), "..");

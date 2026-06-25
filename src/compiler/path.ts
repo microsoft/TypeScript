@@ -736,7 +736,10 @@ function simpleNormalizePath(path: string): string | undefined {
     }
     // Some paths only require cleanup of `/./` or leading `./`
     let simplified = path.replace(/\/\.\//g, "/");
-    if (simplified.startsWith("./")) {
+    // Only strip a leading `./` when it is an actual `.` segment, not the
+    // start of a `.//` sequence where the second slash is a redundant
+    // separator (stripping there would turn a relative path into a rooted one).
+    if (simplified.startsWith("./") && simplified.charCodeAt(2) !== CharacterCodes.slash) {
         simplified = simplified.slice(2);
     }
     if (simplified !== path) {
