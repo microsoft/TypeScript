@@ -37,6 +37,7 @@
     },
     "exports": {
         "./package.json": "./package.json",
+        ".": "./lib/version.cjs",
         "./unstable/sync": {
             "@typescript/source": "./src/api/sync/api.ts",
             "default": "./dist/api/sync/api.js"
