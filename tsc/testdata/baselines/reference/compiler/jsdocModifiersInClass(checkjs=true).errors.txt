@@ -1,0 +1,27 @@
+test.js(7,3): error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'NoBase' does not extend another class.
+
+
+==== test.js (1 errors) ====
+    // Unlike object literal members, class members are real class-like members, so
+    // JSDoc modifiers are still semantically validated under checkJs: @override
+    // without a base class errors. With checkJs off, nothing is validated.
+    
+    class NoBase {
+      /** @override */
+      foo() {
+      ~~~
+!!! error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'NoBase' does not extend another class.
+      }
+    }
+    
+    class Base {
+      foo() {
+      }
+    }
+    
+    class Derived extends Base {
+      /** @override */
+      foo() {
+      }
+    }
+    
