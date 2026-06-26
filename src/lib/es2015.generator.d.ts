@@ -13,11 +13,6 @@ interface GeneratorFunction {
      * Creates a new Generator object.
      * @param args A list of arguments the function accepts.
      */
-    new (...args: any[]): Generator;
-    /**
-     * Creates a new Generator object.
-     * @param args A list of arguments the function accepts.
-     */
     (...args: any[]): Generator;
     /**
      * The length of the arguments.
