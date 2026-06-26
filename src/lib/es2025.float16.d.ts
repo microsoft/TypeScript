@@ -9,7 +9,7 @@ interface Float16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 2;
 
     /**
      * The ArrayBuffer instance referenced by the array.
@@ -362,7 +362,7 @@ interface Float16ArrayConstructor {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 2;
 
     /**
      * Returns a new array from a set of elements.
