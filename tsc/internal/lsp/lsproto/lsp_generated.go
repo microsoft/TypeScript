@@ -5184,65 +5184,6 @@ func (s *DocumentDiagnosticParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	return nil
 }
 
-// A partial result for a document diagnostic report.
-//
-// Since: 3.17.0
-type DocumentDiagnosticReportPartialResult struct {
-	RelatedDocuments map[DocumentUri]FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport `json:"relatedDocuments"`
-}
-
-var _ json.UnmarshalerFrom = (*DocumentDiagnosticReportPartialResult)(nil)
-
-func (s *DocumentDiagnosticReportPartialResult) UnmarshalJSONFrom(dec *json.Decoder) error {
-	const (
-		missingRelatedDocuments uint = 1 << iota
-		_missingLast
-	)
-	missing := _missingLast - 1
-
-	if k := dec.PeekKind(); k != '{' {
-		return errNotObject(k)
-	}
-	if _, err := dec.ReadToken(); err != nil {
-		return err
-	}
-
-	for dec.PeekKind() != '}' {
-		name, err := dec.ReadValue()
-		if err != nil {
-			return err
-		}
-		switch string(name) {
-		case `"relatedDocuments"`:
-			missing &^= missingRelatedDocuments
-			if dec.PeekKind() == 'n' {
-				return errNull("relatedDocuments")
-			}
-			if err := json.UnmarshalDecode(dec, &s.RelatedDocuments); err != nil {
-				return err
-			}
-		default:
-			if err := dec.SkipValue(); err != nil {
-				return err
-			}
-		}
-	}
-
-	if _, err := dec.ReadToken(); err != nil {
-		return err
-	}
-
-	if missing != 0 {
-		var missingProps []string
-		if missing&missingRelatedDocuments != 0 {
-			missingProps = append(missingProps, "relatedDocuments")
-		}
-		return errMissing(missingProps)
-	}
-
-	return nil
-}
-
 // Cancellation data returned from a diagnostic request.
 //
 // Since: 3.17.0
@@ -15625,28 +15566,18 @@ func (s *RelatedUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.D
 	return nil
 }
 
-// A diagnostic report with a full set of problems.
+// A partial result for a document diagnostic report.
 //
 // Since: 3.17.0
-type FullDocumentDiagnosticReport struct {
-	// A full document diagnostic report.
-	Kind StringLiteralFull `json:"kind"`
-
-	// An optional result id. If provided it will
-	// be sent on the next diagnostic request for the
-	// same document.
-	ResultId *string `json:"resultId,omitzero"`
-
-	// The actual items.
-	Items []*Diagnostic `json:"items"`
+type DocumentDiagnosticReportPartialResult struct {
+	RelatedDocuments map[DocumentUri]FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport `json:"relatedDocuments"`
 }
 
-var _ json.UnmarshalerFrom = (*FullDocumentDiagnosticReport)(nil)
+var _ json.UnmarshalerFrom = (*DocumentDiagnosticReportPartialResult)(nil)
 
-func (s *FullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
+func (s *DocumentDiagnosticReportPartialResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
-		missingKind uint = 1 << iota
-		missingItems
+		missingRelatedDocuments uint = 1 << iota
 		_missingLast
 	)
 	missing := _missingLast - 1
@@ -15664,24 +15595,12 @@ func (s *FullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) erro
 			return err
 		}
 		switch string(name) {
-		case `"kind"`:
-			missing &^= missingKind
-			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
-				return err
-			}
-		case `"resultId"`:
+		case `"relatedDocuments"`:
+			missing &^= missingRelatedDocuments
 			if dec.PeekKind() == 'n' {
-				return errNull("resultId")
+				return errNull("relatedDocuments")
 			}
-			if err := json.UnmarshalDecode(dec, &s.ResultId); err != nil {
-				return err
-			}
-		case `"items"`:
-			missing &^= missingItems
-			if dec.PeekKind() == 'n' {
-				return errNull("items")
-			}
-			if err := json.UnmarshalDecode(dec, &s.Items); err != nil {
+			if err := json.UnmarshalDecode(dec, &s.RelatedDocuments); err != nil {
 				return err
 			}
 		default:
@@ -15697,85 +15616,8 @@ func (s *FullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) erro
 
 	if missing != 0 {
 		var missingProps []string
-		if missing&missingKind != 0 {
-			missingProps = append(missingProps, "kind")
-		}
-		if missing&missingItems != 0 {
-			missingProps = append(missingProps, "items")
-		}
-		return errMissing(missingProps)
-	}
-
-	return nil
-}
-
-// A diagnostic report indicating that the last returned
-// report is still accurate.
-//
-// Since: 3.17.0
-type UnchangedDocumentDiagnosticReport struct {
-	// A document diagnostic report indicating
-	// no changes to the last result. A server can
-	// only return `unchanged` if result ids are
-	// provided.
-	Kind StringLiteralUnchanged `json:"kind"`
-
-	// A result id which will be sent on the next
-	// diagnostic request for the same document.
-	ResultId string `json:"resultId"`
-}
-
-var _ json.UnmarshalerFrom = (*UnchangedDocumentDiagnosticReport)(nil)
-
-func (s *UnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
-	const (
-		missingKind uint = 1 << iota
-		missingResultId
-		_missingLast
-	)
-	missing := _missingLast - 1
-
-	if k := dec.PeekKind(); k != '{' {
-		return errNotObject(k)
-	}
-	if _, err := dec.ReadToken(); err != nil {
-		return err
-	}
-
-	for dec.PeekKind() != '}' {
-		name, err := dec.ReadValue()
-		if err != nil {
-			return err
-		}
-		switch string(name) {
-		case `"kind"`:
-			missing &^= missingKind
-			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
-				return err
-			}
-		case `"resultId"`:
-			missing &^= missingResultId
-			if err := json.UnmarshalDecode(dec, &s.ResultId); err != nil {
-				return err
-			}
-		default:
-			if err := dec.SkipValue(); err != nil {
-				return err
-			}
-		}
-	}
-
-	if _, err := dec.ReadToken(); err != nil {
-		return err
-	}
-
-	if missing != 0 {
-		var missingProps []string
-		if missing&missingKind != 0 {
-			missingProps = append(missingProps, "kind")
-		}
-		if missing&missingResultId != 0 {
-			missingProps = append(missingProps, "resultId")
+		if missing&missingRelatedDocuments != 0 {
+			missingProps = append(missingProps, "relatedDocuments")
 		}
 		return errMissing(missingProps)
 	}
@@ -20740,6 +20582,164 @@ func (s *FileOperationPattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 		var missingProps []string
 		if missing&missingGlob != 0 {
 			missingProps = append(missingProps, "glob")
+		}
+		return errMissing(missingProps)
+	}
+
+	return nil
+}
+
+// A diagnostic report with a full set of problems.
+//
+// Since: 3.17.0
+type FullDocumentDiagnosticReport struct {
+	// A full document diagnostic report.
+	Kind StringLiteralFull `json:"kind"`
+
+	// An optional result id. If provided it will
+	// be sent on the next diagnostic request for the
+	// same document.
+	ResultId *string `json:"resultId,omitzero"`
+
+	// The actual items.
+	Items []*Diagnostic `json:"items"`
+}
+
+var _ json.UnmarshalerFrom = (*FullDocumentDiagnosticReport)(nil)
+
+func (s *FullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
+	const (
+		missingKind uint = 1 << iota
+		missingItems
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"kind"`:
+			missing &^= missingKind
+			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
+				return err
+			}
+		case `"resultId"`:
+			if dec.PeekKind() == 'n' {
+				return errNull("resultId")
+			}
+			if err := json.UnmarshalDecode(dec, &s.ResultId); err != nil {
+				return err
+			}
+		case `"items"`:
+			missing &^= missingItems
+			if dec.PeekKind() == 'n' {
+				return errNull("items")
+			}
+			if err := json.UnmarshalDecode(dec, &s.Items); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingKind != 0 {
+			missingProps = append(missingProps, "kind")
+		}
+		if missing&missingItems != 0 {
+			missingProps = append(missingProps, "items")
+		}
+		return errMissing(missingProps)
+	}
+
+	return nil
+}
+
+// A diagnostic report indicating that the last returned
+// report is still accurate.
+//
+// Since: 3.17.0
+type UnchangedDocumentDiagnosticReport struct {
+	// A document diagnostic report indicating
+	// no changes to the last result. A server can
+	// only return `unchanged` if result ids are
+	// provided.
+	Kind StringLiteralUnchanged `json:"kind"`
+
+	// A result id which will be sent on the next
+	// diagnostic request for the same document.
+	ResultId string `json:"resultId"`
+}
+
+var _ json.UnmarshalerFrom = (*UnchangedDocumentDiagnosticReport)(nil)
+
+func (s *UnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
+	const (
+		missingKind uint = 1 << iota
+		missingResultId
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return errNotObject(k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"kind"`:
+			missing &^= missingKind
+			if err := json.UnmarshalDecode(dec, &s.Kind); err != nil {
+				return err
+			}
+		case `"resultId"`:
+			missing &^= missingResultId
+			if err := json.UnmarshalDecode(dec, &s.ResultId); err != nil {
+				return err
+			}
+		default:
+			if err := dec.SkipValue(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingKind != 0 {
+			missingProps = append(missingProps, "kind")
+		}
+		if missing&missingResultId != 0 {
+			missingProps = append(missingProps, "resultId")
 		}
 		return errMissing(missingProps)
 	}
@@ -32907,45 +32907,6 @@ func (o *StringOrMarkupContent) UnmarshalJSONFrom(dec *json.Decoder) error {
 	}
 }
 
-type FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport struct {
-	FullDocumentDiagnosticReport      *FullDocumentDiagnosticReport
-	UnchangedDocumentDiagnosticReport *UnchangedDocumentDiagnosticReport
-}
-
-var _ json.MarshalerTo = (*FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport)(nil)
-
-func (o *FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) MarshalJSONTo(enc *json.Encoder) error {
-	assertOnlyOne("exactly one element of FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport should be set", boolToInt(o.FullDocumentDiagnosticReport != nil)+boolToInt(o.UnchangedDocumentDiagnosticReport != nil))
-
-	if o.FullDocumentDiagnosticReport != nil {
-		return json.MarshalEncode(enc, o.FullDocumentDiagnosticReport)
-	}
-	if o.UnchangedDocumentDiagnosticReport != nil {
-		return json.MarshalEncode(enc, o.UnchangedDocumentDiagnosticReport)
-	}
-	panic("unreachable")
-}
-
-var _ json.UnmarshalerFrom = (*FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport)(nil)
-
-func (o *FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
-	*o = FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{}
-
-	data, err := dec.ReadValue()
-	if err != nil {
-		return err
-	}
-	switch string(jsonObjectRawField(data, "kind")) {
-	case `"full"`:
-		o.FullDocumentDiagnosticReport = new(FullDocumentDiagnosticReport)
-		return json.Unmarshal(data, o.FullDocumentDiagnosticReport)
-	case `"unchanged"`:
-		o.UnchangedDocumentDiagnosticReport = new(UnchangedDocumentDiagnosticReport)
-		return json.Unmarshal(data, o.UnchangedDocumentDiagnosticReport)
-	}
-	return errInvalidValue("FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport", data)
-}
-
 type WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport struct {
 	FullDocumentDiagnosticReport      *WorkspaceFullDocumentDiagnosticReport
 	UnchangedDocumentDiagnosticReport *WorkspaceUnchangedDocumentDiagnosticReport
@@ -33502,6 +33463,45 @@ func (o *TextEditOrAnnotatedTextEditOrSnippetTextEdit) UnmarshalJSONFrom(dec *js
 		o.TextEdit = new(TextEdit)
 		return json.Unmarshal(data, o.TextEdit)
 	}
+}
+
+type FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport struct {
+	FullDocumentDiagnosticReport      *FullDocumentDiagnosticReport
+	UnchangedDocumentDiagnosticReport *UnchangedDocumentDiagnosticReport
+}
+
+var _ json.MarshalerTo = (*FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport)(nil)
+
+func (o *FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) MarshalJSONTo(enc *json.Encoder) error {
+	assertOnlyOne("exactly one element of FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport should be set", boolToInt(o.FullDocumentDiagnosticReport != nil)+boolToInt(o.UnchangedDocumentDiagnosticReport != nil))
+
+	if o.FullDocumentDiagnosticReport != nil {
+		return json.MarshalEncode(enc, o.FullDocumentDiagnosticReport)
+	}
+	if o.UnchangedDocumentDiagnosticReport != nil {
+		return json.MarshalEncode(enc, o.UnchangedDocumentDiagnosticReport)
+	}
+	panic("unreachable")
+}
+
+var _ json.UnmarshalerFrom = (*FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport)(nil)
+
+func (o *FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
+	*o = FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{}
+
+	data, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	switch string(jsonObjectRawField(data, "kind")) {
+	case `"full"`:
+		o.FullDocumentDiagnosticReport = new(FullDocumentDiagnosticReport)
+		return json.Unmarshal(data, o.FullDocumentDiagnosticReport)
+	case `"unchanged"`:
+		o.UnchangedDocumentDiagnosticReport = new(UnchangedDocumentDiagnosticReport)
+		return json.Unmarshal(data, o.UnchangedDocumentDiagnosticReport)
+	}
+	return errInvalidValue("FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport", data)
 }
 
 type TextDocumentSyncOptionsOrKind struct {
