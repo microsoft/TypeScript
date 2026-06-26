@@ -90,6 +90,7 @@ interface BigInt {
     /**
      * Returns a string representation of an object.
      * @param radix Specifies a radix for converting numeric values to strings.
+     * @throws {RangeError} If `radix` is less than 2 or greater than 36.
      */
     toString(radix?: number): string;
 
@@ -103,6 +104,14 @@ interface BigInt {
 }
 
 interface BigIntConstructor {
+    /**
+     * Creates a BigInt value from a number, string, boolean, or another BigInt.
+     *
+     * @param value The value to convert to a BigInt.
+     * @throws {RangeError} If `value` is a non-integer number.
+     * @throws {TypeError} If `value` cannot be converted to a primitive, or if the primitive is undefined, null, or a symbol.
+     * @throws {SyntaxError} If `value` is a string that cannot be parsed as a BigInt.
+     */
     (value: bigint | boolean | number | string): bigint;
     readonly prototype: BigInt;
 
@@ -111,6 +120,7 @@ interface BigIntConstructor {
      * All higher bits are discarded.
      * @param bits The number of low bits to use
      * @param int The BigInt whose bits to extract
+     * @throws {RangeError} If `bits` is negative or greater than 2 ** 53 - 1.
      */
     asIntN(bits: number, int: bigint): bigint;
     /**
@@ -118,6 +128,7 @@ interface BigIntConstructor {
      * All higher bits are discarded.
      * @param bits The number of low bits to use
      * @param int The BigInt whose bits to extract
+     * @throws {RangeError} If `bits` is negative or greater than 2 ** 53 - 1.
      */
     asUintN(bits: number, int: bigint): bigint;
 }
