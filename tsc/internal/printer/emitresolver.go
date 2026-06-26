@@ -111,7 +111,7 @@ type EmitResolver interface {
 	GetEnumMemberValue(node *ast.Node) evaluator.Result
 	IsLateBound(node *ast.Node) bool
 	IsOptionalParameter(node *ast.Node) bool
-	GetBaseDeclarationsForPropertyDeclaration(node *ast.Node) []*ast.Node
+	IsThisPropertyAssignmentDeclarationRedundant(node *ast.Node) bool
 
 	// isolatedDeclarations-specific declaration emit
 	GetPropertiesOfContainerFunction(node *ast.Node) []*ast.Symbol
