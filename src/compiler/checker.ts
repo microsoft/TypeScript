@@ -1058,6 +1058,7 @@ import {
     SyntheticExpression,
     TaggedTemplateExpression,
     TemplateExpression,
+    TemplateLiteralTrieNode,
     TemplateLiteralType,
     TemplateLiteralTypeNode,
     Ternary,
@@ -18219,21 +18220,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]) {
         const templates = filter(types, isPatternLiteralType) as (TemplateLiteralType | StringMappingType)[];
         if (templates.length) {
+            const templateLiterals = filter(templates, t => !!(t.flags & TypeFlags.TemplateLiteral)) as TemplateLiteralType[];
+            const stringMappings = filter(templates, t => !!(t.flags & TypeFlags.StringMapping)) as StringMappingType[];
+            const trie = templateLiterals.length >= 2 ? buildTemplateLiteralTrieFromTypes(templateLiterals) : undefined;
             let i = types.length;
             while (i > 0) {
                 i--;
                 const t = types[i];
-                if (t.flags & TypeFlags.StringLiteral && some(templates, template => isTypeMatchedByTemplateLiteralOrStringMapping(t, template))) {
+                if (t.flags & TypeFlags.StringLiteral && isStringLiteralMatchedByTemplates(t as StringLiteralType, trie, templateLiterals, stringMappings)) {
                     orderedRemoveItemAt(types, i);
                 }
             }
         }
     }
 
-    function isTypeMatchedByTemplateLiteralOrStringMapping(type: Type, template: TemplateLiteralType | StringMappingType) {
-        return template.flags & TypeFlags.TemplateLiteral ?
-            isTypeMatchedByTemplateLiteralType(type, template as TemplateLiteralType) :
-            isMemberOfStringMapping(type, template);
+    function isStringLiteralMatchedByTemplates(source: StringLiteralType, trie: TemplateLiteralTrieNode | undefined, templateLiterals: readonly TemplateLiteralType[], stringMappings: readonly StringMappingType[]): boolean {
+        if (trie) {
+            if (findMatchingTemplateLiteralInTrie(trie, source)) return true;
+        }
+        else if (templateLiterals.length) {
+            if (some(templateLiterals, tl => isTypeMatchedByTemplateLiteralType(source, tl))) return true;
+        }
+        if (stringMappings.length) {
+            if (some(stringMappings, sm => isMemberOfStringMapping(source, sm))) return true;
+        }
+        return false;
     }
 
     function removeConstrainedTypeVariables(types: Type[]) {
@@ -28060,6 +28071,58 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const keyPropertyName = getKeyPropertyName(unionType);
         const propType = keyPropertyName && getTypeOfPropertyOfType(type, keyPropertyName);
         return propType && getConstituentTypeForKeyType(unionType, propType);
+    }
+
+    function buildTemplateLiteralTrieFromTypes(templateTypes: readonly TemplateLiteralType[]): TemplateLiteralTrieNode {
+        const root: TemplateLiteralTrieNode = {};
+        for (const templateType of templateTypes) {
+            const prefix = templateType.texts[0];
+            let node = root;
+            for (let i = 0; i < prefix.length; i++) {
+                const ch = prefix.charCodeAt(i);
+                if (!node.children) {
+                    node.children = new Map();
+                }
+                let child = node.children.get(ch);
+                if (!child) {
+                    child = {};
+                    node.children.set(ch, child);
+                }
+                node = child;
+            }
+            if (!node.types) {
+                node.types = [];
+            }
+            node.types.push(templateType);
+        }
+        return root;
+    }
+
+    function findMatchingTemplateLiteralInTrie(trie: TemplateLiteralTrieNode, source: StringLiteralType): TemplateLiteralType | undefined {
+        const value = source.value;
+        let node: TemplateLiteralTrieNode | undefined = trie;
+        // Check root candidates (empty-prefix templates like `${string}`)
+        if (node.types) {
+            for (const type of node.types) {
+                if (isTypeMatchedByTemplateLiteralType(source, type)) {
+                    return type;
+                }
+            }
+        }
+        for (let i = 0; i < value.length; i++) {
+            node = node.children?.get(value.charCodeAt(i));
+            if (!node) {
+                return undefined;
+            }
+            if (node.types) {
+                for (const type of node.types) {
+                    if (isTypeMatchedByTemplateLiteralType(source, type)) {
+                        return type;
+                    }
+                }
+            }
+        }
+        return undefined;
     }
 
     function getMatchingUnionConstituentForObjectLiteral(unionType: UnionType, node: ObjectLiteralExpression) {

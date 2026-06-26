@@ -6960,6 +6960,12 @@ export interface TemplateLiteralType extends InstantiableType {
     types: readonly Type[]; // Always at least one element
 }
 
+/** @internal */
+export interface TemplateLiteralTrieNode {
+    children?: Map<number, TemplateLiteralTrieNode>; // char code -> child
+    types?: TemplateLiteralType[]; // template literals whose prefix ends at this node
+}
+
 export interface StringMappingType extends InstantiableType {
     symbol: Symbol;
     type: Type;
