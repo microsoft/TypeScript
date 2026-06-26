@@ -246,8 +246,8 @@ declare function f15(a: Meters): string;
 f15(E.x).toLowerCase();
 >f15(E.x).toLowerCase() : string
 >                       : ^^^^^^
->f15(E.x).toLowerCase : () => string
->                     : ^^^^^^      
+>f15(E.x).toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                     : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >f15(E.x) : string
 >         : ^^^^^^
 >f15 : { (a: string): boolean; (a: Meters): string; }
@@ -258,8 +258,8 @@ f15(E.x).toLowerCase();
 >  : ^^^^^^^^
 >x : E
 >  : ^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 type StringAndBoolean = [string, boolean]
 >StringAndBoolean : StringAndBoolean
@@ -296,14 +296,14 @@ var y: StringAndBoolean = ["1", false];
 y[0].toLowerCase();
 >y[0].toLowerCase() : string
 >                   : ^^^^^^
->y[0].toLowerCase : () => string
->                 : ^^^^^^      
+>y[0].toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                 : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >y[0] : string
 >     : ^^^^^^
 >y : StringAndBoolean
 >  : ^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 

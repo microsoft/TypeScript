@@ -24,12 +24,12 @@ let g = f || (abc => { void abc.toLowerCase() })
 >                       : ^^^^^^^^^
 >abc.toLowerCase() : string
 >                  : ^^^^^^
->abc.toLowerCase : () => string
->                : ^^^^^^      
+>abc.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >abc : string
 >    : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 let gg = f ?? (abc => { void abc.toLowerCase() })
 >gg : (x: string) => void
@@ -48,10 +48,10 @@ let gg = f ?? (abc => { void abc.toLowerCase() })
 >                       : ^^^^^^^^^
 >abc.toLowerCase() : string
 >                  : ^^^^^^
->abc.toLowerCase : () => string
->                : ^^^^^^      
+>abc.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >abc : string
 >    : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 

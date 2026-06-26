@@ -29,10 +29,10 @@ var r = a || ((a) => a.toLowerCase());
 >  : ^^^^^^
 >a.toLowerCase() : string
 >                : ^^^^^^
->a.toLowerCase : () => string
->              : ^^^^^^      
+>a.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >a : string
 >  : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 

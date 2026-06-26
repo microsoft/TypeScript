@@ -15,11 +15,11 @@ class Foo {
 >  : ^^^^^^
 >x.toLowerCase() : string
 >                : ^^^^^^
->x.toLowerCase : () => string
->              : ^^^^^^      
+>x.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >x : string
 >  : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 }
 

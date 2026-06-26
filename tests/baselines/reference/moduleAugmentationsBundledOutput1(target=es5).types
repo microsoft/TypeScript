@@ -197,8 +197,8 @@ c.foo().toExponential();
 c.bar().toLowerCase();
 >c.bar().toLowerCase() : string
 >                      : ^^^^^^
->c.bar().toLowerCase : () => string
->                    : ^^^^^^      
+>c.bar().toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                    : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >c.bar() : string
 >        : ^^^^^^
 >c.bar : () => string
@@ -207,8 +207,8 @@ c.bar().toLowerCase();
 >  : ^^^
 >bar : () => string
 >    : ^^^^^^      
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 c.baz1().x.toExponential();
 >c.baz1().x.toExponential() : string
@@ -233,8 +233,8 @@ c.baz1().x.toExponential();
 c.baz2().x.toLowerCase();
 >c.baz2().x.toLowerCase() : string
 >                         : ^^^^^^
->c.baz2().x.toLowerCase : () => string
->                       : ^^^^^^      
+>c.baz2().x.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                       : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >c.baz2().x : string
 >           : ^^^^^^
 >c.baz2() : import("m3").C2
@@ -247,6 +247,6 @@ c.baz2().x.toLowerCase();
 >     : ^^^^^^       ^^^^  ^^
 >x : string
 >  : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 

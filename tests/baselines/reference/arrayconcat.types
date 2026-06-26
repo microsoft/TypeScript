@@ -78,32 +78,32 @@ class parser {
 >      : ^^^^^^
 >a.name.toLowerCase() : string
 >                     : ^^^^^^
->a.name.toLowerCase : () => string
->                   : ^^^^^^      
+>a.name.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                   : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >a.name : string | undefined
 >       : ^^^^^^^^^^^^^^^^^^
 >a : IOptions
 >  : ^^^^^^^^
 >name : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
             var bName = b.name.toLowerCase();
 >bName : string
 >      : ^^^^^^
 >b.name.toLowerCase() : string
 >                     : ^^^^^^
->b.name.toLowerCase : () => string
->                   : ^^^^^^      
+>b.name.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                   : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >b.name : string | undefined
 >       : ^^^^^^^^^^^^^^^^^^
 >b : IOptions
 >  : ^^^^^^^^
 >name : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
             if (aName > bName) {
 >aName > bName : boolean

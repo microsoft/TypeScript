@@ -35,14 +35,14 @@ export class C {
         return this.#hello.toUpperCase();
 >this.#hello.toUpperCase() : string
 >                          : ^^^^^^
->this.#hello.toUpperCase : () => string
->                        : ^^^^^^      
+>this.#hello.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                        : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >this.#hello : string
 >            : ^^^^^^
 >this : this
 >     : ^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
     }
     /** @param value {string} */
     set #screamingHello(value) {

@@ -80,16 +80,16 @@ export function assertNodeTagName<
 >            : ^^^^^^
 >node.tagName.toLowerCase() : string
 >                           : ^^^^^^
->node.tagName.toLowerCase : () => string
->                         : ^^^^^^      
+>node.tagName.toLowerCase : <T_1 extends string>(this: T_1) => string extends T_1 ? string : Lowercase<T_1>
+>                         : ^^^^^^^^^^^^^      ^^    ^^   ^^^^^                                            
 >node.tagName : string
 >             : ^^^^^^
 >node : Element
 >     : ^^^^^^^
 >tagName : string
 >        : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T_1 extends string>(this: T_1) => string extends T_1 ? string : Lowercase<T_1>
+>            : ^^^^^^^^^^^^^      ^^    ^^   ^^^^^                                            
 
          return nodeTagName === tagName;
 >nodeTagName === tagName : boolean

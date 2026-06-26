@@ -14,12 +14,12 @@ export class A {
         return msg.toUpperCase();
 >msg.toUpperCase() : string
 >                  : ^^^^^^
->msg.toUpperCase : () => string
->                : ^^^^^^      
+>msg.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >msg : string
 >    : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
     }
 }
 
