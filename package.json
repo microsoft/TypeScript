@@ -60,7 +60,7 @@
         "chokidar": "^4.0.3",
         "diff": "^8.0.4",
         "dprint": "^0.49.1",
-        "esbuild": "^0.27.4",
+        "esbuild": "^0.28.1",
         "eslint": "^10.1.0",
         "eslint-plugin-regexp": "^3.1.0",
         "fast-xml-parser": "^5.5.9",
