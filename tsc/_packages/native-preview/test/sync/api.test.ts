@@ -1494,6 +1494,32 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         }
     });
 
+    test("ConditionalType.getTrueType() and getFalseType()", () => {
+        const api = spawnAPI(typeFiles);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = project.checker.resolveName("Cond", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
+            assert.ok(symbol);
+            const type = project.checker.getDeclaredTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.ok(type.flags & TypeFlags.Conditional, `Expected ConditionalType, got flags ${type.flags}`);
+
+            const trueType = (type as ConditionalType).getTrueType();
+            assert.ok(trueType, "should return the true-branch type");
+            assert.ok(trueType.flags & TypeFlags.StringLiteral, `Expected StringLiteral for true branch, got flags ${trueType.flags}`);
+            assert.equal((trueType as LiteralType).value, "yes");
+
+            const falseType = (type as ConditionalType).getFalseType();
+            assert.ok(falseType, "should return the false-branch type");
+            assert.ok(falseType.flags & TypeFlags.StringLiteral, `Expected StringLiteral for false branch, got flags ${falseType.flags}`);
+            assert.equal((falseType as LiteralType).value, "no");
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("TemplateLiteralType.texts and getTypes()", () => {
         const { type, api } = getTypeAtName(spawnAPI(typeFiles), "tpl:");
         try {

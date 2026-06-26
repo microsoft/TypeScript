@@ -195,6 +195,10 @@ export interface ConditionalType extends Type {
     getCheckType(): Type;
     /** Get the extends type U in `T extends U ? X : Y` */
     getExtendsType(): Type;
+    /** Get the true type X in `T extends U ? X : Y` */
+    getTrueType(): Type;
+    /** Get the false type Y in `T extends U ? X : Y` */
+    getFalseType(): Type;
 }
 
 /** Substitution types (TypeFlags.Substitution) */

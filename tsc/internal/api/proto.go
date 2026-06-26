@@ -133,6 +133,8 @@ const (
 	MethodGetConstraintOfTypeParameter      Method = "getConstraintOfTypeParameter"
 	MethodGetBaseConstraintOfType           Method = "getBaseConstraintOfType"
 	MethodGetTypeArguments                  Method = "getTypeArguments"
+	MethodGetTrueTypeOfConditionalType      Method = "getTrueTypeOfConditionalType"
+	MethodGetFalseTypeOfConditionalType     Method = "getFalseTypeOfConditionalType"
 	MethodGetConstantValue                  Method = "getConstantValue"
 	MethodGetSignatureFromDeclaration       Method = "getSignatureFromDeclaration"
 	MethodGetExportSpecifierLocalTarget     Method = "getExportSpecifierLocalTargetSymbol"
@@ -368,22 +370,24 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetExportsOfSymbol:      unmarshallerFor[GetSymbolPropertyParams],
 	MethodGetExportSymbolOfSymbol: unmarshallerFor[GetSymbolPropertyParams],
 
-	MethodGetSymbolOfType:              unmarshallerFor[GetTypePropertyParams],
-	MethodGetTargetOfType:              unmarshallerFor[GetTypePropertyParams],
-	MethodGetFreshTypeOfType:           unmarshallerFor[GetTypePropertyParams],
-	MethodGetRegularTypeOfType:         unmarshallerFor[GetTypePropertyParams],
-	MethodGetTypesOfType:               unmarshallerFor[GetTypePropertyParams],
-	MethodGetTypeParametersOfType:      unmarshallerFor[GetTypePropertyParams],
-	MethodGetOuterTypeParametersOfType: unmarshallerFor[GetTypePropertyParams],
-	MethodGetLocalTypeParametersOfType: unmarshallerFor[GetTypePropertyParams],
-	MethodGetAliasTypeArgumentsOfType:  unmarshallerFor[GetTypePropertyParams],
-	MethodGetAliasSymbolOfType:         unmarshallerFor[GetTypePropertyParams],
-	MethodGetObjectTypeOfType:          unmarshallerFor[GetTypePropertyParams],
-	MethodGetIndexTypeOfType:           unmarshallerFor[GetTypePropertyParams],
-	MethodGetCheckTypeOfType:           unmarshallerFor[GetTypePropertyParams],
-	MethodGetExtendsTypeOfType:         unmarshallerFor[GetTypePropertyParams],
-	MethodGetBaseTypeOfType:            unmarshallerFor[GetTypePropertyParams],
-	MethodGetConstraintOfType:          unmarshallerFor[GetTypePropertyParams],
+	MethodGetSymbolOfType:               unmarshallerFor[GetTypePropertyParams],
+	MethodGetTargetOfType:               unmarshallerFor[GetTypePropertyParams],
+	MethodGetFreshTypeOfType:            unmarshallerFor[GetTypePropertyParams],
+	MethodGetRegularTypeOfType:          unmarshallerFor[GetTypePropertyParams],
+	MethodGetTypesOfType:                unmarshallerFor[GetTypePropertyParams],
+	MethodGetTypeParametersOfType:       unmarshallerFor[GetTypePropertyParams],
+	MethodGetOuterTypeParametersOfType:  unmarshallerFor[GetTypePropertyParams],
+	MethodGetLocalTypeParametersOfType:  unmarshallerFor[GetTypePropertyParams],
+	MethodGetAliasTypeArgumentsOfType:   unmarshallerFor[GetTypePropertyParams],
+	MethodGetAliasSymbolOfType:          unmarshallerFor[GetTypePropertyParams],
+	MethodGetObjectTypeOfType:           unmarshallerFor[GetTypePropertyParams],
+	MethodGetIndexTypeOfType:            unmarshallerFor[GetTypePropertyParams],
+	MethodGetCheckTypeOfType:            unmarshallerFor[GetTypePropertyParams],
+	MethodGetExtendsTypeOfType:          unmarshallerFor[GetTypePropertyParams],
+	MethodGetBaseTypeOfType:             unmarshallerFor[GetTypePropertyParams],
+	MethodGetConstraintOfType:           unmarshallerFor[GetTypePropertyParams],
+	MethodGetTrueTypeOfConditionalType:  unmarshallerFor[GetTypePropertyParams],
+	MethodGetFalseTypeOfConditionalType: unmarshallerFor[GetTypePropertyParams],
 
 	MethodGetTypeParametersOfSignature: unmarshallerFor[GetSignaturePropertyParams],
 	MethodGetParametersOfSignature:     unmarshallerFor[GetSignaturePropertyParams],

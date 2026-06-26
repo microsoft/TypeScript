@@ -427,10 +427,12 @@ class ProjectObjectRegistry {
         this.signatures.clear();
     }
 
-    async fetchType<T extends Type>(source: Symbol | Signature | Type, method: string, handle: number | undefined): Promise<T> {
-        if (!handle) return undefined as unknown as T;
-        const cached = this.getType(handle);
-        if (cached) return cached as unknown as T;
+    async fetchType<T extends Type>(source: Symbol | Signature | Type, method: string, handle: number | false | undefined): Promise<T> {
+        if (handle !== false) {
+            if (!handle) return undefined as unknown as T;
+            const cached = this.getType(handle);
+            if (cached) return cached as unknown as T;
+        }
 
         const data = await this.client.apiRequest<TypeResponse | null>(method, {
             snapshot: this.snapshotId,
@@ -1455,6 +1457,9 @@ class TypeObject implements Type {
     readonly baseType!: number;
     readonly substConstraint!: number;
 
+    private trueType: number | false; // false if not yet loaded
+    private falseType: number | false; // false if not yet loaded
+
     constructor(data: TypeResponse, objectRegistry: ProjectObjectRegistry) {
         this.objectRegistry = objectRegistry;
 
@@ -1487,6 +1492,9 @@ class TypeObject implements Type {
         if (data.extendsType !== undefined) this.extendsType = data.extendsType;
         if (data.baseType !== undefined) this.baseType = data.baseType;
         if (data.substConstraint !== undefined) this.substConstraint = data.substConstraint;
+
+        this.trueType = false;
+        this.falseType = false;
     }
 
     async getSymbol(): Promise<Symbol | undefined> {
@@ -1551,6 +1559,18 @@ class TypeObject implements Type {
 
     async getConstraint(): Promise<Type> {
         return this.objectRegistry.fetchType(this, "getConstraintOfType", this.substConstraint);
+    }
+
+    async getTrueType(): Promise<Type> {
+        const result = await this.objectRegistry.fetchType(this, "getTrueTypeOfConditionalType", this.trueType);
+        this.trueType = result.id;
+        return result;
+    }
+
+    async getFalseType(): Promise<Type> {
+        const result = await this.objectRegistry.fetchType(this, "getFalseTypeOfConditionalType", this.falseType);
+        this.falseType = result.id;
+        return result;
     }
 
     isUnionType(): this is UnionType {
