@@ -11,6 +11,14 @@ import (
 // WatchBackend abstracts fswatch.Watcher for testing
 type WatchBackend interface {
 	WatchDirectory(dir string, fn fswatch.WatchCallback, recursive bool, ignore func(string) bool) (io.Closer, error)
+	WatchDirectories(requests []WatchDirectoryRequest) ([]io.Closer, error)
+}
+
+type WatchDirectoryRequest struct {
+	Dir       string
+	Callback  fswatch.WatchCallback
+	Recursive bool
+	Ignore    func(string) bool
 }
 
 // CommandLineTestingWithWatchBackend is an optional extension of
@@ -22,14 +30,43 @@ type CommandLineTestingWithWatchBackend interface {
 type FSWatchBackend struct{ Inner fswatch.Watcher }
 
 func (b *FSWatchBackend) WatchDirectory(dir string, fn fswatch.WatchCallback, recursive bool, ignore func(string) bool) (io.Closer, error) {
-	var opts []fswatch.WatchOption
-	if recursive {
-		opts = append(opts, fswatch.WithRecursive())
+	closers, err := b.WatchDirectories([]WatchDirectoryRequest{{
+		Dir:       dir,
+		Callback:  fn,
+		Recursive: recursive,
+		Ignore:    ignore,
+	}})
+	if err != nil {
+		return nil, err
 	}
-	if ignore != nil {
-		opts = append(opts, fswatch.WithIgnore(ignore))
+	return closers[0], nil
+}
+
+func (b *FSWatchBackend) WatchDirectories(requests []WatchDirectoryRequest) ([]io.Closer, error) {
+	fswatchRequests := make([]fswatch.WatchDirectoryRequest, len(requests))
+	for i, request := range requests {
+		var opts []fswatch.WatchOption
+		if request.Recursive {
+			opts = append(opts, fswatch.WithRecursive())
+		}
+		if request.Ignore != nil {
+			opts = append(opts, fswatch.WithIgnore(request.Ignore))
+		}
+		fswatchRequests[i] = fswatch.WatchDirectoryRequest{
+			Dir:      request.Dir,
+			Callback: request.Callback,
+			Options:  opts,
+		}
 	}
-	return b.Inner.WatchDirectory(dir, fn, opts...)
+	watches, err := b.Inner.WatchDirectories(fswatchRequests)
+	if err != nil {
+		return nil, err
+	}
+	closers := make([]io.Closer, len(watches))
+	for i, watch := range watches {
+		closers[i] = watch
+	}
+	return closers, nil
 }
 
 func ShouldIgnoreWatchPath(path string) bool {

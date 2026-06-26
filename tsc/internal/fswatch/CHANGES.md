@@ -9,11 +9,12 @@ simplifications, new features, and bugfixes.
 
 ### Method naming
 
-| C++ / JS               | Go                                 |
-| ---------------------- | ---------------------------------- |
-| `subscribe(dir, fn)`   | `WatchDirectory(dir, fn, opts...)` |
-| —                      | `WatchFile(path, fn)`              |
-| `unsubscribe(dir, fn)` | `w.Close()`                        |
+| C++ / JS               | Go                                          |
+| ---------------------- | ------------------------------------------- |
+| `subscribe(dir, fn)`   | `WatchDirectory(dir, fn, opts...)`          |
+| —                      | `WatchDirectories([]WatchDirectoryRequest)` |
+| —                      | `WatchFile(path, fn)`                       |
+| `unsubscribe(dir, fn)` | `w.Close()`                                 |
 
 ### Recursion default
 
@@ -54,6 +55,13 @@ Go adds functional options not present in the C++ API:
 `WatchFile(path, fn)` watches a single file by watching its parent directory
 non-recursively and filtering events to the target path. Multiple file watches
 in the same directory share one OS watch. Not available in the C++ API.
+
+### Batch directory watching
+
+`WatchDirectories` registers multiple directory watches in one call. It has the
+same logical behavior as repeated `WatchDirectory` calls, but lets backends batch
+the underlying OS subscription work. On macOS this avoids rebuilding the shared
+FSEvents stream once per logical watch during large watch reconciliations.
 
 ### Error delivery
 
@@ -126,6 +134,16 @@ serves only that backend's `dirWatch`es, so a slow user callback on one backend
 can't starve event delivery on any of the others. In practice most callers will
 only ever use one backend (`Default()`), so this mainly matters for processes
 that mix backends, but the cost of the split is essentially nothing.
+
+### Shared FSEvents streams
+
+Upstream opens one macOS FSEventStream per subscription. Go's FSEvents backend
+shares streams across all logical directory watches in a backend instance. The
+fast path attempts one stream containing every active physical watch root; if
+that stream cannot be started, the backend retries with bounded path chunks.
+Events from shared streams are routed back to matching logical watches by path,
+so non-recursive and per-subscriber ignore semantics are preserved while using
+far fewer system-wide FSEvents stream slots.
 
 ## New backends
 

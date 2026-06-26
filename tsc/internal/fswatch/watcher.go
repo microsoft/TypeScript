@@ -67,6 +67,11 @@ type Watcher interface {
 	// Returns [ErrUnavailable] if the watcher is not supported on
 	// the current platform.
 	WatchDirectory(dir string, fn WatchCallback, opts ...WatchOption) (Watch, error)
+	// WatchDirectories watches multiple directories as a batch. It has the
+	// same semantics as calling [Watcher.WatchDirectory] for each request, but
+	// lets backends arm the underlying OS watches once for the whole batch.
+	// Returned watches are in the same order as requests.
+	WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, error)
 	// WatchFile watches a single file for changes, calling fn with
 	// batched events. path must be an absolute path. The file does not
 	// need to exist at subscribe time; its creation will be reported.
@@ -91,6 +96,14 @@ type Watcher interface {
 // WatchOption configures a watch.
 type WatchOption interface {
 	applyWatchOption(opts *watchOptions)
+}
+
+// WatchDirectoryRequest describes one directory subscription in a
+// [Watcher.WatchDirectories] batch.
+type WatchDirectoryRequest struct {
+	Dir      string
+	Callback WatchCallback
+	Options  []WatchOption
 }
 
 type watchOptions struct {
@@ -361,39 +374,86 @@ func (w *watcher) removeDirWatch(dw *dirWatch) {
 }
 
 func (w *watcher) WatchDirectory(dir string, fn WatchCallback, opts ...WatchOption) (Watch, error) {
-	if fn == nil {
-		return nil, errNilCallback
+	watches, err := w.WatchDirectories([]WatchDirectoryRequest{{
+		Dir:      dir,
+		Callback: fn,
+		Options:  opts,
+	}})
+	if err != nil {
+		return nil, err
 	}
+	return watches[0], nil
+}
+
+func (w *watcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, error) {
 	if !w.Available() {
 		return nil, ErrUnavailable
 	}
-	dir = filepath.Clean(dir)
-	if !filepath.IsAbs(dir) {
-		return nil, errNotAbsolute
-	}
-	dir = canonicalizePath(dir)
-	physicalDir := physicalDirFor(dir)
-
-	var sopts watchOptions
-	for _, o := range opts {
-		o.applyWatchOption(&sopts)
+	if len(requests) == 0 {
+		return nil, nil
 	}
 
-	dw := w.getOrCreateDirWatch(dir, physicalDir, sopts.recursive)
-	id, _ := dw.watch(dir, sopts.recursive, fn, sopts.ignore)
+	type preparedWatch struct {
+		dw        *dirWatch
+		id        uint64
+		recursive bool
+		dir       string
+	}
+	prepared := make([]preparedWatch, 0, len(requests))
+	uniqueDirWatches := make([]*dirWatch, 0, len(requests))
+	seenDirWatches := make(map[*dirWatch]struct{}, len(requests))
+	rollback := func() {
+		for i := len(prepared) - 1; i >= 0; i-- {
+			p := prepared[i]
+			p.dw.unwatch(p.id)
+			p.dw.unref(w)
+		}
+	}
+
+	for _, request := range requests {
+		dir := request.Dir
+		fn := request.Callback
+		if fn == nil {
+			rollback()
+			return nil, errNilCallback
+		}
+		dir = filepath.Clean(dir)
+		if !filepath.IsAbs(dir) {
+			rollback()
+			return nil, errNotAbsolute
+		}
+		dir = canonicalizePath(dir)
+		physicalDir := physicalDirFor(dir)
+
+		var sopts watchOptions
+		for _, o := range request.Options {
+			o.applyWatchOption(&sopts)
+		}
+
+		dw := w.getOrCreateDirWatch(dir, physicalDir, sopts.recursive)
+		id, _ := dw.watch(dir, sopts.recursive, fn, sopts.ignore)
+		prepared = append(prepared, preparedWatch{dw: dw, id: id, recursive: sopts.recursive, dir: dir})
+		if _, ok := seenDirWatches[dw]; !ok {
+			seenDirWatches[dw] = struct{}{}
+			uniqueDirWatches = append(uniqueDirWatches, dw)
+		}
+	}
 
 	impl, err := w.getImpl()
 	if err != nil {
-		dw.unwatch(id)
-		dw.unref(w)
+		rollback()
 		return nil, err
 	}
-	if err := impl.watchAdd(dw); err != nil {
-		dw.unwatch(id)
-		dw.unref(w)
+	if err := impl.watchAddMany(uniqueDirWatches); err != nil {
+		rollback()
 		return nil, err
 	}
-	return &watch{w: w, dw: dw, impl: impl, id: id}, nil
+
+	watches := make([]Watch, len(prepared))
+	for i, p := range prepared {
+		watches[i] = &watch{w: w, dw: p.dw, impl: impl, id: p.id}
+	}
+	return watches, nil
 }
 
 func (w *watcher) WatchFile(path string, fn WatchCallback) (Watch, error) {
@@ -467,6 +527,7 @@ type watcherImpl interface {
 	shutdown()
 
 	watchAdd(w *dirWatch) error
+	watchAddMany(watches []*dirWatch) error
 	watchRemove(w *dirWatch)
 	handleWatcherError(err *dirWatchError)
 
@@ -538,16 +599,50 @@ func (b *watcherBase) handleStartError(err error) {
 }
 
 func (b *watcherBase) watchAdd(w *dirWatch) error {
+	return b.watchAddMany([]*dirWatch{w})
+}
+
+func (b *watcherBase) watchAddMany(watches []*dirWatch) error {
 	b.mu.Lock()
-	if _, ok := b.subscriptions[w]; ok {
+	toAdd := make([]*dirWatch, 0, len(watches))
+	for _, w := range watches {
+		if _, ok := b.subscriptions[w]; ok {
+			continue
+		}
+		toAdd = append(toAdd, w)
+	}
+	if len(toAdd) == 0 {
 		b.mu.Unlock()
 		return nil
 	}
-	if err := b.self.subscribe(w); err != nil {
+
+	if subscriber, ok := b.self.(interface {
+		subscribeMany(watches []*dirWatch) error
+	}); ok {
+		if err := subscriber.subscribeMany(toAdd); err != nil {
+			b.mu.Unlock()
+			return err
+		}
+		for _, w := range toAdd {
+			b.subscriptions[w] = struct{}{}
+		}
 		b.mu.Unlock()
-		return err
+		return nil
 	}
-	b.subscriptions[w] = struct{}{}
+
+	added := make([]*dirWatch, 0, len(toAdd))
+	for _, w := range toAdd {
+		if err := b.self.subscribe(w); err != nil {
+			for _, addedWatch := range added {
+				delete(b.subscriptions, addedWatch)
+				_ = b.self.closeWatch(addedWatch)
+			}
+			b.mu.Unlock()
+			return err
+		}
+		b.subscriptions[w] = struct{}{}
+		added = append(added, w)
+	}
 	b.mu.Unlock()
 	return nil
 }

@@ -1366,6 +1366,43 @@ func TestSubscribeMultipleDifferentDirs(t *testing.T) {
 	})
 }
 
+func TestWatchDirectoriesBatch(t *testing.T) {
+	t.Parallel()
+	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+		dir1 := newTmpDir(t)
+		dir2 := newTmpDir(t)
+		r1 := newRecorder(t)
+		r1.watcher = watcherImpl
+		r2 := newRecorder(t)
+		r2.watcher = watcherImpl
+
+		watches, err := watcherImpl.WatchDirectories([]WatchDirectoryRequest{
+			{Dir: dir1, Callback: r1.callback, Options: []WatchOption{WithRecursive()}},
+			{Dir: dir2, Callback: r2.callback, Options: []WatchOption{WithRecursive()}},
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Cleanup(func() {
+			for _, watch := range watches {
+				_ = watch.Close()
+			}
+		})
+		time.Sleep(settleSleep(watcherImpl))
+
+		f1 := subPath(dir1)
+		f2 := subPath(dir2)
+		if err := os.WriteFile(f1, []byte("a"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(f2, []byte("b"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		assertEventSequence(t, r1.next(r1.deadline()), []wantEvent{{EventUpdate, f1}})
+		assertEventSequence(t, r2.next(r2.deadline()), []wantEvent{{EventUpdate, f2}})
+	})
+}
+
 type countingWatcherImpl struct {
 	watcherBase
 	subscribed []*dirWatch

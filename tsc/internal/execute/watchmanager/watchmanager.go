@@ -17,6 +17,11 @@ type watchedDir struct {
 	recursive bool
 }
 
+type dirWatchUpdate struct {
+	dir       string
+	recursive bool
+}
+
 // WatchManager manages fswatch directory watches, event accumulation,
 // and DoCycle signaling. It is shared by the CLI watcher and the build
 // mode orchestrator.
@@ -174,14 +179,8 @@ func (wm *WatchManager) CloseAllWatches() {
 
 func (wm *WatchManager) createDirWatch(dir string, recursive bool) error {
 	entry := &watchedDir{recursive: recursive}
-	cb := func(events []fswatch.Event, err error) {
-		if err != nil && errors.Is(err, fswatch.ErrWatchTerminated) {
-			wm.handleWatchTerminated(dir, entry)
-			return
-		}
-		wm.onWatchEvents(events, err)
-	}
-	watch, err := wm.backend.WatchDirectory(dir, cb, recursive, ShouldIgnoreWatchPath)
+	request := wm.createDirWatchRequest(dir, entry)
+	watch, err := wm.backend.WatchDirectory(request.Dir, request.Callback, request.Recursive, request.Ignore)
 	if err != nil {
 		if wm.DebugLog != nil {
 			fmt.Fprintf(wm.DebugLog, "[watch] failed to watch directory %s: %v\n", dir, err)
@@ -191,6 +190,21 @@ func (wm *WatchManager) createDirWatch(dir string, recursive bool) error {
 	entry.closer = watch
 	wm.watchedDirs[dir] = entry
 	return nil
+}
+
+func (wm *WatchManager) createDirWatchRequest(dir string, entry *watchedDir) WatchDirectoryRequest {
+	return WatchDirectoryRequest{
+		Dir:       dir,
+		Recursive: entry.recursive,
+		Ignore:    ShouldIgnoreWatchPath,
+		Callback: func(events []fswatch.Event, err error) {
+			if err != nil && errors.Is(err, fswatch.ErrWatchTerminated) {
+				wm.handleWatchTerminated(dir, entry)
+				return
+			}
+			wm.onWatchEvents(events, err)
+		},
+	}
 }
 
 func (wm *WatchManager) ResolveDesiredDirs(desiredDirs map[string]bool) map[string]bool {
@@ -229,7 +243,9 @@ func (wm *WatchManager) ReconcileWatches(desiredDirs map[string]bool) error {
 		return nil
 	}
 
-	var watchErr error
+	var additions []dirWatchUpdate
+	var changes []dirWatchUpdate
+
 	core.DiffMapsFunc(
 		wm.watchedDirs,
 		desiredDirs,
@@ -238,9 +254,7 @@ func (wm *WatchManager) ReconcileWatches(desiredDirs map[string]bool) error {
 			if wm.DebugLog != nil {
 				fmt.Fprintf(wm.DebugLog, "[watch] watching directory %s (recursive=%v)\n", dir, recursive)
 			}
-			if err := wm.createDirWatch(dir, recursive); err != nil && watchErr == nil {
-				watchErr = err
-			}
+			additions = append(additions, dirWatchUpdate{dir: dir, recursive: recursive})
 		},
 		func(dir string, wd *watchedDir) {
 			if wm.DebugLog != nil {
@@ -255,12 +269,41 @@ func (wm *WatchManager) ReconcileWatches(desiredDirs map[string]bool) error {
 			}
 			wd.closer.Close()
 			delete(wm.watchedDirs, dir)
-			if err := wm.createDirWatch(dir, recursive); err != nil && watchErr == nil {
-				watchErr = err
-			}
+			changes = append(changes, dirWatchUpdate{dir: dir, recursive: recursive})
 		},
 	)
-	return watchErr
+	additions = append(additions, changes...)
+	return wm.createDirWatches(additions)
+}
+
+func (wm *WatchManager) createDirWatches(updates []dirWatchUpdate) error {
+	if len(updates) == 0 {
+		return nil
+	}
+	requests := make([]WatchDirectoryRequest, len(updates))
+	entries := make([]*watchedDir, len(updates))
+	for i, update := range updates {
+		entry := &watchedDir{recursive: update.recursive}
+		entries[i] = entry
+		requests[i] = wm.createDirWatchRequest(update.dir, entry)
+	}
+	closers, err := wm.backend.WatchDirectories(requests)
+	if err != nil {
+		for i, update := range updates {
+			if wm.DebugLog != nil {
+				fmt.Fprintf(wm.DebugLog, "[watch] failed to watch directory %s: %v\n", update.dir, err)
+			}
+			if i < len(closers) && closers[i] != nil {
+				closers[i].Close()
+			}
+		}
+		return err
+	}
+	for i, update := range updates {
+		entries[i].closer = closers[i]
+		wm.watchedDirs[update.dir] = entries[i]
+	}
+	return nil
 }
 
 func IsDirCoveredByWatch(dirs map[string]bool, dir string, opts tspath.ComparePathsOptions) bool {
