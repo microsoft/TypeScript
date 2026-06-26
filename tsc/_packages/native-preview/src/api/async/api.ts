@@ -1149,7 +1149,11 @@ export class Checker {
         } as TypePredicate;
     }
 
-    async getBaseTypes(type: Type): Promise<readonly Type[]> {
+    /**
+     * Get the base types of a class or interface type. A type with no base types
+     * yields an empty array.
+     */
+    async getBaseTypes(type: InterfaceType): Promise<readonly Type[]> {
         const data = await this.client.apiRequest<TypeResponse[] | null>("getBaseTypes", {
             snapshot: this.snapshotId,
             project: this.projectId,
@@ -1191,7 +1195,11 @@ export class Checker {
         }));
     }
 
-    async getConstraintOfTypeParameter(type: Type): Promise<Type | undefined> {
+    /**
+     * Get the constraint of a type parameter (the `T` in `<U extends T>`), or
+     * undefined if it has none.
+     */
+    async getConstraintOfTypeParameter(type: TypeParameter): Promise<Type | undefined> {
         const data = await this.client.apiRequest<TypeResponse | null>("getConstraintOfTypeParameter", {
             snapshot: this.snapshotId,
             project: this.projectId,
@@ -1300,7 +1308,10 @@ export class Checker {
         });
     }
 
-    async getTypeArguments(type: Type): Promise<readonly Type[]> {
+    /**
+     * Get the type arguments of a type reference (e.g. the `string` in `Array<string>`).
+     */
+    async getTypeArguments(type: TypeReference): Promise<readonly Type[]> {
         const data = await this.client.apiRequest<TypeResponse[] | null>("getTypeArguments", {
             snapshot: this.snapshotId,
             project: this.projectId,
@@ -1517,20 +1528,26 @@ class TypeObject implements Type {
         return this.objectRegistry.fetchType(this, "getRegularTypeOfType", this.regularType);
     }
 
-    async getTypes(): Promise<readonly Type[]> {
+    async getTypes(): Promise<readonly Type[] | undefined> {
+        // Only union, intersection, and template literal types have constituent
+        // types; any other kind has none, so return undefined rather than sending
+        // a request the server cannot satisfy.
+        if (!(this.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral))) {
+            return undefined;
+        }
         return this.objectRegistry.fetchTypes(this, "getTypesOfType");
     }
 
-    async getTypeParameters(): Promise<readonly Type[]> {
-        return this.objectRegistry.fetchTypes(this, "getTypeParametersOfType", this.typeParameters);
+    async getTypeParameters(): Promise<readonly TypeParameter[]> {
+        return this.objectRegistry.fetchTypes(this, "getTypeParametersOfType", this.typeParameters) as Promise<readonly TypeParameter[]>;
     }
 
-    async getOuterTypeParameters(): Promise<readonly Type[]> {
-        return this.objectRegistry.fetchTypes(this, "getOuterTypeParametersOfType", this.outerTypeParameters);
+    async getOuterTypeParameters(): Promise<readonly TypeParameter[]> {
+        return this.objectRegistry.fetchTypes(this, "getOuterTypeParametersOfType", this.outerTypeParameters) as Promise<readonly TypeParameter[]>;
     }
 
-    async getLocalTypeParameters(): Promise<readonly Type[]> {
-        return this.objectRegistry.fetchTypes(this, "getLocalTypeParametersOfType", this.localTypeParameters);
+    async getLocalTypeParameters(): Promise<readonly TypeParameter[]> {
+        return this.objectRegistry.fetchTypes(this, "getLocalTypeParametersOfType", this.localTypeParameters) as Promise<readonly TypeParameter[]>;
     }
 
     async getAliasTypeArguments(): Promise<readonly Type[]> {
@@ -1740,8 +1757,8 @@ export class Signature {
         this.target = data.target;
     }
 
-    async getTypeParameters(): Promise<readonly Type[]> {
-        return this.objectRegistry.fetchTypes(this, "getTypeParametersOfSignature", this.typeParameters);
+    async getTypeParameters(): Promise<readonly TypeParameter[]> {
+        return this.objectRegistry.fetchTypes(this, "getTypeParametersOfSignature", this.typeParameters) as Promise<readonly TypeParameter[]>;
     }
 
     async getParameters(): Promise<readonly Symbol[]> {

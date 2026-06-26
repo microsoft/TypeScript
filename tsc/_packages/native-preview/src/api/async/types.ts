@@ -130,11 +130,11 @@ export interface TypeReference extends ObjectType {
 /** Interface types — classes and interfaces (ObjectFlags.ClassOrInterface) */
 export interface InterfaceType extends TypeReference {
     /** Get all type parameters (outer + local, excluding thisType) */
-    getTypeParameters(): Promise<readonly Type[]>;
+    getTypeParameters(): Promise<readonly TypeParameter[]>;
     /** Get outer type parameters from enclosing declarations */
-    getOuterTypeParameters(): Promise<readonly Type[]>;
+    getOuterTypeParameters(): Promise<readonly TypeParameter[]>;
     /** Get local type parameters declared on this interface/class */
-    getLocalTypeParameters(): Promise<readonly Type[]>;
+    getLocalTypeParameters(): Promise<readonly TypeParameter[]>;
 }
 
 /** Tuple types (ObjectFlags.Tuple) */

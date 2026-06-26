@@ -1157,7 +1157,11 @@ export class Checker {
         } as TypePredicate;
     }
 
-    getBaseTypes(type: Type): readonly Type[] {
+    /**
+     * Get the base types of a class or interface type. A type with no base types
+     * yields an empty array.
+     */
+    getBaseTypes(type: InterfaceType): readonly Type[] {
         const data = this.client.apiRequest<TypeResponse[] | null>("getBaseTypes", {
             snapshot: this.snapshotId,
             project: this.projectId,
@@ -1199,7 +1203,11 @@ export class Checker {
         }));
     }
 
-    getConstraintOfTypeParameter(type: Type): Type | undefined {
+    /**
+     * Get the constraint of a type parameter (the `T` in `<U extends T>`), or
+     * undefined if it has none.
+     */
+    getConstraintOfTypeParameter(type: TypeParameter): Type | undefined {
         const data = this.client.apiRequest<TypeResponse | null>("getConstraintOfTypeParameter", {
             snapshot: this.snapshotId,
             project: this.projectId,
@@ -1308,7 +1316,10 @@ export class Checker {
         });
     }
 
-    getTypeArguments(type: Type): readonly Type[] {
+    /**
+     * Get the type arguments of a type reference (e.g. the `string` in `Array<string>`).
+     */
+    getTypeArguments(type: TypeReference): readonly Type[] {
         const data = this.client.apiRequest<TypeResponse[] | null>("getTypeArguments", {
             snapshot: this.snapshotId,
             project: this.projectId,
@@ -1525,20 +1536,26 @@ class TypeObject implements Type {
         return this.objectRegistry.fetchType(this, "getRegularTypeOfType", this.regularType);
     }
 
-    getTypes(): readonly Type[] {
+    getTypes(): readonly Type[] | undefined {
+        // Only union, intersection, and template literal types have constituent
+        // types; any other kind has none, so return undefined rather than sending
+        // a request the server cannot satisfy.
+        if (!(this.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral))) {
+            return undefined;
+        }
         return this.objectRegistry.fetchTypes(this, "getTypesOfType");
     }
 
-    getTypeParameters(): readonly Type[] {
-        return this.objectRegistry.fetchTypes(this, "getTypeParametersOfType", this.typeParameters);
+    getTypeParameters(): readonly TypeParameter[] {
+        return this.objectRegistry.fetchTypes(this, "getTypeParametersOfType", this.typeParameters) as readonly TypeParameter[];
     }
 
-    getOuterTypeParameters(): readonly Type[] {
-        return this.objectRegistry.fetchTypes(this, "getOuterTypeParametersOfType", this.outerTypeParameters);
+    getOuterTypeParameters(): readonly TypeParameter[] {
+        return this.objectRegistry.fetchTypes(this, "getOuterTypeParametersOfType", this.outerTypeParameters) as readonly TypeParameter[];
     }
 
-    getLocalTypeParameters(): readonly Type[] {
-        return this.objectRegistry.fetchTypes(this, "getLocalTypeParametersOfType", this.localTypeParameters);
+    getLocalTypeParameters(): readonly TypeParameter[] {
+        return this.objectRegistry.fetchTypes(this, "getLocalTypeParametersOfType", this.localTypeParameters) as readonly TypeParameter[];
     }
 
     getAliasTypeArguments(): readonly Type[] {
@@ -1748,8 +1765,8 @@ export class Signature {
         this.target = data.target;
     }
 
-    getTypeParameters(): readonly Type[] {
-        return this.objectRegistry.fetchTypes(this, "getTypeParametersOfSignature", this.typeParameters);
+    getTypeParameters(): readonly TypeParameter[] {
+        return this.objectRegistry.fetchTypes(this, "getTypeParametersOfSignature", this.typeParameters) as readonly TypeParameter[];
     }
 
     getParameters(): readonly Symbol[] {

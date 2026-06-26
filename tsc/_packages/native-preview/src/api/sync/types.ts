@@ -138,11 +138,11 @@ export interface TypeReference extends ObjectType {
 /** Interface types — classes and interfaces (ObjectFlags.ClassOrInterface) */
 export interface InterfaceType extends TypeReference {
     /** Get all type parameters (outer + local, excluding thisType) */
-    getTypeParameters(): readonly Type[];
+    getTypeParameters(): readonly TypeParameter[];
     /** Get outer type parameters from enclosing declarations */
-    getOuterTypeParameters(): readonly Type[];
+    getOuterTypeParameters(): readonly TypeParameter[];
     /** Get local type parameters declared on this interface/class */
-    getLocalTypeParameters(): readonly Type[];
+    getLocalTypeParameters(): readonly TypeParameter[];
 }
 
 /** Tuple types (ObjectFlags.Tuple) */

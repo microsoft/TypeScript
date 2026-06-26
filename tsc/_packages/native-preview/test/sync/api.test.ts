@@ -50,6 +50,7 @@ import {
     type FreshableType,
     type IndexedAccessType,
     type IndexType,
+    type InterfaceType,
     type IntrinsicType,
     type LiteralType,
     ModifierFlags,
@@ -1430,6 +1431,37 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
         }
     });
 
+    test("UnionOrIntersectionType.getTypes() on a wrongly-cast type returns undefined without hitting the server", () => {
+        const src = `export const s: string = ""; export const u: string | number = "";`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+
+            // `string` is neither a union/intersection nor a template literal type,
+            // so it has no constituent types. The client guards on the type's flags
+            // and returns undefined without ever sending a request the server cannot satisfy.
+            const sSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("s:"));
+            assert.ok(sSymbol);
+            const sType = project.checker.getTypeOfSymbol(sSymbol);
+            assert.ok(sType);
+            assert.equal((sType as unknown as UnionOrIntersectionType).getTypes(), undefined);
+
+            // A real union still returns its constituents.
+            const uSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("u:"));
+            assert.ok(uSymbol);
+            const uType = project.checker.getTypeOfSymbol(uSymbol);
+            assert.ok(uType);
+            assert.equal(((uType as UnionOrIntersectionType).getTypes()).length, 2);
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("IndexType.getTarget() returns the target type", () => {
         const api = spawnAPI(typeFiles);
         try {
@@ -2417,7 +2449,7 @@ export class Derived extends Base {
             assert.ok(symbol);
             const type = project.checker.getDeclaredTypeOfSymbol(symbol);
             assert.ok(type);
-            const baseTypes = project.checker.getBaseTypes(type);
+            const baseTypes = project.checker.getBaseTypes(type as InterfaceType);
             assert.ok(baseTypes.length > 0, "Should have at least one base type");
             const baseSymbol = baseTypes[0].getSymbol();
             assert.ok(baseSymbol);
@@ -2449,7 +2481,7 @@ export interface Dog extends Animal {
             assert.ok(symbol);
             const type = project.checker.getDeclaredTypeOfSymbol(symbol);
             assert.ok(type);
-            const baseTypes = project.checker.getBaseTypes(type);
+            const baseTypes = project.checker.getBaseTypes(type as InterfaceType);
             assert.ok(baseTypes.length > 0, "Should have at least one base type");
             const baseSymbol = baseTypes[0].getSymbol();
             assert.ok(baseSymbol);
@@ -2479,7 +2511,9 @@ export type BoxOfString = Box<string>;
             assert.ok(typeAlias);
             const type = project.checker.getTypeAtLocation(typeAlias);
             assert.ok(type);
-            const baseTypes = project.checker.getBaseTypes(type);
+            // A generic interface instantiation produces a type reference, not an
+            // interface type, so it has no base types and yields [].
+            const baseTypes = project.checker.getBaseTypes(type as InterfaceType);
             assert.deepEqual(baseTypes, []);
         }
         finally {
@@ -2630,9 +2664,41 @@ describe("Checker - getTypeArguments", () => {
             assert.ok(symbol);
             const type = project.checker.getTypeOfSymbol(symbol);
             assert.ok(type);
-            const typeArgs = project.checker.getTypeArguments(type);
+            const typeArgs = project.checker.getTypeArguments(type as TypeReference);
             assert.ok(typeArgs.length > 0, "Should have type arguments");
             assert.ok(typeArgs[0].flags & TypeFlags.Number, `Expected number type argument, got flags ${typeArgs[0].flags}`);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("a wrongly-typed call throws on the client without taking down the server", () => {
+        const src = `export const s: string = ""; export const arr: Array<number> = [1];`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+
+            // `string` is not a type reference. When getTypeArguments is reached
+            // with one, the server panics, but the per-request panic recovery
+            // converts that into an error response rather than crashing the process.
+            const sSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("s:"));
+            assert.ok(sSymbol);
+            const sType = project.checker.getTypeOfSymbol(sSymbol);
+            assert.ok(sType);
+            assert.throws(() => project.checker.getTypeArguments(sType as unknown as TypeReference));
+
+            // The server survived: a subsequent valid request still succeeds.
+            const arrSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("arr:"));
+            assert.ok(arrSymbol);
+            const arrType = project.checker.getTypeOfSymbol(arrSymbol);
+            assert.ok(arrType);
+            const typeArgs = project.checker.getTypeArguments(arrType as TypeReference);
+            assert.ok(typeArgs.length > 0, "Server should still serve valid requests");
         }
         finally {
             api.close();
