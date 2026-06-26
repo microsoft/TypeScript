@@ -43,4 +43,8 @@ declare namespace Intl {
         formatRange(start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral): string;
         formatRangeToParts(start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral): NumberRangeFormatPart[];
     }
+
+    interface PluralRules {
+        selectRange(start: number, end: number): LDMLPluralRule;
+    }
 }
