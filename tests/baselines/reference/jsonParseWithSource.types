@@ -1,0 +1,161 @@
+//// [tests/cases/compiler/jsonParseWithSource.ts] ////
+
+=== jsonParseWithSource.ts ===
+// JSON.rawJSON
+const raw = JSON.rawJSON("123");
+>raw : RawJSON
+>    : ^^^^^^^
+>JSON.rawJSON("123") : RawJSON
+>                    : ^^^^^^^
+>JSON.rawJSON : (text: string) => RawJSON
+>             : ^    ^^      ^^^^^       
+>JSON : JSON
+>     : ^^^^
+>rawJSON : (text: string) => RawJSON
+>        : ^    ^^      ^^^^^       
+>"123" : "123"
+>      : ^^^^^
+
+const rawStr: string = raw.rawJSON;
+>rawStr : string
+>       : ^^^^^^
+>raw.rawJSON : string
+>            : ^^^^^^
+>raw : RawJSON
+>    : ^^^^^^^
+>rawJSON : string
+>        : ^^^^^^
+
+JSON.stringify({ value: raw });
+>JSON.stringify({ value: raw }) : string
+>                               : ^^^^^^
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>               : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^      ^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^      ^^^
+>JSON : JSON
+>     : ^^^^
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>          : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^      ^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^      ^^^
+>{ value: raw } : { value: RawJSON; }
+>               : ^^^^^^^^^^^^^^^^^^^
+>value : RawJSON
+>      : ^^^^^^^
+>raw : RawJSON
+>    : ^^^^^^^
+
+JSON.stringify({ n: JSON.rawJSON("12345678901234567890") });
+>JSON.stringify({ n: JSON.rawJSON("12345678901234567890") }) : string
+>                                                            : ^^^^^^
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>               : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^      ^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^      ^^^
+>JSON : JSON
+>     : ^^^^
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>          : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^      ^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^      ^^^
+>{ n: JSON.rawJSON("12345678901234567890") } : { n: RawJSON; }
+>                                            : ^^^^^^^^^^^^^^^
+>n : RawJSON
+>  : ^^^^^^^
+>JSON.rawJSON("12345678901234567890") : RawJSON
+>                                     : ^^^^^^^
+>JSON.rawJSON : (text: string) => RawJSON
+>             : ^    ^^      ^^^^^       
+>JSON : JSON
+>     : ^^^^
+>rawJSON : (text: string) => RawJSON
+>        : ^    ^^      ^^^^^       
+>"12345678901234567890" : "12345678901234567890"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
+
+// JSON.isRawJSON
+const maybeRaw: unknown = {};
+>maybeRaw : unknown
+>         : ^^^^^^^
+>{} : {}
+>   : ^^
+
+if (JSON.isRawJSON(maybeRaw)) {
+>JSON.isRawJSON(maybeRaw) : boolean
+>                         : ^^^^^^^
+>JSON.isRawJSON : (value: unknown) => value is RawJSON
+>               : ^     ^^       ^^^^^                
+>JSON : JSON
+>     : ^^^^
+>isRawJSON : (value: unknown) => value is RawJSON
+>          : ^     ^^       ^^^^^                
+>maybeRaw : unknown
+>         : ^^^^^^^
+
+    const text: string = maybeRaw.rawJSON;
+>text : string
+>     : ^^^^^^
+>maybeRaw.rawJSON : string
+>                 : ^^^^^^
+>maybeRaw : RawJSON
+>         : ^^^^^^^
+>rawJSON : string
+>        : ^^^^^^
+}
+
+// JSON.parse with reviver context
+JSON.parse('{"key":123}', (key, value, context) => {
+>JSON.parse('{"key":123}', (key, value, context) => {    const src: string = context.source;    return value;}) : any
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver: (this: any, key: string, value: any, context: { source: string; }) => any): any; }
+>           : ^^^    ^^      ^^       ^^^                                           ^^^   ^^^    ^^      ^^       ^^                                                                         ^^^   ^^^
+>JSON : JSON
+>     : ^^^^
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver: (this: any, key: string, value: any, context: { source: string; }) => any): any; }
+>      : ^^^    ^^      ^^       ^^^                                           ^^^   ^^^    ^^      ^^       ^^                                                                         ^^^   ^^^
+>'{"key":123}' : "{\"key\":123}"
+>              : ^^^^^^^^^^^^^^^
+>(key, value, context) => {    const src: string = context.source;    return value;} : (this: any, key: string, value: any, context: { source: string; }) => any
+>                                                                                    : ^    ^^   ^^   ^^^^^^^^^^     ^^^^^^^       ^^^^^^^^^^^^      ^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>value : any
+>context : { source: string; }
+>        : ^^^^^^^^^^      ^^^
+
+    const src: string = context.source;
+>src : string
+>    : ^^^^^^
+>context.source : string
+>               : ^^^^^^
+>context : { source: string; }
+>        : ^^^^^^^^^^      ^^^
+>source : string
+>       : ^^^^^^
+
+    return value;
+>value : any
+
+});
+
+// Existing JSON.parse overloads still work
+JSON.parse("{}");
+>JSON.parse("{}") : any
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver: (this: any, key: string, value: any, context: { source: string; }) => any): any; }
+>           : ^^^    ^^      ^^       ^^^                                           ^^^   ^^^    ^^      ^^       ^^                                                                         ^^^   ^^^
+>JSON : JSON
+>     : ^^^^
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver: (this: any, key: string, value: any, context: { source: string; }) => any): any; }
+>      : ^^^    ^^      ^^       ^^^                                           ^^^   ^^^    ^^      ^^       ^^                                                                         ^^^   ^^^
+>"{}" : "{}"
+>     : ^^^^
+
+JSON.parse('{"a":1}', (key, value) => value);
+>JSON.parse('{"a":1}', (key, value) => value) : any
+>JSON.parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver: (this: any, key: string, value: any, context: { source: string; }) => any): any; }
+>           : ^^^    ^^      ^^       ^^^                                           ^^^   ^^^    ^^      ^^       ^^                                                                         ^^^   ^^^
+>JSON : JSON
+>     : ^^^^
+>parse : { (text: string, reviver?: (this: any, key: string, value: any) => any): any; (text: string, reviver: (this: any, key: string, value: any, context: { source: string; }) => any): any; }
+>      : ^^^    ^^      ^^       ^^^                                           ^^^   ^^^    ^^      ^^       ^^                                                                         ^^^   ^^^
+>'{"a":1}' : "{\"a\":1}"
+>          : ^^^^^^^^^^^
+>(key, value) => value : (this: any, key: string, value: any) => any
+>                      : ^    ^^   ^^   ^^^^^^^^^^     ^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>value : any
+>value : any
+
