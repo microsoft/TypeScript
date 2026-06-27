@@ -33,7 +33,7 @@
         "vendor"
     ],
     "bin": {
-        "tsgo": "./bin/tsgo.js"
+        "tsgo": "./bin/tsgo"
     },
     "exports": {
         "./package.json": "./package.json",

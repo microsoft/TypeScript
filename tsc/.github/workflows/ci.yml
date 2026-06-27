@@ -359,6 +359,8 @@ jobs:
 
       - run: npx hereby check:scripts
 
+      - run: npx hereby native-preview:check-platforms
+
   required:
     runs-on: ubuntu-slim
     if: ${{ always() }}

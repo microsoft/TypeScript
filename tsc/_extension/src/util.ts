@@ -128,22 +128,35 @@ export function resolveTsdkPath(tsdkPath: string): string {
 }
 
 export async function resolveTsdkPathToExe(tsdkPath: string): Promise<{ path: string; version: string; } | undefined> {
-    if (tsdkPath.endsWith("/@typescript/native-preview") || tsdkPath.endsWith("\\@typescript\\native-preview")) {
+    const resolved = workspaceResolve(tsdkPath);
+    for (const packagePath of [resolved, vscode.Uri.joinPath(resolved, "..")]) {
         try {
-            const packagePath = workspaceResolve(tsdkPath);
             const packageJsonPath = vscode.Uri.joinPath(packagePath, "package.json");
             const packageJson = JSON.parse(await vscode.workspace.fs.readFile(packageJsonPath).then(buffer => buffer.toString()));
             // NOTE: Keep in sync with _packages/native-preview/lib/getExePath.js.
-            const exeName = `tsgo${process.platform === "win32" ? ".exe" : ""}`;
-            const platformPackage = `native-preview-${process.platform}-${process.arch}`;
-            const exePath = vscode.Uri.joinPath(packagePath, "..", platformPackage, "lib", exeName);
+            const name: unknown = packageJson.name;
+            const bin: unknown = packageJson.bin;
+            if (typeof name !== "string" || !bin || typeof bin !== "object") continue;
+
+            const baseName = name.startsWith("@") ? name.split("/")[1] : name;
+            if (!baseName) continue;
+            const expectedBinName = baseName === "typescript" ? "tsc" : "tsgo";
+            const binNames = Object.keys(bin);
+            if (binNames.length !== 1 || binNames[0] !== expectedBinName) continue;
+
+            const exeName = `${expectedBinName}${process.platform === "win32" ? ".exe" : ""}`;
+            const platformPackage = `${baseName}-${process.platform}-${process.arch}`;
+            const nodeModules = name.startsWith("@")
+                ? vscode.Uri.joinPath(packagePath, "..", "..")
+                : vscode.Uri.joinPath(packagePath, "..");
+            const exePath = vscode.Uri.joinPath(nodeModules, "@typescript", platformPackage, "lib", exeName);
             await vscode.workspace.fs.stat(exePath);
-            return { path: withLongPathPrefix(exePath.fsPath), version: packageJson.version };
+            return { path: withLongPathPrefix(exePath.fsPath), version: typeof packageJson.version === "string" ? packageJson.version : "unknown" };
         }
         catch {}
     }
     try {
-        const exePath = workspaceResolve(path.join(tsdkPath, `tsgo${process.platform === "win32" ? ".exe" : ""}`));
+        const exePath = vscode.Uri.joinPath(resolved, `tsgo${process.platform === "win32" ? ".exe" : ""}`);
         await vscode.workspace.fs.stat(exePath);
         return { path: withLongPathPrefix(exePath.fsPath), version: "(local)" };
     }
