@@ -28895,7 +28895,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (flags & FlowFlags.BranchLabel) {
                 // A branching point is reachable if any branch is reachable.
-                return some((flow as FlowLabel).antecedent, f => isReachableFlowNodeWorker(f, /*noCacheCheck*/ false));
+                // Use explicit worklist to avoid stack overflow on deeply nested flow graphs.
+                const antecedents = (flow as FlowLabel).antecedent;
+                const worklist = antecedents ? [...antecedents] : [];
+                while (worklist.length > 0) {
+                    const node = worklist.pop()!;
+                    if (node.flags & FlowFlags.BranchLabel) {
+                        const ant = (node as FlowLabel).antecedent;
+                        if (ant) worklist.push(...ant);
+                    }
+                    else if (isReachableFlowNodeWorker(node, /*noCacheCheck*/ false)) {
+                        return true;
+                    }
+                }
+                return false;
             }
             else if (flags & FlowFlags.LoopLabel) {
                 const antecedents = (flow as FlowLabel).antecedent;
