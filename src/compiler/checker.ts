@@ -28897,12 +28897,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // A branching point is reachable if any branch is reachable.
                 // Use explicit worklist to avoid stack overflow on deeply nested flow graphs.
                 const antecedents = (flow as FlowLabel).antecedent;
-                const worklist = antecedents ? [...antecedents] : [];
+                const worklist: FlowNode[] = antecedents ? [...antecedents] : [];
                 while (worklist.length > 0) {
                     const node = worklist.pop()!;
                     if (node.flags & FlowFlags.BranchLabel) {
                         const ant = (node as FlowLabel).antecedent;
-                        if (ant) worklist.push(...ant);
+                        if (ant) {
+                            for (let i = ant.length - 1; i >= 0; i--) {
+                                const a = ant[i];
+                                if (a.flags & FlowFlags.Shared) {
+                                    const id = getFlowNodeId(a);
+                                    const reachable = flowNodeReachable[id];
+                                    if (reachable !== undefined) {
+                                        if (reachable) return true;
+                                        continue;
+                                    }
+                                }
+                                worklist.push(a);
+                            }
+                        }
                     }
                     else if (isReachableFlowNodeWorker(node, /*noCacheCheck*/ false)) {
                         return true;

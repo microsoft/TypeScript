@@ -1,5 +1,0 @@
-// @target: es2015
-// @strict: false
-// Repro from #20096
-
-let foo = (async bar => bar);

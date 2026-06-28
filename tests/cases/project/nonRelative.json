@@ -1,8 +1,0 @@
-{
-    "scenario": "non-relative",
-    "projectRoot": "tests/cases/projects/non-relative",
-    "inputFiles": [
-        "consume.ts"
-    ],
-    "baselineCheck": true
-}

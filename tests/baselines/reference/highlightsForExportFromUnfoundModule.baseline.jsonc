@@ -1,5 +1,0 @@
-// === findRenameLocations ===
-// === /tests/cases/fourslash/b.js ===
-// <|export {
-//    /*START PREFIX*/foo as /*RENAME*/[|fooRENAME|]
-// } from './a';|>

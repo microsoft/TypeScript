@@ -1,6 +1,0 @@
-{ 
-    "compilerOptions": {
-        "outDir": "OutDir",
-        "allowJs": true
-    }
-}

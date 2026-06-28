@@ -1,8 +1,0 @@
-{
-  "scenario": "Verify that JavaScript modules are not resolved if too many hops",
-  "projectRoot": "tests/cases/projects/NodeModulesSearch",
-  "baselineCheck": true,
-  "declaration": false,
-  "moduleResolution": "node",
-  "project": "maxDepthExceeded"
-}

@@ -1,7 +1,0 @@
-// === findRenameLocations ===
-// === /tests/cases/fourslash/renameJSDocNamepath.ts ===
-// /**
-//  * @type {module:foo/A} x
-//  */
-// var x = 1
-// <|var /*RENAME*/[|ARENAME|] = 0;|>

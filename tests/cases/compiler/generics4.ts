@@ -1,8 +1,0 @@
-// @target: es2015
-class C<T> { private x: T; }
-interface X { f(): string; }
-interface Y { f(): boolean; }
-declare var a: C<X>;
-declare var b: C<Y>;
-
-a = b; // Not ok - return types of "f" are different

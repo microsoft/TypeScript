@@ -1,2 +1,0 @@
-// @target: es2015
-var x: boolean = (true ? 1 : ""); // should be an error

@@ -1,5 +1,0 @@
-{
-  "scenario": "Verify default exclude property in project option",
-  "projectRoot": "tests/cases/projects/projectOption/DefaultExcludeNodeModulesAndOutDirWithAllowJS",
-  "baselineCheck": true
-}

@@ -1,7 +1,0 @@
-redefineArray.ts(1,1): error TS2739: Type '(n: number, s: string) => number' is missing the following properties from type 'ArrayConstructor': isArray, from, of, [Symbol.species]
-
-
-==== redefineArray.ts (1 errors) ====
-    Array = function (n:number, s:string) {return n;};
-    ~~~~~
-!!! error TS2739: Type '(n: number, s: string) => number' is missing the following properties from type 'ArrayConstructor': isArray, from, of, [Symbol.species]

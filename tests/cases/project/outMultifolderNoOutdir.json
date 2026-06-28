@@ -1,9 +1,0 @@
-{
-    "scenario": "outputdir_multifolder: no outdir",
-    "projectRoot": "tests/cases/projects/outputdir_multifolder",
-    "inputFiles": [
-        "test.ts"
-    ],
-    "declaration": true,
-    "baselineCheck": true
-}

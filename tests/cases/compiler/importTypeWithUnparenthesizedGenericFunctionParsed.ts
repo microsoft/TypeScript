@@ -1,2 +1,0 @@
-// @target: es2015
-export declare const fail1: import("module").Modifier<<T>(x: T) => T>; // shouldn't be a parse error

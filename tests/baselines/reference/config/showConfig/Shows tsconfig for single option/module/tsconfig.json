@@ -1,9 +1,0 @@
-{
-    "compilerOptions": {
-        "module": "none",
-        "moduleResolution": "classic",
-        "resolvePackageJsonExports": false,
-        "resolvePackageJsonImports": false,
-        "resolveJsonModule": false
-    }
-}

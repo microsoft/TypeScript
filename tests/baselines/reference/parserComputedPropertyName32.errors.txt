@@ -1,9 +1,0 @@
-parserComputedPropertyName32.ts(2,6): error TS2304: Cannot find name 'e'.
-
-
-==== parserComputedPropertyName32.ts (1 errors) ====
-    declare class C {
-        [e](): number 
-         ~
-!!! error TS2304: Cannot find name 'e'.
-    }

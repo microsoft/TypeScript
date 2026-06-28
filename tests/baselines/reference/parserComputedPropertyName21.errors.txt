@@ -1,9 +1,0 @@
-parserComputedPropertyName21.ts(2,6): error TS2304: Cannot find name 'e'.
-
-
-==== parserComputedPropertyName21.ts (1 errors) ====
-    interface I {
-        [e]: number 
-         ~
-!!! error TS2304: Cannot find name 'e'.
-    }

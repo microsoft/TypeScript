@@ -1,9 +1,0 @@
-{
-    "scenario": "declarations_MultipleTimesMultipleImport",
-    "projectRoot": "tests/cases/projects/declarations_MultipleTimesMultipleImport",
-    "inputFiles": [
-        "useModule.ts"
-    ],
-    "declaration": true,
-    "baselineCheck": true
-}

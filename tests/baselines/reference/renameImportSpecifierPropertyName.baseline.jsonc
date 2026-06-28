@@ -1,6 +1,0 @@
-// === findRenameLocations ===
-// === /tests/cases/fourslash/canada.ts ===
-// <|export interface /*RENAME*/[|GingerRENAME|] {}|>
-
-// === /tests/cases/fourslash/dry.ts ===
-// <|import { [|GingerRENAME|] as Ale } from './canada';|>

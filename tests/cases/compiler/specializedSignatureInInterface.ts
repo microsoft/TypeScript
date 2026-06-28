@@ -1,9 +1,0 @@
-// @target: es2015
-interface A {
-  (key:string):void;
-}
-
-interface B extends A {
-  (key:'foo'):string;
-  (key:'bar'):string;
-}

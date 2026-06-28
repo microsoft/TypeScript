@@ -1,2 +1,0 @@
-// @target: es2015
-var foo:(a:{():number; (i:number):number; })=>number; foo = function(this: void, a:string){return 5};

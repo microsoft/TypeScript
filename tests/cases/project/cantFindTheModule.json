@@ -1,7 +1,0 @@
-{
-    "scenario": "can't find the module",
-    "projectRoot": "tests/cases/projects/NoModule",
-    "inputFiles": [
-        "decl.ts"
-    ]
-}

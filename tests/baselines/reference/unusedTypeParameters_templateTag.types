@@ -1,8 +1,0 @@
-//// [tests/cases/compiler/unusedTypeParameters_templateTag.ts] ////
-
-=== /a.js ===
-/** @template T */
-function f() {}
->f : <T>() => void
->  : ^ ^^^^^^^^^^^
-

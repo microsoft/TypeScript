@@ -1,6 +1,0 @@
-//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInRegularExpressions19.ts] ////
-
-=== unicodeExtendedEscapesInRegularExpressions19.ts ===
-var x = /\u{}/gu;
->x : Symbol(x, Decl(unicodeExtendedEscapesInRegularExpressions19.ts, 0, 3))
-

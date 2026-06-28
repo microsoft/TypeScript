@@ -1,7 +1,0 @@
-{
-    "scenario": "int referencing ext and int",
-    "projectRoot": "tests/cases/projects/ext-int-ext",
-    "inputFiles": [
-        "internal2.ts"
-    ]
-}

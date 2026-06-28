@@ -1,9 +1,0 @@
-undeclaredBase.ts(1,40): error TS2339: Property 'I' does not exist on type 'typeof M'.
-
-
-==== undeclaredBase.ts (1 errors) ====
-    namespace M { export class C extends M.I { } }
-                                           ~
-!!! error TS2339: Property 'I' does not exist on type 'typeof M'.
-    
-    

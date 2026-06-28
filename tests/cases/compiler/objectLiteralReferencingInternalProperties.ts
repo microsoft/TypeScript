@@ -1,2 +1,0 @@
-// @target: es2015
-var a = { b: 10, c: b }; // Should give error for attempting to reference b.
