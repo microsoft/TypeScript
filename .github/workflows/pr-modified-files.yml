@@ -17,6 +17,7 @@ concurrency:
 
 permissions:
   contents: read
+  id-token: write
 
 # Ensure scripts are run with pipefail. See:
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
@@ -27,17 +28,37 @@ defaults:
 jobs:
   manage-prs:
     runs-on: ubuntu-latest
+    environment:
+      name: azure
+      deployment: false
     if: github.repository == 'microsoft/TypeScript'
 
-    # No need to set explicit permissions; we are using typescript-bot's token, not github-actions' token.
+    # No need to set explicit permissions; we are using the GitHub App token, not github-actions' token.
 
     env:
-      GH_TOKEN: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
       PR_AUTHOR: ${{ github.event.pull_request.user.login }}
       REPO: ${{ github.repository }}
 
     steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Create GitHub App token
+        id: app-token
+        uses: microsoft/create-github-app-token-via-key-vault@5ba0d436e9c3cac52feff4d1f2f66f9698ce4a2d # v1
+        with:
+          client-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID }}
+          key-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID }}
+          owner: microsoft
+          repositories: TypeScript
+          permission-issues: write
+          permission-pull-requests: write
       - name: Check if PR author is in pr_owners.txt
         id: pr_owner
         run: |
@@ -83,7 +104,7 @@ jobs:
             FILENAME=bot_comments.txt
             if [ ! -f $FILENAME ]; then
               gh pr view $PR_NUMBER --repo $REPO \
-                --json 'comments' --jq '.comments[] | select(.author.login == "typescript-bot") | .body' > $FILENAME
+                --json 'comments' --jq '.comments[] | select(.author.login == "typescript-bot" or .author.login == "typescript-automation[bot]") | .body' > $FILENAME
             fi
             exec grep -Fq -m1 "$1" $FILENAME
           EOF
@@ -91,6 +112,8 @@ jobs:
 
       - name: Generated DOM files
         if: steps.pr_owner.outputs.pr_owner == 'false'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           if ./is_changed.sh "src/lib/dom.generated.d.ts" \
               "src/lib/dom.iterable.generated.d.ts" \
@@ -107,6 +130,8 @@ jobs:
           fi
 
       - name: Check if PR modifies protocol.ts
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           if ./is_changed.sh "src/server/protocol.ts"; then
             MESSAGE="Thanks for the PR! It looks like you've changed the TSServer protocol in some way."
@@ -122,6 +147,8 @@ jobs:
           fi
 
       - name: Check for breaking changes
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           if ./is_changed.sh "tests/baselines/reference/api/typescript.d.ts"; then
             MESSAGE="Looks like you're introducing a change to the public API surface area."
