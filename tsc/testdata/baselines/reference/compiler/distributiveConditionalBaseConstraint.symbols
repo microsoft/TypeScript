@@ -1,0 +1,207 @@
+//// [tests/cases/compiler/distributiveConditionalBaseConstraint.ts] ////
+
+=== distributiveConditionalBaseConstraint.ts ===
+// https://github.com/microsoft/TypeScript/issues/63568
+
+type Type = { values: string };
+>Type : Symbol(Type, Decl(distributiveConditionalBaseConstraint.ts, 0, 0))
+>values : Symbol(values, Decl(distributiveConditionalBaseConstraint.ts, 2, 13))
+
+type Wrapped<T extends Type> = { values: T["values"] };
+>Wrapped : Symbol(Wrapped, Decl(distributiveConditionalBaseConstraint.ts, 2, 31))
+>T : Symbol(T, Decl(distributiveConditionalBaseConstraint.ts, 4, 13))
+>Type : Symbol(Type, Decl(distributiveConditionalBaseConstraint.ts, 0, 0))
+>values : Symbol(values, Decl(distributiveConditionalBaseConstraint.ts, 4, 32))
+>T : Symbol(T, Decl(distributiveConditionalBaseConstraint.ts, 4, 13))
+
+type FromObject<Context extends Record<string, Type>, Props extends Context, Shape extends Record<keyof Props, Type> = {
+>FromObject : Symbol(FromObject, Decl(distributiveConditionalBaseConstraint.ts, 4, 55))
+>Context : Symbol(Context, Decl(distributiveConditionalBaseConstraint.ts, 6, 16))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Type : Symbol(Type, Decl(distributiveConditionalBaseConstraint.ts, 0, 0))
+>Props : Symbol(Props, Decl(distributiveConditionalBaseConstraint.ts, 6, 53))
+>Context : Symbol(Context, Decl(distributiveConditionalBaseConstraint.ts, 6, 16))
+>Shape : Symbol(Shape, Decl(distributiveConditionalBaseConstraint.ts, 6, 76))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Props : Symbol(Props, Decl(distributiveConditionalBaseConstraint.ts, 6, 53))
+>Type : Symbol(Type, Decl(distributiveConditionalBaseConstraint.ts, 0, 0))
+
+  [Key in keyof Props]: Wrapped<FromSchema<Context, Props[Key]>>;
+>Key : Symbol(Key, Decl(distributiveConditionalBaseConstraint.ts, 7, 3))
+>Props : Symbol(Props, Decl(distributiveConditionalBaseConstraint.ts, 6, 53))
+>Wrapped : Symbol(Wrapped, Decl(distributiveConditionalBaseConstraint.ts, 2, 31))
+>FromSchema : Symbol(FromSchema, Decl(distributiveConditionalBaseConstraint.ts, 8, 11))
+>Context : Symbol(Context, Decl(distributiveConditionalBaseConstraint.ts, 6, 16))
+>Props : Symbol(Props, Decl(distributiveConditionalBaseConstraint.ts, 6, 53))
+>Key : Symbol(Key, Decl(distributiveConditionalBaseConstraint.ts, 7, 3))
+
+}> = Shape;
+>Shape : Symbol(Shape, Decl(distributiveConditionalBaseConstraint.ts, 6, 76))
+
+type FromSchema<Context extends Record<string, Type>, S> =
+>FromSchema : Symbol(FromSchema, Decl(distributiveConditionalBaseConstraint.ts, 8, 11))
+>Context : Symbol(Context, Decl(distributiveConditionalBaseConstraint.ts, 10, 16))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Type : Symbol(Type, Decl(distributiveConditionalBaseConstraint.ts, 0, 0))
+>S : Symbol(S, Decl(distributiveConditionalBaseConstraint.ts, 10, 53))
+
+  S extends Type ? FromSchema<Context, Context[keyof Context]> : never;
+>S : Symbol(S, Decl(distributiveConditionalBaseConstraint.ts, 10, 53))
+>Type : Symbol(Type, Decl(distributiveConditionalBaseConstraint.ts, 0, 0))
+>FromSchema : Symbol(FromSchema, Decl(distributiveConditionalBaseConstraint.ts, 8, 11))
+>Context : Symbol(Context, Decl(distributiveConditionalBaseConstraint.ts, 10, 16))
+>Context : Symbol(Context, Decl(distributiveConditionalBaseConstraint.ts, 10, 16))
+>Context : Symbol(Context, Decl(distributiveConditionalBaseConstraint.ts, 10, 16))
+
+// https://github.com/microsoft/typescript-go/issues/4463
+
+type JSONSchema =
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+  | boolean
+  | Readonly<{
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+
+      items?: JSONSchema;
+>items : Symbol(items, Decl(distributiveConditionalBaseConstraint.ts, 17, 14))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+      additionalItems?: JSONSchema;
+>additionalItems : Symbol(additionalItems, Decl(distributiveConditionalBaseConstraint.ts, 18, 25))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+      properties?: JSONSchema;
+>properties : Symbol(properties, Decl(distributiveConditionalBaseConstraint.ts, 19, 35))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+      additionalProperties?: JSONSchema;
+>additionalProperties : Symbol(additionalProperties, Decl(distributiveConditionalBaseConstraint.ts, 20, 30))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+    }>;
+
+// Stands in for json-schema-to-ts's ParseSchema; its only role here is to impose the
+// `extends JSONSchema` constraint on whatever type it is handed.
+type ParseSchema<SCHEMA extends JSONSchema> = unknown;
+>ParseSchema : Symbol(ParseSchema, Decl(distributiveConditionalBaseConstraint.ts, 22, 7))
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 26, 17))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+type RemoveInvalidAdditionalItems<SCHEMA extends JSONSchema> = SCHEMA extends Readonly<{
+>RemoveInvalidAdditionalItems : Symbol(RemoveInvalidAdditionalItems, Decl(distributiveConditionalBaseConstraint.ts, 26, 54))
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 28, 34))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 28, 34))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+
+  items: JSONSchema;
+>items : Symbol(items, Decl(distributiveConditionalBaseConstraint.ts, 28, 88))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+}>
+  ? SCHEMA extends Readonly<{ additionalItems: JSONSchema }>
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 28, 34))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>additionalItems : Symbol(additionalItems, Decl(distributiveConditionalBaseConstraint.ts, 31, 29))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+    ? SCHEMA
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 28, 34))
+
+    : SCHEMA & Readonly<{ additionalItems: true }>
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 28, 34))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>additionalItems : Symbol(additionalItems, Decl(distributiveConditionalBaseConstraint.ts, 33, 25))
+
+  : SCHEMA extends boolean
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 28, 34))
+
+    ? SCHEMA
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 28, 34))
+
+    : Omit<SCHEMA, "additionalItems">;
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 28, 34))
+
+type RemoveInvalidAdditionalProperties<SCHEMA extends JSONSchema> = SCHEMA extends Readonly<{
+>RemoveInvalidAdditionalProperties : Symbol(RemoveInvalidAdditionalProperties, Decl(distributiveConditionalBaseConstraint.ts, 36, 38))
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 38, 39))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 38, 39))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+
+  additionalProperties: JSONSchema;
+>additionalProperties : Symbol(additionalProperties, Decl(distributiveConditionalBaseConstraint.ts, 38, 93))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+}>
+  ? SCHEMA extends Readonly<{ properties: JSONSchema }>
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 38, 39))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>properties : Symbol(properties, Decl(distributiveConditionalBaseConstraint.ts, 41, 29))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+    ? SCHEMA
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 38, 39))
+
+    : SCHEMA & Readonly<{ properties: {} }>
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 38, 39))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>properties : Symbol(properties, Decl(distributiveConditionalBaseConstraint.ts, 43, 25))
+
+  : SCHEMA extends boolean
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 38, 39))
+
+    ? SCHEMA
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 38, 39))
+
+    : Omit<SCHEMA, "additionalProperties">;
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>SCHEMA : Symbol(SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 38, 39))
+
+type MergeSubSchema<
+>MergeSubSchema : Symbol(MergeSubSchema, Decl(distributiveConditionalBaseConstraint.ts, 46, 43))
+
+  SUB_SCHEMA extends JSONSchema,
+>SUB_SCHEMA : Symbol(SUB_SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 48, 20))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+  CLEANED_SUB_SCHEMA extends JSONSchema = RemoveInvalidAdditionalProperties<
+>CLEANED_SUB_SCHEMA : Symbol(CLEANED_SUB_SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 49, 32))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+>RemoveInvalidAdditionalProperties : Symbol(RemoveInvalidAdditionalProperties, Decl(distributiveConditionalBaseConstraint.ts, 36, 38))
+
+    RemoveInvalidAdditionalItems<SUB_SCHEMA>
+>RemoveInvalidAdditionalItems : Symbol(RemoveInvalidAdditionalItems, Decl(distributiveConditionalBaseConstraint.ts, 26, 54))
+>SUB_SCHEMA : Symbol(SUB_SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 48, 20))
+
+  >,
+> = Omit<JSONSchema, keyof CLEANED_SUB_SCHEMA> & CLEANED_SUB_SCHEMA;
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+>CLEANED_SUB_SCHEMA : Symbol(CLEANED_SUB_SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 49, 32))
+>CLEANED_SUB_SCHEMA : Symbol(CLEANED_SUB_SCHEMA, Decl(distributiveConditionalBaseConstraint.ts, 49, 32))
+
+// The failing site: MergeSubSchema<SUB_SCHEMAS_HEAD> is rejected as not satisfying
+// the `extends JSONSchema` constraint on ParseSchema.
+type RecurseOnAllOfSchema<SUB_SCHEMAS extends readonly JSONSchema[]> =
+>RecurseOnAllOfSchema : Symbol(RecurseOnAllOfSchema, Decl(distributiveConditionalBaseConstraint.ts, 53, 68))
+>SUB_SCHEMAS : Symbol(SUB_SCHEMAS, Decl(distributiveConditionalBaseConstraint.ts, 57, 26))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+  SUB_SCHEMAS extends readonly [infer SUB_SCHEMAS_HEAD]
+>SUB_SCHEMAS : Symbol(SUB_SCHEMAS, Decl(distributiveConditionalBaseConstraint.ts, 57, 26))
+>SUB_SCHEMAS_HEAD : Symbol(SUB_SCHEMAS_HEAD, Decl(distributiveConditionalBaseConstraint.ts, 58, 37))
+
+    ? SUB_SCHEMAS_HEAD extends JSONSchema
+>SUB_SCHEMAS_HEAD : Symbol(SUB_SCHEMAS_HEAD, Decl(distributiveConditionalBaseConstraint.ts, 58, 37))
+>JSONSchema : Symbol(JSONSchema, Decl(distributiveConditionalBaseConstraint.ts, 11, 71))
+
+      ? ParseSchema<MergeSubSchema<SUB_SCHEMAS_HEAD>>
+>ParseSchema : Symbol(ParseSchema, Decl(distributiveConditionalBaseConstraint.ts, 22, 7))
+>MergeSubSchema : Symbol(MergeSubSchema, Decl(distributiveConditionalBaseConstraint.ts, 46, 43))
+>SUB_SCHEMAS_HEAD : Symbol(SUB_SCHEMAS_HEAD, Decl(distributiveConditionalBaseConstraint.ts, 58, 37))
+
+      : never
+    : never;
+
