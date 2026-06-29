@@ -169,15 +169,15 @@ declare namespace Intl {
         format(value: number, unit: RelativeTimeFormatUnit): string;
 
         /**
-         *  Returns an array of objects representing the relative time format in parts that can be used for custom locale-aware formatting.
+         * Returns an array of objects representing the relative time format in parts that can be used for custom locale-aware formatting.
          *
-         *  @param value - Numeric value to use in the internationalized relative time message
+         * @param value - Numeric value to use in the internationalized relative time message
          *
-         *  @param unit - [Unit](https://tc39.es/ecma402/#sec-singularrelativetimeunit) to use in the relative time internationalized message.
+         * @param unit - [Unit](https://tc39.es/ecma402/#sec-singularrelativetimeunit) to use in the relative time internationalized message.
          *
-         *  @throws `RangeError` if `unit` was given something other than `unit` possible values
+         * @throws `RangeError` if `unit` was given something other than `unit` possible values
          *
-         *  [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/formatToParts).
+         * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/formatToParts).
          */
         formatToParts(value: number, unit: RelativeTimeFormatUnit): RelativeTimeFormatPart[];
 

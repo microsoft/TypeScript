@@ -416,8 +416,8 @@ interface String {
     charAt(pos: number): string;
 
     /**
-     * Returns the Unicode value of the character at the specified location.
-     * @param index The zero-based index of the desired character. If there is no character at the specified index, NaN is returned.
+     * Returns the Unicode value of the character at the specified location, or NaN if the index is out of bounds.
+     * @param index The zero-based index of the desired character.
      */
     charCodeAt(index: number): number;
 
@@ -563,19 +563,19 @@ interface Number {
 
     /**
      * Returns a string representing a number in fixed-point notation.
-     * @param fractionDigits Number of digits after the decimal point. Must be in the range 0 - 20, inclusive.
+     * @param fractionDigits Number of digits after the decimal point. Must be in the range 0 - 100, inclusive.
      */
     toFixed(fractionDigits?: number): string;
 
     /**
      * Returns a string containing a number represented in exponential notation.
-     * @param fractionDigits Number of digits after the decimal point. Must be in the range 0 - 20, inclusive.
+     * @param fractionDigits Number of digits after the decimal point. Must be in the range 0 - 100, inclusive.
      */
     toExponential(fractionDigits?: number): string;
 
     /**
      * Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits.
-     * @param precision Number of significant digits. Must be in the range 1 - 21, inclusive.
+     * @param precision Number of significant digits. Must be in the range 1 - 100, inclusive.
      */
     toPrecision(precision?: number): string;
 
