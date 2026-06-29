@@ -340,9 +340,11 @@ Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
   /home/src/workspaces/solution
+  /home/src/workspaces/solution/projects
   /home/src/workspaces/solution/projects/server
   /home/src/workspaces/solution/projects/server/src (recursive)
   /home/src/workspaces/solution/projects/shared
+  /home/src/workspaces/solution/projects/shared/dist
   /home/src/workspaces/solution/projects/shared/dist/src
   /home/src/workspaces/solution/projects/shared/src (recursive)
 projects/shared/tsconfig.json::
@@ -376,9 +378,11 @@ Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
   /home/src/workspaces/solution
+  /home/src/workspaces/solution/projects
   /home/src/workspaces/solution/projects/server
   /home/src/workspaces/solution/projects/server/src (recursive)
   /home/src/workspaces/solution/projects/shared
+  /home/src/workspaces/solution/projects/shared/dist
   /home/src/workspaces/solution/projects/shared/dist/src
   /home/src/workspaces/solution/projects/shared/src (recursive)
 
@@ -636,9 +640,11 @@ Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
   /home/src/workspaces/solution
+  /home/src/workspaces/solution/projects
   /home/src/workspaces/solution/projects/server
   /home/src/workspaces/solution/projects/server/src (recursive)
   /home/src/workspaces/solution/projects/shared
+  /home/src/workspaces/solution/projects/shared/dist
   /home/src/workspaces/solution/projects/shared/dist/src
   /home/src/workspaces/solution/projects/shared/src (recursive)
 projects/shared/tsconfig.json::
@@ -663,9 +669,11 @@ Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
   /home/src/workspaces/solution
+  /home/src/workspaces/solution/projects
   /home/src/workspaces/solution/projects/server
   /home/src/workspaces/solution/projects/server/src (recursive)
   /home/src/workspaces/solution/projects/shared
+  /home/src/workspaces/solution/projects/shared/dist
   /home/src/workspaces/solution/projects/shared/dist/src
   /home/src/workspaces/solution/projects/shared/src (recursive)
 
@@ -879,9 +887,11 @@ Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
   /home/src/workspaces/solution
+  /home/src/workspaces/solution/projects
   /home/src/workspaces/solution/projects/server
   /home/src/workspaces/solution/projects/server/src (recursive)
   /home/src/workspaces/solution/projects/shared
+  /home/src/workspaces/solution/projects/shared/dist
   /home/src/workspaces/solution/projects/shared/dist/src
   /home/src/workspaces/solution/projects/shared/src (recursive)
 projects/shared/tsconfig.json::
@@ -902,8 +912,10 @@ Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
   /home/src/workspaces/solution
+  /home/src/workspaces/solution/projects
   /home/src/workspaces/solution/projects/server
   /home/src/workspaces/solution/projects/server/src (recursive)
   /home/src/workspaces/solution/projects/shared
+  /home/src/workspaces/solution/projects/shared/dist
   /home/src/workspaces/solution/projects/shared/dist/src
   /home/src/workspaces/solution/projects/shared/src (recursive)

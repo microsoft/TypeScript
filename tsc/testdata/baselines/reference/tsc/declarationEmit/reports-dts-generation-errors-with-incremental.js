@@ -82,7 +82,7 @@ import ky from 'ky';
 export const api = ky.extend({});
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b9b50c37c18e43d94b0dd4fb43967f10-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;","impliedNodeFormat":99},{"version":"0f5091e963c17913313e4969c59e6eb4-import ky from 'ky';\nexport const api = ky.extend({});","impliedNodeFormat":99}],"fileIdsList":[[2]],"options":{"composite":true,"declaration":true,"module":199,"skipLibCheck":true,"skipDefaultLibCheck":true},"referencedMap":[[3,1]],"emitDiagnosticsPerFile":[[3,[{"pos":34,"end":37,"code":4023,"category":1,"messageKey":"Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named_4023","messageArgs":["api","KyInstance","\"/home/src/workspaces/project/node_modules/ky/distribution/index\""]}]]],"emitSignatures":[3]}
+{"version":"FakeTSVersion","root":[3],"packageJsons":["./node_modules/ky/package.json","./package.json"],"missingPackageJsons":["./node_modules/ky/distribution/package.json"],"fileNames":["lib.es2025.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b9b50c37c18e43d94b0dd4fb43967f10-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;","impliedNodeFormat":99},{"version":"0f5091e963c17913313e4969c59e6eb4-import ky from 'ky';\nexport const api = ky.extend({});","impliedNodeFormat":99}],"fileIdsList":[[2]],"options":{"composite":true,"declaration":true,"module":199,"skipLibCheck":true,"skipDefaultLibCheck":true},"referencedMap":[[3,1]],"emitDiagnosticsPerFile":[[3,[{"pos":34,"end":37,"code":4023,"category":1,"messageKey":"Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named_4023","messageArgs":["api","KyInstance","\"/home/src/workspaces/project/node_modules/ky/distribution/index\""]}]]],"emitSignatures":[3]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -93,6 +93,13 @@ export const api = ky.extend({});
       ],
       "original": 3
     }
+  ],
+  "packageJsons": [
+    "./node_modules/ky/package.json",
+    "./package.json"
+  ],
+  "missingPackageJsons": [
+    "./node_modules/ky/distribution/package.json"
   ],
   "fileNames": [
     "lib.es2025.full.d.ts",
@@ -175,7 +182,7 @@ export const api = ky.extend({});
       "original": 3
     }
   ],
-  "size": 1706
+  "size": 1843
 }
 
 tsconfig.json::

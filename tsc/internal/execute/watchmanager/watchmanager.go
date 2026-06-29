@@ -312,7 +312,7 @@ func IsDirCoveredByWatch(dirs map[string]bool, dir string, opts tspath.ComparePa
 			if tspath.ContainsPath(wdir, dir, opts) {
 				return true
 			}
-		} else if dir == wdir {
+		} else if tspath.ComparePaths(dir, wdir, opts) == 0 {
 			return true
 		}
 	}

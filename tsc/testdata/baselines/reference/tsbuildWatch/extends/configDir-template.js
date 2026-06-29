@@ -125,6 +125,7 @@ Directory watches::
   /home/src/projects/configs/first
   /home/src/projects/configs/second
   /home/src/projects/myproject
+  /home/src/projects/myproject/types
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
@@ -184,6 +185,7 @@ Directory watches::
   /home/src/projects/configs/first
   /home/src/projects/configs/second
   /home/src/projects/myproject
+  /home/src/projects/myproject/types
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts

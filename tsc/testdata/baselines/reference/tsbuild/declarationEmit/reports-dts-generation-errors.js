@@ -91,7 +91,7 @@ import ky from 'ky';
 export const api = ky.extend({});
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":["./index.ts"]}
+{"version":"FakeTSVersion","errors":true,"root":["./index.ts"],"packageJsons":["./node_modules/ky/package.json","./package.json"],"missingPackageJsons":["./node_modules/ky/distribution/package.json"]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -104,7 +104,14 @@ export const api = ky.extend({});
       "original": "./index.ts"
     }
   ],
-  "size": 63
+  "packageJsons": [
+    "./node_modules/ky/package.json",
+    "./package.json"
+  ],
+  "missingPackageJsons": [
+    "./node_modules/ky/distribution/package.json"
+  ],
+  "size": 200
 }
 
 tsconfig.json::

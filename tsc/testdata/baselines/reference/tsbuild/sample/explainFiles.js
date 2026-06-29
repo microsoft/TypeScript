@@ -489,7 +489,7 @@ core/index.ts
    Matched by default include pattern '**/*'
 core/some_decl.d.ts
    Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is out of date because output 'logic/tsconfig.tsbuildinfo' is older than input 'core'
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is out of date because output 'logic/tsconfig.tsbuildinfo' is older than input 'core/index.d.ts'
 
 [[90mHH:MM:SS AM[0m] Building project 'logic/tsconfig.json'...
 
@@ -503,7 +503,7 @@ core/anotherModule.d.ts
    File is output of project reference source 'core/anotherModule.ts'
 logic/index.ts
    Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is out of date because output 'tests/tsconfig.tsbuildinfo' is older than input 'core'
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is out of date because output 'tests/tsconfig.tsbuildinfo' is older than input 'core/index.d.ts'
 
 [[90mHH:MM:SS AM[0m] Building project 'tests/tsconfig.json'...
 

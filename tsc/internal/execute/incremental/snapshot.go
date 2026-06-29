@@ -323,6 +323,9 @@ type snapshot struct {
 	hasSemanticErrors bool
 	// If semantic diagnostic check is pending
 	checkPending bool
+	// Looked up package.json files from
+	packageJsons        []string
+	missingPackageJsons []string
 
 	// Additional fields that are not serialized but needed to track state
 
@@ -331,6 +334,8 @@ type snapshot struct {
 	hasErrorsFromOldState                   core.Tristate
 	hasSemanticErrorsFromOldState           bool
 	allFilesExcludingDefaultLibraryFileOnce sync.Once
+	packageJsonsFromOldState                []string
+	missingPackageJsonsFromOldState         []string
 	//  Cache of all files excluding default library file for the current program
 	allFilesExcludingDefaultLibraryFile []*ast.SourceFile
 	hasChangedDtsFile                   bool

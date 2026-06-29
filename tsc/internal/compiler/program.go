@@ -152,6 +152,11 @@ func (p *Program) GetPackageJsonInfo(pkgJsonPath string) *packagejson.InfoCacheE
 	return nil
 }
 
+// PackageJsonCacheEntries iterates on all package json cache entries.
+func (p *Program) PackageJsonCacheEntries(f func(key tspath.Path, value *packagejson.InfoCacheEntry) bool) {
+	p.resolver.PackageJsonCacheEntries(f)
+}
+
 // GetRedirectTargets returns the list of file paths that redirect to the given path.
 // These are files from the same package (same name@version) installed in different locations.
 func (p *Program) GetRedirectTargets(path tspath.Path) []string {

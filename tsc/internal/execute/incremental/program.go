@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"slices"
+	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
@@ -12,6 +13,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/outputpaths"
+	"github.com/microsoft/typescript-go/internal/packagejson"
 	"github.com/microsoft/typescript-go/internal/tracing"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -290,6 +292,13 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 			p.snapshot.buildInfoEmitPending.Store(true)
 		}
 	}
+	if p.snapshot.packageJsons == nil {
+		p.ensurePackageJsonsForState()
+		if !slices.Equal(p.snapshot.packageJsons, p.snapshot.packageJsonsFromOldState) ||
+			!slices.Equal(p.snapshot.missingPackageJsons, p.snapshot.missingPackageJsonsFromOldState) {
+			p.snapshot.buildInfoEmitPending.Store(true)
+		}
+	}
 	if !p.snapshot.buildInfoEmitPending.Load() {
 		return nil
 	}
@@ -372,7 +381,7 @@ func (p *Program) ensureHasErrorsForState(ctx context.Context, program *compiler
 
 	p.snapshot.hasErrors = core.TSFalse
 	// Check semantic and emit diagnostics first as we dont need to ask program about it
-	if slices.ContainsFunc(program.GetSourceFiles(), func(file *ast.SourceFile) bool {
+	if slices.ContainsFunc(p.program.GetSourceFiles(), func(file *ast.SourceFile) bool {
 		semanticDiagnostics, ok := p.snapshot.semanticDiagnosticsPerFile.Load(file.Path())
 		if !ok {
 			// Missing semantic diagnostics in cache will be encoded in incremental buildInfo
@@ -388,4 +397,57 @@ func (p *Program) ensureHasErrorsForState(ctx context.Context, program *compiler
 		// But encode as errors in non incremental buildInfo
 		p.snapshot.hasSemanticErrors = !p.snapshot.options.IsIncremental()
 	}
+}
+
+func (p *Program) ensurePackageJsonsForState() {
+	config := tspath.GetDirectoryPath(p.program.CommandLine().ConfigName())
+	if config != "" {
+		p.program.PackageJsonCacheEntries(func(key tspath.Path, value *packagejson.InfoCacheEntry) bool {
+			if value == nil {
+				return true
+			}
+			packageJson := tspath.CombinePaths(value.PackageDirectory, "package.json")
+			if value.Exists() || value.DirectoryExists {
+				packageJson = p.program.Host().FS().Realpath(packageJson)
+			}
+			if value.Exists() {
+				p.snapshot.packageJsons = append(p.snapshot.packageJsons, packageJson)
+			} else if strings.Contains(packageJson, "/node_modules/") {
+				p.snapshot.missingPackageJsons = append(p.snapshot.missingPackageJsons, packageJson)
+			}
+			return true
+		})
+	}
+	p.snapshot.packageJsons = normalizePackageJsons(p.snapshot.packageJsons)
+	p.snapshot.missingPackageJsons = normalizePackageJsons(p.snapshot.missingPackageJsons)
+}
+
+func normalizePackageJsons(packageJsons []string) []string {
+	if packageJsons == nil {
+		return make([]string, 0)
+	}
+	slices.Sort(packageJsons)
+	return core.Deduplicate(packageJsons)
+}
+
+func (p *Program) PackageJsonLookupPaths() []string {
+	config := tspath.GetDirectoryPath(p.program.CommandLine().ConfigName())
+	if config == "" {
+		return nil
+	}
+
+	var packageJsons []string
+	p.program.PackageJsonCacheEntries(func(key tspath.Path, value *packagejson.InfoCacheEntry) bool {
+		if value == nil {
+			return true
+		}
+		packageJson := tspath.CombinePaths(value.PackageDirectory, "package.json")
+		if value.Exists() || value.DirectoryExists {
+			packageJson = p.program.Host().FS().Realpath(packageJson)
+		}
+		packageJsons = append(packageJsons, packageJson)
+		return true
+	})
+	slices.Sort(packageJsons)
+	return core.Deduplicate(packageJsons)
 }
