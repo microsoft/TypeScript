@@ -478,6 +478,54 @@ function generateForEachChild(w: CodeWriter, node: NodeType) {
     w.write("");
 }
 
+// ── Generate ForEachChild dispatch ─────────────────────────────────────────
+
+// Determines whether a node has a meaningful ForEachChild implementation (i.e.
+// one that is not the no-op inherited from NodeDefault). This is true for any
+// generated node with child members, or for hand-written nodes (e.g. SourceFile)
+// which define ForEachChild manually in ast.go.
+function hasForEachChild(node: NodeType): boolean {
+    if (node.handWritten) return true;
+    return schemaMembers(node).some(m => m.isChild());
+}
+
+// Generates a (*Node).ForEachChild method that dispatches on node.Kind to the
+// concrete node type's ForEachChild method.
+//
+// This deliberately avoids calling node.data.ForEachChild(v) through the
+// nodeData interface. An interface (or other indirect) call is opaque to escape
+// analysis, which must then assume the visitor `v` escapes; that forces caller
+// closures — and any locals they capture — onto the heap. Dispatching through a
+// Kind switch to a statically-resolved concrete method lets escape analysis
+// prove the visitor does not escape, keeping caller closures on the stack. The
+// integer switch over Kind also compiles to a jump table, making dispatch
+// cheaper than the interface call it replaces.
+//
+// Kinds whose node has no children fall through to `default` and return false,
+// matching NodeDefault.ForEachChild.
+function generateForEachChildDispatch(w: CodeWriter) {
+    w.write("func (n *Node) ForEachChild(v Visitor) bool {");
+    w.push();
+    w.write("switch n.Kind {");
+    for (const node of api.nodes()) {
+        if (!hasForEachChild(node)) continue;
+        const kinds = node.allKinds().map(k => k.formatGoConstant());
+        if (kinds.length === 0) continue;
+        w.write(`case ${kinds.join(", ")}:`);
+        w.push();
+        w.write(`return n.data.(*${node.name}).ForEachChild(v)`);
+        w.pop();
+    }
+    w.write("default:");
+    w.push();
+    w.write("return false");
+    w.pop();
+    w.write("}");
+    w.pop();
+    w.write("}");
+    w.write("");
+}
+
 // ── Generate VisitEachChild() ──────────────────────────────────────────────
 
 function generateVisitEachChild(w: CodeWriter, node: NodeType) {
@@ -818,6 +866,13 @@ function generate(): string {
             w.write("// Struct and factory methods hand-written in ./ast.go");
         }
     }
+
+    // ForEachChild dispatch
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("// ForEachChild dispatch");
+    w.write("// ──────────────────────────────────────────────────────────────────────");
+    w.write("");
+    generateForEachChildDispatch(w);
 
     // As*() casts
     w.write("// ──────────────────────────────────────────────────────────────────────");
