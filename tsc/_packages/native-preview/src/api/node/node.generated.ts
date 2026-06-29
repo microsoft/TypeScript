@@ -217,9 +217,11 @@ export class RemoteNode extends RemoteNodeBase implements Node {
                             return result;
                         }
                     }
-                    const result = child.forEachNode(visitNode);
-                    if (result) {
-                        return result;
+                    else {
+                        const result = child.forEachNode(visitNode);
+                        if (result) {
+                            return result;
+                        }
                     }
                 }
                 else if (child.kind !== SyntaxKind.JSDoc) {

@@ -1654,9 +1654,11 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`                            return result;`);
     w.write(`                        }`);
     w.write(`                    }`);
-    w.write(`                    const result = child.forEachNode(visitNode);`);
-    w.write(`                    if (result) {`);
-    w.write(`                        return result;`);
+    w.write(`                    else {`);
+    w.write(`                        const result = child.forEachNode(visitNode);`);
+    w.write(`                        if (result) {`);
+    w.write(`                            return result;`);
+    w.write(`                        }`);
     w.write(`                    }`);
     w.write(`                }`);
     w.write(`                else if (child.kind !== SyntaxKind.JSDoc) {`);

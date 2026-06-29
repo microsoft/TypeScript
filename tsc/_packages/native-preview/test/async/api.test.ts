@@ -17,6 +17,7 @@ import {
     isTypeNode,
     isVariableDeclarationList,
     type Node,
+    type NodeArray,
     NodeFlags,
     SyntaxKind,
 } from "@typescript/native-preview/unstable/ast";
@@ -305,6 +306,43 @@ describe("SourceFile", () => {
                 node.forEachChild(visit);
             });
             assert.equal(nodeCount, 8);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("forEachChild with visitList does not visit array children twice", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ files: ["/input.ts"] }),
+            "/input.ts": `let arrow = () => {}`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/input.ts");
+
+            assert.ok(sourceFile);
+
+            const visited: { kind: SyntaxKind; pos: number; end: number; }[] = [];
+            (function walk(node: Node): void {
+                visited.push({ kind: node.kind, pos: node.pos, end: node.end });
+                node.forEachChild(walk, (nodes: NodeArray<Node>) => {
+                    for (let i = 0; i < nodes.length; i++) {
+                        walk(nodes[i]);
+                    }
+                    return undefined;
+                });
+            })(sourceFile);
+
+            // Each node should be visited exactly once, even when a visitList callback
+            // is supplied. Previously array children were visited twice.
+            const seen = new Set<string>();
+            for (const { kind, pos, end } of visited) {
+                const key = `${kind}.${pos}.${end}`;
+                assert.ok(!seen.has(key), `Node ${key} was visited more than once`);
+                seen.add(key);
+            }
         }
         finally {
             await api.close();
