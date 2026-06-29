@@ -209,10 +209,9 @@ type Scanner struct {
 	skipTrivia      bool
 	ScannerState
 
-	containsNonASCII bool
-	numberCache      map[string]string
-	hexNumberCache   map[string]string
-	hexDigitCache    map[string]string
+	numberCache    map[string]string
+	hexNumberCache map[string]string
+	hexDigitCache  map[string]string
 }
 
 func defaultScanner() Scanner {
@@ -320,13 +319,6 @@ func (scanner *Scanner) SetSkipTrivia(skip bool) {
 
 func (s *Scanner) HasUnicodeEscape() bool {
 	return s.tokenFlags&ast.TokenFlagsUnicodeEscape != 0
-}
-
-// ContainsNonASCII returns true if the scanner encountered any non-ASCII bytes
-// during scanning. This is useful for determining whether UTF-8 byte offsets
-// may differ from UTF-16 code unit offsets.
-func (s *Scanner) ContainsNonASCII() bool {
-	return s.containsNonASCII
 }
 
 func (s *Scanner) HasExtendedUnicodeEscape() bool {
@@ -455,11 +447,7 @@ func (s *Scanner) charAndSize() (rune, int) {
 			return rune(b), 1
 		}
 	}
-	r, size := utf8.DecodeRuneInString(s.text[s.pos:])
-	if size > 1 {
-		s.containsNonASCII = true
-	}
-	return r, size
+	return utf8.DecodeRuneInString(s.text[s.pos:])
 }
 
 // scanASCIIWhile advances s.pos over the longest run of ASCII bytes for which
@@ -1851,7 +1839,6 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 			var size int
 			ch, size = utf8.DecodeRuneInString(s.text[s.pos:])
 			s.pos += size
-			s.containsNonASCII = true
 		}
 		// LineContinuation: a backslash followed by a line terminator is "the empty code unit sequence".
 		if ch == '\u2028' || ch == '\u2029' {

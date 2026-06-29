@@ -6,8 +6,10 @@
  //// [file.d.ts]
 -export const customSymbol2: unique symbol;
 -export const customSymbol: unique symbol;
-+declare const _default: {
++declare const _exports: {
 +    customSymbol: symbol;
 +};
-+export = _default;
-+export declare var customSymbol2: symbol;
++export = _exports;
++declare namespace _exports {
++    export var customSymbol2: symbol;
++}

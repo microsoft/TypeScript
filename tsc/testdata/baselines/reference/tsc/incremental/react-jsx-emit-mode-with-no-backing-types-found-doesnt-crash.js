@@ -80,7 +80,7 @@ const App = () => (0, jsx_runtime_1.jsx)("div", { propA: true });
 exports.App = App;
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2025.full.d.ts","./src/index.tsx"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"0c3575e38f9aabc971cea9c73a211979-export const App = () => <div propA={true}></div>;"],"options":{"jsx":4,"jsxImportSource":"react","module":1},"semanticDiagnosticsPerFile":[[2,[{"pos":25,"end":43,"code":7026,"category":1,"messageKey":"JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists_7026","messageArgs":["IntrinsicElements"]},{"pos":25,"end":49,"code":7016,"category":1,"messageKey":"Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016","messageArgs":["react/jsx-runtime","/home/src/workspaces/project/node_modules/react/jsx-runtime.js"]},{"pos":43,"end":49,"code":7026,"category":1,"messageKey":"JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists_7026","messageArgs":["IntrinsicElements"]}]]]}
+{"version":"FakeTSVersion","root":[2],"missingPackageJsons":["./node_modules/@types/react/jsx-runtime/package.json","./node_modules/@types/react/package.json","./node_modules/react/jsx-runtime/package.json","./node_modules/react/package.json"],"fileNames":["lib.es2025.full.d.ts","./src/index.tsx"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"0c3575e38f9aabc971cea9c73a211979-export const App = () => <div propA={true}></div>;"],"options":{"jsx":4,"jsxImportSource":"react","module":1},"semanticDiagnosticsPerFile":[[2,[{"pos":25,"end":43,"code":7026,"category":1,"messageKey":"JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists_7026","messageArgs":["IntrinsicElements"]},{"pos":25,"end":49,"code":7016,"category":1,"messageKey":"Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type_7016","messageArgs":["react/jsx-runtime","/home/src/workspaces/project/node_modules/react/jsx-runtime.js"]},{"pos":43,"end":49,"code":7026,"category":1,"messageKey":"JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists_7026","messageArgs":["IntrinsicElements"]}]]]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -91,6 +91,12 @@ exports.App = App;
       ],
       "original": 2
     }
+  ],
+  "missingPackageJsons": [
+    "./node_modules/@types/react/jsx-runtime/package.json",
+    "./node_modules/@types/react/package.json",
+    "./node_modules/react/jsx-runtime/package.json",
+    "./node_modules/react/package.json"
   ],
   "fileNames": [
     "lib.es2025.full.d.ts",
@@ -159,7 +165,7 @@ exports.App = App;
       ]
     ]
   ],
-  "size": 1641
+  "size": 1847
 }
 
 tsconfig.json::

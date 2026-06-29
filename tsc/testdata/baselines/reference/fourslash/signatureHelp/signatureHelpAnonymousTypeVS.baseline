@@ -5,7 +5,7 @@
 // comparers.push((a, b) => true);
 //                   ^
 // | ----------------------------------------------------------------------
-// | þtype(a: any, **b: any**): boolean
+// | (a: any, **b: any**): boolean
 // | ----------------------------------------------------------------------
 [
   {
@@ -21,7 +21,7 @@
     "item": {
       "signatures": [
         {
-          "label": "ï¿½type(a: any, b: any): boolean",
+          "label": "(a: any, b: any): boolean",
           "parameters": [
             {
               "label": "a: any"
@@ -33,11 +33,6 @@
           "activeParameter": 1,
           "_vs_colorizedLabel": {
             "Runs": [
-              {
-                "ClassificationTypeName": "text",
-                "Text": "ï¿½type",
-                "_vs_type": "ClassifiedTextRun"
-              },
               {
                 "ClassificationTypeName": "punctuation",
                 "Text": "(",

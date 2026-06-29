@@ -49,7 +49,7 @@ type ProjectCollectionBuilder struct {
 	configuredProjects  *dirty.SyncMap[tspath.Path, *Project]
 	inferredProject     *dirty.Box[*Project]
 
-	apiOpenedProjects map[tspath.Path]struct{}
+	apiState APIState
 }
 
 func newProjectCollectionBuilder(
@@ -58,7 +58,7 @@ func newProjectCollectionBuilder(
 	fs *snapshotFSBuilder,
 	oldProjectCollection *ProjectCollection,
 	oldConfigFileRegistry *ConfigFileRegistry,
-	oldAPIOpenedProjects map[tspath.Path]struct{},
+	oldAPIState APIState,
 	compilerOptionsForInferredProjects *core.CompilerOptions,
 	sessionOptions *SessionOptions,
 	customConfigFileName string,
@@ -79,7 +79,7 @@ func newProjectCollectionBuilder(
 		newSnapshotID:                      newSnapshotID,
 		configuredProjects:                 dirty.NewSyncMap(oldProjectCollection.configuredProjects),
 		inferredProject:                    dirty.NewBox(oldProjectCollection.inferredProject),
-		apiOpenedProjects:                  maps.Clone(oldAPIOpenedProjects),
+		apiState:                           oldAPIState.clone(),
 		client:                             client,
 	}
 }
@@ -120,9 +120,9 @@ func (b *ProjectCollectionBuilder) Finalize(logger *logging.LogTree) (*ProjectCo
 		newProjectCollection.configFileRegistry = configFileRegistry
 	}
 
-	if !maps.Equal(b.apiOpenedProjects, b.base.apiOpenedProjects) {
+	if !b.apiState.equals(b.base.apiState) {
 		ensureCloned()
-		newProjectCollection.apiOpenedProjects = b.apiOpenedProjects
+		newProjectCollection.apiState = b.apiState
 	}
 
 	return newProjectCollection, configFileRegistry
@@ -145,9 +145,18 @@ func (b *ProjectCollectionBuilder) forEachProject(fn func(entry dirty.Value[*Pro
 func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotRequest, logger *logging.LogTree) error {
 	var projectsToClose map[tspath.Path]struct{}
 	if apiRequest.CloseProjects != nil {
-		projectsToClose = maps.Clone(apiRequest.CloseProjects.M)
 		for projectPath := range apiRequest.CloseProjects.Keys() {
-			delete(b.apiOpenedProjects, projectPath)
+			// Ref-counted close: only actually close the project once the last
+			// API client that opened it releases it.
+			if count := b.apiState.openProjects[projectPath]; count > 1 {
+				b.apiState.openProjects[projectPath] = count - 1
+			} else if count == 1 {
+				delete(b.apiState.openProjects, projectPath)
+				if projectsToClose == nil {
+					projectsToClose = make(map[tspath.Path]struct{})
+				}
+				projectsToClose[projectPath] = struct{}{}
+			}
 		}
 	}
 
@@ -155,17 +164,47 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 		for configFileName := range apiRequest.OpenProjects.Keys() {
 			configPath := b.toPath(configFileName)
 			if entry := b.findOrCreateProject(configFileName, configPath, projectLoadKindCreate, logger); entry != nil {
-				if b.apiOpenedProjects == nil {
-					b.apiOpenedProjects = make(map[tspath.Path]struct{})
+				if b.apiState.openProjects == nil {
+					b.apiState.openProjects = make(map[tspath.Path]int)
 				}
-				b.apiOpenedProjects[configPath] = struct{}{}
+				b.apiState.openProjects[configPath]++
+				// A project re-opened in the same request shouldn't be closed.
+				delete(projectsToClose, configPath)
 			} else {
 				return fmt.Errorf("project not found for open: %s", configFileName)
 			}
 		}
 	}
 
-	for configPath := range b.apiOpenedProjects {
+	if apiRequest.CloseFiles != nil {
+		for path := range apiRequest.CloseFiles.Keys() {
+			// Ref-counted close mirroring projects above.
+			if entry, ok := b.apiState.openFiles[path]; ok {
+				if entry.refCount > 1 {
+					entry.refCount--
+					b.apiState.openFiles[path] = entry
+				} else {
+					delete(b.apiState.openFiles, path)
+				}
+			}
+		}
+	}
+
+	if apiRequest.OpenFiles != nil {
+		for uri := range apiRequest.OpenFiles.Keys() {
+			fileName := uri.FileName()
+			path := b.toPath(fileName)
+			if b.apiState.openFiles == nil {
+				b.apiState.openFiles = make(map[tspath.Path]apiOpenedFile)
+			}
+			entry := b.apiState.openFiles[path]
+			entry.fileName = fileName
+			entry.refCount++
+			b.apiState.openFiles[path] = entry
+		}
+	}
+
+	for configPath := range b.apiState.openProjects {
 		if entry, ok := b.configuredProjects.Load(configPath); ok {
 			b.updateProgram(entry, logger)
 		} else {
@@ -182,6 +221,29 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 	for projectPath := range projectsToClose {
 		if entry, ok := b.configuredProjects.Load(projectPath); ok {
 			b.deleteConfiguredProject(entry, logger)
+		}
+	}
+
+	// Ensure each API-opened file is placed like LSP's textDocument/didOpen: search
+	// up ancestor directories for a configured project that contains it, and only
+	// fall back to the inferred project if none is found. This also keeps already
+	// loaded configured projects up to date. Then run the same cleanup the LSP open
+	// path uses, so configured projects auto-loaded for files that are no longer open
+	// are torn down instead of leaking.
+	if apiRequest.OpenFiles != nil || apiRequest.CloseFiles != nil {
+		var retain collections.Set[tspath.Path]
+		for path, file := range b.apiState.openFiles {
+			if b.fs.isOpenFile(path) {
+				// Already an LSP overlay; its project membership is handled by the
+				// overlay pass in cleanupConfiguredProjects.
+				continue
+			}
+			result := b.ensureConfiguredProjectAndAncestorsForFile(file.fileName, path, logger)
+			retain.Union(&result.retain)
+		}
+		b.cleanupConfiguredProjects(&retain, logger)
+		if b.inferredProject.Value() != nil {
+			b.updateProgram(b.inferredProject, logger)
 		}
 	}
 
@@ -259,89 +321,90 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 
 	// Handle opened file
 	if summary.Opened != "" || summary.Reopened != "" {
-		var toRemoveProjects collections.Set[tspath.Path]
 		fileName := core.FirstNonZero(summary.Opened, summary.Reopened).FileName()
 		path := b.toPath(fileName)
 		openFileResult := b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
-		b.configuredProjects.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *Project]) bool {
-			toRemoveProjects.Add(entry.Key())
-			return true
-		})
-		var isReferencedBy func(project *Project, refPath tspath.Path, seenProjects *collections.Set[*Project]) bool
-		isReferencedBy = func(project *Project, refPath tspath.Path, seenProjects *collections.Set[*Project]) bool {
-			if !seenProjects.AddIfAbsent(project) {
-				return false
-			}
+		b.cleanupConfiguredProjects(&openFileResult.retain, logger)
+	}
+}
 
-			if project.potentialProjectReferences != nil {
-				for potentialRef := range project.potentialProjectReferences.Keys() {
-					if potentialRef == refPath {
-						return true
-					}
+// cleanupConfiguredProjects sweeps the loaded configured projects and unloads those
+// that are no longer needed. Starting from the set of all configured projects, it
+// retains any project that is the default project (along with its references and
+// ancestor configs) of an open overlay file or an API-opened file, any project
+// explicitly opened through the API, and any project in retain (e.g. the ancestor
+// solution tree built for a freshly opened overlay file). Every other configured
+// project is deleted, the inferred project roots are recomputed, and the config file
+// registry is cleaned up. This is the shared mechanism that keeps the set of loaded
+// projects minimal for both LSP file opens and API file opens/closes.
+func (b *ProjectCollectionBuilder) cleanupConfiguredProjects(retain *collections.Set[tspath.Path], logger *logging.LogTree) {
+	var toRemoveProjects collections.Set[tspath.Path]
+	b.configuredProjects.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *Project]) bool {
+		toRemoveProjects.Add(entry.Key())
+		return true
+	})
+
+	retainProjectAndReferences := func(project *Project) {
+		// Retain project
+		toRemoveProjects.Delete(project.configFilePath)
+		if program := project.GetProgram(); program != nil {
+			program.RangeResolvedProjectReference(func(referencePath tspath.Path, _ *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
+				if _, ok := b.configuredProjects.Load(referencePath); ok {
+					toRemoveProjects.Delete(referencePath)
 				}
-				for potentialRef := range project.potentialProjectReferences.Keys() {
-					if refProject, foundRef := b.configuredProjects.Load(potentialRef); foundRef && isReferencedBy(refProject.Value(), refPath, seenProjects) {
-						return true
-					}
-				}
-			} else if program := project.GetProgram(); program != nil && !program.RangeResolvedProjectReference(func(referencePath tspath.Path, _ *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
-				return referencePath != refPath
-			}) {
 				return true
-			}
-			return false
-		}
-
-		retainProjectAndReferences := func(project *Project) {
-			// Retain project
-			toRemoveProjects.Delete(project.configFilePath)
-			if program := project.GetProgram(); program != nil {
-				program.RangeResolvedProjectReference(func(referencePath tspath.Path, _ *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
-					if _, ok := b.configuredProjects.Load(referencePath); ok {
-						toRemoveProjects.Delete(referencePath)
-					}
-					return true
-				})
-			}
-		}
-
-		retainDefaultConfiguredProject := func(openFile string, openFilePath tspath.Path, project *Project) {
-			// Retain project and its references
-			retainProjectAndReferences(project)
-
-			// Retain all the ancestor projects
-			b.configFileRegistryBuilder.forEachConfigFileNameFor(openFilePath, func(configFileName string) {
-				if ancestor := b.findOrCreateProject(configFileName, b.toPath(configFileName), projectLoadKindFind, logger); ancestor != nil {
-					retainProjectAndReferences(ancestor.Value())
-				}
 			})
 		}
-
-		var inferredProjectFiles []string
-		for _, overlay := range b.fs.overlays {
-			openFile := overlay.FileName()
-			openFilePath := b.toPath(openFile)
-			if p := b.findDefaultConfiguredProject(openFile, openFilePath); p != nil {
-				retainDefaultConfiguredProject(openFile, openFilePath, p.Value())
-			} else {
-				inferredProjectFiles = append(inferredProjectFiles, overlay.FileName())
-			}
-		}
-
-		for projectPath := range toRemoveProjects.Keys() {
-			if openFileResult.retain.Has(projectPath) {
-				continue
-			}
-			if _, ok := b.apiOpenedProjects[projectPath]; ok {
-				continue
-			}
-			if p, ok := b.configuredProjects.Load(projectPath); ok {
-				b.deleteConfiguredProject(p, logger)
-			}
-		}
-		b.updateInferredProjectRoots(inferredProjectFiles, logger)
-		b.configFileRegistryBuilder.Cleanup()
 	}
+
+	retainDefaultConfiguredProject := func(openFilePath tspath.Path, project *Project) {
+		// Retain project and its references
+		retainProjectAndReferences(project)
+
+		// Retain all the ancestor projects
+		b.configFileRegistryBuilder.forEachConfigFileNameFor(openFilePath, func(configFileName string) {
+			if ancestor := b.findOrCreateProject(configFileName, b.toPath(configFileName), projectLoadKindFind, logger); ancestor != nil {
+				retainProjectAndReferences(ancestor.Value())
+			}
+		})
+	}
+
+	var inferredProjectFiles []string
+	for _, overlay := range b.fs.overlays {
+		openFile := overlay.FileName()
+		openFilePath := b.toPath(openFile)
+		if p := b.findDefaultConfiguredProject(openFile, openFilePath); p != nil {
+			retainDefaultConfiguredProject(openFilePath, p.Value())
+		} else {
+			inferredProjectFiles = append(inferredProjectFiles, openFile)
+		}
+	}
+	// Treat API-opened files like open files: retain their configured project (so
+	// an LSP-driven open doesn't close it), or keep them as inferred project roots.
+	for path, file := range b.apiState.openFiles {
+		if b.fs.isOpenFile(path) {
+			continue
+		}
+		if p := b.findDefaultConfiguredProject(file.fileName, path); p != nil {
+			retainDefaultConfiguredProject(path, p.Value())
+		} else {
+			inferredProjectFiles = append(inferredProjectFiles, file.fileName)
+		}
+	}
+
+	for projectPath := range toRemoveProjects.Keys() {
+		if retain.Has(projectPath) {
+			continue
+		}
+		if _, ok := b.apiState.openProjects[projectPath]; ok {
+			continue
+		}
+		if p, ok := b.configuredProjects.Load(projectPath); ok {
+			b.deleteConfiguredProject(p, logger)
+		}
+	}
+	b.updateInferredProjectRoots(inferredProjectFiles, logger)
+	b.configFileRegistryBuilder.Cleanup()
 }
 
 func logChangeFileResult(result changeFileResult, logger *logging.LogTree) {
@@ -353,26 +416,39 @@ func logChangeFileResult(result changeFileResult, logger *logging.LogTree) {
 	}
 }
 
-func (b *ProjectCollectionBuilder) cleanupInferredProject(logger *logging.LogTree) {
+func (b *ProjectCollectionBuilder) collectInferredProjectRoots() []string {
 	var inferredProjectFiles []string
 	for path, overlay := range b.fs.overlays {
 		if b.findDefaultConfiguredProject(overlay.FileName(), path) == nil {
 			inferredProjectFiles = append(inferredProjectFiles, overlay.FileName())
 		}
 	}
-	b.updateInferredProjectRoots(inferredProjectFiles, logger)
+	return b.appendAPIOpenedInferredRoots(inferredProjectFiles)
+}
+
+// appendAPIOpenedInferredRoots appends API-opened files that aren't open in an
+// overlay and have no configured project, so they're kept as inferred project
+// roots and persist across snapshots.
+func (b *ProjectCollectionBuilder) appendAPIOpenedInferredRoots(inferredProjectFiles []string) []string {
+	for path, file := range b.apiState.openFiles {
+		if b.fs.isOpenFile(path) {
+			continue
+		}
+		if b.findDefaultConfiguredProject(file.fileName, path) == nil {
+			inferredProjectFiles = append(inferredProjectFiles, file.fileName)
+		}
+	}
+	return inferredProjectFiles
+}
+
+func (b *ProjectCollectionBuilder) cleanupInferredProject(logger *logging.LogTree) {
+	b.updateInferredProjectRoots(b.collectInferredProjectRoots(), logger)
 }
 
 func (b *ProjectCollectionBuilder) ensureInferredProjectIncludesClosedFile(fileName string, logger *logging.LogTree) {
 	// Collect existing inferred project roots (open files not in configured projects)
 	// plus this closed file.
-	var inferredProjectFiles []string
-	for path, overlay := range b.fs.overlays {
-		if b.findDefaultConfiguredProject(overlay.FileName(), path) == nil {
-			inferredProjectFiles = append(inferredProjectFiles, overlay.FileName())
-		}
-	}
-	inferredProjectFiles = append(inferredProjectFiles, fileName)
+	inferredProjectFiles := append(b.collectInferredProjectRoots(), fileName)
 	b.updateInferredProjectRoots(inferredProjectFiles, logger)
 	if b.inferredProject.Value() != nil {
 		b.updateProgram(b.inferredProject, logger)

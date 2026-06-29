@@ -16,19 +16,19 @@ function foo() {
 >o : any
 
         return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
->(o == null) ? create(base) : defineProperties(Object(o), descriptors) : any
+>(o == null) ? create(base) : defineProperties(Object(o), descriptors) : error
 >(o == null) : boolean
 >o == null : boolean
 >o : any
->create(base) : any
->create : any
->base : any
->defineProperties(Object(o), descriptors) : any
->defineProperties : any
+>create(base) : error
+>create : error
+>base : error
+>defineProperties(Object(o), descriptors) : error
+>defineProperties : error
 >Object(o) : any
 >Object : ObjectConstructor
 >o : any
->descriptors : any
+>descriptors : error
 
     };
     const m = function () {
@@ -39,7 +39,7 @@ function foo() {
     }
     exports.methods = m;
 >exports.methods = m : () => void
->exports.methods : any
+>exports.methods : error
 >exports : (o: any) => any
 >methods : any
 >m : () => void

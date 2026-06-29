@@ -116,14 +116,25 @@ Object.defineProperty(module.exports, "j", { value: function j() { } });
 //// [index.d.ts]
 export declare var a: () => void;
 export declare var b: () => void;
+declare const _exported: typeof d;
+export { _exported as d };
+declare const _exported_1: typeof e;
+export { _exported_1 as e };
+declare const _exported_2: typeof f;
+export { _exported_2 as f };
+declare const _exported_3: typeof g;
+export { _exported_3 as g };
+export declare var h: typeof hh;
+export declare var i: () => void;
+export declare var ii: () => void;
+export declare var jj: () => void;
+export declare var j: () => void;
 /**
  * @param {number} a
  * @param {number} b
  * @return {string}
  */
 declare function d(a: number, b: number): string;
-declare const _exported: typeof d;
-export { _exported as d };
 /**
  * @template T,U
  * @param {T} a
@@ -131,15 +142,11 @@ export { _exported as d };
  * @return {T & U}
  */
 declare function e<T, U>(a: T, b: U): T & U;
-declare const _exported_1: typeof e;
-export { _exported_1 as e };
 /**
  * @template T
  * @param {T} a
  */
 declare function f<T>(a: T): T;
-declare const _exported_2: typeof f;
-export { _exported_2 as f };
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
@@ -149,8 +156,6 @@ declare function g(a: {
 }, b: {
     y: () => void;
 }): void | "";
-declare const _exported_3: typeof g;
-export { _exported_3 as g };
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
@@ -160,8 +165,3 @@ declare function hh(a: {
 }, b: {
     y: () => void;
 }): void | "";
-export declare var h: typeof hh;
-export declare var i: () => void;
-export declare var ii: () => void;
-export declare var jj: () => void;
-export declare var j: () => void;

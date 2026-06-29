@@ -169,6 +169,14 @@ func (c *Checker) GetConstraintOfTypeParameter(typeParameter *Type) *Type {
 	return c.getConstraintOfTypeParameter(typeParameter)
 }
 
+func (c *Checker) GetTrueTypeOfConditionalType(t *Type) *Type {
+	return c.getTrueTypeFromConditionalType(t)
+}
+
+func (c *Checker) GetFalseTypeOfConditionalType(t *Type) *Type {
+	return c.getFalseTypeFromConditionalType(t)
+}
+
 func (c *Checker) GetDefaultFromTypeParameter(typeParameter *Type) *Type {
 	return c.getDefaultFromTypeParameter(typeParameter)
 }
@@ -191,6 +199,10 @@ func (c *Checker) GetTypePredicateOfSignature(sig *Signature) *TypePredicate {
 
 func IsTupleType(t *Type) bool {
 	return isTupleType(t)
+}
+
+func (c *Checker) IsArrayType(t *Type) bool {
+	return c.isArrayType(t)
 }
 
 func (c *Checker) GetReturnTypeOfSignature(sig *Signature) *Type {

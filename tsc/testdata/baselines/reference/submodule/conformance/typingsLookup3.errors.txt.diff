@@ -1,0 +1,17 @@
+--- old.typingsLookup3.errors.txt
++++ new.typingsLookup3.errors.txt
+@@= skipped -0, +0 lines =@@
+ /a.ts(1,23): error TS2688: Cannot find type definition file for 'JqUeRy'.
+-
+-
+-==== /tsconfig.json (0 errors) ====
++/tsconfig.json(1,12): error TS5024: Compiler option 'files' requires a value of type Array.
++
++
++==== /tsconfig.json (1 errors) ====
+     { "files": "a.ts" }
++               ~~~~~~
++!!! error TS5024: Compiler option 'files' requires a value of type Array.
+     
+ ==== /a.ts (1 errors) ====
+     /// <reference types="JqUeRy" />

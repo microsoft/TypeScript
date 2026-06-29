@@ -55,14 +55,33 @@ func (w *MockWatch) Close() error {
 }
 
 func (m *MockWatchBackend) WatchDirectory(dir string, fn fswatch.WatchCallback, recursive bool, ignore func(string) bool) (io.Closer, error) {
+	closers, err := m.WatchDirectories([]watchmanager.WatchDirectoryRequest{{
+		Dir:       dir,
+		Callback:  fn,
+		Recursive: recursive,
+		Ignore:    ignore,
+	}})
+	if err != nil {
+		return nil, err
+	}
+	return closers[0], nil
+}
+
+func (m *MockWatchBackend) WatchDirectories(requests []watchmanager.WatchDirectoryRequest) ([]io.Closer, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	if m.DirectoryExists != nil && !m.DirectoryExists(dir) {
-		return nil, fmt.Errorf("directory does not exist: %s", dir)
+	for _, request := range requests {
+		if m.DirectoryExists != nil && !m.DirectoryExists(request.Dir) {
+			return nil, fmt.Errorf("directory does not exist: %s", request.Dir)
+		}
 	}
-	w := &MockWatch{Path: dir, Callback: fn, Recursive: recursive, Ignore: ignore}
-	m.Dirs[dir] = w
-	return w, nil
+	closers := make([]io.Closer, len(requests))
+	for i, request := range requests {
+		w := &MockWatch{Path: request.Dir, Callback: request.Callback, Recursive: request.Recursive, Ignore: request.Ignore}
+		m.Dirs[request.Dir] = w
+		closers[i] = w
+	}
+	return closers, nil
 }
 
 // SendEvents routes events through the registered watch callbacks

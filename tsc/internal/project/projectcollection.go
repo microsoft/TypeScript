@@ -2,6 +2,7 @@ package project
 
 import (
 	"cmp"
+	"maps"
 	"slices"
 	"sync"
 
@@ -29,12 +30,43 @@ type ProjectCollection struct {
 	// inferredProject is a fallback project that is used when no configured
 	// project can be found for an open file.
 	inferredProject *Project
-	// apiOpenedProjects is the set of projects that should be kept open for
-	// API clients.
-	apiOpenedProjects map[tspath.Path]struct{}
+	// apiState tracks the projects and files that API clients have explicitly
+	// opened so they are kept loaded across snapshots.
+	apiState APIState
 
 	openConfiguredProjectsOnce sync.Once
 	openConfiguredProjects     *collections.Set[tspath.Path]
+}
+
+// APIState tracks the projects and files that API clients have explicitly opened.
+// Opens and closes are ref-counted so multiple API clients don't clobber each
+// other, and it is carried across snapshots so API-opened resources stay loaded.
+type APIState struct {
+	// openProjects is the ref-counted set of projects to keep open for API
+	// clients, keyed by config file path. The value is the number of outstanding
+	// API opens.
+	openProjects map[tspath.Path]int
+	// openFiles is the ref-counted set of files to keep open for API clients,
+	// keyed by file path. Files with no configured project are loaded into the
+	// inferred project.
+	openFiles map[tspath.Path]apiOpenedFile
+}
+
+func (s APIState) clone() APIState {
+	return APIState{
+		openProjects: maps.Clone(s.openProjects),
+		openFiles:    maps.Clone(s.openFiles),
+	}
+}
+
+func (s APIState) equals(other APIState) bool {
+	return maps.Equal(s.openProjects, other.openProjects) && maps.Equal(s.openFiles, other.openFiles)
+}
+
+// apiOpenedFile tracks a file kept open by API clients along with its ref count.
+type apiOpenedFile struct {
+	fileName string
+	refCount int
 }
 
 func (c *ProjectCollection) ConfigFileRegistry() *ConfigFileRegistry { return c.configFileRegistry }
@@ -271,7 +303,7 @@ func (c *ProjectCollection) clone() *ProjectCollection {
 		openFiles:           c.openFiles,
 		inferredProject:     c.inferredProject,
 		fileDefaultProjects: c.fileDefaultProjects,
-		apiOpenedProjects:   c.apiOpenedProjects,
+		apiState:            c.apiState,
 	}
 }
 

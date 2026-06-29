@@ -5,19 +5,19 @@
 
  //// [thing.d.ts]
 -export class Thing {
-+declare class Thing {
- }
-+declare const _default: {
++declare const _exports: {
 +    Thing: typeof Thing;
 +};
-+export = _default;
++export = _exports;
++declare class Thing {
+ }
  //// [reexport.d.ts]
 -export { Thing };
 -import Thing_1 = require("./thing");
 -import Thing = Thing_1.Thing;
-+declare const _default: {
++declare const _exports: {
 +    Thing: {
 +        new (): {};
 +    };
 +};
-+export = _default;
++export = _exports;

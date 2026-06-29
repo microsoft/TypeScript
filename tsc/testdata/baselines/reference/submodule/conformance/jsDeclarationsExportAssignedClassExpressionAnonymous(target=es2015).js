@@ -23,8 +23,8 @@ module.exports = class {
 
 
 //// [index.d.ts]
-export = _default;
-declare class _default {
+export = _exports;
+declare class _exports {
     t: number;
     /**
      * @param {number} p

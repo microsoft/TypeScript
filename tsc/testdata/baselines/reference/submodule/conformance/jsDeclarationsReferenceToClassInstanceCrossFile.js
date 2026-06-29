@@ -42,14 +42,18 @@ console.log("Objects", render.objects);
 
 
 //// [rectangle.d.ts]
+declare const _exports: {
+    Rectangle: typeof Rectangle;
+};
+export = _exports;
 declare class Rectangle {
     constructor();
 }
-declare const _default: {
-    Rectangle: typeof Rectangle;
-};
-export = _default;
 //// [index.d.ts]
+declare const _exports: {
+    Render: typeof Render;
+};
+export = _exports;
 declare class Render {
     /**
      * Object list
@@ -64,9 +68,5 @@ declare class Render {
      */
     addRectangle(): Rectangle;
 }
-declare const _default: {
-    Render: typeof Render;
-};
-export = _default;
 //// [test.d.ts]
 export {};

@@ -33,23 +33,16 @@
 -import * as ns from "./cls";
  //// [cjs.d.ts]
 -export { ns };
- import ns = require("./cls");
-+declare const _default: {
++declare const _exports: {
 +    ns: typeof ns;
 +};
-+export = _default;
- //// [cjs2.d.ts]
-+import ns = require("./cls");
- export = ns;
--import ns = require("./cls");
- //// [cjs3.d.ts]
--export { ns };
++export = _exports;
  import ns = require("./cls");
-+export { ns };
- //// [cjs4.d.ts]
-+import ns = require("./cls");
+ //// [cjs2.d.ts]
+ export = ns;
+@@= skipped -34, +37 lines =@@
  export { ns as names };
--import ns = require("./cls");
+ import ns = require("./cls");
  //// [includeAll.d.ts]
 -export {};
 +import "./cjs4";

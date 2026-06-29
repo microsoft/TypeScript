@@ -68,11 +68,11 @@ type Rank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 'Jack' | 'Queen' | 'Kin
 export { Suit, Rank };
 //// [Card.d.ts]
 import { Suit, Rank } from './Types';
-declare const _default: (suit: Suit, rank: Rank) => {
+export default _default;
+declare function _default(suit: Suit, rank: Rank): {
     suit: Suit;
     rank: Rank;
 };
-export default _default;
 //// [index.d.ts]
 export declare let lazyCard: () => Promise<(suit: import("./Types").Suit, rank: import("./Types").Rank) => {
     suit: import("./Types").Suit;

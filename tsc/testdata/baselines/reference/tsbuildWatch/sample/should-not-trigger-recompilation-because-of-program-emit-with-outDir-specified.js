@@ -194,6 +194,7 @@ export function multiply(a, b) { return a * b; }
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/sample1
   /user/username/projects/sample1/core (recursive)
 core/tsconfig.json::
 SemanticDiagnostics::
@@ -214,6 +215,7 @@ Output::
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/sample1
   /user/username/projects/sample1/core (recursive)
 
 
@@ -336,6 +338,7 @@ export const y = 10;
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/sample1
   /user/username/projects/sample1/core (recursive)
 core/tsconfig.json::
 SemanticDiagnostics::
@@ -352,4 +355,5 @@ Output::
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/sample1
   /user/username/projects/sample1/core (recursive)

@@ -196,6 +196,9 @@ export {};
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/reexport
+  /user/username/projects/reexport/out
+  /user/username/projects/reexport/out/pure
   /user/username/projects/reexport/src
   /user/username/projects/reexport/src/main (recursive)
   /user/username/projects/reexport/src/pure (recursive)
@@ -357,6 +360,9 @@ export interface Session {
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/reexport
+  /user/username/projects/reexport/out
+  /user/username/projects/reexport/out/pure
   /user/username/projects/reexport/src
   /user/username/projects/reexport/src/main (recursive)
   /user/username/projects/reexport/src/pure (recursive)
@@ -506,6 +512,9 @@ export interface Session {
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/reexport
+  /user/username/projects/reexport/out
+  /user/username/projects/reexport/out/pure
   /user/username/projects/reexport/src
   /user/username/projects/reexport/src/main (recursive)
   /user/username/projects/reexport/src/pure (recursive)

@@ -283,20 +283,20 @@ export { ns };
 import * as ns from "./cls";
 export { ns as classContainer };
 //// [cjs.d.ts]
-import ns = require("./cls");
-declare const _default: {
+declare const _exports: {
     ns: typeof ns;
 };
-export = _default;
+export = _exports;
+import ns = require("./cls");
 //// [cjs2.d.ts]
-import ns = require("./cls");
 export = ns;
+import ns = require("./cls");
 //// [cjs3.d.ts]
-import ns = require("./cls");
 export { ns };
-//// [cjs4.d.ts]
 import ns = require("./cls");
+//// [cjs4.d.ts]
 export { ns as names };
+import ns = require("./cls");
 //// [includeAll.d.ts]
 import "./cjs4";
 import "./cjs3";

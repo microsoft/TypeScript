@@ -48,6 +48,14 @@ export interface Node extends ReadonlyTextRange {
     readonly jsDoc?: readonly Node[];
     forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined;
     getSourceFile(): SourceFile;
+    getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
+    getFullStart(): number;
+    getEnd(): number;
+    getWidth(sourceFile?: SourceFile): number;
+    getFullWidth(): number;
+    getLeadingTriviaWidth(sourceFile?: SourceFile): number;
+    getFullText(sourceFile?: SourceFile): string;
+    getText(sourceFile?: SourceFile): string;
 }
 
 export interface FileReference extends TextRange {

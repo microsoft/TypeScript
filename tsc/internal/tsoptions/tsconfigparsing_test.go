@@ -887,6 +887,40 @@ func TestParseJsonSourceFileConfigFileContentReportsInvalidExtendedConfig(t *tes
 	}
 }
 
+// Extending an empty config file used to panic on nil Statements (#4265).
+func TestParseJsonSourceFileConfigFileContentWithEmptyExtendedConfig(t *testing.T) {
+	t.Parallel()
+	files := map[string]string{
+		"/project/tsconfig.json": `{
+  "extends": "./base.json"
+}`,
+		"/project/base.json": "",
+		"/project/main.ts":   "export const x = 1;",
+	}
+	host := tsoptionstest.NewVFSParseConfigHost(files, "/project", true /*useCaseSensitiveFileNames*/)
+	configFileName := "/project/tsconfig.json"
+	configFile := tsoptions.NewTsconfigSourceFileFromFilePath(
+		configFileName,
+		tspath.ToPath(configFileName, host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()),
+		files[configFileName],
+	)
+
+	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
+		configFile,
+		host,
+		host.GetCurrentDirectory(),
+		nil,
+		nil,
+		configFileName,
+		nil,
+		nil,
+		nil,
+	)
+
+	assert.Assert(t, parsed != nil)
+	assert.DeepEqual(t, parsed.FileNames(), []string{"/project/main.ts"})
+}
+
 func TestParseJsonSourceFileConfigFileContentDoesNotDuplicateUnquotedKeyDiagnostics(t *testing.T) {
 	t.Parallel()
 	parsed := tsoptionstest.GetParsedCommandLine(t, `{
@@ -1496,4 +1530,39 @@ func TestExtendedConfigErrorsAppearOnCacheHit(t *testing.T) {
 		second := parseConfig("/projB/tsconfig.json", cache)
 		assert.Assert(t, len(second.Errors) > 0, "expected diagnostics for projB parse (cache hit on base), got 0")
 	})
+}
+
+func TestExtendedConfigConfigDirPathsAreNotCached(t *testing.T) {
+	t.Parallel()
+
+	files := map[string]string{
+		"/tsconfig.base.json": `{
+  "compilerOptions": {
+    "paths": {
+      "@pkg/*": ["${configDir}/src/*"]
+    }
+  }
+}`,
+		"/packages/a/tsconfig.json": `{
+  "extends": "../../tsconfig.base.json"
+}`,
+		"/packages/b/tsconfig.json": `{
+  "extends": "../../tsconfig.base.json"
+}`,
+		"/packages/a/index.ts": "export {}",
+		"/packages/b/index.ts": "export {}",
+	}
+
+	host := tsoptionstest.NewVFSParseConfigHost(files, "/", true /*useCaseSensitiveFileNames*/)
+	cache := &memoCache{}
+
+	parseConfig := func(configFileName string) *tsoptions.ParsedCommandLine {
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, nil, nil, host, cache)
+		assert.Assert(t, len(errors) == 0, "unexpected errors parsing %s: %v", configFileName, errors)
+		return parsed
+	}
+
+	parseConfig("/packages/a/tsconfig.json")
+	paths := parseConfig("/packages/b/tsconfig.json").CompilerOptions().Paths
+	assert.DeepEqual(t, paths.GetOrZero("@pkg/*"), []string{"/packages/b/src/*"})
 }

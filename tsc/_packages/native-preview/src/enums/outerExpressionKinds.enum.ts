@@ -8,6 +8,10 @@ export enum OuterExpressionKinds {
     ExpressionsWithTypeArguments = 1 << 4,
     Satisfies = 1 << 5,
     ExcludeJSDocTypeAssertion = 1 << 6,
+    Assignments = 1 << 7,
+    Comma = 1 << 8,
     Assertions = TypeAssertions | NonNullAssertions | Satisfies,
     All = Parentheses | Assertions | PartiallyEmittedExpressions | ExpressionsWithTypeArguments,
+    AllExceptAssertionsOrExpressionsWithTypeArguments = All & ~Assertions & ~ExpressionsWithTypeArguments,
+    ExpressionTypePassthrough = Parentheses | Assignments | Comma,
 }

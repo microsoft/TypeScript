@@ -133,6 +133,7 @@ export class myClass {
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/solution
   /user/username/projects/solution/app (recursive)
 app/tsconfig.json::
 SemanticDiagnostics::
@@ -279,6 +280,7 @@ export var myClassWithError = class {
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/solution
   /user/username/projects/solution/app (recursive)
 app/tsconfig.json::
 SemanticDiagnostics::
@@ -373,6 +375,7 @@ export var myClassWithError = class {
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
+  /user/username/projects/solution
   /user/username/projects/solution/app (recursive)
 app/tsconfig.json::
 SemanticDiagnostics::

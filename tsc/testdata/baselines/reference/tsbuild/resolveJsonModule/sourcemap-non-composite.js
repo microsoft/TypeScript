@@ -39,10 +39,10 @@ Output::
 [7m8[0m         "outDir": "dist",
 [7m [0m [91m        ~~~~~~~~[0m
 
-TSFILE:  /home/src/workspaces/solution/project/dist/src/hello.json
-TSFILE:  /home/src/workspaces/solution/project/dist/src/index.js.map
-TSFILE:  /home/src/workspaces/solution/project/dist/src/index.js
-TSFILE:  /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
+TSFILE: /home/src/workspaces/solution/project/dist/src/hello.json
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js.map
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
    Default library for target 'ES2025'
 project/src/hello.json
@@ -141,10 +141,10 @@ Output::
 [7m8[0m         "outDir": "dist",
 [7m [0m [91m        ~~~~~~~~[0m
 
-TSFILE:  /home/src/workspaces/solution/project/dist/src/hello.json
-TSFILE:  /home/src/workspaces/solution/project/dist/src/index.js.map
-TSFILE:  /home/src/workspaces/solution/project/dist/src/index.js
-TSFILE:  /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
+TSFILE: /home/src/workspaces/solution/project/dist/src/hello.json
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js.map
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
    Default library for target 'ES2025'
 project/src/hello.json

@@ -252,12 +252,12 @@
     },
     "dependencies": {
         "@vscode/extension-telemetry": "^1.5.2",
-        "vscode-languageclient": "^10.0.0",
+        "vscode-languageclient": "^10.0.1",
         "vscode-tas-client": "^0.2.1"
     },
     "devDependencies": {
         "@types/vscode": "~1.110.0",
         "@vscode/vsce": "^3.9.2",
-        "esbuild": "^0.28.0"
+        "esbuild": "^0.28.1"
     }
 }

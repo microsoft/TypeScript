@@ -27,7 +27,7 @@ module.exports = {
 
 
 //// [index.d.ts]
-declare const _default: {
+declare const _exports: {
     thing: import("fs").Something;
 };
-export = _default;
+export = _exports;

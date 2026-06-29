@@ -3,6 +3,7 @@ package project
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
 	"sync"
 
@@ -219,7 +220,8 @@ func (p *Project) GetProjectDiagnostics(ctx context.Context) []*ast.Diagnostic {
 	if p.checkerPool != nil {
 		globalDiags = p.checkerPool.GetGlobalDiagnostics()
 	}
-	return compiler.SortAndDeduplicateDiagnostics(core.Concatenate(
+	return compiler.SortAndDeduplicateDiagnostics(slices.Concat(
+		p.Program.GetConfigFileParsingDiagnostics(),
 		p.Program.GetProgramDiagnostics(),
 		globalDiags,
 	))

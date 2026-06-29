@@ -42,12 +42,13 @@ module.exports = Container;
 
 
 //// [obj.d.ts]
+export { Obj };
 declare class Obj {
     x: number;
     constructor();
 }
-export { Obj };
 //// [index.d.ts]
+export = Container;
 import { Obj, Obj as Other } from "./obj";
 declare class Container {
     usage: Obj;
@@ -55,4 +56,3 @@ declare class Container {
     usage2: Other;
     constructor();
 }
-export = Container;

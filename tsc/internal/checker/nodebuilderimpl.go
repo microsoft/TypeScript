@@ -1001,10 +1001,7 @@ func (b *NodeBuilderImpl) getNameOfSymbolAsWritten(symbol *ast.Symbol) string {
 	if len(name) > 0 {
 		return name
 	}
-	if symbol.Name == ast.InternalSymbolNameMissing {
-		return "__missing"
-	}
-	return symbol.Name
+	return ast.EscapeInternalSymbolName(symbol.Name)
 }
 
 // The full set of type parameters for a generic class or interface type consists of its outer type parameters plus

@@ -90,7 +90,7 @@ export {};
 export {};
 
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"bf6a9897955595825a99e7ef50878c55-export const foo = 10;",{"version":"7ae42cb6eee47288e3acb472bb3aad16-import { foo } from \"file\";","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},"bf6a9897955595825a99e7ef50878c55-export const foo = 10;","a0d503557e945e94b2464694c91a48ba-export const bar = 10;"],"fileIdsList":[[2]],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[3],"missingPackageJsons":["../node_modules/@types/bar/package.json","../node_modules/@types/foo/package.json","../node_modules/@types/package.json","../node_modules/package.json","./node_modules/file/package.json","./node_modules/package.json"],"fileNames":["lib.es2025.full.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"bf6a9897955595825a99e7ef50878c55-export const foo = 10;",{"version":"7ae42cb6eee47288e3acb472bb3aad16-import { foo } from \"file\";","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},"bf6a9897955595825a99e7ef50878c55-export const foo = 10;","a0d503557e945e94b2464694c91a48ba-export const bar = 10;"],"fileIdsList":[[2]],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -101,6 +101,14 @@ export {};
       ],
       "original": 3
     }
+  ],
+  "missingPackageJsons": [
+    "../node_modules/@types/bar/package.json",
+    "../node_modules/@types/foo/package.json",
+    "../node_modules/@types/package.json",
+    "../node_modules/package.json",
+    "./node_modules/file/package.json",
+    "./node_modules/package.json"
   ],
   "fileNames": [
     "lib.es2025.full.d.ts",
@@ -166,7 +174,7 @@ export {};
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1429
+  "size": 1671
 }
 //// [/user/username/projects/myproject/project2/index.d.ts] *new* 
 export {};
@@ -176,7 +184,7 @@ export {};
 Object.defineProperty(exports, "__esModule", { value: true });
 
 //// [/user/username/projects/myproject/project2/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"bf6a9897955595825a99e7ef50878c55-export const foo = 10;",{"version":"7ae42cb6eee47288e3acb472bb3aad16-import { foo } from \"file\";","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},"bf6a9897955595825a99e7ef50878c55-export const foo = 10;"],"fileIdsList":[[2]],"options":{"composite":true,"module":199},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[3],"missingPackageJsons":["../node_modules/@types/foo/package.json","../node_modules/@types/package.json","../node_modules/package.json","./node_modules/file/package.json","./node_modules/package.json"],"fileNames":["lib.es2025.full.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"bf6a9897955595825a99e7ef50878c55-export const foo = 10;",{"version":"7ae42cb6eee47288e3acb472bb3aad16-import { foo } from \"file\";","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},"bf6a9897955595825a99e7ef50878c55-export const foo = 10;"],"fileIdsList":[[2]],"options":{"composite":true,"module":199},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/user/username/projects/myproject/project2/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -187,6 +195,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
       ],
       "original": 3
     }
+  ],
+  "missingPackageJsons": [
+    "../node_modules/@types/foo/package.json",
+    "../node_modules/@types/package.json",
+    "../node_modules/package.json",
+    "./node_modules/file/package.json",
+    "./node_modules/package.json"
   ],
   "fileNames": [
     "lib.es2025.full.d.ts",
@@ -246,18 +261,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1344
+  "size": 1544
 }
 
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
   /user/username/projects/myproject
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/@types
   /user/username/projects/myproject/node_modules/@types/bar
   /user/username/projects/myproject/node_modules/@types/foo
   /user/username/projects/myproject/project1
+  /user/username/projects/myproject/project1/node_modules
   /user/username/projects/myproject/project1/node_modules/file
   /user/username/projects/myproject/project2
+  /user/username/projects/myproject/project2/node_modules
   /user/username/projects/myproject/project2/node_modules/file
 project1/tsconfig.json::
 SemanticDiagnostics::
@@ -303,7 +322,7 @@ const bar = 10;
 export {};
 
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"bf6a9897955595825a99e7ef50878c55-export const foo = 10;",{"version":"1ab147b130b9a5309305c28d6be6beb4-import { foo } from \"file\";const bar = 10;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},"bf6a9897955595825a99e7ef50878c55-export const foo = 10;","a0d503557e945e94b2464694c91a48ba-export const bar = 10;"],"fileIdsList":[[2]],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[3],"missingPackageJsons":["../node_modules/@types/bar/package.json","../node_modules/@types/foo/package.json","../node_modules/@types/package.json","../node_modules/package.json","./node_modules/file/package.json","./node_modules/package.json"],"fileNames":["lib.es2025.full.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"bf6a9897955595825a99e7ef50878c55-export const foo = 10;",{"version":"1ab147b130b9a5309305c28d6be6beb4-import { foo } from \"file\";const bar = 10;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},"bf6a9897955595825a99e7ef50878c55-export const foo = 10;","a0d503557e945e94b2464694c91a48ba-export const bar = 10;"],"fileIdsList":[[2]],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -314,6 +333,14 @@ export {};
       ],
       "original": 3
     }
+  ],
+  "missingPackageJsons": [
+    "../node_modules/@types/bar/package.json",
+    "../node_modules/@types/foo/package.json",
+    "../node_modules/@types/package.json",
+    "../node_modules/package.json",
+    "./node_modules/file/package.json",
+    "./node_modules/package.json"
   ],
   "fileNames": [
     "lib.es2025.full.d.ts",
@@ -379,18 +406,22 @@ export {};
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1444
+  "size": 1686
 }
 
 Watch Registrations::
 Directory watches::
   /home/src/tslibs/TS/Lib
   /user/username/projects/myproject
+  /user/username/projects/myproject/node_modules
+  /user/username/projects/myproject/node_modules/@types
   /user/username/projects/myproject/node_modules/@types/bar
   /user/username/projects/myproject/node_modules/@types/foo
   /user/username/projects/myproject/project1
+  /user/username/projects/myproject/project1/node_modules
   /user/username/projects/myproject/project1/node_modules/file
   /user/username/projects/myproject/project2
+  /user/username/projects/myproject/project2/node_modules
   /user/username/projects/myproject/project2/node_modules/file
 project1/tsconfig.json::
 SemanticDiagnostics::

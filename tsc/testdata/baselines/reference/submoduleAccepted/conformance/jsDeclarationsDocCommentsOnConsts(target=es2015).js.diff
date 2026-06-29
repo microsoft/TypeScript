@@ -1,19 +1,20 @@
 --- old.jsDeclarationsDocCommentsOnConsts(target=es2015).js
 +++ new.jsDeclarationsDocCommentsOnConsts(target=es2015).js
-@@= skipped -35, +35 lines =@@
+@@= skipped -34, +34 lines =@@
+
 
  //// [index1.d.ts]
- /**
+-/**
 - * const doc comment
 - */
 -export function x(a: any): string;
--/**
++declare const _exports: {
++    x: (a: any) => string;
++    b: typeof b;
++};
++export = _exports;
+ /**
   * function doc comment
   */
 -export function b(): number;
 +declare function b(): number;
-+declare const _default: {
-+    x: (a: any) => string;
-+    b: typeof b;
-+};
-+export = _default;

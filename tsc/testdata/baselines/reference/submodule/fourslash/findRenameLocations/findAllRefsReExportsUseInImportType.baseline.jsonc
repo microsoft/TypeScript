@@ -89,10 +89,14 @@
 // @useAliasesForRename: false
 
 // === /app.ts ===
-// import { /*START PREFIX*/foo as /*RENAME*/[|fooRENAME|] } from './foo/types';
+// import { /*RENAME*/[|fooRENAME|] } from './foo/types';
 // export type fullType = [|fooRENAME|].Full;
 // type namespaceImport = typeof import('./foo/types');
-// type fullType2 = import('./foo/types').foo.Full;
+// type fullType2 = import('./foo/types').[|fooRENAME|].Full;
+
+// === /foo/types/index.ts ===
+// import * as [|fooRENAME|] from './types';
+// export { [|fooRENAME|] };
 
 
 
@@ -100,10 +104,14 @@
 // @useAliasesForRename: false
 
 // === /app.ts ===
-// import { /*START PREFIX*/foo as [|fooRENAME|] } from './foo/types';
+// import { [|fooRENAME|] } from './foo/types';
 // export type fullType = /*RENAME*/[|fooRENAME|].Full;
 // type namespaceImport = typeof import('./foo/types');
-// type fullType2 = import('./foo/types').foo.Full;
+// type fullType2 = import('./foo/types').[|fooRENAME|].Full;
+
+// === /foo/types/index.ts ===
+// import * as [|fooRENAME|] from './types';
+// export { [|fooRENAME|] };
 
 
 
@@ -117,17 +125,8 @@
 // type fullType2 = import('./foo/types')./*RENAME*/[|fooRENAME|].Full;
 
 // === /foo/types/index.ts ===
-// import * as foo from './types';
-// export { /*START PREFIX*/foo as [|fooRENAME|] };
-
-
-
-// === findRenameLocations ===
-// @useAliasesForRename: false
-
-// === /foo/types/index.ts ===
-// import * as /*RENAME*/[|fooRENAME|] from './types';
-// export { [|fooRENAME|] as foo/*END SUFFIX*/ };
+// import * as [|fooRENAME|] from './types';
+// export { [|fooRENAME|] };
 
 
 
@@ -141,5 +140,20 @@
 // type fullType2 = import('./foo/types').[|fooRENAME|].Full;
 
 // === /foo/types/index.ts ===
-// import * as foo from './types';
-// export { /*START PREFIX*/foo as /*RENAME*/[|fooRENAME|] };
+// import * as /*RENAME*/[|fooRENAME|] from './types';
+// export { [|fooRENAME|] };
+
+
+
+// === findRenameLocations ===
+// @useAliasesForRename: false
+
+// === /app.ts ===
+// import { [|fooRENAME|] } from './foo/types';
+// export type fullType = [|fooRENAME|].Full;
+// type namespaceImport = typeof import('./foo/types');
+// type fullType2 = import('./foo/types').[|fooRENAME|].Full;
+
+// === /foo/types/index.ts ===
+// import * as [|fooRENAME|] from './types';
+// export { /*RENAME*/[|fooRENAME|] };

@@ -344,6 +344,14 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 	}
 
 	var collectFiles func(tasks []*parseTask, seen map[*parseTaskData]string)
+	// recordedDuplicates tracks, per task data, the set of file-name casings that
+	// have already been recorded in duplicateSourceFiles. A file that is reached
+	// from multiple import sites is walked once per site, but each distinct casing
+	// is only parsed and acquired in the parse cache once. Recording the same casing
+	// as a duplicate more than once would cause it to be released more times than it
+	// was acquired when the snapshot is disposed, leaving a dangling cache entry that
+	// panics the next time it is referenced.
+	var recordedDuplicates map[*parseTaskData]*collections.Set[string]
 	collectFiles = func(tasks []*parseTask, seen map[*parseTaskData]string) {
 		for _, task := range tasks {
 			includeReason := task.includeReason
@@ -364,11 +372,21 @@ func (w *filesParser) getProcessedFiles(loader *fileLoader) processedFiles {
 			// ensure we only walk each task once
 			if checkedName, ok := seen[data]; ok {
 				if task.file != nil && checkedName != task.normalizedFilePath {
-					duplicateSourceFiles = append(duplicateSourceFiles, &DuplicateSourceFile{
-						ParseOptions: task.file.ParseOptions(),
-						Hash:         task.file.Hash,
-						ScriptKind:   task.file.ScriptKind,
-					})
+					if recordedDuplicates == nil {
+						recordedDuplicates = make(map[*parseTaskData]*collections.Set[string])
+					}
+					dups := recordedDuplicates[data]
+					if dups == nil {
+						dups = &collections.Set[string]{}
+						recordedDuplicates[data] = dups
+					}
+					if dups.AddIfAbsent(task.normalizedFilePath) {
+						duplicateSourceFiles = append(duplicateSourceFiles, &DuplicateSourceFile{
+							ParseOptions: task.file.ParseOptions(),
+							Hash:         task.file.Hash,
+							ScriptKind:   task.file.ScriptKind,
+						})
+					}
 				}
 				if !loader.opts.Config.CompilerOptions().ForceConsistentCasingInFileNames.IsFalse() {
 					// Check if it differs only in drive letters its ok to ignore that error:

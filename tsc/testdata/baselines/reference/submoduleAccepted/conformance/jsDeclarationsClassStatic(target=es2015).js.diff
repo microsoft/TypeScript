@@ -1,10 +1,10 @@
 --- old.jsDeclarationsClassStatic(target=es2015).js
 +++ new.jsDeclarationsClassStatic(target=es2015).js
-@@= skipped -48, +48 lines =@@
-
+@@= skipped -49, +49 lines =@@
 
  //// [source.d.ts]
--export = Handler;
+ export = Handler;
++export { Strings };
  declare class Handler {
      static get OPTIONS(): number;
      process(): void;
@@ -24,8 +24,6 @@
 +    a: string;
 +    b: string;
 +};
-+export = Handler;
-+export { Strings };
 +export type HandlerOptions = {
      /**
       * Should be able to export a type alias at the same time.

@@ -35,3 +35,25 @@ func TestEncodeURI(t *testing.T) {
 		})
 	}
 }
+
+func TestContainsNonASCII(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name string
+		text string
+		want bool
+	}{
+		{name: "ascii", text: "abc", want: false},
+		{name: "non-ascii", text: "é", want: true},
+		{name: "lone surrogate sentinel", text: EncodeJSStringRune(0xD800), want: true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := ContainsNonASCII(tt.text); got != tt.want {
+				t.Fatalf("ContainsNonASCII(%q) = %v, want %v", tt.text, got, tt.want)
+			}
+		})
+	}
+}

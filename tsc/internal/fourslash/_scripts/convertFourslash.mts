@@ -2695,6 +2695,32 @@ function parseOrganizeImportsArgs(args: readonly ts.Expression[]): [VerifyOrgani
                     throw new Error(`Unsupported value for organizeImportsIgnoreCase: ${propValue.getText()}`);
                 }
             }
+            else if (propName === "organizeImportsSort") {
+                if (ts.isStringLiteral(propValue)) {
+                    switch (propValue.text) {
+                        case "auto":
+                            prefsFields.push(`${goFieldName}: lsutil.OrganizeImportsSortAuto`);
+                            break;
+                        case "ordinal":
+                            prefsFields.push(`${goFieldName}: lsutil.OrganizeImportsSortOrdinal`);
+                            break;
+                        case "ordinalIgnoreCase":
+                            prefsFields.push(`${goFieldName}: lsutil.OrganizeImportsSortOrdinalIgnoreCase`);
+                            break;
+                        case "natural":
+                            prefsFields.push(`${goFieldName}: lsutil.OrganizeImportsSortNatural`);
+                            break;
+                        case "naturalIgnoreCase":
+                            prefsFields.push(`${goFieldName}: lsutil.OrganizeImportsSortNaturalIgnoreCase`);
+                            break;
+                        default:
+                            throw new Error(`Unsupported value for organizeImportsSort: ${propValue.text}`);
+                    }
+                }
+                else {
+                    throw new Error(`Expected string literal for organizeImportsSort, got ${propValue.getText()}`);
+                }
+            }
             else if (propName === "organizeImportsCollation") {
                 if (ts.isStringLiteral(propValue)) {
                     if (propValue.text === "unicode") {

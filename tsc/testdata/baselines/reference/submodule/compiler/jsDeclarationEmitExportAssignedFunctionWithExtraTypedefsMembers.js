@@ -29,11 +29,11 @@ module.exports = function loader(options) { };
  * @typedef Options
  * @property {string} opt
  */
-export type Options = {
-    opt: string;
-};
+export = loader;
 /**
  * @param {Options} options
  */
-declare const _default: (options: Options) => void;
-export = _default;
+declare function loader(options: Options): void;
+export type Options = {
+    opt: string;
+};

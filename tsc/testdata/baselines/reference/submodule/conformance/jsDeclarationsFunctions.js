@@ -151,7 +151,7 @@ export declare function e<T, U>(a: T, b: U): T & U;
  */
 export declare function f<T>(a: T): T;
 export declare namespace f {
-    var self: typeof f;
+    export { f as self };
 }
 /**
  * @param {{x: string}} a

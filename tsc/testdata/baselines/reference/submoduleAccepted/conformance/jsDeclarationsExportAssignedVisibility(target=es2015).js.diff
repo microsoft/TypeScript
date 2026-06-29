@@ -7,11 +7,10 @@
 +    constructor();
  }
  //// [index.d.ts]
--export = Container;
+ export = Container;
 +import Obj = require("./obj");
  declare class Container {
      usage: Obj;
 +    constructor();
  }
 -import Obj = require("./obj");
-+export = Container;

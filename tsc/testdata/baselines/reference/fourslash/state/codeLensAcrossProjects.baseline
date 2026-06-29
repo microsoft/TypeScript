@@ -190,6 +190,7 @@ Config File Names::
           "organizeImports": {
             "caseFirst": "default",
             "locale": "",
+            "sort": "auto",
             "typeOrder": "auto",
             "unicodeCollation": "ordinal"
           },
@@ -642,11 +643,13 @@ Config::
           "organizeImports": {
             "caseFirst": "default",
             "locale": "",
+            "sort": "auto",
             "typeOrder": "auto",
             "unicodeCollation": "ordinal"
           },
           "quoteStyle": ""
         },
+        "reportStyleChecksAsWarnings": true,
         "suggest": {
           "autoImports": true,
           "includeCompletionsForImportStatements": true
@@ -657,8 +660,7 @@ Config::
           "displayPartsForJSDoc": true,
           "maximumHoverLength": 0,
           "preferGoToSourceDefinition": false,
-          "provideRefactorNotApplicableReason": true,
-          "reportStyleChecksAsWarnings": true
+          "provideRefactorNotApplicableReason": true
         },
         "workspaceSymbols": {
           "excludeLibrarySymbols": true

@@ -5,15 +5,19 @@
 
  //// [rectangle.d.ts]
 -export class Rectangle {
++declare const _exports: {
++    Rectangle: typeof Rectangle;
++};
++export = _exports;
 +declare class Rectangle {
 +    constructor();
  }
-+declare const _default: {
-+    Rectangle: typeof Rectangle;
-+};
-+export = _default;
  //// [index.d.ts]
 -export class Render {
++declare const _exports: {
++    Render: typeof Render;
++};
++export = _exports;
 +declare class Render {
      /**
       * Object list
@@ -24,14 +28,10 @@
      /**
       * Adds a rectangle
       *
-@@= skipped -16, +22 lines =@@
+@@= skipped -16, +26 lines =@@
       */
      addRectangle(): Rectangle;
  }
 -import { Rectangle } from "./rectangle";
-+declare const _default: {
-+    Render: typeof Render;
-+};
-+export = _default;
  //// [test.d.ts]
  export {};

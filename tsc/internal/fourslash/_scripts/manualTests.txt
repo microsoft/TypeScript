@@ -110,6 +110,8 @@ navto_excludeLib3
 navto_excludeLib4
 navto_serverExcludeLib
 nodeModulesImportCompletions1
+organizeImportsPathsUnicode3
+organizeImportsUnicode3
 outliningForNonCompleteInterfaceDeclaration
 outliningHintSpansForFunction
 overloadOnConstCallSignature

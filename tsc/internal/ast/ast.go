@@ -9,6 +9,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/zeebo/xxh3"
 )
@@ -188,11 +189,21 @@ type Node struct {
 // type switches. Either approach is fine. Interface methods are likely more performant, but have higher
 // code size costs because we have hundreds of implementations of the NodeData interface.
 
-func (n *Node) AsNode() *Node                             { return n }
-func (n *Node) Pos() int                                  { return n.Loc.Pos() }
-func (n *Node) End() int                                  { return n.Loc.End() }
-func (n *Node) ForEachChild(v Visitor) bool               { return n.data.ForEachChild(v) }
-func (n *Node) IterChildren() iter.Seq[*Node]             { return n.data.IterChildren() }
+func (n *Node) AsNode() *Node { return n }
+func (n *Node) Pos() int      { return n.Loc.Pos() }
+func (n *Node) End() int      { return n.Loc.End() }
+func (n *Node) IterChildren() iter.Seq[*Node] {
+	// Implemented directly (rather than through the nodeData interface) so that the
+	// returned iterator and the visitor closure it passes to ForEachChild do not
+	// escape: an interface call is opaque to escape analysis. `true` stops a TS
+	// visitor early, whereas `false` stops a Go iterator yield, so the result is
+	// inverted.
+	return func(yield func(*Node) bool) {
+		n.ForEachChild(func(child *Node) bool {
+			return !yield(child)
+		})
+	}
+}
 func (n *Node) Clone(f NodeFactoryCoercible) *Node        { return n.data.Clone(f) }
 func (n *Node) VisitEachChild(v *NodeVisitor) *Node       { return n.data.VisitEachChild(v) }
 func (n *Node) Name() *DeclarationName                    { return n.data.Name() }
@@ -1170,7 +1181,6 @@ func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
 type nodeData interface {
 	AsNode() *Node
 	ForEachChild(v Visitor) bool
-	IterChildren() iter.Seq[*Node]
 	VisitEachChild(v *NodeVisitor) *Node
 	Clone(v NodeFactoryCoercible) *Node
 	Name() *DeclarationName
@@ -1197,21 +1207,8 @@ type NodeDefault struct {
 	Node
 }
 
-func invert(yield func(v *Node) bool) Visitor {
-	return func(n *Node) bool {
-		return !yield(n)
-	}
-}
-
 func (node *NodeDefault) AsNode() *Node               { return &node.Node }
 func (node *NodeDefault) ForEachChild(v Visitor) bool { return false }
-func (node *NodeDefault) forEachChildIter(yield func(v *Node) bool) {
-	node.data.ForEachChild(invert(yield)) // `true` is return early for a ts visitor, `false` is return early for a go iterator yield function
-}
-
-func (node *NodeDefault) IterChildren() iter.Seq[*Node] {
-	return node.forEachChildIter
-}
 
 func (node *NodeDefault) VisitEachChild(v *NodeVisitor) *Node                   { return node.AsNode() }
 func (node *NodeDefault) Clone(v NodeFactoryCoercible) *Node                    { return nil }
@@ -2522,7 +2519,6 @@ type SourceFile struct {
 	SymbolCount               int
 	ClassifiableNames         collections.Set[string]
 	PatternAmbientModules     []*PatternAmbientModule
-	NestedCJSExports          []*Node
 	GlobalExports             SymbolTable
 
 	// Fields set by ECMALineMap
@@ -2555,6 +2551,7 @@ func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, st
 	data.fileName = opts.FileName
 	data.parseOptions = opts
 	data.text = text
+	data.ContainsNonASCII = stringutil.ContainsNonASCII(text)
 	data.Statements = statements
 	data.EndOfFileToken = endOfFileToken
 	return f.newNode(KindSourceFile, data)

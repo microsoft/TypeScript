@@ -54,6 +54,7 @@ module.exports = {testFn, testFnTypes};
 
 
 //// [file.d.ts]
+export { myTypes };
 /**
  * @namespace myTypes
  * @global
@@ -78,8 +79,12 @@ export declare namespace myTypes {
 export declare namespace myTypes {
     export type typeC = myTypes.typeB | Function;
 }
-export { myTypes };
 //// [file2.d.ts]
+declare const _exports: {
+    testFn: typeof testFn;
+    testFnTypes: Record<string, any>;
+};
+export = _exports;
 import { myTypes } from './file.js';
 /**
  * @namespace testFnTypes
@@ -98,8 +103,3 @@ export declare namespace testFnTypes {
  * @returns {number|null} Result.
  */
 declare function testFn(input: testFnTypes.input): number | null;
-declare const _default: {
-    testFn: typeof testFn;
-    testFnTypes: Record<string, any>;
-};
-export = _default;

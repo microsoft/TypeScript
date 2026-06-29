@@ -1,22 +1,20 @@
 --- old.jsDeclarationsExportSubAssignments(target=es2015).js
 +++ new.jsDeclarationsExportSubAssignments(target=es2015).js
-@@= skipped -21, +21 lines =@@
-
+@@= skipped -22, +22 lines =@@
 
  //// [cls.d.ts]
--export = Foo;
+ export = Foo;
++export { Strings };
 +declare const Strings: {
 +    a: string;
 +    b: string;
 +};
  declare class Foo {
- }
+-}
 -declare namespace Foo {
 -    export { Strings };
 -}
 -declare namespace Strings {
 -    let a: string;
 -    let b: string;
--}
-+export = Foo;
-+export { Strings };
+ }

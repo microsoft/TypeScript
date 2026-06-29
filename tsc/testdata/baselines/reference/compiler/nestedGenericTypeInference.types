@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/nestedGenericTypeInference.ts] ////
+
+=== nestedGenericTypeInference.ts ===
+// https://github.com/microsoft/typescript-go/issues/1789
+
+declare function flat<T>(args: T[] | T[][]): void;
+>flat : <T>(args: T[] | T[][]) => void
+>args : T[] | T[][]
+
+type Value = 1 | 2;
+>Value : Value
+
+declare const n: Value[] | Value[][];
+>n : Value[][] | Value[]
+
+flat(n);
+>flat(n) : void
+>flat : <T>(args: T[] | T[][]) => void
+>n : Value[][] | Value[]
+
+type Box<T> = { value: T };
+>Box : Box<T>
+>value : T
+
+declare function flat0<T>(args: Box<T> | Box<Box<T>>): void;
+>flat0 : <T>(args: Box<T> | Box<Box<T>>) => void
+>args : Box<T> | Box<Box<T>>
+
+declare const arg0: Box<string> | Box<Box<string>>;
+>arg0 : Box<string> | Box<Box<string>>
+
+flat0(arg0);
+>flat0(arg0) : void
+>flat0 : <T>(args: Box<T> | Box<Box<T>>) => void
+>arg0 : Box<string> | Box<Box<string>>
+
+declare function flat1<T>(args: Array<T> | Array<Box<T>>): void;
+>flat1 : <T>(args: Array<T> | Array<Box<T>>) => void
+>args : T[] | Box<T>[]
+
+declare const arg1: Array<string> | Array<Box<string>>;
+>arg1 : string[] | Box<string>[]
+
+flat1(arg1);
+>flat1(arg1) : void
+>flat1 : <T>(args: Array<T> | Array<Box<T>>) => void
+>arg1 : string[] | Box<string>[]
+
+declare function flat2<T>(args: Box<T> | Box<Array<T>>): void;
+>flat2 : <T>(args: Box<T> | Box<Array<T>>) => void
+>args : Box<T> | Box<T[]>
+
+declare const arg2: Box<string> | Box<Array<string>>;
+>arg2 : Box<string> | Box<string[]>
+
+flat2(arg2);
+>flat2(arg2) : void
+>flat2 : <T>(args: Box<T> | Box<Array<T>>) => void
+>arg2 : Box<string> | Box<string[]>
+

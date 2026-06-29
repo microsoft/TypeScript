@@ -288,7 +288,8 @@ declare namespace foo {
     export var string: number;
     export var symbol: number;
     export var type: number;
-    export var undefined: number;
+    export var _21: number;
+    export { _21 as undefined };
     export var unique: number;
     export var unknown: number;
     export var from: number;

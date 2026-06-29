@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 func TestPositionMapASCII(t *testing.T) {
@@ -116,6 +117,22 @@ func TestPositionMapMultipleNonASCII(t *testing.T) {
 		if got := pm.UTF16ToUTF8(tt.utf16); got != tt.utf8 {
 			t.Errorf("UTF16ToUTF8(%d) = %d, want %d", tt.utf16, got, tt.utf8)
 		}
+	}
+}
+
+func TestPositionMapLoneSurrogateSentinel(t *testing.T) {
+	t.Parallel()
+	text := "a" + stringutil.EncodeJSStringRune(0xD800) + "b"
+	pm := ast.ComputePositionMap(text)
+	if pm.IsAsciiOnly() {
+		t.Fatal("expected non-ASCII")
+	}
+
+	if got := pm.UTF8ToUTF16(len(text)); got != 3 {
+		t.Errorf("UTF8ToUTF16(%d) = %d, want 3", len(text), got)
+	}
+	if got := pm.UTF16ToUTF8(2); got != len(text)-1 {
+		t.Errorf("UTF16ToUTF8(2) = %d, want %d", got, len(text)-1)
 	}
 }
 

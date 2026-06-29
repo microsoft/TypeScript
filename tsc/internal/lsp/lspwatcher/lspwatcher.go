@@ -248,7 +248,7 @@ func (w *watch) reconcile(emitSyntheticCreates bool) error {
 			if w.watchingTarget && w.subscription != nil {
 				return nil // already watching the target
 			}
-			targetDirectory := watcher.fs.Realpath(w.requestedDirectory)
+			targetDirectory := w.requestedDirectory
 			var options []fswatch.WatchOption
 			if w.recursive {
 				options = append(options, fswatch.WithRecursive())
@@ -265,7 +265,7 @@ func (w *watch) reconcile(emitSyntheticCreates bool) error {
 				_ = previous.Close()
 			}
 			if emitSyntheticCreates {
-				watcher.emitSyntheticCreates(targetDirectory, w.requestedDirectory, w.kind, w.recursive)
+				watcher.emitSyntheticCreates(targetDirectory, w.kind, w.recursive)
 			}
 			return nil
 		}
@@ -282,7 +282,7 @@ func (w *watch) reconcile(emitSyntheticCreates bool) error {
 			}
 			return nil
 		}
-		ancestorDirectory := watcher.fs.Realpath(ancestor)
+		ancestorDirectory := ancestor
 		if !w.watchingTarget && w.subscription != nil && w.watchedDirectory == ancestorDirectory {
 			return nil // already watching the correct ancestor
 		}
@@ -326,7 +326,7 @@ func (w *watch) targetCallback(watchedDirectory string) fswatch.WatchCallback {
 			}
 		}
 		if len(events) > 0 {
-			watcher.forwardEvents(watchedDirectory, w.requestedDirectory, w.kind, events)
+			watcher.forwardEvents(w.kind, events)
 		}
 		if terminated {
 			// The delete event for the directory was forwarded above; now
@@ -386,10 +386,9 @@ func nearestExistingAncestor(fs vfs.FS, dir string) (string, bool) {
 	}
 }
 
-// forwardEvents translates fswatch events rooted at watchedDirectory into LSP
-// file events (remapping paths back into the requestedDirectory namespace) and
-// enqueues them for the next debounced flush.
-func (w *Watcher) forwardEvents(watchedDirectory, requestedDirectory string, kind lsproto.WatchKind, events []fswatch.Event) {
+// forwardEvents translates fswatch events into LSP file events and enqueues
+// them for the next debounced flush.
+func (w *Watcher) forwardEvents(kind lsproto.WatchKind, events []fswatch.Event) {
 	w.mu.Lock()
 	if w.closed {
 		w.mu.Unlock()
@@ -398,7 +397,6 @@ func (w *Watcher) forwardEvents(watchedDirectory, requestedDirectory string, kin
 	if w.pending == nil {
 		w.pending = make(map[string]*lsproto.FileEvent, len(events))
 	}
-	comparePathsOptions := tspath.ComparePathsOptions{UseCaseSensitiveFileNames: w.fs.UseCaseSensitiveFileNames()}
 	for _, event := range events {
 		var changeType lsproto.FileChangeType
 		switch event.Kind {
@@ -419,7 +417,7 @@ func (w *Watcher) forwardEvents(watchedDirectory, requestedDirectory string, kin
 			continue
 		}
 
-		path := remapEventPath(watchedDirectory, requestedDirectory, tspath.NormalizeSlashes(event.Path), comparePathsOptions)
+		path := tspath.NormalizeSlashes(event.Path)
 		uri := lsconv.FileNameToDocumentURI(path)
 		w.pending[string(uri)] = &lsproto.FileEvent{
 			Uri:  uri,
@@ -436,31 +434,30 @@ func (w *Watcher) forwardEvents(watchedDirectory, requestedDirectory string, kin
 // directory itself is always included; for a non-recursive watch its immediate
 // children are added, and for a recursive watch its whole subtree is walked.
 // Nothing is emitted if the watch doesn't request create notifications.
-func (w *Watcher) emitSyntheticCreates(watchedDirectory, requestedDirectory string, kind lsproto.WatchKind, recursive bool) {
+func (w *Watcher) emitSyntheticCreates(directory string, kind lsproto.WatchKind, recursive bool) {
 	if kind&lsproto.WatchKindCreate == 0 {
 		return
 	}
-	comparePathsOptions := tspath.ComparePathsOptions{UseCaseSensitiveFileNames: w.fs.UseCaseSensitiveFileNames()}
-	paths := []string{requestedDirectory}
+	paths := []string{directory}
 	if recursive {
-		_ = w.fs.WalkDir(watchedDirectory, func(path string, entry vfs.DirEntry, err error) error {
+		_ = w.fs.WalkDir(directory, func(path string, entry vfs.DirEntry, err error) error {
 			if err != nil {
 				return nil
 			}
 			normalizedPath := tspath.NormalizeSlashes(path)
-			if normalizedPath == watchedDirectory {
+			if normalizedPath == directory {
 				return nil
 			}
-			paths = append(paths, remapEventPath(watchedDirectory, requestedDirectory, normalizedPath, comparePathsOptions))
+			paths = append(paths, normalizedPath)
 			return nil
 		})
 	} else {
-		entries := w.fs.GetAccessibleEntries(watchedDirectory)
+		entries := w.fs.GetAccessibleEntries(directory)
 		for _, name := range entries.Files {
-			paths = append(paths, tspath.CombinePaths(requestedDirectory, name))
+			paths = append(paths, tspath.CombinePaths(directory, name))
 		}
 		for _, name := range entries.Directories {
-			paths = append(paths, tspath.CombinePaths(requestedDirectory, name))
+			paths = append(paths, tspath.CombinePaths(directory, name))
 		}
 	}
 	w.enqueueSyntheticCreates(paths)
@@ -498,24 +495,6 @@ func (w *Watcher) scheduleFlushLocked() {
 	if w.flushTimer == nil {
 		w.flushTimer = time.AfterFunc(throttleWindow, w.flush)
 	}
-}
-
-// remapEventPath translates an absolute path observed under watchedDirectory
-// (the canonicalized, symlink-resolved directory actually watched) back into
-// the requestedDirectory namespace the session requested. When the two
-// directories are identical, the path is returned unchanged.
-func remapEventPath(watchedDirectory, requestedDirectory, path string, comparePathsOptions tspath.ComparePathsOptions) string {
-	if watchedDirectory == requestedDirectory {
-		return path
-	}
-	if tspath.ContainsPath(watchedDirectory, path, comparePathsOptions) {
-		relative := tspath.GetRelativePathFromDirectory(watchedDirectory, path, comparePathsOptions)
-		if relative == "" || relative == "." {
-			return requestedDirectory
-		}
-		return tspath.CombinePaths(requestedDirectory, relative)
-	}
-	return path
 }
 
 func (w *Watcher) flush() {

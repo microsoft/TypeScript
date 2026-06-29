@@ -48,7 +48,7 @@ export async function getBuiltinExePath(context: vscode.ExtensionContext): Promi
         catch {}
     }
     return {
-        path: context.asAbsolutePath(path.join("./lib", `tsc${process.platform === "win32" ? ".exe" : ""}`)),
+        path: context.asAbsolutePath(path.join("./lib", `tsgo${process.platform === "win32" ? ".exe" : ""}`)),
         version: context.extension.packageJSON.version,
     };
 }
@@ -128,29 +128,24 @@ export function resolveTsdkPath(tsdkPath: string): string {
 }
 
 export async function resolveTsdkPathToExe(tsdkPath: string): Promise<{ path: string; version: string; } | undefined> {
-    // tsdkPath may point at either the package directory (e.g. node_modules/typescript)
-    // or, following the built-in TypeScript extension's convention, the package's lib
-    // directory (e.g. node_modules/typescript/lib). Try to resolve it as an installed
-    // `typescript` package: it has a package.json with a `bin` entry and depends on a
-    // platform-specific package named `@typescript/<baseName>-<os>-<arch>` containing
-    // the binary.
-    // NOTE: Keep this algorithm in sync with _packages/native-preview/lib/getExePath.js.
     const resolved = workspaceResolve(tsdkPath);
     for (const packagePath of [resolved, vscode.Uri.joinPath(resolved, "..")]) {
         try {
             const packageJsonPath = vscode.Uri.joinPath(packagePath, "package.json");
             const packageJson = JSON.parse(await vscode.workspace.fs.readFile(packageJsonPath).then(buffer => buffer.toString()));
+            // NOTE: Keep in sync with _packages/native-preview/lib/getExePath.js.
             const name: unknown = packageJson.name;
             const bin: unknown = packageJson.bin;
-            if (typeof name !== "string" || !bin || typeof bin !== "object") {
-                continue;
-            }
+            if (typeof name !== "string" || !bin || typeof bin !== "object") continue;
+
             const baseName = name.startsWith("@") ? name.split("/")[1] : name;
-            const binName = Object.keys(bin)[0];
-            const exeName = `${binName}${process.platform === "win32" ? ".exe" : ""}`;
+            if (!baseName) continue;
+            const expectedBinName = baseName === "typescript" ? "tsc" : "tsgo";
+            const binNames = Object.keys(bin);
+            if (binNames.length !== 1 || binNames[0] !== expectedBinName) continue;
+
+            const exeName = `${expectedBinName}${process.platform === "win32" ? ".exe" : ""}`;
             const platformPackage = `${baseName}-${process.platform}-${process.arch}`;
-            // The platform package lives at <node_modules>/@typescript/<platformPackage>.
-            // Walk out of the (possibly scoped) package directory to <node_modules>.
             const nodeModules = name.startsWith("@")
                 ? vscode.Uri.joinPath(packagePath, "..", "..")
                 : vscode.Uri.joinPath(packagePath, "..");
@@ -160,8 +155,6 @@ export async function resolveTsdkPathToExe(tsdkPath: string): Promise<{ path: st
         }
         catch {}
     }
-    // Otherwise, treat tsdkPath as a directory directly containing the binary
-    // (e.g. the repo's `built/local`).
     try {
         const exePath = vscode.Uri.joinPath(resolved, `tsgo${process.platform === "win32" ? ".exe" : ""}`);
         await vscode.workspace.fs.stat(exePath);
@@ -247,14 +240,27 @@ export function getExplicitConfigTarget(
     return undefined;
 }
 
+export enum ConfigName {
+    JsTsConfigName = "js/ts.experimental.useTsgo",
+    DeprecatedTypeScriptConfigName = "typescript.experimental.useTsgo",
+}
+
 /**
- * Returns the name of the setting that is explicitly set to `false`,
- * preferring `js/ts` over `typescript`. Returns `undefined` if neither
- * is explicitly `false`.
+ * Returns the name of the setting with the appropriate precedence that is explicitly set,
+ * preferring `js/ts` over `typescript`.
+ * Returns `undefined` if neither is explicitly specified.
  */
-export function getUseTsgoFalseSetting(): string | undefined {
-    if (getExplicitUseTsgo("js/ts") === false) return "js/ts.experimental.useTsgo";
-    if (getExplicitUseTsgo("typescript") === false) return "typescript.experimental.useTsgo";
+export function getWinningTsgoConfigKey(): ConfigName | undefined {
+    const jsTsValue = getExplicitUseTsgo("js/ts");
+    const tsValue = getExplicitUseTsgo("typescript");
+
+    if (jsTsValue !== undefined || tsValue !== undefined) {
+        const jsTsTarget = getExplicitConfigTarget(vscode.workspace.getConfiguration("js/ts"), "experimental.useTsgo");
+        const tsTarget = getExplicitConfigTarget(vscode.workspace.getConfiguration("typescript"), "experimental.useTsgo");
+        const mostSpecific = Math.max(jsTsTarget ?? vscode.ConfigurationTarget.Global, tsTarget ?? vscode.ConfigurationTarget.Global);
+        return jsTsTarget === mostSpecific ? ConfigName.JsTsConfigName : ConfigName.DeprecatedTypeScriptConfigName;
+    }
+
     return undefined;
 }
 

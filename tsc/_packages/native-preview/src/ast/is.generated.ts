@@ -273,6 +273,7 @@ import type {
     ShiftOperatorOrHigher,
     ShorthandPropertyAssignment,
     SignatureDeclaration,
+    SourceFile,
     SpreadAssignment,
     SpreadElement,
     StaticKeyword,
@@ -1032,6 +1033,10 @@ export function isJSDocSignature(node: Node): node is JSDocSignature {
 
 export function isJSDocNameReference(node: Node): node is JSDocNameReference {
     return node.kind === SyntaxKind.JSDocNameReference;
+}
+
+export function isSourceFile(node: Node): node is SourceFile {
+    return node.kind === SyntaxKind.SourceFile;
 }
 
 export function isModuleDeclaration(node: Node): node is ModuleDeclaration {

@@ -1406,6 +1406,33 @@ export const value = content;`,
 		assert.Equal(t, len(inlayHintsRefreshCalls), 1, "expected one RefreshInlayHints call after inlay hints preference change")
 	})
 
+	t.Run("schedules diagnostics refresh when reportStyleChecksAsWarnings changes", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/src/tsconfig.json": "{}",
+			"/src/index.ts":      "export const x = 1;",
+		}
+		session, utils := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		// Record the baseline count of RefreshDiagnostics calls.
+		baselineRefreshCount := len(utils.Client().RefreshDiagnosticsCalls())
+
+		// Toggle reportStyleChecksAsWarnings (default is true, so set it to false).
+		prefs := lsutil.NewDefaultUserPreferences()
+		prefs.ReportStyleChecksAsWarnings = core.TSFalse
+		session.Configure(prefs)
+		session.WaitForBackgroundTasks()
+
+		refreshCount := len(utils.Client().RefreshDiagnosticsCalls())
+		assert.Assert(t, refreshCount > baselineRefreshCount,
+			"expected RefreshDiagnostics to be called after reportStyleChecksAsWarnings change, got %d calls (baseline %d)",
+			refreshCount, baselineRefreshCount)
+	})
+
 	t.Run("config parsing", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{
@@ -1423,7 +1450,7 @@ export const value = content;`,
 				"quoteStyle":           "single",
 			},
 			"unstable": map[string]any{
-				"organizeImportsIgnoreCase": true,
+				"organizeImportsSort": "ordinalIgnoreCase",
 			},
 		}
 		session.Configure(lsutil.ParseUserPreferences(map[string]any{"js/ts": configMap1}))
@@ -1431,7 +1458,7 @@ export const value = content;`,
 		expectedPrefs1 := lsutil.NewDefaultUserPreferences()
 		expectedPrefs1.UseAliasesForRename = core.TSTrue
 		expectedPrefs1.QuotePreference = lsutil.QuotePreferenceSingle
-		expectedPrefs1.OrganizeImportsIgnoreCase = core.TSTrue
+		expectedPrefs1.OrganizeImportsSort = lsutil.OrganizeImportsSortOrdinalIgnoreCase
 
 		assert.DeepEqual(t, actualConfig1, expectedPrefs1)
 
@@ -1441,7 +1468,7 @@ export const value = content;`,
 				"quoteStyle":           "double",
 			},
 			"unstable": map[string]any{
-				"organizeImportsIgnoreCase": false,
+				"organizeImportsSort": "ordinal",
 			},
 		}
 		session.Configure(lsutil.ParseUserPreferences(map[string]any{"js/ts": configMap2}))
@@ -1449,7 +1476,7 @@ export const value = content;`,
 		expectedPrefs2 := lsutil.NewDefaultUserPreferences()
 		expectedPrefs2.UseAliasesForRename = core.TSFalse
 		expectedPrefs2.QuotePreference = lsutil.QuotePreferenceDouble
-		expectedPrefs2.OrganizeImportsIgnoreCase = core.TSFalse
+		expectedPrefs2.OrganizeImportsSort = lsutil.OrganizeImportsSortOrdinal
 
 		assert.DeepEqual(t, actualConfig2, expectedPrefs2)
 	})

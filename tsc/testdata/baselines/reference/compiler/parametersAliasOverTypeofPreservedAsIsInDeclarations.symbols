@@ -1,0 +1,112 @@
+//// [tests/cases/compiler/parametersAliasOverTypeofPreservedAsIsInDeclarations.ts] ////
+
+=== parametersAliasOverTypeofPreservedAsIsInDeclarations.ts ===
+interface OverloadUnion {
+>OverloadUnion : Symbol(OverloadUnion, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 0, 0))
+
+    (arg: string): Promise<boolean>;
+>arg : Symbol(arg, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 1, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    (arg: string, callback: (error: Error | null, result: boolean) => void): void;
+>arg : Symbol(arg, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 2, 5))
+>callback : Symbol(callback, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 2, 17))
+>error : Symbol(error, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 2, 29))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>result : Symbol(result, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 2, 49))
+}
+
+declare let overloadInterface: OverloadUnion;
+>overloadInterface : Symbol(overloadInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 5, 11))
+>OverloadUnion : Symbol(OverloadUnion, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 0, 0))
+
+declare let overloadInline:
+>overloadInline : Symbol(overloadInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 6, 11))
+
+    | ((arg: string) => Promise<boolean>)
+>arg : Symbol(arg, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 7, 8))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    | ((arg: string, callback: (error: Error | null, result: boolean) => void) => void)
+>arg : Symbol(arg, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 8, 8))
+>callback : Symbol(callback, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 8, 20))
+>error : Symbol(error, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 8, 32))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>result : Symbol(result, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 8, 52))
+
+export class C {
+>C : Symbol(C, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 8, 87))
+
+    classMethodInterface(...args: Parameters<typeof overloadInterface>) {}
+>classMethodInterface : Symbol(C.classMethodInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 10, 16))
+>args : Symbol(args, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 11, 25))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>overloadInterface : Symbol(overloadInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 5, 11))
+
+    classMethodInline(...args: Parameters<typeof overloadInline>) {}
+>classMethodInline : Symbol(C.classMethodInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 11, 74))
+>args : Symbol(args, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 12, 22))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>overloadInline : Symbol(overloadInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 6, 11))
+
+    classFieldFunctionInterface = function (...args: Parameters<typeof overloadInterface>) {}
+>classFieldFunctionInterface : Symbol(C.classFieldFunctionInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 12, 68))
+>args : Symbol(args, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 14, 44))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>overloadInterface : Symbol(overloadInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 5, 11))
+
+    classFieldFunctionInline = function (...args: Parameters<typeof overloadInline>) {}
+>classFieldFunctionInline : Symbol(C.classFieldFunctionInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 14, 93))
+>args : Symbol(args, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 15, 41))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>overloadInline : Symbol(overloadInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 6, 11))
+
+    classFieldArrowInterface = (...args: Parameters<typeof overloadInterface>) => {}
+>classFieldArrowInterface : Symbol(C.classFieldArrowInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 15, 87))
+>args : Symbol(args, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 17, 32))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>overloadInterface : Symbol(overloadInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 5, 11))
+
+    classFieldArrowInline = (...args: Parameters<typeof overloadInline>) => {}
+>classFieldArrowInline : Symbol(C.classFieldArrowInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 17, 84))
+>args : Symbol(args, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 18, 29))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>overloadInline : Symbol(overloadInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 6, 11))
+}
+
+export function FunctionInterface(...args: Parameters<typeof overloadInterface>) {}
+>FunctionInterface : Symbol(FunctionInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 19, 1))
+>args : Symbol(args, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 21, 34))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>overloadInterface : Symbol(overloadInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 5, 11))
+
+export function FunctionInline(...args: Parameters<typeof overloadInline>) {}
+>FunctionInline : Symbol(FunctionInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 21, 83))
+>args : Symbol(args, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 22, 31))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>overloadInline : Symbol(overloadInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 6, 11))
+
+export const FunctionAssignInterface = function (...args: Parameters<typeof overloadInterface>) {}
+>FunctionAssignInterface : Symbol(FunctionAssignInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 23, 12))
+>args : Symbol(args, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 23, 49))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>overloadInterface : Symbol(overloadInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 5, 11))
+
+export const FunctionAssignInline = function (...args: Parameters<typeof overloadInline>) {}
+>FunctionAssignInline : Symbol(FunctionAssignInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 24, 12))
+>args : Symbol(args, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 24, 46))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>overloadInline : Symbol(overloadInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 6, 11))
+
+export const ArrowInterface = (...args: Parameters<typeof overloadInterface>) => {}
+>ArrowInterface : Symbol(ArrowInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 25, 12))
+>args : Symbol(args, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 25, 31))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>overloadInterface : Symbol(overloadInterface, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 5, 11))
+
+export const ArrowInline = (...args: Parameters<typeof overloadInline>) => {}
+>ArrowInline : Symbol(ArrowInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 26, 12))
+>args : Symbol(args, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 26, 28))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>overloadInline : Symbol(overloadInline, Decl(parametersAliasOverTypeofPreservedAsIsInDeclarations.ts, 6, 11))
+

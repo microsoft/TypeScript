@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"slices"
@@ -117,6 +118,18 @@ func newTmpDir(t testingT) string {
 	return resolved
 }
 
+func makeDirSymlink(t testingT, target string, link string) {
+	t.Helper()
+	if runtime.GOOS == "windows" {
+		if err := exec.Command("cmd", "/c", "mklink", "/J", link, target).Run(); err == nil {
+			return
+		}
+	}
+	if err := os.Symlink(target, link); err != nil {
+		t.Skipf("directory symlink support is not available: %v", err)
+	}
+}
+
 // nameCounter generates unique file names per test to avoid collisions.
 var nameCounter atomic.Uint64
 
@@ -136,7 +149,7 @@ func subPath(dir string) string {
 // test gets its own debouncer so tests don't share goroutine state.
 func newDirectWatcher(t testingT, dir string) *dirWatch {
 	t.Helper()
-	w := newDirWatch(dir, newDebounce())
+	w := newDirWatch(dir, dir, newDebounce())
 	w.recursive = true
 	t.Cleanup(func() { w.destroyDebounce() })
 	return w
@@ -560,6 +573,121 @@ func containsEvent(got []Event, typ EventKind, path string) bool {
 		}
 	}
 	return false
+}
+
+func TestRebasePath(t *testing.T) {
+	t.Parallel()
+
+	volume := filepath.VolumeName(os.TempDir())
+	root := volume + string(filepath.Separator)
+	from := filepath.Join(root, "from")
+	to := filepath.Join(root, "to")
+
+	tests := []struct {
+		name string
+		path string
+		from string
+		to   string
+		want string
+	}{
+		{
+			name: "exact root",
+			path: from,
+			from: from,
+			to:   to,
+			want: to,
+		},
+		{
+			name: "child",
+			path: filepath.Join(from, "child"),
+			from: from,
+			to:   to,
+			want: filepath.Join(to, "child"),
+		},
+		{
+			name: "sibling",
+			path: filepath.Join(root, "from-sibling", "child"),
+			from: from,
+			to:   to,
+			want: filepath.Join(root, "from-sibling", "child"),
+		},
+		{
+			name: "from root",
+			path: filepath.Join(root, "child"),
+			from: root,
+			to:   to,
+			want: filepath.Join(to, "child"),
+		},
+		{
+			name: "to root",
+			path: filepath.Join(from, "child"),
+			from: from,
+			to:   root,
+			want: filepath.Join(root, "child"),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := rebasePath(tt.path, tt.from, tt.to); got != tt.want {
+				t.Fatalf("rebasePath(%q, %q, %q) = %q, want %q", tt.path, tt.from, tt.to, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestPhysicalDirForResolvesSymlinkAncestor(t *testing.T) {
+	t.Parallel()
+
+	root := t.TempDir()
+	target := filepath.Join(root, "target")
+	if err := os.MkdirAll(filepath.Join(target, "nested"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	link := filepath.Join(root, "link")
+	makeDirSymlink(t, target, link)
+
+	dir := filepath.Join(link, "nested")
+	want := physicalDirFor(filepath.Join(target, "nested"))
+	if got := physicalDirFor(dir); got != want {
+		t.Fatalf("physicalDirFor(%q) = %q, want %q", dir, got, want)
+	}
+}
+
+func TestIsInDirectoryOrSelf(t *testing.T) {
+	t.Parallel()
+
+	volume := filepath.VolumeName(os.TempDir())
+	root := volume + string(filepath.Separator)
+	parent := filepath.Join(root, "parent")
+	child := filepath.Join(parent, "child")
+	nested := filepath.Join(child, "nested")
+	siblingPrefix := filepath.Join(root, "parent-sibling")
+
+	tests := []struct {
+		name string
+		dir  string
+		path string
+		want bool
+	}{
+		{name: "exact", dir: parent, path: parent, want: true},
+		{name: "child", dir: parent, path: child, want: true},
+		{name: "nested", dir: parent, path: nested, want: true},
+		{name: "sibling prefix", dir: parent, path: siblingPrefix, want: false},
+		{name: "root self", dir: root, path: root, want: true},
+		{name: "root child", dir: root, path: filepath.Join(root, "child"), want: true},
+		{name: "empty dir", dir: "", path: child, want: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := isInDirectoryOrSelf(tt.dir, tt.path); got != tt.want {
+				t.Fatalf("isInDirectoryOrSelf(%q, %q) = %v, want %v", tt.dir, tt.path, got, tt.want)
+			}
+		})
+	}
 }
 
 // filterEventsForPaths returns only the events whose Path is in the
@@ -997,6 +1125,66 @@ func TestSubscribeSymlinkDelete(t *testing.T) {
 	})
 }
 
+func TestSubscribeSymlinkedDirectoryRebasesTargetEvents(t *testing.T) {
+	t.Parallel()
+	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+		dir := newTmpDir(t)
+		target := filepath.Join(dir, "target")
+		if err := os.Mkdir(target, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		link := filepath.Join(dir, "link")
+		makeDirSymlink(t, target, link)
+
+		r, _ := subscribeFor(t, link, watcherImpl)
+		targetChild := filepath.Join(target, "child")
+		if err := os.WriteFile(targetChild, []byte("x"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		expectContains(t, r, EventUpdate, filepath.Join(link, "child"))
+	})
+}
+
+func TestRecursiveSubscribeSymlinkedDirectoryDoesNotFollowDescendantSymlink(t *testing.T) {
+	t.Parallel()
+	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+		if watcherImpl.HasFastRecursiveBackend() {
+			t.Skip("fast recursive backends do not use the userspace recursive walk")
+		}
+		dir := newTmpDir(t)
+		target := filepath.Join(dir, "target")
+		if err := os.Mkdir(target, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		link := filepath.Join(dir, "link")
+		makeDirSymlink(t, target, link)
+
+		descendantTarget := filepath.Join(dir, "descendant-target")
+		if err := os.Mkdir(descendantTarget, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		descendantLink := filepath.Join(target, "descendant-link")
+		makeDirSymlink(t, descendantTarget, descendantLink)
+
+		r, _ := subscribeFor(t, link, watcherImpl)
+		logicalGrandchild := filepath.Join(link, "descendant-link", "grandchild")
+		physicalGrandchild := filepath.Join(descendantTarget, "grandchild")
+		if err := os.WriteFile(logicalGrandchild, []byte("x"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+
+		marker := filepath.Join(target, "marker")
+		if err := os.WriteFile(marker, []byte("flush"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+
+		got := expectContains(t, r, EventUpdate, filepath.Join(link, "marker"))
+		got = append(got, r.drainQuiet(2*maxWaitTime)...)
+		assertNoEventsForPath(t, got, logicalGrandchild, "expected no events through descendant symlink")
+		assertNoEventsForPath(t, got, physicalGrandchild, "expected no events for descendant symlink target")
+	})
+}
+
 // ----- event coalescing --------------------------------------------------
 
 func TestSubscribeCoalesceCreateUpdate(t *testing.T) {
@@ -1176,6 +1364,181 @@ func TestSubscribeMultipleDifferentDirs(t *testing.T) {
 		assertEventSequence(t, r1.next(r1.deadline()), []wantEvent{{EventUpdate, f1}})
 		assertEventSequence(t, r2.next(r2.deadline()), []wantEvent{{EventUpdate, f2}})
 	})
+}
+
+func TestWatchDirectoriesBatch(t *testing.T) {
+	t.Parallel()
+	runForEachWatcher(t, func(t testingT, watcherImpl Watcher) {
+		dir1 := newTmpDir(t)
+		dir2 := newTmpDir(t)
+		r1 := newRecorder(t)
+		r1.watcher = watcherImpl
+		r2 := newRecorder(t)
+		r2.watcher = watcherImpl
+
+		watches, err := watcherImpl.WatchDirectories([]WatchDirectoryRequest{
+			{Dir: dir1, Callback: r1.callback, Options: []WatchOption{WithRecursive()}},
+			{Dir: dir2, Callback: r2.callback, Options: []WatchOption{WithRecursive()}},
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Cleanup(func() {
+			for _, watch := range watches {
+				_ = watch.Close()
+			}
+		})
+		time.Sleep(settleSleep(watcherImpl))
+
+		f1 := subPath(dir1)
+		f2 := subPath(dir2)
+		if err := os.WriteFile(f1, []byte("a"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(f2, []byte("b"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		assertEventSequence(t, r1.next(r1.deadline()), []wantEvent{{EventUpdate, f1}})
+		assertEventSequence(t, r2.next(r2.deadline()), []wantEvent{{EventUpdate, f2}})
+	})
+}
+
+type countingWatcherImpl struct {
+	watcherBase
+	subscribed []*dirWatch
+	closed     []*dirWatch
+}
+
+func newCountingWatcherImpl() *countingWatcherImpl {
+	impl := &countingWatcherImpl{}
+	impl.watcherBase.init(impl)
+	return impl
+}
+
+func (b *countingWatcherImpl) start() error {
+	b.notifyStarted()
+	return nil
+}
+
+func (b *countingWatcherImpl) subscribe(w *dirWatch) error {
+	b.subscribed = append(b.subscribed, w)
+	return nil
+}
+
+func (b *countingWatcherImpl) closeWatch(w *dirWatch) error {
+	b.closed = append(b.closed, w)
+	return nil
+}
+
+func TestFastRecursiveWatcherConsolidatesSiblingDirectories(t *testing.T) {
+	t.Parallel()
+
+	root := t.TempDir()
+	parent := filepath.Join(root, "node_modules", ".bun")
+	if err := os.MkdirAll(parent, 0o755); err != nil {
+		t.Fatal(err)
+	}
+
+	var impl *countingWatcherImpl
+	watcherImpl := &watcher{
+		name: "fsevents",
+		factory: func() watcherImpl {
+			impl = newCountingWatcherImpl()
+			return impl
+		},
+	}
+
+	var subs []Watch
+	for i := range recursiveConsolidateThreshold + 2 {
+		dir := filepath.Join(parent, fmt.Sprintf("pkg%d", i))
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		sub, err := watcherImpl.WatchDirectory(dir, func([]Event, error) {})
+		if err != nil {
+			t.Fatal(err)
+		}
+		subs = append(subs, sub)
+	}
+	t.Cleanup(func() {
+		for _, sub := range subs {
+			_ = sub.Close()
+		}
+	})
+
+	if got := len(impl.subscribed); got != recursiveConsolidateThreshold {
+		t.Fatalf("expected %d subscriptions after consolidation, got %d", recursiveConsolidateThreshold, got)
+	}
+	consolidated := impl.subscribed[len(impl.subscribed)-1]
+	if consolidated.dir != parent || !consolidated.recursive {
+		t.Fatalf("expected consolidated recursive watch on %s, got dir=%s recursive=%v", parent, consolidated.dir, consolidated.recursive)
+	}
+
+	watcherImpl.mu.Lock()
+	_, hasPkgWatch := watcherImpl.dirWatches[watcherImpl.keyForDirWatch(filepath.Join(parent, "pkg11"), false)]
+	watcherImpl.mu.Unlock()
+	if hasPkgWatch {
+		t.Fatal("expected later package watch to reuse consolidated parent instead of creating its own stream")
+	}
+}
+
+func TestConsolidatedChildWatchFiltersAgainstRequestedDir(t *testing.T) {
+	t.Parallel()
+
+	parent := filepath.Join(t.TempDir(), "parent")
+	child := filepath.Join(parent, "child")
+	sibling := filepath.Join(parent, "sibling")
+	dw := newDirectWatcher(t, parent)
+
+	var got []Event
+	dw.watch(child, false, func(events []Event, err error) {
+		if err != nil {
+			t.Fatal(err)
+		}
+		got = append(got, events...)
+	}, nil)
+	dw.events.update(child)
+	dw.events.update(filepath.Join(child, "file.ts"))
+	dw.events.update(filepath.Join(child, "nested", "file.ts"))
+	dw.events.update(filepath.Join(sibling, "file.ts"))
+	dw.triggerCallbacks()
+
+	gotW := toWantEvents(got)
+	want := []wantEvent{
+		{EventUpdate, child},
+		{EventUpdate, filepath.Join(child, "file.ts")},
+	}
+	cmpEvents := func(a, b wantEvent) int {
+		if a.Kind != b.Kind {
+			return cmp.Compare(a.Kind, b.Kind)
+		}
+		return cmp.Compare(a.Path, b.Path)
+	}
+	slices.SortFunc(gotW, cmpEvents)
+	slices.SortFunc(want, cmpEvents)
+	if !equalWantEvents(gotW, want) {
+		t.Fatalf("event mismatch\nwant: %v\n got: %v", want, gotW)
+	}
+}
+
+func TestRecursiveWatchWithIgnoreDoesNotFilterByLogicalRoot(t *testing.T) {
+	t.Parallel()
+
+	dir := filepath.Join(t.TempDir(), "root")
+	dw := newDirectWatcher(t, dir)
+
+	var got []Event
+	outsidePath := filepath.Join(t.TempDir(), "outside", "pkg", "index.ts")
+	dw.watch(dir, true, func(events []Event, err error) {
+		if err != nil {
+			t.Fatal(err)
+		}
+		got = append(got, events...)
+	}, func(string) bool { return false })
+	dw.events.update(outsidePath)
+	dw.triggerCallbacks()
+
+	assertEventSequence(t, got, []wantEvent{{EventUpdate, outsidePath}})
 }
 
 // ----- errors ------------------------------------------------------------

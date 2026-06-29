@@ -8,9 +8,8 @@
  declare const a: {};
 +export = a;
  //// [file.d.ts]
--export = a;
+ export = a;
  declare const a: {};
-+export = a;
  //// [index.d.ts]
 -export = a;
  declare const a: {};

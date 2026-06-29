@@ -27,21 +27,21 @@ module.exports = j;
 
 
 //// [index.d.ts]
-import j = require("./obj.json");
 export = j;
+import j = require("./obj.json");
 
 
 //// [DtsFileErrors]
 
 
-out/index.d.ts(1,20): error TS2307: Cannot find module './obj.json' or its corresponding type declarations.
+out/index.d.ts(2,20): error TS2307: Cannot find module './obj.json' or its corresponding type declarations.
 
 
 ==== out/index.d.ts (1 errors) ====
+    export = j;
     import j = require("./obj.json");
                        ~~~~~~~~~~~~
 !!! error TS2307: Cannot find module './obj.json' or its corresponding type declarations.
-    export = j;
     
 ==== obj.json (0 errors) ====
     {

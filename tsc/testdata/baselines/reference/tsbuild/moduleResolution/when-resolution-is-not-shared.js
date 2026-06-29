@@ -114,7 +114,7 @@ export declare const a = "a";
 import 'a';
 
 //// [/home/src/workspaces/project/packages/a/types/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","../index.js","../test/index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"fb6f7bce1e97f6455fc2f6a3fc00ca67-export const a = 'a';","signature":"410f445844ca5e1f83239796f66520a1-export declare const a = \"a\";\n","impliedNodeFormat":99},{"version":"25c2781885c8232d7ba0f67afa33aa44-import 'a';","signature":"518d564eba22abfaf340ce3ae18a4763-import 'a';\n","impliedNodeFormat":99}],"fileIdsList":[[2]],"options":{"checkJs":true,"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":199,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./test/index.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"packageJsons":["../package.json"],"fileNames":["lib.es2025.full.d.ts","../index.js","../test/index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"fb6f7bce1e97f6455fc2f6a3fc00ca67-export const a = 'a';","signature":"410f445844ca5e1f83239796f66520a1-export declare const a = \"a\";\n","impliedNodeFormat":99},{"version":"25c2781885c8232d7ba0f67afa33aa44-import 'a';","signature":"518d564eba22abfaf340ce3ae18a4763-import 'a';\n","impliedNodeFormat":99}],"fileIdsList":[[2]],"options":{"checkJs":true,"composite":true,"emitDeclarationOnly":true,"declaration":true,"module":199,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./test/index.d.ts"}
 //// [/home/src/workspaces/project/packages/a/types/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -129,6 +129,9 @@ import 'a';
         3
       ]
     }
+  ],
+  "packageJsons": [
+    "../package.json"
   ],
   "fileNames": [
     "lib.es2025.full.d.ts",
@@ -190,7 +193,7 @@ import 'a';
     ]
   },
   "latestChangedDtsFile": "./test/index.d.ts",
-  "size": 1416
+  "size": 1451
 }
 
 packages/a/tsconfig.json::
@@ -245,7 +248,7 @@ packages/b/index.js
    Matched by default include pattern '**/*'
    File is ECMAScript module because 'packages/b/package.json' has field "type" with value "module"
 //// [/home/src/workspaces/project/packages/b/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["./index.js"]}
+{"version":"FakeTSVersion","root":["./index.js"],"packageJsons":["../a/package.json","./package.json"]}
 //// [/home/src/workspaces/project/packages/b/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -257,7 +260,11 @@ packages/b/index.js
       "original": "./index.js"
     }
   ],
-  "size": 49
+  "packageJsons": [
+    "../a/package.json",
+    "./package.json"
+  ],
+  "size": 103
 }
 
 packages/b/tsconfig.json::

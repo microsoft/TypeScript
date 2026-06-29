@@ -80,3 +80,10 @@ func SymbolName(symbol *Symbol) string {
 func EscapeAllInternalSymbolNames(name string) string {
 	return strings.ReplaceAll(name, InternalSymbolNamePrefix, "__")
 }
+
+func EscapeInternalSymbolName(name string) string {
+	if rest, ok := strings.CutPrefix(name, InternalSymbolNamePrefix); ok {
+		return "__" + rest
+	}
+	return name
+}

@@ -53,6 +53,11 @@ module.exports = {
 
 
 //// [lib.d.ts]
+declare const _exports: {
+    bar: typeof bar;
+    SomeClass: typeof SomeClass;
+};
+export = _exports;
 /**
  * @param {string} a
  */
@@ -60,13 +65,8 @@ declare function bar(a: string): string;
 declare class SomeClass {
     a(): number;
 }
-declare const _default: {
-    bar: typeof bar;
-    SomeClass: typeof SomeClass;
-};
-export = _default;
 //// [main.d.ts]
-declare const _default: {
+declare const _exports: {
     SomeClass: {
         new (): {
             a(): number;
@@ -78,4 +78,4 @@ declare const _default: {
         };
     };
 };
-export = _default;
+export = _exports;

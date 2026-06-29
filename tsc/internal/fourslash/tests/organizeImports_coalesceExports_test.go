@@ -3,7 +3,6 @@ package fourslash_test
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
@@ -22,7 +21,7 @@ void 0;`
 		`export { B, default as M, a as n, Z as O, y } from "lib";
 void 0;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
 
@@ -39,7 +38,7 @@ void 0;`
 		`export * from "lib";
 void 0;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
 
@@ -58,7 +57,7 @@ void 0;`
 export { x, z as y };
 void 0;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
 
@@ -75,7 +74,7 @@ void 0;`
 		`export { x, y as z } from "lib";
 void 0;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
 
@@ -96,7 +95,7 @@ export * from "lib";
 export { y } from "lib";
 void 0;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
 
@@ -116,7 +115,7 @@ void 0;`
 export { z as default, q as w, x, w as y };
 void 0;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
 
@@ -135,7 +134,7 @@ void 0;`
 export { x as a, z as b, y } from "lib";
 void 0;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
 
@@ -160,7 +159,7 @@ export { x };
 export type { y };
 void 0;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
 
@@ -181,6 +180,6 @@ type y = number;
 export type { x, y };
 void 0;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }

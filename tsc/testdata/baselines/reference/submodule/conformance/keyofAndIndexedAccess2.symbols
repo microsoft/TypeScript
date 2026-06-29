@@ -97,9 +97,9 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 
     c.x;
->c.x : Symbol(T[__index], Decl(keyofAndIndexedAccess2.ts, 12, 23))
+>c.x : Symbol(T.__index, Decl(keyofAndIndexedAccess2.ts, 12, 23))
 >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
->x : Symbol(T[__index], Decl(keyofAndIndexedAccess2.ts, 12, 23))
+>x : Symbol(T.__index, Decl(keyofAndIndexedAccess2.ts, 12, 23))
 
     c[k];
 >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
@@ -116,9 +116,9 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 
     c.x = 1;  // Error, cannot write to index signature through constraint
->c.x : Symbol(T[__index], Decl(keyofAndIndexedAccess2.ts, 12, 23))
+>c.x : Symbol(T.__index, Decl(keyofAndIndexedAccess2.ts, 12, 23))
 >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
->x : Symbol(T[__index], Decl(keyofAndIndexedAccess2.ts, 12, 23))
+>x : Symbol(T.__index, Decl(keyofAndIndexedAccess2.ts, 12, 23))
 
     c[k] = 1; // Error, cannot write to index signature through constraint
 >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
@@ -523,9 +523,9 @@ export class c {
 
   constructor() {
     this.a = "b";
->this.a : Symbol(c[__index], Decl(keyofAndIndexedAccess2.ts, 140, 16))
+>this.a : Symbol(c.__index, Decl(keyofAndIndexedAccess2.ts, 140, 16))
 >this : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 136, 1))
->a : Symbol(c[__index], Decl(keyofAndIndexedAccess2.ts, 140, 16))
+>a : Symbol(c.__index, Decl(keyofAndIndexedAccess2.ts, 140, 16))
 
     this["a"] = "b";
 >this : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 136, 1))

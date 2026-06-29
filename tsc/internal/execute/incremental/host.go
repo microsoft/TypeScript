@@ -4,9 +4,11 @@ import (
 	"time"
 
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
 type Host interface {
+	FS() vfs.FS
 	GetMTime(fileName string) time.Time
 	SetMTime(fileName string, mTime time.Time) error
 }
@@ -17,12 +19,16 @@ type host struct {
 
 var _ Host = (*host)(nil)
 
-func (b *host) GetMTime(fileName string) time.Time {
-	return GetMTime(b.host, fileName)
+func (h *host) FS() vfs.FS {
+	return h.host.FS()
 }
 
-func (b *host) SetMTime(fileName string, mTime time.Time) error {
-	return b.host.FS().Chtimes(fileName, time.Time{}, mTime)
+func (h *host) GetMTime(fileName string) time.Time {
+	return GetMTime(h.host, fileName)
+}
+
+func (h *host) SetMTime(fileName string, mTime time.Time) error {
+	return h.host.FS().Chtimes(fileName, time.Time{}, mTime)
 }
 
 func CreateHost(compilerHost compiler.CompilerHost) Host {

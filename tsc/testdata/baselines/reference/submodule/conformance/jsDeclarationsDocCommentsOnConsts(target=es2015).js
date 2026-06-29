@@ -35,12 +35,12 @@ module.exports = { x, b };
 
 
 //// [index1.d.ts]
+declare const _exports: {
+    x: (a: any) => string;
+    b: typeof b;
+};
+export = _exports;
 /**
  * function doc comment
  */
 declare function b(): number;
-declare const _default: {
-    x: (a: any) => string;
-    b: typeof b;
-};
-export = _default;

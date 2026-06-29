@@ -453,7 +453,7 @@ export declare const x = "type1";
 export const x = "type1";
 
 //// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[5,10]],"fileNames":["../node_modules/@typescript/lib-webworker/index.d.ts","../node_modules/@typescript/lib-scripthost/index.d.ts","../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"95c5e18b7871b756fb3bb843e03aa05d-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"2fa71959819338965a3c6b2122d95c96-interface ScriptHostInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d9b7428535134fcb21dad91303dc6311-interface DOMInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},"a1f9b824326bab2c3c8f13eccf69f182-export const core = 10;",{"version":"69c4ea0c9ff13ab7fc078607d9363624-export const file = 10;","signature":"a224c1b0cbd2f5fe611e588db48243cb-export declare const file = 10;\n","impliedNodeFormat":1},{"version":"76f8c505d1aaf1122ce1da0807c21477-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>","signature":"99aa06d3014798d86001c324468d497f-","impliedNodeFormat":1},{"version":"aeb695aed936d7539a32fc3cd25af558-export const x = \"type1\";","signature":"e2f8d12de2edba256e37cf4a656ac52d-export declare const x = \"type1\";\n","impliedNodeFormat":1},"4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;","6bf5e0a71dae6fccf68b93fbbb73f178-export type TheNum = \"type1\";"],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[[5,10]],"missingPackageJsons":["../node_modules/@typescript/lib-dom/package.json","../node_modules/@typescript/lib-es5/package.json","../node_modules/@typescript/lib-scripthost/package.json","../node_modules/@typescript/lib-webworker/package.json"],"fileNames":["../node_modules/@typescript/lib-webworker/index.d.ts","../node_modules/@typescript/lib-scripthost/index.d.ts","../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"95c5e18b7871b756fb3bb843e03aa05d-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"2fa71959819338965a3c6b2122d95c96-interface ScriptHostInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d9b7428535134fcb21dad91303dc6311-interface DOMInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},"a1f9b824326bab2c3c8f13eccf69f182-export const core = 10;",{"version":"69c4ea0c9ff13ab7fc078607d9363624-export const file = 10;","signature":"a224c1b0cbd2f5fe611e588db48243cb-export declare const file = 10;\n","impliedNodeFormat":1},{"version":"76f8c505d1aaf1122ce1da0807c21477-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>","signature":"99aa06d3014798d86001c324468d497f-","impliedNodeFormat":1},{"version":"aeb695aed936d7539a32fc3cd25af558-export const x = \"type1\";","signature":"e2f8d12de2edba256e37cf4a656ac52d-export declare const x = \"type1\";\n","impliedNodeFormat":1},"4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;","6bf5e0a71dae6fccf68b93fbbb73f178-export type TheNum = \"type1\";"],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -472,6 +472,12 @@ export const x = "type1";
         10
       ]
     }
+  ],
+  "missingPackageJsons": [
+    "../node_modules/@typescript/lib-dom/package.json",
+    "../node_modules/@typescript/lib-es5/package.json",
+    "../node_modules/@typescript/lib-scripthost/package.json",
+    "../node_modules/@typescript/lib-webworker/package.json"
   ],
   "fileNames": [
     "../node_modules/@typescript/lib-webworker/index.d.ts",
@@ -590,7 +596,7 @@ export const x = "type1";
     "composite": true
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 2354
+  "size": 2595
 }
 //// [/home/src/workspace/projects/project2/index.d.ts] *new* 
 export declare const y = 10;
@@ -599,7 +605,7 @@ export declare const y = 10;
 export const y = 10;
 
 //// [/home/src/workspace/projects/project2/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[3,4]],"fileNames":["../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d9b7428535134fcb21dad91303dc6311-interface DOMInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"95e641b4f34db55d73f0f5008cdd30f0-export const y = 10","signature":"7ab1b6e8968172bdd365c972b27a69e2-export declare const y = 10;\n","impliedNodeFormat":1},"4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;"],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[[3,4]],"missingPackageJsons":["../node_modules/@typescript/lib-dom/package.json","../node_modules/@typescript/lib-es5/package.json"],"fileNames":["../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d9b7428535134fcb21dad91303dc6311-interface DOMInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"95e641b4f34db55d73f0f5008cdd30f0-export const y = 10","signature":"7ab1b6e8968172bdd365c972b27a69e2-export declare const y = 10;\n","impliedNodeFormat":1},"4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;"],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspace/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -614,6 +620,10 @@ export const y = 10;
         4
       ]
     }
+  ],
+  "missingPackageJsons": [
+    "../node_modules/@typescript/lib-dom/package.json",
+    "../node_modules/@typescript/lib-es5/package.json"
   ],
   "fileNames": [
     "../node_modules/@typescript/lib-es5/index.d.ts",
@@ -668,7 +678,7 @@ export const y = 10;
     "composite": true
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1378
+  "size": 1504
 }
 //// [/home/src/workspace/projects/project3/index.d.ts] *new* 
 export declare const z = 10;
@@ -677,7 +687,7 @@ export declare const z = 10;
 export const z = 10;
 
 //// [/home/src/workspace/projects/project3/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[3,4]],"fileNames":["../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d9b7428535134fcb21dad91303dc6311-interface DOMInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"6f4aaa0b206d74bd2835c8fd3a4020fe-export const z = 10","signature":"f4ea7cd61571728ffc44aefcffc4eda1-export declare const z = 10;\n","impliedNodeFormat":1},"4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;"],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[[3,4]],"missingPackageJsons":["../node_modules/@typescript/lib-dom/package.json","../node_modules/@typescript/lib-es5/package.json"],"fileNames":["../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d9b7428535134fcb21dad91303dc6311-interface DOMInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"6f4aaa0b206d74bd2835c8fd3a4020fe-export const z = 10","signature":"f4ea7cd61571728ffc44aefcffc4eda1-export declare const z = 10;\n","impliedNodeFormat":1},"4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;"],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspace/projects/project3/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -692,6 +702,10 @@ export const z = 10;
         4
       ]
     }
+  ],
+  "missingPackageJsons": [
+    "../node_modules/@typescript/lib-dom/package.json",
+    "../node_modules/@typescript/lib-es5/package.json"
   ],
   "fileNames": [
     "../node_modules/@typescript/lib-es5/index.d.ts",
@@ -746,7 +760,7 @@ export const z = 10;
     "composite": true
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1378
+  "size": 1504
 }
 //// [/home/src/workspace/projects/project4/index.d.ts] *new* 
 export declare const z = 10;
@@ -755,7 +769,7 @@ export declare const z = 10;
 export const z = 10;
 
 //// [/home/src/workspace/projects/project4/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[4,5]],"fileNames":["../node_modules/@typescript/lib-esnext/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","../node_modules/@typescript/lib-webworker/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d9b7428535134fcb21dad91303dc6311-interface DOMInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"95c5e18b7871b756fb3bb843e03aa05d-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"6f4aaa0b206d74bd2835c8fd3a4020fe-export const z = 10","signature":"f4ea7cd61571728ffc44aefcffc4eda1-export declare const z = 10;\n","impliedNodeFormat":1},"4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;"],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[[4,5]],"missingPackageJsons":["../node_modules/@typescript/lib-dom/package.json","../node_modules/@typescript/lib-esnext/package.json","../node_modules/@typescript/lib-webworker/package.json"],"fileNames":["../node_modules/@typescript/lib-esnext/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","../node_modules/@typescript/lib-webworker/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d9b7428535134fcb21dad91303dc6311-interface DOMInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"95c5e18b7871b756fb3bb843e03aa05d-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"6f4aaa0b206d74bd2835c8fd3a4020fe-export const z = 10","signature":"f4ea7cd61571728ffc44aefcffc4eda1-export declare const z = 10;\n","impliedNodeFormat":1},"4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;"],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspace/projects/project4/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -770,6 +784,11 @@ export const z = 10;
         5
       ]
     }
+  ],
+  "missingPackageJsons": [
+    "../node_modules/@typescript/lib-dom/package.json",
+    "../node_modules/@typescript/lib-esnext/package.json",
+    "../node_modules/@typescript/lib-webworker/package.json"
   ],
   "fileNames": [
     "../node_modules/@typescript/lib-esnext/index.d.ts",
@@ -837,11 +856,14 @@ export const z = 10;
     "composite": true
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1564
+  "size": 1750
 }
 
 Watch Registrations::
 Directory watches::
+  /home/src/workspace/projects
+  /home/src/workspace/projects/node_modules
+  /home/src/workspace/projects/node_modules/@typescript
   /home/src/workspace/projects/node_modules/@typescript/lib-dom
   /home/src/workspace/projects/node_modules/@typescript/lib-es5
   /home/src/workspace/projects/node_modules/@typescript/lib-esnext

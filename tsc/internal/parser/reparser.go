@@ -523,7 +523,14 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			parent = parent.Expression()
 		}
 		switch parent.Kind {
-		case ast.KindPropertyDeclaration, ast.KindMethodDeclaration, ast.KindConstructor, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindBinaryExpression:
+		case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:
+			// In object literals these aren't class-like members, so JSDoc modifiers like @override
+			// or @readonly aren't real modifiers there; reparsing them produces spurious grammar errors (#4437).
+			if p.parsingContexts&(1<<PCObjectLiteralMembers) != 0 {
+				return
+			}
+			fallthrough
+		case ast.KindPropertyDeclaration, ast.KindConstructor, ast.KindBinaryExpression:
 			var keyword ast.Kind
 			switch tag.Kind {
 			case ast.KindJSDocReadonlyTag:

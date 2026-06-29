@@ -20,7 +20,8 @@ func walkDir(dir string, recursive bool, fn func(path string, isDir bool) error)
 	if err := windows.GetFileAttributesEx(rootPtr, windows.GetFileExInfoStandard, (*byte)(unsafe.Pointer(&rootData))); err != nil {
 		return fmt.Errorf("error opening directory: %w", err)
 	}
-	if rootData.FileAttributes&windows.FILE_ATTRIBUTE_DIRECTORY == 0 {
+	if rootData.FileAttributes&windows.FILE_ATTRIBUTE_DIRECTORY == 0 ||
+		rootData.FileAttributes&windows.FILE_ATTRIBUTE_REPARSE_POINT != 0 {
 		return syscall.ENOTDIR
 	}
 	if fn != nil {

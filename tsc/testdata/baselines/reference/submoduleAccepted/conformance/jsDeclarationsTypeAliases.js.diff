@@ -40,9 +40,15 @@
 + * @returns {T}
 + */
  //// [mixed.d.ts]
++declare const _exports: {
++    doTheThing: typeof doTheThing;
++    ExportedThing: typeof ExportedThing;
++};
++export = _exports;
  export type SomeType = {
      x: string;
-@@= skipped -23, +40 lines =@@
+ } | number | LocalThing | ExportedThing;
+@@= skipped -23, +45 lines =@@
   * @param {number} x
   * @returns {SomeType}
   */
@@ -52,11 +58,6 @@
 +declare class ExportedThing {
      z: string;
  }
-+declare const _default: {
-+    doTheThing: typeof doTheThing;
-+    ExportedThing: typeof ExportedThing;
-+};
-+export = _default;
  declare class LocalThing {
      y: string;
  }

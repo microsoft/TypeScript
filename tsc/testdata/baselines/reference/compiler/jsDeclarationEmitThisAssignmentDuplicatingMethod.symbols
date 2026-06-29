@@ -1,0 +1,149 @@
+//// [tests/cases/compiler/jsDeclarationEmitThisAssignmentDuplicatingMethod.ts] ////
+
+=== main.js ===
+export class A {
+>A : Symbol(A, Decl(main.js, 0, 0))
+
+    constructor() {
+        this.foo = this.foo.bind(this);
+>this.foo : Symbol(A.foo, Decl(main.js, 3, 5))
+>this : Symbol(A, Decl(main.js, 0, 0))
+>foo : Symbol(A.foo, Decl(main.js, 3, 5))
+>this.foo.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.foo : Symbol(A.foo, Decl(main.js, 3, 5))
+>this : Symbol(A, Decl(main.js, 0, 0))
+>foo : Symbol(A.foo, Decl(main.js, 3, 5))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(A, Decl(main.js, 0, 0))
+    }
+    foo() {}
+>foo : Symbol(A.foo, Decl(main.js, 3, 5))
+}
+
+export class B {
+>B : Symbol(B, Decl(main.js, 5, 1))
+
+    constructor() {
+        this.#foo = this.#foo.bind(this);
+>this.#foo : Symbol(B.#foo, Decl(main.js, 10, 5))
+>this : Symbol(B, Decl(main.js, 5, 1))
+>this.#foo.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.#foo : Symbol(B.#foo, Decl(main.js, 10, 5))
+>this : Symbol(B, Decl(main.js, 5, 1))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(B, Decl(main.js, 5, 1))
+    }
+    #foo = () => {}
+>#foo : Symbol(B.#foo, Decl(main.js, 10, 5))
+}
+
+const sym = Symbol();
+>sym : Symbol(sym, Decl(main.js, 14, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export class C {
+>C : Symbol(C, Decl(main.js, 14, 21))
+
+    constructor() {
+        this[sym] = this[sym].bind(this);
+>this : Symbol(C, Decl(main.js, 14, 21))
+>sym : Symbol(sym, Decl(main.js, 14, 5))
+>this[sym].bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(C, Decl(main.js, 14, 21))
+>sym : Symbol(sym, Decl(main.js, 14, 5))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(C, Decl(main.js, 14, 21))
+    }
+    [sym]() {}
+>[sym] : Symbol(C[sym], Decl(main.js, 18, 5))
+>sym : Symbol(sym, Decl(main.js, 14, 5))
+}
+
+export class D {
+>D : Symbol(D, Decl(main.js, 20, 1))
+
+    constructor() {
+        this.bar = 1;
+>this.bar : Symbol(D.bar, Decl(main.js, 23, 19))
+>this : Symbol(D, Decl(main.js, 20, 1))
+>bar : Symbol(D.bar, Decl(main.js, 23, 19))
+    }
+    static bar() {}
+>bar : Symbol(D.bar, Decl(main.js, 25, 5))
+}
+
+export class E {
+>E : Symbol(E, Decl(main.js, 27, 1))
+
+    static init() {
+>init : Symbol(E.init, Decl(main.js, 29, 16))
+
+        this.baz = 1;
+>this.baz : Symbol(E.baz, Decl(main.js, 30, 19))
+>this : Symbol(E, Decl(main.js, 27, 1))
+>baz : Symbol(E.baz, Decl(main.js, 30, 19))
+    }
+    baz() {}
+>baz : Symbol(E.baz, Decl(main.js, 32, 5))
+}
+
+export class F {
+>F : Symbol(F, Decl(main.js, 34, 1))
+
+    static #foo = () => {}
+>#foo : Symbol(F.#foo, Decl(main.js, 36, 16))
+
+    static {
+        this.#foo = this.#foo.bind(this);
+>this.#foo : Symbol(F.#foo, Decl(main.js, 36, 16))
+>this : Symbol(F, Decl(main.js, 34, 1))
+>this.#foo.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.#foo : Symbol(F.#foo, Decl(main.js, 36, 16))
+>this : Symbol(F, Decl(main.js, 34, 1))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(F, Decl(main.js, 34, 1))
+    }
+}
+
+const sym2 = Symbol();
+>sym2 : Symbol(sym2, Decl(main.js, 43, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export class G {
+>G : Symbol(G, Decl(main.js, 43, 22))
+
+    static {
+        this[sym2] = this[sym2].bind(this);
+>this : Symbol(G, Decl(main.js, 43, 22))
+>sym2 : Symbol(sym2, Decl(main.js, 43, 5))
+>this[sym2].bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(G, Decl(main.js, 43, 22))
+>sym2 : Symbol(sym2, Decl(main.js, 43, 5))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(G, Decl(main.js, 43, 22))
+    }
+    static[sym2]() {}
+>[sym2] : Symbol(G[sym2], Decl(main.js, 47, 5))
+>sym2 : Symbol(sym2, Decl(main.js, 43, 5))
+}
+
+export class H {
+>H : Symbol(H, Decl(main.js, 49, 1))
+
+    static foo = () => {}
+>foo : Symbol(H.foo, Decl(main.js, 51, 16))
+
+    static {
+        this.foo = this.foo.bind(this);
+>this.foo : Symbol(H.foo, Decl(main.js, 51, 16))
+>this : Symbol(H, Decl(main.js, 49, 1))
+>foo : Symbol(H.foo, Decl(main.js, 51, 16))
+>this.foo.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.foo : Symbol(H.foo, Decl(main.js, 51, 16))
+>this : Symbol(H, Decl(main.js, 49, 1))
+>foo : Symbol(H.foo, Decl(main.js, 51, 16))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(H, Decl(main.js, 49, 1))
+    }
+}
+

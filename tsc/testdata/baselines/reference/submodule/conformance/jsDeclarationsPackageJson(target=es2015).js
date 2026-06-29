@@ -76,21 +76,21 @@ module.exports = j;
 
 
 //// [index.d.ts]
-import j = require("./package.json");
 export = j;
+import j = require("./package.json");
 
 
 //// [DtsFileErrors]
 
 
-out/index.d.ts(1,20): error TS2307: Cannot find module './package.json' or its corresponding type declarations.
+out/index.d.ts(2,20): error TS2307: Cannot find module './package.json' or its corresponding type declarations.
 
 
 ==== out/index.d.ts (1 errors) ====
+    export = j;
     import j = require("./package.json");
                        ~~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module './package.json' or its corresponding type declarations.
-    export = j;
     
 ==== package.json (0 errors) ====
     {

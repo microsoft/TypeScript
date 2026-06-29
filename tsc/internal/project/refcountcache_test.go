@@ -252,6 +252,103 @@ func TestRefCountingCaches(t *testing.T) {
 			})
 			assert.Equal(t, projectEntries, 0)
 		})
+
+		t.Run("case-only duplicate imported from multiple files is refcounted once", func(t *testing.T) {
+			t.Parallel()
+
+			// A file reached through a case-only-different file name from more than one
+			// import site is parsed and acquired in the parse cache exactly once (same-casing
+			// loads dedupe), but it must also be recorded as a duplicate exactly once.
+			// Recording it once per import site would release it from the parse cache more
+			// times than it was acquired, deleting the live entry out from under a program
+			// that still references it and panicking the next time it is ref'd during a clone.
+			testFiles := map[string]any{
+				// entry.ts imports the canonical casing first, then pulls in a.ts and b.ts,
+				// which both import the same file through an upper-cased name.
+				"/user/username/projects/myproject/src/entry.ts":   "import { dep } from './sub/dep';\nimport './a';\nimport './b';\nexport const e = dep;",
+				"/user/username/projects/myproject/src/a.ts":       "import { dep } from './sub/DEP';\nexport const a = dep;",
+				"/user/username/projects/myproject/src/b.ts":       "import { dep } from './sub/DEP';\nexport const b = dep;",
+				"/user/username/projects/myproject/src/sub/dep.ts": "export const dep = 1;",
+				"/user/username/projects/myproject/src/c.ts":       "export const c = 1;",
+			}
+			session := setup(testFiles)
+			entryURI := lsproto.DocumentUri("file:///user/username/projects/myproject/src/entry.ts")
+			session.DidOpenFile(context.Background(), entryURI, 1, testFiles["/user/username/projects/myproject/src/entry.ts"].(string), lsproto.LanguageKindTypeScript)
+
+			ls, err := session.GetLanguageService(context.Background(), entryURI)
+			assert.NilError(t, err)
+
+			// The upper-cased name is recorded as a duplicate, and it should appear exactly once.
+			program := ls.GetProgram()
+			var dupKeys []ParseCacheKey
+			for _, dup := range program.DuplicateSourceFiles() {
+				if strings.HasSuffix(dup.ParseOptions.FileName, "/sub/DEP.ts") {
+					dupKeys = append(dupKeys, NewParseCacheKey(dup.ParseOptions, dup.Hash, dup.ScriptKind))
+				}
+			}
+			assert.Equal(t, len(dupKeys), 1, "case-only duplicate should be recorded exactly once")
+			dupEntry, ok := session.parseCache.entries.Load(dupKeys[0])
+			assert.Assert(t, ok, "duplicate entry should exist in the parse cache")
+			assert.Equal(t, dupEntry.refCount, 1)
+
+			// Force a full program rebuild (adding an import changes the file's module
+			// structure). The old snapshot is disposed, releasing each of its source and
+			// duplicate files exactly once. If the duplicate were recorded twice, the
+			// shared cache entry would be released to zero and deleted here even though
+			// the new program still references it.
+			session.DidChangeFile(context.Background(), entryURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+				{
+					WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{
+						Text: "import { dep } from \"./sub/dep\";\nimport \"./a\";\nimport \"./b\";\nimport \"./c\";\nexport const e = dep;",
+					},
+				},
+			})
+			lsAfterRebuild, err := session.GetLanguageService(context.Background(), entryURI)
+			assert.NilError(t, err)
+			session.WaitForBackgroundTasks()
+
+			// Every parse-cache key referenced by the live program must still exist.
+			rebuiltProgram := lsAfterRebuild.GetProgram()
+			assertKeyAlive := func(key ParseCacheKey) {
+				_, alive := session.parseCache.entries.Load(key)
+				assert.Assert(t, alive, "live program references a deleted parse-cache entry: %s", key.FileName)
+			}
+			for _, file := range rebuiltProgram.SourceFiles() {
+				assertKeyAlive(NewParseCacheKey(file.ParseOptions(), file.Hash, file.ScriptKind))
+			}
+			for _, dup := range rebuiltProgram.DuplicateSourceFiles() {
+				assertKeyAlive(NewParseCacheKey(dup.ParseOptions, dup.Hash, dup.ScriptKind))
+			}
+
+			// An incremental (clone) update re-references the duplicate files; this must
+			// not panic with "cache entry not found".
+			session.DidChangeFile(context.Background(), entryURI, 3, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+				{
+					WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{
+						Text: "import { dep } from './sub/dep';\nimport './a';\nimport './b';\nimport './c';\nexport const e = dep + 0;",
+					},
+				},
+			})
+			_, err = session.GetLanguageService(context.Background(), entryURI)
+			assert.NilError(t, err)
+			session.WaitForBackgroundTasks()
+
+			// Closing the project releases everything cleanly.
+			// (The configured project is not disposed until another file in another project is opened,
+			// so we open an untitled file to trigger that.)
+			session.DidCloseFile(context.Background(), entryURI)
+			session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
+			session.WaitForBackgroundTasks()
+
+			projectEntries := 0
+			session.parseCache.entries.Range(func(key ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
+				if strings.HasPrefix(key.FileName, "/user/username/projects/myproject/src/") {
+					projectEntries++
+				}
+				return true
+			})
+			assert.Equal(t, projectEntries, 0)
+		})
 	})
 
 	t.Run("extendedConfigCache", func(t *testing.T) {

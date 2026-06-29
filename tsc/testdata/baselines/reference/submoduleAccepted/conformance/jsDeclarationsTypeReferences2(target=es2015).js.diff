@@ -5,7 +5,7 @@
  };
  //// [index.d.ts]
 -export const thing: number;
-+declare const _default: {
++declare const _exports: {
 +    thing: number;
 +};
-+export = _default;
++export = _exports;

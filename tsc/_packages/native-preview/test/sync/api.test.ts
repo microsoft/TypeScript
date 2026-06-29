@@ -21,9 +21,11 @@ import {
     isTemplateHead,
     isTemplateMiddle,
     isTemplateTail,
+    isTypeAliasDeclaration,
     isTypeNode,
     isVariableDeclarationList,
     type Node,
+    type NodeArray,
     NodeFlags,
     SyntaxKind,
 } from "@typescript/native-preview/unstable/ast";
@@ -43,11 +45,13 @@ import { createVirtualFileSystem } from "@typescript/native-preview/unstable/fs"
 import type { FileSystem } from "@typescript/native-preview/unstable/fs";
 import {
     API,
+    type BigIntLiteralType,
     type ConditionalType,
     DiagnosticCategory,
     type FreshableType,
     type IndexedAccessType,
     type IndexType,
+    type InterfaceType,
     type IntrinsicType,
     type LiteralType,
     ModifierFlags,
@@ -85,6 +89,29 @@ describe("API", () => {
             const config = api.parseConfigFile("/tsconfig.json");
             assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
             assert.deepEqual(config.options, { configFilePath: "/tsconfig.json" });
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getImmediateAliasedSymbol", () => {
+    test("resolves one level of alias indirection", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/foo.ts": `export const foo = 42;`,
+            "/src/main.ts": `import { foo } from "./foo";\nexport const usage = foo;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = `import { foo } from "./foo";`.indexOf("foo }");
+            const aliasSymbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(aliasSymbol);
+            const aliased = project.checker.getImmediateAliasedSymbol(aliasSymbol);
+            assert.ok(aliased, "Should resolve the immediate aliased symbol");
+            assert.equal(aliased.name, "foo");
         }
         finally {
             api.close();
@@ -161,7 +188,87 @@ describe("Snapshot", () => {
     });
 });
 
+describe("Checker - getApparentType", () => {
+    test("returns the apparent type of a literal type", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const x = "hello" as const;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = `export const x = "hello" as const;`.indexOf("x =");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.equal(type.isLiteralType(), true);
+            assert.equal(type.isStringLiteralType(), true);
+            assert.equal(type.isIntrinsicType(), false);
+            const apparent = project.checker.getApparentType(type);
+            assert.ok(apparent);
+            assert.ok(apparent.id > 0);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getMemberInModuleExports", () => {
+    test("returns a named export when present", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const direct = 1;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/index.ts");
+            assert.ok(sourceFile);
+            const moduleSymbol = project.checker.getSymbolAtLocation(sourceFile);
+            assert.ok(moduleSymbol);
+            const found = project.checker.getMemberInModuleExports(moduleSymbol, "direct");
+            assert.ok(found);
+            assert.equal(found.name, "direct");
+            const missing = project.checker.getMemberInModuleExports(moduleSymbol, "missing");
+            assert.equal(missing, undefined);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 describe("SourceFile", () => {
+    test("getSourceFileNames returns all program files, not just root files", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    moduleResolution: "node10",
+                    noLib: true,
+                },
+            }),
+            "/src/index.ts": `import { foo } from "./foo";\nimport { bar } from "my-lib";\nexport const result = foo + bar;`,
+            "/src/foo.ts": `export const foo = 42;`,
+            "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
+            "/node_modules/my-lib/index.d.ts": `export declare const bar: number;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const fileNames = project.program.getSourceFileNames();
+            assert.deepEqual(fileNames, [
+                "/src/foo.ts",
+                "/node_modules/my-lib/index.d.ts",
+                "/src/index.ts",
+            ]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("file properties", () => {
         const api = spawnAPI();
         try {
@@ -207,6 +314,43 @@ describe("SourceFile", () => {
                 node.forEachChild(visit);
             });
             assert.equal(nodeCount, 8);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("forEachChild with visitList does not visit array children twice", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ files: ["/input.ts"] }),
+            "/input.ts": `let arrow = () => {}`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/input.ts");
+
+            assert.ok(sourceFile);
+
+            const visited: { kind: SyntaxKind; pos: number; end: number; }[] = [];
+            (function walk(node: Node): void {
+                visited.push({ kind: node.kind, pos: node.pos, end: node.end });
+                node.forEachChild(walk, (nodes: NodeArray<Node>) => {
+                    for (let i = 0; i < nodes.length; i++) {
+                        walk(nodes[i]);
+                    }
+                    return undefined;
+                });
+            })(sourceFile);
+
+            // Each node should be visited exactly once, even when a visitList callback
+            // is supplied. Previously array children were visited twice.
+            const seen = new Set<string>();
+            for (const { kind, pos, end } of visited) {
+                const key = `${kind}.${pos}.${end}`;
+                assert.ok(!seen.has(key), `Node ${key} was visited more than once`);
+                seen.add(key);
+            }
         }
         finally {
             api.close();
@@ -701,6 +845,43 @@ describe("Source file cache keying across projects", () => {
 
             // B and C should share the same cached object (both module parse, same content hash)
             assert.strictEqual(sfB, sfC, "projectB and projectC (both module parse) should share the same cached source file");
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - symbol identity across projects", () => {
+    const sharedSymbolFiles = {
+        "/projectA/tsconfig.json": JSON.stringify({ files: ["../src/shared.ts"] }),
+        "/projectB/tsconfig.json": JSON.stringify({ files: ["../src/shared.ts"] }),
+        "/src/shared.ts": `export const sharedVar = 42;`,
+    };
+
+    test("getSymbolAtPosition returns same Symbol instance across projects", () => {
+        const api = spawnAPI(sharedSymbolFiles);
+        try {
+            api.updateSnapshot({ openProject: "/projectA/tsconfig.json" });
+            const snapshot = api.updateSnapshot({ openProject: "/projectB/tsconfig.json" });
+
+            const projectA = snapshot.getProject("/projectA/tsconfig.json")!;
+            const projectB = snapshot.getProject("/projectB/tsconfig.json")!;
+            assert.ok(projectA, "projectA should exist");
+            assert.ok(projectB, "projectB should exist");
+
+            const src = sharedSymbolFiles["/src/shared.ts"];
+            const varPos = src.indexOf("sharedVar");
+
+            const symbolA = projectA.checker.getSymbolAtPosition("/src/shared.ts", varPos);
+            const symbolB = projectB.checker.getSymbolAtPosition("/src/shared.ts", varPos);
+
+            assert.ok(symbolA, "symbolA should exist");
+            assert.ok(symbolB, "symbolB should exist");
+            assert.equal(symbolA.name, "sharedVar");
+            assert.equal(symbolB.name, "sharedVar");
+
+            assert.strictEqual(symbolA, symbolB, "Same source symbol queried from two projects should be the same object");
         }
         finally {
             api.close();
@@ -1248,6 +1429,9 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
             assert.ok(type.flags & TypeFlags.Object);
             const ref = type as TypeReference;
             assert.ok(ref.objectFlags & ObjectFlags.Reference);
+            assert.equal(type.isObjectType(), true);
+            assert.equal(type.isTypeReference(), true);
+            assert.equal(type.isLiteralType(), false);
             const target = ref.getTarget();
             assert.ok(target);
             assert.ok(target.flags & TypeFlags.Object);
@@ -1264,6 +1448,8 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
             const union = type as UnionOrIntersectionType;
             const types = union.getTypes();
             assert.ok(types.length >= 2);
+            assert.equal(type.isUnionType(), true);
+            assert.equal(type.isIntersectionType(), false);
         }
         finally {
             api.close();
@@ -1277,6 +1463,37 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
             const inter = type as UnionOrIntersectionType;
             const types = inter.getTypes();
             assert.ok(types.length >= 2);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("UnionOrIntersectionType.getTypes() on a wrongly-cast type returns undefined without hitting the server", () => {
+        const src = `export const s: string = ""; export const u: string | number = "";`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+
+            // `string` is neither a union/intersection nor a template literal type,
+            // so it has no constituent types. The client guards on the type's flags
+            // and returns undefined without ever sending a request the server cannot satisfy.
+            const sSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("s:"));
+            assert.ok(sSymbol);
+            const sType = project.checker.getTypeOfSymbol(sSymbol);
+            assert.ok(sType);
+            assert.equal((sType as unknown as UnionOrIntersectionType).getTypes(), undefined);
+
+            // A real union still returns its constituents.
+            const uSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("u:"));
+            assert.ok(uSymbol);
+            const uType = project.checker.getTypeOfSymbol(uSymbol);
+            assert.ok(uType);
+            assert.equal(((uType as UnionOrIntersectionType).getTypes()).length, 2);
         }
         finally {
             api.close();
@@ -1314,6 +1531,7 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
             assert.ok(type);
             assert.ok(type.flags & TypeFlags.IndexedAccess, `Expected IndexedAccessType, got flags ${type.flags}`);
             const ia = type as IndexedAccessType;
+            assert.equal(type.isIndexedAccessType(), true);
             const objectType = ia.getObjectType();
             assert.ok(objectType);
             const indexType = ia.getIndexType();
@@ -1335,10 +1553,37 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
             assert.ok(type);
             assert.ok(type.flags & TypeFlags.Conditional, `Expected ConditionalType, got flags ${type.flags}`);
             const cond = type as ConditionalType;
+            assert.equal(type.isConditionalType(), true);
             const checkType = cond.getCheckType();
             assert.ok(checkType);
             const extendsType = cond.getExtendsType();
             assert.ok(extendsType);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("ConditionalType.getTrueType() and getFalseType()", () => {
+        const api = spawnAPI(typeFiles);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = project.checker.resolveName("Cond", SymbolFlags.TypeAlias, { document: "/src/types.ts", position: 0 });
+            assert.ok(symbol);
+            const type = project.checker.getDeclaredTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.ok(type.flags & TypeFlags.Conditional, `Expected ConditionalType, got flags ${type.flags}`);
+
+            const trueType = (type as ConditionalType).getTrueType();
+            assert.ok(trueType, "should return the true-branch type");
+            assert.ok(trueType.flags & TypeFlags.StringLiteral, `Expected StringLiteral for true branch, got flags ${trueType.flags}`);
+            assert.equal((trueType as LiteralType).value, "yes");
+
+            const falseType = (type as ConditionalType).getFalseType();
+            assert.ok(falseType, "should return the false-branch type");
+            assert.ok(falseType.flags & TypeFlags.StringLiteral, `Expected StringLiteral for false branch, got flags ${falseType.flags}`);
+            assert.equal((falseType as LiteralType).value, "no");
         }
         finally {
             api.close();
@@ -1555,6 +1800,121 @@ describe("Checker - intrinsic type getters", () => {
             const type = project.checker.getESSymbolType();
             assert.ok(type);
             assert.ok(type.flags & TypeFlags.ESSymbol);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - multi-project type ID uniqueness", () => {
+    test("intrinsic types from 3 projects in the same snapshot have non-colliding IDs", () => {
+        const api = spawnAPI({
+            "/proj1/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/proj1/src/index.ts": `export const x = 1;`,
+            "/proj2/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/proj2/src/index.ts": `export const y = "hello";`,
+            "/proj3/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/proj3/src/index.ts": `export const z = true;`,
+        });
+        try {
+            // Open all 3 projects — each updateSnapshot accumulates open projects
+            api.updateSnapshot({ openProject: "/proj1/tsconfig.json" });
+            api.updateSnapshot({ openProject: "/proj2/tsconfig.json" });
+            const snapshot = api.updateSnapshot({ openProject: "/proj3/tsconfig.json" });
+
+            const proj1 = snapshot.getProject("/proj1/tsconfig.json")!;
+            const proj2 = snapshot.getProject("/proj2/tsconfig.json")!;
+            const proj3 = snapshot.getProject("/proj3/tsconfig.json")!;
+            assert.ok(proj1, "proj1 should be in final snapshot");
+            assert.ok(proj2, "proj2 should be in final snapshot");
+            assert.ok(proj3, "proj3 should be in final snapshot");
+
+            // Fetch several intrinsic types from each checker.
+            // If type IDs collide across checkers, registerType panics → API error.
+            const num1 = proj1.checker.getNumberType();
+            const str1 = proj1.checker.getStringType();
+            const bool1 = proj1.checker.getBooleanType();
+            const any1 = proj1.checker.getAnyType();
+            const num2 = proj2.checker.getNumberType();
+            const str2 = proj2.checker.getStringType();
+            const bool2 = proj2.checker.getBooleanType();
+            const any2 = proj2.checker.getAnyType();
+            const num3 = proj3.checker.getNumberType();
+            const str3 = proj3.checker.getStringType();
+            const bool3 = proj3.checker.getBooleanType();
+            const any3 = proj3.checker.getAnyType();
+
+            assert.ok(num1.flags & TypeFlags.Number, "proj1 number type");
+            assert.ok(str1.flags & TypeFlags.String, "proj1 string type");
+            assert.ok(bool1.flags & TypeFlags.Boolean, "proj1 boolean type");
+            assert.ok(any1.flags & TypeFlags.Any, "proj1 any type");
+
+            assert.ok(num2.flags & TypeFlags.Number, "proj2 number type");
+            assert.ok(str2.flags & TypeFlags.String, "proj2 string type");
+            assert.ok(bool2.flags & TypeFlags.Boolean, "proj2 boolean type");
+            assert.ok(any2.flags & TypeFlags.Any, "proj2 any type");
+
+            assert.ok(num3.flags & TypeFlags.Number, "proj3 number type");
+            assert.ok(str3.flags & TypeFlags.String, "proj3 string type");
+            assert.ok(bool3.flags & TypeFlags.Boolean, "proj3 boolean type");
+            assert.ok(any3.flags & TypeFlags.Any, "proj3 any type");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("symbol and signature handles from 3 projects in the same snapshot have non-colliding IDs", () => {
+        const api = spawnAPI({
+            "/proj1/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/proj1/src/index.ts": `export function add(a: number, b: number): number { return a + b; }`,
+            "/proj2/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/proj2/src/index.ts": `export function greet(name: string): string { return "hello " + name; }`,
+            "/proj3/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/proj3/src/index.ts": `export function toggle(b: boolean): boolean { return !b; }`,
+        });
+        try {
+            api.updateSnapshot({ openProject: "/proj1/tsconfig.json" });
+            api.updateSnapshot({ openProject: "/proj2/tsconfig.json" });
+            const snapshot = api.updateSnapshot({ openProject: "/proj3/tsconfig.json" });
+
+            const proj1 = snapshot.getProject("/proj1/tsconfig.json")!;
+            const proj2 = snapshot.getProject("/proj2/tsconfig.json")!;
+            const proj3 = snapshot.getProject("/proj3/tsconfig.json")!;
+
+            // Get a symbol from each project (exercises symbol registry)
+            const src1 = `export function add(a: number, b: number): number { return a + b; }`;
+            const src2 = `export function greet(name: string): string { return "hello " + name; }`;
+            const src3 = `export function toggle(b: boolean): boolean { return !b; }`;
+
+            const sym1 = proj1.checker.getSymbolAtPosition("/proj1/src/index.ts", src1.indexOf("add"));
+            const sym2 = proj2.checker.getSymbolAtPosition("/proj2/src/index.ts", src2.indexOf("greet"));
+            const sym3 = proj3.checker.getSymbolAtPosition("/proj3/src/index.ts", src3.indexOf("toggle"));
+            assert.ok(sym1, "proj1 symbol");
+            assert.ok(sym2, "proj2 symbol");
+            assert.ok(sym3, "proj3 symbol");
+            assert.equal(sym1.name, "add", "proj1 symbol name");
+            assert.equal(sym2.name, "greet", "proj2 symbol name");
+            assert.equal(sym3.name, "toggle", "proj3 symbol name");
+
+            // Get type of each symbol, then signatures (exercises type + signature registries)
+            const type1 = proj1.checker.getTypeOfSymbol(sym1);
+            const type2 = proj2.checker.getTypeOfSymbol(sym2);
+            const type3 = proj3.checker.getTypeOfSymbol(sym3);
+            assert.ok(type1, "proj1 function type");
+            assert.ok(type2, "proj2 function type");
+            assert.ok(type3, "proj3 function type");
+
+            const sigs1 = proj1.checker.getSignaturesOfType(type1, SignatureKind.Call);
+            const sigs2 = proj2.checker.getSignaturesOfType(type2, SignatureKind.Call);
+            const sigs3 = proj3.checker.getSignaturesOfType(type3, SignatureKind.Call);
+            assert.equal(sigs1.length, 1, "proj1 has 1 call signature");
+            assert.equal(sigs2.length, 1, "proj2 has 1 call signature");
+            assert.equal(sigs3.length, 1, "proj3 has 1 call signature");
+            assert.equal(sigs1[0].parameters.length, 2, "proj1 add() has 2 params");
+            assert.equal(sigs2[0].parameters.length, 1, "proj2 greet() has 1 param");
+            assert.equal(sigs3[0].parameters.length, 1, "proj3 toggle() has 1 param");
         }
         finally {
             api.close();
@@ -1801,6 +2161,140 @@ describe("readFile callback semantics", () => {
     });
 });
 
+describe("Checker - isArrayType / isTupleType", () => {
+    test("number[] is array, not tuple", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const xs: number[] = [];`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `export const xs: number[] = [];`;
+            const pos = src.indexOf("xs");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.equal(project.checker.isArrayType(type), true);
+            assert.equal(project.checker.isTupleType(type), false);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("readonly number[] is array", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const xs: readonly number[] = [];`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `export const xs: readonly number[] = [];`;
+            const pos = src.indexOf("xs");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.equal(project.checker.isArrayType(type), true);
+            assert.equal(project.checker.isTupleType(type), false);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("Array<number> is array, not tuple", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const xs: Array<number> = [];`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `export const xs: Array<number> = [];`;
+            const pos = src.indexOf("xs");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.equal(project.checker.isArrayType(type), true);
+            assert.equal(project.checker.isTupleType(type), false);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("[number, string] is tuple, not array", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const tup: [number, string] = [1, "a"];`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `export const tup: [number, string] = [1, "a"];`;
+            const pos = src.indexOf("tup");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.equal(project.checker.isArrayType(type), false);
+            assert.equal(project.checker.isTupleType(type), true);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("readonly [number, string] is tuple, not array", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const tup: readonly [number, string] = [1, "a"];`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `export const tup: readonly [number, string] = [1, "a"];`;
+            const pos = src.indexOf("tup");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.equal(project.checker.isArrayType(type), false);
+            assert.equal(project.checker.isTupleType(type), true);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("string is neither array nor tuple", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const str: string = "";`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `export const str: string = "";`;
+            const pos = src.indexOf("str");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            assert.equal(project.checker.isArrayType(type), false);
+            assert.equal(project.checker.isTupleType(type), false);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 describe("Checker - getReturnTypeOfSignature", () => {
     test("returns the return type of a function signature", () => {
         const api = spawnAPI({
@@ -1993,7 +2487,7 @@ export class Derived extends Base {
             assert.ok(symbol);
             const type = project.checker.getDeclaredTypeOfSymbol(symbol);
             assert.ok(type);
-            const baseTypes = project.checker.getBaseTypes(type);
+            const baseTypes = project.checker.getBaseTypes(type as InterfaceType);
             assert.ok(baseTypes.length > 0, "Should have at least one base type");
             const baseSymbol = baseTypes[0].getSymbol();
             assert.ok(baseSymbol);
@@ -2025,11 +2519,40 @@ export interface Dog extends Animal {
             assert.ok(symbol);
             const type = project.checker.getDeclaredTypeOfSymbol(symbol);
             assert.ok(type);
-            const baseTypes = project.checker.getBaseTypes(type);
+            const baseTypes = project.checker.getBaseTypes(type as InterfaceType);
             assert.ok(baseTypes.length > 0, "Should have at least one base type");
             const baseSymbol = baseTypes[0].getSymbol();
             assert.ok(baseSymbol);
             assert.equal(baseSymbol.name, "Animal");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("does not panic for a type alias to a generic interface instantiation", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+export interface Box<T> {
+    value: T;
+}
+export type BoxOfString = Box<string>;
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const typeAlias = sourceFile.statements.find(isTypeAliasDeclaration);
+            assert.ok(typeAlias);
+            const type = project.checker.getTypeAtLocation(typeAlias);
+            assert.ok(type);
+            // A generic interface instantiation produces a type reference, not an
+            // interface type, so it has no base types and yields [].
+            const baseTypes = project.checker.getBaseTypes(type as InterfaceType);
+            assert.deepEqual(baseTypes, []);
         }
         finally {
             api.close();
@@ -2179,9 +2702,341 @@ describe("Checker - getTypeArguments", () => {
             assert.ok(symbol);
             const type = project.checker.getTypeOfSymbol(symbol);
             assert.ok(type);
-            const typeArgs = project.checker.getTypeArguments(type);
+            const typeArgs = project.checker.getTypeArguments(type as TypeReference);
             assert.ok(typeArgs.length > 0, "Should have type arguments");
             assert.ok(typeArgs[0].flags & TypeFlags.Number, `Expected number type argument, got flags ${typeArgs[0].flags}`);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("a wrongly-typed call throws on the client without taking down the server", () => {
+        const src = `export const s: string = ""; export const arr: Array<number> = [1];`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+
+            // `string` is not a type reference. When getTypeArguments is reached
+            // with one, the server panics, but the per-request panic recovery
+            // converts that into an error response rather than crashing the process.
+            const sSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("s:"));
+            assert.ok(sSymbol);
+            const sType = project.checker.getTypeOfSymbol(sSymbol);
+            assert.ok(sType);
+            assert.throws(() => project.checker.getTypeArguments(sType as unknown as TypeReference));
+
+            // The server survived: a subsequent valid request still succeeds.
+            const arrSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("arr:"));
+            assert.ok(arrSymbol);
+            const arrType = project.checker.getTypeOfSymbol(arrSymbol);
+            assert.ok(arrType);
+            const typeArgs = project.checker.getTypeArguments(arrType as TypeReference);
+            assert.ok(typeArgs.length > 0, "Server should still serve valid requests");
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getBaseConstraintOfType", () => {
+    test("returns the base constraint of a type parameter", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export function identity<T extends string>(x: T): T { return x; }`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `export function identity<T extends string>(x: T): T { return x; }`;
+            const pos = src.indexOf("identity<");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const sigs = project.checker.getSignaturesOfType(type, SignatureKind.Call);
+            assert.ok(sigs.length > 0);
+            const typeParams = sigs[0].getTypeParameters();
+            const constraint = project.checker.getBaseConstraintOfType(typeParams[0]);
+            assert.ok(constraint, "Should resolve a base constraint");
+            assert.ok(constraint.flags & TypeFlags.String, `Expected string constraint, got flags ${constraint.flags}`);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("returns undefined for a non-instantiable type", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const x: number = 1;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = `export const x: number = 1;`.indexOf("x:");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const constraint = project.checker.getBaseConstraintOfType(type);
+            assert.equal(constraint, undefined);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getPropertyOfType", () => {
+    test("returns a named property symbol of a type", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+export interface Person {
+    name: string;
+    age: number;
+}
+export declare const p: Person;
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `\nexport interface Person {\n    name: string;\n    age: number;\n}\nexport declare const p: Person;\n`;
+            const pos = src.indexOf("p: Person");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const nameProp = project.checker.getPropertyOfType(type, "name");
+            assert.ok(nameProp, "Should find 'name' property");
+            assert.equal(nameProp.name, "name");
+            const missing = project.checker.getPropertyOfType(type, "doesNotExist");
+            assert.equal(missing, undefined);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getConstantValue", () => {
+    test("returns numeric value of an enum member", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export enum E { A = 1, B = 2 }`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            let memberB: Node | undefined;
+            sourceFile.forEachChild(function visit(node) {
+                if (node.kind === SyntaxKind.EnumMember) {
+                    const text = sourceFile.text.slice(node.pos, node.end).trim();
+                    if (text.startsWith("B")) memberB = node;
+                }
+                node.forEachChild(visit);
+            });
+            assert.ok(memberB, "Should find enum member B");
+            const value = project.checker.getConstantValue(memberB);
+            assert.equal(value, 2);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("returns string value of a string-initialized enum member", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export enum Color { Red = "red" }`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            let member: Node | undefined;
+            sourceFile.forEachChild(function visit(node) {
+                if (node.kind === SyntaxKind.EnumMember) member = node;
+                node.forEachChild(visit);
+            });
+            assert.ok(member);
+            const value = project.checker.getConstantValue(member);
+            assert.equal(value, "red");
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getSignatureFromDeclaration", () => {
+    test("returns the signature of a function declaration", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export function add(a: number, b: number): number { return a + b; }`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            let funcDecl: Node | undefined;
+            sourceFile.forEachChild(function visit(node) {
+                if (isFunctionDeclaration(node)) funcDecl = node;
+                node.forEachChild(visit);
+            });
+            assert.ok(funcDecl, "Should find the function declaration");
+            const sig = project.checker.getSignatureFromDeclaration(funcDecl);
+            assert.ok(sig, "Should resolve a signature");
+            assert.equal(sig.parameters.length, 2);
+            const returnType = project.checker.getReturnTypeOfSignature(sig);
+            assert.ok(returnType);
+            assert.ok(returnType.flags & TypeFlags.Number);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getExportSpecifierLocalTargetSymbol", () => {
+    test("resolves the local target of an export specifier", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+const value = 42;
+export { value as renamed };
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            let exportSpecifier: Node | undefined;
+            sourceFile.forEachChild(function visit(node) {
+                if (node.kind === SyntaxKind.ExportSpecifier) exportSpecifier = node;
+                node.forEachChild(visit);
+            });
+            assert.ok(exportSpecifier, "Should find the export specifier");
+            const target = project.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
+            assert.ok(target, "Should resolve a local target symbol");
+            assert.equal(target.name, "value");
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getAliasedSymbol", () => {
+    test("resolves an import alias to its target symbol", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/foo.ts": `export const foo = 42;`,
+            "/src/main.ts": `import { foo } from "./foo";\nexport const usage = foo;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = `import { foo } from "./foo";`.indexOf("foo }");
+            const aliasSymbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(aliasSymbol);
+            assert.ok(aliasSymbol.flags & SymbolFlags.Alias, "Import binding should be an alias");
+            const aliased = project.checker.getAliasedSymbol(aliasSymbol);
+            assert.ok(aliased, "Should resolve the aliased symbol");
+            assert.equal(aliased.name, "foo");
+            assert.ok(!(aliased.flags & SymbolFlags.Alias), "Target should not be an alias");
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getExportsOfModule", () => {
+    test("returns all exports including re-exports via 'export *'", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/inner.ts": `export const innerValue = 1;`,
+            "/src/index.ts": `
+export const direct = 1;
+export * from "./inner";
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/index.ts");
+            assert.ok(sourceFile);
+            const moduleSymbol = project.checker.getSymbolAtLocation(sourceFile);
+            assert.ok(moduleSymbol, "Source file should have a module symbol");
+            const exports = project.checker.getExportsOfModule(moduleSymbol);
+            const names = exports.map(e => e.name);
+            assert.ok(names.includes("direct"), "should include directly-declared export");
+            assert.ok(names.includes("innerValue"), "should include 'export *' re-export");
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Symbol - getDocumentationComment and getJsDocTags", () => {
+    const docFiles = {
+        "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+        "/src/main.ts": `
+/**
+ * Adds two numbers together.
+ * @param a the first number
+ * @returns the sum
+ */
+export function add(a: number, b: number): number { return a + b; }
+`,
+    };
+
+    test("getDocumentationComment returns the leading comment text", () => {
+        const api = spawnAPI(docFiles);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = docFiles["/src/main.ts"].indexOf("add(a");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const doc = symbol.getDocumentationComment(project.checker);
+            assert.ok(doc.includes("Adds two numbers together"), `Expected documentation, got: ${doc}`);
+            assert.ok(!doc.includes("@param"), "Documentation comment should not include tags");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getJsDocTags returns structured tag name/text pairs", () => {
+        const api = spawnAPI(docFiles);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = docFiles["/src/main.ts"].indexOf("add(a");
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const tags = symbol.getJsDocTags(project.checker);
+            const param = tags.find(t => t.name === "param");
+            assert.ok(param, `Expected a @param tag, got: ${JSON.stringify(tags)}`);
+            assert.equal(param.text, "a the first number");
+            const returns = tags.find(t => t.name === "returns");
+            assert.ok(returns, `Expected a @returns tag, got: ${JSON.stringify(tags)}`);
+            assert.equal(returns.text, "the sum");
         }
         finally {
             api.close();
@@ -2449,6 +3304,39 @@ describe("FreshableType - getFreshType and getRegularType", () => {
             assert.ok(type.flags & TypeFlags.StringLiteral, "Expected StringLiteral");
             const literal = type as LiteralType;
             assert.equal(literal.value, "hello");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("BigIntLiteralType.value is a bigint (positive and negative)", () => {
+        const src = `\nexport const pos = 123n;\nexport const neg = -123n;\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+
+            const posSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("pos ="));
+            assert.ok(posSymbol);
+            const posType = project.checker.getTypeOfSymbol(posSymbol);
+            assert.ok(posType);
+            assert.ok(posType.flags & TypeFlags.BigIntLiteral, "Expected BigIntLiteral");
+            const posLiteral = posType as BigIntLiteralType;
+            assert.equal(typeof posLiteral.value, "bigint");
+            assert.equal(posLiteral.value, 123n);
+
+            const negSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("neg ="));
+            assert.ok(negSymbol);
+            const negType = project.checker.getTypeOfSymbol(negSymbol);
+            assert.ok(negType);
+            assert.ok(negType.flags & TypeFlags.BigIntLiteral, "Expected BigIntLiteral");
+            const negLiteral = negType as BigIntLiteralType;
+            assert.equal(typeof negLiteral.value, "bigint");
+            assert.equal(negLiteral.value, -123n);
         }
         finally {
             api.close();
@@ -3412,6 +4300,113 @@ describe("Program - diagnostics", () => {
             api.close();
         }
     });
+
+    test("getBindDiagnostics", () => {
+        const source = `let x = 1;\nlet x = 2;`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": source,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getBindDiagnostics("/src/index.ts");
+            assert.deepEqual(diags, [
+                {
+                    fileName: "/src/index.ts",
+                    ...rangeOf(source, "x", 0),
+                    code: 2451,
+                    category: DiagnosticCategory.Error,
+                    text: "Cannot redeclare block-scoped variable 'x'.",
+                },
+                {
+                    fileName: "/src/index.ts",
+                    ...rangeOf(source, "x", 1),
+                    code: 2451,
+                    category: DiagnosticCategory.Error,
+                    text: "Cannot redeclare block-scoped variable 'x'.",
+                },
+            ]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getProgramDiagnostics", () => {
+        const config = `{ "compilerOptions": { "moduleResolution": "bundler", "module": "nodenext" } }`;
+        const api = spawnAPI({
+            "/tsconfig.json": config,
+            "/src/index.ts": `export const x = 1;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getProgramDiagnostics();
+            assert.deepEqual(diags, [
+                {
+                    fileName: "/tsconfig.json",
+                    ...rangeOf(config, `"bundler"`),
+                    code: 5095,
+                    category: DiagnosticCategory.Error,
+                    text: "Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.",
+                },
+                {
+                    fileName: "/tsconfig.json",
+                    ...rangeOf(config, `"bundler"`),
+                    code: 5109,
+                    category: DiagnosticCategory.Error,
+                    text: "Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.",
+                },
+            ]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getGlobalDiagnostics", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `export const x = 1;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getGlobalDiagnostics();
+            assert.deepEqual(diags, []);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getGlobalDiagnostics returns file-less diagnostics from the checker", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": `{ "compilerOptions": { "noLib": true } }`,
+            "/src/index.ts": `export const x = [1, 2, 3];`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getGlobalDiagnostics();
+            // With noLib, the checker reports "Cannot find global type" diagnostics that
+            // are not associated with any source file.
+            assert.ok(diags.length > 0, "expected global diagnostics to be reported");
+            for (const diag of diags) {
+                assert.equal(diag.fileName, undefined);
+                assert.equal(diag.code, 2318);
+                assert.equal(diag.category, DiagnosticCategory.Error);
+            }
+            assert.ok(
+                diags.some(d => d.text === "Cannot find global type 'Array'."),
+                "expected a global diagnostic for the 'Array' type",
+            );
+        }
+        finally {
+            api.close();
+        }
+    });
 });
 
 describe("Checker - getReferencedSymbolsForNode", () => {
@@ -3457,6 +4452,138 @@ describe("Checker - getSignatureUsage", () => {
             // The call site should have a call expression
             const usage = usages.find(u => u.call !== undefined);
             assert.ok(usage, "Expected at least one usage with a call expression");
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("getDefaultProjectForFile", () => {
+    test("finds inferred project for d.ts in node_modules after openFiles", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const x = 1;`,
+            "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
+            "/node_modules/my-lib/index.d.ts": `export declare const foo: string;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+
+            // The d.ts is not imported, so it is not in the project's program
+            const dtsSf = project.program.getSourceFile("/node_modules/my-lib/index.d.ts");
+            assert.equal(dtsSf, undefined, "d.ts not in import graph should not be found via project.program.getSourceFile");
+
+            // Before opening the file, getDefaultProjectForFile returns undefined (no error)
+            const noProject = snapshot.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts");
+            assert.equal(noProject, undefined, "getDefaultProjectForFile returns undefined for unloaded file");
+
+            // Load the file into the inferred project via updateSnapshot openFiles
+            const snapshot2 = api.updateSnapshot({ openFiles: ["/node_modules/my-lib/index.d.ts"] });
+            const defaultProject = snapshot2.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts");
+            assert.ok(defaultProject, "getDefaultProjectForFile should find inferred project after openFiles");
+
+            const fooPos = `export declare const foo: string;`.indexOf("foo");
+            const fooType = defaultProject.checker.getTypeAtPosition("/node_modules/my-lib/index.d.ts", fooPos);
+            assert.ok(fooType);
+            assert.ok(fooType.flags & TypeFlags.String);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("keeps previously opened files open across subsequent openFiles calls", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const x = 1;`,
+            "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
+            "/node_modules/my-lib/index.d.ts": `export declare const foo: string;`,
+            "/node_modules/other-lib/package.json": JSON.stringify({ name: "other-lib", types: "./index.d.ts" }),
+            "/node_modules/other-lib/index.d.ts": `export declare const bar: number;`,
+        });
+        try {
+            api.updateSnapshot({ openProject: "/tsconfig.json" });
+            api.updateSnapshot({ openFiles: ["/node_modules/my-lib/index.d.ts"] });
+
+            // Opening a second file in a later snapshot must not close the first one.
+            const snapshot = api.updateSnapshot({ openFiles: ["/node_modules/other-lib/index.d.ts"] });
+
+            const firstProject = snapshot.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts");
+            assert.ok(firstProject, "previously opened file should remain in the inferred project");
+            const secondProject = snapshot.getDefaultProjectForFile("/node_modules/other-lib/index.d.ts");
+            assert.ok(secondProject, "newly opened file should be in the inferred project");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("opening a file resolves to a configured project via ancestor search", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const x = 1;`,
+        });
+        try {
+            // Open the file without first opening the project. Like LSP's didOpen, this
+            // should search ancestor directories for a tsconfig that contains the file.
+            const snapshot = api.updateSnapshot({ openFiles: ["/src/index.ts"] });
+            const defaultProject = snapshot.getDefaultProjectForFile("/src/index.ts");
+            assert.ok(defaultProject, "should find a project for the opened file");
+            assert.equal(
+                defaultProject.configFileName,
+                "/tsconfig.json",
+                "opened file should resolve to the containing configured project, not the inferred project",
+            );
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("closeProjects releases a project opened via openProjects", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const x = 1;`,
+        });
+        try {
+            const opened = api.updateSnapshot({ openProjects: ["/tsconfig.json"] });
+            assert.ok(opened.getProject("/tsconfig.json"), "project should be open after openProjects");
+
+            const closed = api.updateSnapshot({ closeProjects: ["/tsconfig.json"] });
+            assert.equal(
+                closed.getProject("/tsconfig.json"),
+                undefined,
+                "project should be unloaded after closeProjects",
+            );
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("closeFiles releases a file opened via openFiles", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const x = 1;`,
+            "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
+            "/node_modules/my-lib/index.d.ts": `export declare const foo: string;`,
+        });
+        try {
+            api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const opened = api.updateSnapshot({ openFiles: ["/node_modules/my-lib/index.d.ts"] });
+            assert.ok(
+                opened.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts"),
+                "file should resolve to a project after openFiles",
+            );
+
+            const closed = api.updateSnapshot({ closeFiles: ["/node_modules/my-lib/index.d.ts"] });
+            assert.equal(
+                closed.getDefaultProjectForFile("/node_modules/my-lib/index.d.ts"),
+                undefined,
+                "file should no longer resolve to a project after closeFiles",
+            );
         }
         finally {
             api.close();

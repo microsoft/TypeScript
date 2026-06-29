@@ -31,6 +31,25 @@ func TestWalkDirDoesNotFollowSymlinkedDir(t *testing.T) { //nolint:paralleltest 
 	runWalkDirTest(t, testWalkDirDoesNotFollowSymlinkedDir)
 }
 
+func TestWalkDirDoesNotFollowRootSymlinkedDir(t *testing.T) { //nolint:paralleltest // runWalkDirTest calls t.Parallel.
+	runWalkDirTest(t, testWalkDirDoesNotFollowRootSymlinkedDir)
+}
+
+func testWalkDirDoesNotFollowRootSymlinkedDir(t *testing.T, walk walkDirFunc) {
+	root := newTmpDir(t)
+	target := filepath.Join(t.TempDir(), "target")
+	if err := os.Mkdir(target, 0o755); err != nil {
+		t.Fatal(err)
+	}
+
+	link := filepath.Join(root, "link")
+	makeDirSymlink(t, target, link)
+
+	if err := walk(link, true, nil); err == nil {
+		t.Fatal("expected error for root symlinked directory")
+	}
+}
+
 func testWalkDirDoesNotFollowSymlinkedDir(t *testing.T, walk walkDirFunc) {
 	root := newTmpDir(t)
 	target := filepath.Join(t.TempDir(), "target")
@@ -42,9 +61,7 @@ func testWalkDirDoesNotFollowSymlinkedDir(t *testing.T, walk walkDirFunc) {
 	}
 
 	link := filepath.Join(root, "link")
-	if err := os.Symlink(target, link); err != nil {
-		t.Fatal(err)
-	}
+	makeDirSymlink(t, target, link)
 
 	found := map[string]bool{}
 	if err := walk(root, true, func(path string, isDir bool) error {

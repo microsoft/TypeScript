@@ -205,8 +205,8 @@ declare const _default: {
 };
 export = _default;
 //// [d.d.ts]
-declare const _default: () => void;
 export = _default;
+declare function _default(): void;
 //// [e.d.mts]
 declare const _default = 0;
 export = _default;

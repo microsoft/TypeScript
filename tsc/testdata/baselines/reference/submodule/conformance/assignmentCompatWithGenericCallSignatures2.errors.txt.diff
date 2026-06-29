@@ -1,0 +1,25 @@
+--- old.assignmentCompatWithGenericCallSignatures2.errors.txt
++++ new.assignmentCompatWithGenericCallSignatures2.errors.txt
+@@= skipped -0, +0 lines =@@
+ assignmentCompatWithGenericCallSignatures2.ts(15,1): error TS2322: Type 'B' is not assignable to type 'A'.
+-  Types of parameters 'y' and 'y' are incompatible.
+-    Type 'T[]' is not assignable to type 'T'.
+-      'T' could be instantiated with an arbitrary type which could be unrelated to 'T[]'.
++  Types of parameters 'x' and 'x' are incompatible.
++    Type 'T' is not assignable to type 'T[]'.
+ assignmentCompatWithGenericCallSignatures2.ts(16,1): error TS2322: Type 'A' is not assignable to type 'B'.
+   Types of parameters 'y' and 'y' are incompatible.
+     Type 'S' is not assignable to type 'S[]'.
+@@= skipped -24, +23 lines =@@
+     a = b;
+     ~
+ !!! error TS2322: Type 'B' is not assignable to type 'A'.
+-!!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+-!!! error TS2322:     Type 'T[]' is not assignable to type 'T'.
+-!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T[]'.
++!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
++!!! error TS2322:     Type 'T' is not assignable to type 'T[]'.
++!!! related TS2208 assignmentCompatWithGenericCallSignatures2.ts:4:6: This type parameter might need an `extends T[]` constraint.
+     b = a;
+     ~
+ !!! error TS2322: Type 'A' is not assignable to type 'B'.

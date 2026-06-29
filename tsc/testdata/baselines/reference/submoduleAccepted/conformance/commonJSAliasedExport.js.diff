@@ -1,17 +1,15 @@
 --- old.commonJSAliasedExport.js
 +++ new.commonJSAliasedExport.js
-@@= skipped -33, +33 lines =@@
-
+@@= skipped -34, +34 lines =@@
 
  //// [commonJSAliasedExport.d.ts]
--export = donkey;
+ export = donkey;
 -declare function donkey(ast: any): any;
 -declare namespace donkey {
 -    export { funky };
 -}
++export { funky };
 +declare const donkey: (ast: any) => any;
  declare function funky(declaration: any): boolean;
-+export = donkey;
-+export { funky };
  //// [bug43713.d.ts]
  export {};

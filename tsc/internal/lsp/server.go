@@ -1091,13 +1091,16 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 			},
 			DiagnosticProvider: &lsproto.DiagnosticOptionsOrRegistrationOptions{
 				Options: &lsproto.DiagnosticOptions{
+					Identifier:            new("typescript"),
 					InterFileDependencies: true,
 				},
 			},
 			CompletionProvider: &lsproto.CompletionOptions{
 				TriggerCharacters: &ls.TriggerCharacters,
 				ResolveProvider:   new(true),
-				// !!! other options
+				CompletionItem: &lsproto.ServerCompletionItemOptions{
+					LabelDetailsSupport: new(true),
+				},
 			},
 			SignatureHelpProvider: &lsproto.SignatureHelpOptions{
 				TriggerCharacters:   &[]string{"(", ",", "<"},

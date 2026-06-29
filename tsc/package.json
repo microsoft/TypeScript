@@ -11,7 +11,7 @@
         "@types/node": "latest",
         "@types/tmp": "^0.2.6",
         "@types/which": "^3.0.4",
-        "@unicode/unicode-15.1.0": "^1.6.16",
+        "@unicode/unicode-15.1.0": "^1.6.17",
         "adm-zip": "^0.5.17",
         "chokidar": "^5.0.0",
         "dprint": "^0.54.0",
@@ -45,14 +45,14 @@
         "@microsoft/1ds-core-js": "4.3.11",
         "@microsoft/1ds-post-js": "4.3.11"
     },
-    "packageManager": "npm@11.16.0+sha512.03be172fc3b199c7a06433163e459be5b110a6983c1dd6305b7ac10f6b0fa12e1440755a8df6b1064ab2ccb789df0474919fb9c684e322dc57685ede21752ccb",
+    "packageManager": "npm@11.17.0+sha512.3eeaf18997b11070d313849268b23766b9db0068997dec9471073170fe43fa17f2b4d0337bf0f52330ee2274e7f5754b21b01052742e48f5c9c74d8b1e32ef43",
     "volta": {
         "node": "22.22.0",
-        "npm": "11.16.0"
+        "npm": "11.17.0"
     },
     "allowScripts": {
         "dprint@0.54.0": true,
-        "esbuild@0.28.0": true,
+        "esbuild@0.28.1": true,
         "@vscode/vsce-sign@2.0.9": true,
         "keytar@7.9.0": true
     }

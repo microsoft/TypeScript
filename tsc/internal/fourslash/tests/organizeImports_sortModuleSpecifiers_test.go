@@ -3,7 +3,6 @@ package fourslash_test
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
@@ -24,7 +23,7 @@ x; y;`
 import x from "lib2";
 x; y;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
 
@@ -42,7 +41,7 @@ x; y;`
 import x from "./lib2";
 x; y;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
 
@@ -60,7 +59,7 @@ x; y;`
 import x from "./lib";
 x; y;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
 
@@ -79,7 +78,7 @@ x; y;`
 import x from "Z";
 x; y;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }
 
@@ -98,6 +97,6 @@ x; y;`
 import x from "z";
 x; y;`,
 		lsproto.CodeActionKindSourceSortImports,
-		&lsutil.UserPreferences{OrganizeImportsIgnoreCase: core.TSTrue},
+		&lsutil.UserPreferences{OrganizeImportsSort: lsutil.OrganizeImportsSortOrdinalIgnoreCase},
 	)
 }

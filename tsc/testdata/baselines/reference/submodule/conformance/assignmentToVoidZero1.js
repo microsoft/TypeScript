@@ -13,3 +13,8 @@ exports.y = 2;
 exports.y = exports.x = void 0;
 exports.x = 1;
 exports.y = 2;
+
+
+//// [assignmentToVoidZero1.d.ts]
+export declare var y: 2;
+export declare var x: 1;

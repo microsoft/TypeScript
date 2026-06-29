@@ -161,7 +161,7 @@ type windowsRead struct {
 }
 
 func newWindowsSubscription(watcherImpl *windowsBackend, w *dirWatch) (*windowsSubscription, error) {
-	pathPtr, err := windows.UTF16PtrFromString(w.dir)
+	pathPtr, err := windows.UTF16PtrFromString(w.physicalDir)
 	if err != nil {
 		return nil, &dirWatchError{err: err, dirWatch: w}
 	}
@@ -333,7 +333,7 @@ func (s *windowsSubscription) processCompletion(callErr error, buf []byte, bytes
 			return false
 		case errors.Is(callErr, windows.ERROR_ACCESS_DENIED):
 			// Possibly the watched dir was deleted; check and handle.
-			pathPtr, _ := windows.UTF16PtrFromString(s.dirWatch.dir)
+			pathPtr, _ := windows.UTF16PtrFromString(s.dirWatch.physicalDir)
 			attrs, err := windows.GetFileAttributes(pathPtr)
 			if err != nil || attrs == windows.INVALID_FILE_ATTRIBUTES || attrs&windows.FILE_ATTRIBUTE_DIRECTORY == 0 {
 				s.dirWatch.events.remove(s.dirWatch.dir)
@@ -375,6 +375,7 @@ func (s *windowsSubscription) processCompletion(callErr error, buf []byte, bytes
 
 func (s *windowsSubscription) processOne(action uint32, name string) {
 	path := s.dirWatch.dir + "\\" + name
+	watchPath := s.dirWatch.physicalDir + "\\" + name
 	switch action {
 	case windows.FILE_ACTION_ADDED, windows.FILE_ACTION_RENAMED_NEW_NAME:
 		// Always emit the event, even if the file is already gone by the
@@ -383,7 +384,7 @@ func (s *windowsSubscription) processOne(action uint32, name string) {
 		// the create+delete pair coalesces away.
 		s.dirWatch.events.create(path)
 	case windows.FILE_ACTION_MODIFIED:
-		if pathPtr, err := windows.UTF16PtrFromString(path); err == nil {
+		if pathPtr, err := windows.UTF16PtrFromString(watchPath); err == nil {
 			var data windows.Win32FileAttributeData
 			if err := windows.GetFileAttributesEx(pathPtr, windows.GetFileExInfoStandard, (*byte)(unsafe.Pointer(&data))); err == nil {
 				if data.FileAttributes&windows.FILE_ATTRIBUTE_DIRECTORY == 0 {

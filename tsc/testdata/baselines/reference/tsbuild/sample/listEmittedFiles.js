@@ -63,20 +63,20 @@ export const m = mod;
 tsgo --b tests --listEmittedFiles
 ExitStatus:: Success
 Output::
-TSFILE:  /user/username/projects/sample1/core/anotherModule.js
-TSFILE:  /user/username/projects/sample1/core/anotherModule.d.ts.map
-TSFILE:  /user/username/projects/sample1/core/anotherModule.d.ts
-TSFILE:  /user/username/projects/sample1/core/index.js
-TSFILE:  /user/username/projects/sample1/core/index.d.ts.map
-TSFILE:  /user/username/projects/sample1/core/index.d.ts
-TSFILE:  /user/username/projects/sample1/core/tsconfig.tsbuildinfo
-TSFILE:  /user/username/projects/sample1/logic/index.js.map
-TSFILE:  /user/username/projects/sample1/logic/index.js
-TSFILE:  /user/username/projects/sample1/logic/index.d.ts
-TSFILE:  /user/username/projects/sample1/logic/tsconfig.tsbuildinfo
-TSFILE:  /user/username/projects/sample1/tests/index.js
-TSFILE:  /user/username/projects/sample1/tests/index.d.ts
-TSFILE:  /user/username/projects/sample1/tests/tsconfig.tsbuildinfo
+TSFILE: /user/username/projects/sample1/core/anotherModule.js
+TSFILE: /user/username/projects/sample1/core/anotherModule.d.ts.map
+TSFILE: /user/username/projects/sample1/core/anotherModule.d.ts
+TSFILE: /user/username/projects/sample1/core/index.js
+TSFILE: /user/username/projects/sample1/core/index.d.ts.map
+TSFILE: /user/username/projects/sample1/core/index.d.ts
+TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
+TSFILE: /user/username/projects/sample1/logic/index.js.map
+TSFILE: /user/username/projects/sample1/logic/index.js
+TSFILE: /user/username/projects/sample1/logic/index.d.ts
+TSFILE: /user/username/projects/sample1/logic/tsconfig.tsbuildinfo
+TSFILE: /user/username/projects/sample1/tests/index.js
+TSFILE: /user/username/projects/sample1/tests/index.d.ts
+TSFILE: /user/username/projects/sample1/tests/tsconfig.tsbuildinfo
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -437,15 +437,15 @@ export class someClass { }
 tsgo --b tests --listEmittedFiles
 ExitStatus:: Success
 Output::
-TSFILE:  /user/username/projects/sample1/core/index.js
-TSFILE:  /user/username/projects/sample1/core/index.d.ts.map
-TSFILE:  /user/username/projects/sample1/core/index.d.ts
-TSFILE:  /user/username/projects/sample1/core/tsconfig.tsbuildinfo
-TSFILE:  /user/username/projects/sample1/logic/index.js.map
-TSFILE:  /user/username/projects/sample1/logic/index.js
-TSFILE:  /user/username/projects/sample1/logic/tsconfig.tsbuildinfo
-TSFILE:  /user/username/projects/sample1/tests/index.js
-TSFILE:  /user/username/projects/sample1/tests/tsconfig.tsbuildinfo
+TSFILE: /user/username/projects/sample1/core/index.js
+TSFILE: /user/username/projects/sample1/core/index.d.ts.map
+TSFILE: /user/username/projects/sample1/core/index.d.ts
+TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
+TSFILE: /user/username/projects/sample1/logic/index.js.map
+TSFILE: /user/username/projects/sample1/logic/index.js
+TSFILE: /user/username/projects/sample1/logic/tsconfig.tsbuildinfo
+TSFILE: /user/username/projects/sample1/tests/index.js
+TSFILE: /user/username/projects/sample1/tests/tsconfig.tsbuildinfo
 //// [/user/username/projects/sample1/core/index.d.ts] *modified* 
 export declare const someString: string;
 export declare function leftPad(s: string, n: number): string;
@@ -749,9 +749,9 @@ class someClass2 { }
 tsgo --b tests --listEmittedFiles
 ExitStatus:: Success
 Output::
-TSFILE:  /user/username/projects/sample1/core/index.js
-TSFILE:  /user/username/projects/sample1/core/index.d.ts.map
-TSFILE:  /user/username/projects/sample1/core/tsconfig.tsbuildinfo
+TSFILE: /user/username/projects/sample1/core/index.js
+TSFILE: /user/username/projects/sample1/core/index.d.ts.map
+TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
 //// [/user/username/projects/sample1/core/index.d.ts.map] *rewrite with same content*
 //// [/user/username/projects/sample1/core/index.js] *modified* 
 export const someString = "HELLO WORLD";

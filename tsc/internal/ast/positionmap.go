@@ -2,6 +2,8 @@ package ast
 
 import (
 	"unicode/utf8"
+
+	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 // PositionMap provides bidirectional mapping between UTF-8 byte offsets (used by Go)
@@ -44,7 +46,7 @@ func ComputePositionMap(text string) *PositionMap {
 			i++
 			continue
 		}
-		r, size := utf8.DecodeRuneInString(text[i:])
+		r, size := stringutil.DecodeJSStringRune(text[i:])
 		utf16Size := 1
 		if r >= 0x10000 {
 			utf16Size = 2

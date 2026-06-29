@@ -140,7 +140,16 @@
      export var abstract: number;
      export var as: number;
      export var asserts: number;
-@@= skipped -75, +120 lines =@@
+@@= skipped -68, +113 lines =@@
+     export var string: number;
+     export var symbol: number;
+     export var type: number;
+-    export var undefined: number;
++    export var _21: number;
++    export { _21 as undefined };
+     export var unique: number;
+     export var unknown: number;
+     export var from: number;
      export var global: number;
      export var bigint: number;
      export var of: number;
