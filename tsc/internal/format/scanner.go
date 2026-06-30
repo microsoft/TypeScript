@@ -118,9 +118,27 @@ func shouldRescanJsxIdentifier(node *ast.Node) bool {
 			ast.KindJsxNamespacedName:
 			// May parse an identifier like `module-layout`; that will be scanned as a keyword at first, but we should parse the whole thing to get an identifier.
 			return ast.IsKeywordKind(node.Kind) || node.Kind == ast.KindIdentifier
+		case ast.KindPropertyAccessExpression:
+			// The leftmost name of a dotted JSX tag name (e.g. `a-b` in `<a-b.c>`) may contain hyphens, so rescan it as a JSX identifier.
+			return (ast.IsKeywordKind(node.Kind) || node.Kind == ast.KindIdentifier) && isLeftmostJsxTagName(node)
 		}
 	}
 	return false
+}
+
+func isLeftmostJsxTagName(node *ast.Node) bool {
+	return ast.FindAncestorOrQuit(node, func(n *ast.Node) ast.FindAncestorResult {
+		switch {
+		case n.Parent == nil:
+			return ast.FindAncestorQuit
+		case ast.IsJsxTagName(n):
+			return ast.FindAncestorTrue
+		case ast.IsPropertyAccessExpression(n.Parent) && n.Parent.Expression() == n:
+			return ast.FindAncestorFalse
+		default:
+			return ast.FindAncestorQuit
+		}
+	}) != nil
 }
 
 func (s *formattingScanner) shouldRescanJsxText(node *ast.Node) bool {
