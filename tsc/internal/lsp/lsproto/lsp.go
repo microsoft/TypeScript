@@ -84,44 +84,6 @@ type URI string // !!!
 
 type Method string
 
-func unmarshalPtrTo[T any](data []byte) (*T, error) {
-	var v T
-	if err := json.Unmarshal(data, &v); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal %T: %w", (*T)(nil), err)
-	}
-	return &v, nil
-}
-
-func unmarshalValue[T any](data []byte) (T, error) {
-	var v T
-	if err := json.Unmarshal(data, &v); err != nil {
-		return *new(T), fmt.Errorf("failed to unmarshal %T: %w", (*T)(nil), err)
-	}
-	return v, nil
-}
-
-func unmarshalAny(data []byte) (any, error) {
-	var v any
-	if err := json.Unmarshal(data, &v); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal any: %w", err)
-	}
-	return v, nil
-}
-
-func unmarshalEmpty(data []byte) (any, error) {
-	if len(data) != 0 {
-		return nil, fmt.Errorf("expected empty, got: %s", string(data))
-	}
-	return nil, nil
-}
-
-func boolToInt(b bool) int {
-	if b {
-		return 1
-	}
-	return 0
-}
-
 func errNotObject(k json.Kind) error {
 	return fmt.Errorf("expected object start, but encountered %v", k)
 }
@@ -230,20 +192,16 @@ type RequestInfo[Params, Resp any] struct {
 }
 
 func (info RequestInfo[Params, Resp]) UnmarshalResult(result any) (Resp, error) {
-	if r, ok := result.(Resp); ok {
-		return r, nil
-	}
-
 	raw, ok := result.(json.Value)
 	if !ok {
 		return *new(Resp), fmt.Errorf("expected json.Value, got %T", result)
 	}
 
-	r, err := unmarshalResult(info.Method, raw)
-	if err != nil {
+	var r Resp
+	if err := json.Unmarshal(raw, &r); err != nil {
 		return *new(Resp), err
 	}
-	return r.(Resp), nil
+	return r, nil
 }
 
 func (info RequestInfo[Params, Resp]) NewRequestMessage(id *jsonrpc.ID, params Params) *RequestMessage {
@@ -264,6 +222,45 @@ func (info NotificationInfo[Params]) NewNotificationMessage(params Params) *Requ
 		Method: info.Method,
 		Params: params,
 	}
+}
+
+// UnmarshalParams decodes the params of an inbound request or notification
+// message into the requested type. Inbound messages store their params as a
+// raw [json.Value] (see [Message.UnmarshalJSON]); decoding is deferred to the
+// point of dispatch so that param types for methods the server never handles
+// are not forced into the binary.
+//
+// A [NoParams] method must be given no params; every other method must be given
+// params as an object or array. A violation returns [ErrorCodeInvalidParams].
+func UnmarshalParams[T any](req *RequestMessage) (T, error) {
+	var params T
+	var raw json.Value
+	if req.Params != nil {
+		v, ok := req.Params.(json.Value)
+		if !ok {
+			return params, fmt.Errorf("%w: unexpected params type %T", ErrorCodeInvalidParams, req.Params)
+		}
+		raw = v
+	}
+
+	// params is the zero value of T; this asserts on its type, i.e. whether the
+	// method was declared with NoParams.
+	if _, declaresNoParams := any(params).(NoParams); declaresNoParams {
+		if len(raw) != 0 {
+			return params, fmt.Errorf("%w: expected no params, got %s", ErrorCodeInvalidParams, raw)
+		}
+		return params, nil
+	}
+
+	// The base protocol defines params as `array | object`; reject anything else
+	// (absent, null, or a scalar).
+	if k := raw.Kind(); k != '{' && k != '[' {
+		return params, fmt.Errorf("%w: params must be an object or array", ErrorCodeInvalidParams)
+	}
+	if err := json.Unmarshal(raw, &params); err != nil {
+		return params, fmt.Errorf("%w: %w", ErrorCodeInvalidParams, err)
+	}
+	return params, nil
 }
 
 type Null struct{}

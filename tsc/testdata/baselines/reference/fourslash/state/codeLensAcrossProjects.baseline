@@ -162,46 +162,24 @@ Config File Names::
   "params": {
     "settings": {
       "js/ts": {
-        "format": {
-          "baseIndentSize": 0,
-          "indentSize": 0,
-          "indentStyle": 0,
-          "newLineCharacter": "",
-          "semicolons": "",
-          "tabSize": 0
-        },
         "implementationsCodeLens": {
           "enabled": true,
           "showOnAllClassMethods": true,
           "showOnInterfaceMethods": true
         },
-        "inlayHints": {
-          "parameterNames": {
-            "enabled": ""
-          }
-        },
-        "native-preview": {
-          "customConfigFileName": ""
-        },
         "preferences": {
-          "importModuleSpecifier": "",
-          "importModuleSpecifierEnding": "",
-          "jsxAttributeCompletionStyle": "",
           "organizeImports": {
             "caseFirst": "default",
-            "locale": "",
             "sort": "auto",
             "typeOrder": "auto",
             "unicodeCollation": "ordinal"
-          },
-          "quoteStyle": ""
+          }
         },
         "referencesCodeLens": {
           "enabled": true,
           "showOnAllFunctions": true
         },
         "unstable": {
-          "maximumHoverLength": 0,
           "preferGoToSourceDefinition": false
         }
       }
@@ -604,7 +582,6 @@ Config::
     "settings": {
       "js/ts": {
         "format": {
-          "baseIndentSize": 0,
           "convertTabsToSpaces": true,
           "indentSize": 4,
           "indentStyle": 2,
@@ -628,26 +605,13 @@ Config::
           "tabSize": 4,
           "trimTrailingWhitespace": true
         },
-        "inlayHints": {
-          "parameterNames": {
-            "enabled": ""
-          }
-        },
-        "native-preview": {
-          "customConfigFileName": ""
-        },
         "preferences": {
-          "importModuleSpecifier": "",
-          "importModuleSpecifierEnding": "",
-          "jsxAttributeCompletionStyle": "",
           "organizeImports": {
             "caseFirst": "default",
-            "locale": "",
             "sort": "auto",
             "typeOrder": "auto",
             "unicodeCollation": "ordinal"
-          },
-          "quoteStyle": ""
+          }
         },
         "reportStyleChecksAsWarnings": true,
         "suggest": {
@@ -658,7 +622,6 @@ Config::
           "allowRenameOfImportPath": true,
           "disableLineTextInReferences": true,
           "displayPartsForJSDoc": true,
-          "maximumHoverLength": 0,
           "preferGoToSourceDefinition": false,
           "provideRefactorNotApplicableReason": true
         },

@@ -54,7 +54,7 @@ func TestProgressNotificationsEndToEnd(t *testing.T) {
 
 	client.OnServerNotification = func(_ context.Context, req *lsproto.RequestMessage) {
 		if req.Method == lsproto.MethodProgress {
-			if params, ok := req.Params.(*lsproto.ProgressParams); ok {
+			if params, err := lsproto.UnmarshalParams[*lsproto.ProgressParams](req); err == nil && params != nil {
 				mu.Lock()
 				progressNotifications = append(progressNotifications, params)
 				isEnd := params.Value.End != nil

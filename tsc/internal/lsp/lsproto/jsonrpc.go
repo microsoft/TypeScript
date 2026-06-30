@@ -54,9 +54,8 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 	}
 
 	var params any
-	var err error
 	if len(raw.Params) > 0 {
-		params, err = unmarshalParams(raw.Method, raw.Params)
+		params = raw.Params
 	}
 
 	if raw.ID == nil {
@@ -71,9 +70,6 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 		Params: params,
 	}
 
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrorCodeInvalidParams, err)
-	}
 	return nil
 }
 
@@ -112,11 +108,8 @@ func (r *RequestMessage) UnmarshalJSON(data []byte) error {
 
 	r.ID = raw.ID
 	r.Method = raw.Method
-
-	var err error
-	r.Params, err = unmarshalParams(raw.Method, raw.Params)
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrorCodeInvalidRequest, err)
+	if len(raw.Params) > 0 {
+		r.Params = raw.Params
 	}
 
 	return nil

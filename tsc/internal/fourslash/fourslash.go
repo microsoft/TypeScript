@@ -242,8 +242,8 @@ func (f *FourslashTest) handleServerRequest(_ context.Context, req *lsproto.Requ
 		// Return current user preferences for each requested section.
 		// The server requests multiple sections (js/ts, typescript, javascript, editor);
 		// we return user preferences for "js/ts" and nil for others.
-		params, ok := req.Params.(*lsproto.ConfigurationParams)
-		if !ok || params == nil || params.Items == nil {
+		params, err := lsproto.UnmarshalParams[*lsproto.ConfigurationParams](req)
+		if err != nil || params == nil || params.Items == nil {
 			return &lsproto.ResponseMessage{
 				ID:      req.ID,
 				JSONRPC: req.JSONRPC,
@@ -1098,7 +1098,10 @@ func (f *FourslashTest) VerifyCompletions(t *testing.T, markerInput MarkerInput,
 			if item == nil {
 				t.Fatalf("Code action '%s' from source '%s' not found in completions.", expectedAction.Name, expectedAction.Source)
 			}
-			assert.Check(t, strings.Contains(*item.Detail, expectedAction.Description), "Completion item detail does not contain expected description.")
+			// Detail and AdditionalTextEdits for auto-import items are populated by
+			// completionItem/resolve, not in the initial completion list.
+			item = f.resolveCompletionItem(t, item)
+			assert.Check(t, item.Detail != nil && strings.Contains(*item.Detail, expectedAction.Description), "Completion item detail does not contain expected description.")
 			f.applyTextEdits(t, *item.AdditionalTextEdits)
 			assert.Equal(t, f.getScriptInfo(f.activeFilename).content, expectedAction.NewFileContent, fmt.Sprintf("File content after applying code action '%s' did not match expected content.", expectedAction.Name))
 		},
@@ -2532,7 +2535,7 @@ func (f *FourslashTest) verifyBaselineDefinitions(
 		} else if result.DefinitionLinks != nil {
 			var originRange *lsproto.Range
 			resultAsSpans = core.Map(*result.DefinitionLinks, func(link *lsproto.LocationLink) documentSpan {
-				if originRange != nil && originRange != link.OriginSelectionRange {
+				if originRange != nil && (link.OriginSelectionRange == nil || *originRange != *link.OriginSelectionRange) {
 					panic("multiple different origin ranges in definition links")
 				}
 				originRange = link.OriginSelectionRange
@@ -5487,18 +5490,22 @@ func (f *FourslashTest) VerifyBaselineDocumentSymbol(t *testing.T) {
 	}
 	result := sendRequest(t, f, lsproto.TextDocumentDocumentSymbolInfo, params)
 	uri := lsconv.FileNameToDocumentURI(f.activeFilename)
-	spansToSymbol := make(map[documentSpan]*lsproto.DocumentSymbol)
+	symbolBySpan := make(map[documentSpanKey]*lsproto.DocumentSymbol)
 	if result.DocumentSymbols != nil {
 		for _, symbol := range *result.DocumentSymbols {
-			collectDocumentSymbolSpans(uri, symbol, spansToSymbol)
+			collectDocumentSymbolSpans(uri, symbol, symbolBySpan)
 		}
+	}
+	spans := make([]documentSpan, 0, len(symbolBySpan))
+	for key, symbol := range symbolBySpan {
+		spans = append(spans, documentSpan{uri: key.uri, textSpan: key.textSpan, contextSpan: &symbol.Range})
 	}
 	f.addResultToBaseline(
 		t,
 		documentSymbolsCmd,
-		f.getBaselineForSpansWithFileContents(slices.Collect(maps.Keys(spansToSymbol)), baselineFourslashLocationsOptions{
+		f.getBaselineForSpansWithFileContents(spans, baselineFourslashLocationsOptions{
 			getLocationData: func(span documentSpan) string {
-				symbol := spansToSymbol[span]
+				symbol := symbolBySpan[documentSpanKey{uri: span.uri, textSpan: span.textSpan, contextSpan: *span.contextSpan}]
 				return fmt.Sprintf("{| name: %s, kind: %s |}", symbol.Name, symbol.Kind.String())
 			},
 		}),
@@ -5523,19 +5530,30 @@ func writeDocumentSymbolDetails(symbols []*lsproto.DocumentSymbol, indent int, b
 func collectDocumentSymbolSpans(
 	uri lsproto.DocumentUri,
 	symbol *lsproto.DocumentSymbol,
-	spansToSymbol map[documentSpan]*lsproto.DocumentSymbol,
+	symbolBySpan map[documentSpanKey]*lsproto.DocumentSymbol,
 ) {
-	span := documentSpan{
-		uri:         uri,
-		textSpan:    symbol.SelectionRange,
-		contextSpan: &symbol.Range,
+	// Deduplicate by value rather than by the documentSpan key, which holds a pointer to
+	// the symbol's Range. The same logical symbol can be reached more than once
+	// (e.g. a merged declaration), and depending on transport those occurrences may
+	// be the same object (shared *Range) or independent copies (distinct *Range
+	// after a JSON round-trip). A value-based key collapses them consistently.
+	key := documentSpanKey{uri: uri, textSpan: symbol.SelectionRange, contextSpan: symbol.Range}
+	if _, ok := symbolBySpan[key]; !ok {
+		symbolBySpan[key] = symbol
 	}
-	spansToSymbol[span] = symbol
 	if symbol.Children != nil {
 		for _, child := range *symbol.Children {
-			collectDocumentSymbolSpans(uri, child, spansToSymbol)
+			collectDocumentSymbolSpans(uri, child, symbolBySpan)
 		}
 	}
+}
+
+// documentSpanKey is a value-comparable variant of documentSpan used to deduplicate
+// document symbols regardless of pointer identity.
+type documentSpanKey struct {
+	uri         lsproto.DocumentUri
+	textSpan    lsproto.Range
+	contextSpan lsproto.Range
 }
 
 // VerifyNumberOfErrorsInCurrentFile verifies that the current file has the expected number of errors.
