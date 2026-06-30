@@ -1,0 +1,107 @@
+//// [tests/cases/compiler/controlFlowSwitchReturnWithBranchingFinally.ts] ////
+
+=== controlFlowSwitchReturnWithBranchingFinally.ts ===
+// https://github.com/microsoft/TypeScript/issues/63583
+// A branch inside a `finally` block must not corrupt the reachability of the
+// flow after the protected `try`. Here every `switch` case returns, so the
+// function fully returns and the trailing code is genuinely unreachable —
+// regardless of what the `finally` block does.
+
+let y = false;
+>y : Symbol(y, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 6, 3))
+
+// Was wrongly: "Function lacks ending return statement..." because the branch
+// in `finally` (the short-circuit of `||=`) polluted the shared reachability cache.
+function test1(x: boolean): number {
+>test1 : Symbol(test1, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 6, 14))
+>x : Symbol(x, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 10, 15))
+
+    try {
+        switch (x) {
+>x : Symbol(x, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 10, 15))
+
+            case true: return 1;
+            case false: return 0;
+        }
+    }
+    finally { y ||= true; }
+>y : Symbol(y, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 6, 3))
+}
+
+// test2 documents the *correct* counterpart: with an explicit trailing return,
+// that return is genuinely unreachable (the switch is exhaustive on `boolean`),
+// so reporting it is correct and finally-independent. Before the fix, test1 and
+// test2 contradicted each other (test1 demanded this return; test2 then rejected
+// it). After the fix they are consistent: test1 needs no return, test2's is dead.
+function test2(x: boolean): number {
+>test2 : Symbol(test2, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 18, 1))
+>x : Symbol(x, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 25, 15))
+
+    try {
+        switch (x) {
+>x : Symbol(x, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 25, 15))
+
+            case true: return 1;
+            case false: return 0;
+        }
+        return 0; // correctly flagged unreachable
+    }
+    finally { y ||= true; }
+>y : Symbol(y, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 6, 3))
+}
+
+// A plain `if` (read with a branch) in `finally` triggered the same bug.
+function test3(x: boolean): number {
+>test3 : Symbol(test3, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 34, 1))
+>x : Symbol(x, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 37, 15))
+
+    try {
+        switch (x) {
+>x : Symbol(x, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 37, 15))
+
+            case true: return 1;
+            case false: return 0;
+        }
+    }
+    finally { if (y) { } }
+>y : Symbol(y, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 6, 3))
+}
+
+// Control: linear (non-branching) finally always worked.
+function test4(x: boolean): number {
+>test4 : Symbol(test4, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 45, 1))
+>x : Symbol(x, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 48, 15))
+
+    try {
+        switch (x) {
+>x : Symbol(x, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 48, 15))
+
+            case true: return 1;
+            case false: return 0;
+        }
+    }
+    finally { y = true; }
+>y : Symbol(y, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 6, 3))
+}
+
+// Nested try/finally with branching finally blocks (exercises depth counting).
+function test5(x: boolean): number {
+>test5 : Symbol(test5, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 56, 1))
+>x : Symbol(x, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 59, 15))
+
+    try {
+        try {
+            switch (x) {
+>x : Symbol(x, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 59, 15))
+
+                case true: return 1;
+                case false: return 0;
+            }
+        }
+        finally { y ||= true; }
+>y : Symbol(y, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 6, 3))
+    }
+    finally { if (y) { } }
+>y : Symbol(y, Decl(controlFlowSwitchReturnWithBranchingFinally.ts, 6, 3))
+}
+

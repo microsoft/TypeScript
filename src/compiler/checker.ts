@@ -2364,6 +2364,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var sharedFlowTypes: FlowType[] = [];
     var flowNodeReachable: (boolean | undefined)[] = [];
     var flowNodePostSuper: (boolean | undefined)[] = [];
+    var reduceLabelDepth = 0;
     var potentialThisCollisions: Node[] = [];
     var potentialNewTargetCollisions: Node[] = [];
     var potentialWeakMapSetCollisions: Node[] = [];
@@ -28867,7 +28868,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const flags = flow.flags;
             if (flags & FlowFlags.Shared) {
-                if (!noCacheCheck) {
+                // While a reduce label is active (try/finally), a shared node's reachability is
+                // context-dependent on the temporarily reduced label antecedents, so it must not
+                // be served from or written to the process-global cache (see #63583).
+                if (!noCacheCheck && reduceLabelDepth === 0) {
                     const id = getFlowNodeId(flow);
                     const reachable = flowNodeReachable[id];
                     return reachable !== undefined ? reachable : (flowNodeReachable[id] = isReachableFlowNodeWorker(flow, /*noCacheCheck*/ true));
@@ -28920,7 +28924,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const target = (flow as FlowReduceLabel).node.target;
                 const saveAntecedents = target.antecedent;
                 target.antecedent = (flow as FlowReduceLabel).node.antecedents;
+                // Suppress the shared reachability cache for the duration of the reduced walk:
+                // reachability computed under the reduced antecedents is not valid outside this
+                // context (and vice versa). Depth-counted to handle nested try/finally (see #63583).
+                reduceLabelDepth++;
                 const result = isReachableFlowNodeWorker((flow as FlowReduceLabel).antecedent, /*noCacheCheck*/ false);
+                reduceLabelDepth--;
                 target.antecedent = saveAntecedents;
                 return result;
             }

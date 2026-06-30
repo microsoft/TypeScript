@@ -1,0 +1,78 @@
+controlFlowSwitchReturnWithBranchingFinally.ts(32,9): error TS7027: Unreachable code detected.
+
+
+==== controlFlowSwitchReturnWithBranchingFinally.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/63583
+    // A branch inside a `finally` block must not corrupt the reachability of the
+    // flow after the protected `try`. Here every `switch` case returns, so the
+    // function fully returns and the trailing code is genuinely unreachable —
+    // regardless of what the `finally` block does.
+    
+    let y = false;
+    
+    // Was wrongly: "Function lacks ending return statement..." because the branch
+    // in `finally` (the short-circuit of `||=`) polluted the shared reachability cache.
+    function test1(x: boolean): number {
+        try {
+            switch (x) {
+                case true: return 1;
+                case false: return 0;
+            }
+        }
+        finally { y ||= true; }
+    }
+    
+    // test2 documents the *correct* counterpart: with an explicit trailing return,
+    // that return is genuinely unreachable (the switch is exhaustive on `boolean`),
+    // so reporting it is correct and finally-independent. Before the fix, test1 and
+    // test2 contradicted each other (test1 demanded this return; test2 then rejected
+    // it). After the fix they are consistent: test1 needs no return, test2's is dead.
+    function test2(x: boolean): number {
+        try {
+            switch (x) {
+                case true: return 1;
+                case false: return 0;
+            }
+            return 0; // correctly flagged unreachable
+            ~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+        }
+        finally { y ||= true; }
+    }
+    
+    // A plain `if` (read with a branch) in `finally` triggered the same bug.
+    function test3(x: boolean): number {
+        try {
+            switch (x) {
+                case true: return 1;
+                case false: return 0;
+            }
+        }
+        finally { if (y) { } }
+    }
+    
+    // Control: linear (non-branching) finally always worked.
+    function test4(x: boolean): number {
+        try {
+            switch (x) {
+                case true: return 1;
+                case false: return 0;
+            }
+        }
+        finally { y = true; }
+    }
+    
+    // Nested try/finally with branching finally blocks (exercises depth counting).
+    function test5(x: boolean): number {
+        try {
+            try {
+                switch (x) {
+                    case true: return 1;
+                    case false: return 0;
+                }
+            }
+            finally { y ||= true; }
+        }
+        finally { if (y) { } }
+    }
+    

@@ -1,0 +1,194 @@
+//// [tests/cases/compiler/controlFlowSwitchReturnWithBranchingFinally.ts] ////
+
+=== controlFlowSwitchReturnWithBranchingFinally.ts ===
+// https://github.com/microsoft/TypeScript/issues/63583
+// A branch inside a `finally` block must not corrupt the reachability of the
+// flow after the protected `try`. Here every `switch` case returns, so the
+// function fully returns and the trailing code is genuinely unreachable —
+// regardless of what the `finally` block does.
+
+let y = false;
+>y : boolean
+>  : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+// Was wrongly: "Function lacks ending return statement..." because the branch
+// in `finally` (the short-circuit of `||=`) polluted the shared reachability cache.
+function test1(x: boolean): number {
+>test1 : (x: boolean) => number
+>      : ^ ^^       ^^^^^      
+>x : boolean
+>  : ^^^^^^^
+
+    try {
+        switch (x) {
+>x : boolean
+>  : ^^^^^^^
+
+            case true: return 1;
+>true : true
+>     : ^^^^
+>1 : 1
+>  : ^
+
+            case false: return 0;
+>false : false
+>      : ^^^^^
+>0 : 0
+>  : ^
+        }
+    }
+    finally { y ||= true; }
+>y ||= true : true
+>           : ^^^^
+>y : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+}
+
+// test2 documents the *correct* counterpart: with an explicit trailing return,
+// that return is genuinely unreachable (the switch is exhaustive on `boolean`),
+// so reporting it is correct and finally-independent. Before the fix, test1 and
+// test2 contradicted each other (test1 demanded this return; test2 then rejected
+// it). After the fix they are consistent: test1 needs no return, test2's is dead.
+function test2(x: boolean): number {
+>test2 : (x: boolean) => number
+>      : ^ ^^       ^^^^^      
+>x : boolean
+>  : ^^^^^^^
+
+    try {
+        switch (x) {
+>x : boolean
+>  : ^^^^^^^
+
+            case true: return 1;
+>true : true
+>     : ^^^^
+>1 : 1
+>  : ^
+
+            case false: return 0;
+>false : false
+>      : ^^^^^
+>0 : 0
+>  : ^
+        }
+        return 0; // correctly flagged unreachable
+>0 : 0
+>  : ^
+    }
+    finally { y ||= true; }
+>y ||= true : true
+>           : ^^^^
+>y : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+}
+
+// A plain `if` (read with a branch) in `finally` triggered the same bug.
+function test3(x: boolean): number {
+>test3 : (x: boolean) => number
+>      : ^ ^^       ^^^^^      
+>x : boolean
+>  : ^^^^^^^
+
+    try {
+        switch (x) {
+>x : boolean
+>  : ^^^^^^^
+
+            case true: return 1;
+>true : true
+>     : ^^^^
+>1 : 1
+>  : ^
+
+            case false: return 0;
+>false : false
+>      : ^^^^^
+>0 : 0
+>  : ^
+        }
+    }
+    finally { if (y) { } }
+>y : boolean
+>  : ^^^^^^^
+}
+
+// Control: linear (non-branching) finally always worked.
+function test4(x: boolean): number {
+>test4 : (x: boolean) => number
+>      : ^ ^^       ^^^^^      
+>x : boolean
+>  : ^^^^^^^
+
+    try {
+        switch (x) {
+>x : boolean
+>  : ^^^^^^^
+
+            case true: return 1;
+>true : true
+>     : ^^^^
+>1 : 1
+>  : ^
+
+            case false: return 0;
+>false : false
+>      : ^^^^^
+>0 : 0
+>  : ^
+        }
+    }
+    finally { y = true; }
+>y = true : true
+>         : ^^^^
+>y : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+}
+
+// Nested try/finally with branching finally blocks (exercises depth counting).
+function test5(x: boolean): number {
+>test5 : (x: boolean) => number
+>      : ^ ^^       ^^^^^      
+>x : boolean
+>  : ^^^^^^^
+
+    try {
+        try {
+            switch (x) {
+>x : boolean
+>  : ^^^^^^^
+
+                case true: return 1;
+>true : true
+>     : ^^^^
+>1 : 1
+>  : ^
+
+                case false: return 0;
+>false : false
+>      : ^^^^^
+>0 : 0
+>  : ^
+            }
+        }
+        finally { y ||= true; }
+>y ||= true : true
+>           : ^^^^
+>y : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+    }
+    finally { if (y) { } }
+>y : boolean
+>  : ^^^^^^^
+}
+
