@@ -297,3 +297,89 @@ func TestResolveSubpathNilContentsRace(t *testing.T) {
 		}
 	}
 }
+
+// Regression test for https://github.com/microsoft/typescript-go/issues/4478.
+//
+// While resolving a package with peerDependencies, two goroutines look up the
+// peer package's package.json concurrently. A `flipFileExistsFS` forces the
+// first lookup to cache a nil-Contents entry and the second lookup to receive
+// that stale entry from `Set`. The resolver must not dereference the peer
+// package.json contents unless the entry actually exists.
+func TestResolvePeerDependencyNilContentsRace(t *testing.T) {
+	t.Parallel()
+
+	const peerPkgJSON = "/repo/node_modules/peer/package.json"
+	files := map[string]string{
+		"/repo/node_modules/pkg/package.json": `{"name":"pkg","version":"1.0.0","types":"index.d.ts","peerDependencies":{"peer":"*"}}`,
+		"/repo/node_modules/pkg/index.d.ts":   "export declare const x: number;",
+		peerPkgJSON:                           `{"name":"peer","version":"2.0.0"}`,
+		"/repo/src/a/file.ts":                 "",
+		"/repo/src/b/file.ts":                 "",
+	}
+	fs := &flipFileExistsFS{
+		FS:            vfstest.FromMap(files, true),
+		targetPath:    peerPkgJSON,
+		firstArrived:  make(chan struct{}),
+		secondArrived: make(chan struct{}),
+		firstGate:     make(chan struct{}),
+		secondGate:    make(chan struct{}),
+		readArrived:   make(chan struct{}),
+		readGate:      make(chan struct{}),
+	}
+	host := &resolutionHostStub{fs: fs, cwd: "/repo"}
+	opts := &core.CompilerOptions{
+		ModuleResolution: core.ModuleResolutionKindBundler,
+		Module:           core.ModuleKindESNext,
+		Target:           core.ScriptTargetESNext,
+	}
+	resolver := module.NewResolver(host, opts, "", "")
+
+	var panicked atomic.Bool
+	type resolutionResult struct {
+		containingFile string
+		resolved       bool
+	}
+	results := make(chan resolutionResult, 2)
+	var wg sync.WaitGroup
+	for _, containingFile := range []string{"/repo/src/a/file.ts", "/repo/src/b/file.ts"} {
+		wg.Go(func() {
+			resolved := false
+			defer func() {
+				if r := recover(); r != nil {
+					panicked.Store(true)
+				}
+				results <- resolutionResult{containingFile: containingFile, resolved: resolved}
+			}()
+			r, _ := resolver.ResolveModuleName("pkg", containingFile, core.ModuleKindESNext, nil)
+			resolved = r.IsResolved()
+		})
+	}
+
+	waitForSignal(t, fs.firstArrived, "first peer package.json FileExists arrival")
+	waitForSignal(t, fs.secondArrived, "second peer package.json FileExists arrival")
+	close(fs.firstGate)
+	var firstResult resolutionResult
+	select {
+	case result := <-results:
+		firstResult = result
+	case <-t.Context().Done():
+		t.Fatal("timed out waiting for first peer package.json lookup to finish")
+	}
+	close(fs.secondGate)
+	waitForSignal(t, fs.readArrived, "peer package.json ReadFile arrival")
+	close(fs.readGate)
+
+	wg.Wait()
+	close(results)
+	if panicked.Load() {
+		t.Fatal("resolver panicked due to nil Contents dereference in readPackageJsonPeerDependencies")
+	}
+	if !firstResult.resolved {
+		t.Fatalf("%q failed to resolve pkg", firstResult.containingFile)
+	}
+	for r := range results {
+		if !r.resolved {
+			t.Fatalf("%q failed to resolve pkg", r.containingFile)
+		}
+	}
+}

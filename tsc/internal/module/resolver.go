@@ -1846,7 +1846,7 @@ func (r *resolutionState) readPackageJsonPeerDependencies(packageJsonInfo *packa
 	builder := strings.Builder{}
 	for _, name := range names {
 		peerPackageJson := r.getPackageJsonInfo(nodeModules + name)
-		if peerPackageJson != nil {
+		if peerPackageJson.Exists() {
 			version := peerPackageJson.Contents.Version.Value
 			builder.WriteString("+")
 			builder.WriteString(name)
