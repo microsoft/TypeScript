@@ -251,6 +251,10 @@ func (w *watcher) HasFastRecursiveBackend() bool {
 	}
 }
 
+func (w *watcher) canShareRecursiveDirWatches() bool {
+	return w.name == "fsevents"
+}
+
 func (w *watcher) getImpl() (watcherImpl, error) {
 	w.mu.Lock()
 	if w.impl != nil {
@@ -302,7 +306,7 @@ func (w *watcher) findCoveringRecursiveWatchLocked(dir string) *dirWatch {
 }
 
 func (w *watcher) findConsolidationDirLocked(dir string) string {
-	if !w.HasFastRecursiveBackend() {
+	if !w.canShareRecursiveDirWatches() {
 		return ""
 	}
 	parent := filepath.Dir(dir)
@@ -339,7 +343,7 @@ func (w *watcher) getOrCreateDirWatch(dir string, physicalDir string, recursive 
 		w.debounce = newDebounce()
 	}
 
-	if w.HasFastRecursiveBackend() {
+	if w.canShareRecursiveDirWatches() {
 		if dw := w.findCoveringRecursiveWatchLocked(dir); dw != nil {
 			return dw
 		}
