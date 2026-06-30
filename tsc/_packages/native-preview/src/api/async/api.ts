@@ -2,6 +2,7 @@
 import { CompletionItemKind } from "#enums/completionItemKind";
 import { DiagnosticCategory } from "#enums/diagnosticCategory";
 import { ElementFlags } from "#enums/elementFlags";
+import { ModuleKind } from "#enums/moduleKind";
 import { NodeBuilderFlags } from "#enums/nodeBuilderFlags";
 import { ObjectFlags } from "#enums/objectFlags";
 import { SignatureFlags } from "#enums/signatureFlags";
@@ -10,6 +11,7 @@ import { SymbolFlags } from "#enums/symbolFlags";
 import { TypeFlags } from "#enums/typeFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
 import {
+    type __String,
     type Expression,
     type Identifier,
     ModifierFlags,
@@ -18,6 +20,7 @@ import {
     type SourceFile,
     type SyntaxKind,
     type TypeNode,
+    unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
 import {
     encodeNode,
@@ -51,6 +54,7 @@ import type {
     ProfileResult,
     ProjectResponse,
     SignatureResponse,
+    SourceFileMetadata,
     SymbolResponse,
     TypePredicateResponse,
     TypeResponse,
@@ -104,8 +108,8 @@ import type {
     UnionType,
 } from "./types.ts";
 
-export { CompletionItemKind, DiagnosticCategory, ElementFlags, ModifierFlags, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
-export type { APIOptions, ClientSocketOptions, ClientSpawnOptions, DocumentIdentifier, DocumentPosition, LSPConnectionOptions };
+export { CompletionItemKind, DiagnosticCategory, ElementFlags, ModifierFlags, ModuleKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
+export type { APIOptions, ClientSocketOptions, ClientSpawnOptions, DocumentIdentifier, DocumentPosition, LSPConnectionOptions, SourceFileMetadata };
 export type { AssertsIdentifierTypePredicate, AssertsThisTypePredicate, BigIntLiteralType, BooleanLiteralType, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, FreshableType, IdentifierTypePredicate, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, JSDocTagInfo, LiteralType, NumberLiteralType, ObjectType, StringLiteralType, StringMappingType, SubstitutionType, TemplateLiteralType, ThisTypePredicate, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 
@@ -118,7 +122,7 @@ export class API<FromLSP extends boolean = false> {
     private latestSnapshot: Snapshot | undefined;
     readonly internal: InternalAPI;
 
-    constructor(options: APIOptions | LSPConnectionOptions) {
+    constructor(options: APIOptions | LSPConnectionOptions = {}) {
         this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache();
         this.internal = new InternalAPI(this.client, () => this.ensureInitialized());
@@ -488,6 +492,18 @@ class ProjectObjectRegistry {
     async fetchSymbols(source: Symbol | Signature | Type, method: string, handles?: readonly number[]): Promise<readonly Symbol[]> {
         return this.snapshotRegistry.fetchSymbols(source, method, handles, this.projectId);
     }
+
+    // getBaseTypes is a checker-level endpoint keyed by `type` (not `objectId`),
+    // so it cannot go through fetchTypes. This helper reuses that server method.
+    async fetchBaseTypes(source: Type): Promise<readonly Type[]> {
+        const typesData = await this.client.apiRequest<TypeResponse[] | null>("getBaseTypes", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            type: source.id,
+        });
+        if (typesData == null) return [];
+        return typesData.map(data => this.getOrCreateType(data));
+    }
 }
 
 export class Project {
@@ -543,6 +559,7 @@ export class Program {
     private sourceFileCache: SourceFileCache;
     private toPath: (fileName: string) => Path;
     private decoder = new Wtf8Decoder();
+    private sourceFileMetadataCache = new Map<Path, Promise<SourceFileMetadata | undefined>>();
 
     constructor(
         snapshotId: number,
@@ -593,6 +610,59 @@ export class Program {
             project: this.projectId,
         });
         return data ?? [];
+    }
+
+    /**
+     * Returns program-stored metadata for the given source file, or `undefined` if the file
+     * is not part of the program. Metadata is fetched lazily per file and cached on this
+     * `Program` instance.
+     */
+    getSourceFileMetadata(fileName: string): Promise<SourceFileMetadata | undefined> {
+        return this.getSourceFileMetadataByPath(this.toPath(fileName));
+    }
+
+    /**
+     * Returns program-stored metadata for the source file at the given path, or `undefined`
+     * if the file is not part of the program. Like {@link getSourceFileMetadata}, but skips
+     * the file name to path conversion. Metadata is fetched lazily per file and cached on
+     * this `Program` instance.
+     */
+    getSourceFileMetadataByPath(path: Path): Promise<SourceFileMetadata | undefined> {
+        let metadata = this.sourceFileMetadataCache.get(path);
+        if (metadata === undefined) {
+            metadata = this.fetchSourceFileMetadata(path);
+            this.sourceFileMetadataCache.set(path, metadata);
+        }
+        return metadata;
+    }
+
+    private async fetchSourceFileMetadata(path: Path): Promise<SourceFileMetadata | undefined> {
+        const data = await this.client.apiRequest<SourceFileMetadata | null>("getSourceFileMetadata", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            file: path,
+        });
+        return data ?? undefined;
+    }
+
+    /**
+     * Returns whether the given source file was loaded as part of an external library
+     * (e.g. a dependency resolved from `node_modules`). The underlying program metadata is
+     * fetched lazily per file and cached on this `Program` instance.
+     */
+    async isSourceFileFromExternalLibrary(file: SourceFile): Promise<boolean> {
+        const metadata = await this.getSourceFileMetadataByPath(file.path);
+        return metadata?.isFromExternalLibrary ?? false;
+    }
+
+    /**
+     * Returns whether the given source file is a default library file (e.g. `lib.d.ts`).
+     * The underlying program metadata is fetched lazily per file and cached on this
+     * `Program` instance.
+     */
+    async isSourceFileDefaultLibrary(file: SourceFile): Promise<boolean> {
+        const metadata = await this.getSourceFileMetadataByPath(file.path);
+        return metadata?.isDefaultLibrary ?? false;
     }
 
     /**
@@ -699,6 +769,7 @@ export class Checker {
     private projectId: string;
     private client: Client;
     private objectRegistry: ProjectObjectRegistry;
+    private wellKnownSymbols: Promise<{ unknown: number; undefined: number; arguments: number; }> | undefined;
 
     constructor(
         snapshotId: number,
@@ -775,13 +846,19 @@ export class Checker {
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
 
-    async getDeclaredTypeOfSymbol(symbol: Symbol): Promise<Type | undefined> {
+    /**
+     * Get the declared type of a symbol. Always returns a type; for symbols whose
+     * declared type cannot be determined the checker yields the error type (use
+     * {@link Type.isErrorType} to detect it).
+     */
+    async getDeclaredTypeOfSymbol(symbol: Symbol): Promise<Type> {
         const data = await this.client.apiRequest<TypeResponse | null>("getDeclaredTypeOfSymbol", {
             snapshot: this.snapshotId,
             project: this.projectId,
             symbol: symbol.id,
         });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        if (!data) throw new Error(`getDeclaredTypeOfSymbol returned no type for symbol ${symbol.id}`);
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     async getReferencesToSymbolInFile(file: DocumentIdentifier, symbol: Symbol): Promise<NodeHandle[]> {
@@ -1006,14 +1083,20 @@ export class Checker {
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
-    async getTypeOfSymbolAtLocation(symbol: Symbol, location: Node): Promise<Type | undefined> {
+    /**
+     * Get the type of a symbol as narrowed at a specific location. Always returns
+     * a type; for symbols whose type cannot be determined the checker yields the
+     * error type (use {@link Type.isErrorType} to detect it).
+     */
+    async getTypeOfSymbolAtLocation(symbol: Symbol, location: Node): Promise<Type> {
         const data = await this.client.apiRequest<TypeResponse | null>("getTypeOfSymbolAtLocation", {
             snapshot: this.snapshotId,
             project: this.projectId,
             symbol: symbol.id,
             location: getNodeId(location),
         });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        if (!data) throw new Error(`getTypeOfSymbolAtLocation returned no type for symbol ${symbol.id}`);
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     private async getIntrinsicType(method: string): Promise<Type> {
@@ -1255,13 +1338,19 @@ export class Checker {
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
-    async getAliasedSymbol(symbol: Symbol): Promise<Symbol | undefined> {
+    /**
+     * Follow all aliases to get the original symbol. Always returns a symbol; for
+     * an unresolved alias the checker yields the unknown symbol (use
+     * {@link Checker.isUnknownSymbol} to detect it).
+     */
+    async getAliasedSymbol(symbol: Symbol): Promise<Symbol> {
         const data = await this.client.apiRequest<SymbolResponse | null>("getAliasedSymbol", {
             snapshot: this.snapshotId,
             project: this.projectId,
             symbol: symbol.id,
         });
-        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+        if (!data) throw new Error(`getAliasedSymbol returned no symbol for symbol ${symbol.id}`);
+        return this.objectRegistry.getOrCreateSymbol(data);
     }
 
     async getImmediateAliasedSymbol(symbol: Symbol): Promise<Symbol | undefined> {
@@ -1271,6 +1360,41 @@ export class Checker {
             symbol: symbol.id,
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    /**
+     * Fetch (once, then cache) the handle ids of the per-checker singleton
+     * symbols (unknown, undefined, arguments). These ids are stable for the life
+     * of the project's checker, so identity checks against them are local after
+     * the first call.
+     */
+    private getWellKnownSymbols(): Promise<{ unknown: number; undefined: number; arguments: number; }> {
+        return this.wellKnownSymbols ??= this.client.apiRequest<{ unknown: number; undefined: number; arguments: number; }>("getWellKnownSymbols", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+        });
+    }
+
+    /**
+     * Returns `true` if the symbol is the checker's "unknown" symbol (e.g. the
+     * result of {@link Checker.getAliasedSymbol} on an unresolved alias).
+     */
+    async isUnknownSymbol(symbol: Symbol): Promise<boolean> {
+        return symbol.id === (await this.getWellKnownSymbols()).unknown;
+    }
+
+    /**
+     * Returns `true` if the symbol is the checker's "undefined" symbol.
+     */
+    async isUndefinedSymbol(symbol: Symbol): Promise<boolean> {
+        return symbol.id === (await this.getWellKnownSymbols()).undefined;
+    }
+
+    /**
+     * Returns `true` if the symbol is the checker's "arguments" symbol.
+     */
+    async isArgumentsSymbol(symbol: Symbol): Promise<boolean> {
+        return symbol.id === (await this.getWellKnownSymbols()).arguments;
     }
 
     async getExportsOfModule(symbol: Symbol): Promise<readonly Symbol[]> {
@@ -1392,19 +1516,25 @@ export class Symbol {
     private objectRegistry: SnapshotObjectRegistry;
 
     readonly id: number;
+    /** The escaped (`__String`) name, used as the key in member/export tables. */
+    readonly escapedName: __String;
+    /** The display name (escaped underscores removed). */
     readonly name: string;
     readonly flags: SymbolFlags;
     readonly checkFlags: number;
     readonly declarations: readonly NodeHandle[];
     readonly valueDeclaration: NodeHandle | undefined;
-    readonly parent!: number;
-    readonly exportSymbol!: number;
+    private readonly parent!: number;
+    private readonly exportSymbol!: number;
+    private membersCache: Promise<ReadonlyMap<__String, Symbol>> | undefined;
+    private exportsCache: Promise<ReadonlyMap<__String, Symbol>> | undefined;
 
     constructor(data: SymbolResponse, objectRegistry: SnapshotObjectRegistry) {
         this.objectRegistry = objectRegistry;
 
         this.id = data.id;
-        this.name = data.name;
+        this.escapedName = data.name;
+        this.name = unescapeLeadingUnderscores(data.name);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags;
         this.declarations = (data.declarations ?? []).map(d => new NodeHandle(d));
@@ -1418,12 +1548,29 @@ export class Symbol {
         return this.objectRegistry.fetchSymbol(this, "getParentOfSymbol", this.parent);
     }
 
-    async getMembers(): Promise<readonly Symbol[]> {
-        return this.objectRegistry.fetchSymbols(this, "getMembersOfSymbol");
+    /**
+     * Get this symbol's members keyed by escaped name. The result is cached on
+     * the symbol, so repeated calls do not round-trip to the server.
+     */
+    getMembers(): Promise<ReadonlyMap<__String, Symbol>> {
+        return this.membersCache ??= this.fetchSymbolTable("getMembersOfSymbol");
     }
 
-    async getExports(): Promise<readonly Symbol[]> {
-        return this.objectRegistry.fetchSymbols(this, "getExportsOfSymbol");
+    /**
+     * Get this symbol's exports keyed by escaped name. The result is cached on
+     * the symbol, so repeated calls do not round-trip to the server.
+     */
+    getExports(): Promise<ReadonlyMap<__String, Symbol>> {
+        return this.exportsCache ??= this.fetchSymbolTable("getExportsOfSymbol");
+    }
+
+    private async fetchSymbolTable(method: string): Promise<ReadonlyMap<__String, Symbol>> {
+        const symbols = await this.objectRegistry.fetchSymbols(this, method);
+        const table = new Map<__String, Symbol>();
+        for (const symbol of symbols) {
+            table.set(symbol.escapedName, symbol);
+        }
+        return table;
     }
 
     async getExportSymbol(): Promise<Symbol> {
@@ -1591,6 +1738,21 @@ class TypeObject implements Type {
         return result;
     }
 
+    /**
+     * Get the base types of this type. Returns `undefined` for any type that is
+     * not a class or interface.
+     */
+    async getBaseTypes(): Promise<readonly Type[] | undefined> {
+        if (!this.isClassOrInterface()) {
+            return undefined;
+        }
+        return this.objectRegistry.fetchBaseTypes(this);
+    }
+
+    isClassOrInterface(): this is InterfaceType {
+        return isClassOrInterfaceType(this);
+    }
+
     isUnionType(): this is UnionType {
         return isUnionType(this);
     }
@@ -1605,6 +1767,10 @@ class TypeObject implements Type {
 
     isIntrinsicType(): this is IntrinsicType {
         return isIntrinsicType(this);
+    }
+
+    isErrorType(): boolean {
+        return isErrorType(this);
     }
 
     isLiteralType(): this is LiteralType {
@@ -1676,8 +1842,22 @@ export function isObjectType(type: Type): type is ObjectType {
     return (type.flags & TypeFlags.Object) !== 0;
 }
 
+export function isClassOrInterfaceType(type: Type): type is InterfaceType {
+    return isObjectType(type) && (type.objectFlags & ObjectFlags.ClassOrInterface) !== 0;
+}
+
 export function isIntrinsicType(type: Type): type is IntrinsicType {
     return (type.flags & TypeFlags.Intrinsic) !== 0;
+}
+
+/**
+ * Whether this is the error type — the placeholder the checker produces when a
+ * type cannot be determined (e.g. an unresolved reference). It is an intrinsic
+ * type named `"error"` (this covers both the singleton error type and the
+ * per-alias error types manufactured for unresolved type alias references).
+ */
+export function isErrorType(type: Type): boolean {
+    return isIntrinsicType(type) && type.intrinsicName === "error";
 }
 
 export function isLiteralType(type: Type): type is LiteralType {

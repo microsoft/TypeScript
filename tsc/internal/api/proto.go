@@ -69,6 +69,7 @@ const (
 	MethodGetDeclaredTypeOfSymbol  Method = "getDeclaredTypeOfSymbol"
 	MethodGetSourceFile            Method = "getSourceFile"
 	MethodGetSourceFileNames       Method = "getSourceFileNames"
+	MethodGetSourceFileMetadata    Method = "getSourceFileMetadata"
 	MethodResolveName              Method = "resolveName"
 	MethodGetSignaturesOfType      Method = "getSignaturesOfType"
 	MethodGetResolvedSignature     Method = "getResolvedSignature"
@@ -180,6 +181,9 @@ const (
 	MethodGetUnknownType   Method = "getUnknownType"
 	MethodGetBigIntType    Method = "getBigIntType"
 	MethodGetESSymbolType  Method = "getESSymbolType"
+
+	// Well-known per-checker symbols
+	MethodGetWellKnownSymbols Method = "getWellKnownSymbols"
 
 	// Profiling methods
 	MethodStartCPUProfile Method = "startCPUProfile"
@@ -350,6 +354,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetDefaultProjectForFile: unmarshallerFor[GetDefaultProjectForFileParams],
 	MethodGetSourceFile:            unmarshallerFor[GetSourceFileParams],
 	MethodGetSourceFileNames:       unmarshallerFor[GetSourceFileNamesParams],
+	MethodGetSourceFileMetadata:    unmarshallerFor[GetSourceFileParams],
 	MethodGetSymbolAtPosition:      unmarshallerFor[GetSymbolAtPositionParams],
 	MethodGetSymbolsAtPositions:    unmarshallerFor[GetSymbolsAtPositionsParams],
 	MethodGetSymbolAtLocation:      unmarshallerFor[GetSymbolAtLocationParams],
@@ -446,6 +451,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetUnknownType:                    unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetBigIntType:                     unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetESSymbolType:                   unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetWellKnownSymbols:               unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetSyntacticDiagnostics:           unmarshallerFor[GetDiagnosticsParams],
 	MethodGetBindDiagnostics:                unmarshallerFor[GetDiagnosticsParams],
 	MethodGetSemanticDiagnostics:            unmarshallerFor[GetDiagnosticsParams],
@@ -751,6 +757,15 @@ type GetSourceFileNamesParams struct {
 	Project  ProjectID  `json:"project"`
 }
 
+// SourceFileMetadata carries program-stored metadata about a single source file.
+type SourceFileMetadata struct {
+	IsDefaultLibrary      bool                `json:"isDefaultLibrary"`
+	IsFromExternalLibrary bool                `json:"isFromExternalLibrary"`
+	PackageJsonType       string              `json:"packageJsonType"`
+	PackageJsonDirectory  string              `json:"packageJsonDirectory"`
+	ImpliedNodeFormat     core.ResolutionMode `json:"impliedNodeFormat"`
+}
+
 type ResolveNameParams struct {
 	Snapshot       SnapshotID          `json:"snapshot"`
 	Project        ProjectID           `json:"project"`
@@ -871,6 +886,15 @@ type CompletionInfoResponse struct {
 type GetIntrinsicTypeParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
 	Project  ProjectID  `json:"project"`
+}
+
+// WellKnownSymbolsResponse carries the handle ids of the per-checker singleton
+// symbols (unknown, undefined, arguments) so the client can identify them by id
+// without a round-trip on every check.
+type WellKnownSymbolsResponse struct {
+	Unknown   SymbolID `json:"unknown"`
+	Undefined SymbolID `json:"undefined"`
+	Arguments SymbolID `json:"arguments"`
 }
 
 // GetBaseTypeOfLiteralTypeParams returns the base type of a literal type.

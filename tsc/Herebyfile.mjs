@@ -323,6 +323,8 @@ export const generateExtension = task({
  *   goPrefix: string;
  *   goFile: string;
  *   outDir: string;
+ *   stringEnum?: boolean;
+ *   valueReplacements?: Record<string, string>;
  * }} EnumDef
  */
 
@@ -340,17 +342,22 @@ const enumDefs = [
     { name: "NodeFlags", goPrefix: "NodeFlags", goFile: "internal/ast/nodeflags.go", outDir: "_packages/native-preview/src/enums" },
     { name: "OuterExpressionKinds", goPrefix: "OEK", goFile: "internal/ast/utilities.go", outDir: "_packages/native-preview/src/enums" },
     { name: "ModifierFlags", goPrefix: "ModifierFlags", goFile: "internal/ast/modifierflags.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "ModuleKind", goPrefix: "ModuleKind", goFile: "internal/core/compileroptions.go", outDir: "_packages/native-preview/src/enums" },
     { name: "TokenFlags", goPrefix: "TokenFlags", goFile: "internal/ast/tokenflags.go", outDir: "_packages/native-preview/src/enums" },
     { name: "NodeBuilderFlags", goPrefix: "Flags", goFile: "internal/nodebuilder/types.go", outDir: "_packages/native-preview/src/enums" },
     { name: "CompletionItemKind", goPrefix: "CompletionItemKind", goFile: "internal/lsp/lsproto/lsp_generated.go", outDir: "_packages/native-preview/src/enums" },
+    // String enum: Go stores internal names with a "\xFE" sentinel prefix, but the escaped
+    // form sent over the wire uses "__" (see EscapeSymbolName), so map the sentinel accordingly.
+    { name: "InternalSymbolName", goPrefix: "InternalSymbolName", goFile: "internal/ast/symbol.go", outDir: "_packages/native-preview/src/enums", stringEnum: true, valueReplacements: { InternalSymbolNamePrefix: "__" } },
 ];
 
 /**
  * @param {string} block
- * @param {string} prefix
+ * @param {EnumDef} def
  * @returns {{ name: string, value: string }[]}
  */
-function parseGoConstBlock(block, prefix) {
+function parseGoConstBlock(block, def) {
+    const prefix = def.goPrefix;
     const members = [];
     let iotaCounter = 0;
     let hasIota = false;
@@ -373,7 +380,10 @@ function parseGoConstBlock(block, prefix) {
         const memberName = goName.slice(prefix.length);
 
         let tsValue;
-        if (goValue === "iota") {
+        if (def.stringEnum) {
+            tsValue = parseGoStringValue(goValue, def.valueReplacements ?? {});
+        }
+        else if (goValue === "iota") {
             tsValue = String(iotaCounter);
             hasIota = true;
         }
@@ -395,6 +405,31 @@ function parseGoConstBlock(block, prefix) {
 }
 
 /**
+ * Resolve a Go string-constant expression (e.g. `Prefix + "call"` or `"export="`)
+ * into a quoted, JS-escaped TypeScript string literal. `replacements` maps bare
+ * Go identifiers (such as a sentinel-prefix constant) to their literal value.
+ * @param {string} goValue
+ * @param {Record<string, string>} replacements
+ * @returns {string}
+ */
+function parseGoStringValue(goValue, replacements) {
+    let result = "";
+    for (const part of goValue.split("+").map(p => p.trim())) {
+        if (Object.prototype.hasOwnProperty.call(replacements, part)) {
+            result += replacements[part];
+            continue;
+        }
+        const stringMatch = part.match(/^"((?:[^"\\]|\\.)*)"$/);
+        if (stringMatch === null) {
+            throw new Error(`Cannot parse string enum value: ${goValue}`);
+        }
+        // Interpret Go escape sequences via JSON, then re-stringify below.
+        result += JSON.parse(`"${stringMatch[1]}"`);
+    }
+    return JSON.stringify(result);
+}
+
+/**
  * @param {EnumDef} def
  * @returns {{ name: string, value: string }[]}
  */
@@ -403,7 +438,7 @@ function parseGoEnum(def) {
     const constBlockRegex = /const\s*\(([\s\S]*?)\n\)/g;
 
     for (const match of source.matchAll(constBlockRegex)) {
-        const members = parseGoConstBlock(match[1], def.goPrefix);
+        const members = parseGoConstBlock(match[1], def);
         if (members.length > 0) return topoSortMembers(members);
     }
 

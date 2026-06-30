@@ -37,6 +37,14 @@ export interface Type {
     /** Get the symbol of the type alias this type was instantiated from, if any */
     getAliasSymbol(): Promise<Symbol | undefined>;
 
+    /**
+     * Get the base types of this type, or `undefined` if it is not a class or
+     * interface type.
+     */
+    getBaseTypes(): Promise<readonly Type[] | undefined>;
+
+    /** Whether this type is a class or interface type */
+    isClassOrInterface(): this is InterfaceType;
     /** Whether this type is a union type */
     isUnionType(): this is UnionType;
     /** Whether this type is an intersection type */
@@ -45,6 +53,11 @@ export interface Type {
     isObjectType(): this is ObjectType;
     /** Whether this type is an intrinsic primitive type */
     isIntrinsicType(): this is IntrinsicType;
+    /**
+     * Whether this is the error type — the placeholder produced when a type
+     * cannot be determined (e.g. an unresolved reference).
+     */
+    isErrorType(): boolean;
     /** Whether this type is a literal type */
     isLiteralType(): this is LiteralType;
     /** Whether this type is a string literal type */

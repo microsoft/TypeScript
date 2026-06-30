@@ -1,4 +1,6 @@
 import type { CompletionItemKind } from "#enums/completionItemKind";
+import type { ModuleKind } from "#enums/moduleKind";
+import type { __String } from "../ast/index.ts";
 import {
     documentURIToFileName,
     fileNameToDocumentURI,
@@ -172,9 +174,17 @@ export interface SourceFileResponse {
     data: string;
 }
 
+export interface SourceFileMetadata {
+    isDefaultLibrary: boolean;
+    isFromExternalLibrary: boolean;
+    packageJsonType: string;
+    packageJsonDirectory: string;
+    impliedNodeFormat: ModuleKind;
+}
+
 export interface SymbolResponse {
     id: number;
-    name: string;
+    name: __String;
     flags: number;
     checkFlags: number;
     declarations?: string[];

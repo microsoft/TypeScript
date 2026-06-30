@@ -7,9 +7,12 @@
 // Regenerate: npm run generate (from _packages/native-preview)
 //
 import {
+    type __String,
     cast,
+    escapeLeadingUnderscores,
     type Expression,
     getSynthesizedDeepClone,
+    InternalSymbolName,
     isCallExpression,
     isFunctionDeclaration,
     isIdentifier,
@@ -28,6 +31,7 @@ import {
     type NodeArray,
     NodeFlags,
     SyntaxKind,
+    unescapeLeadingUnderscores,
 } from "@typescript/native-preview/unstable/ast";
 import {
     createArrayTypeNode,
@@ -53,8 +57,10 @@ import {
     type IndexType,
     type InterfaceType,
     type IntrinsicType,
+    isErrorType,
     type LiteralType,
     ModifierFlags,
+    ModuleKind,
     ObjectFlags,
     SignatureKind,
     type StringMappingType,
@@ -263,6 +269,86 @@ describe("SourceFile", () => {
                 "/node_modules/my-lib/index.d.ts",
                 "/src/index.ts",
             ]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("source file metadata identifies external library and default library files", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    moduleResolution: "node10",
+                },
+            }),
+            "/src/index.ts": `import { bar } from "my-lib";\nexport const result = bar;`,
+            "/node_modules/my-lib/package.json": JSON.stringify({ name: "my-lib", types: "./index.d.ts" }),
+            "/node_modules/my-lib/index.d.ts": `export declare const bar: number;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const program = project.program;
+
+            const index = program.getSourceFile("/src/index.ts");
+            assert.ok(index);
+            assert.equal(program.isSourceFileFromExternalLibrary(index), false);
+            assert.equal(program.isSourceFileDefaultLibrary(index), false);
+
+            const lib = program.getSourceFile("/node_modules/my-lib/index.d.ts");
+            assert.ok(lib);
+            assert.equal(program.isSourceFileFromExternalLibrary(lib), true);
+            assert.equal(program.isSourceFileDefaultLibrary(lib), false);
+
+            const fileNames = program.getSourceFileNames();
+            const defaultLibName = fileNames.find(name => name.endsWith("lib.d.ts") || name.includes("/lib."));
+            assert.ok(defaultLibName, "expected a default library file in the program");
+            const defaultLib = program.getSourceFile(defaultLibName);
+            assert.ok(defaultLib);
+            assert.equal(program.isSourceFileDefaultLibrary(defaultLib), true);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("source file metadata reports implied node format", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    module: "nodenext",
+                    moduleResolution: "nodenext",
+                },
+            }),
+            "/src/index.ts": `export const x = 1;`,
+            "/src/esm.mts": `export const e = 1;`,
+            "/src/cjs.cts": `export const c = 1;`,
+            "/esm/package.json": JSON.stringify({ type: "module" }),
+            "/esm/index.ts": `export const m = 1;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const program = snapshot.getProject("/tsconfig.json")!.program;
+
+            const mts = program.getSourceFile("/src/esm.mts");
+            assert.ok(mts);
+            assert.equal((program.getSourceFileMetadata(mts.fileName))?.impliedNodeFormat, ModuleKind.ESNext);
+            assert.equal((program.getSourceFileMetadataByPath(mts.path))?.impliedNodeFormat, ModuleKind.ESNext);
+
+            const cts = program.getSourceFile("/src/cjs.cts");
+            assert.ok(cts);
+            assert.equal((program.getSourceFileMetadata(cts.fileName))?.impliedNodeFormat, ModuleKind.CommonJS);
+
+            // A plain .ts file with no nearby `"type": "module"` is CommonJS.
+            const index = program.getSourceFile("/src/index.ts");
+            assert.ok(index);
+            assert.equal((program.getSourceFileMetadata(index.fileName))?.impliedNodeFormat, ModuleKind.CommonJS);
+
+            // A plain .ts file under a `"type": "module"` package is ESM.
+            const esmIndex = program.getSourceFile("/esm/index.ts");
+            assert.ok(esmIndex);
+            assert.equal((program.getSourceFileMetadata(esmIndex.fileName))?.impliedNodeFormat, ModuleKind.ESNext);
         }
         finally {
             api.close();
@@ -1352,8 +1438,8 @@ export const value = 1;
             const symbol = project.checker.getSymbolAtPosition("/src/mod.ts", animalPos);
             assert.ok(symbol);
             const members = symbol.getMembers();
-            assert.ok(members.length > 0);
-            const memberNames = members.map(m => m.name);
+            assert.ok(members.size > 0);
+            const memberNames = [...members.values()].map(m => m.name);
             assert.ok(memberNames.includes("name"), "should have 'name' member");
             assert.ok(memberNames.includes("speak"), "should have 'speak' member");
         }
@@ -1372,8 +1458,8 @@ export const value = 1;
             const moduleSymbol = project.checker.getSymbolAtLocation(sourceFile);
             assert.ok(moduleSymbol);
             const exports = moduleSymbol.getExports();
-            assert.ok(exports.length > 0);
-            const exportNames = exports.map(e => e.name);
+            assert.ok(exports.size > 0);
+            const exportNames = [...exports.values()].map(e => e.name);
             assert.ok(exportNames.includes("Animal"), "should export Animal");
             assert.ok(exportNames.includes("value"), "should export value");
         }
@@ -2595,6 +2681,184 @@ export type BoxOfString = Box<string>;
         finally {
             api.close();
         }
+    });
+});
+
+describe("Type - getBaseTypes", () => {
+    test("returns base types for a class type and undefined for a non-class/interface", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+export class Base {
+    x: number = 0;
+}
+export class Derived extends Base {
+    y: string = "";
+}
+export const n: number = 0;
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `\nexport class Base {\n    x: number = 0;\n}\nexport class Derived extends Base {\n    y: string = "";\n}\nexport const n: number = 0;\n`;
+
+            const derivedSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("Derived"));
+            assert.ok(derivedSymbol);
+            const derivedType = project.checker.getDeclaredTypeOfSymbol(derivedSymbol);
+            assert.ok(derivedType.isClassOrInterface(), "Derived should be a class/interface type");
+            const baseTypes = derivedType.getBaseTypes();
+            assert.ok(baseTypes && baseTypes.length > 0, "class type should have base types");
+            const baseSymbol = baseTypes![0].getSymbol();
+            assert.equal(baseSymbol?.name, "Base");
+
+            // A primitive type is not a class/interface, so getBaseTypes() is undefined.
+            const numberSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("n:"));
+            assert.ok(numberSymbol);
+            const numberType = project.checker.getTypeOfSymbol(numberSymbol);
+            assert.ok(numberType);
+            assert.equal(numberType.isClassOrInterface(), false);
+            assert.equal(numberType.getBaseTypes(), undefined);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Type - isErrorType", () => {
+    test("identifies the error type from an unresolvable annotation", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+declare const good: string;
+declare const bad: ThisTypeDoesNotExist;
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `\ndeclare const good: string;\ndeclare const bad: ThisTypeDoesNotExist;\n`;
+
+            const badSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("bad"));
+            assert.ok(badSymbol);
+            const badType = project.checker.getTypeOfSymbol(badSymbol);
+            assert.ok(badType);
+            assert.ok(badType.isErrorType(), "unresolved annotation should yield the error type");
+            assert.ok(isErrorType(badType));
+
+            const goodSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("good"));
+            assert.ok(goodSymbol);
+            const goodType = project.checker.getTypeOfSymbol(goodSymbol);
+            assert.ok(goodType);
+            assert.equal(goodType.isErrorType(), false, "string type is not the error type");
+            assert.equal(isErrorType(goodType), false);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - well-known symbols", () => {
+    test("isUnknownSymbol identifies the aliased unknown symbol", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+export const value = 1;
+export type Alias = typeof value;
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `\nexport const value = 1;\nexport type Alias = typeof value;\n`;
+
+            // A real symbol is not the unknown/undefined symbol.
+            const valueSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("value"));
+            assert.ok(valueSymbol);
+            assert.equal(project.checker.isUnknownSymbol(valueSymbol), false);
+            assert.equal(project.checker.isUndefinedSymbol(valueSymbol), false);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Symbol - escaped names and tables", () => {
+    test("getExports/getMembers return a cached Map keyed by escaped name", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+export class Animal {
+    name: string = "";
+    speak(): void {}
+}
+export const value = 1;
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const moduleSymbol = project.checker.getSymbolAtLocation(sourceFile);
+            assert.ok(moduleSymbol);
+
+            const exports = moduleSymbol.getExports();
+            assert.ok(exports.has(escapeLeadingUnderscores("Animal")));
+            assert.ok(exports.get(escapeLeadingUnderscores("value")));
+            // Calling again returns the same cached Map instance.
+            assert.strictEqual(moduleSymbol.getExports(), exports);
+
+            const animal = exports.get(escapeLeadingUnderscores("Animal"))!;
+            const members = animal.getMembers();
+            assert.ok(members.get(escapeLeadingUnderscores("name")));
+            assert.ok(members.get(escapeLeadingUnderscores("speak")));
+            assert.strictEqual(animal.getMembers(), members);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("anonymous type symbol has a __-escaped name, never the \\xFE sentinel", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+export const obj: { a: number } = { a: 1 };
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `\nexport const obj: { a: number } = { a: 1 };\n`;
+            const objSymbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("obj"));
+            assert.ok(objSymbol);
+            const objType = project.checker.getTypeOfSymbol(objSymbol);
+            assert.ok(objType);
+            const typeSymbol = objType.getSymbol();
+            assert.ok(typeSymbol);
+            // The anonymous type literal symbol is internally named; over the wire
+            // it must be the "__type" escaped form, not the raw "\xFE" sentinel.
+            assert.equal(typeSymbol.escapedName, InternalSymbolName.Type);
+            assert.ok(!typeSymbol.escapedName.includes("\xFE"));
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("ast - escapeLeadingUnderscores", () => {
+    test("round-trips display and escaped names", () => {
+        assert.equal(escapeLeadingUnderscores("foo"), "foo");
+        assert.equal(escapeLeadingUnderscores("_foo"), "_foo");
+        assert.equal(escapeLeadingUnderscores("__foo"), "___foo");
+        assert.equal(unescapeLeadingUnderscores("foo" as __String), "foo");
+        assert.equal(unescapeLeadingUnderscores("__type" as __String), "__type");
+        assert.equal(unescapeLeadingUnderscores("___foo" as __String), "__foo");
     });
 });
 

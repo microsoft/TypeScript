@@ -1,5 +1,6 @@
 export { CharacterCodes } from "#enums/characterCodes";
 export { CommentDirectiveType } from "#enums/commentDirectiveType";
+export { InternalSymbolName } from "#enums/internalSymbolName";
 export { LanguageVariant } from "#enums/languageVariant";
 export { ModifierFlags } from "#enums/modifierFlags";
 export { NodeFlags } from "#enums/nodeFlags";
