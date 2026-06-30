@@ -484,6 +484,14 @@ func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, project
 // setupLanguageService creates a LanguageService for the given snapshot/project.
 // Unlike setupChecker, this does NOT acquire a checker from the pool, so callers that
 // only need an LS (and not a Checker) can avoid blocking on / holding a pooled checker.
+//
+// The LS acquires its own checker internally (keyed by the ctx's checker lifetime).
+// If a handler returns symbol/type/signature handles the client may later re-query
+// on the API checker (e.g. completion with IncludeSymbol -> GetTypeOfSymbol), wrap
+// ctx with core.WithCheckerLifetime(ctx, core.CheckerLifetimeAPI) so those handles
+// are produced on the persistent API checker and stay resolvable. Only safe when the
+// LS operation acquires a checker exactly once; nested acquisitions (e.g. find-all-
+// references) would deadlock on the single-slot persistent checker.
 func (s *Session) setupLanguageService(sd *snapshotData, program *compiler.Program, projectHandle ProjectID, activeFile string) (*ls.LanguageService, error) {
 	projectName := parseProjectHandle(projectHandle)
 	proj := sd.snapshot.ProjectCollection.GetProjectByPath(projectName)
@@ -3080,6 +3088,9 @@ func (s *Session) handleGetSignatureUsages(ctx context.Context, params *GetSigna
 
 // handleGetCompletionsAtPosition returns completions at a position in a document.
 func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *GetCompletionsAtPositionParams) (*CompletionInfoResponse, error) {
+	if params.IncludeSymbol {
+		ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeAPI)
+	}
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
