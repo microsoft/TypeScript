@@ -111,10 +111,11 @@ const (
 // String data (variable)
 // ----------------------
 //
-// The string data section contains UTF-8 encoded string data. In typical cases, the entirety of the string data is the
-// source file text, and individual nodes with string properties reference their positional slice of the file text. In
-// cases where a node's string property is not equal to the slice of file text at its position, the unique string is
-// appended to the string data section after the file text.
+// The string data section contains UTF-8 encoded string data, with WTF-8 used for JS strings containing lone UTF-16
+// surrogates. In typical cases, the entirety of the string data is the source file text, and individual nodes with
+// string properties reference their positional slice of the file text. In cases where a node's string property is not
+// equal to the slice of file text at its position, the unique string is appended to the string data section after the
+// file text.
 //
 // Extended node data (variable)
 // -----------------------------

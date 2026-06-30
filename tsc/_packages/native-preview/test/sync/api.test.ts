@@ -363,22 +363,60 @@ test("unicode escapes", () => {
         "/tsconfig.json": "{}",
         "/src/1.ts": `"😃"`,
         "/src/2.ts": `"\\ud83d\\ude03"`,
+        "/src/3.ts": `"\\ud800a\\udc00"`,
     });
     try {
         const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
         const project = snapshot.getProject("/tsconfig.json")!;
+        const expectedTexts = new Map([
+            ["/src/1.ts", "😃"],
+            ["/src/2.ts", "😃"],
+            ["/src/3.ts", "\ud800a\udc00"],
+        ]);
 
-        for (const file of ["/src/1.ts", "/src/2.ts"]) {
+        for (const file of expectedTexts.keys()) {
             const sourceFile = project.program.getSourceFile(file);
             assert.ok(sourceFile);
 
             sourceFile.forEachChild(function visit(node) {
                 if (isStringLiteral(node)) {
-                    assert.equal(node.text, "😃");
+                    assert.equal(node.text, expectedTexts.get(file));
                 }
                 node.forEachChild(visit);
             });
         }
+    }
+    finally {
+        api.close();
+    }
+});
+
+test("template unicode escapes", () => {
+    const api = spawnAPI({
+        "/tsconfig.json": "{}",
+        "/src/index.ts": "`\\ud800${0}\\udc00`",
+    });
+    try {
+        const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+        const project = snapshot.getProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/index.ts");
+        assert.ok(sourceFile);
+
+        let sawHead = false;
+        let sawTail = false;
+        sourceFile.forEachChild(function visit(node) {
+            if (isTemplateHead(node)) {
+                assert.equal(node.text, "\ud800");
+                sawHead = true;
+            }
+            else if (isTemplateTail(node)) {
+                assert.equal(node.text, "\udc00");
+                sawTail = true;
+            }
+            node.forEachChild(visit);
+        });
+        assert.ok(sawHead);
+        assert.ok(sawTail);
     }
     finally {
         api.close();

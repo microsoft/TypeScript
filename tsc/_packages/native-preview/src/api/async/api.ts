@@ -31,6 +31,7 @@ import {
     readSourceFileHash,
     RemoteSourceFile,
 } from "../node/node.ts";
+import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
     APIOptions,
     LSPConnectionOptions,
@@ -541,7 +542,7 @@ export class Program {
     private client: Client;
     private sourceFileCache: SourceFileCache;
     private toPath: (fileName: string) => Path;
-    private decoder = new TextDecoder();
+    private decoder = new Wtf8Decoder();
 
     constructor(
         snapshotId: number,
