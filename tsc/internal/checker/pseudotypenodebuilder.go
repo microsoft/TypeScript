@@ -30,7 +30,7 @@ func (b *NodeBuilderImpl) pseudoTypeToNodeWithCheckerFallback(t *pseudochecker.P
 		return result
 	} else if t.Kind == pseudochecker.PseudoTypeKindDirect {
 		existing := t.AsPseudoTypeDirect().TypeNode
-		if !b.existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, checkerType) {
+		if !b.canReuseExistingJSTypeNode(existing, checkerType) {
 			if !b.ctx.suppressReportInferenceFallback {
 				b.ctx.tracker.ReportInferenceFallback(existing)
 			}

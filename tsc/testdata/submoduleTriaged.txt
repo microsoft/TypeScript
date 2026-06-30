@@ -42,10 +42,6 @@ conformance/parserStatementIsNotAMemberVariableDeclaration1(alwaysstrict=true).e
 ## https://github.com/microsoft/typescript-go/issues/3547
 conformance/typeFromPropertyAssignment39.js.diff
 
-# Missing generic type arguments no longer auto-filled with any (produces TS2314 errors)
-## https://github.com/microsoft/typescript-go/issues/3549
-conformance/jsDeclarationsMissingGenerics(target=es2015).js.diff
-
 # Optional property types in JS declarations drop | undefined
 ## https://github.com/microsoft/typescript-go/issues/3550
 conformance/jsDeclarationsOptionalTypeLiteralProps1.js.diff

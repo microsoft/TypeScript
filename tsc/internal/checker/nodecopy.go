@@ -427,7 +427,12 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				return nil // refers to type parameter remapped by context (TODO improvement: just return the remapped param name?)
 			}
 		}
-		// TODO: further bails in JSdoc - not required anymore due to dropped behavior/reparser?
+		if !b.canReuseExistingJSTypeNode(node, b.getTypeFromTypeNode(node, false)) {
+			// fallback to serialization for jsdoc types that have insufficient or incomplete type args, or are remapped by the checker in only jsdoc contexts
+			// TODO: remappings like `promise` -> `Promise<any>` are static, we *could* statically remap the nodes, too. But that only matters for `isolatedDeclarations`
+			// in JS, should we enable that.
+			return nil
+		}
 		introducesError, newName, _ := trackExistingEntityName(node.AsTypeReferenceNode().TypeName, nil)
 		if !introducesError {
 			typeArguments := visitor.VisitNodes(node.AsTypeReferenceNode().TypeArguments)
