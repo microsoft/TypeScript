@@ -136,6 +136,7 @@ import {
     isAwaitExpression,
     isBigIntLiteral,
     isBinaryExpression,
+    isBlock,
     isBindingElement,
     isBindingPattern,
     isBreakOrContinueStatement,
@@ -592,15 +593,16 @@ export type SymbolSortTextMap = (SortText | undefined)[];
 
 // dprint-ignore
 const enum KeywordCompletionFilters {
-    None,                           // No keywords
-    All,                            // Every possible keyword (TODO: This is never appropriate)
-    ClassElementKeywords,           // Keywords inside class body
-    InterfaceElementKeywords,       // Keywords inside interface body
-    ConstructorParameterKeywords,   // Keywords at constructor parameter
-    FunctionLikeBodyKeywords,       // Keywords at function like body
+    None,                                   // No keywords
+    All,                                    // Every possible keyword (TODO: This is never appropriate)
+    ClassElementKeywords,                   // Keywords inside class body
+    InterfaceElementKeywords,               // Keywords inside interface body
+    ConstructorParameterKeywords,           // Keywords at constructor parameter
+    FunctionLikeBodyKeywords,               // Keywords at function like body (block body)
+    FunctionLikeExpressionBodyKeywords,     // Keywords at expression-bodied function (no `default`)
     TypeAssertionKeywords,
     TypeKeywords,
-    TypeKeyword,                    // Literally just `type`
+    TypeKeyword,                            // Literally just `type`
     Last = TypeKeyword,
 }
 
@@ -3982,7 +3984,15 @@ function getCompletionData(
     }
 
     function getGlobalCompletions(): void {
-        keywordFilters = tryGetFunctionLikeBodyCompletionContainer(contextToken) ? KeywordCompletionFilters.FunctionLikeBodyKeywords : KeywordCompletionFilters.All;
+        const functionLikeContainer = tryGetFunctionLikeBodyCompletionContainer(contextToken);
+        if (functionLikeContainer) {
+            keywordFilters = functionLikeContainer.body && !isBlock(functionLikeContainer.body)
+                ? KeywordCompletionFilters.FunctionLikeExpressionBodyKeywords
+                : KeywordCompletionFilters.FunctionLikeBodyKeywords;
+        }
+        else {
+            keywordFilters = KeywordCompletionFilters.All;
+        }
 
         // Get all entities in the current scope.
         completionKind = CompletionKind.Global;
@@ -4816,6 +4826,19 @@ function getCompletionData(
 
     function tryGetFunctionLikeBodyCompletionContainer(contextToken: Node): FunctionLikeDeclaration | undefined {
         if (contextToken) {
+            // When completing the expression body of an arrow function (e.g. `(x) => x|`
+            // or `(x) => |`), `getRelevantTokens` sets contextToken to the `=>` token
+            // (the preceding token before the identifier or keyword being typed). The
+            // findAncestor loop below starts at contextToken.parent (the ArrowFunction)
+            // and never matches because `prev` is undefined on the first iteration.
+            // Detect this case directly so callers can use the right keyword filter.
+            if (
+                contextToken.kind === SyntaxKind.EqualsGreaterThanToken
+                && isArrowFunction(contextToken.parent)
+                && !isBlock(contextToken.parent.body)
+            ) {
+                return contextToken.parent;
+            }
             let prev: Node;
             const container = findAncestor(contextToken.parent, (node: Node) => {
                 if (isClassLike(node)) {
@@ -5488,6 +5511,8 @@ function getTypescriptKeywordCompletions(keywordFilter: KeywordCompletionFilters
                     || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
             case KeywordCompletionFilters.FunctionLikeBodyKeywords:
                 return isFunctionLikeBodyKeyword(kind);
+            case KeywordCompletionFilters.FunctionLikeExpressionBodyKeywords:
+                return isFunctionLikeBodyKeyword(kind) && kind !== SyntaxKind.DefaultKeyword;
             case KeywordCompletionFilters.ClassElementKeywords:
                 return isClassMemberCompletionKeyword(kind);
             case KeywordCompletionFilters.InterfaceElementKeywords:
