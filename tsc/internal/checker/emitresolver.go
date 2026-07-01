@@ -886,6 +886,10 @@ func (r *EmitResolver) GetReferencedValueDeclaration(node *ast.IdentifierNode) *
 	return r.getReferenceResolver().GetReferencedValueDeclaration(node)
 }
 
+func (r *EmitResolver) GetReferencedValueDeclarationUnsafe(node *ast.IdentifierNode) *ast.Declaration {
+	return r.getReferenceResolver().GetReferencedValueDeclaration(node)
+}
+
 func (r *EmitResolver) GetReferencedValueDeclarations(node *ast.IdentifierNode) []*ast.Declaration {
 	if !ast.IsParseTreeNode(node) {
 		return nil
