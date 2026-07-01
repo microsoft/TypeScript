@@ -1215,10 +1215,6 @@ conformance/defaultExportsCannotMerge04(target=es2015).js.diff
 ## Declaration emit changes how numeric-string-keyed properties are represented
 compiler/declarationEmitPropertyNumericStringKey.js.diff
 
-## `typeof` references resolved to concrete types in declaration emit (concrete types are equivalent to what `typeof` resolves to)
-## `typeof a` rest parameters and symbol references resolved to tuple/symbol types instead of typeof
-compiler/declarationEmitTypeofRest.js.diff
-
 ## Namespace-qualified names simplified to unqualified where context allows (unqualified names are correct when already in scope; simplification reduces noise)
 ## `me.Things<me.Props>` → `Things<Props>` when namespace context makes qualification unnecessary
 compiler/defaultDeclarationEmitShadowedNamedCorrectly.js.diff

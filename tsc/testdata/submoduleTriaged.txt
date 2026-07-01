@@ -10,7 +10,6 @@ compiler/isolatedDeclarationErrorsExpressions.errors.txt.diff
 compiler/isolatedDeclarationErrorsClassesExpressions.errors.txt.diff
 compiler/isolatedDeclarationsAddUndefined.errors.txt.diff
 compiler/isolatedDeclarationErrors.errors.txt.diff
-compiler/declarationEmitTypeofRest.errors.txt.diff
 
 # Corsa changes how module augmentation interacts with export-equals and exported name visibility
 ## https://github.com/microsoft/typescript-go/issues/3481
