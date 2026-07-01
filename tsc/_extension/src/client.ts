@@ -89,7 +89,7 @@ export class Client implements vscode.Disposable {
                 sendNotification: sendNotificationMiddleware,
                 provideHover: () => undefined,
             },
-            diagnosticCollectionName: "typescript",
+            diagnosticCollectionName: "typescript-push",
             diagnosticPullOptions: {
                 onChange: true,
                 onSave: true,
