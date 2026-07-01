@@ -1428,3 +1428,15 @@ conformance/jsDeclarationsOptionalTypeLiteralProps2.js.diff
 
 # Expando object emitted as object instead of namespace
 conformance/typeFromPropertyAssignment39.js.diff
+
+# Better `typeof` usage for function expressions
+## https://github.com/microsoft/typescript-go/pull/4507
+compiler/declarationEmitPartialNodeReuseTypeOf.js.diff
+compiler/declarationEmitPartialNodeReuseTypeReferences.js.diff
+compiler/declarationEmitPartialReuseComputedProperty.js.diff
+compiler/declarationEmitScopeConsistency.js.diff
+compiler/declFileTypeofFunction.types.diff
+compiler/functionExpressionReturningItself.types.diff
+compiler/recursiveLetConst.types.diff
+conformance/functionImplementations.types.diff
+conformance/noInferRedeclaration.js.diff

@@ -4,15 +4,16 @@
 
 
  //// [index1.d.ts]
--/**
-- * const doc comment
-- */
--export function x(a: any): string;
 +declare const _exports: {
-+    x: (a: any) => string;
++    x: typeof x;
 +    b: typeof b;
 +};
 +export = _exports;
+ /**
+  * const doc comment
+  */
+-export function x(a: any): string;
++declare const x: (a: any) => string;
  /**
   * function doc comment
   */

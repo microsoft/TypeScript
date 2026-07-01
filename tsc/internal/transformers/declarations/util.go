@@ -115,7 +115,8 @@ func isEnclosingDeclaration(node *ast.Node) bool {
 		ast.IsInterfaceDeclaration(node) ||
 		ast.IsFunctionLike(node) ||
 		ast.IsIndexSignatureDeclaration(node) ||
-		ast.IsMappedTypeNode(node)
+		ast.IsMappedTypeNode(node) ||
+		ast.IsVariableDeclaration(node)
 }
 
 func isAlwaysType(node *ast.Node) bool {
