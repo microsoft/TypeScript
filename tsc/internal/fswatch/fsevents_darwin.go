@@ -181,6 +181,7 @@ type fsEventsBackend struct {
 
 func init() {
 	fseventsWatcher.factory = func() watcherImpl { return newFSEventsBackend() }
+	fseventsWatcher.sequence = fsEventsGetCurrentEventID
 }
 
 func newFSEventsBackend() *fsEventsBackend {
@@ -483,21 +484,24 @@ func fsEventsCallback(cb *streamCallback, payload *fsEventsCallbackPayload) {
 
 	const (
 		flagSize = unsafe.Sizeof(uint32(0))
+		idSize   = unsafe.Sizeof(uint64(0))
 	)
 
-	if payload == nil || payload.paths == 0 || payload.flags == 0 {
+	if payload == nil || payload.paths == 0 || payload.flags == 0 || payload.ids == 0 {
 		return
 	}
 
 	numEvents := payload.numEvents
 	paths := payload.paths
 	flags := payload.flags
+	ids := payload.ids
 
 	watches := cb.watches
 	touched := map[*dirWatch]struct{}{}
 
 	for i := range numEvents {
 		flag := *(*uint32)(unsafe.Add(nil, flags+i*flagSize))
+		eventID := *(*uint64)(unsafe.Add(nil, ids+i*idSize))
 		pathRef := cfArrayGetValueAtIndex(paths, int(i))
 		path := cfStringToNFC(pathRef)
 		if path == "" {
@@ -564,7 +568,14 @@ func fsEventsCallback(cb *streamCallback, payload *fsEventsCallbackPayload) {
 
 			switch {
 			case isRemoved && !isCreated:
-				w.events.remove(displayPath)
+				if displayPath == w.dir {
+					w.events.removeWatchRootAt(displayPath, eventID)
+				} else {
+					w.events.removeAt(displayPath, eventID)
+				}
+				if w.terminateCallbacksForDeletedRoot(displayPath, eventID, fmt.Errorf("%w: watched directory removed", ErrWatchTerminated)) {
+					touched[w] = struct{}{}
+				}
 				if displayPath == w.dir {
 					watch.state.terminated.Store(true)
 					w.events.setError(fmt.Errorf("%w: watched directory removed", ErrWatchTerminated))
@@ -576,16 +587,31 @@ func fsEventsCallback(cb *streamCallback, payload *fsEventsCallbackPayload) {
 					pathExistsKnown = true
 				}
 				if pathExists {
-					w.events.update(displayPath)
+					if displayPath == w.dir {
+						w.events.updateWatchRootAt(displayPath, eventID)
+					} else {
+						w.events.updateAt(displayPath, eventID)
+					}
 				} else {
-					w.events.remove(displayPath)
+					if displayPath == w.dir {
+						w.events.removeWatchRootAt(displayPath, eventID)
+					} else {
+						w.events.removeAt(displayPath, eventID)
+					}
+					if w.terminateCallbacksForDeletedRoot(displayPath, eventID, fmt.Errorf("%w: watched directory removed", ErrWatchTerminated)) {
+						touched[w] = struct{}{}
+					}
 					if displayPath == w.dir {
 						watch.state.terminated.Store(true)
 						w.events.setError(fmt.Errorf("%w: watched directory removed", ErrWatchTerminated))
 					}
 				}
 			default:
-				w.events.update(displayPath)
+				if displayPath == w.dir {
+					w.events.updateWatchRootAt(displayPath, eventID)
+				} else {
+					w.events.updateAt(displayPath, eventID)
+				}
 			}
 			touched[w] = struct{}{}
 		}

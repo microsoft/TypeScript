@@ -9,6 +9,7 @@ import (
 	"slices"
 	"strings"
 	"sync"
+	"syscall"
 
 	"github.com/microsoft/typescript-go/internal/nativepath"
 )
@@ -232,6 +233,7 @@ type watcher struct {
 	factory    func() watcherImpl // nil if not available on this platform
 	dirWatches map[string]*dirWatch
 	debounce   *debounce // lazily created in getOrCreateDirWatch
+	sequence   func() uint64
 }
 
 const recursiveConsolidateThreshold = 10
@@ -252,6 +254,8 @@ func (w *watcher) HasFastRecursiveBackend() bool {
 }
 
 func (w *watcher) canShareRecursiveDirWatches() bool {
+	// TODO: Re-enable this for Windows once coalesced recursive watches have
+	// more real-world bake time.
 	return w.name == "fsevents"
 }
 
@@ -292,10 +296,10 @@ func (w *watcher) keyForDirWatch(dir string, recursive bool) string {
 	return dir
 }
 
-func (w *watcher) findCoveringRecursiveWatchLocked(dir string) *dirWatch {
+func (w *watcher) findCoveringRecursiveWatchLocked(dir string, physicalDir string) *dirWatch {
 	var best *dirWatch
 	for _, dw := range w.dirWatches {
-		if !dw.recursive || !isInDirectoryOrSelf(dw.dir, dir) {
+		if !dw.recursive || !isInDirectoryOrSelf(dw.dir, dir) || !isInDirectoryOrSelf(dw.physicalDir, physicalDir) {
 			continue
 		}
 		if best == nil || len(dw.dir) > len(best.dir) {
@@ -305,7 +309,7 @@ func (w *watcher) findCoveringRecursiveWatchLocked(dir string) *dirWatch {
 	return best
 }
 
-func (w *watcher) findConsolidationDirLocked(dir string) string {
+func (w *watcher) findConsolidationDirLocked(dir string, physicalDir string) string {
 	if !w.canShareRecursiveDirWatches() {
 		return ""
 	}
@@ -314,9 +318,13 @@ func (w *watcher) findConsolidationDirLocked(dir string) string {
 		if filepath.Dir(parent) == parent {
 			break
 		}
+		physicalParent := physicalDirFor(parent)
+		if !isInDirectoryOrSelf(physicalParent, physicalDir) {
+			return ""
+		}
 		count := 1
 		for _, dw := range w.dirWatches {
-			if isInDirectoryOrSelf(parent, dw.dir) {
+			if isInDirectoryOrSelf(parent, dw.dir) && isInDirectoryOrSelf(physicalParent, dw.physicalDir) {
 				count++
 				if count >= recursiveConsolidateThreshold {
 					return parent
@@ -344,14 +352,14 @@ func (w *watcher) getOrCreateDirWatch(dir string, physicalDir string, recursive 
 	}
 
 	if w.canShareRecursiveDirWatches() {
-		if dw := w.findCoveringRecursiveWatchLocked(dir); dw != nil {
+		if dw := w.findCoveringRecursiveWatchLocked(dir, physicalDir); dw != nil {
 			return dw
 		}
-		if consolidationDir := w.findConsolidationDirLocked(dir); consolidationDir != "" {
+		if consolidationDir := w.findConsolidationDirLocked(dir, physicalDir); consolidationDir != "" {
 			dir = consolidationDir
 			physicalDir = physicalDirFor(dir)
 			recursive = true
-			if dw := w.findCoveringRecursiveWatchLocked(dir); dw != nil {
+			if dw := w.findCoveringRecursiveWatchLocked(dir, physicalDir); dw != nil {
 				return dw
 			}
 		}
@@ -362,6 +370,7 @@ func (w *watcher) getOrCreateDirWatch(dir string, physicalDir string, recursive 
 		return dw
 	}
 	dw := newDirWatch(dir, physicalDir, w.debounce)
+	dw.sequence = w.sequence
 	dw.recursive = recursive
 	w.dirWatches[key] = dw
 	return dw
@@ -427,6 +436,12 @@ func (w *watcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, e
 			return nil, errNotAbsolute
 		}
 		dir = canonicalizePath(dir)
+		if w.canShareRecursiveDirWatches() {
+			if err := validateWatchDirectory(dir); err != nil {
+				rollback()
+				return nil, err
+			}
+		}
 		physicalDir := physicalDirFor(dir)
 
 		var sopts watchOptions
@@ -435,7 +450,7 @@ func (w *watcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, e
 		}
 
 		dw := w.getOrCreateDirWatch(dir, physicalDir, sopts.recursive)
-		id, _ := dw.watch(dir, sopts.recursive, fn, sopts.ignore)
+		id, _ := dw.watch(dir, physicalDir, sopts.recursive, fn, sopts.ignore)
 		prepared = append(prepared, preparedWatch{dw: dw, id: id, recursive: sopts.recursive, dir: dir})
 		if _, ok := seenDirWatches[dw]; !ok {
 			seenDirWatches[dw] = struct{}{}
@@ -458,6 +473,17 @@ func (w *watcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, e
 		watches[i] = &watch{w: w, dw: p.dw, impl: impl, id: p.id}
 	}
 	return watches, nil
+}
+
+func validateWatchDirectory(dir string) error {
+	info, err := os.Stat(dir)
+	if err != nil {
+		return err
+	}
+	if !info.IsDir() {
+		return syscall.ENOTDIR
+	}
+	return nil
 }
 
 func (w *watcher) WatchFile(path string, fn WatchCallback) (Watch, error) {
@@ -670,11 +696,17 @@ func (b *watcherBase) handleWatcherError(werr *dirWatchError) {
 // ----- dirWatch: per-directory watch state -------------------------
 
 type callback struct {
-	id        uint64
-	dir       string
-	recursive bool
-	fn        WatchCallback
-	ignore    func(path string) bool
+	id               uint64
+	dir              string
+	physicalDir      string
+	watchDir         string
+	watchPhysicalDir string
+	recursive        bool
+	fn               WatchCallback
+	ignore           func(path string) bool
+	sinceSeq         uint64
+	terminal         error
+	delivered        bool
 }
 
 // dirWatchError associates an error with a specific directory watch.
@@ -699,6 +731,8 @@ type dirWatch struct {
 
 	// state stores per-directory platform-specific bookkeeping (fsevents, windows).
 	state any
+	// sequence returns a backend event sequence cutoff for new logical callbacks.
+	sequence func() uint64
 
 	mu        sync.Mutex
 	callbacks []callback
@@ -789,13 +823,18 @@ func (dw *dirWatch) destroyDebounce() {
 
 func (dw *dirWatch) notify() {
 	dw.mu.Lock()
-	hasCBs := len(dw.callbacks) > 0
+	hasPendingCBs := slices.ContainsFunc(dw.callbacks, func(cb callback) bool {
+		return !cb.delivered
+	})
+	hasTerminal := slices.ContainsFunc(dw.callbacks, func(cb callback) bool {
+		return cb.terminal != nil && !cb.delivered
+	})
 	hasEvents := dw.events.size() > 0
 	hasError := dw.events.hasError()
 	db := dw.debounce
 	dw.mu.Unlock()
 
-	if hasCBs && (hasEvents || hasError) && db != nil {
+	if hasPendingCBs && (hasEvents || hasError || hasTerminal) && db != nil {
 		db.trigger()
 	}
 }
@@ -814,20 +853,56 @@ func (dw *dirWatch) triggerCallbacks() {
 	dw.mu.Lock()
 	hasError := dw.events.hasError()
 	hasEvents := dw.events.size() > 0
-	if len(dw.callbacks) == 0 || (!hasEvents && !hasError) {
+	cbs := make([]callback, 0, len(dw.callbacks))
+	hasTerminal := false
+	for _, cb := range dw.callbacks {
+		if cb.delivered {
+			continue
+		}
+		if cb.terminal != nil {
+			hasTerminal = true
+		}
+		cbs = append(cbs, cb)
+	}
+	if len(cbs) == 0 {
+		if hasEvents || hasError {
+			_, _ = dw.events.drain()
+		}
 		dw.mu.Unlock()
 		return
 	}
-	events, err := dw.events.drain()
-	cbs := slices.Clone(dw.callbacks)
+	if !hasEvents && !hasError && !hasTerminal {
+		dw.mu.Unlock()
+		return
+	}
+	startSeqs := make([]uint64, len(cbs))
+	for i, cb := range cbs {
+		startSeqs[i] = cb.sinceSeq
+	}
+	eventsByCallback, err := dw.events.drainForSequences(startSeqs)
+	for _, cb := range cbs {
+		if cb.terminal == nil {
+			continue
+		}
+		for i := range dw.callbacks {
+			if dw.callbacks[i].id == cb.id {
+				dw.callbacks[i].delivered = true
+				break
+			}
+		}
+	}
 	dw.mu.Unlock()
 
-	for _, cb := range cbs {
-		cbEvents := events
+	for i, cb := range cbs {
+		cbEvents := eventsByCallback[i]
 		if cb.ignore != nil || !cb.recursive || cb.dir != dw.dir {
-			filtered := make([]Event, 0, len(events))
-			for _, e := range events {
+			filtered := make([]Event, 0, len(cbEvents))
+			for _, e := range cbEvents {
+				e = cb.mapEvent(e)
 				if cb.ignore != nil && cb.ignore(e.Path) {
+					continue
+				}
+				if cb.dir != dw.dir && !e.includedWatchRoot && e.Path == cb.dir && e.Kind == EventUpdate {
 					continue
 				}
 				if cb.recursive {
@@ -841,10 +916,49 @@ func (dw *dirWatch) triggerCallbacks() {
 			}
 			cbEvents = filtered
 		}
-		if len(cbEvents) > 0 || err != nil {
-			cb.fn(cbEvents, err)
+		cbErr := err
+		if cb.terminal != nil {
+			cbErr = cb.terminal
+		}
+		if len(cbEvents) > 0 || cbErr != nil {
+			cb.fn(cbEvents, cbErr)
 		}
 	}
+}
+
+func (cb callback) mapEvent(e Event) Event {
+	if cb.physicalDir != "" && cb.physicalDir != cb.dir {
+		physicalPath := cb.eventPhysicalPath(e.Path)
+		if isInDirectoryOrSelf(cb.physicalDir, physicalPath) {
+			e.Path = rebasePath(physicalPath, cb.physicalDir, cb.dir)
+		}
+	}
+	return e
+}
+
+func (cb callback) eventPhysicalPath(path string) string {
+	if cb.watchPhysicalDir != "" && cb.watchDir != "" && cb.watchPhysicalDir != cb.watchDir && isInDirectoryOrSelf(cb.watchDir, path) {
+		return rebasePath(path, cb.watchDir, cb.watchPhysicalDir)
+	}
+	return path
+}
+
+func (dw *dirWatch) terminateCallbacksForDeletedRoot(path string, seq uint64, err error) bool {
+	dw.mu.Lock()
+	defer dw.mu.Unlock()
+	changed := false
+	for i := range dw.callbacks {
+		cb := &dw.callbacks[i]
+		if cb.delivered || cb.terminal != nil || cb.sinceSeq >= seq {
+			continue
+		}
+		physicalPath := cb.eventPhysicalPath(path)
+		if isInDirectoryOrSelf(path, cb.dir) || (cb.physicalDir != cb.dir && isInDirectoryOrSelf(physicalPath, cb.physicalDir)) {
+			cb.terminal = err
+			changed = true
+		}
+	}
+	return changed
 }
 
 func isInDirectoryOrSelf(dir, path string) bool {
@@ -884,12 +998,16 @@ func isDirectChild(dir, path string) bool {
 	return len(rest) > 0 && !strings.ContainsRune(rest, '/') && !strings.ContainsRune(rest, filepath.Separator)
 }
 
-func (dw *dirWatch) watch(dir string, recursive bool, fn WatchCallback, ignore func(path string) bool) (uint64, bool) {
+func (dw *dirWatch) watch(dir string, physicalDir string, recursive bool, fn WatchCallback, ignore func(path string) bool) (uint64, bool) {
 	dw.mu.Lock()
 	defer dw.mu.Unlock()
 	dw.nextCBID++
 	id := dw.nextCBID
-	dw.callbacks = append(dw.callbacks, callback{id: id, dir: dir, recursive: recursive, fn: fn, ignore: ignore})
+	sinceSeq := dw.events.sequence()
+	if dw.sequence != nil {
+		sinceSeq = dw.sequence()
+	}
+	dw.callbacks = append(dw.callbacks, callback{id: id, dir: dir, physicalDir: physicalDir, watchDir: dw.dir, watchPhysicalDir: dw.physicalDir, recursive: recursive, fn: fn, ignore: ignore, sinceSeq: sinceSeq})
 	return id, true
 }
 

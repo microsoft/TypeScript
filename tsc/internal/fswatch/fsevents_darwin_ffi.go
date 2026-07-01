@@ -375,6 +375,15 @@ func fsEventStreamFlushSync(stream uintptr) {
 	_, _, _ = syscall_syscall6(fse_FSEventStreamFlushSync_trampoline_addr, stream, 0, 0, 0, 0, 0)
 }
 
+//go:cgo_import_dynamic fse_FSEventsGetCurrentEventId FSEventsGetCurrentEventId "/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices"
+
+var fse_FSEventsGetCurrentEventId_trampoline_addr uintptr
+
+func fsEventsGetCurrentEventID() uint64 {
+	r1, _, _ := syscall_syscall6(fse_FSEventsGetCurrentEventId_trampoline_addr, 0, 0, 0, 0, 0, 0)
+	return uint64(r1)
+}
+
 //go:cgo_import_dynamic fse_FSEventStreamStop FSEventStreamStop "/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices"
 
 var fse_FSEventStreamStop_trampoline_addr uintptr
@@ -459,6 +468,7 @@ type fsEventsCallbackPayload struct {
 	numEvents uintptr
 	paths     uintptr
 	flags     uintptr
+	ids       uintptr
 }
 
 func (p *fsEventsCallbackPayload) close() {
@@ -469,6 +479,7 @@ func (p *fsEventsCallbackPayload) close() {
 		cfRelease(p.paths)
 	}
 	libcFree(p.flags)
+	libcFree(p.ids)
 	libcFree(uintptr(unsafe.Pointer(p)))
 }
 

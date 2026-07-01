@@ -143,7 +143,11 @@ fast path attempts one stream containing every active physical watch root; if
 that stream cannot be started, the backend retries with bounded path chunks.
 Events from shared streams are routed back to matching logical watches by path,
 so non-recursive and per-subscriber ignore semantics are preserved while using
-far fewer system-wide FSEvents stream slots.
+far fewer system-wide FSEvents stream slots. When many sibling watches are
+consolidated under one recursive parent watch, each callback still keeps its own
+logical root, physical root, event-ID cutoff, and termination state, so
+late-added watches don't receive older queued events and symlinked watch roots
+continue reporting caller-visible paths.
 
 ## New backends
 
@@ -164,12 +168,12 @@ configuration. The Go port is pure Go on all platforms:
   arm64), following the pattern from Go's `crypto/x509/internal/macos`. The
   FSEvents C callback runs on a libdispatch (GCD) thread, not a Go goroutine. An
   assembly shim, staying entirely in C calling convention, retains the CFArray
-  of paths, allocates a per-callback payload on the C heap, copies the flags
-  array into it, and writes the payload pointer to the stream's event pipe,
-  waking a dedicated Go event-loop goroutine that classifies the events and
-  frees the payload. The shim then returns immediately, so the dispatch thread
-  never enters Go ABI and does not wait for Go-side event classification. Each
-  FSEventStream has its own serial GCD dispatch queue and event pipe, so
+  of paths, allocates a per-callback payload on the C heap, copies the flags and
+  event ID arrays into it, and writes the payload pointer to the stream's event
+  pipe, waking a dedicated Go event-loop goroutine that classifies the events
+  and frees the payload. The shim then returns immediately, so the dispatch
+  thread never enters Go ABI and does not wait for Go-side event classification.
+  Each FSEventStream has its own serial GCD dispatch queue and event pipe, so
   callbacks for different streams run concurrently without contention: a stuck
   callback for one stream cannot back up callbacks for any other stream behind
   it. Teardown invalidates the stream and uses a `dispatch_sync_f` barrier on

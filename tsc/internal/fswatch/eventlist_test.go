@@ -123,3 +123,25 @@ func TestEventListDrainReturnsErrorWithEvents(t *testing.T) {
 		t.Fatalf("expected 1 event alongside error, got %d", len(events))
 	}
 }
+
+func TestEventListDrainForSequences(t *testing.T) {
+	t.Parallel()
+	var el eventList
+	el.create("file.txt")
+	startAfterCreate := el.sequence()
+	el.remove("file.txt")
+
+	eventsByCallback, err := el.drainForSequences([]uint64{0, startAfterCreate})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(eventsByCallback[0]) != 0 {
+		t.Fatalf("create+delete should cancel for original callback, got %v", eventsByCallback[0])
+	}
+	if len(eventsByCallback[1]) != 1 {
+		t.Fatalf("expected delete for later callback, got %v", eventsByCallback[1])
+	}
+	if got := eventsByCallback[1][0]; got.Kind != EventDelete || got.Path != "file.txt" {
+		t.Fatalf("expected delete for file.txt, got %v", got)
+	}
+}
