@@ -1245,6 +1245,10 @@ export class Cache {
             assert.ok(sig.declaration);
             const node = sig.declaration.resolve(project);
             assert.ok(node);
+            // The handle remembers its canonical project, so resolve() works without an argument.
+            const nodeFromCanonical = sig.declaration.resolve();
+            assert.ok(nodeFromCanonical);
+            assert.strictEqual(nodeFromCanonical.kind, node.kind);
 
             const methodPos = src.indexOf("getValue");
             const methodSymbol = project.checker.getSymbolAtPosition("/src/main.ts", methodPos);
@@ -1254,6 +1258,10 @@ export class Cache {
             assert.ok(methodNode);
             assert.strictEqual(methodNode.parent.kind, SyntaxKind.ClassDeclaration);
             assert.strictEqual(methodNode.parent.parent.kind, SyntaxKind.SourceFile);
+            // A symbol's declaration handles default to the symbol's canonical project.
+            const methodNodeFromCanonical = methodSymbol.valueDeclaration.resolve();
+            assert.ok(methodNodeFromCanonical);
+            assert.strictEqual(methodNodeFromCanonical.kind, methodNode.kind);
         }
         finally {
             api.close();

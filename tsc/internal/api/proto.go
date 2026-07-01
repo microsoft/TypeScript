@@ -536,6 +536,7 @@ type GetSymbolsAtLocationsParams struct {
 
 type SymbolResponse struct {
 	Id               SymbolID     `json:"id"`
+	Project          ProjectID    `json:"project"`
 	Name             string       `json:"name"`
 	Flags            uint32       `json:"flags"`
 	CheckFlags       uint32       `json:"checkFlags"`
@@ -787,6 +788,7 @@ type GetTypePropertyParams struct {
 // GetSymbolPropertyParams is used for all symbol sub-property endpoints.
 type GetSymbolPropertyParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
+	Project  ProjectID  `json:"project"`
 	Symbol   SymbolID   `json:"objectId"`
 }
 

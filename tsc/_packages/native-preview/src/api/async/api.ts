@@ -252,9 +252,9 @@ export class Snapshot {
         this.client = client;
         this.toPath = toPath;
         this.onDispose = onDispose;
-        this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id);
-
         this.projectMap = new Map();
+        this.snapshotRegistry = new SnapshotObjectRegistry(client, this.id, projectId => this.projectMap.get(projectId));
+
         for (const projData of data.projects) {
             const project = new Project(projData, this.id, client, sourceFileCache, toPath, this.snapshotRegistry);
             this.projectMap.set(toPath(projData.configFileName), project);
@@ -312,10 +312,17 @@ class SnapshotObjectRegistry {
     private readonly symbols: Map<number, Symbol> = new Map();
     private readonly client: Client;
     private readonly snapshotId: number;
+    private readonly resolveProject: (projectId: Path) => Project | undefined;
 
-    constructor(client: Client, snapshotId: number) {
+    constructor(client: Client, snapshotId: number, resolveProject: (projectId: Path) => Project | undefined) {
         this.client = client;
         this.snapshotId = snapshotId;
+        this.resolveProject = resolveProject;
+    }
+
+    /** Resolve a project id (a config file path) to its Project within this snapshot. */
+    getProject(projectId: Path): Project | undefined {
+        return this.resolveProject(projectId);
     }
 
     getOrCreateSymbol(data: SymbolResponse): Symbol {
@@ -335,7 +342,7 @@ class SnapshotObjectRegistry {
         this.symbols.clear();
     }
 
-    async fetchSymbol(source: Symbol | Signature | Type, method: string, handle: number | undefined, projectId?: string): Promise<Symbol> {
+    async fetchSymbol(source: Symbol | Signature | Type, method: string, handle: number | undefined, projectId?: Path): Promise<Symbol> {
         if (!handle) return undefined as unknown as Symbol;
         const cached = this.getSymbol(handle);
         if (cached) return cached;
@@ -349,7 +356,7 @@ class SnapshotObjectRegistry {
         return this.getOrCreateSymbol(data);
     }
 
-    async fetchSymbols(source: Symbol | Signature | Type, method: string, handles?: readonly number[], projectId?: string): Promise<readonly Symbol[]> {
+    async fetchSymbols(source: Symbol | Signature | Type, method: string, handles?: readonly number[], projectId?: Path): Promise<readonly Symbol[]> {
         if (handles) {
             const result = new Array<Symbol>(handles.length);
             let allCached = true;
@@ -376,7 +383,7 @@ class SnapshotObjectRegistry {
 class ProjectObjectRegistry {
     private client: Client;
     private snapshotId: number;
-    private projectId: string;
+    private project: Project;
     private snapshotRegistry: SnapshotObjectRegistry;
     private types: Map<number, TypeObject> = new Map();
     private signatures: Map<number, Signature> = new Map();
@@ -384,12 +391,12 @@ class ProjectObjectRegistry {
     constructor(
         client: Client,
         snapshotId: number,
-        projectId: string,
+        project: Project,
         snapshotRegistry: SnapshotObjectRegistry,
     ) {
         this.client = client;
         this.snapshotId = snapshotId;
-        this.projectId = projectId;
+        this.project = project;
         this.snapshotRegistry = snapshotRegistry;
     }
 
@@ -417,7 +424,7 @@ class ProjectObjectRegistry {
     getOrCreateSignature(data: SignatureResponse): Signature {
         let sig = this.signatures.get(data.id);
         if (!sig) {
-            sig = new Signature(data, this);
+            sig = new Signature(data, this.project, this);
             this.signatures.set(data.id, sig);
         }
         return sig;
@@ -441,7 +448,7 @@ class ProjectObjectRegistry {
 
         const data = await this.client.apiRequest<TypeResponse | null>(method, {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             objectId: source.id,
         });
         if (!data) throw new Error(`${method} returned null type for ${source.constructor.name} ${source.id}`);
@@ -449,7 +456,7 @@ class ProjectObjectRegistry {
     }
 
     async fetchSymbol(source: Symbol | Signature | Type, method: string, handle: number | undefined): Promise<Symbol> {
-        return this.snapshotRegistry.fetchSymbol(source, method, handle, this.projectId);
+        return this.snapshotRegistry.fetchSymbol(source, method, handle, this.project.id);
     }
 
     async fetchSignature(source: Symbol | Signature | Type, method: string, handle: number | undefined): Promise<Signature> {
@@ -459,7 +466,7 @@ class ProjectObjectRegistry {
 
         const data = await this.client.apiRequest<SignatureResponse | null>(method, {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             objectId: source.id,
         });
         if (!data) throw new Error(`${method} returned null signature for ${source.constructor.name} ${source.id}`);
@@ -482,7 +489,7 @@ class ProjectObjectRegistry {
         }
         const typesData = await this.client.apiRequest<TypeResponse[] | null>(method, {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             objectId: source.id,
         });
         if (typesData == null) return [];
@@ -490,7 +497,7 @@ class ProjectObjectRegistry {
     }
 
     async fetchSymbols(source: Symbol | Signature | Type, method: string, handles?: readonly number[]): Promise<readonly Symbol[]> {
-        return this.snapshotRegistry.fetchSymbols(source, method, handles, this.projectId);
+        return this.snapshotRegistry.fetchSymbols(source, method, handles, this.project.id);
     }
 
     // getBaseTypes is a checker-level endpoint keyed by `type` (not `objectId`),
@@ -498,7 +505,7 @@ class ProjectObjectRegistry {
     async fetchBaseTypes(source: Type): Promise<readonly Type[]> {
         const typesData = await this.client.apiRequest<TypeResponse[] | null>("getBaseTypes", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: source.id,
         });
         if (typesData == null) return [];
@@ -507,7 +514,7 @@ class ProjectObjectRegistry {
 }
 
 export class Project {
-    readonly id: string;
+    readonly id: Path;
     readonly configFileName: string;
     readonly compilerOptions: Record<string, unknown>;
     readonly rootFiles: readonly string[];
@@ -537,10 +544,10 @@ export class Project {
             sourceFileCache,
             toPath,
         );
-        const objectRegistry = new ProjectObjectRegistry(client, snapshotId, this.id, snapshotRegistry);
+        const objectRegistry = new ProjectObjectRegistry(client, snapshotId, this, snapshotRegistry);
         this.checker = new Checker(
             snapshotId,
-            this.id,
+            this,
             client,
             objectRegistry,
         );
@@ -554,7 +561,7 @@ export class Project {
 
 export class Program {
     private snapshotId: number;
-    private projectId: string;
+    private projectId: Path;
     private client: Client;
     private sourceFileCache: SourceFileCache;
     private toPath: (fileName: string) => Path;
@@ -563,7 +570,7 @@ export class Program {
 
     constructor(
         snapshotId: number,
-        projectId: string,
+        projectId: Path,
         client: Client,
         sourceFileCache: SourceFileCache,
         toPath: (fileName: string) => Path,
@@ -766,19 +773,19 @@ export class Program {
 
 export class Checker {
     private snapshotId: number;
-    private projectId: string;
+    private project: Project;
     private client: Client;
     private objectRegistry: ProjectObjectRegistry;
     private wellKnownSymbols: Promise<{ unknown: number; undefined: number; arguments: number; }> | undefined;
 
     constructor(
         snapshotId: number,
-        projectId: string,
+        project: Project,
         client: Client,
         objectRegistry: ProjectObjectRegistry,
     ) {
         this.snapshotId = snapshotId;
-        this.projectId = projectId;
+        this.project = project;
         this.client = client;
         this.objectRegistry = objectRegistry;
     }
@@ -793,14 +800,14 @@ export class Checker {
         if (Array.isArray(nodeOrNodes)) {
             const data = await this.client.apiRequest<(SymbolResponse | null)[]>("getSymbolsAtLocations", {
                 snapshot: this.snapshotId,
-                project: this.projectId,
+                project: this.project.id,
                 locations: nodeOrNodes.map(node => getNodeId(node)),
             });
             return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
         }
         const data = await this.client.apiRequest<SymbolResponse | null>("getSymbolAtLocation", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             location: getNodeId(nodeOrNodes as Node),
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
@@ -812,7 +819,7 @@ export class Checker {
         if (typeof positionOrPositions === "number") {
             const data = await this.client.apiRequest<SymbolResponse | null>("getSymbolAtPosition", {
                 snapshot: this.snapshotId,
-                project: this.projectId,
+                project: this.project.id,
                 file,
                 position: positionOrPositions,
             });
@@ -820,7 +827,7 @@ export class Checker {
         }
         const data = await this.client.apiRequest<(SymbolResponse | null)[]>("getSymbolsAtPositions", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             file,
             positions: positionOrPositions,
         });
@@ -833,14 +840,14 @@ export class Checker {
         if (Array.isArray(symbolOrSymbols)) {
             const data = await this.client.apiRequest<(TypeResponse | null)[]>("getTypesOfSymbols", {
                 snapshot: this.snapshotId,
-                project: this.projectId,
+                project: this.project.id,
                 symbols: symbolOrSymbols.map(s => s.id),
             });
             return data.map(d => d ? this.objectRegistry.getOrCreateType(d) : undefined);
         }
         const data = await this.client.apiRequest<TypeResponse | null>("getTypeOfSymbol", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             symbol: (symbolOrSymbols as Symbol).id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
@@ -854,7 +861,7 @@ export class Checker {
     async getDeclaredTypeOfSymbol(symbol: Symbol): Promise<Type> {
         const data = await this.client.apiRequest<TypeResponse | null>("getDeclaredTypeOfSymbol", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             symbol: symbol.id,
         });
         if (!data) throw new Error(`getDeclaredTypeOfSymbol returned no type for symbol ${symbol.id}`);
@@ -864,43 +871,43 @@ export class Checker {
     async getReferencesToSymbolInFile(file: DocumentIdentifier, symbol: Symbol): Promise<NodeHandle[]> {
         const data = await this.client.apiRequest<string[] | null>("getReferencesToSymbolInFile", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             file,
             symbol: symbol.id,
         });
-        return (data ?? []).map(h => new NodeHandle(h));
+        return (data ?? []).map(h => new NodeHandle(h, this.project));
     }
 
     async getReferencedSymbolsForNode(node: Node, position: number): Promise<ReferencedSymbolEntry[]> {
         const data = await this.client.apiRequest<{ definition: string; symbol?: SymbolResponse; references: string[]; }[] | null>("getReferencedSymbolsForNode", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             node: getNodeId(node),
             position,
         });
         return (data ?? []).map(entry => ({
-            definition: new NodeHandle(entry.definition),
+            definition: new NodeHandle(entry.definition, this.project),
             symbol: entry.symbol ? this.objectRegistry.getOrCreateSymbol(entry.symbol) : undefined,
-            references: (entry.references ?? []).map(h => new NodeHandle(h)),
+            references: (entry.references ?? []).map(h => new NodeHandle(h, this.project)),
         }));
     }
 
     async getSignatureUsage(signatureDecl: Node): Promise<SignatureUsage[]> {
         const data = await this.client.apiRequest<{ name: string; call?: string; }[] | null>("getSignatureUsages", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             signatureDecl: getNodeId(signatureDecl),
         });
         return (data ?? []).map(entry => ({
-            name: new NodeHandle(entry.name),
-            call: entry.call ? new NodeHandle(entry.call) : undefined,
+            name: new NodeHandle(entry.name, this.project),
+            call: entry.call ? new NodeHandle(entry.call, this.project) : undefined,
         }));
     }
 
     async getCompletionsAtPosition(document: string, position: number, options?: CompletionOptions): Promise<CompletionInfo | undefined> {
         const data = await this.client.apiRequest<CompletionInfoResponse | null>("getCompletionsAtPosition", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             file: document,
             position,
             triggerCharacter: options?.triggerCharacter,
@@ -922,14 +929,14 @@ export class Checker {
         if (Array.isArray(nodeOrNodes)) {
             const data = await this.client.apiRequest<(TypeResponse | null)[]>("getTypeAtLocations", {
                 snapshot: this.snapshotId,
-                project: this.projectId,
+                project: this.project.id,
                 locations: nodeOrNodes.map(node => getNodeId(node)),
             });
             return data.map(d => d ? this.objectRegistry.getOrCreateType(d) : undefined);
         }
         const data = await this.client.apiRequest<TypeResponse | null>("getTypeAtLocation", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             location: getNodeId(nodeOrNodes as Node),
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
@@ -938,7 +945,7 @@ export class Checker {
     async getSignaturesOfType(type: Type, kind: SignatureKind): Promise<readonly Signature[]> {
         const data = await this.client.apiRequest<SignatureResponse[]>("getSignaturesOfType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
             kind,
         });
@@ -948,7 +955,7 @@ export class Checker {
     async getResolvedSignature(node: Node): Promise<Signature | undefined> {
         const data = await this.client.apiRequest<SignatureResponse | null>("getResolvedSignature", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             location: getNodeId(node),
         });
         return data ? this.objectRegistry.getOrCreateSignature(data) : undefined;
@@ -960,7 +967,7 @@ export class Checker {
         if (typeof positionOrPositions === "number") {
             const data = await this.client.apiRequest<TypeResponse | null>("getTypeAtPosition", {
                 snapshot: this.snapshotId,
-                project: this.projectId,
+                project: this.project.id,
                 file,
                 position: positionOrPositions,
             });
@@ -968,7 +975,7 @@ export class Checker {
         }
         const data = await this.client.apiRequest<(TypeResponse | null)[]>("getTypesAtPositions", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             file,
             positions: positionOrPositions,
         });
@@ -985,7 +992,7 @@ export class Checker {
         const isNode = location && "kind" in location;
         const data = await this.client.apiRequest<SymbolResponse | null>("resolveName", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             name,
             meaning,
             location: isNode ? getNodeId(location as Node) : undefined,
@@ -1005,7 +1012,7 @@ export class Checker {
     async getContextualType(node: Expression): Promise<Type | undefined> {
         const data = await this.client.apiRequest<TypeResponse | null>("getContextualType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             location: getNodeId(node),
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
@@ -1014,7 +1021,7 @@ export class Checker {
     async getBaseTypeOfLiteralType(type: Type): Promise<Type | undefined> {
         const data = await this.client.apiRequest<TypeResponse | null>("getBaseTypeOfLiteralType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
@@ -1023,7 +1030,7 @@ export class Checker {
     async getNonNullableType(type: Type): Promise<Type | undefined> {
         const data = await this.client.apiRequest<TypeResponse | null>("getNonNullableType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
@@ -1032,7 +1039,7 @@ export class Checker {
     async getTypeFromTypeNode(node: TypeNode): Promise<Type | undefined> {
         const data = await this.client.apiRequest<TypeResponse | null>("getTypeFromTypeNode", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             location: getNodeId(node),
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
@@ -1041,7 +1048,7 @@ export class Checker {
     async getWidenedType(type: Type): Promise<Type | undefined> {
         const data = await this.client.apiRequest<TypeResponse | null>("getWidenedType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
@@ -1050,7 +1057,7 @@ export class Checker {
     async getParameterType(signature: Signature, index: number): Promise<Type | undefined> {
         const data = await this.client.apiRequest<TypeResponse | null>("getParameterType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             signature: signature.id,
             index,
         });
@@ -1060,7 +1067,7 @@ export class Checker {
     async isArrayLikeType(type: Type): Promise<boolean> {
         return this.client.apiRequest<boolean>("isArrayLikeType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
     }
@@ -1068,7 +1075,7 @@ export class Checker {
     async isTypeAssignableTo(source: Type, target: Type): Promise<boolean> {
         return this.client.apiRequest<boolean>("isTypeAssignableTo", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             source: source.id,
             target: target.id,
         });
@@ -1077,7 +1084,7 @@ export class Checker {
     async getShorthandAssignmentValueSymbol(node: Node): Promise<Symbol | undefined> {
         const data = await this.client.apiRequest<SymbolResponse | null>("getShorthandAssignmentValueSymbol", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             location: getNodeId(node),
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
@@ -1091,7 +1098,7 @@ export class Checker {
     async getTypeOfSymbolAtLocation(symbol: Symbol, location: Node): Promise<Type> {
         const data = await this.client.apiRequest<TypeResponse | null>("getTypeOfSymbolAtLocation", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             symbol: symbol.id,
             location: getNodeId(location),
         });
@@ -1102,7 +1109,7 @@ export class Checker {
     private async getIntrinsicType(method: string): Promise<Type> {
         const data = await this.client.apiRequest<TypeResponse>(method, {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
         });
         return this.objectRegistry.getOrCreateType(data);
     }
@@ -1144,7 +1151,7 @@ export class Checker {
     async typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: number): Promise<TypeNode | undefined> {
         const binaryData = await this.client.apiRequestBinary("typeToTypeNode", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
             location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
             flags,
@@ -1156,7 +1163,7 @@ export class Checker {
     async signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<Node | undefined> {
         const binaryData = await this.client.apiRequestBinary("signatureToSignatureDeclaration", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             signature: signature.id,
             kind,
             location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
@@ -1169,7 +1176,7 @@ export class Checker {
     async typeToString(type: Type, enclosingDeclaration?: Node, flags?: number): Promise<string> {
         return this.client.apiRequest<string>("typeToString", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
             location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
             flags,
@@ -1179,7 +1186,7 @@ export class Checker {
     async isContextSensitive(node: Node): Promise<boolean> {
         return this.client.apiRequest<boolean>("isContextSensitive", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             location: getNodeId(node),
         });
     }
@@ -1187,7 +1194,7 @@ export class Checker {
     async isArrayType(type: Type): Promise<boolean> {
         return this.client.apiRequest<boolean>("isArrayType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
     }
@@ -1195,7 +1202,7 @@ export class Checker {
     async isTupleType(type: Type): Promise<boolean> {
         return this.client.apiRequest<boolean>("isTupleType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
     }
@@ -1203,7 +1210,7 @@ export class Checker {
     async getReturnTypeOfSignature(signature: Signature): Promise<Type | undefined> {
         const data = await this.client.apiRequest<TypeResponse | null>("getReturnTypeOfSignature", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             signature: signature.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
@@ -1212,7 +1219,7 @@ export class Checker {
     async getRestTypeOfSignature(signature: Signature): Promise<Type | undefined> {
         const data = await this.client.apiRequest<TypeResponse | null>("getRestTypeOfSignature", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             signature: signature.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
@@ -1221,7 +1228,7 @@ export class Checker {
     async getTypePredicateOfSignature(signature: Signature): Promise<TypePredicate | undefined> {
         const data = await this.client.apiRequest<TypePredicateResponse | null>("getTypePredicateOfSignature", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             signature: signature.id,
         });
         if (!data) return undefined;
@@ -1240,7 +1247,7 @@ export class Checker {
     async getBaseTypes(type: InterfaceType): Promise<readonly Type[]> {
         const data = await this.client.apiRequest<TypeResponse[] | null>("getBaseTypes", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
         return data ? data.map(d => this.objectRegistry.getOrCreateType(d)) : [];
@@ -1249,7 +1256,7 @@ export class Checker {
     async getApparentType(type: Type): Promise<Type | undefined> {
         const data = await this.client.apiRequest<TypeResponse | null>("getApparentType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
@@ -1258,7 +1265,7 @@ export class Checker {
     async getPropertiesOfType(type: Type): Promise<readonly Symbol[]> {
         const data = await this.client.apiRequest<SymbolResponse[] | null>("getPropertiesOfType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
         return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
@@ -1267,7 +1274,7 @@ export class Checker {
     async getIndexInfosOfType(type: Type): Promise<readonly IndexInfo[]> {
         const data = await this.client.apiRequest<IndexInfoResponse[] | null>("getIndexInfosOfType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
         if (!data) return [];
@@ -1275,7 +1282,7 @@ export class Checker {
             keyType: this.objectRegistry.getOrCreateType(d.keyType),
             valueType: this.objectRegistry.getOrCreateType(d.valueType),
             isReadonly: d.isReadonly ?? false,
-            declaration: d.declaration ? new NodeHandle(d.declaration) : undefined,
+            declaration: d.declaration ? new NodeHandle(d.declaration, this.project) : undefined,
         }));
     }
 
@@ -1286,7 +1293,7 @@ export class Checker {
     async getConstraintOfTypeParameter(type: TypeParameter): Promise<Type | undefined> {
         const data = await this.client.apiRequest<TypeResponse | null>("getConstraintOfTypeParameter", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
@@ -1295,7 +1302,7 @@ export class Checker {
     async getBaseConstraintOfType(type: Type): Promise<Type | undefined> {
         const data = await this.client.apiRequest<TypeResponse | null>("getBaseConstraintOfType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
@@ -1304,7 +1311,7 @@ export class Checker {
     async getPropertyOfType(type: Type, name: string): Promise<Symbol | undefined> {
         const data = await this.client.apiRequest<SymbolResponse | null>("getPropertyOfType", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
             name,
         });
@@ -1314,7 +1321,7 @@ export class Checker {
     async getConstantValue(node: Node): Promise<string | number | undefined> {
         const data = await this.client.apiRequest<string | number | null>("getConstantValue", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             location: getNodeId(node),
         });
         return data ?? undefined;
@@ -1323,7 +1330,7 @@ export class Checker {
     async getSignatureFromDeclaration(node: Node): Promise<Signature | undefined> {
         const data = await this.client.apiRequest<SignatureResponse | null>("getSignatureFromDeclaration", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             location: getNodeId(node),
         });
         return data ? this.objectRegistry.getOrCreateSignature(data) : undefined;
@@ -1332,7 +1339,7 @@ export class Checker {
     async getExportSpecifierLocalTargetSymbol(node: Node): Promise<Symbol | undefined> {
         const data = await this.client.apiRequest<SymbolResponse | null>("getExportSpecifierLocalTargetSymbol", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             location: getNodeId(node),
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
@@ -1346,7 +1353,7 @@ export class Checker {
     async getAliasedSymbol(symbol: Symbol): Promise<Symbol> {
         const data = await this.client.apiRequest<SymbolResponse | null>("getAliasedSymbol", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             symbol: symbol.id,
         });
         if (!data) throw new Error(`getAliasedSymbol returned no symbol for symbol ${symbol.id}`);
@@ -1356,7 +1363,7 @@ export class Checker {
     async getImmediateAliasedSymbol(symbol: Symbol): Promise<Symbol | undefined> {
         const data = await this.client.apiRequest<SymbolResponse | null>("getImmediateAliasedSymbol", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             symbol: symbol.id,
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
@@ -1371,7 +1378,7 @@ export class Checker {
     private getWellKnownSymbols(): Promise<{ unknown: number; undefined: number; arguments: number; }> {
         return this.wellKnownSymbols ??= this.client.apiRequest<{ unknown: number; undefined: number; arguments: number; }>("getWellKnownSymbols", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
         });
     }
 
@@ -1400,7 +1407,7 @@ export class Checker {
     async getExportsOfModule(symbol: Symbol): Promise<readonly Symbol[]> {
         const data = await this.client.apiRequest<SymbolResponse[] | null>("getExportsOfModule", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             symbol: symbol.id,
         });
         return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
@@ -1409,7 +1416,7 @@ export class Checker {
     async getMemberInModuleExports(symbol: Symbol, name: string): Promise<Symbol | undefined> {
         const data = await this.client.apiRequest<SymbolResponse | null>("getMemberInModuleExports", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             symbol: symbol.id,
             name,
         });
@@ -1419,7 +1426,7 @@ export class Checker {
     async getJsDocTagsOfSymbol(symbol: Symbol): Promise<readonly JSDocTagInfo[]> {
         const data = await this.client.apiRequest<JSDocTagInfo[] | null>("getJsDocTags", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             symbol: symbol.id,
         });
         return data ?? [];
@@ -1428,7 +1435,7 @@ export class Checker {
     async getDocumentationCommentOfSymbol(symbol: Symbol): Promise<string> {
         return this.client.apiRequest<string>("getDocumentationComment", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             symbol: symbol.id,
         });
     }
@@ -1439,7 +1446,7 @@ export class Checker {
     async getTypeArguments(type: TypeReference): Promise<readonly Type[]> {
         const data = await this.client.apiRequest<TypeResponse[] | null>("getTypeArguments", {
             snapshot: this.snapshotId,
-            project: this.projectId,
+            project: this.project.id,
             type: type.id,
         });
         return data ? data.map(d => this.objectRegistry.getOrCreateType(d)) : [];
@@ -1470,22 +1477,30 @@ export class Emitter {
 }
 
 export class NodeHandle {
+    /**
+     * The project this handle was produced in, used as the default for {@link resolve}.
+     * Node handles are only meaningful within a project's program, so the producing project
+     * is remembered so callers don't have to pass it explicitly.
+     */
+    private readonly canonicalProject: Project;
     readonly index: number;
     readonly kind: SyntaxKind;
     readonly path: Path;
 
-    constructor(handle: string) {
+    constructor(handle: string, canonicalProject: Project) {
         const parsed = parseNodeHandle(handle);
         this.index = parsed.index;
         this.kind = parsed.kind;
         this.path = parsed.path;
+        this.canonicalProject = canonicalProject;
     }
 
     /**
-     * Resolve this handle to the actual AST node by fetching the source file
-     * from the given project and looking up the node by index.
+     * Resolve this handle to the actual AST node by fetching the source file from a project
+     * and looking up the node by index. If no project is passed, the project that produced
+     * the handle is used.
      */
-    async resolve(project: Project): Promise<Node | undefined> {
+    async resolve(project: Project = this.canonicalProject): Promise<Node | undefined> {
         const sourceFile = await project.program.getSourceFile(this.path);
         if (!sourceFile) {
             return undefined;
@@ -1514,6 +1529,12 @@ export interface SignatureUsage {
 
 export class Symbol {
     private objectRegistry: SnapshotObjectRegistry;
+    /**
+     * The project this symbol was first observed in, used as the default project for
+     * lookups that need a project context (members/exports/parent). Symbols are shared
+     * snapshot-wide, so these lookups can otherwise be ambiguous about which project to use.
+     */
+    private readonly canonicalProject: Project;
 
     readonly id: number;
     /** The escaped (`__String`) name, used as the key in member/export tables. */
@@ -1537,15 +1558,20 @@ export class Symbol {
         this.name = unescapeLeadingUnderscores(data.name);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags;
-        this.declarations = (data.declarations ?? []).map(d => new NodeHandle(d));
-        this.valueDeclaration = data.valueDeclaration ? new NodeHandle(data.valueDeclaration) : undefined;
+        const canonicalProject = objectRegistry.getProject(data.project);
+        if (!canonicalProject) {
+            throw new Error(`Symbol ${data.id} references unknown canonical project '${data.project}'`);
+        }
+        this.canonicalProject = canonicalProject;
+        this.declarations = (data.declarations ?? []).map(d => new NodeHandle(d, canonicalProject));
+        this.valueDeclaration = data.valueDeclaration ? new NodeHandle(data.valueDeclaration, canonicalProject) : undefined;
 
         if (data.parent !== undefined) this.parent = data.parent;
         if (data.exportSymbol !== undefined) this.exportSymbol = data.exportSymbol;
     }
 
     async getParent(): Promise<Symbol | undefined> {
-        return this.objectRegistry.fetchSymbol(this, "getParentOfSymbol", this.parent);
+        return this.objectRegistry.fetchSymbol(this, "getParentOfSymbol", this.parent, this.canonicalProject.id);
     }
 
     /**
@@ -1565,7 +1591,7 @@ export class Symbol {
     }
 
     private async fetchSymbolTable(method: string): Promise<ReadonlyMap<__String, Symbol>> {
-        const symbols = await this.objectRegistry.fetchSymbols(this, method);
+        const symbols = await this.objectRegistry.fetchSymbols(this, method, undefined, this.canonicalProject.id);
         const table = new Map<__String, Symbol>();
         for (const symbol of symbols) {
             table.set(symbol.escapedName, symbol);
@@ -1575,7 +1601,7 @@ export class Symbol {
 
     async getExportSymbol(): Promise<Symbol> {
         if (!this.exportSymbol) return this;
-        return this.objectRegistry.fetchSymbol(this, "getExportSymbolOfSymbol", this.exportSymbol);
+        return this.objectRegistry.fetchSymbol(this, "getExportSymbolOfSymbol", this.exportSymbol, this.canonicalProject.id);
     }
 
     async getJsDocTags(checker: Checker): Promise<readonly JSDocTagInfo[]> {
@@ -1927,11 +1953,11 @@ export class Signature {
     readonly thisParameter?: number | undefined;
     readonly target?: number | undefined;
 
-    constructor(data: SignatureResponse, objectRegistry: ProjectObjectRegistry) {
+    constructor(data: SignatureResponse, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.id = data.id;
         this.flags = data.flags;
         this.objectRegistry = objectRegistry;
-        this.declaration = data.declaration ? new NodeHandle(data.declaration) : undefined;
+        this.declaration = data.declaration ? new NodeHandle(data.declaration, project) : undefined;
         this.typeParameters = data.typeParameters ?? [];
         this.parameters = data.parameters ?? [];
         this.thisParameter = data.thisParameter;

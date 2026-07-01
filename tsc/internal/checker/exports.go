@@ -349,3 +349,7 @@ func (c *Checker) RemoveMissingOrUndefinedType(t *Type) *Type {
 func (c *Checker) GetWidenedType(t *Type) *Type {
 	return c.getWidenedType(t)
 }
+
+func (c *Checker) CompareSymbols(s1, s2 *ast.Symbol) int {
+	return c.compareSymbols(s1, s2)
+}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -43,6 +44,14 @@ type snapshotData struct {
 	// querying the same symbol from two different projects returns the same handle.
 	symbolRegistry   map[SymbolID]*ast.Symbol
 	symbolRegistryMu sync.RWMutex
+
+	// symbolCanonicalProjects records, for each registered symbol, the project it was
+	// first observed in. Because symbols are shared snapshot-wide (binder symbols are
+	// attached to source files, which can be shared across projects), lookups that need
+	// a project context (e.g. member/export ordering, node handle resolution) but don't
+	// receive one from the caller default to this canonical project. First-writer wins so
+	// the choice is stable. Guarded by symbolRegistryMu.
+	symbolCanonicalProjects map[SymbolID]ProjectID
 
 	projectRegistries   map[ProjectID]*projectRegistryData
 	projectRegistriesMu sync.RWMutex
@@ -120,13 +129,18 @@ func (sd *snapshotData) getOrCreateProjectRegistry(projectID ProjectID) *project
 }
 
 // newSymbolResponse registers a symbol in the snapshot's registry and returns the response.
-func (sd *snapshotData) newSymbolResponse(symbol *ast.Symbol) *SymbolResponse {
+// canonicalProject is the project the symbol was observed in and must be non-empty; it is recorded
+// as the symbol's canonical project (first writer wins) and returned to the client so it can default
+// project-scoped follow-up lookups (members/exports, node resolution) to it.
+func (sd *snapshotData) newSymbolResponse(symbol *ast.Symbol, canonicalProject ProjectID) *SymbolResponse {
 	if symbol == nil {
 		return nil
 	}
 
+	id, project := sd.registerSymbol(symbol, canonicalProject)
 	resp := &SymbolResponse{
-		Id:         sd.registerSymbol(symbol),
+		Id:         id,
+		Project:    project,
 		Name:       ast.EscapeSymbolName(symbol.Name),
 		Flags:      uint32(symbol.Flags),
 		CheckFlags: uint32(symbol.CheckFlags),
@@ -154,9 +168,17 @@ func (sd *snapshotData) newSymbolResponse(symbol *ast.Symbol) *SymbolResponse {
 	return resp
 }
 
-func (sd *snapshotData) registerSymbol(symbol *ast.Symbol) SymbolID {
+// registerSymbol registers a symbol in the snapshot's registry and returns its handle along with
+// its canonical project. The canonical project is the project the symbol was first observed in
+// (first writer wins for stability) and is always non-empty: every symbol handed to a client must
+// carry a project so that project-scoped follow-up lookups (members/exports, parent, node
+// resolution) have a default context. Callers must supply a non-empty project.
+func (sd *snapshotData) registerSymbol(symbol *ast.Symbol, canonicalProject ProjectID) (SymbolID, ProjectID) {
 	if symbol == nil {
-		return 0
+		return 0, ""
+	}
+	if canonicalProject == "" {
+		panic("registerSymbol requires a non-empty canonical project")
 	}
 	id := SymbolHandle(symbol)
 	sd.symbolRegistryMu.Lock()
@@ -166,10 +188,15 @@ func (sd *snapshotData) registerSymbol(symbol *ast.Symbol) SymbolID {
 		if existing != symbol {
 			panic("duplicate symbol")
 		}
-		return id
+	} else {
+		sd.symbolRegistry[id] = symbol
 	}
-	sd.symbolRegistry[id] = symbol
-	return id
+	project, ok := sd.symbolCanonicalProjects[id]
+	if !ok {
+		sd.symbolCanonicalProjects[id] = canonicalProject
+		project = canonicalProject
+	}
+	return id, project
 }
 
 // newTypeResponse registers a type in the project's registry and returns the response.
@@ -439,7 +466,7 @@ func (setup checkerSetup) newTypeResponse(t *checker.Type) *TypeResponse {
 }
 
 func (setup checkerSetup) newSymbolResponse(sym *ast.Symbol) *SymbolResponse {
-	return setup.sd.newSymbolResponse(sym)
+	return setup.sd.newSymbolResponse(sym, setup.projectID)
 }
 
 func (setup checkerSetup) newSignatureResponse(sig *checker.Signature) *SignatureResponse {
@@ -907,10 +934,11 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		sd.refCount++
 	} else {
 		sd = &snapshotData{
-			snapshot:          snapshot,
-			refCount:          1,
-			symbolRegistry:    make(map[SymbolID]*ast.Symbol),
-			projectRegistries: make(map[ProjectID]*projectRegistryData),
+			snapshot:                snapshot,
+			refCount:                1,
+			symbolRegistry:          make(map[SymbolID]*ast.Symbol),
+			symbolCanonicalProjects: make(map[SymbolID]ProjectID),
+			projectRegistries:       make(map[ProjectID]*projectRegistryData),
 		}
 		s.snapshots[handle] = sd
 	}
@@ -1456,14 +1484,14 @@ func (s *Session) handleGetParentOfSymbol(_ context.Context, params *GetSymbolPr
 	return s.resolveSymbolPropertyOfSymbol(params, func(sym *ast.Symbol) *ast.Symbol { return sym.Parent })
 }
 
-func (s *Session) handleGetMembersOfSymbol(_ context.Context, params *GetSymbolPropertyParams) ([]*SymbolResponse, error) {
-	return s.resolveSymbolTablePropertyOfSymbol(params, func(symbol *ast.Symbol) ast.SymbolTable {
+func (s *Session) handleGetMembersOfSymbol(ctx context.Context, params *GetSymbolPropertyParams) ([]*SymbolResponse, error) {
+	return s.resolveSymbolTablePropertyOfSymbol(ctx, params, func(symbol *ast.Symbol) ast.SymbolTable {
 		return symbol.Members
 	})
 }
 
-func (s *Session) handleGetExportsOfSymbol(_ context.Context, params *GetSymbolPropertyParams) ([]*SymbolResponse, error) {
-	return s.resolveSymbolTablePropertyOfSymbol(params, func(symbol *ast.Symbol) ast.SymbolTable {
+func (s *Session) handleGetExportsOfSymbol(ctx context.Context, params *GetSymbolPropertyParams) ([]*SymbolResponse, error) {
+	return s.resolveSymbolTablePropertyOfSymbol(ctx, params, func(symbol *ast.Symbol) ast.SymbolTable {
 		return symbol.Exports
 	})
 }
@@ -1622,7 +1650,7 @@ func (s *Session) resolveSymbolPropertyOfType(params *GetTypePropertyParams, get
 	if result == nil {
 		return nil, nil
 	}
-	return sd.newSymbolResponse(result), nil
+	return sd.newSymbolResponse(result, params.Project), nil
 }
 
 // resolveSymbolTablePropertyOfSymbol resolves a symbol property of type `Symbol` and returns a symbol response.
@@ -1641,11 +1669,13 @@ func (s *Session) resolveSymbolPropertyOfSymbol(params *GetSymbolPropertyParams,
 	if result == nil {
 		return nil, nil
 	}
-	return sd.newSymbolResponse(result), nil
+	return sd.newSymbolResponse(result, params.Project), nil
 }
 
 // resolveSymbolTablePropertyOfSymbol resolves a symbol property of type `SymbolTable` and returns an array of symbol responses.
-func (s *Session) resolveSymbolTablePropertyOfSymbol(params *GetSymbolPropertyParams, getter func(*ast.Symbol) ast.SymbolTable) ([]*SymbolResponse, error) {
+// Results are sorted using the checker's canonical symbol ordering so that API consumers receive
+// a stable, deterministic order instead of Go's randomized map iteration order.
+func (s *Session) resolveSymbolTablePropertyOfSymbol(ctx context.Context, params *GetSymbolPropertyParams, getter func(*ast.Symbol) ast.SymbolTable) ([]*SymbolResponse, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
 		return nil, err
@@ -1657,13 +1687,31 @@ func (s *Session) resolveSymbolTablePropertyOfSymbol(params *GetSymbolPropertyPa
 	}
 
 	symbolTable := getter(symbol)
-	if symbolTable == nil || len(symbolTable) == 0 {
+	if len(symbolTable) == 0 {
 		return nil, nil
 	}
+	if len(symbolTable) == 1 {
+		for _, sub := range symbolTable {
+			return []*SymbolResponse{sd.newSymbolResponse(sub, params.Project)}, nil
+		}
+	}
 
-	results := make([]*SymbolResponse, 0, len(symbolTable))
+	// More than one symbol, need a checker to sort
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbols := make([]*ast.Symbol, 0, len(symbolTable))
 	for _, sub := range symbolTable {
-		results = append(results, sd.newSymbolResponse(sub))
+		symbols = append(symbols, sub)
+	}
+	slices.SortFunc(symbols, setup.checker.CompareSymbols)
+
+	results := make([]*SymbolResponse, len(symbols))
+	for i, sub := range symbols {
+		results[i] = setup.newSymbolResponse(sub)
 	}
 	return results, nil
 }
@@ -1687,7 +1735,7 @@ func (s *Session) resolveSymbolArrayPropertyOfSignature(params *GetSignatureProp
 
 	results := make([]*SymbolResponse, len(symbols))
 	for i, sym := range symbols {
-		results[i] = sd.newSymbolResponse(sym)
+		results[i] = sd.newSymbolResponse(sym, params.Project)
 	}
 	return results, nil
 }
@@ -1708,7 +1756,7 @@ func (s *Session) resolveSymbolPropertyOfSignature(params *GetSignaturePropertyP
 	if result == nil {
 		return nil, nil
 	}
-	return sd.newSymbolResponse(result), nil
+	return sd.newSymbolResponse(result, params.Project), nil
 }
 
 func (s *Session) resolveTypeArrayPropertyOfSignature(params *GetSignaturePropertyParams, getter func(signature *checker.Signature) []*checker.Type) ([]*TypeResponse, error) {
@@ -2129,10 +2177,13 @@ func (s *Session) handleGetWellKnownSymbols(ctx context.Context, params *GetIntr
 	}
 	defer setup.done()
 
+	unknown, _ := setup.sd.registerSymbol(setup.checker.GetUnknownSymbol(), setup.projectID)
+	undefined, _ := setup.sd.registerSymbol(setup.checker.GetUndefinedSymbol(), setup.projectID)
+	arguments, _ := setup.sd.registerSymbol(setup.checker.GetArgumentsSymbol(), setup.projectID)
 	return &WellKnownSymbolsResponse{
-		Unknown:   setup.sd.registerSymbol(setup.checker.GetUnknownSymbol()),
-		Undefined: setup.sd.registerSymbol(setup.checker.GetUndefinedSymbol()),
-		Arguments: setup.sd.registerSymbol(setup.checker.GetArgumentsSymbol()),
+		Unknown:   unknown,
+		Undefined: undefined,
+		Arguments: arguments,
 	}, nil
 }
 
@@ -2564,6 +2615,7 @@ func (s *Session) handleGetExportsOfModule(ctx context.Context, params *CheckerS
 	if len(exports) == 0 {
 		return nil, nil
 	}
+	slices.SortFunc(exports, setup.checker.CompareSymbols)
 
 	results := make([]*SymbolResponse, len(exports))
 	for i, exp := range exports {
@@ -3180,7 +3232,7 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 			}
 		}
 		if item.Symbol != nil {
-			entry.Symbol = sd.newSymbolResponse(item.Symbol)
+			entry.Symbol = sd.newSymbolResponse(item.Symbol, params.Project)
 		}
 		entries = append(entries, entry)
 	}
@@ -3237,7 +3289,7 @@ func (s *Session) handleGetReferencedSymbolsForNode(ctx context.Context, params 
 			References: refs,
 		}
 		if sym := entry.DefinitionSymbol(); sym != nil {
-			re.Symbol = sd.newSymbolResponse(sym)
+			re.Symbol = sd.newSymbolResponse(sym, params.Project)
 		}
 		result = append(result, re)
 	}
