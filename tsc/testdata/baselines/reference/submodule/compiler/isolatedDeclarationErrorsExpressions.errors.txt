@@ -43,10 +43,10 @@ isolatedDeclarationErrorsExpressions.ts(103,5): error TS9012: Property must have
 isolatedDeclarationErrorsExpressions.ts(104,5): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(109,37): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(110,37): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
-isolatedDeclarationErrorsExpressions.ts(111,37): error TS9039: Type containing private name 'numberParam' can't be used with --isolatedDeclarations.
+isolatedDeclarationErrorsExpressions.ts(111,37): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(114,37): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(115,37): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
-isolatedDeclarationErrorsExpressions.ts(116,37): error TS9039: Type containing private name 'bigIntParam' can't be used with --isolatedDeclarations.
+isolatedDeclarationErrorsExpressions.ts(116,37): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(119,36): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(127,16): error TS9019: Binding elements can't be exported directly with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(128,19): error TS9019: Binding elements can't be exported directly with --isolatedDeclarations.
@@ -300,7 +300,7 @@ isolatedDeclarationErrorsExpressions.ts(128,19): error TS9019: Binding elements 
 !!! related TS9028 isolatedDeclarationErrorsExpressions.ts:110:33: Add a type annotation to the parameter p.
     export function numberParamBad3(p = numberParam): void { }
                                         ~~~~~~~~~~~
-!!! error TS9039: Type containing private name 'numberParam' can't be used with --isolatedDeclarations.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 !!! related TS9028 isolatedDeclarationErrorsExpressions.ts:111:33: Add a type annotation to the parameter p.
     
     export function bigIntParam(p = 1n): void { }
@@ -314,7 +314,7 @@ isolatedDeclarationErrorsExpressions.ts(128,19): error TS9019: Binding elements 
 !!! related TS9028 isolatedDeclarationErrorsExpressions.ts:115:33: Add a type annotation to the parameter p.
     export function bigIntParamBad3(p = bigIntParam): void { }
                                         ~~~~~~~~~~~
-!!! error TS9039: Type containing private name 'bigIntParam' can't be used with --isolatedDeclarations.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 !!! related TS9028 isolatedDeclarationErrorsExpressions.ts:116:33: Add a type annotation to the parameter p.
     
     export function stringParam(p = "s"): void { }

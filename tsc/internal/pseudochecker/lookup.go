@@ -668,6 +668,9 @@ func (ch *PseudoChecker) typeFromParameterWorker(node *ast.ParameterDeclaration,
 	}
 	if node.Initializer != nil && ast.IsIdentifier(node.Name()) && !isContextuallyTyped(node.AsNode()) {
 		expr := ch.typeFromExpression(node.Initializer)
+		if expr != nil && (expr.Kind == PseudoTypeKindInferred && len(expr.AsPseudoTypeInferred().ErrorNodes) == 0) {
+			expr = NewPseudoTypeInferredWithErrors(expr.AsPseudoTypeInferred().Expression, false, []*ast.Node{node.AsNode()}) // Move error up to the parameter
+		}
 		if !ch.strictNullChecks {
 			return expr
 		}
