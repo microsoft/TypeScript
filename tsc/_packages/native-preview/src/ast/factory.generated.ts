@@ -2987,27 +2987,27 @@ export function createImportSpecifier(isTypeOnly: boolean = false, propertyName:
     }) as unknown as ImportSpecifier;
 }
 
-export function createJSDocText(text: readonly string[]): JSDocText {
+export function createJSDocText(text: string): JSDocText {
     return new NodeObject(SyntaxKind.JSDocText, {
         text,
     }) as unknown as JSDocText;
 }
 
-export function createJSDocLink(name: EntityName | undefined, text: readonly string[]): JSDocLink {
+export function createJSDocLink(name: EntityName | undefined, text: string): JSDocLink {
     return new NodeObject(SyntaxKind.JSDocLink, {
         name,
         text,
     }) as unknown as JSDocLink;
 }
 
-export function createJSDocLinkPlain(name: EntityName | undefined, text: readonly string[]): JSDocLinkPlain {
+export function createJSDocLinkPlain(name: EntityName | undefined, text: string): JSDocLinkPlain {
     return new NodeObject(SyntaxKind.JSDocLinkPlain, {
         name,
         text,
     }) as unknown as JSDocLinkPlain;
 }
 
-export function createJSDocLinkCode(name: EntityName | undefined, text: readonly string[]): JSDocLinkCode {
+export function createJSDocLinkCode(name: EntityName | undefined, text: string): JSDocLinkCode {
     return new NodeObject(SyntaxKind.JSDocLinkCode, {
         name,
         text,

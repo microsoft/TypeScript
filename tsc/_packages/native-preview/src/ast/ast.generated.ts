@@ -487,7 +487,7 @@ export interface JSDocTagBase extends NodeBase {
     readonly comment?: NodeArray<JSDocComment>;
 }
 export interface JSDocCommentBase extends NodeBase {
-    readonly text: readonly string[];
+    readonly text: string;
 }
 
 export interface Token<TKind extends TokenSyntaxKind = TokenSyntaxKind> extends NodeBase {

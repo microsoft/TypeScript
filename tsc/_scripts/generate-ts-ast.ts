@@ -55,8 +55,22 @@ function tsInterfaceMembers(node: NodeType): MemberInfo[] {
 // TS-specific naming and typing
 // ────────────────────────────────────────────────────────────────────────────
 
-function tsParamTypeFrom(type: Type): string {
-    return type.kind === "list" ? type.raw().formatTypeScript() : type.formatTypeScript();
+// The JSDoc comment `text` member is stored as a raw []string in Go, but the
+// encoder joins it into a single string and both the RemoteNode API and the
+// local factory expose it as a scalar string. Collapse just this member to its
+// element type in the generated TS. This is intentionally keyed on the property
+// name rather than on "raw list of a primitive" so the exception stays narrow
+// and explicit; `text` is the only such member.
+function collapsedTextType(name: string, type: Type): string | undefined {
+    if (name === "text" && type.kind === "list" && type.listKind === "raw") {
+        return type.elementType.formatTypeScript();
+    }
+    return undefined;
+}
+
+function tsParamTypeFrom(name: string, type: Type): string {
+    return collapsedTextType(name, type)
+        ?? (type.kind === "list" ? type.raw().formatTypeScript() : type.formatTypeScript());
 }
 
 function tsParamName(propName: string): string {
@@ -146,7 +160,7 @@ function generateBaseFields(base: NodeType): string {
     for (const field of base.fields) {
         if (field.noTS) continue;
         const name = api.uncapitalize(field.name);
-        const type = field.type.formatTypeScript();
+        const type = collapsedTextType(field.name, field.type) ?? field.type.formatTypeScript();
         const opt = field.optional ? "?" : "";
         result += `\n    readonly ${name}${opt}: ${type};`;
     }
@@ -485,7 +499,7 @@ function generateFactory(): string {
         const kindTypeParam = kindTypeParameter(node);
         if (kindTypeParam) addType(kindTypeParam.constraint);
         for (const m of tsMembers(node)) {
-            addType(tsParamTypeFrom(m.type));
+            addType(tsParamTypeFrom(m.name, m.type));
             addType(m.type.formatTypeScript());
         }
     }
@@ -792,7 +806,7 @@ function generateFactory(): string {
             const m = members[mi];
             const propName = api.uncapitalize(m.name);
             const paramName = tsParamName(propName);
-            const paramType = tsParamTypeFrom(m.type);
+            const paramType = tsParamTypeFrom(m.name, m.type);
             const memberType = m.type;
             const isBool = !m.isChild() && memberType.kind === "primitive" && memberType.name === "bool";
 
@@ -900,7 +914,7 @@ function generateFactory(): string {
             for (const m of v.members) {
                 const propName = api.uncapitalize(m.name);
                 const paramName = tsParamName(propName);
-                const paramType = tsParamTypeFrom(m.type);
+                const paramType = tsParamTypeFrom(m.name, m.type);
                 if (m.optional) {
                     paramParts.push(`${paramName}: ${paramType} | undefined`);
                 }
@@ -956,7 +970,7 @@ function generateFactory(): string {
             const m = updateChildMembers[mi];
             const propName = api.uncapitalize(m.name);
             const paramName = tsParamName(propName);
-            const paramType = tsParamTypeFrom(m.type);
+            const paramType = tsParamTypeFrom(m.name, m.type);
             if (m.optional) {
                 if (mi < updateLastRequiredIdx) {
                     paramParts.push(`${paramName}: ${paramType} | undefined`);
@@ -1002,7 +1016,7 @@ function generateFactory(): string {
         for (const m of childMembers) {
             const propName = api.uncapitalize(m.name);
             const paramName = tsParamName(propName);
-            const paramType = tsParamTypeFrom(m.type);
+            const paramType = tsParamTypeFrom(m.name, m.type);
             if (m.optional) {
                 paramParts.push(`${paramName}: ${paramType} | undefined`);
             }
