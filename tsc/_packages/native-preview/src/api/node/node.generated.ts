@@ -36,6 +36,12 @@ import {
 } from "./protocol.ts";
 
 export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<RemoteNode> {
+    // Inherited Array methods like filter/map/slice use ArraySpeciesCreate, which would
+    // otherwise call `new RemoteNodeList(length)` and fail. Produce a plain Array instead.
+    static get [Symbol.species](): ArrayConstructor {
+        return Array;
+    }
+
     parent: RemoteNode;
     hasTrailingComma?: boolean;
     transformFlags: number = 0;

@@ -1511,6 +1511,12 @@ function emitNodeGeneratedImports(w: CodeWriter) {
 
 function emitRemoteNodeList(w: CodeWriter) {
     w.write(`export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<RemoteNode> {`);
+    w.write(`    // Inherited Array methods like filter/map/slice use ArraySpeciesCreate, which would`);
+    w.write(`    // otherwise call \`new RemoteNodeList(length)\` and fail. Produce a plain Array instead.`);
+    w.write(`    static get [Symbol.species](): ArrayConstructor {`);
+    w.write(`        return Array;`);
+    w.write(`    }`);
+    w.write(``);
     w.write(`    parent: RemoteNode;`);
     w.write(`    hasTrailingComma?: boolean;`);
     w.write(`    transformFlags: number = 0;`);
