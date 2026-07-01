@@ -2,21 +2,6 @@
 # These are known diffs that we intend to fix.
 # Each group should include a link to the tracking issue.
 
-# https://github.com/microsoft/typescript-go/issues/3410
-compiler/anonClassDeclarationEmitIsAnon.types.diff
-compiler/baseConstraintOfDecorator.types.diff
-compiler/baseExpressionTypeParameters.types.diff
-compiler/declarationEmitGenericTypeParamerSerialization3.types.diff
-compiler/declarationEmitLocalClassDeclarationMixin.types.diff
-
-# Bug: test harness doesn't report tsconfig errors
-## https://github.com/microsoft/typescript-go/issues/3475
-compiler/deprecatedCompilerOptions1.errors.txt.diff
-compiler/deprecatedCompilerOptions3.errors.txt.diff
-compiler/deprecatedCompilerOptions4.errors.txt.diff
-compiler/deprecatedCompilerOptions5.errors.txt.diff
-
-
 # Omnibus: Isolated declarations error changes - needs investigation
 ## https://github.com/microsoft/typescript-go/issues/3477
 compiler/isolatedDeclarationErrorsExpandoFunctions.errors.txt.diff
@@ -37,29 +22,3 @@ compiler/exportAssignmentMembersVisibleInAugmentation.errors.txt.diff
 compiler/multiLinePropertyAccessAndArrowFunctionIndent1.errors.txt.diff
 compiler/parseErrorIncorrectReturnToken.errors.txt.diff
 conformance/parserStatementIsNotAMemberVariableDeclaration1(alwaysstrict=true).errors.txt.diff
-
-# Namespace-to-const restructuring with DtsFileErrors (redeclaration errors)
-## https://github.com/microsoft/typescript-go/issues/3547
-conformance/typeFromPropertyAssignment39.js.diff
-
-# Optional property types in JS declarations drop | undefined
-## https://github.com/microsoft/typescript-go/issues/3550
-conformance/jsDeclarationsOptionalTypeLiteralProps1.js.diff
-conformance/jsDeclarationsOptionalTypeLiteralProps2.js.diff
-
-# @satisfies tag handling changes: functions become const declarations
-## https://github.com/microsoft/typescript-go/issues/3557
-conformance/checkJsdocSatisfiesTag15.js.diff
-
-# noImplicitThis functions returning this now fully expand the object type
-## https://github.com/microsoft/typescript-go/issues/3561
-compiler/noImplicitThisBigThis.js.diff
-
-# Late-bound computed property [prop] preserved instead of resolved to plain prop
-## https://github.com/microsoft/typescript-go/issues/3566
-
-# Symbol getter/setter declaration emit change
-## https://github.com/microsoft/typescript-go/issues/3567
-
-# Declaration emit simplification of class extending built-in Array
-## https://github.com/microsoft/typescript-go/issues/3569
