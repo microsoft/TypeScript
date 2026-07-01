@@ -4,10 +4,13 @@ import type {
     __String,
     Path,
 } from "../ast/index.ts";
+import type { CompilerOptions } from "./compilerOptions.ts";
 import {
     documentURIToFileName,
     fileNameToDocumentURI,
 } from "./path.ts";
+
+export type { CompilerOptions } from "./compilerOptions.ts";
 
 /**
  * A document identifier that can be either a file name (path string) or a document URI object.
@@ -168,7 +171,7 @@ export interface UpdateSnapshotResponse {
 export interface ProjectResponse {
     id: Path;
     configFileName: string;
-    compilerOptions: Record<string, unknown>;
+    compilerOptions: CompilerOptions;
     rootFiles: string[];
 }
 
