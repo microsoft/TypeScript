@@ -89,9 +89,9 @@ declare namespace Intl {
         weekend: number[];
         /**
          * An integer between 1 and 7 indicating the minimum number of days in the first week of a year or month for this locale.
-          *
-           * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getWeekInfo#minimaldays)
-            */
+         *
+         * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getWeekInfo#minimaldays)
+         */
         minimalDays: number;
     }
 }
