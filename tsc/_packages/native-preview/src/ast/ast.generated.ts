@@ -5,6 +5,7 @@ import type { NodeFlags } from "#enums/nodeFlags";
 import { SyntaxKind } from "#enums/syntaxKind";
 import { TokenFlags } from "#enums/tokenFlags";
 import type {
+    JsxTagNamePropertyAccess,
     Node,
     NodeArray,
 } from "./ast.ts";
@@ -1355,7 +1356,7 @@ export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElem
 export type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
 export type JsxAttributeName = Identifier | JsxNamespacedName;
 export type JsxAttributeValue = StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
-export type JsxTagNameExpression = Identifier | KeywordExpression | PropertyAccessExpression | JsxNamespacedName;
+export type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName;
 export type ClassLikeDeclaration = ClassDeclaration | ClassExpression;
 export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
 export type LiteralLikeNode = StringLiteral | NumericLiteral | BigIntLiteral | RegularExpressionLiteral | TemplateLiteralLikeNode | JsxText;

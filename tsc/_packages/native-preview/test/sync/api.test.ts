@@ -11,12 +11,14 @@ import {
     cast,
     escapeLeadingUnderscores,
     type Expression,
+    getJSDocTags,
     getSynthesizedDeepClone,
     InternalSymbolName,
     isCallExpression,
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
+    isJSDocParameterTag,
     isNamedImports,
     isReturnStatement,
     isShorthandPropertyAssignment,
@@ -27,6 +29,7 @@ import {
     isTypeAliasDeclaration,
     isTypeNode,
     isVariableDeclarationList,
+    isVariableStatement,
     type Node,
     type NodeArray,
     NodeFlags,
@@ -2867,6 +2870,160 @@ describe("ast - escapeLeadingUnderscores", () => {
         assert.equal(unescapeLeadingUnderscores("foo" as __String), "foo");
         assert.equal(unescapeLeadingUnderscores("__type" as __String), "__type");
         assert.equal(unescapeLeadingUnderscores("___foo" as __String), "__foo");
+    });
+});
+
+describe("ast - getJSDocTags", () => {
+    test("returns a node's own tags, and inherited @param / @template tags", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+/**
+ * Adds two numbers.
+ * @param a the first number
+ * @param b the second number
+ * @returns the sum
+ */
+export function add(a: number, b: number): number {
+    return a + b;
+}
+
+/**
+ * @template T the element type
+ * @param x a value
+ */
+export function identity<T>(x: T): T {
+    return x;
+}
+
+/** @deprecated use add */
+export const total = add(1, 2);
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const functions = [...sourceFile.statements].filter(isFunctionDeclaration);
+            const add = functions[0];
+            const identity = functions[1];
+            assert.ok(add);
+            assert.ok(identity);
+
+            // A function reports its own JSDoc tags.
+            assert.deepEqual(getJSDocTags(add).map(t => t.tagName.text), ["param", "param", "returns"]);
+
+            // A parameter inherits the matching @param tag from its containing
+            // signature.
+            const paramA = add.parameters[0];
+            const paramATags = getJSDocTags(paramA);
+            assert.deepEqual(paramATags.map(t => t.tagName.text), ["param"]);
+            const paramATag = paramATags[0];
+            assert.ok(isJSDocParameterTag(paramATag));
+            assert.ok(isIdentifier(paramATag.name));
+            assert.equal(paramATag.name.text, "a");
+
+            const paramB = add.parameters[1];
+            const paramBTags = getJSDocTags(paramB);
+            assert.deepEqual(paramBTags.map(t => t.tagName.text), ["param"]);
+            const paramBTag = paramBTags[0];
+            assert.ok(isJSDocParameterTag(paramBTag));
+            assert.ok(isIdentifier(paramBTag.name));
+            assert.equal(paramBTag.name.text, "b");
+
+            // A type parameter inherits the matching @template tag.
+            const typeParam = identity.typeParameters![0];
+            assert.deepEqual(getJSDocTags(typeParam).map(t => t.tagName.text), ["template"]);
+
+            // The value parameter of `identity` inherits its @param tag.
+            const identityParam = identity.parameters[0];
+            assert.deepEqual(getJSDocTags(identityParam).map(t => t.tagName.text), ["param"]);
+
+            // A variable declaration walks up its comment-location chain
+            // (declaration -> declaration list -> statement) to the JSDoc on the
+            // containing variable statement.
+            const variable = sourceFile.statements.find(isVariableStatement);
+            assert.ok(variable);
+            const declaration = variable.declarationList.declarations[0];
+            assert.deepEqual(getJSDocTags(declaration).map(t => t.tagName.text), ["deprecated"]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("a function-expression parameter inherits @param tags from the variable statement", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { allowJs: true, checkJs: true } }),
+            "/src/main.js": `
+/**
+ * @param {string} name a name
+ * @returns {number} the length
+ */
+var measure = function (name) {
+    return name.length;
+};
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.js");
+            assert.ok(sourceFile);
+            const variable = sourceFile.statements.find(isVariableStatement);
+            assert.ok(variable);
+            const declaration = variable.declarationList.declarations[0];
+            const funcExpr = declaration.initializer;
+            assert.ok(funcExpr);
+
+            // The variable statement carries the @param and @returns tags.
+            assert.deepEqual(getJSDocTags(declaration).map(t => t.tagName.text), ["param", "returns"]);
+
+            // The function expression's parameter walks declaration -> list ->
+            // statement and inherits the matching @param tag.
+            const param = (funcExpr as unknown as { parameters: NodeArray<Node>; }).parameters[0];
+            const paramTags = getJSDocTags(param);
+            assert.deepEqual(paramTags.map(t => t.tagName.text), ["param"]);
+            const paramTag = paramTags[0];
+            assert.ok(isJSDocParameterTag(paramTag));
+            assert.ok(isIdentifier(paramTag.name));
+            assert.equal(paramTag.name.text, "name");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("a @type cast tag is owned by its parenthesized expression, not the declaration", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { allowJs: true, checkJs: true } }),
+            "/src/main.js": `
+/** @type {string} */
+const value = "hello";
+
+const cast = /** @type {number} */ (someValue);
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.js");
+            assert.ok(sourceFile);
+            const statements = [...sourceFile.statements].filter(isVariableStatement);
+
+            // A @type tag directly on a declaration is reported for that declaration.
+            const valueDecl = statements[0].declarationList.declarations[0];
+            assert.deepEqual(getJSDocTags(valueDecl).map(t => t.tagName.text), ["type"]);
+
+            // A @type cast tag attached to a parenthesized expression is owned by
+            // that expression and is not reported for the enclosing declaration.
+            const castDecl = statements[1].declarationList.declarations[0];
+            assert.deepEqual(getJSDocTags(castDecl).map(t => t.tagName.text), []);
+        }
+        finally {
+            api.close();
+        }
     });
 });
 

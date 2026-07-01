@@ -15,6 +15,7 @@ import type {
     PropertyAccessExpression,
     PunctuationSyntaxKind,
     Statement,
+    ThisExpression,
     Token,
 } from "./ast.generated.ts";
 
@@ -110,3 +111,7 @@ export interface PropertyAccessEntityNameExpression extends PropertyAccessExpres
 
 export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
 export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
+
+export interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
+    readonly expression: Identifier | ThisExpression | JsxTagNamePropertyAccess;
+}

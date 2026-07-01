@@ -5240,8 +5240,8 @@
             ],
             "JsxTagNameExpression": [
                 "Identifier",
-                "KeywordExpression",
-                "PropertyAccessExpression",
+                "ThisExpression",
+                "JsxTagNamePropertyAccess",
                 "JsxNamespacedName"
             ],
             "ClassLikeDeclaration": [

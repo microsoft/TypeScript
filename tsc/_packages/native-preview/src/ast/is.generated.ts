@@ -175,7 +175,6 @@ import type {
     JsxOpeningLikeElement,
     JsxSelfClosingElement,
     JsxSpreadAttribute,
-    JsxTagNameExpression,
     JsxText,
     JsxTokenSyntaxKind,
     KeywordExpression,
@@ -1198,11 +1197,6 @@ export function isJsxAttributeName(node: Node): node is JsxAttributeName {
 export function isJsxAttributeValue(node: Node): node is JsxAttributeValue {
     const kind = node.kind;
     return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.JsxExpression || kind === SyntaxKind.JsxElement || kind === SyntaxKind.JsxSelfClosingElement || kind === SyntaxKind.JsxFragment;
-}
-
-export function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression {
-    const kind = node.kind;
-    return kind === SyntaxKind.Identifier || kind === SyntaxKind.NullKeyword || kind === SyntaxKind.TrueKeyword || kind === SyntaxKind.FalseKeyword || kind === SyntaxKind.ThisKeyword || kind === SyntaxKind.SuperKeyword || kind === SyntaxKind.ImportKeyword || kind === SyntaxKind.PropertyAccessExpression || kind === SyntaxKind.JsxNamespacedName;
 }
 
 export function isClassLikeDeclaration(node: Node): node is ClassLikeDeclaration {
