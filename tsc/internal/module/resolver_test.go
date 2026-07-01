@@ -298,6 +298,37 @@ func TestResolveSubpathNilContentsRace(t *testing.T) {
 	}
 }
 
+func TestParseNodeModuleFromPath(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		path     string
+		isFolder bool
+		want     string
+	}{
+		{"file in package", "/a/node_modules/b/lib/index.d.ts", false, "/a/node_modules/b"},
+		{"file in scoped package", "/a/node_modules/@scope/b/lib/index.d.ts", false, "/a/node_modules/@scope/b"},
+		{"folder subpath", "/a/node_modules/b/lib/File", true, "/a/node_modules/b"},
+		{"folder subpath scoped", "/a/node_modules/@scope/b/lib/File", true, "/a/node_modules/@scope/b"},
+		{"package root folder", "/a/node_modules/b", true, "/a/node_modules/b"},
+		{"scoped package root folder", "/a/node_modules/@scope/b", true, "/a/node_modules/@scope/b"},
+		// A bare scope directory has no package name; must not panic (https://github.com/microsoft/typescript-go/issues/4373).
+		{"scope-only folder", "/a/node_modules/@scope", true, "/a/node_modules/@scope"},
+		{"types scope-only folder", "/a/node_modules/@types", true, "/a/node_modules/@types"},
+		{"not in node_modules", "/a/src/index.ts", false, ""},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := module.ParseNodeModuleFromPath(tt.path, tt.isFolder); got != tt.want {
+				t.Errorf("ParseNodeModuleFromPath(%q, %v) = %q, want %q", tt.path, tt.isFolder, got, tt.want)
+			}
+		})
+	}
+}
+
 // Regression test for https://github.com/microsoft/typescript-go/issues/4478.
 //
 // While resolving a package with peerDependencies, two goroutines look up the

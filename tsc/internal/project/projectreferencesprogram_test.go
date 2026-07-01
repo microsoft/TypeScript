@@ -250,6 +250,42 @@ func TestProjectReferencesProgram(t *testing.T) {
 		assert.Assert(t, barFile != nil)
 	})
 
+	t.Run("references through symlink with directory index subpath (issue 4373)", func(t *testing.T) {
+		t.Parallel()
+		files, aIndex, bFile := filesForDirectorySubpathSymlinkReferences("")
+		session, _ := projecttestutil.Setup(files)
+		uri := lsconv.FileNameToDocumentURI(aIndex)
+		session.DidOpenFile(context.Background(), uri, 1, files[aIndex].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot := session.Snapshot()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		p := snapshot.ProjectCollection.Projects()[0]
+		assert.Equal(t, p.Kind, project.KindConfigured)
+
+		// The import must redirect to source, so the source file is part of the program...
+		assert.Assert(t, p.Program.GetSourceFile(bFile) != nil)
+		// ...and there must be no `TS2307: Cannot find module 'b/lib/File'` diagnostic.
+		diagnostics := p.Program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), p.Program.GetSourceFile(aIndex))
+		assert.Equal(t, len(diagnostics), 0)
+	})
+
+	t.Run("references through symlink with directory index subpath scoped package", func(t *testing.T) {
+		t.Parallel()
+		files, aIndex, bFile := filesForDirectorySubpathSymlinkReferences("@issue/")
+		session, _ := projecttestutil.Setup(files)
+		uri := lsconv.FileNameToDocumentURI(aIndex)
+		session.DidOpenFile(context.Background(), uri, 1, files[aIndex].(string), lsproto.LanguageKindTypeScript)
+
+		snapshot := session.Snapshot()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		p := snapshot.ProjectCollection.Projects()[0]
+		assert.Equal(t, p.Kind, project.KindConfigured)
+
+		assert.Assert(t, p.Program.GetSourceFile(bFile) != nil)
+		diagnostics := p.Program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), p.Program.GetSourceFile(aIndex))
+		assert.Equal(t, len(diagnostics), 0)
+	})
+
 	t.Run("when new file is added to referenced project", func(t *testing.T) {
 		t.Parallel()
 		files := filesForReferencedProjectProgram(false)
@@ -358,6 +394,26 @@ func filesForSymlinkReferencesInSubfolder(preserveSymlinks bool, scope string) (
 	addConfigForPackage(files, "A", preserveSymlinks, []string{"../B"})
 	addConfigForPackage(files, "B", preserveSymlinks, nil)
 	return files, aTest, bFoo, bBar
+}
+
+func filesForDirectorySubpathSymlinkReferences(scope string) (files map[string]any, aIndex string, bFile string) {
+	aIndex = "/user/username/projects/myproject/packages/a/src/index.ts"
+	bFile = "/user/username/projects/myproject/packages/b/src/File/index.ts"
+	files = map[string]any{
+		"/user/username/projects/myproject/packages/b/package.json": `{
+			"main": "lib/index.js",
+			"types": "lib/index.d.ts"
+		}`,
+		aIndex: fmt.Sprintf(`
+			import { helper } from "%sb/lib/File";
+			export const result: number = helper();
+		`, scope),
+		bFile: `export function helper(): number { return 1; }`,
+		fmt.Sprintf("/user/username/projects/myproject/node_modules/%sb", scope): vfstest.Symlink("/user/username/projects/myproject/packages/b"),
+	}
+	addConfigForPackage(files, "a", false, []string{"../b"})
+	addConfigForPackage(files, "b", false, nil)
+	return files, aIndex, bFile
 }
 
 func addConfigForPackage(files map[string]any, packageName string, preserveSymlinks bool, references []string) {
