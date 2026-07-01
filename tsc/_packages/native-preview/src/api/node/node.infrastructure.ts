@@ -2,7 +2,6 @@ import {
     type FileReference,
     ModifierFlags,
     type Node,
-    type NodeArray,
     SyntaxKind,
 } from "../../ast/index.ts";
 import {
@@ -38,6 +37,11 @@ export const NODE_EXTENDED_DATA_MASK = 0x00_ff_ff_ff;
 // SourceFileInfo — the interface RemoteNode/RemoteNodeList need from the
 // source file, avoiding a direct dependency on RemoteSourceFile.
 // ═══════════════════════════════════════════════════════════════════════════
+
+// The global type is not available in earlier @types/node versions
+export interface TextDecoder {
+    decode(input?: ArrayBufferView | ArrayBufferLike): string;
+}
 
 export interface SourceFileInfo {
     readonly _offsetNodes: number;

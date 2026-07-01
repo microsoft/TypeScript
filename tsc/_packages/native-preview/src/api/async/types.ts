@@ -177,7 +177,7 @@ export interface IntersectionType extends UnionOrIntersectionType {
 /** Type parameters (TypeFlags.TypeParameter) */
 export interface TypeParameter extends Type {
     /** True if this is the synthetic `this` type of an interface, class, or tuple */
-    readonly isThisType?: boolean;
+    readonly isThisType?: boolean | undefined;
 }
 
 /** Index types — keyof T (TypeFlags.Index) */
@@ -282,7 +282,7 @@ export interface IndexInfo {
     /** Whether the index signature is readonly */
     readonly isReadonly: boolean;
     /** The index signature declaration, if any */
-    readonly declaration?: NodeHandle;
+    readonly declaration?: NodeHandle | undefined;
 }
 
 /**
@@ -292,32 +292,32 @@ export interface JSDocTagInfo {
     /** The tag name, without the leading `@` — e.g. `"param"`. */
     readonly name: string;
     /** The rendered tag text, if any — e.g. `"a the first number"` for `@param a the first number`. */
-    readonly text?: string;
+    readonly text?: string | undefined;
 }
 
 export interface CompletionEntryLabelDetails {
-    detail?: string;
-    description?: string;
+    detail?: string | undefined;
+    description?: string | undefined;
 }
 
 /** Options for {@link Checker.getCompletionsAtPosition}. */
 export interface CompletionOptions {
-    triggerCharacter?: string;
+    triggerCharacter?: string | undefined;
     /** Include a `symbol` property on each completion entry. Only populated for symbol-based completions (not keywords or literals). */
-    includeSymbol?: boolean;
+    includeSymbol?: boolean | undefined;
 }
 
 /** A single completion item returned by {@link Checker.getCompletionsAtPosition}. */
 export interface CompletionEntry {
     readonly name: string;
-    readonly kind?: CompletionItemKind;
-    readonly sortText?: string;
-    readonly insertText?: string;
-    readonly filterText?: string;
-    readonly detail?: string;
-    readonly labelDetails?: CompletionEntryLabelDetails;
+    readonly kind?: CompletionItemKind | undefined;
+    readonly sortText?: string | undefined;
+    readonly insertText?: string | undefined;
+    readonly filterText?: string | undefined;
+    readonly detail?: string | undefined;
+    readonly labelDetails?: CompletionEntryLabelDetails | undefined;
     /** The symbol associated with this completion entry. Only set when `includeSymbol: true` is passed and a symbol is available. */
-    readonly symbol?: Symbol;
+    readonly symbol?: Symbol | undefined;
 }
 
 /** The result of {@link Checker.getCompletionsAtPosition}. */
@@ -331,7 +331,7 @@ export interface CompletionInfo {
  */
 export interface Diagnostic {
     /** File name of the source file this diagnostic belongs to, if any */
-    readonly fileName?: string;
+    readonly fileName?: string | undefined;
     /** Start position of the diagnostic */
     readonly pos: number;
     /** End position of the diagnostic */
@@ -343,11 +343,11 @@ export interface Diagnostic {
     /** Localized diagnostic message text */
     readonly text: string;
     /** Whether this diagnostic highlights unnecessary code */
-    readonly reportsUnnecessary?: boolean;
+    readonly reportsUnnecessary?: boolean | undefined;
     /** Whether this diagnostic highlights deprecated code */
-    readonly reportsDeprecated?: boolean;
+    readonly reportsDeprecated?: boolean | undefined;
     /** Chained diagnostic messages */
-    readonly messageChain?: readonly Diagnostic[];
+    readonly messageChain?: readonly Diagnostic[] | undefined;
     /** Related diagnostic information */
-    readonly relatedInformation?: readonly Diagnostic[];
+    readonly relatedInformation?: readonly Diagnostic[] | undefined;
 }

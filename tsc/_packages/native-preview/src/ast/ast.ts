@@ -55,7 +55,7 @@ export interface Node extends ReadonlyTextRange {
     readonly kind: SyntaxKind;
     readonly flags: NodeFlags;
     readonly parent: Node;
-    readonly jsDoc?: readonly Node[];
+    readonly jsDoc?: readonly Node[] | undefined;
     forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined;
     getSourceFile(): SourceFile;
     getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;

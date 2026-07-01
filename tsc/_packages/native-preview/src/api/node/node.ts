@@ -14,6 +14,7 @@ import {
 import {
     NODE_EXTENDED_DATA_MASK,
     type SourceFileInfo,
+    type TextDecoder,
 } from "./node.infrastructure.ts";
 import {
     HEADER_OFFSET_EXTENDED_DATA,

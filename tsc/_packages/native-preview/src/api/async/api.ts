@@ -1447,9 +1447,9 @@ export class Checker {
 }
 
 export interface PrintNodeOptions {
-    preserveSourceNewlines?: boolean;
-    neverAsciiEscape?: boolean;
-    terminateUnterminatedLiterals?: boolean;
+    preserveSourceNewlines?: boolean | undefined;
+    neverAsciiEscape?: boolean | undefined;
+    terminateUnterminatedLiterals?: boolean | undefined;
 }
 
 export class Emitter {
@@ -1499,7 +1499,7 @@ export interface ReferencedSymbolEntry {
     /** The node handle for the symbol's definition. */
     definition: NodeHandle;
     /** The resolved symbol for the definition, if available. */
-    symbol?: Symbol;
+    symbol?: Symbol | undefined;
     /** The node handles for each reference to the symbol. */
     references: NodeHandle[];
 }
@@ -1509,7 +1509,7 @@ export interface SignatureUsage {
     /** The node handle for the name reference. */
     name: NodeHandle;
     /** The node handle for the call expression, if the reference is invoked. */
-    call?: NodeHandle;
+    call?: NodeHandle | undefined;
 }
 
 export class Symbol {
