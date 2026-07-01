@@ -19,9 +19,7 @@
 // | 
 // | *@param* `options` — the args object
 // | 
-// | 
 // | *@param* `callback` — the callback function
-// | 
 // | 
 // | *@returns*
 // | ----------------------------------------------------------------------
@@ -39,7 +37,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nfunction fn(options: any, callback?: null): void\n```\n\n\n*@param* `options` — the args object\n\n\n*@param* `callback` — the callback function\n\n\n*@returns*"
+        "value": "```typescript\nfunction fn(options: any, callback?: null): void\n```\n\n\n*@param* `options` — the args object\n\n*@param* `callback` — the callback function\n\n*@returns*"
       },
       "range": {
         "start": {

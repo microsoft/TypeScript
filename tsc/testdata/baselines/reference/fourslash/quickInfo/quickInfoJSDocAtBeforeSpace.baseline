@@ -12,7 +12,6 @@
 // | 
 // | 
 // | *@return* — Don't @ me
-// | 
 // | ----------------------------------------------------------------------
 // /**
 //  * @return One final @
@@ -26,7 +25,6 @@
 // | 
 // | 
 // | *@return* — One final @
-// | 
 // | ----------------------------------------------------------------------
 // /**
 //  * @return An @
@@ -42,7 +40,6 @@
 // | 
 // | *@return* — An @
 // | But another line
-// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -58,7 +55,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nfunction f(): void\n```\n\n\n*@return* — Don't @ me\n"
+        "value": "```typescript\nfunction f(): void\n```\n\n\n*@return* — Don't @ me"
       },
       "range": {
         "start": {
@@ -85,7 +82,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nfunction g(): void\n```\n\n\n*@return* — One final @\n"
+        "value": "```typescript\nfunction g(): void\n```\n\n\n*@return* — One final @"
       },
       "range": {
         "start": {
@@ -112,7 +109,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nfunction h(): void\n```\n\n\n*@return* — An @\nBut another line\n"
+        "value": "```typescript\nfunction h(): void\n```\n\n\n*@return* — An @\nBut another line"
       },
       "range": {
         "start": {

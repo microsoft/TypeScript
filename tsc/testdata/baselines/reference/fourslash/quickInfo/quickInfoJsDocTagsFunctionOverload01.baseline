@@ -25,7 +25,6 @@
 // | Doc foo overloaded
 // | 
 // | *@tag* — Tag text
-// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -68,7 +67,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nfunction foo(x: number): void\n```\nDoc foo overloaded\n\n*@tag* — Tag text\n"
+        "value": "```typescript\nfunction foo(x: number): void\n```\nDoc foo overloaded\n\n*@tag* — Tag text"
       },
       "range": {
         "start": {

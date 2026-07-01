@@ -13,7 +13,6 @@
 // | ----------------------------------------------------------------------
 // | Circle(**radius: number**): Circle
 // | - `radius: number`: The radius of the circle.
-
 // | Initialize a circle.
 // | ----------------------------------------------------------------------
 [
@@ -40,7 +39,7 @@
               "label": "radius: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "The radius of the circle.\n"
+                "value": "The radius of the circle."
               }
             }
           ],

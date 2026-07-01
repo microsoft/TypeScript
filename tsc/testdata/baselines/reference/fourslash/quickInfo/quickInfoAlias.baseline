@@ -10,7 +10,6 @@
 // | Doc
 // | 
 // | *@tag* — Tag text
-// | 
 // | ----------------------------------------------------------------------
 === /c.ts ===
 // /**
@@ -33,7 +32,6 @@
 // | Doc
 // | 
 // | *@tag* — Tag text
-// | 
 // | ----------------------------------------------------------------------
 
 
@@ -51,7 +49,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text\n"
+        "value": "```typescript\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text"
       },
       "range": {
         "start": {
@@ -78,7 +76,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text\n"
+        "value": "```typescript\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text"
       },
       "range": {
         "start": {

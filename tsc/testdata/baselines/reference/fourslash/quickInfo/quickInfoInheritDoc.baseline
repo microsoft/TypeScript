@@ -48,7 +48,6 @@
 // | *@inheritDoc*
 // | 
 // | *@param* `mySpecificStuff` — Description of my specific parameter.
-// | 
 // | ----------------------------------------------------------------------
 //         let useful = '';
 // 
@@ -74,9 +73,7 @@
 // | 
 // | *@param* `stuff1` — SubClass.func1.stuff1
 // | 
-// | 
 // | *@returns* — SubClass.func1.returns
-// | 
 // | ----------------------------------------------------------------------
 //     }
 // 
@@ -94,7 +91,6 @@
 // | text over tag
 // | 
 // | *@inheritDoc* — text after tag
-// | 
 // | ----------------------------------------------------------------------
 // }
 [
@@ -111,7 +107,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(method) SubClass.doSomethingUseful(mySpecificStuff?: {\n    tiger: string;\n    lion: string;\n}): string\n```\n\n\n*@inheritDoc*\n\n*@param* `mySpecificStuff` — Description of my specific parameter.\n"
+        "value": "```typescript\n(method) SubClass.doSomethingUseful(mySpecificStuff?: {\n    tiger: string;\n    lion: string;\n}): string\n```\n\n\n*@inheritDoc*\n\n*@param* `mySpecificStuff` — Description of my specific parameter."
       },
       "range": {
         "start": {
@@ -138,7 +134,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(method) SubClass.func1(stuff1: any): void\n```\n\n\n*@inheritDoc*\n\n*@param* `stuff1` — SubClass.func1.stuff1\n\n\n*@returns* — SubClass.func1.returns\n"
+        "value": "```typescript\n(method) SubClass.func1(stuff1: any): void\n```\n\n\n*@inheritDoc*\n\n*@param* `stuff1` — SubClass.func1.stuff1\n\n*@returns* — SubClass.func1.returns"
       },
       "range": {
         "start": {
@@ -165,7 +161,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(property) SubClass.someProperty: string\n```\ntext over tag\n\n*@inheritDoc* — text after tag\n"
+        "value": "```typescript\n(property) SubClass.someProperty: string\n```\ntext over tag\n\n*@inheritDoc* — text after tag"
       },
       "range": {
         "start": {

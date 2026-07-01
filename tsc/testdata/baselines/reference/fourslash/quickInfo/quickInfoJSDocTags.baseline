@@ -58,7 +58,6 @@
 // | This is the constructor.
 // | 
 // | *@myjsdoctag* — this is a comment
-// | 
 // | ----------------------------------------------------------------------
 //                   ^
 // | ----------------------------------------------------------------------
@@ -73,7 +72,6 @@
 // | This is class Foo.
 // | 
 // | *@mytag* — comment1 comment2
-// | 
 // | ----------------------------------------------------------------------
 //     ^^^^^^^
 // | ----------------------------------------------------------------------
@@ -83,7 +81,6 @@
 // | method1 documentation
 // | 
 // | *@mytag* — comment1 comment2
-// | 
 // | ----------------------------------------------------------------------
 //             ^
 // | ----------------------------------------------------------------------
@@ -112,7 +109,6 @@
 // | 
 // | 
 // | *@returns* — a value
-// | 
 // | ----------------------------------------------------------------------
 //             ^
 // | ----------------------------------------------------------------------
@@ -128,9 +124,7 @@
 // | 
 // | *@param* `foo` — A value.
 // | 
-// | 
 // | *@returns* — Another value
-// | 
 // | 
 // | *@mytag*
 // | ----------------------------------------------------------------------
@@ -143,7 +137,6 @@
 // | 
 // | 
 // | *@mytag* — comment1 comment2
-// | 
 // | ----------------------------------------------------------------------
 // foo.property2;
 //     ^^^^^^^^^
@@ -156,9 +149,7 @@
 // | *@mytag1* — some comments
 // | some more comments about mytag1
 // | 
-// | 
 // | *@mytag2* — here all the comments are on a new line
-// | 
 // | 
 // | *@mytag3*
 // | 
@@ -196,7 +187,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nconstructor Foo(value: number): Foo\n```\nThis is the constructor.\n\n*@myjsdoctag* — this is a comment\n"
+        "value": "```typescript\nconstructor Foo(value: number): Foo\n```\nThis is the constructor.\n\n*@myjsdoctag* — this is a comment"
       },
       "range": {
         "start": {
@@ -236,7 +227,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nclass Foo\n```\nThis is class Foo.\n\n*@mytag* — comment1 comment2\n"
+        "value": "```typescript\nclass Foo\n```\nThis is class Foo.\n\n*@mytag* — comment1 comment2"
       },
       "range": {
         "start": {
@@ -264,7 +255,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(method) Foo.method1(): void\n```\nmethod1 documentation\n\n*@mytag* — comment1 comment2\n"
+        "value": "```typescript\n(method) Foo.method1(): void\n```\nmethod1 documentation\n\n*@mytag* — comment1 comment2"
       },
       "range": {
         "start": {
@@ -342,7 +333,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(method) Foo.method3(): number\n```\n\n\n*@returns* — a value\n"
+        "value": "```typescript\n(method) Foo.method3(): number\n```\n\n\n*@returns* — a value"
       },
       "range": {
         "start": {
@@ -381,7 +372,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(method) Foo.method4(foo: string): number\n```\n\n\n*@param* `foo` — A value.\n\n\n*@returns* — Another value\n\n\n*@mytag*"
+        "value": "```typescript\n(method) Foo.method4(foo: string): number\n```\n\n\n*@param* `foo` — A value.\n\n*@returns* — Another value\n\n*@mytag*"
       },
       "range": {
         "start": {
@@ -408,7 +399,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(property) Foo.property1: string\n```\n\n\n*@mytag* — comment1 comment2\n"
+        "value": "```typescript\n(property) Foo.property1: string\n```\n\n\n*@mytag* — comment1 comment2"
       },
       "range": {
         "start": {
@@ -435,7 +426,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(property) Foo.property2: number\n```\n\n\n*@mytag1* — some comments\nsome more comments about mytag1\n\n\n*@mytag2* — here all the comments are on a new line\n\n\n*@mytag3*\n\n*@mytag*"
+        "value": "```typescript\n(property) Foo.property2: number\n```\n\n\n*@mytag1* — some comments\nsome more comments about mytag1\n\n*@mytag2* — here all the comments are on a new line\n\n*@mytag3*\n\n*@mytag*"
       },
       "range": {
         "start": {

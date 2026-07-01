@@ -18,7 +18,6 @@
 // | (property) https: number
 // | ```
 // | ://wass
-// | 
 // | ----------------------------------------------------------------------
 // */
 // 
@@ -41,7 +40,7 @@
 // | ```
 // | 
 // | 
-// | *@see* — https://hvad 
+// | *@see* — https://hvad
 // | ----------------------------------------------------------------------
 // 
 // /** @see {@link https://hva} */
@@ -53,7 +52,7 @@
 // | ```
 // | 
 // | 
-// | *@see* — [https://hva](https://hva) 
+// | *@see* — [https://hva](https://hva)
 // | ----------------------------------------------------------------------
 // 
 // /** {@link https://hvaD} */
@@ -106,7 +105,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(property) https: number\n```\n://wass\n"
+        "value": "```typescript\n(property) https: number\n```\n://wass"
       },
       "range": {
         "start": {
@@ -160,7 +159,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nvar see1: boolean\n```\n\n\n*@see* — https://hvad "
+        "value": "```typescript\nvar see1: boolean\n```\n\n\n*@see* — https://hvad"
       },
       "range": {
         "start": {
@@ -187,7 +186,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nvar see2: boolean\n```\n\n\n*@see* — [https://hva](https://hva) "
+        "value": "```typescript\nvar see2: boolean\n```\n\n\n*@see* — [https://hva](https://hva)"
       },
       "range": {
         "start": {

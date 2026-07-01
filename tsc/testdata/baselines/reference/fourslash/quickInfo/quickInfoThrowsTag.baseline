@@ -35,7 +35,6 @@
 // | 
 // | 
 // | *@throws* — {E} description
-// | 
 // | ----------------------------------------------------------------------
 // f3()
 // ^^
@@ -46,7 +45,6 @@
 // | 
 // | 
 // | *@throws* — description
-// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -89,7 +87,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nfunction f2(): void\n```\n\n\n*@throws* — {E} description\n"
+        "value": "```typescript\nfunction f2(): void\n```\n\n\n*@throws* — {E} description"
       },
       "range": {
         "start": {
@@ -116,7 +114,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nfunction f3(): void\n```\n\n\n*@throws* — description\n"
+        "value": "```typescript\nfunction f3(): void\n```\n\n\n*@throws* — description"
       },
       "range": {
         "start": {

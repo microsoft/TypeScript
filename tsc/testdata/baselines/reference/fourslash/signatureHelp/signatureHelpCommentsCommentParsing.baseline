@@ -170,14 +170,12 @@
 // | ----------------------------------------------------------------------
 // | sum(**a: number**, b: number): number
 // | - `a: number`: first number
-
 // | Adds two integers and returns the result
 // | ----------------------------------------------------------------------
 //         ^
 // | ----------------------------------------------------------------------
 // | sum(a: number, **b: number**): number
 // | - `b: number`: second number
-
 // | Adds two integers and returns the result
 // | ----------------------------------------------------------------------
 // /** This is multiplication function
@@ -194,7 +192,6 @@
 // | ----------------------------------------------------------------------
 // | multiply(**a: number**, b: number, c?: number, d?: any, e?: any): void
 // | - `a: number`: first number
-
 // | This is multiplication function
 // | ----------------------------------------------------------------------
 //             ^
@@ -215,7 +212,7 @@
 //                          ^
 // | ----------------------------------------------------------------------
 // | multiply(a: number, b: number, c?: number, d?: any, **e?: any**): void
-// | - `e?: any`: LastParam 
+// | - `e?: any`: LastParam
 // | This is multiplication function
 // | ----------------------------------------------------------------------
 // /** fn f1 with number
@@ -238,7 +235,6 @@
 // | ----------------------------------------------------------------------
 // | f1(**b: string**): any
 // | - `b: string`: about b
-
 // | fn f1 with number
 // | ----------------------------------------------------------------------
 // 
@@ -262,28 +258,24 @@
 // | ----------------------------------------------------------------------
 // | subtract(a: number, **b: number**, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void
 // | - `b: number`: this is about b
-
 // | This is subtract function
 // | ----------------------------------------------------------------------
 //                   ^
 // | ----------------------------------------------------------------------
 // | subtract(a: number, b: number, **c?: () => string**, d?: () => string, e?: () => string, f?: () => string): void
 // | - `c?: () => string`: this is optional param c
-
 // | This is subtract function
 // | ----------------------------------------------------------------------
 //                          ^
 // | ----------------------------------------------------------------------
 // | subtract(a: number, b: number, c?: () => string, **d?: () => string**, e?: () => string, f?: () => string): void
 // | - `d?: () => string`: this is optional param d
-
 // | This is subtract function
 // | ----------------------------------------------------------------------
 //                                 ^
 // | ----------------------------------------------------------------------
 // | subtract(a: number, b: number, c?: () => string, d?: () => string, **e?: () => string**, f?: () => string): void
 // | - `e?: () => string`: this is optional param e
-
 // | This is subtract function
 // | ----------------------------------------------------------------------
 //                                        ^
@@ -304,7 +296,6 @@
 // | ----------------------------------------------------------------------
 // | square(**a: number**): number
 // | - `a: number`: this is input number
-
 // | this is square function
 // | ----------------------------------------------------------------------
 // /** this is divide function
@@ -319,14 +310,12 @@
 // | ----------------------------------------------------------------------
 // | divide(**a: number**, b: number): void
 // | - `a: number`: this is a
-
 // | this is divide function
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
 // | divide(a: number, **b: number**): void
 // | - `b: number`: this is b
-
 // | this is divide function
 // | ----------------------------------------------------------------------
 // /**
@@ -342,14 +331,12 @@
 // | ----------------------------------------------------------------------
 // | fooBar(**foo: string**, bar: string): string
 // | - `foo: string`: is string
-
 // | Function returns string concat of foo and bar
 // | ----------------------------------------------------------------------
 //              ^
 // | ----------------------------------------------------------------------
 // | fooBar(foo: string, **bar: string**): string
 // | - `bar: string`: is second string
-
 // | Function returns string concat of foo and bar
 // | ----------------------------------------------------------------------
 // /** This is a comment */
@@ -386,7 +373,6 @@
 // | ----------------------------------------------------------------------
 // | jsDocParamTest(a: number, b: number, **c: number**, d: number): number
 // | - `c: number`: it is third parameter
-
 // | this is jsdoc style function with param tag as well as inline parameter help
 // | ----------------------------------------------------------------------
 //                            ^
@@ -437,7 +423,6 @@
 // | jsDocCommentAlignmentTest3(**a: string**, b: any, c: any): void
 // | - `a: string`: this is info about a
 spanning on two lines and aligned perfectly
-
 // | This is function comment
 // |     And aligned with 4 space char margin
 // | ----------------------------------------------------------------------
@@ -448,7 +433,6 @@ spanning on two lines and aligned perfectly
 spanning on two lines and aligned perfectly
 spanning one more line alined perfectly
     spanning another line with more margin
-
 // | This is function comment
 // |     And aligned with 4 space char margin
 // | ----------------------------------------------------------------------
@@ -457,7 +441,6 @@ spanning one more line alined perfectly
 // | jsDocCommentAlignmentTest3(a: string, b: any, **c: any**): void
 // | - `c: any`: this is info about b
 not aligned text about parameter will eat only one space
-
 // | This is function comment
 // |     And aligned with 4 space char margin
 // | ----------------------------------------------------------------------
@@ -808,14 +791,14 @@ not aligned text about parameter will eat only one space
               "label": "a: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "first number\n"
+                "value": "first number"
               }
             },
             {
               "label": "b: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "second number\n"
+                "value": "second number"
               }
             }
           ],
@@ -848,14 +831,14 @@ not aligned text about parameter will eat only one space
               "label": "a: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "first number\n"
+                "value": "first number"
               }
             },
             {
               "label": "b: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "second number\n"
+                "value": "second number"
               }
             }
           ],
@@ -888,7 +871,7 @@ not aligned text about parameter will eat only one space
               "label": "a: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "first number\n"
+                "value": "first number"
               }
             },
             {
@@ -904,7 +887,7 @@ not aligned text about parameter will eat only one space
               "label": "e?: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "LastParam "
+                "value": "LastParam"
               }
             }
           ],
@@ -937,7 +920,7 @@ not aligned text about parameter will eat only one space
               "label": "a: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "first number\n"
+                "value": "first number"
               }
             },
             {
@@ -953,7 +936,7 @@ not aligned text about parameter will eat only one space
               "label": "e?: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "LastParam "
+                "value": "LastParam"
               }
             }
           ],
@@ -986,7 +969,7 @@ not aligned text about parameter will eat only one space
               "label": "a: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "first number\n"
+                "value": "first number"
               }
             },
             {
@@ -1002,7 +985,7 @@ not aligned text about parameter will eat only one space
               "label": "e?: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "LastParam "
+                "value": "LastParam"
               }
             }
           ],
@@ -1035,7 +1018,7 @@ not aligned text about parameter will eat only one space
               "label": "a: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "first number\n"
+                "value": "first number"
               }
             },
             {
@@ -1051,7 +1034,7 @@ not aligned text about parameter will eat only one space
               "label": "e?: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "LastParam "
+                "value": "LastParam"
               }
             }
           ],
@@ -1084,7 +1067,7 @@ not aligned text about parameter will eat only one space
               "label": "a: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "first number\n"
+                "value": "first number"
               }
             },
             {
@@ -1100,7 +1083,7 @@ not aligned text about parameter will eat only one space
               "label": "e?: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "LastParam "
+                "value": "LastParam"
               }
             }
           ],
@@ -1146,7 +1129,7 @@ not aligned text about parameter will eat only one space
               "label": "b: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "about b\n"
+                "value": "about b"
               }
             }
           ],
@@ -1192,7 +1175,7 @@ not aligned text about parameter will eat only one space
               "label": "b: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "about b\n"
+                "value": "about b"
               }
             }
           ],
@@ -1228,28 +1211,28 @@ not aligned text about parameter will eat only one space
               "label": "b: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is about b\n"
+                "value": "this is about b"
               }
             },
             {
               "label": "c?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param c\n"
+                "value": "this is optional param c"
               }
             },
             {
               "label": "d?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param d\n"
+                "value": "this is optional param d"
               }
             },
             {
               "label": "e?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param e\n"
+                "value": "this is optional param e"
               }
             },
             {
@@ -1288,28 +1271,28 @@ not aligned text about parameter will eat only one space
               "label": "b: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is about b\n"
+                "value": "this is about b"
               }
             },
             {
               "label": "c?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param c\n"
+                "value": "this is optional param c"
               }
             },
             {
               "label": "d?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param d\n"
+                "value": "this is optional param d"
               }
             },
             {
               "label": "e?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param e\n"
+                "value": "this is optional param e"
               }
             },
             {
@@ -1348,28 +1331,28 @@ not aligned text about parameter will eat only one space
               "label": "b: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is about b\n"
+                "value": "this is about b"
               }
             },
             {
               "label": "c?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param c\n"
+                "value": "this is optional param c"
               }
             },
             {
               "label": "d?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param d\n"
+                "value": "this is optional param d"
               }
             },
             {
               "label": "e?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param e\n"
+                "value": "this is optional param e"
               }
             },
             {
@@ -1408,28 +1391,28 @@ not aligned text about parameter will eat only one space
               "label": "b: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is about b\n"
+                "value": "this is about b"
               }
             },
             {
               "label": "c?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param c\n"
+                "value": "this is optional param c"
               }
             },
             {
               "label": "d?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param d\n"
+                "value": "this is optional param d"
               }
             },
             {
               "label": "e?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param e\n"
+                "value": "this is optional param e"
               }
             },
             {
@@ -1468,28 +1451,28 @@ not aligned text about parameter will eat only one space
               "label": "b: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is about b\n"
+                "value": "this is about b"
               }
             },
             {
               "label": "c?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param c\n"
+                "value": "this is optional param c"
               }
             },
             {
               "label": "d?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param d\n"
+                "value": "this is optional param d"
               }
             },
             {
               "label": "e?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param e\n"
+                "value": "this is optional param e"
               }
             },
             {
@@ -1528,28 +1511,28 @@ not aligned text about parameter will eat only one space
               "label": "b: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is about b\n"
+                "value": "this is about b"
               }
             },
             {
               "label": "c?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param c\n"
+                "value": "this is optional param c"
               }
             },
             {
               "label": "d?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param d\n"
+                "value": "this is optional param d"
               }
             },
             {
               "label": "e?: () => string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is optional param e\n"
+                "value": "this is optional param e"
               }
             },
             {
@@ -1585,7 +1568,7 @@ not aligned text about parameter will eat only one space
               "label": "a: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is input number\n"
+                "value": "this is input number"
               }
             }
           ],
@@ -1618,14 +1601,14 @@ not aligned text about parameter will eat only one space
               "label": "a: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is a\n"
+                "value": "this is a"
               }
             },
             {
               "label": "b: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is b\n"
+                "value": "this is b"
               }
             }
           ],
@@ -1658,14 +1641,14 @@ not aligned text about parameter will eat only one space
               "label": "a: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is a\n"
+                "value": "this is a"
               }
             },
             {
               "label": "b: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is b\n"
+                "value": "this is b"
               }
             }
           ],
@@ -1698,14 +1681,14 @@ not aligned text about parameter will eat only one space
               "label": "foo: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "is string\n"
+                "value": "is string"
               }
             },
             {
               "label": "bar: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "is second string\n"
+                "value": "is second string"
               }
             }
           ],
@@ -1738,14 +1721,14 @@ not aligned text about parameter will eat only one space
               "label": "foo: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "is string\n"
+                "value": "is string"
               }
             },
             {
               "label": "bar: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "is second string\n"
+                "value": "is second string"
               }
             }
           ],
@@ -1804,7 +1787,7 @@ not aligned text about parameter will eat only one space
               "label": "c: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "it is third parameter\n"
+                "value": "it is third parameter"
               }
             },
             {
@@ -1854,7 +1837,7 @@ not aligned text about parameter will eat only one space
               "label": "c: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "it is third parameter\n"
+                "value": "it is third parameter"
               }
             },
             {
@@ -1904,7 +1887,7 @@ not aligned text about parameter will eat only one space
               "label": "c: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "it is third parameter\n"
+                "value": "it is third parameter"
               }
             },
             {
@@ -1954,7 +1937,7 @@ not aligned text about parameter will eat only one space
               "label": "c: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "it is third parameter\n"
+                "value": "it is third parameter"
               }
             },
             {
@@ -2038,21 +2021,21 @@ not aligned text about parameter will eat only one space
               "label": "a: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is info about a\nspanning on two lines and aligned perfectly\n"
+                "value": "this is info about a\nspanning on two lines and aligned perfectly"
               }
             },
             {
               "label": "b: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin\n"
+                "value": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin"
               }
             },
             {
               "label": "c: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is info about b\nnot aligned text about parameter will eat only one space\n"
+                "value": "this is info about b\nnot aligned text about parameter will eat only one space"
               }
             }
           ],
@@ -2085,21 +2068,21 @@ not aligned text about parameter will eat only one space
               "label": "a: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is info about a\nspanning on two lines and aligned perfectly\n"
+                "value": "this is info about a\nspanning on two lines and aligned perfectly"
               }
             },
             {
               "label": "b: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin\n"
+                "value": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin"
               }
             },
             {
               "label": "c: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is info about b\nnot aligned text about parameter will eat only one space\n"
+                "value": "this is info about b\nnot aligned text about parameter will eat only one space"
               }
             }
           ],
@@ -2132,21 +2115,21 @@ not aligned text about parameter will eat only one space
               "label": "a: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is info about a\nspanning on two lines and aligned perfectly\n"
+                "value": "this is info about a\nspanning on two lines and aligned perfectly"
               }
             },
             {
               "label": "b: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin\n"
+                "value": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin"
               }
             },
             {
               "label": "c: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "this is info about b\nnot aligned text about parameter will eat only one space\n"
+                "value": "this is info about b\nnot aligned text about parameter will eat only one space"
               }
             }
           ],

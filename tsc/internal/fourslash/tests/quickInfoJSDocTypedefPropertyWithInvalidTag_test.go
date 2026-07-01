@@ -70,13 +70,13 @@ const obj5 = { /*5n*/name: "", /*5a*/age: 10 };
 	f.VerifyQuickInfoAt(t, "t3", "type MyType3 = {\n    name: string;\n    age: number;\n}", "")
 	f.VerifyQuickInfoAt(t, "t4", "type MyType4 = {\n    name: string;\n    age: number;\n}", "")
 	f.VerifyQuickInfoAt(t, "t5", "type MyType5 = {\n    name: string;\n}", ""+
-		"\n\n*@foo* — *bar\n"+
-		"\n\n*@property* — {number} age\n")
+		"\n\n*@foo* — *bar"+
+		"\n\n*@property* — {number} age")
 
-	f.VerifyQuickInfoAt(t, "1n", "(property) name: string", "@-rule\n")
-	f.VerifyQuickInfoAt(t, "2n", "(property) name: string", "some comment\n")
-	f.VerifyQuickInfoAt(t, "3n", "(property) name: string", "@*stars\n")
-	f.VerifyQuickInfoAt(t, "4n", "(property) name: string", "@(parens)\n")
+	f.VerifyQuickInfoAt(t, "1n", "(property) name: string", "@-rule")
+	f.VerifyQuickInfoAt(t, "2n", "(property) name: string", "some comment")
+	f.VerifyQuickInfoAt(t, "3n", "(property) name: string", "@*stars")
+	f.VerifyQuickInfoAt(t, "4n", "(property) name: string", "@(parens)")
 	f.VerifyQuickInfoAt(t, "5n", "(property) name: string", "")
 
 	f.VerifyQuickInfoAt(t, "1a", "(property) age: number", "")

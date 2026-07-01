@@ -27,7 +27,7 @@ f/*f*/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.GoToMarker(t, "f")
-	f.VerifyQuickInfoIs(t, "function f(x: string): string", "`{@link foo}` initial at-param is OK in title comment\n\n*@param* `x` — hi there `{@link foo}`\n")
+	f.VerifyQuickInfoIs(t, "function f(x: string): string", "`{@link foo}` initial at-param is OK in title comment\n\n*@param* `x` — hi there `{@link foo}`")
 	f.GoToMarker(t, "x")
-	f.VerifyQuickInfoIs(t, "(parameter) x: string", "hi there `{@link foo}`\n")
+	f.VerifyQuickInfoIs(t, "(parameter) x: string", "hi there `{@link foo}`")
 }

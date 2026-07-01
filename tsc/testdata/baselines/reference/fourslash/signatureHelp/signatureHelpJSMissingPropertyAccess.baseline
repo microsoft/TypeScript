@@ -5,7 +5,6 @@
 // | ----------------------------------------------------------------------
 // | ReadonlyArray.filter<S extends T>(**predicate: (value: T, index: number, array: readonly T[]) => value is S**, thisArg?: any): S[]
 // | - `predicate: (value: T, index: number, array: readonly T[]) => value is S`: A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
-
 // | Returns the elements of an array that meet the condition specified in a callback function.
 // | ----------------------------------------------------------------------
 [
@@ -32,14 +31,14 @@
               "label": "predicate: (value: T, index: number, array: readonly T[]) => value is S",
               "documentation": {
                 "kind": "markdown",
-                "value": "A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.\n"
+                "value": "A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array."
               }
             },
             {
               "label": "thisArg?: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.\n"
+                "value": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value."
               }
             }
           ],
@@ -56,14 +55,14 @@
               "label": "predicate: (value: T, index: number, array: readonly T[]) => unknown",
               "documentation": {
                 "kind": "markdown",
-                "value": "A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.\n"
+                "value": "A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array."
               }
             },
             {
               "label": "thisArg?: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.\n"
+                "value": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value."
               }
             }
           ],

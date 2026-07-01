@@ -26,19 +26,16 @@
 // | ----------------------------------------------------------------------
 // | t(**eventName: string**, eventName2: number | string, eventName3: any): number
 // | - `eventName: string`: - So many words
-
 // | ----------------------------------------------------------------------
 //        ^
 // | ----------------------------------------------------------------------
 // | t(eventName: string, **eventName2: number | string**, eventName3: any): number
 // | - `eventName2: number | string`: - Silence is golden
-
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
 // | t(eventName: string, eventName2: number | string, **eventName3: any**): number
 // | - `eventName3: any`: - Osterreich mos def
-
 // | ----------------------------------------------------------------------
 [
   {
@@ -60,21 +57,21 @@
               "label": "eventName: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- So many words\n"
+                "value": "- So many words"
               }
             },
             {
               "label": "eventName2: number | string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- Silence is golden\n"
+                "value": "- Silence is golden"
               }
             },
             {
               "label": "eventName3: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "- Osterreich mos def\n"
+                "value": "- Osterreich mos def"
               }
             }
           ],
@@ -103,21 +100,21 @@
               "label": "eventName: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- So many words\n"
+                "value": "- So many words"
               }
             },
             {
               "label": "eventName2: number | string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- Silence is golden\n"
+                "value": "- Silence is golden"
               }
             },
             {
               "label": "eventName3: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "- Osterreich mos def\n"
+                "value": "- Osterreich mos def"
               }
             }
           ],
@@ -146,21 +143,21 @@
               "label": "eventName: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- So many words\n"
+                "value": "- So many words"
               }
             },
             {
               "label": "eventName2: number | string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- Silence is golden\n"
+                "value": "- Silence is golden"
               }
             },
             {
               "label": "eventName3: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "- Osterreich mos def\n"
+                "value": "- Osterreich mos def"
               }
             }
           ],

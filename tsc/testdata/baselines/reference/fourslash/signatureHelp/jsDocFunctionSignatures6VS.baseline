@@ -12,25 +12,21 @@
 // | ----------------------------------------------------------------------
 // | f1(**p1: string**, p2: string | null, p3?: string, p4?: string): void
 // | - `p1: string`: - A string param
-
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
 // | f1(p1: string, **p2: string | null**, p3?: string, p4?: string): void
 // | - `p2: string | null`: - An optional param
-
 // | ----------------------------------------------------------------------
 //                  ^
 // | ----------------------------------------------------------------------
 // | f1(p1: string, p2: string | null, **p3?: string**, p4?: string): void
 // | - `p3?: string`: - Another optional param
-
 // | ----------------------------------------------------------------------
 //                         ^
 // | ----------------------------------------------------------------------
 // | f1(p1: string, p2: string | null, p3?: string, **p4?: string**): void
 // | - `p4?: string`: - An optional param with a default value
-
 // | ----------------------------------------------------------------------
 [
   {
@@ -52,28 +48,28 @@
               "label": "p1: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- A string param\n"
+                "value": "- A string param"
               }
             },
             {
               "label": "p2: string | null",
               "documentation": {
                 "kind": "markdown",
-                "value": "- An optional param\n"
+                "value": "- An optional param"
               }
             },
             {
               "label": "p3?: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- Another optional param\n"
+                "value": "- Another optional param"
               }
             },
             {
               "label": "p4?: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- An optional param with a default value\n"
+                "value": "- An optional param with a default value"
               }
             }
           ],
@@ -257,28 +253,28 @@
               "label": "p1: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- A string param\n"
+                "value": "- A string param"
               }
             },
             {
               "label": "p2: string | null",
               "documentation": {
                 "kind": "markdown",
-                "value": "- An optional param\n"
+                "value": "- An optional param"
               }
             },
             {
               "label": "p3?: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- Another optional param\n"
+                "value": "- Another optional param"
               }
             },
             {
               "label": "p4?: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- An optional param with a default value\n"
+                "value": "- An optional param with a default value"
               }
             }
           ],
@@ -462,28 +458,28 @@
               "label": "p1: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- A string param\n"
+                "value": "- A string param"
               }
             },
             {
               "label": "p2: string | null",
               "documentation": {
                 "kind": "markdown",
-                "value": "- An optional param\n"
+                "value": "- An optional param"
               }
             },
             {
               "label": "p3?: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- Another optional param\n"
+                "value": "- Another optional param"
               }
             },
             {
               "label": "p4?: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- An optional param with a default value\n"
+                "value": "- An optional param with a default value"
               }
             }
           ],
@@ -667,28 +663,28 @@
               "label": "p1: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- A string param\n"
+                "value": "- A string param"
               }
             },
             {
               "label": "p2: string | null",
               "documentation": {
                 "kind": "markdown",
-                "value": "- An optional param\n"
+                "value": "- An optional param"
               }
             },
             {
               "label": "p3?: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- Another optional param\n"
+                "value": "- Another optional param"
               }
             },
             {
               "label": "p4?: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "- An optional param with a default value\n"
+                "value": "- An optional param with a default value"
               }
             }
           ],

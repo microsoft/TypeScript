@@ -10,7 +10,6 @@
 // | ----------------------------------------------------------------------
 // | emptyObj(**{}: {}**): void
 // | - `{}: {}`: An empty object binding pattern.
-
 // | ----------------------------------------------------------------------
 // 
 // /**
@@ -22,7 +21,6 @@
 // | ----------------------------------------------------------------------
 // | emptyArr(**[]: Iterable<any, void, undefined>**): void
 // | - `[]: Iterable<any, void, undefined>`: An empty array binding pattern.
-
 // | ----------------------------------------------------------------------
 // 
 // /**
@@ -34,7 +32,6 @@
 // | ----------------------------------------------------------------------
 // | nonEmptyObj(**{ a, b }: { a: number; b: string; }**): void
 // | - `{ a, b }: { a: number; b: string; }`: An object with a and b properties.
-
 // | ----------------------------------------------------------------------
 // 
 // /**
@@ -46,7 +43,6 @@
 // | ----------------------------------------------------------------------
 // | nonEmptyArr(**[x, y]: [number, string]**): void
 // | - `[x, y]: [number, string]`: A tuple with two elements.
-
 // | ----------------------------------------------------------------------
 // 
 // /**
@@ -59,13 +55,11 @@
 // | ----------------------------------------------------------------------
 // | idLeading(**first: number**, { a, b }: { a: number; b: string; }): void
 // | - `first: number`: The first number parameter.
-
 // | ----------------------------------------------------------------------
 //                              ^
 // | ----------------------------------------------------------------------
 // | idLeading(first: number, **{ a, b }: { a: number; b: string; }**): void
 // | - `{ a, b }: { a: number; b: string; }`: An object with a and b properties.
-
 // | ----------------------------------------------------------------------
 // 
 // /**
@@ -78,13 +72,11 @@
 // | ----------------------------------------------------------------------
 // | bindingLeading(**{ a, b }: { a: number; b: string; }**, last: number): void
 // | - `{ a, b }: { a: number; b: string; }`: An object with a and b properties.
-
 // | ----------------------------------------------------------------------
 //                                    ^
 // | ----------------------------------------------------------------------
 // | bindingLeading({ a, b }: { a: number; b: string; }, **last: number**): void
 // | - `last: number`: The last number parameter.
-
 // | ----------------------------------------------------------------------
 // 
 // /**
@@ -101,13 +93,11 @@
 // | ----------------------------------------------------------------------
 // | multipleBindings(**{ a, b }: { a: any; b: any; }**, { c, d }: { c: any; d: any; }): void
 // | - `{ a, b }: { a: any; b: any; }`: The first parameter
-
 // | ----------------------------------------------------------------------
 //                                                     ^
 // | ----------------------------------------------------------------------
 // | multipleBindings({ a, b }: { a: any; b: any; }, **{ c, d }: { c: any; d: any; }**): void
 // | - `{ c, d }: { c: any; d: any; }`: The second parameter
-
 // | ----------------------------------------------------------------------
 // 
 [
@@ -130,7 +120,7 @@
               "label": "{}: {}",
               "documentation": {
                 "kind": "markdown",
-                "value": "An empty object binding pattern.\n"
+                "value": "An empty object binding pattern."
               }
             }
           ],
@@ -219,7 +209,7 @@
               "label": "[]: Iterable<any, void, undefined>",
               "documentation": {
                 "kind": "markdown",
-                "value": "An empty array binding pattern.\n"
+                "value": "An empty array binding pattern."
               }
             }
           ],
@@ -348,7 +338,7 @@
               "label": "{ a, b }: { a: number; b: string; }",
               "documentation": {
                 "kind": "markdown",
-                "value": "An object with a and b properties.\n"
+                "value": "An object with a and b properties."
               }
             }
           ],
@@ -532,7 +522,7 @@
               "label": "[x, y]: [number, string]",
               "documentation": {
                 "kind": "markdown",
-                "value": "A tuple with two elements.\n"
+                "value": "A tuple with two elements."
               }
             }
           ],
@@ -661,14 +651,14 @@
               "label": "first: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "The first number parameter.\n"
+                "value": "The first number parameter."
               }
             },
             {
               "label": "{ a, b }: { a: number; b: string; }",
               "documentation": {
                 "kind": "markdown",
-                "value": "An object with a and b properties.\n"
+                "value": "An object with a and b properties."
               }
             }
           ],
@@ -877,14 +867,14 @@
               "label": "first: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "The first number parameter.\n"
+                "value": "The first number parameter."
               }
             },
             {
               "label": "{ a, b }: { a: number; b: string; }",
               "documentation": {
                 "kind": "markdown",
-                "value": "An object with a and b properties.\n"
+                "value": "An object with a and b properties."
               }
             }
           ],
@@ -1093,14 +1083,14 @@
               "label": "{ a, b }: { a: number; b: string; }",
               "documentation": {
                 "kind": "markdown",
-                "value": "An object with a and b properties.\n"
+                "value": "An object with a and b properties."
               }
             },
             {
               "label": "last: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "The last number parameter.\n"
+                "value": "The last number parameter."
               }
             }
           ],
@@ -1309,14 +1299,14 @@
               "label": "{ a, b }: { a: number; b: string; }",
               "documentation": {
                 "kind": "markdown",
-                "value": "An object with a and b properties.\n"
+                "value": "An object with a and b properties."
               }
             },
             {
               "label": "last: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "The last number parameter.\n"
+                "value": "The last number parameter."
               }
             }
           ],
@@ -1525,14 +1515,14 @@
               "label": "{ a, b }: { a: any; b: any; }",
               "documentation": {
                 "kind": "markdown",
-                "value": "The first parameter\n"
+                "value": "The first parameter"
               }
             },
             {
               "label": "{ c, d }: { c: any; d: any; }",
               "documentation": {
                 "kind": "markdown",
-                "value": "The second parameter\n"
+                "value": "The second parameter"
               }
             }
           ],
@@ -1846,14 +1836,14 @@
               "label": "{ a, b }: { a: any; b: any; }",
               "documentation": {
                 "kind": "markdown",
-                "value": "The first parameter\n"
+                "value": "The first parameter"
               }
             },
             {
               "label": "{ c, d }: { c: any; d: any; }",
               "documentation": {
                 "kind": "markdown",
-                "value": "The second parameter\n"
+                "value": "The second parameter"
               }
             }
           ],

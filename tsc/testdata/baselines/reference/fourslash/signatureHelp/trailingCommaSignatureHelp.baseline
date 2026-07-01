@@ -13,7 +13,6 @@
 // | ----------------------------------------------------------------------
 // | str(n: number, **radix: number**): string
 // | - `radix: number`: The radix
-
 // | Stringifies a number with radix
 // | ----------------------------------------------------------------------
 // 
@@ -59,7 +58,7 @@
               "label": "radix: number",
               "documentation": {
                 "kind": "markdown",
-                "value": "The radix\n"
+                "value": "The radix"
               }
             }
           ],

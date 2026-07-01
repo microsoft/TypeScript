@@ -1,0 +1,36 @@
+// === documentHighlights ===
+// === /jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param /*HIGHLIGHTS*/[|foo|] I pity the foo
+//  */
+// function f([|foo|]: I) {
+//     return [|foo|];
+// }
+
+
+
+// === documentHighlights ===
+// === /jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|foo|] I pity the foo
+//  */
+// function f(/*HIGHLIGHTS*/[|foo|]: I) {
+//     return [|foo|];
+// }
+
+
+
+// === documentHighlights ===
+// === /jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|foo|] I pity the foo
+//  */
+// function f([|foo|]: I) {
+//     return /*HIGHLIGHTS*/[|foo|];
+// }

@@ -9,7 +9,7 @@
 // | ```
 // | 
 // | 
-// | *@see* — [https://hva](https://hva) 
+// | *@see* — [https://hva](https://hva)
 // | ----------------------------------------------------------------------
 // 
 // /** {@link https://hvaD} */
@@ -35,7 +35,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nvar see2: boolean\n```\n\n\n*@see* — [https://hva](https://hva) "
+        "value": "```typescript\nvar see2: boolean\n```\n\n\n*@see* — [https://hva](https://hva)"
       },
       "range": {
         "start": {

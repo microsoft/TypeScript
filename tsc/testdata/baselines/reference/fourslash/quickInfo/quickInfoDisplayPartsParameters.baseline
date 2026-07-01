@@ -9,7 +9,7 @@
 // | ```
 // | 
 // | 
-// | *@return* — *crunch* 
+// | *@return* — *crunch*
 // | ----------------------------------------------------------------------
 //              ^^^^^
 // | ----------------------------------------------------------------------
@@ -86,7 +86,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n\n\n*@return* — *crunch* "
+        "value": "```typescript\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n\n\n*@return* — *crunch*"
       },
       "range": {
         "start": {

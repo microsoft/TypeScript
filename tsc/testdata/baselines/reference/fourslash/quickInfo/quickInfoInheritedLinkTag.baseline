@@ -18,7 +18,6 @@
 // | 
 // | 
 // | *@deprecated* — Use PerspectiveCamera.setFocalLength .setFocalLength() and PerspectiveCamera.filmGauge .filmGauge instead.
-// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -34,7 +33,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(method) C.m(): void\n```\n\n\n*@deprecated* — Use PerspectiveCamera.setFocalLength .setFocalLength() and PerspectiveCamera.filmGauge .filmGauge instead.\n"
+        "value": "```typescript\n(method) C.m(): void\n```\n\n\n*@deprecated* — Use PerspectiveCamera.setFocalLength .setFocalLength() and PerspectiveCamera.filmGauge .filmGauge instead."
       },
       "range": {
         "start": {
