@@ -1228,7 +1228,6 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 			s.logger.Logf("Adopted snapshot %d (parent %d) as current session snapshot (replacing %d)", newSnapshot.id, newSnapshot.parentId, oldSnapshot.id)
 			s.logger.Log(newSnapshot.builderLogs.String())
 			s.logProjectChanges(oldSnapshot, newSnapshot)
-			s.logRuntimeMetrics()
 			s.logger.Log("")
 		}
 		if s.options.WatchEnabled {
@@ -1486,37 +1485,6 @@ func (s *Session) logProjectChanges(oldSnapshot *Snapshot, newSnapshot *Snapshot
 	if loggedProjectChanges || s.logger.IsVerbose() {
 		s.logCacheStats(newSnapshot)
 	}
-}
-
-var runtimeMetricsSamples = sync.OnceValue(func() []gometrics.Sample {
-	descs := gometrics.All()
-	var samples []gometrics.Sample
-	for _, desc := range descs {
-		name := desc.Name
-		if strings.HasPrefix(name, "/memory/") || strings.HasPrefix(name, "/gc/") {
-			samples = append(samples, gometrics.Sample{Name: name})
-		}
-	}
-	return samples
-})
-
-func (s *Session) logRuntimeMetrics() {
-	samples := slices.Clone(runtimeMetricsSamples())
-	gometrics.Read(samples)
-
-	var builder strings.Builder
-	builder.WriteString("\n======== Runtime Metrics ========")
-	for _, sample := range samples {
-		switch sample.Value.Kind() {
-		case gometrics.KindUint64:
-			fmt.Fprintf(&builder, "\n%s = %d", sample.Name, sample.Value.Uint64())
-		case gometrics.KindFloat64:
-			fmt.Fprintf(&builder, "\n%s = %f", sample.Name, sample.Value.Float64())
-		case gometrics.KindFloat64Histogram:
-			// Skip histograms for log readability
-		}
-	}
-	s.logger.Log(builder.String())
 }
 
 func (s *Session) logCacheStats(snapshot *Snapshot) {
