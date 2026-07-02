@@ -500,6 +500,9 @@ type ProjectResponse struct {
 }
 
 func NewProjectResponse(p *project.Project) *ProjectResponse {
+	if p == nil || p.CommandLine == nil {
+		panic("NewProjectResponse called with unloaded project")
+	}
 	return &ProjectResponse{
 		Id:              ProjectHandle(p),
 		ConfigFileName:  p.Name(),
