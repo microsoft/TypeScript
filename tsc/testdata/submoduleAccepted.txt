@@ -1436,3 +1436,6 @@ compiler/functionExpressionReturningItself.types.diff
 compiler/recursiveLetConst.types.diff
 conformance/functionImplementations.types.diff
 conformance/noInferRedeclaration.js.diff
+
+# Better isolatedDeclarations error issued on cast initializer before required parameter
+compiler/isolatedDeclarationsAddUndefined.errors.txt.diff
