@@ -4,7 +4,6 @@
 
 # Omnibus: Isolated declarations error changes - needs investigation
 ## https://github.com/microsoft/typescript-go/issues/3477
-compiler/isolatedDeclarationErrorsClassesExpressions.errors.txt.diff
 compiler/isolatedDeclarationsAddUndefined.errors.txt.diff
 
 # Corsa changes how module augmentation interacts with export-equals and exported name visibility
