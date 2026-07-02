@@ -111,6 +111,18 @@ export class SyncRpcChannel {
 
     private methodBufCache = new Map<string, Buffer>();
 
+    // When true, the payload byte lengths of each request/response are recorded
+    // and exposed via the `last*` fields below. These count only the JSON/binary
+    // payload bytes, not the MessagePack tuple framing (message type, method
+    // name, and length headers).
+    private readonly collectTiming: boolean;
+
+    // Per-request payload byte measurements for the most recently completed
+    // request. Only meaningful when `collectTiming` is true. Callers read these
+    // immediately after a request returns (the channel is strictly serial).
+    lastBytesSent = 0;
+    lastBytesReceived = 0;
+
     private _msgType = 0;
     private _msgName: Buffer = EMPTY_BUF;
     private _msgPayload: Buffer = EMPTY_BUF;
@@ -125,7 +137,8 @@ export class SyncRpcChannel {
     // Write buffer – assembles entire tuples for a single writeSync.
     private writeBuf = Buffer.allocUnsafe(65536);
 
-    constructor(exe: string, args: string[]) {
+    constructor(exe: string, args: string[], collectTiming = false) {
+        this.collectTiming = collectTiming;
         const isWindows = process.platform === "win32";
 
         if (isWindows) {
@@ -271,6 +284,12 @@ export class SyncRpcChannel {
 
     private requestBytesSync(method: string, payload: Buffer | Uint8Array | string): Buffer {
         const methodBuf = this.getMethodBuf(method);
+        if (this.collectTiming) {
+            this.lastBytesSent = typeof payload === "string"
+                ? Buffer.byteLength(payload, "utf-8")
+                : payload.length;
+            this.lastBytesReceived = 0;
+        }
         this.writeTuple(MSG_REQUEST, methodBuf, payload);
 
         for (;;) {
@@ -283,6 +302,9 @@ export class SyncRpcChannel {
                         throw new Error(
                             `name mismatch for response: expected \`${method}\`, got \`${this._msgName.toString("utf-8")}\``,
                         );
+                    }
+                    if (this.collectTiming) {
+                        this.lastBytesReceived = this._msgPayload.length;
                     }
                     return this._msgPayload;
                 }

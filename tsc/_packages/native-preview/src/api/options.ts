@@ -17,6 +17,14 @@ export interface ClientSpawnOptions {
     cwd?: string;
     /** Virtual filesystem callbacks */
     fs?: FileSystem;
+    /**
+     * When true, collect timing information for each request. The client
+     * measures round-trip latency and bytes sent/received, and the server
+     * measures its own per-request processing time; both are combined (along
+     * with an estimated transport overhead) in the snapshot returned by
+     * {@link API.getTimingInfo}.
+     */
+    collectTiming?: boolean;
 }
 
 export type ClientOptions = ClientSocketOptions | ClientSpawnOptions;

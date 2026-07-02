@@ -56,6 +56,17 @@ func parseProjectHandle(handle ProjectID) tspath.Path {
 const (
 	MethodRelease Method = "release"
 
+	// MethodGetServerTiming retrieves the server's collected per-request
+	// processing-time totals and recent-request ring buffer. It is handled by
+	// the connection itself (not the session) and is not recorded in the timing
+	// it reports.
+	MethodGetServerTiming Method = "getServerTiming"
+
+	// MethodResetServerTiming clears the server's collected timing totals and
+	// recent-request ring buffer. Like MethodGetServerTiming, it is handled by
+	// the connection itself and is not recorded.
+	MethodResetServerTiming Method = "resetServerTiming"
+
 	MethodInitialize               Method = "initialize"
 	MethodUpdateSnapshot           Method = "updateSnapshot"
 	MethodParseConfigFile          Method = "parseConfigFile"

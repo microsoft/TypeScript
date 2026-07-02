@@ -4,6 +4,7 @@ import {
     type Node,
     SyntaxKind,
 } from "../../ast/index.ts";
+import type { TimingCollector } from "../timing.ts";
 import {
     HEADER_OFFSET_HASH_HI0,
     HEADER_OFFSET_HASH_HI1,
@@ -52,6 +53,13 @@ export interface SourceFileInfo {
     readonly _decoder: TextDecoder;
     nodes: any[];
     readonly path?: string;
+    /**
+     * The timing collector that per-node materialization is reported into, and
+     * that this source file registered itself with when fetched. Present only
+     * when timing collection is enabled; when undefined, materialization is not
+     * timed and no clock is read.
+     */
+    readonly _timing?: TimingCollector | undefined;
     readFileReferences(offset: number): readonly FileReference[];
     readNodeIndexArray(offset: number): readonly Node[];
     readStringArray(offset: number): readonly string[];

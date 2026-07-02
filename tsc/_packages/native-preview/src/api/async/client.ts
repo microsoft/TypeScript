@@ -20,6 +20,14 @@ import {
     isSpawnOptions,
     resolveExePath,
 } from "../options.ts";
+import {
+    combineTimingInfo,
+    disabledServerTimingInfo,
+    disabledTimingInfo,
+    type ServerTimingInfo,
+    TimingCollector,
+    type TimingInfo,
+} from "../timing.ts";
 
 export type { ClientOptions, ClientSocketOptions, ClientSpawnOptions };
 
@@ -33,9 +41,13 @@ export class Client {
     private connection: MessageConnection | undefined;
     private options: ClientOptions;
     private connected = false;
+    private timing: TimingCollector | undefined;
 
     constructor(options: ClientOptions) {
         this.options = options;
+        if (isSpawnOptions(options) && options.collectTiming) {
+            this.timing = new TimingCollector();
+        }
     }
 
     async connect(): Promise<void> {
@@ -59,6 +71,10 @@ export class Client {
                 "--cwd",
                 options.cwd ?? process.cwd(),
             ];
+
+            if (options.collectTiming) {
+                args.push("--timing");
+            }
 
             // Enable virtual FS callbacks for each provided FS function
             const enabledCallbacks: string[] = [];
@@ -142,7 +158,27 @@ export class Client {
         }
 
         const requestType = new RequestType<unknown, T, void>(method);
-        return this.connection.sendRequest(requestType, params);
+        if (!this.timing) {
+            return this.connection.sendRequest(requestType, params);
+        }
+
+        // Round-trip latency is measured here; byte counts approximate the wire
+        // payload via the serialized JSON. Server-side processing time is not
+        // carried on the response; it is retrieved separately (via a
+        // getServerTiming request) and folded in by getTimingInfo().
+        const bytesSent = params === undefined ? 0 : Buffer.byteLength(JSON.stringify(params), "utf-8");
+        const start = performance.now();
+        const result = await this.connection.sendRequest(requestType, params);
+        const roundTripMs = performance.now() - start;
+        this.timing.record({
+            method,
+            roundTripMs,
+            bytesSent,
+            bytesReceived: result === undefined || result === null
+                ? 0
+                : Buffer.byteLength(JSON.stringify(result), "utf-8"),
+        });
+        return result;
     }
 
     async apiRequestBinary(method: string, params?: unknown): Promise<Uint8Array | undefined> {
@@ -150,6 +186,53 @@ export class Client {
         if (!response) return undefined;
         const buffer = Buffer.from(response.data, "base64");
         return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+    }
+
+    /**
+     * Returns the timing collector that per-node materialization is reported
+     * into, or undefined when timing collection is disabled. The returned
+     * collector is the same one folded into {@link getTimingInfo}, so
+     * materialization totals surface alongside request timings.
+     */
+    getTimingCollector(): TimingCollector | undefined {
+        return this.timing;
+    }
+
+    /**
+     * Returns a combined timing snapshot: client-measured round-trip and byte
+     * counts folded together with the server's own per-request processing time
+     * (fetched via a getServerTiming request) and estimated transport overhead.
+     */
+    async getTimingInfo(): Promise<TimingInfo> {
+        if (!this.timing) {
+            return disabledTimingInfo();
+        }
+        const local = this.timing.getInfo();
+        // No requests have been sent yet: nothing to fetch from the server.
+        if (!this.connected || !this.connection) {
+            return local;
+        }
+        return combineTimingInfo(local, await this.fetchServerTiming());
+    }
+
+    async resetTimingInfo(): Promise<void> {
+        if (!this.timing) return;
+        this.timing.reset();
+        if (this.connected && this.connection) {
+            // Keep the server's collection in sync so combined totals stay meaningful.
+            const requestType = new RequestType<unknown, void, void>("resetServerTiming");
+            await this.connection.sendRequest(requestType, undefined);
+        }
+    }
+
+    private async fetchServerTiming(): Promise<ServerTimingInfo> {
+        if (!this.connection) {
+            return disabledServerTimingInfo();
+        }
+        // Fetch the server's own timing collection via a dedicated request. This
+        // bypasses the client-side collector so the query does not pollute it.
+        const requestType = new RequestType<unknown, ServerTimingInfo, void>("getServerTiming");
+        return this.connection.sendRequest(requestType, undefined);
     }
 
     async close(): Promise<void> {

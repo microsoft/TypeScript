@@ -75,6 +75,11 @@ import {
     toUpdateSnapshotRequest,
 } from "../proto.ts";
 import { SourceFileCache } from "../sourceFileCache.ts";
+import type {
+    RequestTiming,
+    TimingAccumulators,
+    TimingInfo,
+} from "../timing.ts";
 import {
     Client,
     type ClientSocketOptions,
@@ -117,10 +122,9 @@ import type {
     UnionType,
 } from "./types.ts";
 
-export { CompletionItemKind, DiagnosticCategory, ElementFlags, ModifierFlags, ModuleKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
-export type { APIOptions, ClientSocketOptions, ClientSpawnOptions, CompilerOptions, DocumentIdentifier, DocumentPosition, LSPConnectionOptions, SourceFileMetadata };
-export type { AssertsIdentifierTypePredicate, AssertsThisTypePredicate, BigIntLiteralType, BooleanLiteralType, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, FreshableType, IdentifierTypePredicate, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, JSDocTagInfo, LiteralType, NumberLiteralType, ObjectType, StringLiteralType, StringMappingType, SubstitutionType, TemplateLiteralType, ThisTypePredicate, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
+export { CompletionItemKind, DiagnosticCategory, ElementFlags, ModifierFlags, ModuleKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
+export type { APIOptions, AssertsIdentifierTypePredicate, AssertsThisTypePredicate, BigIntLiteralType, BooleanLiteralType, ClientSocketOptions, ClientSpawnOptions, CompilerOptions, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, DocumentIdentifier, DocumentPosition, FreshableType, IdentifierTypePredicate, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, JSDocTagInfo, LiteralType, LSPConnectionOptions, NumberLiteralType, ObjectType, RequestTiming, SourceFileMetadata, StringLiteralType, StringMappingType, SubstitutionType, TemplateLiteralType, ThisTypePredicate, TimingAccumulators, TimingInfo, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
 
 export class API<FromLSP extends boolean = false> {
     private client: Client;
@@ -210,6 +214,26 @@ export class API<FromLSP extends boolean = false> {
 
     clearSourceFileCache(): void {
         this.sourceFileCache.clear();
+    }
+
+    /**
+     * Returns a snapshot of collected timing information for requests made
+     * through this API instance: client-measured round-trip latency and bytes
+     * transferred, folded together with the server's own per-request processing
+     * time and an estimated transport overhead (round-trip minus server time).
+     *
+     * Fetching the snapshot issues a lightweight request to the server to
+     * retrieve its timing collection. Collection must be enabled via the
+     * `collectTiming` option; when it is not, the returned snapshot has
+     * `enabled: false` and zeroed totals.
+     */
+    getTimingInfo(): TimingInfo {
+        return this.client.getTimingInfo();
+    }
+
+    /** Clears all accumulated timing totals and recent-request history, on both the client and the server. */
+    resetTimingInfo(): void {
+        return this.client.resetTimingInfo();
     }
 }
 
@@ -620,7 +644,7 @@ export class Program {
         const parseOptionsKey = readParseOptionsKey(view);
 
         // Create a new RemoteSourceFile and cache it (set returns existing if hash matches)
-        const sourceFile = new RemoteSourceFile(binaryData, this.decoder) as unknown as SourceFile;
+        const sourceFile = new RemoteSourceFile(binaryData, this.decoder, this.client.getTimingCollector()) as unknown as SourceFile;
         return this.sourceFileCache.set(path, sourceFile, parseOptionsKey, contentHash, this.snapshotId, this.project.id);
     }
 

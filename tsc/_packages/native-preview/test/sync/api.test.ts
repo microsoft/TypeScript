@@ -5062,6 +5062,154 @@ test("Benchmarks", () => {
     runBenchmarks({ singleIteration: true });
 });
 
+describe("Timing", () => {
+    test("collects combined client, server, and transport timing info", () => {
+        const api = new API({
+            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+            fs: createVirtualFileSystem({ ...defaultFiles }),
+            collectTiming: true,
+        });
+        try {
+            // Baseline: enabled, but nothing measured yet.
+            let info = api.getTimingInfo();
+            assert.equal(info.enabled, true);
+            assert.equal(info.totals.requestCount, 0);
+            assert.equal(info.recentRequests.length, 0);
+
+            // Exercise a JSON request and a binary source-file request.
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/index.ts");
+            assert.ok(sourceFile);
+
+            // Client-side timing: round-trip latency and byte counts.
+            info = api.getTimingInfo();
+            assert.ok(info.totals.requestCount >= 2, "expected at least two measured requests");
+            assert.ok(info.totals.bytesSent > 0);
+            assert.ok(info.totals.bytesReceived > 0);
+            assert.ok(info.totals.roundTripMs >= 0);
+
+            // Server-side timing is folded into the same snapshot.
+            assert.ok(info.totals.serverTimeMs >= 0);
+            assert.ok(info.totals.transportOverheadMs >= 0);
+            assert.equal(
+                info.totals.transportOverheadMs,
+                Math.max(0, info.totals.roundTripMs - info.totals.serverTimeMs),
+            );
+
+            // The ring buffer retains at most the 5 most recent requests.
+            assert.ok(info.recentRequests.length > 0);
+            assert.ok(info.recentRequests.length <= 5);
+            assert.ok(info.recentRequests.length <= info.totals.requestCount);
+
+            for (const r of info.recentRequests) {
+                assert.ok(r.roundTripMs >= 0);
+                assert.ok(r.bytesSent >= 0);
+                assert.ok(r.bytesReceived >= 0);
+                assert.ok(typeof r.method === "string" && r.method.length > 0);
+                assert.equal(typeof r.timestamp, "number");
+                // Transport overhead is present exactly when server time is.
+                assert.equal(r.transportOverheadMs === undefined, r.serverTimeMs === undefined);
+                if (r.serverTimeMs !== undefined) {
+                    assert.ok(r.serverTimeMs >= 0);
+                    assert.equal(r.transportOverheadMs, Math.max(0, r.roundTripMs - r.serverTimeMs));
+                }
+            }
+
+            // Server processing time is folded in for the recent requests.
+            assert.ok(info.recentRequests.every(r => r.serverTimeMs !== undefined), "server time should be reported");
+
+            // Reset clears totals and history on both client and server.
+            api.resetTimingInfo();
+            info = api.getTimingInfo();
+            assert.equal(info.enabled, true);
+            assert.equal(info.totals.requestCount, 0);
+            assert.equal(info.totals.serverTimeMs, 0);
+            assert.equal(info.totals.transportOverheadMs, 0);
+            assert.equal(info.recentRequests.length, 0);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("tracks source-file node materialization", () => {
+        const api = new API({
+            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+            fs: createVirtualFileSystem({ ...defaultFiles }),
+            collectTiming: true,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/index.ts");
+            assert.ok(sourceFile);
+
+            // The source file node itself is pre-cached, so before walking the
+            // tree no descendant nodes have been materialized.
+            let info = api.getTimingInfo();
+            const before = info.totals.nodesMaterialized;
+            assert.equal(info.totals.sourceFilesFetched, 1, "one source file was fetched");
+            assert.ok(info.totals.nodesFetched > 0, "the fetched file contributes materializable nodes");
+            assert.equal(info.totals.nodesMaterialized, 0, "nothing walked yet, so no nodes materialized");
+
+            // Walk the whole tree to force lazy materialization of every node.
+            let visited = 0;
+            sourceFile.forEachChild(function visit(node) {
+                visited++;
+                node.forEachChild(visit);
+            });
+            assert.ok(visited > 0, "expected to visit at least one node");
+
+            info = api.getTimingInfo();
+            assert.ok(
+                info.totals.nodesMaterialized > before,
+                "walking the tree should materialize nodes",
+            );
+            assert.ok(
+                info.totals.nodesMaterialized >= visited,
+                "every visited node should have been materialized",
+            );
+
+            // A full walk materializes (nearly) every fetched node, so the share
+            // of fetched nodes materialized should be substantial.
+            assert.equal(info.totals.sourceFilesFetched, 1);
+            assert.ok(
+                info.totals.nodesMaterialized > 0
+                    && info.totals.nodesMaterialized <= info.totals.nodesFetched,
+                "materialized nodes should be in (0, nodesFetched]",
+            );
+
+            // Reset clears materialization totals along with the rest.
+            api.resetTimingInfo();
+            info = api.getTimingInfo();
+            assert.equal(info.totals.nodesMaterialized, 0);
+            assert.equal(info.totals.sourceFilesFetched, 0);
+            assert.equal(info.totals.nodesFetched, 0);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("is disabled by default", () => {
+        const api = spawnAPI();
+        try {
+            api.parseConfigFile("/tsconfig.json");
+            const info = api.getTimingInfo();
+            assert.equal(info.enabled, false);
+            assert.equal(info.totals.requestCount, 0);
+            assert.equal(info.totals.nodesMaterialized, 0);
+            assert.equal(info.totals.sourceFilesFetched, 0);
+            assert.equal(info.totals.nodesFetched, 0);
+            assert.equal(info.recentRequests.length, 0);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 function spawnAPI(files: Record<string, string> = { ...defaultFiles }) {
     return new API({
         cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
