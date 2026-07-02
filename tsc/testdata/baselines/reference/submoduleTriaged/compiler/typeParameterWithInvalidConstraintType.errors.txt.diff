@@ -1,0 +1,10 @@
+--- old.typeParameterWithInvalidConstraintType.errors.txt
++++ new.typeParameterWithInvalidConstraintType.errors.txt
+@@= skipped -9, +9 lines =@@
+     class A<T extends T> {
+                       ~
+ !!! error TS2313: Type parameter 'T' has a circular constraint.
++!!! related TS2751 typeParameterWithInvalidConstraintType.ts:4:17: Circularity originates in type at this location.
+         foo() {
+             var x!: T;
+             var a = x.foo();

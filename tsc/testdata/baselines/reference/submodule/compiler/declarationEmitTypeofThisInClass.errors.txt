@@ -1,0 +1,11 @@
+error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+
+
+!!! error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2304 declarationEmitTypeofThisInClass.ts:3:25: Cannot find name 'this'.
+==== declarationEmitTypeofThisInClass.ts (0 errors) ====
+    class Foo {
+        public foo!: string
+        public bar!: typeof this.foo //Public property 'bar' of exported class has or is using private name 'this'.(4031)
+    }

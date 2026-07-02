@@ -299,7 +299,7 @@ func (tx *DeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 	tx.witnessedCjsExports.Clear()
 	tx.state.currentSourceFile = node
 	tx.collectFileReferences(node)
-	tx.resolver.PrecalculateDeclarationEmitVisibility(node)
+	tx.resolver.PrecalculateDeclarationEmitVisibility(tx.EmitContext().MostOriginal(node.AsNode()).AsSourceFile())
 	updated := tx.transformSourceFile(node)
 	tx.state.currentSourceFile = nil
 	return updated

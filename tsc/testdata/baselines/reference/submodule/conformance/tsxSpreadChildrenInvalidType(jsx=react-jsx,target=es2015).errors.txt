@@ -1,5 +1,5 @@
-tsxSpreadChildrenInvalidType.tsx(17,12): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 tsxSpreadChildrenInvalidType.tsx(17,12): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+tsxSpreadChildrenInvalidType.tsx(17,12): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 tsxSpreadChildrenInvalidType.tsx(17,50): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 tsxSpreadChildrenInvalidType.tsx(20,12): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be an array type.
@@ -27,9 +27,9 @@ tsxSpreadChildrenInvalidType.tsx(28,5): error TS7026: JSX element implicitly has
     function Todo(prop: { key: number, todo: string }) {
         return <div>{prop.key.toString() + prop.todo}</div>;
                ~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+               ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                                      ~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     }

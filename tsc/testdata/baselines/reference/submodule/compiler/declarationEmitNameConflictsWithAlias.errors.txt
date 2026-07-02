@@ -1,0 +1,13 @@
+error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+
+
+!!! error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2708 declarationEmitNameConflictsWithAlias.ts:2:19: Cannot use namespace 'C' as a value.
+==== declarationEmitNameConflictsWithAlias.ts (0 errors) ====
+    export namespace C { export interface I { } }
+    export import v = C;
+    export namespace M {
+        export namespace C { export interface I { } }
+        export var w: v.I; // Gets emitted as C.I, which is the wrong interface
+    }

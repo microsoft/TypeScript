@@ -175,8 +175,11 @@ func prepareDeclarationCompilationContext(
 ) *declarationCompilationContext {
 	if options.Declaration.IsTrue() && len(result.Diagnostics) == 0 {
 		if options.EmitDeclarationOnly.IsTrue() {
-			if result.JS.Size() > 0 || (result.DTS.Size() == 0 && !options.NoEmit.IsTrue()) {
+			if result.JS.Size() > 0 {
 				panic("Only declaration files should be generated when emitDeclarationOnly:true")
+			}
+			if result.DTS.Size() == 0 && !options.NoEmit.IsTrue() {
+				panic("Expected at least one declaration file to be emitted when emitDeclarationOnly:true and no errors were generated")
 			}
 		} else if result.DTS.Size() != result.GetNumberOfJSFiles(false /*includeJson*/) {
 			panic("There were no errors and declFiles generated did not match number of js files generated")

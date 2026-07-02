@@ -239,7 +239,7 @@ func (b *NodeBuilderImpl) getModuleSpecifierOverride(parent *ast.Node, lit *ast.
 		}
 		name := lit.Text()
 		originalName := name
-		nodeSymbol := b.ch.symbolNodeLinks.Get(parent).resolvedSymbol
+		nodeSymbol := b.tryGetResolvedSymbolFromTypeNode(parent)
 		meaning := ast.SymbolFlagsType
 		if parent.AsImportTypeNode().IsTypeOf {
 			meaning = ast.SymbolFlagsValue
@@ -417,7 +417,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		if ast.IsConstTypeReference(node) {
 			return nil
 		}
-		s := b.ch.symbolNodeLinks.Get(node).resolvedSymbol
+		s := b.tryGetResolvedSymbolFromTypeNode(node)
 		if s == nil {
 			return nil // ???
 		}

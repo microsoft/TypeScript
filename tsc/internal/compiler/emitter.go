@@ -112,7 +112,6 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 
 	var referenceResolver binder.ReferenceResolver
 	if importElisionEnabled || jsxTransformEnabled || !options.GetIsolatedModules() || options.EmitDecoratorMetadata.IsTrue() {
-		emitResolver.MarkLinkedReferencesRecursively(sourceFile)
 		referenceResolver = emitResolver
 	} else {
 		referenceResolver = binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})

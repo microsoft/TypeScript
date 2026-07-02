@@ -1,0 +1,13 @@
+--- old.parserForOfStatement21.errors.txt
++++ new.parserForOfStatement21.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+ parserForOfStatement21.ts(1,9): error TS1123: Variable declaration list cannot be empty.
+
+
++!!! error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
++!!! related TS-1: The excess diagnostics are:
++!!! related TS2304 parserForOfStatement21.ts:1:13: Cannot find name 'of'.
+ ==== parserForOfStatement21.ts (1 errors) ====
+     for (var of of) { }
+             

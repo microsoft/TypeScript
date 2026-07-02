@@ -1,0 +1,38 @@
+--- old.typeofThis.errors.txt
++++ new.typeofThis.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS-1: Pre-emit (8) and post-emit (30) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+ typeofThis.ts(24,19): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+ typeofThis.ts(32,19): error TS18048: 'this' is possibly 'undefined'.
+ typeofThis.ts(46,23): error TS2331: 'this' cannot be referenced in a module or namespace body.
+@@= skipped -7, +8 lines =@@
+ typeofThis.ts(57,24): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+
+
++!!! error TS-1: Pre-emit (8) and post-emit (30) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
++!!! related TS-1: The excess diagnostics are:
++!!! related TS2304 typeofThis.ts:4:26: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:12:26: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:13:25: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:15:26: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:18:25: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:24:19: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:40:23: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:46:23: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:52:23: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:57:19: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:66:30: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:71:30: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:78:30: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:82:30: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:99:23: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:101:27: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:102:27: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:105:31: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:126:28: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:131:28: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:136:28: Cannot find name 'this'.
++!!! related TS2304 typeofThis.ts:141:28: Cannot find name 'this'.
+ ==== typeofThis.ts (8 errors) ====
+     class Test {
+         data = {};

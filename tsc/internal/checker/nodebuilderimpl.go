@@ -496,6 +496,19 @@ func (b *NodeBuilderImpl) canReuseExistingJSTypeNode(existing *ast.TypeNode, t *
 	return b.ch.getIntendedTypeFromJSDocTypeReference(existing) == nil && b.existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, t)
 }
 
+func (b *NodeBuilderImpl) tryGetResolvedSymbolFromTypeNode(node *ast.Node) *ast.Symbol {
+	if node == nil {
+		return nil
+	}
+	b.ch.getTypeFromTypeNode(node)
+	// call to ensure symbol is resolved
+	links := b.ch.symbolNodeLinks.TryGet(node)
+	if links == nil {
+		return nil
+	}
+	return links.resolvedSymbol
+}
+
 func (b *NodeBuilderImpl) existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing *ast.TypeNode, t *Type) bool {
 	// In JS, you can say something like `Foo` and get a `Foo<any>` implicitly - we don't want to preserve that original `Foo` in these cases, though.
 	if t.objectFlags&ObjectFlagsReference == 0 {
@@ -504,18 +517,15 @@ func (b *NodeBuilderImpl) existingTypeNodeIsNotReferenceOrIsReferenceWithCompati
 	if !ast.IsTypeReferenceNode(existing) {
 		return true
 	}
-	// `type` is a reference type, and `existing` is a type reference node, but we still need to make sure they refer to the _same_ target type
-	// before we go comparing their type argument counts.
-	b.ch.getTypeFromTypeReference(existing)
-	// call to ensure symbol is resolved
-	links := b.ch.symbolNodeLinks.TryGet(existing)
-	if links == nil {
-		return true
-	}
-	symbol := links.resolvedSymbol
+
+	symbol := b.tryGetResolvedSymbolFromTypeNode(existing)
 	if symbol == nil {
 		return true
 	}
+
+	// `type` is a reference type, and `existing` is a type reference node, but we still need to make sure they refer to the _same_ target type
+	// before we go comparing their type argument counts.
+
 	existingTarget := b.ch.getDeclaredTypeOfSymbol(symbol)
 	if existingTarget == nil || existingTarget != t.AsTypeReference().target {
 		return true

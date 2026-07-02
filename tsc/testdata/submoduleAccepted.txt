@@ -342,9 +342,6 @@ compiler/inferTypePredicates.errors.txt.diff
 compiler/inheritedConstructorWithRestParams2.errors.txt.diff
 compiler/intTypeCheck.errors.txt.diff
 compiler/invariantGenericErrorElaboration.errors.txt.diff
-compiler/checkingObjectWithThisInNamePositionNoCrash.errors.txt.diff
-compiler/checkingObjectWithThisInNamePositionNoCrash.js.diff
-compiler/checkingObjectWithThisInNamePositionNoCrash.types.diff
 
 ## different error order ##
 compiler/arrayIterationLibES5TargetDifferent(nolib=true,target=es2015).errors.txt.diff
@@ -355,7 +352,6 @@ compiler/assignmentToInstantiationExpression.js.diff
 compiler/javascriptThisAssignmentInStaticBlock.js.diff
 compiler/asyncArrowInClassES5(target=es2015).js.diff
 compiler/augmentedTypesVar.js.diff
-compiler/constructorWithIncompleteTypeAnnotation.js.diff
 compiler/declarationEmitClassAccessorsJs1.js.diff
 compiler/declarationEmitClassSetAccessorParamNameInJs.js.diff
 compiler/declarationEmitClassSetAccessorParamNameInJs2.js.diff
@@ -439,7 +435,6 @@ compiler/classWithDuplicateIdentifier.errors.txt.diff
 compiler/classWithDuplicateIdentifier.symbols.diff
 compiler/classWithDuplicateIdentifier.types.diff
 compiler/commonMissingSemicolons.errors.txt.diff
-compiler/constructorWithIncompleteTypeAnnotation.errors.txt.diff
 compiler/duplicateClassElements.errors.txt.diff
 compiler/duplicateClassElements.symbols.diff
 compiler/duplicateClassElements.types.diff
@@ -597,7 +592,6 @@ conformance/subtypingWithNumericIndexer4.errors.txt.diff
 conformance/subtypingWithStringIndexer2.errors.txt.diff
 conformance/subtypingWithStringIndexer3.errors.txt.diff
 conformance/subtypingWithStringIndexer4.errors.txt.diff
-conformance/thisTypeInFunctionsNegative.errors.txt.diff
 conformance/typedefMultipleTypeParameters.errors.txt.diff
 conformance/typeSatisfaction.errors.txt.diff
 conformance/typeSatisfaction_errorLocations1.errors.txt.diff
@@ -653,7 +647,6 @@ compiler/deeplyNestedAssignabilityIssue.errors.txt.diff
 compiler/esModuleInteropPrettyErrorRelatedInformation.errors.txt.diff
 compiler/prettyContextNotDebugAssertion.errors.txt.diff
 compiler/prettyFileWithErrorsAndTabs.errors.txt.diff
-compiler/manyCompilerErrorsInTheTwoFiles.errors.txt.diff
 
 ## "Call signature return type" layer removed from error pyramid
 compiler/promisePermutations.errors.txt.diff
@@ -795,9 +788,6 @@ compiler/mixinPrivateAndProtected.errors.txt.diff
 conformance/mixinAccessors3.errors.txt.diff
 conformance/typeArgumentInferenceWithClassExpression2.errors.txt.diff
 
-## Different parse error recovery in heavily malformed code produces additional errors and different inferred types
-compiler/reachabilityChecksNoCrash1.errors.txt.diff
-
 ## One error instead of 3 emitted for `<T>(arg) => expr` in JSX-syntax files
 conformance/nodeModulesForbidenSyntax(module=node16).errors.txt.diff
 conformance/nodeModulesForbidenSyntax(module=node18).errors.txt.diff
@@ -880,9 +870,6 @@ compiler/unusedTypeParameters8.errors.txt.diff
 conformance/numericNamedPropertyDuplicates.errors.txt.diff
 conformance/numericStringNamedPropertyEquivalence.errors.txt.diff
 conformance/objectTypeWithDuplicateNumericProperty.errors.txt.diff
-
-## Removes spurious TS2304/TS2693 errors when TS7061 already covers the issue
-conformance/mappedTypeProperties.errors.txt.diff
 
 ## Correct TS2322 errors assigning class prototype to unrelated function type
 conformance/typesWithPrivateConstructor.errors.txt.diff
@@ -1073,7 +1060,6 @@ conformance/nestedDestructuringOfRequire.js.diff
 conformance/jsDeclarationsFunctionKeywordProp(target=es2015).js.diff
 conformance/jsDeclarationsFunctionKeywordPropExhaustive(target=es2015).js.diff
 conformance/nullPropertyName.js.diff
-conformance/typeFromPropertyAssignment29.js.diff
 
 ## Namespace converted to type alias in declaration emit (Documented in CHANGES.md in section "JSDoc Tags and Types")
 ## `namespace Dotted { type Name = number }` → `type Dotted = number`
@@ -1298,7 +1284,6 @@ compiler/letDeclarations.js.diff
 compiler/allowJscheckJsTypeParameterNoCrash.types.diff
 compiler/fieldAndGetterWithSameName.symbols.diff
 conformance/autoAccessor11.symbols.diff
-conformance/objectLiteralErrors(target=es2015).errors.txt.diff
 conformance/objectLiteralErrors(target=es2015).symbols.diff
 conformance/objectLiteralErrors(target=es2015).types.diff
 conformance/propertyAndAccessorWithSameName.symbols.diff

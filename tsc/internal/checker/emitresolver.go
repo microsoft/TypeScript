@@ -798,6 +798,9 @@ func (r *EmitResolver) IsTopLevelValueImportEqualsWithEntityName(node *ast.Node)
 }
 
 func (r *EmitResolver) MarkLinkedReferencesRecursively(file *ast.SourceFile) {
+	if !ast.IsParseTreeNode(file.AsNode()) {
+		return
+	}
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 

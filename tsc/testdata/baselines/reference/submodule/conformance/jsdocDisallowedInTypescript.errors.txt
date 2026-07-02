@@ -1,3 +1,4 @@
+error TS-1: Pre-emit (26) and post-emit (27) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 jsdocDisallowedInTypescript.ts(7,10): error TS7010: 'hof', which lacks return-type annotation, implicitly has an 'any' return type.
 jsdocDisallowedInTypescript.ts(7,20): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 jsdocDisallowedInTypescript.ts(7,28): error TS1005: ',' expected.
@@ -26,6 +27,9 @@ jsdocDisallowedInTypescript.ts(15,46): error TS7006: Parameter 'm' implicitly ha
 jsdocDisallowedInTypescript.ts(18,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
 
 
+!!! error TS-1: Pre-emit (26) and post-emit (27) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2304 jsdocDisallowedInTypescript.ts:8:16: Cannot find name 'ctor'.
 ==== jsdocDisallowedInTypescript.ts (26 errors) ====
     // grammar error from checker
     var ara: Array.<number> = [1,2,3];

@@ -1,7 +1,12 @@
+error TS-1: Pre-emit (2) and post-emit (4) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 parserExportAssignment9.ts(2,3): error TS1319: A default export can only be used in an ECMAScript-style module.
 parserExportAssignment9.ts(6,3): error TS1319: A default export can only be used in an ECMAScript-style module.
 
 
+!!! error TS-1: Pre-emit (2) and post-emit (4) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2552 parserExportAssignment9.ts:2:18: Cannot find name 'foo'. Did you mean 'Foo'?
+!!! related TS2552 parserExportAssignment9.ts:6:18: Cannot find name 'bar'. Did you mean 'Bar'?
 ==== parserExportAssignment9.ts (2 errors) ====
     namespace Foo {
       export default foo;
