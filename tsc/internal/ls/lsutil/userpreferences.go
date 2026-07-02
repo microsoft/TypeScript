@@ -18,9 +18,14 @@ func NewDefaultUserPreferences() UserPreferences {
 
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
+		EnableAutoClosingTags:                 core.TSTrue,
+		EnableJSDocCompletions:                core.TSTrue,
+		GenerateReturnInDocTemplate:           core.TSTrue,
 
 		AllowRenameOfImportPath:            core.TSTrue,
 		ProvideRefactorNotApplicableReason: core.TSTrue,
+		EnableFormatting:                   core.TSTrue,
+		EnableValidation:                   core.TSTrue,
 		DisplayPartsForJSDoc:               core.TSTrue,
 		DisableLineTextInReferences:        core.TSTrue,
 		ReportStyleChecksAsWarnings:        core.TSTrue,
@@ -71,6 +76,9 @@ type UserPreferences struct {
 	// in addition to `const objectLiteral: T = { foo }`.
 	IncludeCompletionsWithObjectLiteralMethodSnippets core.Tristate               `raw:"includeCompletionsWithObjectLiteralMethodSnippets" config:"suggest.objectLiteralMethodSnippets.enabled"` // !!!
 	JsxAttributeCompletionStyle                       JsxAttributeCompletionStyle `raw:"jsxAttributeCompletionStyle" config:"preferences.jsxAttributeCompletionStyle"`
+	EnableAutoClosingTags                             core.Tristate               `raw:"autoClosingTags" config:"autoClosingTags.enabled" fallbackConfig:"autoClosingTags"`
+	EnableJSDocCompletions                            core.Tristate               `raw:"completeJSDocs" config:"suggest.jsdoc.enabled" fallbackConfig:"suggest.completeJSDocs"`
+	GenerateReturnInDocTemplate                       core.Tristate               `raw:"generateReturnInDocTemplate" config:"suggest.jsdoc.generateReturns"`
 
 	// ------- AutoImports --------
 
@@ -162,6 +170,8 @@ type UserPreferences struct {
 
 	// ------- Misc -------
 
+	EnableFormatting            core.Tristate `raw:"formatEnabled" config:"format.enabled" fallbackConfig:"format.enable"`
+	EnableValidation            core.Tristate `raw:"validateEnabled" config:"validate.enabled" fallbackConfig:"validate.enable"`
 	DisableSuggestions          core.Tristate `raw:"disableSuggestions"`          // !!!
 	DisableLineTextInReferences core.Tristate `raw:"disableLineTextInReferences"` // !!!
 	DisplayPartsForJSDoc        core.Tristate `raw:"displayPartsForJSDoc"`        // !!!
@@ -524,11 +534,17 @@ var configPathParsers = map[string]func(any) any{
 }
 
 type fieldInfo struct {
-	rawName      string // raw name for unstable section lookup (e.g., "quotePreference")
-	configPath   string // dotted path for config (e.g., "preferences.quoteStyle")
-	fieldPath    []int  // index path to field in struct
-	rawInvert    bool   // whether to invert boolean values for raw name
-	configInvert bool   // whether to invert boolean values for config path
+	rawName             string // raw name for unstable section lookup (e.g., "quotePreference")
+	configPath          string // dotted path for config (e.g., "preferences.quoteStyle")
+	fallbackConfigPaths []configPathInfo
+	fieldPath           []int // index path to field in struct
+	rawInvert           bool  // whether to invert boolean values for raw name
+	configInvert        bool  // whether to invert boolean values for config path
+}
+
+type configPathInfo struct {
+	path   string
+	invert bool
 }
 
 var fieldInfoCache = sync.OnceValue(func() []fieldInfo {
@@ -555,6 +571,7 @@ func collectFieldInfos(t reflect.Type, indexPath []int) []fieldInfo {
 
 		rawTag := field.Tag.Get("raw")
 		configTag := field.Tag.Get("config")
+		fallbackConfigTag := field.Tag.Get("fallbackConfig")
 
 		if rawTag == "" && configTag == "" {
 			// Embedded struct without tags - recurse into it
@@ -582,18 +599,30 @@ func collectFieldInfos(t reflect.Type, indexPath []int) []fieldInfo {
 
 		// Parse config tag: "path.to.setting" or "path.to.setting,invert"
 		if configTag != "" {
-			parts := strings.Split(configTag, ",")
-			info.configPath = parts[0]
-			for _, part := range parts[1:] {
-				if part == "invert" {
-					info.configInvert = true
-				}
+			configPath := parseConfigPathTag(configTag)
+			info.configPath = configPath.path
+			info.configInvert = configPath.invert
+		}
+		if fallbackConfigTag != "" {
+			for tag := range strings.SplitSeq(fallbackConfigTag, ";") {
+				info.fallbackConfigPaths = append(info.fallbackConfigPaths, parseConfigPathTag(tag))
 			}
 		}
 
 		infos = append(infos, info)
 	}
 	return infos
+}
+
+func parseConfigPathTag(tag string) configPathInfo {
+	parts := strings.Split(tag, ",")
+	info := configPathInfo{path: parts[0]}
+	for _, part := range parts[1:] {
+		if part == "invert" {
+			info.invert = true
+		}
+	}
+	return info
 }
 
 func getNestedValue(config map[string]any, path string) (any, bool) {
@@ -662,18 +691,28 @@ func (p UserPreferences) withConfig(config map[string]any) UserPreferences {
 		if info.configPath == "" {
 			continue
 		}
-		val, ok := getNestedValue(config, info.configPath)
+		configPath := configPathInfo{path: info.configPath, invert: info.configInvert}
+		val, ok := getNestedValue(config, configPath.path)
+		if !ok {
+			for _, fallbackConfigPath := range info.fallbackConfigPaths {
+				val, ok = getNestedValue(config, fallbackConfigPath.path)
+				if ok {
+					configPath = fallbackConfigPath
+					break
+				}
+			}
+		}
 		if !ok {
 			continue
 		}
 
 		field := getFieldByPath(v, info.fieldPath)
-		if info.configInvert {
+		if configPath.invert {
 			if b, ok := val.(bool); ok {
 				val = !b
 			}
 		}
-		if parser, ok := configPathParsers[info.configPath]; ok {
+		if parser, ok := configPathParsers[configPath.path]; ok {
 			field.Set(reflect.ValueOf(parser(val)))
 			continue
 		}

@@ -7,7 +7,9 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/testutil/projecttestutil"
@@ -423,6 +425,68 @@ func TestPushDiagnostics(t *testing.T) {
 		calls := utils.Client().PublishDiagnosticsCalls()
 		// Should not have any calls since inferred projects don't have tsconfig.json
 		assert.Equal(t, len(calls), 0, "expected no PublishDiagnostics calls for inferred projects")
+	})
+
+	t.Run("does not publish when validation is disabled", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/src/tsconfig.json": `{
+				"compilerOptions": {
+					"target": "nope"
+				}
+			}`,
+			"/src/index.ts": "export const x = 1;",
+		}
+		session, utils := projecttestutil.Setup(files)
+		prefs := lsutil.NewDefaultUserPreferences()
+		prefs.EnableValidation = core.TSFalse
+		session.Configure(prefs)
+		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		calls := utils.Client().PublishDiagnosticsCalls()
+		for _, call := range calls {
+			assert.Equal(t, len(call.Params.Diagnostics), 0, "expected only empty PublishDiagnostics calls when validation is disabled")
+		}
+	})
+
+	t.Run("clears diagnostics when validation is disabled", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/src/tsconfig.json": `{
+				"compilerOptions": {
+					"target": "nope"
+				}
+			}`,
+			"/src/index.ts": "export const x = 1;",
+		}
+		session, utils := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		calls := utils.Client().PublishDiagnosticsCalls()
+		tsconfigCalls := filterDiagnosticsByURI(calls, "file:///src/tsconfig.json", 0)
+		assert.Assert(t, len(tsconfigCalls) > 0, "expected initial PublishDiagnostics call for tsconfig.json")
+		assert.Assert(t, len(tsconfigCalls[len(tsconfigCalls)-1].Params.Diagnostics) > 0, "expected initial diagnostics")
+
+		prefs := lsutil.NewDefaultUserPreferences()
+		prefs.EnableValidation = core.TSFalse
+		session.Configure(prefs)
+		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		calls = utils.Client().PublishDiagnosticsCalls()
+		tsconfigCalls = filterDiagnosticsByURI(calls, "file:///src/tsconfig.json", len(calls)-1)
+		if len(tsconfigCalls) == 0 {
+			tsconfigCalls = filterDiagnosticsByURI(calls, "file:///src/tsconfig.json", 0)
+		}
+		lastTsconfigCall := tsconfigCalls[len(tsconfigCalls)-1]
+		assert.Equal(t, len(lastTsconfigCall.Params.Diagnostics), 0, "expected diagnostics to be cleared when validation is disabled")
 	})
 
 	t.Run("publishes global diagnostics after checking", func(t *testing.T) {

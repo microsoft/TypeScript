@@ -126,5 +126,9 @@
     "File rename is not supported by the editor": {
         "category": "Error",
         "code": 8040
+    },
+    "JSDoc comment": {
+        "category": "Message",
+        "code": 100019
     }
 }

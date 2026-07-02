@@ -581,8 +581,12 @@ Config::
   "params": {
     "settings": {
       "js/ts": {
+        "autoClosingTags": {
+          "enabled": true
+        },
         "format": {
           "convertTabsToSpaces": true,
+          "enabled": true,
           "indentSize": 4,
           "indentStyle": 2,
           "indentSwitchCase": true,
@@ -616,7 +620,11 @@ Config::
         "reportStyleChecksAsWarnings": true,
         "suggest": {
           "autoImports": true,
-          "includeCompletionsForImportStatements": true
+          "includeCompletionsForImportStatements": true,
+          "jsdoc": {
+            "enabled": true,
+            "generateReturns": true
+          }
         },
         "unstable": {
           "allowRenameOfImportPath": true,
@@ -624,6 +632,9 @@ Config::
           "displayPartsForJSDoc": true,
           "preferGoToSourceDefinition": false,
           "provideRefactorNotApplicableReason": true
+        },
+        "validate": {
+          "enabled": true
         },
         "workspaceSymbols": {
           "excludeLibrarySymbols": true

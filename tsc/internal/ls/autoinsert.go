@@ -10,6 +10,9 @@ import (
 )
 
 func (l *LanguageService) ProvideOnAutoInsert(ctx context.Context, params *lsproto.VSOnAutoInsertParams) (lsproto.VSOnAutoInsertResponse, error) {
+	if l.UserPreferences().EnableAutoClosingTags.IsFalse() {
+		return lsproto.VSOnAutoInsertResponse{}, nil
+	}
 	if params.VSCh != ">" {
 		return lsproto.VSOnAutoInsertResponse{}, nil
 	}

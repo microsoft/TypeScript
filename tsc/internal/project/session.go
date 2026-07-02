@@ -1571,7 +1571,8 @@ func (s *Session) refreshCodeLensIfNeeded(oldPrefs lsutil.UserPreferences, newPr
 
 func (s *Session) refreshDiagnosticsIfNeeded(oldPrefs lsutil.UserPreferences, newPrefs lsutil.UserPreferences) {
 	if oldPrefs.CustomConfigFileName != newPrefs.CustomConfigFileName ||
-		oldPrefs.ReportStyleChecksAsWarnings != newPrefs.ReportStyleChecksAsWarnings {
+		oldPrefs.ReportStyleChecksAsWarnings != newPrefs.ReportStyleChecksAsWarnings ||
+		oldPrefs.EnableValidation != newPrefs.EnableValidation {
 		s.ScheduleDiagnosticsRefresh()
 	}
 }
@@ -1586,6 +1587,17 @@ func (s *Session) refreshATAIfNeeded(oldPrefs lsutil.UserPreferences, newPrefs l
 
 func (s *Session) publishProgramDiagnostics(oldSnapshot *Snapshot, newSnapshot *Snapshot) {
 	if !s.options.PushDiagnosticsEnabled {
+		return
+	}
+	if newSnapshot.UserPreferences().EnableValidation.IsFalse() {
+		if oldSnapshot.UserPreferences().EnableValidation.IsFalse() {
+			return
+		}
+		for configFilePath, oldProject := range oldSnapshot.ProjectCollection.ProjectsByPath().Entries() {
+			if oldProject.Kind == KindConfigured && oldSnapshot.ProjectCollection.GetOpenConfiguredProjects().Has(configFilePath) {
+				s.publishProjectDiagnostics(s.backgroundCtx, string(configFilePath), nil, oldSnapshot.converters)
+			}
+		}
 		return
 	}
 
@@ -1646,6 +1658,9 @@ func shouldPublishProgramDiagnostics(p *Project, snapshotID uint64) bool {
 }
 
 func (s *Session) publishProjectDiagnostics(ctx context.Context, configFilePath string, diagnostics []*ast.Diagnostic, converters *lsconv.Converters) {
+	if s.Config().EnableValidation.IsFalse() {
+		diagnostics = nil
+	}
 	lspDiagnostics := make([]*lsproto.Diagnostic, 0, len(diagnostics))
 	for _, diag := range diagnostics {
 		lspDiagnostics = append(lspDiagnostics, lsconv.DiagnosticToLSPPush(ctx, converters, diag))
@@ -1663,7 +1678,7 @@ func (s *Session) publishProjectDiagnostics(ctx context.Context, configFilePath 
 // global diagnostics from checker pools, re-publishing tsconfig diagnostics if changed.
 // Multiple calls are coalesced into a single background task.
 func (s *Session) EnqueuePublishGlobalDiagnostics() {
-	if !s.options.PushDiagnosticsEnabled {
+	if !s.options.PushDiagnosticsEnabled || s.Config().EnableValidation.IsFalse() {
 		return
 	}
 	if s.globalDiagPublishPending.CompareAndSwap(false, true) {

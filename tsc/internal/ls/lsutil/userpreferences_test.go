@@ -456,6 +456,138 @@ func TestUserPreferencesReportStyleChecksAsWarnings(t *testing.T) {
 	})
 }
 
+func TestUserPreferencesParseServerFeaturePreferences(t *testing.T) {
+	t.Parallel()
+
+	t.Run("preferred server feature settings", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"validate": map[string]any{"enabled": false},
+				"format":   map[string]any{"enabled": false},
+				"autoClosingTags": map[string]any{
+					"enabled": false,
+				},
+			},
+		})
+		assert.Equal(t, prefs.EnableValidation, core.TSFalse)
+		assert.Equal(t, prefs.EnableFormatting, core.TSFalse)
+		assert.Equal(t, prefs.EnableAutoClosingTags, core.TSFalse)
+	})
+
+	t.Run("legacy server feature fallbacks", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"validate":        map[string]any{"enable": false},
+				"format":          map[string]any{"enable": false},
+				"autoClosingTags": false,
+			},
+		})
+		assert.Equal(t, prefs.EnableValidation, core.TSFalse)
+		assert.Equal(t, prefs.EnableFormatting, core.TSFalse)
+		assert.Equal(t, prefs.EnableAutoClosingTags, core.TSFalse)
+	})
+
+	t.Run("preferred settings take precedence over fallbacks", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"validate":        map[string]any{"enable": false},
+				"format":          map[string]any{"enable": false},
+				"autoClosingTags": false,
+			},
+			"js/ts": map[string]any{
+				"validate": map[string]any{"enabled": true},
+				"format":   map[string]any{"enabled": true},
+				"autoClosingTags": map[string]any{
+					"enabled": true,
+				},
+			},
+		})
+		assert.Equal(t, prefs.EnableValidation, core.TSTrue)
+		assert.Equal(t, prefs.EnableFormatting, core.TSTrue)
+		assert.Equal(t, prefs.EnableAutoClosingTags, core.TSTrue)
+	})
+}
+
+func TestUserPreferencesParseJSDocCompletionPreferences(t *testing.T) {
+	t.Parallel()
+
+	t.Run("unified jsdoc enabled setting", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"suggest": map[string]any{
+					"jsdoc": map[string]any{
+						"enabled": false,
+					},
+				},
+			},
+		})
+		assert.Equal(t, prefs.EnableJSDocCompletions, core.TSFalse)
+	})
+
+	t.Run("language fallback completeJSDocs setting", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"suggest": map[string]any{
+					"completeJSDocs": false,
+				},
+			},
+		})
+		assert.Equal(t, prefs.EnableJSDocCompletions, core.TSFalse)
+	})
+
+	t.Run("unified jsdoc enabled takes precedence over language fallback", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"suggest": map[string]any{
+					"completeJSDocs": false,
+				},
+			},
+			"js/ts": map[string]any{
+				"suggest": map[string]any{
+					"jsdoc": map[string]any{
+						"enabled": true,
+					},
+				},
+			},
+		})
+		assert.Equal(t, prefs.EnableJSDocCompletions, core.TSTrue)
+	})
+
+	t.Run("unified jsdoc generateReturns setting", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"suggest": map[string]any{
+					"jsdoc": map[string]any{
+						"generateReturns": false,
+					},
+				},
+			},
+		})
+		assert.Equal(t, prefs.GenerateReturnInDocTemplate, core.TSFalse)
+	})
+
+	t.Run("language jsdoc generateReturns setting", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"suggest": map[string]any{
+					"jsdoc": map[string]any{
+						"generateReturns": false,
+					},
+				},
+			},
+		})
+		assert.Equal(t, prefs.GenerateReturnInDocTemplate, core.TSFalse)
+	})
+}
+
 func TestUserPreferencesParseATA(t *testing.T) {
 	t.Parallel()
 

@@ -302,7 +302,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 				flush(i - 1)
 				lastNormalCharPosition = i + 1
 				difference += 2
-			} else if previousCharacter == '/' && currentCharacter == '*' {
+			} else if previousCharacter == '/' && currentCharacter == '*' && (i+1 >= len(content) || content[i+1] != '/') {
 				// found a possible marker start
 				state = stateInSlashStarMarker
 				openMarker = &locationInformation{
