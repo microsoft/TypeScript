@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/objectHasOwnNarrowingExactOptional.ts] ////
+
+=== objectHasOwnNarrowingExactOptional.ts ===
+// With exactOptionalPropertyTypes, accessing obj.a when property might not exist
+// produces the "missing" type. Object.hasOwn should remove it.
+declare const obj: { a?: string; b?: number };
+>obj : { a?: string; b?: number; }
+>    : ^^^^^^      ^^^^^^      ^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+if (Object.hasOwn(obj, "a")) {
+>Object.hasOwn(obj, "a") : boolean
+>                        : ^^^^^^^
+>Object.hasOwn : (o: object, v: PropertyKey) => boolean
+>              : ^ ^^      ^^ ^^           ^^^^^       
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>obj : { a?: string; b?: number; }
+>    : ^^^^^^      ^^^^^^      ^^^
+>"a" : "a"
+>    : ^^^
+
+    // Under exactOptionalPropertyTypes, a?: string means the property
+    // might be missing OR might have value string (but not undefined).
+    // After hasOwn confirms presence, obj.a is string.
+    obj.a;
+>obj.a : string
+>      : ^^^^^^
+>obj : { a?: string; b?: number; }
+>    : ^^^^^^      ^^^^^^      ^^^
+>a : string
+>  : ^^^^^^
+}
+
+// Property access after hasOwn with exactOptionalPropertyTypes
+interface Opts {
+    verbose?: boolean;
+>verbose : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
+
+    output?: string;
+>output : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+}
+declare const opts: Opts;
+>opts : Opts
+>     : ^^^^
+
+if (Object.hasOwn(opts, "verbose")) {
+>Object.hasOwn(opts, "verbose") : boolean
+>                               : ^^^^^^^
+>Object.hasOwn : (o: object, v: PropertyKey) => boolean
+>              : ^ ^^      ^^ ^^           ^^^^^       
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>opts : Opts
+>     : ^^^^
+>"verbose" : "verbose"
+>          : ^^^^^^^^^
+
+    opts.verbose;
+>opts.verbose : boolean
+>             : ^^^^^^^
+>opts : Opts
+>     : ^^^^
+>verbose : boolean
+>        : ^^^^^^^
+}
+

@@ -30130,6 +30130,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
+            // Narrow by Object.hasOwn(obj, key) — same semantics as "key in obj" but only in the true branch
+            if (isPropertyAccessExpression(callExpression.expression) && callExpression.arguments.length === 2) {
+                const callAccess = callExpression.expression;
+                if (isIdentifier(callAccess.name) && callAccess.name.escapedText === "hasOwn") {
+                    const objectExpr = callAccess.expression;
+                    const objectExprType = getTypeOfExpression(objectExpr);
+                    // Verify that the receiver is the global ObjectConstructor
+                    if (objectExprType.symbol && objectExprType.symbol.escapedName === "ObjectConstructor" as __String) {
+                        const objArg = getReferenceCandidate(callExpression.arguments[0]);
+                        const keyArg = callExpression.arguments[1];
+                        // Case 1: reference is the object argument — narrow object type like "in" operator
+                        if (isMatchingReference(reference, objArg)) {
+                            const keyType = getTypeOfExpression(keyArg);
+                            if (isTypeUsableAsPropertyName(keyType)) {
+                                // Only narrow in the true branch (same-branch narrowing)
+                                if (assumeTrue) {
+                                    return narrowTypeByInKeyword(type, keyType, /*assumeTrue*/ true);
+                                }
+                            }
+                        }
+                        // Case 2: reference is a property access on the object — narrow away undefined
+                        if (containsMissingType(type) && isAccessExpression(reference) && isMatchingReference(reference.expression, objArg)) {
+                            const keyType = getTypeOfExpression(keyArg);
+                            if (isTypeUsableAsPropertyName(keyType) && getAccessedPropertyName(reference) === getPropertyNameFromType(keyType)) {
+                                return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
+                            }
+                        }
+                    }
+                }
+            }
             return type;
         }
 

@@ -1,0 +1,364 @@
+//// [tests/cases/compiler/objectHasOwnNarrowing.ts] ////
+
+=== objectHasOwnNarrowing.ts ===
+// Basic narrowing — discriminated union member selection
+type Shape = { kind: "circle"; radius: number } | { kind: "square"; side: number };
+>Shape : Shape
+>      : ^^^^^
+>kind : "circle"
+>     : ^^^^^^^^
+>radius : number
+>       : ^^^^^^
+>kind : "square"
+>     : ^^^^^^^^
+>side : number
+>     : ^^^^^^
+
+declare const s: Shape;
+>s : Shape
+>  : ^^^^^
+
+if (Object.hasOwn(s, "radius")) {
+>Object.hasOwn(s, "radius") : boolean
+>                           : ^^^^^^^
+>Object.hasOwn : (o: object, v: PropertyKey) => boolean
+>              : ^ ^^      ^^ ^^           ^^^^^       
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>s : Shape
+>  : ^^^^^
+>"radius" : "radius"
+>         : ^^^^^^^^
+
+    s; // narrowed to { kind: "circle"; radius: number }
+>s : { kind: "circle"; radius: number; }
+>  : ^^^^^^^^        ^^^^^^^^^^      ^^^
+
+    s.radius; // ok
+>s.radius : number
+>         : ^^^^^^
+>s : { kind: "circle"; radius: number; }
+>  : ^^^^^^^^        ^^^^^^^^^^      ^^^
+>radius : number
+>       : ^^^^^^
+}
+
+// Unknown property on object — intersects with Record<key, unknown>
+declare const x: object;
+>x : object
+>  : ^^^^^^
+
+if (Object.hasOwn(x, "foo")) {
+>Object.hasOwn(x, "foo") : boolean
+>                        : ^^^^^^^
+>Object.hasOwn : (o: object, v: PropertyKey) => boolean
+>              : ^ ^^      ^^ ^^           ^^^^^       
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>x : object
+>  : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+    x; // narrowed to object & Record<"foo", unknown>
+>x : object & Record<"foo", unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+// Union narrowing with partial types
+type A = { tag: "a"; value: string };
+>A : A
+>  : ^
+>tag : "a"
+>    : ^^^
+>value : string
+>      : ^^^^^^
+
+type B = { tag: "b"; count: number };
+>B : B
+>  : ^
+>tag : "b"
+>    : ^^^
+>count : number
+>      : ^^^^^^
+
+type AB = A | B;
+>AB : AB
+>   : ^^
+
+declare const ab: AB;
+>ab : AB
+>   : ^^
+
+if (Object.hasOwn(ab, "value")) {
+>Object.hasOwn(ab, "value") : boolean
+>                           : ^^^^^^^
+>Object.hasOwn : (o: object, v: PropertyKey) => boolean
+>              : ^ ^^      ^^ ^^           ^^^^^       
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>ab : AB
+>   : ^^
+>"value" : "value"
+>        : ^^^^^^^
+
+    ab; // narrowed to A
+>ab : A
+>   : ^
+
+    ab.value; // string
+>ab.value : string
+>         : ^^^^^^
+>ab : A
+>   : ^
+>value : string
+>      : ^^^^^^
+}
+
+// No narrowing in else branch (same-branch only, per maintainer guidance)
+declare const maybe: { x?: number };
+>maybe : { x?: number; }
+>      : ^^^^^^      ^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+if (Object.hasOwn(maybe, "x")) {
+>Object.hasOwn(maybe, "x") : boolean
+>                          : ^^^^^^^
+>Object.hasOwn : (o: object, v: PropertyKey) => boolean
+>              : ^ ^^      ^^ ^^           ^^^^^       
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>maybe : { x?: number; }
+>      : ^^^^^^      ^^^
+>"x" : "x"
+>    : ^^^
+
+    maybe; // narrowed to { x?: number } & Record<"x", unknown>
+>maybe : { x?: number; }
+>      : ^^^^^^      ^^^
+
+} else {
+    maybe.x; // should still be number | undefined, NOT never
+>maybe.x : number | undefined
+>        : ^^^^^^^^^^^^^^^^^^
+>maybe : { x?: number; }
+>      : ^^^^^^      ^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+}
+
+// Does not narrow when key is not a literal type
+declare const dynamicKey: string;
+>dynamicKey : string
+>           : ^^^^^^
+
+declare const o2: { [k: string]: number };
+>o2 : { [k: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>k : string
+>  : ^^^^^^
+
+if (Object.hasOwn(o2, dynamicKey)) {
+>Object.hasOwn(o2, dynamicKey) : boolean
+>                              : ^^^^^^^
+>Object.hasOwn : (o: object, v: PropertyKey) => boolean
+>              : ^ ^^      ^^ ^^           ^^^^^       
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>o2 : { [k: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>dynamicKey : string
+>           : ^^^^^^
+
+    o2; // no narrowing, key is not a literal
+>o2 : { [k: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+// Works with aliased Object reference
+const Obj = Object;
+>Obj : ObjectConstructor
+>    : ^^^^^^^^^^^^^^^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+declare const o3: object;
+>o3 : object
+>   : ^^^^^^
+
+if (Obj.hasOwn(o3, "hello")) {
+>Obj.hasOwn(o3, "hello") : boolean
+>                        : ^^^^^^^
+>Obj.hasOwn : (o: object, v: PropertyKey) => boolean
+>           : ^ ^^      ^^ ^^           ^^^^^       
+>Obj : ObjectConstructor
+>    : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>o3 : object
+>   : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+    o3; // narrowed to object & Record<"hello", unknown>
+>o3 : object & Record<"hello", unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+// Negation with ! — no narrowing in the false branch
+declare const o4: object;
+>o4 : object
+>   : ^^^^^^
+
+if (!Object.hasOwn(o4, "a")) {
+>!Object.hasOwn(o4, "a") : boolean
+>                        : ^^^^^^^
+>Object.hasOwn(o4, "a") : boolean
+>                       : ^^^^^^^
+>Object.hasOwn : (o: object, v: PropertyKey) => boolean
+>              : ^ ^^      ^^ ^^           ^^^^^       
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>o4 : object
+>   : ^^^^^^
+>"a" : "a"
+>    : ^^^
+
+    o4; // not narrowed (we only narrow in true branch)
+>o4 : object
+>   : ^^^^^^
+}
+
+// True branch after negation doesn't narrow either (the else of the if(!...))
+declare const o5: object;
+>o5 : object
+>   : ^^^^^^
+
+if (!Object.hasOwn(o5, "b")) {
+>!Object.hasOwn(o5, "b") : boolean
+>                        : ^^^^^^^
+>Object.hasOwn(o5, "b") : boolean
+>                       : ^^^^^^^
+>Object.hasOwn : (o: object, v: PropertyKey) => boolean
+>              : ^ ^^      ^^ ^^           ^^^^^       
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>o5 : object
+>   : ^^^^^^
+>"b" : "b"
+>    : ^^^
+
+    // nothing
+} else {
+    // This is equivalent to Object.hasOwn(o5, "b") being true
+    // The narrowType function inverts assumeTrue for PrefixUnary !, so the else
+    // branch of if(!expr) sees assumeTrue=true — narrowing should work here
+    o5; // narrowed to object & Record<"b", unknown>
+>o5 : object & Record<"b", unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+// Narrowing with interface types having optional and required properties
+interface Config {
+    host: string;
+>host : string
+>     : ^^^^^^
+
+    port?: number;
+>port : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+    ssl?: boolean;
+>ssl : boolean | undefined
+>    : ^^^^^^^^^^^^^^^^^^^
+}
+declare const cfg: Config;
+>cfg : Config
+>    : ^^^^^^
+
+if (Object.hasOwn(cfg, "port")) {
+>Object.hasOwn(cfg, "port") : boolean
+>                           : ^^^^^^^
+>Object.hasOwn : (o: object, v: PropertyKey) => boolean
+>              : ^ ^^      ^^ ^^           ^^^^^       
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>cfg : Config
+>    : ^^^^^^
+>"port" : "port"
+>       : ^^^^^^
+
+    // port is optional, so the object type has it — narrowing filters by presence
+    cfg; // type still Config (port is present in Config, so filter keeps it)
+>cfg : Config
+>    : ^^^^^^
+}
+
+// Multiple hasOwn checks compound
+declare const u: { a: string } | { b: number } | { a: string; b: number };
+>u : { a: string; } | { b: number; } | { a: string; b: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+
+if (Object.hasOwn(u, "a")) {
+>Object.hasOwn(u, "a") : boolean
+>                      : ^^^^^^^
+>Object.hasOwn : (o: object, v: PropertyKey) => boolean
+>              : ^ ^^      ^^ ^^           ^^^^^       
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>u : { a: string; } | { b: number; } | { a: string; b: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
+>"a" : "a"
+>    : ^^^
+
+    u; // { a: string } | { a: string; b: number }
+>u : { a: string; } | { a: string; b: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
+
+    if (Object.hasOwn(u, "b")) {
+>Object.hasOwn(u, "b") : boolean
+>                      : ^^^^^^^
+>Object.hasOwn : (o: object, v: PropertyKey) => boolean
+>              : ^ ^^      ^^ ^^           ^^^^^       
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>hasOwn : (o: object, v: PropertyKey) => boolean
+>       : ^ ^^      ^^ ^^           ^^^^^       
+>u : { a: string; } | { a: string; b: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
+>"b" : "b"
+>    : ^^^
+
+        u; // { a: string; b: number }
+>u : { a: string; b: number; }
+>  : ^^^^^      ^^^^^      ^^^
+    }
+}
+

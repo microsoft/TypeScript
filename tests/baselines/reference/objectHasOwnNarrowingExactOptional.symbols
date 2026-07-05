@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/objectHasOwnNarrowingExactOptional.ts] ////
+
+=== objectHasOwnNarrowingExactOptional.ts ===
+// With exactOptionalPropertyTypes, accessing obj.a when property might not exist
+// produces the "missing" type. Object.hasOwn should remove it.
+declare const obj: { a?: string; b?: number };
+>obj : Symbol(obj, Decl(objectHasOwnNarrowingExactOptional.ts, 2, 13))
+>a : Symbol(a, Decl(objectHasOwnNarrowingExactOptional.ts, 2, 20))
+>b : Symbol(b, Decl(objectHasOwnNarrowingExactOptional.ts, 2, 32))
+
+if (Object.hasOwn(obj, "a")) {
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>obj : Symbol(obj, Decl(objectHasOwnNarrowingExactOptional.ts, 2, 13))
+
+    // Under exactOptionalPropertyTypes, a?: string means the property
+    // might be missing OR might have value string (but not undefined).
+    // After hasOwn confirms presence, obj.a is string.
+    obj.a;
+>obj.a : Symbol(a, Decl(objectHasOwnNarrowingExactOptional.ts, 2, 20))
+>obj : Symbol(obj, Decl(objectHasOwnNarrowingExactOptional.ts, 2, 13))
+>a : Symbol(a, Decl(objectHasOwnNarrowingExactOptional.ts, 2, 20))
+}
+
+// Property access after hasOwn with exactOptionalPropertyTypes
+interface Opts {
+>Opts : Symbol(Opts, Decl(objectHasOwnNarrowingExactOptional.ts, 8, 1))
+
+    verbose?: boolean;
+>verbose : Symbol(Opts.verbose, Decl(objectHasOwnNarrowingExactOptional.ts, 11, 16))
+
+    output?: string;
+>output : Symbol(Opts.output, Decl(objectHasOwnNarrowingExactOptional.ts, 12, 22))
+}
+declare const opts: Opts;
+>opts : Symbol(opts, Decl(objectHasOwnNarrowingExactOptional.ts, 15, 13))
+>Opts : Symbol(Opts, Decl(objectHasOwnNarrowingExactOptional.ts, 8, 1))
+
+if (Object.hasOwn(opts, "verbose")) {
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>opts : Symbol(opts, Decl(objectHasOwnNarrowingExactOptional.ts, 15, 13))
+
+    opts.verbose;
+>opts.verbose : Symbol(Opts.verbose, Decl(objectHasOwnNarrowingExactOptional.ts, 11, 16))
+>opts : Symbol(opts, Decl(objectHasOwnNarrowingExactOptional.ts, 15, 13))
+>verbose : Symbol(Opts.verbose, Decl(objectHasOwnNarrowingExactOptional.ts, 11, 16))
+}
+

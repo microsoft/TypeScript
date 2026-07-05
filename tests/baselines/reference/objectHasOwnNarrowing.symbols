@@ -1,0 +1,226 @@
+//// [tests/cases/compiler/objectHasOwnNarrowing.ts] ////
+
+=== objectHasOwnNarrowing.ts ===
+// Basic narrowing — discriminated union member selection
+type Shape = { kind: "circle"; radius: number } | { kind: "square"; side: number };
+>Shape : Symbol(Shape, Decl(objectHasOwnNarrowing.ts, 0, 0))
+>kind : Symbol(kind, Decl(objectHasOwnNarrowing.ts, 1, 14))
+>radius : Symbol(radius, Decl(objectHasOwnNarrowing.ts, 1, 30))
+>kind : Symbol(kind, Decl(objectHasOwnNarrowing.ts, 1, 51))
+>side : Symbol(side, Decl(objectHasOwnNarrowing.ts, 1, 67))
+
+declare const s: Shape;
+>s : Symbol(s, Decl(objectHasOwnNarrowing.ts, 2, 13))
+>Shape : Symbol(Shape, Decl(objectHasOwnNarrowing.ts, 0, 0))
+
+if (Object.hasOwn(s, "radius")) {
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>s : Symbol(s, Decl(objectHasOwnNarrowing.ts, 2, 13))
+
+    s; // narrowed to { kind: "circle"; radius: number }
+>s : Symbol(s, Decl(objectHasOwnNarrowing.ts, 2, 13))
+
+    s.radius; // ok
+>s.radius : Symbol(radius, Decl(objectHasOwnNarrowing.ts, 1, 30))
+>s : Symbol(s, Decl(objectHasOwnNarrowing.ts, 2, 13))
+>radius : Symbol(radius, Decl(objectHasOwnNarrowing.ts, 1, 30))
+}
+
+// Unknown property on object — intersects with Record<key, unknown>
+declare const x: object;
+>x : Symbol(x, Decl(objectHasOwnNarrowing.ts, 9, 13))
+
+if (Object.hasOwn(x, "foo")) {
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>x : Symbol(x, Decl(objectHasOwnNarrowing.ts, 9, 13))
+
+    x; // narrowed to object & Record<"foo", unknown>
+>x : Symbol(x, Decl(objectHasOwnNarrowing.ts, 9, 13))
+}
+
+// Union narrowing with partial types
+type A = { tag: "a"; value: string };
+>A : Symbol(A, Decl(objectHasOwnNarrowing.ts, 12, 1))
+>tag : Symbol(tag, Decl(objectHasOwnNarrowing.ts, 15, 10))
+>value : Symbol(value, Decl(objectHasOwnNarrowing.ts, 15, 20))
+
+type B = { tag: "b"; count: number };
+>B : Symbol(B, Decl(objectHasOwnNarrowing.ts, 15, 37))
+>tag : Symbol(tag, Decl(objectHasOwnNarrowing.ts, 16, 10))
+>count : Symbol(count, Decl(objectHasOwnNarrowing.ts, 16, 20))
+
+type AB = A | B;
+>AB : Symbol(AB, Decl(objectHasOwnNarrowing.ts, 16, 37))
+>A : Symbol(A, Decl(objectHasOwnNarrowing.ts, 12, 1))
+>B : Symbol(B, Decl(objectHasOwnNarrowing.ts, 15, 37))
+
+declare const ab: AB;
+>ab : Symbol(ab, Decl(objectHasOwnNarrowing.ts, 18, 13))
+>AB : Symbol(AB, Decl(objectHasOwnNarrowing.ts, 16, 37))
+
+if (Object.hasOwn(ab, "value")) {
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>ab : Symbol(ab, Decl(objectHasOwnNarrowing.ts, 18, 13))
+
+    ab; // narrowed to A
+>ab : Symbol(ab, Decl(objectHasOwnNarrowing.ts, 18, 13))
+
+    ab.value; // string
+>ab.value : Symbol(value, Decl(objectHasOwnNarrowing.ts, 15, 20))
+>ab : Symbol(ab, Decl(objectHasOwnNarrowing.ts, 18, 13))
+>value : Symbol(value, Decl(objectHasOwnNarrowing.ts, 15, 20))
+}
+
+// No narrowing in else branch (same-branch only, per maintainer guidance)
+declare const maybe: { x?: number };
+>maybe : Symbol(maybe, Decl(objectHasOwnNarrowing.ts, 25, 13))
+>x : Symbol(x, Decl(objectHasOwnNarrowing.ts, 25, 22))
+
+if (Object.hasOwn(maybe, "x")) {
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>maybe : Symbol(maybe, Decl(objectHasOwnNarrowing.ts, 25, 13))
+
+    maybe; // narrowed to { x?: number } & Record<"x", unknown>
+>maybe : Symbol(maybe, Decl(objectHasOwnNarrowing.ts, 25, 13))
+
+} else {
+    maybe.x; // should still be number | undefined, NOT never
+>maybe.x : Symbol(x, Decl(objectHasOwnNarrowing.ts, 25, 22))
+>maybe : Symbol(maybe, Decl(objectHasOwnNarrowing.ts, 25, 13))
+>x : Symbol(x, Decl(objectHasOwnNarrowing.ts, 25, 22))
+}
+
+// Does not narrow when key is not a literal type
+declare const dynamicKey: string;
+>dynamicKey : Symbol(dynamicKey, Decl(objectHasOwnNarrowing.ts, 33, 13))
+
+declare const o2: { [k: string]: number };
+>o2 : Symbol(o2, Decl(objectHasOwnNarrowing.ts, 34, 13))
+>k : Symbol(k, Decl(objectHasOwnNarrowing.ts, 34, 21))
+
+if (Object.hasOwn(o2, dynamicKey)) {
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>o2 : Symbol(o2, Decl(objectHasOwnNarrowing.ts, 34, 13))
+>dynamicKey : Symbol(dynamicKey, Decl(objectHasOwnNarrowing.ts, 33, 13))
+
+    o2; // no narrowing, key is not a literal
+>o2 : Symbol(o2, Decl(objectHasOwnNarrowing.ts, 34, 13))
+}
+
+// Works with aliased Object reference
+const Obj = Object;
+>Obj : Symbol(Obj, Decl(objectHasOwnNarrowing.ts, 40, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+declare const o3: object;
+>o3 : Symbol(o3, Decl(objectHasOwnNarrowing.ts, 41, 13))
+
+if (Obj.hasOwn(o3, "hello")) {
+>Obj.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(objectHasOwnNarrowing.ts, 40, 5))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>o3 : Symbol(o3, Decl(objectHasOwnNarrowing.ts, 41, 13))
+
+    o3; // narrowed to object & Record<"hello", unknown>
+>o3 : Symbol(o3, Decl(objectHasOwnNarrowing.ts, 41, 13))
+}
+
+// Negation with ! — no narrowing in the false branch
+declare const o4: object;
+>o4 : Symbol(o4, Decl(objectHasOwnNarrowing.ts, 47, 13))
+
+if (!Object.hasOwn(o4, "a")) {
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>o4 : Symbol(o4, Decl(objectHasOwnNarrowing.ts, 47, 13))
+
+    o4; // not narrowed (we only narrow in true branch)
+>o4 : Symbol(o4, Decl(objectHasOwnNarrowing.ts, 47, 13))
+}
+
+// True branch after negation doesn't narrow either (the else of the if(!...))
+declare const o5: object;
+>o5 : Symbol(o5, Decl(objectHasOwnNarrowing.ts, 53, 13))
+
+if (!Object.hasOwn(o5, "b")) {
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>o5 : Symbol(o5, Decl(objectHasOwnNarrowing.ts, 53, 13))
+
+    // nothing
+} else {
+    // This is equivalent to Object.hasOwn(o5, "b") being true
+    // The narrowType function inverts assumeTrue for PrefixUnary !, so the else
+    // branch of if(!expr) sees assumeTrue=true — narrowing should work here
+    o5; // narrowed to object & Record<"b", unknown>
+>o5 : Symbol(o5, Decl(objectHasOwnNarrowing.ts, 53, 13))
+}
+
+// Narrowing with interface types having optional and required properties
+interface Config {
+>Config : Symbol(Config, Decl(objectHasOwnNarrowing.ts, 61, 1))
+
+    host: string;
+>host : Symbol(Config.host, Decl(objectHasOwnNarrowing.ts, 64, 18))
+
+    port?: number;
+>port : Symbol(Config.port, Decl(objectHasOwnNarrowing.ts, 65, 17))
+
+    ssl?: boolean;
+>ssl : Symbol(Config.ssl, Decl(objectHasOwnNarrowing.ts, 66, 18))
+}
+declare const cfg: Config;
+>cfg : Symbol(cfg, Decl(objectHasOwnNarrowing.ts, 69, 13))
+>Config : Symbol(Config, Decl(objectHasOwnNarrowing.ts, 61, 1))
+
+if (Object.hasOwn(cfg, "port")) {
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>cfg : Symbol(cfg, Decl(objectHasOwnNarrowing.ts, 69, 13))
+
+    // port is optional, so the object type has it — narrowing filters by presence
+    cfg; // type still Config (port is present in Config, so filter keeps it)
+>cfg : Symbol(cfg, Decl(objectHasOwnNarrowing.ts, 69, 13))
+}
+
+// Multiple hasOwn checks compound
+declare const u: { a: string } | { b: number } | { a: string; b: number };
+>u : Symbol(u, Decl(objectHasOwnNarrowing.ts, 76, 13))
+>a : Symbol(a, Decl(objectHasOwnNarrowing.ts, 76, 18))
+>b : Symbol(b, Decl(objectHasOwnNarrowing.ts, 76, 34))
+>a : Symbol(a, Decl(objectHasOwnNarrowing.ts, 76, 50))
+>b : Symbol(b, Decl(objectHasOwnNarrowing.ts, 76, 61))
+
+if (Object.hasOwn(u, "a")) {
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>u : Symbol(u, Decl(objectHasOwnNarrowing.ts, 76, 13))
+
+    u; // { a: string } | { a: string; b: number }
+>u : Symbol(u, Decl(objectHasOwnNarrowing.ts, 76, 13))
+
+    if (Object.hasOwn(u, "b")) {
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>u : Symbol(u, Decl(objectHasOwnNarrowing.ts, 76, 13))
+
+        u; // { a: string; b: number }
+>u : Symbol(u, Decl(objectHasOwnNarrowing.ts, 76, 13))
+    }
+}
+
