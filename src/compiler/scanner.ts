@@ -3916,7 +3916,6 @@ export function createScanner(
         if (isIdentifierStart(ch, languageVersion)) {
             let char = ch;
             while (pos < end && (isIdentifierPart(char = codePointUnchecked(pos), languageVersion) || char === CharacterCodes.minus)) pos += charSize(char);
-            tokenValue = text.substring(tokenStart, pos);
             if (char === CharacterCodes.backslash) {
                 tokenValue += scanIdentifierParts();
             }
