@@ -1,14 +1,14 @@
-comment: false
+comment: 
 
 coverage:
-  precision: 5
+  precision: 9
   status:
     patch:
       default:
-        informational: true
+        informational: 
     project:
       default:
-        informational: true
+        informational: 
 
 github_checks:
-  annotations: false
+  annotations: 
