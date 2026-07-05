@@ -5,10 +5,10 @@ coverage:
   status:
     patch:
       default:
-        informational: 
+        informational: true
     project:
       default:
-        informational: 
+        informational: true
 
 github_checks:
   annotations:
