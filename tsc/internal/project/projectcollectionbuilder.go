@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
@@ -1131,6 +1132,7 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 		entry.Locked(func(entry dirty.Value[*Project]) {
 			entry.Change(func(project *Project) {
 				oldHost := project.host
+				oldProgram := project.Program
 				oldCheckerPool := project.checkerPool
 				project.host = newCompilerHost(project.currentDirectory, project, b, logger.Fork("CompilerHost"))
 				result := project.CreateProgram()
@@ -1147,6 +1149,7 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				}
 				project.dirty = false
 				project.dirtyFilePath = ""
+				b.releaseDroppedProjectReferences(oldProgram, result.Program, project.configFilePath)
 				if oldCheckerPool != nil {
 					oldCheckerPool.Discard()
 				}
@@ -1230,4 +1233,27 @@ func (b *ProjectCollectionBuilder) deleteConfiguredProject(project dirty.Value[*
 	}
 	b.configFileRegistryBuilder.releaseConfigForProject(projectPath, projectPath)
 	project.Delete()
+}
+
+// releaseDroppedProjectReferences releases the config entries for project references
+// that were present in oldProgram but are no longer referenced by newProgram. Creating
+// newProgram already re-acquires the config for every reference it still resolves, so
+// only the dropped references need to be released here.
+func (b *ProjectCollectionBuilder) releaseDroppedProjectReferences(oldProgram *compiler.Program, newProgram *compiler.Program, projectPath tspath.Path) {
+	if oldProgram == nil || oldProgram == newProgram {
+		return
+	}
+	var newReferences collections.Set[tspath.Path]
+	if newProgram != nil {
+		newProgram.RangeResolvedProjectReference(func(referencePath tspath.Path, _ *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
+			newReferences.Add(referencePath)
+			return true
+		})
+	}
+	oldProgram.RangeResolvedProjectReference(func(referencePath tspath.Path, _ *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
+		if !newReferences.Has(referencePath) {
+			b.configFileRegistryBuilder.releaseConfigForProject(referencePath, projectPath)
+		}
+		return true
+	})
 }

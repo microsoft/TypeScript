@@ -311,6 +311,106 @@ func TestProjectReferencesProgram(t *testing.T) {
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Check(t, snapshot.ProjectCollection.Projects()[0].Program != programBefore)
 	})
+
+	t.Run("dropped project reference does not crash on later change to the dropped config", func(t *testing.T) {
+		t.Parallel()
+		// Regression test for https://github.com/microsoft/typescript-go/issues/3942.
+		// A project reference dropped from a tsconfig used to leave a stale entry in
+		// the referenced config's retainingProjects. When the referencing project was
+		// later deleted and the referenced config subsequently changed, the stale entry
+		// named a project that no longer existed, crashing markProjectsAffectedByConfigChanges.
+		files := map[string]any{
+			"/user/username/projects/myproject/main/tsconfig.json": `{
+				"compilerOptions": {
+					"composite": true
+				},
+				"references": [{ "path": "../dependency" }]
+			}`,
+			"/user/username/projects/myproject/main/main.ts": `
+				import { fn1 } from '../dependency/fns'
+				fn1();
+			`,
+			"/user/username/projects/myproject/dependency/tsconfig.json": `{
+				"compilerOptions": {
+					"composite": true
+				}
+			}`,
+			"/user/username/projects/myproject/dependency/fns.ts": `
+				export function fn1() { }
+			`,
+			"/user/username/projects/myproject/other/tsconfig.json": `{
+				"compilerOptions": {
+					"composite": true
+				}
+			}`,
+			"/user/username/projects/myproject/other/other.ts": `export const y = 1;`,
+		}
+
+		session, utils := projecttestutil.Setup(files)
+
+		mainURI := lsproto.DocumentUri("file:///user/username/projects/myproject/main/main.ts")
+		mainContent := files["/user/username/projects/myproject/main/main.ts"].(string)
+		otherURI := lsproto.DocumentUri("file:///user/username/projects/myproject/other/other.ts")
+		otherContent := files["/user/username/projects/myproject/other/other.ts"].(string)
+
+		// 1. Open main.ts. The main project's program resolves the `../dependency`
+		//    project reference, so the dependency config's retainingProjects gains
+		//    the main project path.
+		session.DidOpenFile(context.Background(), mainURI, 1, mainContent, lsproto.LanguageKindTypeScript)
+		session.WaitForBackgroundTasks()
+		snapshot := session.Snapshot()
+		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/user/username/projects/myproject/dependency/tsconfig.json")) != nil)
+
+		// 2. Remove the project reference from main/tsconfig.json and rebuild.
+		//    The new program no longer references dependency.
+		err := utils.FS().WriteFile("/user/username/projects/myproject/main/tsconfig.json", `{
+			"compilerOptions": {
+				"composite": true
+			}
+		}`)
+		assert.NilError(t, err)
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{
+				Type: lsproto.FileChangeTypeChanged,
+				Uri:  "file:///user/username/projects/myproject/main/tsconfig.json",
+			},
+		})
+		_, err = session.GetLanguageService(context.Background(), mainURI)
+		assert.NilError(t, err)
+
+		// 3. Close main.ts and open an unrelated file. Opening triggers cleanup of
+		//    orphaned configured projects, deleting the main project.
+		session.DidCloseFile(context.Background(), mainURI)
+		session.DidOpenFile(context.Background(), otherURI, 1, otherContent, lsproto.LanguageKindTypeScript)
+		session.WaitForBackgroundTasks()
+		snapshot = session.Snapshot()
+		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/main/tsconfig.json")) == nil)
+		// Dropping the reference releases main from dependency's retainingProjects,
+		// so the now-unreferenced dependency config is cleaned up and no stale entry
+		// survives to crash a later config change.
+		assert.Assert(t, snapshot.ConfigFileRegistry.GetConfig(tspath.Path("/user/username/projects/myproject/dependency/tsconfig.json")) == nil)
+
+		// 4. Change dependency/tsconfig.json and flush. This used to copy the stale
+		//    retainingProjects into affectedProjects and crash
+		//    markProjectsAffectedByConfigChanges loading the deleted main project.
+		err = utils.FS().WriteFile("/user/username/projects/myproject/dependency/tsconfig.json", `{
+			"compilerOptions": {
+				"composite": true,
+				"strict": true
+			}
+		}`)
+		assert.NilError(t, err)
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{
+				Type: lsproto.FileChangeTypeChanged,
+				Uri:  "file:///user/username/projects/myproject/dependency/tsconfig.json",
+			},
+		})
+		_, err = session.GetLanguageService(context.Background(), otherURI)
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+	})
 }
 
 func filesForReferencedProjectProgram(disableSourceOfProjectReferenceRedirect bool) map[string]any {
