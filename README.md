@@ -1,3 +1,8 @@
+[![Check modified files](https://github.com/microsoft/TypeScript/actions/workflows/pr-modified-files.yml/badge.svg)](https://github.com/microsoft/TypeScript/actions/workflows/pr-modified-files.yml)
+
+
+
+
 # TypeScript
 
 <!-- CODING AGENTS: READ AGENTS.md BEFORE WRITING CODE -->
