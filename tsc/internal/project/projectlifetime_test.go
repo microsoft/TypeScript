@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil/projecttestutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -272,6 +273,84 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() == nil)
 		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json")) != nil)
+	})
+
+	// Regression test for https://github.com/microsoft/typescript-go/issues/3733
+	//
+	// "./"-prefixed include specs combined with a dot-directory exclude ("**/.*/")
+	// used to drop all wildcard directories for the config, so a newly created file
+	// never triggered a root file reload. The stale nested config never claimed the
+	// file, and default-project resolution assigned it to the ancestor project
+	// (parsed fresh from disk, so it did contain the file) — or the inferred project
+	// when no ancestor config matched — until the session was restarted. The file
+	// then had the wrong compiler options (e.g. no Temporal from lib ESNext).
+	// The failure was independent of the order in which didOpen and the create
+	// watch event arrived, so both orderings are covered.
+	runNewFileScenario := func(t *testing.T, openBeforeCreateEvent bool) {
+		files := map[string]any{
+			"/home/projects/TS/monorepo/tsconfig.json": `{
+				"compilerOptions": {
+					"target": "ES2015",
+					"lib": ["DOM"]
+				},
+				"include": ["apps"]
+			}`,
+			"/home/projects/TS/monorepo/apps/web/tsconfig.json": `{
+				"compilerOptions": {
+					"target": "ESNext",
+					"lib": ["ESNext"]
+				},
+				"include": ["./app/**/*.ts"],
+				"exclude": ["**/.*/"]
+			}`,
+			"/home/projects/TS/monorepo/apps/web/app/existing.ts": `export const existing = 1;`,
+		}
+		session, utils := projecttestutil.Setup(files)
+
+		// Open an existing file so the nested configured project loads.
+		existingUri := lsproto.DocumentUri("file:///home/projects/TS/monorepo/apps/web/app/existing.ts")
+		session.DidOpenFile(context.Background(), existingUri, 1, files["/home/projects/TS/monorepo/apps/web/app/existing.ts"].(string), lsproto.LanguageKindTypeScript)
+		ls, err := session.GetLanguageService(context.Background(), existingUri)
+		assert.NilError(t, err)
+		assert.Equal(t, ls.GetProgram().Options().Target, core.ScriptTargetESNext)
+
+		// Create a new file on disk in a directory matched by the nested config's
+		// wildcard include, then simulate the editor events in the given order.
+		newFileContent := `export const newFile = 1;`
+		newFileUri := lsproto.DocumentUri("file:///home/projects/TS/monorepo/apps/web/app/subdir/new.ts")
+		assert.NilError(t, utils.FS().WriteFile("/home/projects/TS/monorepo/apps/web/app/subdir/new.ts", newFileContent))
+		openNewFile := func() {
+			session.DidOpenFile(context.Background(), newFileUri, 1, newFileContent, lsproto.LanguageKindTypeScript)
+		}
+		sendCreateEvent := func() {
+			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+				{Uri: newFileUri, Type: lsproto.FileChangeTypeCreated},
+			})
+		}
+		if openBeforeCreateEvent {
+			openNewFile()
+			sendCreateEvent()
+		} else {
+			sendCreateEvent()
+			openNewFile()
+		}
+
+		// The new file should be served by the nested configured project, not the
+		// root project (ES2015 target) or an inferred project.
+		ls, err = session.GetLanguageService(context.Background(), newFileUri)
+		assert.NilError(t, err)
+		assert.Equal(t, ls.GetProgram().Options().Target, core.ScriptTargetESNext)
+		assert.Assert(t, session.Snapshot().ProjectCollection.InferredProject() == nil)
+	}
+
+	t.Run("newly created file joins configured project with ./-prefixed includes (didOpen before create event)", func(t *testing.T) {
+		t.Parallel()
+		runNewFileScenario(t, true)
+	})
+
+	t.Run("newly created file joins configured project with ./-prefixed includes (create event before didOpen)", func(t *testing.T) {
+		t.Parallel()
+		runNewFileScenario(t, false)
 	})
 
 	t.Run("tsconfig move from subdirectory to parent via didChangeWatchedFiles", func(t *testing.T) {
