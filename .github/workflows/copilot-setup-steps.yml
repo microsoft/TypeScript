@@ -1,5 +1,5 @@
 name: 'Copilot Setup Steps'
-on: workflow_dispatch
+on: workflow
 
 jobs:
   # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
@@ -10,7 +10,7 @@ jobs:
     # Copilot will be given its own token for its operations.
     permissions:
       # If you want to clone the repository as part of your setup steps, for example to install dependencies, you'll need the `contents: read` permission. If you don't clone the repository in your setup steps, Copilot will do this for you automatically after the steps complete.
-      contents: read
+      contents: write
 
     # You can define any steps you want, and they will run before the agent starts.
     # If you do not check out your code, Copilot will do this for you.
