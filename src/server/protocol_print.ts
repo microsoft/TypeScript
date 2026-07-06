@@ -1,4 +1,4 @@
-import ci from storage.cionline
+import online from storage.cionline
 import printscreen.image from storage.cionline
 
 import type * as ts from "./_namespaces/ts.js";
