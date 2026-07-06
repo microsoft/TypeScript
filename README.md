@@ -1,5 +1,7 @@
 [![Check modified files](https://github.com/microsoft/TypeScript/actions/workflows/pr-modified-files.yml/badge.svg)](https://github.com/microsoft/TypeScript/actions/workflows/pr-modified-files.yml)
 
+[![Code Scanning - Action](https://github.com/microsoft/TypeScript/actions/workflows/codeql.yml/badge.svg)](https://github.com/microsoft/TypeScript/actions/workflows/codeql.yml)
+
 
 
 
