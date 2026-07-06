@@ -525,7 +525,7 @@ func (s *Session) setupLanguageService(sd *snapshotData, program *compiler.Progr
 	if proj == nil {
 		return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectName)
 	}
-	return ls.NewLanguageService(proj.ConfigFilePath(), program, sd.snapshot, activeFile), nil
+	return ls.NewLanguageService(proj.ID(), program, sd.snapshot, activeFile), nil
 }
 
 // HandleRequest implements Handler.

@@ -87,3 +87,55 @@ func TestCompletionSymbolTypeIsResolvable(t *testing.T) {
 	assert.Assert(t, sawSymbol, "completion entries should include resolvable symbols")
 	assert.Assert(t, sawPush, "array member completions should include `push`")
 }
+
+// TestCompletionOnInferredProject reproduces a crash where requesting completions
+// for a loose file — one not part of any tsconfig.json, so it resolves to an
+// inferred project — panicked with "ConfigFilePath called on non-configured
+// project".
+//
+// setupLanguageService called Project.ConfigFilePath(), which is only valid for
+// configured projects and panics for inferred ones. The fix uses Project.ID(),
+// which returns the project's path for both configured and inferred projects without panicking.
+func TestCompletionOnInferredProject(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	// No tsconfig.json anywhere, so this file belongs to an inferred project.
+	const fileName = "/home/projects/p/src/index.ts"
+	const content = "declare const people: string[];\npeople."
+
+	files := map[string]any{
+		fileName: content,
+	}
+	projectSession, _ := projecttestutil.Setup(files)
+	defer projectSession.Close()
+	session := NewSession(projectSession, nil)
+	defer session.Close()
+
+	ctx := context.Background()
+
+	snapshotResp, err := session.handleUpdateSnapshot(ctx, &UpdateSnapshotParams{
+		OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+	})
+	assert.NilError(t, err)
+
+	proj, err := session.handleGetDefaultProjectForFile(ctx, &GetDefaultProjectForFileParams{
+		Snapshot: snapshotResp.Snapshot,
+		File:     DocumentIdentifier{FileName: fileName},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, proj != nil, "file should resolve to an inferred default project")
+
+	// This request previously panicked in setupLanguageService.
+	// content is pure ASCII, so the UTF-16 caret offset equals the byte length.
+	completions, err := session.handleGetCompletionsAtPosition(ctx, &GetCompletionsAtPositionParams{
+		Snapshot: snapshotResp.Snapshot,
+		Project:  proj.Id,
+		File:     DocumentIdentifier{FileName: fileName},
+		Position: uint32(len(content)),
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, completions != nil, "expected a completion list for array members")
+}
