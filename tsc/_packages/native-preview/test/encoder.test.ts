@@ -330,3 +330,63 @@ describe("UTF-8 vs UTF-16 position encoding", () => {
         assert.strictEqual(end - pos, 4); // UTF-16 length, not UTF-8 byte length (5)
     });
 });
+
+describe("Line and character mapping", () => {
+    function makeSourceFile(text: string): RemoteSourceFile {
+        return decode(encodeSourceFile(makeSF(text, "/test.ts", [])));
+    }
+
+    test("getLineStarts for empty file", () => {
+        const sf = makeSourceFile("");
+        assert.deepStrictEqual(sf.getLineStarts(), [0]);
+    });
+
+    test("getLineStarts for LF-separated lines", () => {
+        const sf = makeSourceFile("a\nb\nc");
+        assert.deepStrictEqual(sf.getLineStarts(), [0, 2, 4]);
+    });
+
+    test("getLineStarts for CRLF-separated lines", () => {
+        const sf = makeSourceFile("a\r\nbb\r\nc");
+        assert.deepStrictEqual(sf.getLineStarts(), [0, 3, 7]);
+    });
+
+    test("getLineStarts is cached", () => {
+        const sf = makeSourceFile("a\nb");
+        assert.strictEqual(sf.getLineStarts(), sf.getLineStarts());
+    });
+
+    test("getLineAndCharacterOfPosition", () => {
+        const sf = makeSourceFile("ab\ncde\nf");
+        assert.deepStrictEqual(sf.getLineAndCharacterOfPosition(0), { line: 0, character: 0 });
+        assert.deepStrictEqual(sf.getLineAndCharacterOfPosition(2), { line: 0, character: 2 });
+        assert.deepStrictEqual(sf.getLineAndCharacterOfPosition(3), { line: 1, character: 0 });
+        assert.deepStrictEqual(sf.getLineAndCharacterOfPosition(6), { line: 1, character: 3 });
+        assert.deepStrictEqual(sf.getLineAndCharacterOfPosition(7), { line: 2, character: 0 });
+    });
+
+    test("getLineAndCharacterOfPosition uses UTF-16 code units", () => {
+        // 🎉 (U+1F389) is a surrogate pair: 2 UTF-16 code units.
+        const source = "🎉a\nb";
+        const sf = makeSourceFile(source);
+        // "a" is at UTF-16 offset 2, on line 0
+        assert.deepStrictEqual(sf.getLineAndCharacterOfPosition(2), { line: 0, character: 2 });
+        // "b" is at UTF-16 offset 4 (after "🎉a\n"), on line 1
+        assert.strictEqual(source.indexOf("b"), 4);
+        assert.deepStrictEqual(sf.getLineAndCharacterOfPosition(4), { line: 1, character: 0 });
+    });
+
+    test("getPositionOfLineAndCharacter round-trips", () => {
+        const sf = makeSourceFile("ab\ncde\nf");
+        for (const pos of [0, 1, 2, 3, 5, 6, 7]) {
+            const lc = sf.getLineAndCharacterOfPosition(pos);
+            assert.strictEqual(sf.getPositionOfLineAndCharacter(lc.line, lc.character), pos);
+        }
+    });
+
+    test("getPositionOfLineAndCharacter throws for out-of-range line", () => {
+        const sf = makeSourceFile("a\nb");
+        assert.throws(() => sf.getPositionOfLineAndCharacter(5, 0), /Bad line number/);
+        assert.throws(() => sf.getPositionOfLineAndCharacter(-1, 0), /Bad line number/);
+    });
+});

@@ -75,6 +75,13 @@ export interface FileReference extends TextRange {
     readonly preserve: boolean;
 }
 
+export interface LineAndCharacter {
+    /** 0-based line number. */
+    readonly line: number;
+    /** 0-based character offset, in UTF-16 code units, from the start of the line. */
+    readonly character: number;
+}
+
 export interface SourceFile extends Node {
     readonly kind: SyntaxKind.SourceFile;
     readonly statements: NodeArray<Statement>;
@@ -92,6 +99,12 @@ export interface SourceFile extends Node {
     readonly moduleAugmentations: readonly Node[];
     readonly ambientModuleNames: readonly string[];
     readonly externalModuleIndicator: Node | true | undefined;
+    /** Returns the UTF-16 code unit offset of the start of each line. */
+    getLineStarts(): readonly number[];
+    /** Converts a UTF-16 code unit position into a 0-based line and character. */
+    getLineAndCharacterOfPosition(position: number): LineAndCharacter;
+    /** Converts a 0-based line and character into a UTF-16 code unit position. */
+    getPositionOfLineAndCharacter(line: number, character: number): number;
     /** @internal */
     tokenCache?: Map<string, Node>;
 }

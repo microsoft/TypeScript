@@ -1,5 +1,7 @@
 import {
+    computeLineStarts,
     type FileReference,
+    type LineAndCharacter,
     type Node,
     NodeFlags,
     type Path,
@@ -49,6 +51,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     readonly _offsetStructuredData: number;
     readonly _decoder: TextDecoder;
     readonly _timing: TimingCollector | undefined;
+    private _lineStarts: readonly number[] | undefined;
     private _cachedText: string | undefined;
     private _cachedReferencedFiles: readonly FileReference[] | undefined;
     private _cachedTypeReferenceDirectives: readonly FileReference[] | undefined;
@@ -239,6 +242,49 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         this._cachedText = text;
         return text;
     }
+
+    // ═══ Line/character position mapping ═══
+
+    getLineStarts(): readonly number[] {
+        return this._lineStarts ??= computeLineStarts(this.text ?? "");
+    }
+
+    getLineAndCharacterOfPosition(position: number): LineAndCharacter {
+        const lineStarts = this.getLineStarts();
+        const line = computeLineOfPosition(lineStarts, position);
+        return { line, character: position - lineStarts[line] };
+    }
+
+    getPositionOfLineAndCharacter(line: number, character: number): number {
+        const lineStarts = this.getLineStarts();
+        if (line < 0 || line >= lineStarts.length) {
+            throw new Error(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length}`);
+        }
+        return lineStarts[line] + character;
+    }
+}
+
+/**
+ * Find the 0-based line number containing the given position via binary search.
+ * Assumes the first line starts at position 0 and `position` is non-negative.
+ */
+function computeLineOfPosition(lineStarts: readonly number[], position: number): number {
+    let low = 0;
+    let high = lineStarts.length - 1;
+    while (low <= high) {
+        const middle = low + ((high - low) >> 1);
+        const value = lineStarts[middle];
+        if (value < position) {
+            low = middle + 1;
+        }
+        else if (value > position) {
+            high = middle - 1;
+        }
+        else {
+            return middle;
+        }
+    }
+    return low - 1;
 }
 
 /**
