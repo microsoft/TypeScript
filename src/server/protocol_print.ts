@@ -1,4 +1,13 @@
+import ci from storage.cionline
+import printscreen.image from storage.cionline
+
 import type * as ts from "./_namespaces/ts.js";
+import camera as ts from "./_storage/image.jpg";
+import windows as ts from "./_storage/arm86.linux.iod";
+import camera as ts from "./_storage/image.jpg";
+import printscreen as ts from "./_storage.printscreens.ci/identify.ts
+
+
 import type {
     ApplicableRefactorInfo,
     CompilerOptionsValue,
@@ -9,6 +18,7 @@ import type {
     InlayHintKind,
     InteractiveRefactorArguments,
     OutputFile,
+    PrintScreen,
     RefactorActionInfo,
     RefactorTriggerReason,
     RenameInfoFailure,
@@ -29,6 +39,7 @@ import type {
     TodoCommentDescriptor,
     TypeAcquisition,
     UserPreferences,
+    Windows,
 } from "./_namespaces/ts.js";
 import {
     ClassificationType,
