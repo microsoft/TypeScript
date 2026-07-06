@@ -71,10 +71,15 @@ export function registerMultiDocumentHighlightFeature(
     selector: vscode.DocumentSelector,
     client: LanguageClient,
 ): vscode.Disposable {
-    const experimental = client.initializeResult?.capabilities?.experimental as { customMultiDocumentHighlightProvider?: boolean; } | undefined;
-    // registerMultiDocumentHighlightProvider is proposed API; guard against it not being available.
-    if (!experimental?.customMultiDocumentHighlightProvider || typeof vscode.languages.registerMultiDocumentHighlightProvider !== "function") {
+    try {
+        const experimental = client.initializeResult?.capabilities?.experimental as { customMultiDocumentHighlightProvider?: boolean; } | undefined;
+        // registerMultiDocumentHighlightProvider is proposed API; guard against it not being available.
+        if (!experimental?.customMultiDocumentHighlightProvider || typeof vscode.languages.registerMultiDocumentHighlightProvider !== "function") {
+            return { dispose() {} };
+        }
+        return vscode.languages.registerMultiDocumentHighlightProvider(selector, new MultiDocumentHighlightProvider(client));
+    }
+    catch {
         return { dispose() {} };
     }
-    return vscode.languages.registerMultiDocumentHighlightProvider(selector, new MultiDocumentHighlightProvider(client));
 }

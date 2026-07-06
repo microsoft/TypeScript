@@ -189,7 +189,7 @@ type UserPreferences struct {
 	// ------- Project Configuration -------
 
 	// CustomConfigFileName specifies a custom config file name to use before defaulting to tsconfig.json/jsconfig.json.
-	CustomConfigFileName string `raw:"customConfigFileName" config:"native-preview.customConfigFileName"`
+	CustomConfigFileName string `raw:"customConfigFileName" config:"customConfigFileName"`
 }
 
 // IsATADisabled returns whether Automatic Type Acquisition is disabled based on user preferences.

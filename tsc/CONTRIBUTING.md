@@ -76,7 +76,7 @@ This will launch a new VS Code instance which uses the Corsa LS as the backend.
 
 #### Collecting Logs
 
-The extension provides a single output channel, **typescript-native-preview**, in VS Code's Output panel. It shows both server log messages and (optionally) LSP protocol traces.
+The extension provides a single output channel, **TypeScript 7**, in VS Code's Output panel. It shows both server log messages and (optionally) LSP protocol traces.
 
 The output channel's **log level** (the gear icon next to the channel dropdown) controls what is visible:
 
@@ -88,7 +88,7 @@ The output channel's **log level** (the gear icon next to the channel dropdown) 
 | **Debug** | All of the above, plus verbose server details (cache statistics, project trees) |
 | **Trace** | All of the above, plus full LSP request/response protocol traces |
 
-The **`typescript.native-preview.trace.server`** setting controls the detail level of LSP traces when the log level is set to Trace:
+The **`js/ts.trace.server`** setting controls the detail level of LSP traces when the log level is set to Trace:
 
 | Setting value | Effect at Trace log level |
 |---|---|
@@ -99,7 +99,7 @@ The **`typescript.native-preview.trace.server`** setting controls the detail lev
 When filing an issue, copy the relevant section of log output and include it in your report.
 
 > [!WARNING]
-> Logs contain personally identifiable information (mostly file paths). When the log level is set to Trace and `typescript.native-preview.trace.server` is set to `"verbose"`, this includes the full contents of open files. Always review log content before sharing.
+> Logs contain personally identifiable information (mostly file paths). When the log level is set to Trace and `js/ts.trace.server` is set to `"verbose"`, this includes the full contents of open files. Always review log content before sharing.
 
 #### Collecting Heap Profiles
 

@@ -164,7 +164,7 @@ export class ProjectStatus implements vscode.Disposable {
     private ensureStatusItem(): vscode.LanguageStatusItem {
         if (!this.statusItem) {
             this.statusItem = vscode.languages.createLanguageStatusItem("typescript.native-preview.projectStatus", jsTsLanguageModes);
-            this.statusItem.name = vscode.l10n.t("TypeScript Native Preview Project Status");
+            this.statusItem.name = vscode.l10n.t("TypeScript 7 Project Status");
         }
         return this.statusItem;
     }
