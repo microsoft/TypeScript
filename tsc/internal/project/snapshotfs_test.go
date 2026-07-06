@@ -2,6 +2,7 @@ package project
 
 import (
 	"slices"
+	"sync"
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
@@ -494,6 +495,51 @@ func TestSnapshotFSBuilder(t *testing.T) {
 
 		// Should contain both disk file and overlay file (both as basenames)
 		assert.Assert(t, slices.Contains(entries.Files, "disk.ts"), "should contain disk.ts")
+		assert.Assert(t, slices.Contains(entries.Files, "overlay.ts"), "should contain overlay.ts")
+	})
+
+	t.Run("GetAccessibleEntries is safe under concurrent calls", func(t *testing.T) {
+		t.Parallel()
+		testFS := vfstest.FromMap(map[string]string{
+			"/src/a.ts": "",
+			"/src/b.ts": "",
+			"/src/c.ts": "",
+			"/src/d.ts": "",
+			"/src/e.ts": "",
+		}, false /* useCaseSensitiveFileNames */)
+
+		overlays := map[tspath.Path]*Overlay{
+			tspath.Path("/src/overlay.ts"): {
+				fileBase: fileBase{fileName: "/src/overlay.ts", content: ""},
+			},
+		}
+
+		builder := newSnapshotFSBuilder(
+			testFS,
+			make(map[tspath.Path]*Overlay), // prevOverlays
+			overlays,
+			make(map[tspath.Path]*diskFile),
+			make(map[tspath.Path]dirty.CloneableMap[tspath.Path, string]),
+			nil, // nodeModulesRealpathAliases
+			lsproto.PositionEncodingKindUTF16,
+			toPath,
+		)
+
+		_ = builder.fs.GetAccessibleEntries("/src")
+
+		start := make(chan struct{})
+		var wg sync.WaitGroup
+		for range 50 {
+			wg.Go(func() {
+				<-start
+				_ = builder.GetAccessibleEntries("/src")
+			})
+		}
+		close(start)
+		wg.Wait()
+
+		// Sanity: the overlay is still reported after all the concurrent calls.
+		entries := builder.GetAccessibleEntries("/src")
 		assert.Assert(t, slices.Contains(entries.Files, "overlay.ts"), "should contain overlay.ts")
 	})
 }
