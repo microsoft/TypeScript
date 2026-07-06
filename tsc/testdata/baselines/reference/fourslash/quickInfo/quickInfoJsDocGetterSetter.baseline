@@ -14,7 +14,6 @@
 // | getter A
 // | 
 // | *@returns* — return A
-// | 
 // | ----------------------------------------------------------------------
 //         return "";
 //     }
@@ -32,7 +31,6 @@
 // | getter A
 // | 
 // | *@returns* — return A
-// | 
 // | ----------------------------------------------------------------------
 // }
 // // override both getter and setter
@@ -50,7 +48,6 @@
 // | getter B
 // | 
 // | *@returns* — return B
-// | 
 // | ----------------------------------------------------------------------
 //         return "";
 //     }
@@ -67,7 +64,6 @@
 // | getter B
 // | 
 // | *@returns* — return B
-// | 
 // | ----------------------------------------------------------------------
 // }
 // // not override
@@ -87,7 +83,6 @@
 // | setter D
 // | 
 // | *@param* `value` — foo D
-// | 
 // | ----------------------------------------------------------------------
 // }
 // new A().x = "1";
@@ -99,7 +94,6 @@
 // | getter A
 // | 
 // | *@returns* — return A
-// | 
 // | ----------------------------------------------------------------------
 // new B().x = "1";
 //         ^
@@ -110,7 +104,6 @@
 // | getter B
 // | 
 // | *@returns* — return B
-// | 
 // | ----------------------------------------------------------------------
 // new C().x = "1";
 //         ^
@@ -121,7 +114,6 @@
 // | getter A
 // | 
 // | *@returns* — return A
-// | 
 // | ----------------------------------------------------------------------
 // new D().x = "1";
 //         ^
@@ -132,7 +124,6 @@
 // | setter D
 // | 
 // | *@param* `value` — foo D
-// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -148,7 +139,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A\n"
+        "value": "```typescript\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A"
       },
       "range": {
         "start": {
@@ -175,7 +166,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A\n"
+        "value": "```typescript\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A"
       },
       "range": {
         "start": {
@@ -202,7 +193,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(accessor) B.x: string\n```\ngetter B\n\n*@returns* — return B\n"
+        "value": "```typescript\n(accessor) B.x: string\n```\ngetter B\n\n*@returns* — return B"
       },
       "range": {
         "start": {
@@ -229,7 +220,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(accessor) B.x: string\n```\ngetter B\n\n*@returns* — return B\n"
+        "value": "```typescript\n(accessor) B.x: string\n```\ngetter B\n\n*@returns* — return B"
       },
       "range": {
         "start": {
@@ -256,7 +247,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(accessor) D.x: string\n```\nsetter D\n\n*@param* `value` — foo D\n"
+        "value": "```typescript\n(accessor) D.x: string\n```\nsetter D\n\n*@param* `value` — foo D"
       },
       "range": {
         "start": {
@@ -283,7 +274,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A\n"
+        "value": "```typescript\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A"
       },
       "range": {
         "start": {
@@ -310,7 +301,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(accessor) B.x: string\n```\ngetter B\n\n*@returns* — return B\n"
+        "value": "```typescript\n(accessor) B.x: string\n```\ngetter B\n\n*@returns* — return B"
       },
       "range": {
         "start": {
@@ -337,7 +328,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A\n"
+        "value": "```typescript\n(accessor) A.x: string\n```\ngetter A\n\n*@returns* — return A"
       },
       "range": {
         "start": {
@@ -364,7 +355,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(accessor) D.x: string\n```\nsetter D\n\n*@param* `value` — foo D\n"
+        "value": "```typescript\n(accessor) D.x: string\n```\nsetter D\n\n*@param* `value` — foo D"
       },
       "range": {
         "start": {

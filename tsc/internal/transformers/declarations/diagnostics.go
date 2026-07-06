@@ -686,7 +686,7 @@ func createGetIsolatedDeclarationErrors(resolver printer.EmitResolver) func(node
 		}
 		addUndefined := resolver.RequiresAddingImplicitUndefinedUnsafe(node, nil, nil) // skip checker lock - node builder will already have one
 		if !addUndefined && node.Initializer() != nil {
-			return createExpressionError(node)
+			return createExpressionError(node.Initializer())
 		}
 		message := getErrorByDeclarationKind(node.Kind)
 		if addUndefined {

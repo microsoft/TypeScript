@@ -2,9 +2,9 @@ import {
     type FileReference,
     ModifierFlags,
     type Node,
-    type NodeArray,
     SyntaxKind,
 } from "../../ast/index.ts";
+import type { TimingCollector } from "../timing.ts";
 import {
     HEADER_OFFSET_HASH_HI0,
     HEADER_OFFSET_HASH_HI1,
@@ -39,6 +39,11 @@ export const NODE_EXTENDED_DATA_MASK = 0x00_ff_ff_ff;
 // source file, avoiding a direct dependency on RemoteSourceFile.
 // ═══════════════════════════════════════════════════════════════════════════
 
+// The global type is not available in earlier @types/node versions
+export interface TextDecoder {
+    decode(input?: ArrayBufferView | ArrayBufferLike): string;
+}
+
 export interface SourceFileInfo {
     readonly _offsetNodes: number;
     readonly _offsetStringTableOffsets: number;
@@ -48,6 +53,13 @@ export interface SourceFileInfo {
     readonly _decoder: TextDecoder;
     nodes: any[];
     readonly path?: string;
+    /**
+     * The timing collector that per-node materialization is reported into, and
+     * that this source file registered itself with when fetched. Present only
+     * when timing collection is enabled; when undefined, materialization is not
+     * timed and no clock is read.
+     */
+    readonly _timing?: TimingCollector | undefined;
     readFileReferences(offset: number): readonly FileReference[];
     readNodeIndexArray(offset: number): readonly Node[];
     readStringArray(offset: number): readonly string[];

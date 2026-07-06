@@ -25,6 +25,10 @@ func NewImportElisionTransformer(opt *transformers.TransformOptions) *transforme
 }
 
 func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
+	if ast.IsSourceFile(node) && tx.emitResolver != nil {
+		tx.emitResolver.MarkLinkedReferencesRecursively(tx.EmitContext().MostOriginal(node).AsSourceFile())
+	}
+
 	switch node.Kind {
 	case ast.KindImportEqualsDeclaration:
 		if ast.IsExternalModuleImportEqualsDeclaration(node) {

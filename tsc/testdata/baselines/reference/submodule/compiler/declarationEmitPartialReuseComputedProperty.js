@@ -31,9 +31,5 @@ export declare const o: () => {
     [neg]: number;
 };
 //// [b.d.ts]
-export declare const g: () => {
-    A: string;
-    foo: string;
-    1: number;
-    [-1]: number;
-};
+import { o } from "./a";
+export declare const g: typeof o;

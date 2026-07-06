@@ -38,7 +38,6 @@
 // | ----------------------------------------------------------------------
 // | fn(**a: string**): any
 // | - `a: string`: a string
-
 // | Does something
 // | ----------------------------------------------------------------------
 [
@@ -169,7 +168,7 @@
               "label": "a: string",
               "documentation": {
                 "kind": "markdown",
-                "value": "a string\n"
+                "value": "a string"
               }
             }
           ],

@@ -35,7 +35,7 @@ interface SymbolConstructor {
 
     /**
      * Returns a key from the global symbol registry matching the given Symbol if found.
-     * Otherwise, returns a undefined.
+     * Otherwise, returns undefined.
      * @param sym Symbol to find the key for.
      */
     keyFor(sym: symbol): string | undefined;

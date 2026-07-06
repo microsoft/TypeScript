@@ -116,6 +116,7 @@ type EmitResolver interface {
 	// isolatedDeclarations-specific declaration emit
 	GetPropertiesOfContainerFunction(node *ast.Node) []*ast.Symbol
 	RequiresAddingImplicitUndefinedUnsafe(node *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool
+	GetReferencedValueDeclarationUnsafe(node *ast.IdentifierNode) *ast.Declaration
 
 	// Node construction for declaration emit
 	CreateTypeOfDeclaration(emitContext *EmitContext, declaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node

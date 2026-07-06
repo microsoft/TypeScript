@@ -110,7 +110,7 @@ interface Set<T> {
      */
     has(value: T): boolean;
     /**
-     * @returns the number of (unique) elements in Set.
+     * @returns the number of (unique) elements in the Set.
      */
     readonly size: number;
 }
@@ -122,8 +122,17 @@ interface SetConstructor {
 declare var Set: SetConstructor;
 
 interface ReadonlySet<T> {
+    /**
+     * Executes a provided function once per each value in the ReadonlySet object, in insertion order.
+     */
     forEach(callbackfn: (value: T, value2: T, set: ReadonlySet<T>) => void, thisArg?: any): void;
+    /**
+     * @returns a boolean indicating whether an element with the specified value exists in the Set or not.
+     */
     has(value: T): boolean;
+    /**
+     * @returns the number of (unique) elements in the Set.
+     */
     readonly size: number;
 }
 

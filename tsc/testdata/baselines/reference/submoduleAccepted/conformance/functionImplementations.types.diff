@@ -1,0 +1,37 @@
+--- old.functionImplementations.types
++++ new.functionImplementations.types
+@@= skipped -9, +9 lines =@@
+ // FunctionExpression f with no return type annotation and directly references f in its body returns any
+ var a: any = function f() {
+ >a : any
+->function f() {    return f;} : () => any
+->f : () => any
++>function f() {    return f;} : () => typeof f
++>f : () => typeof a
+
+     return f;
+->f : () => any
++>f : () => typeof a
+
+ };
+ var a: any = function f() {
+@@= skipped -21, +21 lines =@@
+ // FunctionExpression f with no return type annotation and indirectly references f in its body returns any
+ var a: any = function f() {
+ >a : any
+->function f() {    var x = f;    return x;} : () => any
+->f : () => any
++>function f() {    var x = f;    return x;} : () => typeof f
++>f : () => typeof a
+
+     var x = f;
+->x : () => any
+->f : () => any
++>x : () => typeof a
++>f : () => typeof a
+
+     return x;
+->x : () => any
++>x : () => typeof a
+
+ };

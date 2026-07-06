@@ -1,0 +1,10 @@
+--- old.exportImportNonInstantiatedModule.types
++++ new.exportImportNonInstantiatedModule.types
+@@= skipped -10, +10 lines =@@
+
+     export import A1 = A
+ >A1 : any
+->A : error
++>A : any
+     
+ }

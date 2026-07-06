@@ -1,6 +1,7 @@
 package project
 
 import (
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -140,6 +141,7 @@ type snapshotFSBuilder struct {
 	diskDirectories            *dirty.Map[tspath.Path, dirty.CloneableMap[tspath.Path, string]]
 	nodeModulesRealpathAliases *dirty.SyncMap[tspath.Path, *realpathAliasSet]
 	toPath                     func(string) tspath.Path
+	accessibleEntries          collections.SyncMap[tspath.Path, *vfs.Entries]
 }
 
 func newSnapshotFSBuilder(
@@ -320,13 +322,23 @@ func (s *snapshotFSBuilder) GetFileByPath(fileName string, path tspath.Path) Fil
 
 func (s *snapshotFSBuilder) GetAccessibleEntries(path string) vfs.Entries {
 	entries := s.fs.GetAccessibleEntries(path)
-	overlayDirectories, ok := s.overlayDirectories[s.toPath(path)]
+	p := s.toPath(path)
+	overlayDirectories, ok := s.overlayDirectories[p]
 	if !ok {
 		return entries
 	}
 
-	readDirectoryIntoEntries(overlayDirectories, s.isOpenFile, &entries)
-	return entries
+	if merged, ok := s.accessibleEntries.Load(p); ok {
+		return *merged
+	}
+	merged := &vfs.Entries{
+		Files:       slices.Clip(entries.Files),
+		Directories: slices.Clip(entries.Directories),
+		Symlinks:    entries.Symlinks,
+	}
+	readDirectoryIntoEntries(overlayDirectories, s.isOpenFile, merged)
+	merged, _ = s.accessibleEntries.LoadOrStore(p, merged)
+	return *merged
 }
 
 func (s *snapshotFSBuilder) getDiskFile(fileName string, path tspath.Path, forceReload bool) FileHandle {

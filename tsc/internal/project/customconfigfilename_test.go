@@ -166,9 +166,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		} {
 			prefs := lsutil.ParseUserPreferences(map[string]any{
 				"js/ts": map[string]any{
-					"native-preview": map[string]any{
-						"customConfigFileName": invalidName,
-					},
+					"customConfigFileName": invalidName,
 				},
 			})
 			assert.Equal(t, prefs.CustomConfigFileName, "",
@@ -185,9 +183,7 @@ func TestCustomConfigFileName(t *testing.T) {
 		} {
 			prefs := lsutil.ParseUserPreferences(map[string]any{
 				"js/ts": map[string]any{
-					"native-preview": map[string]any{
-						"customConfigFileName": validName,
-					},
+					"customConfigFileName": validName,
 				},
 			})
 			assert.Equal(t, prefs.CustomConfigFileName, validName,

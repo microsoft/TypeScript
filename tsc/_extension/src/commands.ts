@@ -12,22 +12,22 @@ import {
     restartExtHostOnChangeIfNeeded,
 } from "./util";
 
-export function registerEnablementCommands(context: vscode.ExtensionContext, telemetryReporter: tr.TelemetryReporter): void {
+export function registerEnablementCommands(context: vscode.ExtensionContext, telemetryReporter: tr.TelemetryReporter, stopSession: () => Promise<void>): void {
     context.subscriptions.push(vscode.commands.registerCommand("typescript.native-preview.enable", () => {
         // Fire and forget, because this will restart the extension host and cause an error if we await
         telemetryReporter.sendTelemetryEvent("command.enableNativePreview");
         updateUseTsgoSetting(true);
     }));
 
-    context.subscriptions.push(vscode.commands.registerCommand("typescript.native-preview.disable", () => {
-        // Fire and forget, because this will restart the extension host and cause an error if we await
+    context.subscriptions.push(vscode.commands.registerCommand("typescript.native-preview.disable", async () => {
         telemetryReporter.sendTelemetryEvent("command.disableNativePreview");
-        updateUseTsgoSetting(false);
+        await stopSession();
+        await updateUseTsgoSetting(false);
     }));
 }
 
 /**
- * Updates the TypeScript Native Preview setting and reloads extension host.
+ * Updates the TypeScript 7 setting and reloads extension host.
  * Handles both `js/ts.experimental.useTsgo` and `typescript.experimental.useTsgo`.
  */
 export async function updateUseTsgoSetting(enable: boolean): Promise<void> {
@@ -39,13 +39,13 @@ export async function updateUseTsgoSetting(enable: boolean): Promise<void> {
 
     // If any are defined, we'll use the most-specific target,
     // but we'll only set it through `js/ts`.
+    const updates: Thenable<void>[] = [];
     if (jsTsTarget !== undefined || tsTarget !== undefined) {
-        const updates = [];
-
         const mostSpecificTarget = Math.max(
             jsTsTarget ?? vscode.ConfigurationTarget.Global,
             tsTarget ?? vscode.ConfigurationTarget.Global,
         );
+
         updates.push(jsTsConfig.update("experimental.useTsgo", enable, mostSpecificTarget));
 
         // If `typescript` had the most-specific target
@@ -57,7 +57,15 @@ export async function updateUseTsgoSetting(enable: boolean): Promise<void> {
 
         await Promise.all(updates);
     }
+    else {
+        await jsTsConfig.update("experimental.useTsgo", enable, vscode.ConfigurationTarget.Global);
+    }
 
+    return restartExtHostOnChangeIfNeeded();
+}
+
+export async function updateWorkspaceUseTsgoSetting(enable: boolean): Promise<void> {
+    await vscode.workspace.getConfiguration("js/ts").update("experimental.useTsgo", enable, vscode.ConfigurationTarget.Workspace);
     return restartExtHostOnChangeIfNeeded();
 }
 

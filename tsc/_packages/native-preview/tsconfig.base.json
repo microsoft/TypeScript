@@ -3,6 +3,7 @@
         "target": "es2022",
         "lib": ["es2022"],
         "strict": true,
+        "exactOptionalPropertyTypes": true,
         "composite": true,
         "forceConsistentCasingInFileNames": true,
         "rewriteRelativeImportExtensions": true,

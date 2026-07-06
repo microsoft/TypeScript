@@ -318,6 +318,64 @@ func TestBulkCacheInvalidation(t *testing.T) {
 		assert.Equal(t, newProject.Kind, project.KindInferred, "dist-folder changes should not cause config discovery")
 		// This assertion will fail until we implement logic to ignore dist folder changes
 	})
+
+	// Regression test for https://github.com/microsoft/typescript-go/issues/4545
+	//
+	// A config file entry can be retained (here, by an open file whose default
+	// project search fanned out to a referenced config) while its commandLine is
+	// nil, because the referenced config file does not exist. A bulk cache
+	// invalidation triggered by an excessive number of watch events ranges over
+	// all config entries and used to dereference entry.commandLine.ConfigFile
+	// without a nil check, crashing.
+	//
+	// The nil-check-avoiding short circuit `!ok || text != entry.commandLine...`
+	// only protects the case where the file cannot be read, so the config file
+	// must exist on disk (readable) while the entry's commandLine is still nil to
+	// reach the crash.
+	t.Run("bulk invalidation with retained config whose command line is nil", func(t *testing.T) {
+		t.Parallel()
+		appConfig := `{
+			"compilerOptions": { "composite": true, "target": "esnext" },
+			"include": ["**/*"]
+		}`
+		files := map[string]any{
+			// Solution config references ./app, but app/tsconfig.json does not exist.
+			"/project/tsconfig.json": `{
+				"compilerOptions": { "composite": true },
+				"files": [],
+				"references": [{ "path": "./app" }]
+			}`,
+			"/project/app/main.ts": `export const main = 1;`,
+		}
+
+		session, utils := projecttestutil.Setup(files)
+
+		// Open a file in the (non-existent) referenced project. The default project
+		// search fans out to app/tsconfig.json, creating a retained config entry
+		// with commandLine == nil and pendingReload == None.
+		session.DidOpenFile(context.Background(), "file:///project/app/main.ts", 1, files["/project/app/main.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), "file:///project/app/main.ts")
+		assert.NilError(t, err)
+
+		// Create the referenced config on disk WITHOUT notifying, so the
+		// nil-commandLine entry is not reloaded (pendingReload stays None) but the
+		// file becomes readable.
+		err = utils.FS().WriteFile("/project/app/tsconfig.json", appConfig)
+		assert.NilError(t, err)
+
+		// Trigger a bulk cache invalidation with an excessive number of watch events.
+		// The creation of a config file drives the excessive-change path into
+		// invalidateCache, which ranges over all config entries -- including the one
+		// whose commandLine is nil -- and used to crash.
+		fileEvents := generateFileEvents(1001, "file:///project/app/generated/file%d.ts", lsproto.FileChangeTypeCreated)
+		fileEvents = append(fileEvents, &lsproto.FileEvent{
+			Uri:  "file:///project/newdir/tsconfig.json",
+			Type: lsproto.FileChangeTypeCreated,
+		})
+		session.DidChangeWatchedFiles(context.Background(), fileEvents)
+		_, err = session.GetLanguageService(context.Background(), "file:///project/app/main.ts")
+		assert.NilError(t, err)
+	})
 }
 
 // Helper function to generate excessive file change events

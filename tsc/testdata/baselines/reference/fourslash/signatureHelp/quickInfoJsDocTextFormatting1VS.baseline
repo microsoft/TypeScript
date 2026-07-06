@@ -41,35 +41,30 @@
 // | ----------------------------------------------------------------------
 // | f1(**var1: any**, var2: any): void
 // | - `var1: any`: **Highlighted text**
-
 // | ----------------------------------------------------------------------
 // f2();
 //    ^
 // | ----------------------------------------------------------------------
 // | f2(**var1: any**, var2: any): void
 // | - `var1: any`: *Regular text with an asterisk
-
 // | ----------------------------------------------------------------------
 // f3();
 //    ^
 // | ----------------------------------------------------------------------
 // | f3(**var1: any**, var2: any): void
 // | - `var1: any`: *Regular text with an asterisk
-
 // | ----------------------------------------------------------------------
 // f4();
 //    ^
 // | ----------------------------------------------------------------------
 // | f4(**var1: any**, var2: any): void
 // | - `var1: any`: **Highlighted text**
-
 // | ----------------------------------------------------------------------
 // f5();
 //    ^
 // | ----------------------------------------------------------------------
 // | f5(**var1: any**, var2: any): void
 // | - `var1: any`: **Highlighted text**
-
 // | ----------------------------------------------------------------------
 [
   {
@@ -91,14 +86,14 @@
               "label": "var1: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "**Highlighted text**\n"
+                "value": "**Highlighted text**"
               }
             },
             {
               "label": "var2: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "Another **Highlighted text**\n"
+                "value": "Another **Highlighted text**"
               }
             }
           ],
@@ -202,14 +197,14 @@
               "label": "var1: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "*Regular text with an asterisk\n"
+                "value": "*Regular text with an asterisk"
               }
             },
             {
               "label": "var2: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "Another *Regular text with an asterisk\n"
+                "value": "Another *Regular text with an asterisk"
               }
             }
           ],
@@ -313,14 +308,14 @@
               "label": "var1: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "*Regular text with an asterisk\n"
+                "value": "*Regular text with an asterisk"
               }
             },
             {
               "label": "var2: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "Another *Regular text with an asterisk\n"
+                "value": "Another *Regular text with an asterisk"
               }
             }
           ],
@@ -424,14 +419,14 @@
               "label": "var1: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "**Highlighted text**\n"
+                "value": "**Highlighted text**"
               }
             },
             {
               "label": "var2: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "Another **Highlighted text**\n"
+                "value": "Another **Highlighted text**"
               }
             }
           ],
@@ -535,14 +530,14 @@
               "label": "var1: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "**Highlighted text**\n"
+                "value": "**Highlighted text**"
               }
             },
             {
               "label": "var2: any",
               "documentation": {
                 "kind": "markdown",
-                "value": "Another **Highlighted text**\n"
+                "value": "Another **Highlighted text**"
               }
             }
           ],

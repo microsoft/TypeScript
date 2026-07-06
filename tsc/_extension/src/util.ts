@@ -3,6 +3,11 @@ import * as vscode from "vscode";
 
 export const aiConnectionString = "0c6ae279ed8443289764825290e4f9e2-1a736e7c-1324-4338-be46-fc2a58ae4d14-7255";
 
+export const languageClientName = "TypeScript Language Server";
+export const nightlyExtensionId = "TypeScriptTeam.native-preview";
+// Temporarily disabled while the native-preview extension ID still owns the client.
+export const enableContributedNightlyVersion = false;
+
 export const jsTsLanguageModes = [
     "typescript",
     "typescriptreact",
@@ -35,22 +40,67 @@ export function isJsConfigOrTsConfigFileName(fileName: string): boolean {
 export interface ExeInfo {
     path: string;
     version: string;
+    name: string;
+    isLocal?: boolean;
 }
 
-export async function getBuiltinExePath(context: vscode.ExtensionContext): Promise<{ path: string; version: string; }> {
+const packagedExeBaseNames = ["tsc", "tsgo"];
+
+export async function getBuiltinExePath(context: vscode.ExtensionContext): Promise<ExeInfo> {
     if (context.extensionMode === vscode.ExtensionMode.Development) {
         const exeName = `tsgo${process.platform === "win32" ? ".exe" : ""}`;
         const exe = context.asAbsolutePath(path.join("../", "built", "local", exeName));
         try {
             await vscode.workspace.fs.stat(vscode.Uri.file(exe));
-            return { path: exe, version: "(local)" };
+            return { path: exe, version: "(local)", name: "tsgo", isLocal: true };
         }
         catch {}
     }
-    return {
-        path: context.asAbsolutePath(path.join("./lib", `tsgo${process.platform === "win32" ? ".exe" : ""}`)),
-        version: context.extension.packageJSON.version,
-    };
+    return getPackagedExePath(context.extension.extensionUri, context.extension.packageJSON.version);
+}
+
+export async function getNightlyExePath(): Promise<ExeInfo | undefined> {
+    const extension = vscode.extensions.getExtension(nightlyExtensionId);
+    if (!extension) {
+        return undefined;
+    }
+
+    return tryGetPackagedExePath(extension.extensionUri, extension.packageJSON?.version);
+}
+
+export async function getDefaultExePath(context: vscode.ExtensionContext): Promise<ExeInfo> {
+    if (enableContributedNightlyVersion) {
+        const nightlyExe = await getNightlyExePath();
+        if (nightlyExe) {
+            return nightlyExe;
+        }
+    }
+    return getBuiltinExePath(context);
+}
+
+async function getPackagedExePath(extensionUri: vscode.Uri, version: unknown): Promise<ExeInfo> {
+    const exe = await tryGetPackagedExePath(extensionUri, version);
+    if (exe) {
+        return exe;
+    }
+    throw new Error(vscode.l10n.t("Could not find a TypeScript executable in the extension package."));
+}
+
+async function tryGetPackagedExePath(extensionUri: vscode.Uri, version: unknown): Promise<ExeInfo | undefined> {
+    for (const baseName of packagedExeBaseNames) {
+        const exeName = `${baseName}${process.platform === "win32" ? ".exe" : ""}`;
+        const exePath = vscode.Uri.joinPath(extensionUri, "lib", exeName);
+        try {
+            await vscode.workspace.fs.stat(exePath);
+            return {
+                path: withLongPathPrefix(exePath.fsPath),
+                version: typeof version === "string" ? version : "unknown",
+                name: baseName,
+            };
+        }
+        catch {}
+    }
+    return undefined;
 }
 
 /**
@@ -96,28 +146,160 @@ function workspaceResolve(relativePath: string): vscode.Uri {
 export const useWorkspaceTsdkStorageKey = "typescript.native-preview.useWorkspaceTsdk";
 
 export async function getExe(context: vscode.ExtensionContext): Promise<ExeInfo> {
-    const config = vscode.workspace.getConfiguration("typescript.native-preview");
-
-    let tsdk = config.get<string>("tsdk");
-    const exeInspection = config.inspect<string>("tsdk");
-
-    // If tsdk is set at the workspace level, require both workspace trust and
-    // explicit user opt-in. Workspace trust can be revoked after the memento is
-    // set, so we must always check both.
-    if (tsdk && exeInspection?.workspaceValue !== undefined) {
-        if (!vscode.workspace.isTrusted || !context.workspaceState.get<boolean>(useWorkspaceTsdkStorageKey, false)) {
-            tsdk = exeInspection.globalValue;
-        }
-    }
-
-    if (tsdk) {
-        const exe = await resolveTsdkPathToExe(tsdk);
+    for (const candidate of getTrustedTsdkCandidates(context, await getTsdkCandidates())) {
+        const exe = await resolveTsdkPathToExe(candidate.value);
         if (exe) {
             return exe;
         }
     }
 
-    return getBuiltinExePath(context);
+    return getDefaultExePath(context);
+}
+
+export async function hasTsdkConfigured(): Promise<boolean> {
+    return (await getTsdkCandidates({ nativeOnly: false })).length > 0;
+}
+
+export async function hasNativeTsdkConfigured(context: vscode.ExtensionContext): Promise<boolean> {
+    return await getTsdkServerKind(context) === "lsp";
+}
+
+export async function getTsdkServerKind(context: vscode.ExtensionContext): Promise<"lsp" | "tsserver" | undefined> {
+    for (const candidate of getTrustedTsdkCandidates(context, await getTsdkCandidates({ nativeOnly: false }))) {
+        const kind = await classifyTsdk(candidate.value);
+        if (kind) {
+            return kind;
+        }
+    }
+}
+
+async function classifyTsdk(tsdkPath: string): Promise<"lsp" | "tsserver" | undefined> {
+    if (await pathHasTsserverJs(tsdkPath)) {
+        return "tsserver";
+    }
+    if (await resolveTsdkPathToExe(tsdkPath)) {
+        return "lsp";
+    }
+}
+
+function getTrustedTsdkCandidates(context: vscode.ExtensionContext, tsdkCandidates: ExplicitConfigValue<string>[]): ExplicitConfigValue<string>[] {
+    // If tsdk is set at the workspace level, require both workspace trust and
+    // explicit user opt-in. Workspace trust can be revoked after the memento is
+    // set, so we must always check both.
+    if (tsdkCandidates.some(candidate => candidate.target !== vscode.ConfigurationTarget.Global)) {
+        if (!vscode.workspace.isTrusted || !context.workspaceState.get<boolean>(useWorkspaceTsdkStorageKey, false)) {
+            return tsdkCandidates.filter(candidate => candidate.target === vscode.ConfigurationTarget.Global);
+        }
+    }
+    return tsdkCandidates;
+}
+
+interface ExplicitConfigValue<T> {
+    value: T;
+    target: vscode.ConfigurationTarget;
+    order: number;
+}
+
+interface TsdkConfigSource {
+    section: string;
+    key: string;
+    nativeOnly: boolean;
+}
+
+const tsdkConfigSources: readonly TsdkConfigSource[] = [
+    { section: "js/ts", key: "tsdk.path", nativeOnly: true },
+    { section: "typescript", key: "tsdk", nativeOnly: true },
+    { section: "typescript.native-preview", key: "tsdk", nativeOnly: false },
+];
+
+export function readNativePreviewConfig<T>(key: string, defaultValue: T): T {
+    const explicit = getExplicitConfigValues<T>("js/ts", key)[0];
+    if (explicit) {
+        return explicit.value;
+    }
+    return vscode.workspace.getConfiguration("typescript.native-preview").get<T>(key, defaultValue);
+}
+
+export function getWorkspaceTsdkConfigValue(): string | undefined {
+    return vscode.workspace.getConfiguration("js/ts").inspect<string>("tsdk.path")?.workspaceValue;
+}
+
+export async function updateWorkspaceTsdkConfig(value: string): Promise<void> {
+    await vscode.workspace.getConfiguration("js/ts").update("tsdk.path", value, vscode.ConfigurationTarget.Workspace);
+}
+
+export async function getWorkspaceTsdkForPrompt(): Promise<string | undefined> {
+    const candidates = await getTsdkCandidates({ filter: candidate => candidate.target !== vscode.ConfigurationTarget.Global });
+    for (const candidate of candidates) {
+        if (await resolveTsdkPathToExe(candidate.value)) {
+            return candidate.value;
+        }
+    }
+    return undefined;
+}
+
+function getExplicitConfigValues<T>(section: string, key: string): ExplicitConfigValue<T>[] {
+    const inspection = vscode.workspace.getConfiguration(section).inspect<T>(key);
+    if (!inspection) {
+        return [];
+    }
+
+    const candidates: Array<{ value: T | undefined; target: vscode.ConfigurationTarget; order: number; }> = [
+        { value: inspection.workspaceFolderLanguageValue, target: vscode.ConfigurationTarget.WorkspaceFolder, order: 0 },
+        { value: inspection.workspaceFolderValue, target: vscode.ConfigurationTarget.WorkspaceFolder, order: 1 },
+        { value: inspection.workspaceLanguageValue, target: vscode.ConfigurationTarget.Workspace, order: 2 },
+        { value: inspection.workspaceValue, target: vscode.ConfigurationTarget.Workspace, order: 3 },
+        { value: inspection.globalLanguageValue, target: vscode.ConfigurationTarget.Global, order: 4 },
+        { value: inspection.globalValue, target: vscode.ConfigurationTarget.Global, order: 5 },
+    ];
+
+    const result: ExplicitConfigValue<T>[] = [];
+    for (const candidate of candidates) {
+        if (candidate.value !== undefined) {
+            result.push({
+                value: candidate.value,
+                target: candidate.target,
+                order: candidate.order,
+            });
+        }
+    }
+    return result.sort(compareExplicitConfigValues);
+}
+
+function compareExplicitConfigValues<T>(a: ExplicitConfigValue<T>, b: ExplicitConfigValue<T>): number {
+    return b.target - a.target || a.order - b.order;
+}
+
+async function getTsdkCandidates(options?: { nativeOnly?: boolean; filter?: (candidate: ExplicitConfigValue<string>) => boolean; }): Promise<ExplicitConfigValue<string>[]> {
+    const candidates: ExplicitConfigValue<string>[] = [];
+    for (let sourceIndex = 0; sourceIndex < tsdkConfigSources.length; sourceIndex++) {
+        const source = tsdkConfigSources[sourceIndex];
+        for (const candidate of getExplicitConfigValues<string>(source.section, source.key)) {
+            if (!candidate.value || typeof candidate.value !== "string") {
+                continue;
+            }
+            if ((options?.nativeOnly ?? true) && source.nativeOnly && await pathHasTsserverJs(candidate.value)) {
+                continue;
+            }
+            candidates.push({
+                ...candidate,
+                order: candidate.order + sourceIndex * 10,
+            });
+        }
+    }
+    return candidates.filter(options?.filter ?? (() => true)).sort(compareExplicitConfigValues);
+}
+
+async function pathHasTsserverJs(tsdkPath: string): Promise<boolean> {
+    const resolved = workspaceResolve(tsdkPath);
+    for (const candidate of [vscode.Uri.joinPath(resolved, "tsserver.js"), vscode.Uri.joinPath(resolved, "lib", "tsserver.js")]) {
+        try {
+            await vscode.workspace.fs.stat(candidate);
+            return true;
+        }
+        catch {}
+    }
+    return false;
 }
 
 /**
@@ -127,7 +309,7 @@ export function resolveTsdkPath(tsdkPath: string): string {
     return path.normalize(workspaceResolve(tsdkPath).fsPath);
 }
 
-export async function resolveTsdkPathToExe(tsdkPath: string): Promise<{ path: string; version: string; } | undefined> {
+export async function resolveTsdkPathToExe(tsdkPath: string): Promise<ExeInfo | undefined> {
     const resolved = workspaceResolve(tsdkPath);
     for (const packagePath of [resolved, vscode.Uri.joinPath(resolved, "..")]) {
         try {
@@ -141,8 +323,7 @@ export async function resolveTsdkPathToExe(tsdkPath: string): Promise<{ path: st
             const baseName = name.startsWith("@") ? name.split("/")[1] : name;
             if (!baseName) continue;
             const expectedBinName = baseName === "typescript" ? "tsc" : "tsgo";
-            const binNames = Object.keys(bin);
-            if (binNames.length !== 1 || binNames[0] !== expectedBinName) continue;
+            if (!Object.prototype.hasOwnProperty.call(bin, expectedBinName)) continue;
 
             const exeName = `${expectedBinName}${process.platform === "win32" ? ".exe" : ""}`;
             const platformPackage = `${baseName}-${process.platform}-${process.arch}`;
@@ -151,16 +332,18 @@ export async function resolveTsdkPathToExe(tsdkPath: string): Promise<{ path: st
                 : vscode.Uri.joinPath(packagePath, "..");
             const exePath = vscode.Uri.joinPath(nodeModules, "@typescript", platformPackage, "lib", exeName);
             await vscode.workspace.fs.stat(exePath);
-            return { path: withLongPathPrefix(exePath.fsPath), version: typeof packageJson.version === "string" ? packageJson.version : "unknown" };
+            return { path: withLongPathPrefix(exePath.fsPath), version: typeof packageJson.version === "string" ? packageJson.version : "unknown", name: expectedBinName };
         }
         catch {}
     }
-    try {
-        const exePath = vscode.Uri.joinPath(resolved, `tsgo${process.platform === "win32" ? ".exe" : ""}`);
-        await vscode.workspace.fs.stat(exePath);
-        return { path: withLongPathPrefix(exePath.fsPath), version: "(local)" };
+    for (const baseName of packagedExeBaseNames) {
+        try {
+            const exePath = vscode.Uri.joinPath(resolved, `${baseName}${process.platform === "win32" ? ".exe" : ""}`);
+            await vscode.workspace.fs.stat(exePath);
+            return { path: withLongPathPrefix(exePath.fsPath), version: "(local)", name: baseName, isLocal: true };
+        }
+        catch {}
     }
-    catch {}
 }
 
 function withLongPathPrefix(exePath: string): string {

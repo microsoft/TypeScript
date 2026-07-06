@@ -27,5 +27,5 @@ new Foo({ func/*1*/() {} })
 `
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyQuickInfoAt(t, "1", "(method) I.func(arg: number): void", "Description of func.\n\n*@param* `arg` — Description of arg.\n")
+	f.VerifyQuickInfoAt(t, "1", "(method) I.func(arg: number): void", "Description of func.\n\n*@param* `arg` — Description of arg.")
 }

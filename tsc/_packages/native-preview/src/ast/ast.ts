@@ -1,6 +1,7 @@
 // ast.ts — Hand-written AST type definitions
 // Generated types are in ast.generated.ts
 
+import type { InternalSymbolName } from "#enums/internalSymbolName";
 import type { LanguageVariant } from "#enums/languageVariant";
 import type { NodeFlags } from "#enums/nodeFlags";
 import type { ScriptKind } from "#enums/scriptKind";
@@ -14,6 +15,7 @@ import type {
     PropertyAccessExpression,
     PunctuationSyntaxKind,
     Statement,
+    ThisExpression,
     Token,
 } from "./ast.generated.ts";
 
@@ -25,6 +27,15 @@ export * from "./ast.generated.ts";
 // ── Core types ──
 
 export type Path = string & { __pathBrand: any; };
+
+/**
+ * The escaped form of a symbol/identifier name. Internal compiler names are
+ * prefixed with `__` (e.g. `__type`, `__call`), and user names that already
+ * begin with `__` carry an extra leading underscore. Use
+ * {@link unescapeLeadingUnderscores} to recover the display name and
+ * {@link escapeLeadingUnderscores} to produce a key from a display name.
+ */
+export type __String = (string & { __escapedIdentifier: void; }) | InternalSymbolName;
 
 export interface TextRange {
     pos: number;
@@ -45,7 +56,7 @@ export interface Node extends ReadonlyTextRange {
     readonly kind: SyntaxKind;
     readonly flags: NodeFlags;
     readonly parent: Node;
-    readonly jsDoc?: readonly Node[];
+    readonly jsDoc?: readonly Node[] | undefined;
     forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined;
     getSourceFile(): SourceFile;
     getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
@@ -62,6 +73,13 @@ export interface FileReference extends TextRange {
     readonly fileName: string;
     readonly resolutionMode: number;
     readonly preserve: boolean;
+}
+
+export interface LineAndCharacter {
+    /** 0-based line number. */
+    readonly line: number;
+    /** 0-based character offset, in UTF-16 code units, from the start of the line. */
+    readonly character: number;
 }
 
 export interface SourceFile extends Node {
@@ -81,6 +99,12 @@ export interface SourceFile extends Node {
     readonly moduleAugmentations: readonly Node[];
     readonly ambientModuleNames: readonly string[];
     readonly externalModuleIndicator: Node | true | undefined;
+    /** Returns the UTF-16 code unit offset of the start of each line. */
+    getLineStarts(): readonly number[];
+    /** Converts a UTF-16 code unit position into a 0-based line and character. */
+    getLineAndCharacterOfPosition(position: number): LineAndCharacter;
+    /** Converts a 0-based line and character into a UTF-16 code unit position. */
+    getPositionOfLineAndCharacter(line: number, character: number): number;
     /** @internal */
     tokenCache?: Map<string, Node>;
 }
@@ -100,3 +124,7 @@ export interface PropertyAccessEntityNameExpression extends PropertyAccessExpres
 
 export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
 export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
+
+export interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
+    readonly expression: Identifier | ThisExpression | JsxTagNamePropertyAccess;
+}

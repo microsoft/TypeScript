@@ -22,7 +22,6 @@
 // | 
 // | 
 // | *@inheritdoc* — SubClass.prop
-// | 
 // | ----------------------------------------------------------------------
 // }
 [
@@ -39,7 +38,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(property) SubClass.prop: string | undefined\n```\n\n\n*@inheritdoc* — SubClass.prop\n"
+        "value": "```typescript\n(property) SubClass.prop: string | undefined\n```\n\n\n*@inheritdoc* — SubClass.prop"
       },
       "range": {
         "start": {

@@ -3,6 +3,7 @@
 package fswatch
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -13,7 +14,8 @@ import (
 
 func newTestFSEventsWatcher(impl **fsEventsBackend) Watcher {
 	return &watcher{
-		name: "fsevents",
+		name:     "fsevents",
+		sequence: fsEventsGetCurrentEventID,
 		factory: func() watcherImpl {
 			*impl = newFSEventsBackend()
 			return *impl
@@ -104,6 +106,96 @@ func TestFSEventsSharedStreamRoutesEvents(t *testing.T) {
 	}
 	expectContains(t, recB, EventUpdate, fileB)
 	assertNoEventsForPath(t, recA.drainQuiet(500*time.Millisecond), fileB, "sibling watch saw event")
+}
+
+func setupFSEventsConsolidatedParent(t *testing.T) (Watcher, string) {
+	t.Helper()
+
+	var impl *fsEventsBackend
+	watcherImpl := newTestFSEventsWatcher(&impl)
+	parent := filepath.Join(newTmpDir(t), "parent")
+
+	var subs []Watch
+	for i := range recursiveConsolidateThreshold {
+		dir := filepath.Join(parent, fmt.Sprintf("pkg%d", i))
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		sub, err := watcherImpl.WatchDirectory(dir, func([]Event, error) {})
+		if err != nil {
+			t.Fatal(err)
+		}
+		subs = append(subs, sub)
+	}
+	t.Cleanup(func() {
+		for _, sub := range subs {
+			_ = sub.Close()
+		}
+	})
+
+	return watcherImpl, parent
+}
+
+func TestFSEventsConsolidatedWatchValidatesLogicalRoot(t *testing.T) {
+	t.Parallel()
+
+	watcherImpl, parent := setupFSEventsConsolidatedParent(t)
+
+	if sub, err := watcherImpl.WatchDirectory(filepath.Join(parent, "missing"), func([]Event, error) {}); err == nil {
+		_ = sub.Close()
+		t.Fatal("expected error subscribing to missing consolidated child")
+	}
+
+	file := filepath.Join(parent, "file")
+	if err := os.WriteFile(file, []byte("x"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if sub, err := watcherImpl.WatchDirectory(file, func([]Event, error) {}); err == nil {
+		_ = sub.Close()
+		t.Fatal("expected error subscribing to file consolidated child")
+	}
+}
+
+func TestFSEventsConsolidatedWatchTerminatesLogicalRoot(t *testing.T) {
+	t.Parallel()
+
+	watcherImpl, parent := setupFSEventsConsolidatedParent(t)
+
+	watched := filepath.Join(parent, "watched")
+	if err := os.MkdirAll(watched, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	r := newRecorder(t)
+	r.watcher = watcherImpl
+	sub, err := watcherImpl.WatchDirectory(watched, r.callback, WithRecursive())
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = sub.Close() })
+	time.Sleep(settleSleep(watcherImpl))
+
+	if err := os.RemoveAll(watched); err != nil {
+		t.Fatal(err)
+	}
+	expectEventSequence(t, r, []wantEvent{{EventDelete, watched}})
+
+	deadline := time.Now().Add(r.deadline())
+	for time.Now().Before(deadline) {
+		r.mu.Lock()
+		n := len(r.errs)
+		r.mu.Unlock()
+		if n > 0 {
+			break
+		}
+		time.Sleep(20 * time.Millisecond)
+	}
+	r.mu.Lock()
+	errs := slices.Clone(r.errs)
+	r.errs = nil
+	r.mu.Unlock()
+	if !slices.ContainsFunc(errs, func(err error) bool { return errors.Is(err, ErrWatchTerminated) }) {
+		t.Fatalf("expected ErrWatchTerminated after watched dir delete, got errs=%v", errs)
+	}
 }
 
 func TestFSEventsSharedStreamFallsBackToChunks(t *testing.T) {

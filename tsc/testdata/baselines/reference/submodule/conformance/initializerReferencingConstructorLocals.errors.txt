@@ -1,3 +1,4 @@
+error TS-1: Pre-emit (10) and post-emit (12) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 initializerReferencingConstructorLocals.ts(4,9): error TS2304: Cannot find name 'z'.
 initializerReferencingConstructorLocals.ts(5,15): error TS2304: Cannot find name 'z'.
 initializerReferencingConstructorLocals.ts(6,14): error TS2339: Property 'z' does not exist on type 'C'.
@@ -10,6 +11,10 @@ initializerReferencingConstructorLocals.ts(17,20): error TS2339: Property 'z' do
 initializerReferencingConstructorLocals.ts(19,9): error TS2304: Cannot find name 'z'.
 
 
+!!! error TS-1: Pre-emit (10) and post-emit (12) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2304 initializerReferencingConstructorLocals.ts:7:15: Cannot find name 'this'.
+!!! related TS2304 initializerReferencingConstructorLocals.ts:17:15: Cannot find name 'this'.
 ==== initializerReferencingConstructorLocals.ts (10 errors) ====
     // Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
     

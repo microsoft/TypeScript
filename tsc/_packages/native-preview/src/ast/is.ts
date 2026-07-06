@@ -18,6 +18,7 @@ import type {
     Identifier,
     JSDocTypeExpression,
     JSDocTypeLiteral,
+    JsxTagNameExpression,
     LeftHandSideExpression,
     LiteralExpression,
     MinusToken,
@@ -40,9 +41,9 @@ import type {
     TypeNode,
     UnaryExpressionBase,
 } from "./ast.ts";
+import { isLiteralExpression } from "./is.generated.ts";
 
 export * from "./is.generated.ts";
-import { isLiteralExpression } from "./is.generated.ts";
 
 type JSDocNamespaceDeclaration = ModuleDeclaration;
 
@@ -304,4 +305,12 @@ export function isIdentifierOrJSDocNamespaceDeclaration(node: Node): node is Ide
 
 export function isJSDocTypeExpressionOrJSDocTypeLiteral(node: Node): node is JSDocTypeExpression | JSDocTypeLiteral {
     return node.kind === SyntaxKind.JSDocTypeExpression || node.kind === SyntaxKind.JSDocTypeLiteral;
+}
+
+export function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression {
+    const kind = node.kind;
+    return kind === SyntaxKind.ThisKeyword
+        || kind === SyntaxKind.Identifier
+        || kind === SyntaxKind.PropertyAccessExpression
+        || kind === SyntaxKind.JsxNamespacedName;
 }

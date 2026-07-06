@@ -1,8 +1,13 @@
+error TS-1: Pre-emit (3) and post-emit (5) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 superCallsInConstructor.ts(7,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 superCallsInConstructor.ts(12,9): error TS1101: 'with' statements are not allowed in strict mode.
 superCallsInConstructor.ts(12,9): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
+!!! error TS-1: Pre-emit (3) and post-emit (5) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2304 superCallsInConstructor.ts:13:13: Cannot find name 'foo'.
+!!! related TS2304 superCallsInConstructor.ts:15:13: Cannot find name 'bar'.
 ==== superCallsInConstructor.ts (3 errors) ====
     class C {
         foo() {}

@@ -1,0 +1,100 @@
+//// [tests/cases/compiler/declarationEmitAliasesOfArrowsWillingToUseTypeof.ts] ////
+
+=== src/component.ts ===
+export function FunctionComponent(props: { x: number; y: number; z: number; }) {
+>FunctionComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>props : { x: number; y: number; z: number; }
+>x : number
+>y : number
+>z : number
+
+    return null;
+}
+FunctionComponent.args = { x: 3, y: 4, z: 5 };
+>FunctionComponent.args = { x: 3, y: 4, z: 5 } : { x: number; y: number; z: number; }
+>FunctionComponent.args : { x: number; y: number; z: number; }
+>FunctionComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>args : { x: number; y: number; z: number; }
+>{ x: 3, y: 4, z: 5 } : { x: number; y: number; z: number; }
+>x : number
+>3 : 3
+>y : number
+>4 : 4
+>z : number
+>5 : 5
+
+export const ArrowComponent = (props: { x: number; y: number; z: number; }) => {
+>ArrowComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>(props: { x: number; y: number; z: number; }) => {    return null;} : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>props : { x: number; y: number; z: number; }
+>x : number
+>y : number
+>z : number
+
+    return null;
+}
+ArrowComponent.args = { x: 5, y: 12, z: 13 };
+>ArrowComponent.args = { x: 5, y: 12, z: 13 } : { x: number; y: number; z: number; }
+>ArrowComponent.args : { x: number; y: number; z: number; }
+>ArrowComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>args : { x: number; y: number; z: number; }
+>{ x: 5, y: 12, z: 13 } : { x: number; y: number; z: number; }
+>x : number
+>5 : 5
+>y : number
+>12 : 12
+>z : number
+>13 : 13
+
+=== src/main.js ===
+import { FunctionComponent, ArrowComponent } from './component.js'
+>FunctionComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>ArrowComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+
+const FunctionComponentAlias = FunctionComponent;
+>FunctionComponentAlias : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>FunctionComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+
+const ArrowComponentAlias = ArrowComponent;
+>ArrowComponentAlias : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>ArrowComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+
+export default { FunctionComponent, ArrowComponent, FunctionComponentAlias, ArrowComponentAlias };
+>{ FunctionComponent, ArrowComponent, FunctionComponentAlias, ArrowComponentAlias } : { FunctionComponent: { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }; ArrowComponent: { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }; FunctionComponentAlias: { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }; ArrowComponentAlias: { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }; }
+>FunctionComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>ArrowComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>FunctionComponentAlias : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>ArrowComponentAlias : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+
+export { FunctionComponent, ArrowComponent, FunctionComponentAlias, ArrowComponentAlias };
+>FunctionComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>ArrowComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>FunctionComponentAlias : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>ArrowComponentAlias : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+
+=== src/main2.ts ===
+import { FunctionComponent, ArrowComponent } from './component.js'
+>FunctionComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>ArrowComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+
+const FunctionComponentAlias = FunctionComponent;
+>FunctionComponentAlias : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>FunctionComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+
+const ArrowComponentAlias = ArrowComponent;
+>ArrowComponentAlias : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>ArrowComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+
+export default { FunctionComponent, ArrowComponent, FunctionComponentAlias, ArrowComponentAlias };
+>{ FunctionComponent, ArrowComponent, FunctionComponentAlias, ArrowComponentAlias } : { FunctionComponent: { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }; ArrowComponent: { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }; FunctionComponentAlias: { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }; ArrowComponentAlias: { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }; }
+>FunctionComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>ArrowComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>FunctionComponentAlias : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>ArrowComponentAlias : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+
+export { FunctionComponent, ArrowComponent, FunctionComponentAlias, ArrowComponentAlias };
+>FunctionComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>ArrowComponent : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>FunctionComponentAlias : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+>ArrowComponentAlias : { (props: { x: number; y: number; z: number; }): null; args: { x: number; y: number; z: number; }; }
+

@@ -369,7 +369,7 @@ func (c *configFileRegistryBuilder) invalidateCache(logger *logging.LogTree) cha
 			affectedProjects = core.CopyMapInto(affectedProjects, entry.retainingProjects)
 			if entry.pendingReload != PendingReloadFull {
 				text, ok := c.FS().ReadFile(entry.fileName)
-				if !ok || text != entry.commandLine.ConfigFile.SourceFile.Text() {
+				if !ok || entry.commandLine == nil || text != entry.commandLine.ConfigFile.SourceFile.Text() {
 					entry.pendingReload = PendingReloadFull
 				} else {
 					entry.pendingReload = PendingReloadFileNames

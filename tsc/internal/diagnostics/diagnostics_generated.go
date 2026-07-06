@@ -4308,6 +4308,8 @@ var Remove_Unused_Imports = &Message{code: 100017, category: CategoryMessage, ke
 
 var Sort_Imports = &Message{code: 100018, category: CategoryMessage, key: "Sort_Imports_100018", text: "Sort Imports"}
 
+var JSDoc_comment = &Message{code: 100019, category: CategoryMessage, key: "JSDoc_comment_100019", text: "JSDoc comment"}
+
 func keyToMessage(key Key) *Message {
 	switch key {
 	case "Unterminated_string_literal_1002":
@@ -8616,6 +8618,8 @@ func keyToMessage(key Key) *Message {
 		return Remove_Unused_Imports
 	case "Sort_Imports_100018":
 		return Sort_Imports
+	case "JSDoc_comment_100019":
+		return JSDoc_comment
 	default:
 		return nil
 	}

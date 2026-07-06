@@ -87,3 +87,17 @@ func EscapeInternalSymbolName(name string) string {
 	}
 	return name
 }
+
+// EscapeSymbolName converts a binder symbol name into its escaped "__String"
+// form. Internal names (prefixed with the "\xFE" sentinel) become "__"-prefixed,
+// and user names that already begin with "__" gain an extra leading underscore
+// so they can be distinguished from internal names.
+func EscapeSymbolName(name string) string {
+	if rest, ok := strings.CutPrefix(name, InternalSymbolNamePrefix); ok {
+		return "__" + rest
+	}
+	if len(name) >= 2 && name[0] == '_' && name[1] == '_' {
+		return "_" + name
+	}
+	return name
+}

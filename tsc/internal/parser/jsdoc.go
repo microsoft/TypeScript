@@ -691,6 +691,7 @@ loop:
 	p.jsdocTagCommentsSpace = comments[:0]
 
 	comments = removeLeadingNewlines(comments)
+	comments = removeTrailingWhitespace(comments)
 	if len(comments) > 0 {
 		var commentStart int
 		if linkEnd > -1 {

@@ -1,11 +1,14 @@
 import * as vscode from "vscode";
-import { jsTsLanguageModes } from "./util";
+import {
+    ExeInfo,
+    jsTsLanguageModes,
+} from "./util";
 
-export function setupStatusBar(version: string): vscode.Disposable {
+export function setupStatusBar(exe: ExeInfo): vscode.Disposable {
     const statusItem = vscode.languages.createLanguageStatusItem("typescript.native-preview.status", jsTsLanguageModes);
-    statusItem.name = vscode.l10n.t("TypeScript Native Preview");
-    statusItem.text = vscode.l10n.t(`$(beaker) tsgo {0}`, version);
-    statusItem.detail = vscode.l10n.t("TypeScript Native Preview Language Server");
+    statusItem.name = vscode.l10n.t("TypeScript 7");
+    statusItem.text = exe.isLocal ? vscode.l10n.t("$(beaker) {0} {1}", exe.name, exe.version) : vscode.l10n.t("{0} {1}", exe.name, exe.version);
+    statusItem.detail = vscode.l10n.t("TypeScript Language Server");
     statusItem.command = {
         title: vscode.l10n.t("Show Menu"),
         command: "typescript.native-preview.showMenu",

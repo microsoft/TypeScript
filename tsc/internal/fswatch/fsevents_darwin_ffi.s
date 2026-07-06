@@ -127,6 +127,12 @@ TEXT fse_FSEventStreamFlushSync_trampoline<>(SB), NOSPLIT, $0-0
 GLOBL ·fse_FSEventStreamFlushSync_trampoline_addr(SB), RODATA, $8
 DATA ·fse_FSEventStreamFlushSync_trampoline_addr(SB)/8, $fse_FSEventStreamFlushSync_trampoline<>(SB)
 
+TEXT fse_FSEventsGetCurrentEventId_trampoline<>(SB), NOSPLIT, $0-0
+	JMP fse_FSEventsGetCurrentEventId(SB)
+
+GLOBL ·fse_FSEventsGetCurrentEventId_trampoline_addr(SB), RODATA, $8
+DATA ·fse_FSEventsGetCurrentEventId_trampoline_addr(SB)/8, $fse_FSEventsGetCurrentEventId_trampoline<>(SB)
+
 TEXT fse_FSEventStreamStop_trampoline<>(SB), NOSPLIT, $0-0
 	JMP fse_FSEventStreamStop(SB)
 

@@ -287,6 +287,9 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] {
         // Stray semicolons, e.g. `;;`
         return [];
     }
+    else if (ts.isForOfStatement(statement)) {
+        return parseForOfStatement(statement);
+    }
     else if (ts.isExpressionStatement(statement) && ts.isCallExpression(statement.expression)) {
         const callExpression = statement.expression;
         if (!ts.isPropertyAccessExpression(callExpression.expression)) {
@@ -431,12 +434,17 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] {
                     return parseSemanticClassificationsAre(callExpression.arguments);
                 case "syntacticClassificationsAre":
                     return [];
+                case "docCommentTemplateAt":
+                    return [parseDocCommentTemplateAtArgs(callExpression.arguments)];
+                case "noDocCommentTemplateAt":
+                    return [parseNoDocCommentTemplateAtArgs(callExpression.arguments)];
             }
         }
 
         if (!ts.isIdentifier(expression)) {
             throw new Error(`Unrecognized fourslash statement: ${getBadStatementText(statement)}`);
         }
+
         // `goTo....`
         if (expression.text === "goTo") {
             return parseGoToArgs(callExpression.arguments, accessExpression.name.text);
@@ -452,6 +460,50 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] {
         // !!! other fourslash commands
     }
     throw new Error(`Unrecognized fourslash statement: ${getBadStatementText(statement)}`);
+}
+
+function parseForOfStatement(statement: ts.ForOfStatement): Cmd[] {
+    const initializer = statement.initializer;
+    let variableName: string | undefined;
+    if (ts.isVariableDeclarationList(initializer) && initializer.declarations.length === 1 && ts.isIdentifier(initializer.declarations[0].name)) {
+        variableName = initializer.declarations[0].name.text;
+    }
+    else if (ts.isIdentifier(initializer)) {
+        variableName = initializer.text;
+    }
+    if (!variableName) {
+        throw new Error(`Unrecognized fourslash statement: ${statement.getText()}`);
+    }
+
+    let rangeExpression: string;
+    const exprText = statement.expression.getText();
+    if (exprText === "test.markerNames()") {
+        rangeExpression = "f.MarkerNames()";
+    }
+    else if (exprText === "test.markers()") {
+        rangeExpression = "f.Markers()";
+    }
+    else if (ts.isArrayLiteralExpression(statement.expression)) {
+        const elements = statement.expression.elements.map(element => {
+            const text = getStringLiteralLike(element)?.text;
+            if (text === undefined) {
+                throw new Error(`Expected string literal in for-of array, got ${element.getText()}`);
+            }
+            return getGoStringLiteral(text);
+        });
+        rangeExpression = `[]string{${elements.join(", ")}}`;
+    }
+    else {
+        throw new Error(`Unrecognized fourslash statement: ${statement.getText()}`);
+    }
+
+    const body = ts.isBlock(statement.statement) ? statement.statement.statements : [statement.statement];
+    return [{
+        kind: "forOf",
+        variableName,
+        rangeExpression,
+        bodyCommands: body.flatMap(parseFourslashStatement),
+    }];
 }
 
 function parseEditStatement(funcName: string, args: readonly ts.Expression[]): EditCmd {
@@ -600,6 +652,61 @@ function parseCurrentContentIsArgs(funcName: string, args: readonly ts.Expressio
         default:
             throw new Error(`Unrecognized verify content function: ${funcName}`);
     }
+}
+
+function parseDocCommentTemplateAtArgs(args: readonly ts.Expression[]): VerifyDocCommentTemplateCmd {
+    if (args.length < 3 || args.length > 4) {
+        throw new Error(`Expected 3-4 arguments in verify.docCommentTemplateAt, got ${args.map(arg => arg.getText()).join(", ")}`);
+    }
+    return {
+        kind: "verifyDocCommentTemplate",
+        marker: parseMarkerInput(args[0]),
+        expectedOffset: getNumericLiteral(args[1])?.text ?? "0",
+        expectedText: getGoStringLiteralFromNode(args[2]),
+        generateReturnInDocTemplate: args[3] ? parseGenerateReturnInDocTemplateOption(args[3]) : undefined,
+    };
+}
+
+function parseNoDocCommentTemplateAtArgs(args: readonly ts.Expression[]): VerifyNoDocCommentTemplateCmd {
+    if (args.length !== 1) {
+        throw new Error(`Expected 1 argument in verify.noDocCommentTemplateAt, got ${args.map(arg => arg.getText()).join(", ")}`);
+    }
+    return {
+        kind: "verifyNoDocCommentTemplate",
+        marker: parseMarkerInput(args[0]),
+    };
+}
+
+function parseMarkerInput(arg: ts.Expression): string {
+    const literal = getStringLiteralLike(arg);
+    if (literal) {
+        return getGoStringLiteral(literal.text);
+    }
+    if (ts.isIdentifier(arg)) {
+        return arg.text;
+    }
+    throw new Error(`Expected marker input, got ${arg.getText()}`);
+}
+
+function parseGenerateReturnInDocTemplateOption(arg: ts.Expression): string | undefined {
+    const obj = getObjectLiteralExpression(arg);
+    if (!obj) {
+        throw new Error(`Expected object literal for doc comment template options, got ${arg.getText()}`);
+    }
+    for (const prop of obj.properties) {
+        if (!ts.isPropertyAssignment(prop) || !ts.isIdentifier(prop.name)) {
+            continue;
+        }
+        if (prop.name.text === "generateReturnInDocTemplate") {
+            if (prop.initializer.kind === ts.SyntaxKind.TrueKeyword) {
+                return "new(true)";
+            }
+            if (prop.initializer.kind === ts.SyntaxKind.FalseKeyword) {
+                return "new(false)";
+            }
+        }
+    }
+    return undefined;
 }
 
 function getGoMultiLineStringLiteral(text: string): string {
@@ -3857,6 +3964,26 @@ interface VerifyCodeFixAllCmd {
     newFileContent: string;
 }
 
+interface VerifyDocCommentTemplateCmd {
+    kind: "verifyDocCommentTemplate";
+    marker: string;
+    expectedOffset: string;
+    expectedText: string;
+    generateReturnInDocTemplate?: string;
+}
+
+interface VerifyNoDocCommentTemplateCmd {
+    kind: "verifyNoDocCommentTemplate";
+    marker: string;
+}
+
+interface ForOfCmd {
+    kind: "forOf";
+    variableName: string;
+    rangeExpression: string;
+    bodyCommands: Cmd[];
+}
+
 interface VerifySemanticClassificationsCmd {
     kind: "verifySemanticClassifications";
     format: string;
@@ -3908,7 +4035,10 @@ type Cmd =
     | VerifyCodeFixCmd
     | VerifyCodeFixAvailableCmd
     | VerifyRangeAfterCodeFixCmd
-    | VerifyCodeFixAllCmd;
+    | VerifyCodeFixAllCmd
+    | VerifyDocCommentTemplateCmd
+    | VerifyNoDocCommentTemplateCmd
+    | ForOfCmd;
 
 function generateVerifyOutliningSpans({ foldingRangeKind }: VerifyOutliningSpansCmd): string {
     if (foldingRangeKind) {
@@ -4173,6 +4303,14 @@ function generateNoSignatureHelpForTriggerReason({ triggerReason, markers }: Ver
     return `f.VerifyNoSignatureHelpForMarkersWithContext(t, ${context}, ${markerArgs})`;
 }
 
+function generateDocCommentTemplate({ marker, expectedOffset, expectedText, generateReturnInDocTemplate }: VerifyDocCommentTemplateCmd): string {
+    return `f.VerifyJSDocCompletion(t, ${marker}, ${expectedOffset}, ${expectedText}, ${generateReturnInDocTemplate ?? "nil"})`;
+}
+
+function generateNoDocCommentTemplate({ marker }: VerifyNoDocCommentTemplateCmd): string {
+    return `f.VerifyNoJSDocCompletion(t, ${marker})`;
+}
+
 function generateNavigateTo({ args }: VerifyNavToCmd): string {
     return `f.VerifyWorkspaceSymbol(t, []*fourslash.VerifyWorkspaceSymbolCase{\n${args.join(", ")}})`;
 }
@@ -4318,6 +4456,14 @@ ${
 })`;
         case "verifySemanticClassifications":
             return generateSemanticClassifications(cmd);
+        case "verifyDocCommentTemplate":
+            return generateDocCommentTemplate(cmd);
+        case "verifyNoDocCommentTemplate":
+            return generateNoDocCommentTemplate(cmd);
+        case "forOf":
+            return `for _, ${cmd.variableName} := range ${cmd.rangeExpression} {
+${cmd.bodyCommands.map(c => generateCmd(c, imports)).join("\n")}
+}`;
         default:
             let neverCommand: never = cmd;
             throw new Error(`Unknown command kind: ${neverCommand as Cmd["kind"]}`);
@@ -4332,10 +4478,13 @@ interface GoTest {
 
 function generateGoTest(test: GoTest, isServer: boolean): string {
     const testName = (test.name[0].toUpperCase() + test.name.substring(1)).replaceAll("-", "_").replaceAll(/[^a-zA-Z0-9_]/g, "");
-    const content = test.content;
     const neededImports = new Set<string>();
     neededImports.add(IMPORT_FOURSLASH);
     neededImports.add(IMPORT_TESTUTIL);
+    const hasDocCommentTemplateCommands = test.commands.some(hasDocCommentTemplateCommand);
+    const content = hasDocCommentTemplateCommands && /@Filename: .*\.jsx?/i.test(test.content)
+        ? prependLineToGoStringLiteral(test.content, "// @allowJs: true")
+        : test.content;
     const commands = test.commands.map(cmd => generateCmd(cmd, neededImports)).join("\n");
     // Scan the generated command code for package-qualified names that may come from
     // parsed command fields (e.g. UserPreferences generated during parsing).
@@ -4343,6 +4492,13 @@ function generateGoTest(test: GoTest, isServer: boolean): string {
     // because they won't appear in TypeScript test content strings.
     if (/\bcore\./.test(commands)) {
         neededImports.add(IMPORT_CORE);
+    }
+
+    function prependLineToGoStringLiteral(literal: string, line: string): string {
+        if (!literal.startsWith("`")) {
+            throw new Error(`Expected raw Go string literal, got ${literal}`);
+        }
+        return "`" + line + "\n" + literal.slice(1);
     }
     if (/\bls\./.test(commands)) {
         neededImports.add(IMPORT_LS);
@@ -4383,11 +4539,25 @@ func Test${testName}(t *testing.T) {
     t.Parallel()
     defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = ${content}
-    f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+    ${
+        hasDocCommentTemplateCommands ? `capabilities := fourslash.GetDefaultCapabilities()
+    capabilities.TextDocument.Completion.CompletionItem.SnippetSupport = new(false)
+    f, done := fourslash.NewFourslash(t, capabilities, content)` : `f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)`
+    }
     defer done()
     ${isServer ? `f.MarkTestAsStradaServer()\n` : ""}${commands}
 }`;
     return template;
+}
+
+function hasDocCommentTemplateCommand(cmd: Cmd): boolean {
+    if (cmd.kind === "verifyDocCommentTemplate" || cmd.kind === "verifyNoDocCommentTemplate") {
+        return true;
+    }
+    if (cmd.kind === "forOf") {
+        return cmd.bodyCommands.some(hasDocCommentTemplateCommand);
+    }
+    return false;
 }
 
 function getNodeOfKind<T extends ts.Node>(node: ts.Node, hasKind: (n: ts.Node) => n is T): T | undefined {

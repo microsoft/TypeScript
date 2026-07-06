@@ -1,5 +1,6 @@
 export { CharacterCodes } from "#enums/characterCodes";
 export { CommentDirectiveType } from "#enums/commentDirectiveType";
+export { InternalSymbolName } from "#enums/internalSymbolName";
 export { LanguageVariant } from "#enums/languageVariant";
 export { ModifierFlags } from "#enums/modifierFlags";
 export { NodeFlags } from "#enums/nodeFlags";
@@ -12,6 +13,7 @@ export * from "./ast.ts";
 export * from "./astnav.ts";
 export * from "./clone.ts";
 export * from "./is.ts";
+export * from "./jsdoc.ts";
 export * from "./scanner.ts";
 export * from "./utils.ts";
 export * from "./visitor.ts";

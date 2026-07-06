@@ -538,7 +538,7 @@ type (
 	JsxAttributeLike               = Node // JsxAttribute | JsxSpreadAttribute
 	JsxAttributeName               = Node // Identifier | JsxNamespacedName
 	JsxAttributeValue              = Node // StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment
-	JsxTagNameExpression           = Node // Identifier | KeywordExpression | PropertyAccessExpression | JsxNamespacedName
+	JsxTagNameExpression           = Node // Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName
 	ClassLikeDeclaration           = Node // ClassDeclaration | ClassExpression
 	AccessorDeclaration            = Node // GetAccessorDeclaration | SetAccessorDeclaration
 	LiteralLikeNode                = Node // StringLiteral | NumericLiteral | BigIntLiteral | RegularExpressionLiteral | TemplateLiteralLikeNode | JsxText

@@ -54,6 +54,9 @@ func TestSemanticTokensCRLF(t *testing.T) {
 		Capabilities: &lsproto.ClientCapabilities{
 			TextDocument: &lsproto.TextDocumentClientCapabilities{
 				SemanticTokens: &lsproto.SemanticTokensClientCapabilities{
+					Requests: &lsproto.ClientSemanticTokensRequestOptions{
+						Full: &lsproto.BooleanOrClientSemanticTokensRequestFullDelta{Boolean: new(true)},
+					},
 					TokenTypes:     []string{"namespace", "type", "class", "enum", "interface", "struct", "typeParameter", "parameter", "variable", "property", "enumMember", "event", "function", "method", "macro", "keyword", "modifier", "comment", "string", "number", "regexp", "operator", "decorator"},
 					TokenModifiers: []string{"declaration", "definition", "readonly", "static", "deprecated", "abstract", "async", "modification", "documentation", "defaultLibrary", "local"},
 				},

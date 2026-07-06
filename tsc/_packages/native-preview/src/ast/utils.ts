@@ -1,5 +1,9 @@
+import { CharacterCodes } from "#enums/characterCodes";
 import { SyntaxKind } from "#enums/syntaxKind";
-import type { SourceFile } from "./ast.ts";
+import type {
+    __String,
+    SourceFile,
+} from "./ast.ts";
 
 let syntaxKindNames: Map<number, string> | undefined;
 function getSyntaxKindNames(): Map<number, string> {
@@ -18,6 +22,27 @@ function getSyntaxKindNames(): Map<number, string> {
 
 export function formatSyntaxKind(kind: SyntaxKind): string {
     return getSyntaxKindNames().get(kind) ?? `Unknown(${kind})`;
+}
+
+/**
+ * Remove one extra leading underscore from an identifier name, recovering the
+ * display form from its escaped {@link __String} key.
+ */
+export function unescapeLeadingUnderscores(identifier: __String): string {
+    const id = identifier as string;
+    return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._
+        ? id.slice(1)
+        : id;
+}
+
+/**
+ * Add an extra leading underscore to a display name that already begins with
+ * `__`, producing its escaped {@link __String} key.
+ */
+export function escapeLeadingUnderscores(identifier: string): __String {
+    return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._
+        ? "_" + identifier
+        : identifier) as __String;
 }
 
 export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined {

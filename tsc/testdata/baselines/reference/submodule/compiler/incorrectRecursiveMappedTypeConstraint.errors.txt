@@ -8,8 +8,10 @@ incorrectRecursiveMappedTypeConstraint.ts(3,5): error TS2365: Operator '+=' cann
     function sum<T extends { [P in T]: number }, K extends keyof T>(n: number, v: T, k: K) {
                            ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2313: Type parameter 'T' has a circular constraint.
+!!! related TS2751 incorrectRecursiveMappedTypeConstraint.ts:3:10: Circularity originates in type at this location.
                                    ~
 !!! error TS2313: Type parameter 'P' has a circular constraint.
+!!! related TS2751 incorrectRecursiveMappedTypeConstraint.ts:3:10: Circularity originates in type at this location.
         n += v[k];
         ~~~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'number' and 'T[K]'.

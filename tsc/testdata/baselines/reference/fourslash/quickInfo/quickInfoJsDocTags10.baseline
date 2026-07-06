@@ -18,7 +18,6 @@
 // | *@param* `a`
 // | 
 // | *@template* `T1`, `T2` — Comment Text
-// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -34,7 +33,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nconst foo: <T1, T2>(a: T1, b: any) => void\n```\n\n\n*@param* `a`\n\n*@param* `a`\n\n*@template* `T1`, `T2` — Comment Text\n"
+        "value": "```typescript\nconst foo: <T1, T2>(a: T1, b: any) => void\n```\n\n\n*@param* `a`\n\n*@param* `a`\n\n*@template* `T1`, `T2` — Comment Text"
       },
       "range": {
         "start": {

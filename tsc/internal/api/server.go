@@ -27,6 +27,12 @@ type StdioServerOptions struct {
 	// Async enables JSON-RPC protocol with async connection handling.
 	// When false (default), uses MessagePack protocol with sync connection.
 	Async bool
+	// CollectTiming enables per-request server processing-time measurement.
+	// When enabled, the server accumulates each request's processing time into
+	// running totals and a recent-request ring buffer. Response messages are
+	// left unchanged; the client folds this data into its own timing snapshot
+	// on demand via getServerTiming / resetServerTiming requests.
+	CollectTiming bool
 }
 
 // StdioServer runs an API session over STDIO using MessagePack protocol.
@@ -99,10 +105,14 @@ func (s *StdioServer) Run(ctx context.Context) error {
 	var conn Conn
 	if s.options.Async {
 		protocol := NewJSONRPCProtocol(rwc)
-		conn = NewAsyncConnWithProtocol(rwc, protocol, session)
+		asyncConn := NewAsyncConnWithProtocol(rwc, protocol, session)
+		asyncConn.SetCollectTiming(s.options.CollectTiming)
+		conn = asyncConn
 	} else {
 		protocol := NewMessagePackProtocol(rwc)
-		conn = NewSyncConn(rwc, protocol, session)
+		syncConn := NewSyncConn(rwc, protocol, session)
+		syncConn.SetCollectTiming(s.options.CollectTiming)
+		conn = syncConn
 	}
 
 	// If callbacks are enabled, set the connection on the FS

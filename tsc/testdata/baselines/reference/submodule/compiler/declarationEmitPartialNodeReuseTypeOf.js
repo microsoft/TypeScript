@@ -41,16 +41,8 @@ export declare const o: (p1: typeof nImported, p2: typeof nNotImported, p3: type
 };
 export {};
 //// [b.d.ts]
-import { nImported } from "./a";
-export declare const g: (p1: typeof nImported, p2: typeof import("./a").nNotImported, p3: "private") => {
-    foo: typeof nImported;
-    bar: "private";
-    baz: typeof import("./a").nNotImported;
-};
+import { o } from "./a";
+export declare const g: typeof o;
 //// [c.d.ts]
 import * as a from "./a";
-export declare const g: (p1: typeof a.nImported, p2: typeof a.nNotImported, p3: "private") => {
-    foo: typeof a.nImported;
-    bar: "private";
-    baz: typeof a.nNotImported;
-};
+export declare const g: typeof a.o;

@@ -737,7 +737,6 @@
 // | this is class cWithConstructorProperty's constructor
 // | 
 // | *@param* `a` — this is first parameter a
-// | 
 // | ----------------------------------------------------------------------
 //         var bbbb = 10;
 //             ^^^^
@@ -3121,7 +3120,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nconstructor cWithConstructorProperty(a: number): cWithConstructorProperty\n```\nthis is class cWithConstructorProperty's constructor\n\n*@param* `a` — this is first parameter a\n"
+        "value": "```typescript\nconstructor cWithConstructorProperty(a: number): cWithConstructorProperty\n```\nthis is class cWithConstructorProperty's constructor\n\n*@param* `a` — this is first parameter a"
       },
       "range": {
         "start": {

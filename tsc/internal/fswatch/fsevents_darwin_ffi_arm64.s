@@ -59,6 +59,8 @@ DATA ·fse_FSEventStreamCreate_trampoline_addr(SB)/8, $fse_FSEventStreamCreate_t
 //   RSP+40: saved original flags pointer
 //   RSP+48: retained CFArray paths
 //   RSP+56: copied flags pointer
+//   RSP+64: saved original IDs pointer
+//   RSP+72: copied IDs pointer
 // ---------------------------------------------------------------------------
 
 TEXT fsEventsCallbackASM<>(SB), NOSPLIT|NOFRAME, $0
@@ -70,6 +72,7 @@ TEXT fsEventsCallbackASM<>(SB), NOSPLIT|NOFRAME, $0
 	MOVD R1, 24(RSP) // info
 	MOVD R2, 32(RSP) // numEvents
 	MOVD R4, 40(RSP) // original flags
+	MOVD R5, 64(RSP) // original IDs
 
 	// Retain the CFArray paths because FSEvents owns the callback argument.
 	MOVD R3, R0
@@ -90,10 +93,23 @@ TEXT fsEventsCallbackASM<>(SB), NOSPLIT|NOFRAME, $0
 	LSL  $2, R2, R2
 	BL   fse_memcpy(SB)
 
-	// Allocate and populate fsEventsCallbackPayload.
-	MOVD $24, R0
+	// Copy the event ID array into C heap memory owned by the Go event loop.
+	MOVD 32(RSP), R0
+	LSL  $3, R0, R0
 	BL   fse_malloc(SB)
 	CBZ  R0, freeFlags
+	MOVD R0, 72(RSP)
+
+	MOVD R0, R0
+	MOVD 64(RSP), R1
+	MOVD 32(RSP), R2
+	LSL  $3, R2, R2
+	BL   fse_memcpy(SB)
+
+	// Allocate and populate fsEventsCallbackPayload.
+	MOVD $32, R0
+	BL   fse_malloc(SB)
+	CBZ  R0, freeIDs
 	MOVD R0, 16(RSP)
 
 	MOVD 32(RSP), R6
@@ -102,6 +118,8 @@ TEXT fsEventsCallbackASM<>(SB), NOSPLIT|NOFRAME, $0
 	MOVD R6, (1*8)(R0)
 	MOVD 56(RSP), R6
 	MOVD R6, (2*8)(R0)
+	MOVD 72(RSP), R6
+	MOVD R6, (3*8)(R0)
 
 	// write(info->eventPipeWrite, &payload, sizeof(payload)).
 writeAgain:
@@ -122,6 +140,10 @@ writeAgain:
 
 freePayload:
 	MOVD 16(RSP), R0
+	BL   fse_free(SB)
+
+freeIDs:
+	MOVD 72(RSP), R0
 	BL   fse_free(SB)
 
 freeFlags:

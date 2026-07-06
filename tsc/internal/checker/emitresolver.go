@@ -798,6 +798,9 @@ func (r *EmitResolver) IsTopLevelValueImportEqualsWithEntityName(node *ast.Node)
 }
 
 func (r *EmitResolver) MarkLinkedReferencesRecursively(file *ast.SourceFile) {
+	if !ast.IsParseTreeNode(file.AsNode()) {
+		return
+	}
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
@@ -883,6 +886,10 @@ func (r *EmitResolver) GetReferencedValueDeclaration(node *ast.IdentifierNode) *
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
 
+	return r.getReferenceResolver().GetReferencedValueDeclaration(node)
+}
+
+func (r *EmitResolver) GetReferencedValueDeclarationUnsafe(node *ast.IdentifierNode) *ast.Declaration {
 	return r.getReferenceResolver().GetReferencedValueDeclaration(node)
 }
 

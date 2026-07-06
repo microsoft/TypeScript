@@ -24,5 +24,7 @@ exports.thing = {
 
 //// [checkingObjectWithThisInNamePositionNoCrash.d.ts]
 export declare const thing: {
-    doit(): any;
+    doit(): {
+        [x: number]: string;
+    };
 };

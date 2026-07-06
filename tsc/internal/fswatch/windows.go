@@ -393,7 +393,10 @@ func (s *windowsSubscription) processOne(action uint32, name string) {
 			}
 		}
 	case windows.FILE_ACTION_REMOVED, windows.FILE_ACTION_RENAMED_OLD_NAME:
-		s.dirWatch.events.remove(path)
+		seq := s.dirWatch.events.removeAndGetSequence(path)
+		if s.dirWatch.terminateCallbacksForDeletedRoot(path, seq, fmt.Errorf("%w: watched directory removed", ErrWatchTerminated)) {
+			s.dirWatch.notify()
+		}
 	}
 }
 

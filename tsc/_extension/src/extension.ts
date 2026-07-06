@@ -42,9 +42,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     // but for now we just construct it to ensure shared properties are set for telemetry.
     void new ExperimentationService(telemetryReporter, context.extension.id, version, context.globalState);
 
-    registerEnablementCommands(context, telemetryReporter);
-
-    const output = vscode.window.createOutputChannel("typescript-native-preview", { log: true });
+    const output = vscode.window.createOutputChannel("TypeScript 7", { log: true });
     context.subscriptions.push(output);
 
     const languageServerInitializedEventEmitter = new vscode.EventEmitter<void>();
@@ -52,22 +50,55 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
 
     const sessionManager = new SessionManager(context, output, languageServerInitializedEventEmitter, telemetryReporter);
     context.subscriptions.push(sessionManager);
+    registerEnablementCommands(context, telemetryReporter, () => sessionManager.stop());
+
+    let pluginWarningShown = false;
+    const onDidChangeExtensions = vscode.extensions.onDidChange(() => {
+        if (sessionManager.currentSession) {
+            warnAboutTsServerPlugins(context, output);
+        }
+    });
+    context.subscriptions.push(onDidChangeExtensions);
+
+    function onLanguageServerInitialized(listener: () => void): vscode.Disposable {
+        if (sessionManager.currentSession?.client.isInitialized) {
+            listener();
+        }
+        return languageServerInitializedEventEmitter.event(listener);
+    }
+
+    async function startNativeServer(): Promise<void> {
+        await sessionManager.start(context);
+        warnAboutTsServerPlugins(context, output);
+        promptUseWorkspaceVersion(context).catch(err => {
+            output.appendLine(vscode.l10n.t(`Error prompting to use workspace version: {0}`, String(err)));
+        });
+    }
+
+    const api: ExtensionAPI = {
+        onLanguageServerInitialized: onLanguageServerInitialized,
+        async initializeAPIConnection(pipe?: string): Promise<string> {
+            return sessionManager.initializeAPIConnection(pipe);
+        },
+    };
 
     let configChangeTimeout: ReturnType<typeof setTimeout> | undefined;
     context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(event => {
-        if (event.affectsConfiguration("typescript.experimental.useTsgo") || event.affectsConfiguration("js/ts.experimental.useTsgo")) {
+        if (
+            event.affectsConfiguration("typescript.experimental.useTsgo")
+            || event.affectsConfiguration("js/ts.experimental.useTsgo")
+        ) {
             // Debounce to coalesce rapid events when both settings are updated together.
             clearTimeout(configChangeTimeout);
             configChangeTimeout = setTimeout(async () => {
                 if (needsExtHostRestartOnChange()) {
-                    const selected = await vscode.window.showInformationMessage(vscode.l10n.t("TypeScript Native Preview setting has changed. Restart extensions to apply changes."), vscode.l10n.t("Restart Extensions"));
+                    const selected = await vscode.window.showInformationMessage(vscode.l10n.t("TypeScript 7 setting has changed. Restart extensions to apply changes."), vscode.l10n.t("Restart Extensions"));
                     if (selected) {
                         vscode.commands.executeCommand("workbench.action.restartExtensionHost");
                     }
                 }
                 else {
-                    const useTsgo = getUseTsgo();
-                    if (useTsgo) {
+                    if (await shouldStartTsgo(context)) {
                         await sessionManager.restart(context);
                     }
                     else {
@@ -86,11 +117,15 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     }
 
     const useTsgo = getUseTsgo();
+    if (useTsgo === undefined && shouldOnboardTsgo) {
+        updateUseTsgoSetting(true);
+        return api;
+    }
 
+    const tsExtension = vscode.extensions.getExtension("vscode.typescript-language-features");
     if (context.extensionMode === vscode.ExtensionMode.Development) {
-        const tsExtension = vscode.extensions.getExtension("vscode.typescript-language-features");
         if (!tsExtension) {
-            if (!useTsgo) {
+            if (useTsgo === false) {
                 vscode.window.showWarningMessage(
                     vscode.l10n.t("The built-in TypeScript extension is disabled. Sync launch.json with launch.template.json to reenable."),
                     vscode.l10n.t("OK"),
@@ -102,7 +137,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
             const settingName = getWinningTsgoConfigKey() ?? "js/ts.experimental.useTsgo";
             const enableSettingString = vscode.l10n.t("Enable Setting");
             vscode.window.showWarningMessage(
-                vscode.l10n.t(`TypeScript Native Preview is running in development mode with "{0}" set to false.`, settingName),
+                vscode.l10n.t(`TypeScript 7 is running in development mode with "{0}" set to false.`, settingName),
                 enableSettingString,
                 vscode.l10n.t("Ignore"),
             ).then(selected => {
@@ -113,47 +148,22 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
             return;
         }
     }
-    else if (useTsgo === false) {
-        output.appendLine(vscode.l10n.t("TypeScript Native Preview is disabled. Select 'Enable TypeScript Native Preview (Experimental)' in the command palette to enable it."));
-        return;
-    }
-    else if (useTsgo === undefined) {
-        if (shouldOnboardTsgo) {
-            // First run after install: enable by default.
-            updateUseTsgoSetting(true);
-            return;
-        }
-        output.appendLine(vscode.l10n.t("TypeScript Native Preview is disabled. Select 'Enable TypeScript Native Preview (Experimental)' in the command palette to enable it."));
+    else if (useTsgo !== true) {
+        output.appendLine(vscode.l10n.t("TypeScript 7 is disabled. Select 'TypeScript: Enable TypeScript 7' in the command palette to enable it."));
         return;
     }
 
-    let pluginWarningShown = false;
-    const onDidChangeExtensions = vscode.extensions.onDidChange(() => {
-        warnAboutTsServerPlugins(context, output);
-    });
-    context.subscriptions.push(onDidChangeExtensions);
-    warnAboutTsServerPlugins(context, output);
-
-    await sessionManager.start(context);
-
-    // Prompt user to use workspace version if one is detected and they haven't opted in yet.
-    promptUseWorkspaceVersion(context).catch(err => {
-        output.appendLine(vscode.l10n.t(`Error prompting to use workspace version: {0}`, String(err)));
-    });
-
-    function onLanguageServerInitialized(listener: () => void): vscode.Disposable {
-        if (sessionManager.currentSession?.client.isInitialized) {
-            listener();
+    async function shouldStartTsgo(context: vscode.ExtensionContext): Promise<boolean> {
+        const useTsgo = getUseTsgo();
+        if (context.extensionMode === vscode.ExtensionMode.Development && !vscode.extensions.getExtension("vscode.typescript-language-features")) {
+            return useTsgo !== false;
         }
-        return languageServerInitializedEventEmitter.event(listener);
+        return useTsgo === true;
     }
 
-    return {
-        onLanguageServerInitialized: onLanguageServerInitialized,
-        async initializeAPIConnection(pipe?: string): Promise<string> {
-            return sessionManager.initializeAPIConnection(pipe);
-        },
-    };
+    await startNativeServer();
+
+    return api;
 
     async function warnAboutTsServerPlugins(context: vscode.ExtensionContext, output: vscode.LogOutputChannel): Promise<void> {
         // Never show more than once.
@@ -190,12 +200,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
 
         const uniqueExtensionNames = [...new Set(pluginExtensions.map(p => p.extensionId))];
         const extensionNames = uniqueExtensionNames.join(", ");
-        output.appendLine(`Extensions contributing tsserver plugins that will not apply with TypeScript Native Preview: ${extensionNames}`);
+        output.appendLine(`Extensions contributing tsserver plugins that will not apply with TypeScript 7: ${extensionNames}`);
 
         const message = uniqueExtensionNames.length === 1
             // Pick the first extension & plugin, even though extensions can have multiple plugins
-            ? vscode.l10n.t(`TypeScript server plugins from the "{0}" extension will not be loaded because TypeScript Native Preview is enabled globally.`, pluginExtensions[0].extensionId)
-            : vscode.l10n.t(`{0} extensions contribute TypeScript server plugins that will not be loaded because TypeScript Native Preview is enabled globally: {1}`, uniqueExtensionNames.length, extensionNames);
+            ? vscode.l10n.t(`TypeScript server plugins from the "{0}" extension will not be loaded because TypeScript 7 is enabled globally.`, pluginExtensions[0].extensionId)
+            : vscode.l10n.t(`{0} extensions contribute TypeScript server plugins that will not be loaded because TypeScript 7 is enabled globally: {1}`, uniqueExtensionNames.length, extensionNames);
 
         const ok = vscode.l10n.t("OK");
         const disableInWorkspace = vscode.l10n.t("Disable Native Preview in Workspace");
@@ -212,6 +222,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
 
         const selected = await vscode.window.showWarningMessage(message, ...options);
         if (selected === disableInWorkspace) {
+            await sessionManager.stop();
             await vscode.workspace.getConfiguration("js/ts").update("experimental.useTsgo", false, vscode.ConfigurationTarget.Workspace);
         }
         else if (selected === dontShowAgain) {

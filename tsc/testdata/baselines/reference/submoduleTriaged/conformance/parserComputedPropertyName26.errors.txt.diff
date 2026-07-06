@@ -1,0 +1,14 @@
+--- old.parserComputedPropertyName26.errors.txt
++++ new.parserComputedPropertyName26.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS-1: Pre-emit (2) and post-emit (3) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+ parserComputedPropertyName26.ts(3,5): error TS1164: Computed property names are not allowed in enums.
+ parserComputedPropertyName26.ts(4,6): error TS2304: Cannot find name 'e2'.
+
+
++!!! error TS-1: Pre-emit (2) and post-emit (3) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
++!!! related TS-1: The excess diagnostics are:
++!!! related TS2552 parserComputedPropertyName26.ts:3:6: Cannot find name 'e'. Did you mean 'E'?
+ ==== parserComputedPropertyName26.ts (2 errors) ====
+     enum E {
+         // No ASI

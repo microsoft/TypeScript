@@ -17,7 +17,6 @@
 // | 
 // | 
 // | *@template* `T` — Comment Text
-// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -33,7 +32,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nconst foo: (t: T) => number\n```\n\n\n*@template* `T` — Comment Text\n"
+        "value": "```typescript\nconst foo: (t: T) => number\n```\n\n\n*@template* `T` — Comment Text"
       },
       "range": {
         "start": {

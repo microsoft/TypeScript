@@ -41,15 +41,7 @@ export declare const o: (p1: SpecialString, p2: PrivateSpecialString, p3: N.Spec
 export {};
 //// [b.d.ts]
 import * as a from "./a";
-export declare const g: (p1: a.SpecialString, p2: string, p3: a.N.SpecialString) => {
-    foo: a.SpecialString;
-    bar: string;
-    baz: a.N.SpecialString;
-};
+export declare const g: typeof a.o;
 //// [c.d.ts]
-import { SpecialString } from "./a";
-export declare const g: (p1: SpecialString, p2: string, p3: import("./a").N.SpecialString) => {
-    foo: SpecialString;
-    bar: string;
-    baz: import("./a").N.SpecialString;
-};
+import { o } from "./a";
+export declare const g: typeof o;

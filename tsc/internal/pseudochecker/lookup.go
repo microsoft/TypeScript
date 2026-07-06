@@ -24,11 +24,7 @@ func (ch *PseudoChecker) GetReturnTypeOfSignature(signatureNode *ast.Node) *Pseu
 }
 
 func (ch *PseudoChecker) GetTypeOfAccessor(accessor *ast.Node) *PseudoType {
-	annotated := ch.typeFromAccessor(accessor)
-	if annotated.Kind == PseudoTypeKindNoResult {
-		return ch.inferAccessorType(accessor)
-	}
-	return annotated
+	return ch.typeFromAccessor(accessor)
 }
 
 func (ch *PseudoChecker) GetTypeOfExpression(node *ast.Node) *PseudoType {
@@ -154,16 +150,17 @@ func (ch *PseudoChecker) typeFromAccessor(accessor *ast.Node) *PseudoType {
 		return NewPseudoTypeDirect(accessorType)
 	}
 	if accessorDeclarations.GetAccessor != nil {
-		return ch.createReturnFromSignature(accessorDeclarations.GetAccessor.AsNode())
+		res := ch.createReturnFromSignature(accessorDeclarations.GetAccessor.AsNode())
+		if res.Kind == PseudoTypeKindInferred && len(res.AsPseudoTypeInferred().ErrorNodes) == 0 {
+			errorNodes := []*ast.Node{accessorDeclarations.GetAccessor.AsNode()}
+			if accessorDeclarations.SetAccessor != nil {
+				errorNodes = append(errorNodes, accessorDeclarations.SetAccessor.AsNode())
+			}
+			res = NewPseudoTypeInferredWithErrors(res.AsPseudoTypeInferred().Expression, res.AsPseudoTypeInferred().IsSignatureReturn, errorNodes) // Move error up to the accessor
+		}
+		return res
 	}
 	return NewPseudoTypeNoResult(accessor)
-}
-
-func (ch *PseudoChecker) inferAccessorType(node *ast.Node) *PseudoType {
-	if node.Kind == ast.KindGetAccessor {
-		return ch.createReturnFromSignature(node)
-	}
-	return NewPseudoTypeNoResult(node)
 }
 
 func (ch *PseudoChecker) getTypeAnnotationFromAllAccessorDeclarations(node *ast.Node, accessors ast.AllAccessorDeclarations) *ast.Node {
@@ -292,7 +289,7 @@ func (ch *PseudoChecker) typeFromExpression(node *ast.Node) *PseudoType {
 	case ast.KindObjectLiteralExpression:
 		return ch.typeFromObjectLiteral(node.AsObjectLiteralExpression())
 	case ast.KindClassExpression:
-		return NewPseudoTypeInferred(node, false) // No possible annotation/directly mappable syntax
+		return NewPseudoTypeInferredWithErrors(node, false, []*ast.Node{node}) // No possible annotation/directly mappable syntax
 	case ast.KindTemplateExpression:
 		// templateLitWithHoles as const, not supported
 		if IsInConstContext(node) {
@@ -668,6 +665,9 @@ func (ch *PseudoChecker) typeFromParameterWorker(node *ast.ParameterDeclaration,
 	}
 	if node.Initializer != nil && ast.IsIdentifier(node.Name()) && !isContextuallyTyped(node.AsNode()) {
 		expr := ch.typeFromExpression(node.Initializer)
+		if expr != nil && (expr.Kind == PseudoTypeKindInferred && len(expr.AsPseudoTypeInferred().ErrorNodes) == 0) {
+			expr = NewPseudoTypeInferredWithErrors(expr.AsPseudoTypeInferred().Expression, false, []*ast.Node{node.AsNode()}) // Move error up to the parameter
+		}
 		if !ch.strictNullChecks {
 			return expr
 		}

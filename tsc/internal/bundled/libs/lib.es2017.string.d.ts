@@ -16,28 +16,32 @@ and limitations under the License.
 
 interface String {
     /**
-     * Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length.
-     * The padding is applied from the start (left) of the current string.
+     * Pads the current string with a given string (repeated and/or truncated, if needed) so that the resulting string has a given length.
+     * The padding is applied from the start of the current string.
      *
-     * @param maxLength The length of the resulting string once the current string has been padded.
-     *        If this parameter is smaller than the current string's length, the current string will be returned as it is.
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart)
      *
-     * @param fillString The string to pad the current string with.
-     *        If this string is too long, it will be truncated and the left-most part will be applied.
-     *        The default value for this parameter is " " (U+0020).
+     * @param targetLength The length of the resulting string once the current `str` has been padded.
+     *        If the value is less than or equal to `str.length`, then `str` is returned as-is.
+     *
+     * @param padString The string to pad the current `str` with.
+     *        If `padString` is too long to stay within `targetLength`, it will be truncated from the end.
+     *        The default value is the space character (U+0020).
      */
-    padStart(maxLength: number, fillString?: string): string;
+    padStart(targetLength: number, padString?: string): string;
 
     /**
-     * Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length.
-     * The padding is applied from the end (right) of the current string.
+     * Pads the current string with a given string (repeated and/or truncated, if needed) so that the resulting string has a given length.
+     * The padding is applied from the end of the current string.
      *
-     * @param maxLength The length of the resulting string once the current string has been padded.
-     *        If this parameter is smaller than the current string's length, the current string will be returned as it is.
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padEnd)
      *
-     * @param fillString The string to pad the current string with.
-     *        If this string is too long, it will be truncated and the left-most part will be applied.
-     *        The default value for this parameter is " " (U+0020).
+     * @param targetLength The length of the resulting string once the current `str` has been padded.
+     *        If the value is less than or equal to `str.length`, then `str` is returned as-is.
+     *
+     * @param padString The string to pad the current `str` with.
+     *        If `padString` is too long to stay within `targetLength`, it will be truncated from the end.
+     *        The default value is the space character (U+0020).
      */
-    padEnd(maxLength: number, fillString?: string): string;
+    padEnd(targetLength: number, padString?: string): string;
 }

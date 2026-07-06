@@ -33,7 +33,7 @@ func getWildcardDirectories(include []string, exclude []string, comparePathsOpti
 	var recursiveKeys []string
 
 	for _, file := range include {
-		spec := tspath.NormalizeSlashes(tspath.CombinePaths(comparePathsOptions.CurrentDirectory, file))
+		spec := tspath.NormalizePath(tspath.CombinePaths(comparePathsOptions.CurrentDirectory, file))
 		if excludeMatcher != nil && excludeMatcher.MatchString(spec) {
 			continue
 		}

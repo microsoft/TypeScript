@@ -2,11 +2,11 @@
 
 === checkingObjectWithThisInNamePositionNoCrash.ts ===
 export const thing = {
->thing : { doit(): any; }
->{    doit() {        return {            [this.a]: "", // should refer to the outer object with the doit method, notably not present        }    }} : { doit(): any; }
+>thing : { doit(): { [x: number]: string; }; }
+>{    doit() {        return {            [this.a]: "", // should refer to the outer object with the doit method, notably not present        }    }} : { doit(): { [x: number]: string; }; }
 
     doit() {
->doit : () => any
+>doit : () => { [x: number]: string; }
 
         return {
 >{            [this.a]: "", // should refer to the outer object with the doit method, notably not present        } : { [x: number]: string; }
@@ -14,7 +14,7 @@ export const thing = {
             [this.a]: "", // should refer to the outer object with the doit method, notably not present
 >[this.a] : string
 >this.a : any
->this : { doit(): any; }
+>this : { doit(): { [x: number]: string; }; }
 >a : any
 >"" : ""
         }

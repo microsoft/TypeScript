@@ -4035,6 +4035,7 @@ func GetHostSignatureFromJSDoc(node *Node) *Node {
 
 // Finds the declaration that owns the JSDoc for a function-like node.
 // Keep these hosts aligned with JSDoc parameter reparsing so unmatched @param diagnostics use the same attachment rules.
+// Keep in sync with getNextJSDocCommentLocation in the API's src/ast/jsdoc.ts
 func GetNextJSDocCommentLocation(node *Node) *Node {
 	if parent := node.Parent; parent != nil {
 		switch parent.Kind {

@@ -1,9 +1,9 @@
-index.js(1,1): error TS4023: Exported variable 'items' has or is using name 'Item' from external module "some-mod" but cannot be named.
+index.js(1,7): error TS4023: Exported variable 'items' has or is using name 'Item' from external module "some-mod" but cannot be named.
 
 
 ==== index.js (1 errors) ====
     const items = require("./some-mod")();
-    ~~~~~
+          ~~~~~
 !!! error TS4023: Exported variable 'items' has or is using name 'Item' from external module "some-mod" but cannot be named.
     module.exports = items;
 ==== some-mod.d.ts (0 errors) ====

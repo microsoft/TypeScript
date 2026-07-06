@@ -1,0 +1,11 @@
+--- old.acceptableAlias1.types
++++ new.acceptableAlias1.types
+@@= skipped -7, +7 lines =@@
+     }
+     export import X = N;
+ >X : any
+->N : error
++>N : any
+ }
+
+ import r = M.X;

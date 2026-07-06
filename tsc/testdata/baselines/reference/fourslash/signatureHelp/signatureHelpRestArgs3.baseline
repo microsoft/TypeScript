@@ -5,7 +5,6 @@
 // | ----------------------------------------------------------------------
 // | assign(target: object, **...sources: any[]**): any
 // | - `...sources: any[]`: One or more source objects from which to copy properties
-
 // | Copy the values of all of the enumerable own properties from one or more source objects to a
 // | target object. Returns the target object.
 // | ----------------------------------------------------------------------
@@ -33,14 +32,14 @@
               "label": "target: T",
               "documentation": {
                 "kind": "markdown",
-                "value": "The target object to copy to.\n"
+                "value": "The target object to copy to."
               }
             },
             {
               "label": "source: U",
               "documentation": {
                 "kind": "markdown",
-                "value": "The source object from which to copy properties.\n"
+                "value": "The source object from which to copy properties."
               }
             }
           ],
@@ -57,21 +56,21 @@
               "label": "target: T",
               "documentation": {
                 "kind": "markdown",
-                "value": "The target object to copy to.\n"
+                "value": "The target object to copy to."
               }
             },
             {
               "label": "source1: U",
               "documentation": {
                 "kind": "markdown",
-                "value": "The first source object from which to copy properties.\n"
+                "value": "The first source object from which to copy properties."
               }
             },
             {
               "label": "source2: V",
               "documentation": {
                 "kind": "markdown",
-                "value": "The second source object from which to copy properties.\n"
+                "value": "The second source object from which to copy properties."
               }
             }
           ],
@@ -88,28 +87,28 @@
               "label": "target: T",
               "documentation": {
                 "kind": "markdown",
-                "value": "The target object to copy to.\n"
+                "value": "The target object to copy to."
               }
             },
             {
               "label": "source1: U",
               "documentation": {
                 "kind": "markdown",
-                "value": "The first source object from which to copy properties.\n"
+                "value": "The first source object from which to copy properties."
               }
             },
             {
               "label": "source2: V",
               "documentation": {
                 "kind": "markdown",
-                "value": "The second source object from which to copy properties.\n"
+                "value": "The second source object from which to copy properties."
               }
             },
             {
               "label": "source3: W",
               "documentation": {
                 "kind": "markdown",
-                "value": "The third source object from which to copy properties.\n"
+                "value": "The third source object from which to copy properties."
               }
             }
           ],
@@ -126,14 +125,14 @@
               "label": "target: object",
               "documentation": {
                 "kind": "markdown",
-                "value": "The target object to copy to.\n"
+                "value": "The target object to copy to."
               }
             },
             {
               "label": "...sources: any[]",
               "documentation": {
                 "kind": "markdown",
-                "value": "One or more source objects from which to copy properties\n"
+                "value": "One or more source objects from which to copy properties"
               }
             }
           ],

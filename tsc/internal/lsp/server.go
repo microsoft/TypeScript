@@ -469,7 +469,14 @@ func (s *Server) readLoop(ctx context.Context) error {
 		if s.initializeParams == nil && msg.Kind == jsonrpc.MessageKindRequest {
 			req := msg.AsRequest()
 			if req.Method == lsproto.MethodInitialize {
-				resp, err := s.handleInitialize(ctx, req.Params.(*lsproto.InitializeParams), req)
+				params, err := lsproto.UnmarshalParams[*lsproto.InitializeParams](req)
+				if err != nil {
+					if err := s.sendError(req.ID, err); err != nil {
+						return err
+					}
+					continue
+				}
+				resp, err := s.handleInitialize(ctx, params, req)
 				if err != nil {
 					return err
 				}
@@ -496,7 +503,9 @@ func (s *Server) readLoop(ctx context.Context) error {
 		} else {
 			req := msg.AsRequest()
 			if req.Method == lsproto.MethodCancelRequest {
-				s.cancelRequest(req.Params.(*lsproto.CancelParams).Id)
+				if params, err := lsproto.UnmarshalParams[*lsproto.CancelParams](req); err == nil && params != nil {
+					s.cancelRequest(params.Id)
+				}
 			} else {
 				if err := s.requestQueue.Put(ctx, req); err != nil {
 					return err
@@ -811,10 +820,9 @@ func registerNotificationHandler[Req any](handlers handlerMap, info lsproto.Noti
 			return nil, lsproto.ErrorCodeServerNotInitialized
 		}
 
-		var params Req
-		// Ignore empty params; all generated params are either pointers or any.
-		if req.Params != nil {
-			params = req.Params.(Req)
+		params, err := lsproto.UnmarshalParams[Req](req)
+		if err != nil {
+			return nil, err
 		}
 		if err := fn(s, ctx, params); err != nil {
 			return nil, err
@@ -833,10 +841,9 @@ func registerRequestHandler[Req, Resp any](
 			return nil, lsproto.ErrorCodeServerNotInitialized
 		}
 
-		var params Req
-		// Ignore empty params.
-		if req.Params != nil {
-			params = req.Params.(Req)
+		params, err := lsproto.UnmarshalParams[Req](req)
+		if err != nil {
+			return nil, err
 		}
 		resp, err := fn(s, ctx, params, req)
 		if err != nil {
@@ -851,10 +858,9 @@ func registerRequestHandler[Req, Resp any](
 
 func registerLanguageServiceDocumentRequestHandler[Req lsproto.HasTextDocumentURI, Resp any](handlers handlerMap, info lsproto.RequestInfo[Req, Resp], fn func(*Server, context.Context, *ls.LanguageService, Req) (Resp, error)) {
 	handlers[info.Method] = func(s *Server, ctx context.Context, req *lsproto.RequestMessage) (func() error, error) {
-		var params Req
-		// Ignore empty params.
-		if req.Params != nil {
-			params = req.Params.(Req)
+		params, err := lsproto.UnmarshalParams[Req](req)
+		if err != nil {
+			return nil, err
 		}
 		ls, err := s.session.GetLanguageService(ctx, params.TextDocumentURI())
 		if err != nil {
@@ -879,10 +885,9 @@ func registerLanguageServiceDocumentRequestHandler[Req lsproto.HasTextDocumentUR
 
 func registerLanguageServiceWithAutoImportsRequestHandler[Req lsproto.HasTextDocumentURI, Resp any](handlers handlerMap, info lsproto.RequestInfo[Req, Resp], fn func(*Server, context.Context, *ls.LanguageService, Req) (Resp, error)) {
 	handlers[info.Method] = func(s *Server, ctx context.Context, req *lsproto.RequestMessage) (func() error, error) {
-		var params Req
-		// Ignore empty params.
-		if req.Params != nil {
-			params = req.Params.(Req)
+		params, err := lsproto.UnmarshalParams[Req](req)
+		if err != nil {
+			return nil, err
 		}
 		return s.session.WithLanguageServiceAndSnapshot(ctx, params.TextDocumentURI(), func(languageService *ls.LanguageService, snapshot *project.Snapshot) (func() error, error) {
 			return func() error {
@@ -919,10 +924,9 @@ func registerMultiProjectReferenceRequestHandler[Req lsproto.HasTextDocumentPosi
 	fn func(*ls.LanguageService, context.Context, Req, ls.CrossProjectOrchestrator) (Resp, error),
 ) {
 	handlers[info.Method] = func(s *Server, ctx context.Context, req *lsproto.RequestMessage) (func() error, error) {
-		var params Req
-		// Ignore empty params.
-		if req.Params != nil {
-			params = req.Params.(Req)
+		params, err := lsproto.UnmarshalParams[Req](req)
+		if err != nil {
+			return nil, err
 		}
 		// !!! sheetal: multiple projects that contain the file through symlinks
 		defaultLs, orchestrator, err := s.getLanguageServiceAndCrossProjectOrchestrator(ctx, params.TextDocumentURI(), req)

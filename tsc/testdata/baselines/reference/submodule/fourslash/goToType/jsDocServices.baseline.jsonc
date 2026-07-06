@@ -1,0 +1,10 @@
+// === goToType ===
+// === /jsDocServices.ts ===
+// <|interface [|I|] {}|>
+// 
+// /**
+//  * @param /*GOTO TYPE*/foo I pity the foo
+//  */
+// function f(foo: I) {
+//     return foo;
+// }

@@ -36,7 +36,7 @@
 // | ```
 // | documentation
 // | 
-// | *@param* `b` — inner parameter 
+// | *@param* `b` — inner parameter
 // | ----------------------------------------------------------------------
 //                                       ^
 // | ----------------------------------------------------------------------
@@ -77,7 +77,7 @@
 // | ```
 // | documentation
 // | 
-// | *@param* `b` — inner parameter 
+// | *@param* `b` — inner parameter
 // | ----------------------------------------------------------------------
 // }
 // /**
@@ -95,9 +95,7 @@
 // | 
 // | *@param* `s` — the first parameter!
 // | 
-// | 
 // | *@returns* — the parameter's length
-// | 
 // | ----------------------------------------------------------------------
 //                 * Summary on expression
 //                 * @param s param on expression
@@ -115,9 +113,7 @@
 // | 
 // | *@param* `s` — the first parameter!
 // | 
-// | 
 // | *@returns* — the parameter's length
-// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -214,7 +210,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nvar lambdaVar: (b: string) => string\n```\ndocumentation\n\n*@param* `b` — inner parameter "
+        "value": "```typescript\nvar lambdaVar: (b: string) => string\n```\ndocumentation\n\n*@param* `b` — inner parameter"
       },
       "range": {
         "start": {
@@ -349,7 +345,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nvar lambdaVar: (b: string) => string\n```\ndocumentation\n\n*@param* `b` — inner parameter "
+        "value": "```typescript\nvar lambdaVar: (b: string) => string\n```\ndocumentation\n\n*@param* `b` — inner parameter"
       },
       "range": {
         "start": {
@@ -376,7 +372,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nvar assigned: (s: string) => number\n```\nOn variable\n\n*@param* `s` — the first parameter!\n\n\n*@returns* — the parameter's length\n"
+        "value": "```typescript\nvar assigned: (s: string) => number\n```\nOn variable\n\n*@param* `s` — the first parameter!\n\n*@returns* — the parameter's length"
       },
       "range": {
         "start": {
@@ -403,7 +399,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\nvar assigned: (s: string) => number\n```\nOn variable\n\n*@param* `s` — the first parameter!\n\n\n*@returns* — the parameter's length\n"
+        "value": "```typescript\nvar assigned: (s: string) => number\n```\nOn variable\n\n*@param* `s` — the first parameter!\n\n*@returns* — the parameter's length"
       },
       "range": {
         "start": {

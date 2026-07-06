@@ -36,6 +36,12 @@ import {
 } from "./protocol.ts";
 
 export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<RemoteNode> {
+    // Inherited Array methods like filter/map/slice use ArraySpeciesCreate, which would
+    // otherwise call `new RemoteNodeList(length)` and fail. Produce a plain Array instead.
+    static get [Symbol.species](): ArrayConstructor {
+        return Array;
+    }
+
     parent: RemoteNode;
     hasTrailingComma?: boolean;
     transformFlags: number = 0;
@@ -174,8 +180,10 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
             if (kind === KIND_NODE_LIST) {
                 throw new Error("NodeList cannot directly contain another NodeList");
             }
-            child = new RemoteNode(this.view, index, this.parent, this.sourceFile, this.sourceFile._offsetNodes);
-            this.sourceFile.nodes[index] = child;
+            const sf = this.sourceFile;
+            child = new RemoteNode(this.view, index, this.parent, sf, sf._offsetNodes);
+            sf.nodes[index] = child;
+            sf._timing?.recordMaterialization();
         }
         return child;
     }
@@ -302,13 +310,14 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     private getOrCreateChildAtNodeIndex(index: number): RemoteNode | RemoteNodeList {
         let child = this.sourceFile.nodes[index];
         if (!child) {
-            const offsetNodes = this.sourceFile._offsetNodes;
-            const kind = this.view.getUint32(offsetNodes + index * NODE_LEN + NODE_OFFSET_KIND, true);
             const sf = this.sourceFile;
+            const offsetNodes = sf._offsetNodes;
+            const kind = this.view.getUint32(offsetNodes + index * NODE_LEN + NODE_OFFSET_KIND, true);
             child = kind === KIND_NODE_LIST
                 ? new RemoteNodeList(this.view, index, this, sf, offsetNodes)
                 : new RemoteNode(this.view, index, this, sf, offsetNodes);
             sf.nodes[index] = child;
+            sf._timing?.recordMaterialization();
         }
         return child;
     }
@@ -322,44 +331,7 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     }
 
     private getNamedChild(propertyName: string): RemoteNode | RemoteNodeList | undefined {
-        // JSDocPropertyTag and JSDocParameterTag have runtime-dependent child order based on isNameFirst.
-        // Handle them before the general childProperties lookup.
         const kind = this.kind;
-        if (kind === SyntaxKind.JSDocPropertyTag) {
-            let order: number;
-            switch (propertyName) {
-                case "name":
-                    order = this.isNameFirst ? 0 : 1;
-                    break;
-                case "typeExpression":
-                    order = this.isNameFirst ? 1 : 0;
-                    break;
-                default:
-                    return undefined;
-            }
-            return this.getChildAtOrder(order);
-        }
-        else if (kind === SyntaxKind.JSDocParameterTag) {
-            let order: number;
-            switch (propertyName) {
-                case "tagName":
-                    order = 0;
-                    break;
-                case "name":
-                    order = this.isNameFirst ? 1 : 2;
-                    break;
-                case "typeExpression":
-                    order = this.isNameFirst ? 2 : 1;
-                    break;
-                case "comment":
-                    order = 3;
-                    break;
-                default:
-                    return undefined;
-            }
-            return this.getChildAtOrder(order);
-        }
-
         const propertyNames = childProperties[kind];
         if (!propertyNames) {
             return undefined;

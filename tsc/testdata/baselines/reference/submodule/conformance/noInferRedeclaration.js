@@ -21,4 +21,5 @@ export const g = f;
 //// [a.d.ts]
 export declare const f: <T>(x: T, y: NoInfer<T>) => T;
 //// [b.d.ts]
-export declare const g: <T>(x: T, y: globalThis.NoInfer<T>) => T;
+import { f } from "./a";
+export declare const g: typeof f;

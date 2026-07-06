@@ -30,7 +30,8 @@ export interface A {
 }
 export declare const f: (x: A) => A;
 //// [b.d.ts]
+import { f } from "./a";
 export interface A {
     other: number;
 }
-export declare const g: (x: import("./a").A) => import("./a").A;
+export declare const g: typeof f;

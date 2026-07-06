@@ -1,0 +1,13 @@
+--- old.parserExportAssignment5.errors.txt
++++ new.parserExportAssignment5.errors.txt
+@@= skipped -0, +0 lines =@@
++error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+ parserExportAssignment5.ts(2,5): error TS1063: An export assignment cannot be used in a namespace.
+
+
++!!! error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
++!!! related TS-1: The excess diagnostics are:
++!!! related TS2304 parserExportAssignment5.ts:2:14: Cannot find name 'A'.
+ ==== parserExportAssignment5.ts (1 errors) ====
+     namespace M {
+         export = A;

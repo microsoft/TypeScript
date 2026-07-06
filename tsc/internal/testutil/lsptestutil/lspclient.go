@@ -17,42 +17,33 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-// LSPReader reads LSP messages from a channel.
-type LSPReader struct {
-	c <-chan *lsproto.Message
+// clientTransport wires a test client to a server using real LSP
+// "Content-Length"-framed JSON streamed over byte pipes, exactly like
+// communication with a real editor. This exercises the full marshal/unmarshal
+// round-trip of every protocol data structure. The two directions are:
+//
+//	client --(clientOut)--> serverIn --> server
+//	server --(serverOut)--> clientIn --> client
+type clientTransport struct {
+	serverIn       lsp.Reader // server reads client->server messages
+	serverOut      lsp.Writer // server writes server->client messages
+	clientIn       lsp.Reader // client reads server->client messages
+	clientOut      lsp.Writer // client writes client->server messages
+	closeClientOut func()     // closes the client->server direction
+	closeServerOut func()     // closes the server->client direction
 }
 
-func (r *LSPReader) Read() (*lsproto.Message, error) {
-	msg, ok := <-r.c
-	if !ok {
-		return nil, io.EOF
+func newClientTransport() clientTransport {
+	clientToServerReader, clientToServerWriter := io.Pipe()
+	serverToClientReader, serverToClientWriter := io.Pipe()
+	return clientTransport{
+		serverIn:       lsp.ToReader(clientToServerReader),
+		serverOut:      lsp.ToWriter(serverToClientWriter),
+		clientIn:       lsp.ToReader(serverToClientReader),
+		clientOut:      lsp.ToWriter(clientToServerWriter),
+		closeClientOut: func() { _ = clientToServerWriter.Close() },
+		closeServerOut: func() { _ = serverToClientWriter.Close() },
 	}
-	return msg, nil
-}
-
-// LSPWriter writes LSP messages to a channel.
-type LSPWriter struct {
-	c chan<- *lsproto.Message
-}
-
-func (w *LSPWriter) Write(msg *lsproto.Message) error {
-	w.c <- msg
-	return nil
-}
-
-func (w *LSPWriter) Close() {
-	close(w.c)
-}
-
-var (
-	_ lsp.Reader = (*LSPReader)(nil)
-	_ lsp.Writer = (*LSPWriter)(nil)
-)
-
-// newLSPPipe creates a paired LSPReader and LSPWriter connected by a buffered channel.
-func newLSPPipe() (*LSPReader, *LSPWriter) {
-	c := make(chan *lsproto.Message, 100)
-	return &LSPReader{c: c}, &LSPWriter{c: c}
 }
 
 // ServerRequestHandler handles server-initiated requests and returns the response to send back.
@@ -64,10 +55,17 @@ type ServerNotificationHandler func(ctx context.Context, req *lsproto.RequestMes
 // LSPClient provides infrastructure for communicating with an LSP server in tests.
 type LSPClient struct {
 	Server       *lsp.Server
-	inputWriter  *LSPWriter
-	outputReader *LSPReader
+	inputWriter  lsp.Writer
+	outputReader lsp.Reader
 	id           int32
 	ctx          context.Context
+
+	// inputWriterMu serializes writes to the server. The test goroutine (sending
+	// requests/notifications) and the MessageRouter goroutine (sending responses
+	// to server-initiated requests) both write to the same stream; a single
+	// message is written as multiple underlying writes (header, body, flush), so
+	// concurrent writers must not interleave.
+	inputWriterMu sync.Mutex
 
 	// OnServerRequest handles server-initiated requests (e.g., workspace/configuration).
 	// If nil, all server requests receive a MethodNotFound error.
@@ -82,12 +80,18 @@ type LSPClient struct {
 	pendingRequestsMu sync.Mutex
 }
 
+// writeToServer writes a message to the server, serializing concurrent writers.
+func (c *LSPClient) writeToServer(msg *lsproto.Message) error {
+	c.inputWriterMu.Lock()
+	defer c.inputWriterMu.Unlock()
+	return c.inputWriter.Write(msg)
+}
+
 // NewLSPClient creates an LSPClient wrapping the given server and pipes.
 func NewLSPClient(t *testing.T, serverOpts lsp.ServerOptions, onServerRequest ServerRequestHandler) (*LSPClient, func() error) {
-	inputReader, inputWriter := newLSPPipe()
-	outputReader, outputWriter := newLSPPipe()
-	serverOpts.In = inputReader
-	serverOpts.Out = outputWriter
+	transport := newClientTransport()
+	serverOpts.In = transport.serverIn
+	serverOpts.Out = transport.serverOut
 
 	server := lsp.NewServer(&serverOpts)
 
@@ -95,8 +99,8 @@ func NewLSPClient(t *testing.T, serverOpts lsp.ServerOptions, onServerRequest Se
 	g, ctx := errgroup.WithContext(ctx)
 	client := &LSPClient{
 		Server:          server,
-		inputWriter:     inputWriter,
-		outputReader:    outputReader,
+		inputWriter:     transport.clientOut,
+		outputReader:    transport.clientIn,
 		pendingRequests: make(map[jsonrpc.ID]chan *lsproto.ResponseMessage),
 		onServerRequest: onServerRequest,
 		ctx:             ctx,
@@ -104,7 +108,7 @@ func NewLSPClient(t *testing.T, serverOpts lsp.ServerOptions, onServerRequest Se
 
 	// Start server goroutine
 	g.Go(func() error {
-		defer outputWriter.Close()
+		defer transport.closeServerOut()
 		return server.Run(ctx)
 	})
 
@@ -115,7 +119,7 @@ func NewLSPClient(t *testing.T, serverOpts lsp.ServerOptions, onServerRequest Se
 
 	return client, func() error {
 		cancel()
-		inputWriter.Close()
+		transport.closeClientOut()
 		if err := g.Wait(); err != nil && !errors.Is(err, context.Canceled) {
 			return err
 		}
@@ -224,7 +228,7 @@ func (c *LSPClient) handleServerRequest(ctx context.Context, req *lsproto.Reques
 		return nil
 	}
 
-	if err := c.inputWriter.Write(response.Message()); err != nil {
+	if err := c.writeToServer(response.Message()); err != nil {
 		if ctx.Err() != nil {
 			return nil
 		}
@@ -237,7 +241,7 @@ func (c *LSPClient) handleServerRequest(ctx context.Context, req *lsproto.Reques
 // This is an untyped low-level method; prefer SendRequest and SendNotification for typed interactions.
 func (c *LSPClient) WriteMsg(t *testing.T, msg *lsproto.Message) {
 	assert.NilError(t, json.MarshalWrite(io.Discard, msg), "failed to encode message as JSON")
-	if err := c.inputWriter.Write(msg); err != nil {
+	if err := c.writeToServer(msg); err != nil {
 		t.Fatalf("failed to write message: %v", err)
 	}
 }
@@ -252,8 +256,9 @@ func SendRequest[Params, Resp any](t *testing.T, c *LSPClient, info lsproto.Requ
 	if !ok {
 		return nil, *new(Resp), false
 	}
-	result, ok := resp.Result.(Resp)
-	return resp.Message(), result, ok
+	// The result arrives as a raw json.Value; decode it into Resp.
+	result, err := info.UnmarshalResult(resp.Result)
+	return resp.Message(), result, err == nil
 }
 
 // SendRequestAsync sends a typed request and returns a waiter for its response.
@@ -268,8 +273,8 @@ func SendRequestAsync[Params, Resp any](t *testing.T, c *LSPClient, info lsproto
 		if !ok {
 			return nil, *new(Resp), false
 		}
-		result, ok := resp.Result.(Resp)
-		return resp.Message(), result, ok
+		result, err := info.UnmarshalResult(resp.Result)
+		return resp.Message(), result, err == nil
 	}
 }
 
