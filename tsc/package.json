@@ -38,6 +38,7 @@
     },
     "workspaces": [
         "./_extension",
+        "./_extension-nightly",
         "./_packages/*"
     ],
     "overrides": {

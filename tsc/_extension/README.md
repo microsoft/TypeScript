@@ -18,8 +18,8 @@ You can enable this extension by modifying the following settings:
     // TypeScript 7 > Experimental: Use Tsgo
     "js/ts.experimental.useTsgo": true,
 
-    // Optional: use a local '@typescript/native-preview' package or 'tsgo' binary directory.
-    "js/ts.tsdk.path": "./node_modules/@typescript/native-preview"
+    // Optional: use a local TypeScript package directory.
+    "js/ts.tsdk.path": "./node_modules/typescript"
 }
 ```
 

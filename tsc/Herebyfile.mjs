@@ -89,13 +89,15 @@ const options = /** @type {Options} */ (rawOptions);
 const nativePreviewReleaseProfile = /** @type {"native-preview" | "typescript"} */ ("native-preview");
 const nativePreviewReleaseVersion = /** @type {string | undefined} */ (undefined);
 const produceNativePreviewVsix = /** @type {boolean} */ (true);
+const produceTypeScriptNightlyVsix = /** @type {boolean} */ (false);
+const produceAnyVsix = produceNativePreviewVsix || produceTypeScriptNightlyVsix;
 const publishAsTypescript = nativePreviewReleaseProfile === "typescript";
 
 if (publishAsTypescript && !nativePreviewReleaseVersion) {
     throw new Error("Publishing as 'typescript' requires hardcoding nativePreviewReleaseVersion.");
 }
 
-if (options.forRelease && !options.setPrerelease && (!nativePreviewReleaseVersion || produceNativePreviewVsix)) {
+if (options.forRelease && !options.setPrerelease && (!nativePreviewReleaseVersion || produceAnyVsix)) {
     throw new Error("forRelease requires setPrerelease unless nativePreviewReleaseVersion is hardcoded and VSIX production is disabled");
 }
 
@@ -1237,6 +1239,7 @@ function getPublishTag() {
 }
 
 const extensionDir = path.resolve("./_extension");
+const nightlyExtensionDir = path.resolve("./_extension-nightly");
 const builtNpm = path.resolve("./built/npm");
 const builtVsix = path.resolve("./built/vsix");
 const builtSignTmp = path.resolve("./built/sign-tmp");
@@ -1489,7 +1492,8 @@ void 0;
 
 /** @type {VsixExtensionPackage[]} */
 const vsixExtensionPackages = [
-    { name: "native-preview", sourceDir: extensionDir },
+    ...(produceNativePreviewVsix ? [{ name: "native-preview", sourceDir: extensionDir }] : []),
+    ...(produceTypeScriptNightlyVsix ? [{ name: "vscode-typescript-nightly", sourceDir: nightlyExtensionDir }] : []),
 ];
 
 /**
@@ -1613,7 +1617,7 @@ const getPlatforms = memoize(() => {
 
         /** @type {VsixExtension[]} */
         let extensions = [];
-        if (produceNativePreviewVsix && vsix) {
+        if (produceAnyVsix && vsix) {
             /** @type {string[]} */
             const vscodeTargets = [`${os}-${arch === "arm" ? "armhf" : arch}`];
             if (alpine) {
@@ -1812,6 +1816,22 @@ async function runBuildNativePreviewPackages() {
         inputPackageJson.bin = {
             tsc: "./bin/tsc",
         };
+        inputPackageJson.description = "TypeScript is a language for application scale JavaScript development";
+        inputPackageJson.homepage = "https://www.typescriptlang.org/";
+        inputPackageJson.keywords = [
+            "TypeScript",
+            "Microsoft",
+            "compiler",
+            "language",
+            "javascript",
+        ];
+        inputPackageJson.bugs = {
+            url: "https://github.com/microsoft/TypeScript/issues",
+        };
+        inputPackageJson.repository = {
+            type: "git",
+            url: "https://github.com/microsoft/TypeScript.git",
+        };
         delete inputPackageJson.scripts;
         delete inputPackageJson.devDependencies;
     }
@@ -1842,6 +1862,7 @@ async function runBuildNativePreviewPackages() {
         await fs.promises.rename(path.join(mainPackageDir, "lib", "tsgo.js"), path.join(mainPackageDir, "lib", "tsc.js"));
         await fs.promises.writeFile(path.join(mainPackageDir, "bin", "tsc"), '#!/usr/bin/env node\nimport "../lib/tsc.js";\n');
         await fs.promises.chmod(path.join(mainPackageDir, "bin", "tsc"), 0o755);
+        await fs.promises.copyFile(path.join(inputDir, "typescript-package-readme.md"), path.join(mainPackageDir, "README.md"));
     }
 
     await fs.promises.writeFile(path.join(mainPackageDir, "package.json"), JSON.stringify(mainPackage, undefined, 4));
@@ -2191,7 +2212,7 @@ export const nativePreviewRelease = task({
     name: "native-preview:release",
     hiddenFromTaskList: true,
     run: async () => {
-        if (!options.forRelease || !options.setPrerelease && (!nativePreviewReleaseVersion || produceNativePreviewVsix)) {
+        if (!options.forRelease || !options.setPrerelease && (!nativePreviewReleaseVersion || produceAnyVsix)) {
             throw new Error("native-preview:release requires --forRelease and --setPrerelease flags, unless nativePreviewReleaseVersion is hardcoded and VSIX production is disabled. Example: npx hereby native-preview:release --forRelease --setPrerelease=dev.1.0");
         }
         await runBuildNativePreviewPackages();

@@ -1,0 +1,30 @@
+{
+    "name": "vscode-typescript-nightly",
+    "displayName": "TypeScript 7 Nightly",
+    "publisher": "TypeScriptTeam",
+    "description": "%description%",
+    "private": true,
+    "version": "0.0.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/microsoft/typescript-go"
+    },
+    "engines": {
+        "vscode": "^1.126.0"
+    },
+    "extensionKind": [
+        "workspace"
+    ],
+    "capabilities": {
+        "untrustedWorkspaces": {
+            "supported": true
+        }
+    },
+    "files": [
+        "lib",
+        "LICENSE",
+        "NOTICE.txt",
+        "README.md",
+        "package.nls.json"
+    ]
+}
