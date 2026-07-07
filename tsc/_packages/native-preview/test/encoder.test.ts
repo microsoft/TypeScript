@@ -3,8 +3,12 @@ import type {
     SourceFile,
     Statement,
 } from "@typescript/native-preview/unstable/ast";
-import { SyntaxKind } from "@typescript/native-preview/unstable/ast";
 import {
+    SyntaxKind,
+    TokenFlags,
+} from "@typescript/native-preview/unstable/ast";
+import {
+    createArrayLiteralExpression,
     createBlock,
     createExpressionStatement,
     createFunctionDeclaration,
@@ -14,6 +18,7 @@ import {
     createJsxClosingElement,
     createJsxElement,
     createJsxOpeningElement,
+    createNumericLiteral,
     createPostfixUnaryExpression,
     createPrefixUnaryExpression,
     createSourceFile,
@@ -267,6 +272,54 @@ describe("Encoder", () => {
         assert.strictEqual(attrs.kind, SyntaxKind.JsxAttributes);
         // Empty properties should return undefined, not throw
         assert.strictEqual(jsxElem.typeArguments, undefined);
+    });
+
+    test("NodeList element access is consistent across forward, backward, and random order", () => {
+        // Build `[0, 1, 2, ..., 9]` and access the NodeList in several orders to
+        // ensure the memoized cursor in `at()` never returns a stale element.
+        const count = 10;
+        const elements = [];
+        let text = "[";
+        for (let i = 0; i < count; i++) {
+            elements.push(createNumericLiteral(String(i), TokenFlags.None));
+            text += (i === 0 ? "" : ", ") + i;
+        }
+        text += "]";
+        const stmt = createExpressionStatement(createArrayLiteralExpression(elements));
+        const sf = makeSF(text, "/test.ts", [stmt]);
+
+        const decoded = decode(encodeSourceFile(sf));
+        const arrayExpr = (decoded.statements!.at(0)! as RemoteNode).expression! as RemoteNode;
+        const list = arrayExpr.elements! as unknown as RemoteNodeList;
+        assert.strictEqual(list.length, count);
+
+        // Independent decode used as an oracle: fresh cursor per lookup.
+        const posOf = (i: number) => {
+            const freshExpr = (decode(encodeSourceFile(sf)).statements!.at(0)! as RemoteNode).expression! as RemoteNode;
+            return (freshExpr.elements! as unknown as RemoteNodeList).at(i)!.pos;
+        };
+        const expected = Array.from({ length: count }, (_, i) => posOf(i));
+
+        // Forward sequential (exercises cursor resume).
+        for (let i = 0; i < count; i++) {
+            assert.strictEqual(list.at(i)!.pos, expected[i], `forward at(${i})`);
+        }
+        // Backward sequential (cursor must reset when index < cursor).
+        for (let i = count - 1; i >= 0; i--) {
+            assert.strictEqual(list.at(i)!.pos, expected[i], `backward at(${i})`);
+        }
+        // Random order, with repeats.
+        for (const i of [3, 7, 1, 7, 0, 9, 4, 4, 2, 8, 5, 6, 0, 9]) {
+            assert.strictEqual(list.at(i)!.pos, expected[i], `random at(${i})`);
+        }
+        // Negative indices.
+        assert.strictEqual(list.at(-1)!.pos, expected[count - 1], "at(-1)");
+        assert.strictEqual(list.at(-count)!.pos, expected[0], `at(-${count})`);
+
+        // Indexed getters (0..15) and spread must agree with at().
+        assert.strictEqual((list[0] as RemoteNode).pos, expected[0]);
+        assert.strictEqual((list[9] as RemoteNode).pos, expected[9]);
+        assert.deepStrictEqual([...list].map(n => n.pos), expected);
     });
 });
 
