@@ -14,7 +14,7 @@
         "@unicode/unicode-15.1.0": "^1.6.17",
         "adm-zip": "^0.5.17",
         "chokidar": "^5.0.0",
-        "dprint": "^0.54.0",
+        "dprint": "^0.55.1",
         "execa": "^9.6.1",
         "glob": "^13.0.6",
         "hereby": "^1.15.1",
@@ -51,7 +51,7 @@
         "npm": "11.17.0"
     },
     "allowScripts": {
-        "dprint@0.54.0": true,
+        "dprint@0.55.1": true,
         "esbuild@0.28.1": true,
         "@vscode/vsce-sign@2.0.9": true,
         "keytar@7.9.0": true
