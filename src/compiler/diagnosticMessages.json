@@ -3790,7 +3790,7 @@
         "category": "Error",
         "code": 2813
     },
-    "Function with bodies can only merge with classes that are ambient.": {
+    "Functions can only merge with classes that are ambient.": {
         "category": "Error",
         "code": 2814
     },
