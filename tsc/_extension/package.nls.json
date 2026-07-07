@@ -31,5 +31,9 @@
     "native-preview.dev.startCPUProfile.title": "TypeScript: Start CPU Profile",
     "native-preview.dev.stopCPUProfile.title": "TypeScript: Stop CPU Profile",
     "native-preview.initializeAPIConnection.ui.title": "TypeScript: Initialize API Connection",
+    "native-preview.showFailedResponses.description": "Controls whether an error notification is shown when a language server request fails.",
+    "native-preview.showFailedResponses.always": "Always show a notification when a request fails.",
+    "native-preview.showFailedResponses.never": "Never show a notification when a request fails.",
+    "native-preview.showFailedResponses.auto": "Show a notification only on VS Code Insiders.",
     "developer": "Developer"
 }
