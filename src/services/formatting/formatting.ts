@@ -858,7 +858,7 @@ function formatSpanWorker(
                     return inheritedIndentation;
                 }
                 if (tokenInfo.token.end > childStartPos) {
-                    if (tokenInfo.token.pos > childStartPos) {
+                    if (tokenInfo.token.pos > childStartPos || tokenInfo.token.end > child.end) {
                         formattingScanner.skipToStartOf(child);
                     }
                     // stop when formatting scanner advances past the beginning of the child
