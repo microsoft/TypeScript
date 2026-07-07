@@ -48,6 +48,12 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
     protected view: DataView;
     protected index: number;
     private _byteIndex: number;
+    // Cursor memoizing the last resolved (logical index -> node index) so that
+    // sequential forward access (index loops and list[i], plus forEach/map/
+    // reduce/filter) resumes instead of re-walking from the head, turning an
+    // O(n) pass over the whole list from O(n^2) into O(n).
+    private _cursorIndex: number = 0;
+    private _cursorNodeIndex: number = 0;
 
     get pos(): number {
         return this.view.getUint32(this._byteIndex + NODE_OFFSET_POS, true);
@@ -75,6 +81,7 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
         this.sourceFile = sourceFile;
         this._byteIndex = offsetNodes + index * NODE_LEN;
         this.length = this.data;
+        this._cursorNodeIndex = index + 1;
 
         const length = this.length;
         for (let i = 16; i < length; i++) {
@@ -165,11 +172,26 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
         if (index < 0) {
             index = this.length + index;
         }
-        let next = this.index + 1;
-        for (let i = 0; i < index; i++) {
-            const child = this.getOrCreateChildAtNodeIndex(next);
-            next = child.next;
+        // Walk the raw buffer following each node's `next` pointer instead of
+        // materializing every intermediate RemoteNode just to read it. Resume from
+        // the memoized cursor when possible so sequential forward access is O(1)
+        // amortized (a full in-order pass is O(n) rather than O(n^2)).
+        const offsetNodes = this.sourceFile._offsetNodes;
+        let i: number;
+        let next: number;
+        if (index >= this._cursorIndex) {
+            i = this._cursorIndex;
+            next = this._cursorNodeIndex;
         }
+        else {
+            i = 0;
+            next = this.index + 1;
+        }
+        for (; i < index; i++) {
+            next = this.view.getUint32(offsetNodes + next * NODE_LEN + NODE_OFFSET_NEXT, true);
+        }
+        this._cursorIndex = index;
+        this._cursorNodeIndex = next;
         return this.getOrCreateChildAtNodeIndex(next) as RemoteNode;
     }
 

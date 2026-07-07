@@ -10,6 +10,7 @@ import {
     LanguageClient,
     LanguageClientOptions,
     Message,
+    MessageSignature,
     NotebookDocumentFilter,
     ServerOptions,
     StaticFeature,
@@ -193,7 +194,7 @@ export class Client implements vscode.Disposable {
         // level changed between construction and start.
         this.clientOptions.initializationOptions.logVerbosity = this.outputChannel.logLevel;
 
-        this.client = new LanguageClient(
+        this.client = new NativePreviewLanguageClient(
             "js/ts",
             languageClientName,
             serverOptions,
@@ -389,6 +390,48 @@ export class Client implements vscode.Disposable {
         return this.client.sendRequest<{ configFilePath: string; }>("custom/projectInfo", {
             textDocument: { uri },
         }, token);
+    }
+}
+
+// Returns true when running on a VS Code Insiders build.
+function isInsiders(): boolean {
+    return vscode.env.uriScheme === "vscode-insiders";
+}
+
+// LanguageClient subclass that lets the user control whether a failed request
+// surfaces an error notification, via the `js/ts.server.showFailedResponses` setting.
+class NativePreviewLanguageClient extends LanguageClient {
+    override handleFailedRequest<T>(
+        type: MessageSignature,
+        token: vscode.CancellationToken | undefined,
+        error: unknown,
+        defaultValue: T,
+        showNotification: boolean = true,
+        throwOnCancel: boolean = false,
+    ): T {
+        const setting = vscode.workspace
+            .getConfiguration("js/ts")
+            .get<"always" | "never" | "auto">("server.showFailedResponses", "auto");
+        const effectiveSetting = setting === "auto" ? (isInsiders() ? "always" : "never") : setting;
+
+        let effectiveShowNotification = showNotification;
+        switch (effectiveSetting) {
+            case "never":
+                effectiveShowNotification = false;
+                break;
+            default:
+                // Use the default behavior (showNotification) for "always" and any unrecognized values.
+                break;
+        }
+
+        return super.handleFailedRequest(
+            type,
+            token,
+            error,
+            defaultValue,
+            effectiveShowNotification,
+            throwOnCancel,
+        );
     }
 }
 

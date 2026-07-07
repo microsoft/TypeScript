@@ -1,9 +1,14 @@
 // === QuickInfo ===
 === /a.tsx ===
 // <a:b a="accepted" b="rejected" />;
-//  ^
+//  ^^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /**/.
+// | ```typescript
+// | (property) JSX.IntrinsicElements['a:b']: {
+// |     a: string;
+// | }
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 [
   {
@@ -16,6 +21,21 @@
       "Name": "",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) JSX.IntrinsicElements['a:b']: {\n    a: string;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 1
+        },
+        "end": {
+          "line": 0,
+          "character": 4
+        }
+      }
+    }
   }
 ]
