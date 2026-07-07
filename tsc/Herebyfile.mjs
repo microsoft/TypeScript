@@ -87,7 +87,7 @@ const options = /** @type {Options} */ (rawOptions);
 // Native release branches can edit these constants to publish a different
 // package flavor. Main's defaults publish @typescript/native-preview.
 const nativePreviewReleaseProfile = /** @type {"native-preview" | "typescript"} */ ("typescript");
-const nativePreviewReleaseVersion = /** @type {string | undefined} */ ("7.0.3");
+const nativePreviewReleaseVersion = /** @type {string | undefined} */ ("7.0.2");
 const produceNativePreviewVsix = /** @type {boolean} */ (true);
 const produceTypeScriptNightlyVsix = /** @type {boolean} */ (false);
 const produceAnyVsix = produceNativePreviewVsix || produceTypeScriptNightlyVsix;
