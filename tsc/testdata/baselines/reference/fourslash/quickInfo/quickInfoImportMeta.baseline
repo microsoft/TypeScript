@@ -9,9 +9,12 @@
 // ^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (property) ImportMetaExpression.meta: ImportMeta
+// | interface ImportMeta
 // | ```
+// | The type of `import.meta`.
 // | 
+// | If you need to declare that a given property exists on `import.meta`,
+// | this type may be augmented via interface merging.
 // | ----------------------------------------------------------------------
 [
   {
@@ -39,7 +42,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(property) ImportMetaExpression.meta: ImportMeta\n```\n"
+        "value": "```typescript\ninterface ImportMeta\n```\nThe type of `import.meta`.\n\nIf you need to declare that a given property exists on `import.meta`,\nthis type may be augmented via interface merging."
       },
       "range": {
         "start": {

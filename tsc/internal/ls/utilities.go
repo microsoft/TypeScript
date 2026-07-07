@@ -1269,7 +1269,7 @@ func getContainingObjectLiteralElementWorker(node *ast.Node) *ast.Node {
 			return nil
 		}
 		fallthrough
-	case ast.KindIdentifier:
+	case ast.KindIdentifier, ast.KindJsxNamespacedName:
 		if isObjectLiteralOrJsxElement(node.Parent) && (node.Parent.Parent.Kind == ast.KindObjectLiteralExpression || node.Parent.Parent.Kind == ast.KindJsxAttributes) && node.Parent.Name() == node {
 			return node.Parent
 		}

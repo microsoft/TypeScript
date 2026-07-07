@@ -41,7 +41,7 @@ func (l *LanguageService) ProvideHover(ctx context.Context, params *lsproto.Hove
 	c, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
 	rangeNode := getNodeForQuickInfo(node)
-	symbol := getSymbolAtLocationForQuickInfo(c, node)
+	symbol := getSymbolAtLocationForQuickInfo(c, rangeNode)
 
 	// Always create VerbosityContext for hover so that canExpandSymbol can signal
 	// canIncreaseVerbosity even at Level 0. The nodebuilder also detects expandable
