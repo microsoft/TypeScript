@@ -196,6 +196,9 @@ const (
 	// Well-known per-checker symbols
 	MethodGetWellKnownSymbols Method = "getWellKnownSymbols"
 
+	// Well-known per-checker signatures
+	MethodGetWellKnownSignatures Method = "getWellKnownSignatures"
+
 	// Profiling methods
 	MethodStartCPUProfile Method = "startCPUProfile"
 	MethodStopCPUProfile  Method = "stopCPUProfile"
@@ -463,6 +466,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetBigIntType:                     unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetESSymbolType:                   unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetWellKnownSymbols:               unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetWellKnownSignatures:            unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetSyntacticDiagnostics:           unmarshallerFor[GetDiagnosticsParams],
 	MethodGetBindDiagnostics:                unmarshallerFor[GetDiagnosticsParams],
 	MethodGetSemanticDiagnostics:            unmarshallerFor[GetDiagnosticsParams],
@@ -911,6 +915,13 @@ type WellKnownSymbolsResponse struct {
 	Unknown   SymbolID `json:"unknown"`
 	Undefined SymbolID `json:"undefined"`
 	Arguments SymbolID `json:"arguments"`
+}
+
+// WellKnownSignaturesResponse carries the handle id of the per-checker singleton
+// unknown signature (the signature the checker yields when a call cannot be
+// resolved) so the client can identify it by id without a round-trip on every check.
+type WellKnownSignaturesResponse struct {
+	Unknown SignatureID `json:"unknown"`
 }
 
 // GetBaseTypeOfLiteralTypeParams returns the base type of a literal type.

@@ -70,6 +70,10 @@ func (c *Checker) GetArgumentsSymbol() *ast.Symbol {
 	return c.argumentsSymbol
 }
 
+func (c *Checker) GetUnknownSignature() *Signature {
+	return c.unknownSignature
+}
+
 func (c *Checker) GetUnionType(types []*Type) *Type {
 	return c.getUnionType(types)
 }

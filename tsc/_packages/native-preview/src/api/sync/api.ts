@@ -814,6 +814,7 @@ export class Checker {
     private client: Client;
     private objectRegistry: ProjectObjectRegistry;
     private wellKnownSymbols: { unknown: number; undefined: number; arguments: number; } | undefined;
+    private wellKnownSignatures: { unknown: number; } | undefined;
 
     constructor(
         snapshotId: number,
@@ -871,23 +872,28 @@ export class Checker {
         return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
     }
 
-    getTypeOfSymbol(symbol: Symbol): Type | undefined;
-    getTypeOfSymbol(symbols: readonly Symbol[]): (Type | undefined)[];
-    getTypeOfSymbol(symbolOrSymbols: Symbol | readonly Symbol[]): Type | (Type | undefined)[] | undefined {
+    /**
+     * Get the type of a symbol. Always returns a type; for symbols whose type
+     * cannot be determined the checker yields the error type (use
+     * {@link Type.isErrorType} to detect it).
+     */
+    getTypeOfSymbol(symbol: Symbol): Type;
+    getTypeOfSymbol(symbols: readonly Symbol[]): Type[];
+    getTypeOfSymbol(symbolOrSymbols: Symbol | readonly Symbol[]): Type | Type[] {
         if (Array.isArray(symbolOrSymbols)) {
-            const data = this.client.apiRequest<(TypeResponse | null)[]>("getTypesOfSymbols", {
+            const data = this.client.apiRequest<TypeResponse[]>("getTypesOfSymbols", {
                 snapshot: this.snapshotId,
                 project: this.project.id,
                 symbols: symbolOrSymbols.map(s => s.id),
             });
-            return data.map(d => d ? this.objectRegistry.getOrCreateType(d) : undefined);
+            return data.map(d => this.objectRegistry.getOrCreateType(d));
         }
-        const data = this.client.apiRequest<TypeResponse | null>("getTypeOfSymbol", {
+        const data = this.client.apiRequest<TypeResponse>("getTypeOfSymbol", {
             snapshot: this.snapshotId,
             project: this.project.id,
             symbol: (symbolOrSymbols as Symbol).id,
         });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     /**
@@ -896,12 +902,11 @@ export class Checker {
      * {@link Type.isErrorType} to detect it).
      */
     getDeclaredTypeOfSymbol(symbol: Symbol): Type {
-        const data = this.client.apiRequest<TypeResponse | null>("getDeclaredTypeOfSymbol", {
+        const data = this.client.apiRequest<TypeResponse>("getDeclaredTypeOfSymbol", {
             snapshot: this.snapshotId,
             project: this.project.id,
             symbol: symbol.id,
         });
-        if (!data) throw new Error(`getDeclaredTypeOfSymbol returned no type for symbol ${symbol.id}`);
         return this.objectRegistry.getOrCreateType(data);
     }
 
@@ -960,23 +965,28 @@ export class Checker {
         };
     }
 
-    getTypeAtLocation(node: Node): Type | undefined;
-    getTypeAtLocation(nodes: readonly Node[]): (Type | undefined)[];
-    getTypeAtLocation(nodeOrNodes: Node | readonly Node[]): Type | (Type | undefined)[] | undefined {
+    /**
+     * Get the type at a node location. Always returns a type; for nodes whose
+     * type cannot be determined the checker yields the error type (use
+     * {@link Type.isErrorType} to detect it).
+     */
+    getTypeAtLocation(node: Node): Type;
+    getTypeAtLocation(nodes: readonly Node[]): Type[];
+    getTypeAtLocation(nodeOrNodes: Node | readonly Node[]): Type | Type[] {
         if (Array.isArray(nodeOrNodes)) {
-            const data = this.client.apiRequest<(TypeResponse | null)[]>("getTypeAtLocations", {
+            const data = this.client.apiRequest<TypeResponse[]>("getTypeAtLocations", {
                 snapshot: this.snapshotId,
                 project: this.project.id,
                 locations: nodeOrNodes.map(node => getNodeId(node)),
             });
-            return data.map(d => d ? this.objectRegistry.getOrCreateType(d) : undefined);
+            return data.map(d => this.objectRegistry.getOrCreateType(d));
         }
-        const data = this.client.apiRequest<TypeResponse | null>("getTypeAtLocation", {
+        const data = this.client.apiRequest<TypeResponse>("getTypeAtLocation", {
             snapshot: this.snapshotId,
             project: this.project.id,
             location: getNodeId(nodeOrNodes as Node),
         });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[] {
@@ -989,13 +999,18 @@ export class Checker {
         return data.map(d => this.objectRegistry.getOrCreateSignature(d));
     }
 
-    getResolvedSignature(node: Node): Signature | undefined {
-        const data = this.client.apiRequest<SignatureResponse | null>("getResolvedSignature", {
+    /**
+     * Get the resolved signature of a call-like expression. Always returns a
+     * signature; when a call cannot be resolved the checker yields the unknown
+     * signature (use {@link Checker.isUnknownSignature} to detect it).
+     */
+    getResolvedSignature(node: Node): Signature {
+        const data = this.client.apiRequest<SignatureResponse>("getResolvedSignature", {
             snapshot: this.snapshotId,
             project: this.project.id,
             location: getNodeId(node),
         });
-        return data ? this.objectRegistry.getOrCreateSignature(data) : undefined;
+        return this.objectRegistry.getOrCreateSignature(data);
     }
 
     getTypeAtPosition(file: DocumentIdentifier, position: number): Type | undefined;
@@ -1055,50 +1070,62 @@ export class Checker {
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
 
-    getBaseTypeOfLiteralType(type: Type): Type | undefined {
-        const data = this.client.apiRequest<TypeResponse | null>("getBaseTypeOfLiteralType", {
+    /** Get the base type of a literal type (e.g. `number` for `42`). Always returns a type. */
+    getBaseTypeOfLiteralType(type: Type): Type {
+        const data = this.client.apiRequest<TypeResponse>("getBaseTypeOfLiteralType", {
             snapshot: this.snapshotId,
             project: this.project.id,
             type: type.id,
         });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        return this.objectRegistry.getOrCreateType(data);
     }
 
-    getNonNullableType(type: Type): Type | undefined {
-        const data = this.client.apiRequest<TypeResponse | null>("getNonNullableType", {
+    /** Get the type with `null` and `undefined` removed. Always returns a type. */
+    getNonNullableType(type: Type): Type {
+        const data = this.client.apiRequest<TypeResponse>("getNonNullableType", {
             snapshot: this.snapshotId,
             project: this.project.id,
             type: type.id,
         });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        return this.objectRegistry.getOrCreateType(data);
     }
 
-    getTypeFromTypeNode(node: TypeNode): Type | undefined {
-        const data = this.client.apiRequest<TypeResponse | null>("getTypeFromTypeNode", {
+    /**
+     * Get the type for a type node. Always returns a type; for type nodes whose
+     * type cannot be determined the checker yields the error type (use
+     * {@link Type.isErrorType} to detect it).
+     */
+    getTypeFromTypeNode(node: TypeNode): Type {
+        const data = this.client.apiRequest<TypeResponse>("getTypeFromTypeNode", {
             snapshot: this.snapshotId,
             project: this.project.id,
             location: getNodeId(node),
         });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        return this.objectRegistry.getOrCreateType(data);
     }
 
-    getWidenedType(type: Type): Type | undefined {
-        const data = this.client.apiRequest<TypeResponse | null>("getWidenedType", {
+    /** Get the widened type. Always returns a type. */
+    getWidenedType(type: Type): Type {
+        const data = this.client.apiRequest<TypeResponse>("getWidenedType", {
             snapshot: this.snapshotId,
             project: this.project.id,
             type: type.id,
         });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        return this.objectRegistry.getOrCreateType(data);
     }
 
-    getParameterType(signature: Signature, index: number): Type | undefined {
-        const data = this.client.apiRequest<TypeResponse | null>("getParameterType", {
+    /**
+     * Get the type of the parameter at the given index in a signature. Always
+     * returns a type; an out-of-range index yields the `any` type.
+     */
+    getParameterType(signature: Signature, index: number): Type {
+        const data = this.client.apiRequest<TypeResponse>("getParameterType", {
             snapshot: this.snapshotId,
             project: this.project.id,
             signature: signature.id,
             index,
         });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     isArrayLikeType(type: Type): boolean {
@@ -1133,13 +1160,12 @@ export class Checker {
      * error type (use {@link Type.isErrorType} to detect it).
      */
     getTypeOfSymbolAtLocation(symbol: Symbol, location: Node): Type {
-        const data = this.client.apiRequest<TypeResponse | null>("getTypeOfSymbolAtLocation", {
+        const data = this.client.apiRequest<TypeResponse>("getTypeOfSymbolAtLocation", {
             snapshot: this.snapshotId,
             project: this.project.id,
             symbol: symbol.id,
             location: getNodeId(location),
         });
-        if (!data) throw new Error(`getTypeOfSymbolAtLocation returned no type for symbol ${symbol.id}`);
         return this.objectRegistry.getOrCreateType(data);
     }
 
@@ -1244,22 +1270,27 @@ export class Checker {
         });
     }
 
-    getReturnTypeOfSignature(signature: Signature): Type | undefined {
-        const data = this.client.apiRequest<TypeResponse | null>("getReturnTypeOfSignature", {
+    /** Get the return type of a signature. Always returns a type. */
+    getReturnTypeOfSignature(signature: Signature): Type {
+        const data = this.client.apiRequest<TypeResponse>("getReturnTypeOfSignature", {
             snapshot: this.snapshotId,
             project: this.project.id,
             signature: signature.id,
         });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        return this.objectRegistry.getOrCreateType(data);
     }
 
-    getRestTypeOfSignature(signature: Signature): Type | undefined {
-        const data = this.client.apiRequest<TypeResponse | null>("getRestTypeOfSignature", {
+    /**
+     * Get the rest type of a signature. Always returns a type; a signature with
+     * no rest parameter yields the `any` type.
+     */
+    getRestTypeOfSignature(signature: Signature): Type {
+        const data = this.client.apiRequest<TypeResponse>("getRestTypeOfSignature", {
             snapshot: this.snapshotId,
             project: this.project.id,
             signature: signature.id,
         });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined {
@@ -1290,13 +1321,14 @@ export class Checker {
         return data ? data.map(d => this.objectRegistry.getOrCreateType(d)) : [];
     }
 
-    getApparentType(type: Type): Type | undefined {
-        const data = this.client.apiRequest<TypeResponse | null>("getApparentType", {
+    /** Get the apparent type of a type. Always returns a type. */
+    getApparentType(type: Type): Type {
+        const data = this.client.apiRequest<TypeResponse>("getApparentType", {
             snapshot: this.snapshotId,
             project: this.project.id,
             type: type.id,
         });
-        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        return this.objectRegistry.getOrCreateType(data);
     }
 
     getPropertiesOfType(type: Type): readonly Symbol[] {
@@ -1364,13 +1396,14 @@ export class Checker {
         return data ?? undefined;
     }
 
-    getSignatureFromDeclaration(node: Node): Signature | undefined {
-        const data = this.client.apiRequest<SignatureResponse | null>("getSignatureFromDeclaration", {
+    /** Get the signature of a function-like declaration. Always returns a signature. */
+    getSignatureFromDeclaration(node: Node): Signature {
+        const data = this.client.apiRequest<SignatureResponse>("getSignatureFromDeclaration", {
             snapshot: this.snapshotId,
             project: this.project.id,
             location: getNodeId(node),
         });
-        return data ? this.objectRegistry.getOrCreateSignature(data) : undefined;
+        return this.objectRegistry.getOrCreateSignature(data);
     }
 
     getExportSpecifierLocalTargetSymbol(node: Node): Symbol | undefined {
@@ -1388,12 +1421,11 @@ export class Checker {
      * {@link Checker.isUnknownSymbol} to detect it).
      */
     getAliasedSymbol(symbol: Symbol): Symbol {
-        const data = this.client.apiRequest<SymbolResponse | null>("getAliasedSymbol", {
+        const data = this.client.apiRequest<SymbolResponse>("getAliasedSymbol", {
             snapshot: this.snapshotId,
             project: this.project.id,
             symbol: symbol.id,
         });
-        if (!data) throw new Error(`getAliasedSymbol returned no symbol for symbol ${symbol.id}`);
         return this.objectRegistry.getOrCreateSymbol(data);
     }
 
@@ -1439,6 +1471,27 @@ export class Checker {
      */
     isArgumentsSymbol(symbol: Symbol): boolean {
         return symbol.id === (this.getWellKnownSymbols()).arguments;
+    }
+
+    /**
+     * Fetch (once, then cache) the handle id of the per-checker unknown
+     * signature. This id is stable for the life of the project's checker, so
+     * identity checks against it are local after the first call.
+     */
+    private getWellKnownSignatures(): { unknown: number; } {
+        return this.wellKnownSignatures ??= this.client.apiRequest<{ unknown: number; }>("getWellKnownSignatures", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+        });
+    }
+
+    /**
+     * Returns `true` if the signature is the checker's "unknown" signature (e.g.
+     * the result of {@link Checker.getResolvedSignature} on a call that cannot be
+     * resolved).
+     */
+    isUnknownSignature(signature: Signature): boolean {
+        return signature.id === (this.getWellKnownSignatures()).unknown;
     }
 
     getExportsOfModule(symbol: Symbol): readonly Symbol[] {

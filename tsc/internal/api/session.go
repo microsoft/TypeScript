@@ -742,6 +742,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetESSymbolType)
 	case string(MethodGetWellKnownSymbols):
 		return s.handleGetWellKnownSymbols(ctx, parsed.(*GetIntrinsicTypeParams))
+	case string(MethodGetWellKnownSignatures):
+		return s.handleGetWellKnownSignatures(ctx, parsed.(*GetIntrinsicTypeParams))
 	case string(MethodGetSyntacticDiagnostics):
 		return s.handleGetSyntacticDiagnostics(ctx, parsed.(*GetDiagnosticsParams))
 	case string(MethodGetBindDiagnostics):
@@ -1242,16 +1244,8 @@ func (s *Session) handleGetTypeOfSymbol(ctx context.Context, params *GetTypeOfSy
 	if err != nil {
 		return nil, err
 	}
-	if symbol == nil {
-		return nil, nil
-	}
 
-	t := setup.checker.GetTypeOfSymbol(symbol)
-	if t == nil {
-		return nil, nil
-	}
-
-	return setup.newTypeResponse(t), nil
+	return setup.newTypeResponse(setup.checker.GetTypeOfSymbol(symbol)), nil
 }
 
 // handleGetTypesOfSymbols returns the types of multiple symbols.
@@ -1268,13 +1262,9 @@ func (s *Session) handleGetTypesOfSymbols(ctx context.Context, params *GetTypesO
 		if err != nil {
 			return nil, err
 		}
-		if symbol == nil {
-			continue
-		}
-		t := setup.checker.GetTypeOfSymbol(symbol)
-		if t != nil {
-			results[i] = setup.newTypeResponse(t)
-		}
+		// resolveSymbolHandle errors on an unresolvable handle and GetTypeOfSymbol
+		// never returns nil, so every element resolves to a type (error type at worst).
+		results[i] = setup.newTypeResponse(setup.checker.GetTypeOfSymbol(symbol))
 	}
 
 	return results, nil
@@ -1292,16 +1282,8 @@ func (s *Session) handleGetDeclaredTypeOfSymbol(ctx context.Context, params *Get
 	if err != nil {
 		return nil, err
 	}
-	if symbol == nil {
-		return nil, nil
-	}
 
-	t := setup.checker.GetDeclaredTypeOfSymbol(symbol)
-	if t == nil {
-		return nil, nil
-	}
-
-	return setup.newTypeResponse(t), nil
+	return setup.newTypeResponse(setup.checker.GetDeclaredTypeOfSymbol(symbol)), nil
 }
 
 // handleResolveName resolves a name to a symbol at a given location.
@@ -1369,12 +1351,8 @@ func (s *Session) handleGetResolvedSignature(ctx context.Context, params *GetRes
 	if err != nil {
 		return nil, err
 	}
-	if node == nil {
-		return nil, nil
-	}
 
-	sig := setup.checker.GetResolvedSignature(node)
-	return setup.newSignatureResponse(sig), nil
+	return setup.newSignatureResponse(setup.checker.GetResolvedSignature(node)), nil
 }
 
 // handleGetTypeAtLocation returns the type at a node location.
@@ -1389,16 +1367,8 @@ func (s *Session) handleGetTypeAtLocation(ctx context.Context, params *GetTypeAt
 	if err != nil {
 		return nil, err
 	}
-	if node == nil {
-		return nil, nil
-	}
 
-	t := setup.checker.GetTypeAtLocation(node)
-	if t == nil {
-		return nil, nil
-	}
-
-	return setup.newTypeResponse(t), nil
+	return setup.newTypeResponse(setup.checker.GetTypeAtLocation(node)), nil
 }
 
 // handleGetTypeAtLocations returns types at multiple node locations.
@@ -1415,13 +1385,9 @@ func (s *Session) handleGetTypeAtLocations(ctx context.Context, params *GetTypeA
 		if err != nil {
 			return nil, err
 		}
-		if node == nil {
-			continue
-		}
-		t := setup.checker.GetTypeAtLocation(node)
-		if t != nil {
-			results[i] = setup.newTypeResponse(t)
-		}
+		// resolveNodeHandle errors on an unresolvable handle and GetTypeAtLocation
+		// never returns nil, so every element resolves to a type (error type at worst).
+		results[i] = setup.newTypeResponse(setup.checker.GetTypeAtLocation(node))
 	}
 
 	return results, nil
@@ -1840,12 +1806,7 @@ func (s *Session) handleGetBaseTypeOfLiteralType(ctx context.Context, params *Ge
 		return nil, err
 	}
 
-	result := setup.checker.GetBaseTypeOfLiteralType(t)
-	if result == nil {
-		return nil, nil
-	}
-
-	return setup.newTypeResponse(result), nil
+	return setup.newTypeResponse(setup.checker.GetBaseTypeOfLiteralType(t)), nil
 }
 
 // handleGetNonNullableType returns the type with null and undefined removed.
@@ -1861,12 +1822,7 @@ func (s *Session) handleGetNonNullableType(ctx context.Context, params *GetNonNu
 		return nil, err
 	}
 
-	result := setup.checker.GetNonNullableType(t)
-	if result == nil {
-		return nil, nil
-	}
-
-	return setup.newTypeResponse(result), nil
+	return setup.newTypeResponse(setup.checker.GetNonNullableType(t)), nil
 }
 
 // handleGetTypeFromTypeNode returns the type for a type node.
@@ -1881,16 +1837,8 @@ func (s *Session) handleGetTypeFromTypeNode(ctx context.Context, params *GetType
 	if err != nil {
 		return nil, err
 	}
-	if node == nil {
-		return nil, nil
-	}
 
-	t := setup.checker.GetTypeFromTypeNode(node)
-	if t == nil {
-		return nil, nil
-	}
-
-	return setup.newTypeResponse(t), nil
+	return setup.newTypeResponse(setup.checker.GetTypeFromTypeNode(node)), nil
 }
 
 // handleGetWidenedType returns the widened type.
@@ -1906,12 +1854,7 @@ func (s *Session) handleGetWidenedType(ctx context.Context, params *GetWidenedTy
 		return nil, err
 	}
 
-	result := setup.checker.GetWidenedType(t)
-	if result == nil {
-		return nil, nil
-	}
-
-	return setup.newTypeResponse(result), nil
+	return setup.newTypeResponse(setup.checker.GetWidenedType(t)), nil
 }
 
 // handleGetParameterType returns the type of a parameter at a given index in a signature.
@@ -1931,12 +1874,7 @@ func (s *Session) handleGetParameterType(ctx context.Context, params *GetParamet
 		return nil, fmt.Errorf("%w: invalid parameter index", ErrClientError)
 	}
 
-	t := setup.checker.GetTypeAtPosition(sig, int(params.Index))
-	if t == nil {
-		return nil, nil
-	}
-
-	return setup.newTypeResponse(t), nil
+	return setup.newTypeResponse(setup.checker.GetTypeAtPosition(sig, int(params.Index))), nil
 }
 
 // handleIsArrayLikeType returns whether a type is array-like.
@@ -2011,24 +1949,13 @@ func (s *Session) handleGetTypeOfSymbolAtLocation(ctx context.Context, params *G
 	if err != nil {
 		return nil, err
 	}
-	if symbol == nil {
-		return nil, nil
-	}
 
 	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
 	if err != nil {
 		return nil, err
 	}
-	if node == nil {
-		return nil, nil
-	}
 
-	t := setup.checker.GetTypeOfSymbolAtLocation(symbol, node)
-	if t == nil {
-		return nil, nil
-	}
-
-	return setup.newTypeResponse(t), nil
+	return setup.newTypeResponse(setup.checker.GetTypeOfSymbolAtLocation(symbol, node)), nil
 }
 
 // handleTypeToTypeNode converts a Type to a TypeNode AST and returns it as binary-encoded data.
@@ -2190,6 +2117,20 @@ func (s *Session) handleGetWellKnownSymbols(ctx context.Context, params *GetIntr
 	}, nil
 }
 
+// handleGetWellKnownSignatures returns the handle id of the per-checker unknown
+// signature so the client can identify it by id.
+func (s *Session) handleGetWellKnownSignatures(ctx context.Context, params *GetIntrinsicTypeParams) (*WellKnownSignaturesResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	return &WellKnownSignaturesResponse{
+		Unknown: setup.sd.registerSignature(setup.projectID, setup.checker.GetUnknownSignature()),
+	}, nil
+}
+
 // handleIsContextSensitive returns whether a node is context-sensitive.
 func (s *Session) handleIsContextSensitive(ctx context.Context, params *GetContextualTypeParams) (bool, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
@@ -2222,12 +2163,7 @@ func (s *Session) handleGetReturnTypeOfSignature(ctx context.Context, params *Ch
 		return nil, err
 	}
 
-	t := setup.checker.GetReturnTypeOfSignature(sig)
-	if t == nil {
-		return nil, nil
-	}
-
-	return setup.newTypeResponse(t), nil
+	return setup.newTypeResponse(setup.checker.GetReturnTypeOfSignature(sig)), nil
 }
 
 // handleGetRestTypeOfSignature returns the rest type of a signature.
@@ -2243,12 +2179,7 @@ func (s *Session) handleGetRestTypeOfSignature(ctx context.Context, params *Chec
 		return nil, err
 	}
 
-	t := setup.checker.GetRestTypeOfSignature(sig)
-	if t == nil {
-		return nil, nil
-	}
-
-	return setup.newTypeResponse(t), nil
+	return setup.newTypeResponse(setup.checker.GetRestTypeOfSignature(sig)), nil
 }
 
 // handleGetTypePredicateOfSignature returns the type predicate of a signature.
@@ -2378,12 +2309,7 @@ func (s *Session) handleGetApparentType(ctx context.Context, params *CheckerType
 		return nil, err
 	}
 
-	apparent := setup.checker.GetApparentType(t)
-	if apparent == nil {
-		return nil, nil
-	}
-
-	return setup.newTypeResponse(apparent), nil
+	return setup.newTypeResponse(setup.checker.GetApparentType(t)), nil
 }
 
 // handleGetIndexInfosOfType returns the index infos of a type.
@@ -2513,16 +2439,8 @@ func (s *Session) handleGetSignatureFromDeclaration(ctx context.Context, params 
 	if err != nil {
 		return nil, err
 	}
-	if node == nil {
-		return nil, nil
-	}
 
-	sig := setup.checker.GetSignatureFromDeclaration(node)
-	if sig == nil {
-		return nil, nil
-	}
-
-	return setup.newSignatureResponse(sig), nil
+	return setup.newSignatureResponse(setup.checker.GetSignatureFromDeclaration(node)), nil
 }
 
 // handleGetExportSpecifierLocalTargetSymbol returns the local target symbol of an export specifier.
@@ -2561,16 +2479,8 @@ func (s *Session) handleGetAliasedSymbol(ctx context.Context, params *CheckerSym
 	if err != nil {
 		return nil, err
 	}
-	if symbol == nil {
-		return nil, nil
-	}
 
-	aliased := setup.checker.GetAliasedSymbol(symbol)
-	if aliased == nil {
-		return nil, nil
-	}
-
-	return setup.newSymbolResponse(aliased), nil
+	return setup.newSymbolResponse(setup.checker.GetAliasedSymbol(symbol)), nil
 }
 
 // handleGetImmediateAliasedSymbol resolves one level of alias indirection.

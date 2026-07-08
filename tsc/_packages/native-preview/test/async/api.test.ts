@@ -2789,6 +2789,44 @@ export type Alias = typeof value;
     });
 });
 
+describe("Checker - well-known signatures", () => {
+    test("isUnknownSignature identifies an unresolvable call", async () => {
+        const src = `
+const ok = (x: number) => x;
+ok(1);
+const notCallable = 1;
+notCallable();
+`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const calls: Node[] = [];
+            sourceFile.forEachChild(function visit(node) {
+                if (isCallExpression(node)) calls.push(node);
+                node.forEachChild(visit);
+            });
+            assert.equal(calls.length, 2, "should find two call expressions");
+
+            // The valid call resolves to a real signature, not the unknown signature.
+            const okSig = await project.checker.getResolvedSignature(calls[0]);
+            assert.equal(await project.checker.isUnknownSignature(okSig), false);
+
+            // The call to a non-callable value yields the unknown signature.
+            const badSig = await project.checker.getResolvedSignature(calls[1]);
+            assert.equal(await project.checker.isUnknownSignature(badSig), true);
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
 describe("Symbol - escaped names and tables", () => {
     test("getExports/getMembers return a cached Map keyed by escaped name", async () => {
         const api = spawnAPI({
