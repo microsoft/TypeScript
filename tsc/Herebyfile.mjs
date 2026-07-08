@@ -84,18 +84,14 @@ const { values: rawOptions } = parseArgs({
  */
 const options = /** @type {Options} */ (rawOptions);
 
-// Native release branches can edit these constants to publish a different
-// package flavor. Main's defaults publish @typescript/native-preview.
-const nativePreviewReleaseProfile = /** @type {"native-preview" | "typescript"} */ ("native-preview");
+// Native release branches can edit these constants to publish a fixed stable version.
+// Main publishes prerelease builds of the TypeScript package.
+const nativePreviewReleaseProfile = /** @type {"native-preview" | "typescript"} */ ("typescript");
 const nativePreviewReleaseVersion = /** @type {string | undefined} */ (undefined);
-const produceNativePreviewVsix = /** @type {boolean} */ (true);
-const produceTypeScriptNightlyVsix = /** @type {boolean} */ (false);
+const produceNativePreviewVsix = /** @type {boolean} */ (false);
+const produceTypeScriptNightlyVsix = /** @type {boolean} */ (true);
 const produceAnyVsix = produceNativePreviewVsix || produceTypeScriptNightlyVsix;
 const publishAsTypescript = nativePreviewReleaseProfile === "typescript";
-
-if (publishAsTypescript && !nativePreviewReleaseVersion) {
-    throw new Error("Publishing as 'typescript' requires hardcoding nativePreviewReleaseVersion.");
-}
 
 if (options.forRelease && !options.setPrerelease && (!nativePreviewReleaseVersion || produceAnyVsix)) {
     throw new Error("forRelease requires setPrerelease unless nativePreviewReleaseVersion is hardcoded and VSIX production is disabled");
@@ -1599,7 +1595,8 @@ function nodeToGOARCH(arch, os) {
 }
 
 const getPlatforms = memoize(() => {
-    let supportedPlatforms = publishAsTypescript
+    const publishTag = getPublishTag();
+    let supportedPlatforms = publishAsTypescript && publishTag !== "next"
         ? platforms
         : platforms.filter(({ vsix }) => vsix);
 

@@ -1,8 +1,7 @@
 {
   "Could not find a TypeScript executable in the extension package.": "Could not find a TypeScript executable in the extension package.",
   "TypeScript 7": "TypeScript 7",
-  "$(beaker) {0} {1}": "$(beaker) {0} {1}",
-  "{0} {1}": "{0} {1}",
+  "$(beaker) {0}": "$(beaker) {0}",
   "TypeScript Language Server": "TypeScript Language Server",
   "Show Menu": "Show Menu",
   "Language server is not running.": "Language server is not running.",

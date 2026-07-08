@@ -5,7 +5,7 @@ import (
 )
 
 // This is a var so it can be overridden by ldflags.
-var version = "7.0.0-dev"
+var version = "7.1.0-dev"
 
 func Version() string {
 	return version
