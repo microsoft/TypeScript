@@ -374,6 +374,43 @@ func TestBuildConfigFileErrors(t *testing.T) {
 			commandLineArgs: []string{"--b"},
 		},
 		{
+			subScenario: "reports invalid project reference fields",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true
+						},
+						"files": ["index.ts"],
+						"references": [
+							{ "path": true },
+							{ "circular": true },
+							{ "path": "./utils", "circular": "yes" },
+							{ "path": "" },
+							{ "path": "./valid", "circular": true }
+						]
+					}`),
+				"/home/src/workspaces/project/index.ts": "export const x = 10;",
+				"/home/src/workspaces/project/utils/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true
+						},
+						"files": ["index.ts"]
+					}`),
+				"/home/src/workspaces/project/utils/index.ts": "export const y = 10;",
+				"/home/src/workspaces/project/valid/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true
+						},
+						"files": ["index.ts"]
+					}`),
+				"/home/src/workspaces/project/valid/index.ts": "export const z = 10;",
+			},
+			commandLineArgs: []string{"--b", "--dry"},
+		},
+		{
 			subScenario: "reports syntax errors in config file",
 			files: FileMap{
 				"/home/src/workspaces/project/a.ts": "export function foo() { }",

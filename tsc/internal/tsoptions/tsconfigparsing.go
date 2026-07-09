@@ -1348,20 +1348,27 @@ func parseJsonConfigFileContentWorker(
 		newReferencesOfRaw := getPropFromRaw("references", func(element any) bool { return reflect.TypeOf(element) == orderedMapType }, "object")
 		if newReferencesOfRaw.sliceValue != nil {
 			projectReferences = []*core.ProjectReference{}
-			for _, reference := range newReferencesOfRaw.sliceValue {
-				for _, ref := range parseProjectReference(reference) {
-					if ref.Path == "" {
-						if sourceFile == nil {
-							errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string"))
-						}
-					} else {
-						projectReferences = append(projectReferences, &core.ProjectReference{
-							Path:         tspath.GetNormalizedAbsolutePath(ref.Path, basePath),
-							OriginalPath: ref.Path,
-							Circular:     ref.Circular,
-						})
-					}
+			for index, reference := range newReferencesOfRaw.sliceValue {
+				ref := parseProjectReference(reference)
+				if ref == nil {
+					continue
 				}
+				if !ref.hasPath || !ref.pathValid {
+					errors = append(errors, createDiagnosticAtProjectReferenceProperty(sourceFile, index, "path", diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string"))
+					continue
+				}
+				if ref.reference.Path == "" {
+					errors = append(errors, createDiagnosticAtProjectReferenceProperty(sourceFile, index, "path", diagnostics.Compiler_option_0_cannot_be_given_an_empty_string, "reference.path"))
+					continue
+				}
+				if ref.hasCircular && !ref.circularValid {
+					errors = append(errors, createDiagnosticAtProjectReferenceProperty(sourceFile, index, "circular", diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.circular", "boolean"))
+				}
+				projectReferences = append(projectReferences, &core.ProjectReference{
+					Path:         tspath.GetNormalizedAbsolutePath(ref.reference.Path, basePath),
+					OriginalPath: ref.reference.Path,
+					Circular:     ref.reference.Circular,
+				})
 			}
 		}
 		return projectReferences
@@ -1492,6 +1499,27 @@ func CreateDiagnosticAtReferenceSyntax(config *ParsedCommandLine, index int, mes
 		}
 		return nil
 	})
+}
+
+func createDiagnosticAtProjectReferenceProperty(sourceFile *TsConfigSourceFile, index int, propertyName string, message *diagnostics.Message, args ...any) *ast.Diagnostic {
+	var node *ast.Node
+	if sourceFile != nil {
+		node = ForEachTsConfigPropArray(sourceFile.SourceFile, "references", func(property *ast.PropertyAssignment) *ast.Node {
+			if ast.IsArrayLiteralExpression(property.Initializer) {
+				elements := property.Initializer.Elements()
+				if len(elements) > index && ast.IsObjectLiteralExpression(elements[index]) {
+					if propertyNode := ForEachPropertyAssignment(elements[index].AsObjectLiteralExpression(), propertyName, func(property *ast.PropertyAssignment) *ast.Node {
+						return property.Initializer
+					}); propertyNode != nil {
+						return propertyNode
+					}
+					return elements[index]
+				}
+			}
+			return nil
+		})
+	}
+	return CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(tsconfigToSourceFile(sourceFile), node, message, args...)
 }
 
 func GetCallbackForFindingPropertyAssignmentByValue(value string) func(property *ast.PropertyAssignment) *ast.Node {

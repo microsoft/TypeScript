@@ -70,19 +70,34 @@ func parseNumber(value any) *int {
 	return nil
 }
 
-func parseProjectReference(json any) []*core.ProjectReference {
-	var result []*core.ProjectReference
+type projectReferenceParseResult struct {
+	reference     core.ProjectReference
+	hasPath       bool
+	pathValid     bool
+	hasCircular   bool
+	circularValid bool
+}
+
+func parseProjectReference(json any) *projectReferenceParseResult {
 	if v, ok := json.(*collections.OrderedMap[string, any]); ok {
-		var reference core.ProjectReference
-		if v, ok := v.Get("path"); ok {
-			reference.Path = v.(string)
+		result := &projectReferenceParseResult{}
+		if value, ok := v.Get("path"); ok {
+			result.hasPath = true
+			if path, ok := value.(string); ok {
+				result.reference.Path = path
+				result.pathValid = true
+			}
 		}
-		if v, ok := v.Get("circular"); ok {
-			reference.Circular = v.(bool)
+		if value, ok := v.Get("circular"); ok {
+			result.hasCircular = true
+			if circular, ok := value.(bool); ok {
+				result.reference.Circular = circular
+				result.circularValid = true
+			}
 		}
-		result = append(result, &reference)
+		return result
 	}
-	return result
+	return nil
 }
 
 func parseJsonToStringKey(json any) *collections.OrderedMap[string, any] {

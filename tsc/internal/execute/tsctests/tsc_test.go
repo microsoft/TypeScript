@@ -4133,6 +4133,44 @@ func TestTscProjectReferences(t *testing.T) {
 			commandLineArgs: []string{"--p", "project"},
 		},
 		{
+			subScenario: "when project references have invalid fields",
+			files: FileMap{
+				"/home/src/workspaces/solution/project/index.ts": `export const x = 10;`,
+				"/home/src/workspaces/solution/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"noEmit": true
+					},
+					"files": ["index.ts"],
+					"references": [
+						{ "path": true },
+						{ "circular": true },
+						{ "path": "../utils", "circular": "yes" },
+						{ "path": "" },
+						{ "path": "../valid", "circular": true }
+					]
+				}`),
+				"/home/src/workspaces/solution/utils/index.ts":   "export const y = 10;",
+				"/home/src/workspaces/solution/utils/index.d.ts": "export declare const y = 10;",
+				"/home/src/workspaces/solution/utils/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"composite": true
+					}
+				}`),
+				"/home/src/workspaces/solution/valid/index.ts":   "export const z = 10;",
+				"/home/src/workspaces/solution/valid/index.d.ts": "export declare const z = 10;",
+				"/home/src/workspaces/solution/valid/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"composite": true
+					}
+				}`),
+			},
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"--p", "project"},
+		},
+		{
 			subScenario: "default import interop uses referenced project settings",
 			files: FileMap{
 				"/home/src/workspaces/project/node_modules/ambiguous-package/package.json": stringtestutil.Dedent(`
