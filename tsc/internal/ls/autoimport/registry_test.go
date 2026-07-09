@@ -1129,6 +1129,41 @@ const (
 	monorepoProjectRoot  = "/home/src/autoimport-monorepo"
 )
 
+func TestUpdateIndexesConcurrentMapSafety(t *testing.T) {
+	t.Parallel()
+	const projectRoot = "/home/src/autoimport-fallback-race"
+	const packageCount = 40
+
+	files := map[string]any{
+		projectRoot + "/tsconfig.json": `{
+			"compilerOptions": { "module": "esnext", "target": "esnext", "strict": true }
+		}`,
+		projectRoot + "/index.ts": "export {};\n",
+	}
+	for i := range packageCount {
+		pkgDir := fmt.Sprintf("%s/node_modules/pkg%d", projectRoot, i)
+		files[pkgDir+"/package.json"] = fmt.Sprintf(`{"name":"pkg%d","version":"1.0.0","main":"index.js"}`, i)
+		files[pkgDir+"/index.js"] = "module.exports = {};\n"
+		typesDir := fmt.Sprintf("%s/node_modules/@types/pkg%d", projectRoot, i)
+		files[typesDir+"/package.json"] = fmt.Sprintf(`{"name":"@types/pkg%d","version":"1.0.0","types":"index.d.ts"}`, i)
+		files[typesDir+"/index.d.ts"] = fmt.Sprintf("export declare const foo%d: number;\n", i)
+	}
+
+	session, _ := projecttestutil.Setup(files)
+	t.Cleanup(session.Close)
+
+	ctx := context.Background()
+	indexURI := lsproto.DocumentUri("file://" + projectRoot + "/index.ts")
+	session.DidOpenFile(ctx, indexURI, 1, "export {};\n", lsproto.LanguageKindTypeScript)
+
+	_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, indexURI)
+	assert.NilError(t, err)
+
+	stats := autoImportStats(t, session)
+	nodeModulesBucket := singleBucket(t, stats.NodeModulesBuckets)
+	assert.Equal(t, nodeModulesBucket.ExportCount, packageCount)
+}
+
 func autoImportStats(t *testing.T, session *project.Session) *autoimport.CacheStats {
 	t.Helper()
 	snapshot := session.Snapshot()

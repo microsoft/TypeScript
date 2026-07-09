@@ -963,7 +963,10 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 
 	// For packages whose main extraction yielded nothing, fall back to @types.
 	for _, pkg := range typesFallbackCandidates {
-		if extractionCache[pkg.realpath] != nil || seen[pkg.typesRealpath] {
+		extractionMu.Lock()
+		mainExtracted := extractionCache[pkg.realpath] != nil
+		extractionMu.Unlock()
+		if mainExtracted || seen[pkg.typesRealpath] {
 			continue
 		}
 		seen[pkg.typesRealpath] = true
