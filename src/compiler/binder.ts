@@ -2859,10 +2859,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     break;
                 }
                 // falls through
-            case SyntaxKind.ThisKeyword:
-                if (node.kind === SyntaxKind.ThisKeyword || (node.kind === SyntaxKind.Identifier && (node as Identifier).escapedText === "this")) {
-                    seenThisKeyword = true;
-                }
+            case SyntaxKind.ThisKeyword:
+                if (node.kind === SyntaxKind.ThisKeyword || (node.kind === SyntaxKind.Identifier && (node as Identifier).escapedText === "this" && isPartOfTypeQuery(node))) {
+                    seenThisKeyword = true;
+                }
                 // TODO: Why use `isExpression` here? both Identifier and ThisKeyword are expressions.
                 if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                     (node as Identifier | ThisExpression).flowNode = currentFlow;
