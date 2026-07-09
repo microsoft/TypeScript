@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/typeofThisWithContextualThisParameter.ts] ////
+
+=== typeofThisWithContextualThisParameter.ts ===
+// Reproduces #63616: typeof this inconsistent when this parameter comes from a contextual signature
+
+interface A { a: string }
+>A : Symbol(A, Decl(typeofThisWithContextualThisParameter.ts, 0, 0))
+>a : Symbol(A.a, Decl(typeofThisWithContextualThisParameter.ts, 2, 13))
+
+// ---- Object-literal method case ----
+
+{
+    interface B { g: (this: A) => void }
+>B : Symbol(B, Decl(typeofThisWithContextualThisParameter.ts, 6, 1))
+>g : Symbol(B.g, Decl(typeofThisWithContextualThisParameter.ts, 7, 17))
+>this : Symbol(this, Decl(typeofThisWithContextualThisParameter.ts, 7, 22))
+>A : Symbol(A, Decl(typeofThisWithContextualThisParameter.ts, 0, 0))
+
+    function f(_: B): void {}
+>f : Symbol(f, Decl(typeofThisWithContextualThisParameter.ts, 7, 40))
+>_ : Symbol(_, Decl(typeofThisWithContextualThisParameter.ts, 9, 15))
+>B : Symbol(B, Decl(typeofThisWithContextualThisParameter.ts, 6, 1))
+
+    // Case 1: typeof this without explicit this usage — should resolve to A
+    f({
+>f : Symbol(f, Decl(typeofThisWithContextualThisParameter.ts, 7, 40))
+
+        g() {
+>g : Symbol(g, Decl(typeofThisWithContextualThisParameter.ts, 12, 7))
+
+            type X = typeof this;
+>X : Symbol(X, Decl(typeofThisWithContextualThisParameter.ts, 13, 13))
+>this : Symbol(this, Decl(typeofThisWithContextualThisParameter.ts, 7, 22))
+
+            //    ^ should be A
+        }
+    })
+
+    // Case 2: this used before typeof this — should resolve to A
+    f({
+>f : Symbol(f, Decl(typeofThisWithContextualThisParameter.ts, 7, 40))
+
+        g() {
+>g : Symbol(g, Decl(typeofThisWithContextualThisParameter.ts, 20, 7))
+
+            this;
+>this : Symbol(this, Decl(typeofThisWithContextualThisParameter.ts, 7, 22))
+
+            type X = typeof this;
+>X : Symbol(X, Decl(typeofThisWithContextualThisParameter.ts, 22, 17))
+>this : Symbol(this, Decl(typeofThisWithContextualThisParameter.ts, 7, 22))
+
+            //    ^ should be A
+        }
+    })
+
+    // Case 3: this used after typeof this — should resolve to A
+    f({
+>f : Symbol(f, Decl(typeofThisWithContextualThisParameter.ts, 7, 40))
+
+        g() {
+>g : Symbol(g, Decl(typeofThisWithContextualThisParameter.ts, 29, 7))
+
+            type X = typeof this;
+>X : Symbol(X, Decl(typeofThisWithContextualThisParameter.ts, 30, 13))
+>this : Symbol(this, Decl(typeofThisWithContextualThisParameter.ts, 7, 22))
+
+            //    ^ should be A
+            this;
+>this : Symbol(this, Decl(typeofThisWithContextualThisParameter.ts, 7, 22))
+        }
+    })
+}
+
+// ---- Function expression case ----
+
+{
+    function f(_: (this: A) => void): void {}
+>f : Symbol(f, Decl(typeofThisWithContextualThisParameter.ts, 40, 1))
+>_ : Symbol(_, Decl(typeofThisWithContextualThisParameter.ts, 41, 15))
+>this : Symbol(this, Decl(typeofThisWithContextualThisParameter.ts, 41, 19))
+>A : Symbol(A, Decl(typeofThisWithContextualThisParameter.ts, 0, 0))
+
+    // Case 4: typeof this only — should resolve to A (not implicit any error for typeof this context)
+    f(function g() {
+>f : Symbol(f, Decl(typeofThisWithContextualThisParameter.ts, 40, 1))
+>g : Symbol(g, Decl(typeofThisWithContextualThisParameter.ts, 44, 6))
+
+        type X = typeof this;
+>X : Symbol(X, Decl(typeofThisWithContextualThisParameter.ts, 44, 20))
+>this : Symbol(this, Decl(typeofThisWithContextualThisParameter.ts, 41, 19))
+
+    })
+
+    // Case 5: this used before typeof this — should resolve to A
+    f(function g() {
+>f : Symbol(f, Decl(typeofThisWithContextualThisParameter.ts, 40, 1))
+>g : Symbol(g, Decl(typeofThisWithContextualThisParameter.ts, 49, 6))
+
+        this;
+>this : Symbol(this, Decl(typeofThisWithContextualThisParameter.ts, 41, 19))
+
+        type X = typeof this;
+>X : Symbol(X, Decl(typeofThisWithContextualThisParameter.ts, 50, 13))
+>this : Symbol(this, Decl(typeofThisWithContextualThisParameter.ts, 41, 19))
+
+    })
+
+    // Case 6: this used after typeof this — should resolve to A
+    f(function g() {
+>f : Symbol(f, Decl(typeofThisWithContextualThisParameter.ts, 40, 1))
+>g : Symbol(g, Decl(typeofThisWithContextualThisParameter.ts, 55, 6))
+
+        type X = typeof this;
+>X : Symbol(X, Decl(typeofThisWithContextualThisParameter.ts, 55, 20))
+>this : Symbol(this, Decl(typeofThisWithContextualThisParameter.ts, 41, 19))
+
+        this;
+>this : Symbol(this, Decl(typeofThisWithContextualThisParameter.ts, 41, 19))
+
+    })
+}
+

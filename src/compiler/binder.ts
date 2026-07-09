@@ -2860,7 +2860,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 }
                 // falls through
             case SyntaxKind.ThisKeyword:
-                if (node.kind === SyntaxKind.ThisKeyword) {
+                if (node.kind === SyntaxKind.ThisKeyword || (node.kind === SyntaxKind.Identifier && (node as Identifier).escapedText === "this")) {
                     seenThisKeyword = true;
                 }
                 // TODO: Why use `isExpression` here? both Identifier and ThisKeyword are expressions.

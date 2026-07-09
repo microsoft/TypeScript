@@ -1,0 +1,178 @@
+//// [tests/cases/compiler/typeofThisWithContextualThisParameter.ts] ////
+
+=== typeofThisWithContextualThisParameter.ts ===
+// Reproduces #63616: typeof this inconsistent when this parameter comes from a contextual signature
+
+interface A { a: string }
+>a : string
+>  : ^^^^^^
+
+// ---- Object-literal method case ----
+
+{
+    interface B { g: (this: A) => void }
+>g : (this: A) => void
+>  : ^    ^^ ^^^^^    
+>this : A
+>     : ^
+
+    function f(_: B): void {}
+>f : (_: B) => void
+>  : ^ ^^^^^^^^    
+>_ : B
+>  : ^
+
+    // Case 1: typeof this without explicit this usage — should resolve to A
+    f({
+>f({        g() {            type X = typeof this;            //    ^ should be A        }    }) : void
+>                                                                                                : ^^^^
+>f : (_: B) => void
+>  : ^ ^^^^^^^^    
+>{        g() {            type X = typeof this;            //    ^ should be A        }    } : { g(this: A): void; }
+>                                                                                             : ^^^^    ^^ ^^^^^^^^^^
+
+        g() {
+>g : (this: A) => void
+>  : ^    ^^ ^^^^^^^^^
+
+            type X = typeof this;
+>X : A
+>  : ^
+>this : A
+>     : ^
+
+            //    ^ should be A
+        }
+    })
+
+    // Case 2: this used before typeof this — should resolve to A
+    f({
+>f({        g() {            this;            type X = typeof this;            //    ^ should be A        }    }) : void
+>                                                                                                                 : ^^^^
+>f : (_: B) => void
+>  : ^ ^^^^^^^^    
+>{        g() {            this;            type X = typeof this;            //    ^ should be A        }    } : { g(this: A): void; }
+>                                                                                                              : ^^^^    ^^ ^^^^^^^^^^
+
+        g() {
+>g : (this: A) => void
+>  : ^    ^^ ^^^^^^^^^
+
+            this;
+>this : A
+>     : ^
+
+            type X = typeof this;
+>X : A
+>  : ^
+>this : A
+>     : ^
+
+            //    ^ should be A
+        }
+    })
+
+    // Case 3: this used after typeof this — should resolve to A
+    f({
+>f({        g() {            type X = typeof this;            //    ^ should be A            this;        }    }) : void
+>                                                                                                                 : ^^^^
+>f : (_: B) => void
+>  : ^ ^^^^^^^^    
+>{        g() {            type X = typeof this;            //    ^ should be A            this;        }    } : { g(this: A): void; }
+>                                                                                                              : ^^^^    ^^ ^^^^^^^^^^
+
+        g() {
+>g : (this: A) => void
+>  : ^    ^^ ^^^^^^^^^
+
+            type X = typeof this;
+>X : A
+>  : ^
+>this : A
+>     : ^
+
+            //    ^ should be A
+            this;
+>this : A
+>     : ^
+        }
+    })
+}
+
+// ---- Function expression case ----
+
+{
+    function f(_: (this: A) => void): void {}
+>f : (_: (this: A) => void) => void
+>  : ^ ^^                 ^^^^^    
+>_ : (this: A) => void
+>  : ^    ^^ ^^^^^    
+>this : A
+>     : ^
+
+    // Case 4: typeof this only — should resolve to A (not implicit any error for typeof this context)
+    f(function g() {
+>f(function g() {        type X = typeof this;    }) : void
+>                                                    : ^^^^
+>f : (_: (this: A) => void) => void
+>  : ^ ^^                 ^^^^^    
+>function g() {        type X = typeof this;    } : (this: A) => void
+>                                                 : ^    ^^ ^^^^^^^^^
+>g : (this: A) => void
+>  : ^    ^^ ^^^^^^^^^
+
+        type X = typeof this;
+>X : A
+>  : ^
+>this : A
+>     : ^
+
+    })
+
+    // Case 5: this used before typeof this — should resolve to A
+    f(function g() {
+>f(function g() {        this;        type X = typeof this;    }) : void
+>                                                                 : ^^^^
+>f : (_: (this: A) => void) => void
+>  : ^ ^^                 ^^^^^    
+>function g() {        this;        type X = typeof this;    } : (this: A) => void
+>                                                              : ^    ^^ ^^^^^^^^^
+>g : (this: A) => void
+>  : ^    ^^ ^^^^^^^^^
+
+        this;
+>this : A
+>     : ^
+
+        type X = typeof this;
+>X : A
+>  : ^
+>this : A
+>     : ^
+
+    })
+
+    // Case 6: this used after typeof this — should resolve to A
+    f(function g() {
+>f(function g() {        type X = typeof this;        this;    }) : void
+>                                                                 : ^^^^
+>f : (_: (this: A) => void) => void
+>  : ^ ^^                 ^^^^^    
+>function g() {        type X = typeof this;        this;    } : (this: A) => void
+>                                                              : ^    ^^ ^^^^^^^^^
+>g : (this: A) => void
+>  : ^    ^^ ^^^^^^^^^
+
+        type X = typeof this;
+>X : A
+>  : ^
+>this : A
+>     : ^
+
+        this;
+>this : A
+>     : ^
+
+    })
+}
+
