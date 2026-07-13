@@ -30,6 +30,7 @@ import {
     type TypeNode,
     unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
+import { assertNever } from "../../internal/utils.ts";
 import {
     encodeNode,
     uint8ArrayToBase64,
@@ -57,6 +58,8 @@ import type {
     ConfigResponse,
     DocumentIdentifier,
     DocumentPosition,
+    ImportAdderActionRequest,
+    ImportSymbolActionRequest,
     IndexInfoResponse,
     InitializeResponse,
     LSPUpdateSnapshotParams,
@@ -65,6 +68,7 @@ import type {
     SignatureResponse,
     SourceFileMetadata,
     SymbolResponse,
+    TextEdit,
     TypePredicateResponse,
     TypeResponse,
     UpdateSnapshotParams,
@@ -96,7 +100,9 @@ import type {
     ConditionalType,
     Diagnostic,
     FreshableType,
+    GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
+    ImportAdderAction,
     IndexedAccessType,
     IndexInfo,
     IndexType,
@@ -124,7 +130,7 @@ import type {
 
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export { CompletionItemKind, DiagnosticCategory, ElementFlags, ModifierFlags, ModuleKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
-export type { APIOptions, AssertsIdentifierTypePredicate, AssertsThisTypePredicate, BigIntLiteralType, BooleanLiteralType, ClientSocketOptions, ClientSpawnOptions, CompilerOptions, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, DocumentIdentifier, DocumentPosition, FreshableType, IdentifierTypePredicate, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, JSDocTagInfo, LiteralType, LSPConnectionOptions, NumberLiteralType, ObjectType, RequestTiming, SourceFileMetadata, StringLiteralType, StringMappingType, SubstitutionType, TemplateLiteralType, ThisTypePredicate, TimingAccumulators, TimingInfo, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
+export type { APIOptions, AssertsIdentifierTypePredicate, AssertsThisTypePredicate, BigIntLiteralType, BooleanLiteralType, ClientSocketOptions, ClientSpawnOptions, CompilerOptions, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, DocumentIdentifier, DocumentPosition, FreshableType, GetImportEditsForSymbolsOptions, IdentifierTypePredicate, ImportAdderAction, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, JSDocTagInfo, LiteralType, LSPConnectionOptions, NumberLiteralType, ObjectType, RequestTiming, SourceFileMetadata, StringLiteralType, StringMappingType, SubstitutionType, TemplateLiteralType, TextEdit, ThisTypePredicate, TimingAccumulators, TimingInfo, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
 
 export class API<FromLSP extends boolean = false> {
     private client: Client;
@@ -556,6 +562,7 @@ export class Project {
     readonly checker: Checker;
     readonly emitter: Emitter;
     private client: Client;
+    private snapshotId: number;
 
     constructor(
         data: ProjectResponse,
@@ -570,6 +577,7 @@ export class Project {
         this.compilerOptions = data.compilerOptions;
         this.rootFiles = data.rootFiles;
         this.client = client;
+        this.snapshotId = snapshotId;
         this.program = new Program(
             snapshotId,
             this,
@@ -585,6 +593,51 @@ export class Project {
             objectRegistry,
         );
         this.emitter = new Emitter(client);
+    }
+
+    getImportAdderEdits(file: DocumentIdentifier, actions: readonly ImportAdderAction[]): readonly TextEdit[] {
+        const requestActions: ImportAdderActionRequest[] = actions.map(action => {
+            switch (action.kind) {
+                case "importSymbol":
+                    const importSymbolAction: ImportSymbolActionRequest = {
+                        kind: "importSymbol",
+                        symbol: action.symbol.id,
+                    };
+                    if (action.isValidTypeOnlyUseSite !== undefined) {
+                        importSymbolAction.isValidTypeOnlyUseSite = action.isValidTypeOnlyUseSite;
+                    }
+                    return importSymbolAction;
+                default:
+                    return assertNever(action.kind);
+            }
+        });
+
+        const data = this.client.apiRequest<TextEdit[]>("getImportAdderEdits", {
+            snapshot: this.snapshotId,
+            project: this.id,
+            file,
+            actions: requestActions,
+        });
+        return data ?? [];
+    }
+
+    getImportEditsForSymbols(file: DocumentIdentifier, symbols: readonly Symbol[], options: GetImportEditsForSymbolsOptions = {}): readonly TextEdit[] {
+        return this.getImportAdderEdits(
+            file,
+            symbols.map((symbol): ImportAdderAction => {
+                if (options.isValidTypeOnlyUseSite !== undefined) {
+                    return {
+                        kind: "importSymbol",
+                        symbol,
+                        isValidTypeOnlyUseSite: options.isValidTypeOnlyUseSite,
+                    };
+                }
+                return {
+                    kind: "importSymbol",
+                    symbol,
+                };
+            }),
+        );
     }
 
     dispose(): void {

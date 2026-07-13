@@ -2,8 +2,12 @@ import { CharacterCodes } from "#enums/characterCodes";
 import { SyntaxKind } from "#enums/syntaxKind";
 import type {
     __String,
+    HasExpression,
+    HasInitializer,
+    ObjectAssignmentInitializer,
     SourceFile,
 } from "./ast.ts";
+import type { Node } from "./ast.ts";
 
 let syntaxKindNames: Map<number, string> | undefined;
 function getSyntaxKindNames(): Map<number, string> {
@@ -53,6 +57,18 @@ export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: 
     if (value !== undefined && test(value)) return value;
 
     throw new Error(`Invalid cast. The supplied value ${value} did not pass the test '${test.name}'.`);
+}
+
+export function hasExpression(node: Node): node is HasExpression {
+    return "expression" in node;
+}
+
+export function hasInitializer(node: Node): node is HasInitializer {
+    return "initializer" in node;
+}
+
+export function hasObjectAssignmentInitializer(node: Node): node is ObjectAssignmentInitializer {
+    return "objectAssignmentInitializer" in node;
 }
 
 export function cloneSourceFileData(sourceFile: SourceFile): Record<string, unknown> {

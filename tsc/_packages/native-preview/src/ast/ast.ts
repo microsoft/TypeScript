@@ -7,16 +7,47 @@ import type { NodeFlags } from "#enums/nodeFlags";
 import type { ScriptKind } from "#enums/scriptKind";
 import { SyntaxKind } from "#enums/syntaxKind";
 import type {
+    AssertionExpression,
+    BindingElement,
+    CaseClause,
+    ComputedPropertyName,
+    Decorator,
+    DefaultClause,
+    DoStatement,
     EndOfFile,
     EntityName,
+    EnumMember,
+    Expression,
+    ExpressionStatement,
+    ForInStatement,
+    ForOfStatement,
+    ForStatement,
     Identifier,
+    IfStatement,
+    JsxAttribute,
+    JsxExpression,
+    JsxSpreadAttribute,
     KeywordSyntaxKind,
     ModifierSyntaxKind,
+    ParameterDeclaration,
     PropertyAccessExpression,
+    PropertyAssignment,
+    PropertyDeclaration,
+    PropertySignatureDeclaration,
     PunctuationSyntaxKind,
+    ReturnStatement,
+    SatisfiesExpression,
+    ShorthandPropertyAssignment,
+    SpreadAssignment,
     Statement,
+    SwitchStatement,
+    TemplateSpan,
     ThisExpression,
+    ThrowStatement,
     Token,
+    VariableDeclaration,
+    WhileStatement,
+    WithStatement,
 } from "./ast.generated.ts";
 
 export { SyntaxKind } from "#enums/syntaxKind";
@@ -127,4 +158,45 @@ export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression
 
 export interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
     readonly expression: Identifier | ThisExpression | JsxTagNamePropertyAccess;
+}
+
+export type HasExpressionInitializer =
+    | VariableDeclaration
+    | ParameterDeclaration
+    | BindingElement
+    | PropertyDeclaration
+    | PropertyAssignment
+    | EnumMember;
+
+export type HasInitializer =
+    | HasExpressionInitializer
+    | ForStatement
+    | ForInStatement
+    | ForOfStatement
+    | JsxAttribute;
+
+export type HasIllegalExpressionInitializer = PropertySignatureDeclaration;
+
+export type HasExpression =
+    | ExpressionStatement
+    | IfStatement
+    | DoStatement
+    | WhileStatement
+    | ReturnStatement
+    | WithStatement
+    | SwitchStatement
+    | CaseClause
+    | DefaultClause
+    | ThrowStatement
+    | AssertionExpression
+    | TemplateSpan
+    | ComputedPropertyName
+    | Decorator
+    | JsxExpression
+    | JsxSpreadAttribute
+    | SpreadAssignment
+    | SatisfiesExpression;
+
+export interface ObjectAssignmentInitializer extends ShorthandPropertyAssignment {
+    readonly objectAssignmentInitializer: Expression;
 }

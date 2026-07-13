@@ -34,6 +34,20 @@ export interface DocumentPosition {
     position: number;
 }
 
+export interface TextEdit {
+    pos: number;
+    end: number;
+    newText: string;
+}
+
+export interface ImportSymbolActionRequest {
+    kind: "importSymbol";
+    symbol: number;
+    isValidTypeOnlyUseSite?: boolean;
+}
+
+export type ImportAdderActionRequest = ImportSymbolActionRequest;
+
 /**
  * Resolves a DocumentIdentifier to a file name.
  * If the identifier contains a URI, it is converted to a file name.

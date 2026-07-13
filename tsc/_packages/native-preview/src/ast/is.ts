@@ -1,6 +1,7 @@
 // is.ts — Hand-written type guard functions
 // Generated guards are in is.generated.ts
 
+import { ModifierFlags } from "#enums/modifierFlags";
 import { NodeFlags } from "#enums/nodeFlags";
 import { OuterExpressionKinds } from "#enums/outerExpressionKinds";
 import { ScriptKind } from "#enums/scriptKind";
@@ -10,17 +11,21 @@ import type {
     BindingPattern,
     BlockOrExpression,
     BooleanLiteral,
+    ComputedPropertyName,
     ConciseBody,
     ExclamationToken,
     Expression,
     ExpressionWithTypeArguments,
     ForInitializer,
+    ForInOrOfStatement,
+    ForStatement,
     Identifier,
     JSDocTypeExpression,
     JSDocTypeLiteral,
     JsxTagNameExpression,
     LeftHandSideExpression,
     LiteralExpression,
+    MetaProperty,
     MinusToken,
     ModuleDeclaration,
     Node,
@@ -41,7 +46,26 @@ import type {
     TypeNode,
     UnaryExpressionBase,
 } from "./ast.ts";
-import { isLiteralExpression } from "./is.generated.ts";
+import {
+    isBinaryExpression,
+    isClassLikeDeclaration,
+    isComputedPropertyName,
+    isHeritageClause,
+    isIdentifier,
+    isJSDocAugmentsTag,
+    isJSDocImplementsTag,
+    isJSDocLink,
+    isJSDocLinkCode,
+    isJSDocLinkPlain,
+    isJSDocNameReference,
+    isLiteralExpression,
+    isShorthandPropertyAssignment,
+} from "./is.generated.ts";
+import {
+    hasExpression,
+    hasInitializer,
+    hasObjectAssignmentInitializer,
+} from "./utils.ts";
 
 export * from "./is.generated.ts";
 
@@ -135,6 +159,248 @@ export function isExpression(node: Node): node is Expression {
         || kind === SyntaxKind.FalseKeyword || kind === SyntaxKind.ThisKeyword
         || kind === SyntaxKind.SuperKeyword || kind === SyntaxKind.ImportKeyword
         || kind === SyntaxKind.ExpressionWithTypeArguments;
+}
+
+export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
+    return !!(useSite.flags & NodeFlags.Ambient)
+        || isInJSDoc(useSite)
+        || isPartOfTypeQuery(useSite)
+        || isIdentifierInNonEmittingHeritageClause(useSite)
+        || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
+        || !(isExpressionNode(useSite) || isShorthandPropertyNameUseSite(useSite));
+}
+
+function isInJSDoc(node: Node): boolean {
+    return !!(node.flags & NodeFlags.JSDoc);
+}
+
+function isPartOfTypeQuery(node: Node): boolean {
+    while (node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.Identifier) {
+        node = node.parent;
+    }
+    return node.kind === SyntaxKind.TypeQuery;
+}
+
+function isIdentifierInNonEmittingHeritageClause(node: Node): boolean {
+    if (!isIdentifier(node)) return false;
+
+    const heritageClause = findAncestor(node.parent, parent => {
+        switch (parent.kind) {
+            case SyntaxKind.HeritageClause:
+                return true;
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return false;
+            default:
+                return "quit";
+        }
+    });
+
+    return heritageClause !== undefined &&
+        isHeritageClause(heritageClause) &&
+        (heritageClause.token === SyntaxKind.ImplementsKeyword || heritageClause.parent.kind === SyntaxKind.InterfaceDeclaration);
+}
+
+function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node): boolean {
+    while (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
+        node = node.parent;
+    }
+    if (!isComputedPropertyName(node)) {
+        return false;
+    }
+    if (hasModifierFlags(node.parent) && node.parent.modifierFlags & ModifierFlags.Abstract) {
+        return true;
+    }
+    const containerKind = node.parent.parent.kind;
+    return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
+}
+
+function isShorthandPropertyNameUseSite(useSite: Node): boolean {
+    return isIdentifier(useSite) && isShorthandPropertyAssignment(useSite.parent) && useSite.parent.name === useSite;
+}
+
+type AncestorCallbackResult = boolean | "quit";
+
+function findAncestor(node: Node, callback: (node: Node) => AncestorCallbackResult): Node | undefined {
+    while (node) {
+        const result = callback(node);
+        if (result === "quit") {
+            return undefined;
+        }
+        if (result) {
+            return node;
+        }
+        node = node.parent;
+    }
+}
+
+function hasModifierFlags(node: Node): node is Node & { readonly modifierFlags: ModifierFlags; } {
+    return "modifierFlags" in node;
+}
+
+function isExpressionNode(node: Node): boolean {
+    switch (node.kind) {
+        case SyntaxKind.SuperKeyword:
+        case SyntaxKind.NullKeyword:
+        case SyntaxKind.TrueKeyword:
+        case SyntaxKind.FalseKeyword:
+        case SyntaxKind.RegularExpressionLiteral:
+        case SyntaxKind.ArrayLiteralExpression:
+        case SyntaxKind.ObjectLiteralExpression:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.ElementAccessExpression:
+        case SyntaxKind.CallExpression:
+        case SyntaxKind.NewExpression:
+        case SyntaxKind.TaggedTemplateExpression:
+        case SyntaxKind.AsExpression:
+        case SyntaxKind.TypeAssertionExpression:
+        case SyntaxKind.SatisfiesExpression:
+        case SyntaxKind.NonNullExpression:
+        case SyntaxKind.ParenthesizedExpression:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.ArrowFunction:
+        case SyntaxKind.VoidExpression:
+        case SyntaxKind.DeleteExpression:
+        case SyntaxKind.TypeOfExpression:
+        case SyntaxKind.PrefixUnaryExpression:
+        case SyntaxKind.PostfixUnaryExpression:
+        case SyntaxKind.BinaryExpression:
+        case SyntaxKind.ConditionalExpression:
+        case SyntaxKind.SpreadElement:
+        case SyntaxKind.TemplateExpression:
+        case SyntaxKind.OmittedExpression:
+        case SyntaxKind.JsxElement:
+        case SyntaxKind.JsxSelfClosingElement:
+        case SyntaxKind.JsxFragment:
+        case SyntaxKind.YieldExpression:
+        case SyntaxKind.AwaitExpression:
+            return true;
+        case SyntaxKind.MetaProperty:
+            return !isImportCall(node.parent) || node.parent.expression !== node;
+        case SyntaxKind.ExpressionWithTypeArguments:
+            return !isHeritageClause(node.parent);
+        case SyntaxKind.QualifiedName:
+            while (node.parent.kind === SyntaxKind.QualifiedName) {
+                node = node.parent;
+            }
+            return node.parent.kind === SyntaxKind.TypeQuery || isInJSDocNameReference(node) || isJSXTagName(node);
+        case SyntaxKind.PrivateIdentifier:
+            return isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.InKeyword;
+        case SyntaxKind.Identifier:
+            if (node.parent.kind === SyntaxKind.TypeQuery || isInJSDocNameReference(node) || isJSXTagName(node)) {
+                return true;
+            }
+        // falls through
+        case SyntaxKind.NumericLiteral:
+        case SyntaxKind.BigIntLiteral:
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+        case SyntaxKind.ThisKeyword:
+            return isInExpressionContext(node);
+        default:
+            return false;
+    }
+}
+
+function isImportCall(node: Node): node is Node & { readonly expression: MetaProperty; } {
+    if (node.kind !== SyntaxKind.CallExpression || !hasExpression(node) || !node.expression) {
+        return false;
+    }
+    return node.expression.kind === SyntaxKind.MetaProperty
+        && (node.expression as MetaProperty).keywordToken === SyntaxKind.ImportKeyword;
+}
+
+function isJSDocLinkLike(node: Node): boolean {
+    return isJSDocLink(node) || isJSDocLinkCode(node) || isJSDocLinkPlain(node);
+}
+
+function isInJSDocNameReference(node: Node): boolean {
+    return isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent);
+}
+
+function isInExpressionContext(node: Node): boolean {
+    const parent = node.parent;
+    switch (parent.kind) {
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.EnumMember:
+        case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.BindingElement:
+            return hasInitializer(parent) && parent.initializer === node;
+        case SyntaxKind.ExpressionStatement:
+        case SyntaxKind.IfStatement:
+        case SyntaxKind.DoStatement:
+        case SyntaxKind.WhileStatement:
+        case SyntaxKind.ReturnStatement:
+        case SyntaxKind.WithStatement:
+        case SyntaxKind.SwitchStatement:
+        case SyntaxKind.CaseClause:
+        case SyntaxKind.DefaultClause:
+        case SyntaxKind.ThrowStatement:
+            return hasExpression(parent) && parent.expression === node;
+        case SyntaxKind.ForStatement:
+            return isForStatementExpression(node, parent as ForStatement);
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+            return isForInOrOfStatementExpression(node, parent as ForInOrOfStatement);
+        case SyntaxKind.TypeAssertionExpression:
+        case SyntaxKind.AsExpression:
+            return hasExpression(parent) && parent.expression === node;
+        case SyntaxKind.TemplateSpan:
+            return hasExpression(parent) && parent.expression === node;
+        case SyntaxKind.ComputedPropertyName:
+            return (parent as ComputedPropertyName).expression === node;
+        case SyntaxKind.Decorator:
+        case SyntaxKind.JsxExpression:
+        case SyntaxKind.JsxSpreadAttribute:
+        case SyntaxKind.SpreadAssignment:
+            return true;
+        case SyntaxKind.ExpressionWithTypeArguments:
+            return (parent as ExpressionWithTypeArguments).expression === node && !isPartOfTypeExpressionWithTypeArguments(parent as ExpressionWithTypeArguments);
+        case SyntaxKind.ShorthandPropertyAssignment:
+            return hasObjectAssignmentInitializer(parent) && parent.objectAssignmentInitializer === node;
+        case SyntaxKind.SatisfiesExpression:
+            return hasExpression(parent) && parent.expression === node;
+        default:
+            return isExpressionNode(parent);
+    }
+}
+
+function isPartOfTypeExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
+    const parent = node.parent;
+    return isHeritageClause(parent) && (!isClassLikeDeclaration(parent.parent) || parent.token === SyntaxKind.ImplementsKeyword) ||
+        isJSDocImplementsTag(parent) ||
+        isJSDocAugmentsTag(parent);
+}
+
+function isForStatementExpression(node: Node, parent: ForStatement): boolean {
+    return parent.initializer === node && parent.initializer.kind !== SyntaxKind.VariableDeclarationList ||
+        parent.condition === node ||
+        parent.incrementor === node;
+}
+
+function isForInOrOfStatementExpression(node: Node, parent: ForInOrOfStatement): boolean {
+    return parent.initializer === node && parent.initializer.kind !== SyntaxKind.VariableDeclarationList ||
+        parent.expression === node;
+}
+
+function isJSXTagName(node: Node): boolean {
+    const parent = node.parent;
+    switch (parent.kind) {
+        case SyntaxKind.JsxOpeningElement:
+        case SyntaxKind.JsxSelfClosingElement:
+        case SyntaxKind.JsxClosingElement:
+            return hasTagName(parent) && parent.tagName === node;
+        default:
+            return false;
+    }
+}
+
+function hasTagName(node: Node): node is Node & { readonly tagName: Node; } {
+    return "tagName" in node;
 }
 
 export function isBlockOrExpression(node: Node): node is BlockOrExpression {

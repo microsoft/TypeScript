@@ -1127,6 +1127,31 @@ func (s *Session) WithLanguageServiceAndSnapshot(
 // The cloned snapshot will be adopted as the session's current snapshot in the background
 // if other changes haven't been adopted in the meantime.
 func (s *Session) GetLanguageServiceWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri) (*ls.LanguageService, error) {
+	newSnapshot := s.cloneWithAutoImports(ctx, baseSnapshot, uri, false /*callerRef*/)
+	project := newSnapshot.GetDefaultProject(uri)
+	if project == nil {
+		// Clone's initial ref (1) is released since we won't use this snapshot.
+		newSnapshot.Deref(s)
+		return nil, fmt.Errorf("no project found for URI %s", uri)
+	}
+
+	s.adoptSnapshotChangeInBackground(baseSnapshot, newSnapshot)
+
+	return ls.NewLanguageService(project.configFilePath, project.GetProgram(), newSnapshot, uri.FileName()), nil
+}
+
+// GetSnapshotWithAutoImports clones the given snapshot with auto-import
+// preparation for the given URI, without flushing pending file changes.
+// The returned snapshot is ref'd for the caller, which must call Deref when done.
+// The cloned snapshot will also be adopted as the session's current snapshot in
+// the background if other changes haven't been adopted in the meantime.
+func (s *Session) GetSnapshotWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri) *Snapshot {
+	newSnapshot := s.cloneWithAutoImports(ctx, baseSnapshot, uri, true /*callerRef*/)
+	s.adoptSnapshotChangeInBackground(baseSnapshot, newSnapshot)
+	return newSnapshot
+}
+
+func (s *Session) cloneWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, callerRef bool) *Snapshot {
 	change := SnapshotChange{
 		reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
 		ResourceRequest: ResourceRequest{
@@ -1135,22 +1160,19 @@ func (s *Session) GetLanguageServiceWithAutoImports(ctx context.Context, baseSna
 		},
 	}
 	newSnapshot := baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, s)
-
-	project := newSnapshot.GetDefaultProject(uri)
-	if project == nil {
-		// Clone's initial ref (1) is released since we won't use this snapshot.
-		newSnapshot.Deref(s)
-		return nil, fmt.Errorf("no project found for URI %s", uri)
+	if callerRef {
+		newSnapshot.ref()
 	}
+	return newSnapshot
+}
 
+func (s *Session) adoptSnapshotChangeInBackground(baseSnapshot, newSnapshot *Snapshot) {
 	// The clone's initial ref (1) is transferred to adoptSnapshotChange,
 	// which will either promote it as the session's current snapshot or
 	// release it if the session has moved on.
 	s.backgroundQueue.Enqueue(s.backgroundCtx, func(ctx context.Context) {
 		s.adoptSnapshotChange(baseSnapshot, newSnapshot)
 	})
-
-	return ls.NewLanguageService(project.configFilePath, project.GetProgram(), newSnapshot, uri.FileName()), nil
 }
 
 // adoptSnapshotChange promotes a cloned snapshot as the session's current

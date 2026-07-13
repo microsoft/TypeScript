@@ -351,3 +351,15 @@ export interface Diagnostic {
     /** Related diagnostic information */
     readonly relatedInformation?: readonly Diagnostic[] | undefined;
 }
+
+export interface ImportSymbolAction {
+    readonly kind: "importSymbol";
+    readonly symbol: Symbol;
+    readonly isValidTypeOnlyUseSite?: boolean;
+}
+
+export type ImportAdderAction = ImportSymbolAction;
+
+export interface GetImportEditsForSymbolsOptions {
+    readonly isValidTypeOnlyUseSite?: boolean;
+}

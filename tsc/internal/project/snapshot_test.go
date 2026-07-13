@@ -210,6 +210,30 @@ func TestSnapshot(t *testing.T) {
 		_, err = session.GetLanguageService(context.Background(), otherURI)
 		assert.NilError(t, err)
 	})
+
+	t.Run("auto-import snapshot is adopted when session snapshot is unchanged", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/TS/p1/tsconfig.json": "{}",
+			"/home/projects/TS/p1/index.ts":      "const value = foo;",
+			"/home/projects/TS/p1/foo.ts":        "export const foo = 1;",
+		}
+		session := setup(files)
+		t.Cleanup(session.Close)
+		ctx := context.Background()
+		uri := lsproto.DocumentUri("file:///home/projects/TS/p1/index.ts")
+
+		session.DidOpenFile(ctx, uri, 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(ctx, uri)
+		assert.NilError(t, err)
+
+		baseSnapshot := session.Snapshot()
+		preparedSnapshot := session.GetSnapshotWithAutoImports(ctx, baseSnapshot, uri)
+		defer preparedSnapshot.Deref(session)
+
+		session.WaitForBackgroundTasks()
+		assert.Equal(t, session.Snapshot(), preparedSnapshot)
+	})
 }
 
 func BenchmarkSnapshotCloneRefCost(b *testing.B) {

@@ -19,6 +19,8 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/ls"
+	"github.com/microsoft/typescript-go/internal/ls/autoimport"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/nodebuilder"
 	"github.com/microsoft/typescript-go/internal/pprof"
@@ -696,6 +698,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetBaseConstraintOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetTypeArguments):
 		return s.handleGetTypeArguments(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodGetImportAdderEdits):
+		return s.handleGetImportAdderEdits(ctx, parsed.(*GetImportAdderEditsParams))
 	case string(MethodGetConstantValue):
 		return s.handleGetConstantValue(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodGetSignatureFromDeclaration):
@@ -1557,6 +1561,112 @@ func (s *Session) handleGetThisParameterOfSignature(_ context.Context, params *G
 
 func (s *Session) handleGetTargetOfSignature(_ context.Context, params *GetSignaturePropertyParams) (*SignatureResponse, error) {
 	return s.resolveSignaturePropertyOfSignature(params, (*checker.Signature).Target)
+}
+
+func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImportAdderEditsParams) ([]*TextEdit, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+
+	projectPath := parseProjectHandle(params.Project)
+	workingSnapshot := sd.snapshot
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+	sourceFile := program.GetSourceFile(params.File.ToFileName())
+	if sourceFile == nil {
+		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
+	}
+
+	userPreferences := workingSnapshot.UserPreferences()
+	if registry := workingSnapshot.AutoImportRegistry(); registry == nil ||
+		!registry.IsPreparedForImportingFile(sourceFile.FileName(), projectPath, userPreferences) {
+		preparedSnapshot := s.projectSession.GetSnapshotWithAutoImports(ctx, workingSnapshot, params.File.ToURI(s.projectSession.GetCurrentDirectory()))
+		defer preparedSnapshot.Deref(s.projectSession)
+
+		workingSnapshot = preparedSnapshot
+		proj := workingSnapshot.ProjectCollection.GetProjectByPath(projectPath)
+		if proj == nil {
+			return nil, fmt.Errorf("%w: project %s not found", ErrClientError, projectPath)
+		}
+		program = proj.GetProgram()
+		if program == nil {
+			return nil, fmt.Errorf("%w: project has no program", ErrClientError)
+		}
+		sourceFile = program.GetSourceFile(params.File.ToFileName())
+		if sourceFile == nil {
+			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
+		}
+		userPreferences = workingSnapshot.UserPreferences()
+	}
+
+	registry := workingSnapshot.AutoImportRegistry()
+	if registry == nil {
+		return []*TextEdit{}, nil
+	}
+
+	ch, done := program.GetTypeChecker(ctx)
+	defer done()
+
+	view := autoimport.NewView(
+		registry,
+		sourceFile,
+		projectPath,
+		program,
+		userPreferences.ModuleSpecifierPreferences(),
+	)
+	importAdder := autoimport.NewImportAdder(
+		ctx,
+		program,
+		ch,
+		sourceFile,
+		view,
+		workingSnapshot.GetPreferences(sourceFile.FileName()).FormatCodeSettings,
+		workingSnapshot.Converters(),
+		userPreferences,
+	)
+
+	for i, action := range params.Actions {
+		switch action.Kind {
+		case ImportAdderActionKindImportSymbol:
+			if action.Symbol == 0 {
+				return nil, fmt.Errorf("%w: import adder action %d missing symbol", ErrClientError, i)
+			}
+			symbol, err := sd.resolveSymbolHandle(action.Symbol)
+			if err != nil {
+				return nil, err
+			}
+			isValidTypeOnlyUseSite := true
+			if action.IsValidTypeOnlyUseSite != nil {
+				isValidTypeOnlyUseSite = *action.IsValidTypeOnlyUseSite
+			}
+			importAdder.AddImportFromExportedSymbol(symbol, isValidTypeOnlyUseSite)
+		default:
+			return nil, fmt.Errorf("%w: unknown import adder action kind %q", ErrClientError, action.Kind)
+		}
+	}
+
+	if !importAdder.HasFixes() {
+		return []*TextEdit{}, nil
+	}
+	return toAPITextEdits(sourceFile, workingSnapshot.Converters(), importAdder.Edits()), nil
+}
+
+func toAPITextEdits(sourceFile *ast.SourceFile, converters *lsconv.Converters, edits []*lsproto.TextEdit) []*TextEdit {
+	positionMap := sourceFile.GetPositionMap()
+	result := make([]*TextEdit, len(edits))
+	for i, edit := range edits {
+		start := converters.LineAndCharacterToPosition(sourceFile, edit.Range.Start)
+		end := converters.LineAndCharacterToPosition(sourceFile, edit.Range.End)
+		result[i] = &TextEdit{
+			Pos:     positionMap.UTF8ToUTF16(int(start)),
+			End:     positionMap.UTF8ToUTF16(int(end)),
+			NewText: edit.NewText,
+		}
+	}
+	return result
 }
 
 // resolveTypePropertyOfType resolves a type property of type `Type` and returns a type response.

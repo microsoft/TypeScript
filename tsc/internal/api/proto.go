@@ -145,6 +145,7 @@ const (
 	MethodGetConstraintOfTypeParameter      Method = "getConstraintOfTypeParameter"
 	MethodGetBaseConstraintOfType           Method = "getBaseConstraintOfType"
 	MethodGetTypeArguments                  Method = "getTypeArguments"
+	MethodGetImportAdderEdits               Method = "getImportAdderEdits"
 	MethodGetTrueTypeOfConditionalType      Method = "getTrueTypeOfConditionalType"
 	MethodGetFalseTypeOfConditionalType     Method = "getFalseTypeOfConditionalType"
 	MethodGetConstantValue                  Method = "getConstantValue"
@@ -438,6 +439,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetConstraintOfTypeParameter:      unmarshallerFor[CheckerTypeParams],
 	MethodGetBaseConstraintOfType:           unmarshallerFor[CheckerTypeParams],
 	MethodGetTypeArguments:                  unmarshallerFor[CheckerTypeParams],
+	MethodGetImportAdderEdits:               unmarshallerFor[GetImportAdderEditsParams],
 	MethodGetConstantValue:                  unmarshallerFor[CheckerNodeParams],
 	MethodGetSignatureFromDeclaration:       unmarshallerFor[CheckerNodeParams],
 	MethodGetExportSpecifierLocalTarget:     unmarshallerFor[CheckerNodeParams],
@@ -1012,6 +1014,31 @@ type GetTypesAtPositionsParams struct {
 	Project   ProjectID          `json:"project"`
 	File      DocumentIdentifier `json:"file"`
 	Positions []uint32           `json:"positions"`
+}
+
+type ImportAdderActionKind string
+
+const (
+	ImportAdderActionKindImportSymbol ImportAdderActionKind = "importSymbol"
+)
+
+type ImportAdderAction struct {
+	Kind                   ImportAdderActionKind `json:"kind"`
+	Symbol                 SymbolID              `json:"symbol,omitempty"`
+	IsValidTypeOnlyUseSite *bool                 `json:"isValidTypeOnlyUseSite,omitempty"`
+}
+
+type GetImportAdderEditsParams struct {
+	Snapshot SnapshotID          `json:"snapshot"`
+	Project  ProjectID           `json:"project"`
+	File     DocumentIdentifier  `json:"file"`
+	Actions  []ImportAdderAction `json:"actions"`
+}
+
+type TextEdit struct {
+	Pos     int    `json:"pos"`
+	End     int    `json:"end"`
+	NewText string `json:"newText"`
 }
 
 // TypeToTypeNodeParams are the parameters for the typeToTypeNode method.
