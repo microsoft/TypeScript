@@ -1,10 +1,6 @@
-error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 YieldExpression14_es6.ts(3,6): error TS1163: A 'yield' expression is only allowed in a generator body.
 
 
-!!! error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS2663 YieldExpression14_es6.ts:3:12: Cannot find name 'foo'. Did you mean the instance member 'this.foo'?
 ==== YieldExpression14_es6.ts (1 errors) ====
     class C {
       foo() {

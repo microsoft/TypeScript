@@ -4,7 +4,7 @@
 export namespace C { export interface I { } }
 export import v = C;
 >v : any
->C : any
+>C : error
 
 export namespace M {
 >M : typeof M

@@ -1,4 +1,3 @@
-error TS-1: Pre-emit (41) and post-emit (43) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 objectLiteralErrors.ts(2,18): error TS1117: An object literal cannot have multiple properties with the same name.
 objectLiteralErrors.ts(3,19): error TS1117: An object literal cannot have multiple properties with the same name.
 objectLiteralErrors.ts(4,18): error TS1117: An object literal cannot have multiple properties with the same name.
@@ -42,10 +41,6 @@ objectLiteralErrors.ts(49,7): error TS1312: Did you mean to use a ':'? An '=' ca
 objectLiteralErrors.ts(50,5): error TS18016: Private identifiers are not allowed outside class bodies.
 
 
-!!! error TS-1: Pre-emit (41) and post-emit (43) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS18004 objectLiteralErrors.ts:48:5: No value exists in scope for the shorthand property 'x'. Either declare one or provide an initializer.
-!!! related TS18004 objectLiteralErrors.ts:49:5: No value exists in scope for the shorthand property 'y'. Either declare one or provide an initializer.
 ==== objectLiteralErrors.ts (41 errors) ====
     // Multiple properties with the same name
     var e1 = { a: 0, a: 0 };

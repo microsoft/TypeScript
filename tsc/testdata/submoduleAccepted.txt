@@ -592,6 +592,7 @@ conformance/subtypingWithNumericIndexer4.errors.txt.diff
 conformance/subtypingWithStringIndexer2.errors.txt.diff
 conformance/subtypingWithStringIndexer3.errors.txt.diff
 conformance/subtypingWithStringIndexer4.errors.txt.diff
+conformance/thisTypeInFunctionsNegative.errors.txt.diff
 conformance/typedefMultipleTypeParameters.errors.txt.diff
 conformance/typeSatisfaction.errors.txt.diff
 conformance/typeSatisfaction_errorLocations1.errors.txt.diff
@@ -647,6 +648,7 @@ compiler/deeplyNestedAssignabilityIssue.errors.txt.diff
 compiler/esModuleInteropPrettyErrorRelatedInformation.errors.txt.diff
 compiler/prettyContextNotDebugAssertion.errors.txt.diff
 compiler/prettyFileWithErrorsAndTabs.errors.txt.diff
+compiler/manyCompilerErrorsInTheTwoFiles.errors.txt.diff
 
 ## "Call signature return type" layer removed from error pyramid
 compiler/promisePermutations.errors.txt.diff
@@ -1060,6 +1062,7 @@ conformance/nestedDestructuringOfRequire.js.diff
 conformance/jsDeclarationsFunctionKeywordProp(target=es2015).js.diff
 conformance/jsDeclarationsFunctionKeywordPropExhaustive(target=es2015).js.diff
 conformance/nullPropertyName.js.diff
+conformance/typeFromPropertyAssignment29.js.diff
 
 ## Namespace converted to type alias in declaration emit (Documented in CHANGES.md in section "JSDoc Tags and Types")
 ## `namespace Dotted { type Name = number }` → `type Dotted = number`
@@ -1284,6 +1287,7 @@ compiler/letDeclarations.js.diff
 compiler/allowJscheckJsTypeParameterNoCrash.types.diff
 compiler/fieldAndGetterWithSameName.symbols.diff
 conformance/autoAccessor11.symbols.diff
+conformance/objectLiteralErrors(target=es2015).errors.txt.diff
 conformance/objectLiteralErrors(target=es2015).symbols.diff
 conformance/objectLiteralErrors(target=es2015).types.diff
 conformance/propertyAndAccessorWithSameName.symbols.diff

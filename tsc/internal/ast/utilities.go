@@ -918,6 +918,25 @@ func FindAncestor(node *Node, callback func(*Node) bool) *Node {
 	return nil
 }
 
+func FindManyAncestors(node *Node, callbacks ...func(*Node) bool) []*Node {
+	ancestors := make([]*Node, len(callbacks))
+	found := 0
+	for node != nil {
+		for i, callback := range callbacks {
+			if ancestors[i] == nil && callback(node) {
+				ancestors[i] = node
+				found++
+				if found == len(callbacks) {
+					return ancestors
+				}
+				break
+			}
+		}
+		node = node.Parent
+	}
+	return ancestors
+}
+
 // Walks up the parents of a node to find the ancestor that matches the kind
 func FindAncestorKind(node *Node, kind Kind) *Node {
 	for node != nil {

@@ -1,11 +1,6 @@
 --- old.objectLiteralErrors(target=es2015).errors.txt
 +++ new.objectLiteralErrors(target=es2015).errors.txt
-@@= skipped -0, +0 lines =@@
-+error TS-1: Pre-emit (41) and post-emit (43) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
- objectLiteralErrors.ts(2,18): error TS1117: An object literal cannot have multiple properties with the same name.
- objectLiteralErrors.ts(3,19): error TS1117: An object literal cannot have multiple properties with the same name.
- objectLiteralErrors.ts(4,18): error TS1117: An object literal cannot have multiple properties with the same name.
-@@= skipped -15, +16 lines =@@
+@@= skipped -15, +15 lines =@@
  objectLiteralErrors.ts(17,23): error TS1117: An object literal cannot have multiple properties with the same name.
  objectLiteralErrors.ts(18,22): error TS1117: An object literal cannot have multiple properties with the same name.
  objectLiteralErrors.ts(19,25): error TS1117: An object literal cannot have multiple properties with the same name.
@@ -71,15 +66,11 @@
 
 
 -==== objectLiteralErrors.ts (77 errors) ====
-+!!! error TS-1: Pre-emit (41) and post-emit (43) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-+!!! related TS-1: The excess diagnostics are:
-+!!! related TS18004 objectLiteralErrors.ts:48:5: No value exists in scope for the shorthand property 'x'. Either declare one or provide an initializer.
-+!!! related TS18004 objectLiteralErrors.ts:49:5: No value exists in scope for the shorthand property 'y'. Either declare one or provide an initializer.
 +==== objectLiteralErrors.ts (41 errors) ====
      // Multiple properties with the same name
      var e1 = { a: 0, a: 0 };
                       ~
-@@= skipped -59, +63 lines =@@
+@@= skipped -59, +59 lines =@@
      
      // Accessor and property with the same name
      var f1 = { a: 0, get a() { return 0; } };

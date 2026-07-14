@@ -1,11 +1,6 @@
 --- old.thisTypeInFunctionsNegative.errors.txt
 +++ new.thisTypeInFunctionsNegative.errors.txt
-@@= skipped -0, +0 lines =@@
-+error TS-1: Pre-emit (63) and post-emit (64) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
- thisTypeInFunctionsNegative.ts(16,15): error TS2339: Property 'n' does not exist on type 'void'.
- thisTypeInFunctionsNegative.ts(39,21): error TS2339: Property 'a' does not exist on type 'void'.
- thisTypeInFunctionsNegative.ts(49,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type '{ a: number; }'.
-@@= skipped -12, +13 lines =@@
+@@= skipped -12, +12 lines =@@
  thisTypeInFunctionsNegative.ts(68,1): error TS2684: The 'this' context of type '{ y: string; f: (this: { y: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ y: number; }'.
    Types of property 'y' are incompatible.
      Type 'string' is not assignable to type 'number'.
@@ -15,17 +10,7 @@
  thisTypeInFunctionsNegative.ts(72,3): error TS2554: Expected 1 arguments, but got 0.
  thisTypeInFunctionsNegative.ts(73,13): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
  thisTypeInFunctionsNegative.ts(74,17): error TS2554: Expected 1 arguments, but got 2.
-@@= skipped -81, +80 lines =@@
- thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot have a 'this' parameter.
-
-
-+!!! error TS-1: Pre-emit (63) and post-emit (64) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-+!!! related TS-1: The excess diagnostics are:
-+!!! related TS2304 thisTypeInFunctionsNegative.ts:171:21: Cannot find name 'deco'.
- ==== thisTypeInFunctionsNegative.ts (63 errors) ====
-     class C {
-         n: number;
-@@= skipped -100, +103 lines =@@
+@@= skipped -181, +180 lines =@@
  !!! error TS2684:     Type 'string' is not assignable to type 'number'.
      wrongPropertyName.f(13);
      ~~~~~~~~~~~~~~~~~

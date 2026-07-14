@@ -1,10 +1,6 @@
-error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 factory.ts(3,1): error TS1269: Cannot use 'export import' on a type or type-only namespace when 'isolatedModules' is enabled.
 
 
-!!! error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS2708 factory.ts:3:21: Cannot use namespace 'JSXInternal' as a value.
 ==== jsx.ts (0 errors) ====
     export namespace JSXInternal {
       export type HTMLAttributes = string

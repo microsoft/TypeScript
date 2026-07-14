@@ -1,10 +1,6 @@
-error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 classExpressionWithDecorator1.ts(1,9): error TS1206: Decorators are not valid here.
 
 
-!!! error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS2304 classExpressionWithDecorator1.ts:1:10: Cannot find name 'decorate'.
 ==== classExpressionWithDecorator1.ts (1 errors) ====
     var v = @decorate class C { static p = 1 };
             ~

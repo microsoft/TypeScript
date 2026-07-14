@@ -1,13 +1,6 @@
 --- old.manyCompilerErrorsInTheTwoFiles.errors.txt
 +++ new.manyCompilerErrorsInTheTwoFiles.errors.txt
-@@= skipped -0, +0 lines =@@
-+[91merror[0m[90m TS-1: [0mPre-emit (19) and post-emit (20) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-+
-+  [96ma.ts[0m:[93m1[0m:[93m15[0m - Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig.
-+    [7m1[0m const a =!@#!@$
-+    [7m [0m [96m              ~[0m
-+
- [96ma.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
+@@= skipped -1, +1 lines =@@
 
  [7m1[0m const a =!@#!@$
  [7m [0m [91m           ~~[0m
@@ -102,22 +95,7 @@
  [96mb.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'limit'.
 
  [7m3[0m limit
- [7m [0m [91m~~~~~[0m
-
-
-+!!! error TS-1: Pre-emit (19) and post-emit (20) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-+!!! related TS-1: The excess diagnostics are:
-+!!! related TS2592 a.ts:1:15: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig.
- ==== a.ts (16 errors) ====
-     const a =!@#!@$
-                ~~
-@@= skipped -124, +151 lines =@@
-     limit
-     ~~~~~
- !!! error TS2304: Cannot find name 'limit'.
--Found 19 errors in 2 files.
-+Found 20 errors in 2 files.
-
+@@= skipped -128, +146 lines =@@
  Errors  Files
      16  a.ts[90m:1[0m
       3  b.ts[90m:1[0m
