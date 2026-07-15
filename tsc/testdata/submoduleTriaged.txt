@@ -10,21 +10,11 @@ compiler/exportAssignmentMembersVisibleInAugmentation.errors.txt.diff
 # New issues in corsa with checker order dependence creating diagnostic instability in API scenarios
 ## ANY test with a TS-1 indicates a problem, not just these diffs - these are just new ones.
 compiler/accessorInferredReturnTypeErrorInReturnStatement.errors.txt.diff
-compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=auto).errors.txt.diff
-compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=force).errors.txt.diff
-compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=legacy).errors.txt.diff
-compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=auto).errors.txt.diff
-compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=force).errors.txt.diff
-compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=legacy).errors.txt.diff
 compiler/incorrectRecursiveMappedTypeConstraint.errors.txt.diff
 compiler/noUnusedLocals_selfReference.errors.txt.diff
 compiler/reverseMappedPartiallyInferableTypes.errors.txt.diff
 compiler/typeParameterWithInvalidConstraintType.errors.txt.diff
 conformance/jsdocDisallowedInTypescript.errors.txt.diff
-conformance/jsxJsxsCjsTransformKeyPropCustomImport(jsx=react-jsx).errors.txt.diff
-conformance/jsxJsxsCjsTransformKeyPropCustomImport(jsx=react-jsxdev).errors.txt.diff
-conformance/jsxJsxsCjsTransformKeyPropCustomImportPragma(jsx=react-jsx).errors.txt.diff
-conformance/jsxJsxsCjsTransformKeyPropCustomImportPragma(jsx=react-jsxdev).errors.txt.diff
 conformance/parserClassDeclaration1.errors.txt.diff
 conformance/parserClassDeclaration6.errors.txt.diff
 conformance/parserErrorRecovery_ModuleElement1.errors.txt.diff
@@ -34,7 +24,6 @@ conformance/recursiveMappedTypes.errors.txt.diff
 conformance/symbolProperty53.errors.txt.diff
 conformance/symbolProperty54.errors.txt.diff
 conformance/thisInObjectLiterals.errors.txt.diff
-conformance/tsxSpreadChildrenInvalidType(jsx=react-jsx,target=es2015).errors.txt.diff
 
 # previously submoduleAccepted baselines which have TS-1 errors that need fixing
 compiler/checkingObjectWithThisInNamePositionNoCrash.errors.txt.diff
