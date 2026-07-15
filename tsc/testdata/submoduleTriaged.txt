@@ -20,8 +20,6 @@ conformance/parserErrorRecovery_ModuleElement1.errors.txt.diff
 conformance/parserExportAssignment5.errors.txt.diff
 conformance/parserExportAssignment9.errors.txt.diff
 conformance/recursiveMappedTypes.errors.txt.diff
-conformance/symbolProperty53.errors.txt.diff
-conformance/symbolProperty54.errors.txt.diff
 conformance/thisInObjectLiterals.errors.txt.diff
 
 # previously submoduleAccepted baselines which have TS-1 errors that need fixing

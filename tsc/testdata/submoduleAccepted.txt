@@ -1428,3 +1428,6 @@ conformance/noInferRedeclaration.js.diff
 
 # Better isolatedDeclarations error issued on cast initializer before required parameter
 compiler/isolatedDeclarationsAddUndefined.errors.txt.diff
+
+# Better circularity handling in computed name checking
+compiler/blockScopedBindingUsedBeforeDef.errors.txt.diff

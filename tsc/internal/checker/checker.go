@@ -26665,8 +26665,9 @@ func (c *Checker) isKeyTypeIncluded(keyType *Type, include TypeFlags) bool {
 }
 
 func (c *Checker) checkComputedPropertyName(node *ast.Node) *Type {
-	links := c.typeNodeLinks.Get(node.Expression())
+	links := c.typeNodeLinks.Get(node)
 	if links.resolvedType == nil {
+		links.resolvedType = c.circularConstraintType
 		if (ast.IsTypeLiteralNode(node.Parent.Parent) || ast.IsClassLike(node.Parent.Parent) || ast.IsInterfaceDeclaration(node.Parent.Parent)) &&
 			ast.IsBinaryExpression(node.Expression()) && node.Expression().AsBinaryExpression().OperatorToken.Kind == ast.KindInKeyword &&
 			!ast.IsAccessor(node.Parent) {

@@ -1,10 +1,9 @@
-error TS-1: Pre-emit (1) and post-emit (0) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+symbolProperty54.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 
 
-!!! error TS-1: Pre-emit (1) and post-emit (0) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS2464 symbolProperty54.ts:2:5: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-==== symbolProperty54.ts (0 errors) ====
+==== symbolProperty54.ts (1 errors) ====
     var obj = {
         [Symbol.prototype]: 0
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
     };
