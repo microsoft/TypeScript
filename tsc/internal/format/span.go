@@ -55,7 +55,8 @@ func getScanStartPosition(enclosingNode *ast.Node, originalRange core.TextRange,
 		return start
 	}
 
-	precedingToken := astnav.FindPrecedingToken(sourceFile, originalRange.Pos())
+	// exclude JSDoc so the scan never starts inside a JSDoc comment
+	precedingToken := astnav.FindPrecedingTokenEx(sourceFile, originalRange.Pos(), nil /*startNode*/, true /*excludeJSDoc*/)
 	if precedingToken == nil {
 		// no preceding token found - start from the beginning of enclosing node
 		return enclosingNode.Pos()
