@@ -11,7 +11,6 @@ compiler/exportAssignmentMembersVisibleInAugmentation.errors.txt.diff
 ## ANY test with a TS-1 indicates a problem, not just these diffs - these are just new ones.
 compiler/accessorInferredReturnTypeErrorInReturnStatement.errors.txt.diff
 compiler/incorrectRecursiveMappedTypeConstraint.errors.txt.diff
-compiler/noUnusedLocals_selfReference.errors.txt.diff
 compiler/reverseMappedPartiallyInferableTypes.errors.txt.diff
 compiler/typeParameterWithInvalidConstraintType.errors.txt.diff
 conformance/jsdocDisallowedInTypescript.errors.txt.diff
