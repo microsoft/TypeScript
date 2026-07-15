@@ -5,16 +5,14 @@ propertiesOfGenericConstructorFunctions.js(15,13): error TS7009: 'new' expressio
 propertiesOfGenericConstructorFunctions.js(17,14): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 propertiesOfGenericConstructorFunctions.js(34,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 propertiesOfGenericConstructorFunctions.js(35,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-propertiesOfGenericConstructorFunctions.js(38,5): error TS7023: 'm1' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 propertiesOfGenericConstructorFunctions.js(38,24): error TS2339: Property 'x' does not exist on type '{ m1(): any; m2(): any; }'.
-propertiesOfGenericConstructorFunctions.js(39,5): error TS7023: 'm2' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 propertiesOfGenericConstructorFunctions.js(39,17): error TS2339: Property 'z' does not exist on type '{ m1(): any; m2(): any; }'.
 propertiesOfGenericConstructorFunctions.js(39,26): error TS2339: Property 'x' does not exist on type '{ m1(): any; m2(): any; }'.
 propertiesOfGenericConstructorFunctions.js(39,45): error TS2339: Property 'y' does not exist on type '{ m1(): any; m2(): any; }'.
 propertiesOfGenericConstructorFunctions.js(41,10): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 
-==== propertiesOfGenericConstructorFunctions.js (14 errors) ====
+==== propertiesOfGenericConstructorFunctions.js (12 errors) ====
     /**
      * @template {string} K
      * @template V
@@ -67,13 +65,9 @@ propertiesOfGenericConstructorFunctions.js(41,10): error TS7009: 'new' expressio
     }
     Cp.prototype = {
         m1() { return this.x },
-        ~~
-!!! error TS7023: 'm1' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
                            ~
 !!! error TS2339: Property 'x' does not exist on type '{ m1(): any; m2(): any; }'.
         m2() { this.z = this.x + 1; return this.y }
-        ~~
-!!! error TS7023: 'm2' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
                     ~
 !!! error TS2339: Property 'z' does not exist on type '{ m1(): any; m2(): any; }'.
                              ~

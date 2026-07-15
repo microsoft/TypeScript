@@ -9,7 +9,6 @@ compiler/exportAssignmentMembersVisibleInAugmentation.errors.txt.diff
 
 # New issues in corsa with checker order dependence creating diagnostic instability in API scenarios
 ## ANY test with a TS-1 indicates a problem, not just these diffs - these are just new ones.
-compiler/accessorInferredReturnTypeErrorInReturnStatement.errors.txt.diff
 compiler/incorrectRecursiveMappedTypeConstraint.errors.txt.diff
 compiler/reverseMappedPartiallyInferableTypes.errors.txt.diff
 compiler/typeParameterWithInvalidConstraintType.errors.txt.diff
@@ -20,10 +19,8 @@ conformance/parserErrorRecovery_ModuleElement1.errors.txt.diff
 conformance/parserExportAssignment5.errors.txt.diff
 conformance/parserExportAssignment9.errors.txt.diff
 conformance/recursiveMappedTypes.errors.txt.diff
-conformance/thisInObjectLiterals.errors.txt.diff
 
 # previously submoduleAccepted baselines which have TS-1 errors that need fixing
-compiler/checkingObjectWithThisInNamePositionNoCrash.errors.txt.diff
 compiler/constructorWithIncompleteTypeAnnotation.errors.txt.diff
 compiler/reachabilityChecksNoCrash1.errors.txt.diff
 conformance/mappedTypeProperties.errors.txt.diff

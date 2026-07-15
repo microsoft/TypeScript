@@ -1429,5 +1429,10 @@ conformance/noInferRedeclaration.js.diff
 # Better isolatedDeclarations error issued on cast initializer before required parameter
 compiler/isolatedDeclarationsAddUndefined.errors.txt.diff
 
+# Fixed bogus circularity error caused by reporting missing `this.` member in a return expression
+compiler/checkingObjectWithThisInNamePositionNoCrash.errors.txt.diff
+compiler/accessorInferredReturnTypeErrorInReturnStatement.errors.txt.diff
+conformance/thisInObjectLiterals.errors.txt.diff
+
 # Better circularity handling in computed name checking
 compiler/blockScopedBindingUsedBeforeDef.errors.txt.diff

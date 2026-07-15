@@ -374,6 +374,11 @@ type TypeNodeLinks struct {
 	outerTypeParameters []*Type // Outer type parameters of anonymous object type
 }
 
+type ComputedNameNodeLinks struct {
+	hasName *bool  // If the node has a computable name
+	name    string // Resolved name associated with the type of the node
+}
+
 // Links for enum members
 
 type EnumMemberLinks struct {

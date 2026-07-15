@@ -1,11 +1,7 @@
-error TS-1: Pre-emit (3) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 thisInObjectLiterals.ts(2,5): error TS2564: Property 't' has no initializer and is not definitely assigned in the constructor.
 thisInObjectLiterals.ts(15,21): error TS2339: Property 'spaaace' does not exist on type '{ f(): any; }'.
 
 
-!!! error TS-1: Pre-emit (3) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS7023 thisInObjectLiterals.ts:14:5: 'f' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 ==== thisInObjectLiterals.ts (2 errors) ====
     class MyClass {
         t: number;
