@@ -74,13 +74,12 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
     private sourceFile: SourceFileInfo;
 
     constructor(view: DataView, index: number, parent: RemoteNode, sourceFile: SourceFileInfo, offsetNodes: number) {
-        super();
+        super(view.getUint32(offsetNodes + index * NODE_LEN + NODE_OFFSET_DATA, true));
         this.view = view;
         this.index = index;
         this.parent = parent;
         this.sourceFile = sourceFile;
         this._byteIndex = offsetNodes + index * NODE_LEN;
-        this.length = this.data;
         this._cursorNodeIndex = index + 1;
 
         const length = this.length;

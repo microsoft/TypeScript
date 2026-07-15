@@ -1549,13 +1549,12 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(`    private sourceFile: SourceFileInfo;`);
     w.write(``);
     w.write(`    constructor(view: DataView, index: number, parent: RemoteNode, sourceFile: SourceFileInfo, offsetNodes: number) {`);
-    w.write(`        super();`);
+    w.write(`        super(view.getUint32(offsetNodes + index * NODE_LEN + NODE_OFFSET_DATA, true));`);
     w.write(`        this.view = view;`);
     w.write(`        this.index = index;`);
     w.write(`        this.parent = parent;`);
     w.write(`        this.sourceFile = sourceFile;`);
     w.write(`        this._byteIndex = offsetNodes + index * NODE_LEN;`);
-    w.write(`        this.length = this.data;`);
     w.write(`        this._cursorNodeIndex = index + 1;`);
     w.write(``);
     w.write(`        const length = this.length;`);
