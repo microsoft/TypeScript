@@ -135,6 +135,21 @@ export interface UpdateSnapshotParams extends LSPUpdateSnapshotParams {
 }
 
 /**
+ * Parameters for updateTemporarySnapshot. Unlike {@link UpdateSnapshotParams}, this
+ * only overrides a single file's content: it does not open or close projects/files
+ * and does not advance the session's latest snapshot. The resulting snapshot is only
+ * for the caller's own queries and must be released when done.
+ */
+export interface UpdateTemporarySnapshotParams {
+    /** The current client snapshot on which to layer the temporary update. */
+    snapshot: number;
+    /** The file whose content is temporarily overridden. */
+    file: DocumentIdentifier;
+    /** The temporary content for the file. */
+    newText: string;
+}
+
+/**
  * Builds the wire request for updateSnapshot, applying the deprecated `openProject`
  * compatibility shim: a single `openProject` is folded into `openProjects` and is
  * never sent on the wire.

@@ -266,7 +266,7 @@ export function runBenchmarks(options?: { filter?: string; singleIteration?: boo
         tsFile = undefined!;
     }
 
-    function all(...fns: (() => void | void)[]) {
+    function all(...fns: (() => void)[]) {
         return () => {
             for (const fn of fns) {
                 fn();

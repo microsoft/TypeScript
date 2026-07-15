@@ -159,6 +159,24 @@ function removeAsyncAwaitAndPromise(source: string, fileName: string): string {
     const sourceFile = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true);
     const edits: Edit[] = [];
 
+    function getUnwrappedPromiseType(node: ts.TypeNode): ts.TypeNode {
+        let current = node;
+        while (
+            ts.isTypeReferenceNode(current) &&
+            ts.isIdentifier(current.typeName) &&
+            current.typeName.text === "Promise" &&
+            current.typeArguments?.length === 1
+        ) {
+            current = current.typeArguments[0];
+        }
+        return current;
+    }
+
+    function getUnwrappedTypeText(node: ts.TypeNode): string {
+        const unwrapped = getUnwrappedPromiseType(node);
+        return source.slice(unwrapped.getStart(sourceFile), unwrapped.end);
+    }
+
     function visit(node: ts.Node): void {
         // Remove `async` modifier from function-like declarations
         if (
@@ -196,13 +214,41 @@ function removeAsyncAwaitAndPromise(source: string, fileName: string): string {
             node.typeArguments &&
             node.typeArguments.length === 1
         ) {
-            const innerType = node.typeArguments[0];
-            const innerText = source.slice(innerType.getStart(sourceFile), innerType.end);
+            const innerText = getUnwrappedTypeText(node);
+
+            if (ts.isUnionTypeNode(node.parent)) {
+                const unionTypes = node.parent.types;
+                const currentIndex = unionTypes.indexOf(node);
+                const matchingNonPromiseIndex = unionTypes.findIndex(type => type === getUnwrappedPromiseType(type) && getUnwrappedTypeText(type) === innerText);
+                const representativeIndex = matchingNonPromiseIndex !== -1
+                    ? matchingNonPromiseIndex
+                    : unionTypes.findIndex(type => getUnwrappedTypeText(type) === innerText);
+
+                if (representativeIndex !== currentIndex) {
+                    if (currentIndex < representativeIndex) {
+                        edits.push({
+                            start: node.getStart(sourceFile),
+                            end: unionTypes[currentIndex + 1].getStart(sourceFile),
+                            newText: "",
+                        });
+                    }
+                    else {
+                        edits.push({
+                            start: unionTypes[currentIndex - 1].end,
+                            end: node.end,
+                            newText: "",
+                        });
+                    }
+                    return;
+                }
+            }
+
             edits.push({
                 start: node.getStart(sourceFile),
                 end: node.end,
                 newText: innerText,
             });
+            return;
         }
 
         ts.forEachChild(node, visit);

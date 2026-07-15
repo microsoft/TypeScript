@@ -69,6 +69,7 @@ const (
 
 	MethodInitialize               Method = "initialize"
 	MethodUpdateSnapshot           Method = "updateSnapshot"
+	MethodUpdateTemporarySnapshot  Method = "updateTemporarySnapshot"
 	MethodParseConfigFile          Method = "parseConfigFile"
 	MethodGetDefaultProjectForFile Method = "getDefaultProjectForFile"
 	MethodGetSymbolAtPosition      Method = "getSymbolAtPosition"
@@ -330,6 +331,17 @@ type UpdateSnapshotParams struct {
 	CloseFiles []DocumentIdentifier `json:"closeFiles,omitempty"`
 }
 
+// UpdateTemporarySnapshotParams are the parameters for creating a temporary
+// snapshot that overrides a single file's content.
+type UpdateTemporarySnapshotParams struct {
+	// Snapshot is the current client snapshot on which to layer the temporary update.
+	Snapshot SnapshotID `json:"snapshot"`
+	// File identifies the file whose content is temporarily overridden.
+	File DocumentIdentifier `json:"file"`
+	// NewText is the temporary content for the file.
+	NewText string `json:"newText"`
+}
+
 // ProjectFileChanges describes what source files changed within a single project.
 type ProjectFileChanges struct {
 	// ChangedFiles lists source file paths whose content differs.
@@ -365,6 +377,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodRelease:                  unmarshallerFor[ReleaseParams],
 	MethodInitialize:               noParams,
 	MethodUpdateSnapshot:           unmarshallerFor[UpdateSnapshotParams],
+	MethodUpdateTemporarySnapshot:  unmarshallerFor[UpdateTemporarySnapshotParams],
 	MethodParseConfigFile:          unmarshallerFor[ParseConfigFileParams],
 	MethodGetDefaultProjectForFile: unmarshallerFor[GetDefaultProjectForFileParams],
 	MethodGetSourceFile:            unmarshallerFor[GetSourceFileParams],

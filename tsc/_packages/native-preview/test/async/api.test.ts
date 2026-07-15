@@ -5361,6 +5361,49 @@ describe("Timing", () => {
     });
 });
 
+describe("runWithTemporaryFileUpdate", () => {
+    test("temporary file update is visible in the callback and reverted afterward", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const x: number = 1;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+
+            // The original content type-checks cleanly.
+            const baseDiags = await project.program.getSemanticDiagnostics("/src/index.ts");
+            assert.equal(baseDiags.length, 0);
+
+            // Keep a newer snapshot active to verify any active snapshot can be the base.
+            const latestSnapshot = await api.updateSnapshot();
+            assert.notEqual(latestSnapshot.id, snapshot.id);
+
+            // Inside the callback, the file has the temporary (erroneous) content.
+            let errorCount = -1;
+            await api.runWithTemporaryFileUpdate(snapshot, "/src/index.ts", `export const x: string = 1;`, async tempSnapshot => {
+                const tempProject = tempSnapshot.getProject("/tsconfig.json")!;
+                const diags = await tempProject.program.getSemanticDiagnostics("/src/index.ts");
+                errorCount = diags.length;
+            });
+            assert.ok(errorCount > 0, "temporary content should produce a semantic error inside the callback");
+
+            // The original snapshot is unaffected by the temporary update.
+            const afterDiags = await project.program.getSemanticDiagnostics("/src/index.ts");
+            assert.equal(afterDiags.length, 0);
+
+            // Subsequent regular updates still work and diff against the real latest snapshot.
+            const snapshot2 = await api.updateSnapshot();
+            const project2 = snapshot2.getProject("/tsconfig.json")!;
+            const diags2 = await project2.program.getSemanticDiagnostics("/src/index.ts");
+            assert.equal(diags2.length, 0);
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
 function spawnAPI(files: Record<string, string> = { ...defaultFiles }) {
     return new API({
         cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
