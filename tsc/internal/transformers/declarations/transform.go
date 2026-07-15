@@ -1222,7 +1222,8 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		if tx.needsDeclare {
 			mods = append(mods, tx.Factory().NewModifier(ast.KindDeclareKeyword))
 		}
-		funcDecl := tx.transformFunctionLikeToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods))
+		fullSignatureType := assignment.Type()
+		funcDecl := tx.transformFunctionLikeToDeclaration(unwrapped, newId, tx.Factory().NewModifierList(mods), fullSignatureType)
 		tx.preserveJsDoc(funcDecl, input)
 		// Reuse the same name node for the export so unique names resolve consistently
 		exportAssignment := tx.Factory().NewExportAssignment(nil, isExportEquals, nil, newId)
@@ -1261,18 +1262,30 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 	return tx.Factory().NewSyntaxList([]*ast.Node{statement, exportAssignment})
 }
 
-func (tx *DeclarationTransformer) transformFunctionLikeToDeclaration(unwrapped *ast.Node, funcName *ast.Node, mods *ast.ModifierList) *ast.Node {
+func (tx *DeclarationTransformer) transformFunctionLikeToDeclaration(unwrapped *ast.Node, funcName *ast.Node, mods *ast.ModifierList, fullSignatureType *ast.Node) *ast.Node {
 	d := unwrapped.FunctionLikeData()
-	return tx.Factory().NewFunctionDeclaration(
-		mods,
-		nil,
-		funcName,
-		tx.ensureTypeParams(unwrapped, d.TypeParameters),
-		tx.updateParamList(unwrapped, d.Parameters),
-		tx.ensureType(unwrapped, false),
-		tx.Visitor().VisitNode(d.FullSignature),
-		nil,
-	)
+	sig := d.FullSignature
+	if sig == nil {
+		sig = fullSignatureType
+	}
+	if sig == nil {
+		return tx.Factory().NewFunctionDeclaration(
+			mods,
+			nil,
+			funcName,
+			tx.ensureTypeParams(unwrapped, d.TypeParameters),
+			tx.updateParamList(unwrapped, d.Parameters),
+			tx.ensureType(unwrapped, false),
+			tx.Visitor().VisitNode(sig),
+			nil,
+		)
+	} else {
+		// If a full signature type node is present, emit as a variable statement to reuse it
+		return tx.Factory().NewVariableStatement(
+			mods,
+			tx.Factory().NewVariableDeclarationList(tx.Factory().NewNodeList([]*ast.Node{tx.Factory().NewVariableDeclaration(funcName, nil, tx.Visitor().VisitNode(sig), nil)}), ast.NodeFlagsConst),
+		)
+	}
 }
 
 func (tx *DeclarationTransformer) transformBinaryExpressionToExportDeclaration(input *ast.Node, name *ast.Node) *ast.Node {
