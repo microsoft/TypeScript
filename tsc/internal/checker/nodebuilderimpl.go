@@ -497,7 +497,7 @@ func (b *NodeBuilderImpl) canReuseExistingJSTypeNode(existing *ast.TypeNode, t *
 }
 
 func (b *NodeBuilderImpl) tryGetResolvedSymbolFromTypeNode(node *ast.Node) *ast.Symbol {
-	if node == nil {
+	if node == nil || node.Parent == nil {
 		return nil
 	}
 	b.ch.getTypeFromTypeNode(node)
@@ -2857,6 +2857,9 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 
 func (b *NodeBuilderImpl) getTypeFromTypeNode(node *ast.TypeNode, noMappedTypes bool) *Type {
 	// !!! noMappedTypes optional param support
+	if node.Parent == nil {
+		return b.ch.errorType
+	}
 	t := b.ch.getTypeFromTypeNode(node)
 	if b.ctx.mapper == nil {
 		return t
