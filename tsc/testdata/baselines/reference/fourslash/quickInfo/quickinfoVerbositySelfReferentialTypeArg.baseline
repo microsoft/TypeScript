@@ -1,0 +1,52 @@
+// === QuickInfo ===
+=== /quickinfoVerbositySelfReferentialTypeArg.ts ===
+// type ContainerChild = Container;
+// interface Container<C = ContainerChild> {
+//     parent: Container;
+// }
+// declare const x: Container;
+// x;
+// ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const x: {
+// |     parent: Container<{
+// |         parent: Container;
+// |     }>;
+// | }
+// | ```
+// | 
+// | (verbosity level: 3)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 129,
+      "LSPosition": {
+        "line": 5,
+        "character": 1
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nconst x: {\n    parent: Container<{\n        parent: Container;\n    }>;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 5,
+            "character": 0
+          },
+          "end": {
+            "line": 5,
+            "character": 1
+          }
+        }
+      },
+      "verbosityLevel": 3
+    }
+  }
+]
