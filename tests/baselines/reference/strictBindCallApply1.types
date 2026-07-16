@@ -198,12 +198,12 @@ let a00 = foo.apply(undefined, [10, "hello"]);
 >    : ^^^^^^
 >foo.apply(undefined, [10, "hello"]) : string
 >                                    : ^^^^^^
->foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >foo : (a: number, b: string) => string
 >    : ^ ^^      ^^ ^^      ^^^^^      
->apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >[10, "hello"] : [number, string]
@@ -218,12 +218,12 @@ let a01 = foo.apply(undefined, [10]);  // Error
 >    : ^^^^^^
 >foo.apply(undefined, [10]) : string
 >                           : ^^^^^^
->foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >foo : (a: number, b: string) => string
 >    : ^ ^^      ^^ ^^      ^^^^^      
->apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >[10] : [number]
@@ -236,12 +236,12 @@ let a02 = foo.apply(undefined, [10, 20]);  // Error
 >    : ^^^^^^
 >foo.apply(undefined, [10, 20]) : string
 >                               : ^^^^^^
->foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >foo : (a: number, b: string) => string
 >    : ^ ^^      ^^ ^^      ^^^^^      
->apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >[10, 20] : [number, number]
@@ -256,12 +256,12 @@ let a03 = foo.apply(undefined, [10, "hello", 30]);  // Error
 >    : ^^^^^^
 >foo.apply(undefined, [10, "hello", 30]) : string
 >                                        : ^^^^^^
->foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >foo : (a: number, b: string) => string
 >    : ^ ^^      ^^ ^^      ^^^^^      
->apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >[10, "hello", 30] : [number, string, number]
@@ -585,16 +585,16 @@ let a10 = c.foo.apply(c, [10, "hello"]);
 >    : ^^^^^^
 >c.foo.apply(c, [10, "hello"]) : string
 >                              : ^^^^^^
->c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >c.foo : (this: C, a: number, b: string) => string
 >      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
 >  : ^
 >foo : (this: C, a: number, b: string) => string
 >    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
->apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >c : C
 >  : ^
 >[10, "hello"] : [number, string]
@@ -609,16 +609,16 @@ let a11 = c.foo.apply(c, [10]);  // Error
 >    : ^^^^^^
 >c.foo.apply(c, [10]) : string
 >                     : ^^^^^^
->c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >c.foo : (this: C, a: number, b: string) => string
 >      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
 >  : ^
 >foo : (this: C, a: number, b: string) => string
 >    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
->apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >c : C
 >  : ^
 >[10] : [number]
@@ -631,16 +631,16 @@ let a12 = c.foo.apply(c, [10, 20]);  // Error
 >    : ^^^^^^
 >c.foo.apply(c, [10, 20]) : string
 >                         : ^^^^^^
->c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >c.foo : (this: C, a: number, b: string) => string
 >      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
 >  : ^
 >foo : (this: C, a: number, b: string) => string
 >    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
->apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >c : C
 >  : ^
 >[10, 20] : [number, number]
@@ -655,16 +655,16 @@ let a13 = c.foo.apply(c, [10, "hello", 30]);  // Error
 >    : ^^^^^^
 >c.foo.apply(c, [10, "hello", 30]) : string
 >                                  : ^^^^^^
->c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >c.foo : (this: C, a: number, b: string) => string
 >      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
 >  : ^
 >foo : (this: C, a: number, b: string) => string
 >    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
->apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >c : C
 >  : ^
 >[10, "hello", 30] : [number, string, number]
@@ -681,16 +681,16 @@ let a14 = c.foo.apply(undefined, [10, "hello"]);  // Error
 >    : ^^^^^^
 >c.foo.apply(undefined, [10, "hello"]) : string
 >                                      : ^^^^^^
->c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>c.foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>            : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >c.foo : (this: C, a: number, b: string) => string
 >      : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
 >c : C
 >  : ^
 >foo : (this: C, a: number, b: string) => string
 >    : ^    ^^^^^ ^^      ^^ ^^      ^^^^^      
->apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >[10, "hello"] : [number, string]

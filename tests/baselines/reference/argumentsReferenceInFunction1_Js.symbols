@@ -44,9 +44,9 @@ const debuglog = function() {
 >debuglog : Symbol(debuglog, Decl(index.js, 11, 5))
 
   return format.apply(null, arguments);
->format.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>format.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >format : Symbol(format, Decl(index.js, 0, 5))
->apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >arguments : Symbol(arguments)
 
 };

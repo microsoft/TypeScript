@@ -1,0 +1,103 @@
+//// [tests/cases/conformance/functions/applyArrayLike.ts] ////
+
+=== applyArrayLike.ts ===
+// Repro for #61835: Function.prototype.apply accepts an array-like second argument
+// per the ECMAScript spec (CreateListFromArrayLike), so CallableFunction.apply must
+// accept ArrayLike<T>, not just T[]. These cases work at runtime but previously errored.
+
+// --- Array-likes that should now be accepted ---
+
+declare const u8: Uint8Array;
+>u8 : Symbol(u8, Decl(applyArrayLike.ts, 6, 13))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const s1: string = String.fromCharCode.apply(null, u8); // Ok (Uint8Array is ArrayLike<number>)
+>s1 : Symbol(s1, Decl(applyArrayLike.ts, 7, 5))
+>String.fromCharCode.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+>fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>u8 : Symbol(u8, Decl(applyArrayLike.ts, 6, 13))
+
+const forwardArguments: (...args: unknown[]) => void = function () {
+>forwardArguments : Symbol(forwardArguments, Decl(applyArrayLike.ts, 9, 5))
+>args : Symbol(args, Decl(applyArrayLike.ts, 9, 25))
+
+    console.log.apply(null, arguments); // Ok (IArguments is array-like)
+>console.log.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+
+};
+forwardArguments(1, 2, 3);
+>forwardArguments : Symbol(forwardArguments, Decl(applyArrayLike.ts, 9, 5))
+
+declare function variadic(...xs: number[]): void;
+>variadic : Symbol(variadic, Decl(applyArrayLike.ts, 12, 26))
+>xs : Symbol(xs, Decl(applyArrayLike.ts, 14, 26))
+
+declare const arrayLikeNumbers: ArrayLike<number>;
+>arrayLikeNumbers : Symbol(arrayLikeNumbers, Decl(applyArrayLike.ts, 15, 13))
+>ArrayLike : Symbol(ArrayLike, Decl(lib.es5.d.ts, --, --))
+
+variadic.apply(undefined, arrayLikeNumbers); // Ok
+>variadic.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>variadic : Symbol(variadic, Decl(applyArrayLike.ts, 12, 26))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+>arrayLikeNumbers : Symbol(arrayLikeNumbers, Decl(applyArrayLike.ts, 15, 13))
+
+// A plain array/tuple still works via the arity-checked overload.
+declare function foo(a: number, b: string): string;
+>foo : Symbol(foo, Decl(applyArrayLike.ts, 16, 44))
+>a : Symbol(a, Decl(applyArrayLike.ts, 19, 21))
+>b : Symbol(b, Decl(applyArrayLike.ts, 19, 31))
+
+const a00 = foo.apply(undefined, [10, "hello"]); // Ok
+>a00 : Symbol(a00, Decl(applyArrayLike.ts, 20, 5))
+>foo.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(applyArrayLike.ts, 16, 44))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+// --- Regression guards: strictBindCallApply arity/element checks must be preserved ---
+
+const a01 = foo.apply(undefined, [10]); // Error: too few elements
+>a01 : Symbol(a01, Decl(applyArrayLike.ts, 24, 5))
+>foo.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(applyArrayLike.ts, 16, 44))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+const a02 = foo.apply(undefined, [10, 20]); // Error: wrong element type
+>a02 : Symbol(a02, Decl(applyArrayLike.ts, 25, 5))
+>foo.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(applyArrayLike.ts, 16, 44))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+const a03 = foo.apply(undefined, [10, "hello", 30]); // Error: too many elements
+>a03 : Symbol(a03, Decl(applyArrayLike.ts, 26, 5))
+>foo.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(applyArrayLike.ts, 16, 44))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+// An array-like of the wrong element type must still be rejected.
+declare const arrayLikeStrings: ArrayLike<string>;
+>arrayLikeStrings : Symbol(arrayLikeStrings, Decl(applyArrayLike.ts, 29, 13))
+>ArrayLike : Symbol(ArrayLike, Decl(lib.es5.d.ts, --, --))
+
+const bad = String.fromCharCode.apply(null, arrayLikeStrings); // Error: string is not number
+>bad : Symbol(bad, Decl(applyArrayLike.ts, 30, 5))
+>String.fromCharCode.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+>fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrayLikeStrings : Symbol(arrayLikeStrings, Decl(applyArrayLike.ts, 29, 13))
+

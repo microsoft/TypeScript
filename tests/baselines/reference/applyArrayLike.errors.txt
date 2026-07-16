@@ -1,0 +1,91 @@
+applyArrayLike.ts(25,34): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(this: (this: undefined, a: number, b: string) => string, thisArg: undefined, args: [a: number, b: string]): string', gave the following error.
+    Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+      Source has 1 element(s) but target requires 2.
+  Overload 2 of 3, '(this: (this: undefined, a: number, b: string) => string, thisArg: undefined, args: [a: number, b: string]): string', gave the following error.
+    Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+      Source has 1 element(s) but target requires 2.
+applyArrayLike.ts(26,39): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(this: (this: undefined, a: number, b: string) => string, thisArg: undefined, args: [a: number, b: string]): string', gave the following error.
+    Type 'number' is not assignable to type 'string'.
+  Overload 2 of 3, '(this: (this: undefined, a: number, b: string) => string, thisArg: undefined, args: [a: number, b: string]): string', gave the following error.
+    Type 'number' is not assignable to type 'string'.
+applyArrayLike.ts(27,34): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(this: (this: undefined, a: number, b: string) => string, thisArg: undefined, args: [a: number, b: string]): string', gave the following error.
+    Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+      Source has 3 element(s) but target allows only 2.
+  Overload 2 of 3, '(this: (this: undefined, a: number, b: string) => string, thisArg: undefined, args: [a: number, b: string]): string', gave the following error.
+    Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+      Source has 3 element(s) but target allows only 2.
+applyArrayLike.ts(31,45): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(this: (this: null, ...args: number[]) => string, thisArg: null, args: number[]): string', gave the following error.
+    Argument of type 'ArrayLike<string>' is not assignable to parameter of type 'number[]'.
+      Type 'ArrayLike<string>' is missing the following properties from type 'number[]': pop, push, concat, join, and 24 more.
+  Overload 2 of 3, '(this: (this: null, ...args: number[]) => string, thisArg: null, args: ArrayLike<number>): string', gave the following error.
+    Argument of type 'ArrayLike<string>' is not assignable to parameter of type 'ArrayLike<number>'.
+      Type 'string' is not assignable to type 'number'.
+
+
+==== applyArrayLike.ts (4 errors) ====
+    // Repro for #61835: Function.prototype.apply accepts an array-like second argument
+    // per the ECMAScript spec (CreateListFromArrayLike), so CallableFunction.apply must
+    // accept ArrayLike<T>, not just T[]. These cases work at runtime but previously errored.
+    
+    // --- Array-likes that should now be accepted ---
+    
+    declare const u8: Uint8Array;
+    const s1: string = String.fromCharCode.apply(null, u8); // Ok (Uint8Array is ArrayLike<number>)
+    
+    const forwardArguments: (...args: unknown[]) => void = function () {
+        console.log.apply(null, arguments); // Ok (IArguments is array-like)
+    };
+    forwardArguments(1, 2, 3);
+    
+    declare function variadic(...xs: number[]): void;
+    declare const arrayLikeNumbers: ArrayLike<number>;
+    variadic.apply(undefined, arrayLikeNumbers); // Ok
+    
+    // A plain array/tuple still works via the arity-checked overload.
+    declare function foo(a: number, b: string): string;
+    const a00 = foo.apply(undefined, [10, "hello"]); // Ok
+    
+    // --- Regression guards: strictBindCallApply arity/element checks must be preserved ---
+    
+    const a01 = foo.apply(undefined, [10]); // Error: too few elements
+                                     ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(this: (this: undefined, a: number, b: string) => string, thisArg: undefined, args: [a: number, b: string]): string', gave the following error.
+!!! error TS2769:     Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+!!! error TS2769:       Source has 1 element(s) but target requires 2.
+!!! error TS2769:   Overload 2 of 3, '(this: (this: undefined, a: number, b: string) => string, thisArg: undefined, args: [a: number, b: string]): string', gave the following error.
+!!! error TS2769:     Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
+!!! error TS2769:       Source has 1 element(s) but target requires 2.
+    const a02 = foo.apply(undefined, [10, 20]); // Error: wrong element type
+                                          ~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(this: (this: undefined, a: number, b: string) => string, thisArg: undefined, args: [a: number, b: string]): string', gave the following error.
+!!! error TS2769:     Type 'number' is not assignable to type 'string'.
+!!! error TS2769:   Overload 2 of 3, '(this: (this: undefined, a: number, b: string) => string, thisArg: undefined, args: [a: number, b: string]): string', gave the following error.
+!!! error TS2769:     Type 'number' is not assignable to type 'string'.
+    const a03 = foo.apply(undefined, [10, "hello", 30]); // Error: too many elements
+                                     ~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(this: (this: undefined, a: number, b: string) => string, thisArg: undefined, args: [a: number, b: string]): string', gave the following error.
+!!! error TS2769:     Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+!!! error TS2769:       Source has 3 element(s) but target allows only 2.
+!!! error TS2769:   Overload 2 of 3, '(this: (this: undefined, a: number, b: string) => string, thisArg: undefined, args: [a: number, b: string]): string', gave the following error.
+!!! error TS2769:     Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
+!!! error TS2769:       Source has 3 element(s) but target allows only 2.
+    
+    // An array-like of the wrong element type must still be rejected.
+    declare const arrayLikeStrings: ArrayLike<string>;
+    const bad = String.fromCharCode.apply(null, arrayLikeStrings); // Error: string is not number
+                                                ~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(this: (this: null, ...args: number[]) => string, thisArg: null, args: number[]): string', gave the following error.
+!!! error TS2769:     Argument of type 'ArrayLike<string>' is not assignable to parameter of type 'number[]'.
+!!! error TS2769:       Type 'ArrayLike<string>' is missing the following properties from type 'number[]': pop, push, concat, join, and 24 more.
+!!! error TS2769:   Overload 2 of 3, '(this: (this: null, ...args: number[]) => string, thisArg: null, args: ArrayLike<number>): string', gave the following error.
+!!! error TS2769:     Argument of type 'ArrayLike<string>' is not assignable to parameter of type 'ArrayLike<number>'.
+!!! error TS2769:       Type 'string' is not assignable to type 'number'.
+    

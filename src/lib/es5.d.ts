@@ -325,6 +325,16 @@ interface CallableFunction extends Function {
     apply<T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R;
 
     /**
+     * Calls the function with the specified object as the this value and the elements of the specified
+     * array-like object as the arguments. Real arrays and tuples are matched by the overload above, which
+     * checks their arity against the parameter list; this overload additionally accepts non-array
+     * array-likes (e.g. `arguments`, typed arrays, DOM collections) as permitted by the ECMAScript spec.
+     * @param thisArg The object to be used as the this object.
+     * @param args An array-like of argument values to be passed to the function.
+     */
+    apply<T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R;
+
+    /**
      * Calls the function with the specified object as the this value and the specified rest arguments as the arguments.
      * @param thisArg The object to be used as the this object.
      * @param args Argument values to be passed to the function.

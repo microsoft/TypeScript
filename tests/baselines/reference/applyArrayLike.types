@@ -1,0 +1,206 @@
+//// [tests/cases/conformance/functions/applyArrayLike.ts] ////
+
+=== applyArrayLike.ts ===
+// Repro for #61835: Function.prototype.apply accepts an array-like second argument
+// per the ECMAScript spec (CreateListFromArrayLike), so CallableFunction.apply must
+// accept ArrayLike<T>, not just T[]. These cases work at runtime but previously errored.
+
+// --- Array-likes that should now be accepted ---
+
+declare const u8: Uint8Array;
+>u8 : Uint8Array<ArrayBuffer>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+
+const s1: string = String.fromCharCode.apply(null, u8); // Ok (Uint8Array is ArrayLike<number>)
+>s1 : string
+>   : ^^^^^^
+>String.fromCharCode.apply(null, u8) : string
+>                                    : ^^^^^^
+>String.fromCharCode.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>                          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>String.fromCharCode : (...codes: number[]) => string
+>                    : ^^^^     ^^        ^^^^^      
+>String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>fromCharCode : (...codes: number[]) => string
+>             : ^^^^     ^^        ^^^^^      
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>u8 : Uint8Array<ArrayBuffer>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+
+const forwardArguments: (...args: unknown[]) => void = function () {
+>forwardArguments : (...args: unknown[]) => void
+>                 : ^^^^    ^^         ^^^^^    
+>args : unknown[]
+>     : ^^^^^^^^^
+>function () {    console.log.apply(null, arguments); // Ok (IArguments is array-like)} : () => void
+>                                                                                       : ^^^^^^^^^^
+
+    console.log.apply(null, arguments); // Ok (IArguments is array-like)
+>console.log.apply(null, arguments) : void
+>                                   : ^^^^
+>console.log.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>                  : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>arguments : IArguments
+>          : ^^^^^^^^^^
+
+};
+forwardArguments(1, 2, 3);
+>forwardArguments(1, 2, 3) : void
+>                          : ^^^^
+>forwardArguments : (...args: unknown[]) => void
+>                 : ^^^^    ^^         ^^^^^    
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+declare function variadic(...xs: number[]): void;
+>variadic : (...xs: number[]) => void
+>         : ^^^^  ^^        ^^^^^    
+>xs : number[]
+>   : ^^^^^^^^
+
+declare const arrayLikeNumbers: ArrayLike<number>;
+>arrayLikeNumbers : ArrayLike<number>
+>                 : ^^^^^^^^^^^^^^^^^
+
+variadic.apply(undefined, arrayLikeNumbers); // Ok
+>variadic.apply(undefined, arrayLikeNumbers) : void
+>                                            : ^^^^
+>variadic.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>               : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>variadic : (...xs: number[]) => void
+>         : ^^^^  ^^        ^^^^^    
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>arrayLikeNumbers : ArrayLike<number>
+>                 : ^^^^^^^^^^^^^^^^^
+
+// A plain array/tuple still works via the arity-checked overload.
+declare function foo(a: number, b: string): string;
+>foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
+>a : number
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+
+const a00 = foo.apply(undefined, [10, "hello"]); // Ok
+>a00 : string
+>    : ^^^^^^
+>foo.apply(undefined, [10, "hello"]) : string
+>                                    : ^^^^^^
+>foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>[10, "hello"] : [number, string]
+>              : ^^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+// --- Regression guards: strictBindCallApply arity/element checks must be preserved ---
+
+const a01 = foo.apply(undefined, [10]); // Error: too few elements
+>a01 : string
+>    : ^^^^^^
+>foo.apply(undefined, [10]) : string
+>                           : ^^^^^^
+>foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>[10] : [number]
+>     : ^^^^^^^^
+>10 : 10
+>   : ^^
+
+const a02 = foo.apply(undefined, [10, 20]); // Error: wrong element type
+>a02 : string
+>    : ^^^^^^
+>foo.apply(undefined, [10, 20]) : string
+>                               : ^^^^^^
+>foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>[10, 20] : [number, number]
+>         : ^^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+>20 : 20
+>   : ^^
+
+const a03 = foo.apply(undefined, [10, "hello", 30]); // Error: too many elements
+>a03 : string
+>    : ^^^^^^
+>foo.apply(undefined, [10, "hello", 30]) : string
+>                                        : ^^^^^^
+>foo.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>foo : (a: number, b: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>[10, "hello", 30] : [number, string, number]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>30 : 30
+>   : ^^
+
+// An array-like of the wrong element type must still be rejected.
+declare const arrayLikeStrings: ArrayLike<string>;
+>arrayLikeStrings : ArrayLike<string>
+>                 : ^^^^^^^^^^^^^^^^^
+
+const bad = String.fromCharCode.apply(null, arrayLikeStrings); // Error: string is not number
+>bad : string
+>    : ^^^^^^
+>String.fromCharCode.apply(null, arrayLikeStrings) : string
+>                                                  : ^^^^^^
+>String.fromCharCode.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>                          : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>String.fromCharCode : (...codes: number[]) => string
+>                    : ^^^^     ^^        ^^^^^      
+>String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>fromCharCode : (...codes: number[]) => string
+>             : ^^^^     ^^        ^^^^^      
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; <T, A extends any[], R, Args extends ArrayLike<A[number]>>(this: (this: T, ...args: A) => R, thisArg: T, args: Args extends readonly any[] ? A : Args): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^^^^^^^^                    ^^    ^^                          ^^       ^^ ^^    ^^                                      ^^^ ^^^
+>arrayLikeStrings : ArrayLike<string>
+>                 : ^^^^^^^^^^^^^^^^^
+
