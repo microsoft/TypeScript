@@ -2393,6 +2393,9 @@ type Hover struct {
 
 	// Whether the verbosity level can be increased for this hover.
 	CanIncreaseVerbosity bool `json:"canIncreaseVerbosity,omitzero" lsp:"nullable"`
+
+	// VS-specific rich content (symbol icon + colorized/classified text) rendered by clients that support Visual Studio extensions, in place of `contents`.
+	VSRawContent *VSContainerElement `json:"_vs_rawContent,omitzero"`
 }
 
 var _ json.UnmarshalerFrom = (*Hover)(nil)
@@ -9334,6 +9337,57 @@ func (s *VSClassifiedTextElement) UnmarshalJSONFrom(dec *json.Decoder) error {
 	return unmarshalStruct(s, dec)
 }
 
+// Identifies an image in a VS image catalog. Used to render symbol-kind icons (e.g. in hover tooltips).
+type VSImageId struct {
+	// The GUID of the image catalog containing this image.
+	Guid string `json:"Guid" lsp:"required"`
+
+	// The numeric identifier of the image within its catalog.
+	Id int32 `json:"Id" lsp:"required"`
+
+	// VS type discriminator required by ObjectContentConverter for deserialization.
+	VSType StringLiteralImageId `json:"_vs_type" lsp:"required"`
+}
+
+var _ json.UnmarshalerFrom = (*VSImageId)(nil)
+
+func (s *VSImageId) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// An image element (e.g. a symbol-kind icon) for use in VS rich content such as hover tooltips.
+type VSImageElement struct {
+	// The image to display.
+	ImageId *VSImageId `json:"ImageId" lsp:"required"`
+
+	// VS type discriminator required by ObjectContentConverter for deserialization.
+	VSType StringLiteralImageElement `json:"_vs_type" lsp:"required"`
+}
+
+var _ json.UnmarshalerFrom = (*VSImageElement)(nil)
+
+func (s *VSImageElement) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// A container element that groups other VS rich-content elements (images, classified text, or nested containers). Used to build the VS hover raw content that combines a symbol icon with colorized text.
+type VSContainerElement struct {
+	// Layout style for the child elements.
+	Style VSContainerElementStyle `json:"Style" lsp:"required"`
+
+	// The child elements contained within this container.
+	Elements []VSImageElementOrClassifiedTextElementOrContainerElement `json:"Elements" lsp:"required"`
+
+	// VS type discriminator required by ObjectContentConverter for deserialization.
+	VSType StringLiteralContainerElement `json:"_vs_type" lsp:"required"`
+}
+
+var _ json.UnmarshalerFrom = (*VSContainerElement)(nil)
+
+func (s *VSContainerElement) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
 // CallHierarchyItemData is a placeholder for custom data preserved on a CallHierarchyItem.
 type CallHierarchyItemData struct{}
 
@@ -10411,6 +10465,28 @@ type TokenFormat string
 const (
 	TokenFormatRelative TokenFormat = "relative"
 )
+
+// Layout style for a VSContainerElement's children, mirroring VS's Microsoft.VisualStudio.Text.Adornments.ContainerElementStyle.
+type VSContainerElementStyle int32
+
+const (
+	// Child elements are laid out inline, wrapping as needed (e.g. an icon next to a signature line).
+	VSContainerElementStyleWrapped VSContainerElementStyle = 0
+	// Child elements are stacked vertically, each on its own line (e.g. a signature line followed by documentation).
+	VSContainerElementStyleStacked VSContainerElementStyle = 1
+)
+
+const _VSContainerElementStyle_name = "WrappedStacked"
+
+var _VSContainerElementStyle_index = [...]uint16{0, 7, 14}
+
+func (e VSContainerElementStyle) String() string {
+	i := int(e) - 0
+	if i < 0 || i >= len(_VSContainerElementStyle_index)-1 {
+		return fmt.Sprintf("VSContainerElementStyle(%d)", e)
+	}
+	return _VSContainerElementStyle_name[_VSContainerElementStyle_index[i]:_VSContainerElementStyle_index[i+1]]
+}
 
 // Log verbosity level, mirroring the VS Code LogLevel enum values.
 type LogVerbosity int32
@@ -13376,6 +13452,41 @@ func (o *BooleanOrClientSemanticTokensRequestFullDelta) UnmarshalJSONFrom(dec *j
 	}
 }
 
+type VSImageElementOrClassifiedTextElementOrContainerElement struct {
+	ImageElement          *VSImageElement
+	ClassifiedTextElement *VSClassifiedTextElement
+	ContainerElement      *VSContainerElement
+}
+
+var _ json.MarshalerTo = (*VSImageElementOrClassifiedTextElementOrContainerElement)(nil)
+
+func (o *VSImageElementOrClassifiedTextElementOrContainerElement) MarshalJSONTo(enc *json.Encoder) error {
+	return marshalUnion(o, enc, "VSImageElementOrClassifiedTextElementOrContainerElement", false)
+}
+
+var _ json.UnmarshalerFrom = (*VSImageElementOrClassifiedTextElementOrContainerElement)(nil)
+
+func (o *VSImageElementOrClassifiedTextElementOrContainerElement) UnmarshalJSONFrom(dec *json.Decoder) error {
+	*o = VSImageElementOrClassifiedTextElementOrContainerElement{}
+
+	data, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	switch string(jsonObjectRawField(data, "_vs_type")) {
+	case `"ContainerElement"`:
+		o.ContainerElement = new(VSContainerElement)
+		return json.Unmarshal(data, o.ContainerElement)
+	case `"ImageElement"`:
+		o.ImageElement = new(VSImageElement)
+		return json.Unmarshal(data, o.ImageElement)
+	case `"ClassifiedTextElement"`:
+		o.ClassifiedTextElement = new(VSClassifiedTextElement)
+		return json.Unmarshal(data, o.ClassifiedTextElement)
+	}
+	return errInvalidValue("VSImageElementOrClassifiedTextElementOrContainerElement", data)
+}
+
 type LocationOrLocationsOrDefinitionLinksOrNull struct {
 	Location        *Location
 	Locations       *[]Location
@@ -14941,6 +15052,72 @@ func (o *StringLiteralClassifiedTextElement) UnmarshalJSONFrom(dec *json.Decoder
 	}
 	if string(v) != `"ClassifiedTextElement"` {
 		return errLiteralMismatch("StringLiteralClassifiedTextElement", `"ClassifiedTextElement"`, v)
+	}
+	return nil
+}
+
+// StringLiteralImageId is a literal type for "ImageId"
+type StringLiteralImageId struct{}
+
+var _ json.MarshalerTo = StringLiteralImageId{}
+
+func (o StringLiteralImageId) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"ImageId"`))
+}
+
+var _ json.UnmarshalerFrom = &StringLiteralImageId{}
+
+func (o *StringLiteralImageId) UnmarshalJSONFrom(dec *json.Decoder) error {
+	v, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	if string(v) != `"ImageId"` {
+		return errLiteralMismatch("StringLiteralImageId", `"ImageId"`, v)
+	}
+	return nil
+}
+
+// StringLiteralImageElement is a literal type for "ImageElement"
+type StringLiteralImageElement struct{}
+
+var _ json.MarshalerTo = StringLiteralImageElement{}
+
+func (o StringLiteralImageElement) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"ImageElement"`))
+}
+
+var _ json.UnmarshalerFrom = &StringLiteralImageElement{}
+
+func (o *StringLiteralImageElement) UnmarshalJSONFrom(dec *json.Decoder) error {
+	v, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	if string(v) != `"ImageElement"` {
+		return errLiteralMismatch("StringLiteralImageElement", `"ImageElement"`, v)
+	}
+	return nil
+}
+
+// StringLiteralContainerElement is a literal type for "ContainerElement"
+type StringLiteralContainerElement struct{}
+
+var _ json.MarshalerTo = StringLiteralContainerElement{}
+
+func (o StringLiteralContainerElement) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"ContainerElement"`))
+}
+
+var _ json.UnmarshalerFrom = &StringLiteralContainerElement{}
+
+func (o *StringLiteralContainerElement) UnmarshalJSONFrom(dec *json.Decoder) error {
+	v, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	if string(v) != `"ContainerElement"` {
+		return errLiteralMismatch("StringLiteralContainerElement", `"ContainerElement"`, v)
 	}
 	return nil
 }

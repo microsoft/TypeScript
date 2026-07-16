@@ -2857,6 +2857,75 @@ func (f *FourslashTest) VerifyBaselineHover(t *testing.T) {
 	}
 }
 
+// VerifyBaselineVSHover is like VerifyBaselineHover, but asserts on the VS-specific rich hover
+// content (Hover.VSRawContent / the "_vs_rawContent" wire field) that the LSP server emits for
+// clients advertising the VSSupportsVisualStudioExtensions capability.
+func (f *FourslashTest) VerifyBaselineVSHover(t *testing.T) {
+	markersAndItems := core.MapFiltered(f.Markers(), func(marker *Marker) (markerAndItem[*lsproto.Hover], bool) {
+		if marker.Name == nil {
+			return markerAndItem[*lsproto.Hover]{}, false
+		}
+
+		params := &lsproto.HoverParams{
+			TextDocument: lsproto.TextDocumentIdentifier{
+				Uri: lsconv.FileNameToDocumentURI(marker.fileName),
+			},
+			Position: marker.LSPosition,
+		}
+
+		result := sendRequest(t, f, lsproto.TextDocumentHoverInfo, params)
+		return markerAndItem[*lsproto.Hover]{Marker: marker, Item: result.Hover}, true
+	})
+
+	getRange := func(item *lsproto.Hover) *lsproto.Range {
+		if item == nil || item.Range == nil {
+			return nil
+		}
+		return item.Range
+	}
+
+	getTooltipLines := func(item, _prev *lsproto.Hover) []string {
+		if item == nil {
+			return nil
+		}
+		if item.VSRawContent == nil {
+			return []string{"(no _vs_rawContent; is VSSupportsVisualStudioExtensions set on the test's ClientCapabilities?)"}
+		}
+		return renderVSContainerElement(item.VSRawContent, "")
+	}
+
+	f.addResultToBaseline(t, vsQuickInfoCmd, annotateContentWithTooltips(t, f, markersAndItems, "vsquickinfo", getRange, getTooltipLines))
+	if jsonStr, err := core.StringifyJson(markersAndItems, "", "  "); err == nil {
+		f.writeToBaseline(vsQuickInfoCmd, jsonStr)
+	} else {
+		t.Fatalf("Failed to stringify markers and items for baseline: %v", err)
+	}
+}
+
+// renderVSContainerElement renders a VS rich-content container element (icon + colorized runs,
+// possibly nested for the stacked display-line/documentation shape) into readable baseline lines.
+func renderVSContainerElement(el *lsproto.VSContainerElement, indent string) []string {
+	lines := []string{fmt.Sprintf("%sContainerElement (Style=%s)", indent, el.Style)}
+	childIndent := indent + "  "
+	for _, child := range el.Elements {
+		switch {
+		case child.ImageElement != nil:
+			imageId := child.ImageElement.ImageId
+			lines = append(lines, fmt.Sprintf("%sImageElement { Guid: %s, Id: 0x%X }", childIndent, imageId.Guid, imageId.Id))
+		case child.ClassifiedTextElement != nil:
+			lines = append(lines, childIndent+"ClassifiedTextElement")
+			for _, run := range child.ClassifiedTextElement.Runs {
+				lines = append(lines, fmt.Sprintf("%s  [%s] %q", childIndent, run.ClassificationTypeName, run.Text))
+			}
+		case child.ContainerElement != nil:
+			lines = append(lines, renderVSContainerElement(child.ContainerElement, childIndent)...)
+		default:
+			lines = append(lines, childIndent+"<empty union element>")
+		}
+	}
+	return lines
+}
+
 func appendLinesForMarkedStringWithLanguage(result []string, ms *lsproto.MarkedStringWithLanguage) []string {
 	result = append(result, "```"+ms.Language)
 	result = append(result, ms.Value)
