@@ -1,11 +1,6 @@
 --- old.mappedTypeProperties.errors.txt
 +++ new.mappedTypeProperties.errors.txt
-@@= skipped -0, +0 lines =@@
-+error TS-1: Pre-emit (14) and post-emit (22) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
- mappedTypeProperties.ts(3,5): error TS7061: A mapped type may not declare properties or methods.
- mappedTypeProperties.ts(9,5): error TS7061: A mapped type may not declare properties or methods.
- mappedTypeProperties.ts(14,5): error TS7061: A mapped type may not declare properties or methods.
-@@= skipped -5, +6 lines =@@
+@@= skipped -5, +5 lines =@@
  mappedTypeProperties.ts(27,5): error TS7061: A mapped type may not declare properties or methods.
  mappedTypeProperties.ts(31,5): error TS7061: A mapped type may not declare properties or methods.
  mappedTypeProperties.ts(34,5): error TS7061: A mapped type may not declare properties or methods.
@@ -22,21 +17,11 @@
 
 
 -==== mappedTypeProperties.ts (18 errors) ====
-+!!! error TS-1: Pre-emit (14) and post-emit (22) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-+!!! related TS-1: The excess diagnostics are:
-+!!! related TS2304 mappedTypeProperties.ts:4:6: Cannot find name 'placeType'.
-+!!! related TS2693 mappedTypeProperties.ts:4:19: 'PlaceType' only refers to a type, but is being used as a value here.
-+!!! related TS2304 mappedTypeProperties.ts:31:6: Cannot find name 'P'.
-+!!! related TS2693 mappedTypeProperties.ts:31:11: 'PlaceType' only refers to a type, but is being used as a value here.
-+!!! related TS2304 mappedTypeProperties.ts:34:6: Cannot find name 'P'.
-+!!! related TS2693 mappedTypeProperties.ts:34:11: 'PlaceType' only refers to a type, but is being used as a value here.
-+!!! related TS2304 mappedTypeProperties.ts:37:6: Cannot find name 'P'.
-+!!! related TS2693 mappedTypeProperties.ts:37:11: 'PlaceType' only refers to a type, but is being used as a value here.
 +==== mappedTypeProperties.ts (14 errors) ====
      export type PlaceType = 'openSky' | 'roofed' | 'garage'
      type Before = {
          model: 'hour' | 'day';
-@@= skipped -51, +61 lines =@@
+@@= skipped -51, +51 lines =@@
          [P in PlaceType]: any
          ~~~~~~~~~~~~~~~~
  !!! error TS7061: A mapped type may not declare properties or methods.

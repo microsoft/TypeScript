@@ -1,11 +1,7 @@
-error TS-1: Pre-emit (2) and post-emit (3) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 parserClassDeclaration6.ts(1,17): error TS2304: Cannot find name 'A'.
 parserClassDeclaration6.ts(1,20): error TS1174: Classes can only extend a single class.
 
 
-!!! error TS-1: Pre-emit (2) and post-emit (3) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS2304 parserClassDeclaration6.ts:1:20: Cannot find name 'B'.
 ==== parserClassDeclaration6.ts (2 errors) ====
     class C extends A, B {
                     ~

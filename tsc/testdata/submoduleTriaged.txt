@@ -12,15 +12,4 @@ compiler/exportAssignmentMembersVisibleInAugmentation.errors.txt.diff
 compiler/incorrectRecursiveMappedTypeConstraint.errors.txt.diff
 compiler/reverseMappedPartiallyInferableTypes.errors.txt.diff
 compiler/typeParameterWithInvalidConstraintType.errors.txt.diff
-conformance/jsdocDisallowedInTypescript.errors.txt.diff
-conformance/parserClassDeclaration1.errors.txt.diff
-conformance/parserClassDeclaration6.errors.txt.diff
-conformance/parserErrorRecovery_ModuleElement1.errors.txt.diff
-conformance/parserExportAssignment5.errors.txt.diff
-conformance/parserExportAssignment9.errors.txt.diff
 conformance/recursiveMappedTypes.errors.txt.diff
-
-# previously submoduleAccepted baselines which have TS-1 errors that need fixing
-compiler/constructorWithIncompleteTypeAnnotation.errors.txt.diff
-compiler/reachabilityChecksNoCrash1.errors.txt.diff
-conformance/mappedTypeProperties.errors.txt.diff

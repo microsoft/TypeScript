@@ -1,12 +1,7 @@
-error TS-1: Pre-emit (2) and post-emit (4) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 parserErrorRecovery_ModuleElement1.ts(2,1): error TS1128: Declaration or statement expected.
 parserErrorRecovery_ModuleElement1.ts(4,1): error TS1128: Declaration or statement expected.
 
 
-!!! error TS-1: Pre-emit (2) and post-emit (4) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS2304 parserErrorRecovery_ModuleElement1.ts:1:8: Cannot find name 'foo'.
-!!! related TS2304 parserErrorRecovery_ModuleElement1.ts:3:8: Cannot find name 'bar'.
 ==== parserErrorRecovery_ModuleElement1.ts (2 errors) ====
     return foo;
     }

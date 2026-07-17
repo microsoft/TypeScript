@@ -12,7 +12,6 @@
 -jsdocDisallowedInTypescript.ts(15,8): error TS8020: JSDoc types can only be used inside documentation comments.
 -jsdocDisallowedInTypescript.ts(16,11): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
 -jsdocDisallowedInTypescript.ts(17,17): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
-+error TS-1: Pre-emit (26) and post-emit (27) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 +jsdocDisallowedInTypescript.ts(7,10): error TS7010: 'hof', which lacks return-type annotation, implicitly has an 'any' return type.
 +jsdocDisallowedInTypescript.ts(7,20): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +jsdocDisallowedInTypescript.ts(7,28): error TS1005: ',' expected.
@@ -48,9 +47,6 @@
 -==== jsdocDisallowedInTypescript.ts (16 errors) ====
 +
 +
-+!!! error TS-1: Pre-emit (26) and post-emit (27) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-+!!! related TS-1: The excess diagnostics are:
-+!!! related TS2304 jsdocDisallowedInTypescript.ts:8:16: Cannot find name 'ctor'.
 +==== jsdocDisallowedInTypescript.ts (26 errors) ====
      // grammar error from checker
      var ara: Array.<number> = [1,2,3];

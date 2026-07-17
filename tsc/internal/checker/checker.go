@@ -5553,6 +5553,14 @@ func (c *Checker) checkExportSpecifier(node *ast.ExportSpecifierNode) {
 	}
 }
 
+func isContainedByNamespace(node *ast.Node) bool {
+	container := node.Parent
+	if !ast.IsSourceFile(container) {
+		container = container.Parent
+	}
+	return ast.IsModuleDeclaration(container) && !ast.IsAmbientModule(container)
+}
+
 func (c *Checker) checkExportAssignment(node *ast.Node) {
 	isExportEquals := node.AsExportAssignment().IsExportEquals
 	illegalContextMessage := core.IfElse(isExportEquals,
@@ -5564,11 +5572,7 @@ func (c *Checker) checkExportAssignment(node *ast.Node) {
 	if c.shouldCheckErasableSyntax(node) && node.AsExportAssignment().IsExportEquals && node.Flags&ast.NodeFlagsAmbient == 0 {
 		c.error(node, diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled)
 	}
-	container := node.Parent
-	if !ast.IsSourceFile(container) {
-		container = container.Parent
-	}
-	if ast.IsModuleDeclaration(container) && !ast.IsAmbientModule(container) {
+	if isContainedByNamespace(node) {
 		// TODO(danielr): should these be grammar errors?
 		if isExportEquals {
 			c.error(node, diagnostics.An_export_assignment_cannot_be_used_in_a_namespace)
@@ -5633,6 +5637,10 @@ func (c *Checker) checkExportAssignment(node *ast.Node) {
 	}
 	if isIllegalExportDefaultInCJS {
 		c.error(node, getVerbatimModuleSyntaxErrorMessage(node))
+	}
+	container := node.Parent
+	if !ast.IsSourceFile(container) {
+		container = container.Parent
 	}
 	c.checkExternalModuleExports(container)
 	if typeNode := node.Type(); typeNode != nil && node.Kind == ast.KindExportAssignment {
@@ -14911,6 +14919,14 @@ func (c *Checker) getTargetOfExportSpecifier(node *ast.Node, meaning ast.SymbolF
 }
 
 func (c *Checker) getTargetOfExportAssignment(node *ast.Node) *ast.Symbol {
+	// An `export =` / `export default` inside a namespace/module block is a grammar error;
+	// checkExportAssignment reports it and returns without resolving the expression. Mirror that
+	// bail-out here (using the same container computation) so that alias resolution triggered by
+	// the emit resolver does not resolve — and report "Cannot find name" diagnostics on — the
+	// expression, which would produce diagnostics inconsistent with checking.
+	if isContainedByNamespace(node) {
+		return nil
+	}
 	resolved := c.getTargetOfAliasLikeExpression(node.Expression())
 	c.markSymbolOfAliasDeclarationIfTypeOnly(node, nil)
 	return resolved
@@ -26683,13 +26699,17 @@ func (c *Checker) isKeyTypeIncluded(keyType *Type, include TypeFlags) bool {
 		})
 }
 
+func isInvalidComputedPropertyName(node *ast.Node) bool {
+	return (ast.IsTypeLiteralNode(node.Parent.Parent) || ast.IsClassLike(node.Parent.Parent) || ast.IsInterfaceDeclaration(node.Parent.Parent)) &&
+		ast.IsBinaryExpression(node.Expression()) && node.Expression().AsBinaryExpression().OperatorToken.Kind == ast.KindInKeyword &&
+		!ast.IsAccessor(node.Parent)
+}
+
 func (c *Checker) checkComputedPropertyName(node *ast.Node) *Type {
 	links := c.typeNodeLinks.Get(node)
 	if links.resolvedType == nil {
 		links.resolvedType = c.circularConstraintType
-		if (ast.IsTypeLiteralNode(node.Parent.Parent) || ast.IsClassLike(node.Parent.Parent) || ast.IsInterfaceDeclaration(node.Parent.Parent)) &&
-			ast.IsBinaryExpression(node.Expression()) && node.Expression().AsBinaryExpression().OperatorToken.Kind == ast.KindInKeyword &&
-			!ast.IsAccessor(node.Parent) {
+		if isInvalidComputedPropertyName(node) {
 			links.resolvedType = c.errorType
 			return links.resolvedType
 		}
@@ -28078,13 +28098,15 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 				!ast.IsAssignmentTarget(parent.Parent) {
 				return
 			}
-			res := ast.FindManyAncestors(location, ast.IsMetaProperty, ast.IsDecorator, ast.IsYieldExpression, ast.IsForInOrOfStatement, ast.IsComputedPropertyName, ast.IsHeritageClause)
+			res := ast.FindManyAncestors(location, ast.IsMetaProperty, ast.IsDecorator, ast.IsYieldExpression, ast.IsForInOrOfStatement, ast.IsComputedPropertyName, ast.IsHeritageClause, ast.IsExportAssignment, ast.IsReturnStatement)
 			metaProperty := res[0]
 			decorator := res[1]
 			yieldExpr := res[2]
 			forNode := res[3]
 			computedName := res[4]
 			heritageClause := res[5]
+			exportAssignment := res[6]
+			returnStatement := res[7]
 			if metaProperty != nil {
 				return // identifiers in meta properties shouldn't be resolved, but are expressions, so must be filtered
 			}
@@ -28124,12 +28146,44 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 			// Computed property names on enum members are a grammar error and are never checked
 			// (checkEnumMember only checks the member initializer, not the name), so resolving
 			// identifiers in them here would report a spurious "Cannot find name" diagnostic.
-			if computedName != nil && ast.IsEnumMember(computedName.Parent) {
+			if computedName != nil {
+				if ast.IsEnumMember(computedName.Parent) {
+					return
+				}
+				if isInvalidComputedPropertyName(computedName) {
+					return
+				}
+			}
+			if heritageClause != nil {
+				// extends heritage clauses on interfaces are not expressions and are unchecked if they are
+				if ast.IsInterfaceDeclaration(heritageClause.Parent) {
+					return
+				}
+				// On a class, only the first `extends` type is resolved as a value (the base class); any
+				// additional `extends` types are grammar errors (e.g. `class C extends A extends B` or
+				// `class C extends A, B`) and are never resolved during checking.
+				if ast.IsClassLike(heritageClause.Parent) &&
+					heritageClause.AsHeritageClause().Token == ast.KindExtendsKeyword {
+					if firstExtends := ast.GetExtendsHeritageClauseElement(heritageClause.Parent); firstExtends != nil &&
+						location != firstExtends && !ast.IsNodeDescendantOf(location, firstExtends) {
+						return
+					}
+				}
+			}
+			// An `export =` / `export default` inside a namespace/module block is a grammar error;
+			// checkExportAssignment reports it and returns without resolving the expression, so
+			// resolving identifiers in it here would report a spurious "Cannot find name" diagnostic.
+			if exportAssignment != nil && isContainedByNamespace(exportAssignment) {
 				return
 			}
-			// extends heritage clauses on interfaces are errors and are unchecked
-			if heritageClause != nil && ast.IsInterfaceDeclaration(heritageClause.Parent) {
-				return
+			// A `return` statement outside of any function body (or inside a class static block) is a
+			// grammar error; checkReturnStatement reports it and returns without checking the return
+			// expression, so resolving identifiers in it here would report a spurious diagnostic.
+			if returnStatement != nil {
+				container := getContainingFunctionOrClassStaticBlock(returnStatement)
+				if container == nil || ast.IsClassStaticBlockDeclaration(container) {
+					return
+				}
 			}
 			// Identifiers in expression contexts are emitted, so we need to follow their referenced aliases and mark them as used
 			// Some non-expression identifiers are also treated as expression identifiers for this purpose, eg, `a` in `b = {a}` or `q` in `import r = q`

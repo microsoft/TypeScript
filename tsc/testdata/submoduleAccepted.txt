@@ -1436,3 +1436,15 @@ conformance/thisInObjectLiterals.errors.txt.diff
 
 # Better circularity handling in computed name checking
 compiler/blockScopedBindingUsedBeforeDef.errors.txt.diff
+
+# Slight difference in checking parse errors
+compiler/reachabilityChecksNoCrash1.errors.txt.diff
+
+# Reduction in follow-on errors after erroneous use of `in` in computed name
+conformance/mappedTypeProperties.errors.txt.diff
+
+# Vastly different parsing
+conformance/jsdocDisallowedInTypescript.errors.txt.diff
+
+# Differing/better spans/related info for some errors
+compiler/constructorWithIncompleteTypeAnnotation.errors.txt.diff
