@@ -9,7 +9,4 @@ compiler/exportAssignmentMembersVisibleInAugmentation.errors.txt.diff
 
 # New issues in corsa with checker order dependence creating diagnostic instability in API scenarios
 ## ANY test with a TS-1 indicates a problem, not just these diffs - these are just new ones.
-compiler/incorrectRecursiveMappedTypeConstraint.errors.txt.diff
 compiler/reverseMappedPartiallyInferableTypes.errors.txt.diff
-compiler/typeParameterWithInvalidConstraintType.errors.txt.diff
-conformance/recursiveMappedTypes.errors.txt.diff

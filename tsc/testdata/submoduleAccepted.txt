@@ -1437,6 +1437,11 @@ conformance/thisInObjectLiterals.errors.txt.diff
 # Better circularity handling in computed name checking
 compiler/blockScopedBindingUsedBeforeDef.errors.txt.diff
 
+# Minor differences in related spans or error locations for circular mapped types
+compiler/incorrectRecursiveMappedTypeConstraint.errors.txt.diff
+compiler/typeParameterWithInvalidConstraintType.errors.txt.diff
+conformance/recursiveMappedTypes.errors.txt.diff
+
 # Slight difference in checking parse errors
 compiler/reachabilityChecksNoCrash1.errors.txt.diff
 
