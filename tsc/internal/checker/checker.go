@@ -12923,7 +12923,7 @@ func (c *Checker) getSyntacticNullishnessSemantics(node *ast.Node) PredicateSema
 		return PredicateSemanticsSometimes
 	case ast.KindBinaryExpression:
 		// List of operators that can produce null/undefined:
-		// || ||= && &&=
+		// || ||= && &&= ?? ??=
 		switch node.AsBinaryExpression().OperatorToken.Kind {
 		case ast.KindBarBarToken,
 			ast.KindBarBarEqualsToken,
@@ -12932,10 +12932,22 @@ func (c *Checker) getSyntacticNullishnessSemantics(node *ast.Node) PredicateSema
 			return PredicateSemanticsSometimes
 		// For these operator kinds, the right operand is effectively controlling
 		case ast.KindCommaToken,
-			ast.KindEqualsToken,
-			ast.KindQuestionQuestionToken,
-			ast.KindQuestionQuestionEqualsToken:
+			ast.KindEqualsToken:
 			return c.getSyntacticNullishnessSemantics(node.AsBinaryExpression().Right)
+		// For nullish coalescing: result is the left operand when left is non-null,
+		// or the right operand when left is null/undefined. The nullishness of the
+		// result combines both paths: the left's non-null path contributes Never,
+		// and when left can be null, the right's semantics are also included.
+		case ast.KindQuestionQuestionToken,
+			ast.KindQuestionQuestionEqualsToken:
+			leftSemantics := c.getSyntacticNullishnessSemantics(node.AsBinaryExpression().Left)
+			// The non-null path (left is non-null): left branch taken, result has Never bit
+			result := leftSemantics & PredicateSemanticsNever
+			// The null path (left is null/undefined): right branch taken, result inherits right's semantics
+			if leftSemantics&PredicateSemanticsAlways != 0 {
+				result |= c.getSyntacticNullishnessSemantics(node.AsBinaryExpression().Right)
+			}
+			return result
 		}
 		return PredicateSemanticsNever
 	case ast.KindConditionalExpression:

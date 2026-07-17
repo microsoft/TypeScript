@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/nullishCoalescingAlwaysNullFalsePositive.ts] ////
+
+=== nullishCoalescingAlwaysNullFalsePositive.ts ===
+// Repro for https://github.com/microsoft/TypeScript/issues/63642
+// TS2871 false positive: conditional with ?? null in true branch
+
+declare let a: unknown, b: unknown;
+>a : unknown
+>b : unknown
+
+const p = (a ? b ?? null : null) ?? 0;
+>p : {}
+>(a ? b ?? null : null) ?? 0 : {}
+>(a ? b ?? null : null) : {} | null
+>a ? b ?? null : null : {} | null
+>a : unknown
+>b ?? null : {} | null
+>b : unknown
+>0 : 0
+
+declare let x: string | null | undefined;
+>x : string | null | undefined
+
+const q = (x ??= null) ?? 0;
+>q : string | 0
+>(x ??= null) ?? 0 : string | 0
+>(x ??= null) : string | null
+>x ??= null : string | null
+>x : string | null | undefined
+>0 : 0
+
