@@ -174,7 +174,13 @@ func GetAllowedEndingsInPreferredOrder(
 	moduleResolution := compilerOptions.GetModuleResolutionKind()
 	moduleResolutionIsNodeNext := core.ModuleResolutionKindNode16 <= moduleResolution && moduleResolution <= core.ModuleResolutionKindNodeNext
 	allowImportingTsExtension := shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.FileName())
-	if syntaxImpliedNodeFormat == core.ResolutionModeESM && moduleResolutionIsNodeNext {
+	// TypeScript uses `(syntaxImpliedNodeFormat ?? impliedNodeFormat)` here - fall back to the
+	// file's default resolution mode when no syntax-implied mode is given.
+	effectiveSyntaxMode := syntaxImpliedNodeFormat
+	if effectiveSyntaxMode == core.ResolutionModeNone {
+		effectiveSyntaxMode = resolutionMode
+	}
+	if effectiveSyntaxMode == core.ResolutionModeESM && moduleResolutionIsNodeNext {
 		if allowImportingTsExtension {
 			return []ModuleSpecifierEnding{ModuleSpecifierEndingTsExtension, ModuleSpecifierEndingJsExtension}
 		}
