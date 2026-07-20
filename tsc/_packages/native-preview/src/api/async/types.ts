@@ -178,6 +178,10 @@ export interface IntersectionType extends UnionOrIntersectionType {
 export interface TypeParameter extends Type {
     /** True if this is the synthetic `this` type of an interface, class, or tuple */
     readonly isThisType?: boolean | undefined;
+    /** Get the constraint (the `T` in `<U extends T>`), or undefined if it has none */
+    getConstraint(): Promise<Type | undefined>;
+    /** Get the default type (the `T` in `<U = T>`), or undefined if it has none */
+    getDefault(): Promise<Type | undefined>;
 }
 
 /** Index types — keyof T (TypeFlags.Index) */

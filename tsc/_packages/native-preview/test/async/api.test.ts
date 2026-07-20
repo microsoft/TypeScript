@@ -3305,6 +3305,69 @@ describe("Checker - getConstraintOfTypeParameter", () => {
     });
 });
 
+describe("Checker - TypeParameter getters", () => {
+    test("getConstraint() and getDefault() return the constraint and default types", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export function f<T extends string = "hello">(x: T): T { return x; }`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `export function f<T extends string = "hello">(x: T): T { return x; }`;
+            const pos = src.indexOf("f<");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+            assert.ok(sigs.length > 0);
+            const typeParams = await sigs[0].getTypeParameters();
+            assert.ok(typeParams.length > 0, "Should have type parameters");
+            const typeParam = typeParams[0] as TypeParameter;
+
+            const constraint = await typeParam.getConstraint();
+            assert.ok(constraint);
+            assert.ok(constraint.flags & TypeFlags.String, `Expected string constraint, got flags ${constraint.flags}`);
+
+            const defaultType = await typeParam.getDefault();
+            assert.ok(defaultType);
+            assert.ok(defaultType.flags & TypeFlags.StringLiteral, `Expected string literal default, got flags ${defaultType.flags}`);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getConstraint() and getDefault() return undefined when there is none", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export function f<T>(x: T): T { return x; }`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `export function f<T>(x: T): T { return x; }`;
+            const pos = src.indexOf("f<");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", pos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const sigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+            assert.ok(sigs.length > 0);
+            const typeParams = await sigs[0].getTypeParameters();
+            assert.ok(typeParams.length > 0, "Should have type parameters");
+            const typeParam = typeParams[0] as TypeParameter;
+
+            assert.equal(await typeParam.getConstraint(), undefined);
+            assert.equal(await typeParam.getDefault(), undefined);
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
 describe("Checker - getTypeArguments", () => {
     test("returns type arguments of a generic instantiation", async () => {
         const api = spawnAPI({

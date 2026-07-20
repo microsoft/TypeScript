@@ -511,9 +511,9 @@ class ProjectObjectRegistry {
         this.signatures.clear();
     }
 
-    fetchType<T extends Type>(source: Symbol | Signature | Type, method: string, handle: number | false | undefined): T {
+    fetchOptionalType<T extends Type>(source: Symbol | Signature | Type, method: string, handle: number | false | undefined): T | undefined {
         if (handle !== false) {
-            if (!handle) return undefined as unknown as T;
+            if (!handle) return undefined;
             const cached = this.getType(handle);
             if (cached) return cached as unknown as T;
         }
@@ -523,8 +523,14 @@ class ProjectObjectRegistry {
             project: this.project.id,
             objectId: source.id,
         });
-        if (!data) throw new Error(`${method} returned null type for ${source.constructor.name} ${source.id}`);
+        if (!data) return undefined;
         return this.getOrCreateType(data) as unknown as T;
+    }
+
+    fetchType<T extends Type>(source: Symbol | Signature | Type, method: string, handle: number | false | undefined): T {
+        const result = this.fetchOptionalType<T>(source, method, handle);
+        if (result === undefined) throw new Error(`${method} returned no type for ${source.constructor.name} ${source.id}`);
+        return result;
     }
 
     fetchSymbol(source: Symbol | Signature | Type, method: string, handle: number | undefined): Symbol {
@@ -1449,7 +1455,7 @@ export class Checker {
         const data = this.client.apiRequest<TypeResponse | null>("getConstraintOfTypeParameter", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            type: type.id,
+            objectId: type.id,
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
@@ -1820,6 +1826,8 @@ class TypeObject implements Type {
 
     private trueType: number | false; // false if not yet loaded
     private falseType: number | false; // false if not yet loaded
+    private constraint: number | false; // false if not yet loaded (type parameter)
+    private default: number | false; // false if not yet loaded (type parameter)
 
     constructor(data: TypeResponse, objectRegistry: ProjectObjectRegistry) {
         this.objectRegistry = objectRegistry;
@@ -1856,6 +1864,8 @@ class TypeObject implements Type {
 
         this.trueType = false;
         this.falseType = false;
+        this.constraint = false;
+        this.default = false;
     }
 
     getSymbol(): Symbol | undefined {
@@ -1924,8 +1934,21 @@ class TypeObject implements Type {
         return this.objectRegistry.fetchType(this, "getBaseTypeOfType", this.baseType);
     }
 
-    getConstraint(): Type {
+    getConstraint(): Type | undefined {
+        // Type parameters resolve their constraint lazily through the checker,
+        // whereas substitution types carry a preloaded constraint handle.
+        if (this.flags & TypeFlags.TypeParameter) {
+            const result = this.objectRegistry.fetchOptionalType(this, "getConstraintOfTypeParameter", this.constraint);
+            this.constraint = result ? result.id : 0;
+            return result;
+        }
         return this.objectRegistry.fetchType(this, "getConstraintOfType", this.substConstraint);
+    }
+
+    getDefault(): Type | undefined {
+        const result = this.objectRegistry.fetchOptionalType(this, "getDefaultFromTypeParameter", this.default);
+        this.default = result ? result.id : 0;
+        return result;
     }
 
     getTrueType(): Type {

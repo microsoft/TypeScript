@@ -723,7 +723,9 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 	case string(MethodGetIndexInfosOfType):
 		return s.handleGetIndexInfosOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetConstraintOfTypeParameter):
-		return s.handleGetConstraintOfTypeParameter(ctx, parsed.(*CheckerTypeParams))
+		return s.handleGetConstraintOfTypeParameter(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetDefaultFromTypeParameter):
+		return s.handleGetDefaultFromTypeParameter(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetBaseConstraintOfType):
 		return s.handleGetBaseConstraintOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetTypeArguments):
@@ -1619,6 +1621,8 @@ func (s *Session) handleGetBaseTypeOfType(_ context.Context, params *GetTypeProp
 	return s.resolveTypePropertyOfType(params, func(t *checker.Type) *checker.Type { return t.AsSubstitutionType().BaseType() })
 }
 
+// handleGetConstraintOfType returns the constraint of a substitution type.
+// Type parameter constraints are handled by handleGetConstraintOfTypeParameter.
 func (s *Session) handleGetConstraintOfType(_ context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
 	return s.resolveTypePropertyOfType(params, func(t *checker.Type) *checker.Type { return t.AsSubstitutionType().SubstConstraint() })
 }
@@ -2532,7 +2536,7 @@ func (s *Session) handleGetIndexInfosOfType(ctx context.Context, params *Checker
 }
 
 // handleGetConstraintOfTypeParameter returns the constraint of a type parameter.
-func (s *Session) handleGetConstraintOfTypeParameter(ctx context.Context, params *CheckerTypeParams) (*TypeResponse, error) {
+func (s *Session) handleGetConstraintOfTypeParameter(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
 		return nil, err
@@ -2550,6 +2554,22 @@ func (s *Session) handleGetConstraintOfTypeParameter(ctx context.Context, params
 	}
 
 	return setup.newTypeResponse(constraint), nil
+}
+
+// handleGetDefaultFromTypeParameter returns the default type of a type parameter.
+func (s *Session) handleGetDefaultFromTypeParameter(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newTypeResponse(setup.checker.GetDefaultFromTypeParameter(t)), nil
 }
 
 // handleGetBaseConstraintOfType returns the base constraint of an instantiable type.
