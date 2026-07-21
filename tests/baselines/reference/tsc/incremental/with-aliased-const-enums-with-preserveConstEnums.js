@@ -251,7 +251,7 @@ export {};
 
 
 //// [/home/src/workspaces/project/a.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10210453821-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\n",{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n"},"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10210453821-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\n",{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n"},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt]
 {
@@ -292,8 +292,12 @@ export {};
       "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n"
     },
     "./a.ts": {
+      "original": {
+        "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
+        "signature": "-3531856636-export {};\n"
+      },
       "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-      "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"
+      "signature": "-3531856636-export {};\n"
     }
   },
   "root": [
@@ -315,7 +319,7 @@ export {};
     ]
   },
   "version": "FakeTSVersion",
-  "size": 996
+  "size": 1047
 }
 
 
@@ -339,7 +343,7 @@ Output::
 //// [/home/src/workspaces/project/c.js] file written with same contents
 //// [/home/src/workspaces/project/a.js] file written with same contents
 //// [/home/src/workspaces/project/a.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-11645711104-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;",{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n"},"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-11645711104-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;",{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n"},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt]
 {
@@ -380,8 +384,12 @@ Output::
       "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n"
     },
     "./a.ts": {
+      "original": {
+        "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
+        "signature": "-3531856636-export {};\n"
+      },
       "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-      "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"
+      "signature": "-3531856636-export {};\n"
     }
   },
   "root": [
@@ -403,7 +411,7 @@ Output::
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1026
+  "size": 1077
 }
 
 
@@ -427,7 +435,7 @@ Output::
 //// [/home/src/workspaces/project/c.js] file written with same contents
 //// [/home/src/workspaces/project/a.js] file written with same contents
 //// [/home/src/workspaces/project/a.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-19677125073-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;export const randomThing2 = 10;",{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n"},"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-19677125073-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;export const randomThing2 = 10;",{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n"},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt]
 {
@@ -468,8 +476,12 @@ Output::
       "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n"
     },
     "./a.ts": {
+      "original": {
+        "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
+        "signature": "-3531856636-export {};\n"
+      },
       "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-      "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"
+      "signature": "-3531856636-export {};\n"
     }
   },
   "root": [
@@ -491,7 +503,7 @@ Output::
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1057
+  "size": 1108
 }
 
 

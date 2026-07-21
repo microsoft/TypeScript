@@ -539,6 +539,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/demo/core/utilities.ts (computed .d.ts)
 /user/username/projects/demo/animals/dog.ts (computed .d.ts)
-/user/username/projects/demo/animals/index.ts (computed .d.ts during emit)
+/user/username/projects/demo/animals/index.ts (kept existing computed signature)
 
 exitCode:: ExitStatus.undefined

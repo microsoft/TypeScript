@@ -218,6 +218,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /home/src/projects/a/b/f1.ts (computed .d.ts)
 /home/src/projects/a/b/f2.ts (computed .d.ts)
-/home/src/projects/a/b/f3.ts (used version)
+/home/src/projects/a/b/f3.ts (kept existing computed signature)
 
 exitCode:: ExitStatus.undefined

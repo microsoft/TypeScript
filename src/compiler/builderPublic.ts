@@ -35,6 +35,14 @@ export interface BuilderProgramHost {
      * @internal
      */
     storeSignatureInfo?: boolean;
+    /**
+     * When true, the builder always computes .d.ts shape signatures for source files instead
+     * of falling back to the file version (text hash) on the initial program. This makes
+     * change detection precise from the first edit onward — at the cost of computing
+     * declaration signatures during the initial build — and avoids invalidating a file's
+     * entire dependent closure on the first edit after a fresh build.
+     */
+    disableUseFileVersionAsSignature?: boolean;
 }
 
 /** @internal */

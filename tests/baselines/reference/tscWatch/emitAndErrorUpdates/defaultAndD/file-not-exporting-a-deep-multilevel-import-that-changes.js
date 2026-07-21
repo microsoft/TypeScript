@@ -278,9 +278,9 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
-/user/username/projects/myproject/c.ts (computed .d.ts during emit)
-/user/username/projects/myproject/d.ts (computed .d.ts during emit)
-/user/username/projects/myproject/e.ts (computed .d.ts during emit)
+/user/username/projects/myproject/c.ts (kept existing computed signature)
+/user/username/projects/myproject/d.ts (kept existing computed signature)
+/user/username/projects/myproject/e.ts (kept existing computed signature)
 
 exitCode:: ExitStatus.undefined
 
@@ -379,9 +379,9 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
-/user/username/projects/myproject/c.ts (computed .d.ts during emit)
-/user/username/projects/myproject/d.ts (computed .d.ts during emit)
-/user/username/projects/myproject/e.ts (computed .d.ts during emit)
+/user/username/projects/myproject/c.ts (kept existing computed signature)
+/user/username/projects/myproject/d.ts (kept existing computed signature)
+/user/username/projects/myproject/e.ts (kept existing computed signature)
 
 exitCode:: ExitStatus.undefined
 
@@ -465,8 +465,8 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
-/user/username/projects/myproject/c.ts (computed .d.ts during emit)
-/user/username/projects/myproject/d.ts (computed .d.ts during emit)
-/user/username/projects/myproject/e.ts (computed .d.ts during emit)
+/user/username/projects/myproject/c.ts (kept existing computed signature)
+/user/username/projects/myproject/d.ts (kept existing computed signature)
+/user/username/projects/myproject/e.ts (kept existing computed signature)
 
 exitCode:: ExitStatus.undefined

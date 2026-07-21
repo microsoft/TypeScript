@@ -169,7 +169,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/c.d.ts (used version)
 /user/username/projects/myproject/b.d.ts (used version)
-/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+/user/username/projects/myproject/a.ts (kept existing computed signature)
 
 exitCode:: ExitStatus.undefined
 
@@ -228,7 +228,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/c.d.ts (used version)
 /user/username/projects/myproject/b.d.ts (used version)
-/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+/user/username/projects/myproject/a.ts (kept existing computed signature)
 
 exitCode:: ExitStatus.undefined
 
@@ -292,6 +292,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/c.d.ts (used version)
 /user/username/projects/myproject/b.d.ts (used version)
-/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+/user/username/projects/myproject/a.ts (kept existing computed signature)
 
 exitCode:: ExitStatus.undefined

@@ -57,6 +57,7 @@ export enum SignatureInfo {
     ComputedDts,
     StoredSignatureAtEmit,
     UsedVersion,
+    KeptExistingSignature,
 }
 /** @internal */
 export interface BuilderState {
@@ -450,8 +451,20 @@ export namespace BuilderState {
         }
         // Default is to use file version as signature
         if (latestSignature === undefined) {
-            latestSignature = sourceFile.version;
-            if (host.storeSignatureInfo) (state.signatureInfo ??= new Map()).set(sourceFile.resolvedPath, SignatureInfo.UsedVersion);
+            // Do not overwrite a previously computed .d.ts signature with the file version:
+            // replacing it would make the next comparison against a freshly computed
+            // signature a guaranteed mismatch, falsely invalidating the file's entire
+            // dependent closure even for edits that do not change the file's shape.
+            // Keep the stored signature instead; use the version only when no computed
+            // signature exists.
+            if (!sourceFile.isDeclarationFile && !state.useFileVersionAsSignature && prevSignature !== undefined && prevSignature !== sourceFile.version) {
+                latestSignature = prevSignature;
+                if (host.storeSignatureInfo) (state.signatureInfo ??= new Map()).set(sourceFile.resolvedPath, SignatureInfo.KeptExistingSignature);
+            }
+            else {
+                latestSignature = sourceFile.version;
+                if (host.storeSignatureInfo) (state.signatureInfo ??= new Map()).set(sourceFile.resolvedPath, SignatureInfo.UsedVersion);
+            }
         }
         (state.oldSignatures ||= new Map()).set(sourceFile.resolvedPath, prevSignature || false);
         (state.hasCalledUpdateShapeSignature ||= new Set()).add(sourceFile.resolvedPath);

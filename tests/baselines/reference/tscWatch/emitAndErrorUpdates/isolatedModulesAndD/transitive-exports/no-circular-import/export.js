@@ -263,11 +263,11 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
-/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
-/user/username/projects/myproject/app.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/tools/public.ts (kept existing computed signature)
+/user/username/projects/myproject/lib1/public.ts (kept existing computed signature)
+/user/username/projects/myproject/lib2/data.ts (kept existing computed signature)
+/user/username/projects/myproject/lib2/public.ts (kept existing computed signature)
+/user/username/projects/myproject/app.ts (kept existing computed signature)
 
 exitCode:: ExitStatus.undefined
 
@@ -340,11 +340,11 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
-/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
-/user/username/projects/myproject/app.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/tools/public.ts (kept existing computed signature)
+/user/username/projects/myproject/lib1/public.ts (kept existing computed signature)
+/user/username/projects/myproject/lib2/data.ts (kept existing computed signature)
+/user/username/projects/myproject/lib2/public.ts (kept existing computed signature)
+/user/username/projects/myproject/app.ts (kept existing computed signature)
 
 exitCode:: ExitStatus.undefined
 
@@ -417,10 +417,10 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
-/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
-/user/username/projects/myproject/app.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/tools/public.ts (kept existing computed signature)
+/user/username/projects/myproject/lib1/public.ts (kept existing computed signature)
+/user/username/projects/myproject/lib2/data.ts (kept existing computed signature)
+/user/username/projects/myproject/lib2/public.ts (kept existing computed signature)
+/user/username/projects/myproject/app.ts (kept existing computed signature)
 
 exitCode:: ExitStatus.undefined

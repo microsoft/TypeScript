@@ -105,6 +105,10 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
                             ts.Debug.assert(info?.version === info?.signature || !info?.signature);
                             baseline.push(path + " (used version)");
                             break;
+                        case ts.SignatureInfo.KeptExistingSignature:
+                            ts.Debug.assert(info?.signature && info.signature !== info.version);
+                            baseline.push(path + " (kept existing computed signature)");
+                            break;
                         default:
                             ts.Debug.assertNever(signatureInfo);
                     }

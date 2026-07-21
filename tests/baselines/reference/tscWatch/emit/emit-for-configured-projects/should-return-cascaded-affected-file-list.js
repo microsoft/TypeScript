@@ -266,7 +266,7 @@ Shape signatures in builder refreshed for::
 /home/src/projects/a/b/modulefile1.ts (computed .d.ts)
 /home/src/projects/a/b/file1consumer2.ts (computed .d.ts)
 /home/src/projects/a/b/file1consumer1.ts (computed .d.ts)
-/home/src/projects/a/b/file1consumer1consumer1.ts (used version)
+/home/src/projects/a/b/file1consumer1consumer1.ts (kept existing computed signature)
 
 exitCode:: ExitStatus.undefined
 

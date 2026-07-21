@@ -1053,7 +1053,7 @@ No cached semantic diagnostics in the builder::
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
 /user/username/projects/transitivereferences/b/index.d.ts (used version)
-/user/username/projects/transitivereferences/c/index.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (kept existing computed signature)
 
 Dependencies for::
 /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
@@ -1652,7 +1652,7 @@ No cached semantic diagnostics in the builder::
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/a/index.ts (computed .d.ts)
 /user/username/projects/transitivereferences/b/index.d.ts (used version)
-/user/username/projects/transitivereferences/c/index.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (kept existing computed signature)
 
 Dependencies for::
 /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
@@ -1795,7 +1795,7 @@ No cached semantic diagnostics in the builder::
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/a/index.d.ts (used version)
 /user/username/projects/transitivereferences/b/index.d.ts (used version)
-/user/username/projects/transitivereferences/c/index.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (kept existing computed signature)
 
 Dependencies for::
 /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:

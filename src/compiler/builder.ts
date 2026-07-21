@@ -321,8 +321,9 @@ function hasSameKeys(
 function createBuilderProgramState(
     newProgram: Program,
     oldState: Readonly<ReusableBuilderProgramState> | undefined,
+    disableUseFileVersionAsSignature?: boolean,
 ): BuilderProgramState {
-    const state = BuilderState.create(newProgram, oldState, /*disableUseFileVersionAsSignature*/ false) as BuilderProgramState;
+    const state = BuilderState.create(newProgram, oldState, !!disableUseFileVersionAsSignature) as BuilderProgramState;
     state.program = newProgram;
     const compilerOptions = newProgram.getCompilerOptions();
     state.compilerOptions = compilerOptions;
@@ -1682,7 +1683,7 @@ export function createBuilderProgram(
         return oldProgram;
     }
 
-    const state = createBuilderProgramState(newProgram, oldState);
+    const state = createBuilderProgramState(newProgram, oldState, host.disableUseFileVersionAsSignature);
     newProgram.getBuildInfo = () => getBuildInfo(toBuilderProgramStateWithDefinedProgram(state));
 
     // To ensure that we arent storing any references to old program or new program without state

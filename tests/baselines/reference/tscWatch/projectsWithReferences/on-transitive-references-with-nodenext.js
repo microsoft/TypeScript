@@ -1308,7 +1308,7 @@ No cached semantic diagnostics in the builder::
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
 /user/username/projects/transitivereferences/b.d.ts (used version)
-/user/username/projects/transitivereferences/c.ts (used version)
+/user/username/projects/transitivereferences/c.ts (kept existing computed signature)
 
 Dependencies for::
 /home/src/tslibs/TS/Lib/lib.es6.d.ts:
@@ -2048,7 +2048,7 @@ No cached semantic diagnostics in the builder::
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/a.ts (computed .d.ts)
 /user/username/projects/transitivereferences/b.d.ts (used version)
-/user/username/projects/transitivereferences/c.ts (used version)
+/user/username/projects/transitivereferences/c.ts (kept existing computed signature)
 
 Dependencies for::
 /home/src/tslibs/TS/Lib/lib.es6.d.ts:
@@ -2230,7 +2230,7 @@ No cached semantic diagnostics in the builder::
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/a.d.ts (used version)
 /user/username/projects/transitivereferences/b.d.ts (used version)
-/user/username/projects/transitivereferences/c.ts (used version)
+/user/username/projects/transitivereferences/c.ts (kept existing computed signature)
 
 Dependencies for::
 /home/src/tslibs/TS/Lib/lib.es6.d.ts:

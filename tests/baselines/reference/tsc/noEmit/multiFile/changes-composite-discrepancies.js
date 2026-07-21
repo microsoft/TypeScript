@@ -392,14 +392,6 @@ IncrementalBuild:
     [
       "./src/class.ts",
       "-9508063301-export declare class classC {\n    prop: number;\n}\n"
-    ],
-    [
-      "./src/directuse.ts",
-      "-3531856636-export {};\n"
-    ],
-    [
-      "./src/indirectuse.ts",
-      "-3531856636-export {};\n"
     ]
   ],
   "latestChangedDtsFile": "FakeFileName",
@@ -1061,14 +1053,6 @@ IncrementalBuild:
     [
       "./src/class.ts",
       "-12157283604-export declare class classC {\n    prop1: number;\n}\n"
-    ],
-    [
-      "./src/directuse.ts",
-      "-3531856636-export {};\n"
-    ],
-    [
-      "./src/indirectuse.ts",
-      "-3531856636-export {};\n"
     ]
   ],
   "latestChangedDtsFile": "FakeFileName",
