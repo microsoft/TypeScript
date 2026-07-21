@@ -349,8 +349,8 @@ function f32(f: (<T>(a: T) => T) | { x: string }) {
 >x : string
 
     let fs = f<string>;  // ((a: string) => string) | { x: string }
->fs : { x: string; } | ((a: string) => string)
->f<string> : { x: string; } | ((a: string) => string)
+>fs : ((a: string) => string) | { x: string; }
+>f<string> : ((a: string) => string) | { x: string; }
 >f : (<T>(a: T) => T) | { x: string; }
 }
 

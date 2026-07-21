@@ -10673,7 +10673,7 @@ func (c *Checker) getInstantiationExpressionType(exprType *Type, node *ast.Node)
 				hasSignatures = hasSignatures || len(resolved.CallSignatures()) != 0 || len(resolved.ConstructSignatures()) != 0
 				hasApplicableSignature = hasApplicableSignature || len(callSignatures) != 0 || len(constructSignatures) != 0
 				if !core.Same(callSignatures, resolved.CallSignatures()) || !core.Same(constructSignatures, resolved.ConstructSignatures()) {
-					result := c.newObjectType(ObjectFlagsAnonymous|ObjectFlagsInstantiationExpressionType, c.newSymbol(ast.SymbolFlagsNone, ast.InternalSymbolNameInstantiationExpression))
+					result := c.newObjectType(ObjectFlagsAnonymous|ObjectFlagsInstantiationExpressionType, t.symbol)
 					c.setStructuredTypeMembers(result, resolved.members, callSignatures, constructSignatures, resolved.indexInfos)
 					result.AsInstantiationExpressionType().node = node
 					return result
@@ -15599,6 +15599,7 @@ func (c *Checker) getTypeWithSyntheticDefaultImportType(t *Type, symbol *ast.Sym
 		var syntheticType *Type
 		if hasSyntheticDefault {
 			anonymousSymbol := c.newSymbol(ast.SymbolFlagsTypeLiteral, ast.InternalSymbolNameType)
+			anonymousSymbol.Declarations = originalSymbol.Declarations
 			defaultContainingObject := c.createDefaultPropertyWrapperForModule(symbol, originalSymbol, anonymousSymbol)
 			c.valueSymbolLinks.Get(anonymousSymbol).resolvedType = defaultContainingObject
 			if c.isValidSpreadType(t) {
@@ -15655,6 +15656,10 @@ func (c *Checker) createDefaultPropertyWrapperForModule(symbol *ast.Symbol, orig
 	c.valueSymbolLinks.Get(newSymbol).nameType = c.getStringLiteralType("default")
 	c.aliasSymbolLinks.Get(newSymbol).aliasTarget = c.resolveSymbol(symbol)
 	memberTable[ast.InternalSymbolNameDefault] = newSymbol
+	if anonymousSymbol == nil && originalSymbol != nil {
+		anonymousSymbol = c.newSymbol(ast.SymbolFlagsObjectLiteral, ast.InternalSymbolNameObject)
+		anonymousSymbol.Declarations = originalSymbol.Declarations
+	}
 	return c.newAnonymousType(anonymousSymbol, memberTable, nil, nil, nil)
 }
 
@@ -25594,7 +25599,7 @@ func (c *Checker) getUnionTypeEx(types []*Type, unionReduction UnionReduction, a
 }
 
 func (c *Checker) getUnionTypeWorker(types []*Type, unionReduction UnionReduction, alias *TypeAlias, origin *Type) *Type {
-	typeSet, includes := c.addTypesToUnion(make([]*Type, 0, len(types)), 0, types)
+	typeSet, includes := c.addTypesToUnion(types)
 	if unionReduction != UnionReductionNone {
 		if includes&TypeFlagsAnyOrUnknown != 0 {
 			if includes&TypeFlagsAny != 0 {
@@ -25701,29 +25706,15 @@ func (c *Checker) UnionTypes() iter.Seq[*Type] {
 	return maps.Values(c.unionTypes)
 }
 
-func (c *Checker) addTypesToUnion(typeSet []*Type, includes TypeFlags, types []*Type) ([]*Type, TypeFlags) {
-	var lastType *Type
-	for _, t := range types {
-		if t != lastType {
-			if t.flags&TypeFlagsUnion != 0 {
-				u := t.AsUnionType()
-				if t.alias != nil || u.origin != nil {
-					includes |= TypeFlagsUnion
-				}
-				typeSet, includes = c.addTypesToUnion(typeSet, includes, u.types)
-			} else {
-				typeSet, includes = c.addTypeToUnion(typeSet, includes, t)
-			}
-			lastType = t
+func (c *Checker) addTypesToUnion(sourceTypes []*Type) ([]*Type, TypeFlags) {
+	types := make([]*Type, 0, len(sourceTypes))
+	var includes TypeFlags
+	addType := func(t *Type) {
+		flags := t.flags
+		// We ignore 'never' types in unions
+		if flags&TypeFlagsNever != 0 {
+			return
 		}
-	}
-	return typeSet, includes
-}
-
-func (c *Checker) addTypeToUnion(typeSet []*Type, includes TypeFlags, t *Type) ([]*Type, TypeFlags) {
-	flags := t.flags
-	// We ignore 'never' types in unions
-	if flags&TypeFlagsNever == 0 {
 		includes |= flags & TypeFlagsIncludesMask
 		if flags&TypeFlagsInstantiable != 0 {
 			includes |= TypeFlagsIncludesInstantiable
@@ -25741,13 +25732,41 @@ func (c *Checker) addTypeToUnion(typeSet []*Type, includes TypeFlags, t *Type) (
 			if t.objectFlags&ObjectFlagsContainsWideningType == 0 {
 				includes |= TypeFlagsIncludesNonWideningType
 			}
-		} else {
-			if index, ok := slices.BinarySearchFunc(typeSet, t, CompareTypes); !ok {
-				typeSet = slices.Insert(typeSet, index, t)
+			return
+		}
+		types = append(types, t)
+	}
+	var lastType *Type
+	for _, t := range sourceTypes {
+		if t != lastType {
+			if t.flags&TypeFlagsUnion != 0 {
+				u := t.AsUnionType()
+				if t.alias != nil || u.origin != nil {
+					includes |= TypeFlagsUnion
+				}
+				for _, s := range u.types {
+					addType(s)
+				}
+			} else {
+				addType(t)
 			}
+			lastType = t
 		}
 	}
-	return typeSet, includes
+	if len(types) >= 2 {
+		// Sort and deduplicate types
+		slices.SortStableFunc(types, CompareTypes)
+		unique := 1
+		for _, t := range types[1:] {
+			if t != types[unique-1] {
+				types[unique] = t
+				unique++
+			}
+		}
+		clear(types[unique:])
+		types = types[:unique]
+	}
+	return types, includes
 }
 
 func (c *Checker) addNamedUnions(namedUnions []*Type, types []*Type) []*Type {
@@ -27157,7 +27176,7 @@ func (c *Checker) getSuggestionForNonexistentIndexSignature(objectType *Type, ex
 
 func (c *Checker) getSuggestedTypeForNonexistentStringLiteralType(source *Type, target *Type) *Type {
 	candidates := core.FilterSeq(target.Types(), func(t *Type) bool { return t.flags&TypeFlagsStringLiteral != 0 })
-	return core.GetSpellingSuggestion(getStringLiteralValue(source), candidates, getStringLiteralValue, CompareTypes)
+	return core.GetSpellingSuggestionWithMaxCandidateCount(getStringLiteralValue(source), candidates, getStringLiteralValue, CompareTypes, 1000)
 }
 
 func getIndexNodeForAccessExpression(accessNode *ast.Node) *ast.Node {
