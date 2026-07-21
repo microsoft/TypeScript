@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/controlFlowNoCircularity.ts] ////
+
+=== controlFlowNoCircularity.ts ===
+// https://github.com/microsoft/typescript-go/issues/4673
+
+export function repro(board: number[][], pos: number | undefined): void {
+>repro : (board: number[][], pos: number | undefined) => void
+>board : number[][]
+>pos : number | undefined
+
+  if (!pos) return;
+>!pos : boolean
+>pos : number | undefined
+
+  for (const pattern of [{ target: [-1, -1], intermediate: [-1, 0] }]) {
+>pattern : { target: number[]; intermediate: number[]; }
+>[{ target: [-1, -1], intermediate: [-1, 0] }] : { target: number[]; intermediate: number[]; }[]
+>{ target: [-1, -1], intermediate: [-1, 0] } : { target: number[]; intermediate: number[]; }
+>target : number[]
+>[-1, -1] : number[]
+>-1 : -1
+>1 : 1
+>-1 : -1
+>1 : 1
+>intermediate : number[]
+>[-1, 0] : number[]
+>-1 : -1
+>1 : 1
+>0 : 0
+
+    const targetR = pos + pattern.target[0];
+>targetR : number
+>pos + pattern.target[0] : number
+>pos : number
+>pattern.target[0] : number
+>pattern.target : number[]
+>pattern : { target: number[]; intermediate: number[]; }
+>target : number[]
+>0 : 0
+
+    const targetC = pos + pattern.target[1];
+>targetC : number
+>pos + pattern.target[1] : number
+>pos : number
+>pattern.target[1] : number
+>pattern.target : number[]
+>pattern : { target: number[]; intermediate: number[]; }
+>target : number[]
+>1 : 1
+
+    if (board[targetR][targetC] !== 0) {}
+>board[targetR][targetC] !== 0 : boolean
+>board[targetR][targetC] : number
+>board[targetR] : number[]
+>board : number[][]
+>targetR : number
+>targetC : number
+>0 : 0
+
+    const [ir, ic] = pattern.intermediate;
+>ir : number
+>ic : number
+>pattern.intermediate : number[]
+>pattern : { target: number[]; intermediate: number[]; }
+>intermediate : number[]
+
+    const midC = ic;
+>midC : number
+>ic : number
+
+    if (board[ir][midC] === 0) {
+>board[ir][midC] === 0 : boolean
+>board[ir][midC] : number
+>board[ir] : number[]
+>board : number[][]
+>ir : number
+>midC : number
+>0 : 0
+    }
+  }
+}
+
