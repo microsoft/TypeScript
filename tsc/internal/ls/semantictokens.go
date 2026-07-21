@@ -12,7 +12,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
-	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 // tokenTypes defines the order of token types for encoding
@@ -259,13 +258,13 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 							tokenModifier |= tokenModifierLocal
 						}
 						declSourceFile := ast.GetSourceFileOfNode(decl)
-						if declSourceFile != nil && program.IsSourceFileDefaultLibrary(tspath.Path(declSourceFile.FileName())) {
+						if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.Path()) {
 							tokenModifier |= tokenModifierDefaultLibrary
 						}
 					} else if symbol.Declarations != nil {
 						for _, decl := range symbol.Declarations {
 							declSourceFile := ast.GetSourceFileOfNode(decl)
-							if declSourceFile != nil && program.IsSourceFileDefaultLibrary(tspath.Path(declSourceFile.FileName())) {
+							if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.Path()) {
 								tokenModifier |= tokenModifierDefaultLibrary
 								break
 							}
