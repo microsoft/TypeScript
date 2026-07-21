@@ -53,6 +53,7 @@ import type { FileSystem } from "@typescript/native-preview/unstable/fs";
 import {
     API,
     type BigIntLiteralType,
+    CheckFlags,
     type ConditionalType,
     DiagnosticCategory,
     type FreshableType,
@@ -66,6 +67,7 @@ import {
     ModifierFlags,
     ModuleKind,
     ObjectFlags,
+    type Signature,
     SignatureKind,
     type StringMappingType,
     SymbolFlags,
@@ -1339,11 +1341,87 @@ export class Cache {
             const callSigs = project.checker.getSignaturesOfType(type, SignatureKind.Call);
             assert.ok(callSigs.length > 0);
             const sig = callSigs[0];
+            const typeCallSigs = type.getCallSignatures();
+            assert.deepEqual(typeCallSigs, callSigs);
+            assert.ok((sig.getReturnType()).flags & TypeFlags.Number);
+            assert.ok((sig.getTypeParameterAtPosition(0)).flags & TypeFlags.Number);
             assert.ok(sig.id);
             assert.ok(sig.parameters.length >= 2);
             assert.ok(sig.hasRestParameter);
             assert.ok(!sig.isConstruct);
             assert.ok(!sig.isAbstract);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getApparentProperties includes CallableFunction members", () => {
+        const api = spawnAPI(checkerFiles);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = checkerFiles["/src/main.ts"];
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            const propertyNames = (type.getApparentProperties()).map(property => property.name);
+            assert.ok(propertyNames.includes("apply"));
+            assert.ok(propertyNames.includes("call"));
+            assert.ok(propertyNames.includes("bind"));
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("checker and object methods share cached results", () => {
+        const api = new API({
+            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+            fs: createVirtualFileSystem(checkerFiles),
+            collectTiming: true,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = checkerFiles["/src/main.ts"];
+            const symbol = project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("add("));
+            assert.ok(symbol);
+            const type = project.checker.getTypeOfSymbol(symbol);
+            let signature: Signature | undefined;
+
+            function assertOneRequest(callback: () => void) {
+                api.resetTimingInfo();
+                callback();
+                assert.equal((api.getTimingInfo()).totals.requestCount, 1);
+            }
+
+            assertOneRequest(() => {
+                const properties = type.getProperties();
+                assert.strictEqual(project.checker.getPropertiesOfType(type), properties);
+            });
+            assertOneRequest(() => {
+                const signatures = type.getCallSignatures();
+                assert.strictEqual(project.checker.getSignaturesOfType(type, SignatureKind.Call), signatures);
+                signature = signatures[0];
+            });
+            assertOneRequest(() => {
+                const nonNullable = project.checker.getNonNullableType(type);
+                assert.strictEqual(type.getNonNullableType(), nonNullable);
+            });
+            assertOneRequest(() => {
+                const apparentType = type.getApparentType();
+                assert.strictEqual(project.checker.getApparentType(type), apparentType);
+            });
+            assertOneRequest(() => {
+                const indexInfos = type.getIndexInfos();
+                assert.strictEqual(project.checker.getIndexInfosOfType(type), indexInfos);
+            });
+            assertOneRequest(() => {
+                assert.ok(signature);
+                const returnType = project.checker.getReturnTypeOfSignature(signature);
+                assert.strictEqual(signature.getReturnType(), returnType);
+            });
         }
         finally {
             api.close();
@@ -1637,6 +1715,21 @@ export const value = 1;
             api.close();
         }
     });
+
+    test("checkFlags is typed as CheckFlags", () => {
+        const api = spawnAPI(symbolFiles);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = project.checker.getSymbolAtPosition("/src/mod.ts", symbolFiles["/src/mod.ts"].indexOf("Animal"));
+            assert.ok(symbol);
+            const checkFlags: CheckFlags = symbol.checkFlags;
+            assert.equal(checkFlags & CheckFlags.Readonly, 0);
+        }
+        finally {
+            api.close();
+        }
+    });
 });
 
 describe("Type - getSymbol", () => {
@@ -1710,6 +1803,11 @@ export const tuple: readonly [number, string?, ...boolean[]] = [1];
             const target = ref.getTarget();
             assert.ok(target);
             assert.ok(target.flags & TypeFlags.Object);
+            const properties = type.getProperties();
+            assert.ok(properties.some(property => property.name === "length"));
+            assert.equal((type.getProperty("length"))?.name, "length");
+            assert.ok((type.getApparentProperties()).length >= properties.length);
+            assert.strictEqual(type.getNonNullableType(), type);
         }
         finally {
             api.close();

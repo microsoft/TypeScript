@@ -6,6 +6,7 @@ import type { TypeFlags } from "#enums/typeFlags";
 import type { TypePredicateKind } from "#enums/typePredicateKind";
 import type {
     NodeHandle,
+    Signature,
     Symbol,
 } from "./api.ts";
 
@@ -30,6 +31,36 @@ export interface Type {
 
     /** Get the symbol associated with this type, if any */
     getSymbol(): Promise<Symbol | undefined>;
+
+    /** Get the properties of this type. */
+    getProperties(): Promise<readonly Symbol[]>;
+
+    /** Get a named property of this type, if present. */
+    getProperty(propertyName: string): Promise<Symbol | undefined>;
+
+    /** Get the properties of the apparent type of this type. */
+    getApparentProperties(): Promise<readonly Symbol[]>;
+
+    /** Get the apparent type of this type. */
+    getApparentType(): Promise<Type>;
+
+    /** Get the call signatures of this type. */
+    getCallSignatures(): Promise<readonly Signature[]>;
+
+    /** Get the construct signatures of this type. */
+    getConstructSignatures(): Promise<readonly Signature[]>;
+
+    /** Get this type with `null` and `undefined` removed. */
+    getNonNullableType(): Promise<Type>;
+
+    /** Get this type's string index value type, if present. */
+    getStringIndexType(): Promise<Type | undefined>;
+
+    /** Get this type's number index value type, if present. */
+    getNumberIndexType(): Promise<Type | undefined>;
+
+    /** Get all index information for this type. */
+    getIndexInfos(): Promise<readonly IndexInfo[]>;
 
     /** Get the type arguments of the type alias this type was instantiated from, if any */
     getAliasTypeArguments(): Promise<readonly Type[]>;

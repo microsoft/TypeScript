@@ -329,6 +329,7 @@ export const generateExtension = task({
 /** @type {EnumDef[]} */
 const enumDefs = [
     { name: "SymbolFlags", goPrefix: "SymbolFlags", goFile: "internal/ast/symbolflags.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "CheckFlags", goPrefix: "CheckFlags", goFile: "internal/ast/checkflags.go", outDir: "_packages/native-preview/src/enums" },
     { name: "TypeFlags", goPrefix: "TypeFlags", goFile: "internal/checker/types.go", outDir: "_packages/native-preview/src/enums" },
     { name: "ObjectFlags", goPrefix: "ObjectFlags", goFile: "internal/checker/types.go", outDir: "_packages/native-preview/src/enums" },
     { name: "SignatureFlags", goPrefix: "SignatureFlags", goFile: "internal/checker/types.go", outDir: "_packages/native-preview/src/enums" },

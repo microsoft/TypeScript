@@ -681,13 +681,15 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 	case string(MethodGetBaseTypeOfLiteralType):
 		return s.handleGetBaseTypeOfLiteralType(ctx, parsed.(*GetBaseTypeOfLiteralTypeParams))
 	case string(MethodGetNonNullableType):
-		return s.handleGetNonNullableType(ctx, parsed.(*GetNonNullableTypeParams))
+		return s.handleGetNonNullableType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetTypeFromTypeNode):
 		return s.handleGetTypeFromTypeNode(ctx, parsed.(*GetTypeFromTypeNodeParams))
 	case string(MethodGetWidenedType):
 		return s.handleGetWidenedType(ctx, parsed.(*GetWidenedTypeParams))
 	case string(MethodGetParameterType):
 		return s.handleGetParameterType(ctx, parsed.(*GetParameterTypeParams))
+	case string(MethodGetTypeParameterAtPosition):
+		return s.handleGetTypeParameterAtPosition(ctx, parsed.(*GetParameterTypeParams))
 	case string(MethodIsArrayLikeType):
 		return s.handleIsArrayLikeType(ctx, parsed.(*IsArrayLikeTypeParams))
 	case string(MethodIsTypeAssignableTo):
@@ -707,7 +709,7 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 	case string(MethodIsContextSensitive):
 		return s.handleIsContextSensitive(ctx, parsed.(*GetContextualTypeParams))
 	case string(MethodGetReturnTypeOfSignature):
-		return s.handleGetReturnTypeOfSignature(ctx, parsed.(*CheckerSignatureParams))
+		return s.handleGetReturnTypeOfSignature(ctx, parsed.(*GetSignaturePropertyParams))
 	case string(MethodGetRestTypeOfSignature):
 		return s.handleGetRestTypeOfSignature(ctx, parsed.(*CheckerSignatureParams))
 	case string(MethodGetTypePredicateOfSignature):
@@ -716,18 +718,20 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetBaseTypes(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetPropertiesOfType):
 		return s.handleGetPropertiesOfType(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodGetApparentPropertiesOfType):
+		return s.handleGetApparentPropertiesOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetApparentType):
-		return s.handleGetApparentType(ctx, parsed.(*CheckerTypeParams))
+		return s.handleGetApparentType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetPropertyOfType):
 		return s.handleGetPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
 	case string(MethodGetIndexInfosOfType):
 		return s.handleGetIndexInfosOfType(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetConstraintOfTypeParameter):
 		return s.handleGetConstraintOfTypeParameter(ctx, parsed.(*GetTypePropertyParams))
-	case string(MethodGetDefaultFromTypeParameter):
-		return s.handleGetDefaultFromTypeParameter(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetBaseConstraintOfType):
 		return s.handleGetBaseConstraintOfType(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodGetDefaultFromTypeParameter):
+		return s.handleGetDefaultFromTypeParameter(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetTypeArguments):
 		return s.handleGetTypeArguments(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetImportAdderEdits):
@@ -2001,7 +2005,7 @@ func (s *Session) handleGetBaseTypeOfLiteralType(ctx context.Context, params *Ge
 }
 
 // handleGetNonNullableType returns the type with null and undefined removed.
-func (s *Session) handleGetNonNullableType(ctx context.Context, params *GetNonNullableTypeParams) (*TypeResponse, error) {
+func (s *Session) handleGetNonNullableType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
 		return nil, err
@@ -2066,6 +2070,23 @@ func (s *Session) handleGetParameterType(ctx context.Context, params *GetParamet
 	}
 
 	return setup.newTypeResponse(setup.checker.GetTypeAtPosition(sig, int(params.Index))), nil
+}
+
+func (s *Session) handleGetTypeParameterAtPosition(ctx context.Context, params *GetParameterTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	sig, err := setup.resolveSignatureHandle(params.Signature)
+	if err != nil {
+		return nil, err
+	}
+	if params.Index < 0 {
+		return nil, fmt.Errorf("%w: invalid parameter index", ErrClientError)
+	}
+	return setup.newTypeResponse(setup.checker.GetTypeParameterAtPosition(sig, int(params.Index))), nil
 }
 
 // handleIsArrayLikeType returns whether a type is array-like.
@@ -2342,7 +2363,7 @@ func (s *Session) handleIsContextSensitive(ctx context.Context, params *GetConte
 }
 
 // handleGetReturnTypeOfSignature returns the return type of a signature.
-func (s *Session) handleGetReturnTypeOfSignature(ctx context.Context, params *CheckerSignatureParams) (*TypeResponse, error) {
+func (s *Session) handleGetReturnTypeOfSignature(ctx context.Context, params *GetSignaturePropertyParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
 		return nil, err
@@ -2487,8 +2508,30 @@ func (s *Session) handleGetPropertiesOfType(ctx context.Context, params *Checker
 	return results, nil
 }
 
+// handleGetApparentPropertiesOfType returns the apparent properties of a type,
+// including CallableFunction or NewableFunction members where applicable.
+func (s *Session) handleGetApparentPropertiesOfType(ctx context.Context, params *GetTypePropertyParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	props := setup.checker.GetApparentProperties(t)
+	results := make([]*SymbolResponse, len(props))
+	for i, prop := range props {
+		results[i] = setup.newSymbolResponse(prop)
+	}
+	return results, nil
+}
+
 // handleGetApparentType returns the apparent type of a type.
-func (s *Session) handleGetApparentType(ctx context.Context, params *CheckerTypeParams) (*TypeResponse, error) {
+func (s *Session) handleGetApparentType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
 		return nil, err
