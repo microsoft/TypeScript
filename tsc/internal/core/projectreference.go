@@ -3,9 +3,9 @@ package core
 import "github.com/microsoft/typescript-go/internal/tspath"
 
 type ProjectReference struct {
-	Path         string
-	OriginalPath string
-	Circular     bool
+	Path         string `json:"path"`
+	OriginalPath string `json:"originalPath"`
+	Circular     bool   `json:"circular"`
 }
 
 func ResolveProjectReferencePath(ref *ProjectReference) string {

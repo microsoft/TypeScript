@@ -80,9 +80,19 @@ export interface InitializeResponse {
     currentDirectory: string;
 }
 
+export interface ProjectReference {
+    /** A normalized path on disk */
+    path: string;
+    /** The path as the user originally wrote it */
+    originalPath?: string;
+    /** True if it is intended that this reference form a circularity */
+    circular?: boolean;
+}
+
 export interface ConfigResponse {
     options: Record<string, unknown>;
     fileNames: string[];
+    projectReferences?: ProjectReference[];
 }
 
 export interface LSPUpdateSnapshotParams {

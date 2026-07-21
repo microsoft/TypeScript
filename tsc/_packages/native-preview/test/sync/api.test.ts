@@ -100,6 +100,25 @@ describe("API", () => {
             const config = api.parseConfigFile("/tsconfig.json");
             assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
             assert.deepEqual(config.options, { configFilePath: "/tsconfig.json" });
+            assert.equal(config.projectReferences, undefined);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("parseConfigFile includes projectReferences", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ references: [{ path: "./harness" }, { path: "./server" }] }),
+        });
+        try {
+            const config = api.parseConfigFile("/tsconfig.json");
+            assert.deepEqual(config.fileNames, []);
+            assert.deepEqual(config.options, { configFilePath: "/tsconfig.json" });
+            assert.deepEqual(config.projectReferences, [
+                { circular: false, originalPath: "./harness", path: "/harness" },
+                { circular: false, originalPath: "./server", path: "/server" },
+            ]);
         }
         finally {
             api.close();

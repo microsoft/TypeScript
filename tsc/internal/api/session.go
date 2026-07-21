@@ -1120,8 +1120,9 @@ func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfig
 	)
 
 	return &ConfigFileResponse{
-		FileNames: parsedCommandLine.FileNames(),
-		Options:   parsedCommandLine.CompilerOptions(),
+		FileNames:         parsedCommandLine.FileNames(),
+		Options:           parsedCommandLine.CompilerOptions(),
+		ProjectReferences: parsedCommandLine.ProjectReferences(),
 	}, nil
 }
 
