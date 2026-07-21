@@ -88,3 +88,32 @@ flat2(arg2);
 >flat2 : Symbol(flat2, Decl(nestedGenericTypeInference.ts, 15, 12))
 >arg2 : Symbol(arg2, Decl(nestedGenericTypeInference.ts, 18, 13))
 
+// https://github.com/oxc-project/tsgolint/issues/1058
+
+interface Column<T> {
+>Column : Symbol(Column, Decl(nestedGenericTypeInference.ts, 19, 12))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 23, 17))
+
+  dataIndex?: (T | (string & {}))[]
+>dataIndex : Symbol(Column.dataIndex, Decl(nestedGenericTypeInference.ts, 23, 21))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 23, 17))
+}
+
+declare function table<T>(rows: readonly T[], columns: Column<T>[]): void
+>table : Symbol(table, Decl(nestedGenericTypeInference.ts, 25, 1))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 27, 23))
+>rows : Symbol(rows, Decl(nestedGenericTypeInference.ts, 27, 26))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 27, 23))
+>columns : Symbol(columns, Decl(nestedGenericTypeInference.ts, 27, 45))
+>Column : Symbol(Column, Decl(nestedGenericTypeInference.ts, 19, 12))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 27, 23))
+
+declare const rows: { id: number }[]
+>rows : Symbol(rows, Decl(nestedGenericTypeInference.ts, 29, 13))
+>id : Symbol(id, Decl(nestedGenericTypeInference.ts, 29, 21))
+
+table(rows, [{ dataIndex: ['id'] }])
+>table : Symbol(table, Decl(nestedGenericTypeInference.ts, 25, 1))
+>rows : Symbol(rows, Decl(nestedGenericTypeInference.ts, 29, 13))
+>dataIndex : Symbol(dataIndex, Decl(nestedGenericTypeInference.ts, 31, 14))
+

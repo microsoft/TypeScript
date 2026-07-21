@@ -20,3 +20,15 @@ flat1(arg1);
 declare function flat2<T>(args: Box<T> | Box<Array<T>>): void;
 declare const arg2: Box<string> | Box<Array<string>>;
 flat2(arg2);
+
+// https://github.com/oxc-project/tsgolint/issues/1058
+
+interface Column<T> {
+  dataIndex?: (T | (string & {}))[]
+}
+
+declare function table<T>(rows: readonly T[], columns: Column<T>[]): void
+
+declare const rows: { id: number }[]
+
+table(rows, [{ dataIndex: ['id'] }])

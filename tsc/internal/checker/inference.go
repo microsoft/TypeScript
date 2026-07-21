@@ -27,7 +27,6 @@ type InferenceState struct {
 	sourceStack       []*Type
 	targetStack       []*Type
 	next              *InferenceState
-	depth             int
 }
 
 func (c *Checker) getInferenceState() *InferenceState {
@@ -108,11 +107,11 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 		}
 		// First, infer between identically matching source and target constituents and remove the
 		// matching types.
-		tempSources, tempTargets := c.inferFromMatchingTypes(n, sourceTypes, target.Distributed(), (*Checker).isTypeOrBaseIdenticalTo)
+		tempSources, tempTargets := c.inferFromMatchingTypes(n, sourceTypes, target.Types(), (*Checker).isTypeOrBaseIdenticalTo, false /*sort*/)
 		// Next, infer between closely matching source and target constituents and remove
 		// the matching types. Types closely match when they are instantiations of the same
 		// object type or instantiations of the same type alias.
-		sources, targets := c.inferFromMatchingTypes(n, tempSources, tempTargets, (*Checker).isTypeCloselyMatchedBy)
+		sources, targets := c.inferFromMatchingTypes(n, tempSources, tempTargets, (*Checker).isTypeCloselyMatchedBy, true /*sort*/)
 		if len(targets) == 0 {
 			return
 		}
@@ -140,7 +139,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 				sourceTypes = []*Type{source}
 			}
 			// Infer between identically matching source and target constituents and remove the matching types.
-			sources, targets := c.inferFromMatchingTypes(n, sourceTypes, target.Types(), (*Checker).isTypeIdenticalTo)
+			sources, targets := c.inferFromMatchingTypes(n, sourceTypes, target.Types(), (*Checker).isTypeIdenticalTo, false /*sort*/)
 			if len(sources) == 0 || len(targets) == 0 {
 				return
 			}
@@ -188,7 +187,6 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 				}
 				if n.priority < inference.priority {
 					inference.candidates = nil
-					inference.candidateDepths = nil
 					inference.contraCandidates = nil
 					inference.topLevel = true
 					inference.priority = n.priority
@@ -201,28 +199,9 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 							inference.contraCandidates = append(inference.contraCandidates, candidate)
 							clearCachedInferences(n.inferences)
 						}
-					} else {
-						index := slices.Index(inference.candidates, candidate)
-						if index < 0 || inference.candidateDepths[index] < n.depth {
-							// Candidate isn't present or is present with lower depth
-							if index >= 0 {
-								// Remove candidate with lower depth
-								inference.candidates = slices.Delete(inference.candidates, index, index+1)
-								inference.candidateDepths = slices.Delete(inference.candidateDepths, index, index+1)
-							}
-							index = 0
-							for index < len(inference.candidateDepths) {
-								if inference.candidateDepths[index] < n.depth {
-									break
-								}
-								index++
-							}
-							// Insert candidate at end or immediately before first candidate with lower depth.
-							// This ensures candidates with the highest depth are stored first.
-							inference.candidates = slices.Insert(inference.candidates, index, candidate)
-							inference.candidateDepths = slices.Insert(inference.candidateDepths, index, n.depth)
-							clearCachedInferences(n.inferences)
-						}
+					} else if !slices.Contains(inference.candidates, candidate) {
+						inference.candidates = append(inference.candidates, candidate)
+						clearCachedInferences(n.inferences)
 					}
 				}
 				if n.priority&InferencePriorityReturnType == 0 && target.flags&TypeFlagsTypeParameter != 0 && inference.topLevel && !c.isTypeParameterAtTopLevel(n.originalTarget, target, 0) {
@@ -303,7 +282,6 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 }
 
 func (c *Checker) inferFromTypeArguments(n *InferenceState, sourceTypes []*Type, targetTypes []*Type, variances []VarianceFlags) {
-	n.depth++
 	for i := range min(len(sourceTypes), len(targetTypes)) {
 		if i < len(variances) && variances[i]&VarianceFlagsVarianceMask == VarianceFlagsContravariant {
 			c.inferFromContravariantTypes(n, sourceTypes[i], targetTypes[i])
@@ -311,7 +289,6 @@ func (c *Checker) inferFromTypeArguments(n *InferenceState, sourceTypes []*Type,
 			c.inferFromTypes(n, sourceTypes[i], targetTypes[i])
 		}
 	}
-	n.depth--
 }
 
 func (c *Checker) inferWithPriority(n *InferenceState, source *Type, target *Type, newPriority InferencePriority) {
@@ -390,15 +367,33 @@ func (c *Checker) invokeOnce(n *InferenceState, source *Type, target *Type, acti
 	n.inferencePriority = min(n.inferencePriority, saveInferencePriority)
 }
 
-func (c *Checker) inferFromMatchingTypes(n *InferenceState, sources []*Type, targets []*Type, matches func(c *Checker, s *Type, t *Type) bool) ([]*Type, []*Type) {
+func (c *Checker) inferFromMatchingTypes(n *InferenceState, sources []*Type, targets []*Type, matches func(c *Checker, s *Type, t *Type) bool, sort bool) ([]*Type, []*Type) {
 	var matchedSources []*Type
 	var matchedTargets []*Type
 	for _, t := range targets {
 		for _, s := range sources {
 			if matches(c, s, t) {
-				c.inferFromTypes(n, s, t)
+				if !sort {
+					c.inferFromTypes(n, s, t)
+				}
 				matchedSources = core.AppendIfUnique(matchedSources, s)
 				matchedTargets = core.AppendIfUnique(matchedTargets, t)
+			}
+		}
+	}
+	if sort {
+		// Sort target types by decreasing depth of generic instantiations. Intuitively, a successful
+		// inference from a type argument with deeper nesting is of higher quality because we've stripped
+		// away more layers of type instantiations that otherwise might skew the results. For example,
+		// when inferring from string[] | string[][] to T[] | T[][], the inference of string we make from
+		// relating string[][] to T[][] is of higher quality than the inference of string[] we make relating
+		// string[][] to T[].
+		slices.SortFunc(matchedTargets, compareTypesAndDepth)
+		for _, t := range matchedTargets {
+			for _, s := range matchedSources {
+				if matches(c, s, t) {
+					c.inferFromTypes(n, s, t)
+				}
 			}
 		}
 	}
@@ -409,6 +404,45 @@ func (c *Checker) inferFromMatchingTypes(n *InferenceState, sources []*Type, tar
 		targets = core.Filter(targets, func(t *Type) bool { return !slices.Contains(matchedTargets, t) })
 	}
 	return sources, targets
+}
+
+// Compare two types first by depth and then by the regular type ordering.
+func compareTypesAndDepth(t1, t2 *Type) int {
+	d1 := getTypeDepth(t1, 3)
+	d2 := getTypeDepth(t2, 3)
+	if d1 != d2 {
+		return d2 - d1 // Largest depth sorts first
+	}
+	return CompareTypes(t1, t2)
+}
+
+// Return the depth of the given type up to the given maximum depth. For generic aliased types
+// and type references, the depth is one plus the largest type argument depth. For union and
+// intersection types, the depth is the largest constituent type depth. For all other types,
+// the depth is zero. The maximum depth limits infinite recursion of circular types.
+func getTypeDepth(t *Type, maxDepth int) int {
+	if maxDepth != 0 {
+		if t.alias != nil && len(t.alias.typeArguments) != 0 {
+			return getTypeListDepth(t.alias.typeArguments, maxDepth-1) + 1
+		}
+		if t.objectFlags&ObjectFlagsReference != 0 {
+			if typeArguments := t.checker.getTypeArguments(t); len(typeArguments) != 0 {
+				return getTypeListDepth(typeArguments, maxDepth-1) + 1
+			}
+		}
+		if t.flags&TypeFlagsUnionOrIntersection != 0 {
+			return getTypeListDepth(t.Types(), maxDepth)
+		}
+	}
+	return 0
+}
+
+func getTypeListDepth(types []*Type, maxDepth int) int {
+	depth := 0
+	for _, t := range types {
+		depth = max(depth, getTypeDepth(t, maxDepth))
+	}
+	return depth
 }
 
 func (c *Checker) inferToMultipleTypes(n *InferenceState, source *Type, targets []*Type, targetFlags TypeFlags) {
@@ -1596,7 +1630,6 @@ func cloneInferenceInfo(info *InferenceInfo) *InferenceInfo {
 	return &InferenceInfo{
 		typeParameter:    info.typeParameter,
 		candidates:       slices.Clone(info.candidates),
-		candidateDepths:  slices.Clone(info.candidateDepths),
 		contraCandidates: slices.Clone(info.contraCandidates),
 		inferredType:     info.inferredType,
 		priority:         info.priority,

@@ -58,3 +58,29 @@ flat2(arg2);
 >flat2 : <T>(args: Box<T> | Box<Array<T>>) => void
 >arg2 : Box<string> | Box<string[]>
 
+// https://github.com/oxc-project/tsgolint/issues/1058
+
+interface Column<T> {
+  dataIndex?: (T | (string & {}))[]
+>dataIndex : (T | (string & {}))[] | undefined
+}
+
+declare function table<T>(rows: readonly T[], columns: Column<T>[]): void
+>table : <T>(rows: readonly T[], columns: Column<T>[]) => void
+>rows : readonly T[]
+>columns : Column<T>[]
+
+declare const rows: { id: number }[]
+>rows : { id: number; }[]
+>id : number
+
+table(rows, [{ dataIndex: ['id'] }])
+>table(rows, [{ dataIndex: ['id'] }]) : void
+>table : <T>(rows: readonly T[], columns: Column<T>[]) => void
+>rows : { id: number; }[]
+>[{ dataIndex: ['id'] }] : { dataIndex: string[]; }[]
+>{ dataIndex: ['id'] } : { dataIndex: string[]; }
+>dataIndex : string[]
+>['id'] : string[]
+>'id' : "id"
+
