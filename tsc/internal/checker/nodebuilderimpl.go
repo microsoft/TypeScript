@@ -2160,7 +2160,15 @@ func (b *NodeBuilderImpl) indexInfoToIndexSignatureDeclarationHelper(indexInfo *
 }
 
 func hasTypeAnnotation(declaration *ast.Declaration) bool {
-	return declaration != nil && declaration.Type() != nil
+	if declaration == nil || declaration.Type() == nil {
+		return false
+	}
+	// Type alias declarations have a .Type() that is their type definition, not a type annotation on a value.
+	// Exclude them so callers don't mistake them for annotated value declarations.
+	if ast.IsTypeAliasDeclaration(declaration) || ast.IsJSTypeAliasDeclaration(declaration) {
+		return false
+	}
+	return true
 }
 
 /**
