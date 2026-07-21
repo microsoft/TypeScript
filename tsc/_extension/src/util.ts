@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
 
@@ -319,7 +320,7 @@ export function resolveTsdkPath(tsdkPath: string): string {
 }
 
 export async function resolveTsdkPathToExe(tsdkPath: string): Promise<ExeInfo | undefined> {
-    const resolved = workspaceResolve(tsdkPath);
+    const resolved = await realpathUri(workspaceResolve(tsdkPath));
     for (const packagePath of [resolved, vscode.Uri.joinPath(resolved, "..")]) {
         try {
             const packageJsonPath = vscode.Uri.joinPath(packagePath, "package.json");
@@ -352,6 +353,18 @@ export async function resolveTsdkPathToExe(tsdkPath: string): Promise<ExeInfo | 
             return { path: withLongPathPrefix(exePath.fsPath), version: "(local)", name: baseName, isLocal: true };
         }
         catch {}
+    }
+}
+
+async function realpathUri(uri: vscode.Uri): Promise<vscode.Uri> {
+    if (uri.scheme !== "file") {
+        return uri;
+    }
+    try {
+        return vscode.Uri.file(await fs.promises.realpath(uri.fsPath));
+    }
+    catch {
+        return uri;
     }
 }
 
