@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/controlFlowDependentDestructuringOverloadedAssertion.ts] ////
+
+=== controlFlowDependentDestructuringOverloadedAssertion.ts ===
+// https://github.com/microsoft/typescript-go/issues/4572
+
+type State =
+>State : State
+
+  | { status: "ready"; payload: { value?: string } }
+>status : "ready"
+>payload : { value?: string; }
+>value : string | undefined
+
+  | { status: "pending"; payload?: undefined };
+>status : "pending"
+>payload : undefined
+
+declare function getState(): State;
+>getState : () => State
+
+declare function assert(condition: boolean): asserts condition;
+>assert : { (condition: boolean): asserts condition; (condition: boolean, message: string): asserts condition; }
+>condition : boolean
+
+declare function assert(condition: boolean, message: string): asserts condition;
+>assert : { (condition: boolean): asserts condition; (condition: boolean, message: string): asserts condition; }
+>condition : boolean
+>message : string
+
+const readValue = () => {
+>readValue : () => string
+>() => {  const { status, payload } = getState();  if (status !== "ready") throw new Error("Value is not ready.");  assert(payload.value !== undefined);  return payload.value;} : () => string
+
+  const { status, payload } = getState();
+>status : "pending" | "ready"
+>payload : { value?: string; } | undefined
+>getState() : State
+>getState : () => State
+
+  if (status !== "ready") throw new Error("Value is not ready.");
+>status !== "ready" : boolean
+>status : "pending" | "ready"
+>"ready" : "ready"
+>new Error("Value is not ready.") : Error
+>Error : ErrorConstructor
+>"Value is not ready." : "Value is not ready."
+
+  assert(payload.value !== undefined);
+>assert(payload.value !== undefined) : void
+>assert : { (condition: boolean): asserts condition; (condition: boolean, message: string): asserts condition; }
+>payload.value !== undefined : boolean
+>payload.value : string | undefined
+>payload : { value?: string; }
+>value : string | undefined
+>undefined : undefined
+
+  return payload.value;
+>payload.value : string
+>payload : { value?: string; }
+>value : string
+
+};
+

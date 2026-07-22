@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariablesNoCrash2.ts] ////
+
+=== dependentDestructuredVariablesNoCrash2.ts ===
+// https://github.com/microsoft/TypeScript/issues/63091
+
+function ([undefined, unknown]: string | undefined = undefined)
+> : Symbol((Missing), Decl(dependentDestructuredVariablesNoCrash2.ts, 0, 0))
+>undefined : Symbol(undefined, Decl(dependentDestructuredVariablesNoCrash2.ts, 2, 11))
+>unknown : Symbol(unknown, Decl(dependentDestructuredVariablesNoCrash2.ts, 2, 21))
+>undefined : Symbol(undefined, Decl(dependentDestructuredVariablesNoCrash2.ts, 2, 11))
+

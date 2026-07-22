@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/exhaustiveSwitchTupleLengthFallthrough.ts] ////
+
+=== exhaustiveSwitchTupleLengthFallthrough.ts ===
+type F =
+>F : Symbol(F, Decl(exhaustiveSwitchTupleLengthFallthrough.ts, 0, 0))
+
+    | readonly [0, readonly [number]]
+    | readonly [0 | 1, readonly [number, number]]
+    | readonly [1, readonly [number, number, number]];
+
+const f = ([i, x]: F): undefined => {
+>f : Symbol(f, Decl(exhaustiveSwitchTupleLengthFallthrough.ts, 5, 5))
+>i : Symbol(i, Decl(exhaustiveSwitchTupleLengthFallthrough.ts, 5, 12))
+>x : Symbol(x, Decl(exhaustiveSwitchTupleLengthFallthrough.ts, 5, 14))
+>F : Symbol(F, Decl(exhaustiveSwitchTupleLengthFallthrough.ts, 0, 0))
+
+    switch (i) {
+>i : Symbol(i, Decl(exhaustiveSwitchTupleLengthFallthrough.ts, 5, 12))
+
+        case 0: {
+            switch (x.length) {
+>x.length : Symbol(length)
+>x : Symbol(x, Decl(exhaustiveSwitchTupleLengthFallthrough.ts, 5, 14))
+>length : Symbol(length)
+
+                case 1: case 2: return undefined;
+>undefined : Symbol(undefined)
+            }
+        }
+        case 1: {
+            const _: 2 | 3 = x.length;
+>_ : Symbol(_, Decl(exhaustiveSwitchTupleLengthFallthrough.ts, 13, 17))
+>x.length : Symbol(length)
+>x : Symbol(x, Decl(exhaustiveSwitchTupleLengthFallthrough.ts, 5, 14))
+>length : Symbol(length)
+        }
+    }
+};
+
