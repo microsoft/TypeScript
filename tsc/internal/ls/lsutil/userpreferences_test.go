@@ -511,6 +511,21 @@ func TestUserPreferencesParseServerFeaturePreferences(t *testing.T) {
 	})
 }
 
+func TestParseUserPreferencesEditorFormatting(t *testing.T) {
+	t.Parallel()
+
+	prefs := ParseUserPreferences(map[string]any{
+		"editor": map[string]any{
+			"tabSize":      2,
+			"insertSpaces": false,
+		},
+	})
+
+	assert.Equal(t, prefs.FormatCodeSettings.TabSize, 2)
+	assert.Equal(t, prefs.FormatCodeSettings.IndentSize, 2)
+	assert.Equal(t, prefs.FormatCodeSettings.ConvertTabsToSpaces, core.TSFalse)
+}
+
 func TestUserPreferencesParseJSDocCompletionPreferences(t *testing.T) {
 	t.Parallel()
 

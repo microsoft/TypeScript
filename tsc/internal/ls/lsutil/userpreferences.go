@@ -1,6 +1,7 @@
 package lsutil
 
 import (
+	"maps"
 	"reflect"
 	"slices"
 	"strings"
@@ -886,7 +887,19 @@ func ParseUserPreferences(items map[string]any) UserPreferences {
 	// editor < javascript < typescript < js/ts
 	if editorItem, ok := items["editor"]; ok && editorItem != nil {
 		if editorSettings, ok := editorItem.(map[string]any); ok {
-			prefs = prefs.withConfig(map[string]any{"unstable": editorSettings})
+			normalizedSettings := make(map[string]any, len(editorSettings)+2)
+			maps.Copy(normalizedSettings, editorSettings)
+			if tabSize, ok := normalizedSettings["tabSize"]; ok {
+				if _, hasIndentSize := normalizedSettings["indentSize"]; !hasIndentSize {
+					normalizedSettings["indentSize"] = tabSize
+				}
+			}
+			if insertSpaces, ok := normalizedSettings["insertSpaces"]; ok {
+				if _, hasConvertTabsToSpaces := normalizedSettings["convertTabsToSpaces"]; !hasConvertTabsToSpaces {
+					normalizedSettings["convertTabsToSpaces"] = insertSpaces
+				}
+			}
+			prefs = prefs.withConfig(map[string]any{"unstable": normalizedSettings})
 		}
 	}
 	// Apply javascript, then typescript, then js/ts (highest precedence).
