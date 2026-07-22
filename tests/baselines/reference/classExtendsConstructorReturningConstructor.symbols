@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/classExtendsConstructorReturningConstructor.ts] ////
+
+=== classExtendsConstructorReturningConstructor.ts ===
+// https://github.com/microsoft/TypeScript/issues/63559
+// Extending a value whose type is a class instance type carrying a construct
+// signature should resolve the base type from that construct signature rather
+// than repeating the outer instance type.
+
+export declare const Base: {
+>Base : Symbol(Base, Decl(classExtendsConstructorReturningConstructor.ts, 5, 20))
+
+    new (): {
+        kind: "A";
+>kind : Symbol(kind, Decl(classExtendsConstructorReturningConstructor.ts, 6, 13))
+
+        new (): { kind: "B" };
+>kind : Symbol(kind, Decl(classExtendsConstructorReturningConstructor.ts, 8, 17))
+
+    };
+};
+
+const A = new class extends Base {}();
+>A : Symbol(A, Decl(classExtendsConstructorReturningConstructor.ts, 12, 5))
+>Base : Symbol(Base, Decl(classExtendsConstructorReturningConstructor.ts, 5, 20))
+
+const B = new class extends A {}();
+>B : Symbol(B, Decl(classExtendsConstructorReturningConstructor.ts, 13, 5))
+>A : Symbol(A, Decl(classExtendsConstructorReturningConstructor.ts, 12, 5))
+
+const a: "A" = A.kind;
+>a : Symbol(a, Decl(classExtendsConstructorReturningConstructor.ts, 15, 5))
+>A.kind : Symbol(kind, Decl(classExtendsConstructorReturningConstructor.ts, 6, 13))
+>A : Symbol(A, Decl(classExtendsConstructorReturningConstructor.ts, 12, 5))
+>kind : Symbol(kind, Decl(classExtendsConstructorReturningConstructor.ts, 6, 13))
+
+const b: "B" = B.kind;
+>b : Symbol(b, Decl(classExtendsConstructorReturningConstructor.ts, 16, 5))
+>B.kind : Symbol(kind, Decl(classExtendsConstructorReturningConstructor.ts, 8, 17))
+>B : Symbol(B, Decl(classExtendsConstructorReturningConstructor.ts, 13, 5))
+>kind : Symbol(kind, Decl(classExtendsConstructorReturningConstructor.ts, 8, 17))
+

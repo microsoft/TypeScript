@@ -13325,6 +13325,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const originalBaseType = baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) : undefined;
         if (
             baseConstructorType.symbol && baseConstructorType.symbol.flags & SymbolFlags.Class &&
+            // Guard against extending a value whose type is a class instance type (rather than the class
+            // constructor itself). In that case `baseConstructorType` is the instance type, which shares the
+            // class symbol but whose construct signatures do not return the instance type, so we must resolve
+            // the base type from those construct signatures below instead of assuming the instance type.
+            baseConstructorType !== originalBaseType &&
             areAllOuterTypeParametersApplied(originalBaseType!)
         ) {
             // When base constructor type is a class with no captured type arguments we know that the constructors all have the same type parameters as the
