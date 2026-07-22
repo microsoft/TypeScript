@@ -5757,7 +5757,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
 
         /**
-         * @param {ignoreQualification} boolean Set when a symbol is being looked for through the exports of another symbol (meaning we have a route to qualify it already)
+         * @param {boolean} ignoreQualification Set when a symbol is being looked for through the exports of another symbol (meaning we have a route to qualify it already)
          */
         function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable, ignoreQualification?: boolean, isLocalNameLookup?: boolean): Symbol[] | undefined {
             if (!pushIfUnique(visitedSymbolTables!, symbols)) {
@@ -5975,7 +5975,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param symbol a Symbol to check if accessible
      * @param enclosingDeclaration a Node containing reference to the symbol
      * @param meaning a SymbolFlags to check if such meaning of the symbol is accessible
-     * @param shouldComputeAliasToMakeVisible a boolean value to indicate whether to return aliases to be mark visible in case the symbol is accessible
+     * @param shouldComputeAliasesToMakeVisible a boolean value to indicate whether to return aliases to be marked visible in case the symbol is accessible
      */
     function isSymbolAccessible(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean): SymbolAccessibilityResult {
         return isSymbolAccessibleWorker(symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible, /*allowModules*/ true);
@@ -18879,7 +18879,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * rather than manufacturing the properties. We can't just fetch the `constraintType` since that would ignore mappings
      * and mapping the `constraintType` directly ignores how mapped types map _properties_ and not keys (thus ignoring subtype
      * reduction in the constraintType) when possible.
-     * @param noIndexSignatures Indicates if _string_ index signatures should be elided. (other index signatures are always reported)
+     * @param indexFlags Flags controlling index type resolution; use IndexFlags.NoIndexSignatures to elide string index signatures (other index signatures are always reported)
      */
     function getIndexTypeForMappedType(type: MappedType, indexFlags: IndexFlags) {
         const typeParameter = getTypeParameterFromMappedType(type);
@@ -49835,7 +49835,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         /**
          * Copy the given symbol into symbol tables if the symbol has the given meaning
          * and it doesn't already existed in the symbol table
-         * @param key a key for storing in symbol table; if undefined, use symbol.name
          * @param symbol the symbol to be added into symbol table
          * @param meaning meaning of symbol to filter by before adding to symbol table
          */
