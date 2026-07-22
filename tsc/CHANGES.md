@@ -126,6 +126,14 @@ Corsa no longer parses the following JSDoc tags with a specific node type. They 
 
 ### Miscellaneous
 
+#### Error reporting under `--skipLibCheck`
+
+In TypeScript 6, conflicting declarations would sometimes only error in one declaration involved in the conflict.
+
+In TypeScript 7, conflicting declarations now consistently error in all contributing sites.
+
+This means some projects with errors previously fully silenced by `--skipLibCheck` will now correctly see declaration conflict errors in non-.d.ts files.
+
 #### Template literal type inference pulls off a full Unicode code point for empty placeholders.
 
 When inferring through a template literal type with an empty delimiter, Corsa consumes a full Unicode code point rather than a single UTF-16 code unit.
