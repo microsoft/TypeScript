@@ -666,7 +666,7 @@ type Checker struct {
 	factory                                     ast.NodeFactory
 	nodeLinks                                   core.LinkStore[*ast.Node, NodeLinks]
 	signatureLinks                              core.LinkStore[*ast.Node, SignatureLinks]
-	symbolNodeLinks                             core.LinkStore[*ast.Node, SymbolNodeLinks]
+	symbolNodeLinks                             nodeLinkStore[SymbolNodeLinks]
 	typeNodeLinks                               core.LinkStore[*ast.Node, TypeNodeLinks]
 	enumMemberLinks                             core.LinkStore[*ast.Node, EnumMemberLinks]
 	assertionLinks                              core.LinkStore[*ast.Node, AssertionLinks]
@@ -675,7 +675,7 @@ type Checker struct {
 	jsxElementLinks                             core.LinkStore[*ast.Node, JsxElementLinks]
 	computedNameLinks                           core.LinkStore[*ast.Node, ComputedNameNodeLinks]
 	symbolReferenceLinks                        core.LinkStore[*ast.Symbol, SymbolReferenceLinks]
-	valueSymbolLinks                            core.LinkStore[*ast.Symbol, ValueSymbolLinks]
+	valueSymbolLinks                            symbolArenaLinkStore[ValueSymbolLinks]
 	mappedSymbolLinks                           core.LinkStore[*ast.Symbol, MappedSymbolLinks]
 	deferredSymbolLinks                         core.LinkStore[*ast.Symbol, DeferredSymbolLinks]
 	aliasSymbolLinks                            core.LinkStore[*ast.Symbol, AliasSymbolLinks]
