@@ -2411,7 +2411,12 @@ func (c *Checker) typeMaybeAssignableTo(source *Type, target *Type) bool {
 	if source.flags&TypeFlagsUnion == 0 {
 		return c.isTypeAssignableTo(source, target)
 	}
-	for _, t := range source.AsUnionType().types {
+	// Quick exit when source union contains the target type
+	if containsType(source.Types(), target) {
+		return true
+	}
+	// Otherwise, check if any constituent type of the source union is assignable to the target type
+	for _, t := range source.Types() {
 		if c.isTypeAssignableTo(t, target) {
 			return true
 		}
