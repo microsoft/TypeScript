@@ -482,8 +482,9 @@ Found 1 error in a.ts[90m:1[0m
 "use strict";
 const a = "hello;
 
+//// [/home/src/projects/project/b.js] *rewrite with same content*
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","errors":true,"root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d8a5f356bd133a6882ecbde29426bdcb-const a = \"hello","signature":"64868e4042512db835b5b3c3226ab323-declare const a = \"hello\";\n","affectsGlobalScope":true,"impliedNodeFormat":1},"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;"],"options":{"declaration":false},"semanticDiagnosticsPerFile":[1,2]}
+{"version":"FakeTSVersion","errors":true,"root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d8a5f356bd133a6882ecbde29426bdcb-const a = \"hello","signature":"64868e4042512db835b5b3c3226ab323-declare const a = \"hello\";\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;","signature":"eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n","impliedNodeFormat":1}],"options":{"declaration":false},"semanticDiagnosticsPerFile":[1,2,3]}
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -534,8 +535,13 @@ const a = "hello;
     {
       "fileName": "./b.ts",
       "version": "907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;",
-      "signature": "907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;",
-      "impliedNodeFormat": "CommonJS"
+      "signature": "eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n",
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "907abc8137ceb88f0ddd6eccfa92d573-export const b = 10;",
+        "signature": "eaed5dafb4668e1b7c86b65b584b776a-export declare const b = 10;\n",
+        "impliedNodeFormat": 1
+      }
     }
   ],
   "options": {
@@ -543,17 +549,20 @@ const a = "hello;
   },
   "semanticDiagnosticsPerFile": [
     "lib.es2025.full.d.ts",
-    "./a.ts"
+    "./a.ts",
+    "./b.ts"
   ],
-  "size": 1209
+  "size": 1323
 }
 
 tsconfig.json::
 SemanticDiagnostics::
 *not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/projects/project/a.ts
+*not cached* /home/src/projects/project/b.ts
 Signatures::
 (computed .d.ts) /home/src/projects/project/a.ts
+(computed .d.ts) /home/src/projects/project/b.ts
 
 
 Edit [7]:: no change
@@ -581,4 +590,5 @@ tsconfig.json::
 SemanticDiagnostics::
 *not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/projects/project/a.ts
+*not cached* /home/src/projects/project/b.ts
 Signatures::

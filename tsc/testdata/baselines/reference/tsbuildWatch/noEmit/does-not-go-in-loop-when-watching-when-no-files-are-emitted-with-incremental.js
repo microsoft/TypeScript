@@ -250,5 +250,7 @@ tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /user/username/projects/myproject/a.js
+*refresh*    /user/username/projects/myproject/b.ts
 Signatures::
 (computed .d.ts) /user/username/projects/myproject/a.js
+(computed .d.ts) /user/username/projects/myproject/b.ts

@@ -119,7 +119,7 @@ func (h *affectedFilesHandler) getFilesAffectedBy(path tspath.Path) []*ast.Sourc
 
 	if info, _ := h.program.snapshot.fileInfos.Load(file.Path()); info.affectsGlobalScope {
 		h.hasAllFilesExcludingDefaultLibraryFile.Store(true)
-		h.program.snapshot.getAllFilesExcludingDefaultLibraryFile(h.program.program, file)
+		return h.program.snapshot.getAllFilesExcludingDefaultLibraryFile(h.program.program, file)
 	}
 
 	if h.program.snapshot.options.IsolatedModules.IsTrue() {

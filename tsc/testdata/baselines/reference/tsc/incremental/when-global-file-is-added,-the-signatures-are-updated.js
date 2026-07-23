@@ -541,6 +541,8 @@ Errors  Files
      1  src/anotherFileWithSameReferenes.ts[90m:2[0m
      1  src/main.ts[90m:3[0m
 
+//// [/home/src/workspaces/project/src/anotherFileWithSameReferenes.js] *rewrite with same content*
+//// [/home/src/workspaces/project/src/filePresent.js] *rewrite with same content*
 //// [/home/src/workspaces/project/src/main.js] *modified* 
 "use strict";
 /// <reference path="./newFile.ts"/>
@@ -684,9 +686,13 @@ function foo() { return 20; }
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/workspaces/project/src/filePresent.ts
+*refresh*    /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
 *refresh*    /home/src/workspaces/project/src/newFile.ts
 *refresh*    /home/src/workspaces/project/src/main.ts
 Signatures::
+(computed .d.ts) /home/src/workspaces/project/src/filePresent.ts
+(computed .d.ts) /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
 (computed .d.ts) /home/src/workspaces/project/src/newFile.ts
 (computed .d.ts) /home/src/workspaces/project/src/main.ts
 
@@ -706,7 +712,9 @@ declare function something2(): number;
 "use strict";
 function something2() { return 20; }
 
+//// [/home/src/workspaces/project/src/filePresent.js] *rewrite with same content*
 //// [/home/src/workspaces/project/src/main.js] *rewrite with same content*
+//// [/home/src/workspaces/project/src/newFile.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":[[2,6]],"fileNames":["lib.es2025.full.d.ts","./src/filePresent.ts","./src/fileNotFound.ts","./src/anotherFileWithSameReferenes.ts","./src/newFile.ts","./src/main.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"90fb0189e81698eb72c5c92453cf2ab4-function something() { return 10; }","signature":"427bfa05de25170a9630b13346cde60c-declare function something(): number;\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d97745dab1d2c6dc05ce702bd0c7145d-function something2() { return 20; }","signature":"6bc942031a42ec462dd78d556924caf0-declare function something2(): number;\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e70a47c0753d68cebbf1d60d9abf7212-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }","signature":"d30ad74c2e698ad06cc29f2ea6d12014-declare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"cf329dc888a898a1403ba3e35c2ec68e-function foo() { return 20; }","signature":"67af86f8c5b618332b620488f3be2c41-declare function foo(): number;\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"bc6af6fddab57e87e44b7bf54d933e49-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }something();something();foo();","signature":"50f7afe296d55bfece856bfb6f7ad6c9-declare function main(): void;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[2,3],[2,3,5]],"options":{"composite":true},"referencedMap":[[4,1],[6,2]],"latestChangedDtsFile":"./src/fileNotFound.d.ts"}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
@@ -846,12 +854,16 @@ function something2() { return 20; }
 tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/workspaces/project/src/filePresent.ts
 *refresh*    /home/src/workspaces/project/src/fileNotFound.ts
 *refresh*    /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
+*refresh*    /home/src/workspaces/project/src/newFile.ts
 *refresh*    /home/src/workspaces/project/src/main.ts
 Signatures::
+(computed .d.ts) /home/src/workspaces/project/src/filePresent.ts
 (computed .d.ts) /home/src/workspaces/project/src/fileNotFound.ts
 (computed .d.ts) /home/src/workspaces/project/src/anotherFileWithSameReferenes.ts
+(computed .d.ts) /home/src/workspaces/project/src/newFile.ts
 (computed .d.ts) /home/src/workspaces/project/src/main.ts
 
 

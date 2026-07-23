@@ -1008,6 +1008,63 @@ func TestBuildFileDelete(t *testing.T) {
 
 func TestBuildDependencyUpdate(t *testing.T) {
 	t.Parallel()
+	// Project shape shared by the batched dependency update scenarios:
+	// src/consumer.ts depends on dep-a only through src/middle.ts, whose .d.ts
+	// signature does not change when dep-a's type gains a member. src/env.ts
+	// pulls in dep-b, whose .d.ts augments the global scope.
+	getBatchDependencyUpdateFiles := func() FileMap {
+		return FileMap{
+			"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"composite": true,
+						"outDir": "dist",
+						"strict": true
+					},
+					"include": ["src/**/*"]
+				}
+			`),
+			"/home/src/workspaces/project/src/consumer.ts": stringtestutil.Dedent(`
+				import type { Kind } from "./middle";
+				export function describe(kind: Kind): string {
+					switch (kind) {
+						case "a":
+							return "first";
+						case "b":
+							return "second";
+					}
+				}
+			`),
+			"/home/src/workspaces/project/src/middle.ts": `export type { Kind } from "dep-a";`,
+			"/home/src/workspaces/project/src/env.ts":    `import "dep-b";`,
+			"/home/src/workspaces/project/node_modules/dep-a/package.json": stringtestutil.Dedent(`
+				{
+					"name": "dep-a",
+					"version": "1.0.0",
+					"types": "index.d.ts"
+				}
+			`),
+			"/home/src/workspaces/project/node_modules/dep-a/index.d.ts": `export type Kind = "a" | "b";`,
+			"/home/src/workspaces/project/node_modules/dep-b/package.json": stringtestutil.Dedent(`
+				{
+					"name": "dep-b",
+					"version": "1.0.0",
+					"types": "index.d.ts"
+				}
+			`),
+			"/home/src/workspaces/project/node_modules/dep-b/index.d.ts": stringtestutil.Dedent(`
+				declare global {
+					interface DepBGlobal {
+						marker: string;
+					}
+				}
+				export {};
+			`),
+		}
+	}
+	updateDepAWithBreakingTypeChange := func(sys *TestSys) {
+		sys.writeFileNoError("/home/src/workspaces/project/node_modules/dep-a/index.d.ts", `export type Kind = "a" | "b" | "c";`)
+	}
 	testCases := []*tscInput{
 		{
 			// https://github.com/microsoft/typescript-go/issues/2666
@@ -1202,6 +1259,88 @@ func TestBuildDependencyUpdate(t *testing.T) {
 					caption: "update absolute non-root dependency with breaking type change",
 					edit: func(sys *TestSys) {
 						sys.writeFileNoError("D:/work/deps/dep.d.ts", "export declare const myValue: number;")
+					},
+				},
+			},
+		},
+		{
+			subScenario:     "rebuilds transitive dependents when dependency update batch includes a global scope change",
+			files:           getBatchDependencyUpdateFiles(),
+			cwd:             "/home/src/workspaces/project",
+			commandLineArgs: []string{"--b", "--verbose"},
+			edits: []*tscEdit{
+				{
+					caption: "update dep-a with a breaking type change and dep-b with a global scope change in one batch",
+					edit: func(sys *TestSys) {
+						updateDepAWithBreakingTypeChange(sys)
+						sys.writeFileNoError("/home/src/workspaces/project/node_modules/dep-b/index.d.ts", stringtestutil.Dedent(`
+							declare global {
+								interface DepBGlobal {
+									marker: string;
+									extra: number;
+								}
+							}
+							export {};
+						`))
+					},
+				},
+				noChange,
+			},
+		},
+		{
+			// Control for the batched scenario: the same dep-a break without dep-b's global scope change.
+			subScenario:     "rebuilds transitive dependents when dependency update batch has no global scope change",
+			files:           getBatchDependencyUpdateFiles(),
+			cwd:             "/home/src/workspaces/project",
+			commandLineArgs: []string{"--b", "--verbose"},
+			edits: []*tscEdit{
+				{
+					caption: "update dep-a with a breaking type change",
+					edit:    updateDepAWithBreakingTypeChange,
+				},
+			},
+		},
+		{
+			subScenario: "rebuilds files using globals when global scope dependency is updated",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+					{
+						"compilerOptions": {
+							"composite": true,
+							"outDir": "dist",
+							"strict": true
+						},
+						"include": ["src/**/*"]
+					}
+				`),
+				"/home/src/workspaces/project/src/env.ts":  `import "dep-b";`,
+				"/home/src/workspaces/project/src/user.ts": `export const marker: string = globalMarker;`,
+				"/home/src/workspaces/project/node_modules/dep-b/package.json": stringtestutil.Dedent(`
+					{
+						"name": "dep-b",
+						"version": "1.0.0",
+						"types": "index.d.ts"
+					}
+				`),
+				"/home/src/workspaces/project/node_modules/dep-b/index.d.ts": stringtestutil.Dedent(`
+					declare global {
+						var globalMarker: string;
+					}
+					export {};
+				`),
+			},
+			cwd:             "/home/src/workspaces/project",
+			commandLineArgs: []string{"--b", "--verbose"},
+			edits: []*tscEdit{
+				{
+					caption: "update dep-b changing the type of a global",
+					edit: func(sys *TestSys) {
+						sys.writeFileNoError("/home/src/workspaces/project/node_modules/dep-b/index.d.ts", stringtestutil.Dedent(`
+							declare global {
+								var globalMarker: number;
+							}
+							export {};
+						`))
 					},
 				},
 			},
