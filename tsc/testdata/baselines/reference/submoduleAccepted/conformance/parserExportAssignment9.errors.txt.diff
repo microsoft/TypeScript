@@ -1,0 +1,30 @@
+--- old.parserExportAssignment9.errors.txt
++++ new.parserExportAssignment9.errors.txt
+@@= skipped -0, +0 lines =@@
+ parserExportAssignment9.ts(2,3): error TS1319: A default export can only be used in an ECMAScript-style module.
++parserExportAssignment9.ts(2,18): error TS2552: Cannot find name 'foo'. Did you mean 'Foo'?
+ parserExportAssignment9.ts(6,3): error TS1319: A default export can only be used in an ECMAScript-style module.
+-
+-
+-==== parserExportAssignment9.ts (2 errors) ====
++parserExportAssignment9.ts(6,18): error TS2552: Cannot find name 'bar'. Did you mean 'Bar'?
++
++
++==== parserExportAssignment9.ts (4 errors) ====
+     namespace Foo {
+       export default foo;
+       ~~~~~~~~~~~~~~~~~~~
+ !!! error TS1319: A default export can only be used in an ECMAScript-style module.
++                     ~~~
++!!! error TS2552: Cannot find name 'foo'. Did you mean 'Foo'?
++!!! related TS2728 parserExportAssignment9.ts:1:11: 'Foo' is declared here.
+     }
+     
+     namespace Bar {
+       export default bar;
+       ~~~~~~~~~~~~~~~~~~~
+ !!! error TS1319: A default export can only be used in an ECMAScript-style module.
++                     ~~~
++!!! error TS2552: Cannot find name 'bar'. Did you mean 'Bar'?
++!!! related TS2728 parserExportAssignment9.ts:5:11: 'Bar' is declared here.
+     }

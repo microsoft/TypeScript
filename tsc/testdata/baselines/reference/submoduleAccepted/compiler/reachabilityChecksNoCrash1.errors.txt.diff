@@ -9,12 +9,28 @@
  reachabilityChecksNoCrash1.ts(1,84): error TS2304: Cannot find name 'T'.
  reachabilityChecksNoCrash1.ts(1,86): error TS1011: An element access expression should take an argument.
  reachabilityChecksNoCrash1.ts(2,11): error TS1005: ':' expected.
-@@= skipped -100, +100 lines =@@
+@@= skipped -20, +20 lines =@@
+ reachabilityChecksNoCrash1.ts(4,12): error TS1005: ',' expected.
+ reachabilityChecksNoCrash1.ts(4,24): error TS2304: Cannot find name 'v'.
+ reachabilityChecksNoCrash1.ts(4,26): error TS1005: ',' expected.
++reachabilityChecksNoCrash1.ts(6,12): error TS2304: Cannot find name 'out'.
+ reachabilityChecksNoCrash1.ts(7,1): error TS1109: Expression expected.
+
+
+-==== reachabilityChecksNoCrash1.ts (35 errors) ====
++==== reachabilityChecksNoCrash1.ts (36 errors) ====
+     export async function arrayFromAsync<T>(asyncIterable!: AsyncIterable<T>): Promise<T[]> {
+                           ~~~~~~~~~~~~~~
+ !!! error TS7010: 'arrayFromAsync', which lacks return-type annotation, implicitly has an 'any' return type.
+@@= skipped -80, +81 lines =@@
  !!! error TS1005: ',' expected.
          }
      ~~~~~
 -!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ const: any; for: any; of: any; asyncIterable: any; out: any; "": any; }'.
 +!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ const: never[]; for: any; of: any; asyncIterable: any; out: any; "": any; }'.
          return out;
++               ~~~
++!!! error TS2304: Cannot find name 'out'.
      }
      ~
+ !!! error TS1109: Expression expected.

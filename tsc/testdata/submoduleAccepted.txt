@@ -1453,3 +1453,24 @@ conformance/jsdocDisallowedInTypescript.errors.txt.diff
 
 # Differing/better spans/related info for some errors
 compiler/constructorWithIncompleteTypeAnnotation.errors.txt.diff
+
+## checkchildren: dispatch methods now always check their child nodes ##
+# The checker methods dispatched from checkSourceElementWorker/checkExpressionWorker
+# (checkReturnStatement, checkYieldExpression, checkExportAssignment, checkTypePredicate,
+# checkAssertion) now always check their child nodes, even when an early return fires for a
+# grammar error or a misplaced construct (e.g. `yield`/`return` outside a function, `export =`
+# in a namespace). This keeps diagnostics stable regardless of traversal order and removes the
+# emit-resolver "pre-emit/post-emit diagnostic counts do not match" instability. The TypeScript
+# submodule skips these children on error paths (surfacing the diagnostics only lazily via the
+# emit resolver, if at all), so we now report some additional, correct diagnostics up front.
+compiler/multiLinePropertyAccessAndArrowFunctionIndent1.errors.txt.diff
+compiler/parseErrorIncorrectReturnToken.errors.txt.diff
+conformance/parserErrorRecovery_ModuleElement1.errors.txt.diff
+conformance/parserExportAssignment5.errors.txt.diff
+conformance/parserExportAssignment9.errors.txt.diff
+conformance/parserStatementIsNotAMemberVariableDeclaration1(alwaysstrict=true).errors.txt.diff
+conformance/YieldExpression12_es6.errors.txt.diff
+conformance/YieldExpression14_es6.errors.txt.diff
+conformance/YieldExpression15_es6.errors.txt.diff
+conformance/YieldExpression17_es6.errors.txt.diff
+conformance/YieldExpression2_es6.errors.txt.diff

@@ -41,6 +41,11 @@ func DoErrorBaseline(t *testing.T, baselinePath string, inputFiles []*harnessuti
 		errorBaseline = baseline.NoContent
 	}
 	baseline.Run(t, baselinePath, errorBaseline, opts)
+	if core.Some(errors, func(d *ast.Diagnostic) bool {
+		return d.Code() == -1
+	}) {
+		t.Fatalf("Found diagnostic with code -1, which is used to log critical assertion violations in the baseline. Inspect and fix those failures.")
+	}
 }
 
 func minimalDiagnosticsToString(diagnostics []diagnosticwriter.Diagnostic, pretty bool) string {

@@ -1,11 +1,14 @@
 YieldExpression12_es6.ts(3,6): error TS1163: A 'yield' expression is only allowed in a generator body.
+YieldExpression12_es6.ts(3,12): error TS2304: Cannot find name 'foo'.
 
 
-==== YieldExpression12_es6.ts (1 errors) ====
+==== YieldExpression12_es6.ts (2 errors) ====
     class C {
       constructor() {
          yield foo
          ~~~~~
 !!! error TS1163: A 'yield' expression is only allowed in a generator body.
+               ~~~
+!!! error TS2304: Cannot find name 'foo'.
       }
     }

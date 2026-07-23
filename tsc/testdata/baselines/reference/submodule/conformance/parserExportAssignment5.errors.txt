@@ -1,9 +1,12 @@
 parserExportAssignment5.ts(2,5): error TS1063: An export assignment cannot be used in a namespace.
+parserExportAssignment5.ts(2,14): error TS2304: Cannot find name 'A'.
 
 
-==== parserExportAssignment5.ts (1 errors) ====
+==== parserExportAssignment5.ts (2 errors) ====
     namespace M {
         export = A;
         ~~~~~~~~~~~
 !!! error TS1063: An export assignment cannot be used in a namespace.
+                 ~
+!!! error TS2304: Cannot find name 'A'.
     }

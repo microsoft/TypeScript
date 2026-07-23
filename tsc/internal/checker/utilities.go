@@ -129,6 +129,29 @@ func isConstTypeReference(node *ast.Node) bool {
 	return ast.IsTypeReferenceNode(node) && len(node.TypeArguments()) == 0 && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName) && node.AsTypeReferenceNode().TypeName.Text() == "const"
 }
 
+// isConstTypeReferenceName reports whether node is the `const` type name of a `const`
+// assertion (`x as const` / `<const>x`), which must not be resolved as a real name.
+func isConstTypeReferenceName(node *ast.Node) bool {
+	return node != nil && ast.IsIdentifier(node) &&
+		node.Parent != nil && isConstTypeReference(node.Parent) &&
+		node.Parent.Parent != nil && ast.IsAssertionExpression(node.Parent.Parent)
+}
+
+// isExportAssignmentExpressionName reports whether node is (the root entity name of) the
+// expression of an `export =` / `export default` assignment. Referencing a namespace or
+// type-only name there is legal, and checkExportAssignment decides whether it is an error,
+// so checkIdentifier must not report a value-usage error for it.
+func isExportAssignmentExpressionName(node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	current := node
+	for current.Parent != nil && ast.IsPropertyAccessOrQualifiedName(current.Parent) {
+		current = current.Parent
+	}
+	return current.Parent != nil && ast.IsExportAssignment(current.Parent) && current.Parent.Expression() == current
+}
+
 func GetSingleVariableOfVariableStatement(node *ast.Node) *ast.Node {
 	if !ast.IsVariableStatement(node) {
 		return nil

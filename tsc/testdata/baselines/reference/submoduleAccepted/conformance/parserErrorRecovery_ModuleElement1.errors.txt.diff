@@ -1,0 +1,23 @@
+--- old.parserErrorRecovery_ModuleElement1.errors.txt
++++ new.parserErrorRecovery_ModuleElement1.errors.txt
+@@= skipped -0, +0 lines =@@
++parserErrorRecovery_ModuleElement1.ts(1,8): error TS2304: Cannot find name 'foo'.
+ parserErrorRecovery_ModuleElement1.ts(2,1): error TS1128: Declaration or statement expected.
++parserErrorRecovery_ModuleElement1.ts(3,8): error TS2304: Cannot find name 'bar'.
+ parserErrorRecovery_ModuleElement1.ts(4,1): error TS1128: Declaration or statement expected.
+
+
+-==== parserErrorRecovery_ModuleElement1.ts (2 errors) ====
++==== parserErrorRecovery_ModuleElement1.ts (4 errors) ====
+     return foo;
++           ~~~
++!!! error TS2304: Cannot find name 'foo'.
+     }
+     ~
+ !!! error TS1128: Declaration or statement expected.
+     return bar;
++           ~~~
++!!! error TS2304: Cannot find name 'bar'.
+     }
+     ~
+ !!! error TS1128: Declaration or statement expected.

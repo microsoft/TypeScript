@@ -21,12 +21,14 @@
 +jsdocDisallowedInTypescript.ts(7,42): error TS2693: 'string' only refers to a type, but is being used as a value here.
 +jsdocDisallowedInTypescript.ts(7,48): error TS1005: ';' expected.
 +jsdocDisallowedInTypescript.ts(7,49): error TS1128: Declaration or statement expected.
++jsdocDisallowedInTypescript.ts(8,16): error TS2304: Cannot find name 'ctor'.
 +jsdocDisallowedInTypescript.ts(10,10): error TS7010: 'hof2', which lacks return-type annotation, implicitly has an 'any' return type.
 +jsdocDisallowedInTypescript.ts(10,18): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +jsdocDisallowedInTypescript.ts(10,26): error TS1005: ',' expected.
 +jsdocDisallowedInTypescript.ts(10,27): error TS2730: An arrow function cannot have a 'this' parameter.
 +jsdocDisallowedInTypescript.ts(10,41): error TS7006: Parameter 'string' implicitly has an 'any' type.
 +jsdocDisallowedInTypescript.ts(10,56): error TS1005: '=>' expected.
++jsdocDisallowedInTypescript.ts(11,18): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number[]'.
 +jsdocDisallowedInTypescript.ts(14,13): error TS1110: Type expected.
 +jsdocDisallowedInTypescript.ts(15,8): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +jsdocDisallowedInTypescript.ts(15,16): error TS1005: ',' expected.
@@ -47,7 +49,7 @@
 -==== jsdocDisallowedInTypescript.ts (16 errors) ====
 +
 +
-+==== jsdocDisallowedInTypescript.ts (26 errors) ====
++==== jsdocDisallowedInTypescript.ts (28 errors) ====
      // grammar error from checker
      var ara: Array.<number> = [1,2,3];
 -                  ~
@@ -83,6 +85,8 @@
 +                                                    ~
 +!!! error TS1128: Declaration or statement expected.
          return new ctor('hi');
++                   ~~~~
++!!! error TS2304: Cannot find name 'ctor'.
      }
      function hof2(f: function(this: number, string): string) {
 -                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,8 +105,9 @@
 +                                                           ~
 +!!! error TS1005: '=>' expected.
          return f(12, 'hullo');
--                     ~~~~~~~
+                      ~~~~~~~
 -!!! error TS2554: Expected 1 arguments, but got 2.
++!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number[]'.
      }
      var whatevs: * = 1001;
 -                 ~

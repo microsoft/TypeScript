@@ -1561,6 +1561,11 @@ func (c *Checker) checkAndReportErrorForMissingPrefix(errorLocation *ast.Node, n
 }
 
 func (c *Checker) onFailedToResolveSymbol(errorLocation *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message) {
+	// The `const` in a `const` assertion (`x as const`) is a syntactic marker, not a real
+	// type reference, and must never be resolved or reported as an unresolvable name.
+	if isConstTypeReferenceName(errorLocation) {
+		return
+	}
 	if errorLocation != nil && (errorLocation.Parent.Kind == ast.KindJSDocLink ||
 		c.checkAndReportErrorForMissingPrefix(errorLocation, name) ||
 		c.checkAndReportErrorForExtendingInterface(errorLocation) ||
@@ -1636,7 +1641,11 @@ func (c *Checker) checkAndReportErrorForUsingNamespaceAsTypeOrValue(errorLocatio
 	if meaning&(ast.SymbolFlagsValue&^ast.SymbolFlagsType) != 0 {
 		symbol := c.resolveSymbol(c.resolveName(errorLocation, name, ast.SymbolFlagsNamespaceModule, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/))
 		if symbol != nil {
-			c.error(errorLocation, diagnostics.Cannot_use_namespace_0_as_a_value, name)
+			// `export = ns` may legitimately reference a namespace; checkExportAssignment decides
+			// whether that is an error, so don't report "cannot use namespace as a value" here.
+			if !isExportAssignmentExpressionName(errorLocation) {
+				c.error(errorLocation, diagnostics.Cannot_use_namespace_0_as_a_value, name)
+			}
 			return true
 		}
 	} else if meaning&(ast.SymbolFlagsType&^ast.SymbolFlagsValue) != 0 {
@@ -1672,6 +1681,11 @@ func (c *Checker) checkAndReportErrorForUsingTypeAsValue(errorLocation *ast.Node
 		if symbol != nil {
 			allFlags := c.getSymbolFlags(symbol)
 			if allFlags&ast.SymbolFlagsValue == 0 {
+				// `export = SomeType` may legitimately reference a type-only name; checkExportAssignment
+				// decides whether that is an error, so don't report "used as a value" here.
+				if isExportAssignmentExpressionName(errorLocation) {
+					return true
+				}
 				if isES2015OrLaterConstructorName(name) {
 					c.error(errorLocation, diagnostics.X_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later, name)
 				} else if c.maybeMappedType(errorLocation, symbol) {
@@ -3038,6 +3052,9 @@ func (c *Checker) getDeprecatedSuggestionNode(node *ast.Node) *ast.Node {
 }
 
 func (c *Checker) checkTypePredicate(node *ast.Node) {
+	// Always check the predicate's type so nested type errors are reported even when the
+	// predicate is in an invalid position, keeping diagnostics stable.
+	c.checkSourceElement(node.Type())
 	parent := c.getTypePredicateParent(node)
 	if parent == nil {
 		// The parent must not be valid.
@@ -3049,7 +3066,6 @@ func (c *Checker) checkTypePredicate(node *ast.Node) {
 	if typePredicate == nil {
 		return
 	}
-	c.checkSourceElement(node.Type())
 	parameterName := node.AsTypePredicateNode().ParameterName
 	if typePredicate.kind != TypePredicateKindThis && typePredicate.kind != TypePredicateKindAssertsThis {
 		if typePredicate.parameterIndex >= 0 {
@@ -4067,6 +4083,14 @@ func (c *Checker) checkBreakOrContinueStatement(node *ast.Node) {
 }
 
 func (c *Checker) checkReturnStatement(node *ast.Node) {
+	// Always check the return expression so its identifiers are resolved even when the
+	// return statement is misplaced (grammar error), keeping diagnostics stable
+	// regardless of traversal order.
+	exprNode := node.Expression()
+	exprType := c.undefinedType
+	if exprNode != nil {
+		exprType = c.checkExpressionCached(exprNode)
+	}
 	if c.checkGrammarStatementInAmbientContext(node) {
 		return
 	}
@@ -4082,12 +4106,7 @@ func (c *Checker) checkReturnStatement(node *ast.Node) {
 	signature := c.getSignatureFromDeclaration(container)
 	returnType := c.getReturnTypeOfSignature(signature)
 	functionFlags := ast.GetFunctionFlags(container)
-	exprNode := node.Expression()
 	if c.strictNullChecks || exprNode != nil || returnType.flags&TypeFlagsNever != 0 {
-		exprType := c.undefinedType
-		if exprNode != nil {
-			exprType = c.checkExpressionCached(exprNode)
-		}
 		if ast.IsSetAccessorDeclaration(container) {
 			if exprNode != nil {
 				c.error(node, diagnostics.Setters_cannot_return_a_value)
@@ -5562,6 +5581,10 @@ func isContainedByNamespace(node *ast.Node) bool {
 
 func (c *Checker) checkExportAssignment(node *ast.Node) {
 	isExportEquals := node.AsExportAssignment().IsExportEquals
+	// Always check the exported expression so its identifiers are resolved even when the
+	// export assignment is misplaced (grammar error), keeping diagnostics stable
+	// regardless of traversal order.
+	exprType := c.checkExpressionCached(node.Expression())
 	illegalContextMessage := core.IfElse(isExportEquals,
 		diagnostics.An_export_assignment_must_be_at_the_top_level_of_a_file_or_module_declaration,
 		diagnostics.A_default_export_must_be_at_the_top_level_of_a_file_or_module_declaration)
@@ -5593,7 +5616,6 @@ func (c *Checker) checkExportAssignment(node *ast.Node) {
 			// If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
 			if c.getSymbolFlags(sym)&ast.SymbolFlagsValue != 0 {
 				// However if it is a value, we need to check it's being used correctly
-				c.checkExpressionCached(id)
 				if !isIllegalExportDefaultInCJS && node.Flags&ast.NodeFlagsAmbient == 0 && c.compilerOptions.VerbatimModuleSyntax.IsTrue() && typeOnlyDeclaration != nil {
 					message := core.IfElse(isExportEquals,
 						diagnostics.An_export_declaration_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_a_type_only_declaration,
@@ -5626,13 +5648,7 @@ func (c *Checker) checkExportAssignment(node *ast.Node) {
 					c.addTypeOnlyDeclarationRelatedInfo(c.error(id, message, id.Text(), c.getIsolatedModulesLikeFlagName()), typeOnlyDeclaration, id.Text())
 				}
 			}
-		} else {
-			c.checkExpressionCached(id)
-			// doesn't resolve, check as expression to mark as error
 		}
-
-	} else {
-		c.checkExpressionCached(node.Expression())
 	}
 	if isIllegalExportDefaultInCJS {
 		c.error(node, getVerbatimModuleSyntaxErrorMessage(node))
@@ -5644,8 +5660,7 @@ func (c *Checker) checkExportAssignment(node *ast.Node) {
 	c.checkExternalModuleExports(container)
 	if typeNode := node.Type(); typeNode != nil && node.Kind == ast.KindExportAssignment {
 		t := c.getTypeFromTypeNode(typeNode)
-		initializerType := c.checkExpressionCached(node.Expression())
-		c.checkTypeAssignableToAndOptionallyElaborate(initializerType, t, node.Expression(), node.Expression(), nil /*headMessage*/, nil)
+		c.checkTypeAssignableToAndOptionallyElaborate(exprType, t, node.Expression(), node.Expression(), nil /*headMessage*/, nil)
 	}
 	if (node.Flags&ast.NodeFlagsAmbient != 0) && !ast.IsEntityNameExpression(node.Expression()) {
 		c.grammarErrorOnNode(node.Expression(), diagnostics.The_expression_of_an_export_assignment_must_be_an_identifier_or_qualified_name_in_an_ambient_context)
@@ -6874,7 +6889,9 @@ func (c *Checker) checkTypeAliasDeclaration(node *ast.Node) {
 			len(typeParameters) == 1 && intrinsicTypeKinds[node.Name().Text()] != IntrinsicTypeKindUnknown) {
 			c.error(typeNode, diagnostics.The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types)
 		}
-		return
+		// The `intrinsic` keyword is a leaf type node with no child nodes to check,
+		// so skipping the checkSourceElement below visits nothing.
+		return //nolint:customlint // intrinsic keyword has no children to check
 	}
 	c.checkSourceElement(typeNode)
 	c.registerForUnusedIdentifiersCheck(node)
@@ -8251,7 +8268,8 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
 	c.checkGrammarImportCallExpression(node)
 	args := node.Arguments()
 	if len(args) == 0 {
-		return c.createPromiseReturnType(node, c.anyType)
+		// No call arguments exist, so there are no child expressions to check.
+		return c.createPromiseReturnType(node, c.anyType) //nolint:customlint // no arguments to check
 	}
 	specifier := args[0]
 	specifierType := c.checkExpressionCached(specifier)
@@ -10602,7 +10620,9 @@ func (c *Checker) checkTypeOfExpression(node *ast.Node) *Type {
 
 func (c *Checker) checkNonNullAssertion(node *ast.Node) *Type {
 	if node.Flags&ast.NodeFlagsOptionalChain != 0 {
-		return c.checkNonNullChain(node)
+		// checkNonNullChain checks the same operand expression (node.Expression()),
+		// so the child is still visited on this branch.
+		return c.checkNonNullChain(node) //nolint:customlint // checkNonNullChain checks the operand
 	}
 	return c.GetNonNullableType(c.checkExpression(node.Expression()))
 }
@@ -10930,6 +10950,14 @@ func (c *Checker) checkSpreadExpression(node *ast.Node, checkMode CheckMode) *Ty
 
 func (c *Checker) checkYieldExpression(node *ast.Node) *Type {
 	c.checkGrammarYieldExpression(node)
+	// Always check the operand so its identifiers are resolved even when the yield is
+	// outside a generator, keeping diagnostics stable regardless of traversal order.
+	var yieldExpressionType *Type
+	if node.Expression() != nil {
+		yieldExpressionType = c.checkExpression(node.Expression())
+	} else {
+		yieldExpressionType = c.undefinedWideningType
+	}
 	fn := ast.GetContainingFunction(node)
 	if fn == nil {
 		return c.anyType
@@ -10962,12 +10990,6 @@ func (c *Checker) checkYieldExpression(node *ast.Node) *Type {
 	}
 	signatureYieldType := core.OrElse(iterationTypes.yieldType, c.anyType)
 	signatureNextType := core.OrElse(iterationTypes.nextType, c.anyType)
-	var yieldExpressionType *Type
-	if node.Expression() != nil {
-		yieldExpressionType = c.checkExpression(node.Expression())
-	} else {
-		yieldExpressionType = c.undefinedWideningType
-	}
 	yieldedType := c.getYieldedTypeOfYieldExpression(node, yieldExpressionType, signatureNextType, isAsync)
 	if returnType != nil && yieldedType != nil {
 		c.checkTypeAssignableToAndOptionallyElaborate(yieldedType, signatureYieldType, core.OrElse(node.Expression(), node), node.Expression(), nil, nil)
@@ -12269,6 +12291,10 @@ func (c *Checker) checkAssertion(node *ast.Node, checkMode CheckMode) *Type {
 	}
 	typeNode := node.Type()
 	exprType := c.checkExpressionEx(node.Expression(), checkMode)
+	// Always check the type node so its identifiers are resolved. resolveName knows not
+	// to resolve (or report an error for) the `const` in a `const` assertion, so this is
+	// safe even for `x as const` and keeps diagnostics stable regardless of traversal order.
+	c.checkSourceElement(typeNode)
 	if isConstTypeReference(typeNode) {
 		if !c.isValidConstAssertionArgument(node.Expression()) {
 			c.error(node.Expression(), diagnostics.A_const_assertion_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals)
@@ -12277,7 +12303,6 @@ func (c *Checker) checkAssertion(node *ast.Node, checkMode CheckMode) *Type {
 	}
 	links := c.assertionLinks.Get(node)
 	links.exprType = exprType
-	c.checkSourceElement(typeNode)
 	c.checkNodeDeferred(node)
 	return c.getTypeFromTypeNode(typeNode)
 }
@@ -13118,7 +13143,9 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		if ast.IsInJSFile(node) && !ast.IsInJsonFile(node) {
 			result.objectFlags |= ObjectFlagsJSLiteral
 		}
-		return result
+		// An expando object literal has no property children (len == 0), so there
+		// is nothing to check here.
+		return result //nolint:customlint // expando object literal has no property children to check
 	}
 	inDestructuringPattern := ast.IsAssignmentTarget(node)
 	// Grammar checking
@@ -23030,11 +23057,9 @@ func (c *Checker) getIntendedTypeFromJSDocTypeReference(node *ast.Node) *Type {
 func (c *Checker) getSymbolFromTypeReference(node *ast.Node) *ast.Symbol {
 	links := c.symbolNodeLinks.Get(node)
 	if links.resolvedSymbol == nil {
-		if isConstTypeReference(node) && ast.IsAssertionExpression(node.Parent) {
-			links.resolvedSymbol = c.unknownSymbol
-		} else {
-			links.resolvedSymbol = c.resolveTypeReferenceName(node, ast.SymbolFlagsType, false /*ignoreErrors*/)
-		}
+		// The `const` in a `const` assertion resolves to nothing; resolveName knows not to
+		// report an error for it, so no special-casing is needed here.
+		links.resolvedSymbol = c.resolveTypeReferenceName(node, ast.SymbolFlagsType, false /*ignoreErrors*/)
 	}
 	return links.resolvedSymbol
 }
@@ -28124,15 +28149,12 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 				!ast.IsAssignmentTarget(parent.Parent) {
 				return
 			}
-			res := ast.FindManyAncestors(location, ast.IsMetaProperty, ast.IsDecorator, ast.IsYieldExpression, ast.IsForInOrOfStatement, ast.IsComputedPropertyName, ast.IsHeritageClause, ast.IsExportAssignment, ast.IsReturnStatement)
+			res := ast.FindManyAncestors(location, ast.IsMetaProperty, ast.IsDecorator, ast.IsForInOrOfStatement, ast.IsComputedPropertyName, ast.IsHeritageClause)
 			metaProperty := res[0]
 			decorator := res[1]
-			yieldExpr := res[2]
-			forNode := res[3]
-			computedName := res[4]
-			heritageClause := res[5]
-			exportAssignment := res[6]
-			returnStatement := res[7]
+			forNode := res[2]
+			computedName := res[3]
+			heritageClause := res[4]
 			if metaProperty != nil {
 				return // identifiers in meta properties shouldn't be resolved, but are expressions, so must be filtered
 			}
@@ -28143,16 +28165,6 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 				// decorator expressions must still be resolved and marked for emit.
 				decorated := decorator.Parent
 				if decorated != nil && !ast.NodeCanBeDecorated(c.legacyDecorators, decorated, decorated.Parent, decorated.Parent.Parent) {
-					return
-				}
-			}
-			// The operand of a 'yield' expression is only checked when the containing function is a
-			// generator. Outside a generator (or outside any function), checkYieldExpression returns
-			// early and never checks the operand, so resolving identifiers in it here would report a
-			// spurious "Cannot find name" diagnostic.
-			if yieldExpr != nil {
-				fn := ast.GetContainingFunction(yieldExpr)
-				if fn == nil || ast.GetFunctionFlags(fn)&ast.FunctionFlagsGenerator == 0 {
 					return
 				}
 			}
@@ -28194,21 +28206,6 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 						location != firstExtends && !ast.IsNodeDescendantOf(location, firstExtends) {
 						return
 					}
-				}
-			}
-			// An `export =` / `export default` inside a namespace/module block is a grammar error;
-			// checkExportAssignment reports it and returns without resolving the expression, so
-			// resolving identifiers in it here would report a spurious "Cannot find name" diagnostic.
-			if exportAssignment != nil && isContainedByNamespace(exportAssignment) {
-				return
-			}
-			// A `return` statement outside of any function body (or inside a class static block) is a
-			// grammar error; checkReturnStatement reports it and returns without checking the return
-			// expression, so resolving identifiers in it here would report a spurious diagnostic.
-			if returnStatement != nil {
-				container := getContainingFunctionOrClassStaticBlock(returnStatement)
-				if container == nil || ast.IsClassStaticBlockDeclaration(container) {
-					return
 				}
 			}
 			// Identifiers in expression contexts are emitted, so we need to follow their referenced aliases and mark them as used

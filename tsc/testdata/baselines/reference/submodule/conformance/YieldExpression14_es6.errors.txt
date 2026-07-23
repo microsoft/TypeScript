@@ -1,11 +1,14 @@
 YieldExpression14_es6.ts(3,6): error TS1163: A 'yield' expression is only allowed in a generator body.
+YieldExpression14_es6.ts(3,12): error TS2663: Cannot find name 'foo'. Did you mean the instance member 'this.foo'?
 
 
-==== YieldExpression14_es6.ts (1 errors) ====
+==== YieldExpression14_es6.ts (2 errors) ====
     class C {
       foo() {
          yield foo
          ~~~~~
 !!! error TS1163: A 'yield' expression is only allowed in a generator body.
+               ~~~
+!!! error TS2663: Cannot find name 'foo'. Did you mean the instance member 'this.foo'?
       }
     }

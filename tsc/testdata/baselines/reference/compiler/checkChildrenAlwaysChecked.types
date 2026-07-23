@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/checkChildrenAlwaysChecked.ts] ////
+
+=== yieldOutsideGenerator.ts ===
+function notAGenerator() {
+>notAGenerator : () => void
+
+    // The operand is now checked even though the yield is not in a generator.
+    yield yieldOperandName;
+>yield yieldOperandName : any
+>yieldOperandName : any
+}
+
+=== returnInStaticBlock.ts ===
+class C {
+>C : C
+
+    static {
+        // The expression is now checked even though `return` is illegal here.
+        return returnOperandName;
+>returnOperandName : any
+    }
+}
+
+=== exportAssignmentInNamespace.ts ===
+namespace N {
+>N : typeof N
+
+    // The expression is now checked even though `export =` is illegal here.
+    export = exportOperandName;
+>exportOperandName : any
+}
+

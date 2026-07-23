@@ -1,0 +1,18 @@
+--- old.YieldExpression15_es6.errors.txt
++++ new.YieldExpression15_es6.errors.txt
+@@= skipped -0, +0 lines =@@
+ YieldExpression15_es6.ts(2,6): error TS1163: A 'yield' expression is only allowed in a generator body.
+-
+-
+-==== YieldExpression15_es6.ts (1 errors) ====
++YieldExpression15_es6.ts(2,12): error TS2304: Cannot find name 'foo'.
++
++
++==== YieldExpression15_es6.ts (2 errors) ====
+     var v = () => {
+          yield foo
+          ~~~~~
+ !!! error TS1163: A 'yield' expression is only allowed in a generator body.
++               ~~~
++!!! error TS2304: Cannot find name 'foo'.
+       }

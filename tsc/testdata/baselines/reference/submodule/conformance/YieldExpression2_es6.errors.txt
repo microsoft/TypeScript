@@ -1,7 +1,10 @@
 YieldExpression2_es6.ts(1,1): error TS1163: A 'yield' expression is only allowed in a generator body.
+YieldExpression2_es6.ts(1,7): error TS2304: Cannot find name 'foo'.
 
 
-==== YieldExpression2_es6.ts (1 errors) ====
+==== YieldExpression2_es6.ts (2 errors) ====
     yield foo;
     ~~~~~
 !!! error TS1163: A 'yield' expression is only allowed in a generator body.
+          ~~~
+!!! error TS2304: Cannot find name 'foo'.
