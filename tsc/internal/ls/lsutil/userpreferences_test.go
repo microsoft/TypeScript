@@ -424,6 +424,21 @@ func TestUserPreferencesParseUnstable(t *testing.T) {
 	}
 }
 
+func TestUserPreferencesLocale(t *testing.T) {
+	t.Parallel()
+
+	prefs := ParseUserPreferences(map[string]any{
+		"typescript": map[string]any{
+			"locale": "de",
+		},
+		"js/ts": map[string]any{
+			"locale": "fr",
+		},
+	})
+
+	assert.Equal(t, prefs.Locale, "fr")
+}
+
 func TestUserPreferencesReportStyleChecksAsWarnings(t *testing.T) {
 	t.Parallel()
 

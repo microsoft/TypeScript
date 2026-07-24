@@ -177,6 +177,7 @@ type UserPreferences struct {
 	DisableLineTextInReferences core.Tristate `raw:"disableLineTextInReferences"` // !!!
 	DisplayPartsForJSDoc        core.Tristate `raw:"displayPartsForJSDoc"`        // !!!
 	ReportStyleChecksAsWarnings core.Tristate `raw:"reportStyleChecksAsWarnings" config:"reportStyleChecksAsWarnings"`
+	Locale                      string        `config:"locale"`
 
 	// ------- ATA -------
 

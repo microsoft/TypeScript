@@ -176,7 +176,11 @@ type Server struct {
 	initializationOptions *lsproto.InitializationOptions
 	clientCapabilities    lsproto.ResolvedClientCapabilities
 	positionEncoding      lsproto.PositionEncodingKind
+	localeMu              sync.RWMutex
 	locale                locale.Locale
+	// initLocale is the locale resolved from the initialize request; it is
+	// used as the fallback when the user's locale preference is "auto".
+	initLocale locale.Locale
 
 	watchEnabled     bool
 	telemetryEnabled bool
@@ -362,6 +366,28 @@ func (s *Server) ProgressFinish(message *diagnostics.Message, args ...any) {
 	}
 }
 
+// GetLocale implements project.Client.
+func (s *Server) GetLocale() locale.Locale {
+	s.localeMu.RLock()
+	defer s.localeMu.RUnlock()
+	return s.locale
+}
+
+// SetLocale implements project.Client.
+func (s *Server) SetLocale(localeString string) {
+	newLocale := s.initLocale
+	if localeString != "auto" {
+		parsed, ok := locale.Parse(localeString)
+		if !ok {
+			return
+		}
+		newLocale = parsed
+	}
+	s.localeMu.Lock()
+	s.locale = newLocale
+	s.localeMu.Unlock()
+}
+
 func (s *Server) RequestConfiguration(ctx context.Context) (lsutil.UserPreferences, error) {
 	caps := lsproto.GetClientCapabilities(ctx)
 	if !caps.Workspace.Configuration {
@@ -539,7 +565,7 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
 		}
 
 		s.lastRequestTimeMs.Store(time.Now().UnixMilli())
-		requestCtx := locale.WithLocale(ctx, s.locale)
+		requestCtx := locale.WithLocale(ctx, s.GetLocale())
 		var cancel context.CancelFunc
 		if req.ID != nil {
 			requestCtx, cancel = context.WithCancel(core.WithRequestID(requestCtx, req.ID.String()))
@@ -1057,6 +1083,7 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 	if s.initializeParams.Locale != nil {
 		s.locale, _ = locale.Parse(*s.initializeParams.Locale)
 	}
+	s.initLocale = s.locale
 
 	if s.startWatchdog != nil && params.ProcessId.Integer != nil {
 		s.startWatchdog(int(*params.ProcessId.Integer))
@@ -1254,7 +1281,6 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 			TelemetryEnabled:       enableTelemetry,
 			DebounceDelay:          500 * time.Millisecond,
 			PushDiagnosticsEnabled: !disablePushDiagnostics,
-			Locale:                 s.locale,
 		},
 		FS:          s.fs,
 		Logger:      s.logger,

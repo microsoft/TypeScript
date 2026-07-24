@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project/logging"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -43,6 +44,10 @@ func (noopClient) SendTelemetry(ctx context.Context, telemetry lsproto.Telemetry
 }
 
 func (noopClient) IsActive() bool { return true }
+
+func (noopClient) GetLocale() locale.Locale { return locale.Default }
+
+func (noopClient) SetLocale(locale string) {}
 
 // TestExtendedConfigCacheOwnership tests the invariant that each ExtendedSourceFile
 // of a config in the ConfigFileRegistry is owned exactly once per snapshot that
