@@ -91,7 +91,7 @@ const nativePreviewReleaseProfile = /** @type {"native-preview" | "typescript"} 
 const nativePreviewReleaseVersion = /** @type {string | undefined} */ ("7.0.2");
 const produceNativePreviewVsix = /** @type {boolean} */ (true);
 const produceTypeScriptNightlyVsix = /** @type {boolean} */ (false);
-const usePublishedPlatformPackagesForVsix = /** @type {boolean} */ (false);
+const usePublishedPlatformPackagesForVsix = /** @type {boolean} */ (true);
 const produceAnyVsix = produceNativePreviewVsix || produceTypeScriptNightlyVsix;
 const publishAsTypescript = nativePreviewReleaseProfile === "typescript";
 
