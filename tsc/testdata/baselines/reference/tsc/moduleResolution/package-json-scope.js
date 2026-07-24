@@ -217,7 +217,10 @@ exports.x = 10;
               "messageArgs": [
                 ".mts",
                 "/home/src/workspaces/project/package.json"
-              ]
+              ],
+              "repopulateInfo": {
+                "kind": 1
+              }
             }
           ]
         }

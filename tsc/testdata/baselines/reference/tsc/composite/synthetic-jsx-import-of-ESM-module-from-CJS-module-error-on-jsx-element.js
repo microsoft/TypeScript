@@ -128,7 +128,10 @@ exports.default = (0, jsx_runtime_1.jsx)("div", {});
               "end": 21,
               "code": 1483,
               "category": 3,
-              "messageKey": "To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module_1483"
+              "messageKey": "To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module_1483",
+              "repopulateInfo": {
+                "kind": 1
+              }
             }
           ]
         }
