@@ -95,6 +95,8 @@ describe("API", () => {
             const config = await api.parseConfigFile("/tsconfig.json");
             assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
             assert.deepEqual(config.options, { configFilePath: "/tsconfig.json" });
+            assert.equal(config.compileOnSave, undefined);
+            assert.equal(config.typeAcquisition, undefined);
             assert.equal(config.projectReferences, undefined);
         }
         finally {
@@ -114,6 +116,33 @@ describe("API", () => {
                 { circular: false, originalPath: "./harness", path: "/harness" },
                 { circular: false, originalPath: "./server", path: "/server" },
             ]);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("parseConfigFile includes compileOnSave", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compileOnSave: true }),
+        });
+        try {
+            const config = await api.parseConfigFile("/tsconfig.json");
+            assert.equal(config.compileOnSave, true);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("parseConfigFile includes typeAcquisition", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ typeAcquisition: { enable: true, include: ["jquery"] } }),
+        });
+        try {
+            const config = await api.parseConfigFile("/tsconfig.json");
+            assert.equal(config.typeAcquisition?.enable, true);
+            assert.deepEqual(config.typeAcquisition?.include, ["jquery"]);
         }
         finally {
             await api.close();
@@ -153,6 +182,25 @@ describe("Snapshot", () => {
             assert.ok(snapshot.id);
             assert.ok(snapshot.getProjects().length > 0);
             assert.ok(snapshot.getProject("/tsconfig.json"));
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("project exposes parsedCommandLine", async () => {
+        const api = spawnAPI({
+            ...defaultFiles,
+            "/tsconfig.json": JSON.stringify({ compileOnSave: true }),
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            assert.deepEqual(project.parsedCommandLine.fileNames, ["/src/index.ts", "/src/foo.ts"]);
+            assert.deepEqual(project.parsedCommandLine.options, { configFilePath: "/tsconfig.json" });
+            assert.equal(project.parsedCommandLine.compileOnSave, true);
+            assert.deepEqual(project.rootFiles, project.parsedCommandLine.fileNames);
+            assert.deepEqual(project.compilerOptions, project.parsedCommandLine.options);
         }
         finally {
             await api.close();
@@ -5150,6 +5198,38 @@ describe("Program - diagnostics", () => {
                 category: DiagnosticCategory.Error,
                 text: "Argument for '--target' option must be: 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'es2023', 'es2024', 'es2025', 'esnext'.",
             }]);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getConfigFileNames and getConfigSourceFile", async () => {
+        const baseConfigText = `{ "compilerOptions": { "strict": true } }`;
+        const { api, fs } = spawnAPIWithFS({
+            "/tsconfig.base.json": baseConfigText,
+            "/tsconfig.json": `{ "extends": "./tsconfig.base.json", "files": ["./src/index.ts"] }`,
+            "/src/index.ts": `export const x = 1;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const names = await project.program.getConfigFileNames();
+            assert.deepEqual(names, ["/tsconfig.json", "/tsconfig.base.json"]);
+
+            const rootConfig = await project.program.getConfigSourceFile("/tsconfig.json");
+            assert.ok(rootConfig);
+            assert.equal(rootConfig.fileName, "/tsconfig.json");
+            assert.equal(await project.program.getSourceFile("/tsconfig.json"), undefined);
+
+            fs.writeFile!("/tsconfig.base.json", `{ "compilerOptions": { "strict": false } }`);
+            const extendedConfig = await project.program.getConfigSourceFile("/tsconfig.base.json");
+            assert.ok(extendedConfig);
+            assert.equal(extendedConfig.fileName, "/tsconfig.base.json");
+            assert.equal(extendedConfig.getFullText(), baseConfigText);
+
+            const nonConfig = await project.program.getConfigSourceFile("/src/index.ts");
+            assert.equal(nonConfig, undefined);
         }
         finally {
             await api.close();

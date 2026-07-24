@@ -57,7 +57,6 @@ import {
 import type {
     CompilerOptions,
     CompletionInfoResponse,
-    ConfigResponse,
     DocumentIdentifier,
     DocumentPosition,
     ImportAdderActionRequest,
@@ -65,6 +64,7 @@ import type {
     IndexInfoResponse,
     InitializeResponse,
     LSPUpdateSnapshotParams,
+    ParsedCommandLine,
     ProfileResult,
     ProjectReference,
     ProjectResponse,
@@ -72,6 +72,7 @@ import type {
     SourceFileMetadata,
     SymbolResponse,
     TextEdit,
+    TypeAcquisition,
     TypePredicateResponse,
     TypeResponse,
     UpdateSnapshotParams,
@@ -136,7 +137,7 @@ import type {
 
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, ModifierFlags, ModuleKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
-export type { APIOptions, AssertsIdentifierTypePredicate, AssertsThisTypePredicate, BigIntLiteralType, BooleanLiteralType, ClientSocketOptions, ClientSpawnOptions, CompilerOptions, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, DocumentIdentifier, DocumentPosition, EmitOutput, EmitOutputFile, EmitResult, FreshableType, GetImportEditsForSymbolsOptions, IdentifierTypePredicate, ImportAdderAction, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, JSDocTagInfo, LiteralType, LSPConnectionOptions, NumberLiteralType, ObjectType, ProjectReference, RequestTiming, SourceFileMetadata, StringLiteralType, StringMappingType, SubstitutionType, TemplateLiteralType, TextEdit, ThisTypePredicate, TimingAccumulators, TimingInfo, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
+export type { APIOptions, AssertsIdentifierTypePredicate, AssertsThisTypePredicate, BigIntLiteralType, BooleanLiteralType, ClientSocketOptions, ClientSpawnOptions, CompilerOptions, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, DocumentIdentifier, DocumentPosition, EmitOutput, EmitOutputFile, EmitResult, FreshableType, GetImportEditsForSymbolsOptions, IdentifierTypePredicate, ImportAdderAction, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, JSDocTagInfo, LiteralType, LSPConnectionOptions, NumberLiteralType, ObjectType, ParsedCommandLine, ProjectReference, RequestTiming, SourceFileMetadata, StringLiteralType, StringMappingType, SubstitutionType, TemplateLiteralType, TextEdit, ThisTypePredicate, TimingAccumulators, TimingInfo, TupleType, Type, TypeAcquisition, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
 
 interface EmitOutputResponse {
     readonly emitSkipped: boolean;
@@ -179,9 +180,9 @@ export class API<FromLSP extends boolean = false> {
         }
     }
 
-    parseConfigFile(file: DocumentIdentifier): ConfigResponse {
+    parseConfigFile(file: DocumentIdentifier): ParsedCommandLine {
         this.ensureInitialized();
-        return this.client.apiRequest<ConfigResponse>("parseConfigFile", { file });
+        return this.client.apiRequest<ParsedCommandLine>("parseConfigFile", { file });
     }
 
     updateSnapshot(params?: FromLSP extends true ? LSPUpdateSnapshotParams : UpdateSnapshotParams): Snapshot {
@@ -669,7 +670,10 @@ class ProjectObjectRegistry {
 export class Project {
     readonly id: Path;
     readonly configFileName: string;
+    readonly parsedCommandLine: ParsedCommandLine;
+    /** @deprecated Use `parsedCommandLine.options`. */
     readonly compilerOptions: CompilerOptions;
+    /** @deprecated Use `parsedCommandLine.fileNames`. */
     readonly rootFiles: readonly string[];
 
     readonly program: Program;
@@ -688,8 +692,9 @@ export class Project {
     ) {
         this.id = data.id;
         this.configFileName = data.configFileName;
-        this.compilerOptions = data.compilerOptions;
-        this.rootFiles = data.rootFiles;
+        this.parsedCommandLine = data.parsedCommandLine;
+        this.compilerOptions = this.parsedCommandLine.options;
+        this.rootFiles = this.parsedCommandLine.fileNames;
         this.client = client;
         this.snapshotId = snapshotId;
         this.program = new Program(
@@ -874,6 +879,35 @@ export class Program {
     isSourceFileDefaultLibrary(file: SourceFile): boolean {
         const metadata = this.getSourceFileMetadataByPath(file.path);
         return metadata?.isDefaultLibrary ?? false;
+    }
+
+    /**
+     * Get all config source file names associated with this program's project config.
+     * Includes the root config file and any extended config files.
+     */
+    getConfigFileNames(): readonly string[] {
+        const data = this.client.apiRequest<string[]>("getConfigFileNames", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+        });
+        return data ?? [];
+    }
+
+    /**
+     * Get a config source file by file name/URI.
+     * This can return the project's root tsconfig file or one of its extended config files.
+     */
+    getConfigSourceFile(file: DocumentIdentifier): SourceFile | undefined {
+        const binaryData = this.client.apiRequestBinary("getConfigSourceFile", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file,
+        });
+        if (!binaryData) {
+            return undefined;
+        }
+
+        return new RemoteSourceFile(binaryData, this.decoder) as unknown as SourceFile;
     }
 
     /**

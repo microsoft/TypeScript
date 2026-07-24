@@ -6,6 +6,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/checker"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/jsnum"
@@ -14,6 +15,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project"
+	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -82,6 +84,8 @@ const (
 	MethodGetSourceFile            Method = "getSourceFile"
 	MethodGetSourceFileNames       Method = "getSourceFileNames"
 	MethodGetSourceFileMetadata    Method = "getSourceFileMetadata"
+	MethodGetConfigFileNames       Method = "getConfigFileNames"
+	MethodGetConfigSourceFile      Method = "getConfigSourceFile"
 	MethodResolveName              Method = "resolveName"
 	MethodGetSignaturesOfType      Method = "getSignaturesOfType"
 	MethodGetResolvedSignature     Method = "getResolvedSignature"
@@ -390,6 +394,8 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetSourceFile:            unmarshallerFor[GetSourceFileParams],
 	MethodGetSourceFileNames:       unmarshallerFor[GetSourceFileNamesParams],
 	MethodGetSourceFileMetadata:    unmarshallerFor[GetSourceFileParams],
+	MethodGetConfigFileNames:       unmarshallerFor[GetProjectDiagnosticsParams],
+	MethodGetConfigSourceFile:      unmarshallerFor[GetSourceFileParams],
 	MethodGetSymbolAtPosition:      unmarshallerFor[GetSymbolAtPositionParams],
 	MethodGetSymbolsAtPositions:    unmarshallerFor[GetSymbolsAtPositionsParams],
 	MethodGetSymbolAtLocation:      unmarshallerFor[GetSymbolAtLocationParams],
@@ -530,6 +536,8 @@ type ConfigFileResponse struct {
 	FileNames         []string                 `json:"fileNames"`
 	Options           *core.CompilerOptions    `json:"options"`
 	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitempty"`
+	TypeAcquisition   *core.TypeAcquisition    `json:"typeAcquisition,omitempty"`
+	CompileOnSave     *bool                    `json:"compileOnSave,omitempty"`
 }
 
 type GetDefaultProjectForFileParams struct {
@@ -538,10 +546,33 @@ type GetDefaultProjectForFileParams struct {
 }
 
 type ProjectResponse struct {
-	Id              ProjectID             `json:"id"`
-	ConfigFileName  string                `json:"configFileName"`
-	RootFiles       []string              `json:"rootFiles"`
-	CompilerOptions *core.CompilerOptions `json:"compilerOptions"`
+	Id                ProjectID             `json:"id"`
+	ConfigFileName    string                `json:"configFileName"`
+	ParsedCommandLine *ConfigFileResponse   `json:"parsedCommandLine"`
+	RootFiles         []string              `json:"rootFiles"`
+	CompilerOptions   *core.CompilerOptions `json:"compilerOptions"`
+}
+
+func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *ConfigFileResponse {
+	if parsedCommandLine == nil {
+		return nil
+	}
+	compileOnSave := parsedCommandLine.CompileOnSave
+	if compileOnSave == nil {
+		if rawConfig, ok := parsedCommandLine.Raw.(*collections.OrderedMap[string, any]); ok {
+			if value, ok := rawConfig.GetOrZero("compileOnSave").(bool); ok {
+				compileOnSave = &value
+			}
+		}
+	}
+	compilerOptions := parsedCommandLine.CompilerOptions()
+	return &ConfigFileResponse{
+		FileNames:         parsedCommandLine.FileNames(),
+		Options:           compilerOptions,
+		ProjectReferences: parsedCommandLine.ProjectReferences(),
+		TypeAcquisition:   parsedCommandLine.TypeAcquisition(),
+		CompileOnSave:     compileOnSave,
+	}
 }
 
 func NewProjectResponse(p *project.Project) *ProjectResponse {
@@ -549,10 +580,11 @@ func NewProjectResponse(p *project.Project) *ProjectResponse {
 		panic("NewProjectResponse called with unloaded project")
 	}
 	return &ProjectResponse{
-		Id:              ProjectHandle(p),
-		ConfigFileName:  p.Name(),
-		RootFiles:       p.CommandLine.FileNames(),
-		CompilerOptions: p.CommandLine.CompilerOptions(),
+		Id:                ProjectHandle(p),
+		ConfigFileName:    p.Name(),
+		ParsedCommandLine: NewConfigFileResponse(p.CommandLine),
+		RootFiles:         p.CommandLine.FileNames(),
+		CompilerOptions:   p.CommandLine.CompilerOptions(),
 	}
 }
 

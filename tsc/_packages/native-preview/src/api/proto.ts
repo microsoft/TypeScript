@@ -81,6 +81,13 @@ export interface InitializeResponse {
     currentDirectory: string;
 }
 
+export interface TypeAcquisition {
+    enable?: boolean;
+    include?: string[];
+    exclude?: string[];
+    disableFilenameBasedTypeAcquisition?: boolean;
+}
+
 export interface ProjectReference {
     /** A normalized path on disk */
     path: string;
@@ -90,10 +97,12 @@ export interface ProjectReference {
     circular?: boolean;
 }
 
-export interface ConfigResponse {
-    options: Record<string, unknown>;
+export interface ParsedCommandLine {
+    options: CompilerOptions;
     fileNames: string[];
     projectReferences?: ProjectReference[];
+    typeAcquisition?: TypeAcquisition;
+    compileOnSave?: boolean;
 }
 
 export interface LSPUpdateSnapshotParams {
@@ -211,7 +220,10 @@ export interface UpdateSnapshotResponse {
 export interface ProjectResponse {
     id: Path;
     configFileName: string;
+    parsedCommandLine: ParsedCommandLine;
+    /** @deprecated Use `parsedCommandLine.options`. */
     compilerOptions: CompilerOptions;
+    /** @deprecated Use `parsedCommandLine.fileNames`. */
     rootFiles: string[];
 }
 
