@@ -58,6 +58,19 @@ export class Client {
 
         if (options.fs) {
             for (const name of enabledCallbacks) {
+                if (name === "writeFile") {
+                    if (!options.fs.writeFile) continue;
+                    const callback = options.fs.writeFile;
+
+                    channel.registerCallback(name, (_, arg) => {
+                        const { path, data } = JSON.parse(arg);
+                        callback(path, data);
+                        return "";
+                    });
+
+                    continue;
+                }
+
                 const callback = options.fs[name]!;
                 channel.registerCallback(name, (_, arg) => {
                     const result = callback(JSON.parse(arg));

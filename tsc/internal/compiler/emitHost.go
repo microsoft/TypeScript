@@ -93,7 +93,7 @@ func (host *emitHost) GetEffectiveDeclarationFlags(node *ast.Node, flags ast.Mod
 
 func (host *emitHost) GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) declarations.OutputPaths {
 	// TODO: cache
-	return outputpaths.GetOutputPathsFor(file, host.Options(), host, forceDtsPaths)
+	return outputpaths.GetOutputPathsFor(file, host.Options(), host, outputpaths.ForceEmitPaths{Dts: forceDtsPaths})
 }
 
 func (host *emitHost) GetResolutionModeOverride(node *ast.Node) core.ResolutionMode {

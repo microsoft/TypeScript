@@ -32,6 +32,7 @@ const (
 	callbackDirectoryExists      = "directoryExists"
 	callbackGetAccessibleEntries = "getAccessibleEntries"
 	callbackRealpath             = "realpath"
+	callbackWriteFile            = "writeFile"
 )
 
 func isCallbackName(name string) bool {
@@ -40,7 +41,8 @@ func isCallbackName(name string) bool {
 		callbackFileExists,
 		callbackDirectoryExists,
 		callbackGetAccessibleEntries,
-		callbackRealpath:
+		callbackRealpath,
+		callbackWriteFile:
 		return true
 	default:
 		return false
@@ -195,8 +197,21 @@ func (fs *callbackFS) Realpath(path string) string {
 	return fs.base.Realpath(path)
 }
 
-// WriteFile implements vfs.FS - always delegates to base (no callback support).
+// WriteFile implements vfs.FS.
 func (fs *callbackFS) WriteFile(path string, data string) error {
+	if fs.isEnabled(callbackWriteFile) {
+		payload := struct {
+			Path string `json:"path"`
+			Data string `json:"data"`
+		}{Path: path, Data: data}
+
+		_, err := fs.call(callbackWriteFile, payload)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
 	return fs.base.WriteFile(path, data)
 }
 

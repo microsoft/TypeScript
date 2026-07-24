@@ -22,7 +22,7 @@ export interface FileSystem {
 }
 
 /** The callback names supported by the Go server for virtual FS delegation. */
-export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "getAccessibleEntries", "realpath"] as const;
+export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "getAccessibleEntries", "realpath", "writeFile"] as const;
 
 interface VDirectory {
     type: "directory";

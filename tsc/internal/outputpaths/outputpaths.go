@@ -39,7 +39,13 @@ func (o *OutputPaths) DeclarationMapPath() string {
 	return o.declarationMapPath
 }
 
-func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions, host OutputPathsHost, forceDtsEmit bool) *OutputPaths {
+type ForceEmitPaths struct {
+	Dts            bool
+	Js             bool
+	DeclarationMap bool
+}
+
+func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions, host OutputPathsHost, force ForceEmitPaths) *OutputPaths {
 	ownOutputFilePath := getOwnEmitOutputFilePath(sourceFile.FileName(), options, host, GetOutputExtension(sourceFile.FileName(), options.Jsx))
 	isJsonFile := ast.IsJsonSourceFile(sourceFile)
 	// If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
@@ -49,15 +55,15 @@ func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions
 			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
 		}) == 0
 	paths := &OutputPaths{}
-	if options.EmitDeclarationOnly != core.TSTrue && !isJsonEmittedToSameLocation {
+	if (force.Js || options.EmitDeclarationOnly != core.TSTrue) && !isJsonEmittedToSameLocation {
 		paths.jsFilePath = ownOutputFilePath
 		if !ast.IsJsonSourceFile(sourceFile) {
 			paths.sourceMapFilePath = GetSourceMapFilePath(paths.jsFilePath, options)
 		}
 	}
-	if forceDtsEmit || options.GetEmitDeclarations() && !isJsonFile {
+	if force.Dts || options.GetEmitDeclarations() && !isJsonFile {
 		paths.declarationFilePath = GetDeclarationEmitOutputFilePath(sourceFile.FileName(), options, host)
-		if options.GetAreDeclarationMapsEnabled() {
+		if options.GetAreDeclarationMapsEnabled() || force.DeclarationMap && options.DeclarationMap.IsTrue() {
 			paths.declarationMapPath = paths.declarationFilePath + ".map"
 		}
 	}
@@ -66,7 +72,7 @@ func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions
 
 func ForEachEmittedFile(host OutputPathsHost, options *core.CompilerOptions, action func(emitFileNames *OutputPaths, sourceFile *ast.SourceFile) bool, sourceFiles []*ast.SourceFile, forceDtsEmit bool) bool {
 	for _, sourceFile := range sourceFiles {
-		if action(GetOutputPathsFor(sourceFile, options, host, forceDtsEmit), sourceFile) {
+		if action(GetOutputPathsFor(sourceFile, options, host, ForceEmitPaths{Dts: forceDtsEmit}), sourceFile) {
 			return true
 		}
 	}

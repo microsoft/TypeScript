@@ -387,6 +387,23 @@ export interface Diagnostic {
     readonly relatedInformation?: readonly Diagnostic[] | undefined;
 }
 
+export interface EmitOutputFile {
+    readonly text: string;
+    readonly sourceFileName?: string | undefined;
+}
+
+export interface EmitResult {
+    readonly emitSkipped: boolean;
+    readonly diagnostics: readonly Diagnostic[];
+    readonly emittedFiles: readonly string[];
+}
+
+export interface EmitOutput {
+    readonly emitSkipped: boolean;
+    readonly diagnostics: readonly Diagnostic[];
+    readonly outputFiles: ReadonlyMap<string, EmitOutputFile>;
+}
+
 export interface ImportSymbolAction {
     readonly kind: "importSymbol";
     readonly symbol: Symbol;

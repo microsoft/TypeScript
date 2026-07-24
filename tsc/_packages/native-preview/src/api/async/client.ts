@@ -132,6 +132,19 @@ export class Client {
     private registerFSCallbacks(connection: MessageConnection, fs: FileSystem | undefined): void {
         if (!fs) return;
         for (const name of fsCallbackNames) {
+            if (name === "writeFile") {
+                if (!fs.writeFile) continue;
+                const callback = fs.writeFile;
+
+                const requestType = new RequestType<{ path: string; data: string; }, unknown, void>(name);
+                connection.onRequest(requestType, (arg: { path: string; data: string; }) => {
+                    callback(arg.path, arg.data);
+                    return null;
+                });
+
+                continue;
+            }
+
             const callback = fs[name];
             if (callback) {
                 const requestType = new RequestType<unknown, unknown, void>(name);

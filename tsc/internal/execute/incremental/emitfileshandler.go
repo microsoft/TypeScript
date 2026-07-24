@@ -50,12 +50,14 @@ func (h *emitFilesHandler) emitAllAffectedFiles(options compiler.EmitOptions) *c
 	if h.program.snapshot.canUseIncrementalState() {
 		results := h.emitFilesIncremental(options)
 		if h.isForDtsErrors {
-			if options.TargetSourceFile != nil {
+			if options.TargetSourceFiles != nil {
 				// Result from cache
-				diagnostics, _ := h.program.snapshot.emitDiagnosticsPerFile.Load(options.TargetSourceFile.Path())
 				result := &compiler.EmitResult{
 					EmitSkipped: true,
-					Diagnostics: diagnostics.getDiagnostics(h.program.program, options.TargetSourceFile),
+					Diagnostics: core.FlatMap(options.TargetSourceFiles, func(targetFile *ast.SourceFile) []*ast.Diagnostic {
+						diagnostics, _ := h.program.snapshot.emitDiagnosticsPerFile.Load(targetFile.Path())
+						return diagnostics.getDiagnostics(h.program.program, targetFile)
+					}),
 				}
 				h.updateHasEmitDiagnostics(result)
 				return result
@@ -78,9 +80,17 @@ func (h *emitFilesHandler) emitAllAffectedFiles(options compiler.EmitOptions) *c
 		h.emitBuildInfo(options, result)
 		return result
 	} else {
+		var diagnostics []*ast.Diagnostic
+		if options.TargetSourceFiles == nil {
+			diagnostics = h.program.program.GetDeclarationDiagnostics(h.ctx, nil)
+		} else {
+			diagnostics = core.FlatMap(options.TargetSourceFiles, func(targetSourceFile *ast.SourceFile) []*ast.Diagnostic {
+				return h.program.program.GetDeclarationDiagnostics(h.ctx, targetSourceFile)
+			})
+		}
 		result := &compiler.EmitResult{
 			EmitSkipped: true,
-			Diagnostics: h.program.program.GetDeclarationDiagnostics(h.ctx, options.TargetSourceFile),
+			Diagnostics: diagnostics,
 		}
 		if len(result.Diagnostics) != 0 {
 			h.updateHasEmitDiagnostics(result)
@@ -136,9 +146,9 @@ func (h *emitFilesHandler) emitFilesIncremental(options compiler.EmitOptions) []
 				var result *compiler.EmitResult
 				if !h.isForDtsErrors {
 					result = h.program.program.Emit(h.ctx, h.getEmitOptions(compiler.EmitOptions{
-						TargetSourceFile: affectedFile,
-						EmitOnly:         emitOnly,
-						WriteFile:        options.WriteFile,
+						TargetSourceFiles: core.SingleElementSlice(affectedFile),
+						EmitOnly:          emitOnly,
+						WriteFile:         options.WriteFile,
 					}))
 				} else {
 					result = &compiler.EmitResult{
@@ -189,29 +199,29 @@ func (h *emitFilesHandler) getEmitOptions(options compiler.EmitOptions) compiler
 	}
 	canUseIncrementalState := h.program.snapshot.canUseIncrementalState()
 	return compiler.EmitOptions{
-		TargetSourceFile: options.TargetSourceFile,
-		EmitOnly:         options.EmitOnly,
+		TargetSourceFiles: options.TargetSourceFiles,
+		EmitOnly:          options.EmitOnly,
 		WriteFile: func(fileName string, text string, data *compiler.WriteFileData) error {
 			var differsOnlyInMap bool
 			if tspath.IsDeclarationFileName(fileName) {
 				if canUseIncrementalState {
 					var emitSignature string
-					info, _ := h.program.snapshot.fileInfos.Load(options.TargetSourceFile.Path())
+					info, _ := h.program.snapshot.fileInfos.Load(data.SourceFile.Path())
 					if info.signature == info.version {
-						signature := h.program.snapshot.computeSignatureWithDiagnostics(options.TargetSourceFile, text, data)
+						signature := h.program.snapshot.computeSignatureWithDiagnostics(data.SourceFile, text, data)
 						// With d.ts diagnostics they are also part of the signature so emitSignature will be different from it since its just hash of d.ts
 						if len(data.Diagnostics) == 0 {
 							emitSignature = signature
 						}
 						if signature != info.version { // Update it
-							h.signatures.Store(options.TargetSourceFile.Path(), signature)
+							h.signatures.Store(data.SourceFile.Path(), signature)
 						}
 					}
 
 					// Store d.ts emit hash so later can be compared to check if d.ts has changed.
 					// Currently we do this only for composite projects since these are the only projects that can be referenced by other projects
 					// and would need their d.ts change time in --build mode
-					if h.skipDtsOutputOfComposite(options.TargetSourceFile, fileName, text, data, emitSignature, &differsOnlyInMap) {
+					if h.skipDtsOutputOfComposite(data.SourceFile, fileName, text, data, emitSignature, &differsOnlyInMap) {
 						return nil
 					}
 				}
@@ -328,7 +338,7 @@ func emitFiles(ctx context.Context, program *Program, options compiler.EmitOptio
 	emitHandler := &emitFilesHandler{ctx: ctx, program: program, isForDtsErrors: isForDtsErrors}
 
 	// Single file emit - do direct from program
-	if !isForDtsErrors && options.TargetSourceFile != nil {
+	if !isForDtsErrors && options.TargetSourceFiles != nil {
 		result := program.program.Emit(ctx, emitHandler.getEmitOptions(options))
 		emitHandler.updateHasEmitDiagnostics(result)
 		if ctx.Err() != nil {
