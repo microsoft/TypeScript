@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/variadicTupleMismatch.ts] ////
+
+=== variadicTupleMismatch.ts ===
+// https://github.com/microsoft/typescript-go/issues/4727
+
+function f1<A extends unknown[]>(x: [...A, number], y: [...A, number, number, number, number]) {
+>f1 : Symbol(f1, Decl(variadicTupleMismatch.ts, 0, 0))
+>A : Symbol(A, Decl(variadicTupleMismatch.ts, 2, 12))
+>x : Symbol(x, Decl(variadicTupleMismatch.ts, 2, 33))
+>A : Symbol(A, Decl(variadicTupleMismatch.ts, 2, 12))
+>y : Symbol(y, Decl(variadicTupleMismatch.ts, 2, 51))
+>A : Symbol(A, Decl(variadicTupleMismatch.ts, 2, 12))
+
+    x = y  // Error
+>x : Symbol(x, Decl(variadicTupleMismatch.ts, 2, 33))
+>y : Symbol(y, Decl(variadicTupleMismatch.ts, 2, 51))
+}
+
+function f2<A extends unknown[]>(x: [number, ...A], y: [...A, number, number, number, number]) {
+>f2 : Symbol(f2, Decl(variadicTupleMismatch.ts, 4, 1))
+>A : Symbol(A, Decl(variadicTupleMismatch.ts, 6, 12))
+>x : Symbol(x, Decl(variadicTupleMismatch.ts, 6, 33))
+>A : Symbol(A, Decl(variadicTupleMismatch.ts, 6, 12))
+>y : Symbol(y, Decl(variadicTupleMismatch.ts, 6, 51))
+>A : Symbol(A, Decl(variadicTupleMismatch.ts, 6, 12))
+
+    x = y  // Error
+>x : Symbol(x, Decl(variadicTupleMismatch.ts, 6, 33))
+>y : Symbol(y, Decl(variadicTupleMismatch.ts, 6, 51))
+}
+
+function f3<A extends unknown[]>(x: [...A, ...A], y: [...A, number, number, number, number]) {
+>f3 : Symbol(f3, Decl(variadicTupleMismatch.ts, 8, 1))
+>A : Symbol(A, Decl(variadicTupleMismatch.ts, 10, 12))
+>x : Symbol(x, Decl(variadicTupleMismatch.ts, 10, 33))
+>A : Symbol(A, Decl(variadicTupleMismatch.ts, 10, 12))
+>A : Symbol(A, Decl(variadicTupleMismatch.ts, 10, 12))
+>y : Symbol(y, Decl(variadicTupleMismatch.ts, 10, 49))
+>A : Symbol(A, Decl(variadicTupleMismatch.ts, 10, 12))
+
+    x = y  // Error
+>x : Symbol(x, Decl(variadicTupleMismatch.ts, 10, 33))
+>y : Symbol(y, Decl(variadicTupleMismatch.ts, 10, 49))
+}
+

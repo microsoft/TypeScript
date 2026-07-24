@@ -1,0 +1,32 @@
+variadicTupleMismatch.ts(4,5): error TS2322: Type '[...A, number, number, number, number]' is not assignable to type '[...A, number]'.
+  Target allows only 2 element(s) but source may have more.
+variadicTupleMismatch.ts(8,5): error TS2322: Type '[...A, number, number, number, number]' is not assignable to type '[number, ...A]'.
+  Variadic element at position 0 in source does not match element at position 0 in target.
+variadicTupleMismatch.ts(12,5): error TS2322: Type '[...A, number, number, number, number]' is not assignable to type '[...A, ...A]'.
+  Source provides no match for variadic element at position 1 in target.
+
+
+==== variadicTupleMismatch.ts (3 errors) ====
+    // https://github.com/microsoft/typescript-go/issues/4727
+    
+    function f1<A extends unknown[]>(x: [...A, number], y: [...A, number, number, number, number]) {
+        x = y  // Error
+        ~
+!!! error TS2322: Type '[...A, number, number, number, number]' is not assignable to type '[...A, number]'.
+!!! error TS2322:   Target allows only 2 element(s) but source may have more.
+    }
+    
+    function f2<A extends unknown[]>(x: [number, ...A], y: [...A, number, number, number, number]) {
+        x = y  // Error
+        ~
+!!! error TS2322: Type '[...A, number, number, number, number]' is not assignable to type '[number, ...A]'.
+!!! error TS2322:   Variadic element at position 0 in source does not match element at position 0 in target.
+    }
+    
+    function f3<A extends unknown[]>(x: [...A, ...A], y: [...A, number, number, number, number]) {
+        x = y  // Error
+        ~
+!!! error TS2322: Type '[...A, number, number, number, number]' is not assignable to type '[...A, ...A]'.
+!!! error TS2322:   Source provides no match for variadic element at position 1 in target.
+    }
+    
