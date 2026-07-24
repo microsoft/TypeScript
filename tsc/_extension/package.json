@@ -353,6 +353,7 @@
     },
     "devDependencies": {
         "@types/vscode": "~1.125.0",
+        "@typescript/bundled-typescript": "npm:typescript@7.0.2",
         "@vscode/vsce": "^3.9.2",
         "esbuild": "^0.28.1"
     }
