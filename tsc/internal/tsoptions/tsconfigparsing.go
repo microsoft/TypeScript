@@ -246,7 +246,7 @@ func parseOwnConfigOfJsonSourceFile(
 				if keyText == "excludes" {
 					propertySetErrors = append(propertySetErrors, CreateDiagnosticForNodeInSourceFile(sourceFile, propertyAssignment.Name(), diagnostics.Unknown_option_excludes_Did_you_mean_exclude))
 				}
-				if core.Find(OptionsDeclarations, func(option *CommandLineOption) bool { return option.Name == keyText }) != nil {
+				if core.Find(optionsForCompiler, func(option *CommandLineOption) bool { return option.Name == keyText }) != nil {
 					rootCompilerOptions = append(rootCompilerOptions, propertyAssignment.Name())
 				}
 			}
@@ -262,9 +262,14 @@ func parseOwnConfigOfJsonSourceFile(
 		},
 	)
 	errors = append(errors, err...)
-	// if len(rootCompilerOptions) != 0  && json != nil && json.CompilerOptions != nil {
-	//    errors = append(errors, ast.NewDiagnostic(sourceFile, rootCompilerOptions[0], diagnostics.X_0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file))
-	// }
+	if jsonObject, ok := json.(*collections.OrderedMap[string, any]); len(rootCompilerOptions) != 0 && ok && !jsonObject.Has("compilerOptions") {
+		errors = append(errors, CreateDiagnosticForNodeInSourceFile(
+			sourceFile,
+			rootCompilerOptions[0],
+			diagnostics.X_0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file,
+			ast.GetTextOfPropertyName(rootCompilerOptions[0]),
+		))
+	}
 	return &parsedTsconfig{
 		raw:     json,
 		options: compilerOptions,

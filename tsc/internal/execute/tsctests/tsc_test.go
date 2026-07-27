@@ -195,6 +195,14 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: []string{"-p", "."},
 		},
 		{
+			subScenario: "compiler option at top level of tsconfig",
+			files: FileMap{
+				"/home/src/workspaces/project/index.ts":      "",
+				"/home/src/workspaces/project/tsconfig.json": `{ "strict": true }`,
+			},
+			commandLineArgs: []string{"--pretty", "false"},
+		},
+		{
 			subScenario:     "Parse enum type options",
 			commandLineArgs: []string{"--moduleResolution", "nodenext ", "first.ts", "--module", "nodenext", "--target", "esnext", "--moduleDetection", "auto", "--jsx", "react", "--newLine", "crlf"},
 		},
