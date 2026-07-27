@@ -790,12 +790,6 @@ compiler/mixinPrivateAndProtected.errors.txt.diff
 conformance/mixinAccessors3.errors.txt.diff
 conformance/typeArgumentInferenceWithClassExpression2.errors.txt.diff
 
-## One error instead of 3 emitted for `<T>(arg) => expr` in JSX-syntax files
-conformance/nodeModulesForbidenSyntax(module=node16).errors.txt.diff
-conformance/nodeModulesForbidenSyntax(module=node18).errors.txt.diff
-conformance/nodeModulesForbidenSyntax(module=node20).errors.txt.diff
-conformance/nodeModulesForbidenSyntax(module=nodenext).errors.txt.diff
-
 ## `super()` call no longer flagged as error when the class heritage clause already has an error. Immaterial.
 compiler/interfaceMergeWithNonGenericTypeArguments.errors.txt.diff
 
