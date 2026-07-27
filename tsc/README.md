@@ -38,7 +38,7 @@ This is still a work in progress and is not yet at full feature parity with Type
 | JSX | done | - |
 | Declaration emit | done | - |
 | Emit (JS output) | done | - |
-| Watch mode | prototype | Watches files and rebuilds, but no incremental rechecking. Not optimized. |
+| Watch mode | done | - |
 | Build mode / project references | done | - |
 | Incremental build | done | - |
 | Language service (LSP) | in progress | Nearly all features implemented. |
