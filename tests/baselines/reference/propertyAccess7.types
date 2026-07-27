@@ -8,10 +8,10 @@ var foo: string;
 foo.toUpperCase();
 >foo.toUpperCase() : string
 >                  : ^^^^^^
->foo.toUpperCase : () => string
->                : ^^^^^^      
+>foo.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >foo : string
 >    : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 

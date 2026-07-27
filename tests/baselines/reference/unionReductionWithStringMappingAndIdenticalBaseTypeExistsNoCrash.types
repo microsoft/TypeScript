@@ -186,12 +186,12 @@ const displayEnum = (value: string) => upperFirst(value.toLowerCase())
 >           : ^ ^^^^^^^^^      ^^   ^^ ^^^^^             
 >value.toLowerCase() : string
 >                    : ^^^^^^
->value.toLowerCase : () => string
->                  : ^^^^^^      
+>value.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                  : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >value : string
 >      : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 function Comp() {
 >Comp : () => React.JSX.Element

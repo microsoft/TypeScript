@@ -30,32 +30,32 @@ const [s0, s1, s2] = strings;
 s0.toUpperCase()
 >s0.toUpperCase() : string
 >                 : ^^^^^^
->s0.toUpperCase : () => string
->               : ^^^^^^      
+>s0.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>               : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >s0 : string
 >   : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 s1.toUpperCase() 
 >s1.toUpperCase() : string
 >                 : ^^^^^^
->s1.toUpperCase : () => string
->               : ^^^^^^      
+>s1.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>               : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >s1 : string | undefined
 >   : ^^^^^^^^^^^^^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 s2.toUpperCase()
 >s2.toUpperCase() : string
 >                 : ^^^^^^
->s2.toUpperCase : () => string
->               : ^^^^^^      
+>s2.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>               : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >s2 : string | undefined
 >   : ^^^^^^^^^^^^^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 declare const strings2: [string, ...Array<string>, string]
 >strings2 : [string, ...string[], string]
@@ -74,30 +74,30 @@ const [s3, s4, s5] = strings2;
 s3.toUpperCase()
 >s3.toUpperCase() : string
 >                 : ^^^^^^
->s3.toUpperCase : () => string
->               : ^^^^^^      
+>s3.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>               : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >s3 : string
 >   : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 s4.toUpperCase() 
 >s4.toUpperCase() : string
 >                 : ^^^^^^
->s4.toUpperCase : () => string
->               : ^^^^^^      
+>s4.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>               : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >s4 : string
 >   : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 s5.toUpperCase()
 >s5.toUpperCase() : string
 >                 : ^^^^^^
->s5.toUpperCase : () => string
->               : ^^^^^^      
+>s5.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>               : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >s5 : string | undefined
 >   : ^^^^^^^^^^^^^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 

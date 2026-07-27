@@ -203,16 +203,16 @@ let foo: Maybe<string>;
 get(foo).toUpperCase(); // Ok
 >get(foo).toUpperCase() : string
 >                       : ^^^^^^
->get(foo).toUpperCase : () => string
->                     : ^^^^^^      
+>get(foo).toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                     : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >get(foo) : string
 >         : ^^^^^^
 >get : <U>(x: U | void) => U
 >    : ^ ^^ ^^        ^^^^^ 
 >foo : Maybe<string>
 >    : ^^^^^^^^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 // Repro from #5456
 

@@ -16,14 +16,14 @@ var upper = foo.name.toUpperCase();
 >      : ^^^^^^
 >foo.name.toUpperCase() : string
 >                       : ^^^^^^
->foo.name.toUpperCase : () => string
->                     : ^^^^^^      
+>foo.name.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                     : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >foo.name : string
 >         : ^^^^^^
 >foo : { name: string; }
 >    : ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 

@@ -86,20 +86,20 @@ exports.apply = 'ok'
 >     : ^^^^
 
 var OK = exports.apply.toUpperCase()
->OK : string
->   : ^^^^^^
->exports.apply.toUpperCase() : string
->                            : ^^^^^^
->exports.apply.toUpperCase : () => string
->                          : ^^^^^^      
+>OK : "OK"
+>   : ^^^^
+>exports.apply.toUpperCase() : "OK"
+>                            : ^^^^
+>exports.apply.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>                          : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >exports.apply : "ok"
 >              : ^^^^
 >exports : typeof import("./moduleExportAliasDuplicateAlias")
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >apply : "ok"
 >      : ^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 exports.apply = 1
 >exports.apply = 1 : 1

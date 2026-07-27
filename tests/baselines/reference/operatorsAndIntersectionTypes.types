@@ -104,16 +104,16 @@ const s1 = "{" + guid + "}";
 >    : ^^^
 
 const s2 = guid.toLowerCase();
->s2 : string
->   : ^^^^^^
->guid.toLowerCase() : string
->                   : ^^^^^^
->guid.toLowerCase : () => string
->                 : ^^^^^^      
+>s2 : Lowercase<`${Guid}`>
+>   : ^^^^^^^^^^^^^^^^^^^^
+>guid.toLowerCase() : Lowercase<`${Guid}`>
+>                   : ^^^^^^^^^^^^^^^^^^^^
+>guid.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                 : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >guid : Guid
 >     : ^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 
 const s3 = guid + guid;
 >s3 : string

@@ -60,12 +60,12 @@ catch (e) {
 >    : ^^^^    ^^     ^^^^^    
 >e.toUpperCase() : string
 >                : ^^^^^^
->e.toUpperCase : () => string
->              : ^^^^^^      
+>e.toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>              : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >e : string
 >  : ^^^^^^
->toUpperCase : () => string
->            : ^^^^^^      
+>toUpperCase : <T extends string>(this: T) => string extends T ? string : Uppercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
     }
     if (e instanceof Error) {
 >e instanceof Error : boolean
@@ -78,16 +78,16 @@ catch (e) {
         e.stack?.toUpperCase();
 >e.stack?.toUpperCase() : string | undefined
 >                       : ^^^^^^^^^^^^^^^^^^
->e.stack?.toUpperCase : (() => string) | undefined
->                     : ^^^^^^^      ^^^^^^^^^^^^^
+>e.stack?.toUpperCase : (<T extends string>(this: T) => string extends T ? string : Uppercase<T>) | undefined
+>                     : ^^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        ^^^^^^^^^^^^^
 >e.stack : string | undefined
 >        : ^^^^^^^^^^^^^^^^^^
 >e : Error
 >  : ^^^^^
 >stack : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
->toUpperCase : (() => string) | undefined
->            : ^^^^^^^      ^^^^^^^^^^^^^
+>toUpperCase : (<T extends string>(this: T) => string extends T ? string : Uppercase<T>) | undefined
+>            : ^^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        ^^^^^^^^^^^^^
     }
     if (typeof e === "number") {
 >typeof e === "number" : boolean

@@ -135,8 +135,8 @@ let c = a.getCls().y.toLowerCase();
 >  : ^^^^^^
 >a.getCls().y.toLowerCase() : string
 >                           : ^^^^^^
->a.getCls().y.toLowerCase : () => string
->                         : ^^^^^^      
+>a.getCls().y.toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                         : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >a.getCls().y : string
 >             : ^^^^^^
 >a.getCls() : import("C").Cls
@@ -149,6 +149,6 @@ let c = a.getCls().y.toLowerCase();
 >       : ^^^^^^       ^^^  ^^^
 >y : string
 >  : ^^^^^^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 

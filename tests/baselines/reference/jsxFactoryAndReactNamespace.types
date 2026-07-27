@@ -101,16 +101,16 @@ function toCamelCase(text: string): string {
 >                                          : ^^^^^^
 >text[0].toLowerCase() : string
 >                      : ^^^^^^
->text[0].toLowerCase : () => string
->                    : ^^^^^^      
+>text[0].toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>                    : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >text[0] : string
 >        : ^^^^^^
 >text : string
 >     : ^^^^^^
 >0 : 0
 >  : ^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T extends string>(this: T) => string extends T ? string : Lowercase<T>
+>            : ^ ^^^^^^^^^      ^^    ^^ ^^^^^                                        
 >text.substring(1) : string
 >                  : ^^^^^^
 >text.substring : (start: number, end?: number) => string

@@ -1,9 +1,13 @@
 arrayconcat.ts(12,9): error TS2564: Property 'options' has no initializer and is not definitely assigned in the constructor.
+arrayconcat.ts(16,25): error TS2684: The 'this' context of type 'string | undefined' is not assignable to method's 'this' of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
 arrayconcat.ts(16,25): error TS18048: 'a.name' is possibly 'undefined'.
+arrayconcat.ts(17,25): error TS2684: The 'this' context of type 'string | undefined' is not assignable to method's 'this' of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
 arrayconcat.ts(17,25): error TS18048: 'b.name' is possibly 'undefined'.
 
 
-==== arrayconcat.ts (3 errors) ====
+==== arrayconcat.ts (5 errors) ====
     interface IOptions {
         name?: string;
         flag?: boolean;
@@ -23,8 +27,14 @@ arrayconcat.ts(17,25): error TS18048: 'b.name' is possibly 'undefined'.
     		this.options = this.options.sort(function(a, b) {
                 var aName = a.name.toLowerCase();
                             ~~~~~~
+!!! error TS2684: The 'this' context of type 'string | undefined' is not assignable to method's 'this' of type 'string'.
+!!! error TS2684:   Type 'undefined' is not assignable to type 'string'.
+                            ~~~~~~
 !!! error TS18048: 'a.name' is possibly 'undefined'.
                 var bName = b.name.toLowerCase();
+                            ~~~~~~
+!!! error TS2684: The 'this' context of type 'string | undefined' is not assignable to method's 'this' of type 'string'.
+!!! error TS2684:   Type 'undefined' is not assignable to type 'string'.
                             ~~~~~~
 !!! error TS18048: 'b.name' is possibly 'undefined'.
     

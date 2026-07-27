@@ -274,14 +274,14 @@ function bString<T extends string>(this: T, arg: B) {
 >    : ^
 
   this.toLowerCase();
->this.toLowerCase() : string
->                   : ^^^^^^
->this.toLowerCase : () => string
->                 : ^^^^^^      
+>this.toLowerCase() : string extends T ? T : Lowercase<T>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.toLowerCase : <T_1 extends string>(this: T_1) => string extends T_1 ? string : Lowercase<T_1>
+>                 : ^^^^^^^^^^^^^      ^^    ^^   ^^^^^                                            
 >this : T
 >     : ^
->toLowerCase : () => string
->            : ^^^^^^      
+>toLowerCase : <T_1 extends string>(this: T_1) => string extends T_1 ? string : Lowercase<T_1>
+>            : ^^^^^^^^^^^^^      ^^    ^^   ^^^^^                                            
 
   arg.a(); // should error
 >arg.a() : void
