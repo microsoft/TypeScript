@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/intl/collatorCompareBoundFunction.ts] ////
+
+=== collatorCompareBoundFunction.ts ===
+const collator = new Intl.Collator();
+>collator : Symbol(collator, Decl(collatorCompareBoundFunction.ts, 0, 5))
+>Intl : Symbol(Intl, Decl(lib.es2022.intl.d.ts, --, --))
+
+// Should be usable as a function with no dynamic `this`
+const cmp: (a: string, b: string) => number = collator.compare;
+>cmp : Symbol(cmp, Decl(collatorCompareBoundFunction.ts, 3, 5))
+>a : Symbol(a, Decl(collatorCompareBoundFunction.ts, 3, 12))
+>b : Symbol(b, Decl(collatorCompareBoundFunction.ts, 3, 22))
+>collator : Symbol(collator, Decl(collatorCompareBoundFunction.ts, 0, 5))
+
+// Function expecting a `this: void` bound compare function
+function useCompare(fn: (this: void, a: string, b: string) => number): number {
+>useCompare : Symbol(useCompare, Decl(collatorCompareBoundFunction.ts, 3, 63))
+>fn : Symbol(fn, Decl(collatorCompareBoundFunction.ts, 6, 20))
+>this : Symbol(this, Decl(collatorCompareBoundFunction.ts, 6, 25))
+>a : Symbol(a, Decl(collatorCompareBoundFunction.ts, 6, 36))
+>b : Symbol(b, Decl(collatorCompareBoundFunction.ts, 6, 47))
+
+    return fn("a", "b");
+>fn : Symbol(fn, Decl(collatorCompareBoundFunction.ts, 6, 20))
+}
+
+useCompare(collator.compare);
+>useCompare : Symbol(useCompare, Decl(collatorCompareBoundFunction.ts, 3, 63))
+>collator : Symbol(collator, Decl(collatorCompareBoundFunction.ts, 0, 5))
+
+// Should work with Array.prototype.sort
+const sorted = ["z", "ä", "a"].sort(collator.compare);
+>sorted : Symbol(sorted, Decl(collatorCompareBoundFunction.ts, 13, 5))
+>collator : Symbol(collator, Decl(collatorCompareBoundFunction.ts, 0, 5))
+
