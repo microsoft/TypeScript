@@ -497,6 +497,19 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 		}},
 	},
 	{
+		title: "reports spelling suggestion for an unknown option",
+		input: []testConfig{{
+			jsonText: `{
+			    "compilerOptions": {
+				"targt": 1
+			    }
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/app.ts": ""},
+		}},
+	},
+	{
 		title: "reports errors for wrong type option and invalid enum value",
 		input: []testConfig{{
 			jsonText: `{

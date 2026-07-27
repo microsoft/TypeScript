@@ -49,9 +49,14 @@ func (parser *commandLineParser) createUnknownOptionError(
 		node,
 		sourceFile,
 		parser.AlternateMode(),
+		parser.UnknownDidYouMeanDiagnostic(),
+		commandLineOptionsToMap(parser.workerDiagnostics.didYouMean.OptionDeclarations),
 	)
 }
 
+// createUnknownOptionError creates a diagnostic for an unknown option. If
+// unknownDidYouMeanDiagnostic and optionsNameMap are provided, it also checks
+// for a spelling suggestion and emits a "did you mean" diagnostic instead.
 func createUnknownOptionError(
 	unknownOption string,
 	unknownOptionDiagnostic *diagnostics.Message,
@@ -59,6 +64,8 @@ func createUnknownOptionError(
 	node *ast.Node, // optional
 	sourceFile *ast.SourceFile, // optional
 	alternateMode *AlternateModeDiagnostics, // optional
+	unknownDidYouMeanDiagnostic *diagnostics.Message, // optional; nil skips suggestion
+	optionsNameMap CommandLineOptionNameMap, // optional; nil skips suggestion
 ) *ast.Diagnostic {
 	if alternateMode != nil && alternateMode.optionsNameMap != nil {
 		otherOption := alternateMode.optionsNameMap.Get(strings.ToLower(unknownOption))
@@ -74,7 +81,11 @@ func createUnknownOptionError(
 	if unknownOptionErrorText == "" {
 		unknownOptionErrorText = unknownOption
 	}
-	// TODO: possibleOption := spelling suggestion
+	if unknownDidYouMeanDiagnostic != nil && optionsNameMap != nil {
+		if possibleOption := optionsNameMap.GetSpellingSuggestion(unknownOption); possibleOption != nil {
+			return CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, unknownDidYouMeanDiagnostic, unknownOptionErrorText, possibleOption.Name)
+		}
+	}
 	return CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, unknownOptionDiagnostic, unknownOptionErrorText)
 }
 

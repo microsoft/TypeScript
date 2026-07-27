@@ -2,6 +2,7 @@ package tsoptions
 
 import (
 	"cmp"
+	"maps"
 	"reflect"
 	"slices"
 	"strings"
@@ -215,6 +216,9 @@ func parseOwnConfigOfJsonSourceFile(
 				unknownNameDiag := extraKeyDiagnostics(parentOption.Name)
 				if parentOption.ElementOptions != nil {
 					possibleOption := parentOption.ElementOptions.Get(keyText)
+					if possibleOption == nil {
+						possibleOption = parentOption.ElementOptions.GetSpellingSuggestion(keyText)
+					}
 					if possibleOption != nil && possibleOption.Name != keyText {
 						propertySetErrors = append(propertySetErrors, CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
 							sourceFile,
@@ -231,6 +235,8 @@ func parseOwnConfigOfJsonSourceFile(
 							propertyAssignment.Name(),
 							sourceFile,
 							nil, /*alternateMode*/
+							nil, /*unknownDidYouMeanDiagnostic*/
+							nil, /*optionsNameMap*/
 						))
 					}
 				} else {
@@ -602,6 +608,15 @@ func (m CommandLineOptionNameMap) Get(name string) *CommandLineOption {
 	return opt
 }
 
+func (m CommandLineOptionNameMap) GetSpellingSuggestion(name string) *CommandLineOption {
+	return core.GetSpellingSuggestion(
+		name,
+		maps.Values(m),
+		func(option *CommandLineOption) string { return option.Name },
+		func(a *CommandLineOption, b *CommandLineOption) int { return strings.Compare(a.Name, b.Name) },
+	)
+}
+
 func commandLineOptionsToMap(compilerOptions []*CommandLineOption) CommandLineOptionNameMap {
 	result := make(map[string]*CommandLineOption, len(compilerOptions)*2)
 	for i := range compilerOptions {
@@ -639,7 +654,7 @@ func convertOptionsFromJson[O optionParser](optionsNameMap CommandLineOptionName
 			continue
 		}
 		if opt == nil {
-			errors = append(errors, createUnknownOptionError(key, result.UnknownOptionDiagnostic(), "", nil, nil, nil))
+			errors = append(errors, createUnknownOptionError(key, result.UnknownOptionDiagnostic(), "", nil, nil, nil, result.UnknownDidYouMeanDiagnostic(), optionsNameMap))
 			continue
 		}
 
