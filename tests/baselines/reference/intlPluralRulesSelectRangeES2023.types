@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/es2023/intlPluralRulesSelectRangeES2023.ts] ////
+
+=== intlPluralRulesSelectRangeES2023.ts ===
+const pr = new Intl.PluralRules("en-US");
+>pr : Intl.PluralRules
+>   : ^^^^^^^^^^^^^^^^
+>new Intl.PluralRules("en-US") : Intl.PluralRules
+>                              : ^^^^^^^^^^^^^^^^
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"en-US" : "en-US"
+>        : ^^^^^^^
+
+const category = pr.selectRange(1, 2);
+>category : Intl.LDMLPluralRule
+>         : ^^^^^^^^^^^^^^^^^^^
+>pr.selectRange(1, 2) : Intl.LDMLPluralRule
+>                     : ^^^^^^^^^^^^^^^^^^^
+>pr.selectRange : (start: number, end: number) => Intl.LDMLPluralRule
+>               : ^     ^^      ^^   ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>pr : Intl.PluralRules
+>   : ^^^^^^^^^^^^^^^^
+>selectRange : (start: number, end: number) => Intl.LDMLPluralRule
+>            : ^     ^^      ^^   ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+const exact: Intl.LDMLPluralRule = category;
+>exact : Intl.LDMLPluralRule
+>      : ^^^^^^^^^^^^^^^^^^^
+>Intl : any
+>     : ^^^
+>category : Intl.LDMLPluralRule
+>         : ^^^^^^^^^^^^^^^^^^^
+
