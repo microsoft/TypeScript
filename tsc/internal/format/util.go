@@ -1,8 +1,6 @@
 package format
 
 import (
-	"slices"
-
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -82,59 +80,6 @@ func GetLineStartPositionForPosition(position int, sourceFile *ast.SourceFile) i
 }
 
 /**
- * Tests whether `child` is a grammar error on `parent`.
- * In strada, this also checked node arrays, but it is never actually called with one in practice.
- */
-func isGrammarError(parent *ast.Node, child *ast.Node) bool {
-	if ast.IsTypeParameterDeclaration(parent) {
-		return child == parent.AsTypeParameterDeclaration().Expression
-	}
-	if ast.IsPropertySignatureDeclaration(parent) {
-		return child == parent.Initializer()
-	}
-	if ast.IsPropertyDeclaration(parent) {
-		return ast.IsAutoAccessorPropertyDeclaration(parent) && child == parent.PostfixToken() && child.Kind == ast.KindQuestionToken
-	}
-	if ast.IsPropertyAssignment(parent) {
-		pa := parent.AsPropertyAssignment()
-		mods := pa.Modifiers()
-		return child == pa.PostfixToken || (mods != nil && isGrammarErrorElement(&mods.NodeList, child, ast.IsModifierLike))
-	}
-	if ast.IsShorthandPropertyAssignment(parent) {
-		sp := parent.AsShorthandPropertyAssignment()
-		mods := sp.Modifiers()
-		return child == sp.EqualsToken || child == sp.PostfixToken || (mods != nil && isGrammarErrorElement(&mods.NodeList, child, ast.IsModifierLike))
-	}
-	if ast.IsMethodDeclaration(parent) {
-		return child == parent.PostfixToken() && child.Kind == ast.KindExclamationToken
-	}
-	if ast.IsConstructorDeclaration(parent) {
-		return child == parent.AsConstructorDeclaration().Type || isGrammarErrorElement(parent.TypeParameterList(), child, ast.IsTypeParameterDeclaration)
-	}
-	if ast.IsGetAccessorDeclaration(parent) {
-		return isGrammarErrorElement(parent.TypeParameterList(), child, ast.IsTypeParameterDeclaration)
-	}
-	if ast.IsSetAccessorDeclaration(parent) {
-		return child == parent.AsSetAccessorDeclaration().Type || isGrammarErrorElement(parent.TypeParameterList(), child, ast.IsTypeParameterDeclaration)
-	}
-	if ast.IsNamespaceExportDeclaration(parent) {
-		mods := parent.AsNamespaceExportDeclaration().Modifiers()
-		return mods != nil && isGrammarErrorElement(&mods.NodeList, child, ast.IsModifierLike)
-	}
-	return false
-}
-
-func isGrammarErrorElement(list *ast.NodeList, child *ast.Node, isPossibleElement func(node *ast.Node) bool) bool {
-	if list == nil || len(list.Nodes) == 0 {
-		return false
-	}
-	if !isPossibleElement(child) {
-		return false
-	}
-	return slices.Contains(list.Nodes, child)
-}
-
-/**
  * Validating `expectedTokenKind` ensures the token was typed in the context we expect (eg: not a comment).
  * @param expectedTokenKind The kind of the last token constituting the desired parent node.
  */
@@ -186,5 +131,18 @@ func isListElement(parent *ast.Node, node *ast.Node) bool {
 		return node.Loc.ContainedBy(parent.AsCatchClause().Block.StatementList().Loc)
 	}
 
+	return false
+}
+
+func isMemberListElement(parent *ast.Node, node *ast.Node) bool {
+	switch parent.Kind {
+	case ast.KindClassDeclaration,
+		ast.KindClassExpression,
+		ast.KindInterfaceDeclaration,
+		ast.KindEnumDeclaration,
+		ast.KindTypeLiteral,
+		ast.KindMappedType:
+		return node.Loc.ContainedBy(parent.MemberList().Loc)
+	}
 	return false
 }

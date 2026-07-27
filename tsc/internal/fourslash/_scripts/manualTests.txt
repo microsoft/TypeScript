@@ -57,6 +57,8 @@ exhaustiveCaseCompletions5
 exhaustiveCaseCompletions6
 exhaustiveCaseCompletions7
 exhaustiveCaseCompletions8
+formatConflictDiff3Marker1
+formatConflictMarker1
 formatOnEnterInComment
 getEditsForFileRename_caseInsensitive
 getEditsForFileRename_directory_down
