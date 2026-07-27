@@ -10,12 +10,12 @@ const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 1024);
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Int32Array.BYTES_PER_ELEMENT * 1024 : number
 >                                    : ^^^^^^
->Int32Array.BYTES_PER_ELEMENT : number
->                             : ^^^^^^
+>Int32Array.BYTES_PER_ELEMENT : 4
+>                             : ^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->BYTES_PER_ELEMENT : number
->                  : ^^^^^^
+>BYTES_PER_ELEMENT : 4
+>                  : ^
 >1024 : 1024
 >     : ^^^^
 
@@ -38,12 +38,12 @@ const sab64 = new SharedArrayBuffer(BigInt64Array.BYTES_PER_ELEMENT * 1024);
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array.BYTES_PER_ELEMENT * 1024 : number
 >                                       : ^^^^^^
->BigInt64Array.BYTES_PER_ELEMENT : number
->                                : ^^^^^^
+>BigInt64Array.BYTES_PER_ELEMENT : 8
+>                                : ^
 >BigInt64Array : BigInt64ArrayConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
->BYTES_PER_ELEMENT : number
->                  : ^^^^^^
+>BYTES_PER_ELEMENT : 8
+>                  : ^
 >1024 : 1024
 >     : ^^^^
 

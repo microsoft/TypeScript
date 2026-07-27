@@ -1866,7 +1866,7 @@ interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 1;
 
     /**
      * The ArrayBuffer instance referenced by the array.
@@ -2116,7 +2116,7 @@ interface Int8ArrayConstructor {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 1;
 
     /**
      * Returns a new array from a set of elements.
@@ -2148,7 +2148,7 @@ interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 1;
 
     /**
      * The ArrayBuffer instance referenced by the array.
@@ -2398,7 +2398,7 @@ interface Uint8ArrayConstructor {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 1;
 
     /**
      * Returns a new array from a set of elements.
@@ -2430,7 +2430,7 @@ interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBufferLi
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 1;
 
     /**
      * The ArrayBuffer instance referenced by the array.
@@ -2680,7 +2680,7 @@ interface Uint8ClampedArrayConstructor {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 1;
 
     /**
      * Returns a new array from a set of elements.
@@ -2712,7 +2712,7 @@ interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 2;
 
     /**
      * The ArrayBuffer instance referenced by the array.
@@ -2961,7 +2961,7 @@ interface Int16ArrayConstructor {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 2;
 
     /**
      * Returns a new array from a set of elements.
@@ -2993,7 +2993,7 @@ interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 2;
 
     /**
      * The ArrayBuffer instance referenced by the array.
@@ -3243,7 +3243,7 @@ interface Uint16ArrayConstructor {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 2;
 
     /**
      * Returns a new array from a set of elements.
@@ -3274,7 +3274,7 @@ interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 4;
 
     /**
      * The ArrayBuffer instance referenced by the array.
@@ -3524,7 +3524,7 @@ interface Int32ArrayConstructor {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 4;
 
     /**
      * Returns a new array from a set of elements.
@@ -3556,7 +3556,7 @@ interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 4;
 
     /**
      * The ArrayBuffer instance referenced by the array.
@@ -3805,7 +3805,7 @@ interface Uint32ArrayConstructor {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 4;
 
     /**
      * Returns a new array from a set of elements.
@@ -3837,7 +3837,7 @@ interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 4;
 
     /**
      * The ArrayBuffer instance referenced by the array.
@@ -4087,7 +4087,7 @@ interface Float32ArrayConstructor {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 4;
 
     /**
      * Returns a new array from a set of elements.
@@ -4119,7 +4119,7 @@ interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 8;
 
     /**
      * The ArrayBuffer instance referenced by the array.
@@ -4369,7 +4369,7 @@ interface Float64ArrayConstructor {
     /**
      * The size in bytes of each element in the array.
      */
-    readonly BYTES_PER_ELEMENT: number;
+    readonly BYTES_PER_ELEMENT: 8;
 
     /**
      * Returns a new array from a set of elements.
