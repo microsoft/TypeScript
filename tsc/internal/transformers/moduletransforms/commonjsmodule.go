@@ -1964,7 +1964,7 @@ func (tx *CommonJSModuleTransformer) shimOrRewriteImportOrRequireCall(node *ast.
 	expression := tx.Visitor().VisitNode(node.Expression)
 	argumentsList := node.Arguments
 	if len(node.Arguments.Nodes) > 0 {
-		firstArgument := node.Arguments.Nodes[0]
+		firstArgument := tx.Visitor().VisitNode(node.Arguments.Nodes[0])
 		firstArgumentChanged := false
 		if ast.IsStringLiteralLike(firstArgument) {
 			rewritten := rewriteModuleSpecifier(tx.EmitContext(), firstArgument, tx.compilerOptions)
