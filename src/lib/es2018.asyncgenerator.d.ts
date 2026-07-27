@@ -13,11 +13,6 @@ interface AsyncGeneratorFunction {
      * Creates a new AsyncGenerator object.
      * @param args A list of arguments the function accepts.
      */
-    new (...args: any[]): AsyncGenerator;
-    /**
-     * Creates a new AsyncGenerator object.
-     * @param args A list of arguments the function accepts.
-     */
     (...args: any[]): AsyncGenerator;
     /**
      * The length of the arguments.
