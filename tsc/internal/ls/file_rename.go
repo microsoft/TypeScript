@@ -24,6 +24,11 @@ type toImport struct {
 	updated     bool
 }
 
+type movedFile struct {
+	sourceFile  *ast.SourceFile
+	newFileName string
+}
+
 func (l *LanguageService) GetEditsForFileRename(ctx context.Context, oldURI lsproto.DocumentUri, newURI lsproto.DocumentUri) []lsproto.TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile {
 	program := l.GetProgram()
 	oldPath := oldURI.FileName()
@@ -202,6 +207,13 @@ func (l *LanguageService) updateImportsForFileRename(program *compiler.Program, 
 	defer done()
 	moduleSpecifierPreferences := l.UserPreferences().ModuleSpecifierPreferences()
 
+	var movedFiles []movedFile
+	for _, sourceFile := range allFiles {
+		if newFileName, ok := oldToNew(sourceFile.FileName()); ok {
+			movedFiles = append(movedFiles, movedFile{sourceFile: sourceFile, newFileName: newFileName})
+		}
+	}
+
 	for _, sourceFile := range allFiles {
 		oldFileName := sourceFile.FileName()
 		newFromOld, fileMoved := oldToNew(sourceFile.FileName())
@@ -221,7 +233,7 @@ func (l *LanguageService) updateImportsForFileRename(program *compiler.Program, 
 		}
 
 		for _, importStringLiteral := range sourceFile.Imports() {
-			updated := l.getUpdatedImportSpecifier(program, checker, sourceFile, importStringLiteral, oldToNew, newImportFromPath, fileMoved, moduleSpecifierPreferences)
+			updated := l.getUpdatedImportSpecifier(program, checker, sourceFile, importStringLiteral, oldToNew, movedFiles, newImportFromPath, fileMoved, moduleSpecifierPreferences)
 			if updated != "" && updated != importStringLiteral.Text() {
 				changeTracker.ReplaceRangeWithText(sourceFile, l.converters.ToLSPRange(sourceFile, createStringTextRange(sourceFile, importStringLiteral)), updated)
 			}
@@ -236,6 +248,7 @@ func (l *LanguageService) getUpdatedImportSpecifier(
 	sourceFile *ast.SourceFile, // old importing source file
 	importLiteral *ast.StringLiteralLike,
 	oldToNew pathUpdater,
+	movedFiles []movedFile,
 	newImportFromPath string,
 	importingSourceFileMoved bool,
 	userPreferences modulespecifiers.UserPreferences,
@@ -248,8 +261,8 @@ func (l *LanguageService) getUpdatedImportSpecifier(
 	target := getSourceFileToImport(program, sourceFile, importLiteral, oldToNew)
 
 	if target == nil {
-		// First fall back: try every file in the program to see if any of them would match the import specifier, and if so, obtain the updated specifier for that file.
-		if updated := getUpdatedImportSpecifierFromMovedSourceFiles(program, sourceFile, importLiteral, oldToNew, newImportFromPath, userPreferences); updated != "" && updated != importLiteral.Text() {
+		// First fall back: try every file affected by the rename to see if any of them would match the import specifier, and if so, obtain the updated specifier for that file.
+		if updated := getUpdatedImportSpecifierFromMovedSourceFiles(program, sourceFile, importLiteral, movedFiles, newImportFromPath, userPreferences); updated != "" && updated != importLiteral.Text() {
 			return updated
 		}
 		// Fall back to a regular path update for unresolved module.
@@ -296,23 +309,18 @@ func getSourceFileToImport(
 	return nil
 }
 
-// As a fall back for unresolved modules, we'll check all files in the program to see if any of them would match
+// As a fall back for unresolved modules, we'll check every file affected by the rename to see if any of them would match
 // the import specifier, and if so, we'll obtain the updated specifier for that file.
-func getUpdatedImportSpecifierFromMovedSourceFiles(program *compiler.Program, sourceFile *ast.SourceFile, importLiteral *ast.StringLiteralLike, oldToNew pathUpdater, importingSourceFileName string, userPreferences modulespecifiers.UserPreferences) string {
+func getUpdatedImportSpecifierFromMovedSourceFiles(program *compiler.Program, sourceFile *ast.SourceFile, importLiteral *ast.StringLiteralLike, movedFiles []movedFile, importingSourceFileName string, userPreferences modulespecifiers.UserPreferences) string {
 	resolutionMode := program.GetModeForUsageLocation(sourceFile, importLiteral)
-	for _, candidate := range program.GetSourceFiles() {
-		newFileName, ok := oldToNew(candidate.FileName())
-		if !ok {
-			continue
-		}
-
+	for _, candidate := range movedFiles {
 		oldSpecifier := modulespecifiers.UpdateModuleSpecifier(
 			program.Options(),
 			program,
 			sourceFile,
 			importingSourceFileName,
 			importLiteral.Text(),
-			candidate.FileName(),
+			candidate.sourceFile.FileName(),
 			userPreferences,
 			modulespecifiers.ModuleSpecifierOptions{
 				OverrideImportMode: resolutionMode,
@@ -328,7 +336,7 @@ func getUpdatedImportSpecifierFromMovedSourceFiles(program *compiler.Program, so
 			sourceFile,
 			importingSourceFileName,
 			importLiteral.Text(),
-			newFileName,
+			candidate.newFileName,
 			userPreferences,
 			modulespecifiers.ModuleSpecifierOptions{
 				OverrideImportMode: resolutionMode,
