@@ -1921,7 +1921,6 @@ func (node *ExportSpecifier) computeSubtreeFacts() SubtreeFacts {
 
 // NamedMemberBase
 
-func (node *NamedMemberBase) DeclarationData() *DeclarationBase    { return &node.DeclarationBase }
 func (node *NamedMemberBase) Modifiers() *ModifierList             { return node.modifiers }
 func (node *NamedMemberBase) setModifiers(modifiers *ModifierList) { node.modifiers = modifiers }
 func (node *NamedMemberBase) Name() *DeclarationName               { return node.name }
@@ -2260,10 +2259,6 @@ func (node *ImportAttributesNode) GetResolutionModeOverride( /* !!! grammarError
 }
 
 // FunctionOrConstructorTypeNodeBase
-
-func (node *FunctionOrConstructorTypeNodeBase) DeclarationData() *DeclarationBase {
-	return node.FunctionLikeBase.DeclarationData()
-}
 
 func (node *TemplateLiteralLikeNodeBase) LiteralLikeData() *LiteralLikeNodeBase {
 	return &node.LiteralLikeNodeBase

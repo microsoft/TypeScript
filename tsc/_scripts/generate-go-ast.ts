@@ -139,6 +139,61 @@ function generateHeader(w: CodeWriter) {
 
 // ── Generate struct definitions ────────────────────────────────────────────
 
+/**
+ * Verifies that nothing inherits a base along more than one path.
+ */
+function verifyNoDuplicateBases(): void {
+    const problems: string[] = [];
+    const check = (name: string, extendsKeys: string[]) => {
+        const copies = new Map<string, number>();
+        const walk = (keys: string[]) => {
+            for (const key of keys) {
+                copies.set(key, (copies.get(key) ?? 0) + 1);
+                walk(api.getBase(key)?.extendsKeys ?? []);
+            }
+        };
+        walk(extendsKeys);
+        for (const [base, count] of copies) {
+            if (count > 1) problems.push(`${name} inherits ${base} ${count} times`);
+        }
+    };
+    for (const base of api.bases()) check(base.key, base.extendsKeys);
+    for (const node of api.nodes()) check(node.name, node.extendsKeys);
+
+    if (problems.length > 0) {
+        throw new Error(`ast.json declares duplicate embedded bases:\n  ${problems.sort().join("\n  ")}`);
+    }
+}
+
+/**
+ * Verifies that the inheritance path containing NodeBase is embedded first.
+ */
+function verifyNodeBaseAtOffsetZero(): void {
+    const containsNodeBase = (key: string): boolean => {
+        if (key === "NodeBase") return true;
+        return api.getBase(key)?.extendsKeys.some(containsNodeBase) ?? false;
+    };
+    const problems: string[] = [];
+    const check = (name: string, extendsKeys: string[], requireNodeBase: boolean) => {
+        const nodeBaseIndex = extendsKeys.findIndex(containsNodeBase);
+        if (nodeBaseIndex < 0 && requireNodeBase) {
+            problems.push(`${name} does not embed NodeBase`);
+        }
+        else if (nodeBaseIndex > 0) {
+            problems.push(`${name} embeds ${extendsKeys[nodeBaseIndex]} after ${extendsKeys.slice(0, nodeBaseIndex).join(", ")}`);
+        }
+    };
+    for (const base of api.bases()) check(base.key, base.extendsKeys, false);
+    for (const node of api.nodes()) check(node.name, node.extendsKeys, true);
+
+    if (problems.length > 0) {
+        throw new Error(`ast.json does not embed NodeBase at offset zero:\n  ${problems.sort().join("\n  ")}`);
+    }
+}
+
+verifyNoDuplicateBases();
+verifyNodeBaseAtOffsetZero();
+
 function generateStructDef(w: CodeWriter, node: NodeType) {
     const structName = node.name;
     w.write(`type ${structName} struct {`);
