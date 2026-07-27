@@ -124,6 +124,13 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: []string{"--strictPropertyInitialization", "--strictNullChecks", "false", "a.ts"},
 		},
 		{
+			subScenario: "non-object config root",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `[]`,
+			},
+			commandLineArgs: []string{},
+		},
+		{
 			subScenario: "Project is empty string",
 			files: FileMap{
 				"/home/src/workspaces/project/first.ts": `export const a = 1`,

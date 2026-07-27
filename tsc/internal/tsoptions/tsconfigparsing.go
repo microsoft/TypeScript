@@ -315,7 +315,7 @@ func convertConfigFileToObject(
 		if tspath.GetBaseFileName(sourceFile.FileName()) == "jsconfig.json" {
 			baseFileName = "jsconfig.json"
 		}
-		errors := []*ast.Diagnostic{ast.NewCompilerDiagnostic(diagnostics.The_root_value_of_a_0_file_must_be_an_object, baseFileName)}
+		errors := []*ast.Diagnostic{CreateDiagnosticForNodeInSourceFile(sourceFile, rootExpression, diagnostics.The_root_value_of_a_0_file_must_be_an_object, baseFileName)}
 		// Last-ditch error recovery. Somewhat useful because the JSON parser will recover from some parse errors by
 		// synthesizing a top-level array literal expression. There's a reasonable chance the first element of that
 		// array is a well-formed configuration object, made into an array element by stray characters.
