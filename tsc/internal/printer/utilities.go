@@ -648,14 +648,6 @@ func isImmediatelyInvokedFunctionExpressionOrArrowFunction(node *ast.Expression)
 	return ast.IsFunctionExpression(node) || ast.IsArrowFunction(node)
 }
 
-func IsFileLevelUniqueName(sourceFile *ast.SourceFile, name string, hasGlobalName func(string) bool) bool {
-	if hasGlobalName != nil && hasGlobalName(name) {
-		return false
-	}
-	_, ok := sourceFile.Identifiers[name]
-	return !ok
-}
-
 func hasLeadingHash(text string) bool {
 	return len(text) > 0 && text[0] == '#'
 }

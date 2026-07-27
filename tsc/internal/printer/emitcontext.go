@@ -506,6 +506,14 @@ func (c *EmitContext) ParseNode(node *ast.Node) *ast.Node {
 	return nil
 }
 
+func (c *EmitContext) IsFileLevelUniqueName(sourceFile *ast.SourceFile, name string, hasGlobalName func(string) bool) bool {
+	if hasGlobalName != nil && hasGlobalName(name) {
+		return false
+	}
+	sourceFile = c.MostOriginal(sourceFile.AsNode()).AsSourceFile()
+	return !sourceFile.HasIdentifier(name)
+}
+
 //
 // Emit-related Data
 //

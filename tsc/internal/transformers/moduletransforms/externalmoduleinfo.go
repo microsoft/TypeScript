@@ -292,7 +292,7 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 				// NOTE: We don't need to care about global import collisions as this is a module.
 
 				importSpecifiers := core.Map(helperNames, func(name string) *ast.ImportSpecifierNode {
-					if printer.IsFileLevelUniqueName(sourceFile, name, nil /*hasGlobalName*/) {
+					if emitContext.IsFileLevelUniqueName(sourceFile, name, nil /*hasGlobalName*/) {
 						return emitContext.Factory.NewImportSpecifier(false /*isTypeOnly*/, nil /*propertyName*/, emitContext.Factory.NewIdentifier(name))
 					} else {
 						return emitContext.Factory.NewImportSpecifier(false /*isTypeOnly*/, emitContext.Factory.NewIdentifier(name), emitContext.Factory.NewUnscopedHelperName(name))
