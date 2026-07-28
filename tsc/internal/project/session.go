@@ -369,6 +369,7 @@ func (s *Session) DidSaveFile(ctx context.Context, uri lsproto.DocumentUri) {
 
 func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.FileEvent) {
 	fileChanges := make([]FileChange, 0, len(changes))
+	hasRelevantChange := false
 	for _, change := range changes {
 		var kind FileChangeKind
 		switch change.Type {
@@ -385,14 +386,43 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 			Kind: kind,
 			URI:  change.Uri,
 		})
+
+		if !hasRelevantChange {
+			fileName := change.Uri.FileName()
+			path := s.toPath(fileName).RemoveTrailingDirectorySeparator()
+			pathStr := string(path)
+			i := strings.LastIndexByte(pathStr, '.')
+			if i < 0 || strings.LastIndexByte(pathStr, '/') > i {
+				// Extensionless paths might be directories.
+				// For creations/changes, we can check the file system.
+				// For deletions, consult the current snapshot cache to avoid treating extensionless file deletions as relevant.
+				if kind != FileChangeKindWatchDelete {
+					hasRelevantChange = s.fs.fs.DirectoryExists(fileName)
+				} else {
+					s.snapshotMu.RLock()
+					snapshot := s.snapshot
+					s.snapshotMu.RUnlock()
+					if _, ok := snapshot.fs.diskDirectories[path]; ok || isNodeModulesPath(path) {
+						hasRelevantChange = true
+					}
+				}
+			} else {
+				if isRelevantExtension(pathStr[i:]) {
+					hasRelevantChange = true
+				}
+			}
+		}
 	}
 
 	s.pendingFileChangesMu.Lock()
 	s.pendingFileChanges = append(s.pendingFileChanges, fileChanges...)
 	s.pendingFileChangesMu.Unlock()
 
-	// Schedule a debounced diagnostics refresh
-	s.ScheduleDiagnosticsRefresh()
+	if hasRelevantChange {
+		// Schedule a debounced diagnostics refresh only for paths
+		// that can affect the TypeScript program (relevant extensions or directories).
+		s.ScheduleDiagnosticsRefresh()
+	}
 	s.cancelWarmAutoImportCache()
 	s.scheduleIdleCacheClean()
 }

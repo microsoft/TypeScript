@@ -602,7 +602,13 @@ func (s *snapshotFSBuilder) isRelevantFileName(uri lsproto.DocumentUri) bool {
 	if i < 0 {
 		return false
 	}
-	switch string(path)[i:] {
+	return isRelevantExtension(string(path)[i:])
+}
+
+// isRelevantExtension returns true if the given extension is a known TypeScript
+// or JavaScript extension that can affect the project.
+func isRelevantExtension(ext string) bool {
+	switch ext {
 	case ".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".mts", ".cts", ".json":
 		return true
 	}
