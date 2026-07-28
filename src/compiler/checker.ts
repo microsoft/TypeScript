@@ -805,7 +805,6 @@ import {
     JSDoc,
     JSDocAugmentsTag,
     JSDocCallbackTag,
-    JSDocComment,
     JSDocFunctionType,
     JSDocImplementsTag,
     JSDocImportTag,
@@ -49057,16 +49056,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return;
         }
 
-        if (canHaveJSDoc(node)) {
-            forEach(node.jsDoc, ({ comment, tags }) => {
-                checkJSDocCommentWorker(comment);
-                forEach(tags, tag => {
-                    checkJSDocCommentWorker(tag.comment);
-                    if (isInJSFile(node)) {
-                        checkSourceElement(tag);
-                    }
-                });
-            });
+        if (isInJSFile(node) && canHaveJSDoc(node)) {
+            forEach(node.jsDoc, ({ tags }) => forEach(tags, checkSourceElement));
         }
 
         const kind = node.kind;
@@ -49340,16 +49331,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return !isReachableFlowNode(node.flowNode);
         }
         return false;
-    }
-
-    function checkJSDocCommentWorker(node: string | readonly JSDocComment[] | undefined) {
-        if (isArray(node)) {
-            forEach(node, tag => {
-                if (isJSDocLinkLike(tag)) {
-                    checkSourceElement(tag);
-                }
-            });
-        }
     }
 
     function checkJSDocTypeIsInJsFile(node: Node): void {
