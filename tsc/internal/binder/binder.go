@@ -73,7 +73,6 @@ type Binder struct {
 	inAssignmentPattern     bool
 	seenParseError          bool
 	symbolCount             int
-	classifiableNames       collections.Set[string]
 	notConstEnumOnlyModules collections.Set[*ast.Symbol]
 	symbolArena             core.Arena[ast.Symbol]
 	flowNodeArena           core.Arena[ast.FlowNode]
@@ -127,7 +126,6 @@ func bindSourceFile(file *ast.SourceFile) {
 		b.bind(file.AsNode())
 		b.bindDeferredExpandoAssignments()
 		file.SymbolCount = b.symbolCount
-		file.ClassifiableNames = b.classifiableNames
 	})
 }
 
@@ -192,9 +190,6 @@ func (b *Binder) declareSymbolEx(symbolTable ast.SymbolTable, parent *ast.Symbol
 		// you have multiple 'vars' with the same name in the same container).  In this case
 		// just add this node into the declarations list of the symbol.
 		symbol = symbolTable[name]
-		if includes&ast.SymbolFlagsClassifiable != 0 {
-			b.classifiableNames.Add(name)
-		}
 		if symbol == nil {
 			symbol = b.newSymbol(ast.SymbolFlagsNone, name)
 			symbolTable[name] = symbol
@@ -951,7 +946,6 @@ func (b *Binder) bindClassLikeDeclaration(node *ast.Node) {
 		nameText := ast.InternalSymbolNameClass
 		if name != nil {
 			nameText = name.Text()
-			b.classifiableNames.Add(nameText)
 		}
 		b.bindAnonymousDeclaration(node, ast.SymbolFlagsClass, nameText)
 	}

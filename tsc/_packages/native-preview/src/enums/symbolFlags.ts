@@ -67,6 +67,5 @@ export var SymbolFlags: any;
     SymbolFlags[SymbolFlags["ClassMember"] = 106500] = "ClassMember";
     SymbolFlags[SymbolFlags["ExportSupportsDefaultModifier"] = 112] = "ExportSupportsDefaultModifier";
     SymbolFlags[SymbolFlags["ExportDoesNotSupportDefaultModifier"] = -113] = "ExportDoesNotSupportDefaultModifier";
-    SymbolFlags[SymbolFlags["Classifiable"] = 2885600] = "Classifiable";
     SymbolFlags[SymbolFlags["LateBindingContainer"] = 6256] = "LateBindingContainer";
 })(SymbolFlags || (SymbolFlags = {}));

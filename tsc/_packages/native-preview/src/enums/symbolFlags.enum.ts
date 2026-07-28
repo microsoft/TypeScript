@@ -67,6 +67,5 @@ export enum SymbolFlags {
     ClassMember = Method | Accessor | Property,
     ExportSupportsDefaultModifier = Class | Function | Interface,
     ExportDoesNotSupportDefaultModifier = ~ExportSupportsDefaultModifier,
-    Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module | Alias,
     LateBindingContainer = Class | Interface | TypeLiteral | ObjectLiteral | Function,
 }
