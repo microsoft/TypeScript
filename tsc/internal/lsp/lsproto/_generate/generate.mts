@@ -68,6 +68,12 @@ const customStructures: Structure[] = [
                 optional: true,
                 documentation: "The initial log verbosity level, matching the client's output channel log level at startup. Subsequent changes are sent via custom/setLogVerbosity.",
             },
+            {
+                name: "trackFlakyDiagnostics",
+                type: { kind: "reference", name: "DiagnosticFlakeLogLevel" },
+                optional: true,
+                documentation: "The level at which we track flaky diagnostics, if at all.",
+            },
         ],
         documentation: "InitializationOptions contains user-provided initialization options.",
     },
@@ -699,6 +705,16 @@ const customEnumerations: Enumeration[] = [
             { name: "Error", value: 5, documentation: "Errors only." },
         ],
         documentation: "Log verbosity level, mirroring the VS Code LogLevel enum values.",
+    },
+    {
+        name: "DiagnosticFlakeLogLevel",
+        type: { kind: "base", name: "integer" },
+        values: [
+            { name: "Off", value: 0, documentation: "All flake logging disabled." },
+            { name: "Log", value: 1, documentation: "Log flaky diagnostics to the error log." },
+            { name: "Panic", value: 2, documentation: "Panic on flaky diagnostics." },
+        ],
+        documentation: "Behavior for tracking and logging flaky diagnostics.",
     },
     {
         name: "VSReferenceKind",

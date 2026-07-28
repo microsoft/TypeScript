@@ -35,5 +35,10 @@
     "native-preview.showFailedResponses.always": "Always show a notification when a request fails.",
     "native-preview.showFailedResponses.never": "Never show a notification when a request fails.",
     "native-preview.showFailedResponses.auto": "Show a notification only on VS Code Insiders.",
+    "native-preview.trackFlakyDiagnostics.description": "Controls whether an additional diagnostics pass is performed to check for and log flaky diagnostics",
+    "native-preview.trackFlakyDiagnostics.panic": "Panic when a flaky diagnostic is detected.",
+    "native-preview.trackFlakyDiagnostics.log": "Log an error when a flaky diagnostic is detected.",
+    "native-preview.trackFlakyDiagnostics.never": "Never perform flaky diagnostic checking and logging.",
+    "native-preview.trackFlakyDiagnostics.auto": "Perform flaky diagnostic logging only on VS Code Insiders.",
     "developer": "Developer"
 }

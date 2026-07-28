@@ -190,6 +190,27 @@
                         "default": "auto",
                         "description": "%native-preview.showFailedResponses.description%",
                         "scope": "window"
+                    },
+                    "js/ts.server.trackFlakyDiagnostics": {
+                        "type": "string",
+                        "enum": [
+                            "panic",
+                            "log",
+                            "never",
+                            "auto"
+                        ],
+                        "enumDescriptions": [
+                            "%native-preview.trackFlakyDiagnostics.panic%",
+                            "%native-preview.trackFlakyDiagnostics.log%",
+                            "%native-preview.trackFlakyDiagnostics.never%",
+                            "%native-preview.trackFlakyDiagnostics.auto%"
+                        ],
+                        "default": "auto",
+                        "tags": [
+                            "experimental"
+                        ],
+                        "description": "%native-preview.trackFlakyDiagnostics.description%",
+                        "scope": "window"
                     }
                 }
             }
