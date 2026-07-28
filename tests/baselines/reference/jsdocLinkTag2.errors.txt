@@ -1,0 +1,15 @@
+/b.js(1,1): error TS6133: 'A' is declared but its value is never read.
+
+
+==== /a.js (0 errors) ====
+    export class A {}
+    
+==== /b.js (1 errors) ====
+    import { A } from "./a";
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'A' is declared but its value is never read.
+    
+    /** {@link A} */
+    export class B {}
+    
+    

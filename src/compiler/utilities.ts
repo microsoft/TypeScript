@@ -11513,7 +11513,7 @@ export function createNameResolver({
         nameArg: __String | Identifier,
         meaning: SymbolFlags,
         nameNotFoundMessage: DiagnosticMessage | undefined,
-        isUse: boolean,
+        isUseArg: boolean,
         excludeGlobals?: boolean,
     ): Symbol | undefined {
         const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
@@ -11525,6 +11525,7 @@ export function createNameResolver({
         let withinDeferredContext = false;
         let grandparent: Node;
         const name = isString(nameArg) ? nameArg : (nameArg as Identifier).escapedText;
+        const isUse = isUseArg && (isString(nameArg) || !isInJSDoc(nameArg as Identifier) || isInJSFile(nameArg as Identifier));
         loop:
         while (location) {
             if (name === "const" && isConstAssertion(location)) {

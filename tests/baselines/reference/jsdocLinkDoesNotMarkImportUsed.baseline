@@ -1,0 +1,75 @@
+// === QuickInfo ===
+=== /b.ts ===
+// import type { A } from "./a";
+// /** {@link A} */
+//            ^
+// | ----------------------------------------------------------------------
+// | (alias) interface A
+// | import A
+// | ----------------------------------------------------------------------
+// export interface B {}
+
+[
+  {
+    "marker": {
+      "fileName": "/b.ts",
+      "position": 41,
+      "name": "link"
+    },
+    "item": {
+      "kind": "alias",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 41,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A",
+          "kind": "aliasName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A",
+          "kind": "aliasName"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

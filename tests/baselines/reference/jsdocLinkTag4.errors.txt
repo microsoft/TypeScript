@@ -1,0 +1,16 @@
+/b.ts(1,1): error TS6133: 'a' is declared but its value is never read.
+
+
+==== /a.ts (0 errors) ====
+    export interface A {}
+    
+==== /b.ts (1 errors) ====
+    import * as a from "./a";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'a' is declared but its value is never read.
+    
+    /**
+     * @param {number} a - see {@link a.A}
+     */
+    export function foo(a: string) {}
+    

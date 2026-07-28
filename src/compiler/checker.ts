@@ -809,9 +809,6 @@ import {
     JSDocFunctionType,
     JSDocImplementsTag,
     JSDocImportTag,
-    JSDocLink,
-    JSDocLinkCode,
-    JSDocLinkPlain,
     JSDocMemberName,
     JSDocNullableType,
     JSDocOptionalType,
@@ -44258,12 +44255,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function checkJSDocLinkLikeTag(node: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
-        if (node.name) {
-            resolveJSDocMemberName(node.name, /*ignoreErrors*/ true);
-        }
-    }
-
     function checkJSDocParameterTag(node: JSDocParameterTag) {
         checkSourceElement(node.typeExpression);
     }
@@ -49168,10 +49159,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkJSDocTemplateTag(node as JSDocTemplateTag);
             case SyntaxKind.JSDocTypeTag:
                 return checkJSDocTypeTag(node as JSDocTypeTag);
-            case SyntaxKind.JSDocLink:
-            case SyntaxKind.JSDocLinkCode:
-            case SyntaxKind.JSDocLinkPlain:
-                return checkJSDocLinkLikeTag(node as JSDocLink | JSDocLinkCode | JSDocLinkPlain);
             case SyntaxKind.JSDocParameterTag:
                 return checkJSDocParameterTag(node as JSDocParameterTag);
             case SyntaxKind.JSDocPropertyTag:
