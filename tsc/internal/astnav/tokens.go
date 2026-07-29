@@ -553,7 +553,7 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 				for startPos < min(visitedNode.Pos(), position) {
 					token := scanNavigationToken(scanner, n)
 					tokenStart := scanner.TokenStart()
-					if tokenStart >= position {
+					if tokenStart >= min(visitedNode.Pos(), position) {
 						break
 					}
 					tokenFullStart := scanner.TokenFullStart()
@@ -571,7 +571,7 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 			for startPos < min(endPos, position) {
 				token := scanNavigationToken(scanner, n)
 				tokenStart := scanner.TokenStart()
-				if tokenStart >= position {
+				if tokenStart >= min(endPos, position) {
 					break
 				}
 				tokenFullStart := scanner.TokenFullStart()
