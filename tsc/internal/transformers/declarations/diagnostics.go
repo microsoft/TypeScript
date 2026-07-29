@@ -621,7 +621,7 @@ func createReturnTypeError(node *ast.Node) *ast.Diagnostic {
 }
 
 func createBindingElementError(node *ast.Node) *ast.Diagnostic {
-	return createDiagnosticForNode(node, diagnostics.Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations)
+	return createDiagnosticForNode(node, diagnostics.Binding_elements_with_initializers_can_t_be_exported_directly_with_isolatedDeclarations)
 }
 
 func createVariableOrPropertyError(node *ast.Node) *ast.Diagnostic {

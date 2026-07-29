@@ -836,18 +836,34 @@ func (tx *DeclarationTransformer) transformVariableDeclaration(input *ast.Variab
 	if tx.state.currentSourceFile.CommonJSModuleIndicator != nil && ast.IsVariableDeclarationInitializedToRequire(input.AsNode()) {
 		return tx.transformCjsRequireVariableDeclaration(input)
 	}
-	if ast.IsBindingPattern(input.Name()) {
+	if ast.IsBindingPattern(input.Name()) && hasAnyBindingInitializers(input.Name().AsBindingPattern()) {
 		return tx.recreateBindingPattern(input.Name().AsBindingPattern())
 	}
 	// Variable declaration types also suppress new diagnostic contexts, provided the contexts wouldn't be made for binding pattern types
 	tx.suppressNewDiagnosticContexts = true
 	return tx.Factory().UpdateVariableDeclaration(
 		input,
-		input.Name(),
+		tx.bindingNameVisitor.VisitNode(input.Name()),
 		nil,
 		tx.ensureType(input.AsNode(), false),
 		tx.ensureNoInitializer(input.AsNode()),
 	)
+}
+
+func hasAnyBindingInitializers(bindingPattern *ast.BindingPattern) bool {
+	for _, elem := range bindingPattern.Elements.Nodes {
+		if !ast.IsBindingElement(elem) {
+			continue
+		}
+		e := elem.AsBindingElement()
+		if e.Initializer != nil {
+			return true
+		}
+		if e.Name() != nil && ast.IsBindingPattern(e.Name()) && hasAnyBindingInitializers(e.Name().AsBindingPattern()) {
+			return true
+		}
+	}
+	return false
 }
 
 func (tx *DeclarationTransformer) transformCjsRequireVariableDeclaration(input *ast.VariableDeclaration) *ast.Node {

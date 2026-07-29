@@ -3570,7 +3570,7 @@ var Only_const_arrays_can_be_inferred_with_isolatedDeclarations = &Message{code:
 
 var Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations = &Message{code: 9018, category: CategoryError, key: "Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations_9018", text: "Arrays with spread elements can't inferred with --isolatedDeclarations."}
 
-var Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations = &Message{code: 9019, category: CategoryError, key: "Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations_9019", text: "Binding elements can't be exported directly with --isolatedDeclarations."}
+var Binding_elements_with_initializers_can_t_be_exported_directly_with_isolatedDeclarations = &Message{code: 9019, category: CategoryError, key: "Binding_elements_with_initializers_can_t_be_exported_directly_with_isolatedDeclarations_9019", text: "Binding elements with initializers can't be exported directly with --isolatedDeclarations."}
 
 var Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations = &Message{code: 9020, category: CategoryError, key: "Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDecl_9020", text: "Enum member initializers must be computable without references to external symbols with --isolatedDeclarations."}
 
@@ -7880,8 +7880,8 @@ func keyToMessage(key Key) *Message {
 		return Only_const_arrays_can_be_inferred_with_isolatedDeclarations
 	case "Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations_9018":
 		return Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations
-	case "Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations_9019":
-		return Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations
+	case "Binding_elements_with_initializers_can_t_be_exported_directly_with_isolatedDeclarations_9019":
+		return Binding_elements_with_initializers_can_t_be_exported_directly_with_isolatedDeclarations
 	case "Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDecl_9020":
 		return Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations
 	case "Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations_9021":

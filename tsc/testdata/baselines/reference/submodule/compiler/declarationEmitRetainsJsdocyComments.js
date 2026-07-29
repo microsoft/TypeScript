@@ -109,11 +109,11 @@ export declare class Foo {
      */
     bar(s: number): void;
 }
-export declare let 
+export declare let { 
 /**
 * comment5
 */
-someMethod: any;
+someMethod }: any;
 declare global {
     interface ExtFunc {
         /**

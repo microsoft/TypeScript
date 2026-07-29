@@ -2192,14 +2192,22 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 		symbol = b.ch.getSymbolOfDeclaration(declaration)
 	}
 	if t == nil {
-		t = b.ctx.enclosingSymbolTypes[ast.GetSymbolId(symbol)]
-		if t == nil {
-			if symbol.Flags&ast.SymbolFlagsAccessor != 0 && declaration.Kind == ast.KindSetAccessor {
-				t = b.ch.instantiateType(b.ch.getWriteTypeOfSymbol(symbol), b.ctx.mapper)
-			} else if symbol != nil && (symbol.Flags&(ast.SymbolFlagsTypeLiteral|ast.SymbolFlagsSignature) == 0) {
-				t = b.ch.instantiateType(b.ch.getWidenedLiteralType(b.ch.getTypeOfSymbol(symbol)), b.ctx.mapper)
+		if symbol == nil {
+			if ast.IsVariableLike(declaration) {
+				t = b.ch.getTypeForVariableLikeDeclaration(declaration, false, CheckModeNormal)
 			} else {
 				t = b.ch.errorType
+			}
+		} else {
+			t = b.ctx.enclosingSymbolTypes[ast.GetSymbolId(symbol)]
+			if t == nil {
+				if symbol.Flags&ast.SymbolFlagsAccessor != 0 && declaration.Kind == ast.KindSetAccessor {
+					t = b.ch.instantiateType(b.ch.getWriteTypeOfSymbol(symbol), b.ctx.mapper)
+				} else if symbol != nil && (symbol.Flags&(ast.SymbolFlagsTypeLiteral|ast.SymbolFlagsSignature) == 0) {
+					t = b.ch.instantiateType(b.ch.getWidenedLiteralType(b.ch.getTypeOfSymbol(symbol)), b.ctx.mapper)
+				} else {
+					t = b.ch.errorType
+				}
 			}
 		}
 	}
@@ -2221,14 +2229,17 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 	var reportedInferenceFallback bool
 	// !!! expandable hover support
 	if !b.isActivelyExpanding() && tryReuse && b.ctx.enclosingDeclaration != nil && declaration != nil && (ast.IsAccessor(declaration) || (ast.HasInferredType(declaration) && !ast.NodeIsSynthesized(declaration) && (t.ObjectFlags()&ObjectFlagsRequiresWidening) == 0)) {
-		remove := b.addSymbolTypeToContext(symbol, t)
+		var remove func()
+		if symbol != nil {
+			remove = b.addSymbolTypeToContext(symbol, t)
+		}
 		var pt *pseudochecker.PseudoType
 		if ast.IsAccessor(declaration) {
 			pt = b.pc.GetTypeOfAccessor(declaration)
 		} else {
 			pt = b.pc.GetTypeOfDeclaration(declaration)
 		}
-		if (pt == nil || pt.Kind == pseudochecker.PseudoTypeKindNoResult) && ast.IsBinaryExpression(declaration) {
+		if (pt == nil || pt.Kind == pseudochecker.PseudoTypeKindNoResult) && ast.IsBinaryExpression(declaration) && symbol != nil {
 			if decl := core.Find(symbol.Declarations, hasTypeAnnotation); decl != nil {
 				// Binary expressions have a first-in-wins type annotation system. The first one with an annotation supplies the type for the rest.
 				pt = b.pc.GetTypeOfDeclaration(decl)
@@ -2265,7 +2276,9 @@ func (b *NodeBuilderImpl) serializeTypeForDeclaration(declaration *ast.Declarati
 				}
 			}
 		}
-		remove()
+		if remove != nil {
+			remove()
+		}
 	}
 	if result == nil {
 		if reportedInferenceFallback {

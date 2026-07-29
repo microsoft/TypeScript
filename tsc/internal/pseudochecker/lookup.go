@@ -127,7 +127,7 @@ func (ch *PseudoChecker) typeFromVariable(declaration *ast.VariableDeclaration) 
 		return NewPseudoTypeDirect(t)
 	}
 	init := declaration.Initializer
-	if init != nil && (len(declaration.Symbol.Declarations) == 1 || core.CountWhere(declaration.Symbol.Declarations, ast.IsVariableDeclaration) == 1) {
+	if init != nil && declaration.Symbol != nil && (len(declaration.Symbol.Declarations) == 1 || core.CountWhere(declaration.Symbol.Declarations, ast.IsVariableDeclaration) == 1) {
 		if !isContextuallyTyped(declaration.AsNode()) { // TODO: also should bail on expando declarations; reuse syntactic expando check used in declaration emit
 			// TODO: Strada forces an inference fallback on `const` variables with template expression initializers, to leave space for template literal freshness in the future
 			if ast.IsVarConst(declaration.AsNode()) && ast.IsTemplateExpression(init) {

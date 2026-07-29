@@ -91,6 +91,10 @@
         "category": "Error",
         "code": 5002
     },
+    "Binding elements with initializers can't be exported directly with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9019
+    },
     "Deduplicate packages with the same name and version.": {
         "category": "Message",
         "code": 100011

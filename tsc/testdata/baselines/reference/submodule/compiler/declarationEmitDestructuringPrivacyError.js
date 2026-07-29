@@ -22,6 +22,6 @@ var m;
 declare namespace m {
     class c {
     }
-    export var x: number, y: c, z: number;
+    export var [x, y, z]: [number, c, number];
     export {};
 }

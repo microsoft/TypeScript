@@ -33,13 +33,29 @@ var m;
 
 
 //// [declarationEmitDestructuringObjectLiteralPattern2.d.ts]
-declare var x11: number, y11: string, z11: boolean;
+declare var { a: x11, b: { a: y11, b: { a: z11 } } }: {
+    a: number;
+    b: {
+        a: string;
+        b: {
+            a: boolean;
+        };
+    };
+};
 declare function f15(): {
     a4: string;
     b4: number;
     c4: boolean;
 };
-declare var a4: string, b4: number, c4: boolean;
+declare var { a4, b4, c4 }: {
+    a4: string;
+    b4: number;
+    c4: boolean;
+};
 declare namespace m {
-    var a4: string, b4: number, c4: boolean;
+    var { a4, b4, c4 }: {
+        a4: string;
+        b4: number;
+        c4: boolean;
+    };
 }

@@ -48,11 +48,10 @@ isolatedDeclarationErrorsExpressions.ts(114,37): error TS9011: Parameter must ha
 isolatedDeclarationErrorsExpressions.ts(115,37): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(116,37): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsExpressions.ts(119,36): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
-isolatedDeclarationErrorsExpressions.ts(127,16): error TS9019: Binding elements can't be exported directly with --isolatedDeclarations.
-isolatedDeclarationErrorsExpressions.ts(128,19): error TS9019: Binding elements can't be exported directly with --isolatedDeclarations.
+isolatedDeclarationErrorsExpressions.ts(128,19): error TS9019: Binding elements with initializers can't be exported directly with --isolatedDeclarations.
 
 
-==== isolatedDeclarationErrorsExpressions.ts (52 errors) ====
+==== isolatedDeclarationErrorsExpressions.ts (51 errors) ====
     declare function time(): bigint
     export const numberConst = 1;
     export const numberConstBad1 = 1 + 1;
@@ -330,11 +329,9 @@ isolatedDeclarationErrorsExpressions.ts(128,19): error TS9019: Binding elements 
     
     
     export const { a } = { a: 1 };
-                   ~
-!!! error TS9019: Binding elements can't be exported directly with --isolatedDeclarations.
     export const [, , b = 1]: [number, number, number | undefined] = [0, 1, 2];
                       ~
-!!! error TS9019: Binding elements can't be exported directly with --isolatedDeclarations.
+!!! error TS9019: Binding elements with initializers can't be exported directly with --isolatedDeclarations.
     
     export function foo([, , b]: [
         number,

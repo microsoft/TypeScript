@@ -22,9 +22,9 @@ var [x3, y3, z3] = a; // emit x3, y3, z3
 
 
 //// [declarationEmitDestructuringArrayPattern1.d.ts]
-declare var x: number;
-declare var x1: number, y1: string;
-declare var z1: number;
+declare var [x]: [number, string];
+declare var [x1, y1]: [number, string];
+declare var [, , z1]: [number, number, number];
 declare var a: (string | number)[];
-declare var x2: string | number;
-declare var x3: string | number, y3: string | number, z3: string | number;
+declare var [x2]: (string | number)[];
+declare var [x3, y3, z3]: (string | number)[];

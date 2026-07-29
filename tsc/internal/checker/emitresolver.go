@@ -644,7 +644,11 @@ func (r *EmitResolver) IsLiteralConstDeclaration(node *ast.Node) bool {
 	if isDeclarationReadonly(node) || ast.IsVariableDeclaration(node) && ast.IsVarConst(node) {
 		r.checkerMu.Lock()
 		defer r.checkerMu.Unlock()
-		return isFreshLiteralType(r.checker.getTypeOfSymbol(r.checker.getSymbolOfDeclaration(node)))
+		s := r.checker.getSymbolOfDeclaration(node)
+		if s == nil {
+			return false
+		}
+		return isFreshLiteralType(r.checker.getTypeOfSymbol(s))
 	}
 	return false
 }

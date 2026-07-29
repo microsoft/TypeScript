@@ -59,5 +59,7 @@ export declare const re: {
 };
 export {};
 //// [index.d.ts]
-declare const foo: () => Promise<import("package-b").B>;
+declare const { foo }: {
+    foo: () => Promise<import("package-b").B>;
+};
 export { foo };
