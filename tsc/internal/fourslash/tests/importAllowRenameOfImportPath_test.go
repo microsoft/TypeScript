@@ -47,3 +47,20 @@ const a = require("./[|a|]");
 		f.VerifyRenameFailed(t, &prefsFalse)
 	})
 }
+
+func TestRenameInfoForImportPathTriggerSpan(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /library.ts
+export const foo = "bar";
+// @Filename: /index.ts
+export * from "./[|lib/*rename*/rary|]";
+`
+
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToMarker(t, "rename")
+	f.VerifyRenameRange(t, f.Ranges()[0].LSRange, "library", &lsutil.UserPreferences{
+		AllowRenameOfImportPath: core.TSTrue,
+	})
+}

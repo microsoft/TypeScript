@@ -263,7 +263,7 @@ func (l *LanguageService) getRenameInfoForModule(ctx context.Context, newName st
 
 	// Span should only be the last component of the path. + 1 to account for the quote character.
 	indexAfterLastSlash := strings.LastIndex(specifier.Text(), "/") + 1
-	start := specifier.Pos() + 1 + indexAfterLastSlash
+	start := astnav.GetStartOfNode(specifier, sourceFile, false /*includeJSDoc*/) + 1 + indexAfterLastSlash
 	length := len(specifier.Text()) - indexAfterLastSlash
 
 	return RenameInfo{
