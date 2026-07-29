@@ -9,7 +9,6 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/zeebo/xxh3"
 )
@@ -2480,7 +2479,6 @@ type SourceFile struct {
 	LanguageVariant             core.LanguageVariant
 	ScriptKind                  core.ScriptKind
 	IsDeclarationFile           bool
-	ContainsNonASCII            bool
 	UsesUriStyleNodeCoreModules core.Tristate
 	IdentifierCount             int
 	imports                     []*LiteralLikeNode // []LiteralLikeNode
@@ -2507,14 +2505,12 @@ type SourceFile struct {
 
 	// Fields set by binder
 
-	isBound                   atomic.Bool
-	bindOnce                  sync.Once
-	bindDiagnostics           []*Diagnostic
-	BindSuggestionDiagnostics []*Diagnostic
-	EndFlowNode               *FlowNode
-	SymbolCount               int
-	PatternAmbientModules     []*PatternAmbientModule
-	GlobalExports             SymbolTable
+	isBound               atomic.Bool
+	bindOnce              sync.Once
+	bindDiagnostics       []*Diagnostic
+	SymbolCount           int
+	PatternAmbientModules []*PatternAmbientModule
+	GlobalExports         SymbolTable
 
 	// Fields set by ECMALineMap
 
@@ -2546,7 +2542,6 @@ func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, st
 	data.fileName = opts.FileName
 	data.parseOptions = opts
 	data.text = text
-	data.ContainsNonASCII = stringutil.ContainsNonASCII(text)
 	data.Statements = statements
 	data.EndOfFileToken = endOfFileToken
 	return f.newNode(KindSourceFile, data)
@@ -2683,7 +2678,6 @@ func (node *SourceFile) copyFrom(other *SourceFile) {
 	node.LanguageVariant = other.LanguageVariant
 	node.ScriptKind = other.ScriptKind
 	node.IsDeclarationFile = other.IsDeclarationFile
-	node.ContainsNonASCII = other.ContainsNonASCII
 	node.UsesUriStyleNodeCoreModules = other.UsesUriStyleNodeCoreModules
 	node.imports = other.imports
 	node.ModuleAugmentations = other.ModuleAugmentations
@@ -2774,11 +2768,7 @@ func (node *SourceFile) IsBound() bool {
 // GetPositionMap returns the PositionMap for this source file, computing it lazily.
 func (file *SourceFile) GetPositionMap() *PositionMap {
 	file.positionMapOnce.Do(func() {
-		if !file.ContainsNonASCII {
-			file.positionMap = &PositionMap{asciiOnly: true}
-		} else {
-			file.positionMap = ComputePositionMap(file.Text())
-		}
+		file.positionMap = ComputePositionMap(file.Text())
 	})
 	return file.positionMap
 }

@@ -1560,7 +1560,6 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 		}
 		if node.Kind == ast.KindSourceFile {
 			node.Flags |= b.emitFlags
-			node.AsSourceFile().EndFlowNode = b.currentFlow
 		}
 		if b.currentReturnTarget != nil {
 			b.addAntecedent(b.currentReturnTarget, b.currentFlow)
@@ -2704,21 +2703,6 @@ func (b *Binder) errorOnNode(node *ast.Node, message *diagnostics.Message, args 
 func (b *Binder) errorOnFirstToken(node *ast.Node, message *diagnostics.Message, args ...any) {
 	span := scanner.GetRangeOfTokenAtPosition(b.file, node.Pos())
 	b.addDiagnostic(ast.NewDiagnostic(b.file, span, message, args...))
-}
-
-func (b *Binder) errorOrSuggestionOnNode(isError bool, node *ast.Node, message *diagnostics.Message) {
-	b.errorOrSuggestionOnRange(isError, node, node, message)
-}
-
-func (b *Binder) errorOrSuggestionOnRange(isError bool, startNode *ast.Node, endNode *ast.Node, message *diagnostics.Message) {
-	textRange := core.NewTextRange(scanner.GetRangeOfTokenAtPosition(b.file, startNode.Pos()).Pos(), endNode.End())
-	diagnostic := ast.NewDiagnostic(b.file, textRange, message)
-	if isError {
-		b.addDiagnostic(diagnostic)
-	} else {
-		diagnostic.SetCategory(diagnostics.CategorySuggestion)
-		b.file.BindSuggestionDiagnostics = append(b.file.BindSuggestionDiagnostics, diagnostic)
-	}
 }
 
 // Inside the binder, we may create a diagnostic for an as-yet unbound node (with potentially no parent pointers, implying no accessible source file)

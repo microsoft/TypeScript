@@ -1439,11 +1439,7 @@ func (p *Program) getSuggestionDiagnosticsWithChecker(ctx context.Context, fileC
 		return nil
 	}
 
-	// Checker creation forces binding, so bind suggestion diagnostics will be populated.
-	diags := slices.Clip(sourceFile.BindSuggestionDiagnostics)
-	diags = append(diags, fileChecker.GetSuggestionDiagnostics(ctx, sourceFile)...)
-
-	return diags
+	return fileChecker.GetSuggestionDiagnostics(ctx, sourceFile)
 }
 
 func isCommentOrBlankLine(text string, pos int) bool {

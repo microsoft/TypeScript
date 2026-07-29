@@ -209,7 +209,7 @@ test("", async function () {
 	}
 }
 
-func TestSourceFileContainsNonASCIIInStringLiteralFastPath(t *testing.T) {
+func TestSourceFilePositionMapWithNonASCIIStringLiteral(t *testing.T) {
 	t.Parallel()
 	sourceText := `const x = "─";
 
@@ -224,7 +224,6 @@ namespace N {
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindTS)
 
-	assert.Assert(t, file.ContainsNonASCII)
 	positionMap := file.GetPositionMap()
 	assert.Assert(t, !positionMap.IsAsciiOnly())
 	afterBoxDrawingCharacter := strings.Index(sourceText, "─") + len("─")
