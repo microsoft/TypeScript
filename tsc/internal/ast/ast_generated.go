@@ -111,8 +111,8 @@ type PrimaryExpressionBase struct {
 }
 
 type TypeNodeBase struct {
-	NodeBase
 	TypeSyntaxBase
+	NodeBase
 }
 
 type NodeWithTypeArgumentsBase struct {
@@ -210,14 +210,14 @@ type NamedMemberBase struct {
 type ObjectLiteralElementBase struct{}
 
 type AccessorDeclarationBase struct {
+	TypeElementBase
+	ClassElementBase
+	ObjectLiteralElementBase
 	NodeBase
 	DeclarationBase
 	NamedMemberBase
 	FunctionLikeWithBodyBase
 	FlowNodeBase
-	TypeElementBase
-	ClassElementBase
-	ObjectLiteralElementBase
 	CompositeBase
 }
 
@@ -2190,11 +2190,11 @@ func IsHeritageClause(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type InterfaceDeclaration struct {
+	TypeSyntaxBase
 	StatementBase
 	DeclarationBase
 	ExportableBase
 	ModifiersBase
-	TypeSyntaxBase
 	name            *IdentifierNode
 	TypeParameters  *TypeParameterList  // Optional
 	HeritageClauses *HeritageClauseList // Optional
@@ -2247,12 +2247,12 @@ func IsInterfaceDeclaration(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type TypeAliasDeclaration struct {
+	TypeSyntaxBase
 	StatementBase
 	DeclarationBase
 	ExportableBase
 	ModifiersBase
 	LocalsContainerBase
-	TypeSyntaxBase
 	name           *IdentifierNode
 	TypeParameters *TypeParameterList // Optional
 	Type           *TypeNode
@@ -2488,8 +2488,8 @@ func IsNotEmittedStatement(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type NotEmittedTypeElement struct {
-	NodeBase
 	TypeElementBase
+	NodeBase
 }
 
 func (f *NodeFactory) NewNotEmittedTypeElement() *Node {
@@ -2772,10 +2772,10 @@ func IsExportAssignment(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type NamespaceExportDeclaration struct {
+	TypeSyntaxBase
 	StatementBase
 	DeclarationBase
 	ModifiersBase
-	TypeSyntaxBase
 	name *IdentifierNode
 }
 
@@ -2957,11 +2957,11 @@ func IsExportSpecifier(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type CallSignatureDeclaration struct {
+	TypeElementBase
+	TypeSyntaxBase
 	NodeBase
 	DeclarationBase
 	FunctionLikeBase
-	TypeElementBase
-	TypeSyntaxBase
 }
 
 func (f *NodeFactory) NewCallSignatureDeclaration(typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
@@ -3000,11 +3000,11 @@ func IsCallSignatureDeclaration(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type ConstructSignatureDeclaration struct {
+	TypeElementBase
+	TypeSyntaxBase
 	NodeBase
 	DeclarationBase
 	FunctionLikeBase
-	TypeElementBase
-	TypeSyntaxBase
 }
 
 func (f *NodeFactory) NewConstructSignatureDeclaration(typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
@@ -3043,11 +3043,11 @@ func IsConstructSignatureDeclaration(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type ConstructorDeclaration struct {
+	ClassElementBase
 	NodeBase
 	DeclarationBase
 	ModifiersBase
 	FunctionLikeWithBodyBase
-	ClassElementBase
 	CompositeBase
 	ReturnFlowNode *FlowNode
 }
@@ -3202,13 +3202,13 @@ func IsSetAccessorDeclaration(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type IndexSignatureDeclaration struct {
+	TypeElementBase
+	ClassElementBase
+	TypeSyntaxBase
 	NodeBase
 	DeclarationBase
 	ModifiersBase
 	FunctionLikeBase
-	TypeElementBase
-	ClassElementBase
-	TypeSyntaxBase
 }
 
 func (f *NodeFactory) NewIndexSignatureDeclaration(modifiers *ModifierList, parameters *ParameterList, typeNode *TypeNode) *Node {
@@ -3247,12 +3247,12 @@ func IsIndexSignatureDeclaration(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type MethodSignatureDeclaration struct {
+	TypeElementBase
+	TypeSyntaxBase
 	NodeBase
 	DeclarationBase
 	NamedMemberBase
 	FunctionLikeBase
-	TypeElementBase
-	TypeSyntaxBase
 }
 
 func (f *NodeFactory) NewMethodSignatureDeclaration(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
@@ -3303,13 +3303,13 @@ func IsMethodSignatureDeclaration(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type MethodDeclaration struct {
+	ClassElementBase
+	ObjectLiteralElementBase
 	NodeBase
 	DeclarationBase
 	NamedMemberBase
 	FunctionLikeWithBodyBase
 	FlowNodeBase
-	ClassElementBase
-	ObjectLiteralElementBase
 	CompositeBase
 }
 
@@ -3367,11 +3367,11 @@ func IsMethodDeclaration(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type PropertySignatureDeclaration struct {
+	TypeElementBase
+	TypeSyntaxBase
 	NodeBase
 	DeclarationBase
 	NamedMemberBase
-	TypeElementBase
-	TypeSyntaxBase
 	Type        *TypeNode
 	Initializer *Expression
 }
@@ -3422,10 +3422,10 @@ func IsPropertySignatureDeclaration(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type PropertyDeclaration struct {
+	ClassElementBase
 	NodeBase
 	DeclarationBase
 	NamedMemberBase
-	ClassElementBase
 	CompositeBase
 	Type        *TypeNode   // Optional
 	Initializer *Expression // Optional
@@ -3477,9 +3477,9 @@ func IsPropertyDeclaration(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type SemicolonClassElement struct {
+	ClassElementBase
 	NodeBase
 	DeclarationBase
-	ClassElementBase
 }
 
 func (f *NodeFactory) NewSemicolonClassElement() *Node {
@@ -3500,11 +3500,11 @@ func IsSemicolonClassElement(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type ClassStaticBlockDeclaration struct {
+	ClassElementBase
 	NodeBase
 	DeclarationBase
 	ModifiersBase
 	LocalsContainerBase
-	ClassElementBase
 	CompositeBase
 	Body           *BlockNode
 	ReturnFlowNode *FlowNode
@@ -4744,9 +4744,9 @@ func IsObjectLiteralExpression(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type SpreadAssignment struct {
+	ObjectLiteralElementBase
 	NodeBase
 	DeclarationBase
-	ObjectLiteralElementBase
 	Expression *Expression
 }
 
@@ -4784,10 +4784,10 @@ func IsSpreadAssignment(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type PropertyAssignment struct {
+	ObjectLiteralElementBase
 	NodeBase
 	DeclarationBase
 	NamedMemberBase
-	ObjectLiteralElementBase
 	CompositeBase
 	Type        *TypeNode
 	Initializer *Expression
@@ -4839,10 +4839,10 @@ func IsPropertyAssignment(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type ShorthandPropertyAssignment struct {
+	ObjectLiteralElementBase
 	NodeBase
 	DeclarationBase
 	NamedMemberBase
-	ObjectLiteralElementBase
 	CompositeBase
 	Type                        *TypeNode
 	EqualsToken                 *EqualsToken // Optional
@@ -6688,8 +6688,8 @@ func IsJsxAttribute(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type JsxSpreadAttribute struct {
-	NodeBase
 	ObjectLiteralElementBase
+	NodeBase
 	Expression *Expression
 }
 
@@ -8485,10 +8485,10 @@ func IsJSDocLinkCode(node *Node) bool {
 // ──────────────────────────────────────────────────────────────────────
 
 type TypeParameterDeclaration struct {
+	TypeSyntaxBase
 	NodeBase
 	DeclarationBase
 	ModifiersBase
-	TypeSyntaxBase
 	name        *IdentifierNode
 	Constraint  *TypeNode   // Optional
 	Expression  *Expression // Optional

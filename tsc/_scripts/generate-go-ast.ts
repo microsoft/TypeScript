@@ -194,13 +194,35 @@ function verifyNodeBaseAtOffsetZero(): void {
 verifyNoDuplicateBases();
 verifyNodeBaseAtOffsetZero();
 
+// A base with no fields and no extends is a struct{} marker. Go pads a struct whose last field is
+// zero-size (so the field's address stays in bounds), so markers are embedded first, never last; being
+// zero-size, they don't move NodeBase off offset zero.
+function isZeroSizeBase(key: string): boolean {
+    const base = api.getBase(key);
+    return !!base && base.extendsKeys.length === 0 && base.fields.length === 0;
+}
+
+function goEmbeds(extendsKeys: string[]): string[] {
+    const zeroSized: string[] = [];
+    const nonZeroSized: string[] = [];
+    for (const key of extendsKeys) {
+        if (isZeroSizeBase(key)) {
+            zeroSized.push(key);
+        }
+        else {
+            nonZeroSized.push(key);
+        }
+    }
+    return [...zeroSized, ...nonZeroSized];
+}
+
 function generateStructDef(w: CodeWriter, node: NodeType) {
     const structName = node.name;
     w.write(`type ${structName} struct {`);
     w.push();
 
     // Embeddings from extends (each maps to a Go struct via convention)
-    for (const ext of node.extendsKeys) {
+    for (const ext of goEmbeds(node.extendsKeys)) {
         w.write(ext);
     }
 
@@ -287,7 +309,7 @@ function generateBaseStructDefs(w: CodeWriter) {
 
         const structName = base.key;
 
-        const goExts = base.extendsKeys;
+        const goExts = goEmbeds(base.extendsKeys);
 
         w.write(`type ${structName} struct {`);
         w.push();
