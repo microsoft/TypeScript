@@ -5945,6 +5945,9 @@ namespace Parser {
                 expression = finishNode(factory.createMetaProperty(SyntaxKind.ImportKeyword, parseIdentifierName()), pos);
 
                 if ((expression as MetaProperty).name.escapedText === "defer") {
+                    if (token() === SyntaxKind.QuestionDotToken) {
+                        parseErrorAtCurrentToken(Diagnostics.import_defer_does_not_support_optional_invocation);
+                    }
                     if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
                         sourceFlags |= NodeFlags.PossiblyContainsDynamicImport;
                     }
