@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/execute/watchmanager"
 	"github.com/microsoft/typescript-go/internal/fswatch"
 	"github.com/microsoft/typescript-go/internal/testutil/fsbaselineutil"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 // MockWatchBackend implements watchmanager.WatchBackend for testing. It
@@ -19,9 +20,10 @@ import (
 // SendEvents, which routes them only through watches whose paths
 // match, enforcing that tests fail if the wrong watches are set up.
 type MockWatchBackend struct {
-	mu              sync.Mutex
-	Dirs            map[string]*MockWatch
-	DirectoryExists func(string) bool // if set, WatchDirectory fails for non-existent dirs
+	mu                        sync.Mutex
+	Dirs                      map[string]*MockWatch
+	DirectoryExists           func(string) bool // if set, WatchDirectory fails for non-existent dirs
+	UseCaseSensitiveFileNames bool
 }
 
 var _ watchmanager.WatchBackend = (*MockWatchBackend)(nil)
@@ -109,7 +111,7 @@ func (m *MockWatchBackend) SendEvents(events []fswatch.Event) {
 			if w.Ignore != nil && w.Ignore(e.Path) {
 				continue
 			}
-			if !pathIsUnder(e.Path, w.Path, w.Recursive) {
+			if !pathIsUnder(e.Path, w.Path, w.Recursive, m.UseCaseSensitiveFileNames) {
 				continue
 			}
 			if t, ok := targets[w]; ok {
@@ -179,7 +181,11 @@ func (m *MockWatchBackend) SendChangedPaths(changes []fsbaselineutil.FileChange)
 
 // pathIsUnder reports whether eventPath is inside dir. If recursive is
 // false, only direct children match.
-func pathIsUnder(eventPath, dir string, recursive bool) bool {
+func pathIsUnder(eventPath, dir string, recursive, useCaseSensitiveFileNames bool) bool {
+	if !useCaseSensitiveFileNames {
+		eventPath = tspath.GetCanonicalFileName(eventPath, false)
+		dir = tspath.GetCanonicalFileName(dir, false)
+	}
 	if !strings.HasPrefix(eventPath, dir) {
 		return false
 	}
