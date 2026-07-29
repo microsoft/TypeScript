@@ -3,12 +3,14 @@ package tsctests
 import (
 	"context"
 	"fmt"
+	"strings"
 	"sync"
 	"testing"
 	"time"
 
 	"github.com/microsoft/typescript-go/internal/execute"
 	"github.com/microsoft/typescript-go/internal/execute/tsc"
+	"github.com/microsoft/typescript-go/internal/fswatch"
 	"gotest.tools/v3/assert"
 )
 
@@ -289,4 +291,230 @@ func TestBuildWatchStopsWhenContextIsCancelled(t *testing.T) {
 	case <-time.After(2 * time.Second):
 		t.Fatal("build watch did not stop after context cancellation")
 	}
+}
+
+func TestWatcherStartsFromExistingBuildInfo(t *testing.T) {
+	t.Parallel()
+	input := &tscInput{
+		files: FileMap{
+			"/home/src/workspaces/project/index.ts":      `export const x: number = 1;`,
+			"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions":{"composite":true},"files":["index.ts"]}`,
+		},
+	}
+	sys := newTestSys(input, false)
+
+	result := execute.CommandLine(context.Background(), sys, []string{"-p", "tsconfig.json", "--pretty", "false"}, sys)
+	assert.Equal(t, result.Status, tsc.ExitStatusSuccess)
+	assert.Assert(t, sys.fsFromFileMap().FileExists("/home/src/workspaces/project/tsconfig.tsbuildinfo"))
+
+	sys.clearOutput()
+	defer func() {
+		if r := recover(); r != nil {
+			t.Fatalf("watch startup with existing build info panicked: %v", r)
+		}
+	}()
+	result = execute.CommandLine(context.Background(), sys, []string{"--watch", "--noEmit", "--pretty", "false"}, sys)
+	assert.Equal(t, result.Status, tsc.ExitStatusSuccess)
+	assert.Assert(t, result.Watcher != nil)
+}
+
+func TestWatcherRebuildsWhenJsxImportSourcePragmaChanges(t *testing.T) {
+	t.Parallel()
+	input := &tscInput{
+		files: FileMap{
+			"/home/src/workspaces/project/index.tsx": `/** @jsxImportSource foo */
+export const x = <div />;`,
+			"/home/src/workspaces/project/tsconfig.json": `{
+				"compilerOptions":{"jsx":"react-jsx","module":"esnext","moduleResolution":"bundler","noEmit":true},
+				"files":["index.tsx"]
+			}`,
+		},
+		commandLineArgs: []string{"--watch"},
+	}
+	sys := newTestSys(input, false)
+	result := execute.CommandLine(context.Background(), sys, []string{"--watch", "--pretty", "false"}, sys)
+	if result.Watcher == nil {
+		t.Fatal("expected Watcher to be non-nil in watch mode")
+	}
+	w := result.Watcher.(*execute.Watcher)
+
+	sys.currentWrite.Reset()
+	_ = sys.fsFromFileMap().WriteFile("/home/src/workspaces/project/index.tsx", `/** @jsxImportSource bar */
+export const x = <div />;`)
+	sys.mockWatchBackend.SendEvents([]fswatch.Event{
+		{Kind: fswatch.EventUpdate, Path: "/home/src/workspaces/project/index.tsx"},
+	})
+	w.DoCycle()
+
+	out := sys.currentWrite.String()
+	assert.Assert(t, strings.Contains(out, "bar/jsx-runtime"), "expected updated JSX runtime diagnostic, got: %s", out)
+	assert.Assert(t, !strings.Contains(out, "foo/jsx-runtime"), "expected stale JSX runtime diagnostic to be gone, got: %s", out)
+}
+
+// TestWatcherUpdateProgramFastPath verifies that the UpdateProgram optimization
+// produces correct compilation results for body-only edits (fast path) and
+// correctly falls back to full NewProgram when the set of imported modules
+// changes. The build path taken is asserted via FastPathBuilds/FullBuilds so a
+// regression that stops using (or stops falling back from) the fast path is
+// caught, not just a diagnostics difference.
+func TestWatcherUpdateProgramFastPath(t *testing.T) {
+	t.Parallel()
+
+	input := &tscInput{
+		files: FileMap{
+			"/home/src/workspaces/project/a.ts":          `export const a: number = 1;`,
+			"/home/src/workspaces/project/b.ts":          `import { a } from "./a"; export const b = a;`,
+			"/home/src/workspaces/project/c.ts":          `export const c: number = 10;`,
+			"/home/src/workspaces/project/tsconfig.json": `{}`,
+		},
+		commandLineArgs: []string{"--watch"},
+	}
+	sys := newTestSys(input, false)
+	result := execute.CommandLine(context.Background(), sys, []string{"--watch"}, sys)
+	if result.Watcher == nil {
+		t.Fatal("expected Watcher to be non-nil in watch mode")
+	}
+	w := result.Watcher.(*execute.Watcher)
+
+	// Helper to write a file, send the event, cycle, and return output
+	editAndCycle := func(path, content string) string {
+		sys.currentWrite.Reset()
+		_ = sys.fsFromFileMap().WriteFile(path, content)
+		sys.mockWatchBackend.SendEvents([]fswatch.Event{
+			{Kind: fswatch.EventUpdate, Path: path},
+		})
+		w.DoCycle()
+		return sys.currentWrite.String()
+	}
+
+	// Body-only edit — should use UpdateProgram fast path, no errors
+	fast, full := w.FastPathBuilds(), w.FullBuilds()
+	out := editAndCycle("/home/src/workspaces/project/a.ts", `export const a: number = 2;`)
+	assert.Assert(t, strings.Contains(out, "Found 0 errors"), "expected 0 errors after body edit, got: %s", out)
+	assert.Equal(t, w.FastPathBuilds(), fast+1, "body-only edit should take the UpdateProgram fast path")
+	assert.Equal(t, w.FullBuilds(), full, "body-only edit should not trigger a full rebuild")
+
+	// Introduce a type error via body-only edit — fast path should detect it
+	fast, full = w.FastPathBuilds(), w.FullBuilds()
+	out = editAndCycle("/home/src/workspaces/project/a.ts", `export const a: number = "not a number";`)
+	assert.Assert(t, !strings.Contains(out, "Found 0 errors"), "expected errors after type error, got: %s", out)
+	assert.Equal(t, w.FastPathBuilds(), fast+1, "type error via body edit should still take the fast path")
+	assert.Equal(t, w.FullBuilds(), full, "type error via body edit should not trigger a full rebuild")
+
+	// Fix the type error — fast path should clear it
+	out = editAndCycle("/home/src/workspaces/project/a.ts", `export const a: number = 3;`)
+	assert.Assert(t, strings.Contains(out, "Found 0 errors"), "expected 0 errors after fix, got: %s", out)
+
+	// Change b.ts's imported module (./a -> ./c). The set of imported module
+	// specifiers changes, so the file cannot be replaced in place and the build
+	// must fall back to a full NewProgram rebuild.
+	fast, full = w.FastPathBuilds(), w.FullBuilds()
+	out = editAndCycle("/home/src/workspaces/project/b.ts", `import { c } from "./c"; export const b = c;`)
+	assert.Assert(t, strings.Contains(out, "Found 0 errors"), "expected 0 errors after import change, got: %s", out)
+	assert.Equal(t, w.FullBuilds(), full+1, "changing the imported module should fall back to a full NewProgram rebuild")
+	assert.Equal(t, w.FastPathBuilds(), fast, "changing the imported module should not take the fast path")
+
+	// Body edit after import change — should use fast path again, no errors
+	fast, full = w.FastPathBuilds(), w.FullBuilds()
+	out = editAndCycle("/home/src/workspaces/project/b.ts", `import { c } from "./c"; export const b = c + 1;`)
+	assert.Assert(t, strings.Contains(out, "Found 0 errors"), "expected 0 errors after body edit post-import-change, got: %s", out)
+	assert.Equal(t, w.FastPathBuilds(), fast+1, "body edit after an import change should take the fast path again")
+	assert.Equal(t, w.FullBuilds(), full, "body edit after an import change should not trigger a full rebuild")
+}
+
+// TestWatcherOverflowForcesFullRebuild verifies that an event-queue overflow
+// forces a full NewProgram rebuild rather than reusing the existing program via
+// the single-file UpdateProgram fast path. For a single-file program with an
+// unresolved import, clearing the source-file cache on overflow leaves exactly
+// one cache miss, which the fast path would misread as a lone content edit and
+// reuse the stale (unresolved) program, never discovering a dependency created
+// while events were dropped. Program membership is observed via the emitted
+// output for the dependency.
+func TestWatcherOverflowForcesFullRebuild(t *testing.T) {
+	t.Parallel()
+
+	input := &tscInput{
+		files: FileMap{
+			"/home/src/workspaces/project/index.ts": `import { dep } from "./dep"; export const x = dep;`,
+			"/home/src/workspaces/project/tsconfig.json": `{
+				"compilerOptions":{"noLib":true,"moduleResolution":"bundler","module":"esnext","outDir":"out"},
+				"files":["index.ts"]
+			}`,
+		},
+		commandLineArgs: []string{"--watch"},
+	}
+	sys := newTestSys(input, false)
+	result := execute.CommandLine(context.Background(), sys, []string{"--watch", "--pretty", "false"}, sys)
+	if result.Watcher == nil {
+		t.Fatal("expected Watcher to be non-nil in watch mode")
+	}
+	w := result.Watcher.(*execute.Watcher)
+	fs := sys.fsFromFileMap()
+
+	// The import is initially unresolved, so the dependency is not part of the
+	// program and produces no emitted output.
+	assert.Assert(t, !fs.FileExists("/home/src/workspaces/project/out/dep.js"),
+		"dep.js should not exist while ./dep is unresolved")
+
+	// Create the missing dependency, but deliver an overflow instead of a
+	// precise event (as if the create event were dropped by the kernel queue).
+	_ = fs.WriteFile("/home/src/workspaces/project/dep.ts", `export const dep: number = 1;`)
+	full := w.FullBuilds()
+	sys.mockWatchBackend.SendOverflow()
+	w.DoCycle()
+
+	assert.Equal(t, w.FullBuilds(), full+1, "overflow must force a full rebuild, not the single-file fast path")
+	assert.Assert(t, fs.FileExists("/home/src/workspaces/project/out/dep.js"),
+		"overflow rebuild should rediscover the created dependency and emit dep.js")
+}
+
+// TestWatcherNonSourceDependencyForcesFullRebuild verifies that when a
+// non-source build dependency changes in the same cycle as a source edit, the
+// single-file fast path is rejected. A previously-missing module path is
+// tracked in seenFiles (via failed resolution) but is never stored in the
+// source-file cache, so counting source-cache misses alone would report a lone
+// changed file and reuse stale module resolutions.
+func TestWatcherNonSourceDependencyForcesFullRebuild(t *testing.T) {
+	t.Parallel()
+
+	input := &tscInput{
+		files: FileMap{
+			"/home/src/workspaces/project/index.ts": `import { dep } from "./dep"; export const x = dep;`,
+			"/home/src/workspaces/project/tsconfig.json": `{
+				"compilerOptions":{"noLib":true,"moduleResolution":"bundler","module":"esnext","outDir":"out"},
+				"files":["index.ts"]
+			}`,
+		},
+		commandLineArgs: []string{"--watch"},
+	}
+	sys := newTestSys(input, false)
+	result := execute.CommandLine(context.Background(), sys, []string{"--watch", "--pretty", "false"}, sys)
+	if result.Watcher == nil {
+		t.Fatal("expected Watcher to be non-nil in watch mode")
+	}
+	w := result.Watcher.(*execute.Watcher)
+	fs := sys.fsFromFileMap()
+
+	// "./dep" is unresolved initially; the failed resolution probes dep.ts,
+	// recording it as a (missing) non-source dependency in seenFiles.
+	assert.Assert(t, !fs.FileExists("/home/src/workspaces/project/out/dep.js"),
+		"dep.js should not exist while ./dep is unresolved")
+
+	// In a single cycle, edit index.ts's body (a lone source-cache miss) and
+	// create the previously-missing dependency. The batched dependency change
+	// must reject the fast path so the new module resolution is discovered.
+	_ = fs.WriteFile("/home/src/workspaces/project/index.ts",
+		`import { dep } from "./dep"; export const x = dep + 0;`)
+	_ = fs.WriteFile("/home/src/workspaces/project/dep.ts", `export const dep: number = 1;`)
+	full := w.FullBuilds()
+	sys.mockWatchBackend.SendEvents([]fswatch.Event{
+		{Kind: fswatch.EventUpdate, Path: "/home/src/workspaces/project/index.ts"},
+		{Kind: fswatch.EventUpdate, Path: "/home/src/workspaces/project/dep.ts"},
+	})
+	w.DoCycle()
+
+	assert.Equal(t, w.FullBuilds(), full+1,
+		"a changed non-source dependency must force a full rebuild, not the fast path")
+	assert.Assert(t, fs.FileExists("/home/src/workspaces/project/out/dep.js"),
+		"full rebuild should resolve the created dependency and emit dep.js")
 }

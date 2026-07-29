@@ -291,6 +291,25 @@ func NewProgram(opts ProgramOptions) *Program {
 // host-side parse caches must release this exact pointer when the old program could not be
 // reused, since it was acquired speculatively before that decision was made.
 func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHost, createCheckerPool func(*Program) CheckerPool) (*Program, *ast.SourceFile, bool) {
+	if result, newFile, reused := p.ReuseProgram(changedFilePath, newHost, createCheckerPool); reused {
+		return result, newFile, true
+	} else {
+		newOpts := p.opts
+		newOpts.Host = newHost
+		if createCheckerPool != nil {
+			newOpts.CreateCheckerPool = createCheckerPool
+		}
+		return NewProgram(newOpts), newFile, false
+	}
+}
+
+// ReuseProgram attempts to produce a new program by replacing only
+// changedFilePath in place, reusing the rest of p. It returns
+// (newProgram, newFile, true) on success, or (nil, newFile, false) when the
+// file cannot be replaced in place. Unlike UpdateProgram, it never constructs a
+// full fallback program, so callers that build their own fallback (e.g. with a
+// different host) do not pay for a discarded program build.
+func (p *Program) ReuseProgram(changedFilePath tspath.Path, newHost CompilerHost, createCheckerPool func(*Program) CheckerPool) (*Program, *ast.SourceFile, bool) {
 	newOpts := p.opts
 	newOpts.Host = newHost
 	if createCheckerPool != nil {
@@ -306,14 +325,14 @@ func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHos
 	_, inRedirectFiles := p.redirectFilesByPath[changedFilePath]
 	_, isRedirectTarget := p.redirectTargetsMap[changedFilePath]
 	if inRedirectFiles || isRedirectTarget {
-		return NewProgram(newOpts), newFile, false
+		return nil, newFile, false
 	}
 
 	if !canReplaceFileInProgram(oldFile, newFile) {
-		return NewProgram(newOpts), newFile, false
+		return nil, newFile, false
 	}
 	if oldNeedsImportHelpers := p.importHelpersImportSpecifiers[oldFile.Path()] != nil; oldNeedsImportHelpers != p.needsImportHelpersImportSpecifier(newFile) {
-		return NewProgram(newOpts), newFile, false
+		return nil, newFile, false
 	}
 	// TODO: reverify compiler options when config has changed?
 	result := &Program{

@@ -126,6 +126,23 @@ func (m *MockWatchBackend) SendEvents(events []fswatch.Event) {
 	}
 }
 
+// SendOverflow simulates a kernel event-queue overflow by invoking every
+// active watch callback with fswatch.ErrOverflow. The watch manager treats
+// this as a signal that events were dropped and a full rebuild is required.
+func (m *MockWatchBackend) SendOverflow() {
+	m.mu.Lock()
+	var cbs []fswatch.WatchCallback
+	for _, w := range m.Dirs {
+		if !w.Closed {
+			cbs = append(cbs, w.Callback)
+		}
+	}
+	m.mu.Unlock()
+	for _, cb := range cbs {
+		cb(nil, fswatch.ErrOverflow)
+	}
+}
+
 // SendChangedPaths converts a list of file changes into fswatch
 // events with appropriate event kinds and routes them through
 // registered watches via SendEvents. For new/modified files, it also
