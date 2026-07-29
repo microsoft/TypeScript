@@ -81,6 +81,7 @@ importNameCodeFixOptionalImport0
 incrementalParsingWithJsDoc
 isDefinitionAcrossGlobalProjects
 jsdocDeprecated_suggestion1
+jsdocDeprecated_suggestion19
 jsdocDeprecated_suggestion2
 jsDocFunctionSignatures12
 jsDocFunctionSignatures2

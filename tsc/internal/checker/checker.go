@@ -13267,6 +13267,9 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 			if allPropertiesTable != nil {
 				allPropertiesTable[prop.Name] = prop
 			}
+			if ast.IsIdentifier(memberDecl.Name()) {
+				c.checkDeprecatedProperty(memberDecl.Name(), contextualType)
+			}
 			if contextualType != nil && checkMode&CheckModeInferential != 0 && checkMode&CheckModeSkipContextSensitive == 0 && (ast.IsPropertyAssignment(memberDecl) || ast.IsMethodDeclaration(memberDecl)) && c.isContextSensitive(memberDecl) {
 				inferenceContext := c.getInferenceContext(node)
 				// In CheckMode.Inferential we should always have an inference context
@@ -13349,6 +13352,19 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		})
 	}
 	return createObjectLiteralType()
+}
+
+func (c *Checker) checkDeprecatedProperty(name *ast.IdentifierNode, contextualType *Type) {
+	if contextualType == nil || name == nil {
+		return
+	}
+	prop := c.getPropertyOfType(contextualType, name.Text())
+	if prop == nil || len(prop.Declarations) == 0 {
+		return
+	}
+	if c.isDeprecatedSymbol(prop) {
+		c.addDeprecatedSuggestion(name, prop.Declarations, name.Text())
+	}
 }
 
 func (c *Checker) checkSpreadPropOverrides(t *Type, props ast.SymbolTable, spread *ast.Node) {
