@@ -80,6 +80,54 @@ func TestProjectProgramUpdateKind(t *testing.T) {
 		assert.Equal(t, configured.ProgramUpdateKind, project.ProgramUpdateKindCloned)
 	})
 
+	t.Run("NewFiles when import resolution mode changes", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/src/tsconfig.json": `{
+				"compilerOptions":{"module":"preserve","moduleResolution":"bundler","noEmit":true},
+				"files":["index.ts"]
+			}`,
+			"/src/index.ts": `import type { Value } from "pkg" with { "resolution-mode": "require" };
+const value: Value = { mode: "require" };`,
+			"/src/node_modules/pkg/package.json": `{
+				"name": "pkg",
+				"version": "1.0.0",
+				"exports": {
+					".": {
+						"import": "./index.mjs",
+						"require": "./index.js"
+					}
+				}
+			}`,
+			"/src/node_modules/pkg/index.d.mts": `export interface Value { mode: "import" }`,
+			"/src/node_modules/pkg/index.d.ts":  `export interface Value { mode: "require" }`,
+		}
+		session, _ := projecttestutil.Setup(files)
+		uri := lsproto.DocumentUri("file:///src/index.ts")
+		session.DidOpenFile(context.Background(), uri, 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		ls, err := session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+		program := ls.GetProgram()
+		assert.Equal(t, len(program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), program.GetSourceFile("/src/index.ts"))), 0)
+
+		session.DidChangeFile(context.Background(), uri, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+			WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{
+				Text: `import type { Value } from "pkg" with { "resolution-mode": "import" };
+const value: Value = { mode: "require" };`,
+			},
+		}})
+		ls, err = session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+		program = ls.GetProgram()
+		diags := program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), program.GetSourceFile("/src/index.ts"))
+		assert.Equal(t, len(diags), 1)
+		assert.Equal(t, diags[0].Code(), diagnostics.Type_0_is_not_assignable_to_type_1.Code())
+
+		configured := session.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/src/tsconfig.json"))
+		assert.Assert(t, configured != nil)
+		assert.Equal(t, configured.ProgramUpdateKind, project.ProgramUpdateKindNewFiles)
+	})
+
 	t.Run("SameFileNames on config change without root changes", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{
