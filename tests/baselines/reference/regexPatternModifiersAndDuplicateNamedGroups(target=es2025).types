@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/es2025/regexPatternModifiersAndDuplicateNamedGroups.ts] ////
+
+=== regexPatternModifiersAndDuplicateNamedGroups.ts ===
+const dupNames = /(?<y>\d{4})-\d{2}|\d{2}\/(?<y>\d{4})/;
+>dupNames : RegExp
+>         : ^^^^^^
+>/(?<y>\d{4})-\d{2}|\d{2}\/(?<y>\d{4})/ : RegExp
+>                                       : ^^^^^^
+
+const modifiers = /(?i:abc)/;
+>modifiers : RegExp
+>          : ^^^^^^
+>/(?i:abc)/ : RegExp
+>           : ^^^^^^
+

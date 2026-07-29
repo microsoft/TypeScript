@@ -1,0 +1,11 @@
+regexPatternModifiersAndDuplicateNamedGroups.ts(1,47): error TS18063: Duplicate named capturing groups are only available when targeting 'es2025' or later.
+regexPatternModifiersAndDuplicateNamedGroups.ts(2,22): error TS18062: Regular expression pattern modifiers are only available when targeting 'es2025' or later.
+
+
+==== regexPatternModifiersAndDuplicateNamedGroups.ts (2 errors) ====
+    const dupNames = /(?<y>\d{4})-\d{2}|\d{2}\/(?<y>\d{4})/;
+                                                  ~
+!!! error TS18063: Duplicate named capturing groups are only available when targeting 'es2025' or later.
+    const modifiers = /(?i:abc)/;
+                         ~
+!!! error TS18062: Regular expression pattern modifiers are only available when targeting 'es2025' or later.

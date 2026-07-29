@@ -2750,6 +2750,9 @@ export function createScanner(
                                             error(Diagnostics.Subpattern_flags_must_be_present_when_there_is_a_minus_sign, start, pos - start);
                                         }
                                     }
+                                    if (pos !== start && languageVersion < ScriptTarget.ES2025) {
+                                        error(Diagnostics.Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later, start, pos - start, getNameOfScriptTarget(ScriptTarget.ES2025));
+                                    }
                                     scanExpectedChar(CharacterCodes.colon);
                                     isPreviousTermQuantifiable = true;
                                     break;
@@ -3008,6 +3011,9 @@ export function createScanner(
                 error(Diagnostics.Named_capturing_groups_with_the_same_name_must_be_mutually_exclusive_to_each_other, tokenStart, pos - tokenStart);
             }
             else {
+                if (groupSpecifiers?.has(tokenValue) && languageVersion < ScriptTarget.ES2025) {
+                    error(Diagnostics.Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later, tokenStart, pos - tokenStart, getNameOfScriptTarget(ScriptTarget.ES2025));
+                }
                 topNamedCapturingGroupsScope ??= new Set();
                 topNamedCapturingGroupsScope.add(tokenValue);
                 groupSpecifiers ??= new Set();

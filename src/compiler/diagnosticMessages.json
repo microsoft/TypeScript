@@ -1724,6 +1724,14 @@
         "category": "Error",
         "code": 1515
     },
+    "Regular expression pattern modifiers are only available when targeting '{0}' or later.": {
+        "category": "Error",
+        "code": 18062
+    },
+    "Duplicate named capturing groups are only available when targeting '{0}' or later.": {
+        "category": "Error",
+        "code": 18063
+    },
     "A character class range must not be bounded by another character class.": {
         "category": "Error",
         "code": 1516
