@@ -1,6 +1,10 @@
 //// [tests/cases/conformance/importDefer/importDeferOptionalCall.ts] ////
 
+=== x.ts ===
+export const x = 1;
+>x : Symbol(x, Decl(x.ts, 0, 12))
+
 === b.ts ===
 
-import.defer?.('x');
+import.defer?.('./x');
 

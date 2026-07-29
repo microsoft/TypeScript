@@ -1,11 +1,13 @@
 b.ts(1,13): error TS18062: 'import.defer' does not support optional invocation.
-b.ts(1,16): error TS2307: Cannot find module 'x' or its corresponding type declarations.
+b.ts(1,16): error TS2307: Cannot find module './x' or its corresponding type declarations.
 
 
+==== x.ts (0 errors) ====
+    export const x = 1;
 ==== b.ts (2 errors) ====
-    import.defer?.('x');
+    import.defer?.('./x');
                 ~~
 !!! error TS18062: 'import.defer' does not support optional invocation.
-                   ~~~
-!!! error TS2307: Cannot find module 'x' or its corresponding type declarations.
+                   ~~~~~
+!!! error TS2307: Cannot find module './x' or its corresponding type declarations.
     

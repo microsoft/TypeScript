@@ -1,11 +1,18 @@
 //// [tests/cases/conformance/importDefer/importDeferOptionalCall.ts] ////
 
+=== x.ts ===
+export const x = 1;
+>x : 1
+>  : ^
+>1 : 1
+>  : ^
+
 === b.ts ===
-import.defer?.('x');
->import.defer?.('x') : Promise<any>
->                    : ^^^^^^^^^^^^
+import.defer?.('./x');
+>import.defer?.('./x') : Promise<any>
+>                      : ^^^^^^^^^^^^
 >defer : any
 >      : ^^^
->'x' : "x"
->    : ^^^
+>'./x' : "./x"
+>      : ^^^^^
 
