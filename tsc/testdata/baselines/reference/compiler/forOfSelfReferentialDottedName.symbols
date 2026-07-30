@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/forOfSelfReferentialDottedName.ts] ////
+
+=== forOfSelfReferentialDottedName.ts ===
+// A self-referential for-of iterable (`for (const a of a)`) plus a call and a
+// later narrowing reference must not infinitely recurse in getExplicitTypeOfSymbol.
+for (const a of a) {
+>a : Symbol(a, Decl(forOfSelfReferentialDottedName.ts, 2, 10))
+>a : Symbol(a, Decl(forOfSelfReferentialDottedName.ts, 2, 10))
+
+    a();
+>a : Symbol(a, Decl(forOfSelfReferentialDottedName.ts, 2, 10))
+
+    a;
+>a : Symbol(a, Decl(forOfSelfReferentialDottedName.ts, 2, 10))
+}
+
