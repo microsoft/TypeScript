@@ -45,6 +45,8 @@ export enum ObjectFlags {
     ContainsIntersections = 1 << 25,
     IsUnknownLikeUnionComputed = 1 << 26,
     IsUnknownLikeUnion = 1 << 27,
+    IsUniformEnumComputed = 1 << 28,
+    IsUniformEnum = 1 << 29,
     IsNeverIntersectionComputed = 1 << 25,
     IsNeverIntersection = 1 << 26,
     IsConstrainedTypeVariable = 1 << 27,

@@ -45,6 +45,8 @@ export var ObjectFlags: any;
     ObjectFlags[ObjectFlags["ContainsIntersections"] = 33554432] = "ContainsIntersections";
     ObjectFlags[ObjectFlags["IsUnknownLikeUnionComputed"] = 67108864] = "IsUnknownLikeUnionComputed";
     ObjectFlags[ObjectFlags["IsUnknownLikeUnion"] = 134217728] = "IsUnknownLikeUnion";
+    ObjectFlags[ObjectFlags["IsUniformEnumComputed"] = 268435456] = "IsUniformEnumComputed";
+    ObjectFlags[ObjectFlags["IsUniformEnum"] = 536870912] = "IsUniformEnum";
     ObjectFlags[ObjectFlags["IsNeverIntersectionComputed"] = 33554432] = "IsNeverIntersectionComputed";
     ObjectFlags[ObjectFlags["IsNeverIntersection"] = 67108864] = "IsNeverIntersection";
     ObjectFlags[ObjectFlags["IsConstrainedTypeVariable"] = 134217728] = "IsConstrainedTypeVariable";

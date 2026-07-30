@@ -586,12 +586,24 @@ func (c *Checker) narrowTypeByEquality(t *Type, operator ast.Kind, value *ast.No
 				return c.nonPrimitiveType
 			}
 		}
+		if !doubleEquals && valueType.flags&TypeFlagsPrimitive != 0 && c.isUniformUnionType(t) {
+			regularType := c.getRegularTypeOfLiteralType(valueType)
+			if c.unionContainsType(t, regularType, false /*matchSymbol*/) {
+				return regularType
+			}
+		}
 		filteredType := c.filterType(t, func(t *Type) bool {
 			return c.areTypesComparable(t, valueType) || doubleEquals && isCoercibleUnderDoubleEquals(t, valueType)
 		})
 		return c.replacePrimitivesWithLiterals(filteredType, valueType)
 	}
 	if isUnitType(valueType) {
+		if c.isUniformUnionType(t) {
+			filteredType := c.removeType(t, c.getRegularTypeOfLiteralType(valueType))
+			if filteredType != t {
+				return filteredType
+			}
+		}
 		return c.filterType(t, func(t *Type) bool {
 			return !(c.isUnitLikeType(t) && c.areTypesComparable(t, valueType))
 		})
@@ -1110,8 +1122,16 @@ func (c *Checker) narrowTypeBySwitchOnDiscriminant(t *Type, data *ast.FlowSwitch
 	if discriminantType.flags&TypeFlagsNever != 0 {
 		caseType = c.neverType
 	} else {
-		filtered := c.filterType(t, func(t *Type) bool { return c.areTypesComparable(discriminantType, t) })
-		caseType = c.replacePrimitivesWithLiterals(filtered, discriminantType)
+		if discriminantType.flags&TypeFlagsPrimitive != 0 && c.isUniformUnionType(t) {
+			regularType := c.getRegularTypeOfLiteralType(discriminantType)
+			if c.unionContainsType(t, regularType, false /*matchSymbol*/) {
+				caseType = regularType
+			}
+		}
+		if caseType == nil {
+			filtered := c.filterType(t, func(t *Type) bool { return c.areTypesComparable(discriminantType, t) })
+			caseType = c.replacePrimitivesWithLiterals(filtered, discriminantType)
+		}
 	}
 	if !hasDefaultClause {
 		return caseType

@@ -639,6 +639,8 @@ const (
 	ObjectFlagsContainsIntersections      = 1 << 25 // Union contains intersections
 	ObjectFlagsIsUnknownLikeUnionComputed = 1 << 26 // IsUnknownLikeUnion flag has been computed
 	ObjectFlagsIsUnknownLikeUnion         = 1 << 27 // Union of null, undefined, and empty object type
+	ObjectFlagsIsUniformEnumComputed      = 1 << 28 // IsUniformEnum flag has been computed
+	ObjectFlagsIsUniformEnum              = 1 << 29 // Union contains uniform literal types
 	// Flags that require TypeFlags.Intersection
 	ObjectFlagsIsNeverIntersectionComputed = 1 << 25 // IsNeverLike flag has been computed
 	ObjectFlagsIsNeverIntersection         = 1 << 26 // Intersection reduces to never
