@@ -282,6 +282,8 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 			logger.Logf("Reason: RequestedLoadProjectTree - %v", getDetails())
 		case UpdateReasonIdleCleanDiskCache:
 			logger.Logf("Reason: IdleCleanDiskCache")
+		case UpdateReasonDidChangeConfigFile:
+			logger.Logf("Reason: DidChangeConfigFile - %v", getDetails())
 		}
 	}
 

@@ -44,6 +44,7 @@ const (
 	UpdateReasonRequestedLoadProjectTree
 	UpdateReasonRequestedLanguageServiceWithAutoImports
 	UpdateReasonIdleCleanDiskCache
+	UpdateReasonDidChangeConfigFile
 )
 
 // watchRequestTimeout is the maximum time to wait for the client to respond to
@@ -370,6 +371,8 @@ func (s *Session) DidSaveFile(ctx context.Context, uri lsproto.DocumentUri) {
 func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.FileEvent) {
 	fileChanges := make([]FileChange, 0, len(changes))
 	hasRelevantChange := false
+	hasConfigChange := false
+	configFileRegistry := s.Snapshot().ConfigFileRegistry
 	for _, change := range changes {
 		var kind FileChangeKind
 		switch change.Type {
@@ -386,6 +389,10 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 			Kind: kind,
 			URI:  change.Uri,
 		})
+
+		if !hasConfigChange && configFileRegistry.isTracked(s.toPath(change.Uri.FileName())) {
+			hasConfigChange = true
+		}
 
 		if !hasRelevantChange {
 			fileName := change.Uri.FileName()
@@ -422,6 +429,12 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 		// Schedule a debounced diagnostics refresh only for paths
 		// that can affect the TypeScript program (relevant extensions or directories).
 		s.ScheduleDiagnosticsRefresh()
+	}
+	if hasConfigChange {
+		// Config file diagnostics are pushed on snapshot updates rather than pulled,
+		// so they must not depend on the client re-pulling diagnostics in response to
+		// the refresh request above.
+		s.ScheduleSnapshotUpdate(UpdateReasonDidChangeConfigFile)
 	}
 	s.cancelWarmAutoImportCache()
 	s.scheduleIdleCacheClean()
