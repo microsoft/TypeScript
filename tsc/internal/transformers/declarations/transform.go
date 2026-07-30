@@ -549,12 +549,12 @@ func (tx *DeclarationTransformer) getTypeReferences() (result []*ast.FileReferen
 }
 
 func (tx *DeclarationTransformer) setupDiagnosticContext(input *ast.Node) (bool, func()) {
-	canProdiceDiagnostic := canProduceDiagnostics(input)
+	canProduceDiagnostic := canProduceDiagnostics(input)
 	oldWithinObjectLiteralType := tx.suppressNewDiagnosticContexts
 	shouldEnterSuppressNewDiagnosticsContextContext := (input.Kind == ast.KindTypeLiteral || input.Kind == ast.KindMappedType) && !(input.Parent.Kind == ast.KindTypeAliasDeclaration || input.Parent.Kind == ast.KindJSTypeAliasDeclaration)
 
 	oldDiag := tx.state.getSymbolAccessibilityDiagnostic
-	if canProdiceDiagnostic && !tx.suppressNewDiagnosticContexts {
+	if canProduceDiagnostic && !tx.suppressNewDiagnosticContexts {
 		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input)
 	}
 	oldName := tx.state.errorNameNode
@@ -563,7 +563,7 @@ func (tx *DeclarationTransformer) setupDiagnosticContext(input *ast.Node) (bool,
 		tx.suppressNewDiagnosticContexts = true
 	}
 
-	return canProdiceDiagnostic, func() {
+	return canProduceDiagnostic, func() {
 		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
 		tx.state.errorNameNode = oldName
 		tx.suppressNewDiagnosticContexts = oldWithinObjectLiteralType
@@ -616,7 +616,7 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 		tx.enclosingDeclaration = input
 	}
 
-	canProdiceDiagnostic, cleanupDiagnosticContext := tx.setupDiagnosticContext(input)
+	canProduceDiagnostic, cleanupDiagnosticContext := tx.setupDiagnosticContext(input)
 	defer cleanupDiagnosticContext()
 
 	var result *ast.Node
@@ -692,7 +692,7 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 		result = tx.Visitor().VisitEachChild(input)
 	}
 
-	if result != nil && canProdiceDiagnostic && ast.HasDynamicName(input) {
+	if result != nil && canProduceDiagnostic && ast.HasDynamicName(input) {
 		tx.checkName(input)
 	}
 
@@ -1744,10 +1744,10 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 		tx.enclosingDeclaration = input
 	}
 
-	canProdiceDiagnostic := canProduceDiagnostics(input)
+	canProduceDiagnostic := canProduceDiagnostics(input)
 	oldDiag := tx.state.getSymbolAccessibilityDiagnostic
 	oldName := tx.state.errorNameNode
-	if canProdiceDiagnostic {
+	if canProduceDiagnostic {
 		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input)
 	}
 	saveNeedsDeclare := tx.needsDeclare
