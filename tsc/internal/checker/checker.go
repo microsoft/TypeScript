@@ -22353,10 +22353,9 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	// We are instantiating an anonymous type that has one or more type parameters in scope. Apply the
 	// mapper to the type parameters to produce the effective list of type arguments, and compute the
 	// instantiation cache key from the type IDs of the type arguments.
-	combinedMapper := c.combineTypeMappers(t.Mapper(), m)
 	typeArguments := make([]*Type, len(typeParameters))
 	for i, tp := range typeParameters {
-		typeArguments[i] = combinedMapper.Map(tp)
+		typeArguments[i] = c.mapTypeWithCompositeMapper(tp, t.Mapper(), m)
 	}
 	newAlias := alias
 	if newAlias == nil {
