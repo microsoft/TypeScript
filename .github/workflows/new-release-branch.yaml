@@ -67,7 +67,8 @@ jobs:
           # corepack enable npm
           npm install -g $(jq -r '.packageManager' < package.json)
           npm --version
-      - env:
+      - name: Bump version, LKG, and create release branch
+        env:
           BRANCH_NAME: ${{ inputs.branch_name }}
           PACKAGE_VERSION: ${{ inputs.package_version }}
           CORE_MAJOR_MINOR: ${{ inputs.core_major_minor }}

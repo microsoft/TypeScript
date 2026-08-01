@@ -72,7 +72,8 @@ jobs:
       # branch_name - the target branch
       # package_version - the full version string (eg, `3.9.1-rc` or `3.9.2`)
       # core_major_minor - the major.minor pair associated with the desired package_version (eg, `3.9` for `3.9.3`)
-      - env:
+      - name: Bump version and LKG
+        env:
           PACKAGE_VERSION: ${{ inputs.package_version }}
           CORE_MAJOR_MINOR: ${{ inputs.core_major_minor }}
         run: |
