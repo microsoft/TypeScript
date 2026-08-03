@@ -2763,7 +2763,7 @@ namespace Parser {
         return canFollowModifier();
     }
 
-    function nextTokenCanFollowModifier() {
+    function nextTokenCanFollowModifier(permitLineBreak?: boolean) {
         switch (token()) {
             case SyntaxKind.ConstKeyword:
                 // 'const' is only a modifier if followed by 'enum'.
@@ -2787,8 +2787,13 @@ namespace Parser {
                 nextToken();
                 return canFollowGetOrSetKeyword();
             default:
-                return nextTokenIsOnSameLineAndCanFollowModifier();
+                return permitLineBreak ? nextTokenCanFollowModifierWorker() : nextTokenIsOnSameLineAndCanFollowModifier();
         }
+    }
+
+    function nextTokenCanFollowModifierWorker() {
+        nextToken();
+        return canFollowModifier();
     }
 
     function canFollowExportModifier(): boolean {
@@ -2804,8 +2809,8 @@ namespace Parser {
         return canFollowExportModifier();
     }
 
-    function parseAnyContextualModifier(): boolean {
-        return isModifierKind(token()) && tryParse(nextTokenCanFollowModifier);
+    function parseAnyContextualModifier(permitLineBreak?: boolean): boolean {
+        return isModifierKind(token()) && tryParse(() => nextTokenCanFollowModifier(permitLineBreak));
     }
 
     function canFollowModifier(): boolean {
@@ -4042,8 +4047,8 @@ namespace Parser {
 
         // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
         const modifiers = inOuterAwaitContext ?
-            doInAwaitContext(() => parseModifiers(/*allowDecorators*/ true)) :
-            doOutsideOfAwaitContext(() => parseModifiers(/*allowDecorators*/ true));
+            doInAwaitContext(() => parseModifiers(/*allowDecorators*/ true, /*permitConstAsModifier*/ false, /*stopOnStartOfClassStaticBlock*/ false, /*permitLineBreak*/ true)) :
+            doOutsideOfAwaitContext(() => parseModifiers(/*allowDecorators*/ true, /*permitConstAsModifier*/ false, /*stopOnStartOfClassStaticBlock*/ false, /*permitLineBreak*/ true));
 
         if (token() === SyntaxKind.ThisKeyword) {
             const node = factory.createParameterDeclaration(
@@ -7977,7 +7982,7 @@ namespace Parser {
         return finishNode(factory.createDecorator(expression), pos);
     }
 
-    function tryParseModifier(hasSeenStaticModifier: boolean, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): Modifier | undefined {
+    function tryParseModifier(hasSeenStaticModifier: boolean, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean, permitLineBreak?: boolean): Modifier | undefined {
         const pos = getNodePos();
         const kind = token();
 
@@ -7995,7 +8000,7 @@ namespace Parser {
             return undefined;
         }
         else {
-            if (!parseAnyContextualModifier()) {
+            if (!parseAnyContextualModifier(permitLineBreak)) {
                 return undefined;
             }
         }
@@ -8010,9 +8015,9 @@ namespace Parser {
      *
      * In such situations, 'permitConstAsModifier' should be set to true.
      */
-    function parseModifiers(allowDecorators: false, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<Modifier> | undefined;
-    function parseModifiers(allowDecorators: true, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<ModifierLike> | undefined;
-    function parseModifiers(allowDecorators: boolean, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<ModifierLike> | undefined {
+    function parseModifiers(allowDecorators: false, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean, permitLineBreak?: boolean): NodeArray<Modifier> | undefined;
+    function parseModifiers(allowDecorators: true, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean, permitLineBreak?: boolean): NodeArray<ModifierLike> | undefined;
+    function parseModifiers(allowDecorators: boolean, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean, permitLineBreak?: boolean): NodeArray<ModifierLike> | undefined {
         const pos = getNodePos();
         let list: ModifierLike[] | undefined;
         let decorator, modifier, hasSeenStaticModifier = false, hasLeadingModifier = false, hasTrailingDecorator = false;
@@ -8029,7 +8034,7 @@ namespace Parser {
         }
 
         // parse leading modifiers
-        while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock)) {
+        while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock, permitLineBreak)) {
             if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStaticModifier = true;
             list = append(list, modifier);
             hasLeadingModifier = true;
@@ -8045,7 +8050,7 @@ namespace Parser {
 
         // parse trailing modifiers, but only if we parsed any trailing decorators
         if (hasTrailingDecorator) {
-            while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock)) {
+            while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock, permitLineBreak)) {
                 if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStaticModifier = true;
                 list = append(list, modifier);
             }

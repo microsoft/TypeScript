@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/parameterPropertyWithNewline.ts] ////
+
+=== parameterPropertyWithNewline.ts ===
+class Foo1 {
+>Foo1 : Foo1
+>     : ^^^^
+
+  constructor(public
+    foo: string) {}
+>foo : string
+>    : ^^^^^^
+}
+
+class Foo2 {
+>Foo2 : Foo2
+>     : ^^^^
+
+  constructor(private
+    bar: number) {}
+>bar : number
+>    : ^^^^^^
+}
+
+class Foo3 {
+>Foo3 : Foo3
+>     : ^^^^
+
+  constructor(protected
+    baz: boolean) {}
+>baz : boolean
+>    : ^^^^^^^
+}
+
+class Foo4 {
+>Foo4 : Foo4
+>     : ^^^^
+
+  constructor(readonly
+    qux: string) {}
+>qux : string
+>    : ^^^^^^
+}
+

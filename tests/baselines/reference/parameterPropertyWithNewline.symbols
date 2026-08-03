@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/parameterPropertyWithNewline.ts] ////
+
+=== parameterPropertyWithNewline.ts ===
+class Foo1 {
+>Foo1 : Symbol(Foo1, Decl(parameterPropertyWithNewline.ts, 0, 0))
+
+  constructor(public
+    foo: string) {}
+>foo : Symbol(Foo1.foo, Decl(parameterPropertyWithNewline.ts, 1, 14))
+}
+
+class Foo2 {
+>Foo2 : Symbol(Foo2, Decl(parameterPropertyWithNewline.ts, 3, 1))
+
+  constructor(private
+    bar: number) {}
+>bar : Symbol(Foo2.bar, Decl(parameterPropertyWithNewline.ts, 6, 14))
+}
+
+class Foo3 {
+>Foo3 : Symbol(Foo3, Decl(parameterPropertyWithNewline.ts, 8, 1))
+
+  constructor(protected
+    baz: boolean) {}
+>baz : Symbol(Foo3.baz, Decl(parameterPropertyWithNewline.ts, 11, 14))
+}
+
+class Foo4 {
+>Foo4 : Symbol(Foo4, Decl(parameterPropertyWithNewline.ts, 13, 1))
+
+  constructor(readonly
+    qux: string) {}
+>qux : Symbol(Foo4.qux, Decl(parameterPropertyWithNewline.ts, 16, 14))
+}
+
