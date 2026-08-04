@@ -14,6 +14,8 @@ updates:
       github-actions:
         patterns:
           - '*'
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: 'devcontainers'
     directory: '/'
