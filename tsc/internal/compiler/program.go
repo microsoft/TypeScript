@@ -2093,7 +2093,7 @@ func (p *Program) GetSymlinkCache() *symlinks.KnownSymlinks {
 					}
 				}
 
-				if packageResolution := p.resolver.ResolvePackageDirectory(dep, packageJsonName, core.ResolutionModeCommonJS, nil); packageResolution.IsResolved() {
+				if packageResolution := p.resolver.ResolvePackageDirectory(dep, packageJsonName, core.ResolutionModeCommonJS, nil); packageResolution.IsResolved() && packageResolution.OriginalPath != "" {
 					knownSymlinks.ProcessResolution(
 						tspath.CombinePaths(packageResolution.OriginalPath, "package.json"),
 						tspath.CombinePaths(packageResolution.ResolvedFileName, "package.json"),
