@@ -1,0 +1,1 @@
+Read AGENTS.md before proceeding.

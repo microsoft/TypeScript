@@ -36,7 +36,7 @@ npm install -D typescript@next
  * Serious regressions from 5.9 (these must *seriously* impact a *large* proportion of users)
 
 Most bug fixes should be submitted to the [typescript-go](https://github.com/microsoft/TypeScript-go) repository.
-Feature additions and behavorial changes are currently on pause until TypeScript 7.0 is completed.
+Feature additions and behavioral changes are currently on pause until TypeScript 7.0 is completed.
 
 There are many ways to [contribute](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md) to TypeScript.
 * [Submit bugs](https://github.com/microsoft/TypeScript/issues) and help us verify fixes as they are checked in.
