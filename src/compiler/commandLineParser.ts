@@ -250,6 +250,7 @@ const libEntries: [string, string][] = [
     ["esnext.promise", "lib.es2025.promise.d.ts"],
     // ESNext By-feature options
     ["esnext.array", "lib.esnext.array.d.ts"],
+    ["esnext.math", "lib.esnext.math.d.ts"],
     ["esnext.collection", "lib.esnext.collection.d.ts"],
     ["esnext.date", "lib.esnext.date.d.ts"],
     ["esnext.decorators", "lib.esnext.decorators.d.ts"],

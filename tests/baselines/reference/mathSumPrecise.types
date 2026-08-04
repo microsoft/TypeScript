@@ -1,0 +1,172 @@
+//// [tests/cases/conformance/esnext/mathSumPrecise.ts] ////
+
+=== mathSumPrecise.ts ===
+// Basic usage with array
+const sum1 = Math.sumPrecise([1, 2, 3]);
+>sum1 : number
+>     : ^^^^^^
+>Math.sumPrecise([1, 2, 3]) : number
+>                           : ^^^^^^
+>Math.sumPrecise : (numbers: Iterable<number>) => number
+>                : ^       ^^                ^^^^^      
+>Math : Math
+>     : ^^^^
+>sumPrecise : (numbers: Iterable<number>) => number
+>           : ^       ^^                ^^^^^      
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+// Floating point precision
+const sum2 = Math.sumPrecise([1e20, 0.1, -1e20]);
+>sum2 : number
+>     : ^^^^^^
+>Math.sumPrecise([1e20, 0.1, -1e20]) : number
+>                                    : ^^^^^^
+>Math.sumPrecise : (numbers: Iterable<number>) => number
+>                : ^       ^^                ^^^^^      
+>Math : Math
+>     : ^^^^
+>sumPrecise : (numbers: Iterable<number>) => number
+>           : ^       ^^                ^^^^^      
+>[1e20, 0.1, -1e20] : number[]
+>                   : ^^^^^^^^
+>1e20 : 100000000000000000000
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>0.1 : 0.1
+>    : ^^^
+>-1e20 : -100000000000000000000
+>      : ^^^^^^^^^^^^^^^^^^^^^^
+>1e20 : 100000000000000000000
+>     : ^^^^^^^^^^^^^^^^^^^^^
+
+// Empty iterable returns -0
+const sum3 = Math.sumPrecise([]);
+>sum3 : number
+>     : ^^^^^^
+>Math.sumPrecise([]) : number
+>                    : ^^^^^^
+>Math.sumPrecise : (numbers: Iterable<number>) => number
+>                : ^       ^^                ^^^^^      
+>Math : Math
+>     : ^^^^
+>sumPrecise : (numbers: Iterable<number>) => number
+>           : ^       ^^                ^^^^^      
+>[] : never[]
+>   : ^^^^^^^
+
+// Works with any Iterable<number>
+const sum4 = Math.sumPrecise(new Set([1, 2, 3]));
+>sum4 : number
+>     : ^^^^^^
+>Math.sumPrecise(new Set([1, 2, 3])) : number
+>                                    : ^^^^^^
+>Math.sumPrecise : (numbers: Iterable<number>) => number
+>                : ^       ^^                ^^^^^      
+>Math : Math
+>     : ^^^^
+>sumPrecise : (numbers: Iterable<number>) => number
+>           : ^       ^^                ^^^^^      
+>new Set([1, 2, 3]) : Set<number>
+>                   : ^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+function* gen(): Iterable<number> {
+>gen : () => Iterable<number>
+>    : ^^^^^^                
+
+    yield 0.1;
+>yield 0.1 : any
+>0.1 : 0.1
+>    : ^^^
+
+    yield 0.2;
+>yield 0.2 : any
+>0.2 : 0.2
+>    : ^^^
+}
+const sum5 = Math.sumPrecise(gen());
+>sum5 : number
+>     : ^^^^^^
+>Math.sumPrecise(gen()) : number
+>                       : ^^^^^^
+>Math.sumPrecise : (numbers: Iterable<number>) => number
+>                : ^       ^^                ^^^^^      
+>Math : Math
+>     : ^^^^
+>sumPrecise : (numbers: Iterable<number>) => number
+>           : ^       ^^                ^^^^^      
+>gen() : Iterable<number>
+>      : ^^^^^^^^^^^^^^^^
+>gen : () => Iterable<number>
+>    : ^^^^^^                
+
+// Return type is number
+const result: number = Math.sumPrecise([1, 2, 3]);
+>result : number
+>       : ^^^^^^
+>Math.sumPrecise([1, 2, 3]) : number
+>                           : ^^^^^^
+>Math.sumPrecise : (numbers: Iterable<number>) => number
+>                : ^       ^^                ^^^^^      
+>Math : Math
+>     : ^^^^
+>sumPrecise : (numbers: Iterable<number>) => number
+>           : ^       ^^                ^^^^^      
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+// @ts-expect-error - BigInt is not a number
+Math.sumPrecise([1n, 2n]);
+>Math.sumPrecise([1n, 2n]) : number
+>                          : ^^^^^^
+>Math.sumPrecise : (numbers: Iterable<number>) => number
+>                : ^       ^^                ^^^^^      
+>Math : Math
+>     : ^^^^
+>sumPrecise : (numbers: Iterable<number>) => number
+>           : ^       ^^                ^^^^^      
+>[1n, 2n] : bigint[]
+>         : ^^^^^^^^
+>1n : 1n
+>   : ^^
+>2n : 2n
+>   : ^^
+
+// @ts-expect-error - string is not a number
+Math.sumPrecise(["a", "b"]);
+>Math.sumPrecise(["a", "b"]) : number
+>                            : ^^^^^^
+>Math.sumPrecise : (numbers: Iterable<number>) => number
+>                : ^       ^^                ^^^^^      
+>Math : Math
+>     : ^^^^
+>sumPrecise : (numbers: Iterable<number>) => number
+>           : ^       ^^                ^^^^^      
+>["a", "b"] : string[]
+>           : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+

@@ -1,0 +1,65 @@
+//// [tests/cases/conformance/esnext/mathSumPrecise.ts] ////
+
+=== mathSumPrecise.ts ===
+// Basic usage with array
+const sum1 = Math.sumPrecise([1, 2, 3]);
+>sum1 : Symbol(sum1, Decl(mathSumPrecise.ts, 1, 5))
+>Math.sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+
+// Floating point precision
+const sum2 = Math.sumPrecise([1e20, 0.1, -1e20]);
+>sum2 : Symbol(sum2, Decl(mathSumPrecise.ts, 4, 5))
+>Math.sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+
+// Empty iterable returns -0
+const sum3 = Math.sumPrecise([]);
+>sum3 : Symbol(sum3, Decl(mathSumPrecise.ts, 7, 5))
+>Math.sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+
+// Works with any Iterable<number>
+const sum4 = Math.sumPrecise(new Set([1, 2, 3]));
+>sum4 : Symbol(sum4, Decl(mathSumPrecise.ts, 10, 5))
+>Math.sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.collection.d.ts, --, --))
+
+function* gen(): Iterable<number> {
+>gen : Symbol(gen, Decl(mathSumPrecise.ts, 10, 49))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    yield 0.1;
+    yield 0.2;
+}
+const sum5 = Math.sumPrecise(gen());
+>sum5 : Symbol(sum5, Decl(mathSumPrecise.ts, 16, 5))
+>Math.sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+>gen : Symbol(gen, Decl(mathSumPrecise.ts, 10, 49))
+
+// Return type is number
+const result: number = Math.sumPrecise([1, 2, 3]);
+>result : Symbol(result, Decl(mathSumPrecise.ts, 19, 5))
+>Math.sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+
+// @ts-expect-error - BigInt is not a number
+Math.sumPrecise([1n, 2n]);
+>Math.sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+
+// @ts-expect-error - string is not a number
+Math.sumPrecise(["a", "b"]);
+>Math.sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>sumPrecise : Symbol(Math.sumPrecise, Decl(lib.esnext.math.d.ts, --, --))
+

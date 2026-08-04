@@ -1573,6 +1573,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2025: [
                 "f16round",
             ],
+            esnext: [
+                "sumPrecise",
+            ],
         })),
         Map: new Map(Object.entries({
             es2015: [
