@@ -1354,60 +1354,100 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 				popFn()
 			}()
 		}
-		oldVarianceComputation := c.inVarianceComputation
-		saveResolutionStart := c.resolutionStart
-		if !c.inVarianceComputation {
-			c.inVarianceComputation = true
-			c.resolutionStart = len(c.typeResolutions)
-		}
-		links.variances = []VarianceFlags{}
-		variances := make([]VarianceFlags, len(typeParameters))
-		for i, tp := range typeParameters {
-			modifiers := c.getTypeParameterModifiers(tp)
-			var variance VarianceFlags
-			switch {
-			case modifiers&ast.ModifierFlagsOut != 0:
-				if modifiers&ast.ModifierFlagsIn != 0 {
-					variance = VarianceFlagsInvariant
-				} else {
-					variance = VarianceFlagsCovariant
-				}
-			case modifiers&ast.ModifierFlagsIn != 0:
-				variance = VarianceFlagsContravariant
-			default:
-				saveReliabilityFlags := c.reliabilityFlags
-				c.reliabilityFlags = 0
-				// We first compare instantiations where the type parameter is replaced with
-				// marker types that have a known subtype relationship. From this we can infer
-				// invariance, covariance, contravariance or bivariance.
-				typeWithSuper := c.createMarkerType(symbol, tp, c.markerSuperType)
-				typeWithSub := c.createMarkerType(symbol, tp, c.markerSubType)
-				variance = core.IfElse(c.isTypeAssignableTo(typeWithSub, typeWithSuper), VarianceFlagsCovariant, 0) |
-					core.IfElse(c.isTypeAssignableTo(typeWithSuper, typeWithSub), VarianceFlagsContravariant, 0)
-				// If the instantiations appear to be related bivariantly it may be because the
-				// type parameter is independent (i.e. it isn't witnessed anywhere in the generic
-				// type). To determine this we compare instantiations where the type parameter is
-				// replaced with marker types that are known to be unrelated.
-				if variance == VarianceFlagsBivariant && c.isTypeAssignableTo(c.createMarkerType(symbol, tp, c.markerOtherType), typeWithSuper) {
-					variance = VarianceFlagsIndependent
-				}
-				if c.reliabilityFlags&RelationComparisonResultReportsUnmeasurable != 0 {
-					variance |= VarianceFlagsUnmeasurable
-				}
-				if c.reliabilityFlags&RelationComparisonResultReportsUnreliable != 0 {
-					variance |= VarianceFlagsUnreliable
-				}
-				c.reliabilityFlags = saveReliabilityFlags
+		stackIndex := c.getVarianceStackIndex(symbol)
+		if stackIndex < 0 {
+			saveResolutionStart := c.resolutionStart
+			if len(c.varianceStack) == 0 {
+				c.resolutionStart = len(c.typeResolutions)
 			}
-			variances[i] = variance
+			c.varianceStack = append(c.varianceStack, VarianceStackEntry{symbol, typeParameters})
+			variances := make([]VarianceFlags, len(typeParameters))
+			for i, tp := range typeParameters {
+				modifiers := c.getTypeParameterModifiers(tp)
+				var variance VarianceFlags
+				switch {
+				case modifiers&ast.ModifierFlagsOut != 0:
+					if modifiers&ast.ModifierFlagsIn != 0 {
+						variance = VarianceFlagsInvariant
+					} else {
+						variance = VarianceFlagsCovariant
+					}
+				case modifiers&ast.ModifierFlagsIn != 0:
+					variance = VarianceFlagsContravariant
+				default:
+					saveReliabilityFlags := c.reliabilityFlags
+					c.reliabilityFlags = 0
+					// We first compare instantiations where the type parameter is replaced with
+					// marker types that have a known subtype relationship. From this we can infer
+					// invariance, covariance, contravariance or bivariance.
+					typeWithSuper := c.createMarkerType(symbol, tp, c.markerSuperType)
+					typeWithSub := c.createMarkerType(symbol, tp, c.markerSubType)
+					variance = core.IfElse(c.isTypeAssignableTo(typeWithSub, typeWithSuper), VarianceFlagsCovariant, 0) |
+						core.IfElse(c.isTypeAssignableTo(typeWithSuper, typeWithSub), VarianceFlagsContravariant, 0)
+					// If the instantiations appear to be related bivariantly it may be because the
+					// type parameter is independent (i.e. it isn't witnessed anywhere in the generic
+					// type). To determine this we compare instantiations where the type parameter is
+					// replaced with marker types that are known to be unrelated.
+					if variance == VarianceFlagsBivariant && c.isTypeAssignableTo(c.createMarkerType(symbol, tp, c.markerOtherType), typeWithSuper) {
+						variance = VarianceFlagsIndependent
+					}
+					if c.reliabilityFlags&RelationComparisonResultReportsUnmeasurable != 0 {
+						variance |= VarianceFlagsUnmeasurable
+					}
+					if c.reliabilityFlags&RelationComparisonResultReportsUnreliable != 0 {
+						variance |= VarianceFlagsUnreliable
+					}
+					c.reliabilityFlags = saveReliabilityFlags
+				}
+				// If variance computation was restarted due to a circularity we may have already
+				// computed variances for this generic type. If so, we exit early.
+				if len(links.variances) != 0 {
+					break
+				}
+				variances[i] = variance
+			}
+			// Store the results unless a restarted computation has already stored them.
+			if len(links.variances) == 0 {
+				links.variances = variances
+			}
+			c.varianceStack = c.varianceStack[:len(c.varianceStack)-1]
+			if len(c.varianceStack) == 0 {
+				c.resolutionStart = saveResolutionStart
+			}
+		} else {
+			// We've detected a circularity. Since we may compute different variances depending on where
+			// we enter a circularity, we find the generic type with the "smallest" symbol in the circular
+			// region of the variance stack and restart the computation from there if necessary. This
+			// ensures stable results for circular generic types.
+			minIndex := stackIndex
+			for i := stackIndex + 1; i < len(c.varianceStack); i++ {
+				if c.compareSymbols(c.varianceStack[i].symbol, c.varianceStack[minIndex].symbol) < 0 {
+					minIndex = i
+				}
+			}
+			if minIndex > stackIndex {
+				saveVarianceStack := c.varianceStack
+				c.varianceStack = nil
+				c.getVariancesWorker(saveVarianceStack[minIndex].symbol, saveVarianceStack[minIndex].typeParameters)
+				c.varianceStack = saveVarianceStack
+			}
+			// Store an empty slice to mark that we can't compute variances for this type. We treat type
+			// parameters as co-variant in this case.
+			if len(links.variances) == 0 {
+				links.variances = []VarianceFlags{}
+			}
 		}
-		if !oldVarianceComputation {
-			c.inVarianceComputation = false
-			c.resolutionStart = saveResolutionStart
-		}
-		links.variances = variances
 	}
 	return links.variances
+}
+
+func (c *Checker) getVarianceStackIndex(symbol *ast.Symbol) int {
+	for i, entry := range c.varianceStack {
+		if entry.symbol == symbol {
+			return i
+		}
+	}
+	return -1
 }
 
 func (c *Checker) createMarkerType(symbol *ast.Symbol, source *Type, target *Type) *Type {
@@ -3930,8 +3970,8 @@ func (r *Relater) typeArgumentsRelatedTo(sources []*Type, targets []*Type, varia
 					related = r.c.compareTypesIdentical(s, t)
 				}
 			} else {
-				// Propagate unreliable variance flag
-				if r.c.inVarianceComputation && varianceFlags&VarianceFlagsUnreliable != 0 {
+				// Propagate unreliable variance flag in variance computations
+				if len(r.c.varianceStack) != 0 && varianceFlags&VarianceFlagsUnreliable != 0 {
 					r.c.instantiateType(s, r.c.reportUnreliableMapper)
 				}
 				if variance == VarianceFlagsCovariant {

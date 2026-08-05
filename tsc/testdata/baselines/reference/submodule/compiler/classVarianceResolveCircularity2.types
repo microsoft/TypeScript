@@ -12,7 +12,7 @@ class Bar<T> {
 >num : number
 
     Value = callme(new Foo(this)).bar.num;
->Value : number
+>Value : any
 >callme(new Foo(this)).bar.num : number
 >callme(new Foo(this)).bar : Bar<any>
 >callme(new Foo(this)) : Foo<any>
