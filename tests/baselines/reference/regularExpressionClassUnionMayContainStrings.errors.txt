@@ -1,0 +1,22 @@
+regularExpressionClassUnionMayContainStrings.ts(2,8): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionClassUnionMayContainStrings.ts(3,9): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionClassUnionMayContainStrings.ts(4,11): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionClassUnionMayContainStrings.ts(5,9): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+
+
+==== regularExpressionClassUnionMayContainStrings.ts (4 errors) ====
+    const regexes: RegExp[] = [
+        /[^\q{xy}b]/v,
+           ~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+        /[^b\q{xy}]/v,
+            ~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+        /[^a-c\q{xy}]/v,
+              ~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+        /[^b[b\q{xy}]]/v,
+            ~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    ];
+    

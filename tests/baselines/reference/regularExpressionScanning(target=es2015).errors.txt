@@ -195,19 +195,23 @@ regularExpressionScanning.ts(38,87): error TS1501: This regular expression flag 
 regularExpressionScanning.ts(39,56): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
 regularExpressionScanning.ts(39,67): error TS1005: '&&' expected.
 regularExpressionScanning.ts(39,77): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
+regularExpressionScanning.ts(40,14): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(40,83): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
 regularExpressionScanning.ts(41,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(41,30): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(41,83): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
 regularExpressionScanning.ts(42,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(42,18): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(42,28): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(42,53): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(42,77): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
+regularExpressionScanning.ts(43,14): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(43,95): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
 regularExpressionScanning.ts(44,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(44,34): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(44,95): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
 regularExpressionScanning.ts(45,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(45,22): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(45,32): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(45,61): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(45,89): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
@@ -219,7 +223,7 @@ regularExpressionScanning.ts(47,89): error TS1518: Anything that would possibly 
 regularExpressionScanning.ts(47,101): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
 
 
-==== regularExpressionScanning.ts (219 errors) ====
+==== regularExpressionScanning.ts (223 errors) ====
     const regexes: RegExp[] = [
     	// Flags
     	/foo/visualstudiocode,
@@ -654,6 +658,8 @@ regularExpressionScanning.ts(47,101): error TS1501: This regular expression flag
     	                                                                           ~
 !!! error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
     	/[^\p{Emoji}\p{RGI_Emoji}][^\p{Emoji}--\p{RGI_Emoji}][^\p{Emoji}&&\p{RGI_Emoji}]/v,
+    	            ~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
     	                                                                                 ~
 !!! error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
     	/[^\p{RGI_Emoji}\p{Emoji}][^\p{RGI_Emoji}--\p{Emoji}][^\p{RGI_Emoji}&&\p{Emoji}]/v,
@@ -666,6 +672,8 @@ regularExpressionScanning.ts(47,101): error TS1501: This regular expression flag
     	/[^\p{RGI_Emoji}\q{foo}][^\p{RGI_Emoji}--\q{foo}][^\p{RGI_Emoji}&&\q{foo}]/v,
     	   ~~~~~~~~~~~~~
 !!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	                ~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
     	                          ~~~~~~~~~~~~~
 !!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
     	                                                   ~~~~~~~~~~~~~~~~~~~~~~
@@ -673,6 +681,8 @@ regularExpressionScanning.ts(47,101): error TS1501: This regular expression flag
     	                                                                           ~
 !!! error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
     	/[^\p{Emoji}[[\p{RGI_Emoji}]]][^\p{Emoji}--[[\p{RGI_Emoji}]]][^\p{Emoji}&&[[\p{RGI_Emoji}]]]/v,
+    	            ~~~~~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
     	                                                                                             ~
 !!! error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
     	/[^[[\p{RGI_Emoji}]]\p{Emoji}][^[[\p{RGI_Emoji}]]--\p{Emoji}][^[[\p{RGI_Emoji}]]&&\p{Emoji}]/v,
@@ -684,6 +694,8 @@ regularExpressionScanning.ts(47,101): error TS1501: This regular expression flag
 !!! error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
     	/[^[[\p{RGI_Emoji}]]\q{foo}][^[[\p{RGI_Emoji}]]--\q{foo}][^[[\p{RGI_Emoji}]]&&\q{foo}]/v,
     	   ~~~~~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	                    ~~~~~~~
 !!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
     	                              ~~~~~~~~~~~~~~~~~
 !!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.

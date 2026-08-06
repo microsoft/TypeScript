@@ -3214,6 +3214,10 @@ export function createScanner(
                         break;
                     default:
                         operand = scanClassSetOperand();
+                        if (isCharacterComplement && mayContainStrings) {
+                            error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, start, pos - start);
+                        }
+                        expressionMayContainStrings ||= mayContainStrings;
                         break;
                 }
             }
