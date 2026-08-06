@@ -1,0 +1,161 @@
+//// [tests/cases/compiler/importHelpersNoHelpersForPrivateFieldsAtES2022.ts] ////
+
+=== main.ts ===
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+    #field = true;
+>#field : boolean
+>       : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    static #staticField = true;
+>#staticField : boolean
+>             : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    #method() {}
+>#method : () => void
+>        : ^^^^^^^^^^
+
+    static #staticMethod() {}
+>#staticMethod : () => void
+>              : ^^^^^^^^^^
+
+    get #accessor() { return this.#field; }
+>#accessor : boolean
+>          : ^^^^^^^
+>this.#field : boolean
+>            : ^^^^^^^
+>this : this
+>     : ^^^^
+
+    set #accessor(v: boolean) { this.#field = v; }
+>#accessor : boolean
+>          : ^^^^^^^
+>v : boolean
+>  : ^^^^^^^
+>this.#field = v : boolean
+>                : ^^^^^^^
+>this.#field : boolean
+>            : ^^^^^^^
+>this : this
+>     : ^^^^
+>v : boolean
+>  : ^^^^^^^
+
+    accessor #autoAccessor = true;
+>#autoAccessor : boolean
+>              : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    static accessor #staticAutoAccessor = true;
+>#staticAutoAccessor : boolean
+>                    : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    static {
+        Foo.#staticField = true;
+>Foo.#staticField = true : true
+>                        : ^^^^
+>Foo.#staticField : boolean
+>                 : ^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>true : true
+>     : ^^^^
+    }
+    f() {
+>f : () => void
+>  : ^^^^^^^^^^
+
+        this.#field = this.#field;
+>this.#field = this.#field : boolean
+>                          : ^^^^^^^
+>this.#field : boolean
+>            : ^^^^^^^
+>this : this
+>     : ^^^^
+>this.#field : boolean
+>            : ^^^^^^^
+>this : this
+>     : ^^^^
+
+        this.#method();
+>this.#method() : void
+>               : ^^^^
+>this.#method : () => void
+>             : ^^^^^^^^^^
+>this : this
+>     : ^^^^
+
+        Foo.#staticField = Foo.#staticField;
+>Foo.#staticField = Foo.#staticField : boolean
+>                                    : ^^^^^^^
+>Foo.#staticField : boolean
+>                 : ^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>Foo.#staticField : boolean
+>                 : ^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+        Foo.#staticMethod();
+>Foo.#staticMethod() : void
+>                    : ^^^^
+>Foo.#staticMethod : () => void
+>                  : ^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+        this.#accessor = this.#accessor;
+>this.#accessor = this.#accessor : boolean
+>                                : ^^^^^^^
+>this.#accessor : boolean
+>               : ^^^^^^^
+>this : this
+>     : ^^^^
+>this.#accessor : boolean
+>               : ^^^^^^^
+>this : this
+>     : ^^^^
+
+        this.#autoAccessor = this.#autoAccessor;
+>this.#autoAccessor = this.#autoAccessor : boolean
+>                                        : ^^^^^^^
+>this.#autoAccessor : boolean
+>                   : ^^^^^^^
+>this : this
+>     : ^^^^
+>this.#autoAccessor : boolean
+>                   : ^^^^^^^
+>this : this
+>     : ^^^^
+
+        Foo.#staticAutoAccessor = Foo.#staticAutoAccessor;
+>Foo.#staticAutoAccessor = Foo.#staticAutoAccessor : boolean
+>                                                  : ^^^^^^^
+>Foo.#staticAutoAccessor : boolean
+>                        : ^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>Foo.#staticAutoAccessor : boolean
+>                        : ^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+        #field in this;
+>#field in this : boolean
+>               : ^^^^^^^
+>#field : any
+>this : this
+>     : ^^^^
+    }
+}
+

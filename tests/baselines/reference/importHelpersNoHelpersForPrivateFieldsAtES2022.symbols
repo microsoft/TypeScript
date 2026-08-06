@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/importHelpersNoHelpersForPrivateFieldsAtES2022.ts] ////
+
+=== main.ts ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(main.ts, 0, 0))
+
+    #field = true;
+>#field : Symbol(Foo.#field, Decl(main.ts, 0, 18))
+
+    static #staticField = true;
+>#staticField : Symbol(Foo.#staticField, Decl(main.ts, 1, 18))
+
+    #method() {}
+>#method : Symbol(Foo.#method, Decl(main.ts, 2, 31))
+
+    static #staticMethod() {}
+>#staticMethod : Symbol(Foo.#staticMethod, Decl(main.ts, 3, 16))
+
+    get #accessor() { return this.#field; }
+>#accessor : Symbol(Foo.#accessor, Decl(main.ts, 4, 29), Decl(main.ts, 5, 43))
+>this.#field : Symbol(Foo.#field, Decl(main.ts, 0, 18))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+
+    set #accessor(v: boolean) { this.#field = v; }
+>#accessor : Symbol(Foo.#accessor, Decl(main.ts, 4, 29), Decl(main.ts, 5, 43))
+>v : Symbol(v, Decl(main.ts, 6, 18))
+>this.#field : Symbol(Foo.#field, Decl(main.ts, 0, 18))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+>v : Symbol(v, Decl(main.ts, 6, 18))
+
+    accessor #autoAccessor = true;
+>#autoAccessor : Symbol(Foo.#autoAccessor, Decl(main.ts, 6, 50))
+
+    static accessor #staticAutoAccessor = true;
+>#staticAutoAccessor : Symbol(Foo.#staticAutoAccessor, Decl(main.ts, 7, 34))
+
+    static {
+        Foo.#staticField = true;
+>Foo.#staticField : Symbol(Foo.#staticField, Decl(main.ts, 1, 18))
+>Foo : Symbol(Foo, Decl(main.ts, 0, 0))
+    }
+    f() {
+>f : Symbol(Foo.f, Decl(main.ts, 11, 5))
+
+        this.#field = this.#field;
+>this.#field : Symbol(Foo.#field, Decl(main.ts, 0, 18))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+>this.#field : Symbol(Foo.#field, Decl(main.ts, 0, 18))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+
+        this.#method();
+>this.#method : Symbol(Foo.#method, Decl(main.ts, 2, 31))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+
+        Foo.#staticField = Foo.#staticField;
+>Foo.#staticField : Symbol(Foo.#staticField, Decl(main.ts, 1, 18))
+>Foo : Symbol(Foo, Decl(main.ts, 0, 0))
+>Foo.#staticField : Symbol(Foo.#staticField, Decl(main.ts, 1, 18))
+>Foo : Symbol(Foo, Decl(main.ts, 0, 0))
+
+        Foo.#staticMethod();
+>Foo.#staticMethod : Symbol(Foo.#staticMethod, Decl(main.ts, 3, 16))
+>Foo : Symbol(Foo, Decl(main.ts, 0, 0))
+
+        this.#accessor = this.#accessor;
+>this.#accessor : Symbol(Foo.#accessor, Decl(main.ts, 4, 29), Decl(main.ts, 5, 43))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+>this.#accessor : Symbol(Foo.#accessor, Decl(main.ts, 4, 29), Decl(main.ts, 5, 43))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+
+        this.#autoAccessor = this.#autoAccessor;
+>this.#autoAccessor : Symbol(Foo.#autoAccessor, Decl(main.ts, 6, 50))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+>this.#autoAccessor : Symbol(Foo.#autoAccessor, Decl(main.ts, 6, 50))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+
+        Foo.#staticAutoAccessor = Foo.#staticAutoAccessor;
+>Foo.#staticAutoAccessor : Symbol(Foo.#staticAutoAccessor, Decl(main.ts, 7, 34))
+>Foo : Symbol(Foo, Decl(main.ts, 0, 0))
+>Foo.#staticAutoAccessor : Symbol(Foo.#staticAutoAccessor, Decl(main.ts, 7, 34))
+>Foo : Symbol(Foo, Decl(main.ts, 0, 0))
+
+        #field in this;
+>#field : Symbol(Foo.#field, Decl(main.ts, 0, 18))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+    }
+}
+

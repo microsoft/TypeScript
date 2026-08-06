@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/importHelpersNoHelpersForPrivateFieldsAtES2022UseDefineForClassFieldsFalse.ts] ////
+
+=== main.ts ===
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+    #field = true;
+>#field : boolean
+>       : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    static #staticField = true;
+>#staticField : boolean
+>             : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    #method() {}
+>#method : () => void
+>        : ^^^^^^^^^^
+
+    static #staticMethod() {}
+>#staticMethod : () => void
+>              : ^^^^^^^^^^
+
+    f() {
+>f : () => void
+>  : ^^^^^^^^^^
+
+        this.#field = this.#field;
+>this.#field = this.#field : boolean
+>                          : ^^^^^^^
+>this.#field : boolean
+>            : ^^^^^^^
+>this : this
+>     : ^^^^
+>this.#field : boolean
+>            : ^^^^^^^
+>this : this
+>     : ^^^^
+
+        this.#method();
+>this.#method() : void
+>               : ^^^^
+>this.#method : () => void
+>             : ^^^^^^^^^^
+>this : this
+>     : ^^^^
+
+        Foo.#staticField = Foo.#staticField;
+>Foo.#staticField = Foo.#staticField : boolean
+>                                    : ^^^^^^^
+>Foo.#staticField : boolean
+>                 : ^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>Foo.#staticField : boolean
+>                 : ^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+        Foo.#staticMethod();
+>Foo.#staticMethod() : void
+>                    : ^^^^
+>Foo.#staticMethod : () => void
+>                  : ^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+        #field in this;
+>#field in this : boolean
+>               : ^^^^^^^
+>#field : any
+>this : this
+>     : ^^^^
+    }
+}
+
