@@ -1051,6 +1051,17 @@ function patchAndPreprocessModel() {
             });
         }
 
+        // Patch WorkspaceSymbolParams to optionally scope the search to projects
+        // containing a document, matching Strada's currentProject mode.
+        if (structure.name === "WorkspaceSymbolParams") {
+            structure.properties.push({
+                name: "textDocument",
+                type: { kind: "reference", name: "TextDocumentIdentifier" },
+                optional: true,
+                documentation: "Scopes the workspace symbol search to projects containing this document.",
+            });
+        }
+
         // Patch Hover to add canIncreaseVerbosity
         if (structure.name === "Hover") {
             structure.properties.push(

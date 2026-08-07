@@ -637,7 +637,8 @@ Config::
           "enabled": true
         },
         "workspaceSymbols": {
-          "excludeLibrarySymbols": true
+          "excludeLibrarySymbols": true,
+          "scope": "allOpenProjects"
         }
       }
     }

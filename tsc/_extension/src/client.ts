@@ -36,6 +36,7 @@ import {
     readNativePreviewConfig,
 } from "./util";
 import { getLanguageForUri } from "./util";
+import { workspaceSymbolSendRequestMiddleware } from "./workspaceSymbolMiddleware";
 
 export class Client implements vscode.Disposable {
     private outputChannel: vscode.LogOutputChannel;
@@ -97,6 +98,7 @@ export class Client implements vscode.Disposable {
                     },
                 },
                 sendNotification: sendNotificationMiddleware,
+                sendRequest: workspaceSymbolSendRequestMiddleware,
                 provideHover: () => undefined,
             },
             diagnosticCollectionName: "typescript-push",

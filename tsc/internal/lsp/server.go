@@ -1704,9 +1704,8 @@ func (s *Server) handleDocumentOnTypeFormat(ctx context.Context, ls *ls.Language
 func (s *Server) handleWorkspaceSymbol(ctx context.Context, params *lsproto.WorkspaceSymbolParams, reqMsg *lsproto.RequestMessage) (lsproto.WorkspaceSymbolResponse, error) {
 	var resp lsproto.WorkspaceSymbolResponse
 	var lsErr error
-	s.session.WithSnapshotLoadingProjectTree(ctx, nil, func(snapshot *project.Snapshot) {
+	provideSymbols := func(snapshot *project.Snapshot, programs []*compiler.Program) {
 		defer s.recover(reqMsg)
-		programs := core.Map(snapshot.ProjectCollection.Projects(), (*project.Project).GetProgram)
 		resp, lsErr = ls.ProvideWorkspaceSymbols(
 			ctx,
 			programs,
@@ -1714,7 +1713,19 @@ func (s *Server) handleWorkspaceSymbol(ctx context.Context, params *lsproto.Work
 			snapshot.UserPreferences(),
 			params.Query,
 		)
-	})
+	}
+	if params.TextDocument != nil && s.session.Config().WorkspaceSymbolsScope == lsutil.WorkspaceSymbolsScopeCurrentProject {
+		uri := params.TextDocument.Uri
+		s.session.WithSnapshotForDocument(ctx, uri, func(snapshot *project.Snapshot) {
+			programs := core.Map(snapshot.GetProjectsContainingFile(uri), ls.Project.GetProgram)
+			provideSymbols(snapshot, programs)
+		})
+	} else {
+		s.session.WithSnapshotLoadingProjectTree(ctx, nil, func(snapshot *project.Snapshot) {
+			programs := core.Map(snapshot.ProjectCollection.Projects(), (*project.Project).GetProgram)
+			provideSymbols(snapshot, programs)
+		})
+	}
 	return resp, lsErr
 }
 

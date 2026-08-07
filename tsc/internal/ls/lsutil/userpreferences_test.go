@@ -239,13 +239,15 @@ func TestUserPreferencesParseUnstable(t *testing.T) {
 					"importModuleSpecifier": "relative"
 				},
 				"workspaceSymbols": {
-					"excludeLibrarySymbols": true
+					"excludeLibrarySymbols": true,
+					"scope": "currentProject"
 				}
 			}`,
 			expected: UserPreferences{
 				DisplayPartsForJSDoc:            core.TSTrue,
 				ImportModuleSpecifierPreference: modulespecifiers.ImportModuleSpecifierPreferenceRelative,
 				ExcludeLibrarySymbolsInNavTo:    core.TSTrue,
+				WorkspaceSymbolsScope:           WorkspaceSymbolsScopeCurrentProject,
 			},
 		},
 		{

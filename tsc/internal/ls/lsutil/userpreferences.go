@@ -32,6 +32,7 @@ func NewDefaultUserPreferences() UserPreferences {
 		ReportStyleChecksAsWarnings:        core.TSTrue,
 
 		ExcludeLibrarySymbolsInNavTo: core.TSTrue,
+		WorkspaceSymbolsScope:        WorkspaceSymbolsScopeAllOpenProjects,
 	}
 }
 
@@ -167,7 +168,8 @@ type UserPreferences struct {
 
 	// ------- Symbols -------
 
-	ExcludeLibrarySymbolsInNavTo core.Tristate `raw:"excludeLibrarySymbolsInNavTo" config:"workspaceSymbols.excludeLibrarySymbols"`
+	ExcludeLibrarySymbolsInNavTo core.Tristate         `raw:"excludeLibrarySymbolsInNavTo" config:"workspaceSymbols.excludeLibrarySymbols"`
+	WorkspaceSymbolsScope        WorkspaceSymbolsScope `config:"workspaceSymbols.scope"`
 
 	// ------- Misc -------
 
@@ -226,6 +228,13 @@ type CodeLensUserPreferences struct {
 // --- Enum Types ---
 
 type QuotePreference string
+
+type WorkspaceSymbolsScope string
+
+const (
+	WorkspaceSymbolsScopeAllOpenProjects WorkspaceSymbolsScope = "allOpenProjects"
+	WorkspaceSymbolsScopeCurrentProject  WorkspaceSymbolsScope = "currentProject"
+)
 
 const (
 	QuotePreferenceUnknown QuotePreference = ""
