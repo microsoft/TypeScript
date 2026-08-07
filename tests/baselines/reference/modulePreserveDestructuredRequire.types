@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/modulePreserveDestructuredRequire.ts] ////
+
+=== /file.cjs ===
+// Destructured and whole-module require are valid CommonJS and must not error under
+// --module preserve + --verbatimModuleSyntax (https://github.com/microsoft/TypeScript/issues/63696).
+const { x } = require("./mod");
+>x : 1
+>  : ^
+>require("./mod") : typeof whole
+>                 : ^^^^^^^^^^^^
+>require : any
+>        : ^^^
+>"./mod" : "./mod"
+>        : ^^^^^^^
+
+const { y: renamed } = require("./mod");
+>y : any
+>  : ^^^
+>renamed : 2
+>        : ^
+>require("./mod") : typeof whole
+>                 : ^^^^^^^^^^^^
+>require : any
+>        : ^^^
+>"./mod" : "./mod"
+>        : ^^^^^^^
+
+const whole = require("./mod");
+>whole : typeof whole
+>      : ^^^^^^^^^^^^
+>require("./mod") : typeof whole
+>                 : ^^^^^^^^^^^^
+>require : any
+>        : ^^^
+>"./mod" : "./mod"
+>        : ^^^^^^^
+
+x;
+>x : 1
+>  : ^
+
+renamed;
+>renamed : 2
+>        : ^
+
+whole.y;
+>whole.y : 2
+>        : ^
+>whole : typeof whole
+>      : ^^^^^^^^^^^^
+>y : 2
+>  : ^
+
+// True ESM syntax in a .cjs file remains an error.
+import { x as x2 } from "./mod";
+>x : 1
+>  : ^
+>x2 : 1
+>   : ^
+
+=== /mod.js ===
+exports.x = 1;
+>exports.x = 1 : 1
+>              : ^
+>exports.x : 1
+>          : ^
+>exports : typeof import("./mod")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+>x : 1
+>  : ^
+>1 : 1
+>  : ^
+
+exports.y = 2;
+>exports.y = 2 : 2
+>              : ^
+>exports.y : 2
+>          : ^
+>exports : typeof import("./mod")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+>y : 2
+>  : ^
+>2 : 2
+>  : ^
+

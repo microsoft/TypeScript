@@ -1,0 +1,22 @@
+/file.cjs(11,10): error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+
+
+==== /file.cjs (1 errors) ====
+    // Destructured and whole-module require are valid CommonJS and must not error under
+    // --module preserve + --verbatimModuleSyntax (https://github.com/microsoft/TypeScript/issues/63696).
+    const { x } = require("./mod");
+    const { y: renamed } = require("./mod");
+    const whole = require("./mod");
+    x;
+    renamed;
+    whole.y;
+    
+    // True ESM syntax in a .cjs file remains an error.
+    import { x as x2 } from "./mod";
+             ~~~~~~~
+!!! error TS1293: ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+    
+==== /mod.js (0 errors) ====
+    exports.x = 1;
+    exports.y = 2;
+    

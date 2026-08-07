@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/modulePreserveDestructuredRequire.ts] ////
+
+=== /file.cjs ===
+// Destructured and whole-module require are valid CommonJS and must not error under
+// --module preserve + --verbatimModuleSyntax (https://github.com/microsoft/TypeScript/issues/63696).
+const { x } = require("./mod");
+>x : Symbol(x, Decl(file.cjs, 2, 7))
+>require : Symbol(require)
+>"./mod" : Symbol(whole, Decl(mod.js, 0, 0))
+
+const { y: renamed } = require("./mod");
+>y : Symbol(renamed, Decl(mod.js, 0, 14))
+>renamed : Symbol(renamed, Decl(file.cjs, 3, 7))
+>require : Symbol(require)
+>"./mod" : Symbol(whole, Decl(mod.js, 0, 0))
+
+const whole = require("./mod");
+>whole : Symbol(whole, Decl(file.cjs, 4, 5))
+>require : Symbol(require)
+>"./mod" : Symbol(whole, Decl(mod.js, 0, 0))
+
+x;
+>x : Symbol(x, Decl(file.cjs, 2, 7))
+
+renamed;
+>renamed : Symbol(renamed, Decl(file.cjs, 3, 7))
+
+whole.y;
+>whole.y : Symbol(renamed, Decl(mod.js, 0, 14))
+>whole : Symbol(whole, Decl(file.cjs, 4, 5))
+>y : Symbol(renamed, Decl(mod.js, 0, 14))
+
+// True ESM syntax in a .cjs file remains an error.
+import { x as x2 } from "./mod";
+>x : Symbol(x, Decl(mod.js, 0, 0))
+>x2 : Symbol(x2, Decl(file.cjs, 10, 8))
+
+=== /mod.js ===
+exports.x = 1;
+>exports.x : Symbol(x, Decl(mod.js, 0, 0))
+>exports : Symbol(x, Decl(mod.js, 0, 0))
+>x : Symbol(x, Decl(mod.js, 0, 0))
+
+exports.y = 2;
+>exports.y : Symbol(y, Decl(mod.js, 0, 14))
+>exports : Symbol(y, Decl(mod.js, 0, 14))
+>y : Symbol(y, Decl(mod.js, 0, 14))
+

@@ -48526,6 +48526,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     moduleKind === ModuleKind.Preserve &&
                     node.kind !== SyntaxKind.ImportEqualsDeclaration &&
                     node.kind !== SyntaxKind.VariableDeclaration &&
+                    // `const { x } = require(...)` is CommonJS alias syntax (BindingElement), not ESM.
+                    node.kind !== SyntaxKind.BindingElement &&
                     host.getEmitModuleFormatOfFile(getSourceFileOfNode(node)) === ModuleKind.CommonJS
                 ) {
                     // In `--module preserve`, ESM input syntax emits ESM output syntax, but there will be times
