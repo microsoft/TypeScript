@@ -803,3 +803,52 @@ func TestWatcher_WatchTerminatedDoesNotDropEvents(t *testing.T) {
 		return len(got) > 0
 	}, "events with watch-terminated error")
 }
+
+type blockingBackend struct {
+	entered chan struct{}
+	release chan struct{}
+}
+
+func (b *blockingBackend) WatchDirectory(
+	_ string,
+	_ fswatch.WatchCallback,
+	_ ...fswatch.WatchOption,
+) (io.Closer, error) {
+	close(b.entered)
+	<-b.release
+	return fakeWatch{closeFn: func() error { return nil }}, nil
+}
+
+func TestWatcher_CloseWhileWatchFilesReconciles(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	pattern := tspath.NormalizeSlashes(dir) + "/**/*"
+	backend := &blockingBackend{
+		entered: make(chan struct{}),
+		release: make(chan struct{}),
+	}
+	w := newWithBackend(
+		bundled.WrapFS(osvfs.FS()),
+		backend,
+		func([]*lsproto.FileEvent) {},
+		logging.NewLogger(os.Stderr),
+	)
+
+	done := make(chan error, 1)
+	go func() {
+		done <- w.WatchFiles("id", []*lsproto.FileSystemWatcher{{
+			GlobPattern: lsproto.PatternOrRelativePattern{
+				Pattern: &pattern,
+			},
+		}})
+	}()
+
+	<-backend.entered
+	w.Close()
+	close(backend.release)
+
+	if err := <-done; err == nil {
+		t.Fatal("expected WatchFiles to report that the watcher was closed")
+	}
+}

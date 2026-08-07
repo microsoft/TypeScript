@@ -157,6 +157,11 @@ func (w *Watcher) WatchFiles(id string, fileSystemWatchers []*lsproto.FileSystem
 			break
 		}
 		w.mu.Lock()
+		if w.closed {
+			w.mu.Unlock()
+			newWatch.close()
+			return errors.New("lspwatcher: closed")
+		}
 		w.watches[id] = append(w.watches[id], newWatch)
 		w.mu.Unlock()
 	}
