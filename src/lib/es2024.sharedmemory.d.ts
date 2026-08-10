@@ -7,7 +7,8 @@ interface Atomics {
      * @param typedArray A shared Int32Array or BigInt64Array.
      * @param index The position in the typedArray to wait on.
      * @param value The expected value to test.
-     * @param [timeout] The expected value to test.
+     * @param timeout The number of milliseconds to wait before the operation times out.
+     *        Defaults to `Infinity`.
      */
     waitAsync(typedArray: Int32Array, index: number, value: number, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; };
 
@@ -17,7 +18,8 @@ interface Atomics {
      * @param typedArray A shared Int32Array or BigInt64Array.
      * @param index The position in the typedArray to wait on.
      * @param value The expected value to test.
-     * @param [timeout] The expected value to test.
+     * @param timeout The number of milliseconds to wait before the operation times out.
+     *        Defaults to `Infinity`.
      */
     waitAsync(typedArray: BigInt64Array, index: number, value: bigint, timeout?: number): { async: false; value: "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "timed-out">; };
 }
