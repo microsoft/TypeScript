@@ -1,0 +1,143 @@
+//// [tests/cases/compiler/awaitInNamespaceExportedClassComputedProperty.ts] ////
+
+=== awaitInNamespaceExportedClassComputedProperty.ts ===
+declare const x: string;
+>x : string
+
+namespace N {
+>N : typeof N
+
+    class A { [await x]() {} }
+>A : A
+>[await x] : () => void
+>await x : string
+>x : string
+
+    export class B {
+>B : B
+
+        [await x]() {}
+>[await x] : () => void
+>await x : string
+>x : string
+
+        static [await x]() {}
+>[await x] : () => void
+>await x : string
+>x : string
+    }
+}
+export class C {
+>C : C
+
+    [await x]() {}
+>[await x] : () => void
+>await x : string
+>x : string
+
+    static [await x]() {}
+>[await x] : () => void
+>await x : string
+>x : string
+}
+
+{
+    class D { [await x]() {} }
+>D : D
+>[await x] : () => void
+>await x : string
+>x : string
+}
+
+function f() {
+>f : () => void
+
+    class E {
+>E : E
+
+        [await x]() {}
+>[await x] : () => void
+>await x : string
+>x : string
+
+        static [await x]() {}
+>[await x] : () => void
+>await x : string
+>x : string
+    }
+}
+
+async function af() {
+>af : () => Promise<void>
+
+    class F {
+>F : F
+
+        [await x]() {}
+>[await x] : () => void
+>await x : string
+>x : string
+
+        static [await x]() {}
+>[await x] : () => void
+>await x : string
+>x : string
+    }
+}
+
+function* gf() {
+>gf : () => Generator<never, void, unknown>
+
+    class G { [await x]() {} }
+>G : G
+>[await x] : () => void
+>await x : string
+>x : string
+}
+
+async function* agf() {
+>agf : () => AsyncGenerator<never, void, unknown>
+
+    class H { [await x]() {} }
+>H : H
+>[await x] : () => void
+>await x : string
+>x : string
+}
+
+function switchSync() {
+>switchSync : () => void
+
+    switch (0) {
+>0 : 0
+
+        case 0:
+>0 : 0
+
+            class I { [await x]() {} }
+>I : I
+>[await x] : () => void
+>await x : string
+>x : string
+    }
+}
+
+async function switchAsync() {
+>switchAsync : () => Promise<void>
+
+    switch (0) {
+>0 : 0
+
+        case 0:
+>0 : 0
+
+            class J { [await x]() {} }
+>J : J
+>[await x] : () => void
+>await x : string
+>x : string
+    }
+}
+
+export {};
+
