@@ -172,7 +172,7 @@ declare var WScript: {
 
     /**
      * Creates a COM object.
-     * @param strProgiID
+     * @param strProgID The programmatic identifier (ProgID) of the COM object to create.
      * @param strPrefix Function names in the form prefix_event will be bound to this object's COM events.
      */
     CreateObject(strProgID: string, strPrefix?: string): any;
@@ -186,7 +186,7 @@ declare var WScript: {
      * Retrieves an existing object with the specified ProgID from memory, or creates a new one from a file.
      * @param strPathname Fully qualified path to the file containing the object persisted to disk.
      *                       For objects in memory, pass a zero-length string.
-     * @param strProgID
+     * @param strProgID The programmatic identifier (ProgID) of the object to retrieve or create.
      * @param strPrefix Function names in the form prefix_event will be bound to this object's COM events.
      */
     GetObject(strPathname: string, strProgID?: string, strPrefix?: string): any;
