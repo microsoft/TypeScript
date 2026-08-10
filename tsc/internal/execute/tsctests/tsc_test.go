@@ -289,6 +289,25 @@ func TestTscMissingFiles(t *testing.T) {
 			commandLineArgs: []string{"-p", "./tsconfig.json"},
 		},
 		{
+			subScenario: "extensionless file in tsconfig exists",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(
+					`{
+					"files": ["./src/script"]
+					}`,
+				),
+				"/home/src/workspaces/project/src/script": `const n: number = "s";`,
+			},
+			commandLineArgs: []string{"-p", "./tsconfig.json"},
+		},
+		{
+			subScenario: "extensionless file on command line exists",
+			files: FileMap{
+				"/home/src/workspaces/project/script": `const n: number = "s";`,
+			},
+			commandLineArgs: []string{"script"},
+		},
+		{
 			subScenario: "extensionless file in extended tsconfig in different folder does not exist",
 			files: FileMap{
 				"/home/src/workspaces/project/src/tsconfig.json": stringtestutil.Dedent(

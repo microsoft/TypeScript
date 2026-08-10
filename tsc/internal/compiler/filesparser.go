@@ -26,6 +26,7 @@ type parseTask struct {
 	loaded                      bool
 	startedSubTasks             bool
 	isForAutomaticTypeDirective bool
+	failedLookup                bool
 	includeReason               *FileIncludeReason
 	packageId                   module.PackageId
 
@@ -58,6 +59,11 @@ func (t *parseTask) load(loader *fileLoader) {
 	t.loaded = true
 	if t.isForAutomaticTypeDirective {
 		t.loadAutomaticTypeDirectives(loader)
+		return
+	}
+	if t.failedLookup {
+		// The root file name did not resolve to a supported extension; the task
+		// exists only to carry its processing diagnostic, so nothing is parsed.
 		return
 	}
 	if loader.opts.Tracing != nil {

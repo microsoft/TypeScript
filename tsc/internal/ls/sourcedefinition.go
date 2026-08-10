@@ -421,7 +421,9 @@ func (r *sourceDefResolver) getOrParseSourceFile(fileName string) *ast.SourceFil
 		sourceFile = parser.ParseSourceFile(
 			ast.SourceFileParseOptions{FileName: fileName, Path: r.ls.toPath(fileName)},
 			text,
-			core.GetScriptKindFromFileName(fileName),
+			// A declaration map's `sources` entries are arbitrary strings, so the
+			// file name here may not have a recognized extension.
+			core.EnsureScriptKindFromFileName(fileName),
 		)
 		binder.BindSourceFile(sourceFile)
 	}

@@ -214,6 +214,7 @@ func (p *fileLoader) addRootFileTask(fileName string, libFile *LibFile, includeR
 	}
 	if diagnostic != nil {
 		rootTask.normalizedFilePath = absPath
+		rootTask.failedLookup = true
 		rootTask.processingDiagnostics = []*processingDiagnostic{{
 			kind: processingDiagnosticKindExplainingFileInclude,
 			data: &includeExplainingDiagnostic{

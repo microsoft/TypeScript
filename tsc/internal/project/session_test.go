@@ -112,6 +112,27 @@ func TestSession(t *testing.T) {
 			program := ls.GetProgram()
 			assert.Assert(t, program.GetSourceFile("/home/projects/TS/p1/index.js") != nil)
 		})
+
+		t.Run("inferred project extensionless file", func(t *testing.T) {
+			t.Parallel()
+			files := map[string]any{
+				"/home/projects/TS/p1/script": `const x = 1;`,
+			}
+			session, _ := projecttestutil.Setup(files)
+
+			session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/script", 1, files["/home/projects/TS/p1/script"].(string), lsproto.LanguageKind("plaintext"))
+
+			snapshot := session.Snapshot()
+			assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
+			assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)
+
+			ls, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/script")
+			assert.NilError(t, err)
+			program := ls.GetProgram()
+			file := program.GetSourceFile("/home/projects/TS/p1/script")
+			assert.Assert(t, file != nil)
+			assert.Equal(t, file.ScriptKind, core.ScriptKindTS)
+		})
 	})
 
 	t.Run("watchChange and didOpen in same batch rebuilds program", func(t *testing.T) {
