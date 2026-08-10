@@ -105,6 +105,7 @@ declare namespace Reflect {
      * Sets the property of target, equivalent to `target[propertyKey] = value` when `receiver === target`.
      * @param target Object that contains the property on itself or in its prototype chain.
      * @param propertyKey Name of the property.
+     * @param value The value to assign to the property.
      * @param receiver The reference to use as the `this` value in the setter function,
      *        if `target[propertyKey]` is an accessor property.
      */
@@ -117,7 +118,7 @@ declare namespace Reflect {
     function set(target: object, propertyKey: PropertyKey, value: any, receiver?: any): boolean;
 
     /**
-     * Sets the prototype of a specified object o to object proto or null.
+     * Sets the prototype of a specified object `target` to object `proto` or null.
      * @param target The object to change its prototype.
      * @param proto The value of the new prototype or null.
      * @return Whether setting the prototype was successful.
