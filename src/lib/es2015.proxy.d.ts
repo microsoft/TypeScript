@@ -2,12 +2,15 @@ interface ProxyHandler<T extends object> {
     /**
      * A trap method for a function call.
      * @param target The original callable object which is being proxied.
+     * @param thisArg The `this` argument for the call.
+     * @param argArray The list of arguments for the call.
      */
     apply?(target: T, thisArg: any, argArray: any[]): any;
 
     /**
      * A trap for the `new` operator.
      * @param target The original object which is being proxied.
+     * @param argArray The list of arguments for the constructor.
      * @param newTarget The constructor that was originally called.
      */
     construct?(target: T, argArray: any[], newTarget: Function): object;
@@ -15,6 +18,8 @@ interface ProxyHandler<T extends object> {
     /**
      * A trap for `Object.defineProperty()`.
      * @param target The original object which is being proxied.
+     * @param property The name or `Symbol` of the property to define.
+     * @param attributes The descriptor for the property being defined or modified.
      * @returns A `Boolean` indicating whether or not the property has been defined.
      */
     defineProperty?(target: T, property: string | symbol, attributes: PropertyDescriptor): boolean;
@@ -77,6 +82,7 @@ interface ProxyHandler<T extends object> {
      * A trap for setting a property value.
      * @param target The original object which is being proxied.
      * @param p The name or `Symbol` of the property to set.
+     * @param newValue The new value of the property to set.
      * @param receiver The object to which the assignment was originally directed.
      * @returns A `Boolean` indicating whether or not the property was set.
      */
@@ -87,7 +93,7 @@ interface ProxyHandler<T extends object> {
      * @param target The original object which is being proxied.
      * @param newPrototype The object's new prototype or `null`.
      */
-    setPrototypeOf?(target: T, v: object | null): boolean;
+    setPrototypeOf?(target: T, newPrototype: object | null): boolean;
 }
 
 interface ProxyConstructor {
