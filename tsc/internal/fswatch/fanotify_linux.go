@@ -346,13 +346,13 @@ func (b *fanotifyBackend) subscribe(w *dirWatch) error {
 
 func (b *fanotifyBackend) markDir(w *dirWatch, path string, markPath string) error {
 	if err := unix.FanotifyMark(b.fanotifyFD, fanotifyMarkAddFlags, b.markMask, unix.AT_FDCWD, markPath); err != nil {
-		return err
+		return maybeWrapUnsupportedFilesystem(err)
 	}
 	handle, _, err := unix.NameToHandleAt(unix.AT_FDCWD, markPath, 0)
 	if err != nil {
 		// Unmark since we can't track this directory without a handle.
 		_ = unix.FanotifyMark(b.fanotifyFD, unix.FAN_MARK_REMOVE|unix.FAN_MARK_ONLYDIR, b.markMask, unix.AT_FDCWD, markPath)
-		return fmt.Errorf("name_to_handle_at: %w", err)
+		return maybeWrapUnsupportedFilesystem(fmt.Errorf("name_to_handle_at: %w", err))
 	}
 	var st unix.Statfs_t
 	if err := unix.Statfs(markPath, &st); err != nil {
@@ -363,6 +363,13 @@ func (b *fanotifyBackend) markDir(w *dirWatch, path string, markPath string) err
 	sub := &fanotifySubscription{path: path, watchPath: markPath, dirWatch: w, key: key}
 	b.subscriptions[key] = append(b.subscriptions[key], sub)
 	return nil
+}
+
+func maybeWrapUnsupportedFilesystem(err error) error {
+	if errors.Is(err, unix.EOPNOTSUPP) || errors.Is(err, unix.ENOTSUP) || errors.Is(err, unix.ENODEV) {
+		return fmt.Errorf("%w: %w", err, ErrFilesystemUnsupported)
+	}
+	return err
 }
 
 // handleEvents reads and dispatches fanotify events from the fd.
