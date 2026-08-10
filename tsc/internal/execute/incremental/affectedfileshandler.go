@@ -68,6 +68,8 @@ func (h *affectedFilesHandler) removeDiagnosticsOfLibraryFiles() {
 
 func (h *affectedFilesHandler) computeDtsSignature(file *ast.SourceFile) string {
 	var signature string
+	done := h.program.beginNestedEmit()
+	defer done()
 	h.program.program.Emit(h.ctx, compiler.EmitOptions{
 		TargetSourceFiles: core.SingleElementSlice(file),
 		EmitOnly:          compiler.EmitOnlyForcedDts,

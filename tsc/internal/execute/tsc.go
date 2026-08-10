@@ -305,7 +305,7 @@ func performIncrementalCompilation(
 	})
 	compileTimes.ParseTime = sys.Now().Sub(parseStart)
 	changesComputeStart := sys.Now()
-	incrementalProgram := incremental.NewProgram(program, oldProgram, incremental.CreateHost(host), testing != nil)
+	incrementalProgram := incremental.NewProgram(program, oldProgram, incremental.CreateHost(host), sys.Now, testing != nil)
 	compileTimes.ChangesComputeTime = sys.Now().Sub(changesComputeStart)
 	result, _ := tsc.EmitAndReportStatistics(tsc.EmitInput{
 		Sys:                sys,

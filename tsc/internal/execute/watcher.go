@@ -407,7 +407,7 @@ func (w *Watcher) doBuild() error {
 	w.program = incremental.NewProgram(compiler.NewProgram(compiler.ProgramOptions{
 		Config: w.config,
 		Host:   host,
-	}), w.program, nil, w.testing != nil)
+	}), w.program, nil, w.sys.Now, w.testing != nil)
 	w.programReady = true
 	w.fullBuilds++
 
@@ -486,7 +486,7 @@ func (w *Watcher) tryUpdateProgram(host *watchCompilerHost) bool {
 
 	newProgram, _, reused := oldProgram.ReuseProgram(changedPath, host, nil)
 	if reused {
-		w.program = incremental.NewProgram(newProgram, w.program, nil, w.testing != nil)
+		w.program = incremental.NewProgram(newProgram, w.program, nil, w.sys.Now, w.testing != nil)
 	}
 	return reused
 }
