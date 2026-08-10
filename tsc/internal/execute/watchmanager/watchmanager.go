@@ -177,21 +177,6 @@ func (wm *WatchManager) CloseAllWatches() {
 	}
 }
 
-func (wm *WatchManager) createDirWatch(dir string, recursive bool) error {
-	entry := &watchedDir{recursive: recursive}
-	request := wm.createDirWatchRequest(dir, entry)
-	watch, err := wm.backend.WatchDirectory(request.Dir, request.Callback, request.Recursive, request.Ignore)
-	if err != nil {
-		if wm.DebugLog != nil {
-			fmt.Fprintf(wm.DebugLog, "[watch] failed to watch directory %s: %v\n", dir, err)
-		}
-		return fmt.Errorf("failed to watch directory %s: %w", dir, err)
-	}
-	entry.closer = watch
-	wm.watchedDirs[dir] = entry
-	return nil
-}
-
 func (wm *WatchManager) createDirWatchRequest(dir string, entry *watchedDir) WatchDirectoryRequest {
 	return WatchDirectoryRequest{
 		Dir:       dir,
@@ -288,22 +273,19 @@ func (wm *WatchManager) createDirWatches(updates []dirWatchUpdate) error {
 		requests[i] = wm.createDirWatchRequest(update.dir, entry)
 	}
 	closers, err := wm.backend.WatchDirectories(requests)
-	if err != nil {
+	if err == nil {
 		for i, update := range updates {
-			if wm.DebugLog != nil {
-				fmt.Fprintf(wm.DebugLog, "[watch] failed to watch directory %s: %v\n", update.dir, err)
-			}
-			if i < len(closers) && closers[i] != nil {
-				closers[i].Close()
-			}
+			entries[i].closer = closers[i]
+			wm.watchedDirs[update.dir] = entries[i]
 		}
-		return err
+		return nil
 	}
-	for i, update := range updates {
-		entries[i].closer = closers[i]
-		wm.watchedDirs[update.dir] = entries[i]
+	if wm.DebugLog != nil {
+		for _, update := range updates {
+			fmt.Fprintf(wm.DebugLog, "[watch] failed to watch directory %s: %v\n", update.dir, err)
+		}
 	}
-	return nil
+	return err
 }
 
 // DirWatchSet accumulates the set of directories that should be watched while

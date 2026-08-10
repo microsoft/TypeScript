@@ -40,6 +40,15 @@ var ErrWatchTerminated = errors.New("fswatch: watch terminated")
 // available on the current platform.
 var ErrUnavailable = errors.New("fswatch: watcher not available on this platform")
 
+// ErrFilesystemUnsupported indicates that the active watcher backend cannot
+// operate on the target filesystem, even though the backend is available on
+// the current platform. This happens, for example, with the fanotify backend
+// on filesystems that do not support FID-based watching: name_to_handle_at
+// returning EOPNOTSUPP (some Docker bind mounts backed by virtiofs, gRPC FUSE,
+// or overlayfs) or fanotify_mark returning ENODEV (e.g. NTFS mounted via
+// fuseblk).
+var ErrFilesystemUnsupported = errors.New("fswatch: watcher backend unsupported on this filesystem")
+
 // Watcher represents a filesystem watching implementation.
 // Use one of the constructor functions ([Inotify], [FSEvents], [Kqueue],
 // [Windows]) to obtain a value, or [Default] for the platform default.
@@ -166,11 +175,15 @@ type WatchCallback func(events []Event, err error)
 
 // Package-level watcher instances. Platform init() functions set the factory.
 var (
-	inotifyWatcher  = &watcher{name: "inotify"}
-	fseventsWatcher = &watcher{name: "fsevents"}
-	kqueueWatcher   = &watcher{name: "kqueue"}
-	windowsWatcher  = &watcher{name: "windows"}
-	fanotifyWatcher = &watcher{name: "fanotify"}
+	inotifyWatcher          = &watcher{name: "inotify"}
+	fseventsWatcher         = &watcher{name: "fsevents"}
+	kqueueWatcher           = &watcher{name: "kqueue"}
+	windowsWatcher          = &watcher{name: "windows"}
+	fanotifyWatcher         = &watcher{name: "fanotify"}
+	fanotifyFallbackWatcher = &fallbackWatcher{
+		primary:   fanotifyWatcher,
+		secondary: inotifyWatcher,
+	}
 )
 
 // AllWatchers returns a fresh slice listing every watcher backend the package
@@ -182,7 +195,7 @@ func AllWatchers() []Watcher {
 		fseventsWatcher,
 		kqueueWatcher,
 		windowsWatcher,
-		fanotifyWatcher,
+		fanotifyFallbackWatcher,
 	}
 }
 
@@ -198,8 +211,9 @@ func Kqueue() Watcher { return kqueueWatcher }
 // Windows returns the ReadDirectoryChangesW watcher (Windows).
 func Windows() Watcher { return windowsWatcher }
 
-// Fanotify returns the fanotify watcher (Linux, kernel ≥ 5.13).
-func Fanotify() Watcher { return fanotifyWatcher }
+// Fanotify returns the fanotify watcher (Linux, kernel ≥ 5.13). Directories on
+// filesystems that don't support fanotify watches automatically use inotify instead.
+func Fanotify() Watcher { return fanotifyFallbackWatcher }
 
 // Default returns the recommended watcher for the current OS.
 func Default() Watcher {
@@ -222,6 +236,65 @@ func Default() Watcher {
 		return &watcher{name: "unsupported"}
 	}
 }
+
+// fallbackWatcher keeps the primary backend for supported filesystems while
+// routing individual unsupported watches to the secondary backend.
+type fallbackWatcher struct {
+	primary   Watcher
+	secondary Watcher
+}
+
+func (w *fallbackWatcher) Name() string                  { return w.primary.Name() }
+func (w *fallbackWatcher) Available() bool               { return w.primary.Available() }
+func (w *fallbackWatcher) HasFastRecursiveBackend() bool { return w.primary.HasFastRecursiveBackend() }
+
+func (w *fallbackWatcher) WatchDirectory(dir string, fn WatchCallback, opts ...WatchOption) (Watch, error) {
+	watches, err := w.WatchDirectories([]WatchDirectoryRequest{{
+		Dir:      dir,
+		Callback: fn,
+		Options:  opts,
+	}})
+	if err != nil {
+		return nil, err
+	}
+	return watches[0], nil
+}
+
+func (w *fallbackWatcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, error) {
+	watches, err := w.primary.WatchDirectories(requests)
+	if err == nil || !errors.Is(err, ErrFilesystemUnsupported) {
+		return watches, err
+	}
+
+	watches = make([]Watch, 0, len(requests))
+	rollback := func() {
+		for i := len(watches) - 1; i >= 0; i-- {
+			_ = watches[i].Close()
+		}
+	}
+	for _, request := range requests {
+		watch, err := w.primary.WatchDirectory(request.Dir, request.Callback, request.Options...)
+		if errors.Is(err, ErrFilesystemUnsupported) {
+			watch, err = w.secondary.WatchDirectory(request.Dir, request.Callback, request.Options...)
+		}
+		if err != nil {
+			rollback()
+			return nil, fmt.Errorf("fswatch: failed to watch directory %q: %w", request.Dir, err)
+		}
+		watches = append(watches, watch)
+	}
+	return watches, nil
+}
+
+func (w *fallbackWatcher) WatchFile(path string, fn WatchCallback) (Watch, error) {
+	watch, err := w.primary.WatchFile(path, fn)
+	if errors.Is(err, ErrFilesystemUnsupported) {
+		return w.secondary.WatchFile(path, fn)
+	}
+	return watch, err
+}
+
+func (w *fallbackWatcher) unexported() {}
 
 // watcher is the concrete implementation of [Watcher]. Each platform
 // watcher is a package-level *watcher whose factory is set by the
