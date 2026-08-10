@@ -12502,7 +12502,7 @@ func (c *Checker) checkAssertion(node *ast.Node, checkMode CheckMode) *Type {
 	// safe even for `x as const` and keeps diagnostics stable regardless of traversal order.
 	c.checkSourceElement(typeNode)
 	if isConstTypeReference(typeNode) {
-		if !c.isValidConstAssertionArgument(node.Expression()) {
+		if !c.isValidConstAssertionArgument(node.Expression()) && exprType.flags&TypeFlagsUniqueESSymbol == 0 {
 			c.error(node.Expression(), diagnostics.A_const_assertion_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals)
 		}
 		return c.getRegularTypeOfLiteralType(exprType)
@@ -18585,8 +18585,9 @@ func (c *Checker) widenTypeForVariableLikeDeclaration(t *Type, declaration *ast.
 			c.reportErrorsFromWidening(declaration, t, WideningKindNormal)
 		}
 
-		// always widen a 'unique symbol' type if the type was created for a different declaration.
-		if t.flags&TypeFlagsUniqueESSymbol != 0 && !isRegisteredSymbolAlias(t.alias) && (ast.IsBindingElement(declaration) || declaration.Type() == nil) && t.symbol != c.getSymbolOfDeclaration(declaration) {
+		// Widen a 'unique symbol' type if the type was created for a different declaration, unless the
+		// declaration or initializer is const-like.
+		if t.flags&TypeFlagsUniqueESSymbol != 0 && !c.isConstLikeUniqueSymbolDeclaration(declaration) && (ast.IsBindingElement(declaration) || declaration.Type() == nil) && t.symbol != c.getSymbolOfDeclaration(declaration) {
 			t = c.esSymbolType
 		}
 		return c.getWidenedType(t)
@@ -18604,6 +18605,12 @@ func (c *Checker) widenTypeForVariableLikeDeclaration(t *Type, declaration *ast.
 		}
 	}
 	return t
+}
+
+func (c *Checker) isConstLikeUniqueSymbolDeclaration(declaration *ast.Node) bool {
+	return c.getCombinedNodeFlagsCached(declaration)&ast.NodeFlagsConstant != 0 ||
+		isDeclarationReadonly(declaration) ||
+		declaration.Initializer() != nil && ast.IsConstAssertion(ast.SkipParentheses(declaration.Initializer()))
 }
 
 func (c *Checker) reportImplicitAny(declaration *ast.Node, t *Type, wideningKind WideningKind) {
