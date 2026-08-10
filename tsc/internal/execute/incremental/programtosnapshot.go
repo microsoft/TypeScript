@@ -32,6 +32,7 @@ func programToSnapshot(program *compiler.Program, oldProgram *Program, hashWithT
 		to.reuseFromOldProgram()
 		to.computeProgramFileChanges()
 		to.handleFileDelete()
+		to.handleGlobalScopeChange()
 		to.handlePendingEmit()
 		to.handlePendingCheck()
 	}
@@ -171,6 +172,28 @@ func (t *toProgramSnapshot) handleFileDelete() {
 			}
 			return true
 		})
+	}
+}
+
+func (t *toProgramSnapshot) handleGlobalScopeChange() {
+	if t.oldProgram == nil || t.globalFileRemoved {
+		return
+	}
+	globalScopeLost := false
+	t.oldProgram.snapshot.fileInfos.Range(func(filePath tspath.Path, oldInfo *FileInfo) bool {
+		if !oldInfo.affectsGlobalScope {
+			return true
+		}
+		if newInfo, ok := t.snapshot.fileInfos.Load(filePath); ok && !newInfo.affectsGlobalScope {
+			globalScopeLost = true
+			return false
+		}
+		return true
+	})
+	if globalScopeLost {
+		for _, file := range t.snapshot.getAllFilesExcludingDefaultLibraryFile(t.program, nil) {
+			t.snapshot.addFileToChangeSet(file.Path())
+		}
 	}
 }
 
