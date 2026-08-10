@@ -356,14 +356,16 @@ const (
 	IntrinsicTypeKindCapitalize
 	IntrinsicTypeKindUncapitalize
 	IntrinsicTypeKindNoInfer
+	IntrinsicTypeKindRegisteredSymbol
 )
 
 var intrinsicTypeKinds = map[string]IntrinsicTypeKind{
-	"Uppercase":    IntrinsicTypeKindUppercase,
-	"Lowercase":    IntrinsicTypeKindLowercase,
-	"Capitalize":   IntrinsicTypeKindCapitalize,
-	"Uncapitalize": IntrinsicTypeKindUncapitalize,
-	"NoInfer":      IntrinsicTypeKindNoInfer,
+	"Uppercase":        IntrinsicTypeKindUppercase,
+	"Lowercase":        IntrinsicTypeKindLowercase,
+	"Capitalize":       IntrinsicTypeKindCapitalize,
+	"Uncapitalize":     IntrinsicTypeKindUncapitalize,
+	"NoInfer":          IntrinsicTypeKindNoInfer,
+	"RegisteredSymbol": IntrinsicTypeKindRegisteredSymbol,
 }
 
 type MappedTypeModifiers uint32
@@ -631,6 +633,7 @@ type Checker struct {
 	indexedAccessTypes                          map[CacheHashKey]*Type
 	templateLiteralTypes                        map[CacheHashKey]*Type
 	stringMappingTypes                          map[StringMappingKey]*Type
+	registeredESSymbolTypes                     map[CacheHashKey]*Type
 	uniqueESSymbolTypes                         map[*ast.Symbol]*Type
 	thisExpandoKinds                            map[*ast.Symbol]thisAssignmentDeclarationKind
 	thisExpandoLocations                        map[*ast.Symbol]*ast.Node
@@ -947,6 +950,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.indexedAccessTypes = make(map[CacheHashKey]*Type)
 	c.templateLiteralTypes = make(map[CacheHashKey]*Type)
 	c.stringMappingTypes = make(map[StringMappingKey]*Type)
+	c.registeredESSymbolTypes = make(map[CacheHashKey]*Type)
 	c.uniqueESSymbolTypes = make(map[*ast.Symbol]*Type)
 	c.thisExpandoKinds = make(map[*ast.Symbol]thisAssignmentDeclarationKind)
 	c.thisExpandoLocations = make(map[*ast.Symbol]*ast.Node)
@@ -7539,7 +7543,7 @@ func (c *Checker) getQuickTypeOfExpression(node *ast.Node) *Type {
 		return nil
 	// Optimize for the common case of a call to a function with a single non-generic call
 	// signature where we can just fetch the return type without checking the arguments.
-	case ast.IsCallExpression(expr) && expr.Expression().Kind != ast.KindSuperKeyword && !ast.IsRequireCall(expr, true /*requireStringLiteralLikeArgument*/) && !c.isSymbolOrSymbolForCall(expr) && !ast.IsImportCall(expr):
+	case ast.IsCallExpression(expr) && expr.Expression().Kind != ast.KindSuperKeyword && !ast.IsRequireCall(expr, true /*requireStringLiteralLikeArgument*/) && !c.isSymbolCall(expr) && !ast.IsImportCall(expr):
 		if isCallChain(expr) {
 			return c.getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr)
 		}
@@ -8519,7 +8523,7 @@ func (c *Checker) checkCallExpression(node *ast.Node, checkMode CheckMode) *Type
 	returnType := c.getReturnTypeOfSignature(signature)
 	// Treat any call to the global 'Symbol' function that is part of a const variable or readonly property
 	// as a fresh unique symbol literal type.
-	if returnType.flags&TypeFlagsESSymbolLike != 0 && c.isSymbolOrSymbolForCall(node) {
+	if returnType.flags&TypeFlagsESSymbolLike != 0 && c.isSymbolCall(node) {
 		return c.getESSymbolLikeTypeForNode(ast.WalkUpParenthesizedExpressions(node.Parent))
 	}
 	if ast.IsCallExpression(node) && node.QuestionDotToken() == nil && ast.IsExpressionStatement(node.Parent) && returnType.flags&TypeFlagsVoid != 0 && c.getTypePredicateOfSignature(signature) != nil {
@@ -8550,14 +8554,11 @@ func (c *Checker) addDeprecatedSuggestionWithSignature(location *ast.Node, decla
 	return c.addDeprecatedSuggestionWorker([]*ast.Node{declaration}, diagnostic)
 }
 
-func (c *Checker) isSymbolOrSymbolForCall(node *ast.Node) bool {
+func (c *Checker) isSymbolCall(node *ast.Node) bool {
 	if !ast.IsCallExpression(node) {
 		return false
 	}
 	left := node.Expression()
-	if ast.IsPropertyAccessExpression(left) && left.Name().Text() == "for" {
-		left = left.Expression()
-	}
 	if !ast.IsIdentifier(left) || left.Text() != "Symbol" {
 		return false
 	}
@@ -18585,7 +18586,7 @@ func (c *Checker) widenTypeForVariableLikeDeclaration(t *Type, declaration *ast.
 		}
 
 		// always widen a 'unique symbol' type if the type was created for a different declaration.
-		if t.flags&TypeFlagsUniqueESSymbol != 0 && (ast.IsBindingElement(declaration) || declaration.Type() == nil) && t.symbol != c.getSymbolOfDeclaration(declaration) {
+		if t.flags&TypeFlagsUniqueESSymbol != 0 && !isRegisteredSymbolAlias(t.alias) && (ast.IsBindingElement(declaration) || declaration.Type() == nil) && t.symbol != c.getSymbolOfDeclaration(declaration) {
 			t = c.esSymbolType
 		}
 		return c.getWidenedType(t)
@@ -22629,6 +22630,9 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 		return c.getTemplateLiteralType(t.AsTemplateLiteralType().texts, c.instantiateTypes(t.AsTemplateLiteralType().types, m))
 	case flags&TypeFlagsStringMapping != 0:
 		return c.getStringMappingType(t.symbol, c.instantiateType(t.AsStringMappingType().target, m))
+	case flags&TypeFlagsUniqueESSymbol != 0 && isRegisteredSymbolAlias(t.alias):
+		newAlias := c.instantiateTypeAlias(t.alias, m)
+		return c.getRegisteredESSymbolType(newAlias.typeArguments[0], newAlias)
 	case flags&TypeFlagsConditional != 0:
 		return c.getConditionalTypeInstantiation(t, c.combineTypeMappers(t.AsConditionalType().mapper, m), false /*forConstraint*/, alias)
 	case flags&TypeFlagsSubstitution != 0:
@@ -22652,6 +22656,10 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 		return c.getIntersectionType([]*Type{newConstraint, newBaseType})
 	}
 	return t
+}
+
+func isRegisteredSymbolAlias(alias *TypeAlias) bool {
+	return alias != nil && alias.symbol != nil && alias.symbol.Name == "RegisteredSymbol" && len(alias.typeArguments) == 1
 }
 
 // Handles instantiation of the following object types:
@@ -23358,6 +23366,46 @@ func (c *Checker) getESSymbolLikeTypeForNode(node *ast.Node) *Type {
 	return c.esSymbolType
 }
 
+func (c *Checker) getRegisteredESSymbolType(keyType *Type, alias *TypeAlias) *Type {
+	key := c.getRegisteredESSymbolTypeKey(keyType)
+	t := c.registeredESSymbolTypes[key]
+	if t == nil {
+		name := ast.InternalSymbolNamePrefix + "@@" + c.getRegisteredESSymbolNameText(keyType)
+		symbol := c.newSymbol(ast.SymbolFlagsProperty, name)
+		t = c.newUniqueESSymbolType(symbol, name)
+		c.registeredESSymbolTypes[key] = t
+	}
+	t.alias = alias
+	return t
+}
+
+func (c *Checker) getRegisteredESSymbolTypeKey(keyType *Type) CacheHashKey {
+	var b keyBuilder
+	b.writeString("RegisteredSymbol")
+	if keyType.flags&TypeFlagsStringLiteral != 0 {
+		b.writeByte('s')
+		b.writeString(getStringLiteralValue(keyType))
+	} else if keyType.flags&TypeFlagsNumberLiteral != 0 {
+		b.writeByte('n')
+		b.writeString(getNumberLiteralValue(keyType).String())
+	} else {
+		b.writeByte('t')
+		b.writeType(keyType)
+	}
+	return b.hash()
+}
+
+func (c *Checker) getRegisteredESSymbolNameText(keyType *Type) string {
+	switch {
+	case keyType.flags&TypeFlagsStringLiteral != 0:
+		return getStringLiteralValue(keyType)
+	case keyType.flags&TypeFlagsNumberLiteral != 0:
+		return getNumberLiteralValue(keyType).String()
+	default:
+		return c.typeToStringEx(keyType, nil, TypeFormatFlagsNoTruncation|TypeFormatFlagsUseAliasDefinedOutsideCurrentScope, nil)
+	}
+}
+
 func (c *Checker) getTypeFromTypeReference(node *ast.Node) *Type {
 	links := c.typeNodeLinks.Get(node)
 	if links.resolvedType == nil {
@@ -24039,6 +24087,11 @@ func (c *Checker) getTypeAliasInstantiation(symbol *ast.Symbol, typeArguments []
 			switch typeKind {
 			case IntrinsicTypeKindNoInfer:
 				return c.getNoInferType(typeArguments[0])
+			case IntrinsicTypeKindRegisteredSymbol:
+				if alias == nil {
+					alias = &TypeAlias{symbol: symbol, typeArguments: typeArguments}
+				}
+				return c.getRegisteredESSymbolType(typeArguments[0], alias)
 			default:
 				return c.getStringMappingType(symbol, typeArguments[0])
 			}

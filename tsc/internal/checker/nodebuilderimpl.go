@@ -2568,6 +2568,11 @@ func (b *NodeBuilderImpl) getPropertyNameNodeForSymbolFromNameType(symbol *ast.S
 		return b.createPropertyNameNodeForIdentifierOrLiteral(name, singleQuote, stringNamed, isMethod, symbol)
 	}
 	if nameType.flags&TypeFlagsUniqueESSymbol != 0 {
+		if isRegisteredSymbolAlias(nameType.alias) && symbol.ValueDeclaration != nil {
+			if declName := symbol.ValueDeclaration.Name(); declName != nil && ast.IsComputedPropertyName(declName) {
+				return b.f.DeepCloneNode(declName)
+			}
+		}
 		// The reference was tracked in the destination scope by trackComputedName.
 		// Reconstructing its spelling in the source scope must not paint that scope's declarations visible.
 		return b.f.NewComputedPropertyName(b.symbolToExpressionWorker(nameType.AsUniqueESSymbolType().symbol, ast.SymbolFlagsValue))
@@ -3409,6 +3414,9 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		}
 	}
 	if t.flags&TypeFlagsUniqueESSymbol != 0 {
+		if isRegisteredSymbolAlias(t.alias) {
+			return t.alias.ToTypeReferenceNode(b)
+		}
 		if b.ctx.flags&nodebuilder.FlagsAllowUniqueESSymbolType == 0 {
 			if b.ch.IsValueSymbolAccessible(t.symbol, b.ctx.enclosingDeclaration) {
 				b.ctx.approximateLength += 6
