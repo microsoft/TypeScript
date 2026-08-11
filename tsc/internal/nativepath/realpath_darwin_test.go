@@ -9,11 +9,13 @@ import (
 )
 
 func TestRealpathHardlinkedFile(t *testing.T) {
+	t.Parallel()
+
 	tmp := t.TempDir()
-	real := filepath.Join(tmp, "real.d.ts")
+	realPath := filepath.Join(tmp, "real.d.ts")
 	alias := filepath.Join(tmp, "alias.d.ts")
-	assert.NilError(t, os.WriteFile(real, []byte("export * from './lib';\n"), 0o666))
-	assert.NilError(t, os.Link(real, alias))
+	assert.NilError(t, os.WriteFile(realPath, []byte("export * from './lib';\n"), 0o666))
+	assert.NilError(t, os.Link(realPath, alias))
 
 	want, err := filepath.EvalSymlinks(alias)
 	assert.NilError(t, err)
@@ -23,20 +25,20 @@ func TestRealpathHardlinkedFile(t *testing.T) {
 	workerErr := make(chan error, 1)
 	go func() {
 		defer close(done)
+		defer close(workerErr)
 		for {
 			select {
 			case <-stop:
 				return
 			default:
-			}
-
-			f, err := os.Open(real)
-			if err == nil {
-				err = f.Close()
-			}
-			if err != nil {
-				workerErr <- err
-				return
+				f, openErr := os.Open(realPath)
+				if openErr == nil {
+					openErr = f.Close()
+				}
+				if openErr != nil {
+					workerErr <- openErr
+					return
+				}
 			}
 		}
 	}()
@@ -58,9 +60,7 @@ func TestRealpathHardlinkedFile(t *testing.T) {
 	}
 
 	stopWorker()
-	select {
-	case err := <-workerErr:
+	for err := range workerErr {
 		assert.NilError(t, err)
-	default:
 	}
 }
