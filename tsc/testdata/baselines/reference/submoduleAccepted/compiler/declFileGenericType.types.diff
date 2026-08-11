@@ -1,0 +1,11 @@
+--- old.declFileGenericType.types
++++ new.declFileGenericType.types
+@@= skipped -115, +115 lines =@@
+ >C : any
+
+ export interface i extends C.A<C.B> { }
+->C : typeof C
++>C : any
+ >C : any
+
+ export var j = C.F6;

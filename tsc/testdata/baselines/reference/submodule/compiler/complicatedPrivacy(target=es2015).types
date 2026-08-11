@@ -19,7 +19,7 @@ namespace m1 {
 
         export class C2 implements m3.i3 {
 >C2 : C2
->m3 : typeof m3
+>m3 : any
 
             public get p1(arg) {
 >p1 : C1

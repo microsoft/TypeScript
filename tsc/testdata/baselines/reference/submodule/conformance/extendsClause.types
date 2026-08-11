@@ -23,10 +23,10 @@ import type { C, I } from './types';
 interface Q extends C {}
 interface R extends I {}
 interface S extends types.C {}
->types : typeof types
+>types : any
 
 interface T extends types.I {}
->types : typeof types
+>types : any
 
 class U extends C {} // Error
 >U : U

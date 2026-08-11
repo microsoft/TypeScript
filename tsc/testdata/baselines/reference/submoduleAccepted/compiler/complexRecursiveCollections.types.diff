@@ -1,0 +1,65 @@
+--- old.complexRecursiveCollections.types
++++ new.complexRecursiveCollections.types
+@@= skipped -166, +166 lines =@@
+ >collection : Iterable<T>
+
+   export interface List<T> extends Collection.Indexed<T> {
+->Collection : typeof Collection
++>Collection : any
+
+     // Persistent changes
+     set(index: number, value: T): List<T>;
+@@= skipped -205, +205 lines =@@
+ >Map : typeof Map
+
+   export interface Map<K, V> extends Collection.Keyed<K, V> {
+->Collection : typeof Collection
++>Collection : any
+
+     // Persistent changes
+     set(key: K, value: V): this;
+@@= skipped -304, +304 lines =@@
+ >collection : Iterable<T>
+
+   export interface Set<T> extends Collection.Set<T> {
+->Collection : typeof Collection
++>Collection : any
+
+     // Persistent changes
+     add(value: T): this;
+@@= skipped -199, +199 lines =@@
+ >collection : Iterable<T>
+
+   export interface Stack<T> extends Collection.Indexed<T> {
+->Collection : typeof Collection
++>Collection : any
+
+     // Reading values
+     peek(): T | undefined;
+@@= skipped -295, +295 lines =@@
+ >Seq : any
+
+     export interface Keyed<K, V> extends Seq<K, V>, Collection.Keyed<K, V> {
+->Collection : typeof Collection
++>Collection : any
+
+       toJS(): Object;
+ >toJS : () => Object
+@@= skipped -98, +98 lines =@@
+ >Seq : any
+
+     export interface Indexed<T> extends Seq<number, T>, Collection.Indexed<T> {
+->Collection : typeof Collection
++>Collection : any
+
+       toJS(): Array<any>;
+ >toJS : () => Array<any>
+@@= skipped -73, +73 lines =@@
+ >Seq : any
+
+     export interface Set<T> extends Seq<never, T>, Collection.Set<T> {
+->Collection : typeof Collection
++>Collection : any
+
+       toJS(): Array<any>;
+ >toJS : () => Array<any>

@@ -91,7 +91,7 @@ declare global {
 
   namespace JSX {
     interface Element extends React.ReactElement<any, any> {}
->React : typeof React
+>React : any
 
     interface ElementChildrenAttribute {
       children: {};

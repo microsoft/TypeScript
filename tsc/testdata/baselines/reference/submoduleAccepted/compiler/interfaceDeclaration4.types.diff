@@ -1,0 +1,51 @@
+--- old.interfaceDeclaration4.types
++++ new.interfaceDeclaration4.types
+@@= skipped -14, +14 lines =@@
+
+ class C1 implements Foo.I1 {
+ >C1 : C1
+->Foo : typeof Foo
++>Foo : any
+
+ 	public item:string;
+ >item : string
+@@= skipped -8, +8 lines =@@
+
+ // Allowed
+ interface I2 extends Foo.I1 {
+->Foo : typeof Foo
++>Foo : any
+
+ 	item:string;
+ >item : string
+@@= skipped -8, +8 lines =@@
+
+ // Negative Case
+ interface I3 extends Foo.I1 {
+->Foo : typeof Foo
++>Foo : any
+
+     item:number;
+ >item : number
+ }
+
+ interface I4 extends Foo.I1 {
+->Foo : typeof Foo
++>Foo : any
+
+     token:string;
+ >token : string
+@@= skipped -25, +25 lines =@@
+
+ // Negative case
+ interface I6 extends Foo.C1 { }
+->Foo : typeof Foo
++>Foo : any
+
+ class C3 implements Foo.I1 { }
+ >C3 : C3
+->Foo : typeof Foo
++>Foo : any
+
+ // Negative case 
+ interface Foo.I1 { }

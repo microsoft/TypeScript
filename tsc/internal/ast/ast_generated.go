@@ -493,6 +493,7 @@ type (
 	ClassElementList                = NodeList // NodeList[*ClassElement]
 	TypeElementList                 = NodeList // NodeList[*TypeElement]
 	ExpressionWithTypeArgumentsList = NodeList // NodeList[*ExpressionWithTypeArguments]
+	HeritageClauseElementList       = NodeList // NodeList[*HeritageClauseElement]
 	EnumMemberList                  = NodeList // NodeList[*EnumMember]
 	ImportSpecifierList             = NodeList // NodeList[*ImportSpecifier]
 	ExportSpecifierList             = NodeList // NodeList[*ExportSpecifier]
@@ -516,6 +517,7 @@ type (
 	Expression                     = Node // Node with ExpressionBase
 	Statement                      = Node // Node with StatementBase
 	TypeNode                       = Node // Node with TypeNodeBase
+	HeritageClauseElement          = Node // ExpressionWithTypeArguments | TypeReferenceNode
 	BlockOrExpression              = Node // Block | Expression
 	NodeBody                       = Node // Block | Expression | ModuleBlock | ModuleDeclaration
 	AccessExpression               = Node // PropertyAccessExpression | ElementAccessExpression
@@ -2152,17 +2154,17 @@ type HeritageClause struct {
 	NodeBase
 	CompositeBase
 	Token Kind
-	Types *ExpressionWithTypeArgumentsList
+	Types *HeritageClauseElementList
 }
 
-func (f *NodeFactory) NewHeritageClause(token Kind, types *ExpressionWithTypeArgumentsList) *Node {
+func (f *NodeFactory) NewHeritageClause(token Kind, types *HeritageClauseElementList) *Node {
 	data := f.heritageClauseArena.New()
 	data.Token = token
 	data.Types = types
 	return f.newNode(KindHeritageClause, data)
 }
 
-func (f *NodeFactory) UpdateHeritageClause(node *HeritageClause, token Kind, types *ExpressionWithTypeArgumentsList) *Node {
+func (f *NodeFactory) UpdateHeritageClause(node *HeritageClause, token Kind, types *HeritageClauseElementList) *Node {
 	if token != node.Token || types != node.Types {
 		return updateNode(f.NewHeritageClause(token, types), node.AsNode(), f.hooks)
 	}

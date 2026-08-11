@@ -73,7 +73,7 @@ class D3<T extends M.E> { }
 >M : any
 
 interface I2 extends M.E { }
->M : typeof M
+>M : any
 
 function h<T extends C>(x: T) { }
 >h : <T extends C>(x: T) => void

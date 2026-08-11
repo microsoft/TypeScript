@@ -9,7 +9,7 @@ declare namespace EndGate {
 }
 
 interface Number extends EndGate.ICloneable { }
->EndGate : typeof EndGate
+>EndGate : any
 
 namespace EndGate.Tweening {
 >EndGate : typeof EndGate

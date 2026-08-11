@@ -1,0 +1,11 @@
+--- old.bluebirdStaticThis.types
++++ new.bluebirdStaticThis.types
+@@= skipped -6, +6 lines =@@
+ // Tests by: Bart van der Schoor <https://github.com/Bartvds>
+ export declare class Promise<R> implements Promise.Thenable<R> {
+ >Promise : Promise<R>
+->Promise : typeof Promise
++>Promise : any
+
+ 	constructor(callback: (resolve: (thenableOrResult: R | Promise.Thenable<R>) => void, reject: (error: any) => void) => void);
+ >callback : (resolve: (thenableOrResult: R | Promise.Thenable<R>) => void, reject: (error: any) => void) => void

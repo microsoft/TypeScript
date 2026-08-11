@@ -735,9 +735,10 @@ func (tx *DeclarationTransformer) transformMappedTypeNode(input *ast.MappedTypeN
 }
 
 func (tx *DeclarationTransformer) transformHeritageClause(clause *ast.HeritageClause) *ast.Node {
-	retainedClauses := core.Filter(clause.Types.Nodes, func(t *ast.Node) bool {
-		return ast.IsEntityNameExpression(t.AsExpressionWithTypeArguments().Expression) ||
-			(clause.Token == ast.KindExtendsKeyword && t.Expression().Kind == ast.KindNullKeyword)
+	retainedClauses := core.Filter(clause.Types.Nodes, func(t *ast.HeritageClauseElement) bool {
+		name := ast.GetHeritageClauseElementName(t)
+		return ast.IsEntityName(name) || ast.IsEntityNameExpression(name) ||
+			(clause.Token == ast.KindExtendsKeyword && ast.IsExpressionWithTypeArguments(t) && t.Expression().Kind == ast.KindNullKeyword)
 	})
 	if len(retainedClauses) == 0 {
 		return nil // elide empty clause
@@ -2142,20 +2143,16 @@ func isClassExtendingNull(node *ast.Node) bool {
 	if node == nil {
 		return false
 	}
-	heritage := node.ClassLikeData().HeritageClauses
-	if heritage == nil {
+	extendsClause := ast.GetHeritageClause(node, ast.KindExtendsKeyword)
+	if extendsClause == nil {
 		return false
 	}
-	if len(heritage.Nodes) > 1 || len(heritage.Nodes) == 0 {
+	types := extendsClause.AsHeritageClause().Types
+	if types == nil || len(types.Nodes) != 1 {
 		return false
 	}
-	for _, expA := range heritage.Nodes[0].AsHeritageClause().Types.Nodes {
-		expr := expA.AsExpressionWithTypeArguments().Expression
-		if expr != nil && expr.Kind == ast.KindNullKeyword {
-			return true
-		}
-	}
-	return false
+	expr := types.Nodes[0].AsExpressionWithTypeArguments().Expression
+	return expr != nil && expr.Kind == ast.KindNullKeyword
 }
 
 // collectThisPropertyAssignments finds `this.x = expr` assignments in constructors, methods, and static blocks

@@ -162,6 +162,37 @@ func FuzzParser(f *testing.F) {
 	})
 }
 
+func TestHeritageClauseElementKinds(t *testing.T) {
+	t.Parallel()
+	sourceText := `
+class C extends Base<number> implements Contract<string> {}
+interface I extends Parent<boolean> {}
+interface Invalid implements Recovery {}
+interface MissingExtends extends A. {}
+class MissingImplements implements B. {}
+`
+	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+		FileName: "/index.ts",
+		Path:     "/index.ts",
+	}, sourceText, core.ScriptKindTS)
+
+	classDecl := file.Statements.Nodes[0].AsClassDeclaration()
+	assert.Equal(t, classDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+	assert.Equal(t, classDecl.HeritageClauses.Nodes[1].AsHeritageClause().Types.Nodes[0].Kind, ast.KindTypeReference)
+
+	interfaceDecl := file.Statements.Nodes[1].AsInterfaceDeclaration()
+	assert.Equal(t, interfaceDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindTypeReference)
+
+	invalidInterfaceDecl := file.Statements.Nodes[2].AsInterfaceDeclaration()
+	assert.Equal(t, invalidInterfaceDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+
+	missingExtendsDecl := file.Statements.Nodes[3].AsInterfaceDeclaration()
+	assert.Equal(t, missingExtendsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+
+	missingImplementsDecl := file.Statements.Nodes[4].AsClassDeclaration()
+	assert.Equal(t, missingImplementsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+}
+
 func TestJSDocImportTypeParentChain(t *testing.T) {
 	t.Parallel()
 	sourceText := `test("", async function () {

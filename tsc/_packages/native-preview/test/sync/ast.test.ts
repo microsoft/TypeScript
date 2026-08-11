@@ -9,7 +9,9 @@ import type {
 } from "@typescript/native-preview/unstable/ast";
 import {
     getTokenAtPosition,
+    isClassDeclaration,
     isImportDeclaration,
+    isInterfaceDeclaration,
     isNamedImports,
     isValidTypeOnlyAliasUseSite,
     SyntaxKind,
@@ -577,6 +579,29 @@ function getRemoteSourceFile(api: API, configPath: string, filePath: string) {
 }
 
 describe("RemoteNode + cloneNode", () => {
+    test("uses distinct nodes for expression and type heritage", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/heritage.ts": `
+class C extends Base<number> implements Contract<string> {}
+interface I extends Parent<boolean> {}
+`,
+        });
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/heritage.ts");
+            const classDecl = sf.statements[0];
+            const interfaceDecl = sf.statements[1];
+            assert.ok(isClassDeclaration(classDecl));
+            assert.ok(isInterfaceDeclaration(interfaceDecl));
+            assert.strictEqual(classDecl.heritageClauses?.[0].types[0].kind, SyntaxKind.ExpressionWithTypeArguments);
+            assert.strictEqual(classDecl.heritageClauses?.[1].types[0].kind, SyntaxKind.TypeReference);
+            assert.strictEqual(interfaceDecl.heritageClauses?.[0].types[0].kind, SyntaxKind.TypeReference);
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("cloneNode produces a NodeObject from a RemoteNode", () => {
         const api = spawnAPI();
         try {

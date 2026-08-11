@@ -167,7 +167,7 @@ declare namespace Immutable {
 >collection : Iterable<T>
 
   export interface List<T> extends Collection.Indexed<T> {
->Collection : typeof Collection
+>Collection : any
 
     // Persistent changes
     set(index: number, value: T): List<T>;
@@ -372,7 +372,7 @@ declare namespace Immutable {
 >Map : typeof Map
 
   export interface Map<K, V> extends Collection.Keyed<K, V> {
->Collection : typeof Collection
+>Collection : any
 
     // Persistent changes
     set(key: K, value: V): this;
@@ -676,7 +676,7 @@ declare namespace Immutable {
 >collection : Iterable<T>
 
   export interface Set<T> extends Collection.Set<T> {
->Collection : typeof Collection
+>Collection : any
 
     // Persistent changes
     add(value: T): this;
@@ -875,7 +875,7 @@ declare namespace Immutable {
 >collection : Iterable<T>
 
   export interface Stack<T> extends Collection.Indexed<T> {
->Collection : typeof Collection
+>Collection : any
 
     // Reading values
     peek(): T | undefined;
@@ -1170,7 +1170,7 @@ declare namespace Immutable {
 >Seq : any
 
     export interface Keyed<K, V> extends Seq<K, V>, Collection.Keyed<K, V> {
->Collection : typeof Collection
+>Collection : any
 
       toJS(): Object;
 >toJS : () => Object
@@ -1268,7 +1268,7 @@ declare namespace Immutable {
 >Seq : any
 
     export interface Indexed<T> extends Seq<number, T>, Collection.Indexed<T> {
->Collection : typeof Collection
+>Collection : any
 
       toJS(): Array<any>;
 >toJS : () => Array<any>
@@ -1341,7 +1341,7 @@ declare namespace Immutable {
 >Seq : any
 
     export interface Set<T> extends Seq<never, T>, Collection.Set<T> {
->Collection : typeof Collection
+>Collection : any
 
       toJS(): Array<any>;
 >toJS : () => Array<any>

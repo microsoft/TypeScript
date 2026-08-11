@@ -101,6 +101,7 @@ import type {
     FunctionTypeNode,
     GetAccessorDeclaration,
     HeritageClause,
+    HeritageClauseElement,
     Identifier,
     IfStatement,
     ImportAttribute,
@@ -1120,6 +1121,10 @@ export function isJSDocParameterTag(node: Node): node is JSDocParameterTag {
 
 export function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag {
     return node.kind === SyntaxKind.JSDocPropertyTag;
+}
+
+export function isHeritageClauseElement(node: Node): node is HeritageClauseElement {
+    return node.kind === SyntaxKind.ExpressionWithTypeArguments || node.kind === SyntaxKind.TypeReference;
 }
 
 export function isAccessExpression(node: Node): node is AccessExpression {

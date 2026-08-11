@@ -108,7 +108,7 @@ namespace m2 {
         }
         export class ib2 implements m1.ib {
 >ib2 : ib2
->m1 : typeof m1
+>m1 : any
         }
     }
 }
@@ -122,7 +122,7 @@ class c extends m1.b {
 
 class ib2 implements m1.ib {
 >ib2 : ib2
->m1 : typeof m1
+>m1 : any
 }
 
 declare class aAmbient {

@@ -1,0 +1,20 @@
+--- old.classdecl(target=es2015).types
++++ new.classdecl(target=es2015).types
+@@= skipped -107, +107 lines =@@
+         }
+         export class ib2 implements m1.ib {
+ >ib2 : ib2
+->m1 : typeof m1
++>m1 : any
+         }
+     }
+ }
+@@= skipped -14, +14 lines =@@
+
+ class ib2 implements m1.ib {
+ >ib2 : ib2
+->m1 : typeof m1
++>m1 : any
+ }
+
+ declare class aAmbient {

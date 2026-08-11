@@ -13,7 +13,7 @@ import type * as a from './a';
 >a : typeof a
 
 interface B extends a.types.A {}
->a.types : typeof a.types
->a : typeof a
->types : typeof a.types
+>a.types : any
+>a : any
+>types : any
 

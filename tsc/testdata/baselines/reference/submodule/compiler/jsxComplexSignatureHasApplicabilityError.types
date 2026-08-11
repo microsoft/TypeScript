@@ -489,7 +489,7 @@ export interface ValueComponentProps<TValue = OptionValues> {
 }
 
 export interface ReactSelectProps<TValue = OptionValues> extends React.Props<ReactSelectClass<TValue>> {
->React : typeof React
+>React : any
 
     /**
      * text to display when `allowCreate` is true.

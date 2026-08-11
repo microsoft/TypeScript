@@ -25,11 +25,11 @@ export namespace publicModule {
 
     class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
 >privateClassImplementingFromPrivateModuleInterface : privateClassImplementingFromPrivateModuleInterface
->privateModule : typeof privateModule
+>privateModule : any
     }
     export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule { // Should error
 >publicClassImplementingFromPrivateModuleInterface : publicClassImplementingFromPrivateModuleInterface
->privateModule : typeof privateModule
+>privateModule : any
     }
 
     export class publicClassImplementingPrivateAndPublicInterface implements privateInterfaceInPublicModule, publicInterfaceInPublicModule { // Should error
@@ -62,11 +62,11 @@ namespace privateModule {
 
     class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
 >privateClassImplementingFromPrivateModuleInterface : privateClassImplementingFromPrivateModuleInterface
->privateModule : typeof privateModule
+>privateModule : any
     }
     export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
 >publicClassImplementingFromPrivateModuleInterface : publicClassImplementingFromPrivateModuleInterface
->privateModule : typeof privateModule
+>privateModule : any
     }
 }
 
@@ -92,11 +92,11 @@ export class publicClassImplementingPrivateInterface implements privateInterface
 
 class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
 >privateClassImplementingFromPrivateModuleInterface : privateClassImplementingFromPrivateModuleInterface
->privateModule : typeof privateModule
+>privateModule : any
 }
 export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule { // Should error
 >publicClassImplementingFromPrivateModuleInterface : publicClassImplementingFromPrivateModuleInterface
->privateModule : typeof privateModule
+>privateModule : any
 }
 
 === privacyClassImplementsClauseDeclFile_GlobalFile.ts ===

@@ -34,7 +34,7 @@ namespace M1 {
     
     class C4 implements M2.I1 { 
 >C4 : C4
->M2 : typeof M2
+>M2 : any
 
         public item:string;
 >item : string
@@ -43,7 +43,7 @@ namespace M1 {
     class C5 implements M2.M3.I1 {
 >C5 : C5
 >M2.M3 : any
->M2 : typeof M2
+>M2 : any
 >M3 : any
 
         public item:string;
@@ -93,7 +93,7 @@ class C1 implements I1 {
 
 class C2 implements M2.I1 { 
 >C2 : C2
->M2 : typeof M2
+>M2 : any
 
     public item:string;
 >item : string
@@ -102,7 +102,7 @@ class C2 implements M2.I1 {
 class C3 implements M2.M3.I1 {
 >C3 : C3
 >M2.M3 : any
->M2 : typeof M2
+>M2 : any
 >M3 : any
 
     public item:string;

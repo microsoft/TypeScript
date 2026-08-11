@@ -1,0 +1,12 @@
+--- old.nestedNamespace.types
++++ new.nestedNamespace.types
+@@= skipped -12, +12 lines =@@
+ >a : typeof a
+
+ interface B extends a.types.A {}
+->a.types : typeof a.types
+->a : typeof a
+->types : typeof a.types
++>a.types : any
++>a : any
++>types : any

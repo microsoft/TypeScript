@@ -1754,7 +1754,7 @@ func (p *Parser) parseClassDeclarationOrExpression(pos int, jsdoc jsdocScannerIn
 		core.Some(modifiers.Nodes, isExportModifier) {
 		p.setContextFlags(ast.NodeFlagsAwaitContext, true /*value*/)
 	}
-	heritageClauses := p.parseHeritageClauses()
+	heritageClauses := p.parseHeritageClauses(false /*isInterface*/)
 	var members *ast.NodeList
 	if p.parseExpected(ast.KindOpenBraceToken) {
 		// ClassTail[Yield,Await] : (Modified) See 14.5
@@ -1818,21 +1818,64 @@ func isAsyncModifier(modifier *ast.Node) bool {
 	return modifier.Kind == ast.KindAsyncKeyword
 }
 
-func (p *Parser) parseHeritageClauses() *ast.NodeList {
+func (p *Parser) parseHeritageClauses(isInterface bool) *ast.NodeList {
 	// ClassTail[Yield,Await] : (Modified) See 14.5
 	//      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
 	if p.isHeritageClause() {
-		return p.parseList(PCHeritageClauses, (*Parser).parseHeritageClause)
+		return p.parseList(PCHeritageClauses, func(p *Parser) *ast.Node {
+			return p.parseHeritageClause(isInterface)
+		})
 	}
 	return nil
 }
 
-func (p *Parser) parseHeritageClause() *ast.Node {
+func (p *Parser) parseHeritageClause(isInterface bool) *ast.Node {
 	pos := p.nodePos()
 	kind := p.token
 	p.nextToken()
-	types := p.parseDelimitedList(PCHeritageClauseElement, (*Parser).parseExpressionWithTypeArguments)
+	parseElement := (*Parser).parseExpressionWithTypeArguments
+	if isTypeHeritageClause(isInterface, kind) {
+		parseElement = (*Parser).parseTypeHeritageClauseElement
+	}
+	types := p.parseDelimitedList(PCHeritageClauseElement, parseElement)
 	return p.checkJSSyntax(p.finishNode(p.factory.NewHeritageClause(kind, types), pos))
+}
+
+func isTypeHeritageClause(isInterface bool, token ast.Kind) bool {
+	return isInterface && token == ast.KindExtendsKeyword ||
+		!isInterface && token == ast.KindImplementsKeyword
+}
+
+func (p *Parser) parseTypeHeritageClauseElement() *ast.HeritageClauseElement {
+	pos := p.nodePos()
+	expressionWithTypeArguments := p.parseExpressionWithTypeArguments().AsExpressionWithTypeArguments()
+	if !isValidHeritageTypeReferenceExpression(expressionWithTypeArguments.Expression) {
+		return expressionWithTypeArguments.AsNode()
+	}
+	typeName := p.convertEntityNameExpressionToEntityName(expressionWithTypeArguments.Expression)
+	return p.finishNode(p.factory.NewTypeReferenceNode(typeName, expressionWithTypeArguments.TypeArguments), pos)
+}
+
+func isValidHeritageTypeReferenceExpression(node *ast.Node) bool {
+	if ast.IsIdentifier(node) {
+		return ast.NodeIsPresent(node)
+	}
+	return ast.IsPropertyAccessExpression(node) &&
+		!ast.IsOptionalChain(node) &&
+		ast.NodeIsPresent(node.Name()) &&
+		isValidHeritageTypeReferenceExpression(node.Expression())
+}
+
+func (p *Parser) convertEntityNameExpressionToEntityName(node *ast.Node) *ast.Node {
+	if ast.IsIdentifier(node) {
+		return node
+	}
+	propertyAccess := node.AsPropertyAccessExpression()
+	result := p.factory.NewQualifiedName(
+		p.convertEntityNameExpressionToEntityName(propertyAccess.Expression),
+		propertyAccess.Name(),
+	)
+	return p.finishNodeWithEnd(result, node.Pos(), node.End())
 }
 
 func (p *Parser) parseExpressionWithTypeArguments() *ast.Node {
@@ -2085,7 +2128,7 @@ func (p *Parser) parseInterfaceDeclaration(pos int, jsdoc jsdocScannerInfo, modi
 	p.parseExpected(ast.KindInterfaceKeyword)
 	name := p.parseIdentifier()
 	typeParameters := p.parseTypeParameters()
-	heritageClauses := p.parseHeritageClauses()
+	heritageClauses := p.parseHeritageClauses(true /*isInterface*/)
 	members := p.parseObjectTypeMembers()
 	result := p.finishNode(p.factory.NewInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members), pos)
 	p.withJSDoc(result, jsdoc)

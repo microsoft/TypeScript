@@ -71,6 +71,7 @@ import type {
     FunctionTypeNode,
     GetAccessorDeclaration,
     HeritageClause,
+    HeritageClauseElement,
     Identifier,
     IfStatement,
     ImportAttribute,
@@ -1891,7 +1892,7 @@ export function createClassExpression(modifiers: readonly ModifierLike[] | undef
     }) as unknown as ClassExpression;
 }
 
-export function createHeritageClause(token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword, types: readonly ExpressionWithTypeArguments[]): HeritageClause {
+export function createHeritageClause(token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword, types: readonly HeritageClauseElement[]): HeritageClause {
     return new NodeObject(SyntaxKind.HeritageClause, {
         token,
         types: createNodeArray(types),
@@ -3216,7 +3217,7 @@ export function updateClassExpression(node: ClassExpression, modifiers: readonly
     return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.heritageClauses !== heritageClauses || node.members !== members ? createClassExpression(modifiers, name, typeParameters, heritageClauses, members) : node;
 }
 
-export function updateHeritageClause(node: HeritageClause, types: readonly ExpressionWithTypeArguments[]): HeritageClause {
+export function updateHeritageClause(node: HeritageClause, types: readonly HeritageClauseElement[]): HeritageClause {
     return node.types !== types ? createHeritageClause(node.token, types) : node;
 }
 

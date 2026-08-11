@@ -1,0 +1,11 @@
+--- old.genericConstraintOnExtendedBuiltinTypes2.types
++++ new.genericConstraintOnExtendedBuiltinTypes2.types
+@@= skipped -8, +8 lines =@@
+ }
+
+ interface Number extends EndGate.ICloneable { }
+->EndGate : typeof EndGate
++>EndGate : any
+
+ namespace EndGate.Tweening {
+ >EndGate : typeof EndGate

@@ -429,10 +429,12 @@ func findReferenceInPosition(refs []*ast.FileReference, pos int) *ast.FileRefere
 }
 
 func getContainingNodeIfInHeritageClause(node *ast.Node) *ast.Node {
-	if node.Kind == ast.KindIdentifier || node.Kind == ast.KindPropertyAccessExpression {
+	if node.Kind == ast.KindIdentifier || node.Kind == ast.KindQualifiedName || node.Kind == ast.KindPropertyAccessExpression {
 		return getContainingNodeIfInHeritageClause(node.Parent)
 	}
-	if node.Kind == ast.KindExpressionWithTypeArguments && (ast.IsClassLike(node.Parent.Parent) || node.Parent.Parent.Kind == ast.KindInterfaceDeclaration) {
+	if (node.Kind == ast.KindExpressionWithTypeArguments || node.Kind == ast.KindTypeReference) &&
+		ast.IsHeritageClause(node.Parent) &&
+		(ast.IsClassLike(node.Parent.Parent) || node.Parent.Parent.Kind == ast.KindInterfaceDeclaration) {
 		return node.Parent.Parent
 	}
 	return nil
@@ -592,7 +594,7 @@ func getAdjustedLocation(node *ast.Node, forRename bool, sourceFile *ast.SourceF
 			// /**/extends [|name|]
 			// /**/implements [|name|]
 			if len(node.Types.Nodes) == 1 {
-				return node.Types.Nodes[0].Expression()
+				return ast.GetHeritageClauseElementName(node.Types.Nodes[0])
 			}
 
 			// fall through `getAdjustedLocation`
@@ -912,14 +914,14 @@ func getIntersectingMeaningFromDeclarations(node *ast.Node, symbol *ast.Symbol, 
 }
 
 // Returns the node in an `extends` or `implements` clause of a class or interface.
-func getAllSuperTypeNodes(node *ast.Node) []*ast.TypeNode {
+func getAllSuperTypeNodes(node *ast.Node) []*ast.HeritageClauseElement {
 	if ast.IsInterfaceDeclaration(node) {
 		return ast.GetHeritageElements(node, ast.KindExtendsKeyword)
 	}
 	if ast.IsClassLike(node) {
 		return append(
 			core.SingleElementSlice(ast.GetClassExtendsHeritageElement(node)),
-			ast.GetImplementsTypeNodes(node)...,
+			ast.GetImplementsHeritageClauseElements(node)...,
 		)
 	}
 	return nil

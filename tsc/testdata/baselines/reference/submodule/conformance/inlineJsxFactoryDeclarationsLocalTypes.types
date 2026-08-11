@@ -109,7 +109,7 @@ export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Elemen
 export class MyClass implements predom.JSX.Element {
 >MyClass : MyClass
 >predom.JSX : any
->predom : () => predom.JSX.Element
+>predom : any
 >JSX : any
 
     __predomBrand!: void;
@@ -245,7 +245,7 @@ const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => 
 class DOMClass implements dom.JSX.Element {
 >DOMClass : DOMClass
 >dom.JSX : any
->dom : () => dom.JSX.Element
+>dom : any
 >JSX : any
 
     __domBrand!: void;

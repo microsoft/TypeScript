@@ -1142,12 +1142,13 @@ func isImportTypeQualifierPart(node *ast.Node) *ast.Node {
 	return nil
 }
 
-func isInNameOfExpressionWithTypeArguments(node *ast.Node) bool {
-	for node.Parent.Kind == ast.KindPropertyAccessExpression {
+func isInNameOfExpressionWithTypeArgumentsOrHeritageTypeReference(node *ast.Node) bool {
+	for node.Parent.Kind == ast.KindPropertyAccessExpression || node.Parent.Kind == ast.KindQualifiedName {
 		node = node.Parent
 	}
 
-	return node.Parent.Kind == ast.KindExpressionWithTypeArguments
+	return node.Parent.Kind == ast.KindExpressionWithTypeArguments ||
+		ast.IsNameOfHeritageClauseTypeReference(node)
 }
 
 func getIndexSymbolFromSymbolTable(symbolTable ast.SymbolTable) *ast.Symbol {

@@ -302,6 +302,33 @@ compiler/indexTypeNoSubstitutionTemplateLiteral.symbols.diff
 compiler/indexTypeNoSubstitutionTemplateLiteral.types.diff
 compiler/inferenceFromIncompleteSource.errors.txt.diff
 
+## Heritage clause type references use type-space qualified names ##
+compiler/bluebirdStaticThis.types.diff
+compiler/classdecl(target=es2015).types.diff
+compiler/complexRecursiveCollections.types.diff
+compiler/complicatedPrivacy(target=es2015).types.diff
+compiler/declFileGenericType.types.diff
+compiler/declFileGenericType2.types.diff
+compiler/declFileModuleContinuation.types.diff
+compiler/declFileWithInternalModuleNameConflictsInExtendsClause1.types.diff
+compiler/declFileWithInternalModuleNameConflictsInExtendsClause2.types.diff
+compiler/declFileWithInternalModuleNameConflictsInExtendsClause3.types.diff
+compiler/declarationEmitNameConflicts.types.diff
+compiler/genericConstraintOnExtendedBuiltinTypes.types.diff
+compiler/genericConstraintOnExtendedBuiltinTypes2.types.diff
+compiler/interfaceDeclaration3.types.diff
+compiler/interfaceDeclaration4.types.diff
+compiler/interfacePropertiesWithSameName2.types.diff
+compiler/jsxComplexSignatureHasApplicabilityError.types.diff
+compiler/privacyClassImplementsClauseDeclFile.types.diff
+compiler/recursiveClassReferenceTest.types.diff
+compiler/unionReductionWithStringMappingAndIdenticalBaseTypeExistsNoCrash.types.diff
+conformance/extendsClause.types.diff
+conformance/genericTypeReferenceWithoutTypeArgument.types.diff
+conformance/implementsClause.types.diff
+conformance/inlineJsxFactoryDeclarationsLocalTypes.types.diff
+conformance/nestedNamespace.types.diff
+
 ## more concise errors ##
 compiler/arrayBestCommonTypes.errors.txt.diff
 compiler/arrayCast.errors.txt.diff

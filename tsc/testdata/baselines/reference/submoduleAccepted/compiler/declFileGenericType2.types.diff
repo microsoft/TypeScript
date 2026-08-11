@@ -1,0 +1,30 @@
+--- old.declFileGenericType2.types
++++ new.declFileGenericType2.types
+@@= skipped -18, +18 lines =@@
+ >AbstractController : AbstractController<ModelType>
+ >templa : any
+ >mvc : any
+->mvc : typeof mvc
++>mvc : any
+     }
+ }
+ declare namespace templa.mvc.composite {
+     interface ICompositeControllerModel extends mvc.IModel {
+->mvc : typeof mvc
++>mvc : any
+
+         getControllers(): mvc.IController<mvc.IModel>[];
+ >getControllers : () => mvc.IController<mvc.IModel>[]
+@@= skipped -17, +17 lines =@@
+     export interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
+ >templa : any
+ >mvc : any
+->templa.mvc : typeof templa.mvc
+->templa : typeof templa
+->mvc : typeof templa.mvc
++>templa.mvc : any
++>templa : any
++>mvc : any
+     }
+ }
+ // Module

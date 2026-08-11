@@ -11,7 +11,13 @@
 
  interface Q extends C {}
  interface R extends I {}
-@@= skipped -13, +13 lines =@@
+ interface S extends types.C {}
+->types : typeof types
++>types : any
+
+ interface T extends types.I {}
+->types : typeof types
++>types : any
 
  class U extends C {} // Error
  >U : U

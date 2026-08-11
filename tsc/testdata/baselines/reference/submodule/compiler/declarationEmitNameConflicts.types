@@ -117,18 +117,18 @@ export namespace M.Q {
         export interface I { }
     }
     export interface b extends M.b { } // ok
->M : typeof M
+>M : any
 
     export interface I extends M.c.I { } // ok
->M.c : typeof M.N
->M : typeof M
->c : typeof M.N
+>M.c : any
+>M : any
+>c : any
 
     export namespace c {
         export interface I extends M.c.I { } // ok
->M.c : typeof M.N
->M : typeof M
->c : typeof M.N
+>M.c : any
+>M : any
+>c : any
     }
 }
 === declarationEmit_nameConflicts_1.ts ===

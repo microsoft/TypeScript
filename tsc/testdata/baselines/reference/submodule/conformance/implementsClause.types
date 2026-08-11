@@ -20,11 +20,11 @@ import * as nestedNamespace from './ns';
 
 class C implements types.Component {}
 >C : C
->types : typeof types
+>types : any
 
 class D implements nestedNamespace.types.Component {}
 >D : D
 >nestedNamespace.types : any
->nestedNamespace : typeof nestedNamespace
+>nestedNamespace : any
 >types : any
 

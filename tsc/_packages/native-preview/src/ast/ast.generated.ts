@@ -646,7 +646,7 @@ export interface ClassExpression extends PrimaryExpressionBase, DeclarationBase,
 export interface HeritageClause extends NodeBase {
     readonly kind: SyntaxKind.HeritageClause;
     readonly token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
-    readonly types: NodeArray<ExpressionWithTypeArguments>;
+    readonly types: NodeArray<HeritageClauseElement>;
 }
 export interface InterfaceDeclaration extends StatementBase, DeclarationBase, ModifiersBase {
     readonly kind: SyntaxKind.InterfaceDeclaration;
@@ -1338,6 +1338,7 @@ export interface JSDocTypeLiteral extends JSDocTypeBase, DeclarationBase {
 export type Expression = ExpressionBase;
 export type Statement = StatementBase;
 export type TypeNode = TypeNodeBase;
+export type HeritageClauseElement = ExpressionWithTypeArguments | TypeReferenceNode;
 export type BlockOrExpression = Block | Expression;
 export type NodeBody = Block | Expression | ModuleBlock | ModuleDeclaration;
 export type AccessExpression = PropertyAccessExpression | ElementAccessExpression;
@@ -1507,6 +1508,7 @@ export type HeritageClauseList = NodeArray<HeritageClause>;
 export type ClassElementList = NodeArray<ClassElement>;
 export type TypeElementList = NodeArray<TypeElement>;
 export type ExpressionWithTypeArgumentsList = NodeArray<ExpressionWithTypeArguments>;
+export type HeritageClauseElementList = NodeArray<HeritageClauseElement>;
 export type EnumMemberList = NodeArray<EnumMember>;
 export type ImportSpecifierList = NodeArray<ImportSpecifier>;
 export type ExportSpecifierList = NodeArray<ExportSpecifier>;
