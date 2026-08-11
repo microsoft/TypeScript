@@ -1138,8 +1138,13 @@ func isIgnoredFile(program *compiler.Program, file *ast.SourceFile) bool {
 // hasSymlinkToNodeModules checks if a file's realpath has a symlink that points
 // to a node_modules directory. This is used to skip files in the project bucket
 // that would be duplicated by the node_modules bucket via their symlink.
-func hasSymlinkToNodeModules(filePath tspath.Path, symlinkCache *symlinks.KnownSymlinks) bool {
+func hasSymlinkToNodeModules(filePath tspath.Path, projectRootPath tspath.Path, symlinkCache *symlinks.KnownSymlinks) bool {
 	if symlinkCache == nil {
+		return false
+	}
+	// Keep files inside this project indexed in project buckets even if they are
+	// reachable through a node_modules symlink from elsewhere.
+	if projectRootPath.ContainsPath(filePath) {
 		return false
 	}
 
@@ -1225,6 +1230,7 @@ func (b *registryBuilder) buildProjectBucket(
 	result.bucket = &RegistryBucket{}
 	moduleResolver := module.NewResolverWithOptions(b.host, core.EmptyCompilerOptions, "", "", b.resolverOptions)
 	program := b.host.GetProgramForProject(projectPath)
+	projectRootPath := b.base.toPath(program.GetCurrentDirectory())
 	symlinkCache := program.GetSymlinkCache()
 	getChecker, closePool, checkerCount := createCheckerPool(program)
 	defer closePool()
@@ -1248,7 +1254,7 @@ func (b *registryBuilder) buildProjectBucket(
 		}
 		// Skip files that are realpaths of symlinks in node_modules.
 		// These files will be indexed via their symlinked path in node_modules buckets.
-		if hasSymlinkToNodeModules(file.Path(), symlinkCache) {
+		if hasSymlinkToNodeModules(file.Path(), projectRootPath, symlinkCache) {
 			continue
 		}
 		wg.Go(func() {
