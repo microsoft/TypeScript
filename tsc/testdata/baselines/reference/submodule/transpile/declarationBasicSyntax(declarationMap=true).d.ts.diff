@@ -1,0 +1,11 @@
+--- old.transpile/declarationBasicSyntax(declarationMap=true).d.ts
++++ new.transpile/declarationBasicSyntax(declarationMap=true).d.ts
+@@= skipped -77, +77 lines =@@
+ }
+ //# sourceMappingURL=class.d.ts.map
+ //// [class.d.ts.map] ////
+-{"version":3,"file":"class.d.ts","sourceRoot":"","sources":["class.ts"],"names":[],"mappings":"AACA,qBAAa,GAAG;;IACZ,CAAC,EAAE,MAAM,CAAC;IACV,CAAC,CAAC,EAAE,MAAM,CAAC;IACH,CAAC,EAAE,MAAM,CAAC;IAEX,CAAC,EAAE,MAAM,CAAC;IACjB,SAAS,CAAC,CAAC,EAAE,MAAM,CAAC;IACpB,OAAO,CAAC,CAAC,CAAS;IAClB,CAAC,GAAG,CAAC,EAAE,MAAM,CAAC;CAEjB;AAED,8BAAsB,GAAG;IACrB,QAAQ,CAAC,CAAC,EAAE,MAAM,CAAC;IACnB,QAAQ,CAAC,MAAM,IAAI,IAAI;CAC1B"}
++{"version":3,"file":"class.d.ts","sourceRoot":"","sources":["class.ts"],"names":[],"mappings":"AACA,qBAAa,GAAG;;IACZ,CAAC,EAAE,MAAM,CAAC;IACV,CAAC,CAAC,EAAE,MAAM,CAAC;IACH,CAAC,EAAE,MAAM,CAAC;IAEX,CAAC,EAAE,MAAM,CAAC;IACjB,SAAS,CAAC,CAAC,EAAE,MAAM,CAAC;IACpB,OAAO,CAAC,CAAC,CAAS;IAClB,CAAC,GAAG,CAAC,EAAE,MAAM,CAAC;CAEjB;AAED,8BAAsB,GAAG;IACrB,QAAQ,CAAC,CAAC,EAAE,MAAM,CAAC;IACnB,QAAQ,CAAC,MAAM,IAAI,IAAI,CAAC;CAC3B"}
+
+
+ //// [Diagnostics reported]

@@ -89,6 +89,32 @@ const defaultFiles = {
 };
 
 describe("API", () => {
+    test("transpile", async () => {
+        const api = spawnAPI({
+            "/input.ts": "export const x: number = 1;",
+        });
+        try {
+            const moduleOutput = await api.transpileModule("export const x: number = 1;", {
+                compilerOptions: { module: ModuleKind.CommonJS },
+            });
+            assert.match(moduleOutput.outputText, /exports\.x = 1/);
+
+            const moduleFileOutput = await api.transpileModuleFromFile("/input.ts", {
+                compilerOptions: { module: ModuleKind.CommonJS },
+            });
+            assert.match(moduleFileOutput.outputText, /exports\.x = 1/);
+
+            const declarationOutput = await api.transpileDeclaration("export const x: number = 1;");
+            assert.equal(declarationOutput.outputText, "export declare const x: number;\n");
+
+            const declarationFileOutput = await api.transpileDeclarationFromFile("/input.ts");
+            assert.equal(declarationFileOutput.outputText, "export declare const x: number;\n");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("parseConfigFile", async () => {
         const api = spawnAPI();
         try {

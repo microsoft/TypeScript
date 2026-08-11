@@ -1655,7 +1655,7 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 		defer tr.Push(tracing.PhaseEmit, "emit", nil, true)()
 	}
 
-	if !options.ForceEmit && options.EmitOnly != EmitOnlyForcedDts {
+	if !options.ForceEmit && options.EmitOnly != EmitOnlyBuilderSignature {
 		result := HandleNoEmitOnError(
 			ctx,
 			p,
@@ -1674,7 +1674,7 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 	}
 	wg := core.NewWorkGroup(p.SingleThreaded())
 	var emitters []*emitter
-	forceDtsEmit := options.EmitOnly == EmitOnlyForcedDts || options.ForceEmit && options.EmitOnly == EmitOnlyDts
+	forceDtsEmit := options.EmitOnly == EmitOnlyBuilderSignature || options.ForceEmit && options.EmitOnly == EmitOnlyDts
 	forceJsEmit := options.ForceEmit && options.EmitOnly == EmitOnlyJs
 	sourceFiles := p.getSourceFilesToEmit(options.TargetSourceFiles, forceDtsEmit, forceJsEmit)
 
