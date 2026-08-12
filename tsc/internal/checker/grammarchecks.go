@@ -82,7 +82,7 @@ func (c *Checker) checkGrammarRegularExpressionLiteral(node *ast.RegularExpressi
 				lastError.AddRelatedInfo(err)
 			} else if lastError == nil || start != lastError.Pos() {
 				lastError = ast.NewDiagnostic(sourceFile, core.NewTextRange(start, start+length), message, args...)
-				c.addDiagnostic(lastError)
+				lastError = c.addDiagnostic(lastError)
 			}
 		})
 		c.regExpScanner.SetText(sourceFile.Text())

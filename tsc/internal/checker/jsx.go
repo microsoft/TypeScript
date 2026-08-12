@@ -124,6 +124,7 @@ func (c *Checker) checkJsxFragment(node *ast.Node) *Type {
 }
 
 func (c *Checker) checkJsxAttributes(node *ast.Node, checkMode CheckMode) *Type {
+	c.checkNodeDeferred(node)
 	return c.createJsxAttributesTypeFromAttributesProperty(node.Parent, checkMode)
 }
 
@@ -755,9 +756,6 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 				}
 				if attributeDecl.Name().Text() == jsxChildrenPropertyName {
 					explicitlySpecifyChildrenAttribute = true
-				}
-				if ast.IsIdentifier(attributeDecl.Name()) {
-					c.checkDeprecatedProperty(attributeDecl.Name(), contextualType)
 				}
 				if contextualType != nil && checkMode&CheckModeInferential != 0 && checkMode&CheckModeSkipContextSensitive == 0 && c.isContextSensitive(attributeDecl) {
 					inferenceContext := c.getInferenceContext(attributes)

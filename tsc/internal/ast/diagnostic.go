@@ -163,28 +163,68 @@ func NewCompilerDiagnostic(message *diagnostics.Message, args ...any) *Diagnosti
 type DiagnosticsCollection struct {
 	mu                       sync.Mutex
 	count                    int
-	fileDiagnostics          map[string][]*Diagnostic
-	fileDiagnosticsSorted    collections.Set[string]
+	fileDiagnostics          map[*SourceFile][]*Diagnostic
+	fileDiagnosticsSorted    collections.Set[*SourceFile]
 	nonFileDiagnostics       []*Diagnostic
 	nonFileDiagnosticsSorted bool
+	diagnosticIndex          map[diagnosticLocationKey]*Diagnostic
+	diagnosticCollisions     map[diagnosticLocationKey][]*Diagnostic
 }
 
-func (c *DiagnosticsCollection) Add(diagnostic *Diagnostic) {
+func (c *DiagnosticsCollection) Add(diagnostic *Diagnostic) *Diagnostic {
 	c.mu.Lock()
 	defer c.mu.Unlock()
+
+	key := getDiagnosticLocationKey(diagnostic)
+	if existing := c.diagnosticIndex[key]; existing != nil {
+		if EqualDiagnostics(existing, diagnostic) {
+			return existing
+		}
+		for _, collision := range c.diagnosticCollisions[key] {
+			if EqualDiagnostics(collision, diagnostic) {
+				return collision
+			}
+		}
+	}
+	if c.diagnosticIndex == nil {
+		c.diagnosticIndex = make(map[diagnosticLocationKey]*Diagnostic)
+	}
+	if c.diagnosticIndex[key] == nil {
+		c.diagnosticIndex[key] = diagnostic
+	} else {
+		if c.diagnosticCollisions == nil {
+			c.diagnosticCollisions = make(map[diagnosticLocationKey][]*Diagnostic)
+		}
+		c.diagnosticCollisions[key] = append(c.diagnosticCollisions[key], diagnostic)
+	}
 
 	c.count++
 
 	if diagnostic.File() != nil {
-		fileName := diagnostic.File().FileName()
+		file := diagnostic.File()
 		if c.fileDiagnostics == nil {
-			c.fileDiagnostics = make(map[string][]*Diagnostic)
+			c.fileDiagnostics = make(map[*SourceFile][]*Diagnostic)
 		}
-		c.fileDiagnostics[fileName] = append(c.fileDiagnostics[fileName], diagnostic)
-		c.fileDiagnosticsSorted.Delete(fileName)
+		c.fileDiagnostics[file] = append(c.fileDiagnostics[file], diagnostic)
+		c.fileDiagnosticsSorted.Delete(file)
 	} else {
 		c.nonFileDiagnostics = append(c.nonFileDiagnostics, diagnostic)
 		c.nonFileDiagnosticsSorted = false
+	}
+	return diagnostic
+}
+
+type diagnosticLocationKey struct {
+	file *SourceFile
+	loc  core.TextRange
+	code int32
+}
+
+func getDiagnosticLocationKey(diagnostic *Diagnostic) diagnosticLocationKey {
+	return diagnosticLocationKey{
+		file: diagnostic.File(),
+		loc:  diagnostic.Loc(),
+		code: diagnostic.Code(),
 	}
 }
 
@@ -194,7 +234,7 @@ func (c *DiagnosticsCollection) Lookup(diagnostic *Diagnostic) *Diagnostic {
 
 	var diagnostics []*Diagnostic
 	if diagnostic.File() != nil {
-		diagnostics = c.getDiagnosticsForFileLocked(diagnostic.File().FileName())
+		diagnostics = c.getDiagnosticsForFileLocked(diagnostic.File())
 	} else {
 		diagnostics = c.getGlobalDiagnosticsLocked()
 	}
@@ -219,19 +259,19 @@ func (c *DiagnosticsCollection) getGlobalDiagnosticsLocked() []*Diagnostic {
 	return slices.Clone(c.nonFileDiagnostics)
 }
 
-func (c *DiagnosticsCollection) GetDiagnosticsForFile(fileName string) []*Diagnostic {
+func (c *DiagnosticsCollection) GetDiagnosticsForFile(file *SourceFile) []*Diagnostic {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	return c.getDiagnosticsForFileLocked(fileName)
+	return c.getDiagnosticsForFileLocked(file)
 }
 
-func (c *DiagnosticsCollection) getDiagnosticsForFileLocked(fileName string) []*Diagnostic {
-	if !c.fileDiagnosticsSorted.Has(fileName) {
-		slices.SortStableFunc(c.fileDiagnostics[fileName], CompareDiagnostics)
-		c.fileDiagnosticsSorted.Add(fileName)
+func (c *DiagnosticsCollection) getDiagnosticsForFileLocked(file *SourceFile) []*Diagnostic {
+	if !c.fileDiagnosticsSorted.Has(file) {
+		slices.SortStableFunc(c.fileDiagnostics[file], CompareDiagnostics)
+		c.fileDiagnosticsSorted.Add(file)
 	}
-	return slices.Clone(c.fileDiagnostics[fileName])
+	return slices.Clone(c.fileDiagnostics[file])
 }
 
 func (c *DiagnosticsCollection) GetDiagnostics() []*Diagnostic {
@@ -269,8 +309,16 @@ func EqualDiagnosticsNoRelatedInfo(d1, d2 *Diagnostic) bool {
 	return getDiagnosticPath(d1) == getDiagnosticPath(d2) &&
 		d1.Loc() == d2.Loc() &&
 		d1.Code() == d2.Code() &&
+		getDiagnosticMessageIdentity(d1) == getDiagnosticMessageIdentity(d2) &&
 		slices.Equal(d1.MessageArgs(), d2.MessageArgs()) &&
 		slices.EqualFunc(d1.MessageChain(), d2.MessageChain(), equalMessageChain)
+}
+
+func getDiagnosticMessageIdentity(diagnostic *Diagnostic) string {
+	if diagnostic.message != nil && diagnostic.Code() == -1 {
+		return diagnostic.message.String()
+	}
+	return string(diagnostic.MessageKey())
 }
 
 func equalMessageChain(c1, c2 *Diagnostic) bool {
@@ -343,6 +391,10 @@ func CompareDiagnostics(d1, d2 *Diagnostic) int {
 		return c
 	}
 	c = int(d1.Code()) - int(d2.Code())
+	if c != 0 {
+		return c
+	}
+	c = strings.Compare(getDiagnosticMessageIdentity(d1), getDiagnosticMessageIdentity(d2))
 	if c != 0 {
 		return c
 	}
