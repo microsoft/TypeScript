@@ -1,4 +1,3 @@
-/// <reference path="../node/node.ts" preserve="true" />
 import { CheckFlags } from "#enums/checkFlags";
 import { CompletionItemKind } from "#enums/completionItemKind";
 import { DiagnosticCategory } from "#enums/diagnosticCategory";
@@ -724,6 +723,7 @@ export class Project {
     readonly program: Program;
     readonly checker: Checker;
     readonly emitter: Emitter;
+    readonly languageService: LanguageService;
     private client: Client;
     private snapshotId: number;
 
@@ -757,6 +757,40 @@ export class Project {
             objectRegistry,
         );
         this.emitter = new Emitter(client);
+        this.languageService = new LanguageService(snapshotId, this, client, objectRegistry);
+    }
+
+    /** @deprecated Use `languageService.getImportAdderEdits`. */
+    getImportAdderEdits(file: DocumentIdentifier, actions: readonly ImportAdderAction[]): Promise<readonly TextEdit[]> {
+        return this.languageService.getImportAdderEdits(file, actions);
+    }
+
+    /** @deprecated Use `languageService.getImportEditsForSymbols`. */
+    getImportEditsForSymbols(file: DocumentIdentifier, symbols: readonly Symbol[], options: GetImportEditsForSymbolsOptions = {}): Promise<readonly TextEdit[]> {
+        return this.languageService.getImportEditsForSymbols(file, symbols, options);
+    }
+
+    dispose(): void {
+        this.checker.dispose();
+    }
+}
+
+export class LanguageService {
+    private snapshotId: number;
+    private project: Project;
+    private client: Client;
+    private objectRegistry: ProjectObjectRegistry;
+
+    constructor(
+        snapshotId: number,
+        project: Project,
+        client: Client,
+        objectRegistry: ProjectObjectRegistry,
+    ) {
+        this.snapshotId = snapshotId;
+        this.project = project;
+        this.client = client;
+        this.objectRegistry = objectRegistry;
     }
 
     async getImportAdderEdits(file: DocumentIdentifier, actions: readonly ImportAdderAction[]): Promise<readonly TextEdit[]> {
@@ -778,7 +812,7 @@ export class Project {
 
         const data = await this.client.apiRequest<TextEdit[]>("getImportAdderEdits", {
             snapshot: this.snapshotId,
-            project: this.id,
+            project: this.project.id,
             file,
             actions: requestActions,
         });
@@ -804,8 +838,49 @@ export class Project {
         );
     }
 
-    dispose(): void {
-        this.checker.dispose();
+    async getReferencedSymbolsForNode(node: Node, position: number): Promise<ReferencedSymbolEntry[]> {
+        const data = await this.client.apiRequest<{ definition: string; symbol?: SymbolResponse; references: string[]; }[] | null>("getReferencedSymbolsForNode", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            node: getNodeId(node),
+            position,
+        });
+        return (data ?? []).map(entry => ({
+            definition: new NodeHandle(entry.definition, this.project),
+            symbol: entry.symbol ? this.objectRegistry.getOrCreateSymbol(entry.symbol) : undefined,
+            references: (entry.references ?? []).map(h => new NodeHandle(h, this.project)),
+        }));
+    }
+
+    async getSignatureUsage(signatureDecl: Node): Promise<SignatureUsage[]> {
+        const data = await this.client.apiRequest<{ name: string; call?: string; }[] | null>("getSignatureUsages", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            signatureDecl: getNodeId(signatureDecl),
+        });
+        return (data ?? []).map(entry => ({
+            name: new NodeHandle(entry.name, this.project),
+            call: entry.call ? new NodeHandle(entry.call, this.project) : undefined,
+        }));
+    }
+
+    async getCompletionsAtPosition(document: string, position: number, options?: CompletionOptions): Promise<CompletionInfo | undefined> {
+        const data = await this.client.apiRequest<CompletionInfoResponse | null>("getCompletionsAtPosition", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file: document,
+            position,
+            triggerCharacter: options?.triggerCharacter,
+            includeSymbol: options?.includeSymbol,
+        });
+        if (!data) return undefined;
+        return {
+            isIncomplete: data.isIncomplete,
+            entries: data.entries.map(e => ({
+                ...e,
+                symbol: e.symbol ? this.objectRegistry.getOrCreateSymbol(e.symbol) : undefined,
+            })),
+        };
     }
 }
 
@@ -1228,49 +1303,19 @@ export class Checker {
         return (data ?? []).map(h => new NodeHandle(h, this.project));
     }
 
-    async getReferencedSymbolsForNode(node: Node, position: number): Promise<ReferencedSymbolEntry[]> {
-        const data = await this.client.apiRequest<{ definition: string; symbol?: SymbolResponse; references: string[]; }[] | null>("getReferencedSymbolsForNode", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            node: getNodeId(node),
-            position,
-        });
-        return (data ?? []).map(entry => ({
-            definition: new NodeHandle(entry.definition, this.project),
-            symbol: entry.symbol ? this.objectRegistry.getOrCreateSymbol(entry.symbol) : undefined,
-            references: (entry.references ?? []).map(h => new NodeHandle(h, this.project)),
-        }));
+    /** @deprecated Use `project.languageService.getReferencedSymbolsForNode`. */
+    getReferencedSymbolsForNode(node: Node, position: number): Promise<ReferencedSymbolEntry[]> {
+        return this.project.languageService.getReferencedSymbolsForNode(node, position);
     }
 
-    async getSignatureUsage(signatureDecl: Node): Promise<SignatureUsage[]> {
-        const data = await this.client.apiRequest<{ name: string; call?: string; }[] | null>("getSignatureUsages", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            signatureDecl: getNodeId(signatureDecl),
-        });
-        return (data ?? []).map(entry => ({
-            name: new NodeHandle(entry.name, this.project),
-            call: entry.call ? new NodeHandle(entry.call, this.project) : undefined,
-        }));
+    /** @deprecated Use `project.languageService.getSignatureUsage`. */
+    getSignatureUsage(signatureDecl: Node): Promise<SignatureUsage[]> {
+        return this.project.languageService.getSignatureUsage(signatureDecl);
     }
 
-    async getCompletionsAtPosition(document: string, position: number, options?: CompletionOptions): Promise<CompletionInfo | undefined> {
-        const data = await this.client.apiRequest<CompletionInfoResponse | null>("getCompletionsAtPosition", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            file: document,
-            position,
-            triggerCharacter: options?.triggerCharacter,
-            includeSymbol: options?.includeSymbol,
-        });
-        if (!data) return undefined;
-        return {
-            isIncomplete: data.isIncomplete,
-            entries: data.entries.map(e => ({
-                ...e,
-                symbol: e.symbol ? this.objectRegistry.getOrCreateSymbol(e.symbol) : undefined,
-            })),
-        };
+    /** @deprecated Use `project.languageService.getCompletionsAtPosition`. */
+    getCompletionsAtPosition(document: string, position: number, options?: CompletionOptions): Promise<CompletionInfo | undefined> {
+        return this.project.languageService.getCompletionsAtPosition(document, position, options);
     }
 
     /**

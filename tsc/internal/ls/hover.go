@@ -122,7 +122,7 @@ func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Check
 	}
 	quickInfoRuns := info.displayParts.GetRuns()
 
-	documentation := l.getDocumentationForSymbol(c, symbol, node, info.declaration, contentFormat, false /*commentOnly*/)
+	documentation := getDocumentationForSymbol(l.getMappedLocation, c, symbol, node, info.declaration, contentFormat, false /*commentOnly*/)
 
 	// VS's rich hover (_vs_rawContent) renders documentation as plain colorized text with no Markdown
 	// parser, so it can't use the tag section (@param/@returns/@example/@see, etc.) that
@@ -134,7 +134,7 @@ func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Check
 	// comment-only, plain-text documentation for the VS path instead of reusing `documentation`.
 	var vsDocumentation string
 	if vsCapability {
-		vsDocumentation = l.getDocumentationForSymbol(c, symbol, node, info.declaration, lsproto.MarkupKindPlainText, true /*commentOnly*/)
+		vsDocumentation = getDocumentationForSymbol(l.getMappedLocation, c, symbol, node, info.declaration, lsproto.MarkupKindPlainText, true /*commentOnly*/)
 	}
 
 	return quickInfo, documentation, vsDocumentation, quickInfoRuns
@@ -143,21 +143,21 @@ func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Check
 // getDocumentationForSymbol tries each documentation source in turn (call-signature documentation,
 // declaration JSDoc, alias target JSDoc) and returns the first non-empty result, formatted for
 // contentFormat. commentOnly restricts the result to the JSDoc summary, excluding the @tag section.
-func (l *LanguageService) getDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, declaration *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
-	documentation := l.documentationFromSignature(c, symbol, getCallOrNewExpression(node), node, contentFormat, commentOnly)
+func getDocumentationForSymbol(getMappedLocation func(string, core.TextRange) lsproto.Location, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, declaration *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+	documentation := documentationFromSignature(getMappedLocation, c, symbol, getCallOrNewExpression(node), node, contentFormat, commentOnly)
 	if documentation != "" {
 		return documentation
 	}
 
-	documentation = l.getDocumentationFromDeclaration(c, symbol, declaration, node, contentFormat, commentOnly)
+	documentation = getDocumentationFromDeclaration(getMappedLocation, c, symbol, declaration, node, contentFormat, commentOnly)
 	if documentation != "" {
 		return documentation
 	}
 
-	return l.documentationFromAlias(c, symbol, node, contentFormat, commentOnly)
+	return documentationFromAlias(getMappedLocation, c, symbol, node, contentFormat, commentOnly)
 }
 
-func (l *LanguageService) documentationFromSignature(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+func documentationFromSignature(getMappedLocation func(string, core.TextRange) lsproto.Location, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
 	if node == nil {
 		return ""
 	}
@@ -170,12 +170,12 @@ func (l *LanguageService) documentationFromSignature(c *checker.Checker, symbol 
 		return ""
 	}
 	if ast.IsCallSignatureDeclaration(declaration) || ast.IsConstructSignatureDeclaration(declaration) {
-		return l.getDocumentationFromDeclaration(c, symbol, declaration, location, contentFormat, commentOnly)
+		return getDocumentationFromDeclaration(getMappedLocation, c, symbol, declaration, location, contentFormat, commentOnly)
 	}
 	return ""
 }
 
-func (l *LanguageService) documentationFromAlias(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+func documentationFromAlias(getMappedLocation func(string, core.TextRange) lsproto.Location, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
 	if symbol == nil || symbol.Flags&ast.SymbolFlagsAlias == 0 {
 		return ""
 	}
@@ -196,7 +196,7 @@ func (l *LanguageService) documentationFromAlias(c *checker.Checker, symbol *ast
 			continue
 		}
 
-		if documentation := l.getDocumentationFromDeclaration(c, candidate, aliasedDeclaration, node, contentFormat, commentOnly); documentation != "" {
+		if documentation := getDocumentationFromDeclaration(getMappedLocation, c, candidate, aliasedDeclaration, node, contentFormat, commentOnly); documentation != "" {
 			return documentation
 		}
 	}
@@ -204,14 +204,14 @@ func (l *LanguageService) documentationFromAlias(c *checker.Checker, symbol *ast
 	return ""
 }
 
-func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, symbol *ast.Symbol, declaration *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+func getDocumentationFromDeclaration(getMappedLocation func(string, core.TextRange) lsproto.Location, c *checker.Checker, symbol *ast.Symbol, declaration *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
 	if declaration == nil {
 		return ""
 	}
 	isMarkdown := contentFormat == lsproto.MarkupKindMarkdown
 	var b strings.Builder
 	if jsdoc := getJSDocOrTag(c, declaration, &collections.Set[*ast.Symbol]{}); jsdoc != nil && !(declaration.Flags&ast.NodeFlagsReparsed == 0 && containsTypedefTag(jsdoc)) {
-		l.writeComments(&b, c, jsdoc.Comments(), isMarkdown)
+		writeComments(getMappedLocation, &b, c, jsdoc.Comments(), isMarkdown)
 		if jsdoc.Kind == ast.KindJSDoc && !commentOnly {
 			if tags := jsdoc.AsJSDoc().Tags; tags != nil {
 				for _, tag := range tags.Nodes {
@@ -268,24 +268,24 @@ func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, sy
 						}
 					} else if tag.Kind == ast.KindJSDocSeeTag && tag.AsJSDocSeeTag().NameExpression != nil {
 						b.WriteString(" — ")
-						l.writeNameLink(&b, c, tag.AsJSDocSeeTag().NameExpression.Name(), "", false /*quote*/, isMarkdown)
+						writeNameLink(getMappedLocation, &b, c, tag.AsJSDocSeeTag().NameExpression.Name(), "", false /*quote*/, isMarkdown)
 						if len(comments) != 0 {
 							b.WriteString(" ")
-							l.writeComments(&b, c, comments, isMarkdown)
+							writeComments(getMappedLocation, &b, c, comments, isMarkdown)
 						}
 					} else if tag.Kind == ast.KindJSDocThrowsTag && tag.AsJSDocThrowsTag().TypeExpression != nil {
 						b.WriteString(" — ")
 						b.WriteString(scanner.GetTextOfNode(tag.AsJSDocThrowsTag().TypeExpression))
 						if len(comments) != 0 {
 							b.WriteString(" ")
-							l.writeComments(&b, c, comments, isMarkdown)
+							writeComments(getMappedLocation, &b, c, comments, isMarkdown)
 						}
 					} else if len(comments) != 0 {
 						b.WriteString(" ")
 						if comments[0].Kind != ast.KindJSDocText || !strings.HasPrefix(comments[0].Text(), "-") {
 							b.WriteString("— ")
 						}
-						l.writeComments(&b, c, comments, isMarkdown)
+						writeComments(getMappedLocation, &b, c, comments, isMarkdown)
 					}
 				}
 			}
@@ -898,152 +898,6 @@ func containsTypedefTag(jsdoc *ast.Node) bool {
 	return false
 }
 
-func getJSDoc(node *ast.Node) *ast.Node {
-	return core.LastOrNil(node.JSDoc(nil))
-}
-
-func getJSDocOrTag(c *checker.Checker, node *ast.Node, seenSymbols *collections.Set[*ast.Symbol]) *ast.Node {
-	if node == nil {
-		return nil
-	}
-	if jsdoc := getJSDoc(node); jsdoc != nil {
-		return jsdoc
-	}
-	switch {
-	case ast.IsParameterDeclaration(node):
-		name := node.Name()
-		if ast.IsBindingPattern(name) {
-			// For binding patterns, match JSDoc @param tags by position rather than by name
-			return getJSDocParameterTagByPosition(c, node)
-		}
-		return getMatchingJSDocTag(c, node.Parent, name.Text(), isMatchingParameterTag, seenSymbols)
-	case ast.IsTypeParameterDeclaration(node):
-		return getMatchingJSDocTag(c, node.Parent, node.Name().Text(), isMatchingTemplateTag, seenSymbols)
-	case ast.IsVariableDeclaration(node) && ast.IsVariableDeclarationList(node.Parent) && core.FirstOrNil(node.Parent.AsVariableDeclarationList().Declarations.Nodes) == node:
-		return getJSDocOrTag(c, node.Parent.Parent, seenSymbols)
-	case (ast.IsFunctionExpressionOrArrowFunction(node) || ast.IsClassExpression(node)) &&
-		(ast.IsVariableDeclaration(node.Parent) || ast.IsPropertyDeclaration(node.Parent) || ast.IsPropertyAssignment(node.Parent)) && node.Parent.Initializer() == node:
-		return getJSDocOrTag(c, node.Parent, seenSymbols)
-	case ast.IsBindingElement(node) && ast.IsObjectBindingPattern(node.Parent):
-		if name := node.PropertyNameOrName(); ast.IsIdentifier(name) {
-			if objectType := c.GetTypeAtLocation(node.Parent); objectType != nil {
-				if prop := c.GetPropertyOfType(objectType, name.Text()); prop != nil {
-					for _, d := range prop.Declarations {
-						if jsdoc := getJSDoc(d); jsdoc != nil {
-							return jsdoc
-						}
-					}
-				}
-			}
-		}
-	}
-	if symbol := node.Symbol(); symbol != nil && node.Parent != nil {
-		if ast.IsFunctionDeclaration(node) || ast.IsMethodDeclaration(node) || ast.IsMethodSignatureDeclaration(node) || ast.IsConstructorDeclaration(node) || ast.IsConstructSignatureDeclaration(node) {
-			firstSignature := core.Find(symbol.Declarations, ast.IsFunctionLike)
-			if firstSignature != nil && node != firstSignature {
-				if jsDoc := getJSDocOrTag(c, firstSignature, seenSymbols); jsDoc != nil {
-					return jsDoc
-				}
-			}
-		}
-		if ast.IsClassOrInterfaceLike(node.Parent) {
-			isStatic := ast.HasStaticModifier(node)
-			classType := c.GetDeclaredTypeOfSymbol(node.Parent.Symbol())
-			if isStatic {
-				// For static members, use the checker's base constructor type resolution.
-				// This correctly handles intersection constructor types from mixins
-				// (e.g., typeof MixinClass & T) by preserving the full intersection.
-				staticBaseType := c.GetApparentType(c.GetBaseConstructorTypeOfClass(classType))
-				if prop := c.GetPropertyOfType(staticBaseType, symbol.Name); prop != nil && prop.ValueDeclaration != nil && seenSymbols.AddIfAbsent(prop) {
-					if jsDoc := getJSDocOrTag(c, prop.ValueDeclaration, seenSymbols); jsDoc != nil {
-						return jsDoc
-					}
-				}
-			} else {
-				for _, baseType := range c.GetBaseTypes(classType) {
-					if prop := c.GetPropertyOfType(baseType, symbol.Name); prop != nil && prop.ValueDeclaration != nil && seenSymbols.AddIfAbsent(prop) {
-						if jsDoc := getJSDocOrTag(c, prop.ValueDeclaration, seenSymbols); jsDoc != nil {
-							return jsDoc
-						}
-					}
-				}
-			}
-		}
-	}
-	return nil
-}
-
-func getMatchingJSDocTag(c *checker.Checker, node *ast.Node, name string, match func(*ast.Node, string) bool, seenSymbols *collections.Set[*ast.Symbol]) *ast.Node {
-	if jsdoc := getJSDocOrTag(c, node, seenSymbols); jsdoc != nil && jsdoc.Kind == ast.KindJSDoc {
-		if tags := jsdoc.AsJSDoc().Tags; tags != nil {
-			for _, tag := range tags.Nodes {
-				if match(tag, name) {
-					return tag
-				}
-			}
-		}
-	}
-	return nil
-}
-
-// getJSDocParameterTagByPosition finds a JSDoc @param tag for a binding pattern parameter by position.
-// Since binding patterns don't have a simple name, we match the @param tag at the same index as the parameter.
-func getJSDocParameterTagByPosition(c *checker.Checker, param *ast.Node) *ast.Node {
-	parent := param.Parent
-	if parent == nil {
-		return nil
-	}
-
-	// Find the parameter's index in the parent's parameters list
-	params := parent.Parameters()
-	paramIndex := -1
-	for i, p := range params {
-		if p.AsNode() == param {
-			paramIndex = i
-			break
-		}
-	}
-	if paramIndex < 0 {
-		return nil
-	}
-
-	// Get the JSDoc for the parent function/method
-	jsdoc := getJSDocOrTag(c, parent, &collections.Set[*ast.Symbol]{})
-	if jsdoc == nil || jsdoc.Kind != ast.KindJSDoc {
-		return nil
-	}
-
-	// Collect all @param tags in order
-	tags := jsdoc.AsJSDoc().Tags
-	if tags == nil {
-		return nil
-	}
-
-	paramTagIndex := 0
-	for _, tag := range tags.Nodes {
-		if tag.Kind == ast.KindJSDocParameterTag {
-			if paramTagIndex == paramIndex {
-				return tag
-			}
-			paramTagIndex++
-		}
-	}
-	return nil
-}
-
-func isMatchingParameterTag(tag *ast.Node, name string) bool {
-	return tag.Kind == ast.KindJSDocParameterTag && isNodeWithName(tag, name)
-}
-
-func isMatchingTemplateTag(tag *ast.Node, name string) bool {
-	return tag.Kind == ast.KindJSDocTemplateTag && core.Some(tag.TypeParameters(), func(tp *ast.Node) bool { return isNodeWithName(tp, name) })
-}
-
-func isNodeWithName(node *ast.Node, name string) bool {
-	nodeName := node.Name()
-	return ast.IsIdentifier(nodeName) && nodeName.Text() == name
-}
-
 func writeCode(b *strings.Builder, lang string, code string) {
 	if code == "" {
 		return
@@ -1065,20 +919,20 @@ func writeCode(b *strings.Builder, lang string, code string) {
 	b.WriteByte('\n')
 }
 
-func (l *LanguageService) writeComments(b *strings.Builder, c *checker.Checker, comments []*ast.Node, isMarkdown bool) {
+func writeComments(getMappedLocation func(string, core.TextRange) lsproto.Location, b *strings.Builder, c *checker.Checker, comments []*ast.Node, isMarkdown bool) {
 	for _, comment := range comments {
 		switch comment.Kind {
 		case ast.KindJSDocText:
 			b.WriteString(comment.Text())
 		case ast.KindJSDocLink, ast.KindJSDocLinkPlain:
-			l.writeJSDocLink(b, c, comment, false /*quote*/, isMarkdown)
+			writeJSDocLink(getMappedLocation, b, c, comment, false /*quote*/, isMarkdown)
 		case ast.KindJSDocLinkCode:
-			l.writeJSDocLink(b, c, comment, true /*quote*/, isMarkdown)
+			writeJSDocLink(getMappedLocation, b, c, comment, true /*quote*/, isMarkdown)
 		}
 	}
 }
 
-func (l *LanguageService) writeJSDocLink(b *strings.Builder, c *checker.Checker, link *ast.Node, quote bool, isMarkdown bool) {
+func writeJSDocLink(getMappedLocation func(string, core.TextRange) lsproto.Location, b *strings.Builder, c *checker.Checker, link *ast.Node, quote bool, isMarkdown bool) {
 	name := link.Name()
 	text := strings.Trim(link.Text(), " ")
 	if name == nil {
@@ -1107,16 +961,16 @@ func (l *LanguageService) writeJSDocLink(b *strings.Builder, c *checker.Checker,
 		}
 		return
 	}
-	l.writeNameLink(b, c, name, text, quote, isMarkdown)
+	writeNameLink(getMappedLocation, b, c, name, text, quote, isMarkdown)
 }
 
-func (l *LanguageService) writeNameLink(b *strings.Builder, c *checker.Checker, name *ast.Node, text string, quote bool, isMarkdown bool) {
+func writeNameLink(getMappedLocation func(string, core.TextRange) lsproto.Location, b *strings.Builder, c *checker.Checker, name *ast.Node, text string, quote bool, isMarkdown bool) {
 	declarations := getDeclarationsFromLocation(c, name)
 	if len(declarations) != 0 {
 		declaration := declarations[0]
 		file := ast.GetSourceFileOfNode(declaration)
 		node := core.OrElse(ast.GetNameOfDeclaration(declaration), declaration)
-		loc := l.getMappedLocation(file.FileName(), createRangeFromNode(node, file))
+		loc := getMappedLocation(file.FileName(), createRangeFromNode(node, file))
 		prefixLen := core.IfElse(strings.HasPrefix(text, "()"), 2, 0)
 		linkText := trimCommentPrefix(text[prefixLen:])
 		if linkText == "" {

@@ -3149,12 +3149,7 @@ func (s *Session) handleGetJSDocTags(ctx context.Context, params *CheckerSymbolP
 		return nil, nil
 	}
 
-	langSvc, err := s.setupLanguageService(setup.sd, setup.program, params.Project, "")
-	if err != nil {
-		return nil, err
-	}
-
-	tags := langSvc.GetSymbolJSDocTags(symbol)
+	tags := ls.GetSymbolJSDocTags(symbol)
 	if len(tags) == 0 {
 		return nil, nil
 	}
@@ -3181,12 +3176,7 @@ func (s *Session) handleGetDocumentationComment(ctx context.Context, params *Che
 		return "", nil
 	}
 
-	langSvc, err := s.setupLanguageService(setup.sd, setup.program, params.Project, "")
-	if err != nil {
-		return "", err
-	}
-
-	return langSvc.GetSymbolDocumentationComment(setup.checker, symbol), nil
+	return ls.GetSymbolDocumentationComment(setup.checker, symbol), nil
 }
 
 // handleGetTypeArguments returns the type arguments of a type reference.
