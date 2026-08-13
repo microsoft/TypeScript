@@ -7,16 +7,18 @@
 // Regenerate: npm run generate (from _packages/native-preview)
 //
 import type { CompletionItemKind } from "#enums/completionItemKind";
-import type { DiagnosticCategory } from "#enums/diagnosticCategory";
 import type { ElementFlags } from "#enums/elementFlags";
 import type { ObjectFlags } from "#enums/objectFlags";
 import type { TypeFlags } from "#enums/typeFlags";
 import type { TypePredicateKind } from "#enums/typePredicateKind";
+import type { Diagnostic } from "../proto.ts";
 import type {
     NodeHandle,
     Signature,
     Symbol,
 } from "./api.ts";
+
+export type { Diagnostic } from "../proto.ts";
 
 /**
  * A TypeScript type.
@@ -367,32 +369,6 @@ export interface CompletionEntry {
 export interface CompletionInfo {
     readonly isIncomplete: boolean;
     readonly entries: readonly CompletionEntry[];
-}
-
-/**
- * A diagnostic message from the TypeScript compiler.
- */
-export interface Diagnostic {
-    /** File name of the source file this diagnostic belongs to, if any */
-    readonly fileName?: string | undefined;
-    /** Start position of the diagnostic */
-    readonly pos: number;
-    /** End position of the diagnostic */
-    readonly end: number;
-    /** Diagnostic error code */
-    readonly code: number;
-    /** Diagnostic category (error, warning, suggestion, message) */
-    readonly category: DiagnosticCategory;
-    /** Localized diagnostic message text */
-    readonly text: string;
-    /** Whether this diagnostic highlights unnecessary code */
-    readonly reportsUnnecessary?: boolean | undefined;
-    /** Whether this diagnostic highlights deprecated code */
-    readonly reportsDeprecated?: boolean | undefined;
-    /** Chained diagnostic messages */
-    readonly messageChain?: readonly Diagnostic[] | undefined;
-    /** Related diagnostic information */
-    readonly relatedInformation?: readonly Diagnostic[] | undefined;
 }
 
 export interface EmitOutputFile {

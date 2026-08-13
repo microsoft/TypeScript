@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/packagejson"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -72,6 +73,9 @@ const (
 	MethodInitialize                   Method = "initialize"
 	MethodUpdateSnapshot               Method = "updateSnapshot"
 	MethodUpdateTemporarySnapshot      Method = "updateTemporarySnapshot"
+	MethodParseCommandLine             Method = "parseCommandLine"
+	MethodReadConfigFile               Method = "readConfigFile"
+	MethodParseJsonConfigFile          Method = "parseJsonConfigFileContent"
 	MethodParseConfigFile              Method = "parseConfigFile"
 	MethodTranspileModule              Method = "transpileModule"
 	MethodTranspileModuleFromFile      Method = "transpileModuleFromFile"
@@ -393,6 +397,9 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodInitialize:                   noParams,
 	MethodUpdateSnapshot:               unmarshallerFor[UpdateSnapshotParams],
 	MethodUpdateTemporarySnapshot:      unmarshallerFor[UpdateTemporarySnapshotParams],
+	MethodParseCommandLine:             unmarshallerFor[ParseCommandLineParams],
+	MethodReadConfigFile:               unmarshallerFor[ReadConfigFileParams],
+	MethodParseJsonConfigFile:          unmarshallerFor[ParseJsonConfigFileContentParams],
 	MethodParseConfigFile:              unmarshallerFor[ParseConfigFileParams],
 	MethodTranspileModule:              unmarshallerFor[TranspileParams],
 	MethodTranspileModuleFromFile:      unmarshallerFor[TranspileFromFileParams],
@@ -527,6 +534,45 @@ type ParseConfigFileParams struct {
 	File DocumentIdentifier `json:"file"`
 }
 
+type ParseCommandLineParams struct {
+	CommandLine []string `json:"commandLine"`
+}
+
+type ReadConfigFileParams struct {
+	File DocumentIdentifier `json:"file"`
+}
+
+type ParseJsonConfigFileContentParams struct {
+	JSON            packagejson.JSONValue `json:"json"`
+	ConfigDirectory *string               `json:"configDirectory,omitempty"`
+	ConfigFileName  *DocumentIdentifier   `json:"configFileName,omitempty"`
+}
+
+func jsonValueToAny(value packagejson.JSONValue) any {
+	switch value.Type {
+	case packagejson.JSONValueTypeNotPresent, packagejson.JSONValueTypeNull:
+		return nil
+	case packagejson.JSONValueTypeString, packagejson.JSONValueTypeNumber, packagejson.JSONValueTypeBoolean:
+		return value.Value
+	case packagejson.JSONValueTypeArray:
+		array := value.AsArray()
+		result := make([]any, len(array))
+		for i, child := range array {
+			result[i] = jsonValueToAny(child)
+		}
+		return result
+	case packagejson.JSONValueTypeObject:
+		object := value.AsObject()
+		result := collections.NewOrderedMapWithSizeHint[string, any](object.Size())
+		for key, child := range object.Entries() {
+			result.Set(key, jsonValueToAny(child))
+		}
+		return result
+	default:
+		panic(fmt.Sprintf("unexpected JSON value type %v", value.Type))
+	}
+}
+
 type TranspileOptions struct {
 	CompilerOptions   *core.CompilerOptions `json:"compilerOptions,omitempty"`
 	FileName          string                `json:"fileName,omitempty"`
@@ -568,6 +614,13 @@ type ConfigFileResponse struct {
 	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitempty"`
 	TypeAcquisition   *core.TypeAcquisition    `json:"typeAcquisition,omitempty"`
 	CompileOnSave     *bool                    `json:"compileOnSave,omitempty"`
+	Raw               any                      `json:"raw,omitempty"`
+	Errors            []*DiagnosticResponse    `json:"errors"`
+}
+
+type ReadConfigFileResponse struct {
+	Config any                 `json:"config"`
+	Error  *DiagnosticResponse `json:"error,omitempty"`
 }
 
 type GetDefaultProjectForFileParams struct {
@@ -596,12 +649,43 @@ func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *Conf
 		}
 	}
 	compilerOptions := parsedCommandLine.CompilerOptions()
+	errors := NewDiagnosticResponses(parsedCommandLine.Errors)
+	if errors == nil {
+		errors = []*DiagnosticResponse{}
+	}
 	return &ConfigFileResponse{
 		FileNames:         parsedCommandLine.FileNames(),
 		Options:           compilerOptions,
 		ProjectReferences: parsedCommandLine.ProjectReferences(),
 		TypeAcquisition:   parsedCommandLine.TypeAcquisition(),
 		CompileOnSave:     compileOnSave,
+		Raw:               toProtocolJSONValue(parsedCommandLine.Raw),
+		Errors:            errors,
+	}
+}
+
+func toProtocolJSONValue(value any) any {
+	switch value := value.(type) {
+	case core.WatchFileKind:
+		return int(value) - 1
+	case core.WatchDirectoryKind:
+		return int(value) - 1
+	case core.PollingKind:
+		return int(value) - 1
+	case *collections.OrderedMap[string, any]:
+		result := collections.NewOrderedMapWithSizeHint[string, any](value.Size())
+		for key, child := range value.Entries() {
+			result.Set(key, toProtocolJSONValue(child))
+		}
+		return result
+	case []any:
+		result := make([]any, len(value))
+		for i, child := range value {
+			result[i] = toProtocolJSONValue(child)
+		}
+		return result
+	default:
+		return value
 	}
 }
 

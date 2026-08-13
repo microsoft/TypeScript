@@ -68,6 +68,7 @@ import type {
     ProfileResult,
     ProjectReference,
     ProjectResponse,
+    ReadConfigFileResult,
     SignatureResponse,
     SourceFileMetadata,
     SymbolResponse,
@@ -137,7 +138,7 @@ import type {
 
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, ModifierFlags, ModuleKind, NodeBuilderFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
-export type { APIOptions, AssertsIdentifierTypePredicate, AssertsThisTypePredicate, BigIntLiteralType, BooleanLiteralType, ClientSocketOptions, ClientSpawnOptions, CompilerOptions, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, DocumentIdentifier, DocumentPosition, EmitOutput, EmitOutputFile, EmitResult, FreshableType, GetImportEditsForSymbolsOptions, IdentifierTypePredicate, ImportAdderAction, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, JSDocTagInfo, LiteralType, LSPConnectionOptions, NumberLiteralType, ObjectType, ParsedCommandLine, ProjectReference, RequestTiming, SourceFileMetadata, StringLiteralType, StringMappingType, SubstitutionType, TemplateLiteralType, TextEdit, ThisTypePredicate, TimingAccumulators, TimingInfo, TupleType, Type, TypeAcquisition, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
+export type { APIOptions, AssertsIdentifierTypePredicate, AssertsThisTypePredicate, BigIntLiteralType, BooleanLiteralType, ClientSocketOptions, ClientSpawnOptions, CompilerOptions, CompletionEntry, CompletionInfo, CompletionOptions, ConditionalType, Diagnostic, DocumentIdentifier, DocumentPosition, EmitOutput, EmitOutputFile, EmitResult, FreshableType, GetImportEditsForSymbolsOptions, IdentifierTypePredicate, ImportAdderAction, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, IntrinsicType, JSDocTagInfo, LiteralType, LSPConnectionOptions, NumberLiteralType, ObjectType, ParsedCommandLine, ProjectReference, ReadConfigFileResult, RequestTiming, SourceFileMetadata, StringLiteralType, StringMappingType, SubstitutionType, TemplateLiteralType, TextEdit, ThisTypePredicate, TimingAccumulators, TimingInfo, TupleType, Type, TypeAcquisition, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
 
 interface EmitOutputResponse {
     readonly emitSkipped: boolean;
@@ -195,6 +196,26 @@ export class API<FromLSP extends boolean = false> {
     parseConfigFile(file: DocumentIdentifier): ParsedCommandLine {
         this.ensureInitialized();
         return this.client.apiRequest<ParsedCommandLine>("parseConfigFile", { file });
+    }
+
+    parseCommandLine(commandLine: readonly string[]): ParsedCommandLine {
+        this.ensureInitialized();
+        return this.client.apiRequest<ParsedCommandLine>("parseCommandLine", { commandLine });
+    }
+
+    readConfigFile(file: DocumentIdentifier): ReadConfigFileResult {
+        this.ensureInitialized();
+        return this.client.apiRequest<ReadConfigFileResult>("readConfigFile", { file });
+    }
+
+    parseJsonConfigFileContent(
+        json: any,
+        options:
+            | { configDirectory: string; configFileName?: never; }
+            | { configFileName: DocumentIdentifier; configDirectory?: never; },
+    ): ParsedCommandLine {
+        this.ensureInitialized();
+        return this.client.apiRequest<ParsedCommandLine>("parseJsonConfigFileContent", { json, ...options });
     }
 
     transpileModule(input: string, options: TranspileOptions = {}): TranspileOutput {

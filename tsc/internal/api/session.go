@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/ls/autoimport"
@@ -588,6 +589,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleUpdateSnapshot(ctx, parsed.(*UpdateSnapshotParams))
 	case string(MethodUpdateTemporarySnapshot):
 		return s.handleUpdateTemporarySnapshot(ctx, parsed.(*UpdateTemporarySnapshotParams))
+	case string(MethodParseCommandLine):
+		return s.handleParseCommandLine(ctx, parsed.(*ParseCommandLineParams))
+	case string(MethodReadConfigFile):
+		return s.handleReadConfigFile(ctx, parsed.(*ReadConfigFileParams))
+	case string(MethodParseJsonConfigFile):
+		return s.handleParseJsonConfigFileContent(ctx, parsed.(*ParseJsonConfigFileContentParams))
 	case string(MethodParseConfigFile):
 		return s.handleParseConfigFile(ctx, parsed.(*ParseConfigFileParams))
 	case string(MethodTranspileModule):
@@ -1117,6 +1124,62 @@ func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *Ge
 	}
 
 	return NewProjectResponse(proj), nil
+}
+
+// handleParseCommandLine parses command-line arguments.
+func (s *Session) handleParseCommandLine(ctx context.Context, params *ParseCommandLineParams) (*ConfigFileResponse, error) {
+	return NewConfigFileResponse(tsoptions.ParseCommandLine(params.CommandLine, s.projectSession)), nil
+}
+
+// handleReadConfigFile reads and parses a JSON configuration file.
+func (s *Session) handleReadConfigFile(ctx context.Context, params *ReadConfigFileParams) (*ReadConfigFileResponse, error) {
+	configFileName := params.File.ToAbsoluteFileName(s.projectSession.GetCurrentDirectory())
+	configFileContent, ok := s.projectSession.FS().ReadFile(configFileName)
+	if !ok {
+		return &ReadConfigFileResponse{
+			Config: map[string]any{},
+			Error:  NewDiagnosticResponse(ast.NewCompilerDiagnostic(diagnostics.Cannot_read_file_0, configFileName)),
+		}, nil
+	}
+
+	config, parseErrors := tsoptions.ParseConfigFileTextToJson(
+		configFileName,
+		s.toPath(configFileName),
+		configFileContent,
+	)
+	response := &ReadConfigFileResponse{Config: config}
+	if len(parseErrors) > 0 {
+		response.Error = NewDiagnosticResponse(parseErrors[0])
+	}
+	return response, nil
+}
+
+// handleParseJsonConfigFileContent parses an in-memory JSON configuration.
+func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *ParseJsonConfigFileContentParams) (*ConfigFileResponse, error) {
+	if (params.ConfigDirectory == nil) == (params.ConfigFileName == nil) {
+		return nil, fmt.Errorf("%w: exactly one of configDirectory or configFileName is required", ErrClientError)
+	}
+
+	var basePath string
+	var configFileName string
+	if params.ConfigDirectory != nil {
+		basePath = tspath.GetNormalizedAbsolutePath(*params.ConfigDirectory, s.projectSession.GetCurrentDirectory())
+	} else {
+		configFileName = params.ConfigFileName.ToAbsoluteFileName(s.projectSession.GetCurrentDirectory())
+		basePath = tspath.GetDirectoryPath(configFileName)
+	}
+
+	parsedCommandLine := tsoptions.ParseJsonConfigFileContent(
+		jsonValueToAny(params.JSON),
+		s.projectSession,
+		basePath,
+		nil, /*existingOptions*/
+		configFileName,
+		nil, /*resolutionStack*/
+		nil, /*extraFileExtensions*/
+		nil, /*extendedConfigCache*/
+	)
+	return NewConfigFileResponse(parsedCommandLine), nil
 }
 
 // handleParseConfigFile parses a tsconfig.json file and returns its contents.

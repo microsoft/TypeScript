@@ -6,11 +6,13 @@ import (
 	"io/fs"
 	"maps"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
@@ -826,6 +828,131 @@ func TestParseJsonConfigFileContent(t *testing.T) {
 			baselineParseConfigWith(t, rec.title+" with json api.js", rec.noSubmoduleBaseline, rec.input, getParsedWithJsonApi)
 		})
 	}
+}
+
+func TestParseJsonConfigFileContentAcceptsJsonRepresentations(t *testing.T) {
+	t.Parallel()
+
+	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		"/project/index.ts": "export {};",
+	}, "/project", true /*useCaseSensitiveFileNames*/)
+
+	orderedMap, parseErrors := tsoptions.ParseConfigFileTextToJson(
+		"/project/tsconfig.json",
+		"/project/tsconfig.json",
+		`{"compilerOptions":{"strict":true},"files":["index.ts"]}`,
+	)
+	assert.Equal(t, len(parseErrors), 0)
+
+	orderedMapWithTypedSlices := &collections.OrderedMap[string, any]{}
+	orderedMapWithTypedSlices.Set("compilerOptions", map[string]any{"strict": true})
+	orderedMapWithTypedSlices.Set("files", []string{"index.ts"})
+
+	tests := map[string]any{
+		"ordered map":                   orderedMap,
+		"ordered map with typed slices": orderedMapWithTypedSlices,
+		"plain map": map[string]any{
+			"compilerOptions": map[string]any{"strict": true},
+			"files":           []any{"index.ts"},
+		},
+		"typed slices": map[string]any{
+			"compilerOptions": map[string]any{"strict": true},
+			"files":           []string{"index.ts"},
+		},
+	}
+	for name, json := range tests {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			parsed := tsoptions.ParseJsonConfigFileContent(
+				json,
+				host,
+				"/project",
+				nil,
+				"/project/tsconfig.json",
+				nil, /*resolutionStack*/
+				nil, /*extraFileExtensions*/
+				nil, /*extendedConfigCache*/
+			)
+			assert.DeepEqual(t, parsed.FileNames(), []string{"/project/index.ts"})
+			assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
+			assert.Equal(t, len(parsed.Errors), 0)
+		})
+	}
+}
+
+func TestParseJsonConfigFileContentPreservesRaw(t *testing.T) {
+	t.Parallel()
+
+	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		"/project/index.ts": "export {};",
+	}, "/project", true /*useCaseSensitiveFileNames*/)
+
+	parsed := tsoptions.ParseJsonConfigFileContent(
+		map[string]any{
+			"files":         []any{"index.ts"},
+			"customSetting": map[string]any{"enabled": true},
+			"compileOnSave": true,
+		},
+		host,
+		"/project",
+		nil,
+		"/project/tsconfig.json",
+		nil, /*resolutionStack*/
+		nil, /*extraFileExtensions*/
+		nil, /*extendedConfigCache*/
+	)
+
+	assert.Equal(t, len(parsed.Errors), 0)
+	assert.Assert(t, parsed.CompileOnSave != nil && *parsed.CompileOnSave)
+
+	raw := parsed.Raw.(*collections.OrderedMap[string, any])
+	assert.DeepEqual(t, slices.Collect(raw.Keys()), []string{"compileOnSave", "customSetting", "files"})
+	assert.Assert(t, raw.Has("customSetting"))
+}
+
+func TestParseJsonConfigFileContentHandlesNullArrayElements(t *testing.T) {
+	t.Parallel()
+
+	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		"/project/index.ts": "export {};",
+	}, "/project", true /*useCaseSensitiveFileNames*/)
+	for _, property := range []string{"files", "include", "exclude"} {
+		t.Run(property, func(t *testing.T) {
+			t.Parallel()
+			parsed := tsoptions.ParseJsonConfigFileContent(
+				map[string]any{property: []any{nil}},
+				host,
+				"/project",
+				nil,
+				"/project/tsconfig.json",
+				nil, /*resolutionStack*/
+				nil, /*extraFileExtensions*/
+				nil, /*extendedConfigCache*/
+			)
+			assert.Assert(t, len(parsed.Errors) > 0)
+			assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code())
+		})
+	}
+}
+
+func TestParseJsonConfigFileContentDefaultsCompileOnSaveToFalse(t *testing.T) {
+	t.Parallel()
+
+	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		"/project/index.ts": "export {};",
+	}, "/project", true /*useCaseSensitiveFileNames*/)
+	parsed := tsoptions.ParseJsonConfigFileContent(
+		map[string]any{"files": []any{"index.ts"}},
+		host,
+		"/project",
+		nil,
+		"/project/tsconfig.json",
+		nil, /*resolutionStack*/
+		nil, /*extraFileExtensions*/
+		nil, /*extendedConfigCache*/
+	)
+	assert.Assert(t, parsed.CompileOnSave != nil)
+	assert.Equal(t, *parsed.CompileOnSave, false)
 }
 
 func getParsedWithJsonApi(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {

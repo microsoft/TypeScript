@@ -14,15 +14,14 @@ const testDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(testDir, "..", "..", "..");
 const goOptionsPath = join(repoRoot, "internal", "core", "compileroptions.go");
 const tsOptionsPath = join(testDir, "..", "src", "api", "compilerOptions.ts");
+const exposedInternalOptions = new Set(["configFilePath"]);
 
 /**
- * Extracts the JSON tag names of the *public, non-deprecated* fields of the Go
- * `core.CompilerOptions` struct — i.e. every field declared before the
- * `// Internal fields` marker that is not annotated with a `// Deprecated:`
- * comment. Fields at/after the internal marker are CLI/debug/internal options,
- * and deprecated fields are intentionally omitted from the public API type.
+ * Extracts the JSON tag names of the fields exposed in the TypeScript API.
+ * These are the public, non-deprecated Go fields plus explicitly selected
+ * internal fields.
  */
-function getGoPublicOptionNames(): Set<string> {
+function getGoApiOptionNames(): Set<string> {
     const source = readFileSync(goOptionsPath, "utf-8");
     const structMatch = source.match(/type CompilerOptions struct \{([\s\S]*?)\n\}/);
     assert.ok(structMatch, "Could not find `type CompilerOptions struct` in compileroptions.go");
@@ -30,6 +29,7 @@ function getGoPublicOptionNames(): Set<string> {
     let body = structMatch[1];
     const internalMarker = body.indexOf("// Internal fields");
     assert.notStrictEqual(internalMarker, -1, "Could not find `// Internal fields` marker in compileroptions.go");
+    const internalBody = body.slice(internalMarker);
     body = body.slice(0, internalMarker);
 
     const names = new Set<string>();
@@ -48,6 +48,11 @@ function getGoPublicOptionNames(): Set<string> {
         }
         else {
             prevDeprecated = line.startsWith("// Deprecated:");
+        }
+    }
+    for (const match of internalBody.matchAll(/`json:"([^",]+)/g)) {
+        if (exposedInternalOptions.has(match[1])) {
+            names.add(match[1]);
         }
     }
     return names;
@@ -72,7 +77,7 @@ function getTsOptionNames(): Set<string> {
 }
 
 describe("CompilerOptions type stays in sync with Go", () => {
-    const goNames = getGoPublicOptionNames();
+    const goNames = getGoApiOptionNames();
     const tsNames = getTsOptionNames();
 
     test("sanity: both sides parsed a plausible number of options", () => {

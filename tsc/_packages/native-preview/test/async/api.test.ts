@@ -89,6 +89,182 @@ const defaultFiles = {
 };
 
 describe("API", () => {
+    test("parseCommandLine", async () => {
+        const api = spawnAPI();
+        try {
+            const commandLine = await api.parseCommandLine([
+                "--strict",
+                "--outDir",
+                "dist",
+                "/src/index.ts",
+            ]);
+            assert.deepEqual(commandLine.fileNames, ["/src/index.ts"]);
+            assert.equal(commandLine.options.strict, true);
+            assert.equal(
+                commandLine.options.outDir,
+                resolve(fileURLToPath(new URL("../../../../", import.meta.url)), "dist"),
+            );
+            assert.deepEqual(commandLine.raw, {
+                strict: true,
+                outDir: "dist",
+            });
+            assert.deepEqual(commandLine.errors, []);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("parseCommandLine reports diagnostics", async () => {
+        const api = spawnAPI();
+        try {
+            const commandLine = await api.parseCommandLine(["--notAnOption"]);
+            assert.deepEqual(commandLine.fileNames, []);
+            assert.equal(commandLine.errors.length, 1);
+            assert.equal(commandLine.errors[0].code, 5023);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("readConfigFile", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": `{
+                // Comments and trailing commas are supported.
+                "compilerOptions": { "strict": true, },
+            }`,
+        });
+        try {
+            const result = await api.readConfigFile("/tsconfig.json");
+            assert.deepEqual(result, {
+                config: { compilerOptions: { strict: true } },
+            });
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("readConfigFile reports read and parse errors", async () => {
+        const api = spawnAPI({
+            "/invalid.json": `{ "compilerOptions": { "strict": true,, } }`,
+        });
+        try {
+            const invalid = await api.readConfigFile("/invalid.json");
+            assert.deepEqual(invalid.config, { compilerOptions: { strict: true } });
+            assert.ok(invalid.error);
+
+            const missing = await api.readConfigFile("/missing.json");
+            assert.deepEqual(missing.config, {});
+            assert.equal(missing.error?.code, 5083);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("parseJsonConfigFileContent with configDirectory", async () => {
+        const api = spawnAPI();
+        try {
+            const config = await api.parseJsonConfigFileContent(
+                {
+                    compilerOptions: { strict: true },
+                    files: ["index.ts"],
+                },
+                { configDirectory: "/src" },
+            );
+            assert.deepEqual(config.fileNames, ["/src/index.ts"]);
+            assert.equal(config.options.strict, true);
+            assert.equal("configFilePath" in config.options, false);
+            assert.equal(config.compileOnSave, false);
+            assert.deepEqual(config.errors, []);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("parseJsonConfigFileContent accepts non-object JSON", async () => {
+        const api = spawnAPI();
+        try {
+            const config = await api.parseJsonConfigFileContent(null, { configDirectory: "/src" });
+            assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
+            assert.deepEqual(config.errors, []);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("parseJsonConfigFileContent with configFileName", async () => {
+        const api = spawnAPI();
+        try {
+            const config = await api.parseJsonConfigFileContent(
+                {
+                    compilerOptions: { strict: true },
+                    files: ["index.ts"],
+                },
+                { configFileName: "/src/tsconfig.json" },
+            );
+            assert.deepEqual(config.fileNames, ["/src/index.ts"]);
+            assert.equal(config.options.strict, true);
+            assert.equal(config.options.configFilePath, "/src/tsconfig.json");
+            assert.deepEqual(config.errors, []);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("parseJsonConfigFileContent preserves raw config", async () => {
+        const api = spawnAPI();
+        try {
+            const input = {
+                compileOnSave: true,
+                customSetting: { enabled: true },
+                files: ["index.ts"],
+            };
+            const config = await api.parseJsonConfigFileContent(input, { configDirectory: "/src" });
+            assert.deepEqual(config.raw, input);
+            assert.equal(config.compileOnSave, true);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("parseJsonConfigFileContent preserves an empty files list", async () => {
+        const api = spawnAPI();
+        try {
+            const config = await api.parseJsonConfigFileContent(
+                { files: [] },
+                { configDirectory: "/src" },
+            );
+            assert.deepEqual(config.fileNames, []);
+            assert.equal(config.errors.length, 1);
+            assert.equal(config.errors[0].code, 18002);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("parseJsonConfigFileContent reports null array elements", async () => {
+        const api = spawnAPI();
+        try {
+            const config = await api.parseJsonConfigFileContent(
+                { files: [null], include: [null], exclude: [null] },
+                { configDirectory: "/src" },
+            );
+            assert.equal(config.errors.length, 3);
+            assert.ok(config.errors.every(diagnostic => diagnostic.code === 5024));
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("transpile", async () => {
         const api = spawnAPI({
             "/input.ts": "export const x: number = 1;",
@@ -121,7 +297,7 @@ describe("API", () => {
             const config = await api.parseConfigFile("/tsconfig.json");
             assert.deepEqual(config.fileNames, ["/src/index.ts", "/src/foo.ts"]);
             assert.deepEqual(config.options, { configFilePath: "/tsconfig.json" });
-            assert.equal(config.compileOnSave, undefined);
+            assert.equal(config.compileOnSave, false);
             assert.equal(config.typeAcquisition, undefined);
             assert.equal(config.projectReferences, undefined);
         }
@@ -142,6 +318,28 @@ describe("API", () => {
                 { circular: false, originalPath: "./harness", path: "/harness" },
                 { circular: false, originalPath: "./server", path: "/server" },
             ]);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("parseConfigFile preserves raw config", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compileOnSave: true,
+                customSetting: { enabled: true },
+                files: ["/src/index.ts"],
+            }),
+        });
+        try {
+            const config = await api.parseConfigFile("/tsconfig.json");
+            assert.equal(config.compileOnSave, true);
+            assert.deepEqual(config.raw, {
+                compileOnSave: true,
+                customSetting: { enabled: true },
+                files: ["/src/index.ts"],
+            });
         }
         finally {
             await api.close();

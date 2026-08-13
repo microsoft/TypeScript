@@ -106,6 +106,33 @@ func TestResponseFileDoesNotPanic(t *testing.T) {
 	})
 }
 
+func TestResponseFileParsing(t *testing.T) {
+	t.Parallel()
+
+	t.Run("final token without trailing whitespace", func(t *testing.T) {
+		t.Parallel()
+		host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+			"/project/args.txt": "--strict --outDir dist",
+		}, "/project", true)
+		parsed := tsoptions.ParseCommandLine([]string{"@args.txt"}, host)
+		assert.Equal(t, len(parsed.Errors), 0)
+		assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
+		assert.Equal(t, parsed.CompilerOptions().OutDir, "/project/dist")
+	})
+
+	t.Run("cyclic response files", func(t *testing.T) {
+		t.Parallel()
+		host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+			"/project/a.txt": "@/project/b.txt --strict",
+			"/project/b.txt": "@/project/a.txt --outDir dist",
+		}, "/project", true)
+		parsed := tsoptions.ParseCommandLine([]string{"@a.txt"}, host)
+		assert.Equal(t, len(parsed.Errors), 0)
+		assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
+		assert.Equal(t, parsed.CompilerOptions().OutDir, "/project/dist")
+	})
+}
+
 func TestParseCommandLineTypeRootsRelativePath(t *testing.T) {
 	t.Parallel()
 

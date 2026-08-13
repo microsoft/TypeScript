@@ -19,6 +19,7 @@ export interface CompilerOptions {
     checkJs?: boolean;
     customConditions?: string[];
     composite?: boolean;
+    configFilePath?: string;
     emitDeclarationOnly?: boolean;
     emitBOM?: boolean;
     emitDecoratorMetadata?: boolean;
