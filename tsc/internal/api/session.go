@@ -518,6 +518,22 @@ func (setup checkerSetup) resolveSignatureHandle(id SignatureID) (*checker.Signa
 	return setup.sd.resolveSignatureHandle(setup.projectID, id)
 }
 
+// resolveLocation resolves an optional location, given either as a node handle or as a
+// file and position. Returns nil when neither is provided.
+func (setup checkerSetup) resolveLocation(handle NodeHandle, file *DocumentIdentifier, position *uint32) (*ast.Node, error) {
+	if handle != "" {
+		return setup.sd.resolveNodeHandle(setup.program, handle)
+	}
+	if file != nil && position != nil {
+		sourceFile := setup.program.GetSourceFile(file.ToFileName())
+		if sourceFile == nil {
+			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, *file)
+		}
+		return astnav.GetTouchingPropertyName(sourceFile, sourceFile.GetPositionMap().UTF16ToUTF8(int(*position))), nil
+	}
+	return nil, nil
+}
+
 // setupChecker resolves snapshot, program, and type checker for a project.
 // Callers must defer setup.done() to release the checker.
 func (s *Session) setupChecker(ctx context.Context, snapshot SnapshotID, projectHandle ProjectID) (checkerSetup, error) {
@@ -633,6 +649,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetDeclaredTypeOfSymbol(ctx, parsed.(*GetTypeOfSymbolParams))
 	case string(MethodResolveName):
 		return s.handleResolveName(ctx, parsed.(*ResolveNameParams))
+	case string(MethodGetSymbolsInScope):
+		return s.handleGetSymbolsInScope(ctx, parsed.(*GetSymbolsInScopeParams))
 	case string(MethodGetSignaturesOfType):
 		return s.handleGetSignaturesOfType(ctx, parsed.(*GetSignaturesOfTypeParams))
 	case string(MethodGetResolvedSignature):
@@ -1568,18 +1586,9 @@ func (s *Session) handleResolveName(ctx context.Context, params *ResolveNamePara
 	defer setup.done()
 
 	// Resolve location node - either from node handle or from fileName+position
-	var location *ast.Node
-	if params.Location != "" {
-		location, err = setup.sd.resolveNodeHandle(setup.program, params.Location)
-		if err != nil {
-			return nil, err
-		}
-	} else if params.File != nil && params.Position != nil {
-		sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
-		if sourceFile == nil {
-			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, *params.File)
-		}
-		location = astnav.GetTouchingPropertyName(sourceFile, sourceFile.GetPositionMap().UTF16ToUTF8(int(*params.Position)))
+	location, err := setup.resolveLocation(params.Location, params.File, params.Position)
+	if err != nil {
+		return nil, err
 	}
 
 	symbol := setup.checker.ResolveName(params.Name, location, ast.SymbolFlags(params.Meaning), params.ExcludeGlobals)
@@ -1588,6 +1597,31 @@ func (s *Session) handleResolveName(ctx context.Context, params *ResolveNamePara
 	}
 
 	return setup.newSymbolResponse(symbol), nil
+}
+
+// handleGetSymbolsInScope returns all symbols with the given meaning that are visible at a location.
+func (s *Session) handleGetSymbolsInScope(ctx context.Context, params *GetSymbolsInScopeParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	location, err := setup.resolveLocation(params.Location, params.File, params.Position)
+	if err != nil {
+		return nil, err
+	}
+	if location == nil {
+		return nil, fmt.Errorf("%w: getSymbolsInScope requires a location", ErrClientError)
+	}
+
+	symbols := setup.checker.GetSymbolsInScope(location, ast.SymbolFlags(params.Meaning))
+	results := make([]*SymbolResponse, len(symbols))
+	for i, symbol := range symbols {
+		results[i] = setup.newSymbolResponse(symbol)
+	}
+
+	return results, nil
 }
 
 // handleGetSignaturesOfType returns the call or construct signatures of a type.

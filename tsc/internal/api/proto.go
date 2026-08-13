@@ -95,6 +95,7 @@ const (
 	MethodGetConfigFileNames           Method = "getConfigFileNames"
 	MethodGetConfigSourceFile          Method = "getConfigSourceFile"
 	MethodResolveName                  Method = "resolveName"
+	MethodGetSymbolsInScope            Method = "getSymbolsInScope"
 	MethodGetSignaturesOfType          Method = "getSignaturesOfType"
 	MethodGetResolvedSignature         Method = "getResolvedSignature"
 	MethodGetTypeAtLocation            Method = "getTypeAtLocation"
@@ -419,6 +420,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTypesOfSymbols:            unmarshallerFor[GetTypesOfSymbolsParams],
 	MethodGetDeclaredTypeOfSymbol:      unmarshallerFor[GetTypeOfSymbolParams],
 	MethodResolveName:                  unmarshallerFor[ResolveNameParams],
+	MethodGetSymbolsInScope:            unmarshallerFor[GetSymbolsInScopeParams],
 	MethodGetSignaturesOfType:          unmarshallerFor[GetSignaturesOfTypeParams],
 	MethodGetResolvedSignature:         unmarshallerFor[GetResolvedSignatureParams],
 	MethodGetTypeAtLocation:            unmarshallerFor[GetTypeAtLocationParams],
@@ -970,6 +972,17 @@ type ResolveNameParams struct {
 	Position       *uint32             `json:"position,omitempty"`       // Optional: position in file for location context (with File)
 	Meaning        uint32              `json:"meaning"`                  // SymbolFlags for what kind of symbol to find
 	ExcludeGlobals bool                `json:"excludeGlobals,omitempty"` // Whether to exclude global symbols
+}
+
+// GetSymbolsInScopeParams are parameters for getSymbolsInScope, which returns
+// all symbols visible at a given location.
+type GetSymbolsInScopeParams struct {
+	Snapshot SnapshotID          `json:"snapshot"`
+	Project  ProjectID           `json:"project"`
+	Location NodeHandle          `json:"location,omitempty"` // Optional: node handle for location context
+	File     *DocumentIdentifier `json:"file,omitempty"`     // Optional: file for location context (alternative to Location)
+	Position *uint32             `json:"position,omitempty"` // Optional: position in file for location context (with File)
+	Meaning  uint32              `json:"meaning"`            // SymbolFlags for what kind of symbols to find
 }
 
 // GetTypePropertyParams is used for all type sub-property endpoints.

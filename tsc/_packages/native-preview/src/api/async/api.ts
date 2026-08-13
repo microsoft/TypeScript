@@ -1402,6 +1402,23 @@ export class Checker {
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
+    /**
+     * Returns all symbols with the given meaning that are visible at `location`.
+     */
+    async getSymbolsInScope(location: Node | DocumentPosition, meaning: SymbolFlags): Promise<readonly Symbol[]> {
+        // Distinguish Node (has `kind`) from DocumentPosition (has `document` and `position`)
+        const isNode = "kind" in location;
+        const data = await this.client.apiRequest<SymbolResponse[] | null>("getSymbolsInScope", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            meaning,
+            location: isNode ? getNodeId(location as Node) : undefined,
+            file: isNode ? undefined : (location as DocumentPosition).document,
+            position: isNode ? undefined : (location as DocumentPosition).position,
+        });
+        return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
+    }
+
     async getResolvedSymbol(node: Identifier): Promise<Symbol | undefined> {
         const text = node.text;
         if (!text) return undefined;

@@ -4198,6 +4198,58 @@ export * from "./inner";
     });
 });
 
+describe("Checker - getSymbolsInScope", () => {
+    const scopeFiles = {
+        "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+        "/src/main.ts": `
+const outerValue = 1;
+interface OuterType { x: number; }
+function f() {
+    const innerValue = 2;
+    return innerValue;
+}
+`,
+    };
+
+    test("returns symbols visible at a position", async () => {
+        const api = spawnAPI(scopeFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = scopeFiles["/src/main.ts"].indexOf("return innerValue");
+            const symbols = await project.checker.getSymbolsInScope(
+                { document: "/src/main.ts", position: pos },
+                SymbolFlags.Value,
+            );
+            const names = symbols.map(s => s.name);
+            assert.ok(names.includes("innerValue"), "should include local variable");
+            assert.ok(names.includes("outerValue"), "should include outer variable");
+            assert.ok(names.includes("f"), "should include enclosing function");
+            assert.ok(!names.includes("OuterType"), "should not include type-only meanings");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("returns type symbols when asked for type meaning at a node", async () => {
+        const api = spawnAPI(scopeFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const symbols = await project.checker.getSymbolsInScope(sourceFile, SymbolFlags.Type);
+            const names = symbols.map(s => s.name);
+            assert.ok(names.includes("OuterType"), "should include interface declared in file");
+            assert.ok(names.includes("Array"), "should include global type symbols");
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
 describe("Symbol - getDocumentationComment and getJsDocTags", () => {
     const docFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
