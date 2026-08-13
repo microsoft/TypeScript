@@ -3,7 +3,9 @@ package ast
 import (
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 func TestDiagnosticsCollectionDeduplicatesExactDiagnosticsOnAdd(t *testing.T) {
@@ -50,5 +52,26 @@ func TestDiagnosticsCollectionPreservesDistinctAdHocMessages(t *testing.T) {
 	collected := collection.GetGlobalDiagnostics()
 	if len(collected) != 2 {
 		t.Fatalf("GetGlobalDiagnostics() returned %d diagnostics, want 2", len(collected))
+	}
+}
+
+func TestDiagnosticsCollectionGetsDiagnosticsForEquivalentSourceFile(t *testing.T) {
+	t.Parallel()
+
+	path := tspath.Path("/src/file.ts")
+	diagnosticFile := &SourceFile{
+		parseOptions: SourceFileParseOptions{FileName: string(path), Path: path},
+	}
+	requestedFile := &SourceFile{
+		parseOptions: SourceFileParseOptions{FileName: string(path), Path: path},
+	}
+	diagnostic := NewDiagnostic(diagnosticFile, core.TextRange{}, diagnostics.Cannot_find_name_0, "x")
+
+	var collection DiagnosticsCollection
+	collection.Add(diagnostic)
+
+	collected := collection.GetDiagnosticsForFile(requestedFile)
+	if len(collected) != 1 || collected[0] != diagnostic {
+		t.Fatalf("GetDiagnosticsForFile() returned %v, want diagnostic for equivalent source file", collected)
 	}
 }

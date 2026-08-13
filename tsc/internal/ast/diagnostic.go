@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/locale"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 // RepopulateDiagnosticKind indicates the kind of repopulation for a diagnostic chain entry.
@@ -163,8 +164,8 @@ func NewCompilerDiagnostic(message *diagnostics.Message, args ...any) *Diagnosti
 type DiagnosticsCollection struct {
 	mu                       sync.Mutex
 	count                    int
-	fileDiagnostics          map[*SourceFile][]*Diagnostic
-	fileDiagnosticsSorted    collections.Set[*SourceFile]
+	fileDiagnostics          map[tspath.Path][]*Diagnostic
+	fileDiagnosticsSorted    collections.Set[tspath.Path]
 	nonFileDiagnostics       []*Diagnostic
 	nonFileDiagnosticsSorted bool
 	diagnosticIndex          map[diagnosticLocationKey]*Diagnostic
@@ -201,12 +202,12 @@ func (c *DiagnosticsCollection) Add(diagnostic *Diagnostic) *Diagnostic {
 	c.count++
 
 	if diagnostic.File() != nil {
-		file := diagnostic.File()
+		path := diagnostic.File().Path()
 		if c.fileDiagnostics == nil {
-			c.fileDiagnostics = make(map[*SourceFile][]*Diagnostic)
+			c.fileDiagnostics = make(map[tspath.Path][]*Diagnostic)
 		}
-		c.fileDiagnostics[file] = append(c.fileDiagnostics[file], diagnostic)
-		c.fileDiagnosticsSorted.Delete(file)
+		c.fileDiagnostics[path] = append(c.fileDiagnostics[path], diagnostic)
+		c.fileDiagnosticsSorted.Delete(path)
 	} else {
 		c.nonFileDiagnostics = append(c.nonFileDiagnostics, diagnostic)
 		c.nonFileDiagnosticsSorted = false
@@ -215,14 +216,18 @@ func (c *DiagnosticsCollection) Add(diagnostic *Diagnostic) *Diagnostic {
 }
 
 type diagnosticLocationKey struct {
-	file *SourceFile
+	path tspath.Path
 	loc  core.TextRange
 	code int32
 }
 
 func getDiagnosticLocationKey(diagnostic *Diagnostic) diagnosticLocationKey {
+	var path tspath.Path
+	if diagnostic.File() != nil {
+		path = diagnostic.File().Path()
+	}
 	return diagnosticLocationKey{
-		file: diagnostic.File(),
+		path: path,
 		loc:  diagnostic.Loc(),
 		code: diagnostic.Code(),
 	}
@@ -267,11 +272,12 @@ func (c *DiagnosticsCollection) GetDiagnosticsForFile(file *SourceFile) []*Diagn
 }
 
 func (c *DiagnosticsCollection) getDiagnosticsForFileLocked(file *SourceFile) []*Diagnostic {
-	if !c.fileDiagnosticsSorted.Has(file) {
-		slices.SortStableFunc(c.fileDiagnostics[file], CompareDiagnostics)
-		c.fileDiagnosticsSorted.Add(file)
+	path := file.Path()
+	if !c.fileDiagnosticsSorted.Has(path) {
+		slices.SortStableFunc(c.fileDiagnostics[path], CompareDiagnostics)
+		c.fileDiagnosticsSorted.Add(path)
 	}
-	return slices.Clone(c.fileDiagnostics[file])
+	return slices.Clone(c.fileDiagnostics[path])
 }
 
 func (c *DiagnosticsCollection) GetDiagnostics() []*Diagnostic {
