@@ -465,7 +465,6 @@ declare namespace Intl {
 
     interface PluralRulesConstructor {
         new (locales?: LocalesArgument, options?: PluralRulesOptions): PluralRules;
-        (locales?: LocalesArgument, options?: PluralRulesOptions): PluralRules;
 
         supportedLocalesOf(locales: LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[];
     }

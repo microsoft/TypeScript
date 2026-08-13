@@ -47,7 +47,6 @@ declare namespace Intl {
 
     interface PluralRulesConstructor {
         new (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
-        (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
         supportedLocalesOf(locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[];
     }
 
