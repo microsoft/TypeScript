@@ -605,8 +605,6 @@ func (p *regExpParser) scanClassSetExpression() {
 			expressionMayContainStrings = p.mayContainStrings
 			p.mayContainStrings = !isCharacterComplement && expressionMayContainStrings
 			return
-		} else {
-			p.error(diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, p.pos(), 1, string(ch))
 		}
 	default:
 		if isCharacterComplement && p.mayContainStrings {
@@ -651,20 +649,17 @@ func (p *regExpParser) scanClassSetExpression() {
 				}
 			}
 		case '&':
-			start = p.pos()
-			p.incPos(1)
-			if p.char() == '&' {
-				p.incPos(1)
+			if p.pos()+1 < p.end && p.charAt(p.pos()+1) == '&' {
+				start = p.pos()
+				p.incPos(2)
 				p.error(diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, p.pos()-2, 2)
 				if p.char() == '&' {
 					p.error(diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, p.pos(), 1, string(ch))
 					p.incPos(1)
 				}
-			} else {
-				p.error(diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, p.pos()-1, 1, string(ch))
+				operand = p.text()[start:p.pos()]
+				continue
 			}
-			operand = p.text()[start:p.pos()]
-			continue
 		}
 		if p.isClassContentExit(p.char()) {
 			break
