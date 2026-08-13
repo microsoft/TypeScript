@@ -225,7 +225,10 @@ func (p *Parser) parseJSONText() *ast.SourceFile {
 }
 
 func getErrorSpanForNode(sourceText string, node *ast.Node) core.TextRange {
-	pos := scanner.SkipTrivia(sourceText, node.Pos())
+	pos := node.Pos()
+	if !ast.NodeIsMissing(node) {
+		pos = scanner.SkipTrivia(sourceText, pos)
+	}
 	return core.NewTextRange(pos, node.End())
 }
 
