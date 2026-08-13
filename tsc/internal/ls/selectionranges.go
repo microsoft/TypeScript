@@ -10,6 +10,41 @@ import (
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
+const maxSelectionRangeDepth = 1000
+
+type selectionRangeBuilder struct {
+	ranges      []lsproto.Range
+	oldestIndex int
+}
+
+func newSelectionRangeBuilder(capacity int) *selectionRangeBuilder {
+	return &selectionRangeBuilder{
+		ranges: make([]lsproto.Range, 0, capacity),
+	}
+}
+
+func (b *selectionRangeBuilder) push(selectionRange lsproto.Range) {
+	if len(b.ranges) < cap(b.ranges) {
+		b.ranges = append(b.ranges, selectionRange)
+		return
+	}
+
+	b.ranges[b.oldestIndex] = selectionRange
+	b.oldestIndex = (b.oldestIndex + 1) % len(b.ranges)
+}
+
+func (b *selectionRangeBuilder) build(parentRange lsproto.Range) *lsproto.SelectionRange {
+	result := &lsproto.SelectionRange{Range: parentRange}
+	for i := range b.ranges {
+		index := (b.oldestIndex + i) % len(b.ranges)
+		result = &lsproto.SelectionRange{
+			Range:  b.ranges[index],
+			Parent: result,
+		}
+	}
+	return result
+}
+
 func (l *LanguageService) ProvideSelectionRanges(ctx context.Context, params *lsproto.SelectionRangeParams) (lsproto.SelectionRangeResponse, error) {
 	_, sourceFile := l.getProgramAndFile(params.TextDocument.Uri)
 	if sourceFile == nil {
@@ -146,6 +181,10 @@ func createSyntaxList(factory *ast.NodeFactory, children []*ast.Node) *ast.Node 
 
 func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos int) *lsproto.SelectionRange {
 	factory := &ast.NodeFactory{}
+	fullRange := l.converters.ToLSPRange(sourceFile, core.NewTextRange(sourceFile.Pos(), sourceFile.End()))
+	// Traversal discovers ranges from broadest to most specific, so retain the newest ranges nearest to the cursor
+	ranges := newSelectionRangeBuilder(maxSelectionRangeDepth - 1)
+	lastRange := fullRange
 
 	nodeContainsPosition := func(node *ast.Node) bool {
 		if node == nil {
@@ -167,38 +206,34 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 		return false
 	}
 
-	pushSelectionRange := func(current *lsproto.SelectionRange, start, end int) *lsproto.SelectionRange {
+	pushSelectionRange := func(start, end int) {
 		if start == end {
-			return current
+			return
 		}
 
 		if !(start <= pos && pos <= end) {
-			return current
+			return
 		}
 
 		lspRange := l.converters.ToLSPRange(sourceFile, core.NewTextRange(start, end))
 
-		if current != nil && current.Range == lspRange {
-			return current
+		if lastRange == lspRange {
+			return
 		}
+		lastRange = lspRange
 
-		return &lsproto.SelectionRange{
-			Range:  lspRange,
-			Parent: current,
-		}
+		ranges.push(lspRange)
 	}
 
-	pushSelectionCommentRange := func(current *lsproto.SelectionRange, start, end int) *lsproto.SelectionRange {
-		current = pushSelectionRange(current, start, end)
+	pushSelectionCommentRange := func(start, end int) {
+		pushSelectionRange(start, end)
 
 		commentPos := start
 		text := sourceFile.Text()
 		for commentPos < end && commentPos < len(text) && text[commentPos] == '/' {
 			commentPos++
 		}
-		current = pushSelectionRange(current, commentPos, end)
-
-		return current
+		pushSelectionRange(commentPos, end)
 	}
 
 	positionsAreOnSameLine := func(pos1, pos2 int) bool {
@@ -238,11 +273,6 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 		return false
 	}
 
-	fullRange := l.converters.ToLSPRange(sourceFile, core.NewTextRange(sourceFile.Pos(), sourceFile.End()))
-	result := &lsproto.SelectionRange{
-		Range: fullRange,
-	}
-
 	var current *ast.Node
 	for current = sourceFile.AsNode(); current != nil; {
 		var next *ast.Node
@@ -256,7 +286,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 					break
 				}
 				if foundComment != nil && foundComment.Kind == ast.KindSingleLineCommentTrivia {
-					result = pushSelectionCommentRange(result, foundComment.Pos(), foundComment.End())
+					pushSelectionCommentRange(foundComment.Pos(), foundComment.End())
 				}
 
 				if nodeContainsPosition(node) {
@@ -265,7 +295,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 						if !positionsAreOnSameLine(astnav.GetStartOfNode(node, sourceFile, false), node.End()) {
 							start := astnav.GetStartOfNode(node, sourceFile, false)
 							end := node.End()
-							result = pushSelectionRange(result, start, end)
+							pushSelectionRange(start, end)
 						}
 					}
 
@@ -281,7 +311,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 							// Validate the positions are reasonable
 							text := sourceFile.Text()
 							if spanStart >= 0 && spanEnd <= len(text) && spanStart < spanEnd {
-								result = pushSelectionRange(result, spanStart, spanEnd)
+								pushSelectionRange(spanStart, spanEnd)
 							}
 						}
 					}
@@ -289,7 +319,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 					if !shouldSkipNode(node, parent) {
 						start := astnav.GetStartOfNode(node, sourceFile, false)
 						end := node.End()
-						result = pushSelectionRange(result, start, end)
+						pushSelectionRange(start, end)
 
 						if ast.IsMappedTypeNode(node) {
 							for selectionParent := node; ; {
@@ -300,7 +330,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 										break
 									}
 									if positionShouldSnapToNode(child) {
-										result = pushSelectionRange(result, childStart, child.End())
+										pushSelectionRange(childStart, child.End())
 										selectionChild = child
 										break
 									}
@@ -316,7 +346,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 						if ast.IsStringLiteral(node) || node.Kind == ast.KindTemplateExpression || node.Kind == ast.KindNoSubstitutionTemplateLiteral {
 							// Only add inner content range if there's actually content (handles unterminated literals)
 							if start+1 < end-1 {
-								result = pushSelectionRange(result, start+1, end-1)
+								pushSelectionRange(start+1, end-1)
 							}
 						}
 					}
@@ -336,7 +366,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 					end := nodes.Nodes[len(nodes.Nodes)-1].End()
 
 					if start <= pos && pos < end {
-						result = pushSelectionRange(result, start, end)
+						pushSelectionRange(start, end)
 					}
 				}
 			}
@@ -355,5 +385,5 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 		current.VisitEachChild(tempVisitor)
 		current = next
 	}
-	return result
+	return ranges.build(fullRange)
 }
