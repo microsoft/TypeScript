@@ -295,7 +295,7 @@ Signatures::
 Edit [0]:: No Change run with noEmit
 
 tsgo -b -v --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -321,7 +321,7 @@ Signatures::
 Edit [1]:: No Change run with noEmit
 
 tsgo -b -v --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -351,7 +351,7 @@ export class classC {
 }
 
 tsgo -b -v --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -884,7 +884,7 @@ Signatures::
 Edit [5]:: No Change run with noEmit
 
 tsgo -b -v --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -910,7 +910,7 @@ Signatures::
 Edit [6]:: No Change run with noEmit
 
 tsgo -b -v --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1297,7 +1297,7 @@ Signatures::
 Edit [10]:: No Change run with noEmit
 
 tsgo -b -v --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1346,7 +1346,7 @@ Signatures::
 Edit [11]:: No Change run with noEmit
 
 tsgo -b -v --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1448,7 +1448,7 @@ export class classC {
 }
 
 tsgo -b -v --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1871,7 +1871,7 @@ Signatures::
 Edit [15]:: No Change run with noEmit
 
 tsgo -b -v --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -1897,7 +1897,7 @@ Signatures::
 Edit [16]:: No Change run with noEmit
 
 tsgo -b -v --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json

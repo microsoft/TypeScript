@@ -119,6 +119,11 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: []string{"--lib", "es6 ", "first.ts"},
 		},
 		{
+			subScenario:     "noEmit with type error",
+			files:           FileMap{"/home/src/workspaces/project/index.ts": `x = 5;`},
+			commandLineArgs: []string{"--noEmit", "index.ts"},
+		},
+		{
 			subScenario:     "option diagnostics are suppressed when there are syntactic errors",
 			files:           FileMap{"/home/src/workspaces/project/a.ts": `const x: = 1;`},
 			commandLineArgs: []string{"--strictPropertyInitialization", "--strictNullChecks", "false", "a.ts"},

@@ -12,7 +12,7 @@ const a = class { private p = 10; };
 }
 
 tsgo --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -55,7 +55,7 @@ declare const console: { log(msg: any): void; };
 Edit [0]:: no change
 
 tsgo --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -118,7 +118,7 @@ Edit [5]:: Introduce error
 const a = class { private p = 10; };
 
 tsgo --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
@@ -164,7 +164,7 @@ const a = class {
 Edit [7]:: no change
 
 tsgo --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 

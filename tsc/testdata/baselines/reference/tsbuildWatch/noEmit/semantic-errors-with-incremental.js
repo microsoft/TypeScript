@@ -12,7 +12,7 @@ const a: number = "hello"
 }
 
 tsgo -b -verbose -w
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 

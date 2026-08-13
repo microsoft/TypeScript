@@ -39,7 +39,7 @@ export const z = 10;
 }
 
 tsgo --p project
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproject/tsconfig.json[0m:[93m7[0m:[93m19[0m - [91merror[0m[90m TS5024: [0mCompiler option 'reference.path' requires a value of type string.
 

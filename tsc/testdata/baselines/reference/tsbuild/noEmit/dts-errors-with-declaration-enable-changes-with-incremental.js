@@ -119,7 +119,7 @@ Output::
 Edit [1]:: With declaration enabled noEmit - Should report errors
 
 tsgo -b -v --noEmit --declaration
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -236,7 +236,7 @@ Signatures::
 Edit [2]:: With declaration and declarationMap noEmit - Should report errors
 
 tsgo -b -v --noEmit --declaration --declarationMap
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json

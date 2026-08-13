@@ -28,7 +28,7 @@ test("", async function () {
 {"compilerOptions": {"allowJs": true, "composite": true}}
 
 tsgo --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'Promise'.
 

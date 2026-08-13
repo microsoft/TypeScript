@@ -244,16 +244,20 @@ func (p *Program) Emit(ctx context.Context, options compiler.EmitOptions) *compi
 	p.panicIfNoProgram("Emit")
 
 	var result *compiler.EmitResult
-	if p.snapshot.options.NoEmit.IsTrue() {
-		result = &compiler.EmitResult{EmitSkipped: true}
-	} else {
-		result = compiler.HandleNoEmitOnError(ctx, p, options.TargetSourceFiles)
+	if !options.ForceEmit && options.EmitOnly != compiler.EmitOnlyBuilderSignature {
+		var emitBuildInfo func() *compiler.EmitResult
+		if p.Options().NoEmit.IsTrue() {
+			emitBuildInfo = func() *compiler.EmitResult {
+				return p.emitBuildInfo(ctx, options)
+			}
+		}
+		result = compiler.HandleNoEmitOptions(ctx, p, options.TargetSourceFiles, emitBuildInfo)
 		if ctx.Err() != nil {
 			return nil
 		}
 	}
 	if result != nil {
-		if options.TargetSourceFiles != nil {
+		if options.TargetSourceFiles != nil || p.Options().NoEmit.IsTrue() {
 			return result
 		}
 

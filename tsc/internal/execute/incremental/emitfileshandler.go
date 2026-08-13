@@ -201,6 +201,7 @@ func (h *emitFilesHandler) getEmitOptions(options compiler.EmitOptions) compiler
 	return compiler.EmitOptions{
 		TargetSourceFiles: options.TargetSourceFiles,
 		EmitOnly:          options.EmitOnly,
+		ForceEmit:         options.ForceEmit,
 		WriteFile: func(fileName string, text string, data *compiler.WriteFileData) error {
 			var differsOnlyInMap bool
 			if tspath.IsDeclarationFileName(fileName) {

@@ -20,7 +20,7 @@ export interface Container<T> {
 export type Nullable<T> = T | null | undefined;
 
 tsgo --generateTrace /home/src/workspaces/project/trace --singleThreaded
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mmain.ts[0m:[93m2[0m:[93m74[0m - [91merror[0m[90m TS2322: [0mType '<U>(fn: (x: number) => U) => Container<U>' is not assignable to type '<U>(fn: (x: U) => U) => Container<U>'.
   Types of parameters 'fn' and 'fn' are incompatible.
@@ -104,11 +104,7 @@ declare const console: { log(msg: any): void; };
 {"pid":1,"tid":2,"ph":"E","cat":"check","ts":24,"name":"checkSourceFile","args":{"checkerId":0,"path":"/home/src/workspaces/project/main.ts"}},
 {"pid":1,"tid":1,"ph":"E","cat":"check","ts":25,"name":"checkSourceFiles"},
 {"pid":1,"tid":1,"ph":"B","cat":"emit","ts":26,"name":"emit"},
-{"pid":1,"tid":100209852,"ph":"B","cat":"emit","ts":27,"name":"emit","args":{"path":"/home/src/workspaces/project/main.ts"}},
-{"pid":1,"tid":100209852,"ph":"E","cat":"emit","ts":28,"name":"emit","args":{"path":"/home/src/workspaces/project/main.ts"}},
-{"pid":1,"tid":553096334,"ph":"B","cat":"emit","ts":29,"name":"emit","args":{"path":"/home/src/workspaces/project/types.ts"}},
-{"pid":1,"tid":553096334,"ph":"E","cat":"emit","ts":30,"name":"emit","args":{"path":"/home/src/workspaces/project/types.ts"}},
-{"pid":1,"tid":1,"ph":"E","cat":"emit","ts":31,"name":"emit"}
+{"pid":1,"tid":1,"ph":"E","cat":"emit","ts":27,"name":"emit"}
 ]
 
 //// [/home/src/workspaces/project/trace/types_0.json] *new* 

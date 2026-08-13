@@ -6051,12 +6051,12 @@ describe("Program - emit", () => {
             const project = snapshot.getProject("/tsconfig.json")!;
             assert.deepEqual(project.program.emit(), {
                 diagnostics: [],
-                emitSkipped: true,
+                emitSkipped: false,
                 emittedFiles: [],
             });
             assert.deepEqual(project.program.emitToString(), {
                 diagnostics: [],
-                emitSkipped: true,
+                emitSkipped: false,
                 outputFiles: new Map(),
             });
             assert.equal(fs.readFile?.("/src/index.js"), undefined);

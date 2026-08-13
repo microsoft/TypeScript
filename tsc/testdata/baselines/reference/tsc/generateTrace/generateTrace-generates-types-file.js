@@ -77,9 +77,7 @@ declare const console: { log(msg: any): void; };
 {"pid":1,"tid":2,"ph":"E","cat":"check","ts":18,"name":"checkSourceFile","args":{"checkerId":0,"path":"/home/src/workspaces/project/a.ts"}},
 {"pid":1,"tid":1,"ph":"E","cat":"check","ts":19,"name":"checkSourceFiles"},
 {"pid":1,"tid":1,"ph":"B","cat":"emit","ts":20,"name":"emit"},
-{"pid":1,"tid":354130385,"ph":"B","cat":"emit","ts":21,"name":"emit","args":{"path":"/home/src/workspaces/project/a.ts"}},
-{"pid":1,"tid":354130385,"ph":"E","cat":"emit","ts":22,"name":"emit","args":{"path":"/home/src/workspaces/project/a.ts"}},
-{"pid":1,"tid":1,"ph":"E","cat":"emit","ts":23,"name":"emit"}
+{"pid":1,"tid":1,"ph":"E","cat":"emit","ts":21,"name":"emit"}
 ]
 
 //// [/home/src/workspaces/project/trace/types_0.json] *new* 

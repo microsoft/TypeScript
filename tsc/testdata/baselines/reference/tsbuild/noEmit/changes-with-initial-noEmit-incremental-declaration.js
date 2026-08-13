@@ -28,7 +28,7 @@ function someFunc(arguments: boolean, ...rest: any[]) {
 }
 
 tsgo -b -v --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -771,7 +771,7 @@ export class classC {
 }
 
 tsgo -b -v --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json

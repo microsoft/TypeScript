@@ -28,7 +28,7 @@ function someFunc(arguments: boolean, ...rest: any[]) {
 }
 
 tsgo --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS1100: [0mInvalid use of 'arguments' in strict mode.
 
@@ -674,7 +674,7 @@ export class classC {
 }
 
 tsgo --noEmit
-ExitStatus:: DiagnosticsPresent_OutputsSkipped
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS1100: [0mInvalid use of 'arguments' in strict mode.
 
