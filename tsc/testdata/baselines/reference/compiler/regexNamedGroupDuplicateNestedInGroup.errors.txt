@@ -1,0 +1,39 @@
+regexNamedGroupDuplicateNestedInGroup.ts(2,12): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regexNamedGroupDuplicateNestedInGroup.ts(5,16): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regexNamedGroupDuplicateNestedInGroup.ts(8,18): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regexNamedGroupDuplicateNestedInGroup.ts(11,16): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regexNamedGroupDuplicateNestedInGroup.ts(14,14): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+
+
+==== regexNamedGroupDuplicateNestedInGroup.ts (5 errors) ====
+    // Duplicate at the top level (already reported prior to this fix).
+    /(?<a>x)(?<a>y)/;
+               ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    
+    // Earlier definition nested inside a non-capturing group.
+    /(?:(?<a>x))(?<a>z)/;
+                   ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    
+    // Earlier definition nested inside a non-capturing group with alternation.
+    /(?:(?<a>x)|y)(?<a>z)/;
+                     ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    
+    // Earlier definition nested inside a lookahead assertion.
+    /(?=(?<a>x))(?<a>z)/;
+                   ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    
+    // Earlier definition nested inside a capturing group.
+    /((?<a>x))(?<a>z)/;
+                 ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    
+    // Legal: duplicate names in different alternatives of the same disjunction.
+    /(?<a>x)|(?<a>y)/;
+    
+    // Legal: duplicate names in different alternatives of a nested disjunction.
+    /(?:(?<a>x)|(?<a>y))/;
+    
