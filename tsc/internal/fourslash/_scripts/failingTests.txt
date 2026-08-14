@@ -373,7 +373,6 @@ TestQuickInfoJSDocFunctionThis
 TestQuickInfoJsDocGetterSetterNoCrash1
 TestQuickInfoJsdocTypedefMissingType
 TestQuickInfoJSExport
-TestQuickInfoMappedSpreadTypes
 TestQuickInfoMappedType
 TestQuickInfoMeaning
 TestQuickInfoModuleVariables
@@ -407,7 +406,6 @@ TestQuickInfoTypeOfThisInStatics
 TestQuickInfoTypeOnlyNamespaceAndClass
 TestQuickInfoUnionOfNamespaces
 TestQuickInfoUntypedModuleImport
-TestQuickinfoWrongComment
 TestRecursiveInternalModuleImport
 TestRegexDetection
 TestSelfReferencedExternalModule
