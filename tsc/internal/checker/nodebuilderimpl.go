@@ -3576,8 +3576,12 @@ func (b *NodeBuilderImpl) lookupInstantiatedTypeArgumentNodes(chain []*ast.Symbo
 		}
 
 		targetSymbol := symbol
-		if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+		if symbol.Flags&ast.SymbolFlagsAlias != 0 && !b.ch.canGetTypeParametersOfClassOrInterface(symbol) {
 			targetSymbol = b.ch.resolveAlias(symbol)
+		}
+
+		if !b.ch.canGetTypeParametersOfClassOrInterface(targetSymbol) {
+			return nil
 		}
 
 		params := b.getTypeParametersOfClassOrInterface(targetSymbol)

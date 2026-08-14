@@ -1,0 +1,42 @@
+// === QuickInfo ===
+=== /main.ts ===
+// import { Box } from "./mod"
+// declare const b: Box<string>
+// const x = b.content
+//             ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) Box<string>.content: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 69,
+      "LSPosition": {
+        "line": 2,
+        "character": 12
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) Box<string>.content: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 12
+        },
+        "end": {
+          "line": 2,
+          "character": 19
+        }
+      }
+    }
+  }
+]
