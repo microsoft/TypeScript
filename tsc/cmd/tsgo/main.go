@@ -8,6 +8,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/execute"
+	"github.com/microsoft/typescript-go/internal/osutil"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func main() {
 
 func runMain() int {
 	core.ApplyDebugStackLimit()
-	args := os.Args[1:]
+	args := osutil.Args()[1:]
 	if len(args) > 0 {
 		switch args[0] {
 		case "--lsp":

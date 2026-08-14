@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"runtime"
 	"sync/atomic"
 	"unsafe"
 
@@ -187,6 +188,9 @@ func init() {
 // fanotifyAvailable probes whether fanotify_init succeeds with the flags
 // this backend needs.
 func fanotifyAvailable() bool {
+	if runtime.GOOS == "android" {
+		return false
+	}
 	fd, err := unix.FanotifyInit(fanotifyInitFlags, unix.O_RDONLY|unix.O_CLOEXEC)
 	if err != nil {
 		return false

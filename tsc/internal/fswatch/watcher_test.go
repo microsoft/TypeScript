@@ -2214,6 +2214,8 @@ func TestDefaultBackendMatchesPlatform(t *testing.T) {
 		} else {
 			wantName = "inotify"
 		}
+	case "android":
+		wantName = "inotify"
 	case "darwin":
 		wantName = "fsevents"
 	case "windows":

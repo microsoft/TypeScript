@@ -4,10 +4,10 @@ package bundled
 
 import (
 	"fmt"
-	"os"
 	"sync"
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/osutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
@@ -20,7 +20,7 @@ func wrapFS(fs vfs.FS) vfs.FS {
 }
 
 var executableDir = sync.OnceValue(func() string {
-	exe, err := os.Executable()
+	exe, err := osutil.Executable()
 	if err != nil {
 		panic(fmt.Sprintf("bundled: failed to get executable path: %v", err))
 	}
