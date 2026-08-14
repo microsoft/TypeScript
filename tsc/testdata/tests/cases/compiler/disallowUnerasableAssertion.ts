@@ -1,7 +1,7 @@
 // https://github.com/microsoft/TypeScript/issues/63527
 
-// Expressions of the form 'a ## b as T $$ c' where ## has lower precedence than $$ are errors
-// because 'as T' cannot be erased without changing the meaning of the expressions.
+// Expressions of the form 'a ## b as T $$ c' are errors when $$ would bind before ## after
+// erasing 'as T', changing the meaning of the expression.
 
 export const x01 = 1 as number * 2;
 export const x02 = 1 as any as number * 2;
@@ -33,6 +33,14 @@ export const x22 = 1 + 1 as any as number >> 2;
 export const x23 = 1 >> 1 as number + 2;  // Error
 export const x24 = 1 >> 1 as any as number + 2;  // Error
 
+// Equal-precedence left-associative operators preserve their grouping when assertions are erased.
+export const x25 = 2 * 3 as number * 2;
+export const x26 = 2 * 3 as any as number * 2;
+
+// Equal-precedence right-associative operators do not.
+export const x27 = 2 ** 3 as number ** 2;  // Error
+export const x28 = 2 ** 3 as any as number ** 2;  // Error
+
 export const y01 = 1 satisfies number * 2;
 export const y02 = 1 satisfies any satisfies number * 2;
 
@@ -62,3 +70,11 @@ export const y21 = 1 + 1 satisfies number >> 2;
 export const y22 = 1 + 1 satisfies any satisfies number >> 2;
 export const y23 = 1 >> 1 satisfies number + 2;  // Error
 export const y24 = 1 >> 1 satisfies any satisfies number + 2;  // Error
+
+// Equal-precedence left-associative operators preserve their grouping when assertions are erased.
+export const y25 = 2 * 3 satisfies number * 2;
+export const y26 = 2 * 3 satisfies any satisfies number * 2;
+
+// Equal-precedence right-associative operators do not.
+export const y27 = 2 ** 3 satisfies number ** 2;  // Error
+export const y28 = 2 ** 3 satisfies any satisfies number ** 2;  // Error

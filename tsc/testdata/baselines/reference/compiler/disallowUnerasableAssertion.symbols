@@ -3,8 +3,8 @@
 === disallowUnerasableAssertion.ts ===
 // https://github.com/microsoft/TypeScript/issues/63527
 
-// Expressions of the form 'a ## b as T $$ c' where ## has lower precedence than $$ are errors
-// because 'as T' cannot be erased without changing the meaning of the expressions.
+// Expressions of the form 'a ## b as T $$ c' are errors when $$ would bind before ## after
+// erasing 'as T', changing the meaning of the expression.
 
 export const x01 = 1 as number * 2;
 >x01 : Symbol(x01, Decl(disallowUnerasableAssertion.ts, 5, 12))
@@ -78,75 +78,103 @@ export const x23 = 1 >> 1 as number + 2;  // Error
 export const x24 = 1 >> 1 as any as number + 2;  // Error
 >x24 : Symbol(x24, Decl(disallowUnerasableAssertion.ts, 33, 12))
 
+// Equal-precedence left-associative operators preserve their grouping when assertions are erased.
+export const x25 = 2 * 3 as number * 2;
+>x25 : Symbol(x25, Decl(disallowUnerasableAssertion.ts, 36, 12))
+
+export const x26 = 2 * 3 as any as number * 2;
+>x26 : Symbol(x26, Decl(disallowUnerasableAssertion.ts, 37, 12))
+
+// Equal-precedence right-associative operators do not.
+export const x27 = 2 ** 3 as number ** 2;  // Error
+>x27 : Symbol(x27, Decl(disallowUnerasableAssertion.ts, 40, 12))
+
+export const x28 = 2 ** 3 as any as number ** 2;  // Error
+>x28 : Symbol(x28, Decl(disallowUnerasableAssertion.ts, 41, 12))
+
 export const y01 = 1 satisfies number * 2;
->y01 : Symbol(y01, Decl(disallowUnerasableAssertion.ts, 35, 12))
+>y01 : Symbol(y01, Decl(disallowUnerasableAssertion.ts, 43, 12))
 
 export const y02 = 1 satisfies any satisfies number * 2;
->y02 : Symbol(y02, Decl(disallowUnerasableAssertion.ts, 36, 12))
+>y02 : Symbol(y02, Decl(disallowUnerasableAssertion.ts, 44, 12))
 
 export const y03 = 1 + 1 satisfies number * 2;  // Error
->y03 : Symbol(y03, Decl(disallowUnerasableAssertion.ts, 38, 12))
+>y03 : Symbol(y03, Decl(disallowUnerasableAssertion.ts, 46, 12))
 
 export const y04 = 1 + 1 satisfies any satisfies number * 2;  // Error
->y04 : Symbol(y04, Decl(disallowUnerasableAssertion.ts, 39, 12))
+>y04 : Symbol(y04, Decl(disallowUnerasableAssertion.ts, 47, 12))
 
 export const y05 = 1 satisfies number + 1 * 2;
->y05 : Symbol(y05, Decl(disallowUnerasableAssertion.ts, 40, 12))
+>y05 : Symbol(y05, Decl(disallowUnerasableAssertion.ts, 48, 12))
 
 export const y06 = 1 satisfies any satisfies number + 1 * 2;
->y06 : Symbol(y06, Decl(disallowUnerasableAssertion.ts, 41, 12))
+>y06 : Symbol(y06, Decl(disallowUnerasableAssertion.ts, 49, 12))
 
 export const y07 = 1 * 1 satisfies number + 2;
->y07 : Symbol(y07, Decl(disallowUnerasableAssertion.ts, 43, 12))
+>y07 : Symbol(y07, Decl(disallowUnerasableAssertion.ts, 51, 12))
 
 export const y08 = 1 * 1 satisfies any satisfies number + 2;
->y08 : Symbol(y08, Decl(disallowUnerasableAssertion.ts, 44, 12))
+>y08 : Symbol(y08, Decl(disallowUnerasableAssertion.ts, 52, 12))
 
 export const y09 = 1 satisfies number * 1 + 2;
->y09 : Symbol(y09, Decl(disallowUnerasableAssertion.ts, 45, 12))
+>y09 : Symbol(y09, Decl(disallowUnerasableAssertion.ts, 53, 12))
 
 export const y10 = 1 satisfies any satisfies number * 1 + 2;
->y10 : Symbol(y10, Decl(disallowUnerasableAssertion.ts, 46, 12))
+>y10 : Symbol(y10, Decl(disallowUnerasableAssertion.ts, 54, 12))
 
 export const y11 = (1 + 1 satisfies number) * 2;
->y11 : Symbol(y11, Decl(disallowUnerasableAssertion.ts, 48, 12))
+>y11 : Symbol(y11, Decl(disallowUnerasableAssertion.ts, 56, 12))
 
 export const y12 = (1 + 1 satisfies any satisfies number) * 2;
->y12 : Symbol(y12, Decl(disallowUnerasableAssertion.ts, 49, 12))
+>y12 : Symbol(y12, Decl(disallowUnerasableAssertion.ts, 57, 12))
 
 export const y13 = (1 satisfies number + 1) * 2;
->y13 : Symbol(y13, Decl(disallowUnerasableAssertion.ts, 50, 12))
+>y13 : Symbol(y13, Decl(disallowUnerasableAssertion.ts, 58, 12))
 
 export const y14 = (1 satisfies any satisfies number + 1) * 2;
->y14 : Symbol(y14, Decl(disallowUnerasableAssertion.ts, 51, 12))
+>y14 : Symbol(y14, Decl(disallowUnerasableAssertion.ts, 59, 12))
 
 export const y15 = 1 + 1 satisfies number === 2;
->y15 : Symbol(y15, Decl(disallowUnerasableAssertion.ts, 53, 12))
+>y15 : Symbol(y15, Decl(disallowUnerasableAssertion.ts, 61, 12))
 
 export const y16 = 1 + 1 satisfies any satisfies number === 2;
->y16 : Symbol(y16, Decl(disallowUnerasableAssertion.ts, 54, 12))
+>y16 : Symbol(y16, Decl(disallowUnerasableAssertion.ts, 62, 12))
 
 export const y17 = 1 + 1 satisfies number > 2;
->y17 : Symbol(y17, Decl(disallowUnerasableAssertion.ts, 55, 12))
+>y17 : Symbol(y17, Decl(disallowUnerasableAssertion.ts, 63, 12))
 
 export const y18 = 1 + 1 satisfies any satisfies number > 2;
->y18 : Symbol(y18, Decl(disallowUnerasableAssertion.ts, 56, 12))
+>y18 : Symbol(y18, Decl(disallowUnerasableAssertion.ts, 64, 12))
 
 export const y19 = 1 + 1 satisfies number >= 2;
->y19 : Symbol(y19, Decl(disallowUnerasableAssertion.ts, 57, 12))
+>y19 : Symbol(y19, Decl(disallowUnerasableAssertion.ts, 65, 12))
 
 export const y20 = 1 + 1 satisfies any satisfies number >= 2;
->y20 : Symbol(y20, Decl(disallowUnerasableAssertion.ts, 58, 12))
+>y20 : Symbol(y20, Decl(disallowUnerasableAssertion.ts, 66, 12))
 
 export const y21 = 1 + 1 satisfies number >> 2;
->y21 : Symbol(y21, Decl(disallowUnerasableAssertion.ts, 60, 12))
+>y21 : Symbol(y21, Decl(disallowUnerasableAssertion.ts, 68, 12))
 
 export const y22 = 1 + 1 satisfies any satisfies number >> 2;
->y22 : Symbol(y22, Decl(disallowUnerasableAssertion.ts, 61, 12))
+>y22 : Symbol(y22, Decl(disallowUnerasableAssertion.ts, 69, 12))
 
 export const y23 = 1 >> 1 satisfies number + 2;  // Error
->y23 : Symbol(y23, Decl(disallowUnerasableAssertion.ts, 62, 12))
+>y23 : Symbol(y23, Decl(disallowUnerasableAssertion.ts, 70, 12))
 
 export const y24 = 1 >> 1 satisfies any satisfies number + 2;  // Error
->y24 : Symbol(y24, Decl(disallowUnerasableAssertion.ts, 63, 12))
+>y24 : Symbol(y24, Decl(disallowUnerasableAssertion.ts, 71, 12))
+
+// Equal-precedence left-associative operators preserve their grouping when assertions are erased.
+export const y25 = 2 * 3 satisfies number * 2;
+>y25 : Symbol(y25, Decl(disallowUnerasableAssertion.ts, 74, 12))
+
+export const y26 = 2 * 3 satisfies any satisfies number * 2;
+>y26 : Symbol(y26, Decl(disallowUnerasableAssertion.ts, 75, 12))
+
+// Equal-precedence right-associative operators do not.
+export const y27 = 2 ** 3 satisfies number ** 2;  // Error
+>y27 : Symbol(y27, Decl(disallowUnerasableAssertion.ts, 78, 12))
+
+export const y28 = 2 ** 3 satisfies any satisfies number ** 2;  // Error
+>y28 : Symbol(y28, Decl(disallowUnerasableAssertion.ts, 79, 12))
 

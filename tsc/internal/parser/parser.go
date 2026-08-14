@@ -4626,6 +4626,15 @@ func (p *Parser) parseBinaryExpressionOrHigher(precedence ast.OperatorPrecedence
 	return p.parseBinaryExpressionRest(precedence, leftOperand, pos)
 }
 
+// shouldConsumeBinaryOperator reports whether an operator binds before the operator represented by currentPrecedence.
+// At equal precedence, only the right-associative exponentiation operator binds first.
+func shouldConsumeBinaryOperator(operator ast.Kind, operatorPrecedence ast.OperatorPrecedence, currentPrecedence ast.OperatorPrecedence) bool {
+	if operatorPrecedence > currentPrecedence {
+		return true
+	}
+	return operatorPrecedence == currentPrecedence && operator == ast.KindAsteriskAsteriskToken
+}
+
 func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, leftOperand *ast.Expression, pos int) *ast.Expression {
 	lastOperand := leftOperand
 	for {
@@ -4654,13 +4663,7 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 		//            ^^token; leftOperand = b. Return b ** c to the caller as a rightOperand
 		//      a ** b - c
 		//             ^token; leftOperand = b. Return b to the caller as a rightOperand
-		var consumeCurrentOperator bool
-		if operator == ast.KindAsteriskAsteriskToken {
-			consumeCurrentOperator = newPrecedence >= precedence
-		} else {
-			consumeCurrentOperator = newPrecedence > precedence
-		}
-		if !consumeCurrentOperator {
+		if !shouldConsumeBinaryOperator(operator, newPrecedence, precedence) {
 			break
 		}
 		if operator == ast.KindInKeyword && p.inDisallowInContext() {
@@ -4676,10 +4679,9 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 				break
 			} else {
 				p.nextToken()
-				// When we have 'a ## b as SomeType' or 'a ## b satisfies SomeType', where ## is some binary
-				// operator, we want to stop parsing on any following operator with a higher precedence than ##
-				// because continuing would make it impossible to erase the `as` or `satisfies` without changing
-				// the meaning of the expression. See https://github.com/microsoft/TypeScript/issues/63527.
+				// When we have 'a ## b as SomeType $$ c' or 'a ## b satisfies SomeType $$ c', where ## and $$
+				// are binary operators, we want to stop parsing when $$ would bind before ## after erasing the
+				// assertion. See https://github.com/microsoft/TypeScript/issues/63527.
 				lastPrecedence := ast.OperatorPrecedenceHighest
 				if ast.IsBinaryExpression(lastOperand) {
 					lastPrecedence = ast.GetBinaryOperatorPrecedence(lastOperand.AsBinaryExpression().OperatorToken.Kind)
@@ -4689,8 +4691,10 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 				} else {
 					leftOperand = p.makeAsExpression(leftOperand, p.parseType())
 				}
-				// Stop if the precedence of the next operator is too high.
-				if ast.GetBinaryOperatorPrecedence(p.reScanGreaterThanToken()) > lastPrecedence {
+				// Stop if the next operator would bind before the last operator when the assertion is erased.
+				nextOperator := p.reScanGreaterThanToken()
+				nextPrecedence := ast.GetBinaryOperatorPrecedence(nextOperator)
+				if shouldConsumeBinaryOperator(nextOperator, nextPrecedence, lastPrecedence) {
 					break
 				}
 			}
