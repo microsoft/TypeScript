@@ -23908,7 +23908,7 @@ func (c *Checker) getDeclaredTypeOfEnum(symbol *ast.Symbol) *Type {
 		for _, declaration := range symbol.Declarations {
 			if declaration.Kind == ast.KindEnumDeclaration {
 				for _, member := range declaration.Members() {
-					if c.hasBindableName(member) {
+					if !ast.HasDynamicName(member) {
 						memberSymbol := c.getSymbolOfDeclaration(member)
 						value := c.getEnumMemberValue(member).Value
 						var memberType *Type
