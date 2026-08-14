@@ -508,7 +508,7 @@ export interface PrivateIdentifier extends PrimaryExpressionBase {
 export interface QualifiedName extends NodeBase {
     readonly kind: SyntaxKind.QualifiedName;
     readonly left: EntityName;
-    readonly right: Identifier;
+    readonly right: MemberName;
 }
 export interface ComputedPropertyName extends NodeBase {
     readonly kind: SyntaxKind.ComputedPropertyName;

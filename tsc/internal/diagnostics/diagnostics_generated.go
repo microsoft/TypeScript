@@ -3468,6 +3468,8 @@ var This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailin
 
 var A_mapped_type_may_not_declare_properties_or_methods = &Message{code: 7061, category: CategoryError, key: "A_mapped_type_may_not_declare_properties_or_methods_7061", text: "A mapped type may not declare properties or methods."}
 
+var Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here = &Message{code: 7080, category: CategoryError, key: "Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here_7080", text: "Declaration emit elides private members, but '{0}' refers to a private member. Write an explicit type here."}
+
 var You_cannot_rename_this_element = &Message{code: 8000, category: CategoryError, key: "You_cannot_rename_this_element_8000", text: "You cannot rename this element."}
 
 var You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library = &Message{code: 8001, category: CategoryError, key: "You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library_8001", text: "You cannot rename elements that are defined in the standard TypeScript library."}
@@ -7778,6 +7780,8 @@ func keyToMessage(key Key) *Message {
 		return This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_constraint
 	case "A_mapped_type_may_not_declare_properties_or_methods_7061":
 		return A_mapped_type_may_not_declare_properties_or_methods
+	case "Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here_7080":
+		return Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here
 	case "You_cannot_rename_this_element_8000":
 		return You_cannot_rename_this_element
 	case "You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library_8001":

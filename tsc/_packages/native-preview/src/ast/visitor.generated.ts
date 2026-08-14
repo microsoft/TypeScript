@@ -515,7 +515,7 @@ type VisitEachChildFunction = (node: any, visitor: Visitor) => Node;
 const visitEachChildTable: Record<number, VisitEachChildFunction> = {
     [SyntaxKind.QualifiedName]: (node: QualifiedName, visitor: Visitor): QualifiedName => {
         const _left = visitNode(node.left, visitor, isEntityName);
-        const _right = visitNode(node.right, visitor, isIdentifier);
+        const _right = visitNode(node.right, visitor, isMemberName);
         return updateQualifiedName(node, _left, _right);
     },
     [SyntaxKind.ComputedPropertyName]: (node: ComputedPropertyName, visitor: Visitor): ComputedPropertyName => {

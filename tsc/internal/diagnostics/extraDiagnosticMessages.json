@@ -91,6 +91,10 @@
         "category": "Error",
         "code": 5002
     },
+    "Declaration emit elides private members, but '{0}' refers to a private member. Write an explicit type here.": {
+        "category": "Error",
+        "code": 7080
+    },
     "Binding elements with initializers can't be exported directly with --isolatedDeclarations.": {
         "category": "Error",
         "code": 9019

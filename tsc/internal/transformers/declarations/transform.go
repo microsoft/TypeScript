@@ -665,6 +665,11 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 	case ast.KindTypeQuery:
 		tx.checkEntityNameVisibility(input.AsTypeQueryNode().ExprName, tx.enclosingDeclaration)
 		result = tx.Visitor().VisitEachChild(input)
+	case ast.KindQualifiedName:
+		if input.AsQualifiedName().Right.Kind == ast.KindPrivateIdentifier {
+			tx.state.addDiagnostic(createDiagnosticForNode(input, diagnostics.Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here, input.AsQualifiedName().Right.Text()))
+		}
+		result = tx.Visitor().VisitEachChild(input)
 	case ast.KindTupleType:
 		result = tx.Visitor().VisitEachChild(input)
 		if result != nil {

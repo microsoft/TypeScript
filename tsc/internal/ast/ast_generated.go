@@ -672,17 +672,17 @@ type QualifiedName struct {
 	FlowNodeBase
 	CompositeBase
 	Left  *EntityName
-	Right *IdentifierNode
+	Right *MemberName
 }
 
-func (f *NodeFactory) NewQualifiedName(left *EntityName, right *IdentifierNode) *Node {
+func (f *NodeFactory) NewQualifiedName(left *EntityName, right *MemberName) *Node {
 	data := &QualifiedName{}
 	data.Left = left
 	data.Right = right
 	return f.newNode(KindQualifiedName, data)
 }
 
-func (f *NodeFactory) UpdateQualifiedName(node *QualifiedName, left *EntityName, right *IdentifierNode) *Node {
+func (f *NodeFactory) UpdateQualifiedName(node *QualifiedName, left *EntityName, right *MemberName) *Node {
 	if left != node.Left || right != node.Right {
 		return updateNode(f.NewQualifiedName(left, right), node.AsNode(), f.hooks)
 	}

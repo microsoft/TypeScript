@@ -284,7 +284,7 @@ func ParseIsolatedEntityName(text string) *ast.EntityName {
 	defer putParser(p)
 	p.initializeState(ast.SourceFileParseOptions{}, text, core.ScriptKindJS)
 	p.nextToken()
-	entityName := p.parseEntityName(true, nil)
+	entityName := p.parseEntityName(true, false, nil)
 	return core.IfElse(p.token == ast.KindEndOfFile && len(p.diagnostics) == 0, entityName, nil)
 }
 
@@ -2353,7 +2353,7 @@ func (p *Parser) parseModuleReference() *ast.Node {
 	if p.token == ast.KindRequireKeyword && p.lookAhead((*Parser).nextTokenIsOpenParen) {
 		return p.parseExternalModuleReference()
 	}
-	return p.parseEntityName(false /*allowReservedWords*/, nil /*diagnosticMessage*/)
+	return p.parseEntityName(false /*allowReservedWords*/, false /*allowPrivateName*/, nil /*diagnosticMessage*/)
 }
 
 func (p *Parser) parseExternalModuleReference() *ast.Node {
@@ -2944,10 +2944,10 @@ func (p *Parser) parseTypeReference() *ast.Node {
 }
 
 func (p *Parser) parseEntityNameOfTypeReference() *ast.Node {
-	return p.parseEntityName(true /*allowReservedWords*/, diagnostics.Type_expected)
+	return p.parseEntityName(true /*allowReservedWords*/, false /*allowPrivateName*/, diagnostics.Type_expected)
 }
 
-func (p *Parser) parseEntityName(allowReservedWords bool, diagnosticMessage *diagnostics.Message) *ast.Node {
+func (p *Parser) parseEntityName(allowReservedWords bool, allowPrivateName bool, diagnosticMessage *diagnostics.Message) *ast.Node {
 	pos := p.nodePos()
 	var entity *ast.Node
 	if allowReservedWords {
@@ -2961,7 +2961,7 @@ func (p *Parser) parseEntityName(allowReservedWords bool, diagnosticMessage *dia
 			// `typeArguments` to report it as a grammar error in the checker.
 			break
 		}
-		entity = p.finishNode(p.factory.NewQualifiedName(entity, p.parseRightSideOfDot(allowReservedWords, false /*allowPrivateIdentifiers*/, true /*allowUnicodeEscapeSequenceInIdentifierName*/)), pos)
+		entity = p.finishNode(p.factory.NewQualifiedName(entity, p.parseRightSideOfDot(allowReservedWords, allowPrivateName, true /*allowUnicodeEscapeSequenceInIdentifierName*/)), pos)
 	}
 	return entity
 }
@@ -3160,7 +3160,7 @@ func (p *Parser) parseImportAttributes(token ast.Kind, skipKeyword bool) *ast.No
 func (p *Parser) parseTypeQuery() *ast.Node {
 	pos := p.nodePos()
 	p.parseExpected(ast.KindTypeOfKeyword)
-	entityName := p.parseEntityName(true /*allowReservedWords*/, nil)
+	entityName := p.parseEntityName(true /*allowReservedWords*/, true /*allowPrivateName*/, nil)
 	// Make sure we perform ASI to prevent parsing the next line's type arguments as part of an instantiation expression
 	var typeArguments *ast.NodeList
 	if !p.hasPrecedingLineBreak() {

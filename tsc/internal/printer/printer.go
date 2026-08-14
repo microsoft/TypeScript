@@ -1196,7 +1196,7 @@ func (p *Printer) emitQualifiedName(node *ast.QualifiedName) {
 	state := p.enterNode(node.AsNode())
 	p.emitEntityName(node.Left)
 	p.writePunctuation(".")
-	p.emitIdentifierName(node.Right.AsIdentifier())
+	p.emitMemberName(node.Right)
 	p.exitNode(node.AsNode(), state)
 }
 
