@@ -3,6 +3,7 @@ import type { ElementFlags } from "#enums/elementFlags";
 import type { ObjectFlags } from "#enums/objectFlags";
 import type { TypeFlags } from "#enums/typeFlags";
 import type { TypePredicateKind } from "#enums/typePredicateKind";
+import type { IndexSignatureDeclaration } from "../../ast/ast.ts";
 import type { Diagnostic } from "../proto.ts";
 import type {
     NodeHandle,
@@ -319,7 +320,7 @@ export interface IndexInfo {
     /** Whether the index signature is readonly */
     readonly isReadonly: boolean;
     /** The index signature declaration, if any */
-    readonly declaration?: NodeHandle | undefined;
+    readonly declaration?: NodeHandle<IndexSignatureDeclaration> | undefined;
 }
 
 /**

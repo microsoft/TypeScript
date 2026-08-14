@@ -88,6 +88,7 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
+import { isSignatureDeclaration } from "../../src/ast/is.ts";
 import { runBenchmarks } from "./api.bench.ts";
 
 const defaultFiles = {
@@ -1872,11 +1873,16 @@ export class Cache {
             assert.ok(callSigs.length > 0);
             const sig = callSigs[0];
             assert.ok(sig.declaration);
+            assert.ok(isSignatureDeclaration.Handle(sig.declaration));
             const node = sig.declaration.resolve(project);
             assert.ok(node);
+            assert.ok(node.parameters);
+            assert.ok(isSignatureDeclaration(node));
             // The handle remembers its canonical project, so resolve() works without an argument.
             const nodeFromCanonical = sig.declaration.resolve();
             assert.ok(nodeFromCanonical);
+            assert.ok(nodeFromCanonical.parameters);
+            assert.ok(isSignatureDeclaration(nodeFromCanonical));
             assert.strictEqual(nodeFromCanonical.kind, node.kind);
 
             const methodPos = src.indexOf("getValue");

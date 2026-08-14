@@ -1422,6 +1422,11 @@ function generateIsGenerated(): string {
         out.push(`    ${t},`);
     }
     out.push(`} from "./ast.ts";`);
+    out.push(`import type { NodeHandle as AsyncNodeHandle } from "../api/async/api.ts";`);
+    out.push(`import type { NodeHandle as SyncNodeHandle } from "../api/sync/api.ts";`);
+    out.push(`type NodeHandleLike<out T extends Node> = { kind: SyntaxKind; resolve(...args: any): any; };`);
+    // Note that we must `& T` to satisfy the requirements of a type guard, and it must be _second_ so the narrowed `resolve` overload from the specialization is selected (order matters)
+    out.push(`type SpecializeNodeHandle<T extends NodeHandleLike<Node>, U extends Node> = T extends AsyncNodeHandle<any> ? AsyncNodeHandle<U> & T : SyncNodeHandle<U> & T;`);
     out.push(``);
 
     // ── Simple guards ──
@@ -1446,6 +1451,11 @@ function generateIsGenerated(): string {
         }
         out.push(`}`);
         out.push(``);
+        out.push(`export declare namespace ${g.funcName} {`);
+        out.push(`    function Handle<T extends NodeHandleLike<Node>>(node: T): node is SpecializeNodeHandle<T, ${g.typeName}>;`);
+        out.push(`}`);
+        out.push(`${g.funcName}.Handle = ${g.funcName} as any;`);
+        out.push(``);
     }
 
     // ── Composite guards ──
@@ -1453,6 +1463,12 @@ function generateIsGenerated(): string {
         out.push(`export function ${g.funcName}(node: Node): node is ${g.typeName} {`);
         out.push(`    ${g.body}`);
         out.push(`}`);
+        out.push(``);
+        out.push(`export declare namespace ${g.funcName} {`);
+        out.push(`    function Handle<T extends NodeHandleLike<Node>>(node: T): node is SpecializeNodeHandle<T, ${g.typeName}>;`);
+        out.push(`}`);
+        out.push(``);
+        out.push(`${g.funcName}.Handle = ${g.funcName} as any;`);
         out.push(``);
     }
 
@@ -1480,9 +1496,16 @@ function generateIsGenerated(): string {
     // ── Token alias guards ──
     for (const g of tokenAliasGuards) {
         const returnType = g.isRangeBased ? `boolean` : `node is ${g.typeName}`;
+        const handleReturnType = g.isRangeBased ? `boolean` : `node is SpecializeNodeHandle<T, ${g.typeName}>`;
         out.push(`export function ${g.funcName}(node: Node): ${returnType} {`);
         out.push(`    ${g.body}`);
         out.push(`}`);
+        out.push(``);
+        out.push(`export declare namespace ${g.funcName} {`);
+        out.push(`    function Handle<T extends NodeHandleLike<Node>>(node: T): ${handleReturnType};`);
+        out.push(`}`);
+        out.push(``);
+        out.push(`${g.funcName}.Handle = ${g.funcName} as any;`);
         out.push(``);
     }
 

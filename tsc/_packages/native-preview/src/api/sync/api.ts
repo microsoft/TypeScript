@@ -21,8 +21,10 @@ import { TypeFlags } from "#enums/typeFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
 import {
     type __String,
+    type Declaration,
     type Expression,
     type Identifier,
+    type IndexSignatureDeclaration,
     ModifierFlags,
     type Node,
     type Path,
@@ -704,7 +706,7 @@ class ProjectObjectRegistry {
             keyType: this.getOrCreateType(info.keyType),
             valueType: this.getOrCreateType(info.valueType),
             isReadonly: info.isReadonly ?? false,
-            declaration: info.declaration ? new NodeHandle(info.declaration, this.project) : undefined,
+            declaration: info.declaration ? new NodeHandle<IndexSignatureDeclaration>(info.declaration, this.project) : undefined,
         }));
     }
 
@@ -1901,7 +1903,7 @@ export class Emitter {
     }
 }
 
-export class NodeHandle {
+export class NodeHandle<out T extends Node = Node> {
     /**
      * The project this handle was produced in, used as the default for {@link resolve}.
      * Node handles are only meaningful within a project's program, so the producing project
@@ -1925,12 +1927,12 @@ export class NodeHandle {
      * and looking up the node by index. If no project is passed, the project that produced
      * the handle is used.
      */
-    resolve(project: Project = this.canonicalProject): Node | undefined {
+    resolve(project: Project = this.canonicalProject): T | undefined {
         const sourceFile = project.program.getSourceFile(this.path);
         if (!sourceFile) {
             return undefined;
         }
-        return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(this.index);
+        return (sourceFile as unknown as RemoteSourceFile).getOrCreateNodeAtIndex(this.index) as T | undefined;
     }
 }
 
@@ -1968,8 +1970,8 @@ export class Symbol {
     readonly name: string;
     readonly flags: SymbolFlags;
     readonly checkFlags: CheckFlags;
-    readonly declarations: readonly NodeHandle[];
-    readonly valueDeclaration: NodeHandle | undefined;
+    readonly declarations: readonly NodeHandle<Declaration>[];
+    readonly valueDeclaration: NodeHandle<Declaration> | undefined;
     private readonly parent!: number;
     private readonly exportSymbol!: number;
     private membersCache: ReadonlyMap<__String, Symbol> | undefined;
@@ -1988,8 +1990,8 @@ export class Symbol {
             throw new Error(`Symbol ${data.id} references unknown canonical project '${data.project}'`);
         }
         this.canonicalProject = canonicalProject;
-        this.declarations = (data.declarations ?? []).map(d => new NodeHandle(d, canonicalProject));
-        this.valueDeclaration = data.valueDeclaration ? new NodeHandle(data.valueDeclaration, canonicalProject) : undefined;
+        this.declarations = (data.declarations ?? []).map(d => new NodeHandle<Declaration>(d, canonicalProject));
+        this.valueDeclaration = data.valueDeclaration ? new NodeHandle<Declaration>(data.valueDeclaration, canonicalProject) : undefined;
 
         if (data.parent !== undefined) this.parent = data.parent;
         if (data.exportSymbol !== undefined) this.exportSymbol = data.exportSymbol;
@@ -2494,7 +2496,7 @@ export class Signature {
     private objectRegistry: ProjectObjectRegistry;
 
     readonly id: number;
-    readonly declaration?: NodeHandle | undefined;
+    readonly declaration?: NodeHandle<Declaration> | undefined;
     readonly typeParameters?: readonly number[] | undefined;
     readonly parameters: readonly number[];
     readonly thisParameter?: number | undefined;
@@ -2505,7 +2507,7 @@ export class Signature {
         this.id = data.id;
         this.flags = data.flags;
         this.objectRegistry = objectRegistry;
-        this.declaration = data.declaration ? new NodeHandle(data.declaration, project) : undefined;
+        this.declaration = data.declaration ? new NodeHandle<Declaration>(data.declaration, project) : undefined;
         this.typeParameters = data.typeParameters ?? [];
         this.parameters = data.parameters ?? [];
         this.thisParameter = data.thisParameter;
