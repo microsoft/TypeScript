@@ -18,6 +18,14 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 )
 
+type identifierVariant int32
+
+const (
+	identifierVariantStandard identifierVariant = iota
+	identifierVariantJSX
+	identifierVariantRegExpGroupName
+)
+
 type EscapeSequenceScanningFlags int32
 
 const (
@@ -887,9 +895,7 @@ func (s *Scanner) Scan() ast.Kind {
 			s.pos++
 			s.token = ast.KindAtToken
 		case '\\':
-			cp := s.peekUnicodeEscape()
-			if cp >= 0 && IsIdentifierStart(cp) {
-				s.tokenValue = string(s.scanUnicodeEscape(true)) + s.scanIdentifierParts()
+			if s.scanIdentifier(identifierVariantStandard) {
 				s.token = GetIdentifierToken(s.tokenValue)
 			} else {
 				s.scanInvalidCharacter()
@@ -904,31 +910,22 @@ func (s *Scanner) Scan() ast.Kind {
 					continue
 				}
 				s.errorAt(diagnostics.X_can_only_be_used_at_the_start_of_a_file, s.pos, 2)
-				s.pos++
+				s.pos += 2
 				s.token = ast.KindUnknown
 				break
 			}
-			if s.charAt(1) == '\\' {
-				s.pos++
-				cp := s.peekUnicodeEscape()
-				if cp >= 0 && IsIdentifierStart(cp) {
-					s.tokenValue = "#" + string(s.scanUnicodeEscape(true)) + s.scanIdentifierParts()
-					s.token = ast.KindPrivateIdentifier
-					break
-				}
-				s.pos--
-			}
-			if !s.scanIdentifier(1) {
+			s.pos++
+			if !s.scanIdentifier(identifierVariantStandard) {
 				s.errorAt(diagnostics.Invalid_character, s.pos-1, 1)
-				s.tokenValue = "#"
 			}
+			s.tokenValue = "#" + s.tokenValue
 			s.token = ast.KindPrivateIdentifier
 		default:
 			if ch < 0 {
 				s.token = ast.KindEndOfFile
 				break
 			}
-			if s.scanIdentifier(0) {
+			if s.scanIdentifier(identifierVariantStandard) {
 				s.token = GetIdentifierToken(s.tokenValue)
 				break
 			}
@@ -1324,22 +1321,8 @@ func (s *Scanner) ScanJsxIdentifier() ast.Kind {
 		// everything after it to the token
 		// Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
 		// Any caller should be expecting this behavior and should only read the pos or token value after calling it.
-		for {
-			ch := s.char()
-			if ch < 0 {
-				break
-			}
-			if ch == '-' {
-				s.tokenValue += "-"
-				s.pos++
-				continue
-			}
-			oldPos := s.pos
-			s.tokenValue += s.scanIdentifierParts() // reuse `scanIdentifierParts` so unicode escapes are handled
-			if s.pos == oldPos {
-				break
-			}
-		}
+		// Here scanIdentifierParts is reused to ensure Unicode escapes are handled.
+		s.tokenValue += s.scanIdentifierParts(identifierVariantJSX)
 		s.token = GetIdentifierToken(s.tokenValue)
 	}
 	return s.token
@@ -1487,49 +1470,23 @@ func (s *Scanner) ScanJSDocToken() ast.Kind {
 	case '#':
 		s.token = ast.KindHashToken
 		return s.token
-	case '\\':
-		s.pos--
-		cp := s.peekUnicodeEscape()
-		if cp >= 0 && IsIdentifierStart(cp) {
-			s.tokenValue = string(s.scanUnicodeEscape(true)) + s.scanIdentifierParts()
-			s.token = GetIdentifierToken(s.tokenValue)
-		} else {
-			s.pos++
-			s.token = ast.KindUnknown
-		}
-		return s.token
 	}
 
-	if IsIdentifierStart(ch) {
-		char := ch
-		for {
-			if s.pos >= len(s.text) {
-				break
-			}
-			char, size = s.charAndSize()
-			if !IsIdentifierPart(char) && char != '-' {
-				break
-			}
-			s.pos += size
-		}
-		s.tokenValue = s.text[s.tokenStart:s.pos]
-		if char == '\\' {
-			s.tokenValue += s.scanIdentifierParts()
-		}
+	s.pos = s.tokenStart
+	if s.scanIdentifier(identifierVariantJSX) {
 		s.token = GetIdentifierToken(s.tokenValue)
 		return s.token
-	} else {
-		s.token = ast.KindUnknown
-		return s.token
 	}
+	s.pos = s.tokenStart + size
+	s.token = ast.KindUnknown
+	return s.token
 }
 
-func (s *Scanner) scanIdentifier(prefixLength int) bool {
+func (s *Scanner) scanIdentifier(variant identifierVariant) bool {
 	start := s.pos
-	s.pos += prefixLength
 	ch := s.char()
 	// Fast path for simple ASCII identifiers
-	if stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$' {
+	if variant != identifierVariantJSX && (stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$') {
 		s.pos++
 		s.scanASCIIWhile(func(b byte) bool {
 			return (b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z') || (b >= '0' && b <= '9') || b == '_' || b == '$'
@@ -1539,42 +1496,93 @@ func (s *Scanner) scanIdentifier(prefixLength int) bool {
 			s.tokenValue = s.text[start:s.pos]
 			return true
 		}
-		s.pos = start + prefixLength
+		s.pos = start
 	}
-	ch, size := s.charAndSize()
-	if IsIdentifierStart(ch) {
-		for {
-			s.pos += size
-			ch, size = s.charAndSize()
-			if !IsIdentifierPart(ch) {
-				break
-			}
-		}
-		s.tokenValue = s.text[start:s.pos]
-		if ch == '\\' {
-			s.tokenValue += s.scanIdentifierParts()
-		}
+	s.tokenValue = s.scanIdentifierStart(variant)
+	if s.tokenValue != "" {
+		s.tokenValue += s.scanIdentifierParts(variant)
 		return true
 	}
 	return false
 }
 
-func (s *Scanner) scanIdentifierParts() string {
+func (s *Scanner) scanIdentifierStart(variant identifierVariant) string {
+	ch, size := s.charAndSize()
+	if ch == '\\' {
+		escaped := s.peekUnicodeEscape()
+		if escaped >= 0 {
+			if IsIdentifierStart(escaped) {
+				return string(s.scanUnicodeEscape(true))
+			}
+			if variant == identifierVariantRegExpGroupName &&
+				s.charAt(2) != '{' &&
+				stringutil.IsHighSurrogate(escaped) &&
+				s.charAt(6) == '\\' && s.charAt(7) == 'u' && s.charAt(8) != '{' {
+				start := s.pos
+				s.pos += 6
+				nextEscaped := s.peekUnicodeEscape()
+				if stringutil.IsLowSurrogate(nextEscaped) {
+					codePoint := stringutil.SurrogatePairToCodePoint(escaped, nextEscaped)
+					if IsIdentifierStart(codePoint) {
+						// Unlike normal identifiers, RegExp group names accept a pair of
+						// fixed-width surrogate escapes as one RegExpIdentifierName character.
+						s.pos += 6
+						s.tokenFlags |= ast.TokenFlagsUnicodeEscape
+						return string(codePoint)
+					}
+				}
+				s.pos = start
+			}
+		}
+	} else if IsIdentifierStart(ch) {
+		s.pos += size
+		return string(ch)
+	}
+	return ""
+}
+
+func (s *Scanner) scanIdentifierParts(variant identifierVariant) string {
 	var sb strings.Builder
 	start := s.pos
+	languageVariant := core.LanguageVariantStandard
+	if variant == identifierVariantJSX {
+		languageVariant = core.LanguageVariantJSX
+	}
 	for {
 		ch, size := s.charAndSize()
-		if IsIdentifierPart(ch) {
+		if IsIdentifierPartEx(ch, languageVariant) {
 			s.pos += size
 			continue
 		}
 		if ch == '\\' {
 			escaped := s.peekUnicodeEscape()
-			if escaped >= 0 && IsIdentifierPart(escaped) {
+			if escaped >= 0 && IsIdentifierPartEx(escaped, languageVariant) {
 				sb.WriteString(s.text[start:s.pos])
 				sb.WriteRune(s.scanUnicodeEscape(true))
 				start = s.pos
 				continue
+			}
+			if variant == identifierVariantRegExpGroupName &&
+				s.charAt(2) != '{' &&
+				stringutil.IsHighSurrogate(escaped) &&
+				s.charAt(6) == '\\' && s.charAt(7) == 'u' && s.charAt(8) != '{' {
+				escapeStart := s.pos
+				s.pos += 6
+				nextEscaped := s.peekUnicodeEscape()
+				if stringutil.IsLowSurrogate(nextEscaped) {
+					codePoint := stringutil.SurrogatePairToCodePoint(escaped, nextEscaped)
+					if IsIdentifierPartEx(codePoint, languageVariant) {
+						// Unlike normal identifiers, RegExp group names accept a pair of
+						// fixed-width surrogate escapes as one RegExpIdentifierName character.
+						sb.WriteString(s.text[start:escapeStart])
+						sb.WriteRune(codePoint)
+						s.pos += 6
+						s.tokenFlags |= ast.TokenFlagsUnicodeEscape
+						start = s.pos
+						continue
+					}
+				}
+				s.pos = escapeStart
 			}
 		}
 		break
@@ -2024,7 +2032,7 @@ func (s *Scanner) scanNumber() ast.Kind {
 	ch, _ := s.charAndSize()
 	if IsIdentifierStart(ch) {
 		idStart := s.pos
-		id := s.scanIdentifierParts()
+		id := s.scanIdentifierParts(identifierVariantStandard)
 		if result != ast.KindBigIntLiteral && len(id) == 1 && s.text[idStart] == 'n' {
 			if s.tokenFlags&ast.TokenFlagsScientific != 0 {
 				s.errorAt(diagnostics.A_bigint_literal_cannot_use_exponential_notation, start, s.pos-start)
@@ -2249,7 +2257,7 @@ func IsIdentifierPart(ch rune) bool {
 func IsIdentifierPartEx(ch rune, languageVariant core.LanguageVariant) bool {
 	return isWordCharacter(ch) || ch == '$' ||
 		ch >= utf8.RuneSelf && stringutil.IsUnicodeIdentifierPart(ch) ||
-		languageVariant == core.LanguageVariantJSX && (ch == '-' || ch == ':') // "-" and ":" are valid in JSX Identifiers
+		languageVariant == core.LanguageVariantJSX && ch == '-' // ":" is part of JSXNamespacedName, but not JSXIdentifier.
 }
 
 var tokenToText = func() [ast.KindCount]string {

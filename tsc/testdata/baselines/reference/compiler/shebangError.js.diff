@@ -1,0 +1,9 @@
+--- old.shebangError.js
++++ new.shebangError.js
+@@= skipped -6, +6 lines =@@
+ //// [shebangError.js]
+ "use strict";
+ var foo = 'Shebang is only allowed on the first line';
+-!/usr/bin / env;
++/usr/bin / env;
+ node;
