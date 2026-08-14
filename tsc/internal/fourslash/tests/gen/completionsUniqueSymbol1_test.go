@@ -47,7 +47,7 @@ i[|./**/|];`
 					SortText:   new(string(ls.SortTextGlobalsOrKeywords)),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "M",
+							NewText: "[M]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

@@ -71,12 +71,12 @@ type UserPreferences struct {
 	// a whole declaration for the member.
 	// E.g., `class A { f| }` could be completed to `class A { foo(): number {} }`, instead of
 	// `class A { foo }`.
-	IncludeCompletionsWithClassMemberSnippets core.Tristate `raw:"includeCompletionsWithClassMemberSnippets" config:"suggest.classMemberSnippets.enabled"` // !!!
+	IncludeCompletionsWithClassMemberSnippets core.Tristate `raw:"includeCompletionsWithClassMemberSnippets" config:"suggest.classMemberSnippets.enabled"`
 	// If enabled, object literal methods will have a method declaration completion entry in addition
 	// to the regular completion entry containing just the method name.
 	// E.g., `const objectLiteral: T = { f| }` could be completed to `const objectLiteral: T = { foo(): void {} }`,
 	// in addition to `const objectLiteral: T = { foo }`.
-	IncludeCompletionsWithObjectLiteralMethodSnippets core.Tristate               `raw:"includeCompletionsWithObjectLiteralMethodSnippets" config:"suggest.objectLiteralMethodSnippets.enabled"` // !!!
+	IncludeCompletionsWithObjectLiteralMethodSnippets core.Tristate               `raw:"includeCompletionsWithObjectLiteralMethodSnippets" config:"suggest.objectLiteralMethodSnippets.enabled"`
 	JsxAttributeCompletionStyle                       JsxAttributeCompletionStyle `raw:"jsxAttributeCompletionStyle" config:"preferences.jsxAttributeCompletionStyle"`
 	EnableAutoClosingTags                             core.Tristate               `raw:"autoClosingTags" config:"autoClosingTags.enabled" fallbackConfig:"autoClosingTags"`
 	EnableJSDocCompletions                            core.Tristate               `raw:"completeJSDocs" config:"suggest.jsdoc.enabled" fallbackConfig:"suggest.completeJSDocs"`

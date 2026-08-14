@@ -17,7 +17,9 @@ func TestJSDocSnippetCompletionForFunction(t *testing.T) {
 	const content = `/*completion*/ */
 function abcdef(x, y) { }
 `
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	capabilities := fourslash.GetDefaultCapabilities()
+	capabilities.TextDocument.Completion.CompletionItem.SnippetSupport = new(true)
+	f, done := fourslash.NewFourslash(t, capabilities, content)
 	defer done()
 	f.GoToMarker(t, "completion")
 	f.Insert(t, "/**")
@@ -52,7 +54,9 @@ func TestJSDocSnippetCompletionForReturn(t *testing.T) {
 	const content = `/*completion*/ */
 function abcdef(x) { return x; }
 `
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	capabilities := fourslash.GetDefaultCapabilities()
+	capabilities.TextDocument.Completion.CompletionItem.SnippetSupport = new(true)
+	f, done := fourslash.NewFourslash(t, capabilities, content)
 	defer done()
 	f.GoToMarker(t, "completion")
 	f.Insert(t, "/**")
@@ -67,14 +71,17 @@ func TestJSDocSnippetCompletionPreservesCRLF(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = "/*completion*/ */\r\nfunction abcdef(x) { return x; }\r\n"
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	capabilities := fourslash.GetDefaultCapabilities()
+	capabilities.TextDocument.Completion.CompletionItem.SnippetSupport = new(true)
+	f, done := fourslash.NewFourslash(t, capabilities, content)
 	defer done()
 	f.GoToMarker(t, "completion")
 	f.Insert(t, "/**")
 
 	userPreferences := lsutil.NewDefaultUserPreferences()
 	userPreferences.FormatCodeSettings.NewLineCharacter = "\r\n"
-	list := f.GetCompletions(t, &userPreferences)
+	f.Configure(t, userPreferences)
+	list := f.GetCompletions(t, nil /*userPreferences*/)
 	assert.Assert(t, list != nil)
 	assert.Equal(t, len(list.Items), 1)
 	assert.Equal(t, list.Items[0].TextEdit.InsertReplaceEdit.NewText, "/**\r\n * $0\r\n * @param x ${1}\r\n * @returns ${2}\r\n */")
@@ -86,7 +93,9 @@ func TestJSDocSnippetCompletionRespectsGenerateReturnPreference(t *testing.T) {
 	const content = `/*completion*/ */
 function abcdef(x) { return x; }
 `
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	capabilities := fourslash.GetDefaultCapabilities()
+	capabilities.TextDocument.Completion.CompletionItem.SnippetSupport = new(true)
+	f, done := fourslash.NewFourslash(t, capabilities, content)
 	defer done()
 	f.GoToMarker(t, "completion")
 	f.Insert(t, "/**")
@@ -127,7 +136,9 @@ func TestJSDocSnippetCompletionForClass(t *testing.T) {
 class C {
 }
 `
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	capabilities := fourslash.GetDefaultCapabilities()
+	capabilities.TextDocument.Completion.CompletionItem.SnippetSupport = new(true)
+	f, done := fourslash.NewFourslash(t, capabilities, content)
 	defer done()
 	f.GoToMarker(t, "completion")
 	f.Insert(t, "/**")

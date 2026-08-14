@@ -51,7 +51,7 @@ x[|./**/|]`
 					Detail: new("(property) 0: number (lbl1)"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "0",
+							NewText: "[0]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
@@ -68,7 +68,7 @@ x[|./**/|]`
 					Detail: new("(property) 1: number (lbl2)"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "1",
+							NewText: "[1]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

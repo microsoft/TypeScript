@@ -46,5 +46,6 @@ declare module "./test" {
 }
 
 Abcde`),
+		UserPreferences: nil, /*preferences*/
 	})
 }

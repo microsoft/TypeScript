@@ -29,7 +29,11 @@ declare namespace React {
 export = React;
 // @Filename: /test.js
 [|import R/**/|]`
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, fourslash.GetDefaultCapabilitiesWithOptions(&fourslash.ClientCapabilitiesOptions{
+		CompletionItem: &lsproto.ClientCompletionItemOptions{
+			SnippetSupport: new(true),
+		},
+	}), content)
 	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
@@ -50,7 +54,7 @@ export = React;
 					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "React",
+							NewText: "import React$1 from \"react\";",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

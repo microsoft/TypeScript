@@ -78,5 +78,6 @@ Ba/**/`
 		NewFileContent: new(`import { Bar } from "path2longer";
 
 Ba`),
+		UserPreferences: nil, /*preferences*/
 	})
 }

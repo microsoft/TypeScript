@@ -127,7 +127,7 @@ x["[|/*b*/|]"];`
 					InsertText: new("[\"foo \"]"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "foo ",
+							NewText: "[\"foo \"]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
@@ -140,7 +140,7 @@ x["[|/*b*/|]"];`
 					InsertText: new("[\"#\"]"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "#",
+							NewText: "[\"#\"]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
@@ -152,7 +152,7 @@ x["[|/*b*/|]"];`
 					InsertText: new("[\"1b\"]"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "1b",
+							NewText: "[\"1b\"]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

@@ -28,7 +28,11 @@ export interface SvgProperties {}
 [|import SvgProp/**/|]
 // @link: /home/src/workspaces/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react -> /home/src/workspaces/project/node_modules/@types/react
 // @link: /home/src/workspaces/project/node_modules/.pnpm/csstype@3.0.8/node_modules/csstype -> /home/src/workspaces/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/csstype`
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, fourslash.GetDefaultCapabilitiesWithOptions(&fourslash.ClientCapabilitiesOptions{
+		CompletionItem: &lsproto.ClientCompletionItemOptions{
+			SnippetSupport: new(true),
+		},
+	}), content)
 	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")

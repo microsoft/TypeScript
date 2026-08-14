@@ -36,7 +36,7 @@ func TestCompletionOfAwaitPromise7(t *testing.T) {
 					InsertText: new(";(await x).trim"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "trim",
+							NewText: ";(await x).trim",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

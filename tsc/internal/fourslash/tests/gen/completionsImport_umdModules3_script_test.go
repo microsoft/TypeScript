@@ -42,9 +42,8 @@ const el1 = <div className={class/*1*/}>foo</div>`
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:               "classNames",
-					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            new(string(ls.SortTextGlobalsOrKeywords)),
+					Label:    "classNames",
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

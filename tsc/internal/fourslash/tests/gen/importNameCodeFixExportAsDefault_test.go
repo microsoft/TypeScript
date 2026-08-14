@@ -28,5 +28,6 @@ export { foo as default }
 		NewFileContent: new(`import foo from "./foo";
 
 foo`),
+		UserPreferences: nil, /*preferences*/
 	})
 }

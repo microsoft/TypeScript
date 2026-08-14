@@ -24,7 +24,11 @@ declare module "*.css" {
 }
 // @Filename: /index.ts
 import style/**/`
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, fourslash.GetDefaultCapabilitiesWithOptions(&fourslash.ClientCapabilitiesOptions{
+		CompletionItem: &lsproto.ClientCompletionItemOptions{
+			SnippetSupport: new(true),
+		},
+	}), content)
 	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

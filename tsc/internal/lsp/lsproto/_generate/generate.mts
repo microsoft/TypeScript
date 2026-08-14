@@ -160,6 +160,11 @@ const customStructures: Structure[] = [
                 optional: true,
                 documentation: "Auto-import data for this completion item.",
             },
+            {
+                name: "isImportStatementCompletion",
+                type: { kind: "base", name: "boolean" },
+                omitzeroValue: true,
+            },
         ],
         documentation: "CompletionItemData is preserved on a CompletionItem between CompletionRequest and CompletionResolveRequest.",
     },

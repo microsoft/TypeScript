@@ -45,7 +45,7 @@ export = Foo;
 					},
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "Foo",
+							NewText: "import type Foo = require(\"./foo\");",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

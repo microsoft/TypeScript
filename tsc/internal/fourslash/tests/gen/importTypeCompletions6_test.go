@@ -43,7 +43,7 @@ export interface Foo { };
 					},
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "Foo",
+							NewText: "import type { Foo } from \"./foo\";",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

@@ -56,7 +56,7 @@ i[|./**/|];`
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "publicSym",
+							NewText: "[publicSym]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

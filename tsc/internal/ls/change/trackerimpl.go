@@ -92,7 +92,7 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 func (t *Tracker) getFormattedTextOfNode(nodeIn *ast.Node, targetSourceFile *ast.SourceFile, sourceFile *ast.SourceFile, pos int, options NodeOptions) string {
 	text, sourceFileLike := t.getNonformattedText(nodeIn, targetSourceFile)
 	// !!! if (validate) validate(node, text);
-	formatOptions := getFormatCodeSettingsForWriting(t.formatSettings, targetSourceFile)
+	formatOptions := GetFormatCodeSettingsForWriting(t.formatSettings, targetSourceFile)
 
 	var initialIndentation, delta int
 	if options.indentation == nil {
@@ -111,7 +111,7 @@ func (t *Tracker) getFormattedTextOfNode(nodeIn *ast.Node, targetSourceFile *ast
 	return core.ApplyBulkEdits(text, changes)
 }
 
-func getFormatCodeSettingsForWriting(options lsutil.FormatCodeSettings, sourceFile *ast.SourceFile) lsutil.FormatCodeSettings {
+func GetFormatCodeSettingsForWriting(options lsutil.FormatCodeSettings, sourceFile *ast.SourceFile) lsutil.FormatCodeSettings {
 	shouldAutoDetectSemicolonPreference := options.Semicolons == lsutil.SemicolonPreferenceIgnore
 	shouldRemoveSemicolons := options.Semicolons == lsutil.SemicolonPreferenceRemove || shouldAutoDetectSemicolonPreference && !lsutil.ProbablyUsesSemicolons(sourceFile)
 	if shouldRemoveSemicolons {

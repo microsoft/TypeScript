@@ -22,7 +22,11 @@ export const foo = 0;
 // @Filename: /single.ts
 import * as fs from 'fs';
 [|import f/**/|]`
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, fourslash.GetDefaultCapabilitiesWithOptions(&fourslash.ClientCapabilitiesOptions{
+		CompletionItem: &lsproto.ClientCompletionItemOptions{
+			SnippetSupport: new(true),
+		},
+	}), content)
 	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
@@ -43,7 +47,7 @@ import * as fs from 'fs';
 					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "foo",
+							NewText: "import { foo$1 } from './mod';",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

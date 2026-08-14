@@ -92,10 +92,11 @@ ref/**/`
 		},
 	})
 	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
-		Name:          "ref",
-		Source:        "vue",
-		Description:   "Update import from \"vue\"",
-		AutoImportFix: &lsproto.AutoImportFix{},
+		Name:            "ref",
+		Source:          "vue",
+		Description:     "Update import from \"vue\"",
+		AutoImportFix:   &lsproto.AutoImportFix{},
+		UserPreferences: nil, /*preferences*/
 		NewFileContent: new(`import { ref } from "vue";
 ref`),
 	})

@@ -106,9 +106,8 @@ func TestAutoImportTransitiveLeak(t *testing.T) {
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:               "foo",
-					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            new(string(ls.SortTextLocationPriority)),
+					Label:    "foo",
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 			},
 			Excludes: []string{"fooInternal"},

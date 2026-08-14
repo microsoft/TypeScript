@@ -33,7 +33,7 @@ x[|./**/|];`
 					InsertText: new("[0]"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "0",
+							NewText: "[0]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
@@ -43,7 +43,7 @@ x[|./**/|];`
 					InsertText: new("[1]"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "1",
+							NewText: "[1]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

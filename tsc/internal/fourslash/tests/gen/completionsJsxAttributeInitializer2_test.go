@@ -44,7 +44,7 @@ const foo = 0;
 					Kind:       new(lsproto.CompletionItemKindVariable),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "foo",
+							NewText: "{foo}",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

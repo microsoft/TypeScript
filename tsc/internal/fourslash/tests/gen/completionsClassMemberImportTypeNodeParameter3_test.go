@@ -6,8 +6,10 @@ package fourslash_test
 import (
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -42,12 +44,12 @@ export declare class Derived extends Cls {
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:               "method",
-					InsertText:          new("method(param: import(\"./other/foo.js\").Bar): import(\"./other/foo.js\").Bar;"),
-					FilterText:          new("method"),
-					AdditionalTextEdits: fourslash.AnyTextEdits,
+					Label:      "method",
+					InsertText: new("method(param: import(\"./other/foo.js\").Bar): import(\"./other/foo.js\").Bar;"),
+					FilterText: new("method"),
 				},
 			},
 		},
+		UserPreferences: &lsutil.UserPreferences{IncludeCompletionsWithClassMemberSnippets: core.TSTrue},
 	})
 }

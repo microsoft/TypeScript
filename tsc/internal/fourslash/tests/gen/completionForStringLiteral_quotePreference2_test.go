@@ -36,7 +36,7 @@ a[|./**/|]`
 					InsertText: new("['#']"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "#",
+							NewText: "['#']",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

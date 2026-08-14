@@ -33,10 +33,10 @@ import (
 )
 
 type PrinterOptions struct {
-	RemoveComments bool
-	NewLine        core.NewLineKind
-	// OmitTrailingSemicolon         bool
-	NoEmitHelpers bool
+	RemoveComments        bool
+	NewLine               core.NewLineKind
+	OmitTrailingSemicolon bool
+	NoEmitHelpers         bool
 	// Module                        core.ModuleKind
 	// ModuleResolution              core.ModuleResolutionKind
 	Target                      core.ScriptTarget
@@ -1094,7 +1094,19 @@ func (p *Printer) emitTemplateMiddleTail(node *ast.TemplateMiddleOrTail) {
 // Snippet Elements
 //
 
-// !!! Snippet elements
+func (p *Printer) emitSnippetNode(node *ast.Node, snippetElement *SnippetElement) {
+	switch snippetElement.Kind {
+	case SnippetKindTabStop:
+		p.emitTabStop(node, snippetElement)
+	default:
+		panic(fmt.Sprintf("Unhandled snippet element kind: %v", snippetElement.Kind))
+	}
+}
+
+func (p *Printer) emitTabStop(node *ast.Node, snippetElement *SnippetElement) {
+	debug.Assert(node.Kind == ast.KindEmptyStatement, "Snippet tab stops can only be emitted on empty statements")
+	p.writer.RawWrite(fmt.Sprintf("$%d", snippetElement.Order))
+}
 
 //
 // Names
@@ -4134,6 +4146,11 @@ func (p *Printer) emitEmbeddedStatement(parentNode *ast.Node, node *ast.Statemen
 }
 
 func (p *Printer) emitStatement(node *ast.Statement) {
+	if snippetElement := p.emitContext.SnippetElement(node); snippetElement != nil {
+		p.emitSnippetNode(node, snippetElement)
+		return
+	}
+
 	switch node.Kind {
 	// Statements
 	case ast.KindBlock:
@@ -5066,6 +5083,9 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 	p.sourceMapLineCharCache = nil
 
 	p.setSourceFile(sourceFile)
+	if p.Options.OmitTrailingSemicolon {
+		writer = getTrailingSemicolonDeferringWriter(writer)
+	}
 	p.writer = writer
 	p.writer.Clear()
 	if sourceFile != nil {

@@ -309,7 +309,7 @@ func quote(file *ast.SourceFile, preferences lsutil.UserPreferences, text string
 	quotePreference := lsutil.GetQuotePreference(file, preferences)
 	quoted, _ := core.StringifyJson(text, "" /*prefix*/, "" /*indent*/)
 	if quotePreference == lsutil.QuotePreferenceSingle {
-		quoted = quoteReplacer.Replace(stringutil.StripQuotes(quoted))
+		quoted = "'" + quoteReplacer.Replace(stringutil.StripQuotes(quoted)) + "'"
 	}
 	return quoted
 }

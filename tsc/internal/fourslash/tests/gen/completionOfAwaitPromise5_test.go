@@ -36,7 +36,7 @@ async function foo(x: (a: number) => Promise<Foo>) {
 					InsertText: new("(await x(1)).foo"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "foo",
+							NewText: "(await x(1)).foo",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

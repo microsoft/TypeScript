@@ -43,7 +43,7 @@ j[|./*j*/|];`
 					SortText:   new(string(ls.SortTextGlobalsOrKeywords)),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "s",
+							NewText: "[s]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
@@ -65,7 +65,7 @@ j[|./*j*/|];`
 					SortText:   new(string(ls.SortTextGlobalsOrKeywords)),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "N",
+							NewText: "[N]",
 							Range:   f.Ranges()[1].LSRange,
 						},
 					},

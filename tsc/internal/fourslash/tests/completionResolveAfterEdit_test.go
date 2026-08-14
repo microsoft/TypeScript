@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
+	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -11,21 +13,20 @@ func TestCompletionResolveAfterEdit(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `
-// @filename: /index.ts
-interface Point {
+// @filename: a.ts
+interface I {
 	x: number;
 	y: number;
 }
-declare const p: Point;
+declare const u: I;
 /*a*/
 
-// @filename: /foo.ts
+// @filename: 1.ts
 /*b*/
 `
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 
-	// Step 1: Get completions at the marker.
 	f.GoToMarker(t, "a")
 	completions := f.GetCompletions(t, nil /*userPreferences*/)
 	if completions == nil || len(completions.Items) == 0 {
@@ -33,13 +34,50 @@ declare const p: Point;
 	}
 	firstItem := completions.Items[0]
 
-	// Step 2: Make a file change (insert a comment after marker).
 	f.GoToMarker(t, "b")
 	f.Insert(t, "1")
 
-	// Step 3: Resolve the first completion item from the original list.
 	resolved := f.ResolveCompletionItem(t, firstItem)
 	if resolved == nil {
 		t.Fatal("Expected resolved completion item but got nil")
 	}
+}
+
+func TestResolveImportStatementCompletion(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `
+// @filename: a.ts
+export const u = 1;
+
+// @filename: 1.ts
+[|import u/*a*/|]
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+
+	f.VerifyCompletions(t, "a", &fourslash.CompletionsExpectedList{
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "u",
+					InsertText: new(`import { u } from "./a";`),
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportFix{ModuleSpecifier: "./a"},
+					},
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: `import { u } from "./a";`,
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
+					AdditionalTextEdits: fourslash.NoTextEdits,
+				},
+			},
+		},
+	})
 }

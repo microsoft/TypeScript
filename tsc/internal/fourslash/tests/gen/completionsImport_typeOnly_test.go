@@ -26,9 +26,10 @@ const b: B/**/`
 	defer done()
 	f.GoToFile(t, "/b.ts")
 	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
-		Name:        "B",
-		Source:      "./a",
-		Description: "Update import from \"./a\"",
+		Name:            "B",
+		Source:          "./a",
+		Description:     "Update import from \"./a\"",
+		UserPreferences: nil, /*preferences*/
 		NewFileContent: new(`import type { A, B } from './a';
 const b: B`),
 	})

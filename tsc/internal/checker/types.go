@@ -34,6 +34,14 @@ const (
 	SignatureKindConstruct
 )
 
+type MemberOverrideStatus int32
+
+const (
+	MemberOverrideStatusNone MemberOverrideStatus = iota
+	MemberOverrideStatusNeedsOverride
+	MemberOverrideStatusHasInvalidOverride
+)
+
 type ContextFlags uint32
 
 const (

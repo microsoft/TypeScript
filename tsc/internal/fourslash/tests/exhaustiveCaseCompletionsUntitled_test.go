@@ -25,7 +25,11 @@ declare const e: E;
 switch (e) {
     case/**/
 }`
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, fourslash.GetDefaultCapabilitiesWithOptions(&fourslash.ClientCapabilitiesOptions{
+		CompletionItem: &lsproto.ClientCompletionItemOptions{
+			SnippetSupport: new(true),
+		},
+	}), content)
 	defer done()
 	// Locally defined enum should provide exhaustive case completions in untitled file
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
@@ -65,7 +69,11 @@ declare const direction: Direction;
 switch (direction) {
     case/**/
 }`
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, fourslash.GetDefaultCapabilitiesWithOptions(&fourslash.ClientCapabilitiesOptions{
+		CompletionItem: &lsproto.ClientCompletionItemOptions{
+			SnippetSupport: new(true),
+		},
+	}), content)
 	defer done()
 	// Globally declared enum should provide exhaustive case completions in untitled file
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
@@ -98,7 +106,11 @@ declare const status: "pending" | "success" | "error";
 switch (status) {
     case/**/
 }`
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, fourslash.GetDefaultCapabilitiesWithOptions(&fourslash.ClientCapabilitiesOptions{
+		CompletionItem: &lsproto.ClientCompletionItemOptions{
+			SnippetSupport: new(true),
+		},
+	}), content)
 	defer done()
 	// String literal unions should provide exhaustive case completions in untitled file
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
@@ -139,7 +151,11 @@ declare const s: import("/home/src/project/enums").Status;
 switch (s) {
     case/**/
 }`
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, fourslash.GetDefaultCapabilitiesWithOptions(&fourslash.ClientCapabilitiesOptions{
+		CompletionItem: &lsproto.ClientCompletionItemOptions{
+			SnippetSupport: new(true),
+		},
+	}), content)
 	defer done()
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

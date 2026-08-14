@@ -44,7 +44,7 @@ function f<T extends Address>(x: T) {
 					Detail:     new("(property) Address[\"postal code\"]: string"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "postal code",
+							NewText: "[\"postal code\"]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

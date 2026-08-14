@@ -369,9 +369,7 @@ func (adder *importAdder) getNewImportEntry(moduleSpecifier string, importKind l
 	return newEntry
 }
 
-func (adder *importAdder) getAllExportsForSymbol(
-	symbol *ast.Symbol,
-) []*Export {
+func (adder *importAdder) getAllExportsForSymbol(symbol *ast.Symbol) []*Export {
 	if export := SymbolToExport(symbol, adder.checker); export != nil {
 		return adder.view.SearchByExportID(export.ExportID)
 	}

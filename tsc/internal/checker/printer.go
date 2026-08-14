@@ -18,11 +18,18 @@ func createPrinterWithRemoveComments(emitContext *printer.EmitContext) *printer.
 	return printer.NewPrinter(printer.PrinterOptions{RemoveComments: true}, printer.PrintHandlers{}, emitContext)
 }
 
-func createPrinterWithRemoveCommentsOmitTrailingSemicolonNeverAsciiEscape(emitContext *printer.EmitContext) *printer.Printer {
-	// TODO: OmitTrailingSemicolon support
+func createPrinterWithRemoveCommentsOmitTrailingSemicolon(emitContext *printer.EmitContext) *printer.Printer {
 	return printer.NewPrinter(printer.PrinterOptions{
-		RemoveComments:   true,
-		NeverAsciiEscape: true,
+		RemoveComments:        true,
+		OmitTrailingSemicolon: true,
+	}, printer.PrintHandlers{}, emitContext)
+}
+
+func createPrinterWithRemoveCommentsOmitTrailingSemicolonNeverAsciiEscape(emitContext *printer.EmitContext) *printer.Printer {
+	return printer.NewPrinter(printer.PrinterOptions{
+		RemoveComments:        true,
+		OmitTrailingSemicolon: true,
+		NeverAsciiEscape:      true,
 	}, printer.PrintHandlers{}, emitContext)
 }
 
@@ -31,143 +38,6 @@ func createPrinterWithRemoveCommentsNeverAsciiEscape(emitContext *printer.EmitCo
 		RemoveComments:   true,
 		NeverAsciiEscape: true,
 	}, printer.PrintHandlers{}, emitContext)
-}
-
-type semicolonRemoverWriter struct {
-	hasPendingSemicolon bool
-	inner               printer.EmitTextWriter
-}
-
-func (s *semicolonRemoverWriter) commitSemicolon() {
-	if s.hasPendingSemicolon {
-		s.inner.WriteTrailingSemicolon(";")
-		s.hasPendingSemicolon = false
-	}
-}
-
-func (s *semicolonRemoverWriter) Clear() {
-	s.inner.Clear()
-}
-
-func (s *semicolonRemoverWriter) DecreaseIndent() {
-	s.commitSemicolon()
-	s.inner.DecreaseIndent()
-}
-
-func (s *semicolonRemoverWriter) GetColumn() core.UTF16Offset {
-	return s.inner.GetColumn()
-}
-
-func (s *semicolonRemoverWriter) GetIndent() int {
-	return s.inner.GetIndent()
-}
-
-func (s *semicolonRemoverWriter) GetLine() int {
-	return s.inner.GetLine()
-}
-
-func (s *semicolonRemoverWriter) GetTextPos() int {
-	return s.inner.GetTextPos()
-}
-
-func (s *semicolonRemoverWriter) HasTrailingComment() bool {
-	return s.inner.HasTrailingComment()
-}
-
-func (s *semicolonRemoverWriter) HasTrailingWhitespace() bool {
-	return s.inner.HasTrailingWhitespace()
-}
-
-func (s *semicolonRemoverWriter) IncreaseIndent() {
-	s.commitSemicolon()
-	s.inner.IncreaseIndent()
-}
-
-func (s *semicolonRemoverWriter) IsAtStartOfLine() bool {
-	return s.inner.IsAtStartOfLine()
-}
-
-func (s *semicolonRemoverWriter) RawWrite(s1 string) {
-	s.commitSemicolon()
-	s.inner.RawWrite(s1)
-}
-
-func (s *semicolonRemoverWriter) String() string {
-	s.commitSemicolon()
-	return s.inner.String()
-}
-
-func (s *semicolonRemoverWriter) Write(s1 string) {
-	s.commitSemicolon()
-	s.inner.Write(s1)
-}
-
-func (s *semicolonRemoverWriter) WriteComment(text string) {
-	s.commitSemicolon()
-	s.inner.WriteComment(text)
-}
-
-func (s *semicolonRemoverWriter) WriteKeyword(text string) {
-	s.commitSemicolon()
-	s.inner.WriteKeyword(text)
-}
-
-func (s *semicolonRemoverWriter) WriteLine() {
-	s.commitSemicolon()
-	s.inner.WriteLine()
-}
-
-func (s *semicolonRemoverWriter) WriteLineForce(force bool) {
-	s.commitSemicolon()
-	s.inner.WriteLineForce(force)
-}
-
-func (s *semicolonRemoverWriter) WriteLiteral(s1 string) {
-	s.commitSemicolon()
-	s.inner.WriteLiteral(s1)
-}
-
-func (s *semicolonRemoverWriter) WriteOperator(text string) {
-	s.commitSemicolon()
-	s.inner.WriteOperator(text)
-}
-
-func (s *semicolonRemoverWriter) WriteParameter(text string) {
-	s.commitSemicolon()
-	s.inner.WriteParameter(text)
-}
-
-func (s *semicolonRemoverWriter) WriteProperty(text string) {
-	s.commitSemicolon()
-	s.inner.WriteProperty(text)
-}
-
-func (s *semicolonRemoverWriter) WritePunctuation(text string) {
-	s.commitSemicolon()
-	s.inner.WritePunctuation(text)
-}
-
-func (s *semicolonRemoverWriter) WriteSpace(text string) {
-	s.commitSemicolon()
-	s.inner.WriteSpace(text)
-}
-
-func (s *semicolonRemoverWriter) WriteStringLiteral(text string) {
-	s.commitSemicolon()
-	s.inner.WriteStringLiteral(text)
-}
-
-func (s *semicolonRemoverWriter) WriteSymbol(text string, symbol *ast.Symbol) {
-	s.commitSemicolon()
-	s.inner.WriteSymbol(text, symbol)
-}
-
-func (s *semicolonRemoverWriter) WriteTrailingSemicolon(text string) {
-	s.hasPendingSemicolon = true
-}
-
-func getTrailingSemicolonDeferringWriter(writer printer.EmitTextWriter) printer.EmitTextWriter {
-	return &semicolonRemoverWriter{false, writer}
 }
 
 func (c *Checker) TypeToString(t *Type) string {
@@ -290,9 +160,9 @@ func (c *Checker) symbolToStringEx(symbol *ast.Symbol, enclosingDeclaration *ast
 	var printer_ *printer.Printer
 	// add neverAsciiEscape for GH#39027
 	if enclosingDeclaration != nil && enclosingDeclaration.Kind == ast.KindSourceFile {
-		printer_ = createPrinterWithRemoveCommentsNeverAsciiEscape(nodeBuilder.EmitContext())
+		printer_ = createPrinterWithRemoveCommentsOmitTrailingSemicolonNeverAsciiEscape(nodeBuilder.EmitContext())
 	} else {
-		printer_ = createPrinterWithRemoveComments(nodeBuilder.EmitContext())
+		printer_ = createPrinterWithRemoveCommentsOmitTrailingSemicolon(nodeBuilder.EmitContext())
 	}
 
 	var builder func(symbol *ast.Symbol, meaning ast.SymbolFlags, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node
@@ -301,8 +171,8 @@ func (c *Checker) symbolToStringEx(symbol *ast.Symbol, enclosingDeclaration *ast
 	} else {
 		builder = nodeBuilder.SymbolToEntityName
 	}
-	entity := builder(symbol, meaning, enclosingDeclaration, nodeFlags, internalNodeFlags, nil)         // TODO: GH#18217
-	printer_.Write(entity /*sourceFile*/, sourceFile, getTrailingSemicolonDeferringWriter(writer), nil) // TODO: GH#18217
+	entity := builder(symbol, meaning, enclosingDeclaration, nodeFlags, internalNodeFlags, nil) // TODO: GH#18217
+	printer_.Write(entity /*sourceFile*/, sourceFile, writer, nil)                              // TODO: GH#18217
 	return writer.String()
 }
 
@@ -347,12 +217,12 @@ func (c *Checker) signatureToStringEx(signature *Signature, enclosingDeclaration
 	}
 	if flags&TypeFormatFlagsMultilineObjectLiterals != 0 {
 		writer := printer.NewTextWriter("\n", 0)
-		p.Write(sig, sourceFile, getTrailingSemicolonDeferringWriter(writer), nil)
+		p.Write(sig, sourceFile, writer, nil)
 		return writer.String()
 	}
 	writer, putWriter := printer.GetSingleLineStringWriter()
 	defer putWriter()
-	p.Write(sig, sourceFile, getTrailingSemicolonDeferringWriter(writer), nil)
+	p.Write(sig, sourceFile, writer, nil)
 	return writer.String()
 }
 

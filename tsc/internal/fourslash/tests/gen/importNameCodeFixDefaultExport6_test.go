@@ -27,5 +27,6 @@ a/**/`
 		NewFileContent: new(`import a from "./a";
 
 a`),
+		UserPreferences: nil, /*preferences*/
 	})
 }

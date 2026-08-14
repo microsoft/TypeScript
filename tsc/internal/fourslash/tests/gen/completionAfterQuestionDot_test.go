@@ -50,7 +50,7 @@ class User {
 					Detail:     new("(property) \"postal code\": string"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "postal code",
+							NewText: "?.[\"postal code\"]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

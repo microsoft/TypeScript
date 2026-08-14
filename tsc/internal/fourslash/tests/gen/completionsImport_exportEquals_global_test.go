@@ -45,9 +45,8 @@ conso/**/`
 			Exact: CompletionGlobalsPlus(
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
-						Label:               "console",
-						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            new(string(ls.SortTextGlobalsOrKeywords)),
+						Label:    "console",
+						SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 					},
 				}, false,
 			),

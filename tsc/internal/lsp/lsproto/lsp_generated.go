@@ -8849,6 +8849,8 @@ type CompletionItemData struct {
 
 	// Auto-import data for this completion item.
 	AutoImport *AutoImportFix `json:"autoImport,omitzero"`
+
+	IsImportStatementCompletion bool `json:"isImportStatementCompletion,omitzero" lsp:"nullable"`
 }
 
 var _ json.UnmarshalerFrom = (*CompletionItemData)(nil)

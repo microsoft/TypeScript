@@ -27,9 +27,10 @@ Colle/**/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
-		Name:        "Collection",
-		Source:      "./collection",
-		Description: "Add import from \"./collection\"",
+		Name:            "Collection",
+		Source:          "./collection",
+		Description:     "Add import from \"./collection\"",
+		UserPreferences: nil, /*preferences*/
 		NewFileContent: new(`import Collection = require("./collection");
 
 Colle`),

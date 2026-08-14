@@ -40,7 +40,7 @@ foo[|./**/|]`
 					InsertText: new("['\"a name\\'s all good but it\\'s better with more\"']"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "\"a name's all good but it's better with more\"",
+							NewText: "['\"a name\\'s all good but it\\'s better with more\"']",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

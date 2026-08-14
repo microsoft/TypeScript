@@ -41,7 +41,7 @@ export const foo = 0;
 					},
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "foo",
+							NewText: "import { foo } from \"./mod\";",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

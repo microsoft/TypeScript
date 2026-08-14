@@ -24,7 +24,11 @@ export declare function Component(): void;
 // @Filename: /home/src/workspaces/project/index.ts
 [|import Com/**/|]
 // @link: /home/src/workspaces/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react -> /home/src/workspaces/project/node_modules/@types/react`
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, fourslash.GetDefaultCapabilitiesWithOptions(&fourslash.ClientCapabilitiesOptions{
+		CompletionItem: &lsproto.ClientCompletionItemOptions{
+			SnippetSupport: new(true),
+		},
+	}), content)
 	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
@@ -47,7 +51,7 @@ export declare function Component(): void;
 					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "Component",
+							NewText: "import { Component$1 } from \"react\";",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

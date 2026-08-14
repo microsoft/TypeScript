@@ -66,10 +66,11 @@ const b = new MyClass2/*2*/();`
 		},
 	})
 	f.VerifyApplyCodeActionFromCompletion(t, new("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
-		Name:          "MyClass",
-		Source:        "mylib",
-		Description:   "Add import from \"mylib\"",
-		AutoImportFix: &lsproto.AutoImportFix{},
+		Name:            "MyClass",
+		Source:          "mylib",
+		Description:     "Add import from \"mylib\"",
+		AutoImportFix:   &lsproto.AutoImportFix{},
+		UserPreferences: nil, /*preferences*/
 		NewFileContent: new(`import { MyClass } from "mylib";
 
 const a = new MyClass();

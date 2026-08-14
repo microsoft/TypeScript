@@ -15,6 +15,16 @@ var Ignored = struct{}{}
 
 var DefaultCommitCharacters = []string{".", ",", ";"}
 
+func InsertReplaceTextEdit(newText string, editRange lsproto.Range) *lsproto.TextEditOrInsertReplaceEdit {
+	return &lsproto.TextEditOrInsertReplaceEdit{
+		InsertReplaceEdit: &lsproto.InsertReplaceEdit{
+			NewText: newText,
+			Insert:  editRange,
+			Replace: editRange,
+		},
+	}
+}
+
 var CompletionGlobalThisItem = &lsproto.CompletionItem{
 	Label:    "globalThis",
 	Kind:     new(lsproto.CompletionItemKindModule),

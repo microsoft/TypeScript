@@ -41,7 +41,7 @@ user.address[|./**/|]`
 					Detail:     new("(property) city: string"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "city",
+							NewText: "?.city",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
@@ -52,7 +52,7 @@ user.address[|./**/|]`
 					Detail:     new("(property) \"postal code\": string"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "postal code",
+							NewText: "?.[\"postal code\"]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

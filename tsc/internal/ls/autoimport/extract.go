@@ -108,18 +108,30 @@ func (e *exportExtractor) extractFromFile(file *ast.SourceFile) []*Export {
 		return e.extractFromModule(file)
 	}
 	if len(file.AmbientModuleNames) > 0 {
-		moduleDeclarations := core.Filter(file.Statements.Nodes, ast.IsModuleWithStringLiteralName)
 		var exportCount int
-		for _, decl := range moduleDeclarations {
-			exportCount += len(decl.AsModuleDeclaration().Symbol.Exports)
+		for _, statement := range file.Statements.Nodes {
+			if ast.IsModuleWithStringLiteralName(statement) && isNonPatternAmbientModuleDeclaration(file, statement.AsModuleDeclaration()) {
+				exportCount += len(statement.AsModuleDeclaration().Symbol.Exports)
+			}
 		}
 		exports := make([]*Export, 0, exportCount)
-		for _, decl := range moduleDeclarations {
-			e.extractFromModuleDeclaration(decl.AsModuleDeclaration(), file, ModuleID(decl.Name().Text()), "", &exports)
+		for _, statement := range file.Statements.Nodes {
+			if ast.IsModuleWithStringLiteralName(statement) && isNonPatternAmbientModuleDeclaration(file, statement.AsModuleDeclaration()) {
+				e.extractFromModuleDeclaration(statement.AsModuleDeclaration(), file, ModuleID(statement.Name().Text()), "", &exports)
+			}
 		}
 		return exports
 	}
 	return nil
+}
+
+func isNonPatternAmbientModuleDeclaration(file *ast.SourceFile, decl *ast.ModuleDeclaration) bool {
+	for _, module := range file.PatternAmbientModules {
+		if module.Symbol == decl.Symbol {
+			return false
+		}
+	}
+	return true
 }
 
 func (e *exportExtractor) extractFromModule(file *ast.SourceFile) []*Export {

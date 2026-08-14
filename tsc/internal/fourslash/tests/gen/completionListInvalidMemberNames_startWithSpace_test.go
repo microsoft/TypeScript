@@ -33,7 +33,7 @@ x[|./**/|];`
 					InsertText: new("[\"foo \"]"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "foo ",
+							NewText: "[\"foo \"]",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
