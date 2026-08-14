@@ -895,7 +895,7 @@ func (s *Scanner) Scan() ast.Kind {
 			s.pos++
 			s.token = ast.KindAtToken
 		case '\\':
-			if s.scanIdentifier(identifierVariantStandard) {
+			if s.scanIdentifier(0, identifierVariantStandard) {
 				s.token = GetIdentifierToken(s.tokenValue)
 			} else {
 				s.scanInvalidCharacter()
@@ -914,18 +914,17 @@ func (s *Scanner) Scan() ast.Kind {
 				s.token = ast.KindUnknown
 				break
 			}
-			s.pos++
-			if !s.scanIdentifier(identifierVariantStandard) {
+			if !s.scanIdentifier(1, identifierVariantStandard) {
 				s.errorAt(diagnostics.Invalid_character, s.pos-1, 1)
+				s.tokenValue = "#"
 			}
-			s.tokenValue = "#" + s.tokenValue
 			s.token = ast.KindPrivateIdentifier
 		default:
 			if ch < 0 {
 				s.token = ast.KindEndOfFile
 				break
 			}
-			if s.scanIdentifier(identifierVariantStandard) {
+			if s.scanIdentifier(0, identifierVariantStandard) {
 				s.token = GetIdentifierToken(s.tokenValue)
 				break
 			}
@@ -1473,7 +1472,7 @@ func (s *Scanner) ScanJSDocToken() ast.Kind {
 	}
 
 	s.pos = s.tokenStart
-	if s.scanIdentifier(identifierVariantJSX) {
+	if s.scanIdentifier(0, identifierVariantJSX) {
 		s.token = GetIdentifierToken(s.tokenValue)
 		return s.token
 	}
@@ -1482,8 +1481,10 @@ func (s *Scanner) ScanJSDocToken() ast.Kind {
 	return s.token
 }
 
-func (s *Scanner) scanIdentifier(variant identifierVariant) bool {
+func (s *Scanner) scanIdentifier(prefixLength int, variant identifierVariant) bool {
 	start := s.pos
+	s.pos += prefixLength
+	identifierStart := s.pos
 	ch := s.char()
 	// Fast path for simple ASCII identifiers
 	if variant != identifierVariantJSX && (stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$') {
@@ -1496,10 +1497,17 @@ func (s *Scanner) scanIdentifier(variant identifierVariant) bool {
 			s.tokenValue = s.text[start:s.pos]
 			return true
 		}
-		s.pos = start
+		s.pos = identifierStart
 	}
-	s.tokenValue = s.scanIdentifierStart(variant)
-	if s.tokenValue != "" {
+	identifier := s.scanIdentifierStart(variant)
+	if identifier != "" {
+		// Preserve the original source slice when decoding did not change the identifier;
+		// otherwise combine any prefix (such as "#") with the decoded identifier start.
+		if s.text[identifierStart:s.pos] == identifier {
+			s.tokenValue = s.text[start:s.pos]
+		} else {
+			s.tokenValue = s.text[start:identifierStart] + identifier
+		}
 		s.tokenValue += s.scanIdentifierParts(variant)
 		return true
 	}
@@ -1508,35 +1516,14 @@ func (s *Scanner) scanIdentifier(variant identifierVariant) bool {
 
 func (s *Scanner) scanIdentifierStart(variant identifierVariant) string {
 	ch, size := s.charAndSize()
-	if ch == '\\' {
-		escaped := s.peekUnicodeEscape()
-		if escaped >= 0 {
-			if IsIdentifierStart(escaped) {
-				return string(s.scanUnicodeEscape(true))
-			}
-			if variant == identifierVariantRegExpGroupName &&
-				s.charAt(2) != '{' &&
-				stringutil.IsHighSurrogate(escaped) &&
-				s.charAt(6) == '\\' && s.charAt(7) == 'u' && s.charAt(8) != '{' {
-				start := s.pos
-				s.pos += 6
-				nextEscaped := s.peekUnicodeEscape()
-				if stringutil.IsLowSurrogate(nextEscaped) {
-					codePoint := stringutil.SurrogatePairToCodePoint(escaped, nextEscaped)
-					if IsIdentifierStart(codePoint) {
-						// Unlike normal identifiers, RegExp group names accept a pair of
-						// fixed-width surrogate escapes as one RegExpIdentifierName character.
-						s.pos += 6
-						s.tokenFlags |= ast.TokenFlagsUnicodeEscape
-						return string(codePoint)
-					}
-				}
-				s.pos = start
-			}
-		}
-	} else if IsIdentifierStart(ch) {
+	if IsIdentifierStart(ch) {
 		s.pos += size
 		return string(ch)
+	}
+	if ch == '\\' {
+		if escaped, ok := s.scanIdentifierEscape(IsIdentifierStart, variant == identifierVariantRegExpGroupName); ok {
+			return string(escaped)
+		}
 	}
 	return ""
 }
@@ -1555,40 +1542,45 @@ func (s *Scanner) scanIdentifierParts(variant identifierVariant) string {
 			continue
 		}
 		if ch == '\\' {
-			escaped := s.peekUnicodeEscape()
-			if escaped >= 0 && IsIdentifierPartEx(escaped, languageVariant) {
-				sb.WriteString(s.text[start:s.pos])
-				sb.WriteRune(s.scanUnicodeEscape(true))
+			escapeStart := s.pos
+			if escaped, ok := s.scanIdentifierEscape(func(ch rune) bool {
+				return IsIdentifierPartEx(ch, languageVariant)
+			}, variant == identifierVariantRegExpGroupName); ok {
+				sb.WriteString(s.text[start:escapeStart])
+				sb.WriteRune(escaped)
 				start = s.pos
 				continue
-			}
-			if variant == identifierVariantRegExpGroupName &&
-				s.charAt(2) != '{' &&
-				stringutil.IsHighSurrogate(escaped) &&
-				s.charAt(6) == '\\' && s.charAt(7) == 'u' && s.charAt(8) != '{' {
-				escapeStart := s.pos
-				s.pos += 6
-				nextEscaped := s.peekUnicodeEscape()
-				if stringutil.IsLowSurrogate(nextEscaped) {
-					codePoint := stringutil.SurrogatePairToCodePoint(escaped, nextEscaped)
-					if IsIdentifierPartEx(codePoint, languageVariant) {
-						// Unlike normal identifiers, RegExp group names accept a pair of
-						// fixed-width surrogate escapes as one RegExpIdentifierName character.
-						sb.WriteString(s.text[start:escapeStart])
-						sb.WriteRune(codePoint)
-						s.pos += 6
-						s.tokenFlags |= ast.TokenFlagsUnicodeEscape
-						start = s.pos
-						continue
-					}
-				}
-				s.pos = escapeStart
 			}
 		}
 		break
 	}
 	sb.WriteString(s.text[start:s.pos])
 	return sb.String()
+}
+
+func (s *Scanner) scanIdentifierEscape(isValid func(rune) bool, allowSurrogatePairEscape bool) (rune, bool) {
+	escaped := s.peekUnicodeEscape()
+	if escaped >= 0 && isValid(escaped) {
+		return s.scanUnicodeEscape(true), true
+	}
+	if allowSurrogatePairEscape && s.charAt(2) != '{' && stringutil.IsHighSurrogate(escaped) {
+		// Unlike normal identifiers, group names in regular expressions, whether in Unicode mode or not,
+		// accept \u HexLeadSurrogate \u HexTrailSurrogate as part of RegExpIdentifierName.
+		// See https://github.com/tc39/ecma262/pull/1869 for the change.
+		savedPos := s.pos
+		savedTokenFlags := s.tokenFlags
+		s.scanUnicodeEscape(false)
+		// scanLowSurrogateEscape also accepts the braced form used in string literals,
+		// but RegExpIdentifierName does not allow it.
+		if s.charAt(2) != '{' {
+			if codePoint, ok := s.scanLowSurrogateEscape(escaped); ok && isValid(codePoint) {
+				return codePoint, true
+			}
+		}
+		s.pos = savedPos
+		s.tokenFlags = savedTokenFlags
+	}
+	return 0, false
 }
 
 func (s *Scanner) scanString(jsxAttributeString bool) string {

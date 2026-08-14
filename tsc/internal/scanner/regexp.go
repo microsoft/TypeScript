@@ -500,7 +500,7 @@ func (p *regExpParser) scanCharacterEscape(atomEscape bool) string {
 func (p *regExpParser) scanGroupName(isReference bool) {
 	debug.Assert(p.pos() > 0 && p.text()[p.pos()-1] == '<')
 	p.scanner.tokenStart = p.pos()
-	if !p.scanner.scanIdentifier(identifierVariantRegExpGroupName) {
+	if !p.scanner.scanIdentifier(0, identifierVariantRegExpGroupName) {
 		p.error(diagnostics.Expected_a_capturing_group_name, p.pos(), 0)
 	} else if isReference {
 		p.groupNameReferences = append(p.groupNameReferences, groupNameReference{pos: p.scanner.tokenStart, end: p.pos(), name: p.scanner.tokenValue})
