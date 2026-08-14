@@ -18346,7 +18346,11 @@ func (c *Checker) reportImplicitAny(declaration *ast.Node, t *Type, wideningKind
 		case !c.noImplicitAny:
 			diagnostic = diagnostics.X_0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage
 		case declaration.Flags&ast.NodeFlagsReparsed != 0:
-			c.error(declaration, diagnostics.This_overload_implicitly_returns_the_type_0_because_it_lacks_a_return_type_annotation, typeAsString)
+			if name := scanner.DeclarationNameToString(ast.GetNameOfDeclaration(declaration)); name != "" {
+				c.error(declaration, diagnostics.X_0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type, name, typeAsString)
+			} else {
+				c.error(declaration, diagnostics.This_overload_implicitly_returns_the_type_0_because_it_lacks_a_return_type_annotation, typeAsString)
+			}
 			return
 		case wideningKind == WideningKindGeneratorYield:
 			diagnostic = diagnostics.X_0_which_lacks_return_type_annotation_implicitly_has_an_1_yield_type
