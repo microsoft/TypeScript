@@ -1177,32 +1177,36 @@ func GetRootDeclaration(node *Node) *Node {
 	return node
 }
 
-func getCombinedFlags[T ~uint32](node *Node, getFlags func(*Node) T) T {
+func GetCombinedModifierFlags(node *Node) ModifierFlags {
 	node = GetRootDeclaration(node)
-	flags := getFlags(node)
+	flags := node.ModifierFlags()
 	if node.Kind == KindVariableDeclaration {
 		node = node.Parent
 	}
 	if node != nil && node.Kind == KindVariableDeclarationList {
-		flags |= getFlags(node)
+		flags |= node.ModifierFlags()
 		node = node.Parent
 	}
 	if node != nil && node.Kind == KindVariableStatement {
-		flags |= getFlags(node)
+		flags |= node.ModifierFlags()
 	}
 	return flags
 }
 
-func GetCombinedModifierFlags(node *Node) ModifierFlags {
-	return getCombinedFlags(node, (*Node).ModifierFlags)
-}
-
 func GetCombinedNodeFlags(node *Node) NodeFlags {
-	return getCombinedFlags(node, getNodeFlags)
-}
-
-func getNodeFlags(node *Node) NodeFlags {
-	return node.Flags
+	node = GetRootDeclaration(node)
+	flags := node.Flags
+	if node.Kind == KindVariableDeclaration {
+		node = node.Parent
+	}
+	if node != nil && node.Kind == KindVariableDeclarationList {
+		flags |= node.Flags
+		node = node.Parent
+	}
+	if node != nil && node.Kind == KindVariableStatement {
+		flags |= node.Flags
+	}
+	return flags
 }
 
 // Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of an `await using` declaration.
