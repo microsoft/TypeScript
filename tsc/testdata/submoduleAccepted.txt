@@ -693,6 +693,8 @@ conformance/types.asyncGenerators.es2018.2.errors.txt.diff
 
 ## Error spans for non-BMP characters (surrogate pairs) are measured by code points instead of UTF-16 code units, causing span widths and positions to shift
 compiler/regularExpressionCharacterClassRangeOrder.errors.txt.diff
+compiler/regularExpressionScanning(target=es2015).errors.txt.diff
+compiler/regularExpressionScanning(target=esnext).errors.txt.diff
 compiler/regularExpressionWithNonBMPFlags.errors.txt.diff
 compiler/unicodeEscapesInNames02(target=es2015).errors.txt.diff
 

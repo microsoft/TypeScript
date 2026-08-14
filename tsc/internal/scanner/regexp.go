@@ -676,6 +676,10 @@ func (p *regExpParser) scanClassSetExpression() {
 			operand = p.text()[start:p.pos()]
 		default:
 			operand = p.scanClassSetOperand()
+			if isCharacterComplement && p.mayContainStrings {
+				p.error(diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, start, p.pos()-start)
+			}
+			expressionMayContainStrings = expressionMayContainStrings || p.mayContainStrings
 		}
 	}
 	p.mayContainStrings = !isCharacterComplement && expressionMayContainStrings

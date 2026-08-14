@@ -1,0 +1,64 @@
+--- old.regularExpressionScanning(target=esnext).errors.txt
++++ new.regularExpressionScanning(target=esnext).errors.txt
+@@= skipped -176, +176 lines =@@
+ regularExpressionScanning.ts(38,85): error TS1520: Expected a class set operand.
+ regularExpressionScanning.ts(39,56): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+ regularExpressionScanning.ts(39,67): error TS1005: '&&' expected.
++regularExpressionScanning.ts(40,14): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+ regularExpressionScanning.ts(41,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+ regularExpressionScanning.ts(41,30): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+ regularExpressionScanning.ts(42,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
++regularExpressionScanning.ts(42,18): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+ regularExpressionScanning.ts(42,28): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+ regularExpressionScanning.ts(42,53): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
++regularExpressionScanning.ts(43,14): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+ regularExpressionScanning.ts(44,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+ regularExpressionScanning.ts(44,34): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+ regularExpressionScanning.ts(45,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
++regularExpressionScanning.ts(45,22): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+ regularExpressionScanning.ts(45,32): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+ regularExpressionScanning.ts(45,61): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+ regularExpressionScanning.ts(46,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+@@= skipped -16, +20 lines =@@
+ regularExpressionScanning.ts(47,89): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+
+
+-==== regularExpressionScanning.ts (193 errors) ====
++==== regularExpressionScanning.ts (197 errors) ====
+     const regexes: RegExp[] = [
+     	// Flags
+     	/foo/visualstudiocode,
+@@= skipped -399, +399 lines =@@
+     	                                                                 
+ !!! error TS1005: '&&' expected.
+     	/[^\p{Emoji}\p{RGI_Emoji}][^\p{Emoji}--\p{RGI_Emoji}][^\p{Emoji}&&\p{RGI_Emoji}]/v,
++    	            ~~~~~~~~~~~~~
++!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+     	/[^\p{RGI_Emoji}\p{Emoji}][^\p{RGI_Emoji}--\p{Emoji}][^\p{RGI_Emoji}&&\p{Emoji}]/v,
+     	   ~~~~~~~~~~~~~
+ !!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+@@= skipped -8, +10 lines =@@
+     	/[^\p{RGI_Emoji}\q{foo}][^\p{RGI_Emoji}--\q{foo}][^\p{RGI_Emoji}&&\q{foo}]/v,
+     	   ~~~~~~~~~~~~~
+ !!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
++    	                ~~~~~~~
++!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+     	                          ~~~~~~~~~~~~~
+ !!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+     	                                                   ~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+     	/[^\p{Emoji}[[\p{RGI_Emoji}]]][^\p{Emoji}--[[\p{RGI_Emoji}]]][^\p{Emoji}&&[[\p{RGI_Emoji}]]]/v,
++    	            ~~~~~~~~~~~~~~~~~
++!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+     	/[^[[\p{RGI_Emoji}]]\p{Emoji}][^[[\p{RGI_Emoji}]]--\p{Emoji}][^[[\p{RGI_Emoji}]]&&\p{Emoji}]/v,
+     	   ~~~~~~~~~~~~~~~~~
+ !!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+@@= skipped -12, +16 lines =@@
+ !!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+     	/[^[[\p{RGI_Emoji}]]\q{foo}][^[[\p{RGI_Emoji}]]--\q{foo}][^[[\p{RGI_Emoji}]]&&\q{foo}]/v,
+     	   ~~~~~~~~~~~~~~~~~
++!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
++    	                    ~~~~~~~
+ !!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+     	                              ~~~~~~~~~~~~~~~~~
+ !!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
