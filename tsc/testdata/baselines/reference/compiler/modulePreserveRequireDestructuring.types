@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/modulePreserveRequireDestructuring.ts] ////
+
+=== dep.cjs ===
+module.exports.readFile = function () {};
+>module.exports.readFile = function () {} : () => void
+>module.exports.readFile : () => void
+>module.exports : typeof import("./dep.cjs")
+>module : { exports: typeof import("./dep.cjs"); }
+>exports : typeof import("./dep.cjs")
+>readFile : () => void
+>function () {} : () => void
+
+=== main.cjs ===
+// CommonJS `require` is not ESM syntax, in destructured or plain form.
+const { readFile } = require("./dep.cjs");
+>readFile : () => void
+>require("./dep.cjs") : typeof dep
+>require : any
+>"./dep.cjs" : "./dep.cjs"
+
+const dep = require("./dep.cjs");
+>dep : typeof dep
+>require("./dep.cjs") : typeof dep
+>require : any
+>"./dep.cjs" : "./dep.cjs"
+
+readFile;
+>readFile : () => void
+
+dep;
+>dep : typeof dep
+
+=== esm.cjs ===
+// Genuine ESM syntax in a CommonJS file must still be an error.
+import { readFile as fromEsm } from "./dep.cjs";
+>readFile : () => void
+>fromEsm : () => void
+
+fromEsm;
+>fromEsm : () => void
+

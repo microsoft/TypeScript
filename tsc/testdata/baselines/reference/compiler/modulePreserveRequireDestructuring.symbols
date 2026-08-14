@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/modulePreserveRequireDestructuring.ts] ////
+
+=== dep.cjs ===
+module.exports.readFile = function () {};
+>module.exports.readFile : Symbol(readFile, Decl(dep.cjs, 0, 0))
+>module.exports : Symbol(exports, Decl(dep.cjs, 0, 0))
+>module : Symbol(module, Decl(dep.cjs, 0, 0))
+>exports : Symbol(exports, Decl(dep.cjs, 0, 0))
+>readFile : Symbol(readFile, Decl(dep.cjs, 0, 0))
+
+=== main.cjs ===
+// CommonJS `require` is not ESM syntax, in destructured or plain form.
+const { readFile } = require("./dep.cjs");
+>readFile : Symbol(readFile, Decl(main.cjs, 1, 7))
+>require : Symbol(require)
+>"./dep.cjs" : Symbol(dep, Decl(dep.cjs, 0, 0))
+
+const dep = require("./dep.cjs");
+>dep : Symbol(dep, Decl(main.cjs, 2, 5))
+>require : Symbol(require)
+>"./dep.cjs" : Symbol(dep, Decl(dep.cjs, 0, 0))
+
+readFile;
+>readFile : Symbol(readFile, Decl(main.cjs, 1, 7))
+
+dep;
+>dep : Symbol(dep, Decl(main.cjs, 2, 5))
+
+=== esm.cjs ===
+// Genuine ESM syntax in a CommonJS file must still be an error.
+import { readFile as fromEsm } from "./dep.cjs";
+>readFile : Symbol(fromEsm, Decl(dep.cjs, 0, 0))
+>fromEsm : Symbol(fromEsm, Decl(esm.cjs, 1, 8))
+
+fromEsm;
+>fromEsm : Symbol(fromEsm, Decl(esm.cjs, 1, 8))
+
