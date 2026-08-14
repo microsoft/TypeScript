@@ -1,0 +1,113 @@
+UseCaseSensitiveFileNames: true
+//// [/app/main.ts] *new* 
+import { helper } from "../lib/helper";
+helper;
+//// [/app/tsconfig.json] *new* 
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": ["./main.ts"],
+  "references": [
+    { "path": "../lib" }
+  ]
+}
+
+//// [/lib/helper.ts] *new* 
+export const helper = 0;
+
+//// [/lib/other-helper.ts] *new* 
+import { helper } from "./helper";
+helper;
+
+//// [/lib/tsconfig.json] *new* 
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": ["./helper.ts", "./other-helper.ts"]
+}
+
+//// [/tsconfig.json] *new* 
+{
+  "files": [],
+  "references": [
+    { "path": "./lib" },
+    { "path": "./app" }
+  ]
+}
+
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///lib/helper.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export const helper = 0;\n"
+    }
+  }
+}
+
+Projects::
+  [/lib/tsconfig.json] *new*
+    /lib/helper.ts        
+    /lib/other-helper.ts  
+  [/tsconfig.json] *new*
+Open Files::
+  [/lib/helper.ts] *new*
+    /lib/tsconfig.json  (default) 
+Config::
+  [/lib/tsconfig.json] *new*
+    RetainingProjects:
+      /lib/tsconfig.json  
+    RetainingOpenFiles:
+      /lib/helper.ts  
+Config File Names::
+  [/lib/helper.ts] *new*
+    NearestConfigFileName: /lib/tsconfig.json
+    Ancestors:
+      /lib/tsconfig.json  /tsconfig.json 
+      /tsconfig.json       
+
+{
+  "method": "workspace/willRenameFiles",
+  "params": {
+    "files": [
+      {
+        "oldUri": "file:///lib/helper.ts",
+        "newUri": "file:///lib/renamed-helper.ts"
+      }
+    ]
+  }
+}
+
+Projects::
+  [/app/tsconfig.json] *new*
+    /lib/helper.ts  
+    /app/main.ts    
+  [/lib/tsconfig.json] 
+    /lib/helper.ts        
+    /lib/other-helper.ts  
+  [/tsconfig.json] *modified*
+Open Files::
+  [/lib/helper.ts] *modified*
+    /app/tsconfig.json  *new*
+    /lib/tsconfig.json  (default) 
+Config::
+  [/app/tsconfig.json] *new*
+    RetainingProjects:
+      /app/tsconfig.json  
+      /tsconfig.json      
+  [/lib/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /app/tsconfig.json  *new*
+      /lib/tsconfig.json  
+      /tsconfig.json      *new*
+    RetainingOpenFiles:
+      /lib/helper.ts  
+  [/tsconfig.json] *new*
+    RetainingProjects:
+      /tsconfig.json  

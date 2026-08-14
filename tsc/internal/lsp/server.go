@@ -1546,7 +1546,7 @@ func (s *Server) handleWillRenameFilesWorker(ctx context.Context, params *lsprot
 		return lsproto.WillRenameFilesResponse{}, nil
 	}
 
-	services := s.session.GetLanguageServicesForDocuments(ctx, uris)
+	services := s.session.GetLanguageServicesForDocumentsLoadingProjectTree(ctx, uris)
 
 	type editKey struct {
 		uri    lsproto.DocumentUri

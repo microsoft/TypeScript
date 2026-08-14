@@ -1072,10 +1072,18 @@ func (s *Session) GetProjectsForFile(ctx context.Context, uri lsproto.DocumentUr
 	return allProjects, nil
 }
 
-func (s *Session) GetLanguageServicesForDocuments(ctx context.Context, uris []lsproto.DocumentUri) []*ls.LanguageService {
+// GetLanguageServicesForDocumentsLoadingProjectTree returns language services for
+// every project in the snapshot, loading all project trees first so that projects
+// that were never opened but reference the given documents are included. Loading the
+// trees is expensive, so this should only be used by operations that need to touch
+// every project in a solution, like file rename.
+func (s *Session) GetLanguageServicesForDocumentsLoadingProjectTree(ctx context.Context, uris []lsproto.DocumentUri) []*ls.LanguageService {
 	snapshot := s.getSnapshot(
 		ctx,
-		ResourceRequest{Documents: uris},
+		ResourceRequest{
+			Documents:   uris,
+			ProjectTree: &ProjectTreeRequest{},
+		},
 		false, /*callerRef*/
 	)
 
