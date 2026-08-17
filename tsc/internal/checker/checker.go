@@ -22710,7 +22710,7 @@ func (c *Checker) instantiateMappedTypeTemplate(t *Type, key *Type, isOptional b
 	case c.strictNullChecks && modifiers&MappedTypeModifiersIncludeOptional != 0 && !c.maybeTypeOfKind(propType, TypeFlagsUndefined|TypeFlagsVoid):
 		return c.getOptionalType(propType, true /*isProperty*/)
 	case c.strictNullChecks && modifiers&MappedTypeModifiersExcludeOptional != 0 && isOptional:
-		return c.getTypeWithFacts(propType, TypeFactsNEUndefined)
+		return c.removeMissingOrUndefinedType(propType)
 	default:
 		return propType
 	}

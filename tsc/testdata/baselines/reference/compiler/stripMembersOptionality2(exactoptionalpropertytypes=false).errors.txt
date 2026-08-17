@@ -1,0 +1,31 @@
+stripMembersOptionality2.ts(4,29): error TS2322: Type 'undefined' is not assignable to type 'string'.
+stripMembersOptionality2.ts(6,27): error TS2322: Type 'undefined' is not assignable to type 'string'.
+stripMembersOptionality2.ts(11,37): error TS2322: Type 'undefined' is not assignable to type 'string'.
+stripMembersOptionality2.ts(13,32): error TS2322: Type 'undefined' is not assignable to type 'string'.
+
+
+==== stripMembersOptionality2.ts (4 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/63291
+    
+    type WithObject1 = Required<{ a?: string | undefined }>;
+    const obj1: WithObject1 = { a: undefined };
+                                ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 stripMembersOptionality2.ts:3:31: The expected type comes from property 'a' which is declared here on type 'Required<{ a?: string | undefined; }>'
+    type WithArray1 = Required<[(string | undefined)?]>;
+    const tup1: WithArray1 = [undefined];
+                              ~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+    
+    type ToStringOrUnd<T> = { [P in keyof T]-?: string | undefined };
+    
+    type WithObject2 = ToStringOrUnd<{ a: 1; b?: 2 }>;
+    const obj2: WithObject2 = { a: "1", b: undefined };
+                                        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 stripMembersOptionality2.ts:10:42: The expected type comes from property 'b' which is declared here on type 'ToStringOrUnd<{ a: 1; b?: 2 | undefined; }>'
+    type WithArray2 = ToStringOrUnd<[1, 2?]>;
+    const tup2: WithArray2 = ["1", undefined];
+                                   ~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+    
