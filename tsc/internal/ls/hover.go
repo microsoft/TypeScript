@@ -141,10 +141,16 @@ func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Check
 }
 
 // getDocumentationForSymbol tries each documentation source in turn (call-signature documentation,
-// declaration JSDoc, alias target JSDoc) and returns the first non-empty result, formatted for
-// contentFormat. commentOnly restricts the result to the JSDoc summary, excluding the @tag section.
+// declaration JSDoc, root-symbol JSDoc, alias target JSDoc) and returns the first non-empty result,
+// formatted for contentFormat. commentOnly restricts the result to the JSDoc summary, excluding the
+// @tag section.
 func getDocumentationForSymbol(getMappedLocation func(string, core.TextRange) lsproto.Location, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, declaration *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
 	documentation := documentationFromSignature(getMappedLocation, c, symbol, getCallOrNewExpression(node), node, contentFormat, commentOnly)
+	if documentation != "" {
+		return documentation
+	}
+
+	documentation = documentationFromRootSymbols(getMappedLocation, c, symbol, node, contentFormat, commentOnly)
 	if documentation != "" {
 		return documentation
 	}
@@ -202,6 +208,34 @@ func documentationFromAlias(getMappedLocation func(string, core.TextRange) lspro
 	}
 
 	return ""
+}
+
+func documentationFromRootSymbols(getMappedLocation func(string, core.TextRange) lsproto.Location, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+	if symbol == nil {
+		return ""
+	}
+
+	rootSymbols := c.GetRootSymbols(symbol)
+	if len(rootSymbols) <= 1 {
+		return ""
+	}
+
+	var docs []string
+	for _, rootSymbol := range rootSymbols {
+		if rootSymbol == nil {
+			continue
+		}
+		declarations := rootSymbol.Declarations
+		if len(declarations) == 0 && rootSymbol.ValueDeclaration != nil {
+			declarations = []*ast.Node{rootSymbol.ValueDeclaration}
+		}
+		for _, declaration := range declarations {
+			if documentation := getDocumentationFromDeclaration(getMappedLocation, c, rootSymbol, declaration, node, contentFormat, commentOnly); documentation != "" {
+				docs = core.AppendIfUnique(docs, documentation)
+			}
+		}
+	}
+	return strings.Join(docs, "\n")
 }
 
 func getDocumentationFromDeclaration(getMappedLocation func(string, core.TextRange) lsproto.Location, c *checker.Checker, symbol *ast.Symbol, declaration *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
