@@ -1375,9 +1375,9 @@ type SourceFileResponse struct {
 
 // GetDiagnosticsParams are parameters for per-file diagnostic methods.
 type GetDiagnosticsParams struct {
-	Snapshot SnapshotID          `json:"snapshot"`
-	Project  ProjectID           `json:"project"`
-	File     *DocumentIdentifier `json:"file,omitempty"`
+	Snapshot SnapshotID           `json:"snapshot"`
+	Project  ProjectID            `json:"project"`
+	Files    []DocumentIdentifier `json:"files,omitempty"`
 }
 
 // GetProjectDiagnosticsParams are parameters for project-wide diagnostic methods.

@@ -5834,6 +5834,119 @@ describe("Program - diagnostics", () => {
             await api.close();
         }
     });
+
+    test("getSyntacticDiagnostics with multiple files", async () => {
+        const sourceA = `const a: = 1;`;
+        const sourceB = `const b: = 2;`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/a.ts": sourceA,
+            "/src/b.ts": sourceB,
+            "/src/clean.ts": `const c = 3;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = await project.program.getSyntacticDiagnostics(["/src/a.ts", "/src/b.ts"]);
+            assert.deepEqual(diags, [
+                {
+                    fileName: "/src/a.ts",
+                    ...rangeOf(sourceA, "="),
+                    code: 1110,
+                    category: DiagnosticCategory.Error,
+                    text: "Type expected.",
+                },
+                {
+                    fileName: "/src/b.ts",
+                    ...rangeOf(sourceB, "="),
+                    code: 1110,
+                    category: DiagnosticCategory.Error,
+                    text: "Type expected.",
+                },
+            ]);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getSemanticDiagnostics with multiple files", async () => {
+        const sourceA = `export const a: number = "hello";`;
+        const sourceB = `export const b: string = 42;`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/a.ts": sourceA,
+            "/src/b.ts": sourceB,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = await project.program.getSemanticDiagnostics(["/src/a.ts", "/src/b.ts"]);
+            assert.equal(diags.length, 2);
+            assert.equal(diags[0].fileName, "/src/a.ts");
+            assert.equal(diags[0].code, 2322);
+            assert.equal(diags[1].fileName, "/src/b.ts");
+            assert.equal(diags[1].code, 2322);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getBindDiagnostics with multiple files", async () => {
+        const sourceA = `let x = 1;\nlet x = 2;`;
+        const sourceB = `let y = 1;\nlet y = 2;`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/a.ts": sourceA,
+            "/src/b.ts": sourceB,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = await project.program.getBindDiagnostics(["/src/a.ts", "/src/b.ts"]);
+            assert.equal(diags.length, 4);
+            assert.equal(diags.filter(d => d.fileName === "/src/a.ts").length, 2);
+            assert.equal(diags.filter(d => d.fileName === "/src/b.ts").length, 2);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("diagnostics with no files argument returns all", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/a.ts": `const a: = 1;`,
+            "/src/b.ts": `const b: = 2;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = await project.program.getSyntacticDiagnostics();
+            assert.equal(diags.length, 2);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("diagnostics with empty files array returns empty", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/a.ts": `const a: = 1;`,
+            "/src/b.ts": `const b: = 2;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = await project.program.getSyntacticDiagnostics([]);
+            assert.deepEqual(diags, []);
+        }
+        finally {
+            await api.close();
+        }
+    });
 });
 
 describe("getDefaultProjectForFile", () => {

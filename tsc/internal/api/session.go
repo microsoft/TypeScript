@@ -3515,114 +3515,55 @@ func (s *Session) toFileChangeSummary(changes *APIFileChanges) project.FileChang
 	return summary
 }
 
-// handleGetSyntacticDiagnostics returns syntactic diagnostics for a file or all files.
+func (s *Session) getDiagnostics(ctx context.Context, params *GetDiagnosticsParams, getter func(*compiler.Program, context.Context, *ast.SourceFile) []*ast.Diagnostic) ([]*DiagnosticResponse, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+
+	if params.Files != nil {
+		var allDiags []*ast.Diagnostic
+		for _, file := range params.Files {
+			sourceFile, err := s.resolveOptionalSourceFile(program, &file)
+			if err != nil {
+				return nil, err
+			}
+			allDiags = append(allDiags, getter(program, ctx, sourceFile)...)
+		}
+		return NewDiagnosticResponses(allDiags), nil
+	}
+
+	return NewDiagnosticResponses(getter(program, ctx, nil)), nil
+}
+
 func (s *Session) handleGetSyntacticDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	sd, err := s.getSnapshotData(params.Snapshot)
-	if err != nil {
-		return nil, err
-	}
-
-	program, err := sd.getProgram(params.Project)
-	if err != nil {
-		return nil, err
-	}
-
-	sourceFile, err := s.resolveOptionalSourceFile(program, params.File)
-	if err != nil {
-		return nil, err
-	}
-
-	diags := program.GetSyntacticDiagnostics(ctx, sourceFile)
-	return NewDiagnosticResponses(diags), nil
+	return s.getDiagnostics(ctx, params, (*compiler.Program).GetSyntacticDiagnostics)
 }
 
-// handleGetBindDiagnostics returns bind diagnostics for a file or all files.
 func (s *Session) handleGetBindDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	sd, err := s.getSnapshotData(params.Snapshot)
-	if err != nil {
-		return nil, err
-	}
-
-	program, err := sd.getProgram(params.Project)
-	if err != nil {
-		return nil, err
-	}
-
-	sourceFile, err := s.resolveOptionalSourceFile(program, params.File)
-	if err != nil {
-		return nil, err
-	}
-
-	diags := program.GetBindDiagnostics(ctx, sourceFile)
-	return NewDiagnosticResponses(diags), nil
+	return s.getDiagnostics(ctx, params, (*compiler.Program).GetBindDiagnostics)
 }
 
-// handleGetSemanticDiagnostics returns semantic diagnostics for a file or all files.
 func (s *Session) handleGetSemanticDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	sd, err := s.getSnapshotData(params.Snapshot)
-	if err != nil {
-		return nil, err
-	}
-
-	program, err := sd.getProgram(params.Project)
-	if err != nil {
-		return nil, err
-	}
-
-	sourceFile, err := s.resolveOptionalSourceFile(program, params.File)
-	if err != nil {
-		return nil, err
-	}
-
-	diags := program.GetSemanticDiagnostics(ctx, sourceFile)
-	return NewDiagnosticResponses(diags), nil
+	return s.getDiagnostics(ctx, params, (*compiler.Program).GetSemanticDiagnostics)
 }
 
-// handleGetSuggestionDiagnostics returns suggestion diagnostics for a file or all files.
 func (s *Session) handleGetSuggestionDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	sd, err := s.getSnapshotData(params.Snapshot)
-	if err != nil {
-		return nil, err
-	}
-
-	program, err := sd.getProgram(params.Project)
-	if err != nil {
-		return nil, err
-	}
-
-	sourceFile, err := s.resolveOptionalSourceFile(program, params.File)
-	if err != nil {
-		return nil, err
-	}
-
-	diags := program.GetSuggestionDiagnostics(ctx, sourceFile)
-	return NewDiagnosticResponses(diags), nil
+	return s.getDiagnostics(ctx, params, (*compiler.Program).GetSuggestionDiagnostics)
 }
 
-// handleGetDeclarationDiagnostics returns declaration diagnostics for a file or all files.
 func (s *Session) handleGetDeclarationDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
-	sd, err := s.getSnapshotData(params.Snapshot)
-	if err != nil {
-		return nil, err
-	}
-
-	program, err := sd.getProgram(params.Project)
-	if err != nil {
-		return nil, err
-	}
-
-	sourceFile, err := s.resolveOptionalSourceFile(program, params.File)
-	if err != nil {
-		return nil, err
-	}
-
-	diags := program.GetDeclarationDiagnostics(ctx, sourceFile)
-	return NewDiagnosticResponses(diags), nil
+	return s.getDiagnostics(ctx, params, (*compiler.Program).GetDeclarationDiagnostics)
 }
 
 // handleGetConfigFileParsingDiagnostics returns config file parsing diagnostics.

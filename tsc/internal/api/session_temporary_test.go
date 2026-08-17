@@ -50,7 +50,7 @@ func TestUpdateTemporarySnapshot(t *testing.T) {
 	baseDiags, err := session.handleGetSemanticDiagnostics(ctx, &GetDiagnosticsParams{
 		Snapshot: baseHandle,
 		Project:  projectID,
-		File:     &DocumentIdentifier{FileName: fileName},
+		Files:    []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, len(baseDiags), 0, "original content should have no semantic errors")
@@ -73,7 +73,7 @@ func TestUpdateTemporarySnapshot(t *testing.T) {
 	tempDiags, err := session.handleGetSemanticDiagnostics(ctx, &GetDiagnosticsParams{
 		Snapshot: tempResp.Snapshot,
 		Project:  tempProjectID,
-		File:     &DocumentIdentifier{FileName: fileName},
+		Files:    []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, len(tempDiags) > 0, "temporary content should have a semantic error")
@@ -82,7 +82,7 @@ func TestUpdateTemporarySnapshot(t *testing.T) {
 	baseDiagsAgain, err := session.handleGetSemanticDiagnostics(ctx, &GetDiagnosticsParams{
 		Snapshot: baseHandle,
 		Project:  projectID,
-		File:     &DocumentIdentifier{FileName: fileName},
+		Files:    []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, len(baseDiagsAgain), 0, "original snapshot must be unaffected by the temporary update")
@@ -94,7 +94,7 @@ func TestUpdateTemporarySnapshot(t *testing.T) {
 	baseDiagsFinal, err := session.handleGetSemanticDiagnostics(ctx, &GetDiagnosticsParams{
 		Snapshot: baseHandle,
 		Project:  projectID,
-		File:     &DocumentIdentifier{FileName: fileName},
+		Files:    []DocumentIdentifier{{FileName: fileName}},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, len(baseDiagsFinal), 0, "base snapshot should remain valid after releasing the temporary snapshot")

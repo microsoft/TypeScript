@@ -1039,64 +1039,81 @@ export class Program {
     /**
      * Get syntactic (parse) diagnostics for a specific file or all files.
      * @param file - Optional file to get diagnostics for. If omitted, returns diagnostics for all files.
+     * Get syntactic (parse) diagnostics for specific files or all files.
+     * @param file - Optional file(s) to get diagnostics for. If omitted, returns diagnostics for all files.
      */
-    async getSyntacticDiagnostics(file?: DocumentIdentifier): Promise<readonly Diagnostic[]> {
+    async getSyntacticDiagnostics(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Promise<readonly Diagnostic[]> {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
         const data = await this.client.apiRequest<Diagnostic[]>("getSyntacticDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(file !== undefined ? { file } : {}),
+            files,
         });
         return data ?? [];
     }
 
     /**
-     * Get binder diagnostics for a specific file or all files.
-     * @param file - Optional file to get diagnostics for. If omitted, returns diagnostics for all files.
+     * Get binder diagnostics for specific files or all files.
+     * @param file - Optional file(s) to get diagnostics for. If omitted, returns diagnostics for all files.
      */
-    async getBindDiagnostics(file?: DocumentIdentifier): Promise<readonly Diagnostic[]> {
+    async getBindDiagnostics(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Promise<readonly Diagnostic[]> {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
         const data = await this.client.apiRequest<Diagnostic[]>("getBindDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(file !== undefined ? { file } : {}),
+            files,
         });
         return data ?? [];
     }
 
     /**
-     * Get semantic (type-check) diagnostics for a specific file or all files.
-     * @param file - Optional file to get diagnostics for. If omitted, returns diagnostics for all files.
+     * Get semantic (type-check) diagnostics for specific files or all files.
+     * @param file - Optional file(s) to get diagnostics for. If omitted, returns diagnostics for all files.
      */
-    async getSemanticDiagnostics(file?: DocumentIdentifier): Promise<readonly Diagnostic[]> {
+    async getSemanticDiagnostics(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Promise<readonly Diagnostic[]> {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
         const data = await this.client.apiRequest<Diagnostic[]>("getSemanticDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(file !== undefined ? { file } : {}),
+            files,
         });
         return data ?? [];
     }
 
     /**
-     * Get suggestion diagnostics for a specific file or all files.
-     * @param file - Optional file to get diagnostics for. If omitted, returns diagnostics for all files.
+     * Get suggestion diagnostics for specific files or all files.
+     * @param file - Optional file(s) to get diagnostics for. If omitted, returns diagnostics for all files.
      */
-    async getSuggestionDiagnostics(file?: DocumentIdentifier): Promise<readonly Diagnostic[]> {
+    async getSuggestionDiagnostics(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Promise<readonly Diagnostic[]> {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
         const data = await this.client.apiRequest<Diagnostic[]>("getSuggestionDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(file !== undefined ? { file } : {}),
+            files,
         });
         return data ?? [];
     }
 
     /**
-     * Get declaration emit diagnostics for a specific file or all files.
-     * @param file - Optional file to get diagnostics for. If omitted, returns diagnostics for all files.
+     * Get declaration emit diagnostics for specific files or all files.
+     * @param file - Optional file(s) to get diagnostics for. If omitted, returns diagnostics for all files.
      */
-    async getDeclarationDiagnostics(file?: DocumentIdentifier): Promise<readonly Diagnostic[]> {
+    async getDeclarationDiagnostics(file?: DocumentIdentifier | readonly DocumentIdentifier[]): Promise<readonly Diagnostic[]> {
+        const files = file === undefined ? undefined
+            : Array.isArray(file) ? file
+            : [file];
         const data = await this.client.apiRequest<Diagnostic[]>("getDeclarationDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            ...(file !== undefined ? { file } : {}),
+            files,
         });
         return data ?? [];
     }
