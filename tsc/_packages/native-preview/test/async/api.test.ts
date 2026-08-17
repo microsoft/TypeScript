@@ -5871,6 +5871,39 @@ describe("getDefaultProjectForFile", () => {
         }
     });
 
+    test("inferred project reflects file changes without a follow-up open/close request", async () => {
+        const { api, fs } = spawnAPIWithFS({
+            "/loose.ts": `export const foo = 1;`,
+        });
+        try {
+            const snapshot1 = await api.updateSnapshot({ openFiles: ["/loose.ts"] });
+            const project1 = await snapshot1.getDefaultProjectForFile("/loose.ts");
+            assert.ok(project1, "file with no config file in its ancestry should load into the inferred project");
+            const sf1 = await project1.program.getSourceFile("/loose.ts");
+            assert.ok(sf1);
+            assert.equal(sf1.text, `export const foo = 1;`);
+
+            // Mutate the file and notify only via fileChanges — no follow-up openFiles/closeFiles.
+            fs.writeFile!("/loose.ts", `export const foo = 2;`);
+            const snapshot2 = await api.updateSnapshot({
+                fileChanges: { changed: ["/loose.ts"] },
+            });
+
+            const project2 = await snapshot2.getDefaultProjectForFile("/loose.ts");
+            assert.ok(project2);
+            const sf2 = await project2.program.getSourceFile("/loose.ts");
+            assert.ok(sf2);
+            assert.equal(
+                sf2.text,
+                `export const foo = 2;`,
+                "inferred project's program should reflect the file change even without a follow-up open/close request",
+            );
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("keeps previously opened files open across subsequent openFiles calls", async () => {
         const api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),

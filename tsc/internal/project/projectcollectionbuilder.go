@@ -243,9 +243,9 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 			retain.Union(&result.retain)
 		}
 		b.cleanupConfiguredProjects(&retain, logger)
-		if b.inferredProject.Value() != nil {
-			b.updateProgram(b.inferredProject, logger)
-		}
+	}
+	if b.inferredProject.Value() != nil {
+		b.updateProgram(b.inferredProject, logger)
 	}
 
 	return nil
