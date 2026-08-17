@@ -773,10 +773,17 @@ async function runTests() {
     }
 }
 
+async function runTestExtension() {
+    await $`npm test -w _extension`;
+}
+
 export const test = task({
     name: "test",
     description: "Runs all tests. This is the most typical test task to need.",
-    run: runTests,
+    run: async () => {
+        await runTests();
+        await runTestExtension();
+    },
 });
 
 async function runTestBenchmarks() {
@@ -803,6 +810,12 @@ export const testTools = task({
     name: "test:tools",
     description: "Runs all tests in the _tools module.",
     run: runTestTools,
+});
+
+export const testExtension = task({
+    name: "test:extension",
+    description: "Runs the VS Code extension tests.",
+    run: runTestExtension,
 });
 
 export const buildAPI = task({
@@ -835,6 +848,7 @@ export const testAll = task({
     run: async () => {
         // Prevent interleaving by running these directly instead of in parallel.
         await runTests();
+        await runTestExtension();
         await runTestBenchmarks();
         await runTestTools();
         await runTestAPI();
