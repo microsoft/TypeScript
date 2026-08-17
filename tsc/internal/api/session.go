@@ -19,6 +19,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/format"
 	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/ls/autoimport"
@@ -745,6 +746,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleTypeToString(ctx, parsed.(*TypeToTypeNodeParams))
 	case string(MethodPrintNode):
 		return s.handlePrintNode(ctx, parsed.(*PrintNodeParams))
+	case string(MethodFormatNodeForInsertion):
+		return s.handleFormatNodeForInsertion(ctx, parsed.(*FormatNodeForInsertionParams))
 	case string(MethodEmit):
 		return s.handleEmit(ctx, parsed.(*EmitParams))
 	case string(MethodEmitToString):
@@ -2647,6 +2650,56 @@ func nonNilDiagnostics(diags []*ast.Diagnostic) []*DiagnosticResponse {
 		return []*DiagnosticResponse{}
 	}
 	return result
+}
+
+// handleFormatNodeForInsertion formats a synthesized node with the correct indentation
+// for insertion at a specific position in an existing file.
+func (s *Session) handleFormatNodeForInsertion(ctx context.Context, params *FormatNodeForInsertionParams) (string, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return "", err
+	}
+
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return "", err
+	}
+
+	targetSourceFile, err := s.resolveOptionalSourceFile(program, &params.File)
+	if err != nil {
+		return "", err
+	}
+
+	data, err := base64.StdEncoding.DecodeString(params.Data)
+	if err != nil {
+		return "", fmt.Errorf("%w: invalid base64 data: %w", ErrClientError, err)
+	}
+
+	node, err := encoder.DecodeNodes(data)
+	if err != nil {
+		return "", fmt.Errorf("%w: failed to decode AST: %w", ErrClientError, err)
+	}
+
+	pos := targetSourceFile.GetPositionMap().UTF16ToUTF8(int(params.Position))
+	formatOptions := sd.snapshot.UserPreferences().FormatCodeSettings
+	newLine := formatOptions.NewLineCharacter
+
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	text, nodeWithPos := printer.PrintAndPositionNode(factory, node, nil, newLine, formatOptions.IndentSize, nil)
+	syntheticFile := printer.CreateSyntheticSourceFile(factory, nodeWithPos, text, targetSourceFile.ParseOptions())
+
+	isAtLineStart := format.GetLineStartPositionForPosition(pos, targetSourceFile) == pos
+	initialIndentation := format.GetIndentation(pos, targetSourceFile, formatOptions, isAtLineStart)
+
+	var delta int
+	if formatOptions.IndentSize != 0 && format.ShouldIndentChildNode(formatOptions, node, nil, nil) {
+		delta = formatOptions.IndentSize
+	}
+
+	ctx = format.WithFormatCodeSettings(ctx, formatOptions, newLine)
+	changes := format.FormatNodeGivenIndentation(ctx, nodeWithPos, syntheticFile, targetSourceFile.LanguageVariant, initialIndentation, delta)
+
+	return core.ApplyBulkEdits(text, changes), nil
 }
 
 // handleGetIntrinsicType returns an intrinsic type (any, string, number, etc.).

@@ -122,38 +122,14 @@ func GetFormatCodeSettingsForWriting(options lsutil.FormatCodeSettings, sourceFi
 }
 
 func (t *Tracker) getNonformattedText(node *ast.Node, sourceFile *ast.SourceFile) (string, *ast.Node) {
-	writer := printer.NewChangeTrackerWriter(t.newLine, t.formatSettings.IndentSize)
-	printer.NewPrinter(
-		printer.PrinterOptions{
-			NewLine:                       core.GetNewLineKind(t.newLine),
-			NeverAsciiEscape:              true,
-			PreserveSourceNewlines:        true,
-			TerminateUnterminatedLiterals: true,
-		},
-		writer.GetPrintHandlers(),
-		t.EmitContext,
-	).Write(node, sourceFile, writer, nil)
-
-	text := writer.String()
-	text = strings.TrimSuffix(text, t.newLine)
-
-	nodeOut := writer.AssignPositionsToNode(node, t.NodeFactory)
-	eofToken := t.Factory.NewToken(ast.KindEndOfFile)
-	nodeList := t.Factory.NewNodeList([]*ast.Node{nodeOut})
-	nodeList.Loc = nodeOut.Loc
-	eofToken.Loc = core.NewTextRange(nodeOut.End(), nodeOut.End())
-	sourceFileLike := t.Factory.NewSourceFile(
-		ast.SourceFileParseOptions{FileName: sourceFile.FileName(), Path: sourceFile.Path()},
+	text, nodeOut := printer.PrintAndPositionNode(t.NodeFactory, node, sourceFile, t.newLine, t.formatSettings.IndentSize, t.EmitContext)
+	sourceFileLike := printer.CreateSyntheticSourceFile(
+		t.NodeFactory,
+		nodeOut,
 		text,
-		nodeList,
-		eofToken,
+		ast.SourceFileParseOptions{FileName: sourceFile.FileName(), Path: sourceFile.Path()},
 	)
-	sourceFileLike.ForEachChild(func(child *ast.Node) bool {
-		child.Parent = sourceFileLike
-		return true
-	})
-	sourceFileLike.Loc = nodeOut.Loc
-	return text, sourceFileLike
+	return text, sourceFileLike.AsNode()
 }
 
 // method on the changeTracker because use of converters

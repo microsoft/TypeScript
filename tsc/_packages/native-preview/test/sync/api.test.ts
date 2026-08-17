@@ -41,11 +41,15 @@ import {
     createFunctionTypeNode,
     createIdentifier,
     createKeywordTypeNode,
+    createNumericLiteral,
     createParameterDeclaration,
     createToken,
     createTypeAliasDeclaration,
     createTypeReferenceNode,
     createUnionTypeNode,
+    createVariableDeclaration,
+    createVariableDeclarationList,
+    createVariableStatement,
 } from "@typescript/native-preview/unstable/ast/factory";
 import { visitEachChild } from "@typescript/native-preview/unstable/ast/visitor";
 import { createVirtualFileSystem } from "@typescript/native-preview/unstable/fs";
@@ -5102,6 +5106,96 @@ describe("Program - selected file emit", () => {
             const project = snapshot.getProject("/tsconfig.json")!;
             assert.deepEqual((project.program.getJavaScriptEmit([])).outputFiles, new Map());
             assert.deepEqual((project.program.getDeclarationEmit([])).outputFiles, new Map());
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("SnapshotInternalAPI - formatNodeForInsertion", () => {
+    test("formats a synthesized statement with correct indentation for insertion inside a function body", () => {
+        const files = {
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `function greet(name: string) {\n    console.log(name);\n}\n`,
+        };
+        const api = spawnAPI(files);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+
+            const node = createVariableStatement(
+                undefined,
+                createVariableDeclarationList(
+                    [createVariableDeclaration(createIdentifier("x"), undefined, undefined, createNumericLiteral("1", 0))],
+                    NodeFlags.Const,
+                ),
+            );
+
+            const sourceText = files["/src/index.ts"];
+            const insertionPos = sourceText.indexOf("\n    console.log") + 1;
+
+            const formatted = snapshot.internal.formatNodeForInsertion(node, "/src/index.ts", insertionPos);
+            assert.ok(formatted.includes("const x = 1;"), `Expected 'const x = 1;' in formatted output, got: ${JSON.stringify(formatted)}`);
+            assert.ok(formatted.startsWith("    "), `Expected 4 spaces of indentation, got: ${JSON.stringify(formatted)}`);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("formats a node at top-level with no indentation", () => {
+        const files = {
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `const a = 1;\nconst b = 2;\n`,
+        };
+        const api = spawnAPI(files);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+
+            const node = createVariableStatement(
+                undefined,
+                createVariableDeclarationList(
+                    [createVariableDeclaration(createIdentifier("y"), undefined, undefined, createNumericLiteral("42", 0))],
+                    NodeFlags.Const,
+                ),
+            );
+
+            const formatted = snapshot.internal.formatNodeForInsertion(node, "/src/index.ts", 0);
+            assert.ok(formatted.includes("const y = 42;"), `Expected 'const y = 42;' in formatted output, got: ${JSON.stringify(formatted)}`);
+            assert.ok(!formatted.startsWith(" "), `Expected no leading spaces at top level, got: ${JSON.stringify(formatted)}`);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("formats a synthesized statement with correct indentation when non-ASCII characters precede the insertion position", () => {
+        // 'é' is 1 UTF-16 code unit but 2 UTF-8 bytes, so UTF-16 and UTF-8 offsets diverge after it.
+        // This test verifies the position is correctly converted from UTF-16 to UTF-8 before use.
+        const files = {
+            "/tsconfig.json": "{}",
+            "/src/index.ts": `// \u00e9\nfunction greet(name: string) {\n    console.log(name);\n}\n`,
+        };
+        const api = spawnAPI(files);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+
+            const node = createVariableStatement(
+                undefined,
+                createVariableDeclarationList(
+                    [createVariableDeclaration(createIdentifier("x"), undefined, undefined, createNumericLiteral("1", 0))],
+                    NodeFlags.Const,
+                ),
+            );
+
+            // insertionPos is the UTF-16 code-unit offset of the start of the indented line inside the function body.
+            const sourceText = files["/src/index.ts"];
+            const insertionPos = sourceText.indexOf("\n    console.log") + 1;
+
+            const formatted = snapshot.internal.formatNodeForInsertion(node, "/src/index.ts", insertionPos);
+            // The node should be indented to match the function body (4 spaces)
+            assert.ok(formatted.includes("const x = 1;"), `Expected 'const x = 1;' in formatted output, got: ${JSON.stringify(formatted)}`);
+            assert.ok(formatted.startsWith("    "), `Expected 4 spaces of indentation (UTF-16 offset correctly converted), got: ${JSON.stringify(formatted)}`);
         }
         finally {
             api.close();

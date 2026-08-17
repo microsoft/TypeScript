@@ -6682,7 +6682,7 @@ func (p *snippetPrinter) printAndFormatNode(ctx context.Context, node *ast.Node,
 func (p *snippetPrinter) printAndFormatNodeWithSettings(ctx context.Context, node *ast.Node, sourceFile *ast.SourceFile, formatOptions lsutil.FormatCodeSettings) string {
 	text := p.printUnescapedNode(node)
 	nodeWithPos := p.baseWriter.AssignPositionsToNode(node, p.factory)
-	syntheticFile := p.createSyntheticFile(nodeWithPos, text, sourceFile)
+	syntheticFile := printer.CreateSyntheticSourceFile(p.factory, nodeWithPos, text, sourceFile.ParseOptions())
 	ctx = format.WithFormatCodeSettings(ctx, formatOptions, formatOptions.NewLineCharacter)
 	changes := format.FormatNodeGivenIndentation(
 		ctx,
@@ -6700,25 +6700,6 @@ func (p *snippetPrinter) printAndFormatNodeWithSettings(ctx context.Context, nod
 	}
 
 	return core.ApplyBulkEdits(syntheticFile.Text(), allChanges)
-}
-
-// Creates a source file containing `node` for formatting purposes.
-// `node` and descendants need to be synthetic nodes with positions assigned.
-// This function also assigns parent pointers.
-func (p *snippetPrinter) createSyntheticFile(node *ast.Node, text string, targetFile *ast.SourceFile) *ast.SourceFile {
-	eof := p.factory.NewToken(ast.KindEndOfFile)
-	eof.Loc = core.NewTextRange(len(text), len(text))
-	statements := p.factory.NewNodeList([]*ast.Node{node})
-	statements.Loc = core.NewTextRange(node.Pos(), node.End())
-	syntheticFile := p.factory.NewSourceFile(
-		targetFile.ParseOptions(),
-		text,
-		statements,
-		eof,
-	)
-	syntheticFile.Loc = core.NewTextRange(0, len(text))
-	ast.SetParentInChildren(syntheticFile)
-	return syntheticFile.AsSourceFile()
 }
 
 func createSnippetPrinter(options printer.PrinterOptions, emitContext *printer.EmitContext) *snippetPrinter {
