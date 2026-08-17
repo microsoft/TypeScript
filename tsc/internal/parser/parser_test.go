@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/testrunner"
 	"github.com/microsoft/typescript-go/internal/testutil/fixtures"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -238,6 +239,81 @@ test("", async function () {
 			t.Errorf("reparsed import at pos=%d has broken parent chain", imp.Pos())
 		}
 	}
+}
+
+func TestJSDocTypeSourceSurvivesReparse(t *testing.T) {
+	t.Parallel()
+	sourceText := `/**
+ * @typedef {(
+ *   "a" |
+ *   "b"
+ * )[]} T
+ */
+const value = 0;`
+	opts := ast.SourceFileParseOptions{
+		FileName: "/index.js",
+		Path:     "/index.js",
+	}
+
+	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
+	var typeAlias *ast.Node
+	for _, statement := range file.Statements.Nodes {
+		if ast.IsJSTypeAliasDeclaration(statement) {
+			typeAlias = statement
+			break
+		}
+	}
+	assert.Assert(t, typeAlias != nil)
+
+	jsDocs := typeAlias.JSDoc(file)
+	assert.Equal(t, len(jsDocs), 1)
+	assert.Assert(t, jsDocs[0].AsJSDoc().Tags != nil)
+	assert.Equal(t, len(jsDocs[0].AsJSDoc().Tags.Nodes), 1)
+
+	typeExpression := jsDocs[0].AsJSDoc().Tags.Nodes[0].TypeExpression()
+	assert.Assert(t, typeExpression != nil)
+
+	expected := strings.Join([]string{"(", `"a" |`, `"b"`, ")[]"}, core.NewLineKindLF.GetNewLineCharacter())
+	tests := []struct {
+		name string
+		node *ast.Node
+	}{
+		{name: "original", node: typeExpression.Type()},
+		{name: "reparsed", node: typeAlias.Type()},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			assert.Equal(t, scanner.GetTextOfNode(test.node), expected)
+		})
+	}
+}
+
+func TestJSDocTypeSourcePropagatesToConstructedReparse(t *testing.T) {
+	t.Parallel()
+	sourceText := `/**
+ * @param {{
+ *   value: string
+ * }} options
+ */
+function foo(options) {}`
+	opts := ast.SourceFileParseOptions{
+		FileName: "/index.js",
+		Path:     "/index.js",
+	}
+
+	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
+	function := file.Statements.Nodes[0]
+	assert.Assert(t, ast.IsFunctionDeclaration(function))
+	assert.Equal(t, len(function.Parameters()), 1)
+
+	typeNode := function.Parameters()[0].Type()
+	assert.Assert(t, typeNode != nil)
+	assert.Assert(t, typeNode.Flags&ast.NodeFlagsReparsed != 0)
+
+	expected := strings.Join([]string{"{", "value: string", "}"}, core.NewLineKindLF.GetNewLineCharacter())
+	assert.Equal(t, scanner.GetTextOfNode(typeNode), expected)
+	assert.Equal(t, scanner.GetTokenPosOfNode(typeNode, file, false /*includeJSDoc*/), strings.Index(sourceText, "{{")+1)
 }
 
 func TestSourceFilePositionMapWithNonASCIIStringLiteral(t *testing.T) {
