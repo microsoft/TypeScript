@@ -473,6 +473,53 @@ describe("Snapshot", () => {
         }
     });
 
+    test("getSymbolOfSourceFile", async () => {
+        const api = spawnAPI();
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const moduleSymbol = await project.checker.getSymbolOfSourceFile("/src/foo.ts");
+            assert.ok(moduleSymbol);
+            const exports = await moduleSymbol.getExports();
+            assert.ok(exports.has(escapeLeadingUnderscores("foo")));
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getSymbolOfSourceFile returns undefined for a non-module file", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/script.ts": `const x = 1;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = await project.checker.getSymbolOfSourceFile("/src/script.ts");
+            assert.equal(symbol, undefined);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getSymbolOfSourceFile batched", async () => {
+        const api = spawnAPI();
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbols = await project.checker.getSymbolOfSourceFile(["/src/index.ts", "/src/foo.ts"]);
+            assert.equal(symbols.length, 2);
+            assert.ok(symbols[0]);
+            assert.ok(symbols[1]);
+            assert.strictEqual(symbols[1], await project.checker.getSymbolOfSourceFile("/src/foo.ts"));
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("getTypeOfSymbol", async () => {
         const api = spawnAPI();
         try {

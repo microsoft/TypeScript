@@ -86,6 +86,8 @@ const (
 	MethodGetSymbolsAtPositions        Method = "getSymbolsAtPositions"
 	MethodGetSymbolAtLocation          Method = "getSymbolAtLocation"
 	MethodGetSymbolsAtLocations        Method = "getSymbolsAtLocations"
+	MethodGetSymbolOfSourceFile        Method = "getSymbolOfSourceFile"
+	MethodGetSymbolsOfSourceFiles      Method = "getSymbolsOfSourceFiles"
 	MethodGetTypeOfSymbol              Method = "getTypeOfSymbol"
 	MethodGetTypesOfSymbols            Method = "getTypesOfSymbols"
 	MethodGetDeclaredTypeOfSymbol      Method = "getDeclaredTypeOfSymbol"
@@ -419,6 +421,8 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetSymbolsAtPositions:        unmarshallerFor[GetSymbolsAtPositionsParams],
 	MethodGetSymbolAtLocation:          unmarshallerFor[GetSymbolAtLocationParams],
 	MethodGetSymbolsAtLocations:        unmarshallerFor[GetSymbolsAtLocationsParams],
+	MethodGetSymbolOfSourceFile:        unmarshallerFor[GetSymbolOfSourceFileParams],
+	MethodGetSymbolsOfSourceFiles:      unmarshallerFor[GetSymbolsOfSourceFilesParams],
 	MethodGetTypeOfSymbol:              unmarshallerFor[GetTypeOfSymbolParams],
 	MethodGetTypesOfSymbols:            unmarshallerFor[GetTypesOfSymbolsParams],
 	MethodGetDeclaredTypeOfSymbol:      unmarshallerFor[GetTypeOfSymbolParams],
@@ -722,6 +726,18 @@ type GetSymbolsAtPositionsParams struct {
 	Project   ProjectID          `json:"project"`
 	File      DocumentIdentifier `json:"file"`
 	Positions []uint32           `json:"positions"`
+}
+
+type GetSymbolOfSourceFileParams struct {
+	Snapshot SnapshotID         `json:"snapshot"`
+	Project  ProjectID          `json:"project"`
+	File     DocumentIdentifier `json:"file"`
+}
+
+type GetSymbolsOfSourceFilesParams struct {
+	Snapshot SnapshotID           `json:"snapshot"`
+	Project  ProjectID            `json:"project"`
+	Files    []DocumentIdentifier `json:"files"`
 }
 
 type GetSymbolAtLocationParams struct {

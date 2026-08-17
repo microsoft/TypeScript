@@ -1278,6 +1278,25 @@ export class Checker {
         return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
     }
 
+    getSymbolOfSourceFile(file: DocumentIdentifier): Promise<Symbol | undefined>;
+    getSymbolOfSourceFile(files: readonly DocumentIdentifier[]): Promise<(Symbol | undefined)[]>;
+    async getSymbolOfSourceFile(fileOrFiles: DocumentIdentifier | readonly DocumentIdentifier[]): Promise<Symbol | (Symbol | undefined)[] | undefined> {
+        if (Array.isArray(fileOrFiles)) {
+            const data = await this.client.apiRequest<(SymbolResponse | null)[]>("getSymbolsOfSourceFiles", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                files: fileOrFiles,
+            });
+            return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
+        }
+        const data = await this.client.apiRequest<SymbolResponse | null>("getSymbolOfSourceFile", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            file: fileOrFiles as DocumentIdentifier,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
     /**
      * Get the type of a symbol. Always returns a type; for symbols whose type
      * cannot be determined the checker yields the error type (use

@@ -642,6 +642,10 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSymbolAtLocation(ctx, parsed.(*GetSymbolAtLocationParams))
 	case string(MethodGetSymbolsAtLocations):
 		return s.handleGetSymbolsAtLocations(ctx, parsed.(*GetSymbolsAtLocationsParams))
+	case string(MethodGetSymbolOfSourceFile):
+		return s.handleGetSymbolOfSourceFile(ctx, parsed.(*GetSymbolOfSourceFileParams))
+	case string(MethodGetSymbolsOfSourceFiles):
+		return s.handleGetSymbolsOfSourceFiles(ctx, parsed.(*GetSymbolsOfSourceFilesParams))
 	case string(MethodGetTypeOfSymbol):
 		return s.handleGetTypeOfSymbol(ctx, parsed.(*GetTypeOfSymbolParams))
 	case string(MethodGetTypesOfSymbols):
@@ -1449,6 +1453,49 @@ func (s *Session) handleGetSymbolAtPosition(ctx context.Context, params *GetSymb
 	}
 
 	return setup.newSymbolResponse(symbol), nil
+}
+
+// handleGetSymbolOfSourceFile returns the module symbol for a source file, if any.
+// For non-module (script) files, returns nil.
+func (s *Session) handleGetSymbolOfSourceFile(ctx context.Context, params *GetSymbolOfSourceFileParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	sourceFile := setup.program.GetSourceFile(params.File.ToFileName())
+	if sourceFile == nil {
+		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
+	}
+
+	symbol := setup.checker.GetSymbolAtLocation(sourceFile.AsNode())
+	if symbol == nil {
+		return nil, nil
+	}
+	return setup.newSymbolResponse(symbol), nil
+}
+
+// handleGetSymbolsOfSourceFiles returns the module symbols for multiple source files.
+func (s *Session) handleGetSymbolsOfSourceFiles(ctx context.Context, params *GetSymbolsOfSourceFilesParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	results := make([]*SymbolResponse, len(params.Files))
+	for i, file := range params.Files {
+		sourceFile := setup.program.GetSourceFile(file.ToFileName())
+		if sourceFile == nil {
+			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, file)
+		}
+		symbol := setup.checker.GetSymbolAtLocation(sourceFile.AsNode())
+		if symbol != nil {
+			results[i] = setup.newSymbolResponse(symbol)
+		}
+	}
+	return results, nil
 }
 
 // handleGetSymbolsAtPositions returns symbols at multiple positions in a file.

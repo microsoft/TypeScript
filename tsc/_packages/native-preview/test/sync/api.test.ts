@@ -481,6 +481,53 @@ describe("Snapshot", () => {
         }
     });
 
+    test("getSymbolOfSourceFile", () => {
+        const api = spawnAPI();
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const moduleSymbol = project.checker.getSymbolOfSourceFile("/src/foo.ts");
+            assert.ok(moduleSymbol);
+            const exports = moduleSymbol.getExports();
+            assert.ok(exports.has(escapeLeadingUnderscores("foo")));
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getSymbolOfSourceFile returns undefined for a non-module file", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/script.ts": `const x = 1;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = project.checker.getSymbolOfSourceFile("/src/script.ts");
+            assert.equal(symbol, undefined);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getSymbolOfSourceFile batched", () => {
+        const api = spawnAPI();
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbols = project.checker.getSymbolOfSourceFile(["/src/index.ts", "/src/foo.ts"]);
+            assert.equal(symbols.length, 2);
+            assert.ok(symbols[0]);
+            assert.ok(symbols[1]);
+            assert.strictEqual(symbols[1], project.checker.getSymbolOfSourceFile("/src/foo.ts"));
+        }
+        finally {
+            api.close();
+        }
+    });
+
     test("getTypeOfSymbol", () => {
         const api = spawnAPI();
         try {
