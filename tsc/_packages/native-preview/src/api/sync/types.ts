@@ -216,6 +216,9 @@ export interface UnionType extends UnionOrIntersectionType {
 export interface IntersectionType extends UnionOrIntersectionType {
 }
 
+/** Structured types (TypeFlags.StructuredType) */
+export type StructuredType = ObjectType | UnionType | IntersectionType;
+
 /** Type parameters (TypeFlags.TypeParameter) */
 export interface TypeParameter extends Type {
     /** True if this is the synthetic `this` type of an interface, class, or tuple */
