@@ -31,7 +31,7 @@ function linkPackage(root: string, relativePath: string, targetPackageJson: stri
 function createFixture(t: test.TestContext): string {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), "tsdk-package-"));
     t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-    return root;
+    return fs.realpathSync(root);
 }
 
 interface ResolutionCase {
