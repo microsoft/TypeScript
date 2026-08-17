@@ -830,6 +830,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetBigIntType)
 	case string(MethodGetESSymbolType):
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetESSymbolType)
+	case string(MethodGetNonPrimitiveType):
+		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetNonPrimitiveType)
 	case string(MethodGetWellKnownSymbols):
 		return s.handleGetWellKnownSymbols(ctx, parsed.(*GetIntrinsicTypeParams))
 	case string(MethodGetWellKnownSignatures):

@@ -2596,6 +2596,20 @@ describe("Checker - intrinsic type getters", () => {
             api.close();
         }
     });
+
+    test("getNonPrimitiveType returns a type with NonPrimitive flag", () => {
+        const api = spawnAPI(intrinsicFiles);
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const type = project.checker.getNonPrimitiveType();
+            assert.ok(type);
+            assert.ok(type.flags & TypeFlags.NonPrimitive);
+        }
+        finally {
+            api.close();
+        }
+    });
 });
 
 describe("Checker - multi-project type ID uniqueness", () => {

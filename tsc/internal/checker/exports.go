@@ -54,6 +54,10 @@ func (c *Checker) GetESSymbolType() *Type {
 	return c.esSymbolType
 }
 
+func (c *Checker) GetNonPrimitiveType() *Type {
+	return c.nonPrimitiveType
+}
+
 func (c *Checker) GetBaseTypeOfLiteralType(t *Type) *Type {
 	return c.getBaseTypeOfLiteralType(t)
 }

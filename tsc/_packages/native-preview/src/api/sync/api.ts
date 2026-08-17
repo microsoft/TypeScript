@@ -1582,6 +1582,9 @@ export class Checker {
     getESSymbolType(): Type {
         return this.getIntrinsicType("getESSymbolType");
     }
+    getNonPrimitiveType(): Type {
+        return this.getIntrinsicType("getNonPrimitiveType");
+    }
 
     typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: number): TypeNode | undefined {
         const binaryData = this.client.apiRequestBinary("typeToTypeNode", {
