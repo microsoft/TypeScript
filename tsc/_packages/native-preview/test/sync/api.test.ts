@@ -4202,6 +4202,40 @@ describe("Checker - getAliasedSymbol", () => {
     });
 });
 
+describe("Checker - getFullyQualifiedName", () => {
+    test("returns module-qualified names for exported symbols and dotted names for members", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `
+export namespace Outer {
+    export class Inner {}
+}
+export class Standalone {}
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/index.ts");
+            assert.ok(sourceFile);
+            const moduleSymbol = project.checker.getSymbolAtLocation(sourceFile);
+            assert.ok(moduleSymbol);
+            const exports = project.checker.getExportsOfModule(moduleSymbol);
+            const standalone = exports.find(e => e.name === "Standalone");
+            assert.ok(standalone);
+            assert.equal(project.checker.getFullyQualifiedName(standalone), `"/src/index".Standalone`);
+            const outer = exports.find(e => e.name === "Outer");
+            assert.ok(outer);
+            const inner = (outer.getExports()).get("Inner" as __String);
+            assert.ok(inner);
+            assert.equal(project.checker.getFullyQualifiedName(inner), `"/src/index".Outer.Inner`);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 describe("Checker - getExportsOfModule", () => {
     test("returns all exports including re-exports via 'export *'", () => {
         const api = spawnAPI({

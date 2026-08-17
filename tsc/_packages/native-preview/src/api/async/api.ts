@@ -1765,6 +1765,18 @@ export class Checker {
         return this.objectRegistry.getOrCreateSymbol(data);
     }
 
+    /**
+     * Get the fully qualified name of a symbol, walking up its parent chain
+     * (e.g. `"/path/to/module".Namespace.Name`).
+     */
+    async getFullyQualifiedName(symbol: Symbol): Promise<string> {
+        return this.client.apiRequest<string>("getFullyQualifiedName", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.id,
+        });
+    }
+
     async getImmediateAliasedSymbol(symbol: Symbol): Promise<Symbol | undefined> {
         const data = await this.client.apiRequest<SymbolResponse | null>("getImmediateAliasedSymbol", {
             snapshot: this.snapshotId,

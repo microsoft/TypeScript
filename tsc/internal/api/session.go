@@ -796,6 +796,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetImmediateAliasedSymbol):
 		return s.handleGetImmediateAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetFullyQualifiedName):
+		return s.handleGetFullyQualifiedName(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetExportsOfModule):
 		return s.handleGetExportsOfModule(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetMemberInModuleExports):
@@ -3141,6 +3143,26 @@ func (s *Session) handleGetAliasedSymbol(ctx context.Context, params *CheckerSym
 	}
 
 	return setup.newSymbolResponse(setup.checker.GetAliasedSymbol(symbol)), nil
+}
+
+// handleGetFullyQualifiedName returns the fully qualified name of a symbol
+// (e.g. `"/path/to/module".Namespace.Name`).
+func (s *Session) handleGetFullyQualifiedName(ctx context.Context, params *CheckerSymbolParams) (string, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return "", err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return "", err
+	}
+	if symbol == nil {
+		return "", nil
+	}
+
+	return setup.checker.GetFullyQualifiedName(symbol), nil
 }
 
 // handleGetImmediateAliasedSymbol resolves one level of alias indirection.
