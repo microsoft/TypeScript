@@ -5324,6 +5324,7 @@ func (c *Checker) checkImportDeclaration(node *ast.ImportDeclarationNode) {
 	}
 	if c.checkGrammarModuleElementContext(node, diagnostic) {
 		// If we hit an import declaration in an illegal context, just bail out to avoid cascading errors.
+		c.checkExternalModuleNameInGlobalScope(node)
 		return
 	}
 	if !c.checkGrammarModifiers(node) && node.Modifiers() != nil {
@@ -5514,6 +5515,7 @@ func (c *Checker) checkImportEqualsDeclaration(node *ast.Node) {
 		diagnostics.An_import_declaration_can_only_be_used_at_the_top_level_of_a_module,
 		diagnostics.An_import_declaration_can_only_be_used_at_the_top_level_of_a_namespace_or_module)
 	if c.checkGrammarModuleElementContext(node, diagnostic) {
+		c.checkExternalModuleNameInGlobalScope(node)
 		return // If we hit an import declaration in an illegal context, just bail out to avoid cascading errors.
 	}
 	c.checkGrammarModifiers(node)
@@ -5556,6 +5558,7 @@ func (c *Checker) checkExportDeclaration(node *ast.ExportDeclarationNode) {
 		diagnostics.An_export_declaration_can_only_be_used_at_the_top_level_of_a_module,
 		diagnostics.An_export_declaration_can_only_be_used_at_the_top_level_of_a_namespace_or_module)
 	if c.checkGrammarModuleElementContext(node, diagnostic) {
+		c.checkExternalModuleNameInGlobalScope(node)
 		return // If we hit an export in an illegal context, just bail out to avoid cascading errors.
 	}
 	exportDecl := node.AsExportDeclaration()
@@ -5597,6 +5600,15 @@ func (c *Checker) checkExportDeclaration(node *ast.ExportDeclarationNode) {
 		}
 	}
 	c.checkImportAttributes(node)
+}
+
+func (c *Checker) checkExternalModuleNameInGlobalScope(node *ast.Node) {
+	if getEnclosingContainer(node).Kind != ast.KindSourceFile || (ast.IsImportDeclarationOrJSImportDeclaration(node) && node.ImportClause() == nil) {
+		return
+	}
+	if moduleName := ast.GetExternalModuleName(node); moduleName != nil {
+		c.resolveExternalModuleName(node, moduleName, false)
+	}
 }
 
 func (c *Checker) checkExportSpecifier(node *ast.ExportSpecifierNode) {
