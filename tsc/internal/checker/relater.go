@@ -1106,7 +1106,8 @@ func (c *Checker) getMatchingUnionConstituentForType(unionType *Type, t *Type) *
 }
 
 func (c *Checker) buildTemplateLiteralTrieFromTypes(templateTypes []*Type) *templateLiteralTrieNode {
-	root := &templateLiteralTrieNode{}
+	var arena core.Arena[templateLiteralTrieNode]
+	root := arena.New()
 	for _, t := range templateTypes {
 		prefix := t.AsTemplateLiteralType().texts[0]
 		node := root
@@ -1116,7 +1117,7 @@ func (c *Checker) buildTemplateLiteralTrieFromTypes(templateTypes []*Type) *temp
 			}
 			child := node.children[ch]
 			if child == nil {
-				child = &templateLiteralTrieNode{}
+				child = arena.New()
 				node.children[ch] = child
 			}
 			node = child
