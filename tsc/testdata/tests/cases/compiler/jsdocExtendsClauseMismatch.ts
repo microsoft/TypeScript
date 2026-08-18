@@ -4,8 +4,8 @@
 
 // @filename: react.d.ts
 declare namespace React {
-    class Component {}
-    class PureComponent {}
+    class Component { component: string }
+    class PureComponent { pure: string }
 }
 
 // @filename: main.js

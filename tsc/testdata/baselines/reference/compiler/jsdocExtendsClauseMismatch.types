@@ -4,11 +4,13 @@
 declare namespace React {
 >React : typeof React
 
-    class Component {}
+    class Component { component: string }
 >Component : Component
+>component : string
 
-    class PureComponent {}
+    class PureComponent { pure: string }
 >PureComponent : PureComponent
+>pure : string
 }
 
 === main.js ===

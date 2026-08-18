@@ -3,8 +3,8 @@ main.js(2,20): error TS8023: JSDoc '@extends Component' does not match the 'exte
 
 ==== react.d.ts (0 errors) ====
     declare namespace React {
-        class Component {}
-        class PureComponent {}
+        class Component { component: string }
+        class PureComponent { pure: string }
     }
     
 ==== main.js (1 errors) ====

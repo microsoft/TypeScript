@@ -912,24 +912,6 @@ func (c *Checker) checkGrammarClassDeclarationHeritageClauses(node *ast.ClassLik
 					return c.grammarErrorOnFirstToken(typeNodes[1], diagnostics.Classes_can_only_extend_a_single_class)
 				}
 
-				if len(typeNodes) > 0 {
-					for _, j := range node.EagerJSDoc(file) {
-						if j.AsJSDoc().Tags == nil {
-							continue
-						}
-						for _, tag := range j.AsJSDoc().Tags.Nodes {
-							if tag.Kind == ast.KindJSDocAugmentsTag {
-								target := typeNodes[0].AsExpressionWithTypeArguments()
-								source := tag.ClassName().AsExpressionWithTypeArguments()
-								targetName := getIdentifierFromEntityNameExpression(target.Expression)
-								sourceName := getIdentifierFromEntityNameExpression(source.Expression)
-								if targetName != nil && sourceName != nil && targetName.Text() != sourceName.Text() {
-									return c.grammarErrorOnNode(sourceName, diagnostics.JSDoc_0_1_does_not_match_the_extends_2_clause, tag.TagName().Text(), sourceName.Text(), targetName.Text())
-								}
-							}
-						}
-					}
-				}
 				seenExtendsClause = true
 			} else {
 				if heritageClause.Token != ast.KindImplementsKeyword {

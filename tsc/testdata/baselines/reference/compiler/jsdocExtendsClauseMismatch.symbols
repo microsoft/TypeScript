@@ -4,11 +4,13 @@
 declare namespace React {
 >React : Symbol(React, Decl(react.d.ts, 0, 0))
 
-    class Component {}
+    class Component { component: string }
 >Component : Symbol(Component, Decl(react.d.ts, 0, 25))
+>component : Symbol(Component.component, Decl(react.d.ts, 1, 21))
 
-    class PureComponent {}
->PureComponent : Symbol(PureComponent, Decl(react.d.ts, 1, 22))
+    class PureComponent { pure: string }
+>PureComponent : Symbol(PureComponent, Decl(react.d.ts, 1, 41))
+>pure : Symbol(PureComponent.pure, Decl(react.d.ts, 2, 25))
 }
 
 === main.js ===
@@ -17,9 +19,9 @@ declare namespace React {
  */
 class C extends React.PureComponent {}
 >C : Symbol(C, Decl(main.js, 0, 0))
->React.PureComponent : Symbol(React.PureComponent, Decl(react.d.ts, 1, 22))
+>React.PureComponent : Symbol(React.PureComponent, Decl(react.d.ts, 1, 41))
 >React : Symbol(React, Decl(react.d.ts, 0, 0))
->PureComponent : Symbol(React.PureComponent, Decl(react.d.ts, 1, 22))
+>PureComponent : Symbol(React.PureComponent, Decl(react.d.ts, 1, 41))
 
 /**
  * @extends {React.Component}
