@@ -1,0 +1,19 @@
+--- old.destructuringObjectBindingPatternAndAssignment7(target=esnext).types
++++ new.destructuringObjectBindingPatternAndAssignment7(target=esnext).types
+@@= skipped -20, +20 lines =@@
+ >K : typeof K
+ >b : K.b
+ >bVal : number
+->(() => {	return { [K.a]: 1, [K.b]: 1 };})() : { a: number; b: number; }
+->(() => {	return { [K.a]: 1, [K.b]: 1 };}) : () => { a: number; b: number; }
+->() => {	return { [K.a]: 1, [K.b]: 1 };} : () => { a: number; b: number; }
++>(() => {	return { [K.a]: 1, [K.b]: 1 };})() : { [K.a]: number; [K.b]: number; }
++>(() => {	return { [K.a]: 1, [K.b]: 1 };}) : () => { [K.a]: number; [K.b]: number; }
++>() => {	return { [K.a]: 1, [K.b]: 1 };} : () => { [K.a]: number; [K.b]: number; }
+
+ 	return { [K.a]: 1, [K.b]: 1 };
+->{ [K.a]: 1, [K.b]: 1 } : { a: number; b: number; }
++>{ [K.a]: 1, [K.b]: 1 } : { [K.a]: number; [K.b]: number; }
+ >[K.a] : number
+ >K.a : K.a
+ >K : typeof K

@@ -1517,3 +1517,23 @@ compiler/destructuredDeclarationEmit.js.diff
 compiler/isolatedDeclarationErrorsExpressions.errors.txt.diff
 conformance/dependentDestructuredVariables.js.diff
 conformance/stringLiteralTypesAndTuples01.js.diff
+
+## Preserve enum members in inferred computed property names ##
+compiler/declarationEmitComputedNameConstEnumAlias.js.diff
+compiler/declarationEmitComputedNameConstEnumAlias.types.diff
+compiler/declarationEmitComputedPropertyNameEnum1.types.diff
+compiler/declarationEmitStringEnumUsedInNonlocalSpread.types.diff
+compiler/duplicateObjectLiteralProperty_computedName2.types.diff
+compiler/duplicateObjectLiteralProperty_computedName3.types.diff
+compiler/isolatedDeclarationErrorsObjects.types.diff
+compiler/objectLiteralEnumPropertyNames.types.diff
+compiler/reducibleIndexedAccessTypes.types.diff
+compiler/typeGuardNarrowsIndexedAccessOfKnownProperty11.types.diff
+compiler/typeGuardNarrowsIndexedAccessOfKnownProperty12.types.diff
+conformance/computedPropertyNames47_ES5(target=es2015).types.diff
+conformance/computedPropertyNames47_ES6.types.diff
+conformance/computedPropertyNames48_ES5(target=es2015).types.diff
+conformance/computedPropertyNames48_ES6.types.diff
+conformance/computedPropertyNames7_ES5(target=es2015).types.diff
+conformance/computedPropertyNames7_ES6.types.diff
+conformance/destructuringObjectBindingPatternAndAssignment7(target=esnext).types.diff

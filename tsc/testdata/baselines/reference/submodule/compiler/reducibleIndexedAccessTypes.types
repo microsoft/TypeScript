@@ -65,7 +65,7 @@ type MappedPayload2 = {
 
 const payloads2: MappedPayload2 = {
 >payloads2 : MappedPayload2
->{    [Type.A]: data => { console.log(data) }} : { 0: (data: string) => void; }
+>{    [Type.A]: data => { console.log(data) }} : { [Type.A]: (data: string) => void; }
 
     [Type.A]: data => { console.log(data) }
 >[Type.A] : (data: string) => void

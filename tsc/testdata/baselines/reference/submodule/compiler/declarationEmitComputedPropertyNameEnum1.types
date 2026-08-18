@@ -15,7 +15,7 @@ export enum Enum {
 
 export type Type = { x?: { [Enum.A]: 0 } };
 >Type : Type
->x : { a: 0; } | undefined
+>x : { [Enum.A]: 0; } | undefined
 >[Enum.A] : 0
 >Enum.A : Enum.A
 >Enum : typeof Enum

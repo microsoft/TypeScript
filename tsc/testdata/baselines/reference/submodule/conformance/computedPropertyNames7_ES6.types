@@ -8,8 +8,8 @@ enum E {
 >member : E.member
 }
 var v = {
->v : { 0: number; }
->{    [E.member]: 0} : { 0: number; }
+>v : { [E.member]: number; }
+>{    [E.member]: 0} : { [E.member]: number; }
 
     [E.member]: 0
 >[E.member] : number

@@ -1,0 +1,42 @@
+--- old.objectLiteralEnumPropertyNames.types
++++ new.objectLiteralEnumPropertyNames.types
+@@= skipped -17, +17 lines =@@
+
+ const x: TestStrs = {
+ >x : TestStrs
+->{    [Strs.A]: 'xo',    [Strs.B]: 'xe'} : { a: string; b: string; }
++>{    [Strs.A]: 'xo',    [Strs.B]: 'xe'} : { [Strs.A]: string; [Strs.B]: string; }
+
+     [Strs.A]: 'xo',
+ >[Strs.A] : string
+@@= skipped -17, +17 lines =@@
+ >'xe' : "xe"
+ }
+ const ux = {
+->ux : { a: string; b: string; }
+->{    [Strs.A]: 'xo',    [Strs.B]: 'xe'} : { a: string; b: string; }
++>ux : { [Strs.A]: string; [Strs.B]: string; }
++>{    [Strs.A]: 'xo',    [Strs.B]: 'xe'} : { [Strs.A]: string; [Strs.B]: string; }
+
+     [Strs.A]: 'xo',
+ >[Strs.A] : string
+@@= skipped -84, +84 lines =@@
+
+ const n: TestNums = {
+ >n : TestNums
+->{    [Nums.A]: 1,    [Nums.B]: 2} : { 0: number; 1: number; }
++>{    [Nums.A]: 1,    [Nums.B]: 2} : { [Nums.A]: number; [Nums.B]: number; }
+
+     [Nums.A]: 1,
+ >[Nums.A] : number
+@@= skipped -17, +17 lines =@@
+ >2 : 2
+ }
+ const un = {
+->un : { 0: number; 1: number; }
+->{    [Nums.A]: 3,    [Nums.B]: 4} : { 0: number; 1: number; }
++>un : { [Nums.A]: number; [Nums.B]: number; }
++>{    [Nums.A]: 3,    [Nums.B]: 4} : { [Nums.A]: number; [Nums.B]: number; }
+
+     [Nums.A]: 3,
+ >[Nums.A] : number
