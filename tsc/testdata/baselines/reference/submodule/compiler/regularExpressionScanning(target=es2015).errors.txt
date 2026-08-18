@@ -13,6 +13,7 @@ regularExpressionScanning.ts(3,19): error TS1499: Unknown regular expression fla
 regularExpressionScanning.ts(3,20): error TS1499: Unknown regular expression flag.
 regularExpressionScanning.ts(3,21): error TS1500: Duplicate regular expression flag.
 regularExpressionScanning.ts(3,22): error TS1499: Unknown regular expression flag.
+regularExpressionScanning.ts(5,5): error TS18062: Regular expression pattern modifiers are only available when targeting 'es2025' or later.
 regularExpressionScanning.ts(5,6): error TS1499: Unknown regular expression flag.
 regularExpressionScanning.ts(5,7): error TS1509: This regular expression flag cannot be toggled within a subpattern.
 regularExpressionScanning.ts(5,10): error TS1509: This regular expression flag cannot be toggled within a subpattern.
@@ -223,7 +224,7 @@ regularExpressionScanning.ts(47,89): error TS1518: Anything that would possibly 
 regularExpressionScanning.ts(47,101): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
 
 
-==== regularExpressionScanning.ts (223 errors) ====
+==== regularExpressionScanning.ts (224 errors) ====
     const regexes: RegExp[] = [
     	// Flags
     	/foo/visualstudiocode,
@@ -259,6 +260,8 @@ regularExpressionScanning.ts(47,101): error TS1501: This regular expression flag
 !!! error TS1499: Unknown regular expression flag.
     	// Pattern modifiers
     	/(?med-ium:bar)/,
+    	   ~~~~~~~
+!!! error TS18062: Regular expression pattern modifiers are only available when targeting 'es2025' or later.
     	    ~
 !!! error TS1499: Unknown regular expression flag.
     	     ~

@@ -3758,6 +3758,10 @@ var Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or
 
 var X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer = &Message{code: 18061, category: CategoryError, key: "_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer_18061", text: "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?"}
 
+var Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later = &Message{code: 18062, category: CategoryError, key: "Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later_18062", text: "Regular expression pattern modifiers are only available when targeting '{0}' or later."}
+
+var Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later = &Message{code: 18063, category: CategoryError, key: "Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later_18063", text: "Duplicate named capturing groups are only available when targeting '{0}' or later."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -8070,6 +8074,10 @@ func keyToMessage(key Key) *Message {
 		return Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve
 	case "_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer_18061":
 		return X_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer
+	case "Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later_18062":
+		return Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later
+	case "Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later_18063":
+		return Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later
 	case "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010":
 		return X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler
 	case "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001":

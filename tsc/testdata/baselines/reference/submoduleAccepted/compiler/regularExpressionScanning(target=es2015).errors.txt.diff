@@ -1,6 +1,14 @@
 --- old.regularExpressionScanning(target=es2015).errors.txt
 +++ new.regularExpressionScanning(target=es2015).errors.txt
-@@= skipped -194, +194 lines =@@
+@@= skipped -12, +12 lines =@@
+ regularExpressionScanning.ts(3,20): error TS1499: Unknown regular expression flag.
+ regularExpressionScanning.ts(3,21): error TS1500: Duplicate regular expression flag.
+ regularExpressionScanning.ts(3,22): error TS1499: Unknown regular expression flag.
++regularExpressionScanning.ts(5,5): error TS18062: Regular expression pattern modifiers are only available when targeting 'es2025' or later.
+ regularExpressionScanning.ts(5,6): error TS1499: Unknown regular expression flag.
+ regularExpressionScanning.ts(5,7): error TS1509: This regular expression flag cannot be toggled within a subpattern.
+ regularExpressionScanning.ts(5,10): error TS1509: This regular expression flag cannot be toggled within a subpattern.
+@@= skipped -182, +183 lines =@@
  regularExpressionScanning.ts(39,56): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
  regularExpressionScanning.ts(39,67): error TS1005: '&&' expected.
  regularExpressionScanning.ts(39,77): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
@@ -29,11 +37,20 @@
 
 
 -==== regularExpressionScanning.ts (219 errors) ====
-+==== regularExpressionScanning.ts (223 errors) ====
++==== regularExpressionScanning.ts (224 errors) ====
      const regexes: RegExp[] = [
      	// Flags
      	/foo/visualstudiocode,
-@@= skipped -435, +435 lines =@@
+@@= skipped -36, +36 lines =@@
+ !!! error TS1499: Unknown regular expression flag.
+     	// Pattern modifiers
+     	/(?med-ium:bar)/,
++    	   ~~~~~~~
++!!! error TS18062: Regular expression pattern modifiers are only available when targeting 'es2025' or later.
+     	    ~
+ !!! error TS1499: Unknown regular expression flag.
+     	     ~
+@@= skipped -399, +401 lines =@@
      	                                                                           ~
  !!! error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
      	/[^\p{Emoji}\p{RGI_Emoji}][^\p{Emoji}--\p{RGI_Emoji}][^\p{Emoji}&&\p{RGI_Emoji}]/v,

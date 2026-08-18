@@ -275,6 +275,10 @@ func (p *regExpParser) scanAlternative(isInGroup bool) {
 							p.error(diagnostics.Subpattern_flags_must_be_present_when_there_is_a_minus_sign, flagsStart, p.pos()-flagsStart)
 						}
 					}
+					// Modifier characters were consumed, so this is `(?flags:` rather than a plain `(?:` group.
+					if p.pos() != flagsStart && p.scanner.languageVersion() < core.ScriptTargetES2025 {
+						p.error(diagnostics.Regular_expression_pattern_modifiers_are_only_available_when_targeting_0_or_later, flagsStart, p.pos()-flagsStart, strings.ToLower(core.ScriptTargetES2025.String()))
+					}
 					p.scanExpectedChar(':')
 					isPreviousTermQuantifiable = true
 				}
@@ -384,8 +388,9 @@ func (p *regExpParser) scanPatternModifiers(currFlags regularExpressionFlags) re
 		} else if flag&regularExpressionFlagsModifiers == 0 {
 			p.error(diagnostics.This_regular_expression_flag_cannot_be_toggled_within_a_subpattern, p.pos(), size)
 		} else {
+			// Modifier syntax itself requires ES2025, which is later than any flag that can appear
+			// here, so the group's own diagnostic already covers availability.
 			currFlags |= flag
-			p.scanner.checkRegularExpressionFlagAvailability(flag, p.pos(), size)
 		}
 		p.incPos(size)
 	}
@@ -503,6 +508,13 @@ func (p *regExpParser) scanGroupName(isReference bool) {
 	} else if p.namedCapturingGroupsContains(p.scanner.tokenValue) {
 		p.error(diagnostics.Named_capturing_groups_with_the_same_name_must_be_mutually_exclusive_to_each_other, p.scanner.tokenStart, p.pos()-p.scanner.tokenStart)
 	} else {
+		// A previous definition can only have come from a mutually exclusive alternative.
+		// Below ES2018 the group itself is already reported, so don't stack a second error on it.
+		if p.groupSpecifiers[p.scanner.tokenValue] &&
+			p.scanner.languageVersion() >= core.ScriptTargetES2018 &&
+			p.scanner.languageVersion() < core.ScriptTargetES2025 {
+			p.error(diagnostics.Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later, p.scanner.tokenStart, p.pos()-p.scanner.tokenStart, strings.ToLower(core.ScriptTargetES2025.String()))
+		}
 		if len(p.namedCapturingGroups) > 0 {
 			p.namedCapturingGroups[len(p.namedCapturingGroups)-1][p.scanner.tokenValue] = true
 		}
