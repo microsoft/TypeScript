@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
 
@@ -79,6 +80,35 @@ func TestContentMapperBuildLifecycle(t *testing.T) {
 	assert.Assert(t, result.Watcher == nil)
 	assert.Equal(t, spawner.spawns.Load(), int32(1))
 	assert.Equal(t, spawner.closes.Load(), int32(1))
+}
+
+func TestContentMapperBuildDetectsNewPhysicalSupplementalFile(t *testing.T) {
+	t.Parallel()
+	const supplementalFileName = "/home/src/workspaces/project/app.vue.0.ts"
+	input := &tscInput{files: FileMap{
+		"/home/src/workspaces/project/tsconfig.json": `{
+			"compilerOptions": { "incremental": true },
+			"files": ["app.vue"],
+			"contentMappers": [{ "package": "mapper", "extensions": [".vue"] }]
+		}`,
+		"/home/src/workspaces/project/app.vue":                          `declare const value: number;`,
+		"/home/src/workspaces/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.SupplementalMapper),
+	}}
+	testSys := newTestSys(input, false)
+	sys := &recordingContentMapperSystem{
+		TestSys: testSys,
+		spawner: &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner()},
+	}
+	args := []string{"--build", "--pretty", "false", "--runExternalCode"}
+	result := execute.CommandLine(t.Context(), sys, args, testSys)
+	assert.Equal(t, result.Status, tsc.ExitStatusSuccess, testSys.currentWrite.String())
+
+	testSys.clearOutput()
+	testSys.writeFileNoError(supplementalFileName, "export {};\n")
+	result = execute.CommandLine(t.Context(), sys, args, testSys)
+	assert.Equal(t, result.Status, tsc.ExitStatusDiagnosticsPresent_OutputsGenerated)
+	assert.Assert(t, strings.Contains(testSys.currentWrite.String(), "TS100025"), testSys.currentWrite.String())
+	assert.Assert(t, strings.Contains(testSys.currentWrite.String(), "conflicts with an existing file"), testSys.currentWrite.String())
 }
 
 func TestContentMapperBuildIdentityFailureExitStatus(t *testing.T) {
@@ -321,6 +351,37 @@ func TestDynamicContentMapperBuildWatchDependency(t *testing.T) {
 	assert.Equal(t, lifecycle.Closes.Load(), int32(1))
 	assert.Equal(t, spawner.spawns.Load(), int32(1))
 	assert.Equal(t, spawner.closes.Load(), int32(0))
+}
+
+func TestContentMapperBuildWatchSymlinkedManifestChange(t *testing.T) {
+	t.Parallel()
+	const manifestTarget = "/home/src/workspaces/mapper/package.json"
+	input := &tscInput{files: FileMap{
+		"/home/src/workspaces/project/tsconfig.json": `{
+			"compilerOptions": { "composite": true },
+			"contentMappers": [{ "package": "mapper", "extensions": [".vue"] }]
+		}`,
+		"/home/src/workspaces/project/app.vue":             `export const app = 1;`,
+		"/home/src/workspaces/project/node_modules/mapper": vfstest.Symlink("/home/src/workspaces/mapper"),
+		manifestTarget: contentmappertest.PackageJSON(contentmappertest.VerbatimMapper),
+	}}
+	testSys := newTestSys(input, false)
+	spawner := &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner()}
+	sys := &recordingContentMapperSystem{TestSys: testSys, spawner: spawner}
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+
+	result := execute.CommandLine(ctx, sys, []string{"--build", "--watch", "--runExternalCode"}, testSys)
+	assert.Equal(t, spawner.spawns.Load(), int32(1))
+	assert.Equal(t, spawner.closes.Load(), int32(0))
+
+	updatedManifest := strings.Replace(contentmappertest.PackageJSON(contentmappertest.VerbatimMapper), `"version": "1.0.0"`, `"version": "2.0.0"`, 1)
+	testSys.writeFileNoError(manifestTarget, updatedManifest)
+	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: manifestTarget}})
+	result.Watcher.DoCycle()
+
+	assert.Equal(t, spawner.spawns.Load(), int32(2))
+	assert.Equal(t, spawner.closes.Load(), int32(1))
 }
 
 func TestContentMapperBuildWatchSharedLifecycle(t *testing.T) {
