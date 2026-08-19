@@ -841,7 +841,10 @@ func (tx *asyncTransformer) transformAsyncFunctionBody(node *ast.Node, outerPara
 		)
 
 		if captureLexicalArguments && tx.lexicalArguments.used {
-			block := tx.convertToFunctionBlock(result)
+			block := tx.EmitContext().ConvertToFunctionBlock(result, true /*multiLine*/)
+			if !ast.IsBlock(result) {
+				tx.EmitContext().SetOriginal(block.StatementList().Nodes[0], result)
+			}
 			result = tx.Factory().UpdateBlock(
 				block.AsBlock(),
 				tx.EmitContext().MergeEnvironmentList(block.StatementList(), []*ast.Node{tx.createCaptureArgumentsStatement()}),
@@ -886,20 +889,6 @@ func (tx *asyncTransformer) transformAsyncFunctionBodyWorker(body *ast.Node) *as
 	list.Loc = body.Loc
 	block := tx.Factory().NewBlock(list, false /*multiLine*/)
 	block.Loc = body.Loc
-	return block
-}
-
-func (tx *asyncTransformer) convertToFunctionBlock(node *ast.Node) *ast.Node {
-	if ast.IsBlock(node) {
-		return node
-	}
-	ret := tx.Factory().NewReturnStatement(node)
-	ret.Loc = node.Loc
-	tx.EmitContext().SetOriginal(ret, node)
-	list := tx.Factory().NewNodeList([]*ast.Node{ret})
-	list.Loc = node.Loc
-	block := tx.Factory().NewBlock(list, true)
-	block.Loc = node.Loc
 	return block
 }
 
