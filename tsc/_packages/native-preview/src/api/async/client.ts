@@ -21,6 +21,10 @@ import {
     isSpawnOptions,
     resolveExePath,
 } from "../options.ts";
+import type {
+    APIMethodInfo,
+    SourceFileResponseMethod,
+} from "../proto.ts";
 import {
     combineTimingInfo,
     disabledServerTimingInfo,
@@ -154,7 +158,7 @@ export class Client {
         }
     }
 
-    async apiRequest<T>(method: string, params?: unknown): Promise<T> {
+    async apiRequest<K extends keyof APIMethodInfo>(method: K, params: APIMethodInfo[K]["params"]): Promise<APIMethodInfo[K]["result"]> {
         if (!this.connected) {
             await this.connect();
         }
@@ -162,7 +166,7 @@ export class Client {
             throw new Error("Connection not established");
         }
 
-        const requestType = new RequestType<unknown, T, void>(method);
+        const requestType = new RequestType<unknown, APIMethodInfo[K]["result"], void>(method);
         if (!this.timing) {
             return this.connection.sendRequest(requestType, params);
         }
@@ -186,8 +190,8 @@ export class Client {
         return result;
     }
 
-    async apiRequestBinary(method: string, params?: unknown): Promise<Uint8Array | undefined> {
-        const response = await this.apiRequest<{ data: string; } | null>(method, params);
+    async apiRequestBinary<K extends SourceFileResponseMethod>(method: K, params: APIMethodInfo[K]["params"]): Promise<Uint8Array | undefined> {
+        const response = await this.apiRequest(method, params);
         if (!response) return undefined;
         const buffer = Buffer.from(response.data, "base64");
         return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);

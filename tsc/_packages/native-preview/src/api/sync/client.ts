@@ -7,6 +7,10 @@ import {
     isSpawnOptions,
     resolveExePath,
 } from "../options.ts";
+import type {
+    APIMethodInfo,
+    SourceFileResponseMethod,
+} from "../proto.ts";
 import { SyncRpcChannel } from "../syncChannel.ts";
 import {
     combineTimingInfo,
@@ -81,18 +85,18 @@ export class Client {
         }
     }
 
-    apiRequest<T>(method: string, params?: unknown): T {
+    apiRequest<K extends keyof APIMethodInfo>(method: K, params?: APIMethodInfo[K]["params"]): APIMethodInfo[K]["result"] {
         const encodedPayload = JSON.stringify(params);
         const start = performance.now();
         const result = this.channel.requestSync(method, encodedPayload);
         this.recordTiming(method, start);
         if (result.length) {
-            return JSON.parse(result) as T;
+            return JSON.parse(result) as APIMethodInfo[K]["result"];
         }
-        return undefined as unknown as T;
+        return undefined as APIMethodInfo[K]["result"];
     }
 
-    apiRequestBinary(method: string, params?: unknown): Uint8Array | undefined {
+    apiRequestBinary<K extends SourceFileResponseMethod>(method: K, params?: APIMethodInfo[K]["params"]): Uint8Array | undefined {
         const start = performance.now();
         const result = this.channel.requestBinarySync(method, this.encoder.encode(JSON.stringify(params)));
         this.recordTiming(method, start);

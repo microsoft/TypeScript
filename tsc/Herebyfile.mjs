@@ -577,6 +577,12 @@ export const generateAST = task({
     run: () => $`node --experimental-strip-types --no-warnings ./_scripts/generate.ts`,
 });
 
+export const generateAPI = task({
+    name: "generate:api",
+    description: "Generates API files from internal/api/proto.go and internal/api/session.go.",
+    run: () => $`go -C ./_tools run ./gen-proto ../internal/api/proto.go ../_packages/native-preview/src/api/proto.generated.ts`,
+});
+
 // ── Vendored npm dependencies ───────────────────────────────────
 
 const vendorJsonrpcDir = "_packages/native-preview/vendor/vscode-jsonrpc";
@@ -834,6 +840,7 @@ export const buildAPI = task({
 export const buildAPITests = task({
     name: "build:api:test",
     description: "Builds the @typescript/native-preview JS API tests.",
+    dependencies: [generateEnums, generateAPI],
     run: async () => {
         await $`npm run -w @typescript/native-preview build:test`;
     },

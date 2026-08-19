@@ -37,6 +37,12 @@ npx hereby format # Format the code
 ```
 </critical>
 
+If you are writing or testing TS API features (eg, code in _packages/native-preview/src/api/async/api.ts), additionally, you need to run
+```sh
+npx hereby test:api
+```
+which is not run as part of the primary suite.
+
 ## Compiler Features, Fixes, and Tests
 
 When fixing a bug or implementing a new feature, at least one minimal test case should always be added in advance to verify the fix.

@@ -1141,6 +1141,7 @@ func (s *Session) handleRelease(ctx context.Context, params *ReleaseParams) (any
 
 // handleGetDefaultProjectForFile returns the default project for a given file,
 // or nil if no project currently contains the file.
+// @gen-proto-nullable
 func (s *Session) handleGetDefaultProjectForFile(ctx context.Context, params *GetDefaultProjectForFileParams) (*ProjectResponse, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
@@ -1279,6 +1280,8 @@ func transpileOutput(ctx context.Context, input string, options TranspileOptions
 }
 
 // handleGetSourceFile returns a source file from a project within a snapshot.
+// @gen-proto-result: SourceFileResponse
+// @gen-proto-nullable
 func (s *Session) handleGetSourceFile(ctx context.Context, params *GetSourceFileParams) (any, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
@@ -1294,6 +1297,7 @@ func (s *Session) handleGetSourceFile(ctx context.Context, params *GetSourceFile
 }
 
 // handleGetConfigFileNames returns tsconfig file names associated with the project's command line.
+// @gen-proto-nullable
 func (s *Session) handleGetConfigFileNames(ctx context.Context, params *GetProjectDiagnosticsParams) ([]string, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
@@ -1318,6 +1322,8 @@ func (s *Session) handleGetConfigFileNames(ctx context.Context, params *GetProje
 }
 
 // handleGetConfigSourceFile returns a tsconfig source file associated with the project's command line.
+// @gen-proto-result: SourceFileResponse
+// @gen-proto-nullable
 func (s *Session) handleGetConfigSourceFile(ctx context.Context, params *GetSourceFileParams) (any, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
@@ -1401,6 +1407,7 @@ func (s *Session) handleGetSourceFileNames(ctx context.Context, params *GetSourc
 
 // handleGetSourceFileMetadata returns program-stored metadata for a single source file.
 // The client fetches this lazily per file and caches it.
+// @gen-proto-nullable
 func (s *Session) handleGetSourceFileMetadata(ctx context.Context, params *GetSourceFileParams) (*SourceFileMetadata, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
@@ -1428,6 +1435,7 @@ func (s *Session) handleGetSourceFileMetadata(ctx context.Context, params *GetSo
 }
 
 // handleGetSymbolAtPosition returns the symbol at a position in a file.
+// @gen-proto-nullable
 func (s *Session) handleGetSymbolAtPosition(ctx context.Context, params *GetSymbolAtPositionParams) (*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -1456,6 +1464,7 @@ func (s *Session) handleGetSymbolAtPosition(ctx context.Context, params *GetSymb
 
 // handleGetSymbolOfSourceFile returns the module symbol for a source file, if any.
 // For non-module (script) files, returns nil.
+// @gen-proto-nullable
 func (s *Session) handleGetSymbolOfSourceFile(ctx context.Context, params *GetSymbolOfSourceFileParams) (*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -1527,6 +1536,7 @@ func (s *Session) handleGetSymbolsAtPositions(ctx context.Context, params *GetSy
 }
 
 // handleGetSymbolAtLocation returns the symbol at a node location.
+// @gen-proto-nullable
 func (s *Session) handleGetSymbolAtLocation(ctx context.Context, params *GetSymbolAtLocationParams) (*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -1631,6 +1641,7 @@ func (s *Session) handleGetDeclaredTypeOfSymbol(ctx context.Context, params *Get
 }
 
 // handleResolveName resolves a name to a symbol at a given location.
+// @gen-proto-nullable
 func (s *Session) handleResolveName(ctx context.Context, params *ResolveNameParams) (*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -1754,6 +1765,7 @@ func (s *Session) handleGetTypeAtLocations(ctx context.Context, params *GetTypeA
 }
 
 // handleGetTypeAtPosition returns the type at a position in a file.
+// @gen-proto-nullable
 func (s *Session) handleGetTypeAtPosition(ctx context.Context, params *GetTypeAtPositionParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -1809,26 +1821,31 @@ func (s *Session) handleGetTypesAtPositions(ctx context.Context, params *GetType
 	return results, nil
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetParentOfSymbol(_ context.Context, params *GetSymbolPropertyParams) (*SymbolResponse, error) {
 	return s.resolveSymbolPropertyOfSymbol(params, func(sym *ast.Symbol) *ast.Symbol { return sym.Parent })
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetMembersOfSymbol(ctx context.Context, params *GetSymbolPropertyParams) ([]*SymbolResponse, error) {
 	return s.resolveSymbolTablePropertyOfSymbol(ctx, params, func(symbol *ast.Symbol) ast.SymbolTable {
 		return symbol.Members
 	})
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetExportsOfSymbol(ctx context.Context, params *GetSymbolPropertyParams) ([]*SymbolResponse, error) {
 	return s.resolveSymbolTablePropertyOfSymbol(ctx, params, func(symbol *ast.Symbol) ast.SymbolTable {
 		return symbol.Exports
 	})
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetExportSymbolOfSymbol(_ context.Context, params *GetSymbolPropertyParams) (*SymbolResponse, error) {
 	return s.resolveSymbolPropertyOfSymbol(params, func(sym *ast.Symbol) *ast.Symbol { return sym.ExportSymbol })
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetSymbolOfType(_ context.Context, params *GetTypePropertyParams) (*SymbolResponse, error) {
 	return s.resolveSymbolPropertyOfType(params, (*checker.Type).Symbol)
 }
@@ -1837,30 +1854,37 @@ func (s *Session) handleGetTargetOfType(_ context.Context, params *GetTypeProper
 	return s.resolveTypePropertyOfType(params, (*checker.Type).Target)
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetFreshTypeOfType(_ context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
 	return s.resolveTypePropertyOfType(params, func(t *checker.Type) *checker.Type { return t.AsLiteralType().FreshType() })
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetRegularTypeOfType(_ context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
 	return s.resolveTypePropertyOfType(params, func(t *checker.Type) *checker.Type { return t.AsLiteralType().RegularType() })
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetTypesOfType(_ context.Context, params *GetTypePropertyParams) ([]*TypeResponse, error) {
 	return s.resolveTypeArrayPropertyOfType(params, (*checker.Type).Types)
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetTypeParametersOfType(_ context.Context, params *GetTypePropertyParams) ([]*TypeResponse, error) {
 	return s.resolveTypeArrayPropertyOfType(params, func(t *checker.Type) []*checker.Type { return t.AsInterfaceType().TypeParameters() })
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetOuterTypeParametersOfType(_ context.Context, params *GetTypePropertyParams) ([]*TypeResponse, error) {
 	return s.resolveTypeArrayPropertyOfType(params, func(t *checker.Type) []*checker.Type { return t.AsInterfaceType().OuterTypeParameters() })
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetLocalTypeParametersOfType(_ context.Context, params *GetTypePropertyParams) ([]*TypeResponse, error) {
 	return s.resolveTypeArrayPropertyOfType(params, func(t *checker.Type) []*checker.Type { return t.AsInterfaceType().LocalTypeParameters() })
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetAliasTypeArgumentsOfType(_ context.Context, params *GetTypePropertyParams) ([]*TypeResponse, error) {
 	return s.resolveTypeArrayPropertyOfType(params, func(t *checker.Type) []*checker.Type {
 		if t.Alias() == nil {
@@ -1870,6 +1894,7 @@ func (s *Session) handleGetAliasTypeArgumentsOfType(_ context.Context, params *G
 	})
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetAliasSymbolOfType(_ context.Context, params *GetTypePropertyParams) (*SymbolResponse, error) {
 	return s.resolveSymbolPropertyOfType(params, func(t *checker.Type) *ast.Symbol {
 		if t.Alias() == nil {
@@ -1905,18 +1930,22 @@ func (s *Session) handleGetConstraintOfType(_ context.Context, params *GetTypePr
 	return s.resolveTypePropertyOfType(params, func(t *checker.Type) *checker.Type { return t.AsSubstitutionType().SubstConstraint() })
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetTypeParametersOfSignature(_ context.Context, params *GetSignaturePropertyParams) ([]*TypeResponse, error) {
 	return s.resolveTypeArrayPropertyOfSignature(params, (*checker.Signature).TypeParameters)
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetParametersOfSignature(_ context.Context, params *GetSignaturePropertyParams) ([]*SymbolResponse, error) {
 	return s.resolveSymbolArrayPropertyOfSignature(params, (*checker.Signature).Parameters)
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetThisParameterOfSignature(_ context.Context, params *GetSignaturePropertyParams) (*SymbolResponse, error) {
 	return s.resolveSymbolPropertyOfSignature(params, (*checker.Signature).ThisParameter)
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetTargetOfSignature(_ context.Context, params *GetSignaturePropertyParams) (*SignatureResponse, error) {
 	return s.resolveSignaturePropertyOfSignature(params, (*checker.Signature).Target)
 }
@@ -2258,6 +2287,7 @@ func (s *Session) resolveSignaturePropertyOfSignature(params *GetSignatureProper
 }
 
 // handleGetContextualType returns the contextual type for a node.
+// @gen-proto-nullable
 func (s *Session) handleGetContextualType(ctx context.Context, params *GetContextualTypeParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -2419,6 +2449,7 @@ func (s *Session) handleIsTypeAssignableTo(ctx context.Context, params *IsTypeAs
 }
 
 // handleGetShorthandAssignmentValueSymbol returns the value symbol of a shorthand property assignment.
+// @gen-proto-nullable
 func (s *Session) handleGetShorthandAssignmentValueSymbol(ctx context.Context, params *GetTypeAtLocationParams) (*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -2464,6 +2495,8 @@ func (s *Session) handleGetTypeOfSymbolAtLocation(ctx context.Context, params *G
 }
 
 // handleTypeToTypeNode converts a Type to a TypeNode AST and returns it as binary-encoded data.
+// @gen-proto-result: SourceFileResponse
+// @gen-proto-nullable
 func (s *Session) handleTypeToTypeNode(ctx context.Context, params *TypeToTypeNodeParams) (any, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -2502,6 +2535,8 @@ func (s *Session) handleTypeToTypeNode(ctx context.Context, params *TypeToTypeNo
 	}, nil
 }
 
+// @gen-proto-result: SourceFileResponse
+// @gen-proto-nullable
 func (s *Session) handleSignatureToSignatureDeclaration(ctx context.Context, params *SignatureToSignatureDeclarationParams) (any, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -2873,6 +2908,7 @@ func (s *Session) handleGetRestTypeOfSignature(ctx context.Context, params *Chec
 }
 
 // handleGetTypePredicateOfSignature returns the type predicate of a signature.
+// @gen-proto-nullable
 func (s *Session) handleGetTypePredicateOfSignature(ctx context.Context, params *CheckerSignatureParams) (*TypePredicateResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -2935,6 +2971,7 @@ func (s *Session) handleIsTupleType(ctx context.Context, params *CheckerTypePara
 }
 
 // handleGetBaseTypes returns the base types of an interface/class type.
+// @gen-proto-nullable
 func (s *Session) handleGetBaseTypes(ctx context.Context, params *CheckerTypeParams) ([]*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -2961,6 +2998,7 @@ func (s *Session) handleGetBaseTypes(ctx context.Context, params *CheckerTypePar
 }
 
 // handleGetPropertiesOfType returns the properties of a type.
+// @gen-proto-nullable
 func (s *Session) handleGetPropertiesOfType(ctx context.Context, params *CheckerTypeParams) ([]*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3025,6 +3063,7 @@ func (s *Session) handleGetApparentType(ctx context.Context, params *GetTypeProp
 }
 
 // handleGetIndexInfosOfType returns the index infos of a type.
+// @gen-proto-nullable
 func (s *Session) handleGetIndexInfosOfType(ctx context.Context, params *CheckerTypeParams) ([]*IndexInfoResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3058,6 +3097,7 @@ func (s *Session) handleGetIndexInfosOfType(ctx context.Context, params *Checker
 }
 
 // handleGetConstraintOfTypeParameter returns the constraint of a type parameter.
+// @gen-proto-nullable
 func (s *Session) handleGetConstraintOfTypeParameter(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3079,6 +3119,7 @@ func (s *Session) handleGetConstraintOfTypeParameter(ctx context.Context, params
 }
 
 // handleGetDefaultFromTypeParameter returns the default type of a type parameter.
+// @gen-proto-nullable
 func (s *Session) handleGetDefaultFromTypeParameter(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3095,6 +3136,7 @@ func (s *Session) handleGetDefaultFromTypeParameter(ctx context.Context, params 
 }
 
 // handleGetBaseConstraintOfType returns the base constraint of an instantiable type.
+// @gen-proto-nullable
 func (s *Session) handleGetBaseConstraintOfType(ctx context.Context, params *CheckerTypeParams) (*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3116,6 +3158,7 @@ func (s *Session) handleGetBaseConstraintOfType(ctx context.Context, params *Che
 }
 
 // handleGetPropertyOfType returns a named property symbol of a type.
+// @gen-proto-nullable
 func (s *Session) handleGetPropertyOfType(ctx context.Context, params *GetPropertyOfTypeParams) (*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3137,6 +3180,7 @@ func (s *Session) handleGetPropertyOfType(ctx context.Context, params *GetProper
 }
 
 // handleGetConstantValue returns the constant value of an enum member or const enum access.
+// @gen-proto-nullable
 func (s *Session) handleGetConstantValue(ctx context.Context, params *CheckerNodeParams) (any, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3172,6 +3216,7 @@ func (s *Session) handleGetSignatureFromDeclaration(ctx context.Context, params 
 }
 
 // handleGetExportSpecifierLocalTargetSymbol returns the local target symbol of an export specifier.
+// @gen-proto-nullable
 func (s *Session) handleGetExportSpecifierLocalTargetSymbol(ctx context.Context, params *CheckerNodeParams) (*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3232,6 +3277,7 @@ func (s *Session) handleGetFullyQualifiedName(ctx context.Context, params *Check
 }
 
 // handleGetImmediateAliasedSymbol resolves one level of alias indirection.
+// @gen-proto-nullable
 func (s *Session) handleGetImmediateAliasedSymbol(ctx context.Context, params *CheckerSymbolParams) (*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3257,6 +3303,7 @@ func (s *Session) handleGetImmediateAliasedSymbol(ctx context.Context, params *C
 
 // handleGetExportsOfModule returns the resolved exports of a module symbol,
 // including those introduced by `export *` and re-exports.
+// @gen-proto-nullable
 func (s *Session) handleGetExportsOfModule(ctx context.Context, params *CheckerSymbolParams) ([]*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3287,6 +3334,7 @@ func (s *Session) handleGetExportsOfModule(ctx context.Context, params *CheckerS
 }
 
 // handleGetMemberInModuleExports returns an export by name from a module symbol.
+// @gen-proto-nullable
 func (s *Session) handleGetMemberInModuleExports(ctx context.Context, params *GetMemberInModuleExportsParams) (*SymbolResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3311,6 +3359,7 @@ func (s *Session) handleGetMemberInModuleExports(ctx context.Context, params *Ge
 }
 
 // handleGetJSDocTags returns the JSDoc tags of a symbol as structured name/text pairs.
+// @gen-proto-nullable
 func (s *Session) handleGetJSDocTags(ctx context.Context, params *CheckerSymbolParams) ([]*JSDocTagInfo, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3357,6 +3406,7 @@ func (s *Session) handleGetDocumentationComment(ctx context.Context, params *Che
 }
 
 // handleGetTypeArguments returns the type arguments of a type reference.
+// @gen-proto-nullable
 func (s *Session) handleGetTypeArguments(ctx context.Context, params *CheckerTypeParams) ([]*TypeResponse, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -3607,32 +3657,38 @@ func (s *Session) getDiagnostics(ctx context.Context, params *GetDiagnosticsPara
 	return NewDiagnosticResponses(getter(program, ctx, nil)), nil
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetSyntacticDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	return s.getDiagnostics(ctx, params, (*compiler.Program).GetSyntacticDiagnostics)
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetBindDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	return s.getDiagnostics(ctx, params, (*compiler.Program).GetBindDiagnostics)
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetSemanticDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	return s.getDiagnostics(ctx, params, (*compiler.Program).GetSemanticDiagnostics)
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetSuggestionDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	return s.getDiagnostics(ctx, params, (*compiler.Program).GetSuggestionDiagnostics)
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetDeclarationDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	return s.getDiagnostics(ctx, params, (*compiler.Program).GetDeclarationDiagnostics)
 }
 
 // handleGetConfigFileParsingDiagnostics returns config file parsing diagnostics.
+// @gen-proto-nullable
 func (s *Session) handleGetConfigFileParsingDiagnostics(ctx context.Context, params *GetProjectDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
@@ -3649,6 +3705,7 @@ func (s *Session) handleGetConfigFileParsingDiagnostics(ctx context.Context, par
 }
 
 // handleGetProgramDiagnostics returns program-wide diagnostics, including options diagnostics.
+// @gen-proto-nullable
 func (s *Session) handleGetProgramDiagnostics(ctx context.Context, params *GetProjectDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
@@ -3665,6 +3722,7 @@ func (s *Session) handleGetProgramDiagnostics(ctx context.Context, params *GetPr
 }
 
 // handleGetGlobalDiagnostics returns global (non-file-specific) semantic diagnostics.
+// @gen-proto-nullable
 func (s *Session) handleGetGlobalDiagnostics(ctx context.Context, params *GetProjectDiagnosticsParams) ([]*DiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	sd, err := s.getSnapshotData(params.Snapshot)
@@ -3737,6 +3795,7 @@ func (s *Session) handleGetReferencesToSymbolInFile(ctx context.Context, params 
 	return result, nil
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetSignatureUsages(ctx context.Context, params *GetSignatureUsagesParams) ([]SignatureUsageResponse, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
@@ -3779,6 +3838,7 @@ func (s *Session) handleGetSignatureUsages(ctx context.Context, params *GetSigna
 }
 
 // handleGetCompletionsAtPosition returns completions at a position in a document.
+// @gen-proto-nullable
 func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *GetCompletionsAtPositionParams) (*CompletionInfoResponse, error) {
 	if params.IncludeSymbol {
 		ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeAPI)
@@ -3835,6 +3895,7 @@ func (s *Session) handleGetCompletionsAtPosition(ctx context.Context, params *Ge
 }
 
 // handleGetReferencedSymbolsForNode returns node handles for all references found at a node.
+// @gen-proto-nullable
 func (s *Session) handleGetReferencedSymbolsForNode(ctx context.Context, params *GetReferencedSymbolsForNodeParams) ([]ReferencedSymbolEntry, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
 	if err != nil {
