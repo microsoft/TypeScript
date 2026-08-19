@@ -180,6 +180,30 @@ const value = help/**/;
 	})
 }
 
+func TestContentMapperSupplementalFilesAreNotAutoImportTargets(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	f, done := newContentMapperFourslash(t, `// @Filename: /lib.astro
+export const supplementalOnly = 1;
+
+// @Filename: /main.ts
+supplementalOn/**/
+`, contentmappertest.SupplementalMapper, ".astro")
+	defer done()
+
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		UserPreferences: &lsutil.UserPreferences{
+			IncludeCompletionsForModuleExports:    core.TSTrue,
+			IncludeCompletionsForImportStatements: core.TSTrue,
+		},
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{Excludes: []string{"supplementalOnly"}},
+	})
+}
+
 func TestContentMapperNodeModulesAutoImports(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
