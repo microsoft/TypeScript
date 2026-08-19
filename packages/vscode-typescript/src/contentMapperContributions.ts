@@ -79,12 +79,13 @@ export function validateContentMapperRegistration(contributorId: string, contrib
 }
 
 export function documentMatchesContentMapperContributions(
-    document: vscode.TextDocument,
+    document: { readonly uri: { readonly path: string; }; },
     registrations: ReadonlyMap<string, readonly ContentMapperContribution[]>,
 ): boolean {
+    const documentPath = document.uri.path.toLowerCase();
     for (const contributions of registrations.values()) {
         for (const contribution of contributions) {
-            if (contribution.extensions.some(extension => document.uri.path.endsWith(extension))) {
+            if (contribution.extensions.some(extension => documentPath.endsWith(extension.toLowerCase()))) {
                 return true;
             }
         }

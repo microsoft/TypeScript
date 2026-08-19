@@ -370,7 +370,7 @@
     "scripts": {
         "build": "tsc && npm run bundle",
         "bundle": "esbuild src/extension.ts --bundle --external:vscode --platform=node --format=cjs --outfile=dist/extension.bundle.js --sourcemap",
-        "test": "esbuild test/tsdkPackage.test.ts --bundle --platform=node --format=cjs --outfile=dist/test/tsdkPackage.test.cjs && node --test dist/test/tsdkPackage.test.cjs",
+        "test": "esbuild test/index.test.ts --bundle --platform=node --format=cjs --outfile=dist/test/index.test.cjs && node --test dist/test/index.test.cjs",
         "watch": "npm run bundle -- --watch",
         "generateLocTest": "npx @vscode/l10n-dev generate-pseudo -o ./l10n/ ./l10n/bundle.l10n.json ./package.nls.json",
         "generateLocBundle": "npx @vscode/l10n-dev export --outDir ./l10n ./src",

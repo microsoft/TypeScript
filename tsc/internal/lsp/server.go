@@ -2490,7 +2490,7 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			}
 		}
 		for _, extension := range validExtensions {
-			if !claimedExtensions.AddIfAbsent(extension) {
+			if !claimedExtensions.AddIfAbsent(strings.ToLower(extension)) {
 				return result, fmt.Errorf("content mapper contributions both claim extension %q", extension)
 			}
 			result.Extensions = append(result.Extensions, extension)
@@ -2530,7 +2530,9 @@ func isValidContributedContentMapperExtension(extension string) bool {
 	if len(extension) <= 1 || extension[0] != '.' || tspath.GetAnyExtensionFromPath("file"+extension, nil, false) != extension {
 		return false
 	}
-	return !slices.Contains(core.Flatten(tspath.AllSupportedExtensionsWithJson), extension)
+	return !slices.ContainsFunc(core.Flatten(tspath.AllSupportedExtensionsWithJson), func(nativeExtension string) bool {
+		return strings.EqualFold(nativeExtension, extension)
+	})
 }
 
 func valueOrZero[T any](value *T) T {
