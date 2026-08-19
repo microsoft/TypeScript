@@ -814,7 +814,8 @@ async function runTestTools() {
 }
 
 async function runTestAPI() {
-    await $`npm run -w @typescript/native-preview test:only`;
+    // await $`npm run -w @typescript/native-preview test:only`; // doesn't work on windows - some path escaping isn't done correctly, test runner runs no tests
+    await _$({ verbose: "short", stdio: "inherit", cwd: "./_packages/native-preview" })`node --experimental-strip-types --no-warnings --conditions @typescript/source --test ./test/**/*.test.ts`;
 }
 
 export const testTools = task({

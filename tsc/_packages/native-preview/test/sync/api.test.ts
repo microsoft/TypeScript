@@ -114,7 +114,7 @@ describe("API", () => {
             assert.deepEqual(commandLine.fileNames, ["/src/index.ts"]);
             assert.equal(commandLine.options.strict, true);
             assert.equal(
-                commandLine.options.outDir,
+                resolve(commandLine.options.outDir!),
                 resolve(fileURLToPath(new URL("../../../../", import.meta.url)), "dist"),
             );
             assert.deepEqual(commandLine.raw, {
