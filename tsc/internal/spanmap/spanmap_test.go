@@ -160,6 +160,40 @@ func TestVirtualToOriginalPosition(t *testing.T) {
 	}
 }
 
+func TestZeroLengthSpansAtSegmentEnds(t *testing.T) {
+	t.Parallel()
+
+	m := spanmap.New([]spanmap.Segment{
+		{VirtualStart: 0, VirtualEnd: 10, OriginalStart: 100, OriginalEnd: 110, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+		{VirtualStart: 20, VirtualEnd: 30, OriginalStart: 200, OriginalEnd: 210, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+	})
+
+	position, fidelity := m.VirtualToOriginalPosition(30)
+	assert.Equal(t, position, core.TextPos(210))
+	assert.Equal(t, fidelity, spanmap.FidelityExact)
+	virtualSpan, fidelity := m.VirtualToOriginalSpan(core.NewTextRange(30, 30))
+	assert.Equal(t, virtualSpan, core.NewTextRange(210, 210))
+	assert.Equal(t, fidelity, spanmap.FidelityExact)
+
+	for _, test := range []struct {
+		name        string
+		originalEnd int
+	}{
+		{name: "before gap", originalEnd: 110},
+		{name: "final", originalEnd: 210},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			positions := m.OriginalToVirtualPositions(core.TextPos(test.originalEnd), spanmap.FeatureHover)
+			spans := m.OriginalToVirtualSpans(core.NewTextRange(test.originalEnd, test.originalEnd), spanmap.FeatureHover)
+			assert.Equal(t, len(positions), 1)
+			assert.Equal(t, len(spans), 1)
+			assert.Equal(t, spans[0].Span, core.NewTextRange(int(positions[0].Position), int(positions[0].Position)))
+			assert.Equal(t, spans[0].Fidelity, positions[0].Fidelity)
+		})
+	}
+}
+
 func TestMapPositionNilIdentity(t *testing.T) {
 	t.Parallel()
 

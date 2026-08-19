@@ -72,6 +72,21 @@ describe("SpanMap", () => {
         ]);
     });
 
+    test("maps zero-length spans at segment ends", () => {
+        assert.deepEqual(map.virtualToOriginalSpan({ pos: 18, end: 18 }), {
+            range: { pos: 34, end: 34 },
+            fidelity: SpanMapFidelity.Exact,
+        });
+        for (const originalEnd of [14, 34]) {
+            const positions = map.originalToVirtualPositions(originalEnd, SpanMapFeature.All);
+            assert.equal(positions.length, 1);
+            assert.deepEqual(map.originalToVirtualSpans({ pos: originalEnd, end: originalEnd }, SpanMapFeature.All), [{
+                range: { pos: positions[0].position, end: positions[0].position },
+                fidelity: positions[0].fidelity,
+            }]);
+        }
+    });
+
     test("sorts virtual and original indexes independently", () => {
         const reordered = new SpanMap([
             { virtualStart: 0, virtualEnd: 2, originalStart: 10, originalEnd: 12, kind: SpanMapKind.Verbatim },

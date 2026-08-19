@@ -244,12 +244,13 @@ func (m *SpanMap) VirtualToOriginalSpan(r core.TextRange) (core.TextRange, Fidel
 	}
 	virtualStart := core.TextPos(r.Pos())
 	virtualEnd := max(core.TextPos(r.End()), virtualStart)
+	if virtualStart == virtualEnd {
+		position, fidelity := m.VirtualToOriginalPosition(virtualStart)
+		return core.NewTextRange(int(position), int(position)), fidelity
+	}
 
 	startIdx, startIn := m.segmentIndexAt(virtualStart)
-	endProbe := virtualEnd
-	if virtualEnd > virtualStart {
-		endProbe = virtualEnd - 1
-	}
+	endProbe := virtualEnd - 1
 	endIdx, endIn := m.segmentIndexAt(endProbe)
 
 	if startIdx == endIdx && startIn == endIn {
@@ -362,7 +363,7 @@ func (m *SpanMap) segmentIndexAt(pos core.TextPos) (int, bool) {
 		return idx, true
 	}
 	prev := idx - 1
-	if prev >= 0 && pos < m.segments[prev].VirtualEnd {
+	if prev >= 0 && (pos < m.segments[prev].VirtualEnd || prev == len(m.segments)-1 && pos == m.segments[prev].VirtualEnd) {
 		return prev, true
 	}
 	return prev, false
@@ -464,10 +465,15 @@ func (m *SpanMap) OriginalToVirtualSpans(r core.TextRange, feature Feature) []Ma
 	}
 	start := core.TextPos(r.Pos())
 	end := max(core.TextPos(r.End()), start)
-	lastCharacter := end
-	if end > start {
-		lastCharacter--
+	if start == end {
+		return core.Map(m.OriginalToVirtualPositions(start, feature), func(position MappedPosition) MappedSpan {
+			return MappedSpan{
+				Span:     core.NewTextRange(int(position.Position), int(position.Position)),
+				Fidelity: position.Fidelity,
+			}
+		})
 	}
+	lastCharacter := end - 1
 	originalSegments := m.origIndex()
 	startSegments, startInside := segmentsAtOriginalPosition(originalSegments, start)
 	endSegments, endInside := segmentsAtOriginalPosition(originalSegments, lastCharacter)

@@ -131,7 +131,13 @@ export class SpanMap {
     originalToVirtualSpans(range: ReadonlyTextRange, feature: SpanMapFeature): readonly MappedRange[] {
         const start = range.pos;
         const end = Math.max(range.end, start);
-        const lastCharacter = end > start ? end - 1 : end;
+        if (start === end) {
+            return this.originalToVirtualPositions(start, feature).map(({ position, fidelity }) => ({
+                range: { pos: position, end: position },
+                fidelity,
+            }));
+        }
+        const lastCharacter = end - 1;
         const originalSegments = this.getOriginalSegments();
         const startSegments = segmentsAtOriginalPosition(originalSegments, start);
         const endSegments = segmentsAtOriginalPosition(originalSegments, lastCharacter);
@@ -156,8 +162,12 @@ export class SpanMap {
     private mapRange(range: ReadonlyTextRange, segments: readonly SpanMapSegment[], reverse: boolean): MappedRange {
         const start = range.pos;
         const end = Math.max(range.end, start);
+        if (start === end) {
+            const { position, fidelity } = this.mapPoint(start, segments, reverse);
+            return { range: { pos: position, end: position }, fidelity };
+        }
         const [startIndex, startInside] = segmentIndexAt(segments, start, reverse);
-        const endProbe = end > start ? end - 1 : end;
+        const endProbe = end - 1;
         const [endIndex, endInside] = segmentIndexAt(segments, endProbe, reverse);
 
         if (startIndex === endIndex && startInside === endInside) {
