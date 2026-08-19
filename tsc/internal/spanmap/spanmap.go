@@ -149,8 +149,6 @@ const (
 	MappingErrorKindVerbatimMismatch
 	// MappingErrorKindKind means a segment uses an unsupported mapping kind.
 	MappingErrorKindKind
-	// MappingErrorKindOriginalOverlap means original spans partially overlap or contain one another.
-	MappingErrorKindOriginalOverlap
 	// MappingErrorKindFeature means a feature annotation contains unsupported flags.
 	MappingErrorKindFeature
 )
@@ -175,8 +173,6 @@ func (p *MappingError) Error() string {
 		return fmt.Sprintf("content mapper verbatim mapping does not match the original content at virtual offset %d, original offset %d", p.VirtualPos, p.OriginalPos)
 	case MappingErrorKindKind:
 		return fmt.Sprintf("content mapper position mapping has an invalid kind at virtual offset %d", p.VirtualPos)
-	case MappingErrorKindOriginalOverlap:
-		return fmt.Sprintf("content mapper position mappings partially overlap in the original content near offset %d", p.OriginalPos)
 	case MappingErrorKindFeature:
 		return fmt.Sprintf("content mapper position mappings have invalid features near original offset %d", p.OriginalPos)
 	default:
@@ -217,17 +213,6 @@ func (m *SpanMap) Validate(virtual, original string) *MappingError {
 		if s.Features&^featureMask != 0 {
 			return &MappingError{Kind: MappingErrorKindFeature, VirtualPos: s.VirtualStart, OriginalPos: s.OriginalStart}
 		}
-	}
-	originalSegments := m.origIndex()
-	for i := 0; i < len(originalSegments); {
-		groupEnd := i + 1
-		for groupEnd < len(originalSegments) && originalSegments[groupEnd].OriginalStart == originalSegments[i].OriginalStart && originalSegments[groupEnd].OriginalEnd == originalSegments[i].OriginalEnd {
-			groupEnd++
-		}
-		if i > 0 && originalSegments[i].OriginalStart < originalSegments[i-1].OriginalEnd {
-			return &MappingError{Kind: MappingErrorKindOriginalOverlap, VirtualPos: originalSegments[i].VirtualStart, OriginalPos: originalSegments[i].OriginalStart}
-		}
-		i = groupEnd
 	}
 	return nil
 }
@@ -455,7 +440,7 @@ func (m *SpanMap) OriginalToVirtualPositions(pos core.TextPos, feature Feature) 
 }
 
 // OriginalToVirtualSpans returns every feature-compatible virtual projection of an original range.
-// A range contained by one duplicate group produces one exact or atom result per matching group member.
+// A range contained by one or more segments produces one exact or atom result per matching segment.
 //
 // A range that starts in one group and ends in another can have several possible virtual ranges. For
 // example, suppose two original segments are each copied twice into the virtual text:
@@ -489,14 +474,26 @@ func (m *SpanMap) OriginalToVirtualSpans(r core.TextRange, feature Feature) []Ma
 	if !startInside || !endInside {
 		return nil
 	}
-	if sameOriginalRange(startSegments[0], endSegments[0]) {
-		return originalToVirtualSpansInGroup(startSegments, start, end, feature)
+	var containing []Segment
+	for _, segment := range startSegments {
+		if end <= segment.OriginalEnd {
+			containing = append(containing, segment)
+		}
+	}
+	if len(containing) > 0 {
+		results := originalToVirtualSpansInSegments(containing, start, end, feature)
+		if len(results) > 0 {
+			slices.SortFunc(results, func(a, b MappedSpan) int { return a.Span.Pos() - b.Span.Pos() })
+			return results
+		}
 	}
 	starts := originalStartProjections(startSegments, start, feature)
 	ends := originalEndProjections(endSegments, end, feature)
 	if len(starts) == 0 || len(ends) == 0 {
 		return nil
 	}
+	slices.Sort(starts)
+	slices.Sort(ends)
 	results := make([]MappedSpan, 0, min(len(starts), len(ends)))
 	for i, virtualStart := range starts {
 		endIndex, _ := slices.BinarySearch(ends, virtualStart)
@@ -602,8 +599,8 @@ func originalEndProjections(segments []Segment, end core.TextPos, feature Featur
 	return results
 }
 
-// originalToVirtualSpansInGroup maps a range whose boundaries are known to lie in segments.
-func originalToVirtualSpansInGroup(segments []Segment, start core.TextPos, end core.TextPos, feature Feature) []MappedSpan {
+// originalToVirtualSpansInSegments maps a range fully contained by each segment.
+func originalToVirtualSpansInSegments(segments []Segment, start core.TextPos, end core.TextPos, feature Feature) []MappedSpan {
 	results := make([]MappedSpan, 0, len(segments))
 	for _, segment := range segments {
 		if !supportsFeature(segment, feature) {
@@ -642,30 +639,19 @@ func (m *SpanMap) origIndex() []Segment {
 	return m.origSorted
 }
 
-// segmentsAtOriginalPosition returns the complete duplicate group of mapping segments containing the
-// original-text position pos. segments must be ordered by original start, original end, and virtual start.
+// segmentsAtOriginalPosition returns every mapping segment containing the original-text position pos.
 // Segment ends are exclusive; a segment start, including a zero-length segment, is considered contained.
-// It finds a candidate in O(log n), then scans only the duplicate group. The boolean reports whether any
-// group contains pos.
 func segmentsAtOriginalPosition(segments []Segment, pos core.TextPos) ([]Segment, bool) {
-	index, found := slices.BinarySearchFunc(segments, pos, func(segment Segment, position core.TextPos) int {
-		return int(segment.OriginalStart - position)
-	})
-	if !found {
-		index--
+	var results []Segment
+	for _, segment := range segments {
+		if segment.OriginalStart > pos {
+			break
+		}
+		if pos < segment.OriginalEnd || pos == segment.OriginalStart {
+			results = append(results, segment)
+		}
 	}
-	if index < 0 || !(segments[index].OriginalStart == pos || pos < segments[index].OriginalEnd) {
-		return nil, false
-	}
-	start := index
-	for start > 0 && sameOriginalRange(segments[start-1], segments[index]) {
-		start--
-	}
-	end := start + 1
-	for end < len(segments) && sameOriginalRange(segments[end], segments[start]) {
-		end++
-	}
-	return segments[start:end], true
+	return results, len(results) > 0
 }
 
 type segmentGroupAtOriginalPosition struct {
@@ -673,10 +659,8 @@ type segmentGroupAtOriginalPosition struct {
 	atEnd    bool
 }
 
-// segmentGroupsAtOriginalPosition returns groups of mapping segments containing or touching the original-text
-// position pos. Interior positions return one group. At a boundary between adjacent groups, both the group ending
-// at pos and the group starting at pos are returned. segments must be ordered by original start, original end,
-// then virtual start.
+// segmentGroupsAtOriginalPosition returns every group of equal-range mapping segments containing or touching
+// the original-text position pos. Segment ends are included for point mapping.
 //
 // At a shared boundary, segments ending at pos and segments starting there form separate groups:
 //
@@ -687,37 +671,25 @@ type segmentGroupAtOriginalPosition struct {
 //	             left group       right group
 //	             atEnd: true      atEnd: false
 func segmentGroupsAtOriginalPosition(segments []Segment, pos core.TextPos) []segmentGroupAtOriginalPosition {
-	index, startsAtPosition := slices.BinarySearchFunc(segments, pos, func(segment Segment, position core.TextPos) int {
-		return int(segment.OriginalStart - position)
-	})
-	if startsAtPosition {
-		right, _ := segmentsAtOriginalPosition(segments, pos)
-		var groups []segmentGroupAtOriginalPosition
-		if index > 0 {
-			leftIndex := index - 1
-			if segments[leftIndex].OriginalEnd == pos {
-				leftStart := leftIndex
-				for leftStart > 0 && sameOriginalRange(segments[leftStart-1], segments[leftIndex]) {
-					leftStart--
-				}
-				groups = append(groups, segmentGroupAtOriginalPosition{segments: segments[leftStart:index], atEnd: true})
-			}
+	var groups []segmentGroupAtOriginalPosition
+	for start := 0; start < len(segments); {
+		if segments[start].OriginalStart > pos {
+			break
 		}
-		return append(groups, segmentGroupAtOriginalPosition{segments: right})
+		end := start + 1
+		for end < len(segments) && sameOriginalRange(segments[start], segments[end]) {
+			end++
+		}
+		segment := segments[start]
+		if pos <= segment.OriginalEnd {
+			groups = append(groups, segmentGroupAtOriginalPosition{
+				segments: segments[start:end],
+				atEnd:    pos == segment.OriginalEnd && pos != segment.OriginalStart,
+			})
+		}
+		start = end
 	}
-	if index == 0 {
-		return nil
-	}
-	leftIndex := index - 1
-	segment := segments[leftIndex]
-	if pos > segment.OriginalEnd {
-		return nil
-	}
-	start := leftIndex
-	for start > 0 && sameOriginalRange(segments[start-1], segment) {
-		start--
-	}
-	return []segmentGroupAtOriginalPosition{{segments: segments[start:index], atEnd: pos == segment.OriginalEnd}}
+	return groups
 }
 
 // supportsFeature reports whether segment participates in feature.

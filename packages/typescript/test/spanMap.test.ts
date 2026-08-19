@@ -110,6 +110,37 @@ describe("SpanMap", () => {
         ]);
     });
 
+    test("maps every covering overlapping span", () => {
+        const overlapping = new SpanMap([
+            { virtualStart: 0, virtualEnd: 6, originalStart: 0, originalEnd: 6, kind: SpanMapKind.Verbatim, features: SpanMapFeature.Hover },
+            { virtualStart: 10, virtualEnd: 12, originalStart: 2, originalEnd: 4, kind: SpanMapKind.Verbatim, features: SpanMapFeature.Hover },
+            { virtualStart: 20, virtualEnd: 24, originalStart: 3, originalEnd: 7, kind: SpanMapKind.Verbatim, features: SpanMapFeature.Hover },
+        ]);
+
+        assert.deepEqual(overlapping.originalToVirtualPositions(3, SpanMapFeature.Hover), [
+            { position: 3, fidelity: SpanMapFidelity.Exact },
+            { position: 11, fidelity: SpanMapFidelity.Exact },
+            { position: 20, fidelity: SpanMapFidelity.Exact },
+        ]);
+        assert.deepEqual(overlapping.originalToVirtualSpans({ pos: 3, end: 4 }, SpanMapFeature.Hover), [
+            { range: { pos: 3, end: 4 }, fidelity: SpanMapFidelity.Exact },
+            { range: { pos: 11, end: 12 }, fidelity: SpanMapFidelity.Exact },
+            { range: { pos: 20, end: 21 }, fidelity: SpanMapFidelity.Exact },
+        ]);
+    });
+
+    test("falls back from a disabled containing span", () => {
+        const overlapping = new SpanMap([
+            { virtualStart: 0, virtualEnd: 6, originalStart: 0, originalEnd: 6, kind: SpanMapKind.Verbatim, features: SpanMapFeature.Definition },
+            { virtualStart: 10, virtualEnd: 13, originalStart: 0, originalEnd: 3, kind: SpanMapKind.Verbatim, features: SpanMapFeature.Hover },
+            { virtualStart: 13, virtualEnd: 16, originalStart: 3, originalEnd: 6, kind: SpanMapKind.Verbatim, features: SpanMapFeature.Hover },
+        ]);
+
+        assert.deepEqual(overlapping.originalToVirtualSpans({ pos: 1, end: 5 }, SpanMapFeature.Hover), [
+            { range: { pos: 11, end: 15 }, fidelity: SpanMapFidelity.Approximate },
+        ]);
+    });
+
     test("maps minimal cross-group projections", () => {
         const projections = new SpanMap([
             { virtualStart: 0, virtualEnd: 2, originalStart: 0, originalEnd: 2, kind: SpanMapKind.Verbatim, features: SpanMapFeature.Hover },
