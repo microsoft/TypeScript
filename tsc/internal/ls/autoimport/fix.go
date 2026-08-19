@@ -50,6 +50,9 @@ type addToExistingImportFix struct {
 	namedImport   *newImportBinding
 }
 
+// Edits produces the text edits and a human-readable description for the fix. The returned bool is false
+// when the fix targets a content-mapped file and any edit could not be placed within a single verbatim
+// span, meaning it cannot be safely applied to the original text and the caller should discard it.
 func (f *Fix) Edits(
 	ctx context.Context,
 	file *ast.SourceFile,
@@ -57,20 +60,22 @@ func (f *Fix) Edits(
 	formatOptions lsutil.FormatCodeSettings,
 	converters *lsconv.Converters,
 	preferences lsutil.UserPreferences,
-) ([]*lsproto.TextEdit, string) {
+) ([]*lsproto.TextEdit, string, bool) {
 	locale := locale.FromContext(ctx)
 	tracker := change.NewTracker(ctx, compilerOptions, formatOptions, converters)
 	switch f.Kind {
 	case lsproto.AutoImportFixKindUseNamespace:
 		description := addNamespaceQualifier(f, tracker, file, locale)
-		return tracker.GetChanges()[file.FileName()], description
+		edits, safe := fileEdits(tracker, file)
+		return edits, description, safe
 	case lsproto.AutoImportFixKindAddToExisting:
 		if len(file.Imports()) <= int(f.ImportIndex) {
 			panic("import index out of range")
 		}
 		existingFix := getAddToExistingImportFix(file, f)
 		addToExistingImport(tracker, file, existingFix.importClauseOrBindingPattern, existingFix.defaultImport, core.SingleElementSlice(existingFix.namedImport), preferences)
-		return tracker.GetChanges()[file.FileName()], diagnostics.Update_import_from_0.Localize(locale, f.ModuleSpecifier)
+		edits, safe := fileEdits(tracker, file)
+		return edits, diagnostics.Update_import_from_0.Localize(locale, f.ModuleSpecifier), safe
 	case lsproto.AutoImportFixKindAddNew:
 		var declarations []*ast.Statement
 		defaultImport := core.IfElse(f.ImportKind == lsproto.ImportKindDefault, &newImportBinding{name: f.Name, addAsTypeOnly: f.AddAsTypeOnly}, nil)
@@ -101,21 +106,33 @@ func (f *Fix) Edits(
 		// if qualification != nil {
 		// 	addNamespaceQualifier(tracker, file, qualification)
 		// }
-		return tracker.GetChanges()[file.FileName()], diagnostics.Add_import_from_0.Localize(locale, f.ModuleSpecifier)
+		edits, safe := fileEdits(tracker, file)
+		return edits, diagnostics.Add_import_from_0.Localize(locale, f.ModuleSpecifier), safe
 	case lsproto.AutoImportFixKindPromoteTypeOnly:
 		promotedDeclaration := promoteFromTypeOnly(tracker, f.TypeOnlyAliasDeclaration, compilerOptions, file, preferences)
 		if promotedDeclaration.Kind == ast.KindImportSpecifier {
 			moduleSpec := getModuleSpecifierText(promotedDeclaration.Parent.Parent)
-			return tracker.GetChanges()[file.FileName()], diagnostics.Remove_type_from_import_of_0_from_1.Localize(locale, f.Name, moduleSpec)
+			edits, safe := fileEdits(tracker, file)
+			return edits, diagnostics.Remove_type_from_import_of_0_from_1.Localize(locale, f.Name, moduleSpec), safe
 		}
 		moduleSpec := getModuleSpecifierText(promotedDeclaration)
-		return tracker.GetChanges()[file.FileName()], diagnostics.Remove_type_from_import_declaration_from_0.Localize(locale, moduleSpec)
+		edits, safe := fileEdits(tracker, file)
+		return edits, diagnostics.Remove_type_from_import_declaration_from_0.Localize(locale, moduleSpec), safe
 	case lsproto.AutoImportFixKindJsdocTypeImport:
 		description := addImportType(f, file, preferences, tracker, locale)
-		return tracker.GetChanges()[file.FileName()], description
+		edits, safe := fileEdits(tracker, file)
+		return edits, description, safe
 	default:
 		panic("unimplemented fix edit")
 	}
+}
+
+// fileEdits returns the edits recorded for file, along with whether they are safe to apply. GetChanges
+// drops the edits of any content-mapped file that cannot be faithfully mapped back to the original text,
+// so an empty result with safe == false means the fix could not be represented and must be discarded.
+func fileEdits(tracker *change.Tracker, file *ast.SourceFile) (edits []*lsproto.TextEdit, safe bool) {
+	changes, unmappable := tracker.GetChanges()
+	return changes[file.OriginalFileName()], len(unmappable) == 0
 }
 
 func addImportType(f *Fix, file *ast.SourceFile, preferences lsutil.UserPreferences, tracker *change.Tracker, locale locale.Locale) string {

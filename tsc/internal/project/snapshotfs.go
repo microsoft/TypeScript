@@ -587,10 +587,16 @@ func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeS
 }
 
 // isRelevantFileName returns true if the given URI refers to a file that
-// could affect the project: it has a TypeScript-relevant extension, is a
-// dynamic (e.g. untitled) file, or is currently open as an overlay.
-func (s *snapshotFSBuilder) isRelevantFileName(uri lsproto.DocumentUri) bool {
+// could affect the project: it has a TypeScript-relevant or configured content-mapper extension,
+// is a dynamic (e.g. untitled) file, or is currently open as an overlay.
+func (s *snapshotFSBuilder) isRelevantFileName(uri lsproto.DocumentUri, contentMapperExtensions []string, contentMapperWatchedFiles *collections.Set[tspath.Path]) bool {
 	fileName := uri.FileName()
+	if contentMapperWatchedFiles != nil && contentMapperWatchedFiles.Has(s.toPath(fileName)) {
+		return true
+	}
+	if tspath.FileExtensionIsOneOf(fileName, contentMapperExtensions) {
+		return true
+	}
 	if tspath.IsDynamicFileName(fileName) {
 		return true
 	}
@@ -619,14 +625,14 @@ func isRelevantExtension(ext string) bool {
 // file deletion URIs using the cached directory structure, and filters out
 // watch events for paths that are neither known directories nor have relevant
 // file extensions.
-func (s *snapshotFSBuilder) expandAndFilterWatchEvents(change FileChangeSummary) FileChangeSummary {
+func (s *snapshotFSBuilder) expandAndFilterWatchEvents(change FileChangeSummary, contentMapperExtensions []string, contentMapperWatchedFiles *collections.Set[tspath.Path]) FileChangeSummary {
 	if change.Deleted.Len() > 0 {
 		var filteredDeleted collections.Set[lsproto.DocumentUri]
 		for uri := range change.Deleted.Keys() {
 			path := s.toPath(uri.FileName())
 			if _, ok := s.diskDirectories.Get(path); ok {
 				s.collectFilesRecursive(path, &filteredDeleted)
-			} else if s.isRelevantFileName(uri) || isNodeModulesPath(path) {
+			} else if s.isRelevantFileName(uri, contentMapperExtensions, contentMapperWatchedFiles) || isNodeModulesPath(path) {
 				// node_modules deletions must always be preserved for auto-import registry change handlers.
 				// They won't be in diskDirectories since the registry doesn't use the snapshotFSBuilder for
 				// its file system, since we don't want to retain files read there.
@@ -639,7 +645,7 @@ func (s *snapshotFSBuilder) expandAndFilterWatchEvents(change FileChangeSummary)
 	if change.Changed.Len() > 0 {
 		var filteredChanged collections.Set[lsproto.DocumentUri]
 		for uri := range change.Changed.Keys() {
-			if s.isRelevantFileName(uri) {
+			if s.isRelevantFileName(uri, contentMapperExtensions, contentMapperWatchedFiles) {
 				filteredChanged.Add(uri)
 			}
 		}

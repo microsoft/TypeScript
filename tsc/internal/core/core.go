@@ -543,6 +543,21 @@ func GetScriptKindFromFileName(fileName string) ScriptKind {
 	return ScriptKindUnknown
 }
 
+func GetDefaultExtensionForScriptKind(scriptKind ScriptKind) string {
+	switch scriptKind {
+	case ScriptKindJS:
+		return tspath.ExtensionJs
+	case ScriptKindJSX:
+		return tspath.ExtensionJsx
+	case ScriptKindTSX:
+		return tspath.ExtensionTsx
+	case ScriptKindJSON:
+		return tspath.ExtensionJson
+	default:
+		return tspath.ExtensionTs
+	}
+}
+
 // EnsureScriptKindFromFileName is like GetScriptKindFromFileName, but defaults to
 // ScriptKindTS when the file name has no recognized extension (e.g. files included
 // with allowNonTsExtensions), so the result is always safe to hand to the parser.

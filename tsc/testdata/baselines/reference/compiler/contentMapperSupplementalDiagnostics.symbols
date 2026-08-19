@@ -1,0 +1,5 @@
+//// [tests/cases/compiler/contentMapperSupplementalDiagnostics.ts] ////
+
+=== /component.astro ===
+
+export {};

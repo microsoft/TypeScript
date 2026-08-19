@@ -7,10 +7,13 @@ import (
 	"slices"
 	"time"
 
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/contentmapper"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project/dirty"
 	"github.com/microsoft/typescript-go/internal/project/logging"
@@ -28,15 +31,19 @@ const (
 )
 
 type ProjectCollectionBuilder struct {
-	sessionOptions      *SessionOptions
-	parseCache          *ParseCache
-	extendedConfigCache *ExtendedConfigCache
-	toPath              func(fileName string) tspath.Path
+	sessionOptions          *SessionOptions
+	parseCache              *ParseCache
+	contentMappedParseCache *ContentMappedParseCache
+	extendedConfigCache     *ExtendedConfigCache
+	contentMapperHost       contentmapper.Host
+	toPath                  func(fileName string) tspath.Path
 
 	ctx                                context.Context
 	fs                                 *snapshotFSBuilder
 	base                               *ProjectCollection
 	compilerOptionsForInferredProjects *core.CompilerOptions
+	inferredContentMappers             []*contentmapper.Mapper
+	inferredContentMapperExtensions    []string
 	configFileRegistryBuilder          *configFileRegistryBuilder
 
 	client Client // optional; used for project loading notifications
@@ -61,10 +68,14 @@ func newProjectCollectionBuilder(
 	oldConfigFileRegistry *ConfigFileRegistry,
 	oldAPIState APIState,
 	compilerOptionsForInferredProjects *core.CompilerOptions,
+	inferredContentMappers []*contentmapper.Mapper,
+	inferredContentMapperExtensions []string,
 	sessionOptions *SessionOptions,
 	customConfigFileName string,
 	parseCache *ParseCache,
+	contentMappedParseCache *ContentMappedParseCache,
 	extendedConfigCache *ExtendedConfigCache,
+	contentMapperHost contentmapper.Host,
 	client Client,
 ) *ProjectCollectionBuilder {
 	return &ProjectCollectionBuilder{
@@ -72,9 +83,13 @@ func newProjectCollectionBuilder(
 		fs:                                 fs,
 		toPath:                             fs.toPath,
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
+		inferredContentMappers:             inferredContentMappers,
+		inferredContentMapperExtensions:    inferredContentMapperExtensions,
 		sessionOptions:                     sessionOptions,
 		parseCache:                         parseCache,
+		contentMappedParseCache:            contentMappedParseCache,
 		extendedConfigCache:                extendedConfigCache,
+		contentMapperHost:                  contentMapperHost,
 		base:                               oldProjectCollection,
 		configFileRegistryBuilder:          newConfigFileRegistryBuilder(lsproto.GetClientCapabilities(ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport, fs, oldConfigFileRegistry, extendedConfigCache, newSnapshotID, sessionOptions, customConfigFileName, nil),
 		newSnapshotID:                      newSnapshotID,
@@ -254,11 +269,22 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, logger *logging.LogTree) {
 	b.openFilesChanged = b.openFilesChanged || summary.Opened != "" || summary.Closed.Len() > 0
 
-	changedFiles := make([]tspath.Path, 0, summary.Changed.Len())
-	for uri := range summary.Changed.Keys() {
-		fileName := uri.FileName()
-		path := b.toPath(fileName)
-		changedFiles = append(changedFiles, path)
+	toPaths := func(uris collections.Set[lsproto.DocumentUri]) []tspath.Path {
+		paths := make([]tspath.Path, 0, uris.Len())
+		for uri := range uris.Keys() {
+			paths = append(paths, b.toPath(uri.FileName()))
+		}
+		return paths
+	}
+	changedFiles := toPaths(summary.Changed)
+	deletedFiles := toPaths(summary.Deleted)
+	createdFiles := toPaths(summary.Created)
+	if b.contentMapperHost != nil {
+		allWatchChanges := slices.Concat(changedFiles, deletedFiles, createdFiles)
+		b.forEachProject(func(entry dirty.Value[*Project]) bool {
+			b.refreshContentMapperProjectForChanges(entry, allWatchChanges, summary.HasExcessiveNonCreateWatchEvents(), logger)
+			return true
+		})
 	}
 
 	configChangeLogger := logger.Fork("Checking for changes affecting config files")
@@ -297,24 +323,12 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 
 		// Handle deleted files
 		if summary.Deleted.Len() > 0 {
-			deletedPaths := make([]tspath.Path, 0, summary.Deleted.Len())
-			for uri := range summary.Deleted.Keys() {
-				fileName := uri.FileName()
-				path := b.toPath(fileName)
-				deletedPaths = append(deletedPaths, path)
-			}
-			b.markFilesChanged(entry, deletedPaths, lsproto.FileChangeTypeDeleted, logger)
+			b.markFilesChanged(entry, deletedFiles, lsproto.FileChangeTypeDeleted, logger)
 		}
 
 		// Handle created files
 		if summary.Created.Len() > 0 {
-			createdPaths := make([]tspath.Path, 0, summary.Created.Len())
-			for uri := range summary.Created.Keys() {
-				fileName := uri.FileName()
-				path := b.toPath(fileName)
-				createdPaths = append(createdPaths, path)
-			}
-			b.markFilesChanged(entry, createdPaths, lsproto.FileChangeTypeCreated, logger)
+			b.markFilesChanged(entry, createdFiles, lsproto.FileChangeTypeCreated, logger)
 		}
 
 		return true
@@ -327,6 +341,32 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 		openFileResult := b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
 		b.cleanupConfiguredProjects(&openFileResult.retain, logger)
 	}
+}
+
+func (b *ProjectCollectionBuilder) refreshContentMapperProjectForChanges(entry dirty.Value[*Project], paths []tspath.Path, refreshAll bool, logger *logging.LogTree) {
+	project := entry.Value()
+	if project.Program == nil || project.contentMapperWatchedFiles == nil {
+		return
+	}
+	affected := refreshAll
+	if !affected {
+		if slices.ContainsFunc(paths, project.contentMapperWatchedFiles.Has) {
+			affected = true
+		}
+	}
+	if !affected {
+		return
+	}
+	if contentMapperProject := project.Program.ContentMapperProject(); contentMapperProject != nil {
+		_ = contentMapperProject.Refresh()
+	}
+	entry.Change(func(project *Project) {
+		project.dirty = true
+		project.dirtyFilePath = ""
+		if logger != nil {
+			logger.Logf("Marking project as dirty due to content mapper configuration changes: %s", project.configFilePath)
+		}
+	})
 }
 
 // cleanupConfiguredProjects sweeps the loaded configured projects and unloads those
@@ -446,6 +486,13 @@ func (b *ProjectCollectionBuilder) cleanupInferredProject(logger *logging.LogTre
 	b.updateInferredProjectRoots(b.collectInferredProjectRoots(), logger)
 }
 
+func (b *ProjectCollectionBuilder) DidChangeContentMapperContributions(logger *logging.LogTree) {
+	b.cleanupInferredProject(logger)
+	if b.inferredProject.Value() != nil {
+		b.updateProgram(b.inferredProject, logger)
+	}
+}
+
 func (b *ProjectCollectionBuilder) ensureInferredProjectIncludesClosedFile(fileName string, logger *logging.LogTree) {
 	// Collect existing inferred project roots (open files not in configured projects)
 	// plus this closed file.
@@ -475,7 +522,7 @@ func (b *ProjectCollectionBuilder) DidRequestFile(uri lsproto.DocumentUri, confi
 		// See if we can find a default project without updating a bunch of stuff.
 		if result := b.findDefaultProject(fileName, path); result != nil {
 			hasChanges = b.updateProgram(result, logger) || hasChanges
-			if result.Value() != nil {
+			if result.Value() != nil && result.Value().containsFile(path) {
 				if hasChanges {
 					b.cleanupInferredProject(logger)
 					if b.inferredProject.Value() != nil {
@@ -681,6 +728,22 @@ func (b *ProjectCollectionBuilder) DidChangeCustomConfigFileName(logger *logging
 	b.fileDefaultProjects = nil
 	b.defaultProjectsInvalidated = true
 	b.programStructureChanged = true
+}
+
+func (b *ProjectCollectionBuilder) DidChangeUserPreferences(oldPreferences, newPreferences lsutil.UserPreferences, logger *logging.LogTree) {
+	if oldPreferences.Locale == newPreferences.Locale {
+		return
+	}
+	b.forEachProject(func(entry dirty.Value[*Project]) bool {
+		entry.Change(func(project *Project) {
+			project.dirty = true
+			project.dirtyFilePath = ""
+			if logger != nil {
+				logger.Logf("Marking project as dirty due to locale change: %s", project.configFilePath)
+			}
+		})
+		return true
+	})
 }
 
 func (b *ProjectCollectionBuilder) markProjectsAffectedByConfigChanges(
@@ -1041,6 +1104,7 @@ func (b *ProjectCollectionBuilder) findOrCreateProject(
 }
 
 func (b *ProjectCollectionBuilder) updateInferredProjectRoots(rootFileNames []string, logger *logging.LogTree) bool {
+	rootFileNames = core.Filter(rootFileNames, b.isSupportedInInferredProject)
 	if len(rootFileNames) == 0 {
 		if b.inferredProject.Value() != nil {
 			if logger != nil {
@@ -1053,20 +1117,22 @@ func (b *ProjectCollectionBuilder) updateInferredProjectRoots(rootFileNames []st
 	}
 
 	slices.Sort(rootFileNames)
+	contentMappers := b.inferredContentMappers
 	if b.inferredProject.Value() == nil {
-		b.inferredProject.Set(NewInferredProject(b.sessionOptions.CurrentDirectory, b.compilerOptionsForInferredProjects, rootFileNames, b, logger))
+		b.inferredProject.Set(NewInferredProject(b.sessionOptions.CurrentDirectory, b.compilerOptionsForInferredProjects, rootFileNames, contentMappers, b, logger))
 	} else {
 		newCompilerOptions := b.inferredProject.Value().CommandLine.CompilerOptions()
 		if b.compilerOptionsForInferredProjects != nil {
 			newCompilerOptions = b.compilerOptionsForInferredProjects
 		}
-		newCommandLine := tsoptions.NewParsedCommandLine(newCompilerOptions, rootFileNames, tspath.ComparePathsOptions{
+		newCommandLine := newInferredProjectCommandLine(newCompilerOptions, rootFileNames, contentMappers, tspath.ComparePathsOptions{
 			UseCaseSensitiveFileNames: b.fs.fs.UseCaseSensitiveFileNames(),
 			CurrentDirectory:          b.sessionOptions.CurrentDirectory,
 		})
 		changed := b.inferredProject.ChangeIf(
 			func(p *Project) bool {
-				return !maps.Equal(p.CommandLine.FileNamesByPath(), newCommandLine.FileNamesByPath())
+				return !maps.Equal(p.CommandLine.FileNamesByPath(), newCommandLine.FileNamesByPath()) ||
+					!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers())
 			},
 			func(p *Project) {
 				if logger != nil {
@@ -1080,6 +1146,16 @@ func (b *ProjectCollectionBuilder) updateInferredProjectRoots(rootFileNames []st
 		}
 	}
 	return true
+}
+
+func (b *ProjectCollectionBuilder) isSupportedInInferredProject(fileName string) bool {
+	if tspath.IsDynamicFileName(fileName) || core.GetScriptKindFromFileName(fileName) != core.ScriptKindUnknown {
+		return true
+	}
+	if file := b.fs.GetFile(fileName); file != nil && file.IsOverlay() && tspath.GetAnyExtensionFromPath(fileName, nil, false) == "" {
+		return true
+	}
+	return tspath.FileExtensionIsOneOf(fileName, b.inferredContentMapperExtensions)
 }
 
 // updateProgram updates the program for the given project entry if necessary. It returns
@@ -1136,6 +1212,29 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				oldCheckerPool := project.checkerPool
 				project.host = newCompilerHost(project.currentDirectory, project, b, logger.Fork("CompilerHost"))
 				result := project.CreateProgram()
+				var watchedFiles []string
+				for _, mapper := range project.CommandLine.ContentMappers() {
+					if mapper.Package != "" && mapper.ContributionID == "" && mapper.PackageDirectory != "" {
+						watchedFiles = append(watchedFiles, tspath.CombinePaths(mapper.PackageDirectory, "package.json"))
+					}
+				}
+				if slices.ContainsFunc(result.Program.SourceFiles(), func(file *ast.SourceFile) bool {
+					return file.ContentMapper() != ""
+				}) {
+					project.host.ensureContentMapperProject()
+				}
+				contentMapperProject := project.host.ContentMapperProject()
+				if contentMapperProject != nil {
+					dynamicWatchedFiles, _ := contentMapperProject.WatchedFiles()
+					watchedFiles = append(watchedFiles, dynamicWatchedFiles...)
+				}
+				slices.Sort(watchedFiles)
+				watchedFiles = slices.Compact(watchedFiles)
+				project.contentMapperWatch = project.contentMapperWatch.Clone(watchedFiles)
+				project.contentMapperWatchedFiles = collections.NewSetWithSizeHint[tspath.Path](len(watchedFiles))
+				for _, fileName := range watchedFiles {
+					project.contentMapperWatchedFiles.Add(b.toPath(fileName))
+				}
 				project.Program = result.Program
 				project.checkerPool = result.Program.GetCheckerPool().(*checkerPool)
 				project.ProgramUpdateKind = result.UpdateKind

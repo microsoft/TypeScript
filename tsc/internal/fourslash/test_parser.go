@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/testrunner"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -201,6 +202,7 @@ type TestFileInfo struct {
 	// The contents of the file (with markers, etc stripped out)
 	Content string
 	emit    bool
+	open    bool
 }
 
 // FileName implements lsconv.Script.
@@ -208,14 +210,26 @@ func (t *TestFileInfo) FileName() string {
 	return t.fileName
 }
 
+// OriginalFileName implements lsconv.Script.
+func (t *TestFileInfo) OriginalFileName() string { return t.fileName }
+
 // Text implements lsconv.Script.
 func (t *TestFileInfo) Text() string {
 	return t.Content
 }
 
+// OriginalText implements lsconv.Script.
+func (t *TestFileInfo) OriginalText() string { return t.Content }
+
+// SpanMap implements lsconv.Script.
+func (t *TestFileInfo) SpanMap() *spanmap.SpanMap { return nil }
+
 var _ lsconv.Script = (*TestFileInfo)(nil)
 
-const emitThisFileOption = "emitthisfile"
+const (
+	emitThisFileOption = "emitthisfile"
+	noOpenFileOption   = "noopen"
+)
 
 type parserState int
 
@@ -414,9 +428,9 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 	outputString := output.String()
 	// Set LS positions for markers
 	lineMap := lsconv.ComputeLSPLineStarts(outputString)
-	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *lsconv.LSPLineMap {
+	converters := newTestConverters(lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *lsconv.LSPLineMap {
 		return lineMap
-	})
+	}))
 
 	emit := fileOptions[emitThisFileOption] == "true"
 
@@ -424,6 +438,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 		fileName: fileName,
 		Content:  outputString,
 		emit:     emit,
+		open:     fileOptions[noOpenFileOption] != "true",
 	}
 
 	slices.SortStableFunc(rangeMarkers, func(a, b *RangeMarker) int {

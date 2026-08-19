@@ -2,7 +2,9 @@ package project
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"maps"
 	"math"
 	"runtime"
 	gometrics "runtime/metrics"
@@ -15,6 +17,7 @@ import (
 	osmemory "github.com/mackerelio/go-osstat/memory"
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/typescript-go/internal/contentmapper"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/json"
@@ -32,6 +35,9 @@ import (
 
 type UpdateReason int
 
+// ErrNoProjectForUnknownScriptKind identifies requests for otherwise unsupported files.
+var ErrNoProjectForUnknownScriptKind = errors.New("no project for unknown script kind")
+
 const (
 	UpdateReasonUnknown UpdateReason = iota
 	UpdateReasonDidOpenFile
@@ -45,7 +51,13 @@ const (
 	UpdateReasonRequestedLanguageServiceWithAutoImports
 	UpdateReasonIdleCleanDiskCache
 	UpdateReasonDidChangeConfigFile
+	UpdateReasonDidChangeContentMapperContributions
 )
+
+type ContentMapperContributions struct {
+	Mappers    []*contentmapper.Mapper
+	Extensions []string
+}
 
 // watchRequestTimeout is the maximum time to wait for the client to respond to
 // a WatchFiles or UnwatchFiles request while holding the watches mutex.
@@ -62,8 +74,11 @@ type SessionOptions struct {
 	LoggingEnabled         bool
 	TelemetryEnabled       bool
 	PushDiagnosticsEnabled bool
-	DebounceDelay          time.Duration
-	CheckerPoolOptions     CheckerPoolOptions
+	// RunExternalCode allows configured content mappers to run their (external) processes,
+	// gated on workspace trust by the client. It corresponds to the --runExternalCode CLI flag.
+	RunExternalCode    bool
+	DebounceDelay      time.Duration
+	CheckerPoolOptions CheckerPoolOptions
 }
 
 type SessionInit struct {
@@ -73,7 +88,11 @@ type SessionInit struct {
 	Client        Client
 	Logger        logging.Logger
 	NpmExecutor   ata.NpmExecutor
-	ParseCache    *ParseCache
+	// Spawner launches content mapper processes. It is nil when the host cannot spawn processes.
+	Spawner                 contentmapper.Spawner
+	ContentMapperLogger     contentmapper.Logger
+	ParseCache              *ParseCache
+	ContentMappedParseCache *ContentMappedParseCache
 }
 
 // Session manages the state of an LSP session. It receives textDocument
@@ -90,11 +109,27 @@ type Session struct {
 	client        Client
 	logger        logging.Logger
 	npmExecutor   ata.NpmExecutor
-	fs            *overlayFS
+	// contentMapperHost drives configured content mappers for all projects in the session. It is nil unless
+	// the workspace is trusted (RunExternalCode) and a spawner is available. It is shared so
+	// projects that use the same mapper share a single process, and is closed when the session ends.
+	contentMapperHost contentmapper.Host
+	// contentMapperTimings is the cumulative host snapshot at the most recent session snapshot adoption.
+	contentMapperTimings   contentmapper.Timings
+	contentMapperTimingsMu sync.Mutex
+	fs                     *overlayFS
+
+	// registeredContentMapperSnapshotID is the ID of the newest snapshot whose registration has been
+	// applied. Registration runs from background tasks that may finish out of order, so
+	// contentMapperRegistrationMu serializes updates and the snapshot ID keeps a stale task from
+	// overwriting a newer snapshot's registration.
+	registeredContentMapperExtensions []string
+	registeredContentMapperSnapshotID uint64
+	contentMapperRegistrationMu       sync.Mutex
 
 	// parseCache is the ref-counted cache of source files used when
 	// creating programs during snapshot cloning.
-	parseCache *ParseCache
+	parseCache              *ParseCache
+	contentMappedParseCache *ContentMappedParseCache
 	// extendedConfigCache is the ref-counted cache of tsconfig ASTs
 	// that are used in the "extends" of another tsconfig.
 	extendedConfigCache *ExtendedConfigCache
@@ -128,6 +163,7 @@ type Session struct {
 	scheduledSnapshotUpdateMu         sync.Mutex
 
 	pendingUserConfigChanges bool
+	configureMu              sync.Mutex
 	userConfigRWMu           sync.Mutex
 
 	// pendingFileChanges are accumulated from textDocument/* events delivered
@@ -177,6 +213,20 @@ type Session struct {
 	globalDiagPublishPending atomic.Bool
 }
 
+// newContentMapperHost creates the session's shared content mapper host when the workspace is trusted and
+// a spawner is available; otherwise it returns nil, and configured content mappers are rejected by the
+// config-file gate.
+func newContentMapperHost(init *SessionInit) contentmapper.Host {
+	if !init.Options.RunExternalCode || init.Spawner == nil {
+		return nil
+	}
+	diagnosticLocale := locale.Default
+	if init.Client != nil {
+		diagnosticLocale = init.Client.GetLocale()
+	}
+	return contentmapper.NewHostWithOptions(init.BackgroundCtx, init.Spawner, diagnosticLocale, contentmapper.HostOptions{Logger: init.ContentMapperLogger})
+}
+
 func NewSession(init *SessionInit) *Session {
 	currentDirectory := init.Options.CurrentDirectory
 	useCaseSensitiveFileNames := init.FS.UseCaseSensitiveFileNames()
@@ -188,6 +238,10 @@ func NewSession(init *SessionInit) *Session {
 	if parseCache == nil {
 		parseCache = NewParseCache(RefCountCacheOptions{})
 	}
+	contentMappedParseCache := init.ContentMappedParseCache
+	if contentMappedParseCache == nil {
+		contentMappedParseCache = NewContentMappedParseCache(RefCountCacheOptions{})
+	}
 	extendedConfigCache := NewExtendedConfigCache()
 
 	sessionLogger := init.Logger
@@ -195,18 +249,20 @@ func NewSession(init *SessionInit) *Session {
 		sessionLogger = logging.NewNopLogger()
 	}
 	session := &Session{
-		backgroundCtx:       init.BackgroundCtx,
-		options:             init.Options,
-		toPath:              toPath,
-		client:              init.Client,
-		logger:              sessionLogger,
-		npmExecutor:         init.NpmExecutor,
-		fs:                  overlayFS,
-		parseCache:          parseCache,
-		extendedConfigCache: extendedConfigCache,
-		programCounter:      &programCounter{},
-		backgroundQueue:     background.NewQueue(),
-		startTime:           time.Now(),
+		backgroundCtx:           init.BackgroundCtx,
+		options:                 init.Options,
+		toPath:                  toPath,
+		client:                  init.Client,
+		logger:                  sessionLogger,
+		npmExecutor:             init.NpmExecutor,
+		contentMapperHost:       newContentMapperHost(init),
+		fs:                      overlayFS,
+		parseCache:              parseCache,
+		contentMappedParseCache: contentMappedParseCache,
+		extendedConfigCache:     extendedConfigCache,
+		programCounter:          &programCounter{},
+		backgroundQueue:         background.NewQueue(),
+		startTime:               time.Now(),
 		snapshot: NewSnapshot(
 			uint64(0),
 			&SnapshotFS{
@@ -247,6 +303,9 @@ func NewSession(init *SessionInit) *Session {
 			ThrottleLimit:   5,
 		}, session)
 	}
+	if session.contentMapperHost != nil {
+		session.contentMapperTimings = session.contentMapperHost.Timings()
+	}
 
 	return session
 }
@@ -285,14 +344,23 @@ func (s *Session) Trace(msg string) {
 }
 
 func (s *Session) Configure(config lsutil.UserPreferences) {
+	s.configureMu.Lock()
+	defer s.configureMu.Unlock()
 	s.userConfigRWMu.Lock()
-	defer s.userConfigRWMu.Unlock()
 	s.pendingUserConfigChanges = true
 	oldConfig := s.workspaceUserPreferences
 	s.workspaceUserPreferences = config
+	s.userConfigRWMu.Unlock()
 
 	if config.Locale != "" {
+		oldLocale := s.client.GetLocale()
 		s.client.SetLocale(config.Locale)
+		newLocale := s.client.GetLocale()
+		if oldLocale.String() != newLocale.String() {
+			if s.contentMapperHost != nil {
+				s.contentMapperHost.SetLocale(newLocale)
+			}
+		}
 	}
 
 	// Tell the client to re-request certain commands depending on user preference changes.
@@ -332,6 +400,29 @@ func (s *Session) DidOpenFile(ctx context.Context, uri lsproto.DocumentUri, vers
 	})
 }
 
+// SetContentMapperContributions atomically replaces extension-provided inferred-project mappers and
+// discovers configured projects for matching open documents. Configured projects never consume these mappers.
+func (s *Session) SetContentMapperContributions(ctx context.Context, contributions ContentMapperContributions, documentURIs []lsproto.DocumentUri) {
+	if !s.options.RunExternalCode {
+		return
+	}
+	s.cancelScheduledSnapshotUpdate()
+	s.snapshotUpdateMu.Lock()
+	defer s.snapshotUpdateMu.Unlock()
+	s.pendingFileChangesMu.Lock()
+	changes, overlays := s.flushChangesLocked(ctx)
+	s.pendingFileChangesMu.Unlock()
+	s.UpdateSnapshot(ctx, overlays, SnapshotChange{
+		reason:                     UpdateReasonDidChangeContentMapperContributions,
+		fileChanges:                changes,
+		contentMapperContributions: &contributions,
+		ResourceRequest: ResourceRequest{
+			ConfiguredProjectDocuments: documentURIs,
+		},
+	})
+	_ = s.updateContentMapperRegistrations(ctx, s.Snapshot())
+}
+
 func (s *Session) DidCloseFile(ctx context.Context, uri lsproto.DocumentUri) {
 	s.cancelWarmAutoImportCache()
 	s.scheduleIdleCacheClean()
@@ -345,17 +436,38 @@ func (s *Session) DidCloseFile(ctx context.Context, uri lsproto.DocumentUri) {
 }
 
 func (s *Session) DidChangeFile(ctx context.Context, uri lsproto.DocumentUri, version int32, changes []lsproto.TextDocumentContentChangePartialOrWholeDocument) {
-	s.cancelDiagnosticsRefresh()
 	s.cancelWarmAutoImportCache()
 	s.scheduleIdleCacheClean()
 	s.pendingFileChangesMu.Lock()
-	defer s.pendingFileChangesMu.Unlock()
 	s.pendingFileChanges = append(s.pendingFileChanges, FileChange{
 		Kind:    FileChangeKindChange,
 		URI:     uri,
 		Version: version,
 		Changes: changes,
 	})
+	s.pendingFileChangesMu.Unlock()
+
+	// Editing a content-mapped file changes the program like any source edit, but the client's
+	// pull-diagnostics machinery won't re-request diagnostics for dependent files: the content-mapped file is not
+	// in the diagnostic provider's document selector, so a change to it never triggers the client's
+	// inter-file re-pull. Prompt a workspace refresh so dependents update. We skip the debounce here so the
+	// edit doesn't feel sluggish (normal source edits are pulled per-keystroke client-side); the refresh is
+	// still coalesced. Ordinary source files are handled entirely client-side, so we cancel any pending
+	// refresh for them as before.
+	if s.isContentMapperFile(uri) {
+		s.scheduleDiagnosticsRefresh(0)
+	} else {
+		s.cancelDiagnosticsRefresh()
+	}
+}
+
+// isContentMapperFile reports whether uri is a content-mapped file handled by a configured content mapper, based
+// on the extensions currently registered with the client for text document synchronization.
+func (s *Session) isContentMapperFile(uri lsproto.DocumentUri) bool {
+	snapshot := s.Snapshot()
+	configured := snapshot.ConfigFileRegistry.contentMappers()
+	extensions := append(slices.Clone(configured.extensions), snapshot.inferredProjectContentMapperExtensions...)
+	return tspath.FileExtensionIsOneOf(uri.FileName(), extensions)
 }
 
 func (s *Session) DidSaveFile(ctx context.Context, uri lsproto.DocumentUri) {
@@ -372,7 +484,9 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 	fileChanges := make([]FileChange, 0, len(changes))
 	hasRelevantChange := false
 	hasConfigChange := false
-	configFileRegistry := s.Snapshot().ConfigFileRegistry
+	snapshot := s.Snapshot()
+	configFileRegistry := snapshot.ConfigFileRegistry
+	contentMapperExtensions, contentMapperWatchedFiles := snapshot.contentMapperWatchState()
 	for _, change := range changes {
 		var kind FileChangeKind
 		switch change.Type {
@@ -398,6 +512,10 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 			fileName := change.Uri.FileName()
 			path := s.toPath(fileName).RemoveTrailingDirectorySeparator()
 			pathStr := string(path)
+			if contentMapperWatchedFiles.Has(path) {
+				hasRelevantChange = true
+				continue
+			}
 			i := strings.LastIndexByte(pathStr, '.')
 			if i < 0 || strings.LastIndexByte(pathStr, '/') > i {
 				// Extensionless paths might be directories.
@@ -414,7 +532,8 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 					}
 				}
 			} else {
-				if isRelevantExtension(pathStr[i:]) {
+				if isRelevantExtension(pathStr[i:]) ||
+					tspath.FileExtensionIsOneOf(pathStr, contentMapperExtensions) {
 					hasRelevantChange = true
 				}
 			}
@@ -449,6 +568,13 @@ func (s *Session) DidChangeCompilerOptionsForInferredProjects(ctx context.Contex
 }
 
 func (s *Session) ScheduleDiagnosticsRefresh() {
+	s.scheduleDiagnosticsRefresh(s.options.DebounceDelay)
+}
+
+// scheduleDiagnosticsRefresh schedules a coalesced workspace diagnostics refresh after delay. A delay of
+// 0 refreshes as soon as the background queue runs the task; it is used for interactive edits (e.g. a
+// content-mapped file) where the debounce would make dependent-file diagnostics feel sluggish.
+func (s *Session) scheduleDiagnosticsRefresh(delay time.Duration) {
 	s.diagnosticsRefreshMu.Lock()
 	defer s.diagnosticsRefreshMu.Unlock()
 
@@ -466,15 +592,19 @@ func (s *Session) ScheduleDiagnosticsRefresh() {
 	generation := s.diagnosticsRefreshGeneration
 	s.diagnosticsRefreshCancel = cancel
 
-	// Enqueue the debounced diagnostics refresh
+	// Enqueue the (optionally debounced) diagnostics refresh
 	s.backgroundQueue.Enqueue(debounceCtx, func(ctx context.Context) {
 		defer cancel()
-		// Sleep for the debounce delay
-		select {
-		case <-time.After(s.options.DebounceDelay):
-			// Delay completed, proceed with refresh
-		case <-ctx.Done():
-			// Context was cancelled, newer events arrived
+		if delay > 0 {
+			// Wait out the debounce window; a newer event cancels this one.
+			select {
+			case <-time.After(delay):
+				// Delay completed, proceed with refresh
+			case <-ctx.Done():
+				// Context was cancelled, newer events arrived
+				return
+			}
+		} else if ctx.Err() != nil {
 			return
 		}
 
@@ -1037,6 +1167,12 @@ func (s *Session) getSnapshotAndDefaultProject(ctx context.Context, uri lsproto.
 	)
 	project := snapshot.GetDefaultProject(uri)
 	if project == nil {
+		if callerRef {
+			snapshot.Deref(s)
+		}
+		if file := snapshot.GetFile(uri.FileName()); file != nil && file.Kind() == core.ScriptKindUnknown {
+			return nil, nil, nil, fmt.Errorf("%w: no project found for URI %s", ErrNoProjectForUnknownScriptKind, uri)
+		}
 		return nil, nil, nil, fmt.Errorf("no project found for URI %s", uri)
 	}
 	return snapshot, project, ls.NewLanguageService(project.configFilePath, project.GetProgram(), snapshot, uri.FileName()), nil
@@ -1265,12 +1401,14 @@ func (s *Session) adoptSnapshotChange(baseSnapshot, newSnapshot *Snapshot) {
 		// Session hasn't moved on; adopt the new snapshot. The clone's initial
 		// ref is transferred to become the session's ref for its current snapshot.
 		s.snapshot = newSnapshot
+		oldSnapshot.Deref(s)
+		contentMapperTimings := s.takeContentMapperTimingDelta()
 		s.snapshotMu.Unlock()
 		if s.options.LoggingEnabled {
 			s.logger.Logf("Adopted snapshot %d (parent %d) as current session snapshot (replacing %d)", newSnapshot.id, newSnapshot.parentId, oldSnapshot.id)
 			s.logger.Log(newSnapshot.builderLogs.String())
+			s.logContentMapperTimings(contentMapperTimings)
 		}
-		oldSnapshot.Deref(s)
 	} else {
 		// Session has moved on to a newer snapshot; discard this one.
 		// Release the clone's initial ref. If a handler is still using
@@ -1308,12 +1446,14 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 	if callerRef {
 		newSnapshot.ref()
 	}
+	var contentMapperTimings contentmapper.Timings
 	if newSnapshot != oldSnapshot {
 		// Release the session's reference to the old snapshot. The new snapshot's
 		// clone ref (1) is transferred to become the session's ref for its current
 		// snapshot. Other holders (e.g. active handlers) keep the old snapshot alive
 		// via their own refs until they complete.
 		oldSnapshot.Deref(s)
+		contentMapperTimings = s.takeContentMapperTimingDelta()
 	}
 	s.snapshotMu.Unlock()
 
@@ -1329,6 +1469,7 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 			s.logger.Logf("Adopted snapshot %d (parent %d) as current session snapshot (replacing %d)", newSnapshot.id, newSnapshot.parentId, oldSnapshot.id)
 			s.logger.Log(newSnapshot.builderLogs.String())
 			s.logProjectChanges(oldSnapshot, newSnapshot)
+			s.logContentMapperTimings(contentMapperTimings)
 			s.logger.Log("")
 		}
 		if s.options.WatchEnabled {
@@ -1336,12 +1477,54 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 				s.logger.Log(err)
 			}
 		}
+		_ = s.updateContentMapperRegistrations(ctx, newSnapshot)
 		s.publishProgramDiagnostics(oldSnapshot, newSnapshot)
 		s.sendProjectInfoTelemetryForNewProjects(oldSnapshot, newSnapshot)
 		s.warmAutoImportCache(ctx, change, oldSnapshot, newSnapshot)
 	})
 
 	return newSnapshot
+}
+
+func (s *Session) takeContentMapperTimingDelta() contentmapper.Timings {
+	if s.contentMapperHost == nil {
+		return contentmapper.Timings{}
+	}
+	current := s.contentMapperHost.Timings()
+	s.contentMapperTimingsMu.Lock()
+	delta := current.Since(s.contentMapperTimings)
+	s.contentMapperTimings = current
+	s.contentMapperTimingsMu.Unlock()
+	return delta
+}
+
+func (s *Session) logContentMapperTimings(timings contentmapper.Timings) {
+	if timings.RequestWait == 0 {
+		return
+	}
+	s.logger.Log("Content mapper timings since previous snapshot adoption:")
+	if timings.RequestWait != 0 {
+		s.logger.Logf("  Request wait time: %v", timings.RequestWait)
+	}
+	for _, identity := range slices.Sorted(maps.Keys(timings.Mappers)) {
+		mapper := timings.Mappers[identity]
+		if mapper.Spawn.Count == 0 && mapper.OpenProject.Count == 0 && mapper.CloseProject.Count == 0 && mapper.Transform.Count == 0 {
+			continue
+		}
+		s.logger.Logf("  %s:", identity)
+		if mapper.Spawn.Count != 0 {
+			s.logger.Logf("    Initializations: %d (%v)", mapper.Spawn.Count, mapper.Spawn.Duration+mapper.Initialize.Duration)
+		}
+		if mapper.OpenProject.Count != 0 {
+			s.logger.Logf("    openProject requests: %d (%v)", mapper.OpenProject.Count, mapper.OpenProject.Duration)
+		}
+		if mapper.CloseProject.Count != 0 {
+			s.logger.Logf("    closeProject requests: %d (%v)", mapper.CloseProject.Count, mapper.CloseProject.Duration)
+		}
+		if mapper.Transform.Count != 0 {
+			s.logger.Logf("    Transforms: %d (%v)", mapper.Transform.Count, mapper.Transform.Duration)
+		}
+	}
 }
 
 // WaitForBackgroundTasks waits for all background tasks to complete.
@@ -1431,6 +1614,45 @@ func updateWatch[T any](ctx context.Context, session *Session, logger logging.Lo
 	return errors
 }
 
+// updateContentMapperRegistrations computes the union of content mapper extensions across all loaded
+// configs in the new snapshot and, when the set changes, asks the client to synchronize text documents
+// with those extensions. This is how an otherwise unsupported file (e.g. a `.vue`) begins flowing to the server once a
+// config that maps it is discovered.
+func (s *Session) updateContentMapperRegistrations(ctx context.Context, snapshot *Snapshot) error {
+	if s.client == nil {
+		return nil
+	}
+	contentMappers := snapshot.ConfigFileRegistry.contentMappers()
+	extensions := append(slices.Clone(contentMappers.extensions), snapshot.inferredProjectContentMapperExtensions...)
+	slices.Sort(extensions)
+	extensions = slices.Compact(extensions)
+
+	s.contentMapperRegistrationMu.Lock()
+	defer s.contentMapperRegistrationMu.Unlock()
+	// Background tasks may finish out of order; never let an older snapshot's task overwrite the
+	// registration derived from a newer one.
+	if snapshot.ID() <= s.registeredContentMapperSnapshotID {
+		return nil
+	}
+	if slices.Equal(extensions, s.registeredContentMapperExtensions) {
+		s.registeredContentMapperSnapshotID = snapshot.ID()
+		return nil
+	}
+	// RegisterContentMapperExtensions replaces the prior registration wholesale (unregistering extensions
+	// that are no longer mapped and registering the current set), so an empty set removes the registration
+	// once the last mapping config unloads. On failure we leave the state unadvanced so the next snapshot
+	// update retries.
+	if err := s.client.RegisterContentMapperExtensions(ctx, extensions); err != nil {
+		if s.options.LoggingEnabled {
+			s.logger.Log(err)
+		}
+		return err
+	}
+	s.registeredContentMapperExtensions = extensions
+	s.registeredContentMapperSnapshotID = snapshot.ID()
+	return nil
+}
+
 func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) error {
 	var errors []error
 	start := time.Now()
@@ -1468,10 +1690,12 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 		func(_ tspath.Path, addedProject *Project) {
 			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.programFilesWatch)...)
 			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.typingsWatch)...)
+			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.contentMapperWatch)...)
 		},
 		func(_ tspath.Path, removedProject *Project) {
 			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.programFilesWatch, nil)...)
 			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.typingsWatch, nil)...)
+			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.contentMapperWatch, nil)...)
 		},
 		func(_ tspath.Path, oldProject, newProject *Project) {
 			if oldProject.programFilesWatch.ID() != newProject.programFilesWatch.ID() {
@@ -1487,6 +1711,11 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 				if s.watches.IsPending(newProject.typingsWatch.ID()) {
 					errors = append(errors, updateWatch(ctx, s, s.logger, nil, newProject.typingsWatch)...)
 				}
+			}
+			if oldProject.contentMapperWatch.ID() != newProject.contentMapperWatch.ID() {
+				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.contentMapperWatch, newProject.contentMapperWatch)...)
+			} else if s.watches.IsPending(newProject.contentMapperWatch.ID()) {
+				errors = append(errors, updateWatch(ctx, s, s.logger, nil, newProject.contentMapperWatch)...)
 			}
 		},
 	)
@@ -1519,6 +1748,9 @@ func (s *Session) Close() {
 	// Cancel periodic performance telemetry
 	s.stopPerformanceTelemetry()
 	s.backgroundQueue.Close()
+	if s.contentMapperHost != nil {
+		_ = s.contentMapperHost.Close()
+	}
 }
 
 func (s *Session) flushChanges(ctx context.Context) (FileChangeSummary, map[tspath.Path]*Overlay, map[tspath.Path]*ATAStateChange, *lsutil.UserPreferences) {

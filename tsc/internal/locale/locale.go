@@ -12,6 +12,13 @@ type Locale language.Tag
 
 var Default Locale
 
+func (l Locale) String() string {
+	if l == Default {
+		return ""
+	}
+	return language.Tag(l).String()
+}
+
 func WithLocale(ctx context.Context, locale Locale) context.Context {
 	return context.WithValue(ctx, contextKey(0), locale)
 }

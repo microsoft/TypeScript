@@ -57,6 +57,29 @@ func (c *RefCountCache[K, V, AcquireArgs]) Has(identity K) bool {
 	return ok
 }
 
+// AcquireOrError retrieves an existing entry (incrementing its refcount) or produces a new one via
+// produce. If produce returns an error, no entry is stored and the error is returned, so callers can
+// cache only successful results. produce runs while holding the new entry's lock, so concurrent
+// acquisitions of the same identity that miss serialize on it.
+//
+// The caller is responsible for calling Deref when a value is returned without error.
+func (c *RefCountCache[K, V, AcquireArgs]) AcquireOrError(identity K, produce func() (V, error)) (V, error) {
+	entry, loaded := c.loadOrStoreNewLockedEntry(identity)
+	defer entry.mu.Unlock()
+	if loaded {
+		return entry.value, nil
+	}
+	value, err := produce()
+	if err != nil {
+		// Undo the speculative entry so failures are not cached.
+		entry.refCount = 0
+		c.entries.Delete(identity)
+		return value, err
+	}
+	entry.value = value
+	return value, nil
+}
+
 // Ref increments the reference count for an existing entry.
 // Panics if the entry does not exist.
 func (c *RefCountCache[K, V, AcquireArgs]) Ref(identity K) {

@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
+	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
 	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
@@ -161,7 +162,7 @@ type declarationCompilationContext struct {
 	harnessSettings  *harnessutil.HarnessOptions
 	options          *core.CompilerOptions
 	currentDirectory string
-	configFile       *tsoptions.TsConfigSourceFile
+	config           *tsoptions.ParsedCommandLine
 }
 
 func prepareDeclarationCompilationContext(
@@ -181,7 +182,8 @@ func prepareDeclarationCompilationContext(
 			if result.DTS.Size() == 0 && !options.NoEmit.IsTrue() {
 				panic("Expected at least one declaration file to be emitted when emitDeclarationOnly:true and no errors were generated")
 			}
-		} else if result.DTS.Size() != result.GetNumberOfJSFiles(false /*includeJson*/) {
+		} else if !core.Some(result.Program.GetSourceFiles(), func(file *ast.SourceFile) bool { return file.ContentMapper() != "" }) &&
+			result.DTS.Size() != result.GetNumberOfJSFiles(false /*includeJson*/) {
 			panic("There were no errors and declFiles generated did not match number of js files generated")
 		}
 	}
@@ -214,14 +216,15 @@ func prepareDeclarationCompilationContext(
 			sourceFileName = sourceFile.FileName()
 		}
 
-		dTsFileName := tspath.RemoveFileExtension(sourceFileName) + tspath.GetDeclarationEmitExtensionForPath(sourceFileName)
+		dTsFileName := outputpaths.ChangeToDeclarationExtension(sourceFileName, result.Program.Program())
 		return result.DTS.GetOrZero(dTsFileName)
 	}
 
 	addDtsFile := func(file *harnessutil.TestFile, dtsFiles []*harnessutil.TestFile) []*harnessutil.TestFile {
 		if tspath.IsDeclarationFileName(file.UnitName) || tspath.HasJSONFileExtension(file.UnitName) {
 			dtsFiles = append(dtsFiles, file)
-		} else if tspath.HasTSFileExtension(file.UnitName) || (tspath.HasJSFileExtension(file.UnitName) && options.GetAllowJS()) {
+		} else if sourceFile := result.Program.GetSourceFile(file.UnitName); sourceFile != nil &&
+			(tspath.HasTSFileExtension(file.UnitName) || (tspath.HasJSFileExtension(file.UnitName) && options.GetAllowJS()) || sourceFile.ContentMapper() != "") {
 			declFile := findResultCodeFile(file.UnitName)
 			if declFile != nil && findUnit(declFile.UnitName, declInputFiles) == nil && findUnit(declFile.UnitName, declOtherFiles) == nil {
 				dtsFiles = append(dtsFiles, &harnessutil.TestFile{
@@ -247,7 +250,7 @@ func prepareDeclarationCompilationContext(
 			harnessSettings:  harnessSettings,
 			options:          options,
 			currentDirectory: core.IfElse(len(currentDirectory) > 0, currentDirectory, harnessSettings.CurrentDirectory),
-			configFile:       result.Program.Program().CommandLine().ConfigFile,
+			config:           result.Program.Program().CommandLine(),
 		}
 	}
 	return nil
@@ -264,9 +267,12 @@ func compileDeclarationFiles(t *testing.T, context *declarationCompilationContex
 		return nil
 	}
 	var tsconfig *tsoptions.ParsedCommandLine
-	if context.configFile != nil {
+	if context.config != nil && context.config.ConfigFile != nil {
 		tsconfig = &tsoptions.ParsedCommandLine{
-			ConfigFile: context.configFile,
+			ParsedConfig: &tsoptions.ParsedOptions{
+				ContentMappers: context.config.ContentMappers(),
+			},
+			ConfigFile: context.config.ConfigFile,
 		}
 	}
 	declFileCompilationResult := harnessutil.CompileFilesEx(t,

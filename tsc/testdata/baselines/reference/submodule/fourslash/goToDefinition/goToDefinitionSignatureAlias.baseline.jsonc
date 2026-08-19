@@ -46,7 +46,7 @@
 // f();
 // g();
 // h();
-// const [|i|] = <|() => 0|>;
+// const <|[|i|] = () => 0|>;
 // const iFn = function () { return 0; };
 // const j = i;
 // /*GOTO DEF*/i();
@@ -63,7 +63,7 @@
 // g();
 // h();
 // const i = () => 0;
-// const [|iFn|] = <|function () { return 0; }|>;
+// const <|[|iFn|] = function () { return 0; }|>;
 // const j = i;
 // i();
 // /*GOTO DEF*/iFn();
@@ -80,7 +80,7 @@
 // f();
 // g();
 // h();
-// const [|i|] = <|() => 0|>;
+// const <|[|i|] = () => 0|>;
 // const iFn = function () { return 0; };
 // <|const [|j|] = i;|>
 // i();
@@ -99,7 +99,7 @@
 // i();
 // iFn();
 // j();
-// const o = { [|m|]: <|() => 0|> };
+// const o = { <|[|m|]: () => 0|> };
 // o./*GOTO DEF*/m();
 // const oFn = { mFn: function () { return 0; } };
 // oFn.mFn();
@@ -114,7 +114,7 @@
 // j();
 // const o = { m: () => 0 };
 // o.m();
-// const oFn = { [|mFn|]: <|function () { return 0; }|> };
+// const oFn = { <|[|mFn|]: function () { return 0; }|> };
 // oFn./*GOTO DEF*/mFn();
 // class Component { constructor(props: {}) {} }
 // type ComponentClass = new () => Component;

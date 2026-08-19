@@ -198,18 +198,7 @@ func tryGetAnyFileFromPath(host ModuleSpecifierGenerationHost, path string) bool
 		&core.CompilerOptions{
 			AllowJs: core.TSTrue,
 		},
-		[]tsoptions.FileExtensionInfo{
-			{
-				Extension:      "node",
-				IsMixedContent: false,
-				ScriptKind:     core.ScriptKindExternal,
-			},
-			{
-				Extension:      "json",
-				IsMixedContent: false,
-				ScriptKind:     core.ScriptKindJSON,
-			},
-		},
+		[]string{".node", ".json"},
 	)
 	for _, exts := range extGroups {
 		for _, e := range exts {

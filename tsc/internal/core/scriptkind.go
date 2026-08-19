@@ -6,16 +6,15 @@ package core
 type ScriptKind int32
 
 const (
-	ScriptKindUnknown ScriptKind = iota
-	ScriptKindJS
-	ScriptKindJSX
-	ScriptKindTS
-	ScriptKindTSX
-	ScriptKindExternal
-	ScriptKindJSON
-	/**
-	 * Used on extensions that doesn't define the ScriptKind but the content defines it.
-	 * Deferred extensions are going to be included in all project contexts.
-	 */
-	ScriptKindDeferred
+	ScriptKindUnknown ScriptKind = 0
+	ScriptKindJS      ScriptKind = 1
+	ScriptKindJSX     ScriptKind = 2
+	ScriptKindTS      ScriptKind = 3
+	ScriptKindTSX     ScriptKind = 4
+
+	// Value 5 is reserved (formerly ScriptKindExternal).
+
+	ScriptKindJSON ScriptKind = 6
+
+	// Value 7 is reserved (formerly ScriptKindDeferred).
 )

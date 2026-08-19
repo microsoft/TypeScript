@@ -143,7 +143,7 @@ func getAllIsolatedDeclarationsCodeActions(ctx context.Context, fixContext *Code
 
 	allDiags := getAllDiagnostics(ctx, fixContext.Program, fixContext.SourceFile)
 	for _, diag := range allDiags {
-		if containsErrorCode(isolatedDeclarationsFixErrorCodes, diag.Code()) {
+		if isFixableDiagnostic(diag, isolatedDeclarationsFixErrorCodes) {
 			span := core.NewTextRange(diag.Loc().Pos(), diag.Loc().End())
 			fixer.addTypeAnnotation(span)
 		}
@@ -153,8 +153,8 @@ func getAllIsolatedDeclarationsCodeActions(ctx context.Context, fixContext *Code
 		fixer.addSymbolToExistingImport(sym)
 	}
 
-	changes := changeTracker.GetChanges()
-	fileChanges := changes[fixContext.SourceFile.FileName()]
+	changes, _ := changeTracker.GetChanges()
+	fileChanges := changes[fixContext.SourceFile.OriginalFileName()]
 	if len(fileChanges) == 0 {
 		return nil, nil
 	}
@@ -192,8 +192,8 @@ func tryCodeAction(ctx context.Context, fixContext *CodeFixContext, ch *checker.
 		fixer.addSymbolToExistingImport(sym)
 	}
 
-	changes := changeTracker.GetChanges()
-	fileChanges := changes[fixContext.SourceFile.FileName()]
+	changes, _ := changeTracker.GetChanges()
+	fileChanges := changes[fixContext.SourceFile.OriginalFileName()]
 
 	// Add import edits if import adder has fixes
 	if importAdder != nil && importAdder.HasFixes() {

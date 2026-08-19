@@ -25,6 +25,10 @@ func (noopClient) WatchFiles(ctx context.Context, id WatcherID, watchers []*lspr
 
 func (noopClient) UnwatchFiles(ctx context.Context, id WatcherID) error { return nil }
 
+func (noopClient) RegisterContentMapperExtensions(ctx context.Context, extensions []string) error {
+	return nil
+}
+
 func (noopClient) RefreshDiagnostics(ctx context.Context) error { return nil }
 
 func (noopClient) PublishDiagnostics(ctx context.Context, params *lsproto.PublishDiagnosticsParams) error {

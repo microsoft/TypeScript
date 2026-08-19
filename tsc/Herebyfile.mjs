@@ -352,7 +352,12 @@ const enumDefs = [
     { name: "ModuleDetectionKind", goPrefix: "ModuleDetectionKind", goFile: "internal/core/compileroptions.go", outDir: "_packages/native-preview/src/enums" },
     { name: "NewLineKind", goPrefix: "NewLineKind", goFile: "internal/core/compileroptions.go", outDir: "_packages/native-preview/src/enums" },
     { name: "JsxEmit", goPrefix: "JsxEmit", goFile: "internal/core/compileroptions.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "ScriptKind", goPrefix: "ScriptKind", goFile: "internal/core/scriptkind.go", outDir: "_packages/native-preview/src/enums" },
     { name: "TokenFlags", goPrefix: "TokenFlags", goFile: "internal/ast/tokenflags.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "DiagnosticDirectivePolicy", goPrefix: "MappedDiagnosticDirectivePolicy", goFile: "internal/ast/ast.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "SpanMapKind", goPrefix: "Kind", goFile: "internal/spanmap/spanmap.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "SpanMapFidelity", goPrefix: "Fidelity", goFile: "internal/spanmap/spanmap.go", outDir: "_packages/native-preview/src/enums" },
+    { name: "SpanMapFeature", goPrefix: "Feature", goFile: "internal/spanmap/spanmap.go", outDir: "_packages/native-preview/src/enums" },
     { name: "NodeBuilderFlags", goPrefix: "Flags", goFile: "internal/nodebuilder/types.go", outDir: "_packages/native-preview/src/enums" },
     { name: "CompletionItemKind", goPrefix: "CompletionItemKind", goFile: "internal/lsp/lsproto/lsp_generated.go", outDir: "_packages/native-preview/src/enums" },
     { name: "EmitOnly", goPrefix: "Emit", goFile: "internal/compiler/emitter.go", outDir: "_packages/native-preview/src/enums", excludeMembers: ["OnlyBuilderSignature"] },
@@ -370,7 +375,7 @@ function parseGoConstBlock(block, def) {
     const prefix = def.goPrefix;
     const members = [];
     let iotaCounter = 0;
-    let hasIota = false;
+    let iotaExpression;
 
     for (const rawLine of block.split("\n")) {
         const line = rawLine.replace(/\/\/.*$/, "").trim();
@@ -379,7 +384,7 @@ function parseGoConstBlock(block, def) {
         // Match: PrefixName Type = value  or  PrefixName = value
         const fullMatch = line.match(new RegExp(`^(${prefix}\\w+)\\s+(?:\\S+\\s*)?=\\s*(.+)$`));
         // Match bare iota continuation: just PrefixName
-        const bareMatch = !fullMatch && hasIota
+        const bareMatch = !fullMatch && iotaExpression !== undefined
             ? line.match(new RegExp(`^(${prefix}\\w+)$`))
             : null;
 
@@ -393,12 +398,12 @@ function parseGoConstBlock(block, def) {
         if (def.stringEnum) {
             tsValue = parseGoStringValue(goValue, def.valueReplacements ?? {});
         }
-        else if (goValue === "iota") {
-            tsValue = String(iotaCounter);
-            hasIota = true;
+        else if (goValue.includes("iota")) {
+            iotaExpression = goValue;
+            tsValue = goValue.replace(/\biota\b/g, String(iotaCounter));
         }
-        else if (hasIota && goValue === "") {
-            tsValue = String(iotaCounter);
+        else if (iotaExpression !== undefined && goValue === "") {
+            tsValue = iotaExpression.replace(/\biota\b/g, String(iotaCounter));
         }
         else {
             // Replace Go bitwise NOT (^) with TypeScript (~)

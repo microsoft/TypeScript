@@ -20,6 +20,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/format"
+	"github.com/microsoft/typescript-go/internal/ipc"
 	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/ls/autoimport"
@@ -410,7 +411,7 @@ type Session struct {
 }
 
 // Ensure Session implements Handler
-var _ Handler = (*Session)(nil)
+var _ ipc.Handler = (*Session)(nil)
 
 // SessionOptions configures an API session.
 type SessionOptions struct {
@@ -1205,7 +1206,6 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 		nil, /*existingOptions*/
 		configFileName,
 		nil, /*resolutionStack*/
-		nil, /*extraFileExtensions*/
 		nil, /*extendedConfigCache*/
 	)
 	return NewConfigFileResponse(parsedCommandLine), nil
@@ -1233,7 +1233,6 @@ func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfig
 		nil, /*existingOptionsRaw*/
 		configFileName,
 		nil, /*resolutionStack*/
-		nil, /*extraFileExtensions*/
 		nil, /*extendedConfigCache*/
 	)
 	return NewConfigFileResponse(parsedCommandLine), nil
@@ -2010,22 +2009,42 @@ func (s *Session) handleGetImportAdderEdits(ctx context.Context, params *GetImpo
 	if !importAdder.HasFixes() {
 		return []*TextEdit{}, nil
 	}
-	return toAPITextEdits(sourceFile, workingSnapshot.Converters(), importAdder.Edits()), nil
+	return toAPITextEdits(sourceFile, importAdder.Edits()), nil
 }
 
-func toAPITextEdits(sourceFile *ast.SourceFile, converters *lsconv.Converters, edits []*lsproto.TextEdit) []*TextEdit {
-	positionMap := sourceFile.GetPositionMap()
+func toAPITextEdits(sourceFile *ast.SourceFile, edits []*lsproto.TextEdit) []*TextEdit {
+	originalText := sourceFile.OriginalText()
+	lineMap := lsconv.ComputeLSPLineStarts(originalText)
+	positionMap := ast.ComputePositionMap(originalText)
 	result := make([]*TextEdit, len(edits))
 	for i, edit := range edits {
-		start := converters.LineAndCharacterToPosition(sourceFile, edit.Range.Start)
-		end := converters.LineAndCharacterToPosition(sourceFile, edit.Range.End)
+		start, ok := originalTextOffset(lineMap, edit.Range.Start, len(originalText))
+		if !ok {
+			return nil
+		}
+		end, ok := originalTextOffset(lineMap, edit.Range.End, len(originalText))
+		if !ok {
+			return nil
+		}
 		result[i] = &TextEdit{
-			Pos:     positionMap.UTF8ToUTF16(int(start)),
-			End:     positionMap.UTF8ToUTF16(int(end)),
+			Pos:     positionMap.UTF8ToUTF16(start),
+			End:     positionMap.UTF8ToUTF16(end),
 			NewText: edit.NewText,
 		}
 	}
 	return result
+}
+
+func originalTextOffset(lineMap *lsconv.LSPLineMap, position lsproto.Position, textLength int) (int, bool) {
+	line := int(position.Line)
+	if line < 0 || line >= len(lineMap.LineStarts) {
+		return 0, false
+	}
+	offset := int(lineMap.LineStarts[line]) + int(position.Character)
+	if offset < int(lineMap.LineStarts[line]) || offset > textLength {
+		return 0, false
+	}
+	return offset, true
 }
 
 // resolveTypePropertyOfType resolves a type property of type `Type` and returns a type response.

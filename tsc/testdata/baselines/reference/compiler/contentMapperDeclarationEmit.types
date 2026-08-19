@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/contentMapperDeclarationEmit.ts] ////
+
+=== /component.y.z ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export interface ComponentProps {
+    label: string;
+>label : string
+}
+export declare const component: ComponentProps;
+>component : ComponentProps
+
+=== /main.ts ===
+export { component } from "./component.y.z";
+>component : import("./component.y.z").ComponentProps
+

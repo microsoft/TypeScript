@@ -15,6 +15,7 @@ import (
 // Mock host for testing
 type mockModuleSpecifierGenerationHost struct {
 	currentDir                string
+	contentMapperExtensions   []string
 	useCaseSensitiveFileNames bool
 	symlinkCache              *symlinks.KnownSymlinks
 }
@@ -41,6 +42,10 @@ func (h *mockModuleSpecifierGenerationHost) GetGlobalTypingsCacheLocation() stri
 
 func (h *mockModuleSpecifierGenerationHost) CommonSourceDirectory() string {
 	return h.currentDir
+}
+
+func (h *mockModuleSpecifierGenerationHost) ContentMapperExtensions() []string {
+	return h.contentMapperExtensions
 }
 
 func (h *mockModuleSpecifierGenerationHost) GetProjectReferenceFromSource(path tspath.Path) *tsoptions.SourceOutputAndProjectReference {

@@ -1,0 +1,16 @@
+//// [/component.y.z] (ScriptKind: ScriptKindTS, ContentMapper: [.y.z])
+--- Original ---
+export interface ComponentProps {
+    label: string;
+}
+export declare const component: ComponentProps;
+--- Transformed ---
+const __VERSION = "1.0.0";
+export interface ComponentProps {
+    label: string;
+}
+export declare const component: ComponentProps;
+
+=== Diagnostics ===
+
+<no content>

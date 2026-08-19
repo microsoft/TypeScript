@@ -8,17 +8,23 @@ import (
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/format"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 )
 
 func (l *LanguageService) toLSProtoTextEdits(file *ast.SourceFile, changes []core.TextChange) []*lsproto.TextEdit {
 	result := make([]*lsproto.TextEdit, 0, len(changes))
 	for _, c := range changes {
+		lspRange, fidelity := l.converters.ToLSPRange(file, core.NewTextRange(c.Pos(), c.End()))
+		if !fidelity.IsExact() {
+			return nil
+		}
 		result = append(result, &lsproto.TextEdit{
 			NewText: c.NewText,
-			Range:   l.createLspRangeFromBounds(c.Pos(), c.End(), file),
+			Range:   lspRange,
 		})
 	}
 	return result
@@ -53,11 +59,16 @@ func (l *LanguageService) ProvideFormatDocumentRange(
 	}
 	_, file := l.getProgramAndFile(documentURI)
 	formatOpts := lsutil.FromLSFormatOptions(l.FormatOptions(), options)
+	ranges := lsconv.FromLSPRangeForSourceFile(l.converters, file, r, spanmap.FeatureFormatting)
+	if len(ranges) != 1 || !ranges[0].Fidelity.IsExact() {
+		return lsproto.TextEditsOrNull{}, nil
+	}
+	file = ranges[0].Script
 	edits := l.toLSProtoTextEdits(file, l.getFormattingEditsForRange(
 		ctx,
 		file,
 		formatOpts,
-		l.converters.FromLSPRange(file, r),
+		ranges[0].Span,
 	))
 	return lsproto.TextEditsOrNull{TextEdits: &edits}, nil
 }
@@ -74,11 +85,16 @@ func (l *LanguageService) ProvideFormatDocumentOnType(
 	}
 	_, file := l.getProgramAndFile(documentURI)
 	formatOpts := lsutil.FromLSFormatOptions(l.FormatOptions(), options)
+	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, position, spanmap.FeatureFormatting)
+	if len(positions) != 1 || !positions[0].Fidelity.IsExact() {
+		return lsproto.TextEditsOrNull{}, nil
+	}
+	file = positions[0].Script
 	edits := l.toLSProtoTextEdits(file, l.getFormattingEditsAfterKeystroke(
 		ctx,
 		file,
 		formatOpts,
-		int(l.converters.LineAndCharacterToPosition(file, position)),
+		int(positions[0].Position),
 		character,
 	))
 	return lsproto.TextEditsOrNull{TextEdits: &edits}, nil

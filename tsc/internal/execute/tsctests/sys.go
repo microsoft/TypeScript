@@ -19,6 +19,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/execute/tsc"
 	"github.com/microsoft/typescript-go/internal/execute/watchmanager"
 	"github.com/microsoft/typescript-go/internal/locale"
+	"github.com/microsoft/typescript-go/internal/testutil/contentmappertest"
 	"github.com/microsoft/typescript-go/internal/testutil/fsbaselineutil"
 	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
 	"github.com/microsoft/typescript-go/internal/testutil/stringtestutil"
@@ -220,6 +221,10 @@ func (s *TestSys) Writer() io.Writer {
 	return s.currentWrite
 }
 
+func (s *TestSys) ErrorWriter() io.Writer {
+	return s.currentWrite
+}
+
 func (s *TestSys) WriteOutputIsTTY() bool {
 	return true
 }
@@ -233,6 +238,13 @@ func (s *TestSys) GetWidthOfTerminal() int {
 
 func (s *TestSys) GetEnvironmentVariable(name string) string {
 	return s.env[name]
+}
+
+// Spawn serves the fake content mappers in-process, selecting the implementation by the exec command the
+// mapper package declares (see internal/testutil/contentmappertest), so tests exercise the full IPC stack
+// without spawning a subprocess.
+func (s *TestSys) Spawn(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
+	return contentmappertest.NewSpawner().Spawn(command, dir, stderr)
 }
 
 func (s *TestSys) OnEmittedFiles(result *compiler.EmitResult, mTimesCache *collections.SyncMap[tspath.Path, time.Time]) {

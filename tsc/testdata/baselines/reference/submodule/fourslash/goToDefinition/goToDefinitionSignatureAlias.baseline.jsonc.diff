@@ -1,0 +1,47 @@
+--- old.goToDefinitionSignatureAlias.baseline.jsonc
++++ new.goToDefinitionSignatureAlias.baseline.jsonc
+@@= skipped -45, +45 lines =@@
+ // f();
+ // g();
+ // h();
+-// const [|i|] = <|() => 0|>;
++// const <|[|i|] = () => 0|>;
+ // const iFn = function () { return 0; };
+ // const j = i;
+ // /*GOTO DEF*/i();
+@@= skipped -17, +17 lines =@@
+ // g();
+ // h();
+ // const i = () => 0;
+-// const [|iFn|] = <|function () { return 0; }|>;
++// const <|[|iFn|] = function () { return 0; }|>;
+ // const j = i;
+ // i();
+ // /*GOTO DEF*/iFn();
+@@= skipped -17, +17 lines =@@
+ // f();
+ // g();
+ // h();
+-// const [|i|] = <|() => 0|>;
++// const <|[|i|] = () => 0|>;
+ // const iFn = function () { return 0; };
+ // <|const [|j|] = i;|>
+ // i();
+@@= skipped -19, +19 lines =@@
+ // i();
+ // iFn();
+ // j();
+-// const o = { [|m|]: <|() => 0|> };
++// const o = { <|[|m|]: () => 0|> };
+ // o./*GOTO DEF*/m();
+ // const oFn = { mFn: function () { return 0; } };
+ // oFn.mFn();
+@@= skipped -15, +15 lines =@@
+ // j();
+ // const o = { m: () => 0 };
+ // o.m();
+-// const oFn = { [|mFn|]: <|function () { return 0; }|> };
++// const oFn = { <|[|mFn|]: function () { return 0; }|> };
+ // oFn./*GOTO DEF*/mFn();
+ // class Component { constructor(props: {}) {} }
+ // type ComponentClass = new () => Component;

@@ -72,7 +72,7 @@ func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]*C
 
 	var actions []*CodeAction
 	for _, fixInfo := range info {
-		edits, description := fixInfo.fix.Edits(
+		edits, description, ok := fixInfo.fix.Edits(
 			ctx,
 			fixContext.SourceFile,
 			fixContext.Program.Options(),
@@ -81,12 +81,14 @@ func getImportCodeActions(ctx context.Context, fixContext *CodeFixContext) ([]*C
 			fixContext.LS.UserPreferences(),
 		)
 
-		actions = append(actions, &CodeAction{
-			Description:       description,
-			Changes:           edits,
-			FixID:             importFixID,
-			FixAllDescription: diagnostics.Add_all_missing_imports.Localize(locale.FromContext(ctx)),
-		})
+		if ok {
+			actions = append(actions, &CodeAction{
+				Description:       description,
+				Changes:           edits,
+				FixID:             importFixID,
+				FixAllDescription: diagnostics.Add_all_missing_imports.Localize(locale.FromContext(ctx)),
+			})
+		}
 	}
 	return actions, nil
 }
@@ -100,7 +102,7 @@ func getAllImportCodeActions(ctx context.Context, fixContext *CodeFixContext) (*
 
 	var importDiags []*ast.Diagnostic
 	for _, diag := range allDiagnostics {
-		if containsErrorCode(importFixErrorCodes, diag.Code()) {
+		if isFixableDiagnostic(diag, importFixErrorCodes) {
 			importDiags = append(importDiags, diag)
 		}
 	}
@@ -310,7 +312,10 @@ func getFixesInfoForNonUMDImport(ctx context.Context, fixContext *CodeFixContext
 	var allInfo []*fixInfo
 
 	// Compute usage position for JSDoc import type fixes
-	usagePosition := fixContext.LS.converters.PositionToLineAndCharacter(fixContext.SourceFile, core.TextPos(scanner.GetTokenPosOfNode(symbolToken, fixContext.SourceFile, false)))
+	usagePosition, fidelity := fixContext.LS.converters.ToLSPPosition(fixContext.SourceFile, core.TextPos(scanner.GetTokenPosOfNode(symbolToken, fixContext.SourceFile, false)))
+	if !fidelity.IsExact() {
+		return nil
+	}
 
 	for _, sn := range symbolNames {
 		// Type-only imports are handled by the promotion code path, not the auto-import path.

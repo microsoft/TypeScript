@@ -36,8 +36,15 @@ type Diagnostic struct {
 	loc      core.TextRange
 	code     int32
 	category diagnostics.Category
+	// source, when non-empty, is a custom prefix (e.g. a content mapper's name) shown instead of "TS"
+	// before the code. It marks the diagnostic as coming from an external source whose ranges point
+	// into the file's original, untransformed text.
+	source string
 	// Original message; may be nil.
-	message            *diagnostics.Message
+	message *diagnostics.Message
+	// messageText is an already-localized message used when message is nil, e.g. a diagnostic
+	// deserialized from an external process that owns its own localization.
+	messageText        string
 	messageKey         diagnostics.Key
 	messageArgs        []string
 	messageChain       []*Diagnostic
@@ -55,6 +62,8 @@ func (d *Diagnostic) Len() int                                  { return d.loc.L
 func (d *Diagnostic) Loc() core.TextRange                       { return d.loc }
 func (d *Diagnostic) Code() int32                               { return d.code }
 func (d *Diagnostic) Category() diagnostics.Category            { return d.category }
+func (d *Diagnostic) Source() string                            { return d.source }
+func (d *Diagnostic) MessageText() string                       { return d.messageText }
 func (d *Diagnostic) MessageKey() diagnostics.Key               { return d.messageKey }
 func (d *Diagnostic) MessageArgs() []string                     { return d.messageArgs }
 func (d *Diagnostic) MessageChain() []*Diagnostic               { return d.messageChain }
@@ -69,6 +78,12 @@ func (d *Diagnostic) SetLocation(loc core.TextRange)                   { d.loc =
 func (d *Diagnostic) SetCategory(category diagnostics.Category)        { d.category = category }
 func (d *Diagnostic) SetSkippedOnNoEmit()                              { d.skippedOnNoEmit = true }
 func (d *Diagnostic) SetRepopulateInfo(info *RepopulateDiagnosticInfo) { d.repopulateInfo = info }
+
+func (d *Diagnostic) SetExternalData(source string, messageText string) *Diagnostic {
+	d.source = source
+	d.messageText = messageText
+	return d
+}
 
 func (d *Diagnostic) SetMessageChain(messageChain []*Diagnostic) *Diagnostic {
 	d.messageChain = messageChain
@@ -100,12 +115,52 @@ func (d *Diagnostic) Clone() *Diagnostic {
 }
 
 func (d *Diagnostic) Localize(locale locale.Locale) string {
-	return diagnostics.Localize(locale, d.message, d.messageKey, d.messageArgs...)
+	if d.message == nil && d.messageText != "" {
+		return d.messageText
+	}
+	return diagnostics.Localize(locale, d.message, d.messageKey, d.displayMessageArgs()...)
 }
 
 // For debugging only.
 func (d *Diagnostic) String() string {
-	return diagnostics.Localize(locale.Default, d.message, d.messageKey, d.messageArgs...)
+	if d.message == nil && d.messageText != "" {
+		return d.messageText
+	}
+	return diagnostics.Localize(locale.Default, d.message, d.messageKey, d.displayMessageArgs()...)
+}
+
+// displayMessageArgs substitutes the original text for a complete alias span when a diagnostic argument
+// exactly matches the virtual alias. Stored arguments remain unchanged for code fixes and serialization.
+func (d *Diagnostic) displayMessageArgs() []string {
+	if d.file == nil || d.source != "" {
+		return d.messageArgs
+	}
+	segment, ok := d.file.SpanMap().AliasForVirtualSpan(d.loc)
+	if !ok {
+		return d.messageArgs
+	}
+	virtualText := d.file.Text()
+	originalText := d.file.OriginalText()
+	if segment.VirtualStart < 0 || segment.VirtualEnd > core.TextPos(len(virtualText)) ||
+		segment.OriginalStart < 0 || segment.OriginalEnd > core.TextPos(len(originalText)) {
+		return d.messageArgs
+	}
+	virtualName := virtualText[segment.VirtualStart:segment.VirtualEnd]
+	originalName := originalText[segment.OriginalStart:segment.OriginalEnd]
+	var result []string
+	for i, arg := range d.messageArgs {
+		if arg != virtualName {
+			continue
+		}
+		if result == nil {
+			result = slices.Clone(d.messageArgs)
+		}
+		result[i] = originalName
+	}
+	if result != nil {
+		return result
+	}
+	return d.messageArgs
 }
 
 func NewDiagnosticFromSerialized(
@@ -159,6 +214,21 @@ func NewDiagnosticChain(chain *Diagnostic, message *diagnostics.Message, args ..
 
 func NewCompilerDiagnostic(message *diagnostics.Message, args ...any) *Diagnostic {
 	return NewDiagnostic(nil, core.UndefinedTextRange(), message, args...)
+}
+
+// NewExternalDiagnostic creates a diagnostic reported by an external source such as a content mapper.
+// The message text is already localized (the external source owns localization) and the code is shown
+// with the given source prefix (e.g. "vue") instead of "TS". The location refers to the file's original,
+// untransformed content.
+func NewExternalDiagnostic(file *SourceFile, loc core.TextRange, source string, category diagnostics.Category, code int32, messageText string) *Diagnostic {
+	return &Diagnostic{
+		file:        file,
+		loc:         loc,
+		code:        code,
+		category:    category,
+		source:      source,
+		messageText: messageText,
+	}
 }
 
 type DiagnosticsCollection struct {
@@ -315,12 +385,17 @@ func EqualDiagnosticsNoRelatedInfo(d1, d2 *Diagnostic) bool {
 	return getDiagnosticPath(d1) == getDiagnosticPath(d2) &&
 		d1.Loc() == d2.Loc() &&
 		d1.Code() == d2.Code() &&
+		d1.Category() == d2.Category() &&
+		d1.Source() == d2.Source() &&
 		getDiagnosticMessageIdentity(d1) == getDiagnosticMessageIdentity(d2) &&
 		slices.Equal(d1.MessageArgs(), d2.MessageArgs()) &&
 		slices.EqualFunc(d1.MessageChain(), d2.MessageChain(), equalMessageChain)
 }
 
 func getDiagnosticMessageIdentity(diagnostic *Diagnostic) string {
+	if diagnostic.MessageText() != "" {
+		return diagnostic.MessageText()
+	}
 	if diagnostic.message != nil && diagnostic.Code() == -1 {
 		return diagnostic.message.String()
 	}
@@ -397,6 +472,14 @@ func CompareDiagnostics(d1, d2 *Diagnostic) int {
 		return c
 	}
 	c = int(d1.Code()) - int(d2.Code())
+	if c != 0 {
+		return c
+	}
+	c = int(d1.Category()) - int(d2.Category())
+	if c != 0 {
+		return c
+	}
+	c = strings.Compare(d1.Source(), d2.Source())
 	if c != 0 {
 		return c
 	}

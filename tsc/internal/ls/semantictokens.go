@@ -1,17 +1,20 @@
 package ls
 
 import (
+	"cmp"
 	"context"
 	"fmt"
 	"slices"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/checker"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 )
 
 // tokenTypes defines the order of token types for encoding
@@ -125,17 +128,27 @@ func SemanticTokensLegend(clientCapabilities lsproto.ResolvedSemanticTokensClien
 func (l *LanguageService) ProvideSemanticTokens(ctx context.Context, documentURI lsproto.DocumentUri) (lsproto.SemanticTokensResponse, error) {
 	program, file := l.getProgramAndFile(documentURI)
 
-	c, done := program.GetTypeCheckerForFile(ctx, file)
-	defer done()
-
-	tokens := l.collectSemanticTokens(ctx, c, file, program)
+	supplemental := file.SupplementalSourceFiles()
+	files := make([]*ast.SourceFile, 1, 1+len(supplemental))
+	files[0] = file
+	files = append(files, supplemental...)
+	tokens := make([]semanticToken, 0, len(files))
+	for _, projection := range files {
+		c, done := program.GetTypeCheckerForFile(ctx, projection)
+		for _, token := range l.collectSemanticTokens(ctx, c, projection, program) {
+			token.file = projection
+			tokens = append(tokens, token)
+		}
+		done()
+	}
+	sortSemanticTokens(tokens, l.converters)
 
 	if len(tokens) == 0 {
 		return lsproto.SemanticTokensOrNull{}, nil
 	}
 
 	// Convert to LSP format (relative encoding)
-	encoded := encodeSemanticTokens(ctx, tokens, file, l.converters)
+	encoded := encodeSemanticTokens(ctx, tokens, l.converters)
 
 	return lsproto.SemanticTokensOrNull{
 		SemanticTokens: &lsproto.SemanticTokens{
@@ -147,20 +160,28 @@ func (l *LanguageService) ProvideSemanticTokens(ctx context.Context, documentURI
 func (l *LanguageService) ProvideSemanticTokensRange(ctx context.Context, documentURI lsproto.DocumentUri, rng lsproto.Range) (lsproto.SemanticTokensRangeResponse, error) {
 	program, file := l.getProgramAndFile(documentURI)
 
-	c, done := program.GetTypeCheckerForFile(ctx, file)
-	defer done()
-
-	start := int(l.converters.LineAndCharacterToPosition(file, rng.Start))
-	end := int(l.converters.LineAndCharacterToPosition(file, rng.End))
-
-	tokens := l.collectSemanticTokensInRange(ctx, c, file, program, start, end)
+	mappedRanges := lsconv.FromLSPRangeIntersectingForSourceFile(l.converters, file, rng, spanmap.FeatureSemanticTokens)
+	tokens := make([]semanticToken, 0, len(mappedRanges))
+	var seen collections.Set[semanticToken]
+	for _, mapped := range mappedRanges {
+		projection := mapped.Script
+		c, done := program.GetTypeCheckerForFile(ctx, projection)
+		for _, token := range l.collectSemanticTokensInRange(ctx, c, projection, program, mapped.Span.Pos(), mapped.Span.End()) {
+			token.file = projection
+			if seen.AddIfAbsent(token) {
+				tokens = append(tokens, token)
+			}
+		}
+		done()
+	}
+	sortSemanticTokens(tokens, l.converters)
 
 	if len(tokens) == 0 {
 		return lsproto.SemanticTokensOrNull{}, nil
 	}
 
 	// Convert to LSP format (relative encoding)
-	encoded := encodeSemanticTokens(ctx, tokens, file, l.converters)
+	encoded := encodeSemanticTokens(ctx, tokens, l.converters)
 
 	return lsproto.SemanticTokensOrNull{
 		SemanticTokens: &lsproto.SemanticTokens{
@@ -169,8 +190,31 @@ func (l *LanguageService) ProvideSemanticTokensRange(ctx context.Context, docume
 	}, nil
 }
 
+func sortSemanticTokens(tokens []semanticToken, converters *lsconv.Converters) {
+	slices.SortFunc(tokens, func(a, b semanticToken) int {
+		aRange, _ := semanticTokenLSPRange(a, converters)
+		bRange, _ := semanticTokenLSPRange(b, converters)
+		if result := cmp.Compare(aRange.Start.Line, bRange.Start.Line); result != 0 {
+			return result
+		}
+		if result := cmp.Compare(aRange.Start.Character, bRange.Start.Character); result != 0 {
+			return result
+		}
+		if result := cmp.Compare(a.file.Path(), b.file.Path()); result != 0 {
+			return result
+		}
+		return cmp.Compare(a.node.Pos(), b.node.Pos())
+	})
+}
+
+func semanticTokenLSPRange(token semanticToken, converters *lsconv.Converters) (lsproto.Range, spanmap.Fidelity) {
+	start := scanner.GetTokenPosOfNode(token.node, token.file, false)
+	return converters.ToLSPRangeForFeature(token.file, core.NewTextRange(start, token.node.End()), spanmap.FeatureSemanticTokens)
+}
+
 type semanticToken struct {
 	node          *ast.Node
+	file          *ast.SourceFile
 	tokenType     tokenType
 	tokenModifier tokenModifier
 }
@@ -476,7 +520,7 @@ func isInfinityOrNaNString(text string) bool {
 
 // encodeSemanticTokens encodes tokens into the LSP format using relative positioning.
 // It filters tokens based on client capabilities, only including types and modifiers that the client supports.
-func encodeSemanticTokens(ctx context.Context, tokens []semanticToken, file *ast.SourceFile, converters *lsconv.Converters) []uint32 {
+func encodeSemanticTokens(ctx context.Context, tokens []semanticToken, converters *lsconv.Converters) []uint32 {
 	// Build mapping from server token types/modifiers to client indices
 	typeMapping := make(map[tokenType]uint32)
 	modifierMapping := make(map[lsproto.SemanticTokenModifier]uint32)
@@ -523,13 +567,14 @@ func encodeSemanticTokens(ctx context.Context, tokens []semanticToken, file *ast
 			}
 		}
 
-		// Use GetTokenPosOfNode to skip trivia (comments, whitespace) before the identifier
-		tokenStart := scanner.GetTokenPosOfNode(token.node, file, false)
-		tokenEnd := token.node.End()
-
-		// Convert both start and end positions to LSP coordinates, then compute length
-		startPos := converters.PositionToLineAndCharacter(file, core.TextPos(tokenStart))
-		endPos := converters.PositionToLineAndCharacter(file, core.TextPos(tokenEnd))
+		// Semantic tokens must describe one concrete source segment; synthesized and cross-segment
+		// tokens do not identify a coherent token in the original text.
+		lspRange, fidelity := semanticTokenLSPRange(token, converters)
+		if !fidelity.IsExact() {
+			continue
+		}
+		startPos := lspRange.Start
+		endPos := lspRange.End
 
 		// Length is the character difference when on the same line
 		var tokenLength uint32
@@ -537,16 +582,20 @@ func encodeSemanticTokens(ctx context.Context, tokens []semanticToken, file *ast
 			tokenLength = endPos.Character - startPos.Character
 		} else {
 			panic(fmt.Sprintf("semantic tokens: token spans multiple lines: start=(%d,%d) end=(%d,%d) for token at offset %d",
-				startPos.Line, startPos.Character, endPos.Line, endPos.Character, tokenStart))
+				startPos.Line, startPos.Character, endPos.Line, endPos.Character, token.node.Pos()))
 		}
 
 		line := startPos.Line
 		char := startPos.Character
 
-		// Verify that positions are strictly increasing (visitor walks in order)
-		if len(encoded) > 0 && (line < prevLine || (line == prevLine && char <= prevChar)) {
+		// Multiple virtual projections can describe the same original token; LSP requires one entry per
+		// start position, so retain the first after sorting.
+		if len(encoded) > 0 && line == prevLine && char == prevChar {
+			continue
+		}
+		if len(encoded) > 0 && (line < prevLine || line == prevLine && char < prevChar) {
 			panic(fmt.Sprintf("semantic tokens: positions must be strictly increasing: prev=(%d,%d) current=(%d,%d) for token at offset %d",
-				prevLine, prevChar, line, char, tokenStart))
+				prevLine, prevChar, line, char, token.node.Pos()))
 		}
 
 		// Encode as: [deltaLine, deltaChar, length, tokenType, tokenModifiers]

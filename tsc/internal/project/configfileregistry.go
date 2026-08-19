@@ -3,7 +3,9 @@ package project
 import (
 	"iter"
 	"maps"
+	"slices"
 
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -19,7 +21,41 @@ type ConfigFileRegistry struct {
 	configFileNames map[tspath.Path]*configFileNames
 	// customConfigFileName is the custom config file name preference that was
 	// used when building this registry's configFileNames cache.
-	customConfigFileName string
+	customConfigFileName        string
+	allConfiguredContentMappers *configuredContentMappers
+}
+
+type configuredContentMappers struct {
+	extensions []string
+}
+
+func collectConfiguredContentMappers(commandLines []*tsoptions.ParsedCommandLine) *configuredContentMappers {
+	var seenExtensions collections.Set[string]
+	var extensions []string
+	for _, commandLine := range commandLines {
+		for _, mapper := range commandLine.ContentMappers() {
+			for _, extension := range mapper.Definition.Extensions {
+				if seenExtensions.AddIfAbsent(extension) {
+					extensions = append(extensions, extension)
+				}
+			}
+		}
+	}
+	slices.Sort(extensions)
+	return &configuredContentMappers{extensions: extensions}
+}
+
+func (c *ConfigFileRegistry) contentMappers() *configuredContentMappers {
+	if c.allConfiguredContentMappers != nil {
+		return c.allConfiguredContentMappers
+	}
+	var commandLines []*tsoptions.ParsedCommandLine
+	for _, entry := range c.configs {
+		if entry.commandLine != nil {
+			commandLines = append(commandLines, entry.commandLine)
+		}
+	}
+	return collectConfiguredContentMappers(commandLines)
 }
 
 type configFileEntry struct {
@@ -113,9 +149,10 @@ func (c *ConfigFileRegistry) GetAncestorConfigFileName(path tspath.Path, higherT
 // clone creates a shallow copy of the configFileRegistry.
 func (c *ConfigFileRegistry) clone() *ConfigFileRegistry {
 	return &ConfigFileRegistry{
-		configs:              maps.Clone(c.configs),
-		configFileNames:      maps.Clone(c.configFileNames),
-		customConfigFileName: c.customConfigFileName,
+		configs:                     maps.Clone(c.configs),
+		configFileNames:             maps.Clone(c.configFileNames),
+		customConfigFileName:        c.customConfigFileName,
+		allConfiguredContentMappers: c.allConfiguredContentMappers,
 	}
 }
 

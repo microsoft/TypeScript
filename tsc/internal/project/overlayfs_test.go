@@ -184,7 +184,7 @@ func TestProcessChanges(t *testing.T) {
 		assert.Equal(t, fh.Kind(), core.ScriptKindTS)
 	})
 
-	t.Run("open extensionless file with unknown language kind falls back to TS", func(t *testing.T) {
+	t.Run("open extensionless file preserves unknown script kind", func(t *testing.T) {
 		t.Parallel()
 		fs := createOverlayFS()
 		uri := lsproto.DocumentUri("file:///script")
@@ -201,16 +201,16 @@ func TestProcessChanges(t *testing.T) {
 
 		fh := fs.getFile(uri.FileName())
 		assert.Assert(t, fh != nil)
-		assert.Equal(t, fh.Kind(), core.ScriptKindTS)
+		assert.Equal(t, fh.Kind(), core.ScriptKindUnknown)
 	})
 
-	t.Run("extensionless disk file falls back to TS", func(t *testing.T) {
+	t.Run("extensionless disk file preserves unknown script kind", func(t *testing.T) {
 		t.Parallel()
 		fs := createOverlayFS()
 
 		fh := fs.getFile("/script")
 		assert.Assert(t, fh != nil)
-		assert.Equal(t, fh.Kind(), core.ScriptKindTS)
+		assert.Equal(t, fh.Kind(), core.ScriptKindUnknown)
 	})
 
 	t.Run("watch change on overlay marks as not matching disk", func(t *testing.T) {

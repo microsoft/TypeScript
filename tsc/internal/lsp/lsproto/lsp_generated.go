@@ -8794,6 +8794,9 @@ type InitializationOptions struct {
 	// The initial log verbosity level, matching the client's output channel log level at startup. Subsequent changes are sent via custom/setLogVerbosity.
 	LogVerbosity *LogVerbosity `json:"logVerbosity,omitzero"`
 
+	// RunExternalCode allows configured content mappers to launch external plugin processes. The client should set this only for trusted workspaces. It mirrors the --runExternalCode CLI flag.
+	RunExternalCode *bool `json:"runExternalCode,omitzero"`
+
 	// The level at which we track flaky diagnostics, if at all.
 	TrackFlakyDiagnostics *DiagnosticFlakeLogLevel `json:"trackFlakyDiagnostics,omitzero"`
 }
@@ -8840,6 +8843,9 @@ type CompletionItemData struct {
 
 	// The position where the completion was requested.
 	Position int32 `json:"position,omitzero" lsp:"nullable"`
+
+	// Zero-based index into the canonical file's supplemental source files. Absent when the completion was requested in the canonical file.
+	SupplementalFileIndex *int32 `json:"supplementalFileIndex,omitzero"`
 
 	// Special source value for disambiguation.
 	Source string `json:"source,omitzero" lsp:"nullable"`
@@ -9095,6 +9101,81 @@ type ProjectInfoResult struct {
 var _ json.UnmarshalerFrom = (*ProjectInfoResult)(nil)
 
 func (s *ProjectInfoResult) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// Inline content mapper manifest supplied by a contributing extension.
+type ContentMapperManifest struct {
+	// Human-readable mapper name.
+	Name string `json:"name" lsp:"required"`
+
+	// Mapper version.
+	Version *string `json:"version,omitzero"`
+
+	// Executable and arguments used to start the mapper.
+	Exec []string `json:"exec" lsp:"required"`
+
+	// Absolute working directory for the mapper process.
+	Cwd *string `json:"cwd,omitzero"`
+
+	// Compiler option names forwarded to the mapper.
+	CompilerOptions *[]string `json:"compilerOptions,omitzero"`
+
+	// Whether the mapper uses project-scoped dynamic configuration.
+	DynamicConfig *bool `json:"dynamicConfig,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ContentMapperManifest)(nil)
+
+func (s *ContentMapperManifest) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// Content mapper configuration contributed to inferred projects.
+type InferredProjectContentMapperContribution struct {
+	// Options supplied to transforms in inferred projects.
+	Options *map[string]any `json:"options,omitzero"`
+
+	// Inline manifest for the mapper contributed to inferred projects.
+	Manifest *ContentMapperManifest `json:"manifest" lsp:"required"`
+}
+
+var _ json.UnmarshalerFrom = (*InferredProjectContentMapperContribution)(nil)
+
+func (s *InferredProjectContentMapperContribution) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// One extension-provided content mapper contribution.
+type ContentMapperContribution struct {
+	// Unique identifier of the contributor extension.
+	ContributorId string `json:"contributorId" lsp:"required"`
+
+	// File extensions handled by this content mapper.
+	Extensions []string `json:"extensions" lsp:"required"`
+
+	// When present, contributes this mapper to inferred projects.
+	InferredProjectContribution *InferredProjectContentMapperContribution `json:"inferredProjectContribution,omitzero"`
+}
+
+var _ json.UnmarshalerFrom = (*ContentMapperContribution)(nil)
+
+func (s *ContentMapperContribution) UnmarshalJSONFrom(dec *json.Decoder) error {
+	return unmarshalStruct(s, dec)
+}
+
+// Parameters for the custom/setContentMapperContributions request.
+type SetContentMapperContributionsParams struct {
+	// Complete replacement set of active extension contributions.
+	Contributions []*ContentMapperContribution `json:"contributions" lsp:"required"`
+
+	// Currently open documents matching contributed extensions.
+	OpenDocuments []TextDocumentIdentifier `json:"openDocuments" lsp:"required"`
+}
+
+var _ json.UnmarshalerFrom = (*SetContentMapperContributionsParams)(nil)
+
+func (s *SetContentMapperContributionsParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	return unmarshalStruct(s, dec)
 }
 
@@ -11023,6 +11104,8 @@ const (
 	MethodCustomInitializeAPISession Method = "custom/initializeAPISession"
 	// Returns project information (e.g. the tsconfig.json path) for a given text document.
 	MethodCustomProjectInfo Method = "custom/projectInfo"
+	// Replaces extension content mapper contributions and discovers configured mappers for matching open documents.
+	MethodCustomSetContentMapperContributions Method = "custom/setContentMapperContributions"
 	// Request to get source definitions for a position.
 	MethodCustomTextDocumentSourceDefinition Method = "custom/textDocument/sourceDefinition"
 	// Request to get document highlights across multiple files.
@@ -11571,6 +11654,12 @@ type CustomProjectInfoResponse = *ProjectInfoResult
 
 // Type mapping info for `custom/projectInfo`
 var CustomProjectInfoInfo = RequestInfo[*ProjectInfoParams, CustomProjectInfoResponse]{Method: MethodCustomProjectInfo}
+
+// Response type for `custom/setContentMapperContributions`
+type CustomSetContentMapperContributionsResponse = Null
+
+// Type mapping info for `custom/setContentMapperContributions`
+var CustomSetContentMapperContributionsInfo = RequestInfo[*SetContentMapperContributionsParams, CustomSetContentMapperContributionsResponse]{Method: MethodCustomSetContentMapperContributions}
 
 // Response type for `custom/textDocument/sourceDefinition`
 type CustomTextDocumentSourceDefinitionResponse = *LocationOrLocationsOrDefinitionLinksOrNull

@@ -519,6 +519,10 @@ export function readUnifiedConfig<T>(
     return vscode.workspace.getConfiguration(fallbackSection, scope).get<T>(fallbackKey, defaultValue);
 }
 
+export function contentMappersEnabled(): boolean {
+    return vscode.workspace.getConfiguration("js/ts").get<boolean>("contentMappers.enabled", true);
+}
+
 export interface PackageInfo {
     name: string;
     version: string;

@@ -6,8 +6,10 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/typescript-go/internal/contentmapper"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -100,6 +102,62 @@ func parseProjectReference(json any) *projectReferenceParseResult {
 	return nil
 }
 
+func parseContentMapper(value any) (*contentmapper.Mapper, []*ast.Diagnostic) {
+	v, ok := value.(*collections.OrderedMap[string, any])
+	if !ok {
+		return nil, nil
+	}
+	var errors []*ast.Diagnostic
+	mapper := &contentmapper.Mapper{}
+	if pkg, ok := v.Get("package"); ok {
+		if str, isString := pkg.(string); isString && str != "" {
+			mapper.Package = str
+		} else {
+			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.package", "string"))
+		}
+	} else {
+		errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.package", "string"))
+	}
+	if extensions, ok := v.Get("extensions"); ok {
+		if strs, isStringArray := parseStringArrayStrict(extensions); isStringArray {
+			mapper.Definition.Extensions = strs
+		} else {
+			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.extensions", "string[]"))
+		}
+	} else {
+		errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.extensions", "string[]"))
+	}
+	if options, ok := v.Get("options"); ok {
+		if _, isObject := options.(*collections.OrderedMap[string, any]); !isObject {
+			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.options", "object"))
+		} else {
+			mapper.Options, _ = json.Marshal(options)
+		}
+	}
+	if len(errors) != 0 {
+		return nil, errors
+	}
+	return mapper, errors
+}
+
+// parseStringArrayStrict returns the string slice and true only if value is an array whose
+// elements are all strings. A missing element or wrong element type yields false.
+func parseStringArrayStrict(value any) ([]string, bool) {
+	arr, ok := value.([]any)
+	if !ok {
+		return nil, false
+	}
+	result := make([]string, 0, len(arr))
+	for _, v := range arr {
+		str, ok := v.(string)
+		if !ok {
+			return nil, false
+		}
+		result = append(result, str)
+	}
+	return result, true
+}
+
 func parseJsonToStringKey(json any) *collections.OrderedMap[string, any] {
 	result := collections.NewOrderedMapWithSizeHint[string, any](6)
 	if m, ok := json.(*collections.OrderedMap[string, any]); ok {
@@ -114,6 +172,9 @@ func parseJsonToStringKey(json any) *collections.OrderedMap[string, any] {
 		}
 		if v, ok := m.Get("references"); ok {
 			result.Set("references", v)
+		}
+		if v, ok := m.Get("contentMappers"); ok {
+			result.Set("contentMappers", v)
 		}
 		if v, ok := m.Get("extends"); ok {
 			if str, ok := v.(string); ok {
@@ -487,6 +548,8 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.Quiet = ParseTristate(value)
 	case "checkers":
 		allOptions.Checkers = parseNumber(value)
+	case "runExternalCode":
+		allOptions.RunExternalCode = ParseTristate(value)
 	default:
 		// different than any key above
 		return false

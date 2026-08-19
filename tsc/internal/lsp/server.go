@@ -17,9 +17,11 @@ import (
 	"github.com/microsoft/typescript-go/internal/api"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/contentmapper"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/fswatch"
+	"github.com/microsoft/typescript-go/internal/ipc"
 	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/jsonrpc"
 	"github.com/microsoft/typescript-go/internal/locale"
@@ -31,6 +33,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/pprof"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/project/ata"
+	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"golang.org/x/sync/errgroup"
@@ -47,6 +50,9 @@ type ServerOptions struct {
 	TypingsLocation    string
 	ParseCache         *project.ParseCache
 	NpmInstall         func(cwd string, args []string) ([]byte, error)
+	// Spawn launches a child process, returning its stdio as an io.ReadWriteCloser (Read is its stdout,
+	// Write is its stdin). It is nil when the host cannot spawn processes. Currently used for content mappers.
+	Spawn              func(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error)
 	ProgressDelay      time.Duration // delay before showing progress UI; 0 means no delay
 	SetParentProcessID func(parentPID int)
 }
@@ -70,6 +76,7 @@ func NewServer(opts *ServerOptions) *Server {
 		typingsLocation:       opts.TypingsLocation,
 		parseCache:            opts.ParseCache,
 		npmInstall:            opts.NpmInstall,
+		spawn:                 opts.Spawn,
 		startWatchdog:         opts.SetParentProcessID,
 		initComplete:          make(chan struct{}),
 		progressDelay:         opts.ProgressDelay,
@@ -197,6 +204,14 @@ type Server struct {
 	telemetryEnabled bool
 	watcherID        atomic.Uint32
 	watchers         collections.SyncSet[project.WatcherID]
+
+	// contentMapperRegistrationMu serializes RegisterContentMapperExtensions so the method is correctly
+	// synchronized on its own rather than relying on callers to serialize it. It guards
+	// contentMapperExtensionsRegistered and the ordered unregister/register requests the method sends.
+	contentMapperRegistrationMu sync.Mutex
+	// contentMapperExtensionsRegistered records whether a content mapper text document sync
+	// registration is currently active with the client, so it can be replaced or removed.
+	contentMapperExtensionsRegistered bool
 	// builtinWatcher is non-nil when the server is running its own
 	// in-process file watcher instead of using LSP-based watching. It
 	// is enabled when the client lacks DynamicRegistration for
@@ -225,6 +240,7 @@ type Server struct {
 	parseCache *project.ParseCache
 
 	npmInstall func(cwd string, args []string) ([]byte, error)
+	spawn      func(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error)
 
 	cpuProfiler pprof.CPUProfiler
 
@@ -302,6 +318,383 @@ func (s *Server) UnwatchFiles(ctx context.Context, id project.WatcherID) error {
 	}
 
 	return fmt.Errorf("no file watcher exists with ID %s", id)
+}
+
+const (
+	contentMapperDidOpenRegistrationID           = "content-mapper-did-open"
+	contentMapperDidChangeRegistrationID         = "content-mapper-did-change"
+	contentMapperDidCloseRegistrationID          = "content-mapper-did-close"
+	contentMapperDiagnosticRegistrationID        = "content-mapper-diagnostic"
+	contentMapperHoverRegistrationID             = "content-mapper-hover"
+	contentMapperSignatureHelpRegistrationID     = "content-mapper-signature-help"
+	contentMapperDefinitionRegistrationID        = "content-mapper-definition"
+	contentMapperTypeDefinitionRegistrationID    = "content-mapper-type-definition"
+	contentMapperImplementationRegistrationID    = "content-mapper-implementation"
+	contentMapperReferencesRegistrationID        = "content-mapper-references"
+	contentMapperDocumentHighlightRegistrationID = "content-mapper-document-highlight"
+	contentMapperCompletionRegistrationID        = "content-mapper-completion"
+	contentMapperRenameRegistrationID            = "content-mapper-rename"
+	contentMapperSemanticTokensRegistrationID    = "content-mapper-semantic-tokens"
+	contentMapperDocumentSymbolRegistrationID    = "content-mapper-document-symbol"
+	contentMapperFoldingRangeRegistrationID      = "content-mapper-folding-range"
+	contentMapperSelectionRangeRegistrationID    = "content-mapper-selection-range"
+	contentMapperInlayHintRegistrationID         = "content-mapper-inlay-hint"
+	contentMapperCodeLensRegistrationID          = "content-mapper-code-lens"
+	contentMapperCodeActionRegistrationID        = "content-mapper-code-action"
+	contentMapperFormattingRegistrationID        = "content-mapper-formatting"
+	contentMapperRangeFormattingRegistrationID   = "content-mapper-range-formatting"
+	contentMapperOnTypeFormattingRegistrationID  = "content-mapper-on-type-formatting"
+	contentMapperLinkedEditingRegistrationID     = "content-mapper-linked-editing"
+	contentMapperCallHierarchyRegistrationID     = "content-mapper-call-hierarchy"
+	contentMapperWillRenameFilesRegistrationID   = "content-mapper-will-rename-files"
+)
+
+func (s *Server) supportsContentMapperRegistration(id string) bool {
+	switch id {
+	case contentMapperDidOpenRegistrationID, contentMapperDidChangeRegistrationID, contentMapperDidCloseRegistrationID:
+		return s.clientCapabilities.TextDocument.Synchronization.DynamicRegistration
+	case contentMapperDiagnosticRegistrationID:
+		return s.clientCapabilities.TextDocument.Diagnostic.DynamicRegistration
+	case contentMapperHoverRegistrationID:
+		return s.clientCapabilities.TextDocument.Hover.DynamicRegistration
+	case contentMapperSignatureHelpRegistrationID:
+		return s.clientCapabilities.TextDocument.SignatureHelp.DynamicRegistration
+	case contentMapperDefinitionRegistrationID:
+		return s.clientCapabilities.TextDocument.Definition.DynamicRegistration
+	case contentMapperTypeDefinitionRegistrationID:
+		return s.clientCapabilities.TextDocument.TypeDefinition.DynamicRegistration
+	case contentMapperImplementationRegistrationID:
+		return s.clientCapabilities.TextDocument.Implementation.DynamicRegistration
+	case contentMapperReferencesRegistrationID:
+		return s.clientCapabilities.TextDocument.References.DynamicRegistration
+	case contentMapperDocumentHighlightRegistrationID:
+		return s.clientCapabilities.TextDocument.DocumentHighlight.DynamicRegistration
+	case contentMapperCompletionRegistrationID:
+		return s.clientCapabilities.TextDocument.Completion.DynamicRegistration
+	case contentMapperRenameRegistrationID:
+		return s.clientCapabilities.TextDocument.Rename.DynamicRegistration
+	case contentMapperSemanticTokensRegistrationID:
+		return s.clientCapabilities.TextDocument.SemanticTokens.DynamicRegistration
+	case contentMapperDocumentSymbolRegistrationID:
+		return s.clientCapabilities.TextDocument.DocumentSymbol.DynamicRegistration
+	case contentMapperFoldingRangeRegistrationID:
+		return s.clientCapabilities.TextDocument.FoldingRange.DynamicRegistration
+	case contentMapperSelectionRangeRegistrationID:
+		return s.clientCapabilities.TextDocument.SelectionRange.DynamicRegistration
+	case contentMapperInlayHintRegistrationID:
+		return s.clientCapabilities.TextDocument.InlayHint.DynamicRegistration
+	case contentMapperCodeLensRegistrationID:
+		return s.clientCapabilities.TextDocument.CodeLens.DynamicRegistration
+	case contentMapperCodeActionRegistrationID:
+		return s.clientCapabilities.TextDocument.CodeAction.DynamicRegistration
+	case contentMapperFormattingRegistrationID:
+		return s.clientCapabilities.TextDocument.Formatting.DynamicRegistration
+	case contentMapperRangeFormattingRegistrationID:
+		return s.clientCapabilities.TextDocument.RangeFormatting.DynamicRegistration
+	case contentMapperOnTypeFormattingRegistrationID:
+		return s.clientCapabilities.TextDocument.OnTypeFormatting.DynamicRegistration
+	case contentMapperLinkedEditingRegistrationID:
+		return s.clientCapabilities.TextDocument.LinkedEditingRange.DynamicRegistration
+	case contentMapperCallHierarchyRegistrationID:
+		return s.clientCapabilities.TextDocument.CallHierarchy.DynamicRegistration
+	case contentMapperWillRenameFilesRegistrationID:
+		return s.clientCapabilities.Workspace.FileOperations.DynamicRegistration &&
+			s.clientCapabilities.Workspace.FileOperations.WillRename
+	default:
+		return false
+	}
+}
+
+// RegisterContentMapperExtensions implements project.Client. It dynamically registers text document
+// synchronization and pull diagnostics for the given otherwise unsupported file extensions so the editor forwards their
+// open/change/close notifications to the server and requests diagnostics for them. It is called with the
+// full desired set each time it changes; an empty slice removes any prior registration.
+func (s *Server) RegisterContentMapperExtensions(ctx context.Context, extensions []string) error {
+	if !s.clientCapabilities.TextDocument.Synchronization.DynamicRegistration {
+		return nil
+	}
+
+	s.contentMapperRegistrationMu.Lock()
+	defer s.contentMapperRegistrationMu.Unlock()
+
+	if s.contentMapperExtensionsRegistered {
+		unregistrations := []*lsproto.Unregistration{
+			{Id: contentMapperDidOpenRegistrationID, Method: string(lsproto.MethodTextDocumentDidOpen)},
+			{Id: contentMapperDidChangeRegistrationID, Method: string(lsproto.MethodTextDocumentDidChange)},
+			{Id: contentMapperDidCloseRegistrationID, Method: string(lsproto.MethodTextDocumentDidClose)},
+			{Id: contentMapperDiagnosticRegistrationID, Method: string(lsproto.MethodTextDocumentDiagnostic)},
+			{Id: contentMapperHoverRegistrationID, Method: string(lsproto.MethodTextDocumentHover)},
+			{Id: contentMapperSignatureHelpRegistrationID, Method: string(lsproto.MethodTextDocumentSignatureHelp)},
+			{Id: contentMapperDefinitionRegistrationID, Method: string(lsproto.MethodTextDocumentDefinition)},
+			{Id: contentMapperTypeDefinitionRegistrationID, Method: string(lsproto.MethodTextDocumentTypeDefinition)},
+			{Id: contentMapperImplementationRegistrationID, Method: string(lsproto.MethodTextDocumentImplementation)},
+			{Id: contentMapperReferencesRegistrationID, Method: string(lsproto.MethodTextDocumentReferences)},
+			{Id: contentMapperDocumentHighlightRegistrationID, Method: string(lsproto.MethodTextDocumentDocumentHighlight)},
+			{Id: contentMapperCompletionRegistrationID, Method: string(lsproto.MethodTextDocumentCompletion)},
+			{Id: contentMapperRenameRegistrationID, Method: string(lsproto.MethodTextDocumentRename)},
+			{Id: contentMapperSemanticTokensRegistrationID, Method: string(lsproto.MethodTextDocumentSemanticTokens)},
+			{Id: contentMapperDocumentSymbolRegistrationID, Method: string(lsproto.MethodTextDocumentDocumentSymbol)},
+			{Id: contentMapperFoldingRangeRegistrationID, Method: string(lsproto.MethodTextDocumentFoldingRange)},
+			{Id: contentMapperSelectionRangeRegistrationID, Method: string(lsproto.MethodTextDocumentSelectionRange)},
+			{Id: contentMapperInlayHintRegistrationID, Method: string(lsproto.MethodTextDocumentInlayHint)},
+			{Id: contentMapperCodeLensRegistrationID, Method: string(lsproto.MethodTextDocumentCodeLens)},
+			{Id: contentMapperCodeActionRegistrationID, Method: string(lsproto.MethodTextDocumentCodeAction)},
+			{Id: contentMapperFormattingRegistrationID, Method: string(lsproto.MethodTextDocumentFormatting)},
+			{Id: contentMapperRangeFormattingRegistrationID, Method: string(lsproto.MethodTextDocumentRangeFormatting)},
+			{Id: contentMapperOnTypeFormattingRegistrationID, Method: string(lsproto.MethodTextDocumentOnTypeFormatting)},
+			{Id: contentMapperLinkedEditingRegistrationID, Method: string(lsproto.MethodTextDocumentLinkedEditingRange)},
+			{Id: contentMapperCallHierarchyRegistrationID, Method: string(lsproto.MethodTextDocumentPrepareCallHierarchy)},
+			{Id: contentMapperWillRenameFilesRegistrationID, Method: string(lsproto.MethodWorkspaceWillRenameFiles)},
+		}
+		unregistrations = slices.DeleteFunc(unregistrations, func(registration *lsproto.Unregistration) bool {
+			return !s.supportsContentMapperRegistration(registration.Id)
+		})
+		if _, err := sendClientRequest(ctx, s, lsproto.ClientUnregisterCapabilityInfo, &lsproto.UnregistrationParams{
+			Unregisterations: unregistrations,
+		}); err != nil {
+			return fmt.Errorf("failed to unregister content mapper text document sync: %w", err)
+		}
+		s.contentMapperExtensionsRegistered = false
+	}
+
+	if len(extensions) == 0 {
+		return nil
+	}
+
+	filters := make([]lsproto.TextDocumentFilterLanguageOrSchemeOrPattern, 0, len(extensions))
+	for _, ext := range extensions {
+		filters = append(filters, lsproto.TextDocumentFilterLanguageOrSchemeOrPattern{
+			Pattern: &lsproto.TextDocumentFilterPattern{
+				Pattern: lsproto.PatternOrRelativePattern{Pattern: new("**/*" + ext)},
+			},
+		})
+	}
+	selector := lsproto.DocumentSelectorOrNull{DocumentSelector: &filters}
+	contentMapperFileRenameFilters := make([]*lsproto.FileOperationFilter, 0, len(extensions))
+	for _, extension := range extensions {
+		contentMapperFileRenameFilters = append(contentMapperFileRenameFilters, &lsproto.FileOperationFilter{
+			Scheme: new("file"),
+			Pattern: &lsproto.FileOperationPattern{
+				Glob: "**/*" + extension,
+			},
+		})
+	}
+
+	registrations := []*lsproto.Registration{
+		{
+			Id: contentMapperDidOpenRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentDidOpen: &lsproto.TextDocumentRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperDidChangeRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentDidChange: &lsproto.TextDocumentChangeRegistrationOptions{
+					DocumentSelector: selector,
+					SyncKind:         lsproto.TextDocumentSyncKindIncremental,
+				},
+			},
+		},
+		{
+			Id: contentMapperDidCloseRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentDidClose: &lsproto.TextDocumentRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperDiagnosticRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentDiagnostic: &lsproto.DiagnosticRegistrationOptions{
+					DocumentSelector:      selector,
+					Identifier:            new("typescript"),
+					InterFileDependencies: true,
+				},
+			},
+		},
+		{
+			Id: contentMapperHoverRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentHover: &lsproto.HoverRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperSignatureHelpRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentSignatureHelp: &lsproto.SignatureHelpRegistrationOptions{
+					DocumentSelector:    selector,
+					TriggerCharacters:   &ls.SignatureHelpTriggerCharacters,
+					RetriggerCharacters: &ls.SignatureHelpRetriggerCharacters,
+				},
+			},
+		},
+		{
+			Id: contentMapperDefinitionRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentDefinition: &lsproto.DefinitionRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperTypeDefinitionRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentTypeDefinition: &lsproto.TypeDefinitionRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperImplementationRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentImplementation: &lsproto.ImplementationRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperReferencesRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentReferences: &lsproto.ReferenceRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperDocumentHighlightRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentDocumentHighlight: &lsproto.DocumentHighlightRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperCompletionRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentCompletion: &lsproto.CompletionRegistrationOptions{
+					DocumentSelector:  selector,
+					TriggerCharacters: &ls.CompletionTriggerCharacters,
+					ResolveProvider:   new(true),
+					CompletionItem: &lsproto.ServerCompletionItemOptions{
+						LabelDetailsSupport: new(true),
+					},
+				},
+			},
+		},
+		{
+			Id: contentMapperRenameRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentRename: &lsproto.RenameRegistrationOptions{
+					DocumentSelector: selector,
+					PrepareProvider:  new(true),
+				},
+			},
+		},
+		{
+			Id: contentMapperSemanticTokensRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentSemanticTokens: &lsproto.SemanticTokensRegistrationOptions{
+					DocumentSelector: selector,
+					Legend:           ls.SemanticTokensLegend(s.clientCapabilities.TextDocument.SemanticTokens),
+					Full: &lsproto.BooleanOrSemanticTokensFullDelta{
+						Boolean: new(true),
+					},
+					Range: &lsproto.BooleanOrEmptyObject{
+						Boolean: new(true),
+					},
+				},
+			},
+		},
+		{
+			Id: contentMapperDocumentSymbolRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentDocumentSymbol: &lsproto.DocumentSymbolRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperFoldingRangeRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentFoldingRange: &lsproto.FoldingRangeRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperSelectionRangeRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentSelectionRange: &lsproto.SelectionRangeRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperInlayHintRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentInlayHint: &lsproto.InlayHintRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperCodeLensRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentCodeLens: &lsproto.CodeLensRegistrationOptions{
+					DocumentSelector: selector,
+					ResolveProvider:  new(true),
+				},
+			},
+		},
+		{
+			Id: contentMapperCodeActionRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentCodeAction: &lsproto.CodeActionRegistrationOptions{
+					DocumentSelector: selector,
+					CodeActionKinds: &[]lsproto.CodeActionKind{
+						lsproto.CodeActionKindQuickFix,
+						lsproto.CodeActionKindSourceOrganizeImports,
+						lsproto.CodeActionKindSourceRemoveUnusedImports,
+						lsproto.CodeActionKindSourceSortImports,
+						lsproto.CodeActionKindSourceFixAll,
+					},
+				},
+			},
+		},
+		{
+			Id: contentMapperFormattingRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentFormatting: &lsproto.DocumentFormattingRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperRangeFormattingRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentRangeFormatting: &lsproto.DocumentRangeFormattingRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperOnTypeFormattingRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentOnTypeFormatting: &lsproto.DocumentOnTypeFormattingRegistrationOptions{
+					DocumentSelector:      selector,
+					FirstTriggerCharacter: "{",
+					MoreTriggerCharacter:  &[]string{"}", ";", "\n"},
+				},
+			},
+		},
+		{
+			Id: contentMapperLinkedEditingRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentLinkedEditingRange: &lsproto.LinkedEditingRangeRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperCallHierarchyRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				TextDocumentPrepareCallHierarchy: &lsproto.CallHierarchyRegistrationOptions{DocumentSelector: selector},
+			},
+		},
+		{
+			Id: contentMapperWillRenameFilesRegistrationID,
+			RegisterOptions: &lsproto.RegisterOptions{
+				WorkspaceWillRenameFiles: &lsproto.FileOperationRegistrationOptions{Filters: contentMapperFileRenameFilters},
+			},
+		},
+	}
+	registrations = slices.DeleteFunc(registrations, func(registration *lsproto.Registration) bool {
+		return !s.supportsContentMapperRegistration(registration.Id)
+	})
+	if _, err := sendClientRequest(ctx, s, lsproto.ClientRegisterCapabilityInfo, &lsproto.RegistrationParams{
+		Registrations: registrations,
+	}); err != nil {
+		return fmt.Errorf("failed to register content mapper text document sync: %w", err)
+	}
+
+	s.contentMapperExtensionsRegistered = true
+	return nil
 }
 
 // RefreshDiagnostics implements project.Client.
@@ -755,6 +1148,12 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 			idStr = " (" + req.ID.String() + ")"
 		}
 		if err != nil {
+			if resp, ok := contentMapperFallbackResponse(req.Method, err); ok {
+				if !s.logger.IsTracing() {
+					s.logger.Info("handled method '", req.Method, "'", idStr, " in ", time.Since(start))
+				}
+				return nil, s.sendResult(req.ID, resp)
+			}
 			if _, ok := errors.AsType[userFacingRequestFailedError](err); !ok {
 				s.logger.Error("error handling method '", req.Method, "'", idStr, ": ", err)
 			} else if !s.logger.IsTracing() {
@@ -786,6 +1185,36 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 		return nil, s.sendError(req.ID, lsproto.ErrorCodeInvalidRequest)
 	}
 	return nil, nil
+}
+
+// contentMapperFallbackResponse returns an empty response for requests made for
+// unknown file types not handled by any content mapper. This typically serves a
+// short window in time between when the server has unregistered content mapper
+// extensions and when the client has stopped sending requests for those file types.
+func contentMapperFallbackResponse(method lsproto.Method, err error) (any, bool) {
+	if !errors.Is(err, project.ErrNoProjectForUnknownScriptKind) {
+		return nil, false
+	}
+	switch method {
+	case lsproto.MethodTextDocumentDiagnostic:
+		return lsproto.DocumentDiagnosticResponse{
+			FullDocumentDiagnosticReport: &lsproto.RelatedFullDocumentDiagnosticReport{
+				Items: []*lsproto.Diagnostic{},
+			},
+		}, true
+	case lsproto.MethodTextDocumentHover,
+		lsproto.MethodTextDocumentSignatureHelp,
+		lsproto.MethodTextDocumentDefinition,
+		lsproto.MethodTextDocumentTypeDefinition,
+		lsproto.MethodTextDocumentImplementation,
+		lsproto.MethodTextDocumentReferences,
+		lsproto.MethodTextDocumentDocumentHighlight,
+		lsproto.MethodTextDocumentCompletion,
+		lsproto.MethodTextDocumentRename:
+		return lsproto.Null{}, true
+	default:
+		return nil, false
+	}
 }
 
 // handlerMap maps LSP method to a handler function. The handler function executes any work that must be done synchronously
@@ -860,6 +1289,7 @@ var handlers = sync.OnceValue(func() handlerMap {
 
 	registerRequestHandler(handlers, lsproto.CustomInitializeAPISessionInfo, (*Server).handleInitializeAPISession)
 	registerRequestHandler(handlers, lsproto.CustomProjectInfoInfo, (*Server).handleProjectInfo)
+	registerRequestHandler(handlers, lsproto.CustomSetContentMapperContributionsInfo, (*Server).handleSetContentMapperContributions)
 	return handlers
 })
 
@@ -1153,15 +1583,15 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 				},
 			},
 			CompletionProvider: &lsproto.CompletionOptions{
-				TriggerCharacters: &ls.TriggerCharacters,
+				TriggerCharacters: &ls.CompletionTriggerCharacters,
 				ResolveProvider:   new(true),
 				CompletionItem: &lsproto.ServerCompletionItemOptions{
 					LabelDetailsSupport: new(true),
 				},
 			},
 			SignatureHelpProvider: &lsproto.SignatureHelpOptions{
-				TriggerCharacters:   &[]string{"(", ",", "<"},
-				RetriggerCharacters: &[]string{")"},
+				TriggerCharacters:   &ls.SignatureHelpTriggerCharacters,
+				RetriggerCharacters: &ls.SignatureHelpRetriggerCharacters,
 			},
 			DocumentFormattingProvider: &lsproto.BooleanOrDocumentFormattingOptions{
 				Boolean: new(true),
@@ -1257,6 +1687,10 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 	if s.initializationOptions.EnableTelemetry != nil {
 		enableTelemetry = *s.initializationOptions.EnableTelemetry
 	}
+	var runExternalCode bool
+	if s.initializationOptions.RunExternalCode != nil {
+		runExternalCode = *s.initializationOptions.RunExternalCode
+	}
 	hasDynamicWatchRegistration := s.clientCapabilities.Workspace.DidChangeWatchedFiles.DynamicRegistration
 	if hasDynamicWatchRegistration {
 		s.logger.Logf("file watching: using LSP client-side watching (client supports dynamic registration)")
@@ -1307,12 +1741,15 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 			TelemetryEnabled:       enableTelemetry,
 			DebounceDelay:          500 * time.Millisecond,
 			PushDiagnosticsEnabled: !disablePushDiagnostics,
+			RunExternalCode:        runExternalCode,
 		},
-		FS:          s.fs,
-		Logger:      s.logger,
-		Client:      s,
-		NpmExecutor: s,
-		ParseCache:  s.parseCache,
+		FS:                  s.fs,
+		Logger:              s.logger,
+		Client:              s,
+		NpmExecutor:         s,
+		Spawner:             s.contentMapperSpawner(),
+		ContentMapperLogger: s.contentMapperLogger(),
+		ParseCache:          s.parseCache,
 	})
 
 	userPreferences, err := s.RequestConfiguration(ctx)
@@ -1413,22 +1850,22 @@ func (s *Server) handleSetLogVerbosity(_ context.Context, params *lsproto.SetLog
 	return nil
 }
 
-func (s *Server) handleDocumentDiagnostic(ctx context.Context, ls *ls.LanguageService, params *lsproto.DocumentDiagnosticParams) (lsproto.DocumentDiagnosticResponse, error) {
+func (s *Server) handleDocumentDiagnostic(ctx context.Context, languageService *ls.LanguageService, params *lsproto.DocumentDiagnosticParams) (lsproto.DocumentDiagnosticResponse, error) {
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	if s.flakeLogging == lsproto.DiagnosticFlakeLogLevelOff {
-		return ls.ProvideDiagnostics(ctx, params.TextDocument.Uri)
+		return languageService.ProvideDiagnostics(ctx, params.TextDocument.Uri)
 	}
-	direct, err := ls.ProvideDiagnostics(ctx, params.TextDocument.Uri)
+	direct, err := languageService.ProvideDiagnostics(ctx, params.TextDocument.Uri)
 	if err != nil {
 		return direct, err
 	}
-	ls.GetProgram().Emit(ctx, compiler.EmitOptions{
+	languageService.GetProgram().Emit(ctx, compiler.EmitOptions{
 		WriteFile: func(fileName, text string, data *compiler.WriteFileData) error {
 			// do nothing
 			return nil
 		},
 	})
-	secondary, err2 := ls.ProvideDiagnostics(ctx, params.TextDocument.Uri)
+	secondary, err2 := languageService.ProvideDiagnostics(ctx, params.TextDocument.Uri)
 	if err2 != nil {
 		return direct, err
 	}
@@ -1863,7 +2300,7 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 		pipePath = s.generateAPIPipePath()
 	}
 
-	transport, err := api.NewPipeTransport(pipePath)
+	transport, err := ipc.NewPipeTransport(pipePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create API transport: %w", err)
 	}
@@ -1898,7 +2335,7 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 			}
 		}()
 
-		conn := api.NewAsyncConn(rwc, apiSession)
+		conn := ipc.NewAsyncConn(rwc, apiSession)
 		if apiErr := conn.Run(apiCtx); apiErr != nil {
 			s.logger.Errorf("API session %s: %v", apiSession.ID(), apiErr)
 		}
@@ -1916,7 +2353,7 @@ func (s *Server) generateAPIPipePath() string {
 	// Generate a high-entropy path using time and random source
 	now := time.Now().UnixNano()
 	rnd := rand.Uint64()
-	return api.GeneratePipePath(fmt.Sprintf("tsgo-api-%x-%x", now, rnd))
+	return ipc.GeneratePipePath(fmt.Sprintf("tsgo-api-%x-%x", now, rnd))
 }
 
 func (s *Server) removeAPISession(id string) {
@@ -1936,6 +2373,23 @@ func (s *Server) SetCompilerOptionsForInferredProjects(ctx context.Context, opti
 // NpmInstall implements ata.NpmExecutor
 func (s *Server) NpmInstall(cwd string, args []string) ([]byte, error) {
 	return s.npmInstall(cwd, args)
+}
+
+// contentMapperSpawner adapts the server's spawn callback to a content mapper spawner, or returns nil when
+// the server cannot spawn processes.
+func (s *Server) contentMapperSpawner() contentmapper.Spawner {
+	if s.spawn == nil {
+		return nil
+	}
+	return contentmapper.SpawnerFunc(s.spawn)
+}
+
+func (s *Server) contentMapperLogger() contentmapper.Logger {
+	return func(message string) {
+		if s.logger.IsTracing() {
+			s.logger.Info(message)
+		}
+	}
 }
 
 // Developer/debugging command handlers
@@ -1995,4 +2449,94 @@ func (s *Server) handleProjectInfo(ctx context.Context, params *lsproto.ProjectI
 	return &lsproto.ProjectInfoResult{
 		ConfigFilePath: configFilePath,
 	}, nil
+}
+
+func (s *Server) handleSetContentMapperContributions(ctx context.Context, params *lsproto.SetContentMapperContributionsParams, _ *lsproto.RequestMessage) (lsproto.CustomSetContentMapperContributionsResponse, error) {
+	contributions, err := parseContentMapperContributions(params.Contributions)
+	if err != nil {
+		return lsproto.Null{}, err
+	}
+	documents := core.Map(params.OpenDocuments, func(document lsproto.TextDocumentIdentifier) lsproto.DocumentUri { return document.Uri })
+	s.session.SetContentMapperContributions(ctx, contributions, documents)
+	return lsproto.Null{}, nil
+}
+
+func parseContentMapperContributions(values []*lsproto.ContentMapperContribution) (project.ContentMapperContributions, error) {
+	var result project.ContentMapperContributions
+	var claimedExtensions collections.Set[string]
+	for index, value := range values {
+		if value == nil || value.ContributorId == "" {
+			return result, errors.New("content mapper contribution requires a contributorId")
+		}
+		identity := fmt.Sprintf("%s[%d]", value.ContributorId, index)
+		validExtensions := make([]string, 0, len(value.Extensions))
+		for _, extension := range value.Extensions {
+			if !isValidContributedContentMapperExtension(extension) {
+				return result, fmt.Errorf("content mapper contribution %q has invalid extension %q", identity, extension)
+			}
+			validExtensions = append(validExtensions, extension)
+		}
+		if value.InferredProjectContribution == nil {
+			continue
+		}
+		inferredProject := value.InferredProjectContribution
+		manifest := inferredProject.Manifest
+		if manifest.Name == "" || len(manifest.Exec) == 0 {
+			return result, fmt.Errorf("content mapper contribution %q requires a manifest name and exec", identity)
+		}
+		for _, option := range valueOrZero(manifest.CompilerOptions) {
+			if tsoptions.CommandLineCompilerOptionsMap.Get(option) == nil {
+				return result, fmt.Errorf("content mapper contribution %q requests unknown compiler option %q", identity, option)
+			}
+		}
+		for _, extension := range validExtensions {
+			if !claimedExtensions.AddIfAbsent(extension) {
+				return result, fmt.Errorf("content mapper contributions both claim extension %q", extension)
+			}
+			result.Extensions = append(result.Extensions, extension)
+		}
+		options := []byte("{}")
+		if inferredProject.Options != nil {
+			var err error
+			options, err = json.Marshal(*inferredProject.Options)
+			if err != nil {
+				return result, fmt.Errorf("content mapper contribution %q has invalid options", identity)
+			}
+		}
+		mapper := &contentmapper.Mapper{
+			Definition: contentmapper.Definition{Package: identity, Extensions: validExtensions, Options: options},
+			Manifest: contentmapper.Manifest{
+				Name:            manifest.Name,
+				Version:         valueOrZero(manifest.Version),
+				Exec:            slices.Clone(manifest.Exec),
+				CompilerOptions: slices.Clone(valueOrZero(manifest.CompilerOptions)),
+				DynamicConfig:   valueOrZero(manifest.DynamicConfig),
+			},
+			ContributionID: identity,
+		}
+		if manifest.Cwd != nil {
+			if !tspath.PathIsAbsolute(*manifest.Cwd) {
+				return result, fmt.Errorf("content mapper contribution %q has non-absolute cwd", identity)
+			}
+			mapper.PackageDirectory = *manifest.Cwd
+		}
+		result.Mappers = append(result.Mappers, mapper)
+	}
+	slices.Sort(result.Extensions)
+	return result, nil
+}
+
+func isValidContributedContentMapperExtension(extension string) bool {
+	if len(extension) <= 1 || extension[0] != '.' || tspath.GetAnyExtensionFromPath("file"+extension, nil, false) != extension {
+		return false
+	}
+	return !slices.Contains(core.Flatten(tspath.AllSupportedExtensionsWithJson), extension)
+}
+
+func valueOrZero[T any](value *T) T {
+	if value == nil {
+		var zero T
+		return zero
+	}
+	return *value
 }

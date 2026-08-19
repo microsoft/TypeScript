@@ -44,6 +44,7 @@ type ModuleSpecifierGenerationHost interface {
 	GetSymlinkCache() *symlinks.KnownSymlinks
 	// GetFileIncludeReasons() any // !!! TODO: adapt new resolution cache model
 	CommonSourceDirectory() string
+	ContentMapperExtensions() []string
 	GetGlobalTypingsCacheLocation() string
 	UseCaseSensitiveFileNames() bool
 	GetCurrentDirectory() string

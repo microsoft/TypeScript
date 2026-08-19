@@ -16,6 +16,6 @@
 //     yield 0;
 // }
 // 
-// const [|genFunction|] = <|function*() {
+// const <|[|genFunction|] = function*() {
 //     /*GOTO DEF*/yield 0;
 // }|>

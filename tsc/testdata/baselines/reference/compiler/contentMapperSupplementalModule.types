@@ -1,0 +1,5 @@
+//// [tests/cases/compiler/contentMapperSupplementalModule.ts] ////
+
+=== /component.vue ===
+
+export default 1;

@@ -39,3 +39,22 @@ func NewVFSParseConfigHost(files map[string]string, currentDirectory string, use
 		CurrentDirectory: currentDirectory,
 	}
 }
+
+// NewVFSParseConfigHostWithSymlinks builds a parse-config host whose vfs also contains the given symlinks
+// (link path -> target path), so config parsing resolves packages through symlinks as it would on disk.
+func NewVFSParseConfigHostWithSymlinks(files map[string]string, symlinks map[string]string, currentDirectory string, useCaseSensitiveFileNames bool) *VfsParseConfigHost {
+	if len(symlinks) == 0 {
+		return NewVFSParseConfigHost(files, currentDirectory, useCaseSensitiveFileNames)
+	}
+	entries := make(map[string]any, len(files)+len(symlinks))
+	for name, content := range files {
+		entries[name] = content
+	}
+	for link, target := range symlinks {
+		entries[tspath.GetNormalizedAbsolutePath(link, currentDirectory)] = vfstest.Symlink(tspath.GetNormalizedAbsolutePath(target, currentDirectory))
+	}
+	return &VfsParseConfigHost{
+		Vfs:              vfstest.FromMap(entries, useCaseSensitiveFileNames),
+		CurrentDirectory: currentDirectory,
+	}
+}

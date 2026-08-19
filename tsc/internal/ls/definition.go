@@ -8,10 +8,12 @@ import (
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 )
 
 func (l *LanguageService) ProvideDefinition(
@@ -34,17 +36,28 @@ func (l *LanguageService) provideDefinitionWorker(
 	clientSupportsLink := caps.TextDocument.Definition.LinkSupport
 
 	program, file := l.getProgramAndFile(documentURI)
-	pos := int(l.converters.LineAndCharacterToPosition(file, position))
+	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, position, spanmap.FeatureDefinition)
+	results := make([]lsproto.DefinitionResponse, 0, len(positions))
+	for _, mapped := range positions {
+		if mapped.Fidelity.IsSingleSegment() {
+			results = append(results, l.provideDefinitionAtPosition(ctx, program, mapped.Script, mapped.Position, clientSupportsLink))
+		}
+	}
+	return combineDefinitionResponses(results, clientSupportsLink), nil
+}
+
+func (l *LanguageService) provideDefinitionAtPosition(ctx context.Context, program *compiler.Program, file *ast.SourceFile, textPos core.TextPos, clientSupportsLink bool) lsproto.DefinitionResponse {
+	pos := int(textPos)
 	node := astnav.GetTouchingPropertyName(file, pos)
 	reference := getReferenceAtPosition(file, pos, program)
 
 	if node.Kind == ast.KindSourceFile {
-		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{}, nil
+		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{}
 	}
 
-	originSelectionRange := l.createLspRangeFromNode(node, file)
+	originSelectionRange, _ := l.createLspRangeFromNode(node, file)
 	if reference != nil && reference.file != nil {
-		return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, []*ast.Node{}, reference), nil
+		return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, []*ast.Node{}, reference, spanmap.FeatureDefinition)
 	}
 
 	c, done := program.GetTypeCheckerForFile(ctx, file)
@@ -52,26 +65,26 @@ func (l *LanguageService) provideDefinitionWorker(
 
 	if node.Kind == ast.KindOverrideKeyword {
 		if sym := getSymbolForOverriddenMember(c, node); sym != nil {
-			return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, sym.Declarations, nil /*reference*/), nil
+			return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, sym.Declarations, nil /*reference*/, spanmap.FeatureDefinition)
 		}
 	}
 
 	if ast.IsJumpStatementTarget(node) {
 		if label := getTargetLabel(node.Parent, node.Text()); label != nil {
-			return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, []*ast.Node{label}, nil /*reference*/), nil
+			return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, []*ast.Node{label}, nil /*reference*/, spanmap.FeatureDefinition)
 		}
 	}
 
 	if node.Kind == ast.KindCaseKeyword || node.Kind == ast.KindDefaultKeyword && ast.IsDefaultClause(node.Parent) {
 		if stmt := ast.FindAncestor(node.Parent, ast.IsSwitchStatement); stmt != nil {
 			file := ast.GetSourceFileOfNode(stmt)
-			return l.createLocationFromFileAndRange(file, scanner.GetRangeOfTokenAtPosition(file, stmt.Pos())), nil
+			return l.createLocationFromFileAndRange(file, scanner.GetRangeOfTokenAtPosition(file, stmt.Pos()), spanmap.FeatureDefinition)
 		}
 	}
 
 	if node.Kind == ast.KindReturnKeyword || node.Kind == ast.KindYieldKeyword || node.Kind == ast.KindAwaitKeyword {
 		if fn := ast.FindAncestor(node, ast.IsFunctionLikeDeclaration); fn != nil {
-			return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, []*ast.Node{fn}, nil /*reference*/), nil
+			return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, []*ast.Node{fn}, nil /*reference*/, spanmap.FeatureDefinition)
 		}
 	}
 
@@ -94,7 +107,7 @@ func (l *LanguageService) provideDefinitionWorker(
 		}
 		declarations = append(declarations, calledDeclaration)
 	}
-	return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, declarations, reference), nil
+	return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, declarations, reference, spanmap.FeatureDefinition)
 }
 
 func (l *LanguageService) ProvideTypeDefinition(
@@ -106,11 +119,23 @@ func (l *LanguageService) ProvideTypeDefinition(
 	clientSupportsLink := caps.TextDocument.TypeDefinition.LinkSupport
 
 	program, file := l.getProgramAndFile(documentURI)
-	node := astnav.GetTouchingPropertyName(file, int(l.converters.LineAndCharacterToPosition(file, position)))
-	if node.Kind == ast.KindSourceFile {
-		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{}, nil
+	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, position, spanmap.FeatureTypeDefinition)
+	results := make([]lsproto.TypeDefinitionResponse, 0, len(positions))
+	for _, mapped := range positions {
+		if mapped.Fidelity.IsSingleSegment() {
+			results = append(results, l.provideTypeDefinitionAtPosition(ctx, program, mapped.Script, mapped.Position, clientSupportsLink))
+		}
 	}
-	originSelectionRange := l.createLspRangeFromNode(node, file)
+	return combineDefinitionResponses(results, clientSupportsLink), nil
+}
+
+func (l *LanguageService) provideTypeDefinitionAtPosition(ctx context.Context, program *compiler.Program, file *ast.SourceFile, textPos core.TextPos, clientSupportsLink bool) lsproto.TypeDefinitionResponse {
+	pos := int(textPos)
+	node := astnav.GetTouchingPropertyName(file, pos)
+	if node.Kind == ast.KindSourceFile {
+		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{}
+	}
+	originSelectionRange, _ := l.createLspRangeFromNode(node, file)
 
 	c, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
@@ -124,14 +149,47 @@ func (l *LanguageService) ProvideTypeDefinition(
 			declarations = core.Concatenate(getDeclarationsFromType(typeArgument), declarations)
 		}
 		if len(declarations) != 0 {
-			return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, declarations, nil /*reference*/), nil
+			return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, declarations, nil /*reference*/, spanmap.FeatureTypeDefinition)
 		}
 		if symbol.Flags&ast.SymbolFlagsValue == 0 && symbol.Flags&ast.SymbolFlagsType != 0 {
-			return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, symbol.Declarations, nil /*reference*/), nil
+			return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, symbol.Declarations, nil /*reference*/, spanmap.FeatureTypeDefinition)
 		}
 	}
 
-	return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{}, nil
+	return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{}
+}
+
+func combineDefinitionResponses(results []lsproto.DefinitionResponse, links bool) lsproto.DefinitionResponse {
+	var locations []lsproto.Location
+	var definitionLinks []*lsproto.LocationLink
+	var seen collections.Set[lsproto.Location]
+	for _, result := range results {
+		if result.DefinitionLinks != nil {
+			for _, link := range *result.DefinitionLinks {
+				location := lsproto.Location{Uri: link.TargetUri, Range: link.TargetSelectionRange}
+				if seen.AddIfAbsent(location) {
+					definitionLinks = append(definitionLinks, link)
+					locations = append(locations, location)
+				}
+			}
+		}
+		if result.Location != nil && seen.AddIfAbsent(*result.Location) {
+			locations = append(locations, *result.Location)
+			definitionLinks = append(definitionLinks, &lsproto.LocationLink{TargetUri: result.Location.Uri, TargetRange: result.Location.Range, TargetSelectionRange: result.Location.Range})
+		}
+		if result.Locations != nil {
+			for _, location := range *result.Locations {
+				if seen.AddIfAbsent(location) {
+					locations = append(locations, location)
+					definitionLinks = append(definitionLinks, &lsproto.LocationLink{TargetUri: location.Uri, TargetRange: location.Range, TargetSelectionRange: location.Range})
+				}
+			}
+		}
+	}
+	if links {
+		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{DefinitionLinks: &definitionLinks}
+	}
+	return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{Locations: &locations}
 }
 
 func getDeclarationNameForKeyword(node *ast.Node) *ast.Node {
@@ -148,7 +206,7 @@ func getDeclarationNameForKeyword(node *ast.Node) *ast.Node {
 }
 
 type fileRange struct {
-	fileName  string
+	file      *ast.SourceFile
 	fileRange core.TextRange
 }
 
@@ -157,9 +215,12 @@ func (l *LanguageService) createDefinitionLocations(
 	clientSupportsLink bool,
 	declarations []*ast.Node,
 	reference *refInfo,
+	feature spanmap.Feature,
 ) lsproto.DefinitionResponse {
 	locations := make([]*lsproto.LocationLink, 0)
 	locationRanges := collections.Set[fileRange]{}
+	concreteTargets := collections.Set[lsproto.DocumentUri]{}
+	var fileFallbacks []*lsproto.LocationLink
 
 	if reference != nil {
 		targetRange := lsproto.Range{
@@ -182,7 +243,6 @@ func (l *LanguageService) createDefinitionLocations(
 
 	for _, decl := range declarations {
 		file := ast.GetSourceFileOfNode(decl)
-		fileName := file.FileName()
 		name := core.OrElse(ast.GetNameOfDeclaration(decl), decl)
 		var nameRange core.TextRange
 		if name.Kind == ast.KindEmptyStatement {
@@ -190,11 +250,29 @@ func (l *LanguageService) createDefinitionLocations(
 		} else {
 			nameRange = createRangeFromNode(name, file)
 		}
-		if locationRanges.AddIfAbsent(fileRange{fileName, nameRange}) {
+		if locationRanges.AddIfAbsent(fileRange{file, nameRange}) {
 			contextNode := core.OrElse(getContextNode(decl), decl)
 			contextRange := core.OrElse(toContextRange(&nameRange, file, contextNode), &nameRange)
-			targetSelectionLoc := l.getMappedLocation(fileName, nameRange)
-			targetLoc := l.getMappedLocation(fileName, *contextRange)
+			if !nameRange.ContainedBy(*contextRange) {
+				enclosingRange := core.NewTextRange(min(nameRange.Pos(), contextRange.Pos()), max(nameRange.End(), contextRange.End()))
+				contextRange = &enclosingRange
+			}
+			targetSelectionLoc, selectionFidelity := l.sourceFileRangeToLSPLocationForFeature(file, nameRange, feature)
+			if !selectionFidelity.IsSingleSegment() {
+				zeroRange := lsproto.Range{}
+				fileFallbacks = append(fileFallbacks, &lsproto.LocationLink{
+					OriginSelectionRange: &originSelectionRange,
+					TargetSelectionRange: zeroRange,
+					TargetUri:            targetSelectionLoc.Uri,
+					TargetRange:          zeroRange,
+				})
+				continue
+			}
+			targetLoc, contextFidelity := l.sourceFileRangeToLSPLocation(file, *contextRange)
+			if contextFidelity.IsNone() || targetLoc.Uri != targetSelectionLoc.Uri || !lspRangeContains(targetLoc.Range, targetSelectionLoc.Range) {
+				targetLoc = targetSelectionLoc
+			}
+			concreteTargets.Add(targetSelectionLoc.Uri)
 			locations = append(locations, &lsproto.LocationLink{
 				OriginSelectionRange: &originSelectionRange,
 				TargetSelectionRange: targetSelectionLoc.Range,
@@ -203,11 +281,22 @@ func (l *LanguageService) createDefinitionLocations(
 			})
 		}
 	}
+	for _, fallback := range fileFallbacks {
+		if !concreteTargets.Has(fallback.TargetUri) {
+			concreteTargets.Add(fallback.TargetUri)
+			locations = append(locations, fallback)
+		}
+	}
 
 	if clientSupportsLink {
 		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{DefinitionLinks: &locations}
 	}
 	return createLocationsFromLinks(locations)
+}
+
+func lspRangeContains(outer, inner lsproto.Range) bool {
+	return lsproto.ComparePositions(outer.Start, inner.Start) <= 0 &&
+		lsproto.ComparePositions(inner.End, outer.End) <= 0
 }
 
 func createLocationsFromLinks(links []*lsproto.LocationLink) lsproto.DefinitionResponse {
@@ -220,8 +309,11 @@ func createLocationsFromLinks(links []*lsproto.LocationLink) lsproto.DefinitionR
 	return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{Locations: &locations}
 }
 
-func (l *LanguageService) createLocationFromFileAndRange(file *ast.SourceFile, textRange core.TextRange) lsproto.DefinitionResponse {
-	mappedLocation := l.getMappedLocation(file.FileName(), textRange)
+func (l *LanguageService) createLocationFromFileAndRange(file *ast.SourceFile, textRange core.TextRange, feature spanmap.Feature) lsproto.DefinitionResponse {
+	mappedLocation, fidelity := l.sourceFileRangeToLSPLocationForFeature(file, textRange, feature)
+	if fidelity.IsNone() {
+		mappedLocation.Range = lsproto.Range{}
+	}
 	return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{
 		Location: &mappedLocation,
 	}

@@ -580,9 +580,16 @@ function generateFactory(): string {
     for (
         const name of [
             "fileName",
+            "originalText",
+            "contentMapper",
+            "virtualFileName",
+            "diagnosticDirectives",
+            "supplementalSourceFileNames",
+            "canonicalSourceFileName",
             "path",
             "languageVariant",
             "scriptKind",
+            "spanMap",
             "isDeclarationFile",
             "referencedFiles",
             "typeReferenceDirectives",
@@ -1171,6 +1178,11 @@ function generateFactory(): string {
     out.push(`        statements: createNodeArray(statements),`);
     out.push(`        endOfFileToken,`);
     out.push(`        text,`);
+    out.push(`        originalText: text,`);
+    out.push(`        spanMap: undefined,`);
+    out.push(`        contentMapper: undefined,`);
+    out.push(`        virtualFileName: undefined,`);
+    out.push(`        diagnosticDirectives: undefined,`);
     out.push(`        fileName,`);
     out.push(`        path,`);
     out.push(`    }) as unknown as SourceFile;`);

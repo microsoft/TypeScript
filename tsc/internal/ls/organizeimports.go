@@ -111,7 +111,10 @@ func (l *LanguageService) OrganizeImports(
 		}
 	}
 
-	return changeTracker.GetChanges()
+	// Unmappable files are dropped by GetChanges, so a content-mapped file whose imports cannot be
+	// faithfully rewritten yields no edits rather than a corrupting one.
+	changes, _ := changeTracker.GetChanges()
+	return changes
 }
 
 type organizeImportsComparerSettings struct {

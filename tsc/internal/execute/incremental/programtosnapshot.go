@@ -91,7 +91,11 @@ func (t *toProgramSnapshot) computeProgramFileChanges() {
 	wg := core.NewWorkGroup(t.program.SingleThreaded())
 	for _, file := range files {
 		wg.Queue(func() {
-			version := t.snapshot.computeHash(file.Text())
+			versionText := file.Text()
+			if file.ContentMapper() != "" {
+				versionText = file.OriginalText() + "\x00" + file.ContentMapperTransformIdentity()
+			}
+			version := t.snapshot.computeHash(versionText)
 			impliedNodeFormat := t.program.GetSourceFileMetaData(file.Path()).ImpliedNodeFormat
 			affectsGlobalScope := fileAffectsGlobalScope(file)
 			var signature string
@@ -380,6 +384,8 @@ func repopulateDiagnosticMessageChain(chain []*ast.Diagnostic, p *compiler.Progr
 				end:            c.End(),
 				code:           c.Code(),
 				category:       c.Category(),
+				source:         c.Source(),
+				messageText:    c.MessageText(),
 				messageKey:     c.MessageKey(),
 				messageArgs:    c.MessageArgs(),
 				repopulateInfo: c.RepopulateInfo(),
@@ -415,6 +421,8 @@ func astDiagToBuildInfoDiag(d *ast.Diagnostic) *buildInfoDiagnosticWithFileName 
 		end:            d.End(),
 		code:           d.Code(),
 		category:       d.Category(),
+		source:         d.Source(),
+		messageText:    d.MessageText(),
 		messageKey:     d.MessageKey(),
 		messageArgs:    d.MessageArgs(),
 		repopulateInfo: d.RepopulateInfo(),

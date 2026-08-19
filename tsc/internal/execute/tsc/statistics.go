@@ -3,7 +3,9 @@ package tsc
 import (
 	"fmt"
 	"io"
+	"maps"
 	"runtime"
+	"slices"
 	"strconv"
 	"time"
 
@@ -122,8 +124,32 @@ func (s *Statistics) Report(w io.Writer, testing CommandLineTesting) {
 	if s.compileTimes.ChangesComputeTime != 0 {
 		table.add(prefix+"Changes compute time", s.compileTimes.ChangesComputeTime)
 	}
+	s.addContentMapperStatistics(&table, prefix)
 	table.add(prefix+"Total time", s.compileTimes.totalTime)
 	table.print(w)
+}
+
+func (s *Statistics) addContentMapperStatistics(table *table, prefix string) {
+	timings := s.compileTimes.ContentMapperTimes
+	if timings.RequestWait != 0 {
+		table.add(prefix+"Content mapper request wait time", timings.RequestWait)
+	}
+	for _, identity := range slices.Sorted(maps.Keys(timings.Mappers)) {
+		mapper := timings.Mappers[identity]
+		initializationCount := mapper.Spawn.Count
+		if initializationCount != 0 {
+			table.add(prefix+identity+" initialization time", mapper.Spawn.Duration+mapper.Initialize.Duration)
+		}
+		if mapper.Transform.Count != 0 {
+			table.add(prefix+identity+" transform time", mapper.Transform.Duration)
+		}
+		if mapper.OpenProject.Count != 0 {
+			table.add(prefix+identity+" openProject time", mapper.OpenProject.Duration)
+		}
+		if mapper.CloseProject.Count != 0 {
+			table.add(prefix+identity+" closeProject time", mapper.CloseProject.Duration)
+		}
+	}
 }
 
 func (s *Statistics) Aggregate(stat *Statistics) {

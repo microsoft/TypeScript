@@ -1,0 +1,10 @@
+--- old.goToDefinitionYield1.baseline.jsonc
++++ new.goToDefinitionYield1.baseline.jsonc
+@@= skipped -15, +15 lines =@@
+ //     yield 0;
+ // }
+ // 
+-// const [|genFunction|] = <|function*() {
++// const <|[|genFunction|] = function*() {
+ //     /*GOTO DEF*/yield 0;
+ // }|>

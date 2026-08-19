@@ -53,6 +53,16 @@ func RemoveFileExtension(path string) string {
 	return path
 }
 
+func RemoveAnyFileExtension(path string) string {
+	if withoutExtension := RemoveFileExtension(path); withoutExtension != path {
+		return withoutExtension
+	}
+	if extension := GetAnyExtensionFromPath(path, nil, false); extension != "" {
+		return RemoveExtension(path, extension)
+	}
+	return path
+}
+
 func TryGetExtensionFromPath(p string) string {
 	for _, ext := range extensionsToRemove {
 		if FileExtensionIs(p, ext) {

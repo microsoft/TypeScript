@@ -811,6 +811,13 @@ describe("RemoteNode + getSynthesizedDeepClone", () => {
             assert.strictEqual(clone.moduleAugmentations, moduleAugmentations);
             assert.strictEqual(clone.ambientModuleNames, ambientModuleNames);
             assert.strictEqual(clone.externalModuleIndicator, sf.externalModuleIndicator);
+            assert.strictEqual(clone.originalText, sf.originalText);
+            assert.strictEqual(clone.spanMap, sf.spanMap);
+            assert.strictEqual(clone.contentMapper, sf.contentMapper);
+            assert.strictEqual(clone.virtualFileName, sf.virtualFileName);
+            assert.strictEqual(clone.diagnosticDirectives, sf.diagnosticDirectives);
+            assert.strictEqual(clone.supplementalSourceFileNames, sf.supplementalSourceFileNames);
+            assert.strictEqual(clone.canonicalSourceFileName, sf.canonicalSourceFileName);
         }
         finally {
             api.close();

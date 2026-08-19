@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 )
 
 // JSDocTagInfo mirrors Strada's `JSDocTagInfo`, but renders the tag's text as a
@@ -306,6 +307,6 @@ func isNodeWithName(node *ast.Node, name string) bool {
 	return ast.IsIdentifier(nodeName) && nodeName.Text() == name
 }
 
-func noMappedLocation(string, core.TextRange) lsproto.Location {
-	return lsproto.Location{}
+func noMappedLocation(*ast.SourceFile, core.TextRange) (lsproto.Location, spanmap.Fidelity) {
+	return lsproto.Location{}, spanmap.FidelityNone
 }

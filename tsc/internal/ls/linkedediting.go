@@ -7,8 +7,10 @@ import (
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 )
 
 // allow the client to match more than valid tag names. This allows linked editing when typing is in progress or tag name is incomplete
@@ -16,7 +18,12 @@ var jsxTagWordPattern = new("[a-zA-Z0-9:\\-\\._$]*")
 
 func (l *LanguageService) ProvideLinkedEditingRange(ctx context.Context, params *lsproto.LinkedEditingRangeParams) (lsproto.LinkedEditingRangeResponse, error) {
 	_, sourceFile := l.getProgramAndFile(params.TextDocument.Uri)
-	position := l.converters.LineAndCharacterToPosition(sourceFile, params.Position)
+	positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, params.Position, spanmap.FeatureLinkedEditing)
+	if len(positions) != 1 || !positions[0].Fidelity.IsExact() {
+		return lsproto.LinkedEditingRangeResponse{}, nil
+	}
+	sourceFile = positions[0].Script
+	position := positions[0].Position
 	token := astnav.FindPrecedingToken(sourceFile, int(position))
 
 	if token == nil || token.Parent.Kind == ast.KindSourceFile {
@@ -39,8 +46,11 @@ func (l *LanguageService) ProvideLinkedEditingRange(ctx context.Context, params 
 			return lsproto.LinkedEditingRangeResponse{}, nil
 		}
 
-		openLineChar := l.converters.PositionToLineAndCharacter(sourceFile, openPos)
-		closeLineChar := l.converters.PositionToLineAndCharacter(sourceFile, closePos)
+		openLineChar, openFidelity := l.converters.ToLSPPositionForFeature(sourceFile, openPos, spanmap.FeatureLinkedEditing)
+		closeLineChar, closeFidelity := l.converters.ToLSPPositionForFeature(sourceFile, closePos, spanmap.FeatureLinkedEditing)
+		if !openFidelity.IsExact() || !closeFidelity.IsExact() {
+			return lsproto.LinkedEditingRangeResponse{}, nil
+		}
 		return lsproto.LinkedEditingRangeResponse{
 			LinkedEditingRanges: &lsproto.LinkedEditingRanges{
 				Ranges: []lsproto.Range{
@@ -88,17 +98,17 @@ func (l *LanguageService) ProvideLinkedEditingRange(ctx context.Context, params 
 			return lsproto.LinkedEditingRangeResponse{}, nil
 		}
 
+		openRange, openFidelity := l.converters.ToLSPRangeForFeature(sourceFile, core.NewTextRange(openTagNameStart, openTagNameEnd), spanmap.FeatureLinkedEditing)
+		closeRange, closeFidelity := l.converters.ToLSPRangeForFeature(sourceFile, core.NewTextRange(closeTagNameStart, closeTagNameEnd), spanmap.FeatureLinkedEditing)
+		if !openFidelity.IsExact() || !closeFidelity.IsExact() {
+			return lsproto.LinkedEditingRangeResponse{}, nil
+		}
+
 		return lsproto.LinkedEditingRangeResponse{
 			LinkedEditingRanges: &lsproto.LinkedEditingRanges{
 				Ranges: []lsproto.Range{
-					{
-						Start: l.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(openTagNameStart)),
-						End:   l.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(openTagNameEnd)),
-					},
-					{
-						Start: l.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(closeTagNameStart)),
-						End:   l.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(closeTagNameEnd)),
-					},
+					openRange,
+					closeRange,
 				},
 				WordPattern: jsxTagWordPattern,
 			},

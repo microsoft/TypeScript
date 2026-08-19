@@ -3,9 +3,11 @@ package incremental
 import (
 	"fmt"
 	"iter"
+	"slices"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/typescript-go/internal/contentmapper"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/json"
@@ -201,6 +203,8 @@ type BuildInfoDiagnostic struct {
 	End                int                      `json:"end,omitzero"`
 	Code               int32                    `json:"code,omitzero"`
 	Category           diagnostics.Category     `json:"category,omitzero"`
+	Source             string                   `json:"source,omitzero"`
+	MessageText        string                   `json:"messageText,omitzero"`
 	MessageKey         diagnostics.Key          `json:"messageKey,omitzero"`
 	MessageArgs        []string                 `json:"messageArgs,omitzero"`
 	MessageChain       []*BuildInfoDiagnostic   `json:"messageChain,omitzero"`
@@ -463,11 +467,12 @@ type BuildInfo struct {
 	Version string `json:"version,omitzero"`
 
 	// Common between incremental and tsc -b buildinfo for non incremental programs
-	Errors              bool             `json:"errors,omitzero"`
-	CheckPending        bool             `json:"checkPending,omitzero"`
-	Root                []*BuildInfoRoot `json:"root,omitzero"`
-	PackageJsons        []string         `json:"packageJsons,omitzero"`
-	MissingPackageJsons []string         `json:"missingPackageJsons,omitzero"`
+	Errors                  bool             `json:"errors,omitzero"`
+	CheckPending            bool             `json:"checkPending,omitzero"`
+	Root                    []*BuildInfoRoot `json:"root,omitzero"`
+	PackageJsons            []string         `json:"packageJsons,omitzero"`
+	MissingPackageJsons     []string         `json:"missingPackageJsons,omitzero"`
+	ContentMapperIdentities []string         `json:"contentMapperIdentities,omitzero"`
 
 	// IncrementalProgram info
 	FileNames                  []string                             `json:"fileNames,omitzero"`
@@ -489,6 +494,21 @@ type BuildInfo struct {
 
 func (b *BuildInfo) IsValidVersion() bool {
 	return b.Version == core.Version()
+}
+
+// ContentMapperIdentities returns the project's sorted mapper transform identities. A nil project means
+// the compiler host has no configured content mappers.
+func ContentMapperIdentities(project contentmapper.Project) ([]string, error) {
+	if project == nil {
+		return nil, nil
+	}
+	return project.Identities()
+}
+
+// ContentMapperIdentitiesMatch reports whether the content mapper identities recorded in this build info
+// match the given current identities (as produced by ContentMapperIdentities).
+func (b *BuildInfo) ContentMapperIdentitiesMatch(current []string) bool {
+	return slices.Equal(b.ContentMapperIdentities, current)
 }
 
 func (b *BuildInfo) IsIncremental() bool {

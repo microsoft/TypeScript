@@ -6,9 +6,11 @@ import (
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/zeebo/xxh3"
@@ -99,7 +101,7 @@ func (f *diskFile) IsOverlay() bool {
 }
 
 func (f *diskFile) Kind() core.ScriptKind {
-	return core.EnsureScriptKindFromFileName(f.fileName)
+	return core.GetScriptKindFromFileName(f.fileName)
 }
 
 func (f *diskFile) Clone() *diskFile {
@@ -141,6 +143,15 @@ func (o *Overlay) Version() int32 {
 func (o *Overlay) Text() string {
 	return o.content
 }
+
+func (o *Overlay) OriginalFileName() string { return o.FileName() }
+
+// SpanMap and OriginalText satisfy lsconv.Script. An overlay holds the editor's raw text (for a
+// content-mapped file, that is the original foreign text, not the transformed output), so it never
+// carries a span map and its original text is its own text.
+func (o *Overlay) SpanMap() *spanmap.SpanMap { return nil }
+
+func (o *Overlay) OriginalText() string { return o.content }
 
 // MatchesDiskText may return false negatives, but never false positives.
 func (o *Overlay) MatchesDiskText() bool {
@@ -312,7 +323,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 			}
 			scriptKind := lsconv.LanguageKindToScriptKind(events.openChange.LanguageKind)
 			if scriptKind == core.ScriptKindUnknown {
-				scriptKind = core.EnsureScriptKindFromFileName(uri.FileName())
+				scriptKind = core.GetScriptKindFromFileName(uri.FileName())
 			}
 			newOverlays[path] = newOverlay(
 				uri.FileName(),
@@ -355,7 +366,10 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 				})
 				for _, textChange := range change.Changes {
 					if partialChange := textChange.Partial; partialChange != nil {
-						newContent := converters.FromLSPTextChange(o, partialChange).ApplyTo(o.content)
+						ranges := lsconv.FromLSPRange(converters, o, partialChange.Range, spanmap.FeatureAll)
+						debug.Assert(len(ranges) == 1, "expected exactly one range for partial change")
+						textChange := core.TextChange{TextRange: ranges[0].Span, NewText: partialChange.Text}
+						newContent := textChange.ApplyTo(o.content)
 						o = newOverlay(o.fileName, newContent, change.Version, o.kind)
 					} else if wholeChange := textChange.WholeDocument; wholeChange != nil {
 						o = newOverlay(o.fileName, wholeChange.Text, change.Version, o.kind)

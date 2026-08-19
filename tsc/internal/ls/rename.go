@@ -16,6 +16,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/module"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -28,6 +29,37 @@ type RenameInfo struct {
 	TriggerSpan           lsproto.Range
 	FileToRename          string
 	NewFileName           string
+}
+
+type mappedRenameEdit struct {
+	uri  lsproto.DocumentUri
+	edit *lsproto.TextEdit
+}
+
+type renameEditKey struct {
+	uri       lsproto.DocumentUri
+	textRange lsproto.Range
+}
+
+func deduplicateRenameEdits(mappedEdits []mappedRenameEdit) (map[lsproto.DocumentUri][]*lsproto.TextEdit, bool) {
+	editTexts := make(map[renameEditKey]string)
+	uniqueEdits := make([]mappedRenameEdit, 0, len(mappedEdits))
+	for _, mappedEdit := range mappedEdits {
+		key := renameEditKey{uri: mappedEdit.uri, textRange: mappedEdit.edit.Range}
+		if existingText, ok := editTexts[key]; ok {
+			if existingText != mappedEdit.edit.NewText {
+				return nil, false
+			}
+			continue
+		}
+		editTexts[key] = mappedEdit.edit.NewText
+		uniqueEdits = append(uniqueEdits, mappedEdit)
+	}
+	changes := make(map[lsproto.DocumentUri][]*lsproto.TextEdit)
+	for _, mappedEdit := range uniqueEdits {
+		changes[mappedEdit.uri] = append(changes[mappedEdit.uri], mappedEdit.edit)
+	}
+	return changes, true
 }
 
 func (l *LanguageService) ProvideRename(ctx context.Context, params *lsproto.RenameParams, orchestrator CrossProjectOrchestrator) (lsproto.WorkspaceEditOrNull, error) {
@@ -46,14 +78,18 @@ func (l *LanguageService) ProvideRename(ctx context.Context, params *lsproto.Ren
 
 func (l *LanguageService) GetRenameInfo(ctx context.Context, newName string, documentURI lsproto.DocumentUri, position lsproto.Position) RenameInfo {
 	program, sourceFile := l.getProgramAndFile(documentURI)
-	pos := int(l.converters.LineAndCharacterToPosition(sourceFile, position))
-
-	node := astnav.GetTouchingPropertyName(sourceFile, pos)
-	node = getAdjustedLocation(node, true /*forRename*/, sourceFile)
-
-	if nodeIsEligibleForRename(node) {
-		if renameInfo, ok := l.getRenameInfoForNode(ctx, newName, node, sourceFile, program); ok {
-			return renameInfo
+	positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, position, spanmap.FeatureRename)
+	for _, mapped := range positions {
+		if !mapped.Fidelity.IsExact() {
+			continue
+		}
+		sourceFile := mapped.Script
+		node := astnav.GetTouchingPropertyName(sourceFile, int(mapped.Position))
+		node = getAdjustedLocation(node, true /*forRename*/, sourceFile)
+		if nodeIsEligibleForRename(node) {
+			if renameInfo, ok := l.getRenameInfoForNode(ctx, newName, node, sourceFile, program); ok {
+				return renameInfo
+			}
 		}
 	}
 	return getRenameInfoError(ctx, diagnostics.You_cannot_rename_this_element)
@@ -75,7 +111,7 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 	}
 
 	entries := core.FlatMap(data.SymbolsAndEntries, func(s *SymbolAndEntries) []*ReferenceEntry { return s.references })
-	changes := make(map[lsproto.DocumentUri][]*lsproto.TextEdit)
+	var mappedEdits []mappedRenameEdit
 	ch, done := program.GetTypeChecker(ctx)
 	defer done()
 
@@ -87,17 +123,45 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 		if l.UserPreferences().AllowRenameOfImportPath != core.TSTrue && entry.node != nil && ast.IsStringLiteralLike(entry.node) && ast.TryGetImportFromModuleSpecifier(entry.node) != nil {
 			continue
 		}
+		rng, ok := l.renameEditRange(entry)
+		if !ok {
+			// The occurrence lies outside a verbatim span of a content-mapped file, so it cannot be
+			// written back to the original text. Skip it and keep renaming the remaining occurrences.
+			continue
+		}
 		textEdit := &lsproto.TextEdit{
-			Range:   l.getRangeOfEntry(entry),
+			Range:   rng,
 			NewText: l.getTextForRename(data.OriginalNode, entry, params.NewName, ch, quotePreference, useAliasesForRename),
 		}
-		changes[uri] = append(changes[uri], textEdit)
+		mappedEdits = append(mappedEdits, mappedRenameEdit{uri: uri, edit: textEdit})
+	}
+	changes, ok := deduplicateRenameEdits(mappedEdits)
+	if !ok {
+		return lsproto.WorkspaceEditOrNull{}, nil
 	}
 	return lsproto.WorkspaceEditOrNull{
 		WorkspaceEdit: &lsproto.WorkspaceEdit{
 			Changes: &changes,
 		},
 	}, nil
+}
+
+// renameEditRange returns the LSP range at which a rename occurrence should be edited. For occurrences in
+// content-mapped files it maps the transformed range strictly, returning ok=false when the occurrence is
+// not fully within a single verbatim span, so the caller can skip an edit that cannot be applied to the
+// original text.
+func (l *LanguageService) renameEditRange(entry *ReferenceEntry) (lsproto.Range, bool) {
+	l.resolveEntry(entry)
+	if entry.node == nil {
+		location, fidelity := l.sourceFileRangeToLSPLocation(entry.sourceFile, *entry.textRange)
+		return location.Range, fidelity.IsExact()
+	}
+	sourceFile := ast.GetSourceFileOfNode(entry.node)
+	if sourceFile == nil || sourceFile.SpanMap() == nil {
+		return l.getRangeOfEntry(entry), true
+	}
+	lspRange, fidelity := l.converters.ToLSPRange(sourceFile, *entry.textRange)
+	return lspRange, fidelity.IsExact()
 }
 
 // getRenameInfoForNode performs detailed validation for a rename operation on a specific node.
@@ -143,6 +207,9 @@ func (l *LanguageService) getRenameInfoForNode(ctx context.Context, newName stri
 }
 
 func nodeIsEligibleForRename(node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
 	switch node.Kind {
 	case ast.KindIdentifier,
 		ast.KindPrivateIdentifier,
@@ -266,10 +333,14 @@ func (l *LanguageService) getRenameInfoForModule(ctx context.Context, newName st
 	start := astnav.GetStartOfNode(specifier, sourceFile, false /*includeJSDoc*/) + 1 + indexAfterLastSlash
 	length := len(specifier.Text()) - indexAfterLastSlash
 
+	triggerSpan, fidelity := l.converters.ToLSPRange(sourceFile, core.NewTextRange(start, start+length))
+	if !fidelity.IsExact() {
+		return RenameInfo{}, false
+	}
 	return RenameInfo{
 		CanRename:    true,
 		DisplayName:  specifier.Text()[indexAfterLastSlash:],
-		TriggerSpan:  l.converters.ToLSPRange(sourceFile, core.NewTextRange(start, start+length)),
+		TriggerSpan:  triggerSpan,
 		FileToRename: displayName,
 		NewFileName:  newFileName,
 	}, true
@@ -371,9 +442,13 @@ func getRenameInfoSuccess(node *ast.Node, sourceFile *ast.SourceFile, displayNam
 		start++
 		end--
 	}
+	triggerSpan, fidelity := converters.ToLSPRange(sourceFile, core.NewTextRange(start, end))
+	if !fidelity.IsExact() {
+		return RenameInfo{CanRename: false}
+	}
 	return RenameInfo{
 		CanRename:   true,
 		DisplayName: displayName,
-		TriggerSpan: converters.ToLSPRange(sourceFile, core.NewTextRange(start, end)),
+		TriggerSpan: triggerSpan,
 	}
 }

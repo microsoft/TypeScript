@@ -13,10 +13,12 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/modulespecifiers"
 	"github.com/microsoft/typescript-go/internal/parser"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
@@ -26,11 +28,31 @@ func (l *LanguageService) ProvideSourceDefinition(
 	documentURI lsproto.DocumentUri,
 	position lsproto.Position,
 ) (lsproto.DefinitionResponse, error) {
+	program, file := l.getProgramAndFile(documentURI)
+	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, position, spanmap.FeatureDefinition)
+	results := make([]lsproto.DefinitionResponse, 0, len(positions))
+	for _, mapped := range positions {
+		if mapped.Fidelity.IsSingleSegment() {
+			result, err := l.provideSourceDefinitionAtPosition(ctx, program, mapped.Script, mapped.Position)
+			if err != nil {
+				return lsproto.DefinitionResponse{}, err
+			}
+			results = append(results, result)
+		}
+	}
+	return combineDefinitionResponses(results, lsproto.GetClientCapabilities(ctx).TextDocument.Definition.LinkSupport), nil
+}
+
+func (l *LanguageService) provideSourceDefinitionAtPosition(
+	ctx context.Context,
+	program *compiler.Program,
+	file *ast.SourceFile,
+	textPos core.TextPos,
+) (lsproto.DefinitionResponse, error) {
 	caps := lsproto.GetClientCapabilities(ctx)
 	clientSupportsLink := caps.TextDocument.Definition.LinkSupport
 
-	program, file := l.getProgramAndFile(documentURI)
-	pos := int(l.converters.LineAndCharacterToPosition(file, position))
+	pos := int(textPos)
 	resolver := l.newSourceDefResolver(program, file.FileName())
 	node := astnav.GetTouchingPropertyName(file, pos)
 
@@ -38,13 +60,13 @@ func (l *LanguageService) ProvideSourceDefinition(
 		// Triple-slash directives are comments, not AST nodes, so
 		// GetTouchingPropertyName returns the SourceFile node.
 		if declarations, ref := resolver.resolveTripleSlashReference(file, pos, program); len(declarations) != 0 {
-			originSelectionRange := l.createLspRangeFromBounds(ref.Pos(), ref.End(), file)
-			return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, declarations, nil /*reference*/), nil
+			originSelectionRange, _ := l.createLspRangeFromBounds(ref.Pos(), ref.End(), file)
+			return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, declarations, nil /*reference*/, spanmap.FeatureDefinition), nil
 		}
 		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{}, nil
 	}
 
-	originSelectionRange := l.createLspRangeFromNode(node, file)
+	originSelectionRange, _ := l.createLspRangeFromNode(node, file)
 
 	// If the cursor is directly on a module specifier string, resolve to the
 	// implementation file's entry point.
@@ -53,10 +75,10 @@ func (l *LanguageService) ProvideSourceDefinition(
 		specifierMode := program.GetModeForUsageLocation(file, containingModuleSpecifier)
 		if implementationFile := resolver.resolveImplementation(containingModuleSpecifier.Text(), specifierMode); implementationFile != "" {
 			if sourceFile := resolver.getOrParseSourceFile(implementationFile); sourceFile != nil {
-				return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, getSourceDefinitionEntryDeclarations(sourceFile), nil), nil
+				return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, getSourceDefinitionEntryDeclarations(sourceFile), nil, spanmap.FeatureDefinition), nil
 			}
 		}
-		return l.provideDefinitionWorker(ctx, documentURI, position)
+		return l.provideDefinitionAtPosition(ctx, program, file, textPos, clientSupportsLink), nil
 	}
 
 	// Phase 1: Syntactic fast path — when the cursor is inside an
@@ -74,7 +96,7 @@ func (l *LanguageService) ProvideSourceDefinition(
 		moduleResults := resolver.searchImplementationFile(node, resolvedImplFile, names)
 		if len(moduleResults) != 0 {
 			if !ast.IsPartOfTypeNode(node) && !ast.IsPartOfTypeOnlyImportOrExportDeclaration(node) || hasConcreteSourceDeclarations(moduleResults) {
-				return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, uniqueDeclarationNodes(moduleResults), nil), nil
+				return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, uniqueDeclarationNodes(moduleResults), nil, spanmap.FeatureDefinition), nil
 			}
 		}
 	}
@@ -95,12 +117,12 @@ func (l *LanguageService) ProvideSourceDefinition(
 		// in which case the .d.ts definition is more appropriate.
 		if containingModuleSpecifier != nil && resolvedImplFile != "" && !hasConcreteSourceDeclarations(checkerDeclarations) {
 			if sourceFile := resolver.getOrParseSourceFile(resolvedImplFile); sourceFile != nil {
-				return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, getSourceDefinitionEntryDeclarations(sourceFile), nil), nil
+				return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, getSourceDefinitionEntryDeclarations(sourceFile), nil, spanmap.FeatureDefinition), nil
 			}
 		}
-		return l.provideDefinitionWorker(ctx, documentURI, position)
+		return l.provideDefinitionAtPosition(ctx, program, file, textPos, clientSupportsLink), nil
 	}
-	return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, declarations, nil /*reference*/), nil
+	return l.createDefinitionLocations(originSelectionRange, clientSupportsLink, declarations, nil /*reference*/, spanmap.FeatureDefinition), nil
 }
 
 // sourceDefResolver resolves source definitions by mapping .d.ts declarations
@@ -131,7 +153,7 @@ func (l *LanguageService) newSourceDefResolver(
 		options:       options,
 		getSourceFile: program.GetSourceFile,
 		resolveFrom:   resolveFrom,
-		resolver:      module.NewResolver(program.Host(), noDtsOptions, program.GetGlobalTypingsCacheLocation(), ""),
+		resolver:      module.NewResolver(program.Host(), noDtsOptions, program.GetGlobalTypingsCacheLocation(), "", program.CommandLine().ContentMapperExtensions()),
 	}
 }
 

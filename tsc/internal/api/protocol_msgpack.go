@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/microsoft/typescript-go/internal/ipc"
 	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/jsonrpc"
 )
@@ -43,7 +44,7 @@ type MessagePackProtocol struct {
 	w *bufio.Writer
 }
 
-var _ Protocol = (*MessagePackProtocol)(nil)
+var _ ipc.Protocol = (*MessagePackProtocol)(nil)
 
 // NewMessagePackProtocol creates a new msgpack protocol handler.
 func NewMessagePackProtocol(rw io.ReadWriter) *MessagePackProtocol {
@@ -54,14 +55,14 @@ func NewMessagePackProtocol(rw io.ReadWriter) *MessagePackProtocol {
 }
 
 // ReadMessage implements Protocol.
-func (p *MessagePackProtocol) ReadMessage() (*Message, error) {
+func (p *MessagePackProtocol) ReadMessage() (*ipc.Message, error) {
 	msgType, method, payload, err := p.readTuple()
 	if err != nil {
 		return nil, err
 	}
 
 	// Convert msgpack message type to JSON-RPC message
-	msg := &Message{}
+	msg := &ipc.Message{}
 
 	switch msgType {
 	case MessageTypeRequest:

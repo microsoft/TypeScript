@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -31,6 +32,9 @@ type Diagnostic interface {
 	Len() int
 	Code() int32
 	Category() diagnostics.Category
+	// Source is a custom prefix shown before the code instead of "TS" (empty means "TS"). A non-empty
+	// value marks the diagnostic as coming from an external source (e.g. a content mapper).
+	Source() string
 	Localize(locale locale.Locale) string
 	MessageChain() []Diagnostic
 	RelatedInformation() []Diagnostic
@@ -51,17 +55,92 @@ func (d *ASTDiagnostic) RelatedInformation() []Diagnostic {
 }
 
 func (d *ASTDiagnostic) File() FileLike {
-	if file := d.Diagnostic.File(); file != nil {
-		return file
+	file := d.Diagnostic.File()
+	if file == nil {
+		return nil
 	}
-	return nil
+	if d.resolve().useOriginal {
+		// The mapper's own diagnostics (Source != "") already carry original ranges; compiler
+		// diagnostics have their transformed ranges mapped back. Both render against the original,
+		// untransformed text. Diagnostics in synthesized code (see resolve) keep the virtual text.
+		return newOriginalTextFile(file)
+	}
+	return file
 }
+
+func (d *ASTDiagnostic) Source() string {
+	return d.Diagnostic.Source()
+}
+
+func (d *ASTDiagnostic) Pos() int { return d.resolve().loc.Pos() }
+func (d *ASTDiagnostic) End() int { return d.resolve().loc.End() }
+func (d *ASTDiagnostic) Len() int { return d.resolve().loc.Len() }
+
+// resolvedLocation describes how a diagnostic on a content-mapped file should be reported.
+type resolvedLocation struct {
+	loc         core.TextRange
+	useOriginal bool // render against the file's original, untransformed text
+	synthesized bool // the range is in virtual code with no corresponding original location
+}
+
+// resolve determines where and against which text a diagnostic should be reported. A content mapper's
+// own diagnostics already carry original ranges. A compiler diagnostic on a content-mapped file has its
+// virtual range mapped back to the original; if it falls entirely within synthesized code, there is no
+// original location, so it is shown against the virtual text and flagged as synthesized.
+func (d *ASTDiagnostic) resolve() resolvedLocation {
+	loc := d.Diagnostic.Loc()
+	file := d.Diagnostic.File()
+	switch {
+	case file == nil:
+		return resolvedLocation{loc: loc}
+	case d.Diagnostic.Source() != "":
+		return resolvedLocation{loc: loc, useOriginal: true}
+	case file.SpanMap() != nil:
+		mapped, fidelity := file.SpanMap().VirtualToOriginalSpan(loc)
+		if fidelity == spanmap.FidelityNone {
+			return resolvedLocation{loc: loc, synthesized: true}
+		}
+		return resolvedLocation{loc: mapped, useOriginal: true}
+	default:
+		return resolvedLocation{loc: loc}
+	}
+}
+
+// originalTextFile presents a source file's original (untransformed) text as a FileLike, so that
+// diagnostics whose ranges point into that text render at the correct locations.
+type originalTextFile struct {
+	fileName string
+	text     string
+	lineMap  []core.TextPos
+}
+
+func newOriginalTextFile(file *ast.SourceFile) *originalTextFile {
+	text := file.OriginalText()
+	return &originalTextFile{
+		fileName: file.FileName(),
+		text:     text,
+		lineMap:  []core.TextPos(core.ComputeECMALineStarts(text)),
+	}
+}
+
+func (f *originalTextFile) FileName() string            { return f.fileName }
+func (f *originalTextFile) Text() string                { return f.text }
+func (f *originalTextFile) ECMALineMap() []core.TextPos { return f.lineMap }
 
 func (d *ASTDiagnostic) MessageChain() []Diagnostic {
 	chain := d.Diagnostic.MessageChain()
-	result := make([]Diagnostic, len(chain))
-	for i, c := range chain {
-		result[i] = &ASTDiagnostic{c}
+	result := make([]Diagnostic, 0, len(chain)+1)
+	for _, c := range chain {
+		result = append(result, &ASTDiagnostic{c})
+	}
+	if d.resolve().synthesized {
+		// The diagnostic points into synthesized virtual code; make clear the shown location is not in the
+		// original file, and which content mapper produced it.
+		note := ast.NewCompilerDiagnostic(
+			diagnostics.This_location_is_in_virtual_code_produced_by_the_content_mapper_0_and_has_no_corresponding_location_in_the_original_file,
+			d.Diagnostic.File().ContentMapper(),
+		)
+		result = append(result, WrapASTDiagnostic(note))
 	}
 	return result
 }
@@ -140,7 +219,7 @@ func FormatDiagnosticWithColorAndContext(output io.Writer, diagnostic Diagnostic
 	}
 
 	writeWithStyleAndReset(output, diagnostic.Category().Name(), getCategoryFormat(diagnostic.Category()))
-	fmt.Fprintf(output, "%s TS%d: %s", foregroundColorEscapeGrey, diagnostic.Code(), resetEscapeSequence)
+	fmt.Fprintf(output, "%s %s%d: %s", foregroundColorEscapeGrey, diagnosticPrefix(diagnostic), diagnostic.Code(), resetEscapeSequence)
 	WriteFlattenedDiagnosticMessage(output, diagnostic, formatOpts.NewLine, formatOpts.Locale)
 
 	if diagnostic.File() != nil && diagnostic.Code() != diagnostics.File_appears_to_be_binary.Code() {
@@ -278,6 +357,15 @@ func flattenDiagnosticMessageChain(writer io.Writer, chain Diagnostic, newLine s
 	for _, child := range chain.MessageChain() {
 		flattenDiagnosticMessageChain(writer, child, newLine, locale, level+1)
 	}
+}
+
+// diagnosticPrefix returns the prefix shown before a diagnostic's code, e.g. "TS" for compiler
+// diagnostics or a content mapper's custom source for its diagnostics.
+func diagnosticPrefix(diagnostic Diagnostic) string {
+	if source := diagnostic.Source(); source != "" {
+		return source
+	}
+	return "TS"
 }
 
 func getCategoryFormat(category diagnostics.Category) string {
@@ -472,7 +560,7 @@ func WriteFormatDiagnostic(output io.Writer, diagnostic Diagnostic, formatOpts *
 		fmt.Fprintf(output, "%s(%d,%d): ", relativeFileName, line+1, int(character)+1)
 	}
 
-	fmt.Fprintf(output, "%s TS%d: ", diagnostic.Category().Name(), diagnostic.Code())
+	fmt.Fprintf(output, "%s %s%d: ", diagnostic.Category().Name(), diagnosticPrefix(diagnostic), diagnostic.Code())
 	WriteFlattenedDiagnosticMessage(output, diagnostic, formatOpts.NewLine, formatOpts.Locale)
 	fmt.Fprint(output, formatOpts.NewLine)
 }

@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/contentMapperTransform.ts] ////
+
+=== /app.box ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(app.box, 0, 5))
+
+export const label: string = "widget";
+>label : Symbol(label, Decl(app.box, 1, 12))
+
+export const version = 7;
+>version : Symbol(version, Decl(app.box, 2, 12))
+
+export const flavor = undefined;
+>flavor : Symbol(flavor, Decl(app.box, 3, 12))
+>undefined : Symbol(undefined)
+
+=== /main.ts ===
+import { label, version, flavor } from "./app.box";
+>label : Symbol(label, Decl(main.ts, 0, 8))
+>version : Symbol(version, Decl(main.ts, 0, 15))
+>flavor : Symbol(flavor, Decl(main.ts, 0, 24))
+
+export const upper: string = label;
+>upper : Symbol(upper, Decl(main.ts, 2, 12))
+>label : Symbol(label, Decl(main.ts, 0, 8))
+
+export const twice: number = version * 2;
+>twice : Symbol(twice, Decl(main.ts, 3, 12))
+>version : Symbol(version, Decl(main.ts, 0, 15))
+
+export const maybe: undefined = flavor;
+>maybe : Symbol(maybe, Decl(main.ts, 4, 12))
+>flavor : Symbol(flavor, Decl(main.ts, 0, 24))
+

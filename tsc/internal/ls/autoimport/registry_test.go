@@ -15,6 +15,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/testutil/autoimporttestutil"
+	"github.com/microsoft/typescript-go/internal/testutil/contentmappertest"
 	"github.com/microsoft/typescript-go/internal/testutil/projecttestutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
@@ -952,6 +953,53 @@ export const b = a;
 		assert.Equal(t, len(stats.NodeModulesBuckets), 2, "expected both app and repo node_modules buckets")
 		assert.Equal(t, stats.UniquePackageCount, 1, "expected one unique package after realpath dedup")
 	})
+}
+
+func TestContentMappedNodeModulesFileUsesProjectBucket(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	files := map[string]any{
+		"/home/project/tsconfig.json": `{
+			"compilerOptions": { "module": "esnext", "moduleResolution": "bundler", "strict": true, "skipLibCheck": true },
+			"contentMappers": [ { "package": "mapper", "extensions": [".vue"] } ]
+		}`,
+		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.ComponentMapper),
+		"/home/project/node_modules/profile-package/ProfileCard.vue": `<component name="ProfileCard">
+<script lang="ts">
+export const profileTitle = "Profile";
+</script>`,
+		"/home/project/node_modules/profile-package/HiddenCard.vue": `<component name="HiddenCard">
+<script lang="ts">
+export const hiddenTitle = "Hidden";
+</script>`,
+		"/home/project/node_modules/profile-package/ordinary.ts": `export const ordinary = true;`,
+		"/home/project/load.ts": `import "profile-package/ProfileCard.vue";
+import "profile-package/ordinary";`,
+		"/home/project/main.ts": `profileTitle;`,
+	}
+	init, _ := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+		CurrentDirectory:   "/home/project",
+		DefaultLibraryPath: bundled.LibPath(),
+		TypingsLocation:    projecttestutil.TestTypingsLocation,
+		PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+		RunExternalCode:    true,
+	}, nil)
+	init.Spawner = contentmappertest.NewSpawner()
+	session := project.NewSession(init)
+	defer session.Close()
+
+	ctx := context.Background()
+	mainURI := lsproto.DocumentUri("file:///home/project/main.ts")
+	session.DidOpenFile(ctx, mainURI, 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+	_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, mainURI)
+	assert.NilError(t, err)
+	session.WaitForBackgroundTasks()
+
+	projectBucket := singleBucket(t, autoImportStats(t, session).ProjectBuckets)
+	assert.Equal(t, projectBucket.FileCount, 3, "expected the two project roots and referenced mapped package file")
 }
 
 func TestHiddenDirectoriesInNodeModules(t *testing.T) {

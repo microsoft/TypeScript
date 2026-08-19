@@ -1,6 +1,7 @@
 // ast.ts — Hand-written AST type definitions
 // Generated types are in ast.generated.ts
 
+import type { DiagnosticDirectivePolicy } from "#enums/diagnosticDirectivePolicy";
 import type { InternalSymbolName } from "#enums/internalSymbolName";
 import type { LanguageVariant } from "#enums/languageVariant";
 import type { NodeFlags } from "#enums/nodeFlags";
@@ -49,6 +50,7 @@ import type {
     WhileStatement,
     WithStatement,
 } from "./ast.generated.ts";
+import type { SpanMap } from "./spanMap.ts";
 
 export { SyntaxKind } from "#enums/syntaxKind";
 export { TokenFlags } from "#enums/tokenFlags";
@@ -113,11 +115,30 @@ export interface LineAndCharacter {
     readonly character: number;
 }
 
+export interface MappedDiagnosticDirective {
+    readonly originalRange: ReadonlyTextRange;
+    readonly virtualRange: ReadonlyTextRange;
+    readonly policy: DiagnosticDirectivePolicy;
+    readonly unusedCode: number;
+}
+
 export interface SourceFile extends Node {
     readonly kind: SyntaxKind.SourceFile;
     readonly statements: NodeArray<Statement>;
     readonly endOfFileToken: EndOfFile;
     readonly text: string;
+    readonly originalText: string;
+    readonly spanMap: SpanMap | undefined;
+    /** Identity of the content mapper that produced this source file. */
+    readonly contentMapper?: string;
+    /** Filename used to determine the syntax and module semantics of the transformed content. */
+    readonly virtualFileName?: string;
+    /** Framework-specific diagnostic directives applied to the transformed content. */
+    readonly diagnosticDirectives?: readonly MappedDiagnosticDirective[];
+    /** Compiler-assigned filenames of supplemental outputs associated with this canonical source file. */
+    readonly supplementalSourceFileNames?: readonly string[];
+    /** Canonical source filename associated with this supplemental output, if this is supplemental. */
+    readonly canonicalSourceFileName?: string;
     readonly fileName: string;
     readonly path: Path;
     readonly languageVariant: LanguageVariant;

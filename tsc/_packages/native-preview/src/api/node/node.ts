@@ -2,9 +2,13 @@ import {
     computeLineStarts,
     type FileReference,
     type LineAndCharacter,
+    type MappedDiagnosticDirective,
     type Node,
     NodeFlags,
     type Path,
+    SpanMap,
+    SpanMapFeature,
+    SpanMapKind,
     SyntaxKind,
     TokenFlags,
 } from "../../ast/index.ts";
@@ -36,6 +40,34 @@ import { Wtf8Decoder } from "./wtf8.ts";
 export { RemoteNode, RemoteNodeList } from "./node.generated.ts";
 export { readParseOptionsKey, readSourceFileHash, RemoteNodeBase } from "./node.infrastructure.ts";
 
+const sourceFileExtendedDataOffsets = {
+    Text: 0,
+    FileName: 4,
+    Path: 8,
+    LanguageVariant: 12,
+    ScriptKind: 16,
+    ReferencedFiles: 20,
+    TypeReferenceDirectives: 24,
+    LibReferenceDirectives: 28,
+    Imports: 32,
+    ModuleAugmentations: 36,
+    AmbientModuleNames: 40,
+    ExternalModuleIndicator: 44,
+    OriginalText: 48,
+    SpanMap: 52,
+    SupplementalSourceFileNames: 56,
+    CanonicalSourceFileName: 60,
+    ContentMapper: 64,
+    VirtualFileName: 68,
+    DiagnosticDirectives: 72,
+} as const;
+
+for (const [index, offset] of Object.values(sourceFileExtendedDataOffsets).entries()) {
+    if (offset !== index * Uint32Array.BYTES_PER_ELEMENT) {
+        throw new Error(`Invalid SourceFile extended data offset ${offset} at index ${index}`);
+    }
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // RemoteSourceFile
 // ═══════════════════════════════════════════════════════════════════════════
@@ -59,6 +91,11 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     private _cachedImports: readonly Node[] | undefined;
     private _cachedModuleAugmentations: readonly Node[] | undefined;
     private _cachedAmbientModuleNames: readonly string[] | undefined;
+    private _cachedSpanMap: SpanMap | undefined;
+    private _spanMapRead = false;
+    private _cachedSupplementalSourceFileNames: readonly string[] | undefined;
+    private _cachedDiagnosticDirectives: readonly MappedDiagnosticDirective[] | undefined;
+    private _diagnosticDirectivesRead = false;
 
     constructor(data: Uint8Array, decoder: TextDecoder, timing?: TimingCollector) {
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
@@ -160,26 +197,26 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     }
 
     get fileName(): string {
-        const stringIndex = this.view.getUint32(this.extendedDataOffset + 4, true);
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.FileName, true);
         return this.getString(stringIndex);
     }
 
     get path(): string {
-        const stringIndex = this.view.getUint32(this.extendedDataOffset + 8, true);
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.Path, true);
         return this.getString(stringIndex);
     }
 
     get languageVariant(): number {
-        return this.view.getUint32(this.extendedDataOffset + 12, true);
+        return this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.LanguageVariant, true);
     }
 
     get scriptKind(): number {
-        return this.view.getUint32(this.extendedDataOffset + 16, true);
+        return this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ScriptKind, true);
     }
 
     get referencedFiles(): readonly FileReference[] {
         if (this._cachedReferencedFiles !== undefined) return this._cachedReferencedFiles;
-        const offset = this.view.getUint32(this.extendedDataOffset + 20, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ReferencedFiles, true);
         const files = this.readFileReferences(offset);
         this._cachedReferencedFiles = files;
         return files;
@@ -187,7 +224,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     get typeReferenceDirectives(): readonly FileReference[] {
         if (this._cachedTypeReferenceDirectives !== undefined) return this._cachedTypeReferenceDirectives;
-        const offset = this.view.getUint32(this.extendedDataOffset + 24, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.TypeReferenceDirectives, true);
         const directives = this.readFileReferences(offset);
         this._cachedTypeReferenceDirectives = directives;
         return directives;
@@ -195,7 +232,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     get libReferenceDirectives(): readonly FileReference[] {
         if (this._cachedLibReferenceDirectives !== undefined) return this._cachedLibReferenceDirectives;
-        const offset = this.view.getUint32(this.extendedDataOffset + 28, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.LibReferenceDirectives, true);
         const directives = this.readFileReferences(offset);
         this._cachedLibReferenceDirectives = directives;
         return directives;
@@ -203,7 +240,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     get imports(): readonly Node[] {
         if (this._cachedImports !== undefined) return this._cachedImports;
-        const offset = this.view.getUint32(this.extendedDataOffset + 32, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.Imports, true);
         const imports = this.readNodeIndexArray(offset);
         this._cachedImports = imports;
         return imports;
@@ -211,7 +248,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     get moduleAugmentations(): readonly Node[] {
         if (this._cachedModuleAugmentations !== undefined) return this._cachedModuleAugmentations;
-        const offset = this.view.getUint32(this.extendedDataOffset + 36, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ModuleAugmentations, true);
         const moduleAugmentations = this.readNodeIndexArray(offset);
         this._cachedModuleAugmentations = moduleAugmentations;
         return moduleAugmentations;
@@ -219,17 +256,100 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     get ambientModuleNames(): readonly string[] {
         if (this._cachedAmbientModuleNames !== undefined) return this._cachedAmbientModuleNames;
-        const offset = this.view.getUint32(this.extendedDataOffset + 40, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.AmbientModuleNames, true);
         const names = this.readStringArray(offset);
         this._cachedAmbientModuleNames = names;
         return names;
     }
 
     get externalModuleIndicator(): Node | true | undefined {
-        const nodeIndex = this.view.getUint32(this.extendedDataOffset + 44, true);
+        const nodeIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ExternalModuleIndicator, true);
         if (nodeIndex === 0) return undefined;
         if (nodeIndex === this.index) return true;
         return this.getOrCreateNodeAtIndex(nodeIndex) as Node;
+    }
+
+    get originalText(): string {
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.OriginalText, true);
+        return this.getString(stringIndex);
+    }
+
+    get spanMap(): SpanMap | undefined {
+        if (this._spanMapRead) return this._cachedSpanMap;
+        this._spanMapRead = true;
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.SpanMap, true);
+        if (offset === NO_STRUCTURED_DATA) return undefined;
+        const buf = new Uint8Array(this.view.buffer, this.view.byteOffset, this.view.byteLength);
+        const reader = new MsgpackReader(buf, this._offsetStructuredData + offset);
+        const count = reader.readArrayHeader();
+        const segments = Array(count);
+        for (let i = 0; i < count; i++) {
+            const tupleLength = reader.readArrayHeader();
+            if (tupleLength !== 5 && tupleLength !== 6) throw new Error("Invalid span map segment");
+            const virtualStart = reader.readUint();
+            const virtualLength = reader.readUint();
+            const originalStart = reader.readUint();
+            const originalLength = reader.readUint();
+            const kind = reader.readUint();
+            const features = tupleLength === 6 ? reader.readUint() as SpanMapFeature : SpanMapFeature.All;
+            if (kind !== SpanMapKind.Verbatim && kind !== SpanMapKind.Atom && kind !== SpanMapKind.Alias) throw new Error(`Invalid span map kind: ${kind}`);
+            segments[i] = {
+                virtualStart,
+                virtualEnd: virtualStart + virtualLength,
+                originalStart,
+                originalEnd: originalStart + originalLength,
+                kind,
+                features,
+            };
+        }
+        return this._cachedSpanMap = new SpanMap(segments);
+    }
+
+    get supplementalSourceFileNames(): readonly string[] | undefined {
+        if (this._cachedSupplementalSourceFileNames !== undefined) return this._cachedSupplementalSourceFileNames;
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.SupplementalSourceFileNames, true);
+        if (offset === NO_STRUCTURED_DATA) return undefined;
+        return this._cachedSupplementalSourceFileNames = this.readStringArray(offset);
+    }
+
+    get canonicalSourceFileName(): string | undefined {
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.CanonicalSourceFileName, true);
+        return stringIndex === NO_STRUCTURED_DATA ? undefined : this.getString(stringIndex);
+    }
+
+    get contentMapper(): string | undefined {
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ContentMapper, true);
+        return stringIndex === NO_STRUCTURED_DATA ? undefined : this.getString(stringIndex);
+    }
+
+    get virtualFileName(): string | undefined {
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.VirtualFileName, true);
+        return stringIndex === NO_STRUCTURED_DATA ? undefined : this.getString(stringIndex);
+    }
+
+    get diagnosticDirectives(): readonly MappedDiagnosticDirective[] | undefined {
+        if (this._diagnosticDirectivesRead) return this._cachedDiagnosticDirectives;
+        this._diagnosticDirectivesRead = true;
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.DiagnosticDirectives, true);
+        if (offset === NO_STRUCTURED_DATA) return undefined;
+        const buf = new Uint8Array(this.view.buffer, this.view.byteOffset, this.view.byteLength);
+        const reader = new MsgpackReader(buf, this._offsetStructuredData + offset);
+        const count = reader.readArrayHeader();
+        const directives = Array<MappedDiagnosticDirective>(count);
+        for (let i = 0; i < count; i++) {
+            if (reader.readArrayHeader() !== 6) throw new Error("Invalid diagnostic directive");
+            const originalStart = reader.readUint();
+            const originalLength = reader.readUint();
+            const virtualStart = reader.readUint();
+            const virtualLength = reader.readUint();
+            directives[i] = {
+                originalRange: { pos: originalStart, end: originalStart + originalLength },
+                virtualRange: { pos: virtualStart, end: virtualStart + virtualLength },
+                policy: reader.readUint(),
+                unusedCode: reader.readUint(),
+            };
+        }
+        return this._cachedDiagnosticDirectives = directives;
     }
 
     get isDeclarationFile(): boolean {

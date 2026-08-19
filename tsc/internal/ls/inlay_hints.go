@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/nodebuilder"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
@@ -34,19 +35,25 @@ func (l *LanguageService) ProvideInlayHint(
 	program, file := l.getProgramAndFile(params.TextDocument.Uri)
 	quotePreference := lsutil.GetQuotePreference(file, userPreferences)
 
-	checker, done := program.GetTypeCheckerForFile(ctx, file)
-	defer done()
-	inlayHintState := &inlayHintState{
-		ctx:             ctx,
-		span:            l.converters.FromLSPRange(file, params.Range),
-		preferences:     inlayHintPreferences,
-		quotePreference: quotePreference,
-		file:            file,
-		checker:         checker,
-		converters:      l.converters,
+	mappedRanges := lsconv.FromLSPRangeIntersectingForSourceFile(l.converters, file, params.Range, spanmap.FeatureInlayHints)
+	result := make([]*lsproto.InlayHint, 0, len(mappedRanges))
+	for _, mapped := range mappedRanges {
+		projection := mapped.Script
+		checker, done := program.GetTypeCheckerForFile(ctx, projection)
+		defer done()
+		inlayHintState := &inlayHintState{
+			ctx:             ctx,
+			span:            mapped.Span,
+			preferences:     inlayHintPreferences,
+			quotePreference: quotePreference,
+			file:            projection,
+			checker:         checker,
+			converters:      l.converters,
+		}
+		inlayHintState.visit(projection.AsNode())
+		result = append(result, inlayHintState.result...)
 	}
-	inlayHintState.visit(file.AsNode())
-	return lsproto.InlayHintsOrNull{InlayHints: &inlayHintState.result}, nil
+	return lsproto.InlayHintsOrNull{InlayHints: &result}, nil
 }
 
 type inlayHintState struct {
@@ -333,6 +340,10 @@ func (s *inlayHintState) typePredicateToInlayHintParts(typePredicate *checker.Ty
 }
 
 func (s *inlayHintState) addTypeHints(hint lsproto.StringOrInlayHintLabelParts, position int) {
+	lspPosition, fidelity := s.converters.ToLSPPositionForFeature(s.file, core.TextPos(position), spanmap.FeatureInlayHints)
+	if fidelity.IsNone() {
+		return
+	}
 	if hint.String != nil {
 		hint.String = new(": " + *hint.String)
 	} else {
@@ -340,23 +351,31 @@ func (s *inlayHintState) addTypeHints(hint lsproto.StringOrInlayHintLabelParts, 
 	}
 	s.result = append(s.result, &lsproto.InlayHint{
 		Label:       hint,
-		Position:    s.converters.PositionToLineAndCharacter(s.file, core.TextPos(position)),
+		Position:    lspPosition,
 		Kind:        new(lsproto.InlayHintKindType),
 		PaddingLeft: new(true),
 	})
 }
 
 func (s *inlayHintState) addEnumMemberValueHints(text string, position int) {
+	lspPosition, fidelity := s.converters.ToLSPPositionForFeature(s.file, core.TextPos(position), spanmap.FeatureInlayHints)
+	if fidelity.IsNone() {
+		return
+	}
 	s.result = append(s.result, &lsproto.InlayHint{
 		Label: lsproto.StringOrInlayHintLabelParts{
 			String: new("= " + text),
 		},
-		Position:    s.converters.PositionToLineAndCharacter(s.file, core.TextPos(position)),
+		Position:    lspPosition,
 		PaddingLeft: new(true),
 	})
 }
 
 func (s *inlayHintState) addParameterHints(text string, parameter *ast.IdentifierNode, position int, isFirstVariadicArgument bool) {
+	lspPosition, fidelity := s.converters.ToLSPPositionForFeature(s.file, core.TextPos(position), spanmap.FeatureInlayHints)
+	if fidelity.IsNone() {
+		return
+	}
 	hintText := core.IfElse(isFirstVariadicArgument, "...", "") + text
 	displayParts := []*lsproto.InlayHintLabelPart{
 		s.getNodeDisplayPart(hintText, parameter),
@@ -368,7 +387,7 @@ func (s *inlayHintState) addParameterHints(text string, parameter *ast.Identifie
 
 	s.result = append(s.result, &lsproto.InlayHint{
 		Label:        labelParts,
-		Position:     s.converters.PositionToLineAndCharacter(s.file, core.TextPos(position)),
+		Position:     lspPosition,
 		Kind:         new(lsproto.InlayHintKindParameter),
 		PaddingRight: new(true),
 	})
@@ -769,13 +788,17 @@ func (s *inlayHintState) getNodeDisplayPart(text string, node *ast.Node) *lsprot
 	file := ast.GetSourceFileOfNode(node)
 	pos := astnav.GetStartOfNode(node, file, false /*includeJSDoc*/)
 	end := node.End()
-	return &lsproto.InlayHintLabelPart{
-		Value: text,
-		Location: &lsproto.Location{
-			Uri:   lsconv.FileNameToDocumentURI(file.FileName()),
-			Range: s.converters.ToLSPRange(file, core.NewTextRange(pos, end)),
-		},
+	part := &lsproto.InlayHintLabelPart{Value: text}
+	// The location is an optional go-to target for the name. Only attach it when the name maps back to a
+	// single concrete span in the original text; an approximate or synthesized mapping would point the
+	// user somewhere wrong, so it is better to omit the target than to fabricate one.
+	if lspRange, fidelity := s.converters.ToLSPRangeForFeature(file, core.NewTextRange(pos, end), spanmap.FeatureInlayHints); fidelity.IsSingleSegment() {
+		part.Location = &lsproto.Location{
+			Uri:   lsconv.FileNameToDocumentURI(file.OriginalFileName()),
+			Range: lspRange,
+		}
 	}
+	return part
 }
 
 func (s *inlayHintState) getLiteralText(node *ast.LiteralLikeNode) string {

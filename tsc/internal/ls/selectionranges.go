@@ -6,8 +6,10 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 )
 
 const maxSelectionRangeDepth = 1000
@@ -33,8 +35,7 @@ func (b *selectionRangeBuilder) push(selectionRange lsproto.Range) {
 	b.oldestIndex = (b.oldestIndex + 1) % len(b.ranges)
 }
 
-func (b *selectionRangeBuilder) build(parentRange lsproto.Range) *lsproto.SelectionRange {
-	result := &lsproto.SelectionRange{Range: parentRange}
+func (b *selectionRangeBuilder) build(result *lsproto.SelectionRange) *lsproto.SelectionRange {
 	for i := range b.ranges {
 		index := (b.oldestIndex + i) % len(b.ranges)
 		result = &lsproto.SelectionRange{
@@ -51,10 +52,13 @@ func (l *LanguageService) ProvideSelectionRanges(ctx context.Context, params *ls
 		return lsproto.SelectionRangesOrNull{}, nil
 	}
 
-	var results []*lsproto.SelectionRange
+	results := make([]*lsproto.SelectionRange, 0, len(params.Positions))
 	for _, position := range params.Positions {
-		pos := l.converters.LineAndCharacterToPosition(sourceFile, position)
-		selectionRange := getSmartSelectionRange(l, sourceFile, int(pos))
+		positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, position, spanmap.FeatureSelectionRanges)
+		if len(positions) != 1 || !positions[0].Fidelity.IsSingleSegment() {
+			return lsproto.SelectionRangesOrNull{}, nil
+		}
+		selectionRange := getSmartSelectionRange(l, positions[0].Script, int(positions[0].Position))
 		if selectionRange != nil {
 			results = append(results, selectionRange)
 		}
@@ -181,10 +185,15 @@ func createSyntaxList(factory *ast.NodeFactory, children []*ast.Node) *ast.Node 
 
 func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos int) *lsproto.SelectionRange {
 	factory := &ast.NodeFactory{}
-	fullRange := l.converters.ToLSPRange(sourceFile, core.NewTextRange(sourceFile.Pos(), sourceFile.End()))
 	// Traversal discovers ranges from broadest to most specific, so retain the newest ranges nearest to the cursor
 	ranges := newSelectionRangeBuilder(maxSelectionRangeDepth - 1)
-	lastRange := fullRange
+	var root *lsproto.SelectionRange
+	var lastRange lsproto.Range
+	if sourceFile.ContentMapper() == "" {
+		fullRange, _ := l.converters.ToLSPRange(sourceFile, core.NewTextRange(sourceFile.Pos(), sourceFile.End()))
+		root = &lsproto.SelectionRange{Range: fullRange}
+		lastRange = fullRange
+	}
 
 	nodeContainsPosition := func(node *ast.Node) bool {
 		if node == nil {
@@ -215,7 +224,10 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 			return
 		}
 
-		lspRange := l.converters.ToLSPRange(sourceFile, core.NewTextRange(start, end))
+		lspRange, fidelity := l.converters.ToLSPRangeForFeature(sourceFile, core.NewTextRange(start, end), spanmap.FeatureSelectionRanges)
+		if fidelity.IsNone() {
+			return
+		}
 
 		if lastRange == lspRange {
 			return
@@ -240,9 +252,8 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 		if pos1 == pos2 {
 			return true
 		}
-		lspPos1 := l.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(pos1))
-		lspPos2 := l.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(pos2))
-		return lspPos1.Line == lspPos2.Line
+		lineStarts := sourceFile.ECMALineMap()
+		return scanner.ComputeLineOfPosition(lineStarts, pos1) == scanner.ComputeLineOfPosition(lineStarts, pos2)
 	}
 
 	shouldSkipNode := func(node *ast.Node, parent *ast.Node) bool {
@@ -385,5 +396,5 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 		current.VisitEachChild(tempVisitor)
 		current = next
 	}
-	return ranges.build(fullRange)
+	return ranges.build(root)
 }

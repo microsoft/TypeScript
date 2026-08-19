@@ -17,6 +17,8 @@ export interface ClientSpawnOptions {
     cwd?: string;
     /** Virtual filesystem callbacks */
     fs?: FileSystem;
+    /** Allow trusted projects to execute configured external content mapper processes. */
+    runExternalCode?: boolean;
     /**
      * When true, collect timing information for each request. The client
      * measures round-trip latency and bytes sent/received, and the server
@@ -35,6 +37,15 @@ export function isSpawnOptions(options: ClientOptions): options is ClientSpawnOp
 
 export function resolveExePath(options: ClientSpawnOptions): string {
     return options.tsserverPath ?? getExePath();
+}
+
+export function getAPIProcessArgs(options: ClientSpawnOptions, async: boolean): string[] {
+    const args = ["--api"];
+    if (async) args.push("--async");
+    args.push("--cwd", options.cwd ?? process.cwd());
+    if (options.runExternalCode) args.push("--runExternalCode");
+    if (options.collectTiming) args.push("--timing");
+    return args;
 }
 
 export interface LSPConnectionOptions extends ClientSocketOptions {

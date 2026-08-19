@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/contentmapper"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/glob"
@@ -24,8 +25,25 @@ const (
 	recursiveFileGlobPattern = "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json}"
 )
 
+// fileGlobPatterns returns the include file glob patterns for this command line, augmenting the
+// built-in patterns with the extensions registered by its content mappers so that created
+// content-mapped files are recognized as possible root files.
+func (p *ParsedCommandLine) fileGlobPatterns() (fileGlob string, recursiveFileGlob string) {
+	mapperExtensions := p.ContentMapperExtensions()
+	if len(mapperExtensions) == 0 {
+		return fileGlobPattern, recursiveFileGlobPattern
+	}
+	extensions := make([]string, 0, 9+len(mapperExtensions))
+	extensions = append(extensions, "js", "jsx", "mjs", "cjs", "ts", "tsx", "mts", "cts", "json")
+	for _, extension := range mapperExtensions {
+		extensions = append(extensions, strings.TrimPrefix(extension, "."))
+	}
+	fileGlob = "*.{" + strings.Join(extensions, ",") + "}"
+	return fileGlob, "**/" + fileGlob
+}
+
 type ParsedCommandLine struct {
-	ParsedConfig *core.ParsedOptions `json:"parsedConfig"`
+	ParsedConfig *ParsedOptions `json:"parsedConfig"`
 
 	ConfigFile    *TsConfigSourceFile `json:"configFile"` // TsConfigSourceFile, used in Program and ExecuteCommandLine
 	Errors        []*ast.Diagnostic   `json:"errors"`
@@ -37,7 +55,6 @@ type ParsedCommandLine struct {
 	wildcardDirectories     map[string]bool
 	includeGlobsOnce        sync.Once
 	includeGlobs            []*glob.Glob
-	extraFileExtensions     []FileExtensionInfo
 
 	sourceAndOutputMapsOnce     sync.Once
 	sourceToProjectReference    map[tspath.Path]*SourceOutputAndProjectReference
@@ -63,11 +80,27 @@ func NewParsedCommandLine(
 	comparePathsOptions tspath.ComparePathsOptions,
 ) *ParsedCommandLine {
 	return &ParsedCommandLine{
-		ParsedConfig: &core.ParsedOptions{
+		ParsedConfig: &ParsedOptions{
 			CompilerOptions: compilerOptions,
 			FileNames:       rootFileNames,
 		},
 		comparePathsOptions: comparePathsOptions,
+	}
+}
+
+func (p *ParsedCommandLine) WithFileNames(fileNames []string) *ParsedCommandLine {
+	parsedConfig := *p.ParsedConfig
+	parsedConfig.FileNames = fileNames
+	return &ParsedCommandLine{
+		ParsedConfig:        &parsedConfig,
+		ConfigFile:          p.ConfigFile,
+		Errors:              p.Errors,
+		Raw:                 p.Raw,
+		CompileOnSave:       p.CompileOnSave,
+		comparePathsOptions: p.comparePathsOptions,
+		wildcardDirectories: p.wildcardDirectories,
+		includeGlobs:        p.includeGlobs,
+		literalFileNamesLen: p.literalFileNamesLen,
 	}
 }
 
@@ -203,7 +236,7 @@ func (p *ParsedCommandLine) GetOutputFileNames() iter.Seq[string] {
 					if !yield(dtsFileName) {
 						return
 					}
-					if p.CompilerOptions().GetAreDeclarationMapsEnabled() {
+					if p.GetContentMapperForFileName(fileName) == nil && p.CompilerOptions().GetAreDeclarationMapsEnabled() {
 						declarationMap := dtsFileName + ".map"
 						if !yield(declarationMap) {
 							return
@@ -246,9 +279,10 @@ func (p *ParsedCommandLine) WildcardDirectoryGlobs() []*glob.Glob {
 
 	p.includeGlobsOnce.Do(func() {
 		if p.includeGlobs == nil {
+			fileGlob, recursiveFileGlob := p.fileGlobPatterns()
 			globs := make([]*glob.Glob, 0, len(wildcardDirectories))
 			for dir, recursive := range wildcardDirectories {
-				if parsed, err := glob.Parse(fmt.Sprintf("%s/%s", tspath.NormalizePath(dir), core.IfElse(recursive, recursiveFileGlobPattern, fileGlobPattern))); err == nil {
+				if parsed, err := glob.Parse(fmt.Sprintf("%s/%s", tspath.NormalizePath(dir), core.IfElse(recursive, recursiveFileGlob, fileGlob))); err == nil {
 					globs = append(globs, parsed)
 				}
 			}
@@ -267,7 +301,7 @@ func (p *ParsedCommandLine) LiteralFileNames() []string {
 	return nil
 }
 
-func (p *ParsedCommandLine) SetParsedOptions(o *core.ParsedOptions) {
+func (p *ParsedCommandLine) SetParsedOptions(o *ParsedOptions) {
 	p.ParsedConfig = o
 }
 
@@ -310,6 +344,36 @@ func (p *ParsedCommandLine) ProjectReferences() []*core.ProjectReference {
 	return p.ParsedConfig.ProjectReferences
 }
 
+func (p *ParsedCommandLine) ContentMappers() []*contentmapper.Mapper {
+	if p == nil || p.ParsedConfig == nil {
+		return nil
+	}
+	return p.ParsedConfig.ContentMappers
+}
+
+// ContentMapperExtensions returns the flattened list of file extensions registered by the
+// config's content mappers.
+func (p *ParsedCommandLine) ContentMapperExtensions() []string {
+	return core.FlatMap(p.ContentMappers(), func(m *contentmapper.Mapper) []string {
+		return m.Definition.Extensions
+	})
+}
+
+// GetContentMapperForFileName returns the configured content mapper whose extensions include fileName,
+// or nil if no content mapper is registered for the file's extension.
+func (p *ParsedCommandLine) GetContentMapperForFileName(fileName string) *contentmapper.Mapper {
+	ignoreCase := !p.UseCaseSensitiveFileNames()
+	extension := tspath.GetLongestExtensionFromPath(fileName, p.ContentMapperExtensions(), ignoreCase)
+	for _, mapper := range p.ContentMappers() {
+		if slices.ContainsFunc(mapper.Definition.Extensions, func(mapperExtension string) bool {
+			return extension == mapperExtension || ignoreCase && strings.EqualFold(extension, mapperExtension)
+		}) {
+			return mapper
+		}
+	}
+	return nil
+}
+
 func (p *ParsedCommandLine) ResolvedProjectReferencePaths() []string {
 	p.resolvedProjectReferencePathsOnce.Do(func() {
 		p.resolvedProjectReferencePaths = core.Map(p.ParsedConfig.ProjectReferences, core.ResolveProjectReferencePath)
@@ -346,6 +410,12 @@ func (p *ParsedCommandLine) PossiblyMatchesFileName(fileName string) bool {
 			if includePath == path {
 				return true
 			}
+		}
+	}
+	if p.GetContentMapperForFileName(fileName) != nil {
+		directoryPath := path.GetDirectoryPath()
+		if p.PossiblyMatchesDirectoryName(directoryPath) {
+			return true
 		}
 	}
 	if wildcardDirectoryGlobs := p.WildcardDirectoryGlobs(); len(wildcardDirectoryGlobs) > 0 {
@@ -397,7 +467,7 @@ func (p *ParsedCommandLine) ReloadFileNamesOfParsedCommandLine(fs vfs.FS) *Parse
 		p.GetCurrentDirectory(),
 		p.CompilerOptions(),
 		fs,
-		p.extraFileExtensions,
+		p.ContentMapperExtensions(),
 	)
 	parsedConfig.FileNames = fileNames
 	parsedCommandLine := ParsedCommandLine{
@@ -409,7 +479,6 @@ func (p *ParsedCommandLine) ReloadFileNamesOfParsedCommandLine(fs vfs.FS) *Parse
 		comparePathsOptions: p.comparePathsOptions,
 		wildcardDirectories: p.wildcardDirectories,
 		includeGlobs:        p.includeGlobs,
-		extraFileExtensions: p.extraFileExtensions,
 		literalFileNamesLen: literalFileNamesLen,
 	}
 	return &parsedCommandLine

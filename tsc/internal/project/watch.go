@@ -181,6 +181,33 @@ func NewWatchedFiles[T any](name string, watchKind lsproto.WatchKind, hasRelativ
 	}
 }
 
+// NewWatchedFilesForPaths creates a watcher for exact file paths, routing files outside the workspace
+// through directory-based external watchers so clients can use URI-based RelativePatterns when supported.
+func NewWatchedFilesForPaths(
+	name string,
+	watchKind lsproto.WatchKind,
+	hasRelativePatternCapability bool,
+	workspaceDirectory string,
+	currentDirectory string,
+	useCaseSensitiveFileNames bool,
+) *WatchedFiles[[]string] {
+	comparePathsOptions := tspath.ComparePathsOptions{
+		CurrentDirectory:          currentDirectory,
+		UseCaseSensitiveFileNames: useCaseSensitiveFileNames,
+	}
+	return NewWatchedFiles(name, watchKind, hasRelativePatternCapability, func(files []string) PatternsAndIgnored {
+		var result PatternsAndIgnored
+		for _, file := range files {
+			if tspath.ContainsPath(workspaceDirectory, file, comparePathsOptions) {
+				result.patternsInsideWorkspace = append(result.patternsInsideWorkspace, file)
+			} else {
+				result.directoriesOutsideWorkspace = append(result.directoriesOutsideWorkspace, tspath.GetDirectoryPath(file))
+			}
+		}
+		return result
+	})
+}
+
 type Watchers struct {
 	WatcherID                WatcherID
 	WorkspaceWatchers        []*lsproto.FileSystemWatcher

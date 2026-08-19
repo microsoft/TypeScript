@@ -8,7 +8,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/format"
-	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
@@ -115,9 +114,7 @@ func deleteDefaultImport(t *Tracker, sourceFile *ast.SourceFile, importClause *a
 		if nextToken != nil && nextToken.Kind == ast.KindCommaToken {
 			// shift first non-whitespace position after comma to the start position of the node
 			end := scanner.SkipTriviaEx(sourceFile.Text(), nextToken.End(), &scanner.SkipTriviaOptions{StopAfterLineBreak: false, StopAtComments: true})
-			startPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(start))
-			endPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(end))
-			t.ReplaceRangeWithText(sourceFile, lsproto.Range{Start: startPos, End: endPos}, "")
+			t.ReplaceRangeWithText(sourceFile, t.toLSPEditRange(sourceFile, core.NewTextRange(start, end)), "")
 		} else {
 			deleteNode(t, sourceFile, name, LeadingTriviaOptionIncludeAll, TrailingTriviaOptionInclude)
 		}
@@ -132,9 +129,8 @@ func deleteImportBinding(t *Tracker, sourceFile *ast.SourceFile, node *ast.Node)
 		// import d|, { a }| from './file'
 		previousToken := astnav.GetTokenAtPosition(sourceFile, node.Pos()-1)
 		debug.Assert(previousToken != nil, "previousToken should not be nil")
-		startPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(astnav.GetStartOfNode(previousToken, sourceFile, false)))
-		endPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(node.End()))
-		t.ReplaceRangeWithText(sourceFile, lsproto.Range{Start: startPos, End: endPos}, "")
+		start := astnav.GetStartOfNode(previousToken, sourceFile, false)
+		t.ReplaceRangeWithText(sourceFile, t.toLSPEditRange(sourceFile, core.NewTextRange(start, node.End())), "")
 	} else {
 		// Delete the entire import declaration
 		// |import * as ns from './file'|
@@ -187,9 +183,7 @@ func deleteVariableDeclaration(t *Tracker, deletedNodesInLists map[*ast.Node]boo
 func deleteNode(t *Tracker, sourceFile *ast.SourceFile, node *ast.Node, leadingTrivia LeadingTriviaOption, trailingTrivia TrailingTriviaOption) {
 	startPosition := t.getAdjustedStartPosition(sourceFile, node, leadingTrivia, false)
 	endPosition := t.getAdjustedEndPosition(sourceFile, node, trailingTrivia)
-	startPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(startPosition))
-	endPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(endPosition))
-	t.ReplaceRangeWithText(sourceFile, lsproto.Range{Start: startPos, End: endPos}, "")
+	t.ReplaceRangeWithText(sourceFile, t.toLSPEditRange(sourceFile, core.NewTextRange(startPosition, endPosition)), "")
 }
 
 func deleteNodeInList(t *Tracker, deletedNodesInLists map[*ast.Node]bool, sourceFile *ast.SourceFile, node *ast.Node) {
@@ -220,9 +214,7 @@ func deleteNodeInList(t *Tracker, deletedNodesInLists map[*ast.Node]bool, source
 		endPos = t.endPositionToDeleteNodeInList(sourceFile, node, prevNode, containingList.Nodes[index+1])
 	}
 
-	startLSPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(startPos))
-	endLSPos := t.converters.PositionToLineAndCharacter(sourceFile, core.TextPos(endPos))
-	t.ReplaceRangeWithText(sourceFile, lsproto.Range{Start: startLSPos, End: endLSPos}, "")
+	t.ReplaceRangeWithText(sourceFile, t.toLSPEditRange(sourceFile, core.NewTextRange(startPos, endPos)), "")
 }
 
 // startPositionToDeleteNodeInList finds the first non-whitespace position in the leading trivia of the node

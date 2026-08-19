@@ -19,11 +19,12 @@ import (
 )
 
 type View struct {
-	registry      *Registry
-	importingFile *ast.SourceFile
-	program       *compiler.Program
-	preferences   modulespecifiers.UserPreferences
-	projectKey    tspath.Path
+	registry          *Registry
+	importingFile     *ast.SourceFile
+	importingFilePath tspath.Path
+	program           *compiler.Program
+	preferences       modulespecifiers.UserPreferences
+	projectKey        tspath.Path
 
 	allowedEndings                   []modulespecifiers.ModuleSpecifierEnding
 	conditions                       *collections.Set[string]
@@ -33,12 +34,17 @@ type View struct {
 }
 
 func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspath.Path, program *compiler.Program, preferences modulespecifiers.UserPreferences) *View {
+	importingFilePath := importingFile.Path()
+	if canonical := importingFile.CanonicalSourceFile(); canonical != nil {
+		importingFilePath = canonical.Path()
+	}
 	return &View{
-		registry:      registry,
-		importingFile: importingFile,
-		program:       program,
-		projectKey:    projectKey,
-		preferences:   preferences,
+		registry:          registry,
+		importingFile:     importingFile,
+		importingFilePath: importingFilePath,
+		program:           program,
+		projectKey:        projectKey,
+		preferences:       preferences,
 		conditions: collections.NewSetFromItems(
 			module.GetConditions(program.Options(),
 				program.GetDefaultResolutionModeForFile(importingFile))...,

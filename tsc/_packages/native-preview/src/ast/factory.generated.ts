@@ -308,6 +308,9 @@ export class NodeObject {
     get body(): any {
         return this._data?.body;
     }
+    get canonicalSourceFileName(): any {
+        return this._data?.canonicalSourceFileName;
+    }
     get caseBlock(): any {
         return this._data?.caseBlock;
     }
@@ -347,6 +350,9 @@ export class NodeObject {
     get containsOnlyTriviaWhiteSpaces(): any {
         return this._data?.containsOnlyTriviaWhiteSpaces;
     }
+    get contentMapper(): any {
+        return this._data?.contentMapper;
+    }
     get declarationList(): any {
         return this._data?.declarationList;
     }
@@ -355,6 +361,9 @@ export class NodeObject {
     }
     get defaultType(): any {
         return this._data?.defaultType;
+    }
+    get diagnosticDirectives(): any {
+        return this._data?.diagnosticDirectives;
     }
     get dotDotDotToken(): any {
         return this._data?.dotDotDotToken;
@@ -527,6 +536,9 @@ export class NodeObject {
     get operatorToken(): any {
         return this._data?.operatorToken;
     }
+    get originalText(): any {
+        return this._data?.originalText;
+    }
     get parameterName(): any {
         return this._data?.parameterName;
     }
@@ -572,11 +584,17 @@ export class NodeObject {
     get scriptKind(): any {
         return this._data?.scriptKind;
     }
+    get spanMap(): any {
+        return this._data?.spanMap;
+    }
     get statement(): any {
         return this._data?.statement;
     }
     get statements(): any {
         return this._data?.statements;
+    }
+    get supplementalSourceFileNames(): any {
+        return this._data?.supplementalSourceFileNames;
     }
     get tag(): any {
         return this._data?.tag;
@@ -652,6 +670,9 @@ export class NodeObject {
     }
     get variableDeclaration(): any {
         return this._data?.variableDeclaration;
+    }
+    get virtualFileName(): any {
+        return this._data?.virtualFileName;
     }
     get whenFalse(): any {
         return this._data?.whenFalse;
@@ -3790,6 +3811,11 @@ export function createSourceFile(statements: readonly Statement[], endOfFileToke
         statements: createNodeArray(statements),
         endOfFileToken,
         text,
+        originalText: text,
+        spanMap: undefined,
+        contentMapper: undefined,
+        virtualFileName: undefined,
+        diagnosticDirectives: undefined,
         fileName,
         path,
     }) as unknown as SourceFile;

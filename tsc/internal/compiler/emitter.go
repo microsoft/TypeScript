@@ -52,9 +52,17 @@ func (e *emitter) emit() {
 	e.emitResult.Diagnostics = e.emitterDiagnostics.GetDiagnostics()
 }
 
-func (e *emitter) getDeclarationTransformers(emitContext *printer.EmitContext, declarationFilePath string, declarationMapPath string) []*declarations.DeclarationTransformer {
-	transform := declarations.NewDeclarationTransformer(e.host, emitContext, e.host.Options(), declarationFilePath, declarationMapPath)
-	return []*declarations.DeclarationTransformer{transform}
+type declarationTransformer interface {
+	TransformSourceFile(sourceFile *ast.SourceFile) *ast.SourceFile
+	GetDiagnostics() []*ast.Diagnostic
+}
+
+func (e *emitter) getDeclarationTransformers(emitContext *printer.EmitContext, sourceFile *ast.SourceFile, declarationFilePath string, declarationMapPath string) []declarationTransformer {
+	forceDtsEmit := e.emitOnly == EmitOnlyBuilderSignature || e.forceEmit && e.emitOnly == EmitOnlyDts
+	return []declarationTransformer{
+		declarations.NewDeclarationTransformer(e.host, emitContext, e.host.Options(), declarationFilePath, declarationMapPath),
+		declarations.NewSupplementalReferencesTransformer(e.host, sourceFile, declarationFilePath, forceDtsEmit),
+	}
 }
 
 func (e *emitter) runScriptTransformers(emitContext *printer.EmitContext, sourceFile *ast.SourceFile) *ast.SourceFile {
@@ -72,7 +80,7 @@ func (e *emitter) runDeclarationTransformers(emitContext *printer.EmitContext, s
 		defer e.tr.Push(tracing.PhaseEmit, "transformNodes", map[string]any{"path": string(sourceFile.Path())}, false)()
 	}
 	var diags []*ast.Diagnostic
-	for _, transformer := range e.getDeclarationTransformers(emitContext, declarationFilePath, declarationMapPath) {
+	for _, transformer := range e.getDeclarationTransformers(emitContext, sourceFile, declarationFilePath, declarationMapPath) {
 		sourceFile = transformer.TransformSourceFile(sourceFile)
 		diags = append(diags, transformer.GetDiagnostics()...)
 	}
@@ -216,6 +224,10 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 	if sourceFile == nil || e.emitOnly == EmitOnlyJs || len(declarationFilePath) == 0 {
 		return
 	}
+	// Declaration files for content-mapped files don't get source maps because the mapped positions would point into
+	// transformed TS content that exists only in-memory during the build. As a future improvement, it may be possible
+	// to double-map the positions using the content-mapped file's spanmap.
+	emitDeclarationMap := e.emitOnly != EmitOnlyBuilderSignature && options.DeclarationMap.IsTrue() && sourceFile.ContentMapper() == ""
 
 	if e.tr != nil {
 		defer e.tr.Push(tracing.PhaseEmit, "emitDeclarationFileOrBundle", map[string]any{"declarationFilePath": declarationFilePath}, true)()
@@ -248,7 +260,7 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 		// Module: 			   options.Module, // NYI
 		// ModuleResolution:   options.ModuleResolution, // NYI
 		Target:          options.GetEmitScriptTarget(),
-		SourceMap:       e.emitOnly != EmitOnlyBuilderSignature && options.DeclarationMap.IsTrue(),
+		SourceMap:       emitDeclarationMap,
 		InlineSourceMap: options.InlineSourceMap.IsTrue(),
 		// InlineSources:       options.InlineSources.IsTrue(), // ignored, per strada
 		// ExtendedDiagnostics: options.ExtendedDiagnostics.IsTrue(), // NYI
@@ -262,7 +274,7 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 	}, emitContext)
 
 	declarationMapOptions := &core.CompilerOptions{
-		SourceMap:  core.IfElse(e.emitOnly != EmitOnlyBuilderSignature && options.DeclarationMap.IsTrue(), core.TSTrue, core.TSFalse),
+		SourceMap:  core.IfElse(emitDeclarationMap, core.TSTrue, core.TSFalse),
 		SourceRoot: options.SourceRoot,
 		MapRoot:    options.MapRoot,
 		// Explicitly do not pass through either inline option.
@@ -451,7 +463,6 @@ type SourceFileMayBeEmittedHost interface {
 
 func sourceFileMayBeEmitted(sourceFile *ast.SourceFile, host SourceFileMayBeEmittedHost, forceDtsEmit bool, forceJsEmit bool) bool {
 	// TODO: move this to outputpaths?
-
 	options := host.Options()
 	// Js files are emitted only if option is enabled
 	if !forceJsEmit && options.NoEmitForJsFiles.IsTrue() && ast.IsSourceFileJS(sourceFile) {
@@ -460,6 +471,12 @@ func sourceFileMayBeEmitted(sourceFile *ast.SourceFile, host SourceFileMayBeEmit
 
 	// Declaration files are not emitted
 	if sourceFile.IsDeclarationFile {
+		return false
+	}
+
+	// Runtime output for content-mapped files is owned by the external content mapper or build tool. Only
+	// include them in the emit set when their transformed TypeScript can produce declarations.
+	if sourceFile.ContentMapper() != "" && !forceDtsEmit && !options.GetEmitDeclarations() {
 		return false
 	}
 

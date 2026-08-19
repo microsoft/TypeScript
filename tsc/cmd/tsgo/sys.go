@@ -1,9 +1,11 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"time"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
@@ -46,6 +48,10 @@ func (s *osSys) Writer() io.Writer {
 	return s.writer
 }
 
+func (s *osSys) ErrorWriter() io.Writer {
+	return os.Stderr
+}
+
 func (s *osSys) WriteOutputIsTTY() bool {
 	return term.IsTerminal(int(os.Stdout.Fd()))
 }
@@ -57,6 +63,62 @@ func (s *osSys) GetWidthOfTerminal() int {
 
 func (s *osSys) GetEnvironmentVariable(name string) string {
 	return os.Getenv(name)
+}
+
+func (s *osSys) Spawn(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
+	return spawnProcess(command, dir, stderr)
+}
+
+// spawnProcess launches a process and adapts its stdio to an io.ReadWriteCloser (Read is its stdout,
+// Write is its stdin).
+func spawnProcess(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
+	cmd := exec.Command(command[0], command[1:]...)
+	cmd.Dir = dir
+	cmd.Stderr = stderr
+	cmd.WaitDelay = time.Second
+	stdin, err := cmd.StdinPipe()
+	if err != nil {
+		return nil, err
+	}
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		return nil, err
+	}
+	if err := cmd.Start(); err != nil {
+		return nil, err
+	}
+	return &childProcess{cmd: cmd, stdin: stdin, stdout: stdout}, nil
+}
+
+// childProcess adapts a spawned process's stdout (read) and stdin (write) into one io.ReadWriteCloser.
+// Close kills and reaps the process.
+type childProcess struct {
+	cmd    *exec.Cmd
+	stdin  io.WriteCloser
+	stdout io.Reader
+}
+
+func (p *childProcess) Read(b []byte) (int, error)  { return p.stdout.Read(b) }
+func (p *childProcess) Write(b []byte) (int, error) { return p.stdin.Write(b) }
+
+func (p *childProcess) ExitCode() (int, bool) {
+	if p.cmd.ProcessState == nil {
+		return 0, false
+	}
+	return p.cmd.ProcessState.ExitCode(), true
+}
+
+func (p *childProcess) Close() error {
+	_ = p.stdin.Close()
+	_ = p.cmd.Process.Kill()
+	err := p.cmd.Wait()
+	if _, ok := errors.AsType[*exec.ExitError](err); ok {
+		return nil
+	}
+	if errors.Is(err, exec.ErrWaitDelay) {
+		return nil
+	}
+	return err
 }
 
 func newSystem() *osSys {

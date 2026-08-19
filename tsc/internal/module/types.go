@@ -63,14 +63,15 @@ func (p *PackageId) PackageName() string {
 }
 
 type ResolvedModule struct {
-	ResolutionDiagnostics    []*ast.Diagnostic
-	ResolvedFileName         string
-	OriginalPath             string
-	Extension                string
-	ResolvedUsingTsExtension bool
-	PackageId                PackageId
-	IsExternalLibraryImport  bool
-	AlternateResult          string
+	ResolutionDiagnostics        []*ast.Diagnostic
+	ResolvedFileName             string
+	OriginalPath                 string
+	Extension                    string
+	ResolvedUsingTsExtension     bool
+	ResolvedUsingExtraExtensions bool
+	PackageId                    PackageId
+	IsExternalLibraryImport      bool
+	AlternateResult              string
 }
 
 func (r *ResolvedModule) IsResolved() bool {

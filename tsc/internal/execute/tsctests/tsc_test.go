@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/testutil/contentmappertest"
 	"github.com/microsoft/typescript-go/internal/testutil/stringtestutil"
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
 )
@@ -4802,4 +4803,190 @@ func TestGenerateTrace(t *testing.T) {
 	for _, c := range cases {
 		c.run(t, "generateTrace")
 	}
+}
+
+func TestTscContentMapperEmit(t *testing.T) {
+	t.Parallel()
+	(&tscInput{
+		subScenario: "content-mapped files are not emitted",
+		files: FileMap{
+			"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+			{
+				"compilerOptions": {
+					"outDir": "./dist"
+				},
+				"contentMappers": [
+					{ "package": "vue-ts-mapper", "extensions": [".vue"] }
+				]
+			}`),
+			"/home/src/workspaces/project/index.ts": `export const local = 1;`,
+			"/home/src/workspaces/project/app.vue":  `export const app = 1;`,
+			"/home/src/workspaces/project/node_modules/vue-ts-mapper/package.json": stringtestutil.Dedent(`
+			{
+				"name": "vue-ts-mapper",
+				"version": "1.0.0",
+				"typescript": { "contentMapper": { "exec": ["verbatim-mapper"] } }
+			}`),
+		},
+		commandLineArgs: []string{"--runExternalCode"},
+	}).run(t, "contentMapperEmit")
+}
+
+func TestTscContentMapperExplainFiles(t *testing.T) {
+	t.Parallel()
+	(&tscInput{
+		subScenario: "supplemental virtual file include reason",
+		files: FileMap{
+			"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+			{
+				"contentMappers": [
+					{ "package": "mapper", "extensions": [".vue"] }
+				]
+			}`),
+			"/home/src/workspaces/project/app.vue": `export const value = 1;`,
+			"/home/src/workspaces/project/node_modules/mapper/package.json": stringtestutil.Dedent(`
+			{
+				"name": "mapper",
+				"version": "1.0.0",
+				"typescript": { "contentMapper": { "exec": ["supplemental-mapper"] } }
+			}`),
+		},
+		commandLineArgs: []string{"--runExternalCode", "--explainFiles"},
+	}).run(t, "contentMapperExplainFiles")
+}
+
+func TestTscContentMapperOptionDiagnostics(t *testing.T) {
+	t.Parallel()
+	(&tscInput{
+		subScenario: "nested mapper option diagnostic",
+		files: FileMap{
+			"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+			{
+				"contentMappers": [
+					{
+						"package": "mapper",
+						"extensions": [".vue"],
+						"options": { "plugins": [{ "name": 1 }] }
+					}
+				]
+			}`),
+			"/home/src/workspaces/project/app.vue":                          `export const value = 1;`,
+			"/home/src/workspaces/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.DynamicVerbatimMapper),
+		},
+		commandLineArgs: []string{"--runExternalCode", "--pretty", "false"},
+	}).run(t, "contentMapperOptionDiagnostics")
+}
+
+func TestTscContentMapperFailures(t *testing.T) {
+	t.Parallel()
+	failMapperPackageJSON := stringtestutil.Dedent(`
+	{
+		"name": "fail",
+		"version": "1.0.0",
+		"typescript": { "contentMapper": { "exec": ["failing-mapper"] } }
+	}`)
+	failMapperTSConfig := stringtestutil.Dedent(`
+	{
+		"contentMappers": [
+			{ "package": "fail", "extensions": [".vue"] }
+		]
+	}`)
+	testCases := []*tscInput{
+		{
+			subScenario: "initialization failure reports one project error",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"contentMappers": [
+						{ "package": "missing", "extensions": [".vue"] }
+					]
+				}`),
+				"/home/src/workspaces/project/index.ts": stringtestutil.Dedent(`
+					import "./a.vue";
+					import "./b.vue";
+					import "./c.vue";
+					import "./d.vue";
+					import "./e.vue";
+					import "./f.vue";`),
+				"/home/src/workspaces/project/a.vue": `<template>a</template>`,
+				"/home/src/workspaces/project/b.vue": `<template>b</template>`,
+				"/home/src/workspaces/project/c.vue": `<template>c</template>`,
+				"/home/src/workspaces/project/d.vue": `<template>d</template>`,
+				"/home/src/workspaces/project/e.vue": `<template>e</template>`,
+				"/home/src/workspaces/project/f.vue": `<template>f</template>`,
+				"/home/src/workspaces/project/node_modules/missing/package.json": stringtestutil.Dedent(`
+				{
+					"name": "missing",
+					"version": "1.0.0",
+					"typescript": { "contentMapper": { "exec": ["missing-mapper"] } }
+				}`),
+			},
+			commandLineArgs: []string{"--runExternalCode", "--singleThreaded"},
+		},
+		{
+			subScenario: "transform failure reports a per-file error",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json":                  failMapperTSConfig,
+				"/home/src/workspaces/project/index.ts":                       `import "./app.vue";`,
+				"/home/src/workspaces/project/app.vue":                        `<template>hi</template>`,
+				"/home/src/workspaces/project/node_modules/fail/package.json": failMapperPackageJSON,
+			},
+			commandLineArgs: []string{"--runExternalCode"},
+		},
+		{
+			subScenario: "mapper is disabled after repeated failures",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": failMapperTSConfig,
+				"/home/src/workspaces/project/index.ts": stringtestutil.Dedent(`
+					import "./a.vue";
+					import "./b.vue";
+					import "./c.vue";
+					import "./d.vue";
+					import "./e.vue";
+					import "./f.vue";
+					import "./g.vue";`),
+				"/home/src/workspaces/project/a.vue":                          `<template>a</template>`,
+				"/home/src/workspaces/project/b.vue":                          `<template>b</template>`,
+				"/home/src/workspaces/project/c.vue":                          `<template>c</template>`,
+				"/home/src/workspaces/project/d.vue":                          `<template>d</template>`,
+				"/home/src/workspaces/project/e.vue":                          `<template>e</template>`,
+				"/home/src/workspaces/project/f.vue":                          `<template>f</template>`,
+				"/home/src/workspaces/project/g.vue":                          `<template>g</template>`,
+				"/home/src/workspaces/project/node_modules/fail/package.json": failMapperPackageJSON,
+			},
+			// --singleThreaded makes file loading order deterministic so the same files exceed the failure
+			// threshold on every run.
+			commandLineArgs: []string{"--runExternalCode", "--singleThreaded"},
+		},
+	}
+	for _, test := range testCases {
+		test.run(t, "contentMapperFailures")
+	}
+}
+
+func TestTscContentMapperSynthesized(t *testing.T) {
+	t.Parallel()
+	(&tscInput{
+		subScenario: "diagnostics in synthesized code render on the virtual text",
+		files: FileMap{
+			"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+			{
+				"contentMappers": [
+					{ "package": "synth", "extensions": [".vue"] }
+				]
+			}`),
+			"/home/src/workspaces/project/index.ts": `import "./app.vue";`,
+			"/home/src/workspaces/project/app.vue": stringtestutil.Dedent(`
+				<template>
+					<Widget />
+				</template>`),
+			"/home/src/workspaces/project/node_modules/synth/package.json": stringtestutil.Dedent(`
+			{
+				"name": "synth",
+				"version": "1.0.0",
+				"typescript": { "contentMapper": { "exec": ["synthesizing-mapper"] } }
+			}`),
+		},
+		commandLineArgs: []string{"--runExternalCode"},
+	}).run(t, "contentMapperSynthesized")
 }

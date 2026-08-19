@@ -44,12 +44,12 @@ var optionRegex = regexp.MustCompile(`(?m)^\/{2}\s*@(\w+)\s*:\s*([^\r\n]*)`)
 var linkRegex = regexp.MustCompile(`(?m)^\/{2}\s*@link\s*:\s*([^\r\n]*)\s*->\s*([^\r\n]*)`)
 
 // File-specific directives used by fourslash tests
-var fourslashDirectives = []string{"emitthisfile"}
+var fourslashDirectives = []string{"emitthisfile", "noopen"}
 
 // Given a test file containing // @FileName directives,
 // return an array of named units of code to be added to an existing compiler instance.
 func makeUnitsFromTest(code string, fileName string) testCaseContent {
-	testUnits, symlinks, currentDirectory, _, _ := ParseTestFilesAndSymlinks(
+	testUnits, symlinks, currentDirectory, globalOptions, _ := ParseTestFilesAndSymlinks(
 		code,
 		fileName,
 		func(filename string, content string, fileOptions map[string]string) (*testUnit, error) {
@@ -66,7 +66,15 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 	for _, data := range testUnits {
 		allFiles[tspath.GetNormalizedAbsolutePath(data.name, currentDirectory)] = data.content
 	}
-	parseConfigHost := tsoptionstest.NewVFSParseConfigHost(allFiles, currentDirectory, true /*useCaseSensitiveFileNames*/)
+	parseConfigHost := tsoptionstest.NewVFSParseConfigHostWithSymlinks(allFiles, symlinks, currentDirectory, true /*useCaseSensitiveFileNames*/)
+
+	// Content mappers are gated behind --runExternalCode, a command-line-only option. A test
+	// opts in with a top-level `// @runExternalCode: true`, which we surface to the config
+	// parse as an existing option so the gate passes and the mappers register.
+	var existingOptions *core.CompilerOptions
+	if globalOptions["runexternalcode"] == "true" {
+		existingOptions = &core.CompilerOptions{RunExternalCode: core.TSTrue}
+	}
 
 	// check if project has tsconfig.json in the list of files
 	var tsConfig *tsoptions.ParsedCommandLine
@@ -87,11 +95,10 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 				tsConfigSourceFile,
 				parseConfigHost,
 				configDir,
-				nil, /*existingOptions*/
+				existingOptions,
 				nil, /*existingOptionsRaw*/
 				configFileName,
 				nil, /*resolutionStack*/
-				nil, /*extraFileExtensions*/
 				nil, /*extendedConfigCache*/
 			)
 			tsConfigFileUnitData = data

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/testutil/contentmappertest"
 	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
 	"github.com/microsoft/typescript-go/internal/testutil/stringtestutil"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -295,6 +296,78 @@ console.log(tsconfig);`,
 	for _, test := range testCases {
 		test.run(t, "commandLine")
 	}
+}
+
+func TestBuildContentMapperIdentity(t *testing.T) {
+	t.Parallel()
+	testCases := []*tscInput{
+		{
+			subScenario: "content mapper identity change forces rebuild",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"incremental": true
+					},
+					"contentMappers": [
+						{ "package": "vue-ts-mapper", "extensions": [".vue"] }
+					]
+				}`),
+				"/home/src/workspaces/project/index.ts": `export const local = 1;`,
+				"/home/src/workspaces/project/app.vue":  `export const app = 1;`,
+				"/home/src/workspaces/project/node_modules/vue-ts-mapper/package.json": stringtestutil.Dedent(`
+				{
+					"name": "vue-ts-mapper",
+					"version": "1.0.0",
+					"typescript": { "contentMapper": { "exec": ["verbatim-mapper"] } }
+				}`),
+			},
+			commandLineArgs: []string{"--build", "--verbose", "--runExternalCode"},
+			edits: []*tscEdit{
+				noChange,
+				{
+					caption: "upgrade the content mapper package to a new version",
+					edit: func(sys *TestSys) {
+						sys.replaceFileText(
+							"/home/src/workspaces/project/node_modules/vue-ts-mapper/package.json",
+							`"version": "1.0.0"`,
+							`"version": "2.0.0"`,
+						)
+					},
+				},
+				noChange,
+			},
+		},
+	}
+	for _, test := range testCases {
+		test.run(t, "contentMapperIdentity")
+	}
+}
+
+func TestBuildContentMapperOptionDiagnostics(t *testing.T) {
+	t.Parallel()
+	// Verify that mapper option diagnostics are represented by the standard build
+	// info errors flag and are reported again when that flag triggers a rebuild.
+	(&tscInput{
+		subScenario: "rebuild to report mapper option diagnostics",
+		files: FileMap{
+			"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+			{
+				"compilerOptions": { "incremental": true, "noCheck": true },
+				"contentMappers": [
+					{
+						"package": "mapper",
+						"extensions": [".vue"],
+						"options": { "plugins": [{ "name": 1 }] }
+					}
+				]
+			}`),
+			"/home/src/workspaces/project/app.vue":                          `export const value = 1;`,
+			"/home/src/workspaces/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.VerbatimMapper),
+		},
+		commandLineArgs: []string{"--build", "--verbose", "--runExternalCode", "--pretty", "false"},
+		edits:           []*tscEdit{noChange},
+	}).run(t, "contentMapperOptionDiagnostics")
 }
 
 func TestBuildClean(t *testing.T) {

@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/contentMapperAliasDiagnostic.ts] ////
+
+=== /expression.lisp ===
+add(1, 2, "oops");
+>add(1, 2, "oops") : any
+>add : any
+>1 : 1
+>2 : 2
+>"oops" : "oops"
+

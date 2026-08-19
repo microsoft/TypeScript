@@ -153,6 +153,7 @@ type CompilerOptions struct {
 	Build               Tristate `json:"build,omitzero"`
 	Help                Tristate `json:"help,omitzero"`
 	All                 Tristate `json:"all,omitzero"`
+	RunExternalCode     Tristate `json:"runExternalCode,omitzero"`
 
 	PprofDir       string   `json:"pprofDir,omitzero"`
 	SingleThreaded Tristate `json:"singleThreaded,omitzero"`

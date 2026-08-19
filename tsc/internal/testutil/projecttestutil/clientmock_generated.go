@@ -47,6 +47,9 @@ var _ project.Client = &ClientMock{}
 //			RefreshInlayHintsFunc: func(ctx context.Context) error {
 //				panic("mock out the RefreshInlayHints method")
 //			},
+//			RegisterContentMapperExtensionsFunc: func(ctx context.Context, extensions []string) error {
+//				panic("mock out the RegisterContentMapperExtensions method")
+//			},
 //			SendTelemetryFunc: func(ctx context.Context, telemetry lsproto.TelemetryEvent) error {
 //				panic("mock out the SendTelemetry method")
 //			},
@@ -89,6 +92,9 @@ type ClientMock struct {
 
 	// RefreshInlayHintsFunc mocks the RefreshInlayHints method.
 	RefreshInlayHintsFunc func(ctx context.Context) error
+
+	// RegisterContentMapperExtensionsFunc mocks the RegisterContentMapperExtensions method.
+	RegisterContentMapperExtensionsFunc func(ctx context.Context, extensions []string) error
 
 	// SendTelemetryFunc mocks the SendTelemetry method.
 	SendTelemetryFunc func(ctx context.Context, telemetry lsproto.TelemetryEvent) error
@@ -144,6 +150,13 @@ type ClientMock struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 		}
+		// RegisterContentMapperExtensions holds details about calls to the RegisterContentMapperExtensions method.
+		RegisterContentMapperExtensions []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Extensions is the extensions argument value.
+			Extensions []string
+		}
 		// SendTelemetry holds details about calls to the SendTelemetry method.
 		SendTelemetry []struct {
 			// Ctx is the ctx argument value.
@@ -173,18 +186,19 @@ type ClientMock struct {
 			Watchers []*lsproto.FileSystemWatcher
 		}
 	}
-	lockGetLocale          sync.RWMutex
-	lockIsActive           sync.RWMutex
-	lockProgressFinish     sync.RWMutex
-	lockProgressStart      sync.RWMutex
-	lockPublishDiagnostics sync.RWMutex
-	lockRefreshCodeLens    sync.RWMutex
-	lockRefreshDiagnostics sync.RWMutex
-	lockRefreshInlayHints  sync.RWMutex
-	lockSendTelemetry      sync.RWMutex
-	lockSetLocale          sync.RWMutex
-	lockUnwatchFiles       sync.RWMutex
-	lockWatchFiles         sync.RWMutex
+	lockGetLocale                       sync.RWMutex
+	lockIsActive                        sync.RWMutex
+	lockProgressFinish                  sync.RWMutex
+	lockProgressStart                   sync.RWMutex
+	lockPublishDiagnostics              sync.RWMutex
+	lockRefreshCodeLens                 sync.RWMutex
+	lockRefreshDiagnostics              sync.RWMutex
+	lockRefreshInlayHints               sync.RWMutex
+	lockRegisterContentMapperExtensions sync.RWMutex
+	lockSendTelemetry                   sync.RWMutex
+	lockSetLocale                       sync.RWMutex
+	lockUnwatchFiles                    sync.RWMutex
+	lockWatchFiles                      sync.RWMutex
 }
 
 // GetLocale calls GetLocaleFunc.
@@ -442,6 +456,43 @@ func (mock *ClientMock) RefreshInlayHintsCalls() []struct {
 	mock.lockRefreshInlayHints.RLock()
 	calls = mock.calls.RefreshInlayHints
 	mock.lockRefreshInlayHints.RUnlock()
+	return calls
+}
+
+// RegisterContentMapperExtensions calls RegisterContentMapperExtensionsFunc.
+func (mock *ClientMock) RegisterContentMapperExtensions(ctx context.Context, extensions []string) error {
+	callInfo := struct {
+		Ctx        context.Context
+		Extensions []string
+	}{
+		Ctx:        ctx,
+		Extensions: extensions,
+	}
+	mock.lockRegisterContentMapperExtensions.Lock()
+	mock.calls.RegisterContentMapperExtensions = append(mock.calls.RegisterContentMapperExtensions, callInfo)
+	mock.lockRegisterContentMapperExtensions.Unlock()
+	if mock.RegisterContentMapperExtensionsFunc == nil {
+		var errOut error
+		return errOut
+	}
+	return mock.RegisterContentMapperExtensionsFunc(ctx, extensions)
+}
+
+// RegisterContentMapperExtensionsCalls gets all the calls that were made to RegisterContentMapperExtensions.
+// Check the length with:
+//
+//	len(mockedClient.RegisterContentMapperExtensionsCalls())
+func (mock *ClientMock) RegisterContentMapperExtensionsCalls() []struct {
+	Ctx        context.Context
+	Extensions []string
+} {
+	var calls []struct {
+		Ctx        context.Context
+		Extensions []string
+	}
+	mock.lockRegisterContentMapperExtensions.RLock()
+	calls = mock.calls.RegisterContentMapperExtensions
+	mock.lockRegisterContentMapperExtensions.RUnlock()
 	return calls
 }
 

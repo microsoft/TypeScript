@@ -349,7 +349,15 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 	if ctx.Err() != nil {
 		return nil
 	}
-	buildInfo := snapshotToBuildInfo(p.snapshot, p.program, buildInfoFileName)
+	buildInfo, err := snapshotToBuildInfo(p.snapshot, p.program, buildInfoFileName)
+	if err != nil {
+		return &compiler.EmitResult{
+			EmitSkipped: true,
+			Diagnostics: []*ast.Diagnostic{
+				compiler.ContentMapperProjectDiagnostic(err),
+			},
+		}
+	}
 	text, err := json.Marshal(buildInfo)
 	if err != nil {
 		panic(fmt.Sprintf("Failed to marshal build info: %v", err))

@@ -50,7 +50,7 @@ func TestImplementationsWorklistDoesNotBlowUp(t *testing.T) {
 		}, false /*useCaseSensitiveFileNames*/)
 		fs = bundled.WrapFS(fs)
 
-		host := compiler.NewCompilerHost("/", fs, bundled.LibPath(), nil, nil)
+		host := compiler.NewCompilerHost("/", fs, bundled.LibPath(), nil, nil, nil)
 		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, host, nil)
 		assert.Equal(t, len(errors), 0)
 		program := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
@@ -65,7 +65,7 @@ func TestImplementationsWorklistDoesNotBlowUp(t *testing.T) {
 
 		// Position of the `m` property in the final `i.m();`.
 		offset := strings.LastIndex(content, "i.m") + len("i.")
-		pos := converters.PositionToLineAndCharacter(sourceFile, core.TextPos(offset))
+		pos, _ := converters.ToLSPPosition(sourceFile, core.TextPos(offset))
 
 		data, ok := l.provideSymbolsAndEntries(context.Background(), "file:///repro.ts", pos, false /*isRename*/, true /*implementations*/)
 		assert.Assert(t, ok)

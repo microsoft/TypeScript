@@ -196,11 +196,11 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 	}
 
 	fs := vfstest.FromMap(files, true /*useCaseSensitiveFileNames*/)
-	host := compiler.NewCompilerHost(inputDirectory, fs, libDirectory, nil, nil)
+	host := compiler.NewCompilerHost(inputDirectory, fs, libDirectory, nil, nil, nil)
 
 	program := compiler.NewProgram(compiler.ProgramOptions{
 		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &core.ParsedOptions{
+			ParsedConfig: &tsoptions.ParsedOptions{
 				FileNames:       []string{inputFileName},
 				CompilerOptions: opts,
 			},

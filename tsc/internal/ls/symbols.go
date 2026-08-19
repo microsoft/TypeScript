@@ -17,18 +17,37 @@ import (
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 func (l *LanguageService) ProvideDocumentSymbols(ctx context.Context, documentURI lsproto.DocumentUri) (lsproto.DocumentSymbolResponse, error) {
 	_, file := l.getProgramAndFile(documentURI)
+	projections := append([]*ast.SourceFile{file}, file.SupplementalSourceFiles()...)
+	var symbols []*lsproto.DocumentSymbol
+	var seen collections.Set[struct {
+		name string
+		kind lsproto.SymbolKind
+		rng  lsproto.Range
+	}]
+	for _, projection := range projections {
+		for _, symbol := range l.getDocumentSymbolsForChildren(ctx, projection.AsNode(), projection) {
+			key := struct {
+				name string
+				kind lsproto.SymbolKind
+				rng  lsproto.Range
+			}{symbol.Name, symbol.Kind, symbol.Range}
+			if seen.AddIfAbsent(key) {
+				symbols = append(symbols, symbol)
+			}
+		}
+	}
 	if lsproto.GetClientCapabilities(ctx).TextDocument.DocumentSymbol.HierarchicalDocumentSymbolSupport {
-		symbols := l.getDocumentSymbolsForChildren(ctx, file.AsNode(), file)
 		return lsproto.SymbolInformationsOrDocumentSymbolsOrNull{DocumentSymbols: &symbols}, nil
 	}
 	// Client doesn't support hierarchical document symbols, return flat SymbolInformation array
-	symbolInfos := l.getDocumentSymbolInformations(ctx, file, documentURI)
+	symbolInfos := flattenDocumentSymbols(symbols, documentURI)
 	symbolInfoPtrs := make([]*lsproto.SymbolInformation, len(symbolInfos))
 	for i := range symbolInfos {
 		symbolInfoPtrs[i] = &symbolInfos[i]
@@ -40,7 +59,10 @@ func (l *LanguageService) ProvideDocumentSymbols(ctx context.Context, documentUR
 func (l *LanguageService) getDocumentSymbolInformations(ctx context.Context, file *ast.SourceFile, documentURI lsproto.DocumentUri) []lsproto.SymbolInformation {
 	// First get hierarchical symbols
 	docSymbols := l.getDocumentSymbolsForChildren(ctx, file.AsNode(), file)
+	return flattenDocumentSymbols(docSymbols, documentURI)
+}
 
+func flattenDocumentSymbols(docSymbols []*lsproto.DocumentSymbol, documentURI lsproto.DocumentUri) []lsproto.SymbolInformation {
 	// Flatten the hierarchy
 	var result []lsproto.SymbolInformation
 	var flatten func(symbols []*lsproto.DocumentSymbol, containerName *string)
@@ -307,14 +329,16 @@ func (l *LanguageService) newDocumentSymbol(node *ast.Node, name *ast.Node, chil
 	}
 	result.Name = text
 	result.Kind = getSymbolKindFromNode(node)
-	result.Range = lsproto.Range{
-		Start: l.converters.PositionToLineAndCharacter(file, core.TextPos(nodeStartPos)),
-		End:   l.converters.PositionToLineAndCharacter(file, core.TextPos(node.End())),
+	selectionRange, selectionFidelity := l.converters.ToLSPRangeForFeature(file, core.NewTextRange(nameStartPos, nameEndPos), spanmap.FeatureDocumentSymbols)
+	if !selectionFidelity.IsSingleSegment() {
+		return nil
 	}
-	result.SelectionRange = lsproto.Range{
-		Start: l.converters.PositionToLineAndCharacter(file, core.TextPos(nameStartPos)),
-		End:   l.converters.PositionToLineAndCharacter(file, core.TextPos(nameEndPos)),
+	symbolRange, rangeFidelity := l.converters.ToLSPRangeForFeature(file, core.NewTextRange(nodeStartPos, node.End()), spanmap.FeatureDocumentSymbols)
+	if rangeFidelity.IsNone() {
+		symbolRange = selectionRange
 	}
+	result.Range = symbolRange
+	result.SelectionRange = selectionRange
 	if children == nil {
 		children = []*lsproto.DocumentSymbol{}
 	}
@@ -556,8 +580,8 @@ func ProvideWorkspaceSymbols(
 	// Sort the DeclarationInfos and return the top 256 matches.
 	slices.SortFunc(infos, compareDeclarationInfos)
 	count := min(len(infos), 256)
-	symbols := make([]*lsproto.SymbolInformation, count)
-	for i, info := range infos[0:count] {
+	symbols := make([]*lsproto.SymbolInformation, 0, count)
+	for _, info := range infos[0:count] {
 		node := info.declaration
 		sourceFile := ast.GetSourceFileOfNode(node)
 		container := getContainerNode(info.declaration)
@@ -572,12 +596,17 @@ func ProvideWorkspaceSymbols(
 		nameNode := ast.GetNameOfDeclaration(node)
 		nameStart := astnav.GetStartOfNode(nameNode, sourceFile, false /*includeJsDoc*/)
 		nameRange := core.NewTextRange(nameStart, nameNode.End())
+		location, fidelity := converters.ToLSPLocationForFeature(sourceFile, nameRange, spanmap.FeatureDocumentSymbols)
+		if !fidelity.IsSingleSegment() {
+			// The name has no counterpart in the original text, so there is nothing to navigate to.
+			continue
+		}
 		var symbol lsproto.SymbolInformation
 		symbol.Name = info.name
 		symbol.Kind = getSymbolKindFromNode(info.declaration)
-		symbol.Location = converters.ToLSPLocation(sourceFile, nameRange)
+		symbol.Location = location
 		symbol.ContainerName = containerName
-		symbols[i] = &symbol
+		symbols = append(symbols, &symbol)
 	}
 
 	return lsproto.SymbolInformationsOrWorkspaceSymbolsOrNull{SymbolInformations: &symbols}, nil

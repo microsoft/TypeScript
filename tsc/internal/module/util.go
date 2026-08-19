@@ -151,6 +151,10 @@ func GetResolutionDiagnostic(options *core.CompilerOptions, resolvedModule *Reso
 		return diagnostics.Module_0_was_resolved_to_1_but_allowArbitraryExtensions_is_not_set
 	}
 
+	if resolvedModule.ResolvedUsingExtraExtensions {
+		return nil
+	}
+
 	switch resolvedModule.Extension {
 	case tspath.ExtensionTs, tspath.ExtensionDts,
 		tspath.ExtensionMts, tspath.ExtensionDmts,

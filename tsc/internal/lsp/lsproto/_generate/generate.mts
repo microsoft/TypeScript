@@ -69,6 +69,12 @@ const customStructures: Structure[] = [
                 documentation: "The initial log verbosity level, matching the client's output channel log level at startup. Subsequent changes are sent via custom/setLogVerbosity.",
             },
             {
+                name: "runExternalCode",
+                type: { kind: "base", name: "boolean" },
+                optional: true,
+                documentation: "RunExternalCode allows configured content mappers to launch external plugin processes. The client should set this only for trusted workspaces. It mirrors the --runExternalCode CLI flag.",
+            },
+            {
                 name: "trackFlakyDiagnostics",
                 type: { kind: "reference", name: "DiagnosticFlakeLogLevel" },
                 optional: true,
@@ -141,6 +147,12 @@ const customStructures: Structure[] = [
                 type: { kind: "base", name: "integer" },
                 documentation: "The position where the completion was requested.",
                 omitzeroValue: true,
+            },
+            {
+                name: "supplementalFileIndex",
+                type: { kind: "base", name: "integer" },
+                optional: true,
+                documentation: "Zero-based index into the canonical file's supplemental source files. Absent when the completion was requested in the canonical file.",
             },
             {
                 name: "source",
@@ -420,6 +432,43 @@ const customStructures: Structure[] = [
             },
         ],
         documentation: "Result for the custom/projectInfo request.",
+    },
+    {
+        name: "ContentMapperManifest",
+        properties: [
+            { name: "name", type: { kind: "base", name: "string" }, documentation: "Human-readable mapper name." },
+            { name: "version", type: { kind: "base", name: "string" }, optional: true, documentation: "Mapper version." },
+            { name: "exec", type: { kind: "array", element: { kind: "base", name: "string" } }, documentation: "Executable and arguments used to start the mapper." },
+            { name: "cwd", type: { kind: "base", name: "string" }, optional: true, documentation: "Absolute working directory for the mapper process." },
+            { name: "compilerOptions", type: { kind: "array", element: { kind: "base", name: "string" } }, optional: true, documentation: "Compiler option names forwarded to the mapper." },
+            { name: "dynamicConfig", type: { kind: "base", name: "boolean" }, optional: true, documentation: "Whether the mapper uses project-scoped dynamic configuration." },
+        ],
+        documentation: "Inline content mapper manifest supplied by a contributing extension.",
+    },
+    {
+        name: "InferredProjectContentMapperContribution",
+        properties: [
+            { name: "options", type: { kind: "reference", name: "LSPObject" }, optional: true, documentation: "Options supplied to transforms in inferred projects." },
+            { name: "manifest", type: { kind: "reference", name: "ContentMapperManifest" }, documentation: "Inline manifest for the mapper contributed to inferred projects." },
+        ],
+        documentation: "Content mapper configuration contributed to inferred projects.",
+    },
+    {
+        name: "ContentMapperContribution",
+        properties: [
+            { name: "contributorId", type: { kind: "base", name: "string" }, documentation: "Unique identifier of the contributor extension." },
+            { name: "extensions", type: { kind: "array", element: { kind: "base", name: "string" } }, documentation: "File extensions handled by this content mapper." },
+            { name: "inferredProjectContribution", type: { kind: "reference", name: "InferredProjectContentMapperContribution" }, optional: true, documentation: "When present, contributes this mapper to inferred projects." },
+        ],
+        documentation: "One extension-provided content mapper contribution.",
+    },
+    {
+        name: "SetContentMapperContributionsParams",
+        properties: [
+            { name: "contributions", type: { kind: "array", element: { kind: "reference", name: "ContentMapperContribution" } }, documentation: "Complete replacement set of active extension contributions." },
+            { name: "openDocuments", type: { kind: "array", element: { kind: "reference", name: "TextDocumentIdentifier" } }, documentation: "Currently open documents matching contributed extensions." },
+        ],
+        documentation: "Parameters for the custom/setContentMapperContributions request.",
     },
     {
         name: "SetLogVerbosityParams",
@@ -873,6 +922,14 @@ const customRequests: Request[] = [
         result: { kind: "reference", name: "ProjectInfoResult" },
         messageDirection: "clientToServer",
         documentation: "Returns project information (e.g. the tsconfig.json path) for a given text document.",
+    },
+    {
+        method: "custom/setContentMapperContributions",
+        typeName: "CustomSetContentMapperContributionsRequest",
+        params: { kind: "reference", name: "SetContentMapperContributionsParams" },
+        result: { kind: "base", name: "null" },
+        messageDirection: "clientToServer",
+        documentation: "Replaces extension content mapper contributions and discovers configured mappers for matching open documents.",
     },
     {
         method: "custom/textDocument/sourceDefinition",

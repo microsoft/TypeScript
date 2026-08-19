@@ -11,10 +11,20 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/nodebuilder"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/spanmap"
+)
+
+// SignatureHelpTriggerCharacters and SignatureHelpRetriggerCharacters are the characters that trigger and
+// re-trigger signature help. They are advertised both in the static server capabilities and in the dynamic
+// content-mapper registration, so they live here to keep those two declarations in sync.
+var (
+	SignatureHelpTriggerCharacters   = []string{"(", ",", "<"}
+	SignatureHelpRetriggerCharacters = []string{")"}
 )
 
 type callInvocation struct {
@@ -44,9 +54,15 @@ func (l *LanguageService) ProvideSignatureHelp(
 	context *lsproto.SignatureHelpContext,
 ) (lsproto.SignatureHelpResponse, error) {
 	program, sourceFile := l.getProgramAndFile(documentURI)
+	positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, position, spanmap.FeatureSignatureHelp)
+	if len(positions) == 0 || !positions[0].Fidelity.IsSingleSegment() {
+		return lsproto.SignatureHelpOrNull{}, nil
+	}
+	sourceFile = positions[0].Script
+	pos := int(positions[0].Position)
 	items := l.GetSignatureHelpItems(
 		ctx,
-		int(l.converters.LineAndCharacterToPosition(sourceFile, position)),
+		pos,
 		program,
 		sourceFile,
 		context,
@@ -441,7 +457,7 @@ func (l *LanguageService) getSignatureHelpItem(candidate *checker.Signature, isT
 	// Generate documentation from the signature's declaration
 	var documentation *string
 	if declaration := candidate.Declaration(); declaration != nil {
-		doc := getDocumentationFromDeclaration(l.getMappedLocation, c, nil, declaration, nil, docFormat, true /*commentOnly*/)
+		doc := getDocumentationFromDeclaration(l.documentationLocationMapper(spanmap.FeatureSignatureHelp), c, nil, declaration, nil, docFormat, true /*commentOnly*/)
 		if doc != "" {
 			documentation = &doc
 		}
@@ -653,7 +669,7 @@ func (l *LanguageService) createSignatureHelpParameterFromLabel(parameter *ast.S
 	isRest := parameter.CheckFlags&ast.CheckFlagsRestParameter != 0
 	var documentation *lsproto.StringOrMarkupContent
 	if parameter.ValueDeclaration != nil {
-		doc := getDocumentationFromDeclaration(l.getMappedLocation, c, nil, parameter.ValueDeclaration, nil, docFormat, true /*commentOnly*/)
+		doc := getDocumentationFromDeclaration(l.documentationLocationMapper(spanmap.FeatureSignatureHelp), c, nil, parameter.ValueDeclaration, nil, docFormat, true /*commentOnly*/)
 		if doc != "" {
 			documentation = &lsproto.StringOrMarkupContent{
 				MarkupContent: &lsproto.MarkupContent{

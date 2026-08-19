@@ -10,6 +10,7 @@ import (
 
 type OutputPathsHost interface {
 	CommonSourceDirectory() string
+	ContentMapperExtensions() []string
 	GetCurrentDirectory() string
 	UseCaseSensitiveFileNames() bool
 }
@@ -55,7 +56,7 @@ func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions
 			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
 		}) == 0
 	paths := &OutputPaths{}
-	if (force.Js || options.EmitDeclarationOnly != core.TSTrue) && !isJsonEmittedToSameLocation {
+	if sourceFile.ContentMapper() == "" && (force.Js || options.EmitDeclarationOnly != core.TSTrue) && !isJsonEmittedToSameLocation {
 		paths.jsFilePath = ownOutputFilePath
 		if !ast.IsJsonSourceFile(sourceFile) {
 			paths.sourceMapFilePath = GetSourceMapFilePath(paths.jsFilePath, options)
@@ -63,7 +64,7 @@ func GetOutputPathsFor(sourceFile *ast.SourceFile, options *core.CompilerOptions
 	}
 	if force.Dts || options.GetEmitDeclarations() && !isJsonFile {
 		paths.declarationFilePath = GetDeclarationEmitOutputFilePath(sourceFile.FileName(), options, host)
-		if options.GetAreDeclarationMapsEnabled() || force.DeclarationMap && options.DeclarationMap.IsTrue() {
+		if sourceFile.ContentMapper() == "" && (options.GetAreDeclarationMapsEnabled() || force.DeclarationMap && options.DeclarationMap.IsTrue()) {
 			paths.declarationMapPath = paths.declarationFilePath + ".map"
 		}
 	}
@@ -80,7 +81,7 @@ func ForEachEmittedFile(host OutputPathsHost, options *core.CompilerOptions, act
 }
 
 func GetOutputJSFileName(inputFileName string, options *core.CompilerOptions, host OutputPathsHost) string {
-	if options.EmitDeclarationOnly.IsTrue() {
+	if options.EmitDeclarationOnly.IsTrue() || isContentMappedFileName(inputFileName, host) {
 		return ""
 	}
 	outputFileName := GetOutputJSFileNameWorker(inputFileName, options, host)
@@ -91,7 +92,12 @@ func GetOutputJSFileName(inputFileName string, options *core.CompilerOptions, ho
 		}) != 0 {
 		return outputFileName
 	}
+
 	return ""
+}
+
+func isContentMappedFileName(fileName string, host OutputPathsHost) bool {
+	return tspath.GetLongestExtensionFromPath(fileName, host.ContentMapperExtensions(), !host.UseCaseSensitiveFileNames()) != ""
 }
 
 func GetOutputJSFileNameWorker(inputFileName string, options *core.CompilerOptions, host OutputPathsHost) string {
@@ -106,10 +112,7 @@ func GetOutputDeclarationFileNameWorker(inputFileName string, options *core.Comp
 	if len(dir) == 0 {
 		dir = options.OutDir
 	}
-	return tspath.ChangeExtension(
-		getOutputPathWithoutChangingExtension(inputFileName, dir, host),
-		tspath.GetDeclarationEmitExtensionForPath(inputFileName),
-	)
+	return ChangeToDeclarationExtension(getOutputPathWithoutChangingExtension(inputFileName, dir, host), host)
 }
 
 func GetOutputExtension(fileName string, jsx core.JsxEmit) string {
@@ -141,8 +144,20 @@ func GetDeclarationEmitOutputFilePath(file string, options *core.CompilerOptions
 	} else {
 		path = file
 	}
-	declarationExtension := tspath.GetDeclarationEmitExtensionForPath(path)
-	return tspath.RemoveFileExtension(path) + declarationExtension
+	return ChangeToDeclarationExtension(path, host)
+}
+
+func ChangeToDeclarationExtension(path string, host OutputPathsHost) string {
+	if extension := tspath.GetLongestExtensionFromPath(path, host.ContentMapperExtensions(), false); extension != "" {
+		return tspath.RemoveExtension(path, extension) + ".d" + extension + ".ts"
+	}
+	pathWithoutExtension := tspath.RemoveFileExtension(path)
+	if pathWithoutExtension == path {
+		if extension := tspath.GetAnyExtensionFromPath(path, nil, false); extension != "" {
+			pathWithoutExtension = tspath.RemoveExtension(path, extension)
+		}
+	}
+	return pathWithoutExtension + tspath.GetDeclarationEmitExtensionForPath(path)
 }
 
 func GetSourceFilePathInNewDir(fileName string, newDirPath string, currentDirectory string, commonSourceDirectory string, useCaseSensitiveFileNames bool) string {

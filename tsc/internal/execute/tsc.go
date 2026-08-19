@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/contentmapper"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/execute/build"
@@ -243,6 +244,7 @@ func tscCompilation(ctx context.Context, sys tsc.System, commandLine *tsoptions.
 		return tsc.CommandLineResult{Status: tsc.ExitStatusSuccess, Watcher: watcher}
 	} else if configForCompilation.CompilerOptions().IsIncremental() {
 		return performIncrementalCompilation(
+			ctx,
 			sys,
 			configForCompilation,
 			reportDiagnostic,
@@ -253,6 +255,7 @@ func tscCompilation(ctx context.Context, sys tsc.System, commandLine *tsoptions.
 		)
 	}
 	return performCompilation(
+		ctx,
 		sys,
 		configForCompilation,
 		reportDiagnostic,
@@ -282,6 +285,7 @@ func getTraceFromSys(sys tsc.System, locale locale.Locale, testing tsc.CommandLi
 }
 
 func performIncrementalCompilation(
+	ctx context.Context,
 	sys tsc.System,
 	config *tsoptions.ParsedCommandLine,
 	reportDiagnostic tsc.DiagnosticReporter,
@@ -290,7 +294,12 @@ func performIncrementalCompilation(
 	compileTimes *tsc.CompileTimes,
 	testing tsc.CommandLineTesting,
 ) tsc.CommandLineResult {
-	host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), extendedConfigCache, getTraceFromSys(sys, config.Locale(), testing))
+	contentMapperHost := tsc.NewContentMapperHost(ctx, sys, config.CompilerOptions())
+	contentMapperProject := getContentMapperProject(contentMapperHost, config)
+	if contentMapperProject != nil {
+		defer contentMapperProject.Close()
+	}
+	host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), extendedConfigCache, getTraceFromSys(sys, config.Locale(), testing), contentMapperProject)
 	buildInfoReadStart := sys.Now()
 	oldProgram := incremental.ReadBuildInfoProgram(config, incremental.NewBuildInfoReader(host), host)
 	compileTimes.BuildInfoReadTime = sys.Now().Sub(buildInfoReadStart)
@@ -307,6 +316,9 @@ func performIncrementalCompilation(
 	changesComputeStart := sys.Now()
 	incrementalProgram := incremental.NewProgram(program, oldProgram, incremental.CreateHost(host), sys.Now, testing != nil)
 	compileTimes.ChangesComputeTime = sys.Now().Sub(changesComputeStart)
+	if contentMapperHost != nil {
+		compileTimes.ContentMapperTimes = contentMapperHost.Timings()
+	}
 	result, _ := tsc.EmitAndReportStatistics(tsc.EmitInput{
 		Sys:                sys,
 		ProgramLike:        incrementalProgram,
@@ -331,6 +343,7 @@ func performIncrementalCompilation(
 }
 
 func performCompilation(
+	ctx context.Context,
 	sys tsc.System,
 	config *tsoptions.ParsedCommandLine,
 	reportDiagnostic tsc.DiagnosticReporter,
@@ -339,7 +352,12 @@ func performCompilation(
 	compileTimes *tsc.CompileTimes,
 	testing tsc.CommandLineTesting,
 ) tsc.CommandLineResult {
-	host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), extendedConfigCache, getTraceFromSys(sys, config.Locale(), testing))
+	contentMapperHost := tsc.NewContentMapperHost(ctx, sys, config.CompilerOptions())
+	contentMapperProject := getContentMapperProject(contentMapperHost, config)
+	if contentMapperProject != nil {
+		defer contentMapperProject.Close()
+	}
+	host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), extendedConfigCache, getTraceFromSys(sys, config.Locale(), testing), contentMapperProject)
 
 	tr := startTracingIfNeeded(sys, config, testing)
 
@@ -350,6 +368,9 @@ func performCompilation(
 		Tracing: tr,
 	})
 	compileTimes.ParseTime = sys.Now().Sub(parseStart)
+	if contentMapperHost != nil {
+		compileTimes.ContentMapperTimes = contentMapperHost.Timings()
+	}
 	result, _ := tsc.EmitAndReportStatistics(tsc.EmitInput{
 		Sys:                sys,
 		ProgramLike:        program,
@@ -368,6 +389,17 @@ func performCompilation(
 	return tsc.CommandLineResult{
 		Status: result.Status,
 	}
+}
+
+func getContentMapperProject(host contentmapper.Host, config *tsoptions.ParsedCommandLine) contentmapper.Project {
+	if host == nil || len(config.ContentMappers()) == 0 {
+		return nil
+	}
+	return host.Project(contentmapper.ProjectSpec{
+		ConfigFileName:  config.ConfigName(),
+		Mappers:         config.ContentMappers(),
+		CompilerOptions: config.CompilerOptions(),
+	})
 }
 
 func showConfig(sys tsc.System, config *tsoptions.ParsedCommandLine, configFileName string) {

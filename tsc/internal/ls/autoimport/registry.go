@@ -1247,14 +1247,10 @@ func (b *registryBuilder) buildProjectBucket(
 			skippedFileCount++
 			continue
 		}
-		// Skip all node_modules files - they are always handled by node_modules buckets.
-		// This simplifies the logic and ensures exports are indexed consistently.
-		if strings.Contains(file.FileName(), "/node_modules/") {
-			continue
-		}
-		// Skip files that are realpaths of symlinks in node_modules.
-		// These files will be indexed via their symlinked path in node_modules buckets.
-		if hasSymlinkToNodeModules(file.Path(), projectRootPath, symlinkCache) {
+		// Ordinary node_modules files are owned by node_modules buckets. Content-mapped files are not
+		// discovered by those buckets, but files already transformed in the Program can be indexed here.
+		if file.ContentMapper() == "" &&
+			(strings.Contains(file.FileName(), "/node_modules/") || hasSymlinkToNodeModules(file.Path(), projectRootPath, symlinkCache)) {
 			continue
 		}
 		wg.Go(func() {

@@ -12,7 +12,7 @@ import (
 func TestCompletionForStringLiteralExport(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @typeRoots: my_typings
+	const content = `// @typeRoots: fourslash/my_typings
 // @Filename: fourslash/test.ts
 export * from "./some/*0*/
 export * from "./sub/some/*1*/";
@@ -62,7 +62,8 @@ export var x = 9;`
 		Items: &fourslash.CompletionsExpectedItems{
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: "some-module",
+					Label:  "some-module",
+					Detail: new("some-module"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "some-module",

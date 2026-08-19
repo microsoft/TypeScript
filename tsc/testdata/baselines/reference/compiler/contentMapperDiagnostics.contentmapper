@@ -1,0 +1,27 @@
+//// [/widget.box] (ScriptKind: ScriptKindTS, ContentMapper: [.box])
+--- Original ---
+export const count: number = "not a number";
+export const label: string = #{target};
+export const broken = #{unterminated;
+--- Transformed ---
+const __VERSION = "1.0.0";
+export const count: number = "not a number";
+export const label: string = 7;
+export const broken = undefined
+
+=== Diagnostics ===
+
+/widget.box:1:14 - error TS2322: Type 'string' is not assignable to type 'number'.
+
+1 export const count: number = "not a number";
+               ~~~~~
+
+/widget.box:2:14 - error TS2322: Type 'number' is not assignable to type 'string'.
+
+2 export const label: string = #{target};
+               ~~~~~
+
+/widget.box:3:23 - error box1000: Unclosed interpolation.
+
+3 export const broken = #{unterminated;
+                        ~~~~~~~~~~~~~~~

@@ -5,6 +5,7 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project/dirty"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -1463,7 +1464,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		change := FileChangeSummary{}
 		change.Deleted.Add("file:///project/node_modules")
 
-		expanded := builder.expandAndFilterWatchEvents(change)
+		expanded := builder.expandAndFilterWatchEvents(change, nil, nil)
 		assert.Assert(t, expanded.Deleted.Has("file:///project/node_modules"),
 			"bare node_modules directory deletion should be preserved")
 	})
@@ -1477,7 +1478,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		change := FileChangeSummary{}
 		change.Deleted.Add("file:///project/node_modules/@scope/pkg")
 
-		expanded := builder.expandAndFilterWatchEvents(change)
+		expanded := builder.expandAndFilterWatchEvents(change, nil, nil)
 		assert.Assert(t, expanded.Deleted.Has("file:///project/node_modules/@scope/pkg"),
 			"package directory deletion inside node_modules should be preserved")
 	})
@@ -1491,9 +1492,24 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		change := FileChangeSummary{}
 		change.Deleted.Add("file:///project/build")
 
-		expanded := builder.expandAndFilterWatchEvents(change)
+		expanded := builder.expandAndFilterWatchEvents(change, nil, nil)
 		assert.Equal(t, expanded.Deleted.Len(), 0,
 			"untracked non-node_modules directory deletion should be dropped")
+	})
+
+	t.Run("preserves exact content mapper dependencies", func(t *testing.T) {
+		t.Parallel()
+		builder := newBuilder(vfstest.FromMap(map[string]string{
+			"/project/index.ts": "export const x = 1;",
+		}, false))
+		watched := collections.NewSetFromItems(tspath.Path("/project/mapper.config"))
+		change := FileChangeSummary{}
+		change.Changed.Add("file:///project/mapper.config")
+		change.Deleted.Add("file:///project/mapper.config")
+
+		expanded := builder.expandAndFilterWatchEvents(change, nil, watched)
+		assert.Assert(t, expanded.Changed.Has("file:///project/mapper.config"))
+		assert.Assert(t, expanded.Deleted.Has("file:///project/mapper.config"))
 	})
 
 	t.Run("expands tracked directory deletion into file deletions", func(t *testing.T) {
@@ -1519,7 +1535,7 @@ func TestExpandAndFilterWatchEvents(t *testing.T) {
 		change := FileChangeSummary{}
 		change.Deleted.Add("file:///src")
 
-		expanded := builder.expandAndFilterWatchEvents(change)
+		expanded := builder.expandAndFilterWatchEvents(change, nil, nil)
 		assert.Assert(t, expanded.Deleted.Has("file:///src/foo.ts"),
 			"tracked directory deletion should expand to contained file deletions")
 		assert.Assert(t, !expanded.Deleted.Has("file:///src"),

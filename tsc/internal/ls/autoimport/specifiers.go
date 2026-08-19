@@ -41,7 +41,7 @@ func (v *View) GetModuleSpecifier(
 		}
 	}
 
-	cache := v.registry.specifierCache[v.importingFile.Path()]
+	cache := v.registry.specifierCache[v.importingFilePath]
 	if export.PackageName == "" {
 		if specifier, ok := cache.Load(export.Path); ok {
 			if specifier == "" {

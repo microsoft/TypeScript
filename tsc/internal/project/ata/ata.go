@@ -186,7 +186,7 @@ func (ti *TypingsInstaller) installTypings(
 	if packageNames, ok := ti.installWorker(projectID, requestID, scopedTypings, logger); ok {
 		logger.Log(fmt.Sprintf("ATA:: Installed typings %v", packageNames))
 		var installedTypingFiles []string
-		resolver := module.NewResolver(ti.host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext}, "", "")
+		resolver := module.NewResolver(ti.host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext}, "", "", nil)
 		for _, packageName := range filteredTypings {
 			typingFile := ti.typingToFileName(resolver, packageName)
 			if typingFile == "" {
@@ -416,7 +416,7 @@ func (ti *TypingsInstaller) processCacheLocation(projectID string, fs vfs.FS, lo
 		logger.Log("ATA:: Loaded content of " + packageLockJson + ": " + npmLockContents)
 
 		// !!! sheetal strada uses Node10
-		resolver := module.NewResolver(ti.host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext}, "", "")
+		resolver := module.NewResolver(ti.host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext}, "", "", nil)
 		if npmConfig.DevDependencies != nil && (npmLock.Packages != nil || npmLock.Dependencies != nil) {
 			for key := range npmConfig.DevDependencies {
 				npmLockValue, npmLockValueExists := npmLock.Packages["node_modules/"+key]

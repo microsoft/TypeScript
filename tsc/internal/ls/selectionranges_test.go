@@ -40,11 +40,11 @@ func TestSelectionRangeDepthIsLimited(t *testing.T) {
 	if depth != maxSelectionRangeDepth {
 		t.Fatalf("selection range depth = %d, want %d", depth, maxSelectionRangeDepth)
 	}
-	innerRange := languageService.converters.ToLSPRange(sourceFile, core.NewTextRange(len("const x = ")+nestingDepth, len("const x = ")+nestingDepth+1))
+	innerRange, _ := languageService.converters.ToLSPRange(sourceFile, core.NewTextRange(len("const x = ")+nestingDepth, len("const x = ")+nestingDepth+1))
 	if result.Range != innerRange {
 		t.Fatalf("innermost selection range = %v, want %v", result.Range, innerRange)
 	}
-	fullRange := languageService.converters.ToLSPRange(sourceFile, core.NewTextRange(sourceFile.Pos(), sourceFile.End()))
+	fullRange, _ := languageService.converters.ToLSPRange(sourceFile, core.NewTextRange(sourceFile.Pos(), sourceFile.End()))
 	if outermost.Range != fullRange {
 		t.Fatalf("outermost selection range = %v, want full file range %v", outermost.Range, fullRange)
 	}

@@ -1,0 +1,11 @@
+--- old.goToDefinitionAwait4.baseline.jsonc
++++ new.goToDefinitionAwait4.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === goToDefinition ===
+ // === /goToDefinitionAwait4.ts ===
+ // async function outerAsyncFun() {
+-//     let [|af|] = <|async () => {
++//     let <|[|af|] = async () => {
+ //       /*GOTO DEF*/await Promise.resolve(0);
+ //     }|>
+ // }

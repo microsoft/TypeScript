@@ -20,6 +20,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/contentmapper"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/execute/incremental"
@@ -29,6 +30,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/testutil"
+	"github.com/microsoft/typescript-go/internal/testutil/contentmappertest"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
@@ -184,6 +186,11 @@ func CompileFilesEx(
 		compilerOptions.TypeRoots[i] = tspath.GetNormalizedAbsolutePath(typeRoot, currentDirectory)
 	}
 
+	var contentMappers []*contentmapper.Mapper
+	if tsconfig != nil && tsconfig.ParsedConfig != nil {
+		contentMappers = tsconfig.ParsedConfig.ContentMappers
+	}
+
 	// Create fake FS for testing
 	testfs := map[string]any{}
 	for _, file := range inputFiles {
@@ -212,21 +219,40 @@ func CompileFilesEx(
 	fs = bundled.WrapFS(fs)
 	fs = NewOutputRecorderFS(fs)
 
-	host := createCompilerHost(fs, bundled.LibPath(), currentDirectory)
+	// Content mappers, when trusted, are served in-process by the test mapper (see contentmappertest).
+	// The host is shared by the pre- and post-emit programs and torn down when this compilation finishes.
+	var contentMapperHost contentmapper.Host
+	if compilerOptions.RunExternalCode.IsTrue() && len(contentMappers) > 0 {
+		contentMapperHost = contentmapper.NewHost(context.Background(), contentmappertest.NewSpawner(), locale.Default)
+		defer contentMapperHost.Close()
+	}
+
 	var configFile *tsoptions.TsConfigSourceFile
 	var errors []*ast.Diagnostic
 	if tsconfig != nil {
 		configFile = tsconfig.ConfigFile
 		errors = tsconfig.Errors
 	}
-	result := compileFilesWithHost(host, &tsoptions.ParsedCommandLine{
-		ParsedConfig: &core.ParsedOptions{
+	config := &tsoptions.ParsedCommandLine{
+		ParsedConfig: &tsoptions.ParsedOptions{
 			CompilerOptions: compilerOptions,
 			FileNames:       programFileNames,
+			ContentMappers:  contentMappers,
 		},
 		ConfigFile: configFile,
 		Errors:     errors,
-	}, harnessOptions)
+	}
+	var contentMapperProject contentmapper.Project
+	if contentMapperHost != nil {
+		contentMapperProject = contentMapperHost.Project(contentmapper.ProjectSpec{
+			ConfigFileName:  config.ConfigName(),
+			Mappers:         config.ContentMappers(),
+			CompilerOptions: config.CompilerOptions(),
+		})
+		defer contentMapperProject.Close()
+	}
+	host := createCompilerHost(fs, bundled.LibPath(), currentDirectory, contentMapperProject)
+	result := compileFilesWithHost(host, config, harnessOptions)
 	result.Symlinks = symlinks
 	result.Trace = host.tracer.String()
 	result.Repeat = func(testConfig TestConfiguration) *CompilationResult {
@@ -587,13 +613,13 @@ func (t *TracerForBaselining) Reset() {
 	t.packageJsonCache = make(map[tspath.Path]bool)
 }
 
-func createCompilerHost(fs vfs.FS, defaultLibraryPath string, currentDirectory string) *cachedCompilerHost {
+func createCompilerHost(fs vfs.FS, defaultLibraryPath string, currentDirectory string, contentMapperProject contentmapper.Project) *cachedCompilerHost {
 	tracer := NewTracerForBaselining(tspath.ComparePathsOptions{
 		UseCaseSensitiveFileNames: fs.UseCaseSensitiveFileNames(),
 		CurrentDirectory:          currentDirectory,
 	}, &strings.Builder{})
 	return &cachedCompilerHost{
-		CompilerHost: compiler.NewCompilerHost(currentDirectory, fs, defaultLibraryPath, nil, tracer.Trace),
+		CompilerHost: compiler.NewCompilerHost(currentDirectory, fs, defaultLibraryPath, nil, tracer.Trace, contentMapperProject),
 		tracer:       tracer,
 	}
 }
@@ -619,13 +645,15 @@ func compileFilesWithHost(
 	// }
 
 	ctx := context.Background()
+
 	var preErrors []*ast.Diagnostic
 	preCompilerOptions := config.CompilerOptions().Clone()
 	preCompilerOptions.TraceResolution = core.TSFalse
 	preConfig := &tsoptions.ParsedCommandLine{
-		ParsedConfig: &core.ParsedOptions{
+		ParsedConfig: &tsoptions.ParsedOptions{
 			CompilerOptions: preCompilerOptions,
 			FileNames:       config.FileNames(),
+			ContentMappers:  config.ContentMappers(),
 		},
 		ConfigFile: config.ConfigFile,
 		Errors:     config.Errors,
@@ -826,6 +854,9 @@ func (c *CompilationResult) getOutputPath(path string, ext string) string {
 			})
 			path = tspath.CombinePaths(tspath.ResolvePath(c.Host.GetCurrentDirectory(), c.Options.OutDir), path)
 		}
+	}
+	if ext == tspath.GetDeclarationEmitExtensionForPath(path) {
+		return outputpaths.ChangeToDeclarationExtension(path, c.Program.Program())
 	}
 	return tspath.ChangeExtension(path, ext)
 }

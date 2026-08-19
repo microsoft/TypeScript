@@ -1,22 +1,48 @@
 package ls
 
 import (
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-func (l *LanguageService) getMappedLocation(fileName string, fileRange core.TextRange) lsproto.Location {
+// sourceFileRangeToLSPLocation maps a range from an arbitrary program SourceFile to an LSP location,
+// composing content-mapper span maps and declaration source maps as needed. LS features should use this
+// for cross-file results instead of calling getMappedLocation or lsconv.ToLSPLocation directly.
+// This unfiltered form is appropriate for diagnostics and text edits.
+func (l *LanguageService) sourceFileRangeToLSPLocation(file *ast.SourceFile, fileRange core.TextRange) (lsproto.Location, spanmap.Fidelity) {
+	if file.ContentMapper() != "" {
+		return l.converters.ToLSPLocation(file, fileRange)
+	}
+	return l.getMappedLocation(file.FileName(), fileRange)
+}
+
+// sourceFileRangeToLSPLocationForFeature is the preferred conversion for visible LS results that may
+// come from another file. It applies content-mapper feature filtering and follows declaration source maps.
+// Do not use it for diagnostics or text edits.
+func (l *LanguageService) sourceFileRangeToLSPLocationForFeature(file *ast.SourceFile, fileRange core.TextRange, feature spanmap.Feature) (lsproto.Location, spanmap.Fidelity) {
+	if file.ContentMapper() != "" {
+		return l.converters.ToLSPLocationForFeature(file, fileRange, feature)
+	}
+	return l.getMappedLocation(file.FileName(), fileRange)
+}
+
+// getMappedLocation follows declaration source maps from a .d.ts range to its source location.
+// It is an implementation detail of sourceFileRangeToLSPLocation; LS features should not call it directly,
+// because it does not preserve a content-mapper projection or apply span-map feature filtering.
+func (l *LanguageService) getMappedLocation(fileName string, fileRange core.TextRange) (lsproto.Location, spanmap.Fidelity) {
 	startPos := l.tryGetSourcePosition(fileName, core.TextPos(fileRange.Pos()))
 	if startPos == nil {
-		lspRange := l.createLspRangeFromRange(fileRange, l.getScript(fileName))
+		lspRange, fidelity := l.createLspRangeFromRange(fileRange, l.getScript(fileName))
 		return lsproto.Location{
 			Uri:   lsconv.FileNameToDocumentURI(fileName),
 			Range: lspRange,
-		}
+		}, fidelity
 	}
 	endPos := l.tryGetSourcePosition(fileName, core.TextPos(fileRange.End()))
 	if endPos == nil || endPos.FileName != startPos.FileName || endPos.Pos < startPos.Pos {
@@ -29,11 +55,11 @@ func (l *LanguageService) getMappedLocation(fileName string, fileRange core.Text
 		}
 	}
 	newRange := core.NewTextRange(startPos.Pos, endPos.Pos)
-	lspRange := l.createLspRangeFromRange(newRange, l.getScript(startPos.FileName))
+	lspRange, fidelity := l.createLspRangeFromRange(newRange, l.getScript(startPos.FileName))
 	return lsproto.Location{
 		Uri:   lsconv.FileNameToDocumentURI(startPos.FileName),
 		Range: lspRange,
-	}
+	}, fidelity
 }
 
 type script struct {
@@ -45,9 +71,16 @@ func (s *script) FileName() string {
 	return s.fileName
 }
 
+func (s *script) OriginalFileName() string { return s.fileName }
+
 func (s *script) Text() string {
 	return s.text
 }
+
+func (s *script) OriginalText() string      { return s.text }
+func (s *script) SpanMap() *spanmap.SpanMap { return nil }
+
+var _ lsconv.Script = (*script)(nil)
 
 func (l *LanguageService) getScript(fileName string) *script {
 	text, ok := l.host.ReadFile(fileName)

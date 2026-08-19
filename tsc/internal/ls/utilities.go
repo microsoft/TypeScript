@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -284,24 +285,28 @@ func isInRightSideOfInternalImportEqualsDeclaration(node *ast.Node) bool {
 	return ast.IsInternalModuleImportEqualsDeclaration(node.Parent) && node.Parent.AsImportEqualsDeclaration().ModuleReference == node
 }
 
-func (l *LanguageService) createLspRangeFromNode(node *ast.Node, file *ast.SourceFile) lsproto.Range {
+func (l *LanguageService) createLspRangeFromNode(node *ast.Node, file *ast.SourceFile) (lsproto.Range, spanmap.Fidelity) {
 	return l.createLspRangeFromBounds(scanner.GetTokenPosOfNode(node, file, false /*includeJSDoc*/), node.End(), file)
+}
+
+func (l *LanguageService) createLspRangeFromNodeForFeature(node *ast.Node, file *ast.SourceFile, feature spanmap.Feature) (lsproto.Range, spanmap.Fidelity) {
+	return l.converters.ToLSPRangeForFeature(file, createRangeFromNode(node, file), feature)
 }
 
 func createRangeFromNode(node *ast.Node, file *ast.SourceFile) core.TextRange {
 	return core.NewTextRange(scanner.GetTokenPosOfNode(node, file, false /*includeJSDoc*/), node.End())
 }
 
-func (l *LanguageService) createLspRangeFromBounds(start, end int, file *ast.SourceFile) lsproto.Range {
+func (l *LanguageService) createLspRangeFromBounds(start, end int, file *ast.SourceFile) (lsproto.Range, spanmap.Fidelity) {
 	return l.converters.ToLSPRange(file, core.NewTextRange(start, end))
 }
 
-func (l *LanguageService) createLspRangeFromRange(textRange core.TextRange, script lsconv.Script) lsproto.Range {
+func (l *LanguageService) createLspRangeFromRange(textRange core.TextRange, script lsconv.Script) (lsproto.Range, spanmap.Fidelity) {
 	return l.converters.ToLSPRange(script, textRange)
 }
 
-func (l *LanguageService) createLspPosition(position int, file *ast.SourceFile) lsproto.Position {
-	return l.converters.PositionToLineAndCharacter(file, core.TextPos(position))
+func (l *LanguageService) createLspPosition(position int, file *ast.SourceFile) (lsproto.Position, spanmap.Fidelity) {
+	return l.converters.ToLSPPosition(file, core.TextPos(position))
 }
 
 func quote(file *ast.SourceFile, preferences lsutil.UserPreferences, text string) string {

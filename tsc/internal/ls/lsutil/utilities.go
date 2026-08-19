@@ -118,7 +118,7 @@ func ModuleSymbolToValidIdentifier(moduleSymbol *ast.Symbol, forceCapitalize boo
 }
 
 func ModuleSpecifierToValidIdentifier(moduleSpecifier string, forceCapitalize bool) string {
-	baseName := tspath.GetBaseFileName(strings.TrimSuffix(tspath.RemoveFileExtension(moduleSpecifier), "/index"))
+	baseName := tspath.GetBaseFileName(strings.TrimSuffix(tspath.RemoveAnyFileExtension(moduleSpecifier), "/index"))
 	res := []rune{}
 	lastCharWasValid := true
 	baseNameRunes := []rune(baseName)

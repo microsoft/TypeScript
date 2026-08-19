@@ -250,6 +250,14 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		DefaultValueDescription: diagnostics.X_4_unless_singleThreaded_is_passed,
 		minValue:                1,
 	},
+	{
+		Name:                    "runExternalCode",
+		Kind:                    CommandLineOptionTypeBoolean,
+		Category:                diagnostics.Command_line_Options,
+		IsCommandLineOnly:       true,
+		Description:             diagnostics.Allow_loading_external_content_mapper_plugins_that_execute_code_during_compilation,
+		DefaultValueDescription: false,
+	},
 }
 
 var optionsForCompiler = []*CommandLineOption{

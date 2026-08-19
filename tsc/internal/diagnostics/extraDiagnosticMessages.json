@@ -146,5 +146,201 @@
     "Duplicate named capturing groups are only available when targeting '{0}' or later.": {
         "category": "Error",
         "code": 18063
+    },
+    "Content mapper file extension '{0}' must begin with a '.'.": {
+        "category": "Error",
+        "code": 100020
+    },
+    "Content mapper file extension '{0}' is a built-in extension and cannot be registered by a content mapper.": {
+        "category": "Error",
+        "code": 100021
+    },
+    "Content mapper file extension '{0}' is registered by more than one content mapper.": {
+        "category": "Error",
+        "code": 100022
+    },
+    "Allow loading external content mapper plugins that execute code during compilation.": {
+        "category": "Message",
+        "code": 100023
+    },
+    "Content mappers require the '--runExternalCode' command line flag to be enabled.": {
+        "category": "Error",
+        "code": 100024
+    },
+    "The content mapper '{0}' failed to transform this file.": {
+        "category": "Error",
+        "code": 100025
+    },
+    "The content mapper '{0}' failed {1} times and will not be used.": {
+        "category": "Error",
+        "code": 100026
+    },
+    "The content mapper '{0}' did not provide the required position mappings.": {
+        "category": "Error",
+        "code": 100027
+    },
+    "The content mapper '{0}' produced a position mapping that points outside the original content (original offset {1}).": {
+        "category": "Error",
+        "code": 100028
+    },
+    "The content mapper '{0}' produced a verbatim mapping that does not match the original content (virtual offset {1}, original offset {2}).": {
+        "category": "Error",
+        "code": 100029
+    },
+    "This location is in virtual code produced by the content mapper '{0}' and has no corresponding location in the original file.": {
+        "category": "Message",
+        "code": 100030
+    },
+    "The content mapper package '{0}' could not be resolved.": {
+        "category": "Error",
+        "code": 100031
+    },
+    "The 'package.json' of the content mapper package '{0}' could not be parsed.": {
+        "category": "Error",
+        "code": 100032
+    },
+    "The 'package.json' of the content mapper package '{0}' does not specify a 'name'.": {
+        "category": "Error",
+        "code": 100033
+    },
+    "The 'package.json' of the content mapper package '{0}' does not declare a 'typescript.contentMapper' object.": {
+        "category": "Error",
+        "code": 100034
+    },
+    "The 'typescript.contentMapper.exec' of the content mapper package '{0}' must be a non-empty array of strings.": {
+        "category": "Error",
+        "code": 100035
+    },
+    "Virtual code produced by the content mapper '{0}' has problems with no corresponding location in this file.": {
+        "category": "Error",
+        "code": 100036
+    },
+    "The content mapper '{0}' produced overlapping or out-of-order position mappings (near virtual offset {1}).": {
+        "category": "Error",
+        "code": 100037
+    },
+    "The content mapper '{0}' produced overlapping original position mappings that are not identical (near original offset {1}).": {
+        "category": "Error",
+        "code": 100038
+    },
+    "The content mapper '{0}' produced invalid mapping features near original offset {1}.": {
+        "category": "Error",
+        "code": 100039
+    },
+    "The content mapper '{0}' produced a position mapping with an invalid kind (near virtual offset {1}).": {
+        "category": "Error",
+        "code": 100040
+    },
+    "The content mapper process could not be started or initialized.": {
+        "category": "Message",
+        "code": 100041
+    },
+    "The content mapper process failed while handling the transform request.": {
+        "category": "Message",
+        "code": 100042
+    },
+    "The content mapper returned an invalid transform response.": {
+        "category": "Message",
+        "code": 100043
+    },
+    "The content mapper uses unsupported protocol version {0}; expected version {1}.": {
+        "category": "Message",
+        "code": 100044
+    },
+    "The content mapper selected unsupported position encoding '{0}'.": {
+        "category": "Message",
+        "code": 100045
+    },
+    "The content mapper diagnostic source must not be empty.": {
+        "category": "Message",
+        "code": 100046
+    },
+    "The content mapper diagnostic source '{0}' is reserved by TypeScript.": {
+        "category": "Message",
+        "code": 100047
+    },
+    "The content mapper returned a project response that could not be decoded.": {
+        "category": "Message",
+        "code": 100048
+    },
+    "The content mapper process failed while handling the project request.": {
+        "category": "Message",
+        "code": 100049
+    },
+    "The content mapper did not return 'configIdentity', which is required when the content mapper has '\"dynamicConfig\": true' in its package.json.": {
+        "category": "Message",
+        "code": 100050
+    },
+    "The content mapper returned a non-absolute path in 'watchedFiles'.": {
+        "category": "Message",
+        "code": 100051
+    },
+    "The content mapper returned 'configIdentity', which is only allowed when it declares '\"dynamicConfig\": true' in its package.json.": {
+        "category": "Message",
+        "code": 100052
+    },
+    "The content mapper returned 'watchedFiles', which is only allowed when it declares '\"dynamicConfig\": true' in its package.json.": {
+        "category": "Message",
+        "code": 100053
+    },
+    "Content mapper supplemental output file '{0}' conflicts with an existing file.": {
+        "category": "Message",
+        "code": 100054
+    },
+    "Supplemental virtual file produced by the content mapper for file '{0}'.": {
+        "category": "Message",
+        "code": 100055
+    },
+    "The content mapper returned an output with unsupported virtual extension '{0}'.": {
+        "category": "Message",
+        "code": 100056
+    },
+    "The content mapper '{0}' could not be initialized.": {
+        "category": "Error",
+        "code": 100057
+    },
+    "The content mapper command '{0}' could not be started: {1}": {
+        "category": "Message",
+        "code": 100058
+    },
+    "The content mapper process exited before responding to the 'initialize' request (exit code {0}).": {
+        "category": "Message",
+        "code": 100059
+    },
+    "The content mapper did not respond to the 'initialize' request within {0} seconds.": {
+        "category": "Message",
+        "code": 100060
+    },
+    "The content mapper returned an 'initialize' response that could not be decoded: {0}": {
+        "category": "Message",
+        "code": 100061
+    },
+    "The content mapper's 'initialize' request failed: {0}": {
+        "category": "Message",
+        "code": 100062
+    },
+    "Diagnostic directive {0} returned by the content mapper has an invalid range.": {
+        "category": "Message",
+        "code": 100063
+    },
+    "The content mapper returned a diagnostic directive with invalid policy '{0}'.": {
+        "category": "Message",
+        "code": 100064
+    },
+    "Diagnostic directive {0} returned by the content mapper must specify 'unusedExpectDirectiveIndex' when there is not exactly one 'unusedExpectDirectiveDiagnostics' entry.": {
+        "category": "Message",
+        "code": 100065
+    },
+    "The content mapper returned diagnostic directives with overlapping virtual ranges.": {
+        "category": "Message",
+        "code": 100066
+    },
+    "The invalid diagnostic directive is in supplemental output {0} returned by the content mapper.": {
+        "category": "Message",
+        "code": 100067
+    },
+    "Diagnostic directive {0} returned by the content mapper has an invalid 'unusedExpectDirectiveIndex'.": {
+        "category": "Message",
+        "code": 100068
     }
 }

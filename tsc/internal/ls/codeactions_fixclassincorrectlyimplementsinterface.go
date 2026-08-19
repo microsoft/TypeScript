@@ -79,7 +79,7 @@ func getAllCodeActionsToFixClassIncorrectlyImplementsInterface(context context.C
 	seenClassDeclarations := collections.Set[*ast.Node]{}
 
 	for _, diag := range getAllDiagnostics(context, fixContext.Program, fixContext.SourceFile) {
-		if containsErrorCode(fixClassIncorrectlyImplementsInterfaceErrorCodes, diag.Code()) {
+		if isFixableDiagnostic(diag, fixClassIncorrectlyImplementsInterfaceErrorCodes) {
 			classDeclaration := getClass(fixContext.SourceFile, core.NewTextRange(diag.Pos(), diag.End()))
 			if classDeclaration == nil {
 				continue
@@ -134,7 +134,11 @@ func addChanges(context context.Context, fixContext *CodeFixContext, changeTrack
 }
 
 func getChanges(changeTracker *change.Tracker, importAdder autoimport.ImportAdder, sourceFile *ast.SourceFile) []*lsproto.TextEdit {
-	fileChanges := changeTracker.GetChanges()[sourceFile.FileName()]
+	changes, unmappable := changeTracker.GetChanges()
+	if len(unmappable) != 0 {
+		return nil
+	}
+	fileChanges := changes[sourceFile.OriginalFileName()]
 	if importAdder != nil && importAdder.HasFixes() {
 		fileChanges = append(fileChanges, importAdder.Edits()...)
 	}

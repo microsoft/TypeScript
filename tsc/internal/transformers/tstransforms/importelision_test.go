@@ -50,6 +50,10 @@ func (p *fakeProgram) CommonSourceDirectory() string {
 	panic("unimplemented")
 }
 
+func (p *fakeProgram) ContentMapperExtensions() []string {
+	return nil
+}
+
 func (p *fakeProgram) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
 	panic("unimplemented")
 }

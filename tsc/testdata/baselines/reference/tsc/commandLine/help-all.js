@@ -47,6 +47,9 @@ Compile the project given the path to its configuration file, or to a folder wit
 [94m--quiet, -q[39m
 Do not print diagnostics.
 
+[94m--runExternalCode[39m
+Allow loading external content mapper plugins that execute code during compilation.
+
 [94m--showConfig[39m
 Print the final configuration instead of building.
 

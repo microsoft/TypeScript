@@ -252,8 +252,24 @@ func iterateErrorBaseline[T diagnosticwriter.Diagnostic](t *testing.T, inputFile
 			return d.File() != nil && isTsConfigFile(d.File().FileName())
 		},
 	)
+	contentMapperSupplementalFileNames := map[string]struct{}{}
+	for _, diagnostic := range diagnostics {
+		if file, ok := diagnostic.File().(*ast.SourceFile); ok && file.IsContentMapperSupplemental() {
+			contentMapperSupplementalFileNames[file.FileName()] = struct{}{}
+		}
+	}
+	numContentMapperSupplementalDiagnostics := core.CountWhere(
+		diagnostics,
+		func(d T) bool {
+			if d.File() == nil {
+				return false
+			}
+			_, ok := contentMapperSupplementalFileNames[d.File().FileName()]
+			return ok
+		},
+	)
 	// Verify we didn't miss any errors in total
-	assert.Check(t, cmp.Equal(totalErrorsReportedInNonLibraryNonTsconfigFiles+numLibraryDiagnostics+numTsconfigDiagnostics, len(diagnostics)), "total number of errors")
+	assert.Check(t, cmp.Equal(totalErrorsReportedInNonLibraryNonTsconfigFiles+numLibraryDiagnostics+numTsconfigDiagnostics+numContentMapperSupplementalDiagnostics, len(diagnostics)), "total number of errors")
 
 	return result
 }

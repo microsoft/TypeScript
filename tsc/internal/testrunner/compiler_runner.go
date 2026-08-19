@@ -213,6 +213,7 @@ func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName stri
 	harnessutil.SkipUnsupportedCompilerOptions(t, compilerTest.options)
 
 	compilerTest.verifyDiagnostics(t, r.testSuitName, r.isSubmodule)
+	compilerTest.verifyContentMapper(t, r.testSuitName, r.isSubmodule)
 	compilerTest.verifyJavaScriptOutput(t, r.testSuitName, r.isSubmodule)
 	compilerTest.verifySourceMapOutput(t, r.testSuitName, r.isSubmodule)
 	compilerTest.verifySourceMapRecord(t, r.testSuitName, r.isSubmodule)
@@ -243,17 +244,18 @@ func getCompilerFileBasedTest(t *testing.T, filename string) *compilerFileBasedT
 }
 
 type compilerTest struct {
-	testName       string
-	filename       string
-	basename       string
-	configuredName string // name with configuration description, e.g. `file`
-	options        *core.CompilerOptions
-	harnessOptions *harnessutil.HarnessOptions
-	result         *harnessutil.CompilationResult
-	tsConfigFiles  []*harnessutil.TestFile
-	toBeCompiled   []*harnessutil.TestFile // equivalent to the files that will be passed on the command line
-	otherFiles     []*harnessutil.TestFile // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
-	hasNonDtsFiles bool
+	testName         string
+	filename         string
+	basename         string
+	configuredName   string // name with configuration description, e.g. `file`
+	currentDirectory string
+	options          *core.CompilerOptions
+	harnessOptions   *harnessutil.HarnessOptions
+	result           *harnessutil.CompilationResult
+	tsConfigFiles    []*harnessutil.TestFile
+	toBeCompiled     []*harnessutil.TestFile // equivalent to the files that will be passed on the command line
+	otherFiles       []*harnessutil.TestFile // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
+	hasNonDtsFiles   bool
 }
 
 type testCaseContentWithConfig struct {
@@ -345,18 +347,28 @@ func newCompilerTest(
 		testCaseContentWithConfig.symlinks,
 	)
 
+	// Content-mapped files are transformed during program construction; the transformed text is what the
+	// compiler actually parses and reports positions against. Baseline that text (rather than the original
+	// foreign source) so the type, symbol, and error baselines line up with the compiler's positions.
+	for _, file := range core.Concatenate(toBeCompiled, otherFiles) {
+		if sf := result.Program.GetSourceFile(file.UnitName); sf != nil && sf.ContentMapper() != "" {
+			file.Content = sf.Text()
+		}
+	}
+
 	return &compilerTest{
-		testName:       testName,
-		filename:       filename,
-		basename:       basename,
-		configuredName: configuredName,
-		options:        result.Options,
-		harnessOptions: result.HarnessOptions,
-		result:         result,
-		tsConfigFiles:  tsConfigFiles,
-		toBeCompiled:   toBeCompiled,
-		otherFiles:     otherFiles,
-		hasNonDtsFiles: hasNonDtsFiles,
+		testName:         testName,
+		filename:         filename,
+		basename:         basename,
+		configuredName:   configuredName,
+		currentDirectory: currentDirectory,
+		options:          result.Options,
+		harnessOptions:   result.HarnessOptions,
+		result:           result,
+		tsConfigFiles:    tsConfigFiles,
+		toBeCompiled:     toBeCompiled,
+		otherFiles:       otherFiles,
+		hasNonDtsFiles:   hasNonDtsFiles,
 	}
 }
 
@@ -364,7 +376,18 @@ func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmo
 	t.Run("error", func(t *testing.T) {
 		defer testutil.RecoverAndFail(t, "Panic on creating error baseline for test "+c.filename)
 		files := core.Concatenate(c.tsConfigFiles, core.Concatenate(c.toBeCompiled, c.otherFiles))
-		tsbaseline.DoErrorBaseline(t, c.configuredName, files, c.result.Diagnostics, c.result.Options.Pretty.IsTrue(), baseline.Options{
+		diagnostics := c.result.Diagnostics
+		// Content-mapped files' diagnostics are baselined separately (see verifyContentMapper), where they can
+		// be rendered against the correct text; the squiggle renderer here assumes a single coordinate space.
+		if contentMapped := c.contentMappedFileNames(); len(contentMapped) > 0 {
+			files = core.Filter(files, func(f *harnessutil.TestFile) bool {
+				return !contentMapped[tspath.GetNormalizedAbsolutePath(f.UnitName, c.currentDirectory)]
+			})
+			diagnostics = core.Filter(diagnostics, func(d *ast.Diagnostic) bool {
+				return d.File() == nil || !contentMapped[d.File().FileName()]
+			})
+		}
+		tsbaseline.DoErrorBaseline(t, c.configuredName, files, diagnostics, c.result.Options.Pretty.IsTrue(), baseline.Options{
 			Subfolder:   suiteName,
 			IsSubmodule: isSubmodule,
 			DiffFixupOld: func(old string) string {
@@ -388,6 +411,31 @@ func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmo
 			},
 		})
 	})
+}
+
+func (c *compilerTest) verifyContentMapper(t *testing.T, suiteName string, isSubmodule bool) {
+	t.Run("content mapper", func(t *testing.T) {
+		defer testutil.RecoverAndFail(t, "Panic on creating content mapper baseline for test "+c.filename)
+		tsbaseline.DoContentMapperBaseline(t, c.configuredName, c.result.Program, c.result.Diagnostics, baseline.Options{
+			Subfolder:   suiteName,
+			IsSubmodule: isSubmodule,
+		})
+	})
+}
+
+// contentMappedFileNames returns the set of absolute file names that were produced by a content mapper.
+func (c *compilerTest) contentMappedFileNames() map[string]bool {
+	program := c.result.Program.Program()
+	var mapped map[string]bool
+	for _, file := range c.result.Program.GetSourceFiles() {
+		if program.GetContentMapper(file) != nil {
+			if mapped == nil {
+				mapped = make(map[string]bool)
+			}
+			mapped[file.FileName()] = true
+		}
+	}
+	return mapped
 }
 
 var skippedEmitTests = map[string]string{

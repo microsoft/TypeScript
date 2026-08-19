@@ -139,6 +139,10 @@ var commandLineOptionElements = map[string]*CommandLineOption{
 		Name: "references",
 		Kind: CommandLineOptionTypeObject,
 	},
+	"contentMappers": {
+		Name: "contentMappers",
+		Kind: CommandLineOptionTypeObject,
+	},
 	"files": {
 		Name: "files",
 		Kind: CommandLineOptionTypeString,

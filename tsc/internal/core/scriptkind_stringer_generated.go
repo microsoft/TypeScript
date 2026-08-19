@@ -13,19 +13,23 @@ func _() {
 	_ = x[ScriptKindJSX-2]
 	_ = x[ScriptKindTS-3]
 	_ = x[ScriptKindTSX-4]
-	_ = x[ScriptKindExternal-5]
 	_ = x[ScriptKindJSON-6]
-	_ = x[ScriptKindDeferred-7]
 }
 
-const _ScriptKind_name = "ScriptKindUnknownScriptKindJSScriptKindJSXScriptKindTSScriptKindTSXScriptKindExternalScriptKindJSONScriptKindDeferred"
+const (
+	_ScriptKind_name_0 = "ScriptKindUnknownScriptKindJSScriptKindJSXScriptKindTSScriptKindTSX"
+	_ScriptKind_name_1 = "ScriptKindJSON"
+)
 
-var _ScriptKind_index = [...]uint8{0, 17, 29, 42, 54, 67, 85, 99, 117}
+var _ScriptKind_index_0 = [...]uint8{0, 17, 29, 42, 54, 67}
 
 func (i ScriptKind) String() string {
-	idx := int(i) - 0
-	if i < 0 || idx >= len(_ScriptKind_index)-1 {
+	switch {
+	case 0 <= i && i <= 4:
+		return _ScriptKind_name_0[_ScriptKind_index_0[i]:_ScriptKind_index_0[i+1]]
+	case i == 6:
+		return _ScriptKind_name_1
+	default:
 		return "ScriptKind(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return _ScriptKind_name[_ScriptKind_index[idx]:_ScriptKind_index[idx+1]]
 }

@@ -3,6 +3,7 @@ import {
     type ClientOptions,
     type ClientSocketOptions,
     type ClientSpawnOptions,
+    getAPIProcessArgs,
     isSpawnOptions,
     resolveExePath,
 } from "../options.ts";
@@ -27,12 +28,7 @@ export class Client {
             throw new Error("Socket connections are not yet supported in the sync client");
         }
 
-        const cwd = options.cwd ?? process.cwd();
-        const args = [
-            "--api",
-            "--cwd",
-            cwd,
-        ];
+        const args = getAPIProcessArgs(options, false);
 
         // Enable virtual FS callbacks for each provided FS function
         const enabledCallbacks: (typeof fsCallbackNames[number])[] = [];
@@ -49,7 +45,6 @@ export class Client {
 
         const collectTiming = options.collectTiming ?? false;
         if (collectTiming) {
-            args.push("--timing");
             this.timing = new TimingCollector();
         }
 

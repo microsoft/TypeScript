@@ -79,6 +79,8 @@ func (t *toSnapshot) toBuildInfoDiagnosticsWithFileName(diagnostics []*BuildInfo
 			end:                d.End,
 			code:               d.Code,
 			category:           d.Category,
+			source:             d.Source,
+			messageText:        d.MessageText,
 			messageKey:         d.MessageKey,
 			messageArgs:        d.MessageArgs,
 			messageChain:       t.toBuildInfoDiagnosticsWithFileName(d.MessageChain),

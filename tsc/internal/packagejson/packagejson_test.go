@@ -83,6 +83,29 @@ func TestParse(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "content mapper",
+			content: `{
+				"name": "test-package",
+				"typescript": {
+					"contentMapper": { "exec": ["mapper"], "dynamicConfig": true }
+				}
+			}`,
+			want: packagejson.Fields{
+				HeaderFields: packagejson.HeaderFields{Name: packagejson.ExpectedOf("test-package")},
+				ContentMapper: packagejson.ExpectedOf(packagejson.ContentMapperFields{
+					Exec:          packagejson.ExpectedOf([]string{"mapper"}),
+					DynamicConfig: packagejson.ExpectedOf(true),
+				}),
+			},
+		},
+		{
+			name:    "invalid typescript field is ignored",
+			content: `{ "name": "test-package", "typescript": "invalid" }`,
+			want: packagejson.Fields{
+				HeaderFields: packagejson.HeaderFields{Name: packagejson.ExpectedOf("test-package")},
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -95,7 +118,10 @@ func TestParse(t *testing.T) {
 				packagejson.Fields{},
 				packagejson.HeaderFields{},
 				packagejson.Expected[string]{},
+				packagejson.Expected[bool]{},
 				packagejson.Expected[map[string]string]{},
+				packagejson.Expected[[]string]{},
+				packagejson.Expected[packagejson.ContentMapperFields]{},
 				packagejson.ExportsOrImports{},
 			))
 		})

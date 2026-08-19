@@ -58,9 +58,9 @@ func decodeSemanticTokens(f *FourslashTest, data []uint32, tokenTypes, tokenModi
 	}
 
 	scriptInfo := f.scriptInfos[f.activeFilename]
-	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *lsconv.LSPLineMap {
+	converters := newTestConverters(lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(_ string) *lsconv.LSPLineMap {
 		return scriptInfo.lineMap
-	})
+	}))
 
 	var tokens []SemanticToken
 	prevLine := uint32(0)

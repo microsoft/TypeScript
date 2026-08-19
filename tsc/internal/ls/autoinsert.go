@@ -5,8 +5,10 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/astnav"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/spanmap"
 )
 
 func (l *LanguageService) ProvideOnAutoInsert(ctx context.Context, params *lsproto.VSOnAutoInsertParams) (lsproto.VSOnAutoInsertResponse, error) {
@@ -18,7 +20,12 @@ func (l *LanguageService) ProvideOnAutoInsert(ctx context.Context, params *lspro
 	}
 
 	_, sourceFile := l.getProgramAndFile(params.VSTextDocument.Uri)
-	position := l.converters.LineAndCharacterToPosition(sourceFile, params.VSPosition)
+	positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, params.VSPosition, spanmap.FeatureAutoInsert)
+	if len(positions) != 1 || !positions[0].Fidelity.IsExact() {
+		return lsproto.VSOnAutoInsertResponse{}, nil
+	}
+	sourceFile = positions[0].Script
+	position := positions[0].Position
 
 	token := astnav.FindPrecedingToken(sourceFile, int(position))
 	if token == nil {

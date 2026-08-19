@@ -24,6 +24,7 @@ const (
 	fileIncludeKindRootFile
 	fileIncludeKindLibFile
 	fileIncludeKindAutomaticTypeDirectiveFile
+	fileIncludeKindContentMapperSupplemental
 )
 
 type FileIncludeReason struct {
@@ -212,6 +213,9 @@ func (r *FileIncludeReason) computeDiagnostic(program *Program, toFileName func(
 		} else {
 			return ast.NewCompilerDiagnostic(diagnostics.Default_library)
 		}
+	case fileIncludeKindContentMapperSupplemental:
+		canonical := program.GetSourceFileByPath(r.data.(tspath.Path))
+		return ast.NewCompilerDiagnostic(diagnostics.Supplemental_virtual_file_produced_by_the_content_mapper_for_file_0, toFileName(canonical.FileName()))
 	default:
 		panic(fmt.Sprintf("unknown reason: %v", r.kind))
 	}
@@ -293,6 +297,8 @@ func (r *FileIncludeReason) toRelatedInfo(program *Program) *ast.Diagnostic {
 				return tsoptions.CreateDiagnosticForNodeInSourceFile(config.ConfigFile.SourceFile, targetValueSyntax.AsNode(), diagnostics.File_is_default_library_for_target_specified_here)
 			}
 		}
+	case fileIncludeKindContentMapperSupplemental:
+		return nil
 	default:
 		panic(fmt.Sprintf("unknown reason: %v", r.kind))
 	}

@@ -6,6 +6,7 @@
     "native-preview.tsserver.tsdk.description": "Path to the @typescript/native-preview package or tsgo binary directory. If not specified, the extension will look for it in the default location.",
     "native-preview.additionalTsdkLocations.description": "Additional paths to tsgo binary directories or @typescript/native-preview packages that should appear in the version selector.",
     "native-preview.showDebugInfo.description": "Show debug information (PID, executable path) in the server menu.",
+    "native-preview.contentMappers.enabled.description": "Enable external content mappers that transform otherwise unsupported file types for TypeScript language features. Content mappers can be configured in tsconfig.json/jsconfig.json files or provided by VS Code extensions.",
     "native-preview.goMemLimit.description": "Set GOMEMLIMIT for the language server (e.g., '2048MiB', '4GiB'). See https://pkg.go.dev/runtime#hdr-Environment_Variables for more information.",
     "native-preview.goMemLimit.error": "Must be a valid memory limit (e.g., '2048MiB', '4GiB').",
     "native-preview.customConfigFileName.deprecation": "This setting has moved to js/ts.customConfigFileName.",
