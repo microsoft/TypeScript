@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/emitOutputPathWithCaseFoldingRootDir.ts] ////
+
+=== /a/kkkk/a.ts ===
+export const x = 1;
+>x : Symbol(x, Decl(a.ts, 0, 12))
+

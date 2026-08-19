@@ -1,8 +1,6 @@
 package outputpaths
 
 import (
-	"strings"
-
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -161,16 +159,7 @@ func ChangeToDeclarationExtension(path string, host OutputPathsHost) string {
 }
 
 func GetSourceFilePathInNewDir(fileName string, newDirPath string, currentDirectory string, commonSourceDirectory string, useCaseSensitiveFileNames bool) string {
-	sourceFilePath := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
-	commonSourceDirectory = tspath.EnsureTrailingDirectorySeparator(commonSourceDirectory)
-	isSourceFileInCommonSourceDirectory := tspath.ContainsPath(commonSourceDirectory, sourceFilePath, tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: useCaseSensitiveFileNames,
-		CurrentDirectory:          currentDirectory,
-	})
-	if isSourceFileInCommonSourceDirectory {
-		sourceFilePath = sourceFilePath[len(commonSourceDirectory):]
-	}
-	return tspath.CombinePaths(newDirPath, sourceFilePath)
+	return GetSourceFilePathInNewDirWorker(fileName, newDirPath, currentDirectory, commonSourceDirectory, useCaseSensitiveFileNames)
 }
 
 func getOutputPathWithoutChangingExtension(inputFileName string, outputDirectory string, host OutputPathsHost) string {
@@ -185,11 +174,8 @@ func getOutputPathWithoutChangingExtension(inputFileName string, outputDirectory
 
 func GetSourceFilePathInNewDirWorker(fileName string, newDirPath string, currentDirectory string, commonSourceDirectory string, useCaseSensitiveFileNames bool) string {
 	sourceFilePath := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
-	commonDir := tspath.GetCanonicalFileName(commonSourceDirectory, useCaseSensitiveFileNames)
-	canonFile := tspath.GetCanonicalFileName(sourceFilePath, useCaseSensitiveFileNames)
-	isSourceFileInCommonSourceDirectory := strings.HasPrefix(canonFile, commonDir)
-	if isSourceFileInCommonSourceDirectory {
-		sourceFilePath = sourceFilePath[len(commonSourceDirectory):]
+	if trimmed, ok := tspath.TrimFilePathPrefix(sourceFilePath, commonSourceDirectory, useCaseSensitiveFileNames); ok {
+		sourceFilePath = trimmed
 	}
 	return tspath.CombinePaths(newDirPath, sourceFilePath)
 }

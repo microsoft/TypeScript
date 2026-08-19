@@ -990,16 +990,14 @@ func (l *LanguageService) getCompletionEntriesFromTypingsDirectories(
 }
 
 func tryRemoveDirectoryPrefix(path string, prefix string, useCaseSensitiveFileNames bool) *string {
-	canonicalPath := tspath.GetCanonicalFileName(path, useCaseSensitiveFileNames)
-	canonicalPrefix := tspath.GetCanonicalFileName(prefix, useCaseSensitiveFileNames)
-	if strings.HasPrefix(canonicalPath, canonicalPrefix) {
-		withoutPrefix := path[len(prefix):]
-		if strings.HasPrefix(withoutPrefix, "/") || strings.HasPrefix(withoutPrefix, "\\") {
-			withoutPrefix = withoutPrefix[1:]
-		}
-		return &withoutPrefix
+	withoutPrefix, ok := tspath.TrimFilePathPrefix(path, prefix, useCaseSensitiveFileNames)
+	if !ok {
+		return nil
 	}
-	return nil
+	if strings.HasPrefix(withoutPrefix, "/") || strings.HasPrefix(withoutPrefix, "\\") {
+		withoutPrefix = withoutPrefix[1:]
+	}
+	return &withoutPrefix
 }
 
 func (l *LanguageService) enumerateNodeModulesVisibleToScript(scriptPath string) []string {

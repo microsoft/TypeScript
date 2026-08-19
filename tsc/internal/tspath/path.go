@@ -5,6 +5,7 @@ import (
 	"slices"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 	"unsafe"
 
 	"github.com/microsoft/typescript-go/internal/stringutil"
@@ -613,6 +614,41 @@ func GetCanonicalFileName(fileName string, useCaseSensitiveFileNames bool) strin
 		return fileName
 	}
 	return ToFileNameLowerCase(fileName)
+}
+
+// TrimFilePathPrefix removes prefix from the start of path, honoring
+// useCaseSensitiveFileNames the same way GetCanonicalFileName does. It returns
+// the remainder of path and true if path starts with prefix; otherwise it
+// returns path unchanged and false.
+//
+// This must not slice path using len(prefix): case-folding (as performed by
+// GetCanonicalFileName) can change a string's UTF-8 byte length without
+// changing its rune count (e.g. the Kelvin sign '\u212A' case-folds to the
+// single-byte 'k'), so path and prefix can disagree in byte length even when
+// one is (a case-insensitive match for) a prefix of the other.
+func TrimFilePathPrefix(path string, prefix string, useCaseSensitiveFileNames bool) (string, bool) {
+	if useCaseSensitiveFileNames {
+		return strings.CutPrefix(path, prefix)
+	}
+	canonicalPrefix := GetCanonicalFileName(prefix, false /*useCaseSensitiveFileNames*/)
+	if !strings.HasPrefix(GetCanonicalFileName(path, false /*useCaseSensitiveFileNames*/), canonicalPrefix) {
+		return path, false
+	}
+	return trimRuneCount(path, utf8.RuneCountInString(canonicalPrefix)), true
+}
+
+// trimRuneCount returns the suffix of s after skipping up to runeCount runes,
+// clamping to the end of s if it has fewer runes than runeCount.
+func trimRuneCount(s string, runeCount int) string {
+	i := 0
+	for range runeCount {
+		if i >= len(s) {
+			break
+		}
+		_, size := utf8.DecodeRuneInString(s[i:])
+		i += size
+	}
+	return s[i:]
 }
 
 // We convert the file names to lower case as key for file name on case insensitive file system
