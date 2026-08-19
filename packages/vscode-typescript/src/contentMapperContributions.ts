@@ -11,7 +11,7 @@ export interface ContentMapperManifest {
 
 export interface ContentMapperContribution {
     readonly extensions: readonly string[];
-    readonly inferredProject?: {
+    readonly inferredProjectContribution?: {
         readonly options?: Readonly<Record<string, unknown>>;
         readonly manifest: ContentMapperManifest;
     };
@@ -42,13 +42,13 @@ export function serializeContentMapperContributions(
             result.push({
                 contributorId,
                 extensions: [...contribution.extensions],
-                inferredProjectContribution: contribution.inferredProject && {
-                    options: contribution.inferredProject.options,
+                inferredProjectContribution: contribution.inferredProjectContribution && {
+                    options: contribution.inferredProjectContribution.options,
                     manifest: {
-                        ...contribution.inferredProject.manifest,
-                        exec: [...contribution.inferredProject.manifest.exec],
-                        cwd: contribution.inferredProject.manifest.cwd?.fsPath,
-                        compilerOptions: contribution.inferredProject.manifest.compilerOptions && [...contribution.inferredProject.manifest.compilerOptions],
+                        ...contribution.inferredProjectContribution.manifest,
+                        exec: [...contribution.inferredProjectContribution.manifest.exec],
+                        cwd: contribution.inferredProjectContribution.manifest.cwd?.fsPath,
+                        compilerOptions: contribution.inferredProjectContribution.manifest.compilerOptions && [...contribution.inferredProjectContribution.manifest.compilerOptions],
                     },
                 },
             });
@@ -65,14 +65,14 @@ export function validateContentMapperRegistration(contributorId: string, contrib
         if (contribution.extensions.length === 0 || contribution.extensions.some(extension => !extension.startsWith(".") || extension.length === 1)) {
             throw new TypeError("Content mapper contributions require non-empty extensions beginning with '.'.");
         }
-        const inferredProject = contribution.inferredProject;
-        if (inferredProject?.options === null || Array.isArray(inferredProject?.options) || inferredProject?.options !== undefined && typeof inferredProject.options !== "object") {
+        const inferredProjectContribution = contribution.inferredProjectContribution;
+        if (inferredProjectContribution?.options === null || Array.isArray(inferredProjectContribution?.options) || inferredProjectContribution?.options !== undefined && typeof inferredProjectContribution.options !== "object") {
             throw new TypeError("Content mapper contribution options must be an object.");
         }
-        if (inferredProject && (!inferredProject.manifest.name || inferredProject.manifest.exec.length === 0)) {
+        if (inferredProjectContribution && (!inferredProjectContribution.manifest.name || inferredProjectContribution.manifest.exec.length === 0)) {
             throw new TypeError("Content mapper contribution manifests require a name and non-empty exec.");
         }
-        if (inferredProject?.manifest.cwd && inferredProject.manifest.cwd.scheme !== "file") {
+        if (inferredProjectContribution?.manifest.cwd && inferredProjectContribution.manifest.cwd.scheme !== "file") {
             throw new TypeError("Content mapper contribution cwd must be a file URI.");
         }
     }
