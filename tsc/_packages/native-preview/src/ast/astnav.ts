@@ -130,8 +130,19 @@ function getTokenAtPositionImpl(
         left: 0,
     };
 
+    const getIncludedPrecedingToken = (subtree: Node): Node | undefined => {
+        const child = findPrecedingTokenImpl(sourceFile, position, subtree);
+        if (child !== undefined && child.end === position && includePrecedingTokenAtEndPosition!(child)) {
+            return child;
+        }
+        return undefined;
+    };
+
     const testNode = (node: Node): number => {
         if (node.kind !== SyntaxKind.EndOfFile && node.end === position && includePrecedingTokenAtEndPosition !== undefined) {
+            if (state.prevSubtree !== undefined && getIncludedPrecedingToken(state.prevSubtree) !== undefined) {
+                return 0;
+            }
             state.prevSubtree = node;
         }
         // A node "contains" the position if position < end, except nodes at the file end
@@ -243,8 +254,8 @@ function getTokenAtPositionImpl(
 
         // If prevSubtree was set, check if the rightmost token of prevSubtree should be returned.
         if (state.prevSubtree !== undefined) {
-            const child = findPrecedingTokenImpl(sourceFile, position, state.prevSubtree);
-            if (child !== undefined && child.end === position && includePrecedingTokenAtEndPosition!(child)) {
+            const child = getIncludedPrecedingToken(state.prevSubtree);
+            if (child !== undefined) {
                 return child;
             }
             state.prevSubtree = undefined;

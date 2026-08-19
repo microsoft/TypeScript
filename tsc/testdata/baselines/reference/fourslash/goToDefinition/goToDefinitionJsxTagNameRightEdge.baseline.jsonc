@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /a.jsx ===
+// <|export function [|Component|]() {
+//     return null;
+// }|>
+// 
+// export function App() {
+//     return <Component/*GOTO DEF*/ />
+// }
