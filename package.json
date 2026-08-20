@@ -29,7 +29,7 @@
         "@types/tmp": "^0.2.6",
         "@types/which": "^3.0.4",
         "@unicode/unicode-15.1.0": "^1.6.17",
-        "adm-zip": "^0.5.17",
+        "adm-zip": "^0.6.0",
         "chokidar": "^5.0.0",
         "dprint": "^0.55.1",
         "execa": "^9.6.1",
