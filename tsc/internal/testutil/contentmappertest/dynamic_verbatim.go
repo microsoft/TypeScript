@@ -5,9 +5,9 @@ import (
 	"errors"
 	"sync/atomic"
 
-	"github.com/microsoft/typescript-go/internal/contentmapper"
-	"github.com/microsoft/typescript-go/internal/json"
-	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 // ProjectLifecycle records mapper project protocol calls.

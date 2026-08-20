@@ -7,8 +7,8 @@ package trackingvfs
 import (
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/collections"
-	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 // FS wraps a vfs.FS and records every path accessed via read-like operations.

@@ -3,7 +3,7 @@ package wrapvfs
 import (
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 type Replacements struct {

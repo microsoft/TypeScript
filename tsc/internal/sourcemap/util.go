@@ -4,7 +4,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/microsoft/typescript-go/internal/stringutil"
+	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 )
 
 // Tries to find the sourceMappingURL comment at the end of a file.

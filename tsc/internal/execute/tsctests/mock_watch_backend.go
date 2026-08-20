@@ -8,10 +8,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/microsoft/typescript-go/internal/execute/watchmanager"
-	"github.com/microsoft/typescript-go/internal/fswatch"
-	"github.com/microsoft/typescript-go/internal/testutil/fsbaselineutil"
-	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/watchmanager"
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/fsbaselineutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 // MockWatchBackend implements watchmanager.WatchBackend for testing. It

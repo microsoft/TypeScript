@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 )
 
 // Meta model version 3.17.0

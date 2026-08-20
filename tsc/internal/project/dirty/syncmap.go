@@ -4,7 +4,7 @@ import (
 	"maps"
 	"sync"
 
-	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 )
 
 type lockedEntry[K comparable, V Cloneable[V]] struct {

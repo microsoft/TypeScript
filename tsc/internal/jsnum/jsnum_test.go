@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/json"
-	"github.com/microsoft/typescript-go/internal/testutil/jstest"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/jstest"
 	"gotest.tools/v3/assert"
 )
 

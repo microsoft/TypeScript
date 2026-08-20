@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"gotest.tools/v3/assert"
 )
 

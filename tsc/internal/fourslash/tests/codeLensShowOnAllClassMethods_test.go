@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/fourslash"
-	"github.com/microsoft/typescript-go/internal/ls/lsutil"
-	"github.com/microsoft/typescript-go/internal/testutil"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
 func TestCodeLensReferencesShowOnAllClassMethods(t *testing.T) {

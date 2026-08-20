@@ -1,14 +1,14 @@
 package ls
 
 import (
-	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/ls/lsconv"
-	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
-	"github.com/microsoft/typescript-go/internal/outputpaths"
-	"github.com/microsoft/typescript-go/internal/sourcemap"
-	"github.com/microsoft/typescript-go/internal/spanmap"
-	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
+	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
+	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 // sourceFileRangeToLSPLocation maps a range from an arbitrary program SourceFile to an LSP location,

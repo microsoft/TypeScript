@@ -7,10 +7,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/osutil"
-	"github.com/microsoft/typescript-go/internal/tspath"
-	"github.com/microsoft/typescript-go/internal/vfs"
-	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
+	"github.com/microsoft/TypeScript/tsc/internal/osutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
 const embedded = false

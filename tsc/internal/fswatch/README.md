@@ -25,7 +25,7 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/microsoft/typescript-go/internal/fswatch"
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 )
 
 func main() {

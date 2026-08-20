@@ -4,13 +4,13 @@ import (
 	"maps"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/collections"
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/project/ata"
-	"github.com/microsoft/typescript-go/internal/project/logging"
-	"github.com/microsoft/typescript-go/internal/semver"
-	"github.com/microsoft/typescript-go/internal/testutil/projecttestutil"
-	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
+	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
+	"github.com/microsoft/TypeScript/tsc/internal/semver"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
 

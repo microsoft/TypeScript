@@ -206,8 +206,8 @@ package fourslash_test
 import (
     "testing"
 
-    "github.com/microsoft/typescript-go/internal/fourslash"
-    "github.com/microsoft/typescript-go/internal/testutil"
+    "github.com/microsoft/TypeScript/tsc/internal/fourslash"
+    "github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
 func TestMyFeature(t *testing.T) {
@@ -354,7 +354,7 @@ f.VerifyCompletions(t, "marker", &fourslash.CompletionsExpectedList{
 
 Import the test utilities for shared constants:
 ```go
-import . "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
+import . "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
 // Provides: DefaultCommitCharacters, Ignored, CompletionGlobalThisItem, etc.
 ```
 

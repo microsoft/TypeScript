@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/microsoft/typescript-go/internal/ipc"
+	"github.com/microsoft/TypeScript/tsc/internal/ipc"
 )
 
 const (

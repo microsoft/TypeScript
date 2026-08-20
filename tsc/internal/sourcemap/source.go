@@ -1,6 +1,6 @@
 package sourcemap
 
-import "github.com/microsoft/typescript-go/internal/core"
+import "github.com/microsoft/TypeScript/tsc/internal/core"
 
 type Source interface {
 	Text() string

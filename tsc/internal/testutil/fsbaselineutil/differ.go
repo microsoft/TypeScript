@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/collections"
-	"github.com/microsoft/typescript-go/internal/vfs/iovfs"
-	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
 
 type DiffEntry struct {

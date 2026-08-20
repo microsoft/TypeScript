@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/ipc"
-	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/ipc"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"gotest.tools/v3/assert"
 )
 

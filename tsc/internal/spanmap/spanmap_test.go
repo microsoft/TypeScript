@@ -3,8 +3,8 @@ package spanmap_test
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/spanmap"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"gotest.tools/v3/assert"
 )
 

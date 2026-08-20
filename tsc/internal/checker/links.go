@@ -1,8 +1,8 @@
 package checker
 
 import (
-	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
 // nodeLinkStore is a links store keyed by node references. Values are stored directly

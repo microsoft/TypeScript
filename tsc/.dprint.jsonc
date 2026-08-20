@@ -39,7 +39,7 @@
     },
     "gofumpt": {
         "langVersion": "go1.26",
-        "modulePath": "github.com/microsoft/typescript-go"
+        "modulePath": "github.com/microsoft/TypeScript/tsc"
     },
     "excludes": [
         "**/.git",

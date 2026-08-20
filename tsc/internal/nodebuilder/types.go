@@ -2,7 +2,7 @@
 package nodebuilder
 
 import (
-	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 )
 
 // TODO: previously all symboltracker methods were optional, but now they're required.

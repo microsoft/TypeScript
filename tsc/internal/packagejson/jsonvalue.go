@@ -3,8 +3,8 @@ package packagejson
 import (
 	"fmt"
 
-	"github.com/microsoft/typescript-go/internal/collections"
-	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 )
 
 type JSONValueType int8

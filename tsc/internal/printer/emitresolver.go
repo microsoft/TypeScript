@@ -1,11 +1,11 @@
 package printer
 
 import (
-	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/binder"
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/evaluator"
-	"github.com/microsoft/typescript-go/internal/nodebuilder"
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/binder"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/evaluator"
+	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 )
 
 type SymbolAccessibility int32

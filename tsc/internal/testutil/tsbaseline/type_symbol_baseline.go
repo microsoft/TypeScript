@@ -8,17 +8,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/checker"
-	"github.com/microsoft/typescript-go/internal/compiler"
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/nodebuilder"
-	"github.com/microsoft/typescript-go/internal/printer"
-	"github.com/microsoft/typescript-go/internal/scanner"
-	"github.com/microsoft/typescript-go/internal/testutil"
-	"github.com/microsoft/typescript-go/internal/testutil/baseline"
-	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
-	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/checker"
+	"github.com/microsoft/TypeScript/tsc/internal/compiler"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/scanner"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 var (

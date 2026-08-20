@@ -7,12 +7,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/json"
-	"github.com/microsoft/typescript-go/internal/sourcemap"
-	"github.com/microsoft/typescript-go/internal/testutil/baseline"
-	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
-	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func DoSourcemapBaseline(

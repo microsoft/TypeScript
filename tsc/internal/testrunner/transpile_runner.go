@@ -8,16 +8,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
-	"github.com/microsoft/typescript-go/internal/outputpaths"
-	"github.com/microsoft/typescript-go/internal/repo"
-	"github.com/microsoft/typescript-go/internal/testutil/baseline"
-	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
-	"github.com/microsoft/typescript-go/internal/testutil/tsbaseline"
-	"github.com/microsoft/typescript-go/internal/transpile"
-	"github.com/microsoft/typescript-go/internal/tspath"
-	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
+	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
+	"github.com/microsoft/TypeScript/tsc/internal/repo"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/tsbaseline"
+	"github.com/microsoft/TypeScript/tsc/internal/transpile"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
 var transpileBaselineRegex = regexp.MustCompile(`\.[cm]?[tj]sx?$`)

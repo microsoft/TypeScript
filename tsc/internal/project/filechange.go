@@ -1,8 +1,8 @@
 package project
 
 import (
-	"github.com/microsoft/typescript-go/internal/collections"
-	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 )
 
 const excessiveChangeThreshold = 1000

@@ -3,7 +3,7 @@ package project
 import (
 	"sync"
 
-	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 )
 
 type refCountCacheEntry[V any] struct {

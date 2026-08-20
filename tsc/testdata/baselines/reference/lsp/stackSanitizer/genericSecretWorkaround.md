@@ -6,16 +6,16 @@ Test name: `TestSanitizedStackTraceDefeatsVSCodeGenericSecretRegex`
 goroutine 7 [running]:
 runtime/debug.Stack()
 	runtime/debug/stack.go:26 +0x5e
-github.com/microsoft/typescript-go/internal/ls.(*LanguageService).getSignatureHelp(0x1)
-	github.com/microsoft/typescript-go/internal/ls/signature.go:42 +0x10
-github.com/microsoft/typescript-go/internal/ls.LookupKey(0x2)
-	github.com/microsoft/typescript-go/internal/ls/keys.go:7 +0x10
-github.com/microsoft/typescript-go/internal/ls.validateToken(0x3)
-	github.com/microsoft/typescript-go/internal/ls/token.go:9 +0x10
-github.com/microsoft/typescript-go/internal/ls.signRequest(0x4)
-	github.com/microsoft/typescript-go/internal/ls/sig.go:11 +0x10
-github.com/microsoft/typescript-go/internal/ls.setPwd(0x5)
-	github.com/microsoft/typescript-go/internal/ls/pwd.go:13 +0x10
+github.com/microsoft/TypeScript/tsc/internal/ls.(*LanguageService).getSignatureHelp(0x1)
+	github.com/microsoft/TypeScript/tsc/internal/ls/signature.go:42 +0x10
+github.com/microsoft/TypeScript/tsc/internal/ls.LookupKey(0x2)
+	github.com/microsoft/TypeScript/tsc/internal/ls/keys.go:7 +0x10
+github.com/microsoft/TypeScript/tsc/internal/ls.validateToken(0x3)
+	github.com/microsoft/TypeScript/tsc/internal/ls/token.go:9 +0x10
+github.com/microsoft/TypeScript/tsc/internal/ls.signRequest(0x4)
+	github.com/microsoft/TypeScript/tsc/internal/ls/sig.go:11 +0x10
+github.com/microsoft/TypeScript/tsc/internal/ls.setPwd(0x5)
+	github.com/microsoft/TypeScript/tsc/internal/ls/pwd.go:13 +0x10
 ````
 
 # Sanitized output:

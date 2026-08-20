@@ -1,6 +1,6 @@
 package core
 
-import "github.com/microsoft/typescript-go/internal/tspath"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 
 type ProjectReference struct {
 	// Path is a normalized path on disk.

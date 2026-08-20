@@ -3,8 +3,8 @@ package incremental
 import (
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/compiler"
-	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/compiler"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 type Host interface {

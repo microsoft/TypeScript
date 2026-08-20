@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"maps"
 
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 )
 
 // APIUpdate creates a new snapshot incorporating the given file changes and the

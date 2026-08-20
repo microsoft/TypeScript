@@ -1,8 +1,8 @@
 package tsoptions
 
 import (
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
 
 var OptionsForWatch = []*CommandLineOption{

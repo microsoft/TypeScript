@@ -1,8 +1,8 @@
 package ls
 
 import (
-	"github.com/microsoft/typescript-go/internal/ls/lsutil"
-	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 )
 
 // vsImageCatalogGuid is the GUID of the shared VS image catalog (see

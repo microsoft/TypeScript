@@ -6,9 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/execute"
-	"github.com/microsoft/typescript-go/internal/osutil"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/execute"
+	"github.com/microsoft/TypeScript/tsc/internal/osutil"
 )
 
 func main() {

@@ -9,9 +9,9 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/microsoft/typescript-go/internal/api"
-	"github.com/microsoft/typescript-go/internal/bundled"
-	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/api"
+	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
 type apiFlags struct {

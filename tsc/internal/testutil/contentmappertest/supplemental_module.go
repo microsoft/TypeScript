@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/microsoft/typescript-go/internal/contentmapper"
-	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 )
 
 type supplementalModuleHandler struct{ noNotifications }

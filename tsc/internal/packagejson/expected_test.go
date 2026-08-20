@@ -3,8 +3,8 @@ package packagejson_test
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/json"
-	"github.com/microsoft/typescript-go/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"gotest.tools/v3/assert"
 )
 

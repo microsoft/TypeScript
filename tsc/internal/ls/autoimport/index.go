@@ -5,7 +5,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 )
 
 // Named is a constraint for types that can provide their name.

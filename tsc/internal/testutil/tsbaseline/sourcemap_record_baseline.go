@@ -3,10 +3,10 @@ package tsbaseline
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/testutil/baseline"
-	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
-	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func DoSourcemapRecordBaseline(

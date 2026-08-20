@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/ipc"
-	"github.com/microsoft/typescript-go/internal/json"
-	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/ipc"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 // callbackFS wraps a base filesystem and delegates certain operations

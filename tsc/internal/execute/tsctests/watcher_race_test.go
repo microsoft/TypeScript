@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/execute"
-	"github.com/microsoft/typescript-go/internal/execute/tsc"
-	"github.com/microsoft/typescript-go/internal/fswatch"
+	"github.com/microsoft/TypeScript/tsc/internal/execute"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
+	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"gotest.tools/v3/assert"
 )
 

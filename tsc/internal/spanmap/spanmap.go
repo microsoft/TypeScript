@@ -13,8 +13,8 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 )
 
 // Kind describes how positions inside a segment relate the virtual span to the original span.

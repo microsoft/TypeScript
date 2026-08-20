@@ -3,7 +3,7 @@ package tsbaseline
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
 )
 
 func DoModuleResolutionBaseline(t *testing.T, baselinePath string, trace string, opts baseline.Options) {

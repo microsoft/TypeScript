@@ -1,8 +1,8 @@
 package estransforms
 
 import (
-	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/transformers"
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/transformers"
 )
 
 type logicalAssignmentTransformer struct {
