@@ -1,0 +1,55 @@
+//// [tests/cases/conformance/importAttributes/ambientModuleImportAttributesOverridesRealModule.ts] ////
+
+=== /ambient.d.ts ===
+declare module "*" with { type: "text" } {
+>"*" : typeof import("*")
+>type : any
+
+    const data: string;
+>data : string
+
+    export default data;
+>data : string
+}
+
+=== /real.ts ===
+export const realExport = 123;
+>realExport : 123
+>123 : 123
+
+export default { shape: "object" as const };
+>{ shape: "object" as const } : { shape: "object"; }
+>shape : "object"
+>"object" as const : "object"
+>"object" : "object"
+
+=== /main.ts ===
+// Without attributes: the real module is used.
+import real from "./real.ts";
+>real : { shape: "object"; }
+
+real.shape;
+>real.shape : "object"
+>real : { shape: "object"; }
+>shape : "object"
+
+// With `type: "text"`: the ambient declaration wins over the real module.
+import asText from "./real.ts" with { type: "text" };
+>asText : string
+>type : any
+
+asText.charAt(0);
+>asText.charAt(0) : string
+>asText.charAt : (pos: number) => string
+>asText : string
+>charAt : (pos: number) => string
+>0 : 0
+
+const s: string = asText;
+>s : string
+>asText : string
+
+const bad: number = asText; // error: string is not assignable to number
+>bad : number
+>asText : string
+

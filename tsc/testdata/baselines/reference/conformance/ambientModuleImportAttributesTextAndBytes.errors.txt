@@ -1,0 +1,29 @@
+/main.ts(12,7): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== /ambient.d.ts (0 errors) ====
+    declare module "*" with { type: "text" } {
+        const data: string;
+        export default data;
+    }
+    declare module "*" with { type: "bytes" } {
+        const data: Uint8Array<ArrayBuffer>;
+        export default data;
+    }
+    
+==== /main.ts (1 errors) ====
+    import textData from "./file.txt" with { type: "text" };
+    import bytesData from "./file.txt" with { type: "bytes" };
+    
+    // textData is string
+    textData.charAt(0);
+    // bytesData is Uint8Array
+    bytesData.byteLength;
+    
+    // Attribute mismatches are caught by the usual assignability checks.
+    const asString: string = textData;
+    const asBytes: Uint8Array = bytesData;
+    const wrong: number = textData; // error: string is not assignable to number
+          ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    

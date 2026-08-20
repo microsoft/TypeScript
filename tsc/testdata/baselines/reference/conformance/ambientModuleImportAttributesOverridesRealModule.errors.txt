@@ -1,0 +1,27 @@
+/main.ts(10,7): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== /ambient.d.ts (0 errors) ====
+    declare module "*" with { type: "text" } {
+        const data: string;
+        export default data;
+    }
+    
+==== /real.ts (0 errors) ====
+    export const realExport = 123;
+    export default { shape: "object" as const };
+    
+==== /main.ts (1 errors) ====
+    // Without attributes: the real module is used.
+    import real from "./real.ts";
+    real.shape;
+    
+    // With `type: "text"`: the ambient declaration wins over the real module.
+    import asText from "./real.ts" with { type: "text" };
+    asText.charAt(0);
+    
+    const s: string = asText;
+    const bad: number = asText; // error: string is not assignable to number
+          ~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    

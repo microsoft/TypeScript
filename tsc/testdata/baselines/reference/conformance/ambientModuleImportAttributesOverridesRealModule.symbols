@@ -1,0 +1,48 @@
+//// [tests/cases/conformance/importAttributes/ambientModuleImportAttributesOverridesRealModule.ts] ////
+
+=== /ambient.d.ts ===
+declare module "*" with { type: "text" } {
+>"*" : Symbol("*", Decl(ambient.d.ts, 0, 0))
+
+    const data: string;
+>data : Symbol(data, Decl(ambient.d.ts, 1, 9))
+
+    export default data;
+>data : Symbol(data, Decl(ambient.d.ts, 1, 9))
+}
+
+=== /real.ts ===
+export const realExport = 123;
+>realExport : Symbol(realExport, Decl(real.ts, 0, 12))
+
+export default { shape: "object" as const };
+>shape : Symbol(shape, Decl(real.ts, 1, 16))
+>const : Symbol(const)
+
+=== /main.ts ===
+// Without attributes: the real module is used.
+import real from "./real.ts";
+>real : Symbol(real, Decl(main.ts, 1, 6))
+
+real.shape;
+>real.shape : Symbol(shape, Decl(real.ts, 1, 16))
+>real : Symbol(real, Decl(main.ts, 1, 6))
+>shape : Symbol(shape, Decl(real.ts, 1, 16))
+
+// With `type: "text"`: the ambient declaration wins over the real module.
+import asText from "./real.ts" with { type: "text" };
+>asText : Symbol(asText, Decl(main.ts, 5, 6))
+
+asText.charAt(0);
+>asText.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>asText : Symbol(asText, Decl(main.ts, 5, 6))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+const s: string = asText;
+>s : Symbol(s, Decl(main.ts, 8, 5))
+>asText : Symbol(asText, Decl(main.ts, 5, 6))
+
+const bad: number = asText; // error: string is not assignable to number
+>bad : Symbol(bad, Decl(main.ts, 9, 5))
+>asText : Symbol(asText, Decl(main.ts, 5, 6))
+

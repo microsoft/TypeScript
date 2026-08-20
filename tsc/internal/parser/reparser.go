@@ -741,7 +741,7 @@ func (p *Parser) wrapInJSDocNamespace(fullName *ast.Node, statement *ast.Node, n
 	if nested {
 		modifiers = p.createExportModifier(fullName)
 	}
-	result := p.factory.NewModuleDeclaration(modifiers, ast.KindNamespaceKeyword, p.addDeepCloneReparse(fullName.Name()), block)
+	result := p.factory.NewModuleDeclaration(modifiers, ast.KindNamespaceKeyword, p.addDeepCloneReparse(fullName.Name()), nil /*attributes*/, block)
 	p.finishReparsedNode(result, fullName)
 	p.reparsedClones = append(p.reparsedClones, result)
 	return result

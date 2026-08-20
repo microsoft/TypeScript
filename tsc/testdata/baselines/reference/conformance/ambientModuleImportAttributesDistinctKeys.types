@@ -1,0 +1,43 @@
+//// [tests/cases/conformance/importAttributes/ambientModuleImportAttributesDistinctKeys.ts] ////
+
+=== /ambient.d.ts ===
+declare module "*" with { a: "b,c=d" } {
+>"*" : typeof import("*")
+>a : error
+
+    const one: "one";
+>one : "one"
+
+    export default one;
+>one : "one"
+}
+declare module "*" with { a: "b", c: "d" } {
+>"*" : typeof import("*")
+>a : error
+>c : error
+
+    const two: "two";
+>two : "two"
+
+    export default two;
+>two : "two"
+}
+
+=== /main.ts ===
+import x from "./x.asset" with { a: "b,c=d" };
+>x : "one"
+>a : error
+
+const isOne: "one" = x;
+>isOne : "one"
+>x : "one"
+
+import y from "./y.asset" with { a: "b", c: "d" };
+>y : "two"
+>a : error
+>c : error
+
+const isTwo: "two" = y;
+>isTwo : "two"
+>y : "two"
+

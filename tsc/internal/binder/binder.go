@@ -309,6 +309,12 @@ func (b *Binder) getDeclarationName(node *ast.Node) string {
 			if ast.IsGlobalScopeAugmentation(node) {
 				return ast.InternalSymbolNameGlobal
 			}
+			// An ambient module keyed on import attributes (microsoft/TypeScript#46135)
+			// gets a distinct name so it does not merge with, or shadow, the plain
+			// ambient module of the same specifier (e.g. `declare module "*"`).
+			if attributes := node.AsModuleDeclaration().Attributes; attributes != nil {
+				return "\"" + moduleName + "\" with " + ast.ImportAttributesKey(attributes)
+			}
 			return "\"" + moduleName + "\""
 		}
 		if ast.IsPrivateIdentifier(name) {
@@ -785,6 +791,12 @@ func (b *Binder) bindModuleDeclaration(node *ast.Node) {
 				if !pattern.IsValid() {
 					// An invalid pattern - must have multiple wildcards.
 					b.errorOnFirstToken(name, diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, name.Text())
+				} else if attributes := node.AsModuleDeclaration().Attributes; attributes != nil {
+					// An ambient module keyed on import attributes (microsoft/TypeScript#46135).
+					// It is recorded separately and only consulted when an import specifies
+					// matching attributes, so it neither participates in normal pattern/ambient
+					// resolution nor shadows a plain `declare module` of the same specifier.
+					b.file.AttributedAmbientModules = append(b.file.AttributedAmbientModules, &ast.AttributedAmbientModule{Pattern: pattern, Attributes: attributes, Symbol: symbol})
 				} else if pattern.StarIndex >= 0 {
 					b.file.PatternAmbientModules = append(b.file.PatternAmbientModules, &ast.PatternAmbientModule{Pattern: pattern, Symbol: symbol})
 				}

@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/importAttributes/ambientModuleImportAttributesInvalidValue.ts] ////
+
+=== /ambient.d.ts ===
+declare module "*" with { type: 1 } {
+>"*" : typeof import("*")
+>type : any
+
+    const data: string;
+>data : string
+
+    export default data;
+>data : string
+}
+

@@ -1,0 +1,57 @@
+//// [tests/cases/conformance/importAttributes/ambientModuleImportAttributesTextAndBytes.ts] ////
+
+=== /ambient.d.ts ===
+declare module "*" with { type: "text" } {
+>"*" : Symbol("*", Decl(ambient.d.ts, 0, 0))
+
+    const data: string;
+>data : Symbol(data, Decl(ambient.d.ts, 1, 9))
+
+    export default data;
+>data : Symbol(data, Decl(ambient.d.ts, 1, 9))
+}
+declare module "*" with { type: "bytes" } {
+>"*" : Symbol("*", Decl(ambient.d.ts, 3, 1))
+
+    const data: Uint8Array<ArrayBuffer>;
+>data : Symbol(data, Decl(ambient.d.ts, 5, 9))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2024.arraybuffer.d.ts, --, --))
+
+    export default data;
+>data : Symbol(data, Decl(ambient.d.ts, 5, 9))
+}
+
+=== /main.ts ===
+import textData from "./file.txt" with { type: "text" };
+>textData : Symbol(textData, Decl(main.ts, 0, 6))
+
+import bytesData from "./file.txt" with { type: "bytes" };
+>bytesData : Symbol(bytesData, Decl(main.ts, 1, 6))
+
+// textData is string
+textData.charAt(0);
+>textData.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>textData : Symbol(textData, Decl(main.ts, 0, 6))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+// bytesData is Uint8Array
+bytesData.byteLength;
+>bytesData.byteLength : Symbol(Uint8Array.byteLength, Decl(lib.es5.d.ts, --, --))
+>bytesData : Symbol(bytesData, Decl(main.ts, 1, 6))
+>byteLength : Symbol(Uint8Array.byteLength, Decl(lib.es5.d.ts, --, --))
+
+// Attribute mismatches are caught by the usual assignability checks.
+const asString: string = textData;
+>asString : Symbol(asString, Decl(main.ts, 9, 5))
+>textData : Symbol(textData, Decl(main.ts, 0, 6))
+
+const asBytes: Uint8Array = bytesData;
+>asBytes : Symbol(asBytes, Decl(main.ts, 10, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>bytesData : Symbol(bytesData, Decl(main.ts, 1, 6))
+
+const wrong: number = textData; // error: string is not assignable to number
+>wrong : Symbol(wrong, Decl(main.ts, 11, 5))
+>textData : Symbol(textData, Decl(main.ts, 0, 6))
+

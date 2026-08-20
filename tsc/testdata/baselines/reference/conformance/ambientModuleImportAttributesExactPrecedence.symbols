@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/importAttributes/ambientModuleImportAttributesExactPrecedence.ts] ////
+
+=== /ambient.d.ts ===
+declare module "pkg" {
+>"pkg" : Symbol("pkg", Decl(ambient.d.ts, 0, 0))
+
+    const plain: { plain: true };
+>plain : Symbol(plain, Decl(ambient.d.ts, 1, 9))
+>plain : Symbol(plain, Decl(ambient.d.ts, 1, 18))
+
+    export default plain;
+>plain : Symbol(plain, Decl(ambient.d.ts, 1, 9))
+}
+declare module "pkg" with { type: "text" } {
+>"pkg" : Symbol("pkg", Decl(ambient.d.ts, 3, 1))
+
+    const exact: "exact";
+>exact : Symbol(exact, Decl(ambient.d.ts, 5, 9))
+
+    export default exact;
+>exact : Symbol(exact, Decl(ambient.d.ts, 5, 9))
+}
+declare module "*" with { type: "text" } {
+>"*" : Symbol("*", Decl(ambient.d.ts, 7, 1))
+
+    const wild: "wild";
+>wild : Symbol(wild, Decl(ambient.d.ts, 9, 9))
+
+    export default wild;
+>wild : Symbol(wild, Decl(ambient.d.ts, 9, 9))
+}
+
+=== /main.ts ===
+// Attribute-less import uses the plain exact ambient.
+import plain from "pkg";
+>plain : Symbol(plain, Decl(main.ts, 1, 6))
+
+const isPlain: boolean = plain.plain;
+>isPlain : Symbol(isPlain, Decl(main.ts, 2, 5))
+>plain.plain : Symbol(plain, Decl(ambient.d.ts, 1, 18))
+>plain : Symbol(plain, Decl(main.ts, 1, 6))
+>plain : Symbol(plain, Decl(ambient.d.ts, 1, 18))
+
+// Attributed import: the exact attribute-keyed ambient wins over both the plain
+// exact ambient and the wildcard attribute-keyed ambient.
+import exact from "pkg" with { type: "text" };
+>exact : Symbol(exact, Decl(main.ts, 6, 6))
+
+const isExact: "exact" = exact;
+>isExact : Symbol(isExact, Decl(main.ts, 7, 5))
+>exact : Symbol(exact, Decl(main.ts, 6, 6))
+

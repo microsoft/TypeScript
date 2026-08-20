@@ -1,0 +1,56 @@
+//// [tests/cases/conformance/importAttributes/ambientModuleImportAttributesExactPrecedence.ts] ////
+
+=== /ambient.d.ts ===
+declare module "pkg" {
+>"pkg" : typeof import("pkg")
+
+    const plain: { plain: true };
+>plain : { plain: true; }
+>plain : true
+>true : true
+
+    export default plain;
+>plain : { plain: true; }
+}
+declare module "pkg" with { type: "text" } {
+>"pkg" : typeof import("pkg")
+>type : error
+
+    const exact: "exact";
+>exact : "exact"
+
+    export default exact;
+>exact : "exact"
+}
+declare module "*" with { type: "text" } {
+>"*" : typeof import("*")
+>type : error
+
+    const wild: "wild";
+>wild : "wild"
+
+    export default wild;
+>wild : "wild"
+}
+
+=== /main.ts ===
+// Attribute-less import uses the plain exact ambient.
+import plain from "pkg";
+>plain : { plain: true; }
+
+const isPlain: boolean = plain.plain;
+>isPlain : boolean
+>plain.plain : true
+>plain : { plain: true; }
+>plain : true
+
+// Attributed import: the exact attribute-keyed ambient wins over both the plain
+// exact ambient and the wildcard attribute-keyed ambient.
+import exact from "pkg" with { type: "text" };
+>exact : "exact"
+>type : error
+
+const isExact: "exact" = exact;
+>isExact : "exact"
+>exact : "exact"
+

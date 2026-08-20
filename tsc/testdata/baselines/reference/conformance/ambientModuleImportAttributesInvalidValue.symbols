@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/importAttributes/ambientModuleImportAttributesInvalidValue.ts] ////
+
+=== /ambient.d.ts ===
+declare module "*" with { type: 1 } {
+>"*" : Symbol("*", Decl(ambient.d.ts, 0, 0))
+
+    const data: string;
+>data : Symbol(data, Decl(ambient.d.ts, 1, 9))
+
+    export default data;
+>data : Symbol(data, Decl(ambient.d.ts, 1, 9))
+}
+

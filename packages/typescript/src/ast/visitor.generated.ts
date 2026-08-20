@@ -1342,8 +1342,9 @@ const visitEachChildTable: Record<number, VisitEachChildFunction> = {
     [SyntaxKind.ModuleDeclaration]: (node: ModuleDeclaration, visitor: Visitor): ModuleDeclaration => {
         const _modifiers = visitNodes(node.modifiers, visitor);
         const _name = visitNode(node.name, visitor, isModuleName);
+        const _attributes = visitNode(node.attributes, visitor, isImportAttributes);
         const _body = visitNode(node.body, visitor, isModuleBody);
-        return updateModuleDeclaration(node, _modifiers, _name, _body);
+        return updateModuleDeclaration(node, _modifiers, _name, _attributes, _body);
     },
     [SyntaxKind.ImportEqualsDeclaration]: (node: ImportEqualsDeclaration, visitor: Visitor): ImportEqualsDeclaration => {
         const _modifiers = visitNodes(node.modifiers, visitor);

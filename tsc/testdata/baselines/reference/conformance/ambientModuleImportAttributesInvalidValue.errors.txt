@@ -1,0 +1,11 @@
+/ambient.d.ts(1,33): error TS2858: Import attribute values must be string literal expressions.
+
+
+==== /ambient.d.ts (1 errors) ====
+    declare module "*" with { type: 1 } {
+                                    ~
+!!! error TS2858: Import attribute values must be string literal expressions.
+        const data: string;
+        export default data;
+    }
+    

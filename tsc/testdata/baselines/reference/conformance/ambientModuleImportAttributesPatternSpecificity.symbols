@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/importAttributes/ambientModuleImportAttributesPatternSpecificity.ts] ////
+
+=== /ambient.d.ts ===
+declare module "*" with { type: "asset" } {
+>"*" : Symbol("*", Decl(ambient.d.ts, 0, 0))
+
+    const wildcard: "wildcard";
+>wildcard : Symbol(wildcard, Decl(ambient.d.ts, 1, 9))
+
+    export default wildcard;
+>wildcard : Symbol(wildcard, Decl(ambient.d.ts, 1, 9))
+}
+declare module "https://*" with { type: "asset" } {
+>"https://*" : Symbol("https://*", Decl(ambient.d.ts, 3, 1))
+
+    const url: "url";
+>url : Symbol(url, Decl(ambient.d.ts, 5, 9))
+
+    export default url;
+>url : Symbol(url, Decl(ambient.d.ts, 5, 9))
+}
+
+=== /main.ts ===
+// The bare "*" pattern applies to a relative specifier.
+import local from "./something.png" with { type: "asset" };
+>local : Symbol(local, Decl(main.ts, 1, 6))
+
+const isWildcard: "wildcard" = local;
+>isWildcard : Symbol(isWildcard, Decl(main.ts, 2, 5))
+>local : Symbol(local, Decl(main.ts, 1, 6))
+
+// The longer "https://" prefix wins even though "*" is declared first.
+import remote from "https://example.com/logo" with { type: "asset" };
+>remote : Symbol(remote, Decl(main.ts, 5, 6))
+
+const isUrl: "url" = remote;
+>isUrl : Symbol(isUrl, Decl(main.ts, 6, 5))
+>remote : Symbol(remote, Decl(main.ts, 5, 6))
+

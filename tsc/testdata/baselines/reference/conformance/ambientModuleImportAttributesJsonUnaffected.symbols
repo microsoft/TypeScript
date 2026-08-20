@@ -1,0 +1,56 @@
+//// [tests/cases/conformance/importAttributes/ambientModuleImportAttributesJsonUnaffected.ts] ////
+
+=== /ambient.d.ts ===
+declare module "*" {
+>"*" : Symbol("*", Decl(ambient.d.ts, 0, 0))
+
+    const anything: { plain: true };
+>anything : Symbol(anything, Decl(ambient.d.ts, 1, 9))
+>plain : Symbol(plain, Decl(ambient.d.ts, 1, 21))
+
+    export default anything;
+>anything : Symbol(anything, Decl(ambient.d.ts, 1, 9))
+}
+declare module "*" with { type: "text" } {
+>"*" : Symbol("*", Decl(ambient.d.ts, 3, 1))
+
+    const data: string;
+>data : Symbol(data, Decl(ambient.d.ts, 5, 9))
+
+    export default data;
+>data : Symbol(data, Decl(ambient.d.ts, 5, 9))
+}
+
+=== /data.json ===
+{ "value": 1 }
+>"value" : Symbol("value", Decl(data.json, 0, 1))
+
+=== /main.ts ===
+// Built-in json typing is unaffected by the attribute-keyed ambients.
+import config from "./data.json" with { type: "json" };
+>config : Symbol(config, Decl(main.ts, 1, 6))
+
+const value: number = config.value;
+>value : Symbol(value, Decl(main.ts, 2, 5))
+>config.value : Symbol("value", Decl(data.json, 0, 1))
+>config : Symbol(config, Decl(main.ts, 1, 6))
+>value : Symbol("value", Decl(data.json, 0, 1))
+
+// The plain wildcard ambient still applies to attribute-less imports.
+import plain from "./whatever.asset";
+>plain : Symbol(plain, Decl(main.ts, 5, 6))
+
+const isPlain: boolean = plain.plain;
+>isPlain : Symbol(isPlain, Decl(main.ts, 6, 5))
+>plain.plain : Symbol(plain, Decl(ambient.d.ts, 1, 21))
+>plain : Symbol(plain, Decl(main.ts, 5, 6))
+>plain : Symbol(plain, Decl(ambient.d.ts, 1, 21))
+
+// The attribute-keyed ambient applies only to the matching attributes.
+import text from "./whatever.asset" with { type: "text" };
+>text : Symbol(text, Decl(main.ts, 9, 6))
+
+const asString: string = text;
+>asString : Symbol(asString, Decl(main.ts, 10, 5))
+>text : Symbol(text, Decl(main.ts, 9, 6))
+

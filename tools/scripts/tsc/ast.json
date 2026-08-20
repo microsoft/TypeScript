@@ -4808,6 +4808,11 @@
                         "private": true
                     },
                     {
+                        "name": "Attributes",
+                        "type": "ImportAttributes",
+                        "optional": true
+                    },
+                    {
                         "name": "Body",
                         "inherited": true,
                         "type": "ModuleBody"

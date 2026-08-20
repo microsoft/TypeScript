@@ -3,6 +3,7 @@ package ast
 import (
 	"fmt"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -1951,6 +1952,38 @@ func GetImportAttributes(node *Node) *Node {
 	panic("Unhandled case in getImportAttributes")
 }
 
+// ImportAttributesToMap collects the string-valued attributes of an
+// `ImportAttributes` node (the contents of a `with { ... }` clause, or the
+// deprecated `assert { ... }` form) into a name->value map. Non-string values
+// are skipped.
+func ImportAttributesToMap(attributes *Node) map[string]string {
+	nodes := attributes.AsImportAttributes().Attributes.Nodes
+	result := make(map[string]string, len(nodes))
+	for _, attr := range nodes {
+		value := attr.AsImportAttribute().Value
+		if IsStringLiteralLike(value) {
+			result[attr.Name().Text()] = value.Text()
+		}
+	}
+	return result
+}
+
+// ImportAttributesKey returns a stable, order-independent string key for the
+// string-valued attributes of an `ImportAttributes` node. Used to give
+// attribute-keyed ambient modules distinct symbol names so they neither merge
+// with nor shadow the plain ambient module of the same name. Names and values are
+// quoted so that distinct attribute sets cannot collide into one key (e.g.
+// `{ a: "b,c=d" }` vs `{ a: "b", c: "d" }`).
+func ImportAttributesKey(attributes *Node) string {
+	m := ImportAttributesToMap(attributes)
+	pairs := make([]string, 0, len(m))
+	for name, value := range m {
+		pairs = append(pairs, strconv.Quote(name)+":"+strconv.Quote(value))
+	}
+	slices.Sort(pairs)
+	return "{" + strings.Join(pairs, ",") + "}"
+}
+
 func getImportTypeNodeLiteral(node *Node) *Node {
 	if IsImportTypeNode(node) {
 		importTypeNode := node.AsImportTypeNode()
@@ -3521,6 +3554,7 @@ func ReplaceModifiers(factory *NodeFactory, node *Node, modifierArray *ModifierL
 			modifierArray,
 			node.AsModuleDeclaration().Keyword,
 			node.Name(),
+			node.AsModuleDeclaration().Attributes,
 			node.Body(),
 		)
 	case KindImportEqualsDeclaration:

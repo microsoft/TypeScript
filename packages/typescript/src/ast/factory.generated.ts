@@ -1075,7 +1075,7 @@ function cloneNodeData(node: Node): any {
         case SyntaxKind.JSDocNameReference:
             return { name: n.name };
         case SyntaxKind.ModuleDeclaration:
-            return { modifiers: n.modifiers, keyword: n.keyword, name: n.name, body: n.body };
+            return { modifiers: n.modifiers, keyword: n.keyword, name: n.name, attributes: n.attributes, body: n.body };
         case SyntaxKind.ImportEqualsDeclaration:
             return { modifiers: n.modifiers, isTypeOnly: n.isTypeOnly, name: n.name, moduleReference: n.moduleReference };
         case SyntaxKind.ExportDeclaration:
@@ -1605,6 +1605,7 @@ const forEachChildTable: Record<number, ForEachChildFunction> = {
     [SyntaxKind.ModuleDeclaration]: (data, cbNode, cbNodes) =>
         visitNodes(cbNode, cbNodes, data.modifiers) ||
         visitNode(cbNode, data.name) ||
+        visitNode(cbNode, data.attributes) ||
         visitNode(cbNode, data.body),
     [SyntaxKind.ImportEqualsDeclaration]: (data, cbNode, cbNodes) =>
         visitNodes(cbNode, cbNodes, data.modifiers) ||
@@ -2955,11 +2956,12 @@ export function createJSDocNameReference(name: EntityName): JSDocNameReference {
     }) as unknown as JSDocNameReference;
 }
 
-export function createModuleDeclaration(modifiers: readonly ModifierLike[] | undefined, keyword: SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword, name: ModuleName, body?: ModuleBody): ModuleDeclaration {
+export function createModuleDeclaration(modifiers: readonly ModifierLike[] | undefined, keyword: SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword, name: ModuleName, attributes?: ImportAttributes, body?: ModuleBody): ModuleDeclaration {
     return new NodeObject(SyntaxKind.ModuleDeclaration, {
         modifiers: modifiers ? createNodeArray(modifiers) : undefined,
         keyword,
         name,
+        attributes,
         body,
     }) as unknown as ModuleDeclaration;
 }
@@ -3726,8 +3728,8 @@ export function updateJSDocNameReference(node: JSDocNameReference, name: EntityN
     return node.name !== name ? createJSDocNameReference(name) : node;
 }
 
-export function updateModuleDeclaration(node: ModuleDeclaration, modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body?: ModuleBody): ModuleDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.body !== body ? createModuleDeclaration(modifiers, node.keyword, name, body) : node;
+export function updateModuleDeclaration(node: ModuleDeclaration, modifiers: readonly ModifierLike[] | undefined, name: ModuleName, attributes?: ImportAttributes, body?: ModuleBody): ModuleDeclaration {
+    return node.modifiers !== modifiers || node.name !== name || node.attributes !== attributes || node.body !== body ? createModuleDeclaration(modifiers, node.keyword, name, attributes, body) : node;
 }
 
 export function updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration {

@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/importAttributes/ambientModuleImportAttributesDeclarationEmit.ts] ////
+
+=== /global.ts ===
+declare const marker: number;
+>marker : Symbol(marker, Decl(global.ts, 0, 13))
+
+declare module "*" with { type: "text" } {
+>"*" : Symbol("*", Decl(global.ts, 0, 29))
+
+    const data: string;
+>data : Symbol(data, Decl(global.ts, 2, 9))
+
+    export default data;
+>data : Symbol(data, Decl(global.ts, 2, 9))
+}
+

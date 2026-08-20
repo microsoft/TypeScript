@@ -3837,6 +3837,12 @@ func (p *Printer) emitModuleDeclaration(node *ast.ModuleDeclaration) {
 		p.emitNestedModuleName(module.Name())
 		body = module.Body
 	}
+	if node.Attributes != nil {
+		// Ambient module keyed on import attributes (microsoft/TypeScript#46135):
+		// `declare module "*" with { type: "text" } { ... }`.
+		p.writeSpace()
+		p.emitImportAttributes(node.Attributes.AsImportAttributes())
+	}
 	if body == nil {
 		p.writeTrailingSemicolon()
 	} else {
