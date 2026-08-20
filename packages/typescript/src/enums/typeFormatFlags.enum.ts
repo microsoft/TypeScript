@@ -26,4 +26,5 @@ export enum TypeFormatFlags {
     InElementType = 1 << 21,
     InFirstTypeArgument = 1 << 22,
     InTypeAlias = 1 << 23,
+    NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | GenerateNamesForShadowedTypeParams | UseStructuralFallback | WriteTypeArgumentsOfSignature |,
 }
