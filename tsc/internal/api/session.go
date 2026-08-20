@@ -653,6 +653,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTypesOfSymbols(ctx, parsed.(*GetTypesOfSymbolsParams))
 	case string(MethodGetDeclaredTypeOfSymbol):
 		return s.handleGetDeclaredTypeOfSymbol(ctx, parsed.(*GetTypeOfSymbolParams))
+	case string(MethodGetDeclaredTypesOfSymbols):
+		return s.handleGetDeclaredTypesOfSymbols(ctx, parsed.(*GetTypesOfSymbolsParams))
 	case string(MethodResolveName):
 		return s.handleResolveName(ctx, parsed.(*ResolveNameParams))
 	case string(MethodGetSymbolsInScope):
@@ -801,14 +803,22 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetExportSpecifierLocalTargetSymbol(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodGetAliasedSymbol):
 		return s.handleGetAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetAliasedSymbols):
+		return s.handleGetAliasedSymbols(ctx, parsed.(*CheckerSymbolsParams))
 	case string(MethodGetImmediateAliasedSymbol):
 		return s.handleGetImmediateAliasedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetImmediateAliasedSymbols):
+		return s.handleGetImmediateAliasedSymbols(ctx, parsed.(*CheckerSymbolsParams))
 	case string(MethodGetFullyQualifiedName):
 		return s.handleGetFullyQualifiedName(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetExportsOfModule):
 		return s.handleGetExportsOfModule(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetExportsOfModules):
+		return s.handleGetExportsOfModules(ctx, parsed.(*CheckerSymbolsParams))
 	case string(MethodGetMemberInModuleExports):
 		return s.handleGetMemberInModuleExports(ctx, parsed.(*GetMemberInModuleExportsParams))
+	case string(MethodGetMembersInModuleExports):
+		return s.handleGetMembersInModuleExports(ctx, parsed.(*GetMembersInModuleExportsParams))
 	case string(MethodGetJSDocTags):
 		return s.handleGetJSDocTags(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetDocumentationComment):
@@ -1640,6 +1650,26 @@ func (s *Session) handleGetDeclaredTypeOfSymbol(ctx context.Context, params *Get
 	}
 
 	return setup.newTypeResponse(setup.checker.GetDeclaredTypeOfSymbol(symbol)), nil
+}
+
+// handleGetDeclaredTypesOfSymbols returns the declared types of multiple symbols.
+func (s *Session) handleGetDeclaredTypesOfSymbols(ctx context.Context, params *GetTypesOfSymbolsParams) ([]*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	results := make([]*TypeResponse, len(params.Symbols))
+	for i, symHandle := range params.Symbols {
+		symbol, err := setup.resolveSymbolHandle(symHandle)
+		if err != nil {
+			return nil, err
+		}
+		results[i] = setup.newTypeResponse(setup.checker.GetDeclaredTypeOfSymbol(symbol))
+	}
+
+	return results, nil
 }
 
 // handleResolveName resolves a name to a symbol at a given location.
@@ -3274,6 +3304,26 @@ func (s *Session) handleGetAliasedSymbol(ctx context.Context, params *CheckerSym
 	return setup.newSymbolResponse(setup.checker.GetAliasedSymbol(symbol)), nil
 }
 
+// handleGetAliasedSymbols resolves multiple alias symbols to their targets.
+func (s *Session) handleGetAliasedSymbols(ctx context.Context, params *CheckerSymbolsParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	results := make([]*SymbolResponse, len(params.Symbols))
+	for i, symHandle := range params.Symbols {
+		symbol, err := setup.resolveSymbolHandle(symHandle)
+		if err != nil {
+			return nil, err
+		}
+		results[i] = setup.newSymbolResponse(setup.checker.GetAliasedSymbol(symbol))
+	}
+
+	return results, nil
+}
+
 // handleGetFullyQualifiedName returns the fully qualified name of a symbol
 // (e.g. `"/path/to/module".Namespace.Name`).
 func (s *Session) handleGetFullyQualifiedName(ctx context.Context, params *CheckerSymbolParams) (string, error) {
@@ -3319,6 +3369,34 @@ func (s *Session) handleGetImmediateAliasedSymbol(ctx context.Context, params *C
 	return setup.newSymbolResponse(aliased), nil
 }
 
+// handleGetImmediateAliasedSymbols resolves one level of alias indirection for multiple symbols.
+// @gen-proto-nullable
+func (s *Session) handleGetImmediateAliasedSymbols(ctx context.Context, params *CheckerSymbolsParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	results := make([]*SymbolResponse, len(params.Symbols))
+	for i, symHandle := range params.Symbols {
+		symbol, err := setup.resolveSymbolHandle(symHandle)
+		if err != nil {
+			return nil, err
+		}
+		if symbol == nil {
+			continue
+		}
+		aliased := setup.checker.GetImmediateAliasedSymbol(symbol)
+		if aliased == nil {
+			continue
+		}
+		results[i] = setup.newSymbolResponse(aliased)
+	}
+
+	return results, nil
+}
+
 // handleGetExportsOfModule returns the resolved exports of a module symbol,
 // including those introduced by `export *` and re-exports.
 // @gen-proto-nullable
@@ -3351,6 +3429,41 @@ func (s *Session) handleGetExportsOfModule(ctx context.Context, params *CheckerS
 	return results, nil
 }
 
+// handleGetExportsOfModules returns the resolved exports of multiple module symbols,
+// including those introduced by `export *` and re-exports.
+func (s *Session) handleGetExportsOfModules(ctx context.Context, params *CheckerSymbolsParams) ([][]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	results := make([][]*SymbolResponse, len(params.Symbols))
+	for i, symHandle := range params.Symbols {
+		symbol, err := setup.resolveSymbolHandle(symHandle)
+		if err != nil {
+			return nil, err
+		}
+		if symbol == nil {
+			continue
+		}
+
+		exports := setup.checker.GetExportsOfModule(symbol)
+		if len(exports) == 0 {
+			continue
+		}
+		slices.SortFunc(exports, setup.checker.CompareSymbols)
+
+		symbolResponses := make([]*SymbolResponse, len(exports))
+		for j, exp := range exports {
+			symbolResponses[j] = setup.newSymbolResponse(exp)
+		}
+		results[i] = symbolResponses
+	}
+
+	return results, nil
+}
+
 // handleGetMemberInModuleExports returns an export by name from a module symbol.
 // @gen-proto-nullable
 func (s *Session) handleGetMemberInModuleExports(ctx context.Context, params *GetMemberInModuleExportsParams) (*SymbolResponse, error) {
@@ -3374,6 +3487,33 @@ func (s *Session) handleGetMemberInModuleExports(ctx context.Context, params *Ge
 	}
 
 	return setup.newSymbolResponse(member), nil
+}
+
+// handleGetMembersInModuleExports returns exports by name from module symbols.
+func (s *Session) handleGetMembersInModuleExports(ctx context.Context, params *GetMembersInModuleExportsParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	results := make([]*SymbolResponse, len(params.Requests))
+	for i, req := range params.Requests {
+		symbol, err := setup.resolveSymbolHandle(req.Symbol)
+		if err != nil {
+			return nil, err
+		}
+		if symbol == nil {
+			continue
+		}
+		member := setup.checker.TryGetMemberInModuleExports(req.Name, symbol)
+		if member == nil {
+			continue
+		}
+		results[i] = setup.newSymbolResponse(member)
+	}
+
+	return results, nil
 }
 
 // handleGetJSDocTags returns the JSDoc tags of a symbol as structured name/text pairs.

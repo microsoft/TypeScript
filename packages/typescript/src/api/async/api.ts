@@ -1385,11 +1385,21 @@ export class Checker {
      * declared type cannot be determined the checker yields the error type (use
      * {@link Type.isErrorType} to detect it).
      */
-    async getDeclaredTypeOfSymbol(symbol: Symbol): Promise<Type> {
+    async getDeclaredTypeOfSymbol(symbol: Symbol): Promise<Type>;
+    async getDeclaredTypeOfSymbol(symbols: readonly Symbol[]): Promise<Type[]>;
+    async getDeclaredTypeOfSymbol(symbolOrSymbols: Symbol | readonly Symbol[]): Promise<Type | Type[]> {
+        if (Array.isArray(symbolOrSymbols)) {
+            const data = await this.client.apiRequest("getDeclaredTypesOfSymbols", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                symbols: symbolOrSymbols.map(s => s.id),
+            });
+            return data.map(d => this.objectRegistry.getOrCreateType(d));
+        }
         const data = await this.client.apiRequest("getDeclaredTypeOfSymbol", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            symbol: symbol.id,
+            symbol: (symbolOrSymbols as Symbol).id,
         });
         return this.objectRegistry.getOrCreateType(data);
     }
@@ -1865,11 +1875,21 @@ export class Checker {
      * an unresolved alias the checker yields the unknown symbol (use
      * {@link Checker.isUnknownSymbol} to detect it).
      */
-    async getAliasedSymbol(symbol: Symbol): Promise<Symbol> {
+    async getAliasedSymbol(symbol: Symbol): Promise<Symbol>;
+    async getAliasedSymbol(symbols: readonly Symbol[]): Promise<Symbol[]>;
+    async getAliasedSymbol(symbolOrSymbols: Symbol | readonly Symbol[]): Promise<Symbol | Symbol[]> {
+        if (Array.isArray(symbolOrSymbols)) {
+            const data = await this.client.apiRequest("getAliasedSymbols", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                symbols: symbolOrSymbols.map(s => s.id),
+            });
+            return data.map(d => this.objectRegistry.getOrCreateSymbol(d));
+        }
         const data = await this.client.apiRequest("getAliasedSymbol", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            symbol: symbol.id,
+            symbol: (symbolOrSymbols as Symbol).id,
         });
         return this.objectRegistry.getOrCreateSymbol(data);
     }
@@ -1886,11 +1906,21 @@ export class Checker {
         });
     }
 
-    async getImmediateAliasedSymbol(symbol: Symbol): Promise<Symbol | undefined> {
+    async getImmediateAliasedSymbol(symbol: Symbol): Promise<Symbol | undefined>;
+    async getImmediateAliasedSymbol(symbols: readonly Symbol[]): Promise<(Symbol | undefined)[]>;
+    async getImmediateAliasedSymbol(symbolOrSymbols: Symbol | readonly Symbol[]): Promise<Symbol | (Symbol | undefined)[] | undefined> {
+        if (Array.isArray(symbolOrSymbols)) {
+            const data = await this.client.apiRequest("getImmediateAliasedSymbols", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                symbols: symbolOrSymbols.map(s => s.id),
+            });
+            return data ? data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined) : symbolOrSymbols.map(() => undefined);
+        }
         const data = await this.client.apiRequest("getImmediateAliasedSymbol", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            symbol: symbol.id,
+            symbol: (symbolOrSymbols as Symbol).id,
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
@@ -1951,21 +1981,44 @@ export class Checker {
         return signature.id === (await this.getWellKnownSignatures()).unknown;
     }
 
-    async getExportsOfModule(symbol: Symbol): Promise<readonly Symbol[]> {
+    async getExportsOfModule(symbol: Symbol): Promise<readonly Symbol[]>;
+    async getExportsOfModule(symbols: readonly Symbol[]): Promise<readonly (readonly Symbol[])[]>;
+    async getExportsOfModule(symbolOrSymbols: Symbol | readonly Symbol[]): Promise<readonly Symbol[] | readonly (readonly Symbol[])[]> {
+        if (Array.isArray(symbolOrSymbols)) {
+            const data = await this.client.apiRequest("getExportsOfModules", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                symbols: symbolOrSymbols.map(s => s.id),
+            });
+            return data.map(d => d ? d.map(s => this.objectRegistry.getOrCreateSymbol(s)) : []);
+        }
         const data = await this.client.apiRequest("getExportsOfModule", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            symbol: symbol.id,
+            symbol: (symbolOrSymbols as Symbol).id,
         });
         return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
     }
 
-    async getMemberInModuleExports(symbol: Symbol, name: string): Promise<Symbol | undefined> {
+    async getMemberInModuleExports(symbol: Symbol, name: string): Promise<Symbol | undefined>;
+    async getMemberInModuleExports(requests: readonly { symbol: Symbol; name: string; }[]): Promise<(Symbol | undefined)[]>;
+    async getMemberInModuleExports(
+        symbolOrRequests: Symbol | readonly { symbol: Symbol; name: string; }[],
+        name?: string,
+    ): Promise<Symbol | (Symbol | undefined)[] | undefined> {
+        if (Array.isArray(symbolOrRequests)) {
+            const data = await this.client.apiRequest("getMembersInModuleExports", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                requests: symbolOrRequests.map(r => ({ symbol: r.symbol.id, name: r.name })),
+            });
+            return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
+        }
         const data = await this.client.apiRequest("getMemberInModuleExports", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            symbol: symbol.id,
-            name,
+            symbol: (symbolOrRequests as Symbol).id,
+            name: name!,
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }

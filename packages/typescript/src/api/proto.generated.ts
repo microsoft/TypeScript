@@ -32,6 +32,7 @@ export interface APIMethodInfo {
     getTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
     getTypesOfSymbols: APIMethod<GetTypesOfSymbolsParams, TypeResponse[]>;
     getDeclaredTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
+    getDeclaredTypesOfSymbols: APIMethod<GetTypesOfSymbolsParams, TypeResponse[]>;
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, string[]>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
@@ -105,10 +106,14 @@ export interface APIMethodInfo {
     getSignatureFromDeclaration: APIMethod<CheckerNodeParams, SignatureResponse>;
     getExportSpecifierLocalTargetSymbol: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
+    getAliasedSymbols: APIMethod<CheckerSymbolsParams, SymbolResponse[]>;
     getImmediateAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
+    getImmediateAliasedSymbols: APIMethod<CheckerSymbolsParams, SymbolResponse[] | null>;
     getFullyQualifiedName: APIMethod<CheckerSymbolParams, string>;
     getExportsOfModule: APIMethod<CheckerSymbolParams, SymbolResponse[] | null>;
+    getExportsOfModules: APIMethod<CheckerSymbolsParams, SymbolResponse[][]>;
     getMemberInModuleExports: APIMethod<GetMemberInModuleExportsParams, SymbolResponse | null>;
+    getMembersInModuleExports: APIMethod<GetMembersInModuleExportsParams, SymbolResponse[]>;
     getJsDocTags: APIMethod<CheckerSymbolParams, JSDocTagInfo[] | null>;
     getDocumentationComment: APIMethod<CheckerSymbolParams, string>;
     isArrayType: APIMethod<CheckerTypeParams, boolean>;
@@ -679,12 +684,26 @@ export interface CheckerSymbolParams {
     symbol: number;
 }
 
+/** CheckerSymbolsParams are parameters for checker methods that operate on a list of symbols. */
+export interface CheckerSymbolsParams {
+    snapshot: number;
+    project: string;
+    symbols: readonly number[] | null;
+}
+
 /** GetMemberInModuleExportsParams are parameters for getMemberInModuleExports. */
 export interface GetMemberInModuleExportsParams {
     snapshot: number;
     project: string;
     symbol: number;
     name: string;
+}
+
+/** GetMembersInModuleExportsParams are parameters for getMembersInModuleExports. */
+export interface GetMembersInModuleExportsParams {
+    snapshot: number;
+    project: string;
+    requests: readonly MemberInModuleExportsRequest[] | null;
 }
 
 /**
@@ -1020,6 +1039,11 @@ export interface ImportAdderAction {
     kind: "importSymbol";
     symbol?: number;
     isValidTypeOnlyUseSite?: boolean;
+}
+
+export interface MemberInModuleExportsRequest {
+    symbol: number;
+    name: string;
 }
 
 /** CompletionEntryResponse represents a single completion item. */

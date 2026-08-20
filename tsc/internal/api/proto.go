@@ -82,6 +82,7 @@ const (
 	MethodGetTypeOfSymbol              Method = "getTypeOfSymbol"
 	MethodGetTypesOfSymbols            Method = "getTypesOfSymbols"
 	MethodGetDeclaredTypeOfSymbol      Method = "getDeclaredTypeOfSymbol"
+	MethodGetDeclaredTypesOfSymbols    Method = "getDeclaredTypesOfSymbols"
 	MethodGetSourceFile                Method = "getSourceFile"
 	MethodGetSourceFileNames           Method = "getSourceFileNames"
 	MethodGetSourceFileMetadata        Method = "getSourceFileMetadata"
@@ -163,10 +164,14 @@ const (
 	MethodGetSignatureFromDeclaration       Method = "getSignatureFromDeclaration"
 	MethodGetExportSpecifierLocalTarget     Method = "getExportSpecifierLocalTargetSymbol"
 	MethodGetAliasedSymbol                  Method = "getAliasedSymbol"
+	MethodGetAliasedSymbols                 Method = "getAliasedSymbols"
 	MethodGetImmediateAliasedSymbol         Method = "getImmediateAliasedSymbol"
+	MethodGetImmediateAliasedSymbols        Method = "getImmediateAliasedSymbols"
 	MethodGetFullyQualifiedName             Method = "getFullyQualifiedName"
 	MethodGetExportsOfModule                Method = "getExportsOfModule"
+	MethodGetExportsOfModules               Method = "getExportsOfModules"
 	MethodGetMemberInModuleExports          Method = "getMemberInModuleExports"
+	MethodGetMembersInModuleExports         Method = "getMembersInModuleExports"
 	MethodGetJSDocTags                      Method = "getJsDocTags"
 	MethodGetDocumentationComment           Method = "getDocumentationComment"
 	MethodIsArrayType                       Method = "isArrayType"
@@ -428,6 +433,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTypeOfSymbol:              unmarshallerFor[GetTypeOfSymbolParams],
 	MethodGetTypesOfSymbols:            unmarshallerFor[GetTypesOfSymbolsParams],
 	MethodGetDeclaredTypeOfSymbol:      unmarshallerFor[GetTypeOfSymbolParams],
+	MethodGetDeclaredTypesOfSymbols:    unmarshallerFor[GetTypesOfSymbolsParams],
 	MethodResolveName:                  unmarshallerFor[ResolveNameParams],
 	MethodGetSymbolsInScope:            unmarshallerFor[GetSymbolsInScopeParams],
 	MethodGetSignaturesOfType:          unmarshallerFor[GetSignaturesOfTypeParams],
@@ -500,10 +506,14 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetSignatureFromDeclaration:       unmarshallerFor[CheckerNodeParams],
 	MethodGetExportSpecifierLocalTarget:     unmarshallerFor[CheckerNodeParams],
 	MethodGetAliasedSymbol:                  unmarshallerFor[CheckerSymbolParams],
+	MethodGetAliasedSymbols:                 unmarshallerFor[CheckerSymbolsParams],
 	MethodGetImmediateAliasedSymbol:         unmarshallerFor[CheckerSymbolParams],
+	MethodGetImmediateAliasedSymbols:        unmarshallerFor[CheckerSymbolsParams],
 	MethodGetFullyQualifiedName:             unmarshallerFor[CheckerSymbolParams],
 	MethodGetExportsOfModule:                unmarshallerFor[CheckerSymbolParams],
+	MethodGetExportsOfModules:               unmarshallerFor[CheckerSymbolsParams],
 	MethodGetMemberInModuleExports:          unmarshallerFor[GetMemberInModuleExportsParams],
+	MethodGetMembersInModuleExports:         unmarshallerFor[GetMembersInModuleExportsParams],
 	MethodGetJSDocTags:                      unmarshallerFor[CheckerSymbolParams],
 	MethodGetDocumentationComment:           unmarshallerFor[CheckerSymbolParams],
 	MethodIsArrayType:                       unmarshallerFor[CheckerTypeParams],
@@ -1359,6 +1369,25 @@ type CheckerSymbolParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
 	Project  ProjectID  `json:"project"`
 	Symbol   SymbolID   `json:"symbol"`
+}
+
+// CheckerSymbolsParams are parameters for checker methods that operate on a list of symbols.
+type CheckerSymbolsParams struct {
+	Snapshot SnapshotID `json:"snapshot"`
+	Project  ProjectID  `json:"project"`
+	Symbols  []SymbolID `json:"symbols"`
+}
+
+type MemberInModuleExportsRequest struct {
+	Symbol SymbolID `json:"symbol"`
+	Name   string   `json:"name"`
+}
+
+// GetMembersInModuleExportsParams are parameters for getMembersInModuleExports.
+type GetMembersInModuleExportsParams struct {
+	Snapshot SnapshotID                     `json:"snapshot"`
+	Project  ProjectID                      `json:"project"`
+	Requests []MemberInModuleExportsRequest `json:"requests"`
 }
 
 // JSDocTagInfo is a single JSDoc tag, mirroring Strada's JSDocTagInfo but with the tag text

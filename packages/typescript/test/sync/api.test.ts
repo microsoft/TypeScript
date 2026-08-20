@@ -4405,6 +4405,143 @@ function f() {
     });
 });
 
+describe("Checker - batched methods", () => {
+    test("getImmediateAliasedSymbol resolves multiple aliases", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/a.ts": `export const a = 1;`,
+            "/src/b.ts": `export const b = 2;`,
+            "/src/main.ts": `import { a } from "./a";\nimport { b } from "./b";\nexport const usage = a + b;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const posA = `import { a } from "./a";`.indexOf("a }");
+            const posB = `import { a } from "./a";\nimport { b } from "./b";`.indexOf("b }");
+            const symA = project.checker.getSymbolAtPosition("/src/main.ts", posA);
+            const symB = project.checker.getSymbolAtPosition("/src/main.ts", posB);
+            assert.ok(symA);
+            assert.ok(symB);
+            const results = project.checker.getImmediateAliasedSymbol([symA, symB]);
+            assert.equal(results.length, 2);
+            assert.equal(results[0]?.name, "a");
+            assert.equal(results[1]?.name, "b");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getAliasedSymbol resolves multiple import aliases", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/a.ts": `export const a = 1;`,
+            "/src/b.ts": `export const b = 2;`,
+            "/src/main.ts": `import { a } from "./a";\nimport { b } from "./b";`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const posA = `import { a } from "./a";`.indexOf("a }");
+            const posB = `import { a } from "./a";\nimport { b } from "./b";`.indexOf("b }");
+            const symA = project.checker.getSymbolAtPosition("/src/main.ts", posA);
+            const symB = project.checker.getSymbolAtPosition("/src/main.ts", posB);
+            assert.ok(symA);
+            assert.ok(symB);
+            const results = project.checker.getAliasedSymbol([symA, symB]);
+            assert.equal(results.length, 2);
+            assert.equal(results[0].name, "a");
+            assert.ok(!(results[0].flags & SymbolFlags.Alias));
+            assert.equal(results[1].name, "b");
+            assert.ok(!(results[1].flags & SymbolFlags.Alias));
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getExportsOfModule returns exports for multiple modules", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/a.ts": `export const alpha = 1;`,
+            "/src/b.ts": `export const beta = 2;\nexport const gamma = 3;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sfA = project.program.getSourceFile("/src/a.ts");
+            const sfB = project.program.getSourceFile("/src/b.ts");
+            assert.ok(sfA);
+            assert.ok(sfB);
+            const modA = project.checker.getSymbolAtLocation(sfA);
+            const modB = project.checker.getSymbolAtLocation(sfB);
+            assert.ok(modA);
+            assert.ok(modB);
+            const results = project.checker.getExportsOfModule([modA, modB]);
+            assert.equal(results.length, 2);
+            assert.deepEqual(results[0].map(e => e.name), ["alpha"]);
+            const namesB = results[1].map(e => e.name);
+            assert.ok(namesB.includes("beta"));
+            assert.ok(namesB.includes("gamma"));
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getDeclaredTypeOfSymbol returns types for multiple symbols", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `interface Foo { x: number; }\ninterface Bar { y: string; }`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `interface Foo { x: number; }\ninterface Bar { y: string; }`;
+            const posFoo = src.indexOf("Foo");
+            const posBar = src.indexOf("Bar");
+            const symFoo = project.checker.getSymbolAtPosition("/src/main.ts", posFoo);
+            const symBar = project.checker.getSymbolAtPosition("/src/main.ts", posBar);
+            assert.ok(symFoo);
+            assert.ok(symBar);
+            const types = project.checker.getDeclaredTypeOfSymbol([symFoo, symBar]);
+            assert.equal(types.length, 2);
+            assert.ok(types[0].flags & TypeFlags.Object);
+            assert.ok(types[1].flags & TypeFlags.Object);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getMemberInModuleExports resolves multiple members", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/index.ts": `export const alpha = 1;\nexport const beta = 2;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/index.ts");
+            assert.ok(sourceFile);
+            const moduleSymbol = project.checker.getSymbolAtLocation(sourceFile);
+            assert.ok(moduleSymbol);
+            const results = project.checker.getMemberInModuleExports([
+                { symbol: moduleSymbol, name: "alpha" },
+                { symbol: moduleSymbol, name: "missing" },
+                { symbol: moduleSymbol, name: "beta" },
+            ]);
+            assert.equal(results.length, 3);
+            assert.equal(results[0]?.name, "alpha");
+            assert.equal(results[1], undefined);
+            assert.equal(results[2]?.name, "beta");
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 describe("Symbol - getDocumentationComment and getJsDocTags", () => {
     const docFiles = {
         "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),

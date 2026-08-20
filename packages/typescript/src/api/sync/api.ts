@@ -1393,11 +1393,21 @@ export class Checker {
      * declared type cannot be determined the checker yields the error type (use
      * {@link Type.isErrorType} to detect it).
      */
-    getDeclaredTypeOfSymbol(symbol: Symbol): Type {
+    getDeclaredTypeOfSymbol(symbol: Symbol): Type;
+    getDeclaredTypeOfSymbol(symbols: readonly Symbol[]): Type[];
+    getDeclaredTypeOfSymbol(symbolOrSymbols: Symbol | readonly Symbol[]): Type | Type[] {
+        if (Array.isArray(symbolOrSymbols)) {
+            const data = this.client.apiRequest("getDeclaredTypesOfSymbols", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                symbols: symbolOrSymbols.map(s => s.id),
+            });
+            return data.map(d => this.objectRegistry.getOrCreateType(d));
+        }
         const data = this.client.apiRequest("getDeclaredTypeOfSymbol", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            symbol: symbol.id,
+            symbol: (symbolOrSymbols as Symbol).id,
         });
         return this.objectRegistry.getOrCreateType(data);
     }
@@ -1873,11 +1883,21 @@ export class Checker {
      * an unresolved alias the checker yields the unknown symbol (use
      * {@link Checker.isUnknownSymbol} to detect it).
      */
-    getAliasedSymbol(symbol: Symbol): Symbol {
+    getAliasedSymbol(symbol: Symbol): Symbol;
+    getAliasedSymbol(symbols: readonly Symbol[]): Symbol[];
+    getAliasedSymbol(symbolOrSymbols: Symbol | readonly Symbol[]): Symbol | Symbol[] {
+        if (Array.isArray(symbolOrSymbols)) {
+            const data = this.client.apiRequest("getAliasedSymbols", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                symbols: symbolOrSymbols.map(s => s.id),
+            });
+            return data.map(d => this.objectRegistry.getOrCreateSymbol(d));
+        }
         const data = this.client.apiRequest("getAliasedSymbol", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            symbol: symbol.id,
+            symbol: (symbolOrSymbols as Symbol).id,
         });
         return this.objectRegistry.getOrCreateSymbol(data);
     }
@@ -1894,11 +1914,21 @@ export class Checker {
         });
     }
 
-    getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined {
+    getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined;
+    getImmediateAliasedSymbol(symbols: readonly Symbol[]): (Symbol | undefined)[];
+    getImmediateAliasedSymbol(symbolOrSymbols: Symbol | readonly Symbol[]): Symbol | (Symbol | undefined)[] | undefined {
+        if (Array.isArray(symbolOrSymbols)) {
+            const data = this.client.apiRequest("getImmediateAliasedSymbols", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                symbols: symbolOrSymbols.map(s => s.id),
+            });
+            return data ? data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined) : symbolOrSymbols.map(() => undefined);
+        }
         const data = this.client.apiRequest("getImmediateAliasedSymbol", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            symbol: symbol.id,
+            symbol: (symbolOrSymbols as Symbol).id,
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
@@ -1959,21 +1989,44 @@ export class Checker {
         return signature.id === (this.getWellKnownSignatures()).unknown;
     }
 
-    getExportsOfModule(symbol: Symbol): readonly Symbol[] {
+    getExportsOfModule(symbol: Symbol): readonly Symbol[];
+    getExportsOfModule(symbols: readonly Symbol[]): readonly (readonly Symbol[])[];
+    getExportsOfModule(symbolOrSymbols: Symbol | readonly Symbol[]): readonly Symbol[] | readonly (readonly Symbol[])[] {
+        if (Array.isArray(symbolOrSymbols)) {
+            const data = this.client.apiRequest("getExportsOfModules", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                symbols: symbolOrSymbols.map(s => s.id),
+            });
+            return data.map(d => d ? d.map(s => this.objectRegistry.getOrCreateSymbol(s)) : []);
+        }
         const data = this.client.apiRequest("getExportsOfModule", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            symbol: symbol.id,
+            symbol: (symbolOrSymbols as Symbol).id,
         });
         return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
     }
 
-    getMemberInModuleExports(symbol: Symbol, name: string): Symbol | undefined {
+    getMemberInModuleExports(symbol: Symbol, name: string): Symbol | undefined;
+    getMemberInModuleExports(requests: readonly { symbol: Symbol; name: string; }[]): (Symbol | undefined)[];
+    getMemberInModuleExports(
+        symbolOrRequests: Symbol | readonly { symbol: Symbol; name: string; }[],
+        name?: string,
+    ): Symbol | (Symbol | undefined)[] | undefined {
+        if (Array.isArray(symbolOrRequests)) {
+            const data = this.client.apiRequest("getMembersInModuleExports", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                requests: symbolOrRequests.map(r => ({ symbol: r.symbol.id, name: r.name })),
+            });
+            return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
+        }
         const data = this.client.apiRequest("getMemberInModuleExports", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            symbol: symbol.id,
-            name,
+            symbol: (symbolOrRequests as Symbol).id,
+            name: name!,
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
