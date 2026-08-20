@@ -11891,24 +11891,32 @@ var _ json.UnmarshalerFrom = (*TextDocumentEditOrCreateFileOrRenameFileOrDeleteF
 func (o *TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile{}
 
-	data, err := dec.ReadValue()
+	target, err := unmarshalDiscriminatedStruct(dec, "TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile", "kind", func(value json.Value) any {
+		switch string(value) {
+		case `"rename"`:
+			return new(RenameFile)
+		case `"create"`:
+			return new(CreateFile)
+		case `"delete"`:
+			return new(DeleteFile)
+		default:
+			return new(TextDocumentEdit)
+		}
+	})
 	if err != nil {
 		return err
 	}
-	switch string(jsonObjectRawField(data, "kind")) {
-	case `"rename"`:
-		o.RenameFile = new(RenameFile)
-		return json.Unmarshal(data, o.RenameFile)
-	case `"create"`:
-		o.CreateFile = new(CreateFile)
-		return json.Unmarshal(data, o.CreateFile)
-	case `"delete"`:
-		o.DeleteFile = new(DeleteFile)
-		return json.Unmarshal(data, o.DeleteFile)
-	default:
-		o.TextDocumentEdit = new(TextDocumentEdit)
-		return json.Unmarshal(data, o.TextDocumentEdit)
+	switch target := target.(type) {
+	case *RenameFile:
+		o.RenameFile = target
+	case *CreateFile:
+		o.CreateFile = target
+	case *DeleteFile:
+		o.DeleteFile = target
+	case *TextDocumentEdit:
+		o.TextDocumentEdit = target
 	}
+	return nil
 }
 
 type StringOrInlayHintLabelParts struct {
@@ -11983,19 +11991,26 @@ var _ json.UnmarshalerFrom = (*WorkspaceFullDocumentDiagnosticReportOrUnchangedD
 func (o *WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{}
 
-	data, err := dec.ReadValue()
+	target, err := unmarshalDiscriminatedStruct(dec, "WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport", "kind", func(value json.Value) any {
+		switch string(value) {
+		case `"full"`:
+			return new(WorkspaceFullDocumentDiagnosticReport)
+		case `"unchanged"`:
+			return new(WorkspaceUnchangedDocumentDiagnosticReport)
+		default:
+			return nil
+		}
+	})
 	if err != nil {
 		return err
 	}
-	switch string(jsonObjectRawField(data, "kind")) {
-	case `"full"`:
-		o.FullDocumentDiagnosticReport = new(WorkspaceFullDocumentDiagnosticReport)
-		return json.Unmarshal(data, o.FullDocumentDiagnosticReport)
-	case `"unchanged"`:
-		o.UnchangedDocumentDiagnosticReport = new(WorkspaceUnchangedDocumentDiagnosticReport)
-		return json.Unmarshal(data, o.UnchangedDocumentDiagnosticReport)
+	switch target := target.(type) {
+	case *WorkspaceFullDocumentDiagnosticReport:
+		o.FullDocumentDiagnosticReport = target
+	case *WorkspaceUnchangedDocumentDiagnosticReport:
+		o.UnchangedDocumentDiagnosticReport = target
 	}
-	return errInvalidValue("WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport", data)
+	return nil
 }
 
 type StringOrStringValue struct {
@@ -12368,22 +12383,30 @@ var _ json.UnmarshalerFrom = (*WorkDoneProgressBeginOrReportOrEnd)(nil)
 func (o *WorkDoneProgressBeginOrReportOrEnd) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = WorkDoneProgressBeginOrReportOrEnd{}
 
-	data, err := dec.ReadValue()
+	target, err := unmarshalDiscriminatedStruct(dec, "WorkDoneProgressBeginOrReportOrEnd", "kind", func(value json.Value) any {
+		switch string(value) {
+		case `"begin"`:
+			return new(WorkDoneProgressBegin)
+		case `"report"`:
+			return new(WorkDoneProgressReport)
+		case `"end"`:
+			return new(WorkDoneProgressEnd)
+		default:
+			return nil
+		}
+	})
 	if err != nil {
 		return err
 	}
-	switch string(jsonObjectRawField(data, "kind")) {
-	case `"begin"`:
-		o.Begin = new(WorkDoneProgressBegin)
-		return json.Unmarshal(data, o.Begin)
-	case `"report"`:
-		o.Report = new(WorkDoneProgressReport)
-		return json.Unmarshal(data, o.Report)
-	case `"end"`:
-		o.End = new(WorkDoneProgressEnd)
-		return json.Unmarshal(data, o.End)
+	switch target := target.(type) {
+	case *WorkDoneProgressBegin:
+		o.Begin = target
+	case *WorkDoneProgressReport:
+		o.Report = target
+	case *WorkDoneProgressEnd:
+		o.End = target
 	}
-	return errInvalidValue("WorkDoneProgressBeginOrReportOrEnd", data)
+	return nil
 }
 
 type TextEditOrAnnotatedTextEditOrSnippetTextEdit struct {
@@ -12436,19 +12459,26 @@ var _ json.UnmarshalerFrom = (*FullDocumentDiagnosticReportOrUnchangedDocumentDi
 func (o *FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{}
 
-	data, err := dec.ReadValue()
+	target, err := unmarshalDiscriminatedStruct(dec, "FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport", "kind", func(value json.Value) any {
+		switch string(value) {
+		case `"full"`:
+			return new(FullDocumentDiagnosticReport)
+		case `"unchanged"`:
+			return new(UnchangedDocumentDiagnosticReport)
+		default:
+			return nil
+		}
+	})
 	if err != nil {
 		return err
 	}
-	switch string(jsonObjectRawField(data, "kind")) {
-	case `"full"`:
-		o.FullDocumentDiagnosticReport = new(FullDocumentDiagnosticReport)
-		return json.Unmarshal(data, o.FullDocumentDiagnosticReport)
-	case `"unchanged"`:
-		o.UnchangedDocumentDiagnosticReport = new(UnchangedDocumentDiagnosticReport)
-		return json.Unmarshal(data, o.UnchangedDocumentDiagnosticReport)
+	switch target := target.(type) {
+	case *FullDocumentDiagnosticReport:
+		o.FullDocumentDiagnosticReport = target
+	case *UnchangedDocumentDiagnosticReport:
+		o.UnchangedDocumentDiagnosticReport = target
 	}
-	return errInvalidValue("FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport", data)
+	return nil
 }
 
 type TextDocumentSyncOptionsOrKind struct {
@@ -13590,22 +13620,30 @@ var _ json.UnmarshalerFrom = (*VSImageElementOrClassifiedTextElementOrContainerE
 func (o *VSImageElementOrClassifiedTextElementOrContainerElement) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = VSImageElementOrClassifiedTextElementOrContainerElement{}
 
-	data, err := dec.ReadValue()
+	target, err := unmarshalDiscriminatedStruct(dec, "VSImageElementOrClassifiedTextElementOrContainerElement", "_vs_type", func(value json.Value) any {
+		switch string(value) {
+		case `"ContainerElement"`:
+			return new(VSContainerElement)
+		case `"ImageElement"`:
+			return new(VSImageElement)
+		case `"ClassifiedTextElement"`:
+			return new(VSClassifiedTextElement)
+		default:
+			return nil
+		}
+	})
 	if err != nil {
 		return err
 	}
-	switch string(jsonObjectRawField(data, "_vs_type")) {
-	case `"ContainerElement"`:
-		o.ContainerElement = new(VSContainerElement)
-		return json.Unmarshal(data, o.ContainerElement)
-	case `"ImageElement"`:
-		o.ImageElement = new(VSImageElement)
-		return json.Unmarshal(data, o.ImageElement)
-	case `"ClassifiedTextElement"`:
-		o.ClassifiedTextElement = new(VSClassifiedTextElement)
-		return json.Unmarshal(data, o.ClassifiedTextElement)
+	switch target := target.(type) {
+	case *VSContainerElement:
+		o.ContainerElement = target
+	case *VSImageElement:
+		o.ImageElement = target
+	case *VSClassifiedTextElement:
+		o.ClassifiedTextElement = target
 	}
-	return errInvalidValue("VSImageElementOrClassifiedTextElementOrContainerElement", data)
+	return nil
 }
 
 type LocationOrLocationsOrDefinitionLinksOrNull struct {
@@ -14085,19 +14123,26 @@ var _ json.UnmarshalerFrom = (*RelatedFullDocumentDiagnosticReportOrUnchangedDoc
 func (o *RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{}
 
-	data, err := dec.ReadValue()
+	target, err := unmarshalDiscriminatedStruct(dec, "RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport", "kind", func(value json.Value) any {
+		switch string(value) {
+		case `"full"`:
+			return new(RelatedFullDocumentDiagnosticReport)
+		case `"unchanged"`:
+			return new(RelatedUnchangedDocumentDiagnosticReport)
+		default:
+			return nil
+		}
+	})
 	if err != nil {
 		return err
 	}
-	switch string(jsonObjectRawField(data, "kind")) {
-	case `"full"`:
-		o.FullDocumentDiagnosticReport = new(RelatedFullDocumentDiagnosticReport)
-		return json.Unmarshal(data, o.FullDocumentDiagnosticReport)
-	case `"unchanged"`:
-		o.UnchangedDocumentDiagnosticReport = new(RelatedUnchangedDocumentDiagnosticReport)
-		return json.Unmarshal(data, o.UnchangedDocumentDiagnosticReport)
+	switch target := target.(type) {
+	case *RelatedFullDocumentDiagnosticReport:
+		o.FullDocumentDiagnosticReport = target
+	case *RelatedUnchangedDocumentDiagnosticReport:
+		o.UnchangedDocumentDiagnosticReport = target
 	}
-	return errInvalidValue("RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport", data)
+	return nil
 }
 
 type InlineCompletionListOrItemsOrNull struct {
@@ -14701,22 +14746,30 @@ func (o *RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectIn
 		_, err := dec.ReadToken()
 		return err
 	case '{':
-		data, err := dec.ReadValue()
+		target, err := unmarshalDiscriminatedStruct(dec, "RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull", "eventName", func(value json.Value) any {
+			switch string(value) {
+			case `"languageServer.projectInfo"`:
+				return new(ProjectInfoTelemetryEvent)
+			case `"languageServer.errorResponse"`:
+				return new(RequestFailureTelemetryEvent)
+			case `"languageServer.performanceStats"`:
+				return new(PerformanceStatsTelemetryEvent)
+			default:
+				return nil
+			}
+		})
 		if err != nil {
 			return err
 		}
-		switch string(jsonObjectRawField(data, "eventName")) {
-		case `"languageServer.projectInfo"`:
-			o.ProjectInfoTelemetryEvent = new(ProjectInfoTelemetryEvent)
-			return json.Unmarshal(data, o.ProjectInfoTelemetryEvent)
-		case `"languageServer.errorResponse"`:
-			o.RequestFailureTelemetryEvent = new(RequestFailureTelemetryEvent)
-			return json.Unmarshal(data, o.RequestFailureTelemetryEvent)
-		case `"languageServer.performanceStats"`:
-			o.PerformanceStatsTelemetryEvent = new(PerformanceStatsTelemetryEvent)
-			return json.Unmarshal(data, o.PerformanceStatsTelemetryEvent)
+		switch target := target.(type) {
+		case *ProjectInfoTelemetryEvent:
+			o.ProjectInfoTelemetryEvent = target
+		case *RequestFailureTelemetryEvent:
+			o.RequestFailureTelemetryEvent = target
+		case *PerformanceStatsTelemetryEvent:
+			o.PerformanceStatsTelemetryEvent = target
 		}
-		return errInvalidValue("RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull", data)
+		return nil
 	default:
 		return errInvalidKind("RequestFailureTelemetryEventOrPerformanceStatsTelemetryEventOrProjectInfoTelemetryEventOrNull", dec.PeekKind())
 	}

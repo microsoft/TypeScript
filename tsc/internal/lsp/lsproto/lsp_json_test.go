@@ -630,11 +630,29 @@ func TestUnmarshalDiscriminatorUnion(t *testing.T) {
 		assert.Assert(t, v.End != nil)
 	})
 
+	t.Run("discriminator after variant fields", func(t *testing.T) {
+		t.Parallel()
+		var v WorkDoneProgressBeginOrReportOrEnd
+		err := json.Unmarshal([]byte(`{"title": "Indexing", "percentage": 25, "kind": "begin"}`), &v)
+		assert.NilError(t, err)
+		assert.Assert(t, v.Begin != nil)
+		assert.Equal(t, v.Begin.Title, "Indexing")
+		assert.Assert(t, v.Begin.Percentage != nil)
+		assert.Equal(t, *v.Begin.Percentage, uint32(25))
+	})
+
 	t.Run("invalid discriminator", func(t *testing.T) {
 		t.Parallel()
 		var v WorkDoneProgressBeginOrReportOrEnd
 		err := json.Unmarshal([]byte(`{"kind": "invalid"}`), &v)
 		assert.Assert(t, err != nil)
+	})
+
+	t.Run("missing discriminator", func(t *testing.T) {
+		t.Parallel()
+		var v WorkDoneProgressBeginOrReportOrEnd
+		err := json.Unmarshal([]byte(`{"message": "missing kind"}`), &v)
+		assert.ErrorContains(t, err, `missing discriminator "kind"`)
 	})
 }
 
@@ -717,6 +735,15 @@ func TestUnmarshalDocumentEditUnion(t *testing.T) {
 		err := json.Unmarshal([]byte(`{"kind": "create", "uri": "file:///new.ts"}`), &v)
 		assert.NilError(t, err)
 		assert.Assert(t, v.TextDocumentEdit == nil)
+		assert.Assert(t, v.CreateFile != nil)
+		assert.Equal(t, v.CreateFile.Uri, DocumentUri("file:///new.ts"))
+	})
+
+	t.Run("CreateFile with kind after fields", func(t *testing.T) {
+		t.Parallel()
+		var v TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile
+		err := json.Unmarshal([]byte(`{"uri": "file:///new.ts", "kind": "create"}`), &v)
+		assert.NilError(t, err)
 		assert.Assert(t, v.CreateFile != nil)
 		assert.Equal(t, v.CreateFile.Uri, DocumentUri("file:///new.ts"))
 	})

@@ -2197,6 +2197,47 @@ function generateCode() {
     }
 
     /**
+     * Generate streaming discriminator dispatch for unions with at most one
+     * unmapped fallback arm. Fields after the discriminator decode directly
+     * from the active decoder; fields before it are replayed by the helper.
+     */
+    function generateStreamingDiscriminatorDispatch(
+        name: string,
+        disc: NonNullable<ReturnType<typeof findDiscriminatorField>>,
+        indent: string,
+    ) {
+        writeLine(`${indent}target, err := unmarshalDiscriminatedStruct(dec, "${name}", ${JSON.stringify(disc.fieldName)}, func(value json.Value) any {`);
+        writeLine(`${indent}\tswitch string(value) {`);
+        for (const [value, entry] of disc.mapping) {
+            writeLine(`${indent}\tcase \`"${value}"\`:`);
+            writeLine(`${indent}\t\treturn new(${entry.typeName})`);
+        }
+        writeLine(`${indent}\tdefault:`);
+        if (disc.unmapped.length === 1) {
+            writeLine(`${indent}\t\treturn new(${disc.unmapped[0].typeName})`);
+        }
+        else {
+            writeLine(`${indent}\t\treturn nil`);
+        }
+        writeLine(`${indent}\t}`);
+        writeLine(`${indent}})`);
+        writeLine(`${indent}if err != nil {`);
+        writeLine(`${indent}\treturn err`);
+        writeLine(`${indent}}`);
+        writeLine(`${indent}switch target := target.(type) {`);
+        for (const entry of disc.mapping.values()) {
+            writeLine(`${indent}case *${entry.typeName}:`);
+            writeLine(`${indent}\to.${entry.fieldName} = target`);
+        }
+        for (const entry of disc.unmapped) {
+            writeLine(`${indent}case *${entry.typeName}:`);
+            writeLine(`${indent}\to.${entry.fieldName} = target`);
+        }
+        writeLine(`${indent}}`);
+        writeLine(`${indent}return nil`);
+    }
+
+    /**
      * Generate try-each fallback code for unmapped entries, chaining into
      * presence dispatch if possible before falling back to raw try-each.
      * Assumes a variable named `data` of type `json.Value` is in scope.
@@ -3381,17 +3422,24 @@ function generateCode() {
                     }
                 }
                 else {
-                    // Ambiguous: buffer and dispatch
-                    writeLine(`\t\tdata, err := dec.ReadValue()`);
-                    writeLine(`\t\tif err != nil {`);
-                    writeLine(`\t\t\treturn err`);
-                    writeLine(`\t\t}`);
                     let exhaustive = false;
                     const disc = findDiscriminatorField(entries);
-                    if (disc) {
-                        exhaustive = generateDiscriminatorDispatch(disc, "\t\t");
+                    if (disc && disc.unmapped.length <= 1) {
+                        generateStreamingDiscriminatorDispatch(name, disc, "\t\t");
+                        exhaustive = true;
                     }
                     else {
+                        // Ambiguous non-discriminated objects need the complete
+                        // value for presence checks or speculative decoding.
+                        writeLine(`\t\tdata, err := dec.ReadValue()`);
+                        writeLine(`\t\tif err != nil {`);
+                        writeLine(`\t\t\treturn err`);
+                        writeLine(`\t\t}`);
+                    }
+                    if (disc && disc.unmapped.length > 1) {
+                        exhaustive = generateDiscriminatorDispatch(disc, "\t\t");
+                    }
+                    else if (!disc) {
                         const pres = findPresenceDiscriminator(entries);
                         if (pres) {
                             exhaustive = generatePresenceDispatch(pres, "\t\t");
@@ -3417,25 +3465,30 @@ function generateCode() {
             writeLine(`\t}`);
         }
         else {
-            // Fallback: unknown kinds present (e.g. `any`), use ReadValue + try-each.
-            writeLine("\tdata, err := dec.ReadValue()");
-            writeLine("\tif err != nil {");
-            writeLine("\t\treturn err");
-            writeLine("\t}");
-
-            if (unionContainedNull) {
-                writeLine(`\tif string(data) == "null" {`);
-                writeLine(`\t\treturn nil`);
-                writeLine(`\t}`);
-                writeLine("");
-            }
-
+            // Fallback for unknown kinds (e.g. `any`). Discriminated object
+            // unions can still stream; other unions use ReadValue + try-each.
             let exhaustive = false;
             const disc = findDiscriminatorField(fieldEntries);
-            if (disc) {
-                exhaustive = generateDiscriminatorDispatch(disc, "\t");
+            if (disc && disc.unmapped.length <= 1) {
+                generateStreamingDiscriminatorDispatch(name, disc, "\t");
+                exhaustive = true;
             }
             else {
+                writeLine("\tdata, err := dec.ReadValue()");
+                writeLine("\tif err != nil {");
+                writeLine("\t\treturn err");
+                writeLine("\t}");
+                if (unionContainedNull) {
+                    writeLine(`\tif string(data) == "null" {`);
+                    writeLine(`\t\treturn nil`);
+                    writeLine(`\t}`);
+                    writeLine("");
+                }
+            }
+            if (disc && disc.unmapped.length > 1) {
+                exhaustive = generateDiscriminatorDispatch(disc, "\t");
+            }
+            else if (!disc) {
                 const pres = findPresenceDiscriminator(fieldEntries);
                 if (pres) {
                     exhaustive = generatePresenceDispatch(pres, "\t");
