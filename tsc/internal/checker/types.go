@@ -1219,8 +1219,28 @@ func (t *TemplateLiteralType) Texts() []string { return t.texts }
 func (t *TemplateLiteralType) Types() []*Type  { return t.types }
 
 type templateLiteralTrieNode struct {
-	children map[byte]*templateLiteralTrieNode
-	types    []*Type // template literal types whose prefix ends at this node
+	// Children are stored as small slices scanned linearly: trie nodes in this domain
+	// have very few children, and a slice avoids a map allocation per node. Keeping
+	// construction cheap matters because the trie is rebuilt for every union reduction.
+	children []templateLiteralTrieEdge
+	// Template literal types whose first static text ends at this node, further indexed
+	// by their reversed final static text so candidates can be pruned by suffix as well.
+	bySuffix *templateLiteralSuffixTrieNode
+}
+
+type templateLiteralTrieEdge struct {
+	b    byte
+	node *templateLiteralTrieNode
+}
+
+type templateLiteralSuffixTrieNode struct {
+	children []templateLiteralSuffixTrieEdge
+	types    []*Type // template literal types whose reversed final static text ends at this node
+}
+
+type templateLiteralSuffixTrieEdge struct {
+	b    byte
+	node *templateLiteralSuffixTrieNode
 }
 
 type StringMappingType struct {
