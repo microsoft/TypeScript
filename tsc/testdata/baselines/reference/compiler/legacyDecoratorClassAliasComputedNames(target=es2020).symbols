@@ -1,53 +1,57 @@
 //// [tests/cases/compiler/legacyDecoratorClassAliasComputedNames.ts] ////
 
 === legacyDecoratorClassAliasComputedNames.ts ===
-declare function dec(value: any): any;
+declare function dec(...args: any[]): any;
 >dec : Symbol(dec, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 0))
->value : Symbol(value, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 21))
+>args : Symbol(args, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 21))
 
 @dec
 >dec : Symbol(dec, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 0))
 
 class C {
->C : Symbol(C, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 38))
+>C : Symbol(C, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 42))
 
+    constructor() {}
     [C.name]() {}
->[C.name] : Symbol(C[C.name], Decl(legacyDecoratorClassAliasComputedNames.ts, 3, 9))
+>[C.name] : Symbol(C[C.name], Decl(legacyDecoratorClassAliasComputedNames.ts, 4, 20))
 >C.name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
->C : Symbol(C, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 38))
+>C : Symbol(C, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 42))
 >name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
 
     get [C.name]() { return 1; }
->[C.name] : Symbol(C[C.name], Decl(legacyDecoratorClassAliasComputedNames.ts, 4, 17))
+>[C.name] : Symbol(C[C.name], Decl(legacyDecoratorClassAliasComputedNames.ts, 5, 17))
 >C.name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
->C : Symbol(C, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 38))
+>C : Symbol(C, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 42))
 >name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
 
     set [C.name](value: number) {}
->[C.name] : Symbol(C[C.name], Decl(legacyDecoratorClassAliasComputedNames.ts, 5, 32))
+>[C.name] : Symbol(C[C.name], Decl(legacyDecoratorClassAliasComputedNames.ts, 6, 32))
 >C.name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
->C : Symbol(C, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 38))
+>C : Symbol(C, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 42))
 >name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
->value : Symbol(value, Decl(legacyDecoratorClassAliasComputedNames.ts, 6, 17))
+>value : Symbol(value, Decl(legacyDecoratorClassAliasComputedNames.ts, 7, 17))
 }
 
 @dec
 >dec : Symbol(dec, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 0))
 
 class D {
->D : Symbol(D, Decl(legacyDecoratorClassAliasComputedNames.ts, 7, 1))
+>D : Symbol(D, Decl(legacyDecoratorClassAliasComputedNames.ts, 8, 1))
+
+    @dec
+>dec : Symbol(dec, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 0))
 
     static [D.name] = 1;
->[D.name] : Symbol(D[D.name], Decl(legacyDecoratorClassAliasComputedNames.ts, 10, 9))
+>[D.name] : Symbol(D[D.name], Decl(legacyDecoratorClassAliasComputedNames.ts, 11, 9))
 >D.name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
->D : Symbol(D, Decl(legacyDecoratorClassAliasComputedNames.ts, 7, 1))
+>D : Symbol(D, Decl(legacyDecoratorClassAliasComputedNames.ts, 8, 1))
 >name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
 
     static getSelf() {
->getSelf : Symbol(D.getSelf, Decl(legacyDecoratorClassAliasComputedNames.ts, 11, 24))
+>getSelf : Symbol(D.getSelf, Decl(legacyDecoratorClassAliasComputedNames.ts, 13, 24))
 
         return D;
->D : Symbol(D, Decl(legacyDecoratorClassAliasComputedNames.ts, 7, 1))
+>D : Symbol(D, Decl(legacyDecoratorClassAliasComputedNames.ts, 8, 1))
     }
 }
 
@@ -55,16 +59,16 @@ class D {
 >dec : Symbol(dec, Decl(legacyDecoratorClassAliasComputedNames.ts, 0, 0))
 
 class Outer {
->Outer : Symbol(Outer, Decl(legacyDecoratorClassAliasComputedNames.ts, 15, 1))
+>Outer : Symbol(Outer, Decl(legacyDecoratorClassAliasComputedNames.ts, 17, 1))
 
     method() {
->method : Symbol(Outer.method, Decl(legacyDecoratorClassAliasComputedNames.ts, 18, 13))
+>method : Symbol(Outer.method, Decl(legacyDecoratorClassAliasComputedNames.ts, 20, 13))
 
         return class {
             [Outer.name]() {}
->[Outer.name] : Symbol((Anonymous class)[Outer.name], Decl(legacyDecoratorClassAliasComputedNames.ts, 20, 22))
+>[Outer.name] : Symbol((Anonymous class)[Outer.name], Decl(legacyDecoratorClassAliasComputedNames.ts, 22, 22))
 >Outer.name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
->Outer : Symbol(Outer, Decl(legacyDecoratorClassAliasComputedNames.ts, 15, 1))
+>Outer : Symbol(Outer, Decl(legacyDecoratorClassAliasComputedNames.ts, 17, 1))
 >name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
 
         };

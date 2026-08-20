@@ -1,10 +1,11 @@
 // @target: es2020, es2022
 // @experimentalDecorators: true
 
-declare function dec(value: any): any;
+declare function dec(...args: any[]): any;
 
 @dec
 class C {
+    constructor() {}
     [C.name]() {}
     get [C.name]() { return 1; }
     set [C.name](value: number) {}
@@ -12,6 +13,7 @@ class C {
 
 @dec
 class D {
+    @dec
     static [D.name] = 1;
     static getSelf() {
         return D;

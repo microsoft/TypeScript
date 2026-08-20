@@ -1,10 +1,11 @@
 //// [tests/cases/compiler/legacyDecoratorClassAliasComputedNames.ts] ////
 
 //// [legacyDecoratorClassAliasComputedNames.ts]
-declare function dec(value: any): any;
+declare function dec(...args: any[]): any;
 
 @dec
 class C {
+    constructor() {}
     [C.name]() {}
     get [C.name]() { return 1; }
     set [C.name](value: number) {}
@@ -12,6 +13,7 @@ class C {
 
 @dec
 class D {
+    @dec
     static [D.name] = 1;
     static getSelf() {
         return D;
@@ -36,22 +38,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var C_1, D_1, Outer_1;
-let C = C_1 = class C {
-    [C_1.name]() { }
-    get [C_1.name]() { return 1; }
-    set [C_1.name](value) { }
+var D_1, _a, Outer_1;
+let C = class C {
+    constructor() { }
+    [C.name]() { }
+    get [C.name]() { return 1; }
+    set [C.name](value) { }
 };
-C = C_1 = __decorate([
+C = __decorate([
     dec
 ], C);
 let D = class D {
     static { D_1 = this; }
-    static [D_1.name] = 1;
+    static [_a = D.name] = 1;
     static getSelf() {
         return D_1;
     }
 };
+__decorate([
+    dec
+], D, _a, void 0);
 D = D_1 = __decorate([
     dec
 ], D);

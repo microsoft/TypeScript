@@ -1,16 +1,17 @@
 //// [tests/cases/compiler/legacyDecoratorClassAliasComputedNames.ts] ////
 
 === legacyDecoratorClassAliasComputedNames.ts ===
-declare function dec(value: any): any;
->dec : (value: any) => any
->value : any
+declare function dec(...args: any[]): any;
+>dec : (...args: any[]) => any
+>args : any[]
 
 @dec
->dec : (value: any) => any
+>dec : (...args: any[]) => any
 
 class C {
 >C : C
 
+    constructor() {}
     [C.name]() {}
 >[C.name] : () => void
 >C.name : string
@@ -33,10 +34,13 @@ class C {
 }
 
 @dec
->dec : (value: any) => any
+>dec : (...args: any[]) => any
 
 class D {
 >D : D
+
+    @dec
+>dec : (...args: any[]) => any
 
     static [D.name] = 1;
 >[D.name] : number
@@ -54,7 +58,7 @@ class D {
 }
 
 @dec
->dec : (value: any) => any
+>dec : (...args: any[]) => any
 
 class Outer {
 >Outer : Outer

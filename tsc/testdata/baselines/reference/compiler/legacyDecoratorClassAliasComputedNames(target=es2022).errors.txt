@@ -1,14 +1,15 @@
-legacyDecoratorClassAliasComputedNames.ts(5,6): error TS2449: Class 'C' used before its declaration.
-legacyDecoratorClassAliasComputedNames.ts(6,10): error TS2449: Class 'C' used before its declaration.
+legacyDecoratorClassAliasComputedNames.ts(6,6): error TS2449: Class 'C' used before its declaration.
 legacyDecoratorClassAliasComputedNames.ts(7,10): error TS2449: Class 'C' used before its declaration.
-legacyDecoratorClassAliasComputedNames.ts(12,13): error TS2449: Class 'D' used before its declaration.
+legacyDecoratorClassAliasComputedNames.ts(8,10): error TS2449: Class 'C' used before its declaration.
+legacyDecoratorClassAliasComputedNames.ts(14,13): error TS2449: Class 'D' used before its declaration.
 
 
 ==== legacyDecoratorClassAliasComputedNames.ts (4 errors) ====
-    declare function dec(value: any): any;
+    declare function dec(...args: any[]): any;
     
     @dec
     class C {
+        constructor() {}
         [C.name]() {}
          ~
 !!! error TS2449: Class 'C' used before its declaration.
@@ -25,10 +26,11 @@ legacyDecoratorClassAliasComputedNames.ts(12,13): error TS2449: Class 'D' used b
     
     @dec
     class D {
+        @dec
         static [D.name] = 1;
                 ~
 !!! error TS2449: Class 'D' used before its declaration.
-!!! related TS2728 legacyDecoratorClassAliasComputedNames.ts:11:7: 'D' is declared here.
+!!! related TS2728 legacyDecoratorClassAliasComputedNames.ts:12:7: 'D' is declared here.
         static getSelf() {
             return D;
         }
