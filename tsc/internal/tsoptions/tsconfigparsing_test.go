@@ -146,9 +146,7 @@ func TestParseConfigFileTextToJson(t *testing.T) {
 						UseCaseSensitiveFileNames: true,
 					},
 				})
-				if len(errors) == 0 {
-					baselineContent.WriteString("\n")
-				}
+				baselineContent.WriteString("\n")
 				if i != len(rec.input)-1 {
 					baselineContent.WriteString("\n")
 				}
@@ -1480,9 +1478,7 @@ func baselineParseConfigWith(t *testing.T, baselineFileName string, includeCompi
 				UseCaseSensitiveFileNames: true,
 			},
 		})
-		if len(parsedConfigFileContent.Errors) == 0 {
-			baselineContent.WriteString("\n")
-		}
+		baselineContent.WriteString("\n")
 		if i != len(input)-1 {
 			baselineContent.WriteString("\n")
 		}

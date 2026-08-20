@@ -28,3 +28,4 @@ Errors::
 
 [7m5[0m     "moduleResolution": "invalid value"
 [7m [0m [91m                        ~~~~~~~~~~~~~~~[0m
+
