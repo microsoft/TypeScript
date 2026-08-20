@@ -17,6 +17,15 @@ export let x/*1*/: [number, number] = [1, 2];
 type DoubleTupleTrouble<T> = [T, T];
 
 export let y/*2*/: DoubleTupleTrouble<number> = [1, 2];
+
+type SpanMapping = [
+    virtualStart: number,
+    virtualLength: number,
+    originalStart: number,
+    originalLength: number,
+];
+
+export let mapping/*3*/: SpanMapping;
 `
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
