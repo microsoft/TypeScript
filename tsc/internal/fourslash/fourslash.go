@@ -2118,8 +2118,8 @@ func (f *FourslashTest) applyEditsToContent(content string, edits []*lsproto.Tex
 		bStart := f.converters.LineAndCharacterToPosition(script, b.Range.Start)
 		return int(aStart) - int(bStart)
 	})
-	for i := len(edits) - 1; i >= 0; i-- {
-		edit := edits[i]
+	for _, edit := range slices.Backward(edits) {
+
 		start := int(f.converters.LineAndCharacterToPosition(script, edit.Range.Start))
 		end := int(f.converters.LineAndCharacterToPosition(script, edit.Range.End))
 		content = content[:start] + edit.NewText + content[end:]
@@ -3356,8 +3356,8 @@ func (f *FourslashTest) VerifyBaselineSelectionRanges(t *testing.T) {
 			}
 
 			trailingWidth := -1
-			for j := len(maskedRunes) - 1; j >= 0; j-- {
-				if isRealCharacter(maskedRunes[j]) {
+			for j, maskedRune := range slices.Backward(maskedRunes) {
+				if isRealCharacter(maskedRune) {
 					trailingWidth = j
 					break
 				}
@@ -3980,8 +3980,8 @@ func (f *FourslashTest) applyTextEdits(t *testing.T, edits []*lsproto.TextEdit) 
 	totalOffset := 0
 	currentCaretPosition := int(f.converters.LineAndCharacterToPosition(script, f.currentCaretPosition))
 	// Apply edits in reverse order to avoid affecting the positions of earlier edits.
-	for i := len(edits) - 1; i >= 0; i-- {
-		edit := edits[i]
+	for _, edit := range slices.Backward(edits) {
+
 		start := int(f.converters.LineAndCharacterToPosition(script, edit.Range.Start))
 		end := int(f.converters.LineAndCharacterToPosition(script, edit.Range.End))
 		f.editScriptAndUpdateMarkers(t, f.activeFilename, start, end, edit.NewText)
@@ -4069,8 +4069,8 @@ func (f *FourslashTest) editScriptAndUpdateMarkersWorker(t *testing.T, fileName 
 	})
 
 	// Apply changes in reverse order to preserve positions of earlier changes
-	for i := len(sortedChanges) - 1; i >= 0; i-- {
-		change := sortedChanges[i]
+	for _, change := range slices.Backward(sortedChanges) {
+
 		editStart := change.Pos()
 		editEnd := change.End()
 		script := f.editScript(t, fileName, change)

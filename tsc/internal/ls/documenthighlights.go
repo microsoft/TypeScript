@@ -2,6 +2,7 @@ package ls
 
 import (
 	"context"
+	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -364,9 +365,9 @@ func getIfElseKeywords(ifStatement *ast.IfStatement, sourceFile *ast.SourceFile)
 			keywords = append(keywords, children[0])
 		}
 		// Generally the 'else' keyword is second-to-last, so traverse backwards.
-		for i := len(children) - 1; i >= 0; i-- {
-			if children[i].Kind == ast.KindElseKeyword {
-				keywords = append(keywords, children[i])
+		for _, c := range slices.Backward(children) {
+			if c.Kind == ast.KindElseKeyword {
+				keywords = append(keywords, c)
 				break
 			}
 		}
@@ -639,9 +640,9 @@ func getLoopBreakContinueOccurrences(node *ast.Node, sourceFile *ast.SourceFile)
 		keywords = append(keywords, token)
 		if node.Kind == ast.KindDoStatement {
 			loopTokens := getChildrenFromNonJSDocNode(node, sourceFile)
-			for i := len(loopTokens) - 1; i >= 0; i-- {
-				if loopTokens[i].Kind == ast.KindWhileKeyword {
-					keywords = append(keywords, loopTokens[i])
+			for _, loopToken := range slices.Backward(loopTokens) {
+				if loopToken.Kind == ast.KindWhileKeyword {
+					keywords = append(keywords, loopToken)
 					break
 				}
 			}

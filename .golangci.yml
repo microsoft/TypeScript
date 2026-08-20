@@ -65,10 +65,6 @@ linters:
       customlint:
         type: module
 
-    modernize:
-      disable:
-        - slicesbackward # https://github.com/golang/go/issues/78829
-
     depguard:
       rules:
         main:

@@ -31109,9 +31109,9 @@ func (c *Checker) popInferenceContext() {
 }
 
 func (c *Checker) getInferenceContext(node *ast.Node) *InferenceContext {
-	for i := len(c.inferenceContextInfos) - 1; i >= 0; i-- {
-		if isNodeDescendantOf(node, c.inferenceContextInfos[i].node) {
-			return c.inferenceContextInfos[i].context
+	for _, v := range slices.Backward(c.inferenceContextInfos) {
+		if isNodeDescendantOf(node, v.node) {
+			return v.context
 		}
 	}
 	return nil

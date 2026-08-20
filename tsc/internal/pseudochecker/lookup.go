@@ -608,8 +608,8 @@ func isOptionalInitializedOrRestParameter(node *ast.ParameterDeclarationNode) bo
 // determine "has required parameter after index i" with `i+1 < lastRequired`
 // (equivalently, `i < lastRequired-1`) in O(1).
 func lastRequiredParamIndex(params []*ast.Node) int {
-	for i := len(params) - 1; i >= 0; i-- {
-		if !isOptionalInitializedOrRestParameter(params[i]) {
+	for i, param := range slices.Backward(params) {
+		if !isOptionalInitializedOrRestParameter(param) {
 			return i + 1
 		}
 	}

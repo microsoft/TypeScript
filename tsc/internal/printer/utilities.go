@@ -603,8 +603,7 @@ func tryGetEnd(node interface{ End() int }) (int, bool) {
 }
 
 func greatestEnd(end int, nodes ...interface{ End() int }) int {
-	for i := len(nodes) - 1; i >= 0; i-- {
-		node := nodes[i]
+	for _, node := range slices.Backward(nodes) {
 		if nodeEnd, ok := tryGetEnd(node); ok && end < nodeEnd {
 			end = nodeEnd
 		}
