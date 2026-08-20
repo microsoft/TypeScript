@@ -1251,7 +1251,7 @@ describe("RemoteNode + child/token getters", () => {
 
     for (const entry of corpus) {
         test(`invariants: ${entry.name}`, () => {
-            checkSource(entry.source, { jsx: entry.jsx });
+            checkSource(entry.source, { jsx: entry.jsx ?? false });
         });
     }
 });
