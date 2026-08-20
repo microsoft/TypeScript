@@ -4362,8 +4362,6 @@ var The_content_mapper_process_failed_while_handling_the_transform_request = &Me
 
 var The_content_mapper_returned_an_invalid_transform_response = &Message{code: 100043, category: CategoryMessage, key: "The_content_mapper_returned_an_invalid_transform_response_100043", text: "The content mapper returned an invalid transform response."}
 
-var The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1 = &Message{code: 100044, category: CategoryMessage, key: "The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1_100044", text: "The content mapper uses unsupported protocol version {0}; expected version {1}."}
-
 var The_content_mapper_selected_unsupported_position_encoding_0 = &Message{code: 100045, category: CategoryMessage, key: "The_content_mapper_selected_unsupported_position_encoding_0_100045", text: "The content mapper selected unsupported position encoding '{0}'."}
 
 var The_content_mapper_diagnostic_source_must_not_be_empty = &Message{code: 100046, category: CategoryMessage, key: "The_content_mapper_diagnostic_source_must_not_be_empty_100046", text: "The content mapper diagnostic source must not be empty."}
@@ -8774,8 +8772,6 @@ func keyToMessage(key Key) *Message {
 		return The_content_mapper_process_failed_while_handling_the_transform_request
 	case "The_content_mapper_returned_an_invalid_transform_response_100043":
 		return The_content_mapper_returned_an_invalid_transform_response
-	case "The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1_100044":
-		return The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1
 	case "The_content_mapper_selected_unsupported_position_encoding_0_100045":
 		return The_content_mapper_selected_unsupported_position_encoding_0
 	case "The_content_mapper_diagnostic_source_must_not_be_empty_100046":

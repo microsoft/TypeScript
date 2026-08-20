@@ -453,8 +453,6 @@ func contentMapperTransformDiagnostic(file *ast.SourceFile, label string, err er
 		case contentmapper.TransformErrorKindInitialize:
 			if initializeError, ok := errors.AsType[*contentmapper.InitializeError](transformError); ok {
 				switch initializeError.Kind {
-				case contentmapper.InitializeErrorKindProtocolVersion:
-					return contentMapperTransformDiagnosticChain(file, label, diagnostics.The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1, initializeError.ProtocolVersion, contentmapper.ProtocolVersion)
 				case contentmapper.InitializeErrorKindPositionEncoding:
 					return contentMapperTransformDiagnosticChain(file, label, diagnostics.The_content_mapper_selected_unsupported_position_encoding_0, initializeError.PositionEncoding)
 				case contentmapper.InitializeErrorKindEmptyDiagnosticSource:
@@ -597,8 +595,6 @@ func ContentMapperInitializationDiagnostic(label string, err error) *ast.Diagnos
 			return diagnostic.AddMessageChain(ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_returned_an_initialize_response_that_could_not_be_decoded_Colon_0, initializeError.Detail))
 		case contentmapper.InitializeErrorKindRequest:
 			return diagnostic.AddMessageChain(ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_s_initialize_request_failed_Colon_0, initializeError.Detail))
-		case contentmapper.InitializeErrorKindProtocolVersion:
-			return diagnostic.AddMessageChain(ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_uses_unsupported_protocol_version_0_expected_version_1, initializeError.ProtocolVersion, contentmapper.ProtocolVersion))
 		case contentmapper.InitializeErrorKindPositionEncoding:
 			return diagnostic.AddMessageChain(ast.NewCompilerDiagnostic(diagnostics.The_content_mapper_selected_unsupported_position_encoding_0, initializeError.PositionEncoding))
 		case contentmapper.InitializeErrorKindEmptyDiagnosticSource:

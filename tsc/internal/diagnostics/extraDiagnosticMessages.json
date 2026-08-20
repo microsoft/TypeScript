@@ -239,10 +239,6 @@
         "category": "Message",
         "code": 100043
     },
-    "The content mapper uses unsupported protocol version {0}; expected version {1}.": {
-        "category": "Message",
-        "code": 100044
-    },
     "The content mapper selected unsupported position encoding '{0}'.": {
         "category": "Message",
         "code": 100045
