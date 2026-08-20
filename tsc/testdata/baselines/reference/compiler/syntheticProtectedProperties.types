@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/syntheticProtectedProperties.ts] ////
+
+=== syntheticProtectedProperties.ts ===
+// https://github.com/microsoft/TypeScript/issues/63749
+
+declare class Dummy {
+>Dummy : Dummy
+
+    a: number;
+>a : number
+}
+
+type Public = Base | Dummy;
+>Public : Public
+
+declare class Base {
+>Base : Base
+
+    protected get content(): string;
+>content : string
+
+    protected set content(value: string);
+>content : string
+>value : string
+}
+
+declare class Mock {
+>Mock : Mock
+
+    get content(): string;
+>content : string
+
+    set content(value: string);
+>content : string
+>value : string
+}
+
+declare const w: Public
+>w : Public
+
+if (w instanceof Mock) {
+>w instanceof Mock : boolean
+>w : Public
+>Mock : typeof Mock
+
+    w.content;
+>w.content : string
+>w : Public & Mock
+>content : string
+}
+declare const w2: Mock & Public
+>w2 : Mock & Public
+
+w2.content;
+>w2.content : string
+>w2 : Mock & Public
+>content : string
+
+
+declare const w3: Public & Mock
+>w3 : Public & Mock
+
+w3.content;
+>w3.content : string
+>w3 : Public & Mock
+>content : string
+
