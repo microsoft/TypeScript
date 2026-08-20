@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/unreachableFlowAfterThrowingForInOfHead1.ts] ////
+
+=== unreachableFlowAfterThrowingForInOfHead1.ts ===
+try {
+    for (const x of (function () { throw "1"; })()) {
+>x : any
+>(function () { throw "1"; })() : never
+>(function () { throw "1"; }) : () => never
+>function () { throw "1"; } : () => never
+>"1" : "1"
+
+        console.log("1");
+>console.log("1") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"1" : "1"
+    }
+}
+catch (e) { }
+>e : unknown
+
