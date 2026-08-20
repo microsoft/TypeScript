@@ -71,7 +71,7 @@ func TestResolveUnqualified(t *testing.T) {
 		rawManifest := &testSuite.Manifest
 		manifest, err := parseManifestFromData(rawManifest.String(), "/path/to/project")
 		if err != nil {
-			t.Fatalf("failed to init pnp manifest: %v", err)
+			t.Fatalf("failed to init pnp manifest for suite %d: %v", si, err)
 		}
 
 		for _, tc := range testSuite.Tests {

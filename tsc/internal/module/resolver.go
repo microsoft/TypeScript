@@ -1019,7 +1019,7 @@ func (r *resolutionState) loadModuleFromNearestNodeModulesDirectory(typesScopeOn
 }
 
 func (r *resolutionState) loadModuleFromNearestNodeModulesDirectoryWorker(ext extensions, mode core.ResolutionMode, typesScopeOnly bool) *resolved {
-	if r.resolver.host.PnpApi() != nil {
+	if pnpApi := r.resolver.host.PnpApi(); pnpApi != nil && !pnpApi.IsPathIgnored(r.containingDirectory) {
 		// !!! stop at global cache
 		return r.loadModuleFromImmediateNodeModulesDirectoryPnP(ext, r.containingDirectory, typesScopeOnly)
 	}
@@ -1921,7 +1921,7 @@ func (r *resolutionState) readPackageJsonPeerDependencies(packageJsonInfo *packa
 	for _, name := range names {
 		var peerDependencyPath string
 
-		if pnpApi != nil {
+		if pnpApi != nil && !pnpApi.IsPathIgnored(packageDirectory) {
 			var err *pnp.PnpError
 			peerDependencyPath, err = pnpApi.ResolveToUnqualified(name, packageDirectory)
 			if err != nil {

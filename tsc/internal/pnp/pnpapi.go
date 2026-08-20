@@ -87,6 +87,11 @@ func (p *PnpApi) ResolveToUnqualified(specifier string, parentPath string) (stri
 		return "", err
 	}
 
+	// Return empty string if the parent path is ignored
+	if p.IsPathIgnored(parentPath) {
+		return "", nil
+	}
+
 	parentLocator, err := p.FindLocator(parentPath)
 	if err != nil || parentLocator == nil {
 		// Skipping resolution
@@ -191,21 +196,29 @@ func (p *PnpApi) GetPackage(locator *Locator) *PackageInfo {
 	return packageInfo
 }
 
+// IsPathIgnored reports whether path is covered by the manifest's
+// ignorePatternData, i.e. it is not managed by PnP and should resolve through the
+// classic algorithm.
+func (p *PnpApi) IsPathIgnored(path string) bool {
+	if p.manifest == nil || p.manifest.ignorePatternData == nil || path == "" {
+		return false
+	}
+	relativePath := tspath.GetRelativePathFromDirectory(p.manifest.dirPath, path,
+		tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true})
+	return p.manifest.ignorePatternData.MatchString(relativePath)
+}
+
 func (p *PnpApi) FindLocator(parentPath string) (*Locator, *PnpError) {
 	if parentPath == "" {
 		return nil, nil
 	}
 
+	if p.IsPathIgnored(parentPath) {
+		return nil, nil
+	}
+
 	relativePath := tspath.GetRelativePathFromDirectory(p.manifest.dirPath, parentPath,
 		tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true})
-
-	if p.manifest.ignorePatternData != nil {
-		match := p.manifest.ignorePatternData.MatchString(relativePath)
-
-		if match {
-			return nil, nil
-		}
-	}
 
 	var relativePathWithDot string
 	if strings.HasPrefix(relativePath, "../") {
