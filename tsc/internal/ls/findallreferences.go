@@ -179,11 +179,6 @@ func (l *LanguageService) getFileNameOfEntry(entry *ReferenceEntry) lsproto.Docu
 	return l.resolveEntry(entry).lspRange.Uri
 }
 
-func (l *LanguageService) getLocationOfEntry(entry *ReferenceEntry) (lsproto.Location, bool) {
-	resolved := l.resolveEntry(entry)
-	return *resolved.lspRange, !resolved.unmappable
-}
-
 func (l *LanguageService) getLocationOfEntryForFeature(entry *ReferenceEntry, feature spanmap.Feature) (lsproto.Location, bool) {
 	l.resolveEntrySource(entry)
 	location, fidelity := l.sourceFileRangeToLSPLocationForFeature(entry.sourceFile, *entry.textRange, feature)
@@ -804,7 +799,7 @@ func (l *LanguageService) symbolAndEntriesToVSReferences(ctx context.Context, pa
 		}
 
 		// Convert definition to info
-		defInfo := l.definitionToReferencedSymbolDefinitionInfo(ctx, s.definition, data.OriginalNode, vsCapability)
+		defInfo := l.definitionToReferencedSymbolDefinitionInfo(ctx, s.definition, data.OriginalNode, vsCapability, spanmap.FeatureReferences)
 		if defInfo == nil {
 			continue
 		}
@@ -830,7 +825,7 @@ func (l *LanguageService) symbolAndEntriesToVSReferences(ctx context.Context, pa
 				continue
 			}
 
-			refLocation, ok := l.getLocationOfEntry(ref)
+			refLocation, ok := l.getLocationOfEntryForFeature(ref, spanmap.FeatureReferences)
 			if !ok {
 				continue
 			}
@@ -864,7 +859,7 @@ type referencedSymbolDefinitionInfo struct {
 }
 
 // definitionToReferencedSymbolDefinitionInfo converts a Definition to display info
-func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context.Context, def *Definition, originalNode *ast.Node, vsCapability bool) *referencedSymbolDefinitionInfo {
+func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context.Context, def *Definition, originalNode *ast.Node, vsCapability bool, feature spanmap.Feature) *referencedSymbolDefinitionInfo {
 	switch def.Kind {
 	case definitionKindSymbol:
 		symbol := def.symbol
@@ -883,7 +878,7 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 			node = originalNode
 		}
 
-		loc, ok := l.getLocationOfEntry(&ReferenceEntry{kind: entryKindNode, node: node})
+		loc, ok := l.getLocationOfEntryForFeature(&ReferenceEntry{kind: entryKindNode, node: node}, feature)
 		if !ok {
 			return nil
 		}
@@ -898,7 +893,7 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 		if node == nil {
 			return nil
 		}
-		loc, ok := l.getLocationOfEntry(&ReferenceEntry{kind: entryKindNode, node: node})
+		loc, ok := l.getLocationOfEntryForFeature(&ReferenceEntry{kind: entryKindNode, node: node}, feature)
 		if !ok {
 			return nil
 		}
@@ -916,7 +911,7 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 			return nil
 		}
 		name := scanner.TokenToString(node.Kind)
-		loc, ok := l.getLocationOfEntry(&ReferenceEntry{kind: entryKindNode, node: node})
+		loc, ok := l.getLocationOfEntryForFeature(&ReferenceEntry{kind: entryKindNode, node: node}, feature)
 		if !ok {
 			return nil
 		}
@@ -938,7 +933,7 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 			return nil
 		}
 		element := l.getDefinitionKindAndDisplayParts(ctx, symbol, node, vsCapability)
-		loc, ok := l.getLocationOfEntry(&ReferenceEntry{kind: entryKindNode, node: node})
+		loc, ok := l.getLocationOfEntryForFeature(&ReferenceEntry{kind: entryKindNode, node: node}, feature)
 		if !ok {
 			return nil
 		}
@@ -953,7 +948,7 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 		if node == nil {
 			return nil
 		}
-		loc, ok := l.getLocationOfEntry(&ReferenceEntry{kind: entryKindNode, node: node})
+		loc, ok := l.getLocationOfEntryForFeature(&ReferenceEntry{kind: entryKindNode, node: node}, feature)
 		if !ok {
 			return nil
 		}
@@ -970,7 +965,7 @@ func (l *LanguageService) definitionToReferencedSymbolDefinitionInfo(ctx context
 			return nil
 		}
 		node := def.tripleSlashFileRef.file.AsNode()
-		loc, ok := l.getLocationOfEntry(&ReferenceEntry{kind: entryKindNode, node: node})
+		loc, ok := l.getLocationOfEntryForFeature(&ReferenceEntry{kind: entryKindNode, node: node}, feature)
 		if !ok {
 			return nil
 		}
@@ -1040,7 +1035,7 @@ func (l *LanguageService) symbolAndEntriesToImplementations(ctx context.Context,
 		links := l.convertEntriesToLocationLinks(entries, spanmap.FeatureImplementation)
 		return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{DefinitionLinks: &links}, nil
 	}
-	locations := l.convertEntriesToLocations(entries, nil /*definitionSymbol*/, spanmap.FeatureImplementation)
+	locations := l.convertEntriesToLocations(entries, spanmap.FeatureImplementation)
 	return lsproto.LocationOrLocationsOrDefinitionLinksOrNull{Locations: &locations}, nil
 }
 
@@ -1055,11 +1050,7 @@ func (l *LanguageService) convertSymbolAndEntriesToLocations(s *SymbolAndEntries
 		})
 	}
 
-	var definitionSymbol *ast.Symbol
-	if includeDeclarations && s.definition != nil {
-		definitionSymbol = s.definition.symbol
-	}
-	return l.convertEntriesToLocations(references, definitionSymbol, feature)
+	return l.convertEntriesToLocations(references, feature)
 }
 
 func isDeclarationOfSymbol(node *ast.Node, target *ast.Symbol) bool {
@@ -1086,25 +1077,12 @@ func isDeclarationOfSymbol(node *ast.Node, target *ast.Symbol) bool {
 	})
 }
 
-func (l *LanguageService) convertEntriesToLocations(entries []*ReferenceEntry, definitionSymbol *ast.Symbol, feature spanmap.Feature) []lsproto.Location {
-	// A synthesized declaration has no source span, but it still represents the symbol's definition in
-	// that file. Mirror go-to-definition's file-level fallback while continuing to omit synthesized uses.
-	concreteFiles := collections.Set[lsproto.DocumentUri]{}
-	for _, entry := range entries {
-		if location, ok := l.getLocationOfEntryForFeature(entry, feature); ok {
-			concreteFiles.Add(location.Uri)
-		}
-	}
-
+func (l *LanguageService) convertEntriesToLocations(entries []*ReferenceEntry, feature spanmap.Feature) []lsproto.Location {
 	locations := make([]lsproto.Location, 0, len(entries))
 	for _, entry := range entries {
 		location, ok := l.getLocationOfEntryForFeature(entry, feature)
 		if ok {
 			locations = append(locations, location)
-		} else if isDeclarationOfSymbol(entry.node, definitionSymbol) && !concreteFiles.Has(location.Uri) {
-			location.Range = lsproto.Range{}
-			locations = append(locations, location)
-			concreteFiles.Add(location.Uri)
 		}
 	}
 	return locations
