@@ -24,7 +24,7 @@ func (prefixedSupplementalHandler) HandleRequest(ctx context.Context, method str
 		}
 		const prefix = "/* generated */\n"
 		features := spanmap.FeatureAll
-		if strings.Contains(p.FileName, "folding-disabled") {
+		if strings.Contains(p.FileName, "folding-disabled") || strings.Contains(p.FileName, "codelens-disabled") {
 			features = spanmap.FeatureNone
 		}
 		mappings, err := spanmap.New([]spanmap.Segment{{
@@ -39,7 +39,7 @@ func (prefixedSupplementalHandler) HandleRequest(ctx context.Context, method str
 			return nil, err
 		}
 		canonical := contentmapper.MappedOutput{Text: "export {};", Extension: ".ts"}
-		if strings.Contains(p.FileName, "folding-duplicate") {
+		if strings.Contains(p.FileName, "folding-duplicate") || strings.Contains(p.FileName, "codelens-disabled") || strings.Contains(p.FileName, "codelens-duplicate") {
 			canonicalMappings, err := spanmap.New([]spanmap.Segment{{
 				VirtualStart:  0,
 				VirtualEnd:    core.TextPos(len(p.Content)),

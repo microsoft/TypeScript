@@ -660,6 +660,7 @@ func (l *LanguageService) getIncomingCalls(ctx context.Context, program *compile
 		false,
 		false,
 		symbolEntryTransformOptions{},
+		nil, /*defaultProjectData*/
 	)
 	if result.CallHierarchyIncomingCalls != nil {
 		slices.SortFunc(*result.CallHierarchyIncomingCalls, func(a, b *lsproto.CallHierarchyIncomingCall) int {

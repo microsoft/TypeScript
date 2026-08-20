@@ -158,3 +158,104 @@ function outer() {
 	f.GoToFile(t, "/folding-duplicate.astro")
 	f.VerifyFoldingRangeLines(t, []fourslash.FoldingRangeLineExpected{{StartLine: 0, EndLine: 2}})
 }
+
+func TestContentMapperSupplementalCodeLens(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// The function exists only in the supplemental projection; its declaration and call map verbatim:
+	//
+	//   canonical:     export {};
+	//   supplemental:  /* generated */
+	//                  function outer() {}
+	//                  outer();
+	//
+	//   original:      [------ declaration + call ------)
+	//   supplemental:  /* generated */[------ declaration + call ------)
+	//                                 `-- verbatim, FeatureAll (includes CodeLens) --'
+	//
+	// The lens must be produced from the supplemental AST and resolve to one reference.
+	f, done := newContentMapperFourslash(t, `// @Filename: /codelens-supplemental.astro
+function outer() {}
+outer();
+`, contentmappertest.PrefixedSupplementalMapper, ".astro")
+	defer done()
+
+	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{CodeLens: lsutil.CodeLensUserPreferences{
+		ReferencesCodeLensEnabled:            core.TSTrue,
+		ReferencesCodeLensShowOnAllFunctions: core.TSTrue,
+	}})
+}
+
+func TestContentMapperDisabledSupplementalCodeLens(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// Both projections contain the function, but only the canonical mapping enables CodeLens:
+	//
+	//   original:      [------ declaration + call ------)
+	//   canonical:     [------ declaration + call ------)
+	//                  `-- verbatim, FeatureAll (includes CodeLens) --'
+	//   supplemental:  /* generated */[------ declaration + call ------)
+	//                                 `---- verbatim, FeatureNone -----'
+	//
+	// Exactly one canonical lens should remain and resolve normally.
+	f, done := newContentMapperFourslash(t, `// @Filename: /codelens-disabled.astro
+function outer() {}
+outer();
+`, contentmappertest.PrefixedSupplementalMapper, ".astro")
+	defer done()
+
+	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{CodeLens: lsutil.CodeLensUserPreferences{
+		ReferencesCodeLensEnabled:            core.TSTrue,
+		ReferencesCodeLensShowOnAllFunctions: core.TSTrue,
+	}})
+}
+
+func TestContentMapperDeduplicatesProjectedCodeLens(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// Canonical and supplemental projections both map the same function and call with CodeLens enabled:
+	//
+	//   original:      [------ declaration + call ------)
+	//   canonical:     [------ declaration + call ------)
+	//                  `-- verbatim, FeatureAll (includes CodeLens) --'
+	//   supplemental:  /* generated */[------ declaration + call ------)
+	//                                 `-- verbatim, FeatureAll (includes CodeLens) --'
+	//
+	// The equivalent original lenses must deduplicate to one resolved result.
+	f, done := newContentMapperFourslash(t, `// @Filename: /codelens-duplicate.astro
+function outer() {}
+outer();
+`, contentmappertest.PrefixedSupplementalMapper, ".astro")
+	defer done()
+
+	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{CodeLens: lsutil.CodeLensUserPreferences{
+		ReferencesCodeLensEnabled:            core.TSTrue,
+		ReferencesCodeLensShowOnAllFunctions: core.TSTrue,
+	}})
+}
+
+func TestContentMapperSupplementalImplementationCodeLens(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// The interface and its implementation exist only in the supplemental projection:
+	//
+	//   canonical:     export {};
+	//   supplemental:  /* generated */
+	//                  interface Service { run(): void }
+	//                  class Impl implements Service { run() {} }
+	//
+	//   original:      [---------- interface + class ----------)
+	//   supplemental:  /* generated */[---------- interface + class ----------)
+	//                                 `---- verbatim, FeatureAll (includes CodeLens) ----'
+	//
+	// The interface lens must resolve from the supplemental AST to one implementation.
+	f, done := newContentMapperFourslash(t, `// @Filename: /codelens-implementation.astro
+interface Service { run(): void }
+class Impl implements Service { run() {} }
+`, contentmappertest.PrefixedSupplementalMapper, ".astro")
+	defer done()
+
+	f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{CodeLens: lsutil.CodeLensUserPreferences{
+		ImplementationsCodeLensEnabled: core.TSTrue,
+	}})
+}

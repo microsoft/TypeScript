@@ -758,6 +758,22 @@ func (l *LanguageService) ProvideReferences(ctx context.Context, params *lsproto
 		false, /*isRename*/
 		false, /*implementations*/
 		symbolEntryTransformOptions{},
+		nil, /*defaultProjectData*/
+	)
+}
+
+func (l *LanguageService) provideReferencesFromData(ctx context.Context, params *lsproto.ReferenceParams, orchestrator CrossProjectOrchestrator, data SymbolAndEntriesData) (lsproto.ReferencesResponse, error) {
+	return handleCrossProject(
+		l,
+		ctx,
+		params,
+		orchestrator,
+		(*LanguageService).symbolAndEntriesToReferences,
+		combineReferences,
+		false, /*isRename*/
+		false, /*implementations*/
+		symbolEntryTransformOptions{},
+		&data,
 	)
 }
 
@@ -772,6 +788,7 @@ func (l *LanguageService) ProvideVSReferences(ctx context.Context, params *lspro
 		false, /*isRename*/
 		false, /*implementations*/
 		symbolEntryTransformOptions{},
+		nil, /*defaultProjectData*/
 	)
 }
 
@@ -1017,6 +1034,22 @@ func (l *LanguageService) provideImplementationsEx(ctx context.Context, params *
 		false, /*isRename*/
 		true,  /*implementations*/
 		options,
+		nil, /*defaultProjectData*/
+	)
+}
+
+func (l *LanguageService) provideImplementationsFromData(ctx context.Context, params *lsproto.ImplementationParams, options symbolEntryTransformOptions, orchestrator CrossProjectOrchestrator, data SymbolAndEntriesData) (lsproto.ImplementationResponse, error) {
+	return handleCrossProject(
+		l,
+		ctx,
+		params,
+		orchestrator,
+		(*LanguageService).symbolAndEntriesToImplementations,
+		combineImplementations,
+		false, /*isRename*/
+		true,  /*implementations*/
+		options,
+		&data,
 	)
 }
 
