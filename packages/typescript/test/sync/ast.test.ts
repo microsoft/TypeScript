@@ -1149,6 +1149,25 @@ describe("RemoteNode + child/token getters", () => {
         });
     });
 
+    test("getChildren on an EndOfFile token carrying JSDoc is cached", () => {
+        // A trailing orphan JSDoc attaches to the EndOfFile token; remote nodes rebuild
+        // .jsDoc on every access, so this only holds if the EndOfFile branch is cached too.
+        const api = spawnAPI({ "/tsconfig.json": "{}", "/src/eof.ts": "const x = 1;\n/** orphan */" });
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/eof.ts");
+            const eof = sf.getLastToken()!;
+            assert.strictEqual(eof.kind, SyntaxKind.EndOfFile);
+            const children = eof.getChildren(sf);
+            assert.strictEqual(children.length, 1);
+            assert.strictEqual(children[0].kind, SyntaxKind.JSDoc);
+            assert.strictEqual(eof.getChildren(sf), children, "EndOfFile children should be cached");
+            assert.strictEqual(eof.getChildAt(0, sf), children[0]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
     const isJsDocKind = (n: Node) => n.kind >= SyntaxKind.FirstJSDocNode && n.kind <= SyntaxKind.LastJSDocNode;
 
     // Recursively asserts getChildren's invariants at every node: count/at agreement, caching,

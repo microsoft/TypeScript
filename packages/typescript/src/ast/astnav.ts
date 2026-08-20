@@ -634,11 +634,16 @@ export function getChildren(node: Node, sourceFile: SourceFile = node.getSourceF
     }
 
     if (isTokenKind(node.kind)) {
-        // EndOfFile may carry leading JSDoc; every other token has no children.
-        return node.kind === SyntaxKind.EndOfFile ? node.jsDoc ?? emptyArray : emptyArray;
+        // EndOfFile may carry leading JSDoc; every other token has no children. The EndOfFile
+        // result must go through the cache: remote nodes rebuild .jsDoc on every access.
+        if (node.kind !== SyntaxKind.EndOfFile) {
+            return emptyArray;
+        }
+    }
+    else {
+        assertHasRealPosition(node);
     }
 
-    assertHasRealPosition(node);
     const cache = (sourceFile.childrenCache ??= new WeakMap<Node, readonly Node[]>());
     const cached = cache.get(node);
 
@@ -646,7 +651,9 @@ export function getChildren(node: Node, sourceFile: SourceFile = node.getSourceF
         return cached;
     }
 
-    const children = createChildren(node, sourceFile);
+    const children = node.kind === SyntaxKind.EndOfFile
+        ? node.jsDoc ?? emptyArray
+        : createChildren(node, sourceFile);
     cache.set(node, children);
     return children;
 }
