@@ -104,6 +104,7 @@ const (
 
 	// Type sub-property methods
 	MethodGetSymbolOfType              Method = "getSymbolOfType"
+	MethodGetSymbolsOfTypes            Method = "getSymbolsOfTypes"
 	MethodGetTargetOfType              Method = "getTargetOfType"
 	MethodGetFreshTypeOfType           Method = "getFreshTypeOfType"
 	MethodGetRegularTypeOfType         Method = "getRegularTypeOfType"
@@ -112,7 +113,9 @@ const (
 	MethodGetOuterTypeParametersOfType Method = "getOuterTypeParametersOfType"
 	MethodGetLocalTypeParametersOfType Method = "getLocalTypeParametersOfType"
 	MethodGetAliasTypeArgumentsOfType  Method = "getAliasTypeArgumentsOfType"
+	MethodGetAliasTypeArgumentsOfTypes Method = "getAliasTypeArgumentsOfTypes"
 	MethodGetAliasSymbolOfType         Method = "getAliasSymbolOfType"
+	MethodGetAliasSymbolsOfTypes       Method = "getAliasSymbolsOfTypes"
 	MethodGetObjectTypeOfType          Method = "getObjectTypeOfType"
 	MethodGetIndexTypeOfType           Method = "getIndexTypeOfType"
 	MethodGetCheckTypeOfType           Method = "getCheckTypeOfType"
@@ -442,6 +445,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetExportSymbolOfSymbol: unmarshallerFor[GetSymbolPropertyParams],
 
 	MethodGetSymbolOfType:               unmarshallerFor[GetTypePropertyParams],
+	MethodGetSymbolsOfTypes:             unmarshallerFor[GetSymbolsOfTypesParams],
 	MethodGetTargetOfType:               unmarshallerFor[GetTypePropertyParams],
 	MethodGetFreshTypeOfType:            unmarshallerFor[GetTypePropertyParams],
 	MethodGetRegularTypeOfType:          unmarshallerFor[GetTypePropertyParams],
@@ -450,7 +454,9 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetOuterTypeParametersOfType:  unmarshallerFor[GetTypePropertyParams],
 	MethodGetLocalTypeParametersOfType:  unmarshallerFor[GetTypePropertyParams],
 	MethodGetAliasTypeArgumentsOfType:   unmarshallerFor[GetTypePropertyParams],
+	MethodGetAliasTypeArgumentsOfTypes:  unmarshallerFor[GetSymbolsOfTypesParams],
 	MethodGetAliasSymbolOfType:          unmarshallerFor[GetTypePropertyParams],
+	MethodGetAliasSymbolsOfTypes:        unmarshallerFor[GetSymbolsOfTypesParams],
 	MethodGetObjectTypeOfType:           unmarshallerFor[GetTypePropertyParams],
 	MethodGetIndexTypeOfType:            unmarshallerFor[GetTypePropertyParams],
 	MethodGetCheckTypeOfType:            unmarshallerFor[GetTypePropertyParams],
@@ -1018,6 +1024,14 @@ type GetTypePropertyParams struct {
 	Snapshot SnapshotID `json:"snapshot"`
 	Project  ProjectID  `json:"project"`
 	Type     TypeID     `json:"objectId"`
+}
+
+// GetSymbolsOfTypesParams is used for batched endpoints that take a list of types and return one
+// result per type (getSymbolsOfTypes, getAliasSymbolsOfTypes, getAliasTypeArgumentsOfTypes).
+type GetSymbolsOfTypesParams struct {
+	Snapshot SnapshotID `json:"snapshot"`
+	Project  ProjectID  `json:"project"`
+	Types    []TypeID   `json:"types"`
 }
 
 // GetSymbolPropertyParams is used for all symbol sub-property endpoints.

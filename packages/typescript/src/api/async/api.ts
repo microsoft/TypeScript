@@ -68,6 +68,7 @@ import type {
     SymbolsPropertyMethod,
     TextEdit,
     TypeAcquisition,
+    TypeArraysPropertyMethod,
     TypePropertyMethod,
     TypeResponse,
     TypesPropertyMethod,
@@ -565,6 +566,51 @@ class SnapshotObjectRegistry {
         if (symbolData == null) return [];
         else return symbolData.map(data => this.getOrCreateSymbol(data));
     }
+
+    async fetchSymbolsForTypes(
+        types: readonly Type[],
+        method: SymbolsPropertyMethod,
+        handles: readonly (number | undefined)[],
+        projectId: Path,
+    ): Promise<(Symbol | undefined)[]> {
+        const result: (Symbol | undefined | null)[] = new Array(types.length);
+        const pendingTypeIds: number[] = [];
+        for (let i = 0; i < types.length; i++) {
+            const handle = handles[i];
+            if (!handle) {
+                result[i] = undefined; // no symbol/aliasSymbol for this type
+                continue;
+            }
+            const cached = this.getSymbol(handle);
+            if (cached) {
+                result[i] = cached;
+            }
+            else {
+                result[i] = null; // pending: resolved from the batched response below
+                pendingTypeIds.push(types[i].id);
+            }
+        }
+        if (pendingTypeIds.length > 0) {
+            // The response array can contain nulls at indices with no result (e.g. no aliasSymbol
+            // for that type); the generated SymbolResponse[] result type doesn't express this.
+            const data = await this.client.apiRequest(method, {
+                snapshot: this.snapshotId,
+                project: projectId,
+                types: pendingTypeIds,
+            }) as (SymbolResponse | null)[];
+            let j = 0;
+            for (let i = 0; i < result.length; i++) {
+                if (result[i] === null) {
+                    const d = data[j++];
+                    result[i] = d ? this.getOrCreateSymbol(d) : undefined;
+                }
+            }
+            if (j !== data.length) {
+                throw new Error(`${method} response was not fully consumed: used ${j} of ${data.length} results`);
+            }
+        }
+        return result as (Symbol | undefined)[];
+    }
 }
 
 class ProjectObjectRegistry {
@@ -689,8 +735,59 @@ class ProjectObjectRegistry {
         else return typesData.map(data => this.getOrCreateType(data));
     }
 
+    async fetchTypeArraysForTypes(
+        types: readonly Type[],
+        method: TypeArraysPropertyMethod,
+        handles: readonly (readonly number[])[],
+    ): Promise<readonly Type[][]> {
+        const result: (Type[] | null)[] = new Array(types.length);
+        const pendingTypeIds: number[] = [];
+        for (let i = 0; i < types.length; i++) {
+            const typeHandles = handles[i];
+            const cached = new Array<Type>(typeHandles.length);
+            let allCached = true;
+            for (let j = 0; j < typeHandles.length; j++) {
+                const c = this.getType(typeHandles[j]);
+                if (!c) {
+                    allCached = false;
+                    break;
+                }
+                cached[j] = c;
+            }
+            if (allCached) {
+                result[i] = cached;
+            }
+            else {
+                result[i] = null; // pending: resolved from the batched response below
+                pendingTypeIds.push(types[i].id);
+            }
+        }
+        if (pendingTypeIds.length > 0) {
+            const data = await this.client.apiRequest(method, {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                types: pendingTypeIds,
+            });
+            let j = 0;
+            for (let i = 0; i < result.length; i++) {
+                if (result[i] === null) {
+                    const d = data[j++];
+                    result[i] = d ? d.map(x => this.getOrCreateType(x)) : [];
+                }
+            }
+            if (j !== data.length) {
+                throw new Error(`${method} response was not fully consumed: used ${j} of ${data.length} results`);
+            }
+        }
+        return result as Type[][];
+    }
+
     async fetchSymbols(source: Symbol | Signature | Type, method: SymbolsPropertyMethod, handles?: readonly number[]): Promise<readonly Symbol[]> {
         return this.snapshotRegistry.fetchSymbols(source, method, handles, this.project.id);
+    }
+
+    async fetchSymbolsForTypes(types: readonly Type[], method: SymbolsPropertyMethod, handles: readonly (number | undefined)[]): Promise<(Symbol | undefined)[]> {
+        return this.snapshotRegistry.fetchSymbolsForTypes(types, method, handles, this.project.id);
     }
 
     // getBaseTypes is a checker-level endpoint keyed by `type` (not `objectId`),
@@ -1943,6 +2040,36 @@ export class Checker {
      */
     async isUnknownSignature(signature: Signature): Promise<boolean> {
         return signature.id === (await this.getWellKnownSignatures()).unknown;
+    }
+
+    getSymbolOfType(type: Type): Promise<Symbol | undefined>;
+    getSymbolOfType(types: readonly Type[]): Promise<(Symbol | undefined)[]>;
+    async getSymbolOfType(typeOrTypes: Type | readonly Type[]): Promise<Symbol | (Symbol | undefined)[] | undefined> {
+        if (Array.isArray(typeOrTypes)) {
+            const types = typeOrTypes as readonly TypeObject[];
+            return this.objectRegistry.fetchSymbolsForTypes(types, "getSymbolsOfTypes", types.map(t => t.symbol));
+        }
+        return (typeOrTypes as Type).getSymbol();
+    }
+
+    getAliasSymbolOfType(type: Type): Promise<Symbol | undefined>;
+    getAliasSymbolOfType(types: readonly Type[]): Promise<(Symbol | undefined)[]>;
+    async getAliasSymbolOfType(typeOrTypes: Type | readonly Type[]): Promise<Symbol | (Symbol | undefined)[] | undefined> {
+        if (Array.isArray(typeOrTypes)) {
+            const types = typeOrTypes as readonly TypeObject[];
+            return this.objectRegistry.fetchSymbolsForTypes(types, "getAliasSymbolsOfTypes", types.map(t => t.aliasSymbol));
+        }
+        return (typeOrTypes as Type).getAliasSymbol();
+    }
+
+    getAliasTypeArgumentsOfType(type: Type): Promise<readonly Type[]>;
+    getAliasTypeArgumentsOfType(types: readonly Type[]): Promise<readonly Type[][]>;
+    async getAliasTypeArgumentsOfType(typeOrTypes: Type | readonly Type[]): Promise<readonly Type[] | readonly Type[][]> {
+        if (Array.isArray(typeOrTypes)) {
+            const types = typeOrTypes as readonly TypeObject[];
+            return this.objectRegistry.fetchTypeArraysForTypes(types, "getAliasTypeArgumentsOfTypes", types.map(t => t.aliasTypeArguments));
+        }
+        return (typeOrTypes as Type).getAliasTypeArguments();
     }
 
     async getExportsOfModule(symbol: Symbol): Promise<readonly Symbol[]> {

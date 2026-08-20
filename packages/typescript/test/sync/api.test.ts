@@ -4361,6 +4361,152 @@ function f() {
             api.close();
         }
     });
+
+    test("getSymbolOfType resolves symbols for multiple types", () => {
+        const src = `export class Foo { x: number = 0; }\nexport class Bar { y: string = ""; }\nexport const foo: Foo = new Foo();\nexport const bar: Bar = new Bar();`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const posFoo = src.indexOf("foo:");
+            const posBar = src.indexOf("bar:");
+            const symFoo = project.checker.getSymbolAtPosition("/src/main.ts", posFoo);
+            const symBar = project.checker.getSymbolAtPosition("/src/main.ts", posBar);
+            assert.ok(symFoo);
+            assert.ok(symBar);
+            const typeFoo = project.checker.getTypeOfSymbol(symFoo);
+            const typeBar = project.checker.getTypeOfSymbol(symBar);
+            const results = project.checker.getSymbolOfType([typeFoo, typeBar]);
+            assert.equal(results.length, 2);
+            assert.equal(results[0]?.name, "Foo");
+            assert.equal(results[1]?.name, "Bar");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getAliasSymbolOfType resolves alias symbols for multiple types", () => {
+        const src = `type Point = { x: number; y: number };\ntype Size = { w: number; h: number };\nexport const p: Point = { x: 1, y: 2 };\nexport const s: Size = { w: 1, h: 2 };`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const posP = src.indexOf("p:");
+            const posS = src.indexOf("s:");
+            const symP = project.checker.getSymbolAtPosition("/src/main.ts", posP);
+            const symS = project.checker.getSymbolAtPosition("/src/main.ts", posS);
+            assert.ok(symP);
+            assert.ok(symS);
+            const typeP = project.checker.getTypeOfSymbol(symP);
+            const typeS = project.checker.getTypeOfSymbol(symS);
+            const results = project.checker.getAliasSymbolOfType([typeP, typeS]);
+            assert.equal(results.length, 2);
+            assert.equal(results[0]?.name, "Point");
+            assert.equal(results[1]?.name, "Size");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getSymbolOfType reuses already-cached symbols instead of re-fetching them", () => {
+        const src = `export class Foo { x: number = 0; }\nexport class Bar { y: string = ""; }\nexport const foo: Foo = new Foo();\nexport const bar: Bar = new Bar();`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const posFoo = src.indexOf("foo:");
+            const posBar = src.indexOf("bar:");
+            const symFoo = project.checker.getSymbolAtPosition("/src/main.ts", posFoo);
+            const symBar = project.checker.getSymbolAtPosition("/src/main.ts", posBar);
+            assert.ok(symFoo);
+            assert.ok(symBar);
+            const typeFoo = project.checker.getTypeOfSymbol(symFoo);
+            const typeBar = project.checker.getTypeOfSymbol(symBar);
+            // Populate the object cache for typeFoo's symbol via the singular accessor first.
+            const cachedFooSymbol = typeFoo.getSymbol();
+            assert.ok(cachedFooSymbol);
+            const results = project.checker.getSymbolOfType([typeFoo, typeBar]);
+            assert.equal(results.length, 2);
+            // The already-cached symbol should be reused as-is (same object identity), not re-fetched.
+            assert.strictEqual(results[0], cachedFooSymbol);
+            assert.equal(results[1]?.name, "Bar");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getAliasTypeArgumentsOfType resolves alias type arguments for multiple types", () => {
+        const src = `type Box<T> = { value: T };\ntype Pair<A, B> = [A, B];\nexport const x: Box<string> = { value: "hi" };\nexport const p: Pair<string, number> = ["hello", 42];`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const posX = src.indexOf("x:");
+            const posP = src.indexOf("p:");
+            const symX = project.checker.getSymbolAtPosition("/src/main.ts", posX);
+            const symP = project.checker.getSymbolAtPosition("/src/main.ts", posP);
+            assert.ok(symX);
+            assert.ok(symP);
+            const typeX = project.checker.getTypeOfSymbol(symX);
+            const typeP = project.checker.getTypeOfSymbol(symP);
+            const results = project.checker.getAliasTypeArgumentsOfType([typeX, typeP]);
+            assert.equal(results.length, 2);
+            assert.equal(results[0].length, 1);
+            assert.ok(results[0][0].flags & TypeFlags.String);
+            assert.equal(results[1].length, 2);
+            assert.ok(results[1][0].flags & TypeFlags.String);
+            assert.ok(results[1][1].flags & TypeFlags.Number);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getAliasTypeArgumentsOfType reuses already-cached type arguments instead of re-fetching them", () => {
+        const src = `type Box<T> = { value: T };\ntype Pair<A, B> = [A, B];\nexport const x: Box<string> = { value: "hi" };\nexport const p: Pair<string, number> = ["hello", 42];`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const posX = src.indexOf("x:");
+            const posP = src.indexOf("p:");
+            const symX = project.checker.getSymbolAtPosition("/src/main.ts", posX);
+            const symP = project.checker.getSymbolAtPosition("/src/main.ts", posP);
+            assert.ok(symX);
+            assert.ok(symP);
+            const typeX = project.checker.getTypeOfSymbol(symX);
+            const typeP = project.checker.getTypeOfSymbol(symP);
+            // Populate the object cache for typeX's alias type arguments via the singular accessor first.
+            const cachedXArgs = typeX.getAliasTypeArguments();
+            assert.equal(cachedXArgs.length, 1);
+            const results = project.checker.getAliasTypeArgumentsOfType([typeX, typeP]);
+            assert.equal(results.length, 2);
+            // The already-cached array should be reused as-is (same object identity), not re-fetched.
+            assert.strictEqual(results[0][0], cachedXArgs[0]);
+            assert.equal(results[1].length, 2);
+        }
+        finally {
+            api.close();
+        }
+    });
 });
 
 describe("Symbol - getDocumentationComment and getJsDocTags", () => {

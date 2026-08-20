@@ -50,6 +50,7 @@ export interface APIMethodInfo {
     getExportsOfSymbol: APIMethod<GetSymbolPropertyParams, SymbolResponse[] | null>;
     getExportSymbolOfSymbol: APIMethod<GetSymbolPropertyParams, SymbolResponse | null>;
     getSymbolOfType: APIMethod<GetTypePropertyParams, SymbolResponse | null>;
+    getSymbolsOfTypes: APIMethod<GetSymbolsOfTypesParams, SymbolResponse[]>;
     getTargetOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getFreshTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getRegularTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
@@ -58,7 +59,9 @@ export interface APIMethodInfo {
     getOuterTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
     getLocalTypeParametersOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
     getAliasTypeArgumentsOfType: APIMethod<GetTypePropertyParams, TypeResponse[] | null>;
+    getAliasTypeArgumentsOfTypes: APIMethod<GetSymbolsOfTypesParams, TypeResponse[][]>;
     getAliasSymbolOfType: APIMethod<GetTypePropertyParams, SymbolResponse | null>;
+    getAliasSymbolsOfTypes: APIMethod<GetSymbolsOfTypesParams, SymbolResponse[]>;
     getObjectTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getIndexTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getCheckTypeOfType: APIMethod<GetTypePropertyParams, TypeResponse>;
@@ -526,6 +529,16 @@ export interface GetTypePropertyParams {
     snapshot: number;
     project: string;
     objectId: number;
+}
+
+/**
+ * GetSymbolsOfTypesParams is used for batched endpoints that take a list of types and return one
+ * result per type (getSymbolsOfTypes, getAliasSymbolsOfTypes, getAliasTypeArgumentsOfTypes).
+ */
+export interface GetSymbolsOfTypesParams {
+    snapshot: number;
+    project: string;
+    types: readonly number[] | null;
 }
 
 /** GetSignaturePropertyParams is used for all signature sub-property endpoints. */

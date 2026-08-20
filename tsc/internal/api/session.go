@@ -679,6 +679,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetExportSymbolOfSymbol(ctx, parsed.(*GetSymbolPropertyParams))
 	case string(MethodGetSymbolOfType):
 		return s.handleGetSymbolOfType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetSymbolsOfTypes):
+		return s.handleGetSymbolsOfTypes(ctx, parsed.(*GetSymbolsOfTypesParams))
 	case string(MethodGetTargetOfType):
 		return s.handleGetTargetOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetFreshTypeOfType):
@@ -695,8 +697,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetLocalTypeParametersOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetAliasTypeArgumentsOfType):
 		return s.handleGetAliasTypeArgumentsOfType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetAliasTypeArgumentsOfTypes):
+		return s.handleGetAliasTypeArgumentsOfTypes(ctx, parsed.(*GetSymbolsOfTypesParams))
 	case string(MethodGetAliasSymbolOfType):
 		return s.handleGetAliasSymbolOfType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetAliasSymbolsOfTypes):
+		return s.handleGetAliasSymbolsOfTypes(ctx, parsed.(*GetSymbolsOfTypesParams))
 	case string(MethodGetObjectTypeOfType):
 		return s.handleGetObjectTypeOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetIndexTypeOfType):
@@ -1850,6 +1856,10 @@ func (s *Session) handleGetSymbolOfType(_ context.Context, params *GetTypeProper
 	return s.resolveSymbolPropertyOfType(params, (*checker.Type).Symbol)
 }
 
+func (s *Session) handleGetSymbolsOfTypes(_ context.Context, params *GetSymbolsOfTypesParams) ([]*SymbolResponse, error) {
+	return s.resolveSymbolPropertyOfTypes(params, (*checker.Type).Symbol)
+}
+
 func (s *Session) handleGetTargetOfType(_ context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
 	return s.resolveTypePropertyOfType(params, (*checker.Type).Target)
 }
@@ -1894,9 +1904,27 @@ func (s *Session) handleGetAliasTypeArgumentsOfType(_ context.Context, params *G
 	})
 }
 
+func (s *Session) handleGetAliasTypeArgumentsOfTypes(_ context.Context, params *GetSymbolsOfTypesParams) ([][]*TypeResponse, error) {
+	return s.resolveTypeArrayPropertyOfTypes(params, func(t *checker.Type) []*checker.Type {
+		if t.Alias() == nil {
+			return nil
+		}
+		return t.Alias().TypeArguments()
+	})
+}
+
 // @gen-proto-nullable
 func (s *Session) handleGetAliasSymbolOfType(_ context.Context, params *GetTypePropertyParams) (*SymbolResponse, error) {
 	return s.resolveSymbolPropertyOfType(params, func(t *checker.Type) *ast.Symbol {
+		if t.Alias() == nil {
+			return nil
+		}
+		return t.Alias().Symbol()
+	})
+}
+
+func (s *Session) handleGetAliasSymbolsOfTypes(_ context.Context, params *GetSymbolsOfTypesParams) ([]*SymbolResponse, error) {
+	return s.resolveSymbolPropertyOfTypes(params, func(t *checker.Type) *ast.Symbol {
 		if t.Alias() == nil {
 			return nil
 		}
@@ -2120,6 +2148,33 @@ func (s *Session) resolveTypeArrayPropertyOfType(params *GetTypePropertyParams, 
 	return results, nil
 }
 
+// resolveTypeArrayPropertyOfTypes resolves a type property of an array of types for multiple types
+// and returns arrays of type responses in the same order as the input handles.
+func (s *Session) resolveTypeArrayPropertyOfTypes(params *GetSymbolsOfTypesParams, getter func(*checker.Type) []*checker.Type) ([][]*TypeResponse, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+
+	results := make([][]*TypeResponse, len(params.Types))
+	for i, typeHandle := range params.Types {
+		t, err := sd.resolveTypeHandle(params.Project, typeHandle)
+		if err != nil {
+			return nil, err
+		}
+		types := getter(t)
+		if len(types) == 0 {
+			continue
+		}
+		sub := make([]*TypeResponse, len(types))
+		for j, subType := range types {
+			sub[j] = sd.newTypeResponse(params.Project, subType)
+		}
+		results[i] = sub
+	}
+	return results, nil
+}
+
 // resolveSymbolPropertyOfType resolves a type property of type `Symbol` and returns a symbol response.
 func (s *Session) resolveSymbolPropertyOfType(params *GetTypePropertyParams, getter func(*checker.Type) *ast.Symbol) (*SymbolResponse, error) {
 	sd, err := s.getSnapshotData(params.Snapshot)
@@ -2137,6 +2192,29 @@ func (s *Session) resolveSymbolPropertyOfType(params *GetTypePropertyParams, get
 		return nil, nil
 	}
 	return sd.newSymbolResponse(result, params.Project), nil
+}
+
+// resolveSymbolPropertyOfTypes resolves a type property of type `Symbol` for multiple types
+// and returns symbol responses in the same order as the input handles.
+func (s *Session) resolveSymbolPropertyOfTypes(params *GetSymbolsOfTypesParams, getter func(*checker.Type) *ast.Symbol) ([]*SymbolResponse, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+
+	results := make([]*SymbolResponse, len(params.Types))
+	for i, typeHandle := range params.Types {
+		t, err := sd.resolveTypeHandle(params.Project, typeHandle)
+		if err != nil {
+			return nil, err
+		}
+		result := getter(t)
+		if result == nil {
+			continue
+		}
+		results[i] = sd.newSymbolResponse(result, params.Project)
+	}
+	return results, nil
 }
 
 // resolveSymbolTablePropertyOfSymbol resolves a symbol property of type `Symbol` and returns a symbol response.
