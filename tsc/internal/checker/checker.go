@@ -22636,7 +22636,7 @@ func (c *Checker) cloneTypeParameter(tp *Type) *Type {
 }
 
 func (c *Checker) getHomomorphicTypeVariable(t *Type) *Type {
-	constraintType := c.getConstraintTypeFromMappedType(t)
+	constraintType := c.getActualTypeVariable(c.getConstraintTypeFromMappedType(t))
 	if constraintType.flags&TypeFlagsIndex != 0 {
 		typeVariable := c.getActualTypeVariable(constraintType.AsIndexType().target)
 		if typeVariable.flags&TypeFlagsTypeParameter != 0 {
