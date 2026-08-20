@@ -197,7 +197,7 @@ func (r *CompilerBaselineRunner) runTest(t *testing.T, filename string) {
 
 func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName string, test *compilerFileBasedTest, config *harnessutil.NamedTestConfiguration) {
 	t.Parallel()
-	defer testutil.RecoverAndFail(t, "Panic on compiling test "+test.filename)
+	defer testutil.RecoverAndFail(t, "Panic on compiler test "+test.filename)
 
 	payload := makeUnitsFromTest(test.content, test.filename)
 	compilerTest := newCompilerTest(t, testName, test.filename, &payload, config)

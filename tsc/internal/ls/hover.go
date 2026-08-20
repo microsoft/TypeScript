@@ -465,6 +465,22 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		text := c.SymbolToStringEx(symbol, enclosing, meaning, flags)
 		dpw.WriteSymbol(text, symbol)
 	}
+	writeModuleImportAttributes := func(symbol *ast.Symbol) {
+		declaration := core.Find(symbol.Declarations, func(declaration *ast.Node) bool {
+			return ast.IsModuleDeclaration(declaration) && declaration.AsModuleDeclaration().Attributes != nil
+		})
+		if declaration == nil {
+			return
+		}
+		attributes := declaration.AsModuleDeclaration().Attributes
+		emitContext := printer.NewEmitContext()
+		emitContext.SetEmitFlags(attributes, printer.EFSingleLine)
+		p := printer.NewPrinter(printer.PrinterOptions{NewLine: core.NewLineKindLF}, printer.PrintHandlers{}, emitContext)
+		tempDpw := newDisplayPartsWriter(vsCapability)
+		p.Write(attributes, ast.GetSourceFileOfNode(declaration), tempDpw, nil)
+		dpw.WriteKeyword(" with ")
+		dpw.WriteFrom(tempDpw)
+	}
 	if node.Kind == ast.KindThisKeyword && ast.IsInExpressionContext(node) || ast.IsThisInTypeQuery(node) {
 		dpw.WriteKeyword("this")
 		dpw.WritePunctuation(": ")
@@ -801,6 +817,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 				isModule := symbol.ValueDeclaration != nil && (ast.IsSourceFile(symbol.ValueDeclaration) || ast.IsAmbientModule(symbol.ValueDeclaration))
 				dpw.WriteKeyword(core.IfElse(isModule, "module ", "namespace "))
 				writeSymbolClassified(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags)
+				writeModuleImportAttributes(symbol)
 			}
 			setDeclaration(core.Find(symbol.Declarations, ast.IsModuleDeclaration))
 		}

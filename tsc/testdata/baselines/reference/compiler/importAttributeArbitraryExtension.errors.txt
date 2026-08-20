@@ -1,0 +1,17 @@
+/index.ts(3,7): error TS2339: Property 'ambient' does not exist on type 'typeof import("/file.d.ext")'.
+
+
+==== /types.d.ts (0 errors) ====
+    declare module "*.ext" with { type: "custom" } {
+        export const ambient: "ambient";
+    }
+    
+==== /file.d.ext.ts (0 errors) ====
+    export const physical: "physical";
+    
+==== /index.ts (1 errors) ====
+    import * as value from "./file.ext" with { type: "custom" };
+    value.physical;
+    value.ambient;
+          ~~~~~~~
+!!! error TS2339: Property 'ambient' does not exist on type 'typeof import("/file.d.ext")'.

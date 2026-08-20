@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/importAttributeModuleAugmentations.ts] ////
+
+=== /types.d.ts ===
+declare module "*.asset" {
+>"*.asset" : typeof import("*.asset")
+
+    export const plain: "plain";
+>plain : "plain"
+}
+
+declare module "attributed/*.asset" with { type: "css" } {
+>"attributed/*.asset" : typeof import("attributed/*.asset")
+>type : "css"
+
+    export const attributed: "attributed";
+>attributed : "attributed"
+}
+
+declare module "*.special" with { type: "special" } {
+>"*.special" : typeof import("*.special")
+>type : "special"
+
+    export const attributed: "attributed";
+>attributed : "attributed"
+}
+
+=== /augmentations.ts ===
+export {};
+
+declare module "merged.asset" {
+>"merged.asset" : typeof import("merged.asset")
+
+    export const augmented: "augmented";
+>augmented : "augmented"
+}
+
+declare module "attributed/file.asset" {
+>"attributed/file.asset" : typeof import("attributed/file.asset")
+
+    export const augmented: "augmented";
+>augmented : "augmented"
+}
+
+declare module "unattributed.special" {
+>"unattributed.special" : typeof import("unattributed.special")
+
+    export const augmented: "augmented";
+>augmented : "augmented"
+}
+
+=== /index.ts ===
+import * as merged from "merged.asset";
+>merged : typeof merged
+
+merged.plain;
+>merged.plain : "plain"
+>merged : typeof merged
+>plain : "plain"
+
+merged.augmented;
+>merged.augmented : "augmented"
+>merged : typeof merged
+>augmented : "augmented"
+
+import * as attributed from "attributed/file.asset" with { type: "css" };
+>attributed : typeof attributed
+>type : any
+
+attributed.attributed;
+>attributed.attributed : "attributed"
+>attributed : typeof attributed
+>attributed : "attributed"
+
+attributed.augmented;
+>attributed.augmented : any
+>attributed : typeof attributed
+>augmented : any
+
+import * as unattributed from "unattributed.special";
+>unattributed : any
+
+unattributed.attributed;
+>unattributed.attributed : any
+>unattributed : any
+>attributed : any
+
+unattributed.augmented;
+>unattributed.augmented : any
+>unattributed : any
+>augmented : any
+

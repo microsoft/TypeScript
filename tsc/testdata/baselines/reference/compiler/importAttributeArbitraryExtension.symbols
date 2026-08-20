@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/importAttributeArbitraryExtension.ts] ////
+
+=== /types.d.ts ===
+declare module "*.ext" with { type: "custom" } {
+>"*.ext" : Symbol("*.ext", Decl(types.d.ts, 0, 0))
+>type : Symbol(type, Decl(types.d.ts, 0, 29))
+
+    export const ambient: "ambient";
+>ambient : Symbol(ambient, Decl(types.d.ts, 1, 16))
+}
+
+=== /file.d.ext.ts ===
+export const physical: "physical";
+>physical : Symbol(physical, Decl(file.d.ext.ts, 0, 12))
+
+=== /index.ts ===
+import * as value from "./file.ext" with { type: "custom" };
+>value : Symbol(value, Decl(index.ts, 0, 6))
+
+value.physical;
+>value.physical : Symbol(value.physical, Decl(file.d.ext.ts, 0, 12))
+>value : Symbol(value, Decl(index.ts, 0, 6))
+>physical : Symbol(value.physical, Decl(file.d.ext.ts, 0, 12))
+
+value.ambient;
+>value : Symbol(value, Decl(index.ts, 0, 6))
+

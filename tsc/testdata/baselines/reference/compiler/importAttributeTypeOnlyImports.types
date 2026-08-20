@@ -1,0 +1,102 @@
+//// [tests/cases/compiler/importAttributeTypeOnlyImports.ts] ////
+
+=== /types.d.ts ===
+declare module "*.style" with { type: "css" } {
+>"*.style" : typeof import("*.style")
+>type : "css"
+
+    export interface Style {
+        kind: "css";
+>kind : "css"
+    }
+}
+
+declare module "require/*.style" with { type: "css", "resolution-mode": "require" } {
+>"require/*.style" : typeof import("require/*.style")
+>type : "css"
+>"resolution-mode" : "require"
+
+    export interface RequireStyle {
+        kind: "require-css";
+>kind : "require-css"
+    }
+}
+
+=== /reexports.ts ===
+export type { Style } from "plain.style" with { type: "css" };
+>Style : Style
+>type : error
+
+export type { RequireStyle } from "require/reexport.style" with { type: "css", "resolution-mode": "require" };
+>RequireStyle : import("require/*.style").RequireStyle
+>type : error
+
+=== /jsdoc.js ===
+/** @import { Style } from "jsdoc.style" with { type: "css" } */
+
+/** @type {Style} */
+const jsdocStyle = { kind: "css" };
+>jsdocStyle : Style
+>{ kind: "css" } : { kind: "css"; }
+>kind : "css"
+>"css" : "css"
+
+const jsdocCssKind = jsdocStyle.kind;
+>jsdocCssKind : "css"
+>jsdocStyle.kind : "css"
+>jsdocStyle : Style
+>kind : "css"
+
+=== /index.ts ===
+import type { Style } from "plain.style" with { type: "css" };
+>Style : Style
+>type : error
+
+import type { RequireStyle } from "require/import.style" with { type: "css", "resolution-mode": "require" };
+>RequireStyle : RequireStyle
+>type : error
+
+type ImportTypeStyle = import("inline.style", { with: { type: "css" } }).Style;
+>ImportTypeStyle : Style
+>type : error
+
+type ImportTypeRequireStyle = import("require/inline.style", { with: { type: "css", "resolution-mode": "require" } }).RequireStyle;
+>ImportTypeRequireStyle : RequireStyle
+>type : error
+
+declare const importedStyle: Style;
+>importedStyle : Style
+
+declare const importedRequireStyle: RequireStyle;
+>importedRequireStyle : RequireStyle
+
+declare const importTypeStyle: ImportTypeStyle;
+>importTypeStyle : Style
+
+declare const importTypeRequireStyle: ImportTypeRequireStyle;
+>importTypeRequireStyle : RequireStyle
+
+const cssKind: "css" = importedStyle.kind;
+>cssKind : "css"
+>importedStyle.kind : "css"
+>importedStyle : Style
+>kind : "css"
+
+const requireCssKind: "require-css" = importedRequireStyle.kind;
+>requireCssKind : "require-css"
+>importedRequireStyle.kind : "require-css"
+>importedRequireStyle : RequireStyle
+>kind : "require-css"
+
+const importTypeCssKind: "css" = importTypeStyle.kind;
+>importTypeCssKind : "css"
+>importTypeStyle.kind : "css"
+>importTypeStyle : Style
+>kind : "css"
+
+const importTypeRequireCssKind: "require-css" = importTypeRequireStyle.kind;
+>importTypeRequireCssKind : "require-css"
+>importTypeRequireStyle.kind : "require-css"
+>importTypeRequireStyle : RequireStyle
+>kind : "require-css"
+

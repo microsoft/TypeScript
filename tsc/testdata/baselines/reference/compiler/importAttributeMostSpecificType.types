@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/importAttributeMostSpecificType.ts] ////
+
+=== /bun-sqlite.d.ts ===
+declare module "databases/*.sqlite" with { type: "sqlite" } {
+>"databases/*.sqlite" : typeof import("databases/*.sqlite")
+>type : "sqlite"
+
+    const database: {
+>database : { storage: "external"; filename: string; }
+
+        storage: "external";
+>storage : "external"
+
+        filename: string;
+>filename : string
+
+    };
+    export default database;
+>database : { storage: "external"; filename: string; }
+}
+
+declare module "*.sqlite" with { type: "sqlite", embed: "true" } {
+>"*.sqlite" : typeof import("*.sqlite")
+>type : "sqlite"
+>embed : "true"
+
+    const database: {
+>database : { storage: "embedded"; contents: Uint8Array; }
+
+        storage: "embedded";
+>storage : "embedded"
+
+        contents: Uint8Array;
+>contents : Uint8Array<ArrayBufferLike>
+
+    };
+    export default database;
+>database : { storage: "embedded"; contents: Uint8Array; }
+}
+
+=== /index.ts ===
+import externalDatabase from "databases/app.sqlite" with { type: "sqlite" };
+>externalDatabase : { storage: "external"; filename: string; }
+>type : error
+
+import embeddedDatabase from "databases/app.sqlite" with { type: "sqlite", embed: "true" };
+>embeddedDatabase : { storage: "embedded"; contents: Uint8Array; }
+>type : error
+>embed : error
+
+const expectedExternalStorage: "external" = externalDatabase.storage;
+>expectedExternalStorage : "external"
+>externalDatabase.storage : "external"
+>externalDatabase : { storage: "external"; filename: string; }
+>storage : "external"
+
+const expectedEmbeddedStorage: "embedded" = embeddedDatabase.storage;
+>expectedEmbeddedStorage : "embedded"
+>embeddedDatabase.storage : "embedded"
+>embeddedDatabase : { storage: "embedded"; contents: Uint8Array; }
+>storage : "embedded"
+
+externalDatabase.filename;
+>externalDatabase.filename : string
+>externalDatabase : { storage: "external"; filename: string; }
+>filename : string
+
+embeddedDatabase.contents;
+>embeddedDatabase.contents : Uint8Array<ArrayBufferLike>
+>embeddedDatabase : { storage: "embedded"; contents: Uint8Array; }
+>contents : Uint8Array<ArrayBufferLike>
+

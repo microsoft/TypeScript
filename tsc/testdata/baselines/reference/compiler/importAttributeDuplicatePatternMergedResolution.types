@@ -1,0 +1,117 @@
+//// [tests/cases/compiler/importAttributeDuplicatePatternMergedResolution.ts] ////
+
+=== /a.d.ts ===
+declare module "*.asset" with { type: "css", format: "module" } {
+>"*.asset" : typeof import("*.asset")
+>type : "css"
+>format : "module"
+
+    export const fromA: "a";
+>fromA : "a"
+}
+
+=== /b.d.ts ===
+declare module "*.asset" with { format: "module", type: "css" } {
+>"*.asset" : typeof import("*.asset")
+>format : "module"
+>type : "css"
+
+    export const fromB: "b";
+>fromB : "b"
+}
+
+=== /variantsA.d.ts ===
+declare module "*.variant" with { type: "css" } {
+>"*.variant" : typeof import("*.variant")
+>type : "css"
+
+    export const cssOnly: "css";
+>cssOnly : "css"
+}
+
+declare module "*.variant" with { type: "text" } {
+>"*.variant" : typeof import("*.variant")
+>type : "text"
+
+    export const textOnly: "text";
+>textOnly : "text"
+}
+
+=== /variantsB.d.ts ===
+declare module "*.variant" with { type: "css" } {
+>"*.variant" : typeof import("*.variant")
+>type : "css"
+
+    export const cssAlso: "css-also";
+>cssAlso : "css-also"
+}
+
+declare module "*.variant" with { type: "text" } {
+>"*.variant" : typeof import("*.variant")
+>type : "text"
+
+    export const textAlso: "text-also";
+>textAlso : "text-also"
+}
+
+=== /index.ts ===
+import { fromA, fromB } from "./file.asset" with { type: "css", format: "module" };
+>fromA : "a"
+>fromB : "b"
+>type : error
+>format : error
+
+import * as css from "./file.variant" with { type: "css" };
+>css : typeof css
+>type : error
+
+import * as text from "./file.variant" with { type: "text" };
+>text : typeof text
+>type : error
+
+const a: "a" = fromA;
+>a : "a"
+>fromA : "a"
+
+const b: "b" = fromB;
+>b : "b"
+>fromB : "b"
+
+const cssValue: "css" = css.cssOnly;
+>cssValue : "css"
+>css.cssOnly : "css"
+>css : typeof css
+>cssOnly : "css"
+
+const cssAlsoValue: "css-also" = css.cssAlso;
+>cssAlsoValue : "css-also"
+>css.cssAlso : "css-also"
+>css : typeof css
+>cssAlso : "css-also"
+
+const textValue: "text" = text.textOnly;
+>textValue : "text"
+>text.textOnly : "text"
+>text : typeof text
+>textOnly : "text"
+
+const textAlsoValue: "text-also" = text.textAlso;
+>textAlsoValue : "text-also"
+>text.textAlso : "text-also"
+>text : typeof text
+>textAlso : "text-also"
+
+const cssDoesNotHaveText: "textOnly" extends keyof typeof css ? false : true = true;
+>cssDoesNotHaveText : true
+>css : typeof css
+>false : false
+>true : true
+>true : true
+
+const textDoesNotHaveCss: "cssOnly" extends keyof typeof text ? false : true = true;
+>textDoesNotHaveCss : true
+>text : typeof text
+>false : false
+>true : true
+>true : true
+

@@ -1,0 +1,55 @@
+/augmentation.ts(2,40): error TS1551: Import attributes are not allowed on a module augmentation.
+/checkErrors.d.ts(1,37): error TS2322: Type '{ type: number; }' is not assignable to type 'ImportAttributes'.
+  Property 'type' is incompatible with index signature.
+    Type 'number' is not assignable to type 'string'.
+/checkErrors.d.ts(2,37): error TS2322: Type '{ type: { name: string; }; }' is not assignable to type 'ImportAttributes'.
+  Property 'type' is incompatible with index signature.
+    Type '{ name: string; }' is not assignable to type 'string'.
+
+
+==== /valid.d.ts (0 errors) ====
+    declare module "*.asset" with { type: "css" } {
+      const stylesheet: CSSStyleSheet;
+      export default stylesheet;
+    }
+    
+    declare module "*.text" with { type: "text" } {
+      const text: string;
+      export default text;
+    }
+    
+    declare module "*.data" with { type: "json" | "json5" } {
+      const data: { version: number };
+      export default data;
+    }
+    
+    declare module "*.augmentable" {
+      export interface Existing {}
+    }
+==== /valid.ts (0 errors) ====
+    import stylesheet from "./button.asset" with { type: "css" };
+    import text from "./license.text" with { type: "text" };
+    import data from "./config.data" with { type: "json5" };
+    
+    stylesheet.insertRule("");
+    text.toUpperCase();
+    data.version.toFixed();
+    
+==== /checkErrors.d.ts (2 errors) ====
+    declare module "*.numberValue" with { type: number } {}
+                                        ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ type: number; }' is not assignable to type 'ImportAttributes'.
+!!! error TS2322:   Property 'type' is incompatible with index signature.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    declare module "*.objectValue" with { type: { name: string } } {}
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ type: { name: string; }; }' is not assignable to type 'ImportAttributes'.
+!!! error TS2322:   Property 'type' is incompatible with index signature.
+!!! error TS2322:     Type '{ name: string; }' is not assignable to type 'string'.
+==== /augmentation.ts (1 errors) ====
+    export {};
+    declare module "file.augmentable" with { type: "css" } {
+                                           ~~~~~~~~~~~~~~~
+!!! error TS1551: Import attributes are not allowed on a module augmentation.
+      export interface Added {}
+    }

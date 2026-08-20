@@ -3837,6 +3837,12 @@ func (p *Printer) emitModuleDeclaration(node *ast.ModuleDeclaration) {
 		p.emitNestedModuleName(module.Name())
 		body = module.Body
 	}
+	if node.Attributes != nil {
+		p.writeSpace()
+		p.writeKeyword("with")
+		p.writeSpace()
+		p.emitTypeNode(node.Attributes, ast.TypePrecedenceNonArray)
+	}
 	if body == nil {
 		p.writeTrailingSemicolon()
 	} else {

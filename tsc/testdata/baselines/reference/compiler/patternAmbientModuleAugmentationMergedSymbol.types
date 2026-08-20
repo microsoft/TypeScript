@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/patternAmbientModuleAugmentationMergedSymbol.ts] ////
+
+=== /a.d.ts ===
+declare module "*.asset" {
+>"*.asset" : typeof import("*.asset")
+
+    export const fromA: "a";
+>fromA : "a"
+}
+
+=== /b.d.ts ===
+declare module "*.asset" {
+>"*.asset" : typeof import("*.asset")
+
+    export const fromB: "b";
+>fromB : "b"
+}
+
+=== /augmentation.ts ===
+export {};
+
+declare module "augmented.asset" {
+>"augmented.asset" : typeof import("augmented.asset")
+
+    export const augmented: "augmented";
+>augmented : "augmented"
+}
+
+=== /index.ts ===
+import * as augmented from "augmented.asset";
+>augmented : typeof augmented
+
+augmented.fromA;
+>augmented.fromA : "a"
+>augmented : typeof augmented
+>fromA : "a"
+
+augmented.fromB;
+>augmented.fromB : "b"
+>augmented : typeof augmented
+>fromB : "b"
+
+augmented.augmented;
+>augmented.augmented : "augmented"
+>augmented : typeof augmented
+>augmented : "augmented"
+
+import * as other from "other.asset";
+>other : typeof other
+
+other.fromA;
+>other.fromA : "a"
+>other : typeof other
+>fromA : "a"
+
+other.fromB;
+>other.fromB : "b"
+>other : typeof other
+>fromB : "b"
+
+other.augmented;
+>other.augmented : any
+>other : typeof other
+>augmented : any
+

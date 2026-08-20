@@ -1258,6 +1258,9 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	}
 
 	if file == nil {
+		if declaration := core.Find(symbol.Declarations, ast.IsModuleWithStringLiteralName); declaration != nil {
+			return declaration.Name().Text()
+		}
 		if ast.IsAmbientModuleSymbolName(symbol.Name) {
 			return stringutil.StripQuotes(symbol.Name)
 		}

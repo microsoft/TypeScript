@@ -235,7 +235,7 @@ func (b *NodeBuilderImpl) getModuleSpecifierOverride(parent *ast.Node, lit *ast.
 	if b.ctx.enclosingFile != ast.GetSourceFileOfNode(lit) {
 		mode := core.ResolutionModeNone
 		if parent.AsImportTypeNode().Attributes != nil {
-			mode = b.ch.getResolutionModeOverride(parent.AsImportTypeNode().Attributes.AsImportAttributes(), false)
+			mode, _ = parent.AsImportTypeNode().Attributes.AsImportAttributes().GetResolutionModeOverride(nil)
 		}
 		name := lit.Text()
 		originalName := name
