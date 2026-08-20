@@ -77,6 +77,7 @@ import {
 } from "@typescript/typescript/unstable/async"; // @sync: } from "@typescript/typescript/unstable/sync";
 import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
 import type { FileSystem } from "@typescript/typescript/unstable/fs";
+import type { APIRequest } from "@typescript/typescript/unstable/proto";
 import assert from "node:assert";
 import { globSync } from "node:fs";
 import { resolve } from "node:path";
@@ -379,6 +380,119 @@ describe("API", () => {
         }
     });
 });
+
+describe("API - batchRequests", () => {
+    test("returns results in request order", async () => {
+        const api = spawnAPI();
+        try {
+            const { responses } = await api.batchRequests([
+                { method: "parseCommandLine", params: { commandLine: ["--strict"] } },
+                { method: "readConfigFile", params: { file: "/tsconfig.json" } },
+            ]);
+
+            assert.equal(responses.length, 2);
+            const commandLine = responses[0];
+            assert.equal(commandLine.method, "parseCommandLine");
+            assert.equal(commandLine.error, undefined);
+            assert.equal(commandLine.result.options.strict, true);
+
+            const config = responses[1];
+            assert.equal(config.method, "readConfigFile");
+            assert.equal(config.error, undefined);
+            assert.deepEqual(config.result.config, {});
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("returns an item error without dropping a sibling result", async () => {
+        const api = spawnAPI();
+        try {
+            const { responses } = await api.batchRequests([
+                { method: "unknown", params: null } as unknown as APIRequest,
+                { method: "parseCommandLine", params: { commandLine: ["--strict"] } },
+            ]);
+
+            assert.equal(responses.length, 2);
+            assert.equal(responses[0].method, "unknown");
+            assert.match(responses[0].error!, /unknown API method/);
+            assert.equal(responses[0].result, null);
+
+            const commandLine = responses[1];
+            assert.equal(commandLine.method, "parseCommandLine");
+            assert.equal(commandLine.error, undefined);
+            assert.equal(commandLine.result.options.strict, true);
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+// @sync-skip-block-start
+describe("API - batchContext", () => {
+    test("holds requests until disposal", async () => {
+        const api = spawnAPI();
+        try {
+            await api.parseCommandLine([]);
+
+            const requests = await (async () => {
+                using _ = api.batchContext();
+                const requests = [
+                    api.parseCommandLine(["--strict"]),
+                    api.readConfigFile("/tsconfig.json"),
+                ] as const;
+                let settled = false;
+                void Promise.all(requests).then(() => {
+                    settled = true;
+                });
+
+                await new Promise<void>(resolve => setImmediate(resolve));
+                assert.equal(settled, false, "requests should remain pending inside the batch context");
+                return requests;
+            })();
+
+            const [commandLine, config] = await Promise.all(requests);
+            assert.equal(commandLine.options.strict, true);
+            assert.deepEqual(config.config, {});
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("settles an item error without dropping a sibling result", async () => {
+        const src = `export const value: string = "";`;
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": src,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", src.indexOf("value:"));
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+
+            const requests = await (async () => {
+                using _ = api.batchContext();
+                return [
+                    project.checker.getTypeArguments(type as unknown as TypeReference),
+                    project.checker.getStringType(),
+                ] as const;
+            })();
+
+            await assert.rejects(requests[0], /panic:/);
+            assert.ok((await requests[1]).flags & TypeFlags.String);
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+// @sync-skip-block-end
 
 describe("Checker - getImmediateAliasedSymbol", () => {
     test("resolves one level of alias indirection", async () => {

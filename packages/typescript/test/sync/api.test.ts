@@ -54,6 +54,7 @@ import {
 import { visitEachChild } from "@typescript/typescript/unstable/ast/visitor";
 import { createVirtualFileSystem } from "@typescript/typescript/unstable/fs";
 import type { FileSystem } from "@typescript/typescript/unstable/fs";
+import type { APIRequest } from "@typescript/typescript/unstable/proto";
 import {
     API,
     type BigIntLiteralType,
@@ -381,6 +382,55 @@ describe("API", () => {
             const config = api.parseConfigFile("/tsconfig.json");
             assert.equal(config.typeAcquisition?.enable, true);
             assert.deepEqual(config.typeAcquisition?.include, ["jquery"]);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("API - batchRequests", () => {
+    test("returns results in request order", () => {
+        const api = spawnAPI();
+        try {
+            const { responses } = api.batchRequests([
+                { method: "parseCommandLine", params: { commandLine: ["--strict"] } },
+                { method: "readConfigFile", params: { file: "/tsconfig.json" } },
+            ]);
+
+            assert.equal(responses.length, 2);
+            const commandLine = responses[0];
+            assert.equal(commandLine.method, "parseCommandLine");
+            assert.equal(commandLine.error, undefined);
+            assert.equal(commandLine.result.options.strict, true);
+
+            const config = responses[1];
+            assert.equal(config.method, "readConfigFile");
+            assert.equal(config.error, undefined);
+            assert.deepEqual(config.result.config, {});
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("returns an item error without dropping a sibling result", () => {
+        const api = spawnAPI();
+        try {
+            const { responses } = api.batchRequests([
+                { method: "unknown", params: null } as unknown as APIRequest,
+                { method: "parseCommandLine", params: { commandLine: ["--strict"] } },
+            ]);
+
+            assert.equal(responses.length, 2);
+            assert.equal(responses[0].method, "unknown");
+            assert.match(responses[0].error!, /unknown API method/);
+            assert.equal(responses[0].result, null);
+
+            const commandLine = responses[1];
+            assert.equal(commandLine.method, "parseCommandLine");
+            assert.equal(commandLine.error, undefined);
+            assert.equal(commandLine.result.options.strict, true);
         }
         finally {
             api.close();

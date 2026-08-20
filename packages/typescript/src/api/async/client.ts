@@ -23,6 +23,9 @@ import {
 } from "../options.ts";
 import type {
     APIMethodInfo,
+    APIRequest,
+    BatchRequestsParams,
+    BatchRequestsResponse,
     SourceFileResponseMethod,
 } from "../proto.ts";
 import {
@@ -47,6 +50,8 @@ export class Client {
     private options: ClientOptions;
     private connected = false;
     private timing: TimingCollector | undefined;
+    private batchedRequests: { method: APIRequest["method"]; params: APIRequest["params"]; resolve: (value: unknown) => void; reject: (reason?: any) => void; }[] = [];
+    private nextBatch: NodeJS.Immediate | "manual" | undefined;
 
     constructor(options: ClientOptions) {
         this.options = options;
@@ -158,6 +163,83 @@ export class Client {
         }
     }
 
+    private async doBatch(): Promise<void> {
+        this.nextBatch = undefined;
+        if (!this.batchedRequests.length) return;
+        const requests = this.batchedRequests;
+        this.batchedRequests = [];
+        try {
+            if (!this.connected) {
+                await this.connect();
+            }
+            if (!this.connection) {
+                throw new Error("Connection not established");
+            }
+
+            const requestType = new RequestType<unknown, BatchRequestsResponse, void>("batchRequests");
+            const params: BatchRequestsParams = { requests: requests.map(request => ({ method: request.method, params: request.params })) };
+            if (!this.timing) {
+                const response = await this.connection.sendRequest(requestType, params);
+                for (let i = 0; i < requests.length; i++) {
+                    const { resolve, reject } = requests[i];
+                    const item = response.responses[i];
+                    if (item.error !== undefined) {
+                        reject(new Error(item.error));
+                    }
+                    else {
+                        resolve(item.result);
+                    }
+                }
+                return;
+            }
+
+            // Round-trip latency is measured here; byte counts approximate the wire
+            // payload via the serialized JSON. Server-side processing time is not
+            // carried on the response; it is retrieved separately (via a
+            // getServerTiming request) and folded in by getTimingInfo().
+            const bytesSent = params === undefined ? 0 : Buffer.byteLength(JSON.stringify(params), "utf-8");
+            const start = performance.now();
+            const result = await this.connection.sendRequest(requestType, params);
+            const roundTripMs = performance.now() - start;
+            this.timing.record({
+                method: "batchRequests",
+                roundTripMs,
+                bytesSent,
+                bytesReceived: result === undefined || result === null
+                    ? 0
+                    : Buffer.byteLength(JSON.stringify(result), "utf-8"),
+            });
+            for (let i = 0; i < requests.length; i++) {
+                const { resolve, reject } = requests[i];
+                const item = result.responses[i];
+                if (item.error !== undefined) {
+                    reject(new Error(item.error));
+                }
+                else {
+                    resolve(item.result);
+                }
+            }
+        }
+        catch (error) {
+            for (const { reject } of requests) reject(error);
+        }
+    }
+
+    private scheduleImmediateBatch(): void {
+        if (this.nextBatch) return;
+        this.nextBatch = setImmediate(this.doBatch.bind(this));
+    }
+
+    batchContext(): { [Symbol.dispose](): void; } {
+        this.nextBatch = "manual";
+        return {
+            [Symbol.dispose]: () => {
+                this.nextBatch = undefined;
+                this.scheduleImmediateBatch();
+            },
+        };
+    }
+
     async apiRequest<K extends keyof APIMethodInfo>(method: K, params: APIMethodInfo[K]["params"]): Promise<APIMethodInfo[K]["result"]> {
         if (!this.connected) {
             await this.connect();
@@ -166,28 +248,11 @@ export class Client {
             throw new Error("Connection not established");
         }
 
-        const requestType = new RequestType<unknown, APIMethodInfo[K]["result"], void>(method);
-        if (!this.timing) {
-            return this.connection.sendRequest(requestType, params);
-        }
-
-        // Round-trip latency is measured here; byte counts approximate the wire
-        // payload via the serialized JSON. Server-side processing time is not
-        // carried on the response; it is retrieved separately (via a
-        // getServerTiming request) and folded in by getTimingInfo().
-        const bytesSent = params === undefined ? 0 : Buffer.byteLength(JSON.stringify(params), "utf-8");
-        const start = performance.now();
-        const result = await this.connection.sendRequest(requestType, params);
-        const roundTripMs = performance.now() - start;
-        this.timing.record({
-            method,
-            roundTripMs,
-            bytesSent,
-            bytesReceived: result === undefined || result === null
-                ? 0
-                : Buffer.byteLength(JSON.stringify(result), "utf-8"),
+        const resultPromise = new Promise<APIMethodInfo[K]["result"]>((resolve, reject) => {
+            this.batchedRequests.push({ method, params, resolve, reject });
+            this.scheduleImmediateBatch();
         });
-        return result;
+        return resultPromise;
     }
 
     async apiRequestBinary<K extends SourceFileResponseMethod>(method: K, params: APIMethodInfo[K]["params"]): Promise<Uint8Array | undefined> {
