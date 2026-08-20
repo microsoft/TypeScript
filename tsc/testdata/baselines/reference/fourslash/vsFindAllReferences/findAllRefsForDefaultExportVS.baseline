@@ -1,0 +1,290 @@
+// === vsFindAllReferences ===
+// === /a.ts ===
+// export default function /*FIND ALL REFS*/[|f|]() {}
+
+// === /b.ts ===
+// import [|g|] from "./a";
+// [|g|]();
+
+[
+  {
+    "_vs_id": 0,
+    "_vs_kind": [
+      17
+    ],
+    "_vs_location": {
+      "uri": "file:///a.ts",
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 24
+        },
+        "end": {
+          "line": 0,
+          "character": 25
+        }
+      }
+    },
+    "_vs_definitionText": {
+      "Runs": [
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "function ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "method name",
+          "Text": "f",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": "(",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ")",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ":",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "whitespace",
+          "Text": " ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "void",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ";",
+          "_vs_type": "ClassifiedTextRun"
+        }
+      ],
+      "_vs_type": "ClassifiedTextElement"
+    },
+    "_vs_projectName": "/dev/null/inferred",
+    "_vs_containingType": ""
+  },
+  {
+    "_vs_id": 1,
+    "_vs_kind": [
+      17
+    ],
+    "_vs_location": {
+      "uri": "file:///b.ts",
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 7
+        },
+        "end": {
+          "line": 0,
+          "character": 8
+        }
+      }
+    },
+    "_vs_definitionText": {
+      "Runs": [
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": "(",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "text",
+          "Text": "alias",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ") ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "function ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "method name",
+          "Text": "f",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": "(",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ")",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ":",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "whitespace",
+          "Text": " ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "void",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ";",
+          "_vs_type": "ClassifiedTextRun"
+        }
+      ],
+      "_vs_type": "ClassifiedTextElement"
+    },
+    "_vs_projectName": "/dev/null/inferred",
+    "_vs_containingType": ""
+  },
+  {
+    "_vs_id": 2,
+    "_vs_definitionId": 1,
+    "_vs_kind": [
+      3
+    ],
+    "_vs_location": {
+      "uri": "file:///b.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  }
+]
+
+
+
+// === vsFindAllReferences ===
+// === /b.ts ===
+// import /*FIND ALL REFS*/[|g|] from "./a";
+// [|g|]();
+
+[
+  {
+    "_vs_id": 0,
+    "_vs_kind": [
+      17
+    ],
+    "_vs_location": {
+      "uri": "file:///b.ts",
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 7
+        },
+        "end": {
+          "line": 0,
+          "character": 8
+        }
+      }
+    },
+    "_vs_definitionText": {
+      "Runs": [
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": "(",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "text",
+          "Text": "alias",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ") ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "function ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "method name",
+          "Text": "f",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": "(",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ")",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ":",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "whitespace",
+          "Text": " ",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "keyword",
+          "Text": "void",
+          "_vs_type": "ClassifiedTextRun"
+        },
+        {
+          "ClassificationTypeName": "punctuation",
+          "Text": ";",
+          "_vs_type": "ClassifiedTextRun"
+        }
+      ],
+      "_vs_type": "ClassifiedTextElement"
+    },
+    "_vs_projectName": "/dev/null/inferred",
+    "_vs_containingType": ""
+  },
+  {
+    "_vs_id": 1,
+    "_vs_definitionId": 0,
+    "_vs_kind": [
+      3
+    ],
+    "_vs_location": {
+      "uri": "file:///b.ts",
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    },
+    "_vs_projectName": "/dev/null/inferred"
+  }
+]

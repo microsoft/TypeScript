@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/blockedScopeVariableNotUnused1.ts] ////
+
+=== blockedScopeVariableNotUnused1.ts ===
+export function foo() {
+>foo : () => void
+
+  const _fn = () => {
+>_fn : () => void
+>() => {    ;(() => numFilesSelected)()  } : () => void
+
+    ;(() => numFilesSelected)()
+>(() => numFilesSelected)() : number
+>(() => numFilesSelected) : () => number
+>() => numFilesSelected : () => number
+>numFilesSelected : 1
+  }
+
+  const numFilesSelected = 1
+>numFilesSelected : 1
+>1 : 1
+}
+

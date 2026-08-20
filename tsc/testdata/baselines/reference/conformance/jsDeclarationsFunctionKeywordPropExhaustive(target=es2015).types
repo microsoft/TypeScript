@@ -1,0 +1,554 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionKeywordPropExhaustive.ts] ////
+
+=== source.js ===
+function foo() {}
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+
+// properties
+foo.x = 1;
+>foo.x = 1 : 1
+>foo.x : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>x : number
+>1 : 1
+
+foo.y = 1;
+>foo.y = 1 : 1
+>foo.y : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>y : number
+>1 : 1
+
+// keywords
+foo.break = 1;
+>foo.break = 1 : 1
+>foo.break : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>break : number
+>1 : 1
+
+foo.case = 1;
+>foo.case = 1 : 1
+>foo.case : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>case : number
+>1 : 1
+
+foo.catch = 1;
+>foo.catch = 1 : 1
+>foo.catch : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>catch : number
+>1 : 1
+
+foo.class = 1;
+>foo.class = 1 : 1
+>foo.class : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>class : number
+>1 : 1
+
+foo.const = 1;
+>foo.const = 1 : 1
+>foo.const : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>const : number
+>1 : 1
+
+foo.continue = 1;
+>foo.continue = 1 : 1
+>foo.continue : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>continue : number
+>1 : 1
+
+foo.debugger = 1;
+>foo.debugger = 1 : 1
+>foo.debugger : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>debugger : number
+>1 : 1
+
+foo.default = 1;
+>foo.default = 1 : 1
+>foo.default : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>default : number
+>1 : 1
+
+foo.delete = 1;
+>foo.delete = 1 : 1
+>foo.delete : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>delete : number
+>1 : 1
+
+foo.do = 1;
+>foo.do = 1 : 1
+>foo.do : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>do : number
+>1 : 1
+
+foo.else = 1;
+>foo.else = 1 : 1
+>foo.else : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>else : number
+>1 : 1
+
+foo.enum = 1;
+>foo.enum = 1 : 1
+>foo.enum : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>enum : number
+>1 : 1
+
+foo.export = 1;
+>foo.export = 1 : 1
+>foo.export : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>export : number
+>1 : 1
+
+foo.extends = 1;
+>foo.extends = 1 : 1
+>foo.extends : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>extends : number
+>1 : 1
+
+foo.false = 1;
+>foo.false = 1 : 1
+>foo.false : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>false : number
+>1 : 1
+
+foo.finally = 1;
+>foo.finally = 1 : 1
+>foo.finally : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>finally : number
+>1 : 1
+
+foo.for = 1;
+>foo.for = 1 : 1
+>foo.for : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>for : number
+>1 : 1
+
+foo.function = 1;
+>foo.function = 1 : 1
+>foo.function : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>function : number
+>1 : 1
+
+foo.if = 1;
+>foo.if = 1 : 1
+>foo.if : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>if : number
+>1 : 1
+
+foo.import = 1;
+>foo.import = 1 : 1
+>foo.import : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>import : number
+>1 : 1
+
+foo.in = 1;
+>foo.in = 1 : 1
+>foo.in : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>in : number
+>1 : 1
+
+foo.instanceof = 1;
+>foo.instanceof = 1 : 1
+>foo.instanceof : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>instanceof : number
+>1 : 1
+
+foo.new = 1;
+>foo.new = 1 : 1
+>foo.new : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>new : number
+>1 : 1
+
+foo.null = 1;
+>foo.null = 1 : 1
+>foo.null : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>null : number
+>1 : 1
+
+foo.return = 1;
+>foo.return = 1 : 1
+>foo.return : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>return : number
+>1 : 1
+
+foo.super = 1;
+>foo.super = 1 : 1
+>foo.super : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>super : number
+>1 : 1
+
+foo.switch = 1;
+>foo.switch = 1 : 1
+>foo.switch : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>switch : number
+>1 : 1
+
+foo.this = 1;
+>foo.this = 1 : 1
+>foo.this : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>this : number
+>1 : 1
+
+foo.throw = 1;
+>foo.throw = 1 : 1
+>foo.throw : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>throw : number
+>1 : 1
+
+foo.true = 1;
+>foo.true = 1 : 1
+>foo.true : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>true : number
+>1 : 1
+
+foo.try = 1;
+>foo.try = 1 : 1
+>foo.try : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>try : number
+>1 : 1
+
+foo.typeof = 1;
+>foo.typeof = 1 : 1
+>foo.typeof : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>typeof : number
+>1 : 1
+
+foo.var = 1;
+>foo.var = 1 : 1
+>foo.var : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>var : number
+>1 : 1
+
+foo.void = 1;
+>foo.void = 1 : 1
+>foo.void : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>void : number
+>1 : 1
+
+foo.while = 1;
+>foo.while = 1 : 1
+>foo.while : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>while : number
+>1 : 1
+
+foo.with = 1;
+>foo.with = 1 : 1
+>foo.with : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>with : number
+>1 : 1
+
+foo.implements = 1;
+>foo.implements = 1 : 1
+>foo.implements : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>implements : number
+>1 : 1
+
+foo.interface = 1;
+>foo.interface = 1 : 1
+>foo.interface : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>interface : number
+>1 : 1
+
+foo.let = 1;
+>foo.let = 1 : 1
+>foo.let : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>let : number
+>1 : 1
+
+foo.package = 1;
+>foo.package = 1 : 1
+>foo.package : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>package : number
+>1 : 1
+
+foo.private = 1;
+>foo.private = 1 : 1
+>foo.private : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>private : number
+>1 : 1
+
+foo.protected = 1;
+>foo.protected = 1 : 1
+>foo.protected : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>protected : number
+>1 : 1
+
+foo.public = 1;
+>foo.public = 1 : 1
+>foo.public : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>public : number
+>1 : 1
+
+foo.static = 1;
+>foo.static = 1 : 1
+>foo.static : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>static : number
+>1 : 1
+
+foo.yield = 1;
+>foo.yield = 1 : 1
+>foo.yield : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>yield : number
+>1 : 1
+
+foo.abstract = 1;
+>foo.abstract = 1 : 1
+>foo.abstract : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>abstract : number
+>1 : 1
+
+foo.as = 1;
+>foo.as = 1 : 1
+>foo.as : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>as : number
+>1 : 1
+
+foo.asserts = 1;
+>foo.asserts = 1 : 1
+>foo.asserts : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>asserts : number
+>1 : 1
+
+foo.any = 1;
+>foo.any = 1 : 1
+>foo.any : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>any : number
+>1 : 1
+
+foo.async = 1;
+>foo.async = 1 : 1
+>foo.async : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>async : number
+>1 : 1
+
+foo.await = 1;
+>foo.await = 1 : 1
+>foo.await : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>await : number
+>1 : 1
+
+foo.boolean = 1;
+>foo.boolean = 1 : 1
+>foo.boolean : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>boolean : number
+>1 : 1
+
+foo.constructor = 1;
+>foo.constructor = 1 : 1
+>foo.constructor : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>constructor : number
+>1 : 1
+
+foo.declare = 1;
+>foo.declare = 1 : 1
+>foo.declare : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>declare : number
+>1 : 1
+
+foo.get = 1;
+>foo.get = 1 : 1
+>foo.get : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>get : number
+>1 : 1
+
+foo.infer = 1;
+>foo.infer = 1 : 1
+>foo.infer : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>infer : number
+>1 : 1
+
+foo.is = 1;
+>foo.is = 1 : 1
+>foo.is : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>is : number
+>1 : 1
+
+foo.keyof = 1;
+>foo.keyof = 1 : 1
+>foo.keyof : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>keyof : number
+>1 : 1
+
+foo.module = 1;
+>foo.module = 1 : 1
+>foo.module : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>module : number
+>1 : 1
+
+foo.namespace = 1;
+>foo.namespace = 1 : 1
+>foo.namespace : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>namespace : number
+>1 : 1
+
+foo.never = 1;
+>foo.never = 1 : 1
+>foo.never : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>never : number
+>1 : 1
+
+foo.readonly = 1;
+>foo.readonly = 1 : 1
+>foo.readonly : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>readonly : number
+>1 : 1
+
+foo.require = 1;
+>foo.require = 1 : 1
+>foo.require : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>require : number
+>1 : 1
+
+foo.number = 1;
+>foo.number = 1 : 1
+>foo.number : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>number : number
+>1 : 1
+
+foo.object = 1;
+>foo.object = 1 : 1
+>foo.object : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>object : number
+>1 : 1
+
+foo.set = 1;
+>foo.set = 1 : 1
+>foo.set : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>set : number
+>1 : 1
+
+foo.string = 1;
+>foo.string = 1 : 1
+>foo.string : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>string : number
+>1 : 1
+
+foo.symbol = 1;
+>foo.symbol = 1 : 1
+>foo.symbol : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>symbol : number
+>1 : 1
+
+foo.type = 1;
+>foo.type = 1 : 1
+>foo.type : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>type : number
+>1 : 1
+
+foo.undefined = 1;
+>foo.undefined = 1 : 1
+>foo.undefined : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>undefined : number
+>1 : 1
+
+foo.unique = 1;
+>foo.unique = 1 : 1
+>foo.unique : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>unique : number
+>1 : 1
+
+foo.unknown = 1;
+>foo.unknown = 1 : 1
+>foo.unknown : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>unknown : number
+>1 : 1
+
+foo.from = 1;
+>foo.from = 1 : 1
+>foo.from : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>from : number
+>1 : 1
+
+foo.global = 1;
+>foo.global = 1 : 1
+>foo.global : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>global : number
+>1 : 1
+
+foo.bigint = 1;
+>foo.bigint = 1 : 1
+>foo.bigint : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>bigint : number
+>1 : 1
+
+foo.of = 1;
+>foo.of = 1 : 1
+>foo.of : number
+>foo : { (): void; x: number; y: number; break: number; case: number; catch: number; class: number; const: number; continue: number; debugger: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; implements: number; interface: number; let: number; package: number; private: number; protected: number; public: number; static: number; yield: number; abstract: number; as: number; asserts: number; any: number; async: number; await: number; boolean: number; constructor: number; declare: number; get: number; infer: number; is: number; keyof: number; module: number; namespace: number; never: number; readonly: number; require: number; number: number; object: number; set: number; string: number; symbol: number; type: number; undefined: number; unique: number; unknown: number; from: number; global: number; bigint: number; of: number; }
+>of : number
+>1 : 1
+

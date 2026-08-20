@@ -1,0 +1,20 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/types.d.ts ===
+// <|export interface [|Config|] { enabled: boolean; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { Config, makeConfig } from "pkg";
+// let c: /*GOTO SOURCE DEF*/Config;
+// makeConfig();
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export { Config } from "./types.js";
+// <|export function [|makeConfig|]() { return { enabled: true }; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { Config, makeConfig } from "pkg";
+// let c: Config;
+// makeConfig/*GOTO SOURCE DEF*/();

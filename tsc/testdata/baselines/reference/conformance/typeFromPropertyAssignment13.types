@@ -1,0 +1,80 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment13.ts] ////
+
+=== module.js ===
+var Outer = {}
+>Outer : { Inner: { (): void; prototype: { m(): void; i: number; }; }; }
+>{} : { Inner: { (): void; prototype: { m(): void; i: number; }; }; }
+
+Outer.Inner = function() {}
+>Outer.Inner = function() {} : { (): void; prototype: { m(): void; i: number; }; }
+>Outer.Inner : { (): void; prototype: { m(): void; i: number; }; }
+>Outer : { Inner: { (): void; prototype: { m(): void; i: number; }; }; }
+>Inner : { (): void; prototype: { m(): void; i: number; }; }
+>function() {} : { (): void; prototype: { m(): void; i: number; }; }
+
+Outer.Inner.prototype = {
+>Outer.Inner.prototype = {    m() { },    i: 1} : { m(): void; i: number; }
+>Outer.Inner.prototype : { m(): void; i: number; }
+>Outer.Inner : { (): void; prototype: { m(): void; i: number; }; }
+>Outer : { Inner: { (): void; prototype: { m(): void; i: number; }; }; }
+>Inner : { (): void; prototype: { m(): void; i: number; }; }
+>prototype : { m(): void; i: number; }
+>{    m() { },    i: 1} : { m(): void; i: number; }
+
+    m() { },
+>m : () => void
+
+    i: 1
+>i : number
+>1 : 1
+}
+// incremental assignments still work
+Outer.Inner.prototype.j = 2
+>Outer.Inner.prototype.j = 2 : 2
+>Outer.Inner.prototype.j : any
+>Outer.Inner.prototype : { m(): void; i: number; }
+>Outer.Inner : { (): void; prototype: { m(): void; i: number; }; }
+>Outer : { Inner: { (): void; prototype: { m(): void; i: number; }; }; }
+>Inner : { (): void; prototype: { m(): void; i: number; }; }
+>prototype : { m(): void; i: number; }
+>j : any
+>2 : 2
+
+/** @type {string} */
+Outer.Inner.prototype.k;
+>Outer.Inner.prototype.k : any
+>Outer.Inner.prototype : { m(): void; i: number; }
+>Outer.Inner : { (): void; prototype: { m(): void; i: number; }; }
+>Outer : { Inner: { (): void; prototype: { m(): void; i: number; }; }; }
+>Inner : { (): void; prototype: { m(): void; i: number; }; }
+>prototype : { m(): void; i: number; }
+>k : any
+
+var inner = new Outer.Inner()
+>inner : any
+>new Outer.Inner() : any
+>Outer.Inner : { (): void; prototype: { m(): void; i: number; }; }
+>Outer : { Inner: { (): void; prototype: { m(): void; i: number; }; }; }
+>Inner : { (): void; prototype: { m(): void; i: number; }; }
+
+inner.m()
+>inner.m() : any
+>inner.m : any
+>inner : any
+>m : any
+
+inner.i
+>inner.i : any
+>inner : any
+>i : any
+
+inner.j
+>inner.j : any
+>inner : any
+>j : any
+
+inner.k
+>inner.k : any
+>inner : any
+>k : any
+

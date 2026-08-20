@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/jsFileCompilationBindDeepExportsAssignment.ts] ////
+
+=== a.js ===
+
+exports.a.b.c = 0;
+

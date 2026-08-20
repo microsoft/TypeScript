@@ -1,0 +1,416 @@
+// === Inlay Hints ===
+foo(1);
+    ^
+{
+  "position": {
+    "line": 1,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo('');
+    ^
+{
+  "position": {
+    "line": 2,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(true);
+    ^
+{
+  "position": {
+    "line": 3,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(() => 1);
+    ^
+{
+  "position": {
+    "line": 4,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(function () { return 1 });
+    ^
+{
+  "position": {
+    "line": 5,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo({});
+    ^
+{
+  "position": {
+    "line": 6,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo({ a: 1 });
+    ^
+{
+  "position": {
+    "line": 7,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo([]);
+    ^
+{
+  "position": {
+    "line": 8,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo([1]);
+    ^
+{
+  "position": {
+    "line": 9,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(foo);
+    ^
+{
+  "position": {
+    "line": 10,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo((1));
+    ^
+{
+  "position": {
+    "line": 11,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(foo(1));
+    ^
+{
+  "position": {
+    "line": 12,
+    "character": 4
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}
+
+foo(foo(1));
+        ^
+{
+  "position": {
+    "line": 12,
+    "character": 8
+  },
+  "label": [
+    {
+      "value": "v",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveAnyParameter2.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 14
+          },
+          "end": {
+            "line": 0,
+            "character": 15
+          }
+        }
+      }
+    },
+    {
+      "value": ":"
+    }
+  ],
+  "kind": 2,
+  "paddingRight": true
+}

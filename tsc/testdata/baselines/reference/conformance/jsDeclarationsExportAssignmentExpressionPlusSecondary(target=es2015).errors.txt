@@ -1,0 +1,28 @@
+index.js(5,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+index.js(12,16): error TS2339: Property 'Strings' does not exist on type '{ thing: string; also: string; desc: { item: string; }; }'.
+
+
+==== index.js (2 errors) ====
+    const Strings = {
+        a: "A",
+        b: "B"
+    };
+    module.exports = {
+    ~~~~~~~~~~~~~~~~~~
+        thing: "ok",
+    ~~~~~~~~~~~~~~~~
+        also: "ok",
+    ~~~~~~~~~~~~~~~
+        desc: {
+    ~~~~~~~~~~~
+            item: "ok"
+    ~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+    };
+    ~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    module.exports.Strings = Strings;
+                   ~~~~~~~
+!!! error TS2339: Property 'Strings' does not exist on type '{ thing: string; also: string; desc: { item: string; }; }'.
+    

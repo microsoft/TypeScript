@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /goToDefinitionShorthandObjectLiteralWithInterface.ts ===
+// interface Something {
+//     <|[|foo|]: string;|>
+// }
+// 
+// function makeSomething(<|[|foo|]: string|>): Something {
+//     return { f/*GOTO DEF*/oo };
+// }

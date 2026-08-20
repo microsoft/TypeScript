@@ -1,0 +1,18 @@
+// === documentHighlights ===
+// === /documentHighlightsTypeParameterInHeritageClause01.ts ===
+// interface I</*HIGHLIGHTS*/[|T|]> extends I<[|T|]>, [|T|] {
+// }
+
+
+
+// === documentHighlights ===
+// === /documentHighlightsTypeParameterInHeritageClause01.ts ===
+// interface I<[|T|]> extends I</*HIGHLIGHTS*/[|T|]>, [|T|] {
+// }
+
+
+
+// === documentHighlights ===
+// === /documentHighlightsTypeParameterInHeritageClause01.ts ===
+// interface I<[|T|]> extends I<[|T|]>, /*HIGHLIGHTS*/[|T|] {
+// }

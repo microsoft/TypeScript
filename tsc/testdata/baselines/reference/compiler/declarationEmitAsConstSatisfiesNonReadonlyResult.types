@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/declarationEmitAsConstSatisfiesNonReadonlyResult.ts] ////
+
+=== declarationEmitAsConstSatisfiesNonReadonlyResult.ts ===
+export const obj = {
+>obj : { readonly array: [{ readonly n: 1; }, { readonly n: 2; }]; }
+>{    array: [        { n: 1 },        { n: 2 }    ]} as const satisfies {array?: Readonly<{n: unknown}>[]} : { readonly array: [{ readonly n: 1; }, { readonly n: 2; }]; }
+>{    array: [        { n: 1 },        { n: 2 }    ]} as const : { readonly array: [{ readonly n: 1; }, { readonly n: 2; }]; }
+>{    array: [        { n: 1 },        { n: 2 }    ]} : { readonly array: [{ readonly n: 1; }, { readonly n: 2; }]; }
+
+    array: [
+>array : [{ readonly n: 1; }, { readonly n: 2; }]
+>[        { n: 1 },        { n: 2 }    ] : [{ readonly n: 1; }, { readonly n: 2; }]
+
+        { n: 1 },
+>{ n: 1 } : { readonly n: 1; }
+>n : 1
+>1 : 1
+
+        { n: 2 }
+>{ n: 2 } : { readonly n: 2; }
+>n : 2
+>2 : 2
+
+    ]
+} as const satisfies {array?: Readonly<{n: unknown}>[]}
+>array : Readonly<{ n: unknown; }>[] | undefined
+>n : unknown
+
+declare function foo<const T extends {array?: Readonly<{n: unknown}>[]}>(arg: T): T;
+>foo : <const T extends { array?: Readonly<{ n: unknown; }>[]; }>(arg: T) => T
+>array : Readonly<{ n: unknown; }>[] | undefined
+>n : unknown
+>arg : T
+
+export const call = foo({
+>call : { readonly array: [{ readonly n: 1; }, { readonly n: 2; }]; }
+>foo({    array: [        { n: 1 },        { n: 2 }    ]}) : { readonly array: [{ readonly n: 1; }, { readonly n: 2; }]; }
+>foo : <const T extends { array?: Readonly<{ n: unknown; }>[]; }>(arg: T) => T
+>{    array: [        { n: 1 },        { n: 2 }    ]} : { array: [{ n: 1; }, { n: 2; }]; }
+
+    array: [
+>array : [{ n: 1; }, { n: 2; }]
+>[        { n: 1 },        { n: 2 }    ] : [{ n: 1; }, { n: 2; }]
+
+        { n: 1 },
+>{ n: 1 } : { n: 1; }
+>n : 1
+>1 : 1
+
+        { n: 2 }
+>{ n: 2 } : { n: 2; }
+>n : 2
+>2 : 2
+
+    ]
+})

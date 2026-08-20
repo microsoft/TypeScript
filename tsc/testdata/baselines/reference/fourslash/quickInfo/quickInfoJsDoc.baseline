@@ -1,0 +1,475 @@
+// === QuickInfo ===
+=== /quickInfoJsDoc.ts ===
+// /**
+//  * A constant
+//  * @deprecated
+//  */
+// var foo = "foo";
+// 
+// /**
+//  * A function
+//  * @deprecated
+//  */
+// function fn() { }
+// 
+// /**
+//  * A class
+//  * @deprecated
+//  */
+// class C {
+//     /**
+//      * A field
+//      * @deprecated
+//      */
+//     field = "field";
+// 
+//     /**
+//      * A getter
+//      * @deprecated
+//      */
+//     get getter() {
+//         return;
+//     }
+// 
+//     /**
+//      * A method
+//      * @deprecated
+//      */
+//     m() { }
+// 
+//     get a() {
+//         this.field;
+//              ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) C.field: string
+// | ```
+// | A field
+// | 
+// | *@deprecated*
+// | ----------------------------------------------------------------------
+//         this.getter;
+//              ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (accessor) C.getter: void
+// | ```
+// | A getter
+// | 
+// | *@deprecated*
+// | ----------------------------------------------------------------------
+//         this.m;
+//              ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) C.m(): void
+// | ```
+// | A method
+// | 
+// | *@deprecated*
+// | ----------------------------------------------------------------------
+//         foo;
+//         ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var foo: string
+// | ```
+// | A constant
+// | 
+// | *@deprecated*
+// | ----------------------------------------------------------------------
+//         C/;
+//         ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class C
+// | ```
+// | A class
+// | 
+// | *@deprecated*
+// | ----------------------------------------------------------------------
+//         fn();
+//             ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*5*/.
+// | ----------------------------------------------------------------------
+// 
+//         return 1;
+//     }
+// 
+//     set a(value: number) {
+//         this.field;
+//              ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) C.field: string
+// | ```
+// | A field
+// | 
+// | *@deprecated*
+// | ----------------------------------------------------------------------
+//         this.getter;
+//              ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (accessor) C.getter: void
+// | ```
+// | A getter
+// | 
+// | *@deprecated*
+// | ----------------------------------------------------------------------
+//         this.m;
+//              ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) C.m(): void
+// | ```
+// | A method
+// | 
+// | *@deprecated*
+// | ----------------------------------------------------------------------
+//         foo;
+//         ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var foo: string
+// | ```
+// | A constant
+// | 
+// | *@deprecated*
+// | ----------------------------------------------------------------------
+//         C;
+//         ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class C
+// | ```
+// | A class
+// | 
+// | *@deprecated*
+// | ----------------------------------------------------------------------
+//         fn();
+//         ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function fn(): void
+// | ```
+// | A function
+// | 
+// | *@deprecated*
+// | ----------------------------------------------------------------------
+//     }
+// }
+[
+  {
+    "marker": {
+      "Position": 416,
+      "LSPosition": {
+        "line": 38,
+        "character": 18
+      },
+      "Name": "0",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) C.field: string\n```\nA field\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 38,
+          "character": 13
+        },
+        "end": {
+          "line": 38,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 437,
+      "LSPosition": {
+        "line": 39,
+        "character": 19
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(accessor) C.getter: void\n```\nA getter\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 39,
+          "character": 13
+        },
+        "end": {
+          "line": 39,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 453,
+      "LSPosition": {
+        "line": 40,
+        "character": 14
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) C.m(): void\n```\nA method\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 40,
+          "character": 13
+        },
+        "end": {
+          "line": 40,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 466,
+      "LSPosition": {
+        "line": 41,
+        "character": 11
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar foo: string\n```\nA constant\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 41,
+          "character": 8
+        },
+        "end": {
+          "line": 41,
+          "character": 11
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 477,
+      "LSPosition": {
+        "line": 42,
+        "character": 9
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\nA class\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 42,
+          "character": 8
+        },
+        "end": {
+          "line": 42,
+          "character": 9
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 492,
+      "LSPosition": {
+        "line": 43,
+        "character": 12
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 565,
+      "LSPosition": {
+        "line": 49,
+        "character": 18
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) C.field: string\n```\nA field\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 49,
+          "character": 13
+        },
+        "end": {
+          "line": 49,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 586,
+      "LSPosition": {
+        "line": 50,
+        "character": 19
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(accessor) C.getter: void\n```\nA getter\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 50,
+          "character": 13
+        },
+        "end": {
+          "line": 50,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 602,
+      "LSPosition": {
+        "line": 51,
+        "character": 14
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) C.m(): void\n```\nA method\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 51,
+          "character": 13
+        },
+        "end": {
+          "line": 51,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 615,
+      "LSPosition": {
+        "line": 52,
+        "character": 11
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar foo: string\n```\nA constant\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 52,
+          "character": 8
+        },
+        "end": {
+          "line": 52,
+          "character": 11
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 626,
+      "LSPosition": {
+        "line": 53,
+        "character": 9
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\nA class\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 53,
+          "character": 8
+        },
+        "end": {
+          "line": 53,
+          "character": 9
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 638,
+      "LSPosition": {
+        "line": 54,
+        "character": 10
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction fn(): void\n```\nA function\n\n*@deprecated*"
+      },
+      "range": {
+        "start": {
+          "line": 54,
+          "character": 8
+        },
+        "end": {
+          "line": 54,
+          "character": 10
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,12 @@
+// === Document Symbols ===
+// === /navigationBarItemsModules2.ts ===
+// <|namespace [|{| name: Test.A, kind: Namespace |}Test.A|] { }|>
+// 
+// <|namespace [|{| name: Test.B, kind: Namespace |}Test.B|] {
+//     <|class [|{| name: Foo, kind: Class |}Foo|] { }|>
+// }|>
+
+// === Details ===
+(Namespace) Test.A
+(Namespace) Test.B
+  (Class) Foo

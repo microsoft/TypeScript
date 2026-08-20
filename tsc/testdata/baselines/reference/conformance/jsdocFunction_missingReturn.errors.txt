@@ -1,0 +1,12 @@
+/a.js(1,12): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+/a.js(1,20): error TS1005: '}' expected.
+
+
+==== /a.js (2 errors) ====
+    /** @type {function(): number} */
+               ~~~~~~~~
+!!! error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+                       ~
+!!! error TS1005: '}' expected.
+    function f() {}
+    

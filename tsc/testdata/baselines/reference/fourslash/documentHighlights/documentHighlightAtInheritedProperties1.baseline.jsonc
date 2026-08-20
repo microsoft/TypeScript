@@ -1,0 +1,15 @@
+// === documentHighlights ===
+// === /file1.ts ===
+// interface interface1 extends interface1 {
+//    /*HIGHLIGHTS*/[|doStuff|](): void;
+//    propName: string;
+// }
+
+
+
+// === documentHighlights ===
+// === /file1.ts ===
+// interface interface1 extends interface1 {
+//    doStuff(): void;
+//    /*HIGHLIGHTS*/[|propName|]: string;
+// }

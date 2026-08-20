@@ -1,0 +1,25 @@
+dependentDestructuredVariablesNoCrash2.ts(3,9): error TS7010: '(Missing)', which lacks return-type annotation, implicitly has an 'any' return type.
+dependentDestructuredVariablesNoCrash2.ts(3,10): error TS1003: Identifier expected.
+dependentDestructuredVariablesNoCrash2.ts(3,11): error TS2488: Type 'string | undefined' must have a '[Symbol.iterator]()' method that returns an iterator.
+dependentDestructuredVariablesNoCrash2.ts(3,11): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+dependentDestructuredVariablesNoCrash2.ts(3,12): error TS7022: 'undefined' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+dependentDestructuredVariablesNoCrash2.ts(3,54): error TS2373: Parameter '[undefined, unknown]' cannot reference identifier 'undefined' declared after it.
+
+
+==== dependentDestructuredVariablesNoCrash2.ts (6 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/63091
+    
+    function ([undefined, unknown]: string | undefined = undefined)
+            
+!!! error TS7010: '(Missing)', which lacks return-type annotation, implicitly has an 'any' return type.
+             ~
+!!! error TS1003: Identifier expected.
+              ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'string | undefined' must have a '[Symbol.iterator]()' method that returns an iterator.
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+               ~~~~~~~~~
+!!! error TS7022: 'undefined' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                                                         ~~~~~~~~~
+!!! error TS2373: Parameter '[undefined, unknown]' cannot reference identifier 'undefined' declared after it.
+    

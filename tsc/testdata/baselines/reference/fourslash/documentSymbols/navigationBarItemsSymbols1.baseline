@@ -1,0 +1,13 @@
+// === Document Symbols ===
+// === /navigationBarItemsSymbols1.ts ===
+// <|class [|{| name: C, kind: Class |}C|] {
+//     <|[|{| name: [Symbol.isRegExp], kind: Property |}[Symbol.isRegExp]|] = 0;|>
+//     <|[|{| name: [Symbol.iterator], kind: Method |}[Symbol.iterator]|]() { }|>
+//     <|get [|{| name: [Symbol.isConcatSpreadable], kind: Property |}[Symbol.isConcatSpreadable]|]() { }|>
+// }|>
+
+// === Details ===
+(Class) C
+  (Property) [Symbol.isRegExp]
+  (Method) [Symbol.iterator]
+  (Property) [Symbol.isConcatSpreadable]

@@ -1,9 +1,0 @@
-// === findRenameLocations ===
-// === /tests/cases/fourslash/renameStringLiteralTypes4.ts ===
-// interface I {
-//     <|"[|Prop 1RENAME|]": string;|>
-// }
-// 
-// declare const fn: <K extends keyof I>(p: K) => void
-// 
-// fn("[|Prop 1RENAME|]"/*RENAME*/)

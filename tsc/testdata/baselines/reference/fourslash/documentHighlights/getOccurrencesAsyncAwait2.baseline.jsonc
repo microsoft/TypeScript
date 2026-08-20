@@ -1,0 +1,57 @@
+// === documentHighlights ===
+// === /getOccurrencesAsyncAwait2.ts ===
+// /*HIGHLIGHTS*/[|async|] function f() {
+//  [|await|] 100;
+//  [|await|] [|await|] 200;
+//  return [|await|] async function () {
+//    await 300;
+//  }
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAsyncAwait2.ts ===
+// [|async|] function f() {
+//  /*HIGHLIGHTS*/[|await|] 100;
+//  [|await|] [|await|] 200;
+//  return [|await|] async function () {
+//    await 300;
+//  }
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAsyncAwait2.ts ===
+// [|async|] function f() {
+//  [|await|] 100;
+//  /*HIGHLIGHTS*/[|await|] [|await|] 200;
+//  return [|await|] async function () {
+//    await 300;
+//  }
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAsyncAwait2.ts ===
+// [|async|] function f() {
+//  [|await|] 100;
+//  [|await|] /*HIGHLIGHTS*/[|await|] 200;
+//  return [|await|] async function () {
+//    await 300;
+//  }
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAsyncAwait2.ts ===
+// [|async|] function f() {
+//  [|await|] 100;
+//  [|await|] [|await|] 200;
+//  return /*HIGHLIGHTS*/[|await|] async function () {
+//    await 300;
+//  }
+// }

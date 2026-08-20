@@ -1,0 +1,90 @@
+// === QuickInfo ===
+=== /quickInfoForObjectBindingElementName04.ts ===
+// interface Options {
+//    /**
+//     * A description of 'a'
+//     */
+//     a: {
+//        /**
+//         * A description of 'b'
+//         */
+//        b: string;
+//    }
+// }
+// 
+// function f({ a, a: { b } }: Options) {
+//     a;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: {
+// |     b: string;
+// | }
+// | ```
+// | A description of 'a'
+// | ----------------------------------------------------------------------
+//     b;
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: string
+// | ```
+// | A description of 'b'
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 193,
+      "LSPosition": {
+        "line": 13,
+        "character": 5
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: {\n    b: string;\n}\n```\nA description of 'a'"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 4
+        },
+        "end": {
+          "line": 13,
+          "character": 5
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 200,
+      "LSPosition": {
+        "line": 14,
+        "character": 5
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: string\n```\nA description of 'b'"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 4
+        },
+        "end": {
+          "line": 14,
+          "character": 5
+        }
+      }
+    }
+  }
+]

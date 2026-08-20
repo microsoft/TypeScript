@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/packageDeduplicationDuplicateGlobals.ts] ////
+
+=== /src/index.ts ===
+import { useBar } from "bar";
+>useBar : () => ReturnType<typeof import(".pnpm/foo@1.0.0+globals@1.0.0/node_modules/foo").useFoo>
+
+import { useBaz } from "baz";
+>useBaz : () => ReturnType<typeof import(".pnpm/foo@1.0.0+globals@1.0.0/node_modules/foo").useFoo>
+
+const barResult = useBar();
+>barResult : string
+>useBar() : string
+>useBar : () => ReturnType<typeof import(".pnpm/foo@1.0.0+globals@1.0.0/node_modules/foo").useFoo>
+
+const bazResult = useBaz();
+>bazResult : string
+>useBaz() : string
+>useBaz : () => ReturnType<typeof import(".pnpm/foo@1.0.0+globals@1.0.0/node_modules/foo").useFoo>
+
+const x: string = myGlobal;
+>x : string
+>myGlobal : string
+
+=== /node_modules/.pnpm/foo@1.0.0+globals@1.0.0/node_modules/foo/index.d.ts ===
+import "globals";
+export declare function useFoo(): typeof myGlobal;
+>useFoo : () => typeof myGlobal
+>myGlobal : string
+
+=== /node_modules/.pnpm/foo@1.0.0+globals@1.0.0/node_modules/globals/index.d.ts ===
+declare var myGlobal: string;
+>myGlobal : string
+
+=== /node_modules/.pnpm/foo@1.0.0+globals@2.0.0/node_modules/foo/index.d.ts ===
+import "globals";
+export declare function useFoo(): typeof myGlobal;
+>useFoo : () => typeof myGlobal
+>myGlobal : string
+
+=== /node_modules/.pnpm/bar@1.0.0/node_modules/bar/index.d.ts ===
+import { useFoo } from "foo";
+>useFoo : () => typeof myGlobal
+
+export declare function useBar(): ReturnType<typeof useFoo>;
+>useBar : () => ReturnType<typeof useFoo>
+>useFoo : () => typeof myGlobal
+
+=== /node_modules/.pnpm/baz@1.0.0/node_modules/baz/index.d.ts ===
+import { useFoo } from "foo";
+>useFoo : () => typeof myGlobal
+
+export declare function useBaz(): ReturnType<typeof useFoo>;
+>useBaz : () => ReturnType<typeof useFoo>
+>useFoo : () => typeof myGlobal
+
+
+
+

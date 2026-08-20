@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/jsdoc/jsdocParseStarEquals.ts] ////
+
+=== a.js ===
+/** @param {...*=} args
+    @return {*=} */
+function f(...args) {
+>f : (...args?: any[] | undefined) => any | undefined
+>args : any[] | undefined
+
+    return null
+}
+
+/** @type *= */
+var x;
+>x : any
+
+
+/** @param {function():*=} f */
+function cbf(f) {
+>cbf : (f: Function) => void
+>f : Function
+}
+

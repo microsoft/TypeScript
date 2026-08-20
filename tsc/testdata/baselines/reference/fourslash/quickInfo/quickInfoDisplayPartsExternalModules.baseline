@@ -1,0 +1,607 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsExternalModules.ts ===
+// export namespace m {
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     var namespaceElemWithoutExport = 10;
+//         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var namespaceElemWithoutExport: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     export var namespaceElemWithExport = 10;
+//                ^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var namespaceElemWithExport: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// export var a = m;
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var a: typeof m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// export var b: typeof m;
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var b: typeof m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace m
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// export namespace m1.m2 {
+//                  ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                     ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace m2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     var namespaceElemWithoutExport = 10;
+//         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var namespaceElemWithoutExport: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     export var namespaceElemWithExport = 10;
+//                ^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var namespaceElemWithExport: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// export var x = m1.m2;
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var x: typeof m1.m2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace m1.m2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// export var y: typeof m1.m2;
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var y: typeof m1.m2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace m1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                         ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace m1.m2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 17,
+      "LSPosition": {
+        "line": 0,
+        "character": 17
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nnamespace m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 17
+        },
+        "end": {
+          "line": 0,
+          "character": 18
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 29,
+      "LSPosition": {
+        "line": 1,
+        "character": 8
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar namespaceElemWithoutExport: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 8
+        },
+        "end": {
+          "line": 1,
+          "character": 34
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 77,
+      "LSPosition": {
+        "line": 2,
+        "character": 15
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar namespaceElemWithExport: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 15
+        },
+        "end": {
+          "line": 2,
+          "character": 38
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 120,
+      "LSPosition": {
+        "line": 4,
+        "character": 11
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar a: typeof m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 11
+        },
+        "end": {
+          "line": 4,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 124,
+      "LSPosition": {
+        "line": 4,
+        "character": 15
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nnamespace m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 15
+        },
+        "end": {
+          "line": 4,
+          "character": 16
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 138,
+      "LSPosition": {
+        "line": 5,
+        "character": 11
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar b: typeof m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 11
+        },
+        "end": {
+          "line": 5,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 148,
+      "LSPosition": {
+        "line": 5,
+        "character": 21
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nnamespace m\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 21
+        },
+        "end": {
+          "line": 5,
+          "character": 22
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 168,
+      "LSPosition": {
+        "line": 6,
+        "character": 17
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nnamespace m1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 17
+        },
+        "end": {
+          "line": 6,
+          "character": 19
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 171,
+      "LSPosition": {
+        "line": 6,
+        "character": 20
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nnamespace m2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 20
+        },
+        "end": {
+          "line": 6,
+          "character": 22
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 184,
+      "LSPosition": {
+        "line": 7,
+        "character": 8
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar namespaceElemWithoutExport: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 8
+        },
+        "end": {
+          "line": 7,
+          "character": 34
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 232,
+      "LSPosition": {
+        "line": 8,
+        "character": 15
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar namespaceElemWithExport: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 15
+        },
+        "end": {
+          "line": 8,
+          "character": 38
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 275,
+      "LSPosition": {
+        "line": 10,
+        "character": 11
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar x: typeof m1.m2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 11
+        },
+        "end": {
+          "line": 10,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 279,
+      "LSPosition": {
+        "line": 10,
+        "character": 15
+      },
+      "Name": "13",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nnamespace m1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 15
+        },
+        "end": {
+          "line": 10,
+          "character": 17
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 282,
+      "LSPosition": {
+        "line": 10,
+        "character": 18
+      },
+      "Name": "14",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nnamespace m1.m2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 18
+        },
+        "end": {
+          "line": 10,
+          "character": 20
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 297,
+      "LSPosition": {
+        "line": 11,
+        "character": 11
+      },
+      "Name": "15",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar y: typeof m1.m2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 11
+        },
+        "end": {
+          "line": 11,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 307,
+      "LSPosition": {
+        "line": 11,
+        "character": 21
+      },
+      "Name": "16",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nnamespace m1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 21
+        },
+        "end": {
+          "line": 11,
+          "character": 23
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 310,
+      "LSPosition": {
+        "line": 11,
+        "character": 24
+      },
+      "Name": "17",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nnamespace m1.m2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 24
+        },
+        "end": {
+          "line": 11,
+          "character": 26
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

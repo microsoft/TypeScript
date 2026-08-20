@@ -1,0 +1,2035 @@
+// === VSQuickInfo ===
+=== /quickInfoDisplayPartsFunctionVS.ts ===
+// function foo(param: string, optionalParam?: string, paramWithInitializer = "hello", ...restParam: string[]) {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foo"
+// |     [punctuation] "("
+// |     [parameter name] "param"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ","
+// |     [whitespace] " "
+// |     [parameter name] "optionalParam"
+// |     [punctuation] "?"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ","
+// |     [whitespace] " "
+// |     [parameter name] "paramWithInitializer"
+// |     [punctuation] "?"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ","
+// |     [whitespace] " "
+// |     [punctuation] "..."
+// |     [parameter name] "restParam"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] "["
+// |     [punctuation] "]"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "void"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+// }
+// function foowithoverload(a: string): string;
+//          ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foowithoverload"
+// |     [punctuation] "("
+// |     [parameter name] "a"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+// function foowithoverload(a: number): number;
+//          ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foowithoverload"
+// |     [punctuation] "("
+// |     [parameter name] "a"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "number"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "number"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+// function foowithoverload(a: any): any {
+//          ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foowithoverload"
+// |     [punctuation] "("
+// |     [parameter name] "a"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "any"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "any"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+//     return a;
+// }
+// function foowith3overload(a: string): string;
+//          ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foowith3overload"
+// |     [punctuation] "("
+// |     [parameter name] "a"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+// function foowith3overload(a: number): number;
+//          ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foowith3overload"
+// |     [punctuation] "("
+// |     [parameter name] "a"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "number"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "number"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+// function foowith3overload(a: boolean): boolean;
+//          ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foowith3overload"
+// |     [punctuation] "("
+// |     [parameter name] "a"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "boolean"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "boolean"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+// function foowith3overload(a: any): any {
+//          ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foowith3overload"
+// |     [punctuation] "("
+// |     [parameter name] "a"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "any"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "any"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+//     return a;
+// }
+// foo("hello");
+// ^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foo"
+// |     [punctuation] "("
+// |     [parameter name] "param"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ","
+// |     [whitespace] " "
+// |     [parameter name] "optionalParam"
+// |     [punctuation] "?"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ","
+// |     [whitespace] " "
+// |     [parameter name] "paramWithInitializer"
+// |     [punctuation] "?"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ","
+// |     [whitespace] " "
+// |     [punctuation] "..."
+// |     [parameter name] "restParam"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] "["
+// |     [punctuation] "]"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "void"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+// foowithoverload("hello");
+// ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foowithoverload"
+// |     [punctuation] "("
+// |     [parameter name] "a"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+// foowithoverload(10);
+// ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foowithoverload"
+// |     [punctuation] "("
+// |     [parameter name] "a"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "number"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "number"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+// foowith3overload("hello");
+// ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foowith3overload"
+// |     [punctuation] "("
+// |     [parameter name] "a"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "string"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+// foowith3overload(10);
+// ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foowith3overload"
+// |     [punctuation] "("
+// |     [parameter name] "a"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "number"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "number"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+// foowith3overload(true);
+// ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ContainerElement (Style=Wrapped)
+// |   ImageElement { Guid: ae27a6b0-e345-4288-96df-5eaf394ee369, Id: 0x758 }
+// |   ClassifiedTextElement
+// |     [keyword] "function "
+// |     [method name] "foowith3overload"
+// |     [punctuation] "("
+// |     [parameter name] "a"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "boolean"
+// |     [punctuation] ")"
+// |     [punctuation] ":"
+// |     [whitespace] " "
+// |     [keyword] "boolean"
+// |     [punctuation] ";"
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 9,
+      "LSPosition": {
+        "line": 0,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 9
+        },
+        "end": {
+          "line": 0,
+          "character": 12
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foo",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "param",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ",",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "optionalParam",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "?",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ",",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "paramWithInitializer",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "?",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ",",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "...",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "restParam",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "[",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "]",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "void",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 121,
+      "LSPosition": {
+        "line": 2,
+        "character": 9
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowithoverload(a: string): string;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 9
+        },
+        "end": {
+          "line": 2,
+          "character": 24
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foowithoverload",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 166,
+      "LSPosition": {
+        "line": 3,
+        "character": 9
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowithoverload(a: number): number;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 9
+        },
+        "end": {
+          "line": 3,
+          "character": 24
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foowithoverload",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 211,
+      "LSPosition": {
+        "line": 4,
+        "character": 9
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowithoverload(a: any): any;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 9
+        },
+        "end": {
+          "line": 4,
+          "character": 24
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foowithoverload",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 267,
+      "LSPosition": {
+        "line": 7,
+        "character": 9
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: string): string;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 9
+        },
+        "end": {
+          "line": 7,
+          "character": 25
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foowith3overload",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 313,
+      "LSPosition": {
+        "line": 8,
+        "character": 9
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: number): number;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 9
+        },
+        "end": {
+          "line": 8,
+          "character": 25
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foowith3overload",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 359,
+      "LSPosition": {
+        "line": 9,
+        "character": 9
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: boolean): boolean;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 9
+        },
+        "end": {
+          "line": 9,
+          "character": 25
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foowith3overload",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "boolean",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "boolean",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 407,
+      "LSPosition": {
+        "line": 10,
+        "character": 9
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: any): any;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 9
+        },
+        "end": {
+          "line": 10,
+          "character": 25
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foowith3overload",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 455,
+      "LSPosition": {
+        "line": 13,
+        "character": 0
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 0
+        },
+        "end": {
+          "line": 13,
+          "character": 3
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foo",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "param",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ",",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "optionalParam",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "?",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ",",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "paramWithInitializer",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "?",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ",",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "...",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "restParam",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "[",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "]",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "void",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 469,
+      "LSPosition": {
+        "line": 14,
+        "character": 0
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowithoverload(a: string): string;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 0
+        },
+        "end": {
+          "line": 14,
+          "character": 15
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foowithoverload",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 495,
+      "LSPosition": {
+        "line": 15,
+        "character": 0
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowithoverload(a: number): number;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 0
+        },
+        "end": {
+          "line": 15,
+          "character": 15
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foowithoverload",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 516,
+      "LSPosition": {
+        "line": 16,
+        "character": 0
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: string): string;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 0
+        },
+        "end": {
+          "line": 16,
+          "character": 16
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foowith3overload",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "string",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 543,
+      "LSPosition": {
+        "line": 17,
+        "character": 0
+      },
+      "Name": "13",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: number): number;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 0
+        },
+        "end": {
+          "line": 17,
+          "character": 16
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foowith3overload",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "number",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 565,
+      "LSPosition": {
+        "line": 18,
+        "character": 0
+      },
+      "Name": "14",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: boolean): boolean;\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 0
+        },
+        "end": {
+          "line": 18,
+          "character": 16
+        }
+      },
+      "_vs_rawContent": {
+        "Style": 0,
+        "Elements": [
+          {
+            "ImageId": {
+              "Guid": "ae27a6b0-e345-4288-96df-5eaf394ee369",
+              "Id": 1880,
+              "_vs_type": "ImageId"
+            },
+            "_vs_type": "ImageElement"
+          },
+          {
+            "Runs": [
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "function ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "foowith3overload",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "a",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "boolean",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "boolean",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ";",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        ],
+        "_vs_type": "ContainerElement"
+      }
+    }
+  }
+]

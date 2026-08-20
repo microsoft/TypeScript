@@ -1,0 +1,28 @@
+// === Smart Selection ===
+/**
+ * @constructor
+ * @param {/**/number} data
+ */
+function Foo(data) {
+}
+
+           number      ↲
+
+   @param {number} data↲
+•  ↲
+
+   @constructor
+ * @param {number} data↲
+•  ↲
+
+/**
+ * @constructor
+ * @param {number} data
+ */↲
+
+/**
+ * @constructor
+ * @param {number} data
+ */
+function Foo(data) {
+}

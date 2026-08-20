@@ -1,0 +1,13 @@
+declarationEmitSetAccessorNoParameter.ts(2,7): error TS1049: A 'set' accessor must have exactly one parameter.
+declarationEmitSetAccessorNoParameter.ts(2,7): error TS7032: Property 'foo' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+
+
+==== declarationEmitSetAccessorNoParameter.ts (2 errors) ====
+    class C {
+      set foo() { }
+          ~~~
+!!! error TS1049: A 'set' accessor must have exactly one parameter.
+          ~~~
+!!! error TS7032: Property 'foo' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+    }
+    

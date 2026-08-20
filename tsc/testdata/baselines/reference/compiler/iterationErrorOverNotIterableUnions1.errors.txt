@@ -1,0 +1,36 @@
+iterationErrorOverNotIterableUnions1.ts(6,20): error TS2488: Type 'A[] | B' must have a '[Symbol.iterator]()' method that returns an iterator.
+iterationErrorOverNotIterableUnions1.ts(10,27): error TS2488: Type 'A[] | B' must have a '[Symbol.iterator]()' method that returns an iterator.
+iterationErrorOverNotIterableUnions1.ts(14,7): error TS2488: Type 'A[] | B' must have a '[Symbol.iterator]()' method that returns an iterator.
+iterationErrorOverNotIterableUnions1.ts(17,13): error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type 'A[] | B'.
+  Property '0' does not exist on type 'A[] | B'.
+
+
+==== iterationErrorOverNotIterableUnions1.ts (4 errors) ====
+    type A = { a: string };
+    type B = { b: string };
+    
+    declare const data: A[] | B;
+    
+    for (const item of data) {
+                       ~~~~
+!!! error TS2488: Type 'A[] | B' must have a '[Symbol.iterator]()' method that returns an iterator.
+        item.b;
+    }
+    
+    for (const ignoredItem of data) {
+                              ~~~~
+!!! error TS2488: Type 'A[] | B' must have a '[Symbol.iterator]()' method that returns an iterator.
+        ignoredItem.b;
+    }
+    
+    const [el] = data;
+          ~~~~
+!!! error TS2488: Type 'A[] | B' must have a '[Symbol.iterator]()' method that returns an iterator.
+    el.b;
+    
+    const el2 = data[0];
+                ~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type 'A[] | B'.
+!!! error TS7053:   Property '0' does not exist on type 'A[] | B'.
+    el2.b;
+    

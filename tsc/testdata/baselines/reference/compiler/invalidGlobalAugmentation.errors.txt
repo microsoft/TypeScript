@@ -1,0 +1,19 @@
+globals.ts(1,9): error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
+react-native.ts(2,16): error TS2664: Invalid module name in augmentation, module 'react-native' cannot be found.
+
+
+==== globals.ts (1 errors) ====
+    declare global {
+            ~~~~~~
+!!! error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
+      const __FOO__: any;
+    }
+    
+==== react-native.ts (1 errors) ====
+    export {}
+    declare module "react-native" {
+                   ~~~~~~~~~~~~~~
+!!! error TS2664: Invalid module name in augmentation, module 'react-native' cannot be found.
+      const __FOO__: any;
+    }
+    

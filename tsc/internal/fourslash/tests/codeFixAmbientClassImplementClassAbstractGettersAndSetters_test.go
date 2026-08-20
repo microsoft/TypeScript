@@ -1,0 +1,44 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixAmbientClassImplementClassAbstractGettersAndSetters(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `abstract class A {
+    abstract get a(): string;
+    abstract set a(newName: string);
+
+    abstract get b(): number;
+
+    abstract set c(arg: number | string);
+}
+
+declare class C implements A {}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Implement interface 'A'",
+		NewFileContent: `abstract class A {
+    abstract get a(): string;
+    abstract set a(newName: string);
+
+    abstract get b(): number;
+
+    abstract set c(arg: number | string);
+}
+
+declare class C implements A {
+    get a(): string;
+    set a(newName: string);
+    get b(): number;
+    set c(arg: string | number);
+}`,
+		Index: 0,
+	})
+}

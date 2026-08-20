@@ -1,0 +1,16 @@
+// === Call Hierarchy ===
+╭ name: /main.ts
+├ kind: file
+├ file: /main.ts
+├ span:
+│ ╭ /main.ts:1:1-1:16
+│ │ 1: (function() {})
+│ │    ^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /main.ts:1:1-1:1
+│ │ 1: (function() {})
+│ │    <
+│ ╰
+├ incoming: none
+╰ outgoing: none

@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod6_Js.ts] ////
+
+//// [a.js]
+class A {
+	m() {
+		/**
+		 * @type object
+		 */
+		this.foo = arguments;
+	}
+}
+
+
+
+
+//// [a.d.ts]
+declare class A {
+    /**
+     * @type object
+     */
+    foo: object;
+    m(): void;
+}

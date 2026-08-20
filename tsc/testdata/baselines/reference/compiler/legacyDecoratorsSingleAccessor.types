@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/legacyDecoratorsSingleAccessor.ts] ////
+
+=== legacyDecoratorsSingleAccessor.ts ===
+declare function dec(target: any, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor;
+>dec : (target: any, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor
+>target : any
+>propertyKey : string
+>descriptor : PropertyDescriptor
+
+// Test case for single getter without setter
+class C1 {
+>C1 : C1
+
+    @dec get accessor() { return 1; }
+>dec : (target: any, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor
+>accessor : number
+>1 : 1
+}
+
+// Test case for single setter without getter
+class C2 {
+>C2 : C2
+
+    @dec set accessor(value: number) { }
+>dec : (target: any, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor
+>accessor : number
+>value : number
+}
+

@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/jsxSpreadWithAssertion.tsx] ////
+
+=== jsxSpreadWithAssertion.tsx ===
+declare const EntryTextDialog: any;
+>EntryTextDialog : Symbol(EntryTextDialog, Decl(jsxSpreadWithAssertion.tsx, 0, 13))
+
+const c = <EntryTextDialog
+>c : Symbol(c, Decl(jsxSpreadWithAssertion.tsx, 2, 5))
+>EntryTextDialog : Symbol(EntryTextDialog, Decl(jsxSpreadWithAssertion.tsx, 0, 13))
+
+    {...{
+        first: 0,
+>first : Symbol(first, Decl(jsxSpreadWithAssertion.tsx, 3, 9))
+
+        foo: 1,
+>foo : Symbol(foo, Decl(jsxSpreadWithAssertion.tsx, 4, 17))
+
+        bar: 2 as any,
+>bar : Symbol(bar, Decl(jsxSpreadWithAssertion.tsx, 5, 15))
+
+        baz: 3,
+>baz : Symbol(baz, Decl(jsxSpreadWithAssertion.tsx, 6, 22))
+
+        last: 4
+>last : Symbol(last, Decl(jsxSpreadWithAssertion.tsx, 7, 15))
+
+    }}
+/>
+

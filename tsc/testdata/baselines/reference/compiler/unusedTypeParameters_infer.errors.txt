@@ -1,0 +1,8 @@
+unusedTypeParameters_infer.ts(1,44): error TS6196: 'U' is declared but never used.
+
+
+==== unusedTypeParameters_infer.ts (1 errors) ====
+    type Length<T> = T extends ArrayLike<infer U> ? number : never;
+                                               ~
+!!! error TS6196: 'U' is declared but never used.
+    

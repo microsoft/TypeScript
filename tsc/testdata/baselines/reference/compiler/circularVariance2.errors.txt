@@ -1,0 +1,38 @@
+circularVariance2.ts(17,1): error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<unknown>'.
+  Type 'unknown' is not assignable to type 'string'.
+circularVariance2.ts(24,1): error TS2322: Type 'Foo<unknown>' is not assignable to type 'Foo<string>'.
+  Type 'unknown' is not assignable to type 'string'.
+
+
+==== circularVariance2.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/tsc/pull/4820
+    
+    type Bar<U> = (x: Baz<U[]>) => void;
+    
+    type Baz<V> = {
+        value: Foo<V[]>;
+    }
+    
+    type Foo<T> = {
+        x: T;
+        f: Bar<T>;
+    }
+    
+    declare let bar1: Bar<unknown>;
+    declare let bar2: Bar<string>;
+    
+    bar1 = bar2;  // Error
+    ~~~~
+!!! error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<unknown>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+    bar2 = bar1;
+    
+    declare let foo1: Foo<unknown>;
+    declare let foo2: Foo<string>;
+    
+    foo1 = foo2;
+    foo2 = foo1;  // Error
+    ~~~~
+!!! error TS2322: Type 'Foo<unknown>' is not assignable to type 'Foo<string>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+    

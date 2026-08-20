@@ -1,0 +1,12 @@
+// === goToImplementation ===
+// === /goToImplementationShorthandPropertyAssignment_02.ts ===
+// --- (line: 6) skipped ---
+//          hello
+//     };
+// 
+//     <|function [|hello|]() {}|>
+// }
+// 
+// function whatever(x: Foo) {
+//      x.h/*GOTO IMPL*/ello();
+// }

@@ -1,0 +1,9 @@
+// === Document Symbols ===
+// === /foo.js ===
+// /** <|@typedef {(number|string)} [|{| name: NumberLike, kind: Class |}NumberLike|]|> */
+// /** @typedef {(string|number)} */
+// const <|[|{| name: x, kind: Variable |}x|] = 0|>;
+
+// === Details ===
+(Class) NumberLike
+(Variable) x

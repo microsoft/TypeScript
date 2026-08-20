@@ -1,0 +1,40 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports43_expando_functions_5(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+// @lib: es2019
+// @Filename: /code.ts
+function foo(): void {}
+// x already exists, so do not generate code for 'x'
+foo.x = 1;
+foo.y = 1;
+namespace foo {
+  export let x = 42;
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Annotate types of properties expando function in a namespace",
+		NewFileContent: `function foo(): void {}
+declare namespace foo {
+    export var y: number;
+}
+// x already exists, so do not generate code for 'x'
+foo.x = 1;
+foo.y = 1;
+namespace foo {
+  export let x = 42;
+}`,
+		Index: 0,
+	})
+}

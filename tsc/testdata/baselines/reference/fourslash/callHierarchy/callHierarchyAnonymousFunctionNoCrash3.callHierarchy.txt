@@ -1,0 +1,40 @@
+// === Call Hierarchy ===
+╭ name: default
+├ kind: function
+├ file: /other.ts
+├ span:
+│ ╭ /other.ts:1:1-1:29
+│ │ 1: export default function() {}
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /other.ts:1:8-1:15
+│ │ 1: export default function() {}
+│ │           ^^^^^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: foo
+│ │ ├ kind: function
+│ │ ├ file: /main.ts
+│ │ ├ span:
+│ │ │ ╭ /main.ts:3:1-5:2
+│ │ │ │ 3: function foo() {
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     bar();
+│ │ │ │    ^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /main.ts:3:10-3:13
+│ │ │ │ 3: function foo() {
+│ │ │ │             ^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /main.ts:4:5-4:8
+│ │ │ 4:     bar();
+│ │ │        ^^^
+│ ╰ ╰
+╰ outgoing: none

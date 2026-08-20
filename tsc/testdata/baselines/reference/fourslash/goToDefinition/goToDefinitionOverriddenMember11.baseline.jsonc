@@ -1,0 +1,57 @@
+// === goToDefinition ===
+// === /a.js ===
+// class Foo {
+//     m() {}
+// }
+// class Bar extends Foo {
+//     /** @over/*GOTO DEF*/ride see {@link https://test.com} description */
+//     m() {}
+// }
+
+
+
+// === goToDefinition ===
+// === /a.js ===
+// class Foo {
+//     m() {}
+// }
+// class Bar extends Foo {
+//     /** @override se/*GOTO DEF*/e {@link https://test.com} description */
+//     m() {}
+// }
+
+
+
+// === goToDefinition ===
+// === /a.js ===
+// class Foo {
+//     m() {}
+// }
+// class Bar extends Foo {
+//     /** @override see {@li/*GOTO DEF*/nk https://test.com} description */
+//     m() {}
+// }
+
+
+
+// === goToDefinition ===
+// === /a.js ===
+// class Foo {
+//     m() {}
+// }
+// class Bar extends Foo {
+//     /** @override see {@link https://test.c/*GOTO DEF*/om} description */
+//     m() {}
+// }
+
+
+
+// === goToDefinition ===
+// === /a.js ===
+// class Foo {
+//     m() {}
+// }
+// class Bar extends Foo {
+//     /** @override see {@link https://test.com} /*GOTO DEF*/description */
+//     m() {}
+// }

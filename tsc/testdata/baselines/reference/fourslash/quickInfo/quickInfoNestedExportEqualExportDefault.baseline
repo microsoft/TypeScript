@@ -1,0 +1,76 @@
+// === QuickInfo ===
+=== /quickInfoNestedExportEqualExportDefault.ts ===
+// export = (state, messages) => {
+//    export default {
+//    ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) (Anonymous function).default: {}
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) (Anonymous function).default: {}
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//    }
+// }
+[
+  {
+    "marker": {
+      "Position": 41,
+      "LSPosition": {
+        "line": 1,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) (Anonymous function).default: {}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 3
+        },
+        "end": {
+          "line": 1,
+          "character": 9
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 49,
+      "LSPosition": {
+        "line": 1,
+        "character": 17
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) (Anonymous function).default: {}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 10
+        },
+        "end": {
+          "line": 1,
+          "character": 17
+        }
+      }
+    }
+  }
+]

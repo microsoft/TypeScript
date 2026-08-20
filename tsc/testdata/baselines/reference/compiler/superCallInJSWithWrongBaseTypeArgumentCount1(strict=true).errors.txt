@@ -1,0 +1,41 @@
+error TS5055: Cannot write file 'b.js' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+b.js(3,25): error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+b.js(9,27): error TS8011: Type arguments can only be used in TypeScript files.
+b.js(15,25): error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+b.js(15,27): error TS8011: Type arguments can only be used in TypeScript files.
+
+
+!!! error TS5055: Cannot write file 'b.js' because it would overwrite input file.
+!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+==== a.ts (0 errors) ====
+    export class A<T> {}
+    
+==== b.js (4 errors) ====
+    import { A } from './a.js';
+    
+    export class B1 extends A {
+                            ~
+!!! error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+        constructor() {
+            super();
+        }
+    }
+    
+    export class B2 extends A<string> {
+                              ~~~~~~
+!!! error TS8011: Type arguments can only be used in TypeScript files.
+        constructor() {
+            super();
+        }
+    }
+    
+    export class B3 extends A<string, string> {
+                            ~~~~~~~~~~~~~~~~~
+!!! error TS8026: Expected A<T> type arguments; provide these with an '@extends' tag.
+                              ~~~~~~~~~~~~~~
+!!! error TS8011: Type arguments can only be used in TypeScript files.
+        constructor() {
+            super();
+        }
+    }

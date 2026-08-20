@@ -1,0 +1,95 @@
+test.js(15,5): error TS2322: Type 'string' is not assignable to type '"done"'.
+test.js(16,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
+test.js(57,17): error TS2339: Property 'x' does not exist on type 'Thing'.
+test.js(61,17): error TS2339: Property 'x' does not exist on type 'Thing'.
+
+
+==== test.js (4 errors) ====
+    /** @typedef {{
+        status: 'done'
+        m(n: number): void
+    }} DoneStatus */
+    
+    // property assignment
+    var ns = {}
+    /** @type {DoneStatus} */
+    ns.x = {
+        status: 'done',
+        m(n) { }
+    }
+    
+    ns.x = {
+        status: 'done',
+        ~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type '"done"'.
+!!! related TS6500 test.js:2:5: The expected type comes from property 'status' which is declared here on type 'DoneStatus'
+        m(n) { }
+          ~
+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
+    }
+    ns.x
+    
+    
+    // this-property assignment
+    class Thing {
+        constructor() {
+            /** @type {DoneStatus} */
+            this.s = {
+                status: 'done',
+                m(n) { }
+            }
+        }
+    
+        fail() {
+            this.s = {
+                status: 'done',
+                m(n) { }
+            }
+        }
+    }
+    
+    // exports-property assignment
+    
+    /** @type {DoneStatus} */
+    exports.x = {
+        status: "done",
+        m(n) { }
+    }
+    exports.x
+    
+    /** @type {DoneStatus} */
+    module.exports.y = {
+        status: "done",
+        m(n) { }
+    }
+    module.exports.y
+    
+    // prototype-property assignment
+    /** @type {DoneStatus} */
+    Thing.prototype.x = {
+                    ~
+!!! error TS2339: Property 'x' does not exist on type 'Thing'.
+        status: 'done',
+        m(n) { }
+    }
+    Thing.prototype.x
+                    ~
+!!! error TS2339: Property 'x' does not exist on type 'Thing'.
+    
+    // prototype assignment
+    function F() {
+    }
+    /** @type {DoneStatus} */
+    F.prototype = {
+        status: "done",
+        m(n) { }
+    }
+    
+==== mod.js (0 errors) ====
+    // module.exports assignment
+    /** @type {{ status: 'done', m(n: number): void }} */
+    module.exports = {
+        status: "done",
+        m(n) { }
+    }
+    

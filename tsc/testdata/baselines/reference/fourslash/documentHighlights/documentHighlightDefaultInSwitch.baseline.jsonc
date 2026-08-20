@@ -1,0 +1,21 @@
+// === documentHighlights ===
+// === /documentHighlightDefaultInSwitch.ts ===
+// const foo = 'foo';
+// [|switch|] (foo) {
+//    /*HIGHLIGHTS*/[|case|] 'foo':
+//        [|break|];
+//    [|default|]:
+//        [|break|];
+// }
+
+
+
+// === documentHighlights ===
+// === /documentHighlightDefaultInSwitch.ts ===
+// const foo = 'foo';
+// [|switch|] (foo) {
+//    [|case|] 'foo':
+//        [|break|];
+//    [|default|]:
+//        /*HIGHLIGHTS*/[|break|];
+// }

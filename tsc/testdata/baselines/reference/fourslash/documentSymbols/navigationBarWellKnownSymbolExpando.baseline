@@ -1,0 +1,9 @@
+// === Document Symbols ===
+// === /navigationBarWellKnownSymbolExpando.ts ===
+// <|function [|{| name: f, kind: Function |}f|]() {}|>
+// <|f[[|{| name: Symbol.iterator, kind: Variable |}Symbol.iterator|]]|> = <|[|{| name: <function>, kind: Function |}|]function() {}|>
+
+// === Details ===
+(Function) f
+  (Variable) Symbol.iterator
+    (Function) <function>

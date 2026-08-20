@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/invalidJsdocType.ts] ////
+
+=== a.js ===
+/** @type {@import("a").Type} */
+let x;
+>x : Symbol(x, Decl(a.js, 1, 3))
+

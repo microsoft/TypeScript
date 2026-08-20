@@ -1,0 +1,27 @@
+// === findAllReferences ===
+// === /referencesForInheritedProperties8.ts ===
+// interface C extends D {
+//     /*FIND ALL REFS*/[|propD|]: number;
+// }
+// interface D extends C {
+//     [|propD|]: string;
+//     propC: number;
+// }
+// var d: D;
+// d.[|propD|];
+// d.propC;
+
+
+
+// === findAllReferences ===
+// === /referencesForInheritedProperties8.ts ===
+// interface C extends D {
+//     propD: number;
+// }
+// interface D extends C {
+//     propD: string;
+//     /*FIND ALL REFS*/[|propC|]: number;
+// }
+// var d: D;
+// d.propD;
+// d.[|propC|];

@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/duplicatePackage_peerDependencies.ts] ////
+
+=== /src/a.ts ===
+import { Foo as FooA } from "a";
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 8))
+>FooA : Symbol(FooA, Decl(a.ts, 0, 8))
+
+import { Foo as FooB } from "b";
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 8))
+>FooB : Symbol(FooB, Decl(a.ts, 1, 8))
+
+// Both should be the same type because the packages are deduplicated.
+let x: FooA = new FooB();
+>x : Symbol(x, Decl(a.ts, 4, 3))
+>FooA : Symbol(FooA, Decl(a.ts, 0, 8))
+>FooB : Symbol(FooB, Decl(a.ts, 1, 8))
+
+let y: FooB = new FooA();
+>y : Symbol(y, Decl(a.ts, 5, 3))
+>FooB : Symbol(FooB, Decl(a.ts, 1, 8))
+>FooA : Symbol(FooA, Decl(a.ts, 0, 8))
+
+=== /node_modules/a/index.d.ts ===
+export { Foo } from "foo";
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 8))
+
+=== /node_modules/a/node_modules/foo/index.d.ts ===
+export class Foo { private x; }
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 0))
+>x : Symbol(Foo.x, Decl(index.d.ts, 0, 18))
+
+=== /node_modules/b/index.d.ts ===
+export { Foo } from "foo";
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 8))
+
+=== /node_modules/b/node_modules/foo/index.d.ts ===
+export class Foo { private x; }
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 0))
+>x : Symbol(Foo.x, Decl(index.d.ts, 0, 18))
+

@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/classFieldsPrivatePropertyAccessSameNameAsClass.ts] ////
+
+=== classFieldsPrivatePropertyAccessSameNameAsClass.ts ===
+export enum MyEnum {
+>MyEnum : Symbol(MyEnum, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 0, 0))
+
+    Foo = "FooValue",
+>Foo : Symbol(MyEnum.Foo, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 0, 20))
+
+    Bar = "BarValue",
+>Bar : Symbol(MyEnum.Bar, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 1, 21))
+}
+
+// Private fields on a class trigger class alias creation at target < ES2022.
+// Enum member access with same name as class should not be renamed.
+export class Foo {
+>Foo : Symbol(Foo, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 3, 1))
+
+    #private = 1;
+>#private : Symbol(Foo.#private, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 7, 18))
+
+    static instance = new Foo();
+>instance : Symbol(Foo.instance, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 8, 17))
+>Foo : Symbol(Foo, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 3, 1))
+
+    type: MyEnum = MyEnum.Foo;
+>type : Symbol(Foo.type, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 9, 32))
+>MyEnum : Symbol(MyEnum, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 0, 0))
+>MyEnum.Foo : Symbol(MyEnum.Foo, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 0, 20))
+>MyEnum : Symbol(MyEnum, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 0, 0))
+>Foo : Symbol(MyEnum.Foo, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 0, 20))
+
+    getType(): MyEnum {
+>getType : Symbol(Foo.getType, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 10, 30))
+>MyEnum : Symbol(MyEnum, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 0, 0))
+
+        return this.type || MyEnum.Foo;
+>this.type : Symbol(Foo.type, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 9, 32))
+>this : Symbol(Foo, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 3, 1))
+>type : Symbol(Foo.type, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 9, 32))
+>MyEnum.Foo : Symbol(MyEnum.Foo, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 0, 20))
+>MyEnum : Symbol(MyEnum, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 0, 0))
+>Foo : Symbol(MyEnum.Foo, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 0, 20))
+    }
+
+    getPrivate() {
+>getPrivate : Symbol(Foo.getPrivate, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 14, 5))
+
+        return this.#private;
+>this.#private : Symbol(Foo.#private, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 7, 18))
+>this : Symbol(Foo, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 3, 1))
+    }
+}
+
+// Property access with same name as class in static context
+declare const obj: { Bar: number };
+>obj : Symbol(obj, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 22, 13))
+>Bar : Symbol(Bar, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 22, 20))
+
+export class Bar {
+>Bar : Symbol(Bar, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 22, 35))
+
+    #data = 0;
+>#data : Symbol(Bar.#data, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 24, 18))
+
+    static ref = new Bar();
+>ref : Symbol(Bar.ref, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 25, 14))
+>Bar : Symbol(Bar, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 22, 35))
+
+    static prop = obj.Bar;
+>prop : Symbol(Bar.prop, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 26, 27))
+>obj.Bar : Symbol(Bar, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 22, 20))
+>obj : Symbol(obj, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 22, 13))
+>Bar : Symbol(Bar, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 22, 20))
+}
+
+// Class expression with private fields and self-reference
+declare const obj2: { Baz: string };
+>obj2 : Symbol(obj2, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 31, 13))
+>Baz : Symbol(Baz, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 31, 21))
+
+const MyClass = class Baz {
+>MyClass : Symbol(MyClass, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 33, 5))
+>Baz : Symbol(Baz, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 33, 15))
+
+    #field = 1;
+>#field : Symbol(Baz.#field, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 33, 27))
+
+    static instance = new Baz();
+>instance : Symbol(Baz.instance, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 34, 15))
+>Baz : Symbol(Baz, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 33, 15))
+
+    prop = obj2.Baz;
+>prop : Symbol(Baz.prop, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 35, 32))
+>obj2.Baz : Symbol(Baz, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 31, 21))
+>obj2 : Symbol(obj2, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 31, 13))
+>Baz : Symbol(Baz, Decl(classFieldsPrivatePropertyAccessSameNameAsClass.ts, 31, 21))
+}
+

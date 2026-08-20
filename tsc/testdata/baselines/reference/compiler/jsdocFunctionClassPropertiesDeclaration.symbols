@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/jsdocFunctionClassPropertiesDeclaration.ts] ////
+
+=== /a.js ===
+/**
+ * @param {number | undefined} x
+ * @param {number | undefined} y
+ */
+export function Foo(x, y) {
+>Foo : Symbol(Foo, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 4, 20))
+>y : Symbol(y, Decl(a.js, 4, 22))
+
+    if (!(this instanceof Foo)) {
+>Foo : Symbol(Foo, Decl(a.js, 0, 0))
+
+        return new Foo(x, y);
+>Foo : Symbol(Foo, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 4, 20))
+>y : Symbol(y, Decl(a.js, 4, 22))
+    }
+    this.x = x;
+>x : Symbol(x, Decl(a.js, 4, 20))
+
+    this.y = y;
+>y : Symbol(y, Decl(a.js, 4, 22))
+}
+

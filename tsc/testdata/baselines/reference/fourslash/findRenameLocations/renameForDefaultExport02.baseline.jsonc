@@ -1,0 +1,57 @@
+// === findRenameLocations ===
+// === /renameForDefaultExport02.ts ===
+// export default function /*RENAME*/[|DefaultExportedFunctionRENAME|]() {
+//     return [|DefaultExportedFunctionRENAME|]
+// }
+// /**
+//  *  Commenting DefaultExportedFunction
+//  */
+// 
+// var x: typeof [|DefaultExportedFunctionRENAME|];
+// 
+// var y = [|DefaultExportedFunctionRENAME|]();
+
+
+
+// === findRenameLocations ===
+// === /renameForDefaultExport02.ts ===
+// export default function [|DefaultExportedFunctionRENAME|]() {
+//     return /*RENAME*/[|DefaultExportedFunctionRENAME|]
+// }
+// /**
+//  *  Commenting DefaultExportedFunction
+//  */
+// 
+// var x: typeof [|DefaultExportedFunctionRENAME|];
+// 
+// var y = [|DefaultExportedFunctionRENAME|]();
+
+
+
+// === findRenameLocations ===
+// === /renameForDefaultExport02.ts ===
+// export default function [|DefaultExportedFunctionRENAME|]() {
+//     return [|DefaultExportedFunctionRENAME|]
+// }
+// /**
+//  *  Commenting DefaultExportedFunction
+//  */
+// 
+// var x: typeof /*RENAME*/[|DefaultExportedFunctionRENAME|];
+// 
+// var y = [|DefaultExportedFunctionRENAME|]();
+
+
+
+// === findRenameLocations ===
+// === /renameForDefaultExport02.ts ===
+// export default function [|DefaultExportedFunctionRENAME|]() {
+//     return [|DefaultExportedFunctionRENAME|]
+// }
+// /**
+//  *  Commenting DefaultExportedFunction
+//  */
+// 
+// var x: typeof [|DefaultExportedFunctionRENAME|];
+// 
+// var y = /*RENAME*/[|DefaultExportedFunctionRENAME|]();

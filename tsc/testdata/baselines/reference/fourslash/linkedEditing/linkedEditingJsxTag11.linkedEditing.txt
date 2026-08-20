@@ -1,0 +1,124 @@
+// === Linked Editing ===
+=== /customElements.tsx ===
+const jsx = <[|/*0*/fbt:enum|] knownProp="accepted"
+    unknownProp="rejected">
+</[|/*0*/fbt:enum|]>;
+
+const customElement = <[|/*1*/custom-element|]></[|/*1*/custom-element|]>;
+
+const standardElement = 
+   <[|/*2*/Link|] href="/hello" passHref>
+       <[|/*3*/Button|] component="a">
+           Next
+       </[|/*3*/Button|]>
+   </[|/*2*/Link|]>;
+
+=== 0 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 0,
+        "character": 13
+      },
+      "end": {
+        "line": 0,
+        "character": 21
+      }
+    },
+    {
+      "start": {
+        "line": 2,
+        "character": 2
+      },
+      "end": {
+        "line": 2,
+        "character": 10
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+=== 1 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 4,
+        "character": 23
+      },
+      "end": {
+        "line": 4,
+        "character": 37
+      }
+    },
+    {
+      "start": {
+        "line": 4,
+        "character": 40
+      },
+      "end": {
+        "line": 4,
+        "character": 54
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+=== 2 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 7,
+        "character": 4
+      },
+      "end": {
+        "line": 7,
+        "character": 8
+      }
+    },
+    {
+      "start": {
+        "line": 11,
+        "character": 5
+      },
+      "end": {
+        "line": 11,
+        "character": 9
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+=== 3 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 8,
+        "character": 8
+      },
+      "end": {
+        "line": 8,
+        "character": 14
+      }
+    },
+    {
+      "start": {
+        "line": 10,
+        "character": 9
+      },
+      "end": {
+        "line": 10,
+        "character": 15
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+

@@ -1,0 +1,11 @@
+// === Document Symbols ===
+// === /navigationBarImports.ts ===
+// import <|[|{| name: a, kind: Variable |}a|]|>, {<|[|{| name: b, kind: Variable |}b|]|>} from "m";
+// <|import [|{| name: c, kind: Variable |}c|] = require("m");|>
+// import <|* as [|{| name: d, kind: Variable |}d|]|> from "m";
+
+// === Details ===
+(Variable) a
+(Variable) b
+(Variable) c
+(Variable) d

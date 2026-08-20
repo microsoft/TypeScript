@@ -1,0 +1,11 @@
+// === findAllReferences ===
+// === /isDefinitionSingleReference.ts ===
+// function /*FIND ALL REFS*/[|f|]() {}
+// [|f|]();
+
+
+
+// === findAllReferences ===
+// === /isDefinitionSingleReference.ts ===
+// function [|f|]() {}
+// /*FIND ALL REFS*/[|f|]();

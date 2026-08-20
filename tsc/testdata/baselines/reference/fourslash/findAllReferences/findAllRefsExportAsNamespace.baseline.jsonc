@@ -1,0 +1,36 @@
+// === findAllReferences ===
+// === /b.ts ===
+// import { [|f|] } from "a";
+
+// === /c.ts ===
+// A.[|f|]();
+
+// === /node_modules/a/index.d.ts ===
+// export function /*FIND ALL REFS*/[|f|](): void;
+// export as namespace A;
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import { /*FIND ALL REFS*/[|f|] } from "a";
+
+// === /c.ts ===
+// A.[|f|]();
+
+// === /node_modules/a/index.d.ts ===
+// export function [|f|](): void;
+// export as namespace A;
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// import { [|f|] } from "a";
+
+// === /c.ts ===
+// A./*FIND ALL REFS*/[|f|]();
+
+// === /node_modules/a/index.d.ts ===
+// export function [|f|](): void;
+// export as namespace A;

@@ -1,0 +1,24 @@
+incompatibleExports1.ts(16,5): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+==== incompatibleExports1.ts (1 errors) ====
+    declare module "foo" { 
+        export interface x { a: string } 
+        interface y { a: Date }
+        export = y;
+    }
+     
+    declare module "baz" {
+        export namespace a {
+            export var b: number;
+        }
+     
+        namespace c {
+            export var c: string;
+        }
+     
+        export = c;
+        ~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    }
+    

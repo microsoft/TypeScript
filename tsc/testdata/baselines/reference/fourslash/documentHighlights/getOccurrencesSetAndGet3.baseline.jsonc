@@ -1,0 +1,29 @@
+// === documentHighlights ===
+// === /getOccurrencesSetAndGet3.ts ===
+// --- (line: 12) skipped ---
+//         return undefined;
+//     }
+// 
+//     public /*HIGHLIGHTS*/[|set|] get(g: any) {
+//     }
+// 
+//     public [|get|] get(): any {
+//         return undefined;
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSetAndGet3.ts ===
+// --- (line: 12) skipped ---
+//         return undefined;
+//     }
+// 
+//     public [|set|] get(g: any) {
+//     }
+// 
+//     public /*HIGHLIGHTS*/[|get|] get(): any {
+//         return undefined;
+//     }
+// }

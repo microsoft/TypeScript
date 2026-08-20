@@ -1,0 +1,17 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// [|export default function() { return "ok"; }|]
+
+// === /home/src/workspaces/project/index.ts ===
+// import /*GOTO SOURCE DEF*/myFunc from "pkg";
+// myFunc();
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// [|export default function() { return "ok"; }|]
+
+// === /home/src/workspaces/project/index.ts ===
+// import myFunc from "pkg";
+// myFunc/*GOTO SOURCE DEF*/();

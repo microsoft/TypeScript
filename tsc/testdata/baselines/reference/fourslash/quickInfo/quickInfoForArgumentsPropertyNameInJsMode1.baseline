@@ -1,0 +1,81 @@
+// === QuickInfo ===
+=== /a.js ===
+// const foo = {
+//     f1: (params) => { }
+// }
+// 
+// function f2(x) {
+//          ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function f2(x: any): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//    foo.f1({ x, arguments: [] });
+// }
+// 
+// f2('');
+// ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function f2(x: any): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 50,
+      "LSPosition": {
+        "line": 4,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction f2(x: any): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 9
+        },
+        "end": {
+          "line": 4,
+          "character": 11
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 94,
+      "LSPosition": {
+        "line": 8,
+        "character": 0
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction f2(x: any): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 0
+        },
+        "end": {
+          "line": 8,
+          "character": 2
+        }
+      }
+    }
+  }
+]

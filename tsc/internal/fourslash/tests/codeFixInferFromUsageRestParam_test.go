@@ -1,0 +1,26 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixInferFromUsageRestParam(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @strict: false
+// @noImplicitAny: true
+function f(a: number, [|...rest |]){
+    a; rest;
+}
+f(1);
+f(2, "s1");
+f(3, "s1", "s2");
+f(3, "s1", "s2", "s3", "s4");`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyRangeAfterCodeFix(t, `...rest: string[]`, false, 0, 0)
+}

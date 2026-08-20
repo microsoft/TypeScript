@@ -1,0 +1,84 @@
+// === QuickInfo ===
+=== /destructuredInterfaceJSDocWithRename.ts ===
+// 
+// interface FooBar {
+//     /** foo comment */
+//     foo: number;
+//     /** bar comment */
+//     bar: string;
+// }
+// 
+// declare const fubar: FooBar;
+// 
+// const {foo: myFoo, bar: myBar} = fubar;
+//             ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const myFoo: number
+// | ```
+// | foo comment
+// | ----------------------------------------------------------------------
+//                         ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const myBar: string
+// | ```
+// | bar comment
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 145,
+      "LSPosition": {
+        "line": 10,
+        "character": 12
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst myFoo: number\n```\nfoo comment"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 12
+        },
+        "end": {
+          "line": 10,
+          "character": 17
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 157,
+      "LSPosition": {
+        "line": 10,
+        "character": 24
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst myBar: string\n```\nbar comment"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 24
+        },
+        "end": {
+          "line": 10,
+          "character": 29
+        }
+      }
+    }
+  }
+]

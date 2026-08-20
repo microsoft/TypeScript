@@ -1,0 +1,1448 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsTypeParameterInClass.ts ===
+// class c<T> {
+//       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T in c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     constructor(a: T) {
+//     ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | constructor c<T>(a: T): c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                 ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T in c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+//     method<U>(a: U, b: T) {
+//     ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) c<T>.method<U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in c<T>.method<U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in c<T>.method<U>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                        ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T in c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         return a;
+//                ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var cInstance = new c("Hello");
+//     ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var cInstance: c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | constructor c<string>(a: string): c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var cVal = c;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var cVal: typeof c
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// cInstance.method("hello", "cello");
+// ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var cInstance: c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) c<string>.method<"hello">(a: "hello", b: string): "hello"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// class c2<T extends c<string>> {
+//       ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c2<T extends c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T extends c<string> in c2<T extends c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     constructor(a: T) {
+//     ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | constructor c2<T extends c<string>>(a: T): c2<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                 ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T extends c<string> in c2<T extends c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+//     method<U extends c<string>>(a: U, b: T) {
+//     ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) c2<T extends c<string>>.method<U extends c<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends c<string> in c2<T extends c<string>>.method<U extends c<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c<T>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                 ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                    ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends c<string> in c2<T extends c<string>>.method<U extends c<string>>(a: U, b: T): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: T
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) T extends c<string> in c2<T extends c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         return a;
+//                ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var cInstance1 = new c2(cInstance);
+//     ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var cInstance1: c2<c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | constructor c2<c<string>>(a: c<string>): c2<c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                         ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var cInstance: c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// var cVal2 = c2;
+//     ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var cVal2: typeof c2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class c2<T extends c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// cInstance1.method(cInstance, cInstance);
+// ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var cInstance1: c2<c<string>>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//            ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) c2<c<string>>.method<c<string>>(a: c<string>, b: c<string>): c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                   ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var cInstance: c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                              ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var cInstance: c<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 6,
+      "LSPosition": {
+        "line": 0,
+        "character": 6
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 6
+        },
+        "end": {
+          "line": 0,
+          "character": 7
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 8,
+      "LSPosition": {
+        "line": 0,
+        "character": 8
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T in c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 8
+        },
+        "end": {
+          "line": 0,
+          "character": 9
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 17,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconstructor c<T>(a: T): c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 15
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 29,
+      "LSPosition": {
+        "line": 1,
+        "character": 16
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 16
+        },
+        "end": {
+          "line": 1,
+          "character": 17
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 32,
+      "LSPosition": {
+        "line": 1,
+        "character": 19
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T in c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 19
+        },
+        "end": {
+          "line": 1,
+          "character": 20
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 47,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) c<T>.method<U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 10
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 54,
+      "LSPosition": {
+        "line": 3,
+        "character": 11
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in c<T>.method<U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 11
+        },
+        "end": {
+          "line": 3,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 57,
+      "LSPosition": {
+        "line": 3,
+        "character": 14
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 14
+        },
+        "end": {
+          "line": 3,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 60,
+      "LSPosition": {
+        "line": 3,
+        "character": 17
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in c<T>.method<U>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 17
+        },
+        "end": {
+          "line": 3,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 63,
+      "LSPosition": {
+        "line": 3,
+        "character": 20
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 20
+        },
+        "end": {
+          "line": 3,
+          "character": 21
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 66,
+      "LSPosition": {
+        "line": 3,
+        "character": 23
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T in c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 23
+        },
+        "end": {
+          "line": 3,
+          "character": 24
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 86,
+      "LSPosition": {
+        "line": 4,
+        "character": 15
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 15
+        },
+        "end": {
+          "line": 4,
+          "character": 16
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 101,
+      "LSPosition": {
+        "line": 7,
+        "character": 4
+      },
+      "Name": "13",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar cInstance: c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 4
+        },
+        "end": {
+          "line": 7,
+          "character": 13
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 117,
+      "LSPosition": {
+        "line": 7,
+        "character": 20
+      },
+      "Name": "14",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconstructor c<string>(a: string): c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 20
+        },
+        "end": {
+          "line": 7,
+          "character": 21
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 133,
+      "LSPosition": {
+        "line": 8,
+        "character": 4
+      },
+      "Name": "15",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar cVal: typeof c\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 4
+        },
+        "end": {
+          "line": 8,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 140,
+      "LSPosition": {
+        "line": 8,
+        "character": 11
+      },
+      "Name": "16",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 11
+        },
+        "end": {
+          "line": 8,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 143,
+      "LSPosition": {
+        "line": 9,
+        "character": 0
+      },
+      "Name": "17",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar cInstance: c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 0
+        },
+        "end": {
+          "line": 9,
+          "character": 9
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 153,
+      "LSPosition": {
+        "line": 9,
+        "character": 10
+      },
+      "Name": "18",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) c<string>.method<\"hello\">(a: \"hello\", b: string): \"hello\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 10
+        },
+        "end": {
+          "line": 9,
+          "character": 16
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 185,
+      "LSPosition": {
+        "line": 10,
+        "character": 6
+      },
+      "Name": "19",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c2<T extends c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 6
+        },
+        "end": {
+          "line": 10,
+          "character": 8
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 188,
+      "LSPosition": {
+        "line": 10,
+        "character": 9
+      },
+      "Name": "20",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T extends c<string> in c2<T extends c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 9
+        },
+        "end": {
+          "line": 10,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 198,
+      "LSPosition": {
+        "line": 10,
+        "character": 19
+      },
+      "Name": "21",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 19
+        },
+        "end": {
+          "line": 10,
+          "character": 20
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 215,
+      "LSPosition": {
+        "line": 11,
+        "character": 4
+      },
+      "Name": "22",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconstructor c2<T extends c<string>>(a: T): c2<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 4
+        },
+        "end": {
+          "line": 11,
+          "character": 15
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 227,
+      "LSPosition": {
+        "line": 11,
+        "character": 16
+      },
+      "Name": "23",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 16
+        },
+        "end": {
+          "line": 11,
+          "character": 17
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 230,
+      "LSPosition": {
+        "line": 11,
+        "character": 19
+      },
+      "Name": "24",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T extends c<string> in c2<T extends c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 19
+        },
+        "end": {
+          "line": 11,
+          "character": 20
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 245,
+      "LSPosition": {
+        "line": 13,
+        "character": 4
+      },
+      "Name": "25",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) c2<T extends c<string>>.method<U extends c<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 4
+        },
+        "end": {
+          "line": 13,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 252,
+      "LSPosition": {
+        "line": 13,
+        "character": 11
+      },
+      "Name": "26",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends c<string> in c2<T extends c<string>>.method<U extends c<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 11
+        },
+        "end": {
+          "line": 13,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 262,
+      "LSPosition": {
+        "line": 13,
+        "character": 21
+      },
+      "Name": "27",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c<T>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 21
+        },
+        "end": {
+          "line": 13,
+          "character": 22
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 273,
+      "LSPosition": {
+        "line": 13,
+        "character": 32
+      },
+      "Name": "28",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 32
+        },
+        "end": {
+          "line": 13,
+          "character": 33
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 276,
+      "LSPosition": {
+        "line": 13,
+        "character": 35
+      },
+      "Name": "29",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends c<string> in c2<T extends c<string>>.method<U extends c<string>>(a: U, b: T): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 35
+        },
+        "end": {
+          "line": 13,
+          "character": 36
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 279,
+      "LSPosition": {
+        "line": 13,
+        "character": 38
+      },
+      "Name": "30",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: T\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 38
+        },
+        "end": {
+          "line": 13,
+          "character": 39
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 282,
+      "LSPosition": {
+        "line": 13,
+        "character": 41
+      },
+      "Name": "31",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) T extends c<string> in c2<T extends c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 41
+        },
+        "end": {
+          "line": 13,
+          "character": 42
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 302,
+      "LSPosition": {
+        "line": 14,
+        "character": 15
+      },
+      "Name": "32",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 15
+        },
+        "end": {
+          "line": 14,
+          "character": 16
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 317,
+      "LSPosition": {
+        "line": 17,
+        "character": 4
+      },
+      "Name": "33",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar cInstance1: c2<c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 4
+        },
+        "end": {
+          "line": 17,
+          "character": 14
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 334,
+      "LSPosition": {
+        "line": 17,
+        "character": 21
+      },
+      "Name": "34",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconstructor c2<c<string>>(a: c<string>): c2<c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 21
+        },
+        "end": {
+          "line": 17,
+          "character": 23
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 337,
+      "LSPosition": {
+        "line": 17,
+        "character": 24
+      },
+      "Name": "35",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar cInstance: c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 24
+        },
+        "end": {
+          "line": 17,
+          "character": 33
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 353,
+      "LSPosition": {
+        "line": 18,
+        "character": 4
+      },
+      "Name": "36",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar cVal2: typeof c2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 4
+        },
+        "end": {
+          "line": 18,
+          "character": 9
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 361,
+      "LSPosition": {
+        "line": 18,
+        "character": 12
+      },
+      "Name": "37",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass c2<T extends c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 12
+        },
+        "end": {
+          "line": 18,
+          "character": 14
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 365,
+      "LSPosition": {
+        "line": 19,
+        "character": 0
+      },
+      "Name": "38",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar cInstance1: c2<c<string>>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 0
+        },
+        "end": {
+          "line": 19,
+          "character": 10
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 376,
+      "LSPosition": {
+        "line": 19,
+        "character": 11
+      },
+      "Name": "39",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) c2<c<string>>.method<c<string>>(a: c<string>, b: c<string>): c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 11
+        },
+        "end": {
+          "line": 19,
+          "character": 17
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 383,
+      "LSPosition": {
+        "line": 19,
+        "character": 18
+      },
+      "Name": "40",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar cInstance: c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 18
+        },
+        "end": {
+          "line": 19,
+          "character": 27
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 394,
+      "LSPosition": {
+        "line": 19,
+        "character": 29
+      },
+      "Name": "41",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar cInstance: c<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 29
+        },
+        "end": {
+          "line": 19,
+          "character": 38
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

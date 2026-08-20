@@ -1,0 +1,69 @@
+===================================================================
+JsFile: declarationMapWithInlineSourceMap.js
+mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25NYXBXaXRoSW5saW5lU291cmNlTWFwLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiZGVjbGFyYXRpb25NYXBXaXRoSW5saW5lU291cmNlTWFwLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE1BQU0sQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMifQ==
+sourceRoot: 
+sources: declarationMapWithInlineSourceMap.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:declarationMapWithInlineSourceMap.js
+sourceFile:declarationMapWithInlineSourceMap.ts
+-------------------------------------------------------------------
+>>>export const x = 1;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^
+6 >              ^^^
+7 >                 ^
+8 >                  ^
+9 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >export
+3 >       
+4 >       const 
+5 >             x
+6 >               = 
+7 >                 1
+8 >                  ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+5 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
+6 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+7 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
+8 >Emitted(1, 20) Source(1, 20) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25NYXBXaXRoSW5saW5lU291cmNlTWFwLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiZGVjbGFyYXRpb25NYXBXaXRoSW5saW5lU291cmNlTWFwLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE1BQU0sQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMifQ=====================================================================
+JsFile: declarationMapWithInlineSourceMap.d.ts
+mapUrl: declarationMapWithInlineSourceMap.d.ts.map
+sourceRoot: 
+sources: declarationMapWithInlineSourceMap.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:declarationMapWithInlineSourceMap.d.ts
+sourceFile:declarationMapWithInlineSourceMap.ts
+-------------------------------------------------------------------
+>>>export declare const x = 1;
+1 >
+2 >^^^^^^^^^^^^^^^
+3 >               ^^^^^^
+4 >                     ^
+5 >                      ^^^^
+6 >                          ^
+7 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >export 
+3 >               const 
+4 >                     x
+5 >                       = 1
+6 >                          ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 16) Source(1, 8) + SourceIndex(0)
+3 >Emitted(1, 22) Source(1, 14) + SourceIndex(0)
+4 >Emitted(1, 23) Source(1, 15) + SourceIndex(0)
+5 >Emitted(1, 27) Source(1, 19) + SourceIndex(0)
+6 >Emitted(1, 28) Source(1, 20) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=declarationMapWithInlineSourceMap.d.ts.map

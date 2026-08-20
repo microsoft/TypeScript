@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/salsa/controlFlowJSClassProperty.ts] ////
+
+=== controlFlowJSClassProperty.js ===
+export class C {
+>C : C
+
+  name = "CompileDiagnostic";
+>name : string
+>"CompileDiagnostic" : "CompileDiagnostic"
+
+  /**
+   * @param {[number, number] | undefined} position
+   */
+  constructor(position) {
+>position : [number, number] | undefined
+
+    if (position) {
+>position : [number, number] | undefined
+
+      this.position = position;
+>this.position = position : [number, number]
+>this.position : any
+>this : this
+>position : any
+>position : [number, number]
+    }
+  }
+}
+var c = new C([1, 2]);
+>c : C
+>new C([1, 2]) : C
+>C : typeof C
+>[1, 2] : [number, number]
+>1 : 1
+>2 : 2
+
+c.position;
+>c.position : [number, number] | undefined
+>c : C
+>position : [number, number] | undefined
+

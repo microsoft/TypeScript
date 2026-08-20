@@ -1,0 +1,367 @@
+UseCaseSensitiveFileNames: true
+//// [/project-a/private.ts] *new* 
+export const symbolA = 'some-symbol';
+console.log(symbolA);
+//// [/project-a/public.ts] *new* 
+export { symbolA } from './private';
+//// [/project-a/tsconfig.json] *new* 
+{
+	"extends": "../tsconfig.base.json",
+	"include": ["*"]
+}
+//// [/project-b/public.ts] *new* 
+export const symbolB = 'symbol-b';
+//// [/project-b/tsconfig.json] *new* 
+{
+	"extends": "../tsconfig.base.json",
+	"include": ["*"]
+}
+//// [/project-c/index.ts] *new* 
+import { symbolB } from '../project-b/public';
+import { symbolA } from '../project-a/public';
+console.log(symbolB);
+console.log(symbolA);
+
+//// [/project-c/tsconfig.json] *new* 
+{
+	"extends": "../tsconfig.base.json",
+	"include": ["*"],
+	"references": [
+		{ "path": "../project-a" },
+		{ "path": "../project-b" },
+	]
+}
+//// [/tsconfig.base.json] *new* 
+{
+	"compilerOptions": {
+		"rootDir": ".",
+		"outDir": "target",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"composite": true,
+		"declaration": true,
+		"strict": true
+	},
+	"include": []
+}
+//// [/tsconfig.json] *new* 
+{
+	"extends": "./tsconfig.base.json",
+	"references": [
+		{ "path": "project-a" },
+		{ "path": "project-b" },
+		{ "path": "project-c" },
+	]
+}
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///project-a/private.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export const symbolA = 'some-symbol';\nconsole.log(symbolA);"
+    }
+  }
+}
+
+Projects::
+  [/project-a/tsconfig.json] *new*
+    /project-a/private.ts  
+    /project-a/public.ts   
+  [/tsconfig.json] *new*
+Open Files::
+  [/project-a/private.ts] *new*
+    /project-a/tsconfig.json  (default) 
+Config::
+  [/project-a/tsconfig.json] *new*
+    RetainingProjects:
+      /project-a/tsconfig.json  
+    RetainingOpenFiles:
+      /project-a/private.ts  
+  [/tsconfig.base.json] *new*
+    RetainingConfigs:
+      /project-a/tsconfig.json  
+Config File Names::
+  [/project-a/private.ts] *new*
+    NearestConfigFileName: /project-a/tsconfig.json
+    Ancestors:
+      /project-a/tsconfig.json  /tsconfig.json 
+      /tsconfig.json             
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///project-a/private.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 13
+    },
+    "context": {
+      "includeDeclaration": true
+    }
+  }
+}
+
+Projects::
+  [/project-a/tsconfig.json] 
+    /project-a/private.ts  
+    /project-a/public.ts   
+  [/project-c/tsconfig.json] *new*
+    /project-b/public.ts   
+    /project-a/private.ts  
+    /project-a/public.ts   
+    /project-c/index.ts    
+  [/tsconfig.json] *modified*
+Open Files::
+  [/project-a/private.ts] *modified*
+    /project-a/tsconfig.json  (default) 
+    /project-c/tsconfig.json  *new*
+Config::
+  [/project-a/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /project-a/tsconfig.json  
+      /project-c/tsconfig.json  *new*
+      /tsconfig.json            *new*
+    RetainingOpenFiles:
+      /project-a/private.ts  
+  [/project-b/tsconfig.json] *new*
+    RetainingProjects:
+      /project-c/tsconfig.json  
+      /tsconfig.json            
+  [/project-c/tsconfig.json] *new*
+    RetainingProjects:
+      /project-c/tsconfig.json  
+      /tsconfig.json            
+  [/tsconfig.base.json] *modified*
+    RetainingConfigs: *modified*
+      /project-a/tsconfig.json  
+      /project-b/tsconfig.json  *new*
+      /project-c/tsconfig.json  *new*
+      /tsconfig.json            *new*
+  [/tsconfig.json] *new*
+    RetainingProjects:
+      /tsconfig.json  
+
+
+
+
+// === findAllReferences ===
+// === /project-a/private.ts ===
+// export const /*FIND ALL REFS*/[|symbolA|] = 'some-symbol';
+// console.log([|symbolA|]);
+
+// === /project-a/public.ts ===
+// export { [|symbolA|] } from './private';
+
+// === /project-c/index.ts ===
+// import { symbolB } from '../project-b/public';
+// import { [|symbolA|] } from '../project-a/public';
+// console.log(symbolB);
+// console.log([|symbolA|]);
+// 
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///project-b/public.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export const symbolB = 'symbol-b';"
+    }
+  }
+}
+
+Projects::
+  [/project-a/tsconfig.json] 
+    /project-a/private.ts  
+    /project-a/public.ts   
+  [/project-b/tsconfig.json] *new*
+    /project-b/public.ts  
+  [/project-c/tsconfig.json] 
+    /project-b/public.ts   
+    /project-a/private.ts  
+    /project-a/public.ts   
+    /project-c/index.ts    
+  [/tsconfig.json] 
+Open Files::
+  [/project-a/private.ts] 
+    /project-a/tsconfig.json  (default) 
+    /project-c/tsconfig.json  
+  [/project-b/public.ts] *new*
+    /project-b/tsconfig.json  (default) 
+    /project-c/tsconfig.json  
+Config::
+  [/project-a/tsconfig.json] 
+    RetainingProjects:
+      /project-a/tsconfig.json  
+      /project-c/tsconfig.json  
+      /tsconfig.json            
+    RetainingOpenFiles:
+      /project-a/private.ts  
+  [/project-b/tsconfig.json] *modified*
+    RetainingProjects: *modified*
+      /project-b/tsconfig.json  *new*
+      /project-c/tsconfig.json  
+      /tsconfig.json            
+    RetainingOpenFiles: *modified*
+      /project-b/public.ts  *new*
+  [/project-c/tsconfig.json] 
+    RetainingProjects:
+      /project-c/tsconfig.json  
+      /tsconfig.json            
+  [/tsconfig.base.json] 
+    RetainingConfigs:
+      /project-a/tsconfig.json  
+      /project-b/tsconfig.json  
+      /project-c/tsconfig.json  
+      /tsconfig.json            
+  [/tsconfig.json] 
+    RetainingProjects:
+      /tsconfig.json  
+Config File Names::
+  [/project-a/private.ts] 
+    NearestConfigFileName: /project-a/tsconfig.json
+    Ancestors:
+      /project-a/tsconfig.json  /tsconfig.json 
+      /tsconfig.json             
+  [/project-b/public.ts] *new*
+    NearestConfigFileName: /project-b/tsconfig.json
+    Ancestors:
+      /project-b/tsconfig.json  /tsconfig.json 
+      /tsconfig.json             
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///project-b/public.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 13
+    },
+    "context": {
+      "includeDeclaration": true
+    }
+  }
+}
+
+
+
+
+// === findAllReferences ===
+// === /project-b/public.ts ===
+// export const /*FIND ALL REFS*/[|symbolB|] = 'symbol-b';
+
+// === /project-c/index.ts ===
+// import { [|symbolB|] } from '../project-b/public';
+// import { symbolA } from '../project-a/public';
+// console.log([|symbolB|]);
+// console.log(symbolA);
+// 
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///project-c/index.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import { symbolB } from '../project-b/public';\nimport { symbolA } from '../project-a/public';\nconsole.log(symbolB);\nconsole.log(symbolA);\n"
+    }
+  }
+}
+
+Open Files::
+  [/project-a/private.ts] 
+    /project-a/tsconfig.json  (default) 
+    /project-c/tsconfig.json  
+  [/project-b/public.ts] 
+    /project-b/tsconfig.json  (default) 
+    /project-c/tsconfig.json  
+  [/project-c/index.ts] *new*
+    /project-c/tsconfig.json  (default) 
+Config::
+  [/project-a/tsconfig.json] 
+    RetainingProjects:
+      /project-a/tsconfig.json  
+      /project-c/tsconfig.json  
+      /tsconfig.json            
+    RetainingOpenFiles:
+      /project-a/private.ts  
+  [/project-b/tsconfig.json] 
+    RetainingProjects:
+      /project-b/tsconfig.json  
+      /project-c/tsconfig.json  
+      /tsconfig.json            
+    RetainingOpenFiles:
+      /project-b/public.ts  
+  [/project-c/tsconfig.json] *modified*
+    RetainingProjects:
+      /project-c/tsconfig.json  
+      /tsconfig.json            
+    RetainingOpenFiles: *modified*
+      /project-c/index.ts  *new*
+  [/tsconfig.base.json] 
+    RetainingConfigs:
+      /project-a/tsconfig.json  
+      /project-b/tsconfig.json  
+      /project-c/tsconfig.json  
+      /tsconfig.json            
+  [/tsconfig.json] 
+    RetainingProjects:
+      /tsconfig.json  
+Config File Names::
+  [/project-a/private.ts] 
+    NearestConfigFileName: /project-a/tsconfig.json
+    Ancestors:
+      /project-a/tsconfig.json  /tsconfig.json 
+      /tsconfig.json             
+  [/project-b/public.ts] 
+    NearestConfigFileName: /project-b/tsconfig.json
+    Ancestors:
+      /project-b/tsconfig.json  /tsconfig.json 
+      /tsconfig.json             
+  [/project-c/index.ts] *new*
+    NearestConfigFileName: /project-c/tsconfig.json
+    Ancestors:
+      /project-c/tsconfig.json  /tsconfig.json 
+      /tsconfig.json             
+
+{
+  "method": "textDocument/references",
+  "params": {
+    "textDocument": {
+      "uri": "file:///project-c/index.ts"
+    },
+    "position": {
+      "line": 1,
+      "character": 9
+    },
+    "context": {
+      "includeDeclaration": true
+    }
+  }
+}
+
+
+
+
+// === findAllReferences ===
+// === /project-a/private.ts ===
+// export const [|symbolA|] = 'some-symbol';
+// console.log([|symbolA|]);
+
+// === /project-a/public.ts ===
+// export { [|symbolA|] } from './private';
+
+// === /project-c/index.ts ===
+// import { symbolB } from '../project-b/public';
+// import { /*FIND ALL REFS*/[|symbolA|] } from '../project-a/public';
+// console.log(symbolB);
+// console.log([|symbolA|]);
+// 

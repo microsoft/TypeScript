@@ -1,0 +1,34 @@
+/index.ts(3,16): error TS2671: Cannot augment module './test' because it resolves to a non-module entity.
+/index.ts(11,10): error TS2749: 'Abcde' refers to a value, but is being used as a type here. Did you mean 'typeof Abcde'?
+/test.js(3,3): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== /test.js (1 errors) ====
+    class Abcde {
+      /** @type {string} */
+      x;
+      ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    module.exports = {
+      Abcde
+    };
+    
+==== /index.ts (2 errors) ====
+    import { Abcde } from "./test";
+    
+    declare module "./test" {
+                   ~~~~~~~~
+!!! error TS2671: Cannot augment module './test' because it resolves to a non-module entity.
+      interface Abcde { b: string }
+    }
+    
+    new Abcde().x;
+    
+    // Bug: the type meaning from /test.js does not
+    // propagate through the object literal export.
+    const x: Abcde = { b: "" };
+             ~~~~~
+!!! error TS2749: 'Abcde' refers to a value, but is being used as a type here. Did you mean 'typeof Abcde'?
+    

@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/classFieldsPropertyAccessSameNameAsClass.ts] ////
+
+=== classFieldsPropertyAccessSameNameAsClass.ts ===
+export enum MyEnum {
+>MyEnum : Symbol(MyEnum, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 0))
+
+    Foo = "FooValue",
+>Foo : Symbol(MyEnum.Foo, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 20))
+
+    Bar = "BarValue",
+>Bar : Symbol(MyEnum.Bar, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 1, 21))
+}
+
+// Class declarations with self-reference - alias is same-name, so bug is invisible
+// but these still serve as regression tests
+export class Foo {
+>Foo : Symbol(Foo, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 3, 1))
+
+    static instance = new Foo();
+>instance : Symbol(Foo.instance, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 7, 18))
+>Foo : Symbol(Foo, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 3, 1))
+
+    type: MyEnum = MyEnum.Foo;
+>type : Symbol(Foo.type, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 8, 32))
+>MyEnum : Symbol(MyEnum, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 0))
+>MyEnum.Foo : Symbol(MyEnum.Foo, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 20))
+>MyEnum : Symbol(MyEnum, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 0))
+>Foo : Symbol(MyEnum.Foo, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 20))
+
+    getType(): MyEnum {
+>getType : Symbol(Foo.getType, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 9, 30))
+>MyEnum : Symbol(MyEnum, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 0))
+
+        return this.type || MyEnum.Foo;
+>this.type : Symbol(Foo.type, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 8, 32))
+>this : Symbol(Foo, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 3, 1))
+>type : Symbol(Foo.type, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 8, 32))
+>MyEnum.Foo : Symbol(MyEnum.Foo, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 20))
+>MyEnum : Symbol(MyEnum, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 0))
+>Foo : Symbol(MyEnum.Foo, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 20))
+    }
+}
+
+declare const obj: { Bar: string };
+>obj : Symbol(obj, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 16, 13))
+>Bar : Symbol(Bar, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 16, 20))
+
+export class Bar {
+>Bar : Symbol(Bar, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 16, 35))
+
+    static instance = new Bar();
+>instance : Symbol(Bar.instance, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 18, 18))
+>Bar : Symbol(Bar, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 16, 35))
+
+    prop = obj.Bar;
+>prop : Symbol(Bar.prop, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 19, 32))
+>obj.Bar : Symbol(Bar, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 16, 20))
+>obj : Symbol(obj, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 16, 13))
+>Bar : Symbol(Bar, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 16, 20))
+
+    method() {
+>method : Symbol(Bar.method, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 20, 19))
+
+        return obj.Bar;
+>obj.Bar : Symbol(Bar, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 16, 20))
+>obj : Symbol(obj, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 16, 13))
+>Bar : Symbol(Bar, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 16, 20))
+    }
+}
+
+class Other {
+>Other : Symbol(Other, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 25, 1))
+
+    static Baz = 42;
+>Baz : Symbol(Other.Baz, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 27, 13))
+}
+
+export class Baz {
+>Baz : Symbol(Baz, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 29, 1))
+
+    static instance = new Baz();
+>instance : Symbol(Baz.instance, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 31, 18))
+>Baz : Symbol(Baz, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 29, 1))
+
+    prop = Other.Baz;
+>prop : Symbol(Baz.prop, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 32, 32))
+>Other.Baz : Symbol(Other.Baz, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 27, 13))
+>Other : Symbol(Other, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 25, 1))
+>Baz : Symbol(Other.Baz, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 27, 13))
+}
+
+// Class EXPRESSION with self-reference and transformable static fields.
+// At target < ES2022, the class fields transformer creates a temp variable alias,
+// so property access names must not be incorrectly substituted.
+declare const obj2: { Qux: number };
+>obj2 : Symbol(obj2, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 39, 13))
+>Qux : Symbol(Qux, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 39, 21))
+
+const MyClass = class Qux {
+>MyClass : Symbol(MyClass, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 41, 5))
+>Qux : Symbol(Qux, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 41, 15))
+
+    static ref = new Qux();
+>ref : Symbol(Qux.ref, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 41, 27))
+>Qux : Symbol(Qux, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 41, 15))
+
+    static count = Qux.ref ? 1 : 0;
+>count : Symbol(Qux.count, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 42, 27))
+>Qux.ref : Symbol(Qux.ref, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 41, 27))
+>Qux : Symbol(Qux, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 41, 15))
+>ref : Symbol(Qux.ref, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 41, 27))
+
+    prop = obj2.Qux;
+>prop : Symbol(Qux.prop, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 43, 35))
+>obj2.Qux : Symbol(Qux, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 39, 21))
+>obj2 : Symbol(obj2, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 39, 13))
+>Qux : Symbol(Qux, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 39, 21))
+
+    method() {
+>method : Symbol(Qux.method, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 44, 20))
+
+        return MyEnum.Foo;
+>MyEnum.Foo : Symbol(MyEnum.Foo, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 20))
+>MyEnum : Symbol(MyEnum, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 0))
+>Foo : Symbol(MyEnum.Foo, Decl(classFieldsPropertyAccessSameNameAsClass.ts, 0, 20))
+    }
+}
+
+

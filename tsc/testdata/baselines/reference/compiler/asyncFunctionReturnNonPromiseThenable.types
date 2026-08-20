@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/asyncFunctionReturnNonPromiseThenable.ts] ////
+
+=== asyncFunctionReturnNonPromiseThenable.ts ===
+export interface MyThenable {
+    then(): void;
+>then : () => void
+}
+
+export async function foo(): MyThenable {
+>foo : () => MyThenable
+
+    return {
+>{        then() {        }    } : { then(): void; }
+
+        then() {
+>then : () => void
+        }
+    };
+}
+

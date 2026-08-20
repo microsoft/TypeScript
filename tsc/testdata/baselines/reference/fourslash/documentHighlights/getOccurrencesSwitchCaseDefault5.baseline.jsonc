@@ -1,0 +1,284 @@
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// [|switch|]/*HIGHLIGHTS*/ (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// [|switch|] (10) {
+//     [|case|]/*HIGHLIGHTS*/ 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|]/*HIGHLIGHTS*/ 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|]/*HIGHLIGHTS*/ 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     [|case|]/*HIGHLIGHTS*/ 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|switch|]/*HIGHLIGHTS*/ (20) {
+//             [|case|] 1:
+//             [|case|] 2:
+//                 [|break|];
+//             [|default|]:
+//                 [|break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|switch|] (20) {
+//             [|case|]/*HIGHLIGHTS*/ 1:
+//             [|case|] 2:
+//                 [|break|];
+//             [|default|]:
+//                 [|break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|switch|] (20) {
+//             [|case|] 1:
+//             [|case|]/*HIGHLIGHTS*/ 2:
+//                 [|break|];
+//             [|default|]:
+//                 [|break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|switch|] (20) {
+//             [|case|] 1:
+//             [|case|] 2:
+//                 [|break|]/*HIGHLIGHTS*/;
+//             [|default|]:
+//                 [|break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|switch|] (20) {
+//             [|case|] 1:
+//             [|case|] 2:
+//                 [|break|];
+//             [|default|]/*HIGHLIGHTS*/:
+//                 [|break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|]/*HIGHLIGHTS*/ 0xBEEF:
+//     [|default|]:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]/*HIGHLIGHTS*/:
+//         [|break|];
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// [|switch|] (10) {
+//     [|case|] 1:
+//     [|case|] 2:
+//     [|case|] 4:
+//     [|case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|case|] 0xBEEF:
+//     [|default|]:
+//         [|break|]/*HIGHLIGHTS*/;
+//     [|case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesSwitchCaseDefault5.ts ===
+// --- (line: 12) skipped ---
+//     case 0xBEEF:
+//     default:
+//         break;
+//     case 16/*HIGHLIGHTS*/:
+// }

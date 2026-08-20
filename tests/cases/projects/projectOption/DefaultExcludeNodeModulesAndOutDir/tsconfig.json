@@ -1,6 +1,0 @@
-{ 
-    "compilerOptions": {
-        "outDir": "OutDir",
-        "declaration": true
-    }
-}

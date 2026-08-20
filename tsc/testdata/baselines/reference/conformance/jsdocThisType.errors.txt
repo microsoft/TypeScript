@@ -1,0 +1,69 @@
+/a.js(3,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+/a.js(8,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+/a.js(13,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+/a.js(18,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+/a.js(21,20): error TS1005: '}' expected.
+/a.js(23,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+/a.js(26,12): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+/a.js(26,20): error TS1005: '}' expected.
+/a.js(28,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== /types.d.ts (0 errors) ====
+    export interface Foo {
+        foo: () => void;
+    }
+    
+    export type M = (this: Foo) => void;
+    
+==== /a.js (9 errors) ====
+    /** @type {import('./types').M} */
+    export const f1 = function() {
+        this.test();
+             ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+    }
+    
+    /** @type {import('./types').M} */
+    export function f2() {
+        this.test();
+             ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+    }
+    
+    /** @type {(this: import('./types').Foo) => void} */
+    export const f3 = function() {
+        this.test();
+             ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+    }
+    
+    /** @type {(this: import('./types').Foo) => void} */
+    export function f4() {
+        this.test();
+             ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+    }
+    
+    /** @type {function(this: import('./types').Foo): void} */
+                       ~
+!!! error TS1005: '}' expected.
+    export const f5 = function() {
+        this.test();
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 /a.js:22:14: An outer value of 'this' is shadowed by this container.
+    }
+    
+    /** @type {function(this: import('./types').Foo): void} */
+               ~~~~~~~~
+!!! error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+                       ~
+!!! error TS1005: '}' expected.
+    export function f6() {
+        this.test();
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 /a.js:27:17: An outer value of 'this' is shadowed by this container.
+    }
+    

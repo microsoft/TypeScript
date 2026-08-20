@@ -1,0 +1,17 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/a.js ===
+// export const [|a|] = "a";
+
+// === /home/src/workspaces/project/index.ts ===
+// import { a } from "./a";
+// a/*GOTO SOURCE DEF*/
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/a.js ===
+// [|export const a = "a";|]
+
+// === /home/src/workspaces/project/index.ts ===
+// import { a } from "./a"/*GOTO SOURCE DEF*/;
+// a

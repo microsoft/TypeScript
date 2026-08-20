@@ -1,0 +1,25 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export function [|helper|]() { return "ok"; }|>
+// function unrelated() {
+//     const helper = "shadow";
+//     return helper;
+// }
+
+// === /home/src/workspaces/project/index.ts ===
+// import { /*GOTO SOURCE DEF*/helper } from "pkg";
+// helper();
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export function [|helper|]() { return "ok"; }|>
+// function unrelated() {
+//     const helper = "shadow";
+//     return helper;
+// }
+
+// === /home/src/workspaces/project/index.ts ===
+// import { helper } from "pkg";
+// helper/*GOTO SOURCE DEF*/();

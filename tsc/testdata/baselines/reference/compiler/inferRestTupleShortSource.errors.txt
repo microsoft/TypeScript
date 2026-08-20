@@ -1,0 +1,16 @@
+inferRestTupleShortSource.ts(7,3): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...string[], string]'.
+  Source has 0 element(s) but target requires 1.
+
+
+==== inferRestTupleShortSource.ts (1 errors) ====
+    // Regression test: tsgo panics when inferring [...rest, ...T] from a tuple shorter than fixed-arity constraint
+    
+    function f<T extends [string]>(args: [...string[], ...T]) {
+      // ...
+    }
+    
+    f([])
+      ~~
+!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[...string[], string]'.
+!!! error TS2345:   Source has 0 element(s) but target requires 1.
+    

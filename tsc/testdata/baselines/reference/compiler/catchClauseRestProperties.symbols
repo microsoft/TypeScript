@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/catchClauseRestProperties.ts] ////
+
+=== catchClauseRestProperties.ts ===
+try {
+  // ...
+} catch ({ ...rest }) {
+>rest : Symbol(rest, Decl(catchClauseRestProperties.ts, 2, 10))
+
+  // ...
+}
+

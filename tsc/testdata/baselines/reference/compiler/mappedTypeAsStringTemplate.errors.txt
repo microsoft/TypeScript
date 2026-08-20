@@ -1,0 +1,14 @@
+mappedTypeAsStringTemplate.ts(7,5): error TS2741: Property 'xy' is missing in type '{ x: number; }' but required in type '{ xy: number; }'.
+
+
+==== mappedTypeAsStringTemplate.ts (1 errors) ====
+    // Repro from #44220
+    
+    function foo<T extends { [K in keyof T as `${Extract<K, string>}y`]: number }>(foox: T) { }
+    
+    const c = { x: 1 };
+    
+    foo(c);
+        ~
+!!! error TS2741: Property 'xy' is missing in type '{ x: number; }' but required in type '{ xy: number; }'.
+    

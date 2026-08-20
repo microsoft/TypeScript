@@ -1,0 +1,304 @@
+currentDirectory::/home/src/workspaces/project
+useCaseSensitiveFileNames::true
+Input::
+//// [/home/src/workspaces/project/class1.ts] *new* 
+const a: MagicNumber = 1;
+console.log(a);
+//// [/home/src/workspaces/project/constants.ts] *new* 
+export default 1;
+//// [/home/src/workspaces/project/tsconfig.json] *new* 
+{
+    "compilerOptions": {
+        "composite": true
+    }
+}
+//// [/home/src/workspaces/project/types.d.ts] *new* 
+type MagicNumber = typeof import('./constants').default
+
+tsgo 
+ExitStatus:: Success
+Output::
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+interface SymbolConstructor {
+    (desc?: string | number): symbol;
+    for(name: string): symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}
+declare const console: { log(msg: any): void; };
+//// [/home/src/workspaces/project/class1.d.ts] *new* 
+declare const a = 1;
+
+//// [/home/src/workspaces/project/class1.js] *new* 
+"use strict";
+const a = 1;
+console.log(a);
+
+//// [/home/src/workspaces/project/constants.d.ts] *new* 
+declare const _default = 1;
+export default _default;
+
+//// [/home/src/workspaces/project/constants.js] *new* 
+export default 1;
+
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2025.full.d.ts","./class1.ts","./constants.ts","./types.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"881068d51dfd24d338a5f3706ee1097f-const a: MagicNumber = 1;\nconsole.log(a);","signature":"f59d1a67db5f979e23689dc09b68c628-declare const a = 1;\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"c93bc8f54a24dc311538894cf3d7ac17-export default 1;","signature":"2d0006ef6e037f3b7c2ab23503cc8d5c-declare const _default = 1;\nexport default _default;\n","impliedNodeFormat":1},{"version":"45ee7661a81bc095b54ab4944b849fee-type MagicNumber = typeof import('./constants').default","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[3]],"options":{"composite":true},"referencedMap":[[4,1]],"latestChangedDtsFile":"./constants.d.ts"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
+{
+  "version": "FakeTSVersion",
+  "root": [
+    {
+      "files": [
+        "./class1.ts",
+        "./constants.ts",
+        "./types.d.ts"
+      ],
+      "original": [
+        2,
+        4
+      ]
+    }
+  ],
+  "fileNames": [
+    "lib.es2025.full.d.ts",
+    "./class1.ts",
+    "./constants.ts",
+    "./types.d.ts"
+  ],
+  "fileInfos": [
+    {
+      "fileName": "lib.es2025.full.d.ts",
+      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "./class1.ts",
+      "version": "881068d51dfd24d338a5f3706ee1097f-const a: MagicNumber = 1;\nconsole.log(a);",
+      "signature": "f59d1a67db5f979e23689dc09b68c628-declare const a = 1;\n",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "881068d51dfd24d338a5f3706ee1097f-const a: MagicNumber = 1;\nconsole.log(a);",
+        "signature": "f59d1a67db5f979e23689dc09b68c628-declare const a = 1;\n",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "./constants.ts",
+      "version": "c93bc8f54a24dc311538894cf3d7ac17-export default 1;",
+      "signature": "2d0006ef6e037f3b7c2ab23503cc8d5c-declare const _default = 1;\nexport default _default;\n",
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "c93bc8f54a24dc311538894cf3d7ac17-export default 1;",
+        "signature": "2d0006ef6e037f3b7c2ab23503cc8d5c-declare const _default = 1;\nexport default _default;\n",
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "./types.d.ts",
+      "version": "45ee7661a81bc095b54ab4944b849fee-type MagicNumber = typeof import('./constants').default",
+      "signature": "45ee7661a81bc095b54ab4944b849fee-type MagicNumber = typeof import('./constants').default",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "45ee7661a81bc095b54ab4944b849fee-type MagicNumber = typeof import('./constants').default",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    }
+  ],
+  "fileIdsList": [
+    [
+      "./constants.ts"
+    ]
+  ],
+  "options": {
+    "composite": true
+  },
+  "referencedMap": {
+    "./types.d.ts": [
+      "./constants.ts"
+    ]
+  },
+  "latestChangedDtsFile": "./constants.d.ts",
+  "size": 1573
+}
+
+tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/workspaces/project/class1.ts
+*refresh*    /home/src/workspaces/project/constants.ts
+*refresh*    /home/src/workspaces/project/types.d.ts
+Signatures::
+(stored at emit) /home/src/workspaces/project/class1.ts
+(stored at emit) /home/src/workspaces/project/constants.ts
+
+
+Edit [0]:: Modify imports used in global file
+//// [/home/src/workspaces/project/constants.ts] *modified* 
+export default 2;
+
+tsgo 
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
+Output::
+[96mclass1.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '1' is not assignable to type '2'.
+
+[7m1[0m const a: MagicNumber = 1;
+[7m [0m [91m      ~[0m
+
+
+Found 1 error in class1.ts[90m:1[0m
+
+//// [/home/src/workspaces/project/class1.d.ts] *modified* 
+declare const a = 2;
+
+//// [/home/src/workspaces/project/constants.d.ts] *modified* 
+declare const _default = 2;
+export default _default;
+
+//// [/home/src/workspaces/project/constants.js] *modified* 
+export default 2;
+
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2025.full.d.ts","./class1.ts","./constants.ts","./types.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"881068d51dfd24d338a5f3706ee1097f-const a: MagicNumber = 1;\nconsole.log(a);","signature":"7a581e19dc1cd6e23aafc45ee6ba2cef-declare const a = 2;\n","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"b8fa0b3912c91197fa3ec685cbc93c70-export default 2;","signature":"fab8194a8c4d1fb0c7e69bfb95987309-declare const _default = 2;\nexport default _default;\n","impliedNodeFormat":1},{"version":"45ee7661a81bc095b54ab4944b849fee-type MagicNumber = typeof import('./constants').default","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[3]],"options":{"composite":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[[2,[{"pos":6,"end":7,"code":2322,"category":1,"messageKey":"Type_0_is_not_assignable_to_type_1_2322","messageArgs":["1","2"]}]]],"latestChangedDtsFile":"./constants.d.ts"}
+//// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
+{
+  "version": "FakeTSVersion",
+  "root": [
+    {
+      "files": [
+        "./class1.ts",
+        "./constants.ts",
+        "./types.d.ts"
+      ],
+      "original": [
+        2,
+        4
+      ]
+    }
+  ],
+  "fileNames": [
+    "lib.es2025.full.d.ts",
+    "./class1.ts",
+    "./constants.ts",
+    "./types.d.ts"
+  ],
+  "fileInfos": [
+    {
+      "fileName": "lib.es2025.full.d.ts",
+      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "./class1.ts",
+      "version": "881068d51dfd24d338a5f3706ee1097f-const a: MagicNumber = 1;\nconsole.log(a);",
+      "signature": "7a581e19dc1cd6e23aafc45ee6ba2cef-declare const a = 2;\n",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "881068d51dfd24d338a5f3706ee1097f-const a: MagicNumber = 1;\nconsole.log(a);",
+        "signature": "7a581e19dc1cd6e23aafc45ee6ba2cef-declare const a = 2;\n",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "./constants.ts",
+      "version": "b8fa0b3912c91197fa3ec685cbc93c70-export default 2;",
+      "signature": "fab8194a8c4d1fb0c7e69bfb95987309-declare const _default = 2;\nexport default _default;\n",
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "b8fa0b3912c91197fa3ec685cbc93c70-export default 2;",
+        "signature": "fab8194a8c4d1fb0c7e69bfb95987309-declare const _default = 2;\nexport default _default;\n",
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "./types.d.ts",
+      "version": "45ee7661a81bc095b54ab4944b849fee-type MagicNumber = typeof import('./constants').default",
+      "signature": "45ee7661a81bc095b54ab4944b849fee-type MagicNumber = typeof import('./constants').default",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "45ee7661a81bc095b54ab4944b849fee-type MagicNumber = typeof import('./constants').default",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    }
+  ],
+  "fileIdsList": [
+    [
+      "./constants.ts"
+    ]
+  ],
+  "options": {
+    "composite": true
+  },
+  "referencedMap": {
+    "./types.d.ts": [
+      "./constants.ts"
+    ]
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./class1.ts",
+      [
+        {
+          "pos": 6,
+          "end": 7,
+          "code": 2322,
+          "category": 1,
+          "messageKey": "Type_0_is_not_assignable_to_type_1_2322",
+          "messageArgs": [
+            "1",
+            "2"
+          ]
+        }
+      ]
+    ]
+  ],
+  "latestChangedDtsFile": "./constants.d.ts",
+  "size": 1732
+}
+
+tsconfig.json::
+SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/workspaces/project/class1.ts
+*refresh*    /home/src/workspaces/project/constants.ts
+*refresh*    /home/src/workspaces/project/types.d.ts
+Signatures::
+(stored at emit) /home/src/workspaces/project/class1.ts
+(computed .d.ts) /home/src/workspaces/project/constants.ts
+(used version)   /home/src/workspaces/project/types.d.ts

@@ -1,0 +1,19 @@
+// === Smart Selection ===
+/**
+ * @param {/**/string} x
+ */
+function foo(x) {}
+
+           string   ↲
+
+   @param {string} x↲
+•  ↲
+
+/**
+ * @param {string} x
+ */↲
+
+/**
+ * @param {string} x
+ */
+function foo(x) {}

@@ -1,9 +1,0 @@
-{
-    "scenario": "referenceResolution1_FromFooFolder",
-    "projectRoot": "tests/cases/projects/ReferenceResolution/src/ts/foo",
-    "inputFiles": [
-        "foo.ts"
-    ],
-    "declaration": true,
-    "baselineCheck": true
-}

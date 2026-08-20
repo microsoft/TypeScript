@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/anonymousClassDecoratorEs2022.ts] ////
+
+=== anonymousClassDecoratorEs2022.ts ===
+class {
+  @x
+  m() {
+>m : Symbol(__missing.m, Decl(anonymousClassDecoratorEs2022.ts, 0, 7))
+
+    // ...
+  }
+};
+

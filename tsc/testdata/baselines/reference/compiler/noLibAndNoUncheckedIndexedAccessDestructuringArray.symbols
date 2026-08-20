@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/noLibAndNoUncheckedIndexedAccessDestructuringArray.ts] ////
+
+=== globals.ts ===
+interface Array<T> {}
+>Array : Symbol(Array, Decl(globals.ts, 0, 0))
+>T : Symbol(T, Decl(globals.ts, 0, 16))
+
+interface Boolean {}
+>Boolean : Symbol(Boolean, Decl(globals.ts, 0, 21))
+
+interface Function {}
+>Function : Symbol(Function, Decl(globals.ts, 1, 20))
+
+interface CallableFunction {}
+>CallableFunction : Symbol(CallableFunction, Decl(globals.ts, 2, 21))
+
+interface NewableFunction {}
+>NewableFunction : Symbol(NewableFunction, Decl(globals.ts, 3, 29))
+
+interface IArguments {}
+>IArguments : Symbol(IArguments, Decl(globals.ts, 4, 28))
+
+interface Number {}
+>Number : Symbol(Number, Decl(globals.ts, 5, 23))
+
+interface Object {}
+>Object : Symbol(Object, Decl(globals.ts, 6, 19))
+
+interface RegExp {}
+>RegExp : Symbol(RegExp, Decl(globals.ts, 7, 19))
+
+interface String {}
+>String : Symbol(String, Decl(globals.ts, 8, 19))
+
+=== input.ts ===
+declare var x: string[];
+>x : Symbol(x, Decl(input.ts, 0, 11))
+
+var [a] = x;
+>a : Symbol(a, Decl(input.ts, 1, 5))
+>x : Symbol(x, Decl(input.ts, 0, 11))
+

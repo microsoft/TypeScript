@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/templateLiteralTypeSurrogatePairConcatenation.ts] ////
+
+=== templateLiteralTypeSurrogatePairConcatenation.ts ===
+// Concatenating a lone high surrogate and a lone low surrogate across template
+// literal type fragments forms a surrogate pair, exactly as in a JavaScript
+// string: "\uD83D" + "\uDE00" === "😀". The combined literal type should be
+// "😀", with no leftover lone surrogates.
+type Hi = "\uD83D";
+>Hi : "\uD83D"
+
+type Lo = "\uDE00";
+>Lo : "\uDE00"
+
+type Pair = `${Hi}${Lo}`;
+>Pair : "😀"
+
+const p: Pair = "😀";
+>p : "😀"
+>"😀" : "😀"
+
+const q: "😀" = "x" as unknown as Pair;
+>q : "😀"
+>"x" as unknown as Pair : "😀"
+>"x" as unknown : unknown
+>"x" : "x"
+
+// A non-adjacent boundary must NOT combine: the gap keeps the halves lone.
+type Gapped = `${Hi}-${Lo}`;
+>Gapped : "\uD83D-\uDE00"
+
+const g: Gapped = "\uD83D-\uDE00";
+>g : "\uD83D-\uDE00"
+>"\uD83D-\uDE00" : "\uD83D-\uDE00"
+

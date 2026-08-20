@@ -1,0 +1,17 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.d.ts ===
+// <|export declare function [|typesOnly|](): void;|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { /*GOTO SOURCE DEF*/typesOnly } from "pkg";
+// typesOnly();
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.d.ts ===
+// <|export declare function [|typesOnly|](): void;|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { typesOnly } from "pkg";
+// typesOnly/*GOTO SOURCE DEF*/();

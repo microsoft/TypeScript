@@ -1,0 +1,33 @@
+objectLiteralFunctionArgContextualTyping.ts(8,6): error TS2353: Object literal may only specify known properties, and 'hello' does not exist in type 'I'.
+objectLiteralFunctionArgContextualTyping.ts(10,17): error TS2353: Object literal may only specify known properties, and 'what' does not exist in type 'I'.
+objectLiteralFunctionArgContextualTyping.ts(11,4): error TS2741: Property 'value' is missing in type '{ toString: (s: string) => string; }' but required in type 'I'.
+objectLiteralFunctionArgContextualTyping.ts(12,4): error TS2741: Property 'value' is missing in type '{ toString: (s: string) => string; }' but required in type 'I'.
+objectLiteralFunctionArgContextualTyping.ts(13,36): error TS2339: Property 'uhhh' does not exist on type 'string'.
+
+
+==== objectLiteralFunctionArgContextualTyping.ts (5 errors) ====
+    interface I {
+        value: string;
+        toString: (t: string) => string;
+    }
+    
+    function f2(args: I) { }
+    
+    f2({ hello: 1 }) // error 
+         ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'hello' does not exist in type 'I'.
+    f2({ value: '' }) // missing toString satisfied by Object's member
+    f2({ value: '', what: 1 }) // missing toString satisfied by Object's member
+                    ~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'what' does not exist in type 'I'.
+    f2({ toString: (s) => s }) // error, missing property value from ArgsString
+       ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'value' is missing in type '{ toString: (s: string) => string; }' but required in type 'I'.
+!!! related TS2728 objectLiteralFunctionArgContextualTyping.ts:2:5: 'value' is declared here.
+    f2({ toString: (s: string) => s }) // error, missing property value from ArgsString
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'value' is missing in type '{ toString: (s: string) => string; }' but required in type 'I'.
+!!! related TS2728 objectLiteralFunctionArgContextualTyping.ts:2:5: 'value' is declared here.
+    f2({ value: '', toString: (s) => s.uhhh }) // error
+                                       ~~~~
+!!! error TS2339: Property 'uhhh' does not exist on type 'string'.

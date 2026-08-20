@@ -1,0 +1,143 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsClassDefaultNamed.ts ===
+// export default class C  {
+// ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*1*/.
+// | ----------------------------------------------------------------------
+//        ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class C
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class C
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class C
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                        ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*5*/.
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 0,
+      "LSPosition": {
+        "line": 0,
+        "character": 0
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 7,
+      "LSPosition": {
+        "line": 0,
+        "character": 7
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 7
+        },
+        "end": {
+          "line": 0,
+          "character": 14
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 15,
+      "LSPosition": {
+        "line": 0,
+        "character": 15
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 15
+        },
+        "end": {
+          "line": 0,
+          "character": 20
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 0,
+        "character": 21
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass C\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 21
+        },
+        "end": {
+          "line": 0,
+          "character": 22
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 23,
+      "LSPosition": {
+        "line": 0,
+        "character": 23
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": null
+  }
+]

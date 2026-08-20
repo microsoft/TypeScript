@@ -1,0 +1,65 @@
+// === documentHighlights ===
+// === /index.js ===
+// /**
+//  * @typedef {{
+//  *   /*HIGHLIGHTS*/[|foo|]: string;
+//  *   bar: number;
+//  * }} Foo
+//  */
+// 
+// /** @type {Foo} */
+// const x = {
+//   [|foo|]: "",
+//   bar: 42,
+// };
+
+
+
+// === documentHighlights ===
+// === /index.js ===
+// /**
+//  * @typedef {{
+//  *   foo: string;
+//  *   /*HIGHLIGHTS*/[|bar|]: number;
+//  * }} Foo
+//  */
+// 
+// /** @type {Foo} */
+// const x = {
+//   foo: "",
+//   [|bar|]: 42,
+// };
+
+
+
+// === documentHighlights ===
+// === /index.js ===
+// /**
+//  * @typedef {{
+//  *   [|foo|]: string;
+//  *   bar: number;
+//  * }} Foo
+//  */
+// 
+// /** @type {Foo} */
+// const x = {
+//   /*HIGHLIGHTS*/[|foo|]: "",
+//   bar: 42,
+// };
+
+
+
+// === documentHighlights ===
+// === /index.js ===
+// /**
+//  * @typedef {{
+//  *   foo: string;
+//  *   [|bar|]: number;
+//  * }} Foo
+//  */
+// 
+// /** @type {Foo} */
+// const x = {
+//   foo: "",
+//   /*HIGHLIGHTS*/[|bar|]: 42,
+// };

@@ -1,0 +1,39 @@
+// === documentHighlights ===
+// === /getOccurrencesIfElse4.ts ===
+// --- (line: 5) skipped ---
+//     if (true) {
+//     }
+//     else {
+//         /*HIGHLIGHTS*/[|if|] (false)
+//             if (true)
+//                 var x = undefined;
+//     }
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesIfElse4.ts ===
+// --- (line: 6) skipped ---
+//     }
+//     else {
+//         if (false)
+//             /*HIGHLIGHTS*/[|if|] (true)
+//                 var x = undefined;
+//     }
+// }
+// --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesIfElse4.ts ===
+// --- (line: 6) skipped ---
+//     }
+//     else {
+//         if (false)
+//             [|i/*HIGHLIGHTS*/f|] (true)
+//                 var x = undefined;
+//     }
+// }
+// --- (line: 14) skipped ---

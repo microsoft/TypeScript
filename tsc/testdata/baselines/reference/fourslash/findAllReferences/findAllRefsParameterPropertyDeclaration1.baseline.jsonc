@@ -1,0 +1,8 @@
+// === findAllReferences ===
+// === /findAllRefsParameterPropertyDeclaration1.ts ===
+// class Foo {
+//     constructor(private /*FIND ALL REFS*/[|privateParam|]: number) {
+//         let localPrivate = [|privateParam|];
+//         this.[|privateParam|] += 10;
+//     }
+// }

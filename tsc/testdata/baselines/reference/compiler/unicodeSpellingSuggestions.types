@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/unicodeSpellingSuggestions.ts] ////
+
+=== unicodeSpellingSuggestions.ts ===
+// https://github.com/microsoft/TypeScript/tsc/issues/4223
+
+classAé {
+>classAé : any
+}
+
+classAéé {
+>classAéé : any
+}
+
+classAééé {
+>classAééé : any
+}
+

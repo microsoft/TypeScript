@@ -1,0 +1,1751 @@
+package tsoptions_test
+
+import (
+	"fmt"
+	"io"
+	"io/fs"
+	"maps"
+	"slices"
+	"strings"
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/scanner"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tsoptions/tsoptionstest"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"gotest.tools/v3/assert"
+)
+
+type testConfig struct {
+	jsonText        string
+	configFileName  string
+	basePath        string
+	allFileList     map[string]string
+	existingOptions *core.CompilerOptions
+}
+
+var parseConfigFileTextToJsonTests = []struct {
+	title string
+	input []string
+}{
+	{
+		title: "returns empty config for file with only whitespaces",
+		input: []string{
+			"",
+			" ",
+		},
+	},
+	{
+		title: "returns empty config for file with comments only",
+		input: []string{
+			"// Comment",
+			"/* Comment*/",
+		},
+	},
+	{
+		title: "returns empty config when config is empty object",
+		input: []string{
+			`{}`,
+		},
+	},
+	{
+		title: "returns config object without comments",
+		input: []string{
+			`{ // Excluded files
+            "exclude": [
+                // Exclude d.ts
+                "file.d.ts"
+            ]
+        }`,
+			`{
+            /* Excluded
+                    Files
+            */
+            "exclude": [
+                /* multiline comments can be in the middle of a line */"file.d.ts"
+            ]
+        }`,
+		},
+	},
+	{
+		title: "keeps string content untouched",
+		input: []string{
+			`{
+            "exclude": [
+                "xx//file.d.ts"
+            ]
+        }`,
+			`{
+            "exclude": [
+                "xx/*file.d.ts*/"
+            ]
+        }`,
+		},
+	},
+	{
+		title: "handles escaped characters in strings correctly",
+		input: []string{
+			`{
+            "exclude": [
+                "xx\"//files"
+            ]
+        }`,
+			`{
+            "exclude": [
+                "xx\\" // end of line comment
+            ]
+        }`,
+		},
+	},
+	{
+		title: "returns object when users correctly specify library",
+		input: []string{
+			`{
+            "compilerOptions": {
+                "lib": ["es5"]
+            }
+        }`,
+			`{
+            "compilerOptions": {
+                "lib": ["es5", "es6"]
+            }
+        }`,
+		},
+	},
+}
+
+func TestParseConfigFileTextToJson(t *testing.T) {
+	t.Parallel()
+	for _, rec := range parseConfigFileTextToJsonTests {
+		t.Run(rec.title, func(t *testing.T) {
+			t.Parallel()
+			var baselineContent strings.Builder
+			for i, jsonText := range rec.input {
+				baselineContent.WriteString("Input::\n")
+				baselineContent.WriteString(jsonText)
+				baselineContent.WriteString("\n")
+				parsed, errors := tsoptions.ParseConfigFileTextToJson("/apath/tsconfig.json", "/apath", jsonText)
+				baselineContent.WriteString("Config::\n")
+				assert.NilError(t, writeJsonReadableText(&baselineContent, parsed), "Failed to write JSON text")
+				baselineContent.WriteString("\n")
+				baselineContent.WriteString("Errors::\n")
+				diagnosticwriter.FormatDiagnosticsWithColorAndContext(&baselineContent, diagnosticwriter.FromASTDiagnostics(errors), &diagnosticwriter.FormattingOptions{
+					NewLine: "\n",
+					ComparePathsOptions: tspath.ComparePathsOptions{
+						CurrentDirectory:          "/",
+						UseCaseSensitiveFileNames: true,
+					},
+				})
+				baselineContent.WriteString("\n")
+				if i != len(rec.input)-1 {
+					baselineContent.WriteString("\n")
+				}
+			}
+			baseline.Run(t, rec.title+" jsonParse.js", baselineContent.String(), baseline.Options{Subfolder: "config/tsconfigParsing"})
+		})
+	}
+}
+
+type parseJsonConfigTestCase struct {
+	title                  string
+	includeCompilerOptions bool
+	input                  []testConfig
+}
+
+var parseJsonConfigFileTests = []parseJsonConfigTestCase{
+	{
+		title: "ignore dotted files and folders",
+		input: []testConfig{{
+			jsonText:       `{}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/test.ts": "", "/apath/.git/a.ts": "", "/apath/.b.ts": "", "/apath/..c.ts": ""},
+		}},
+	},
+	{
+		title: "allow dotted files and folders when explicitly requested",
+		input: []testConfig{{
+			jsonText: `{
+                    "files": ["/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"]
+                }`,
+			configFileName: "tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/test.ts": "", "/apath/.git/a.ts": "", "/apath/.b.ts": "", "/apath/..c.ts": ""},
+		}},
+	},
+	{
+		title: "implicitly exclude common package folders",
+		input: []testConfig{{
+			jsonText:       `{}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/node_modules/a.ts": "", "/bower_components/b.ts": "", "/jspm_packages/c.ts": "", "/d.ts": "", "/folder/e.ts": ""},
+		}},
+	},
+	{
+		title: "generates errors for empty files list",
+		input: []testConfig{{
+			jsonText: `{
+                "files": []
+            }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/a.ts": ""},
+		}},
+	},
+	{
+		title: "generates errors for empty files list when no references are provided",
+		input: []testConfig{{
+			jsonText: `{
+                "files": [],
+                "references": []
+            }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/a.ts": ""},
+		}},
+	},
+	{
+		title: "generates errors for directory with no .ts files",
+		input: []testConfig{{
+			jsonText: `{
+            }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/a.js": ""},
+		}},
+	},
+	{
+		title: "generates errors for empty include",
+		input: []testConfig{{
+			jsonText: `{
+                "include": []
+            }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "tests/cases/unittests",
+			allFileList:    map[string]string{"/apath/a.ts": ""},
+		}},
+	},
+	{
+		title: "generates errors for include with parent directory after recursive wildcard",
+		input: []testConfig{{
+			jsonText: `{
+                "include": ["**/../*.ts"]
+            }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": ""},
+		}},
+	},
+	{
+		title:                  "parses tsconfig with compilerOptions, files, include, and exclude",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "strict": true,
+    "noImplicitAny": true,
+    "target": "ES2017",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "auto",
+    "jsx": "react",
+	"maxNodeModuleJsDepth": 1,
+	"paths": {
+      "jquery": ["./vendor/jquery/dist/jquery"]
+    }
+  },
+  "files": ["/apath/src/index.ts", "/apath/src/app.ts"],
+  "include": ["/apath/src/**/*"],
+  "exclude": ["/apath/node_modules", "/apath/dist"]
+}`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/src/index.ts": "", "/apath/src/app.ts": "", "/apath/node_modules/module.ts": "", "/apath/dist/output.js": ""},
+		}},
+	},
+	{
+		title: "generates errors when commandline option is in tsconfig",
+		input: []testConfig{{
+			jsonText: `{
+  "compilerOptions": {
+    "help": true
+  }
+}`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/a.ts": ""},
+		}},
+	},
+	{
+		title: "does not generate errors for empty files list when one or more references are provided",
+		input: []testConfig{{
+			jsonText: `{
+                "files": [],
+                "references": [{ "path": "/apath" }]
+            }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/a.ts": ""},
+		}},
+	},
+	{
+		title: "exclude outDir unless overridden",
+		input: []testConfig{{
+			jsonText: `{
+                "compilerOptions": {
+                    "outDir": "bin"
+                }
+            }`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/bin/a.ts": "", "/b.ts": ""},
+		}, {
+			jsonText: `{
+                "compilerOptions": {
+                    "outDir": "bin"
+                },
+                "exclude": [ "obj" ]
+            }`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/bin/a.ts": "", "/b.ts": ""},
+		}},
+	},
+	{
+		title: "exclude declarationDir unless overridden",
+		input: []testConfig{{
+			jsonText: `{
+                "compilerOptions": {
+                    "declarationDir": "declarations"
+                }
+            }`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/declarations/a.d.ts": "", "/a.ts": ""},
+		}, {
+			jsonText: `{
+                "compilerOptions": {
+                    "declarationDir": "declarations"
+                },
+                "exclude": [ "types" ]
+            }`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/declarations/a.d.ts": "", "/a.ts": ""},
+		}},
+	},
+	{
+		title: "generates errors for empty directory",
+		input: []testConfig{{
+			jsonText: `{
+                "compilerOptions": {
+                    "allowJs": true
+                }
+            }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{},
+		}},
+	},
+	{
+		title: "generates errors for includes with outDir",
+		input: []testConfig{{
+			jsonText: `{
+                "compilerOptions": {
+                    "outDir": "./"
+                },
+                "include": ["**/*"]
+            }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/a.ts": ""},
+		}},
+	},
+	{
+		title: "generates errors when include is not string",
+		input: []testConfig{{
+			jsonText: `{
+  "include": [
+    [
+      "./**/*.ts"
+    ]
+  ]
+}`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/a.ts": ""},
+		}},
+	},
+	{
+		title: "generates errors when files is not string",
+		input: []testConfig{{
+			jsonText: `{
+  "files": [
+    {
+      "compilerOptions": {
+        "experimentalDecorators": true,
+        "allowJs": true
+      }
+    }
+  ]
+}`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/a.ts": ""},
+		}},
+	},
+	{
+		title: "with outDir from base tsconfig",
+		input: []testConfig{
+			{
+				jsonText: `{
+  "extends": "./tsconfigWithoutConfigDir.json"
+}`,
+				configFileName: "tsconfig.json",
+				basePath:       "/",
+				allFileList: map[string]string{
+					"/tsconfigWithoutConfigDir.json": tsconfigWithoutConfigDir,
+					"/bin/a.ts":                      "",
+					"/b.ts":                          "",
+				},
+			},
+			{
+				jsonText: `{
+  "extends": "./tsconfigWithConfigDir.json"
+}`,
+				configFileName: "tsconfig.json",
+				basePath:       "/",
+				allFileList: map[string]string{
+					"/tsconfigWithConfigDir.json": tsconfigWithConfigDir,
+					"/bin/a.ts":                   "",
+					"/b.ts":                       "",
+				},
+			},
+		},
+	},
+	{
+		title: "returns error when tsconfig have excludes",
+		input: []testConfig{{
+			jsonText: `{
+                    "compilerOptions": {
+                        "lib": ["es5"]
+                    },
+                    "excludes": [
+                        "foge.ts"
+                    ]
+                }`,
+			configFileName: "tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/test.ts": "", "/apath/foge.ts": ""},
+		}},
+	},
+	{
+		title:                  "parses tsconfig with extends, files, include and other options",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+				"extends": "./tsconfigWithExtends.json",
+				"compilerOptions": {
+				    "outDir": "./dist",
+    				"strict": true,
+    				"noImplicitAny": true,
+					"baseUrl": "",
+				},
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/tsconfigWithExtends.json": tsconfigWithExtends, "/src/index.ts": "", "/src/app.ts": "", "/node_modules/module.ts": "", "/dist/output.js": ""},
+		}},
+	},
+	{
+		title:                  "parses tsconfig with extends and configDir",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+				"extends": "./tsconfig.base.json"
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/tsconfig.base.json": tsconfigWithExtendsAndConfigDir, "/src/index.ts": "", "/src/app.ts": "", "/node_modules/module.ts": "", "/dist/output.js": ""},
+		}},
+	},
+	{
+		title: "reports error for an unknown option",
+		input: []testConfig{{
+			jsonText: `{
+			    "compilerOptions": {
+				"unknown": true
+			    }
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/app.ts": ""},
+		}},
+	},
+	{
+		title: "reports spelling suggestion for an unknown option",
+		input: []testConfig{{
+			jsonText: `{
+			    "compilerOptions": {
+				"targt": 1
+			    }
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/app.ts": ""},
+		}},
+	},
+	{
+		title: "reports errors for wrong type option and invalid enum value",
+		input: []testConfig{{
+			jsonText: `{
+			    "compilerOptions": {
+				"target": "invalid value",
+				"removeComments": "should be a boolean",
+				"moduleResolution": "invalid value"
+			    }
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/app.ts": ""},
+		}},
+	},
+	{
+		title:                  "reports errors for incorrectly cased option names",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+			    "compilerOptions": {
+				"sourcemap": true,
+				"declarationmap": true,
+				"nouncheckedindexedaccess": true,
+				"exactoptionalpropertytypes": true,
+				"verbatimmodulesyntax": true,
+				"isolatedmodules": true,
+				"nouncheckedsideeffectimports": true,
+				"moduledetection": "force",
+				"skiplibcheck": true,
+				"checkjs": true
+			    }
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/app.ts": ""},
+		}},
+	},
+	{
+		title:                  "handles empty types array",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+			    "compilerOptions": {
+					"types": []
+				}
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/app.ts": ""},
+		}},
+	},
+	{
+		title:                  "issue 1267 scenario - extended files not picked up",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+  "extends": "./tsconfig-base/backend.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "dist",
+    "rootDir": "src",
+    "resolveJsonModule": true
+  },
+  "exclude": ["node_modules", "dist"],
+  "include": ["src/**/*"]
+}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList: map[string]string{
+				"/tsconfig-base/backend.json": `{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Backend",
+  "compilerOptions": {
+    "allowJs": true,
+    "module": "nodenext",
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "esnext",
+    "lib": ["ESNext"],
+    "incremental": false,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "moduleResolution": "nodenext",
+    "types": ["node", "vitest/globals"],
+    "sourceMap": true,
+    "strictPropertyInitialization": false
+  },
+  "files": [
+    "types/ical2json.d.ts",
+    "types/express.d.ts",
+    "types/multer.d.ts",
+    "types/reset.d.ts",
+    "types/stripe-custom-typings.d.ts",
+    "types/nestjs-modules.d.ts",
+    "types/luxon.d.ts",
+    "types/nestjs-pino.d.ts"
+  ],
+  "ts-node": {
+    "files": true
+  }
+}`,
+				"/tsconfig-base/types/ical2json.d.ts":             "export {}",
+				"/tsconfig-base/types/express.d.ts":               "export {}",
+				"/tsconfig-base/types/multer.d.ts":                "export {}",
+				"/tsconfig-base/types/reset.d.ts":                 "export {}",
+				"/tsconfig-base/types/stripe-custom-typings.d.ts": "export {}",
+				"/tsconfig-base/types/nestjs-modules.d.ts":        "export {}",
+				"/tsconfig-base/types/luxon.d.ts": `declare module 'luxon' {
+  interface TSSettings {
+    throwOnInvalid: true
+  }
+}
+export {}`,
+				"/tsconfig-base/types/nestjs-pino.d.ts": "export {}",
+				"/src/main.ts":                          "export {}",
+				"/src/utils.ts":                         "export {}",
+			},
+		}},
+	},
+	{
+		title:                  "null overrides in extended tsconfig - array fields",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "types": null,
+    "lib": null,
+    "typeRoots": null
+  }
+}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList: map[string]string{
+				"/tsconfig-base.json": `{
+  "compilerOptions": {
+    "types": ["node", "@types/jest"],
+    "lib": ["es2020", "dom"],
+    "typeRoots": ["./types", "./node_modules/@types"]
+  }
+}`,
+				"/app.ts": "",
+			},
+		}},
+	},
+	{
+		title:                  "null overrides in extended tsconfig - string fields",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": null,
+    "baseUrl": null,
+    "rootDir": null
+  }
+}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList: map[string]string{
+				"/tsconfig-base.json": `{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "rootDir": "./src"
+  }
+}`,
+				"/app.ts": "",
+			},
+		}},
+	},
+	{
+		title:                  "null overrides in extended tsconfig - mixed field types",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "types": null,
+    "outDir": null,
+    "strict": false,
+    "lib": ["es2022"],
+    "allowJs": null
+  }
+}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList: map[string]string{
+				"/tsconfig-base.json": `{
+  "compilerOptions": {
+    "types": ["node"],
+    "lib": ["es2020", "dom"],
+    "outDir": "./dist",
+    "strict": true,
+    "allowJs": true,
+    "target": "es2020"
+  }
+}`,
+				"/app.ts": "",
+			},
+		}},
+	},
+	{
+		title:                  "null overrides with multiple extends levels",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+  "extends": "./tsconfig-middle.json",
+  "compilerOptions": {
+    "types": null,
+    "lib": null
+  }
+}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList: map[string]string{
+				"/tsconfig-middle.json": `{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "types": ["jest"],
+    "outDir": "./build"
+  }
+}`,
+				"/tsconfig-base.json": `{
+  "compilerOptions": {
+    "types": ["node"],
+    "lib": ["es2020"],
+    "outDir": "./dist",
+    "strict": true
+  }
+}`,
+				"/app.ts": "",
+			},
+		}},
+	},
+	{
+		title:                  "null overrides in middle level of extends chain",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+  "extends": "./tsconfig-middle.json",
+  "compilerOptions": {
+    "outDir": "./final"
+  }
+}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList: map[string]string{
+				"/tsconfig-middle.json": `{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "types": null,
+    "lib": null,
+    "outDir": "./middle"
+  }
+}`,
+				"/tsconfig-base.json": `{
+  "compilerOptions": {
+    "types": ["node"],
+    "lib": ["es2020"],
+    "outDir": "./base",
+    "strict": true
+  }
+}`,
+				"/app.ts": "",
+			},
+		}},
+	},
+}
+
+var tsconfigWithExtends = `{
+  "files": ["/src/index.ts", "/src/app.ts"],
+  "include": ["/src/**/*"],
+  "exclude": [],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    },
+    "transpileOnly": true
+  }
+}`
+
+var tsconfigWithoutConfigDir = `{
+  "compilerOptions": {
+    "outDir": "bin"
+  }
+}`
+
+var tsconfigWithConfigDir = `{
+  "compilerOptions": {
+    "outDir": "${configDir}/bin"
+  }
+}`
+
+var tsconfigWithExtendsAndConfigDir = `{
+  "compilerOptions": {
+    "outFile": "${configDir}/outFile",
+    "outDir": "${configDir}/outDir",
+    "rootDir": "${configDir}/rootDir",
+    "tsBuildInfoFile": "${configDir}/tsBuildInfoFile",
+    "baseUrl": "${configDir}/baseUrl",
+    "declarationDir": "${configDir}/declarationDir",
+  }
+}`
+
+func TestParseJsonConfigFileContent(t *testing.T) {
+	t.Parallel()
+	for _, rec := range parseJsonConfigFileTests {
+		t.Run(rec.title+" with json api", func(t *testing.T) {
+			t.Parallel()
+			baselineParseConfigWith(t, rec.title+" with json api.js", rec.includeCompilerOptions, rec.input, getParsedWithJsonApi)
+		})
+	}
+}
+
+func TestParseJsonConfigFileContentAcceptsJsonRepresentations(t *testing.T) {
+	t.Parallel()
+
+	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		"/project/index.ts": "export {};",
+	}, "/project", true /*useCaseSensitiveFileNames*/)
+
+	orderedMap, parseErrors := tsoptions.ParseConfigFileTextToJson(
+		"/project/tsconfig.json",
+		"/project/tsconfig.json",
+		`{"compilerOptions":{"strict":true},"files":["index.ts"]}`,
+	)
+	assert.Equal(t, len(parseErrors), 0)
+
+	orderedMapWithTypedSlices := &collections.OrderedMap[string, any]{}
+	orderedMapWithTypedSlices.Set("compilerOptions", map[string]any{"strict": true})
+	orderedMapWithTypedSlices.Set("files", []string{"index.ts"})
+
+	tests := map[string]any{
+		"ordered map":                   orderedMap,
+		"ordered map with typed slices": orderedMapWithTypedSlices,
+		"plain map": map[string]any{
+			"compilerOptions": map[string]any{"strict": true},
+			"files":           []any{"index.ts"},
+		},
+		"typed slices": map[string]any{
+			"compilerOptions": map[string]any{"strict": true},
+			"files":           []string{"index.ts"},
+		},
+	}
+	for name, json := range tests {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			parsed := tsoptions.ParseJsonConfigFileContent(
+				json,
+				host,
+				"/project",
+				nil,
+				"/project/tsconfig.json",
+				nil, /*resolutionStack*/
+				nil, /*extendedConfigCache*/
+			)
+			assert.DeepEqual(t, parsed.FileNames(), []string{"/project/index.ts"})
+			assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
+			assert.Equal(t, len(parsed.Errors), 0)
+		})
+	}
+}
+
+func TestParseJsonConfigFileContentPreservesRaw(t *testing.T) {
+	t.Parallel()
+
+	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		"/project/index.ts": "export {};",
+	}, "/project", true /*useCaseSensitiveFileNames*/)
+
+	parsed := tsoptions.ParseJsonConfigFileContent(
+		map[string]any{
+			"files":         []any{"index.ts"},
+			"customSetting": map[string]any{"enabled": true},
+			"compileOnSave": true,
+		},
+		host,
+		"/project",
+		nil,
+		"/project/tsconfig.json",
+		nil, /*resolutionStack*/
+		nil, /*extendedConfigCache*/
+	)
+
+	assert.Equal(t, len(parsed.Errors), 0)
+	assert.Assert(t, parsed.CompileOnSave != nil && *parsed.CompileOnSave)
+
+	raw := parsed.Raw.(*collections.OrderedMap[string, any])
+	assert.DeepEqual(t, slices.Collect(raw.Keys()), []string{"compileOnSave", "customSetting", "files"})
+	assert.Assert(t, raw.Has("customSetting"))
+}
+
+func TestParseJsonConfigFileContentHandlesNullArrayElements(t *testing.T) {
+	t.Parallel()
+
+	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		"/project/index.ts": "export {};",
+	}, "/project", true /*useCaseSensitiveFileNames*/)
+	for _, property := range []string{"files", "include", "exclude"} {
+		t.Run(property, func(t *testing.T) {
+			t.Parallel()
+			parsed := tsoptions.ParseJsonConfigFileContent(
+				map[string]any{property: []any{nil}},
+				host,
+				"/project",
+				nil,
+				"/project/tsconfig.json",
+				nil, /*resolutionStack*/
+				nil, /*extendedConfigCache*/
+			)
+			assert.Assert(t, len(parsed.Errors) > 0)
+			assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code())
+		})
+	}
+}
+
+func TestParseJsonConfigFileContentDefaultsCompileOnSaveToFalse(t *testing.T) {
+	t.Parallel()
+
+	host := tsoptionstest.NewVFSParseConfigHost(map[string]string{
+		"/project/index.ts": "export {};",
+	}, "/project", true /*useCaseSensitiveFileNames*/)
+	parsed := tsoptions.ParseJsonConfigFileContent(
+		map[string]any{"files": []any{"index.ts"}},
+		host,
+		"/project",
+		nil,
+		"/project/tsconfig.json",
+		nil, /*resolutionStack*/
+		nil, /*extendedConfigCache*/
+	)
+	assert.Assert(t, parsed.CompileOnSave != nil)
+	assert.Equal(t, *parsed.CompileOnSave, false)
+}
+
+func getParsedWithJsonApi(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {
+	configFileName := tspath.GetNormalizedAbsolutePath(config.configFileName, basePath)
+	path := tspath.ToPath(config.configFileName, basePath, host.FS().UseCaseSensitiveFileNames())
+	parsed, _ := tsoptions.ParseConfigFileTextToJson(configFileName, path, config.jsonText)
+	return tsoptions.ParseJsonConfigFileContent(
+		parsed,
+		host,
+		basePath,
+		config.existingOptions,
+		configFileName,
+		/*resolutionStack*/ nil,
+		/*extendedConfigCache*/ nil,
+	)
+}
+
+func TestParseJsonSourceFileConfigFileContent(t *testing.T) {
+	t.Parallel()
+	for _, rec := range parseJsonConfigFileTests {
+		t.Run(rec.title+" with jsonSourceFile api", func(t *testing.T) {
+			t.Parallel()
+			baselineParseConfigWith(t, rec.title+" with jsonSourceFile api.js", rec.includeCompilerOptions, rec.input, getParsedWithJsonSourceFileApi)
+		})
+	}
+}
+
+func TestParseJsonSourceFileConfigFileContentReportsInvalidExtendedConfig(t *testing.T) {
+	t.Parallel()
+	files := map[string]string{
+		"/project/tsconfig.json": `{
+  "extends": "./bad.json"
+}`,
+		// The parser recovers from this as object-like JSON, producing expected-token errors for ':', ',', ',', and '}'.
+		"/project/bad.json": "{ this is not json",
+		"/project/main.ts":  "export const x = 1;",
+	}
+	host := tsoptionstest.NewVFSParseConfigHost(files, "/project", true /*useCaseSensitiveFileNames*/)
+	configFileName := "/project/tsconfig.json"
+	configFile := tsoptions.NewTsconfigSourceFileFromFilePath(
+		configFileName,
+		tspath.ToPath(configFileName, host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()),
+		files[configFileName],
+	)
+
+	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
+		configFile,
+		host,
+		host.GetCurrentDirectory(),
+		nil,
+		nil,
+		configFileName,
+		nil,
+		nil,
+	)
+
+	parseErrors := core.Filter(parsed.Errors, func(diagnostic *ast.Diagnostic) bool {
+		return diagnostic.Code() == diagnostics.X_0_expected.Code()
+	})
+	expectedParseErrorMessages := []string{":", ",", ",", "}"}
+	expectedParseErrorPositions := []int{7, 10, 14, 18}
+	assert.Equal(t, len(expectedParseErrorMessages), len(parseErrors))
+	assert.DeepEqual(t, core.Map(parseErrors, func(diagnostic *ast.Diagnostic) string {
+		return diagnostic.MessageArgs()[0]
+	}), expectedParseErrorMessages)
+	assert.DeepEqual(t, core.Map(parseErrors, (*ast.Diagnostic).Pos), expectedParseErrorPositions)
+	for _, diagnostic := range parseErrors {
+		assert.Equal(t, diagnostic.File().FileName(), "/project/bad.json")
+	}
+}
+
+// Extending an empty config file used to panic on nil Statements (#4265).
+func TestParseJsonSourceFileConfigFileContentWithEmptyExtendedConfig(t *testing.T) {
+	t.Parallel()
+	files := map[string]string{
+		"/project/tsconfig.json": `{
+  "extends": "./base.json"
+}`,
+		"/project/base.json": "",
+		"/project/main.ts":   "export const x = 1;",
+	}
+	host := tsoptionstest.NewVFSParseConfigHost(files, "/project", true /*useCaseSensitiveFileNames*/)
+	configFileName := "/project/tsconfig.json"
+	configFile := tsoptions.NewTsconfigSourceFileFromFilePath(
+		configFileName,
+		tspath.ToPath(configFileName, host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()),
+		files[configFileName],
+	)
+
+	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
+		configFile,
+		host,
+		host.GetCurrentDirectory(),
+		nil,
+		nil,
+		configFileName,
+		nil,
+		nil,
+	)
+
+	assert.Assert(t, parsed != nil)
+	assert.DeepEqual(t, parsed.FileNames(), []string{"/project/main.ts"})
+}
+
+func TestParseJsonSourceFileConfigFileContentDoesNotDuplicateUnquotedKeyDiagnostics(t *testing.T) {
+	t.Parallel()
+	parsed := tsoptionstest.GetParsedCommandLine(t, `{
+  compilerOptions: {
+    strict: true
+  }
+}`, map[string]string{"/main.ts": "export const x = 1;"}, "/", true /*useCaseSensitiveFileNames*/)
+
+	diags := parsed.GetConfigFileParsingDiagnostics()
+	assert.Equal(t, len(diags), 2)
+	expectedLocations := []struct {
+		line      int
+		character int
+	}{
+		{line: 1, character: 2},
+		{line: 2, character: 4},
+	}
+	for index, diagnostic := range diags {
+		assert.Equal(t, diagnostic.Code(), diagnostics.String_literal_with_double_quotes_expected.Code())
+		line, character := scanner.GetECMALineAndUTF16CharacterOfPosition(diagnostic.File(), diagnostic.Pos())
+		assert.Equal(t, line, expectedLocations[index].line)
+		assert.Equal(t, int(character), expectedLocations[index].character)
+	}
+}
+
+func TestParseJsonSourceFileConfigFileContentReportsQuestionTokenDiagnostics(t *testing.T) {
+	t.Parallel()
+	parsed := tsoptionstest.GetParsedCommandLine(t, `{
+  compilerOptions?: {
+    strict?: true
+  }
+}`, map[string]string{"/main.ts": "export const x = 1;"}, "/", true /*useCaseSensitiveFileNames*/)
+
+	var questionTokenDiagnostics []*ast.Diagnostic
+	for _, diagnostic := range parsed.GetConfigFileParsingDiagnostics() {
+		if diagnostic.Code() == diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files.Code() {
+			questionTokenDiagnostics = append(questionTokenDiagnostics, diagnostic)
+		}
+	}
+	assert.Equal(t, len(questionTokenDiagnostics), 2)
+	expectedLocations := []struct {
+		line      int
+		character int
+	}{
+		{line: 1, character: 17},
+		{line: 2, character: 10},
+	}
+	for index, diagnostic := range questionTokenDiagnostics {
+		line, character := scanner.GetECMALineAndUTF16CharacterOfPosition(diagnostic.File(), diagnostic.Pos())
+		assert.Equal(t, line, expectedLocations[index].line)
+		assert.Equal(t, int(character), expectedLocations[index].character)
+	}
+}
+
+func TestParseNullEnumCompilerOptions(t *testing.T) {
+	t.Parallel()
+
+	config := testConfig{
+		jsonText: `{
+			"compilerOptions": {
+				"target": null,
+				"module": null
+			}
+		}`,
+		configFileName: "tsconfig.json",
+		basePath:       "/",
+		allFileList:    map[string]string{"/app.ts": ""},
+	}
+	for name, getParsed := range map[string]func(testConfig, tsoptions.ParseConfigHost, string) *tsoptions.ParsedCommandLine{
+		"json api":           getParsedWithJsonApi,
+		"jsonSourceFile api": getParsedWithJsonSourceFileApi,
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			allFileLists := make(map[string]string, len(config.allFileList)+1)
+			maps.Copy(allFileLists, config.allFileList)
+			allFileLists["/tsconfig.json"] = config.jsonText
+			host := tsoptionstest.NewVFSParseConfigHost(allFileLists, config.basePath, true /*useCaseSensitiveFileNames*/)
+			parsedConfigFileContent := getParsed(config, host, config.basePath)
+			assert.Equal(t, len(parsedConfigFileContent.Errors), 0)
+		})
+	}
+}
+
+func TestContentMappers(t *testing.T) {
+	t.Parallel()
+
+	config := testConfig{
+		jsonText: `{
+			"contentMappers": [
+				{ "package": "vue-mapper", "extensions": [".vue"], "options": { "strictTemplates": true } }
+			],
+			"include": ["src"]
+		}`,
+		configFileName: "tsconfig.json",
+		basePath:       "/",
+		allFileList: map[string]string{
+			"/src/app.ts":                           "export {}",
+			"/src/Component.vue":                    "<template></template>",
+			"/node_modules/vue-mapper/package.json": `{ "name": "vue-mapper", "version": "1.2.3", "typescript": { "contentMapper": { "exec": ["node", "./mapper.js"], "dynamicConfig": true } } }`,
+		},
+		existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+	}
+	for name, getParsed := range map[string]func(testConfig, tsoptions.ParseConfigHost, string) *tsoptions.ParsedCommandLine{
+		"json api":           getParsedWithJsonApi,
+		"jsonSourceFile api": getParsedWithJsonSourceFileApi,
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			allFileLists := make(map[string]string, len(config.allFileList)+1)
+			maps.Copy(allFileLists, config.allFileList)
+			allFileLists["/tsconfig.json"] = config.jsonText
+			host := tsoptionstest.NewVFSParseConfigHost(allFileLists, config.basePath, true /*useCaseSensitiveFileNames*/)
+			parsed := getParsed(config, host, config.basePath)
+
+			assert.Equal(t, len(parsed.Errors), 0)
+
+			mappers := parsed.ContentMappers()
+			assert.Equal(t, len(mappers), 1)
+			assert.Equal(t, mappers[0].Package, "vue-mapper")
+			assert.DeepEqual(t, mappers[0].Definition.Extensions, []string{".vue"})
+			assert.Equal(t, string(mappers[0].Options), `{"strictTemplates":true}`)
+			assert.DeepEqual(t, parsed.ContentMapperExtensions(), []string{".vue"})
+
+			// The package.json is resolved during parsing, populating name, version, and exec.
+			assert.Equal(t, mappers[0].Name, "vue-mapper")
+			assert.Equal(t, mappers[0].Version, "1.2.3")
+			assert.DeepEqual(t, mappers[0].Exec, []string{"node", "./mapper.js"})
+			assert.Assert(t, mappers[0].DynamicConfig)
+			assert.Equal(t, mappers[0].PackageDirectory, "/node_modules/vue-mapper")
+
+			// The .vue file is picked up by the include glob because its extension is registered.
+			assert.Assert(t, slices.Contains(parsed.FileNames(), "/src/Component.vue"), "expected /src/Component.vue in %v", parsed.FileNames())
+			assert.Assert(t, slices.Contains(parsed.FileNames(), "/src/app.ts"), "expected /src/app.ts in %v", parsed.FileNames())
+		})
+	}
+}
+
+func TestContentMapperOptionDiagnosticLocation(t *testing.T) {
+	t.Parallel()
+	config := testConfig{
+		jsonText: `{
+			"contentMappers": [{
+				"package": "mapper",
+				"extensions": [".vue"],
+				"options": { "plugins": [{ "name": 1 }] }
+			}]
+		}`,
+		configFileName: "tsconfig.json",
+		basePath:       "/",
+		allFileList: map[string]string{
+			"/index.ts":                         "export {};",
+			"/node_modules/mapper/package.json": `{ "name": "mapper", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["mapper"] } } }`,
+		},
+		existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+	}
+	host := tsoptionstest.NewVFSParseConfigHost(config.allFileList, config.basePath, true /*useCaseSensitiveFileNames*/)
+	parsed := getParsedWithJsonSourceFileApi(config, host, config.basePath)
+	file, loc := tsoptions.GetContentMapperOptionDiagnosticLocation(parsed, parsed.ContentMappers()[0], []contentmapper.OptionPathSegment{
+		{Property: "plugins"},
+		{Index: 0, IsIndex: true},
+		{Property: "name"},
+	})
+	assert.Equal(t, file.Text()[loc.Pos():loc.End()], "1")
+}
+
+func TestContentMappersAreInheritedFromExtendedConfig(t *testing.T) {
+	t.Parallel()
+	config := testConfig{
+		jsonText:       `{ "extends": "./base.json" }`,
+		configFileName: "tsconfig.json",
+		basePath:       "/project",
+		allFileList: map[string]string{
+			"/project/base.json":                            `{ "contentMappers": [{ "package": "vue-mapper", "extensions": [".vue"] }], "include": ["src"] }`,
+			"/project/src/index.ts":                         "export {};",
+			"/project/src/component.vue":                    "<template></template>",
+			"/project/node_modules/vue-mapper/package.json": `{ "name": "vue-mapper", "version": "1.2.3", "typescript": { "contentMapper": { "exec": ["node", "./mapper.js"] } } }`,
+		},
+		existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+	}
+	for name, getParsed := range map[string]func(testConfig, tsoptions.ParseConfigHost, string) *tsoptions.ParsedCommandLine{
+		"json api":           getParsedWithJsonApi,
+		"jsonSourceFile api": getParsedWithJsonSourceFileApi,
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			host := tsoptionstest.NewVFSParseConfigHost(config.allFileList, config.basePath, true /*useCaseSensitiveFileNames*/)
+			parsed := getParsed(config, host, config.basePath)
+			assert.Equal(t, len(parsed.Errors), 0)
+			assert.Equal(t, len(parsed.ContentMappers()), 1)
+			assert.Equal(t, parsed.ContentMappers()[0].Package, "vue-mapper")
+			assert.DeepEqual(t, parsed.ContentMapperExtensions(), []string{".vue"})
+			assert.Assert(t, slices.Contains(parsed.FileNames(), "/project/src/component.vue"))
+		})
+	}
+}
+
+func TestContentMappersRequireFlag(t *testing.T) {
+	t.Parallel()
+
+	config := testConfig{
+		jsonText:       `{ "contentMappers": [{ "package": "vue-mapper", "extensions": [".vue"] }] }`,
+		configFileName: "tsconfig.json",
+		basePath:       "/",
+		allFileList:    map[string]string{"/app.ts": "export {}"},
+		// existingOptions omitted: --runExternalCode is not set.
+	}
+	expectedCode := diagnostics.Content_mappers_require_the_runExternalCode_command_line_flag_to_be_enabled.Code()
+	for name, getParsed := range map[string]func(testConfig, tsoptions.ParseConfigHost, string) *tsoptions.ParsedCommandLine{
+		"json api":           getParsedWithJsonApi,
+		"jsonSourceFile api": getParsedWithJsonSourceFileApi,
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			allFileLists := map[string]string{"/tsconfig.json": config.jsonText}
+			maps.Copy(allFileLists, config.allFileList)
+			host := tsoptionstest.NewVFSParseConfigHost(allFileLists, config.basePath, true /*useCaseSensitiveFileNames*/)
+			parsed := getParsed(config, host, config.basePath)
+			found := slices.ContainsFunc(parsed.Errors, func(d *ast.Diagnostic) bool {
+				return d.Code() == expectedCode
+			})
+			assert.Assert(t, found, "expected diagnostic %d, got errors: %v", expectedCode, parsed.Errors)
+		})
+	}
+}
+
+func TestUnresolvedContentMapperDoesNotRegisterExtensions(t *testing.T) {
+	t.Parallel()
+
+	config := testConfig{
+		jsonText:        `{ "contentMappers": [{ "package": "missing-mapper", "extensions": [".vue"] }], "include": ["src"] }`,
+		configFileName:  "tsconfig.json",
+		basePath:        "/",
+		allFileList:     map[string]string{"/src/app.ts": "export {}", "/src/Component.vue": "<template />"},
+		existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+	}
+	for name, getParsed := range map[string]func(testConfig, tsoptions.ParseConfigHost, string) *tsoptions.ParsedCommandLine{
+		"json api":           getParsedWithJsonApi,
+		"jsonSourceFile api": getParsedWithJsonSourceFileApi,
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			host := tsoptionstest.NewVFSParseConfigHost(config.allFileList, config.basePath, true)
+			parsed := getParsed(config, host, config.basePath)
+
+			assert.Equal(t, len(parsed.ContentMappers()), 0)
+			assert.Equal(t, len(parsed.ContentMapperExtensions()), 0)
+			assert.Assert(t, !slices.Contains(parsed.FileNames(), "/src/Component.vue"))
+			assert.Assert(t, slices.Contains(parsed.FileNames(), "/src/app.ts"))
+		})
+	}
+}
+
+func TestContentMappersValidation(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name           string
+		contentMappers string
+		expectedCode   int32
+	}{
+		{
+			name:           "extension without leading dot",
+			contentMappers: `[{ "package": "vue-mapper", "extensions": ["vue"] }]`,
+			expectedCode:   diagnostics.Content_mapper_file_extension_0_must_begin_with_a.Code(),
+		},
+		{
+			name:           "built-in extension",
+			contentMappers: `[{ "package": "x", "extensions": [".ts"] }]`,
+			expectedCode:   diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+		},
+		{
+			name:           "missing extensions",
+			contentMappers: `[{ "package": "x" }]`,
+			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+		},
+		{
+			name:           "duplicate extension across mappers",
+			contentMappers: `[{ "package": "a", "extensions": [".vue"] }, { "package": "b", "extensions": [".vue"] }]`,
+			expectedCode:   diagnostics.Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper.Code(),
+		},
+		{
+			name:           "extensions is not an array",
+			contentMappers: `[{ "package": "x", "extensions": ".vue" }]`,
+			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+		},
+		{
+			name:           "extensions contains a non-string",
+			contentMappers: `[{ "package": "x", "extensions": [".vue", 1] }]`,
+			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+		},
+		{
+			name:           "package is not a string",
+			contentMappers: `[{ "package": ["x"], "extensions": [".vue"] }]`,
+			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+		},
+		{
+			name:           "missing package",
+			contentMappers: `[{ "extensions": [".vue"] }]`,
+			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+		},
+		{
+			name:           "options is not an object",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "options": ["strict"] }]`,
+			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			config := testConfig{
+				jsonText:        `{ "contentMappers": ` + test.contentMappers + ` }`,
+				configFileName:  "tsconfig.json",
+				basePath:        "/",
+				allFileList:     map[string]string{"/app.ts": "export {}"},
+				existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+			}
+			if test.name == "duplicate extension across mappers" {
+				config.allFileList["/node_modules/a/package.json"] = `{ "name": "a", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["a"] } } }`
+				config.allFileList["/node_modules/b/package.json"] = `{ "name": "b", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["b"] } } }`
+			}
+			for apiName, getParsed := range map[string]func(testConfig, tsoptions.ParseConfigHost, string) *tsoptions.ParsedCommandLine{
+				"json api":           getParsedWithJsonApi,
+				"jsonSourceFile api": getParsedWithJsonSourceFileApi,
+			} {
+				t.Run(apiName, func(t *testing.T) {
+					t.Parallel()
+					allFileLists := map[string]string{"/tsconfig.json": config.jsonText}
+					maps.Copy(allFileLists, config.allFileList)
+					host := tsoptionstest.NewVFSParseConfigHost(allFileLists, config.basePath, true /*useCaseSensitiveFileNames*/)
+					parsed := getParsed(config, host, config.basePath)
+					diagnostic := core.Find(parsed.Errors, func(d *ast.Diagnostic) bool {
+						return d.Code() == test.expectedCode
+					})
+					assert.Assert(t, diagnostic != nil, "expected diagnostic %d, got errors: %v", test.expectedCode, parsed.Errors)
+					switch test.name {
+					case "built-in extension":
+						assert.Equal(t, len(parsed.ContentMappers()), 0)
+						assert.Equal(t, len(parsed.ContentMapperExtensions()), 0)
+					case "duplicate extension across mappers":
+						assert.Equal(t, len(parsed.ContentMappers()), 2)
+						assert.DeepEqual(t, parsed.ContentMappers()[0].Definition.Extensions, []string{".vue"})
+						assert.Equal(t, len(parsed.ContentMappers()[1].Definition.Extensions), 0)
+						assert.DeepEqual(t, parsed.ContentMapperExtensions(), []string{".vue"})
+					case "missing extensions", "extensions is not an array", "extensions contains a non-string", "package is not a string", "missing package", "options is not an object":
+						assert.Equal(t, len(parsed.ContentMappers()), 0)
+					}
+
+					// With the jsonSourceFile API the diagnostic is located at the offending tsconfig syntax.
+					if apiName == "jsonSourceFile api" {
+						assert.Assert(t, diagnostic.File() != nil, "expected diagnostic %d to have a source file", test.expectedCode)
+						assert.Assert(t, diagnostic.Len() > 0, "expected diagnostic %d to have a non-empty location", test.expectedCode)
+					}
+				})
+			}
+		})
+	}
+}
+
+func getParsedWithJsonSourceFileApi(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine {
+	configFileName := tspath.GetNormalizedAbsolutePath(config.configFileName, basePath)
+	path := tspath.ToPath(config.configFileName, basePath, host.FS().UseCaseSensitiveFileNames())
+	parsed := parser.ParseSourceFile(ast.SourceFileParseOptions{
+		FileName: configFileName,
+		Path:     path,
+	}, config.jsonText, core.ScriptKindJSON)
+	tsConfigSourceFile := &tsoptions.TsConfigSourceFile{
+		SourceFile: parsed,
+	}
+	return tsoptions.ParseJsonSourceFileConfigFileContent(
+		tsConfigSourceFile,
+		host,
+		host.GetCurrentDirectory(),
+		config.existingOptions,
+		nil,
+		configFileName,
+		/*resolutionStack*/ nil,
+		/*extendedConfigCache*/ nil,
+	)
+}
+
+func baselineParseConfigWith(t *testing.T, baselineFileName string, includeCompilerOptions bool, input []testConfig, getParsed func(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine) {
+	var baselineContent strings.Builder
+	for i, config := range input {
+		basePath := config.basePath
+		if basePath == "" {
+			basePath = tspath.GetNormalizedAbsolutePath(tspath.GetDirectoryPath(config.configFileName), "")
+		}
+		configFileName := tspath.CombinePaths(basePath, config.configFileName)
+		allFileLists := make(map[string]string, len(config.allFileList)+1)
+		maps.Copy(allFileLists, config.allFileList)
+		allFileLists[configFileName] = config.jsonText
+		host := tsoptionstest.NewVFSParseConfigHost(allFileLists, config.basePath, true /*useCaseSensitiveFileNames*/)
+		parsedConfigFileContent := getParsed(config, host, basePath)
+
+		baselineContent.WriteString("Fs::\n")
+		if err := printFS(&baselineContent, host.FS(), "/"); err != nil {
+			t.Fatal(err)
+		}
+		baselineContent.WriteString("\n")
+		baselineContent.WriteString("configFileName:: ")
+		baselineContent.WriteString(config.configFileName)
+		baselineContent.WriteString("\n")
+		if includeCompilerOptions {
+			baselineContent.WriteString("CompilerOptions::\n")
+			assert.NilError(t, json.MarshalIndentWrite(&baselineContent, parsedConfigFileContent.ParsedConfig.CompilerOptions, "", "  "))
+			baselineContent.WriteString("\n")
+			baselineContent.WriteString("\n")
+
+			if parsedConfigFileContent.ParsedConfig.TypeAcquisition != nil {
+				baselineContent.WriteString("TypeAcquisition::\n")
+				assert.NilError(t, json.MarshalIndentWrite(&baselineContent, parsedConfigFileContent.ParsedConfig.TypeAcquisition, "", "  "))
+				baselineContent.WriteString("\n")
+				baselineContent.WriteString("\n")
+			}
+		}
+		baselineContent.WriteString("FileNames::\n")
+		baselineContent.WriteString(strings.Join(parsedConfigFileContent.ParsedConfig.FileNames, ","))
+		baselineContent.WriteString("\n")
+		baselineContent.WriteString("Errors::\n")
+		diagnosticwriter.FormatDiagnosticsWithColorAndContext(&baselineContent, diagnosticwriter.FromASTDiagnostics(parsedConfigFileContent.Errors), &diagnosticwriter.FormattingOptions{
+			NewLine: "\r\n",
+			ComparePathsOptions: tspath.ComparePathsOptions{
+				CurrentDirectory:          basePath,
+				UseCaseSensitiveFileNames: true,
+			},
+		})
+		baselineContent.WriteString("\n")
+		if i != len(input)-1 {
+			baselineContent.WriteString("\n")
+		}
+	}
+	baseline.Run(t, baselineFileName, baselineContent.String(), baseline.Options{Subfolder: "config/tsconfigParsing"})
+}
+
+func writeJsonReadableText(output io.Writer, input any) error {
+	return json.MarshalIndentWrite(output, input, "", "  ")
+}
+
+func TestParseTypeAcquisition(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		title      string
+		configName string
+		config     string
+	}{
+		{
+			title: "Convert correctly format tsconfig.json to typeAcquisition ",
+			config: `{
+	"typeAcquisition": {
+		"enable": true,
+		"include": ["0.d.ts", "1.d.ts"],
+		"exclude": ["0.js", "1.js"],
+	},
+}`,
+			configName: "tsconfig.json",
+		},
+		{
+			title: "Convert incorrect format tsconfig.json to typeAcquisition ",
+			config: `{
+	"typeAcquisition": {
+		"enableAutoDiscovy": true,
+	}
+}`, configName: "tsconfig.json",
+		},
+		{
+			title:  "Convert default tsconfig.json to typeAcquisition ",
+			config: `{}`, configName: "tsconfig.json",
+		},
+		{
+			title: "Convert tsconfig.json with only enable property to typeAcquisition ",
+			config: `{
+	"typeAcquisition": {
+		"enable": true,
+	},
+}`, configName: "tsconfig.json",
+		},
+
+		// jsconfig.json
+		{
+			title: "Convert jsconfig.json to typeAcquisition ",
+			config: `{
+	"typeAcquisition": {
+		"enable": false,
+		"include": ["0.d.ts"],
+		"exclude": ["0.js"],
+	},
+}`,
+			configName: "jsconfig.json",
+		},
+		{title: "Convert default jsconfig.json to typeAcquisition ", config: `{}`, configName: "jsconfig.json"},
+		{
+			title: "Convert incorrect format jsconfig.json to typeAcquisition ",
+			config: `{
+	"typeAcquisition": {
+		"enableAutoDiscovy": true,
+	},
+}`,
+			configName: "jsconfig.json",
+		},
+		{
+			title: "Convert jsconfig.json with only enable property to typeAcquisition ",
+			config: `{
+	"typeAcquisition": {
+		"enable": false,
+	},
+}`,
+			configName: "jsconfig.json",
+		},
+	}
+	for _, test := range cases {
+		withJsonApiName := test.title + " with json api"
+		input := []testConfig{
+			{
+				jsonText:       test.config,
+				configFileName: test.configName,
+				basePath:       "/apath",
+				allFileList: map[string]string{
+					"/apath/a.ts": "",
+					"/apath/b.ts": "",
+				},
+			},
+		}
+		t.Run(withJsonApiName, func(t *testing.T) {
+			t.Parallel()
+			baselineParseConfigWith(t, withJsonApiName+".js", true, input, getParsedWithJsonApi)
+		})
+		withJsonSourceFileApiName := test.title + " with jsonSourceFile api"
+		t.Run(withJsonSourceFileApiName, func(t *testing.T) {
+			t.Parallel()
+			baselineParseConfigWith(t, withJsonSourceFileApiName+".js", true, input, getParsedWithJsonSourceFileApi)
+		})
+	}
+}
+
+func printFS(output io.Writer, files vfs.FS, root string) error {
+	return files.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.Type().IsRegular() {
+			if content, ok := files.ReadFile(path); !ok {
+				return fmt.Errorf("failed to read file %s", path)
+			} else {
+				if _, err := fmt.Fprintf(output, "//// [%s]\r\n%s\r\n\r\n", path, content); err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	})
+}
+
+// memoCache is a minimal memoizing ExtendedConfigCache used by tests to simulate
+// cache hits across multiple parses of configs that extend a common base.
+type memoCache struct {
+	m map[tspath.Path]*tsoptions.ExtendedConfigCacheEntry
+}
+
+func (mc *memoCache) GetExtendedConfig(fileName string, path tspath.Path, resolutionStack []tspath.Path, host tsoptions.ParseConfigHost) *tsoptions.ExtendedConfigCacheEntry {
+	if mc.m == nil {
+		mc.m = make(map[tspath.Path]*tsoptions.ExtendedConfigCacheEntry)
+	}
+	if e, ok := mc.m[path]; ok {
+		return e
+	}
+	e := tsoptions.ParseExtendedConfig(fileName, path, resolutionStack, host, mc)
+	mc.m[path] = e
+	return e
+}
+
+var _ tsoptions.ExtendedConfigCache = (*memoCache)(nil)
+
+// TestExtendedConfigErrorsAppearOnCacheHit verifies that diagnostics produced while parsing an
+// extended config are still reported when the extended config comes from the cache.
+func TestExtendedConfigErrorsAppearOnCacheHit(t *testing.T) {
+	t.Parallel()
+
+	t.Run("single config parsed twice", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]string{
+			"/tsconfig.json": `{
+  "extends": "./base.json"
+}`,
+			// 'excludes' instead of 'exclude' triggers diagnostic
+			"/base.json": `{
+  "excludes": ["**/*.ts"]
+}`,
+			"/app.ts": "export {}",
+		}
+
+		host := tsoptionstest.NewVFSParseConfigHost(files, "/", true /*useCaseSensitiveFileNames*/)
+
+		parseConfig := func(configFileName string, cache tsoptions.ExtendedConfigCache) *tsoptions.ParsedCommandLine {
+			cfgPath := tspath.ToPath(configFileName, host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames())
+			jsonText, ok := host.FS().ReadFile(configFileName)
+			assert.Assert(t, ok, "missing %s in test fs", configFileName)
+			tsConfigSourceFile := &tsoptions.TsConfigSourceFile{
+				SourceFile: parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: configFileName, Path: cfgPath}, jsonText, core.ScriptKindJSON),
+			}
+			return tsoptions.ParseJsonSourceFileConfigFileContent(
+				tsConfigSourceFile,
+				host,
+				host.GetCurrentDirectory(),
+				nil,
+				nil,
+				configFileName,
+				nil,
+				cache,
+			)
+		}
+
+		cache := &memoCache{}
+		first := parseConfig("/tsconfig.json", cache)
+		assert.Assert(t, len(first.Errors) > 0, "expected diagnostics on first parse, got 0")
+		second := parseConfig("/tsconfig.json", cache)
+		assert.Assert(t, len(second.Errors) > 0, "expected diagnostics on second parse (cache hit), got 0")
+	})
+
+	t.Run("two configs share same base", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]string{
+			"/base.json": `{
+  "excludes": ["**/*.ts"]
+}`,
+			"/projA/tsconfig.json": `{
+  "extends": "../base.json"
+}`,
+			"/projB/tsconfig.json": `{
+  "extends": "../base.json"
+}`,
+			"/projA/app.ts": "export {}",
+			"/projB/app.ts": "export {}",
+		}
+
+		host := tsoptionstest.NewVFSParseConfigHost(files, "/", true /*useCaseSensitiveFileNames*/)
+
+		parseConfig := func(configFileName string, cache tsoptions.ExtendedConfigCache) *tsoptions.ParsedCommandLine {
+			cfgPath := tspath.ToPath(configFileName, host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames())
+			jsonText, ok := host.FS().ReadFile(configFileName)
+			assert.Assert(t, ok, "missing %s in test fs", configFileName)
+			tsConfigSourceFile := &tsoptions.TsConfigSourceFile{
+				SourceFile: parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: configFileName, Path: cfgPath}, jsonText, core.ScriptKindJSON),
+			}
+			return tsoptions.ParseJsonSourceFileConfigFileContent(
+				tsConfigSourceFile,
+				host,
+				host.GetCurrentDirectory(),
+				nil,
+				nil,
+				configFileName,
+				nil,
+				cache,
+			)
+		}
+
+		cache := &memoCache{}
+		first := parseConfig("/projA/tsconfig.json", cache)
+		assert.Assert(t, len(first.Errors) > 0, "expected diagnostics for projA parse, got 0")
+		second := parseConfig("/projB/tsconfig.json", cache)
+		assert.Assert(t, len(second.Errors) > 0, "expected diagnostics for projB parse (cache hit on base), got 0")
+	})
+}
+
+func TestExtendedConfigConfigDirPathsAreNotCached(t *testing.T) {
+	t.Parallel()
+
+	files := map[string]string{
+		"/tsconfig.base.json": `{
+  "compilerOptions": {
+    "paths": {
+      "@pkg/*": ["${configDir}/src/*"]
+    }
+  }
+}`,
+		"/packages/a/tsconfig.json": `{
+  "extends": "../../tsconfig.base.json"
+}`,
+		"/packages/b/tsconfig.json": `{
+  "extends": "../../tsconfig.base.json"
+}`,
+		"/packages/a/index.ts": "export {}",
+		"/packages/b/index.ts": "export {}",
+	}
+
+	host := tsoptionstest.NewVFSParseConfigHost(files, "/", true /*useCaseSensitiveFileNames*/)
+	cache := &memoCache{}
+
+	parseConfig := func(configFileName string) *tsoptions.ParsedCommandLine {
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, nil, nil, host, cache)
+		assert.Assert(t, len(errors) == 0, "unexpected errors parsing %s: %v", configFileName, errors)
+		return parsed
+	}
+
+	parseConfig("/packages/a/tsconfig.json")
+	paths := parseConfig("/packages/b/tsconfig.json").CompilerOptions().Paths
+	assert.DeepEqual(t, paths.GetOrZero("@pkg/*"), []string{"/packages/b/src/*"})
+}

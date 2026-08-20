@@ -1,0 +1,13 @@
+error TS2688: Cannot find type definition file for 'nonexistent'.
+  The file is in the program because:
+    Entry point of type library 'nonexistent' specified in compilerOptions
+
+
+!!! error TS2688: Cannot find type definition file for 'nonexistent'.
+!!! error TS2688:   The file is in the program because:
+!!! error TS2688:     Entry point of type library 'nonexistent' specified in compilerOptions
+==== tsconfig.json (0 errors) ====
+    [{"compilerOptions": {"types": ["nonexistent"]}}]
+==== index.ts (0 errors) ====
+    export const x = 1;
+    

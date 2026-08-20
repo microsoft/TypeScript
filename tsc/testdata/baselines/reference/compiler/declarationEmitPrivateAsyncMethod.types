@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/declarationEmitPrivateAsyncMethod.ts] ////
+
+=== a.ts ===
+export class C {
+>C : C
+
+    /**
+     * Non Async function
+     */
+    private a(): void {
+>a : () => void
+    }
+
+    /**
+     * Async function
+     */
+    private async b(): Promise<void> {
+>b : () => Promise<void>
+    }
+}
+

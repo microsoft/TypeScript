@@ -1,0 +1,141 @@
+//// [tests/cases/compiler/enumComputedPropertyDeclarationEmit.ts] ////
+
+=== enumComputedPropertyDeclarationEmit.ts ===
+export enum StringEnum {
+>StringEnum : StringEnum
+
+    A = "a",
+>A : StringEnum.A
+>"a" : "a"
+
+    B = "not-an-identifier",
+>B : StringEnum.B
+>"not-an-identifier" : "not-an-identifier"
+
+    Unused = "unused",
+>Unused : StringEnum.Unused
+>"unused" : "unused"
+}
+
+export const stringRecord = {
+>stringRecord : { readonly [StringEnum.A]: StringEnum.A; readonly [StringEnum.B]: StringEnum.B; }
+>{    [StringEnum.A]: StringEnum.A,    [StringEnum.B]: StringEnum.B,} as const : { readonly [StringEnum.A]: StringEnum.A; readonly [StringEnum.B]: StringEnum.B; }
+>{    [StringEnum.A]: StringEnum.A,    [StringEnum.B]: StringEnum.B,} : { readonly [StringEnum.A]: StringEnum.A; readonly [StringEnum.B]: StringEnum.B; }
+
+    [StringEnum.A]: StringEnum.A,
+>[StringEnum.A] : StringEnum.A
+>StringEnum.A : StringEnum.A
+>StringEnum : typeof StringEnum
+>A : StringEnum.A
+>StringEnum.A : StringEnum.A
+>StringEnum : typeof StringEnum
+>A : StringEnum.A
+
+    [StringEnum.B]: StringEnum.B,
+>[StringEnum.B] : StringEnum.B
+>StringEnum.B : StringEnum.B
+>StringEnum : typeof StringEnum
+>B : StringEnum.B
+>StringEnum.B : StringEnum.B
+>StringEnum : typeof StringEnum
+>B : StringEnum.B
+
+} as const;
+
+export type StringKey = keyof typeof stringRecord;
+>StringKey : StringEnum.A | StringEnum.B
+>stringRecord : { readonly [StringEnum.A]: StringEnum.A; readonly [StringEnum.B]: StringEnum.B; }
+
+export enum NumericEnum {
+>NumericEnum : NumericEnum
+
+    Zero = 0,
+>Zero : NumericEnum.Zero
+>0 : 0
+
+    Negative = -1,
+>Negative : NumericEnum.Negative
+>-1 : -1
+>1 : 1
+
+    Unused = 1,
+>Unused : NumericEnum.Unused
+>1 : 1
+}
+
+export const numericRecord = {
+>numericRecord : { readonly [NumericEnum.Zero]: NumericEnum.Zero; readonly [NumericEnum.Negative]: NumericEnum.Negative; }
+>{    [NumericEnum.Zero]: NumericEnum.Zero,    [NumericEnum.Negative]: NumericEnum.Negative,} as const : { readonly [NumericEnum.Zero]: NumericEnum.Zero; readonly [NumericEnum.Negative]: NumericEnum.Negative; }
+>{    [NumericEnum.Zero]: NumericEnum.Zero,    [NumericEnum.Negative]: NumericEnum.Negative,} : { readonly [NumericEnum.Zero]: NumericEnum.Zero; readonly [NumericEnum.Negative]: NumericEnum.Negative; }
+
+    [NumericEnum.Zero]: NumericEnum.Zero,
+>[NumericEnum.Zero] : NumericEnum.Zero
+>NumericEnum.Zero : NumericEnum.Zero
+>NumericEnum : typeof NumericEnum
+>Zero : NumericEnum.Zero
+>NumericEnum.Zero : NumericEnum.Zero
+>NumericEnum : typeof NumericEnum
+>Zero : NumericEnum.Zero
+
+    [NumericEnum.Negative]: NumericEnum.Negative,
+>[NumericEnum.Negative] : NumericEnum.Negative
+>NumericEnum.Negative : NumericEnum.Negative
+>NumericEnum : typeof NumericEnum
+>Negative : NumericEnum.Negative
+>NumericEnum.Negative : NumericEnum.Negative
+>NumericEnum : typeof NumericEnum
+>Negative : NumericEnum.Negative
+
+} as const;
+
+export type NumericKey = keyof typeof numericRecord;
+>NumericKey : NumericEnum.Zero | NumericEnum.Negative
+>numericRecord : { readonly [NumericEnum.Zero]: NumericEnum.Zero; readonly [NumericEnum.Negative]: NumericEnum.Negative; }
+
+type Assignability<T extends StringEnum | NumericEnum> = T;
+>Assignability : T
+
+export type StringDemo<T extends StringKey> = Assignability<T>;
+>StringDemo : T
+
+export type NumericDemo<T extends NumericKey> = Assignability<T>;
+>NumericDemo : T
+
+export namespace Namespace {
+>Namespace : typeof Namespace
+
+    enum NamespaceEnum {
+>NamespaceEnum : NamespaceEnum
+
+        A = "a",
+>A : NamespaceEnum.A
+>"a" : "a"
+    }
+
+    export const record = {
+>record : { readonly [NamespaceEnum.A]: NamespaceEnum; }
+>{        [NamespaceEnum.A]: NamespaceEnum.A,    } as const : { readonly [NamespaceEnum.A]: NamespaceEnum; }
+>{        [NamespaceEnum.A]: NamespaceEnum.A,    } : { readonly [NamespaceEnum.A]: NamespaceEnum; }
+
+        [NamespaceEnum.A]: NamespaceEnum.A,
+>[NamespaceEnum.A] : NamespaceEnum
+>NamespaceEnum.A : NamespaceEnum
+>NamespaceEnum : typeof NamespaceEnum
+>A : NamespaceEnum
+>NamespaceEnum.A : NamespaceEnum
+>NamespaceEnum : typeof NamespaceEnum
+>A : NamespaceEnum
+
+    } as const;
+
+    export type Key = keyof typeof record;
+>Key : NamespaceEnum.A
+>record : { readonly [NamespaceEnum.A]: NamespaceEnum; }
+
+    type NamespaceAssignability<T extends NamespaceEnum> = T;
+>NamespaceAssignability : T
+
+    export type Demo<T extends Key> = NamespaceAssignability<T>;
+>Demo : T
+}
+

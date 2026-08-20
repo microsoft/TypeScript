@@ -1,0 +1,34 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestGetOccurrencesSwitchCaseDefault(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `[|switch|] (10) {
+    [|case|] 1:
+    [|case|] 2:
+    [|case|] 4:
+    [|case|] 8:
+        foo: switch (20) {
+            case 1:
+            case 2:
+                break;
+            default:
+                break foo;
+        }
+    [|case|] 0xBEEF:
+    [|default|]:
+        [|break|];
+    [|case|] 16:
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineDocumentHighlights(t, nil /*preferences*/, ToAny(f.Ranges())...)
+}

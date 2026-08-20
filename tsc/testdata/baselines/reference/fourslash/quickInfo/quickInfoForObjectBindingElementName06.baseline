@@ -1,0 +1,56 @@
+// === QuickInfo ===
+=== /quickInfoForObjectBindingElementName06.ts ===
+// type Foo = {
+//     /**
+//      * Thing is a bar
+//      */
+//     isBar: boolean
+// 
+//     /**
+//      * Thing is a baz
+//      */
+//     isBaz: boolean
+// }
+// 
+// function f(): Foo {
+//     return undefined as any
+// }
+// 
+// const { isBaz: isBar } = f();
+// isBar;
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const isBar: boolean
+// | ```
+// | Thing is a baz
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 217,
+      "LSPosition": {
+        "line": 17,
+        "character": 5
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst isBar: boolean\n```\nThing is a baz"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 0
+        },
+        "end": {
+          "line": 17,
+          "character": 5
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,21 @@
+a.js(2,21): error TS1005: '}' expected.
+a.js(8,20): error TS1005: '}' expected.
+
+
+==== a.js (2 errors) ====
+    // from bcryptjs
+    /** @param {function(...[*])} callback */
+                        ~
+!!! error TS1005: '}' expected.
+    function g(callback) {
+        callback([1], [2], [3])
+    }
+    
+    /**
+     * @type {!function(...number):string}
+                       ~
+!!! error TS1005: '}' expected.
+     * @inner
+     */
+    var stringFromCharCode = String.fromCharCode;
+    

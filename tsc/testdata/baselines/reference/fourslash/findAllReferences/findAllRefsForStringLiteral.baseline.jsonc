@@ -1,0 +1,11 @@
+// === findAllReferences ===
+// === /a.ts ===
+// interface Foo {
+//     property: /*FIND ALL REFS*/"[|foo|]";
+// }
+// /**
+//  * @type {{ property: "foo"}}
+//  */
+// const obj: Foo = {
+//     property: "[|foo|]",
+// }

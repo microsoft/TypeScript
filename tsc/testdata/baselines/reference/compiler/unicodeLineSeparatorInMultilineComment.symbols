@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/unicodeLineSeparatorInMultilineComment.ts] ////
+
+=== unicodeLineSeparatorInMultilineComment.ts ===
+/* a
+b */ const x = 1;
+>x : Symbol(x, Decl(unicodeLineSeparatorInMultilineComment.ts, 1, 10))
+

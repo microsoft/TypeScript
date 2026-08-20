@@ -1,0 +1,95 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTagOnObjectProperty1.ts] ////
+
+=== 0.js ===
+// @ts-check
+var lol = "hello Lol"
+>lol : string
+>"hello Lol" : "hello Lol"
+
+const obj = {
+>obj : { [x: string]: string | number | Function | undefined; foo: string | undefined; bar: string | undefined; method1(n1: any): any; lol: string; arrowFunc: Function; }
+>{  /** @type {string|undefined} */  foo: undefined,  /** @type {string|undefined} */  bar: "42",  /** @type {function(number): number} */  method1(n1) {      return n1 + 42;  },  /** @type {string} */  lol,  /** @type {number} */  ['b' + 'ar1']: 42,  /** @type {function(number): number} */  arrowFunc: (num) => num + 42} : { [x: string]: string | number | Function | undefined; foo: string | undefined; bar: string | undefined; method1(n1: any): any; lol: string; arrowFunc: Function; }
+
+  /** @type {string|undefined} */
+  foo: undefined,
+>foo : string | undefined
+>undefined : undefined
+
+  /** @type {string|undefined} */
+  bar: "42",
+>bar : string | undefined
+>"42" : "42"
+
+  /** @type {function(number): number} */
+  method1(n1) {
+>method1 : (n1: any) => any
+>n1 : any
+
+      return n1 + 42;
+>n1 + 42 : any
+>n1 : any
+>42 : 42
+
+  },
+  /** @type {string} */
+  lol,
+>lol : string
+
+  /** @type {number} */
+  ['b' + 'ar1']: 42,
+>['b' + 'ar1'] : number
+>'b' + 'ar1' : string
+>'b' : "b"
+>'ar1' : "ar1"
+>42 : 42
+
+  /** @type {function(number): number} */
+  arrowFunc: (num) => num + 42
+>arrowFunc : Function
+>(num) => num + 42 : (num: any) => any
+>num : any
+>num + 42 : any
+>num : any
+>42 : 42
+}
+obj.foo = 'string'
+>obj.foo = 'string' : "string"
+>obj.foo : string | undefined
+>obj : { [x: string]: string | number | Function | undefined; foo: string | undefined; bar: string | undefined; method1(n1: any): any; lol: string; arrowFunc: Function; }
+>foo : string | undefined
+>'string' : "string"
+
+obj.lol
+>obj.lol : string
+>obj : { [x: string]: string | number | Function | undefined; foo: string | undefined; bar: string | undefined; method1(n1: any): any; lol: string; arrowFunc: Function; }
+>lol : string
+
+obj.bar = undefined;
+>obj.bar = undefined : undefined
+>obj.bar : string | undefined
+>obj : { [x: string]: string | number | Function | undefined; foo: string | undefined; bar: string | undefined; method1(n1: any): any; lol: string; arrowFunc: Function; }
+>bar : string | undefined
+>undefined : undefined
+
+var k = obj.method1(0);
+>k : any
+>obj.method1(0) : any
+>obj.method1 : (n1: any) => any
+>obj : { [x: string]: string | number | Function | undefined; foo: string | undefined; bar: string | undefined; method1(n1: any): any; lol: string; arrowFunc: Function; }
+>method1 : (n1: any) => any
+>0 : 0
+
+obj.bar1 = "42";
+>obj.bar1 = "42" : "42"
+>obj.bar1 : string | number | Function | undefined
+>obj : { [x: string]: string | number | Function | undefined; foo: string | undefined; bar: string | undefined; method1(n1: any): any; lol: string; arrowFunc: Function; }
+>bar1 : string | number | Function | undefined
+>"42" : "42"
+
+obj.arrowFunc(0);
+>obj.arrowFunc(0) : any
+>obj.arrowFunc : Function
+>obj : { [x: string]: string | number | Function | undefined; foo: string | undefined; bar: string | undefined; method1(n1: any): any; lol: string; arrowFunc: Function; }
+>arrowFunc : Function
+>0 : 0
+

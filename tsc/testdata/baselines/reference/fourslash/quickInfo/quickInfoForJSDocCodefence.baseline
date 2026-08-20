@@ -1,0 +1,104 @@
+// === QuickInfo ===
+=== /quickInfoForJSDocCodefence.ts ===
+// /**
+//  * @example
+//  * ```
+//  * 1 + 2
+//  * ```
+//  */
+// function foo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo(): string
+// | ```
+// | 
+// | 
+// | *@example*
+// | ```
+// | 1 + 2
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  * @example
+//  * ``
+//  * 1 + 2
+//  * `
+//  */
+// function boo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function boo(): string
+// | ```
+// | 
+// | 
+// | *@example*
+// | ```tsx
+// | ``
+// | 1 + 2
+// | `
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+[
+  {
+    "marker": {
+      "Position": 54,
+      "LSPosition": {
+        "line": 6,
+        "character": 11
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(): string\n```\n\n\n*@example*\n```\n1 + 2\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 9
+        },
+        "end": {
+          "line": 6,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 129,
+      "LSPosition": {
+        "line": 15,
+        "character": 11
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction boo(): string\n```\n\n\n*@example*\n```tsx\n``\n1 + 2\n`\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 9
+        },
+        "end": {
+          "line": 15,
+          "character": 12
+        }
+      }
+    }
+  }
+]

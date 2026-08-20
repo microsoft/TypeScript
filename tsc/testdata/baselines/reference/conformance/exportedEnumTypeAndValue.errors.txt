@@ -1,0 +1,19 @@
+use.js(3,12): error TS2749: 'MyEnum' refers to a value, but is being used as a type here. Did you mean 'typeof MyEnum'?
+
+
+==== def.js (0 errors) ====
+    /** @enum {number} */
+    const MyEnum = {
+      a: 1,
+      b: 2
+    };
+    export default MyEnum;
+    
+==== use.js (1 errors) ====
+    import MyEnum from "./def";
+    
+    /** @type {MyEnum} */
+               ~~~~~~
+!!! error TS2749: 'MyEnum' refers to a value, but is being used as a type here. Did you mean 'typeof MyEnum'?
+    const v = MyEnum.b;
+    

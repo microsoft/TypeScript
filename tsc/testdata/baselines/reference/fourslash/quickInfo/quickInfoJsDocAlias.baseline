@@ -1,0 +1,40 @@
+// === QuickInfo ===
+=== /b.ts ===
+// import { A } from "./a";
+// A()
+// ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) const A: () => void
+// | ```
+// | docs - const A: T
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 26,
+      "LSPosition": {
+        "line": 1,
+        "character": 1
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) const A: () => void\n```\ndocs - const A: T"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 0
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        }
+      }
+    }
+  }
+]

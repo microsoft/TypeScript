@@ -1,0 +1,12 @@
+// === goToImplementation ===
+// === /goToImplementationInterface_08.ts ===
+// --- (line: 6) skipped ---
+// interface C extends B, A {}
+// 
+// class X implements B {
+//     <|[|hello|]() {}|>
+// }
+// 
+// function someFunction(d : A) {
+//     d.he/*GOTO IMPL*/llo();
+// }

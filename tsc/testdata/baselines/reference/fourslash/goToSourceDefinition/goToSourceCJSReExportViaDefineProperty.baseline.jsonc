@@ -1,0 +1,63 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/impl.js ===
+// "use strict";
+// Object.defineProperty(exports, "__esModule", { value: true });
+// exports.greet = void 0;
+// <|function [|greet|](name) { return "Hello, " + name; }|>
+// exports.greet = greet;
+
+// === /home/src/workspaces/project/index.ts ===
+// import { /*GOTO SOURCE DEF*/greet, TargetPopulation } from "pkg";
+// greet("world");
+// TargetPopulation.Team;
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/types.js ===
+// "use strict";
+// Object.defineProperty(exports, "__esModule", { value: true });
+// exports.TargetPopulation = void 0;
+// <|var [|TargetPopulation|];|>
+// (function (TargetPopulation) {
+//     TargetPopulation["Team"] = "team";
+//     TargetPopulation["Public"] = "public";
+// })(TargetPopulation || (exports.TargetPopulation = TargetPopulation = {}));
+
+// === /home/src/workspaces/project/index.ts ===
+// import { greet, /*GOTO SOURCE DEF*/TargetPopulation } from "pkg";
+// greet("world");
+// TargetPopulation.Team;
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/impl.js ===
+// "use strict";
+// Object.defineProperty(exports, "__esModule", { value: true });
+// exports.greet = void 0;
+// <|function [|greet|](name) { return "Hello, " + name; }|>
+// exports.greet = greet;
+
+// === /home/src/workspaces/project/index.ts ===
+// import { greet, TargetPopulation } from "pkg";
+// greet/*GOTO SOURCE DEF*/("world");
+// TargetPopulation.Team;
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/types.js ===
+// "use strict";
+// Object.defineProperty(exports, "__esModule", { value: true });
+// exports.TargetPopulation = void 0;
+// <|var [|TargetPopulation|];|>
+// (function (TargetPopulation) {
+//     TargetPopulation["Team"] = "team";
+//     TargetPopulation["Public"] = "public";
+// })(TargetPopulation || (exports.TargetPopulation = TargetPopulation = {}));
+
+// === /home/src/workspaces/project/index.ts ===
+// import { greet, TargetPopulation } from "pkg";
+// greet("world");
+// TargetPopulation/*GOTO SOURCE DEF*/.Team;

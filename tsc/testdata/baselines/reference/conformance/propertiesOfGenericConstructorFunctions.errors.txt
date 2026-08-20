@@ -1,0 +1,91 @@
+propertiesOfGenericConstructorFunctions.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+propertiesOfGenericConstructorFunctions.js(11,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+propertiesOfGenericConstructorFunctions.js(14,12): error TS2749: 'Multimap' refers to a value, but is being used as a type here. Did you mean 'typeof Multimap'?
+propertiesOfGenericConstructorFunctions.js(15,13): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+propertiesOfGenericConstructorFunctions.js(17,14): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+propertiesOfGenericConstructorFunctions.js(34,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+propertiesOfGenericConstructorFunctions.js(35,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+propertiesOfGenericConstructorFunctions.js(38,24): error TS2339: Property 'x' does not exist on type '{ m1(): any; m2(): any; }'.
+propertiesOfGenericConstructorFunctions.js(39,17): error TS2339: Property 'z' does not exist on type '{ m1(): any; m2(): any; }'.
+propertiesOfGenericConstructorFunctions.js(39,26): error TS2339: Property 'x' does not exist on type '{ m1(): any; m2(): any; }'.
+propertiesOfGenericConstructorFunctions.js(39,45): error TS2339: Property 'y' does not exist on type '{ m1(): any; m2(): any; }'.
+propertiesOfGenericConstructorFunctions.js(41,10): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+
+
+==== propertiesOfGenericConstructorFunctions.js (12 errors) ====
+    /**
+     * @template {string} K
+     * @template V
+     * @param {string} ik
+     * @param {V} iv
+     */
+    function Multimap(ik, iv) {
+        /** @type {{ [s: string]: V }} */
+        this._map = {};
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+        // without type annotation
+        this._map2 = { [ik]: iv };
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    };
+    
+    /** @type {Multimap<"a" | "b", number>} with type annotation */
+               ~~~~~~~~
+!!! error TS2749: 'Multimap' refers to a value, but is being used as a type here. Did you mean 'typeof Multimap'?
+    const map = new Multimap("a", 1);
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    // without type annotation
+    const map2 = new Multimap("m", 2);
+                 ~~~~~~~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    
+    /** @type {number} */
+    var n = map._map['hi']
+    /** @type {number} */
+    var n = map._map2['hi']
+    /** @type {number} */
+    var n = map2._map['hi']
+    /** @type {number} */
+    var n = map._map2['hi']
+    
+    /**
+     * @class
+     * @template T
+     * @param {T} t
+     */
+    function Cp(t) {
+        this.x = 1
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+        this.y = t
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    }
+    Cp.prototype = {
+        m1() { return this.x },
+                           ~
+!!! error TS2339: Property 'x' does not exist on type '{ m1(): any; m2(): any; }'.
+        m2() { this.z = this.x + 1; return this.y }
+                    ~
+!!! error TS2339: Property 'z' does not exist on type '{ m1(): any; m2(): any; }'.
+                             ~
+!!! error TS2339: Property 'x' does not exist on type '{ m1(): any; m2(): any; }'.
+                                                ~
+!!! error TS2339: Property 'y' does not exist on type '{ m1(): any; m2(): any; }'.
+    }
+    var cp = new Cp(1)
+             ~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    
+    /** @type {number} */
+    var n = cp.x
+    /** @type {number} */
+    var n = cp.y
+    /** @type {number} */
+    var n = cp.m1()
+    /** @type {number} */
+    var n = cp.m2()
+    
+    

@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/declarationEmitConstructorType.ts] ////
+
+=== declarationEmitConstructorType.ts ===
+declare namespace NS {
+>NS : typeof NS
+
+    interface Foo { }
+    var Foo: new () => number;
+>Foo : new () => number
+}
+

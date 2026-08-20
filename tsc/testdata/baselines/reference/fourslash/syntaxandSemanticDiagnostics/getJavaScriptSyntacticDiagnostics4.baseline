@@ -1,0 +1,11 @@
+// === Syntax and Semantic Diagnostics ===
+/a.js(1,1): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+/a.js(1,1): error TS8009: The 'public' modifier can only be used in TypeScript files.
+
+
+==== /a.js (2 errors) ====
+    public class C { }
+    ~~~~~~
+!!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
+    ~~~~~~
+!!! error TS8009: The 'public' modifier can only be used in TypeScript files.

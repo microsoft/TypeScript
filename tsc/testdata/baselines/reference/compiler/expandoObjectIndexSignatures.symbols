@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/expandoObjectIndexSignatures.ts] ////
+
+=== main.js ===
+/** @param {Record<string, number>} obj */
+function fx(obj) {}
+>fx : Symbol(fx, Decl(main.js, 0, 0))
+>obj : Symbol(obj, Decl(main.js, 1, 12))
+
+const obj1 = {};
+>obj1 : Symbol(obj1, Decl(main.js, 3, 5))
+
+fx(obj1);
+>fx : Symbol(fx, Decl(main.js, 0, 0))
+>obj1 : Symbol(obj1, Decl(main.js, 3, 5))
+
+const obj2 = {};
+>obj2 : Symbol(obj2, Decl(main.js, 6, 5))
+
+obj2.x = 1
+>obj2.x : Symbol(x, Decl(main.js, 6, 16))
+>obj2 : Symbol(obj2, Decl(main.js, 6, 5))
+>x : Symbol(x, Decl(main.js, 6, 16))
+
+fx(obj2);
+>fx : Symbol(fx, Decl(main.js, 0, 0))
+>obj2 : Symbol(obj2, Decl(main.js, 6, 5))
+
+function f1() {
+>f1 : Symbol(f1, Decl(main.js, 8, 9))
+
+    const obj1 = {};
+>obj1 : Symbol(obj1, Decl(main.js, 11, 9))
+
+    fx(obj1);
+>fx : Symbol(fx, Decl(main.js, 0, 0))
+>obj1 : Symbol(obj1, Decl(main.js, 11, 9))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(main.js, 13, 1))
+
+    const obj2 = {};
+>obj2 : Symbol(obj2, Decl(main.js, 16, 9))
+
+    obj2.x = 1
+>obj2.x : Symbol(x, Decl(main.js, 16, 20))
+>obj2 : Symbol(obj2, Decl(main.js, 16, 9))
+>x : Symbol(x, Decl(main.js, 16, 20))
+
+    fx(obj2);
+>fx : Symbol(fx, Decl(main.js, 0, 0))
+>obj2 : Symbol(obj2, Decl(main.js, 16, 9))
+}
+
+const obj3 = {};
+>obj3 : Symbol(obj3, Decl(main.js, 21, 5))
+
+obj3.x = 1;
+>obj3.x : Symbol(x, Decl(main.js, 21, 16))
+>obj3 : Symbol(obj3, Decl(main.js, 21, 5))
+>x : Symbol(x, Decl(main.js, 21, 16))
+
+obj3.y = Object.values(obj3);  // Circularity error
+>obj3.y : Symbol(y, Decl(main.js, 22, 11))
+>obj3 : Symbol(obj3, Decl(main.js, 21, 5))
+>y : Symbol(y, Decl(main.js, 22, 11))
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>obj3 : Symbol(obj3, Decl(main.js, 21, 5))
+
+function f3() {
+>f3 : Symbol(f3, Decl(main.js, 23, 29))
+
+    const obj3 = {};
+>obj3 : Symbol(obj3, Decl(main.js, 26, 9))
+
+    obj3.x = 1;
+>obj3.x : Symbol(x, Decl(main.js, 26, 20))
+>obj3 : Symbol(obj3, Decl(main.js, 26, 9))
+>x : Symbol(x, Decl(main.js, 26, 20))
+
+    obj3.y = Object.values(obj3);  // Circularity error
+>obj3.y : Symbol(y, Decl(main.js, 27, 15))
+>obj3 : Symbol(obj3, Decl(main.js, 26, 9))
+>y : Symbol(y, Decl(main.js, 27, 15))
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>obj3 : Symbol(obj3, Decl(main.js, 26, 9))
+}
+

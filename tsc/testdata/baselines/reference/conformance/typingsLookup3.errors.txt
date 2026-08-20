@@ -1,0 +1,18 @@
+/a.ts(1,23): error TS2688: Cannot find type definition file for 'JqUeRy'.
+/tsconfig.json(1,12): error TS5024: Compiler option 'files' requires a value of type Array.
+
+
+==== /tsconfig.json (1 errors) ====
+    { "files": "a.ts" }
+               ~~~~~~
+!!! error TS5024: Compiler option 'files' requires a value of type Array.
+    
+==== /a.ts (1 errors) ====
+    /// <reference types="JqUeRy" />
+                          ~~~~~~
+!!! error TS2688: Cannot find type definition file for 'JqUeRy'.
+    $.x;
+    
+==== /node_modules/@types/jquery/index.d.ts (0 errors) ====
+    declare var $: { x: any };
+    

@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/declarationEmitQualifiedName.ts] ////
+
+=== e.ts ===
+export enum E {
+>E : E
+
+    A = 'a',
+>A : E.A
+>'a' : "a"
+
+    B = 'b',
+>B : E.B
+>'b' : "b"
+}
+
+=== a.ts ===
+import { E } from './e.js'
+>E : typeof E
+
+export const A = {
+>A : { readonly item: { readonly a: E.A; }; }
+>{    item: {        a: E.A,    },} as const : { readonly item: { readonly a: E.A; }; }
+>{    item: {        a: E.A,    },} : { readonly item: { readonly a: E.A; }; }
+
+    item: {
+>item : { readonly a: E.A; }
+>{        a: E.A,    } : { readonly a: E.A; }
+
+        a: E.A,
+>a : E.A
+>E.A : E.A
+>E : typeof E
+>A : E.A
+
+    },
+} as const
+
+=== b.ts ===
+import { A } from './a.js'
+>A : { readonly item: { readonly a: import("./e.js").E.A; }; }
+
+export const B = { ...A } as const
+>B : { readonly item: { readonly a: import("./e.js").E.A; }; }
+>{ ...A } as const : { readonly item: { readonly a: import("./e.js").E.A; }; }
+>{ ...A } : { readonly item: { readonly a: import("./e.js").E.A; }; }
+>A : { readonly item: { readonly a: import("./e.js").E.A; }; }
+

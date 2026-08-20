@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/declarationMapCrossFileNodeReuse.ts] ////
+
+=== types.ts ===
+export interface Widget {
+>Widget : Symbol(Widget, Decl(types.ts, 0, 0))
+
+    id: string;
+>id : Symbol(Widget.id, Decl(types.ts, 0, 25))
+
+    name: string;
+>name : Symbol(Widget.name, Decl(types.ts, 1, 15))
+}
+
+=== helper.ts ===
+import { Widget } from "./types";
+>Widget : Symbol(Widget, Decl(helper.ts, 0, 8))
+
+// Here is a bunch of text in comments to pad the file length so positions in the return type annotation below
+// are past the length of the short index.ts file. This is needed to trigger the slice bounds
+// out of range crash when node positions from this file are used with the text of index.ts.
+
+export function getWidget(): (w: Widget) => keyof Widget {
+>getWidget : Symbol(getWidget, Decl(helper.ts, 0, 33))
+>w : Symbol(w, Decl(helper.ts, 6, 30))
+>Widget : Symbol(Widget, Decl(helper.ts, 0, 8))
+>Widget : Symbol(Widget, Decl(helper.ts, 0, 8))
+
+    return (w) => "id";
+>w : Symbol(w, Decl(helper.ts, 7, 12))
+}
+
+=== index.ts ===
+import { Widget } from "./types";
+>Widget : Symbol(Widget, Decl(index.ts, 0, 8))
+
+import { getWidget } from "./helper";
+>getWidget : Symbol(getWidget, Decl(index.ts, 1, 8))
+
+export type MyWidget = Widget;
+>MyWidget : Symbol(MyWidget, Decl(index.ts, 1, 37))
+>Widget : Symbol(Widget, Decl(index.ts, 0, 8))
+
+export const fn = getWidget();
+>fn : Symbol(fn, Decl(index.ts, 3, 12))
+>getWidget : Symbol(getWidget, Decl(index.ts, 1, 8))
+

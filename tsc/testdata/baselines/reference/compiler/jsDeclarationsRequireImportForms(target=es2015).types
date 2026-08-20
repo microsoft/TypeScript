@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/jsDeclarationsRequireImportForms.ts] ////
+
+=== index.js ===
+const {Obj, Obj: Other} = require("./obj");
+>Obj : typeof Obj
+>Obj : any
+>Other : typeof Obj
+>require("./obj") : typeof import("./obj")
+>require : any
+>"./obj" : "./obj"
+
+class Container {
+>Container : Container
+
+    constructor() {
+        this.usage = new Obj();
+>this.usage = new Obj() : Obj
+>this.usage : any
+>this : this
+>usage : any
+>new Obj() : Obj
+>Obj : typeof Obj
+
+        /** @type {Other} */
+        this.usage2 = new Other();
+>this.usage2 = new Other() : Obj
+>this.usage2 : Obj
+>this : this
+>usage2 : Obj
+>new Other() : Obj
+>Other : typeof Obj
+    }
+}
+
+module.exports = Container;
+>module.exports = Container : typeof Container
+>module.exports : typeof Container
+>module : { exports: typeof Container; }
+>exports : typeof Container
+>Container : typeof Container
+
+=== obj.js ===
+class Obj {
+>Obj : Obj
+
+    constructor() {
+        this.x = 12;
+>this.x = 12 : 12
+>this.x : any
+>this : this
+>x : any
+>12 : 12
+    }
+}
+module.exports.Obj = Obj
+>module.exports.Obj = Obj : typeof Obj
+>module.exports.Obj : typeof Obj
+>module.exports : typeof import("./obj")
+>module : { exports: typeof import("./obj"); }
+>exports : typeof import("./obj")
+>Obj : typeof Obj
+>Obj : typeof Obj
+

@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/importDeclWithExportModifierAndExportAssignment.ts] ////
+
+=== importDeclWithExportModifierAndExportAssignment.ts ===
+namespace x {
+    interface c {
+    }
+}
+export import a = x.c;
+>a : any
+>x : any
+>c : any
+
+export = x;
+>x : any
+

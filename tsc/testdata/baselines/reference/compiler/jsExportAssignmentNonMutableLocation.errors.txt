@@ -1,0 +1,20 @@
+file.js(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+file.js(8,9): error TS2551: Property 'customSymbol2' does not exist on type '{ customSymbol: symbol; }'. Did you mean 'customSymbol'?
+
+
+==== file.js (2 errors) ====
+    const customSymbol = Symbol("custom");
+    
+    // This is a common pattern in Node’s built-in modules:
+    module.exports = {
+    ~~~~~~~~~~~~~~~~~~
+        customSymbol,
+    ~~~~~~~~~~~~~~~~~
+    };
+    ~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    
+    exports.customSymbol2 = Symbol("custom");
+            ~~~~~~~~~~~~~
+!!! error TS2551: Property 'customSymbol2' does not exist on type '{ customSymbol: symbol; }'. Did you mean 'customSymbol'?
+!!! related TS2728 file.js:5:5: 'customSymbol' is declared here.

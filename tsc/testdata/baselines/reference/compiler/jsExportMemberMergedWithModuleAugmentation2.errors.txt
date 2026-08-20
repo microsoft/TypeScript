@@ -1,0 +1,23 @@
+/index.ts(3,16): error TS2671: Cannot augment module './test' because it resolves to a non-module entity.
+/index.ts(7,3): error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
+
+
+==== /test.js (0 errors) ====
+    module.exports = {
+      a: "ok"
+    };
+    
+==== /index.ts (2 errors) ====
+    import { a } from "./test";
+    
+    declare module "./test" {
+                   ~~~~~~~~
+!!! error TS2671: Cannot augment module './test' because it resolves to a non-module entity.
+      export const a: number;
+    }
+    
+    a.toFixed();
+      ~~~~~~~
+!!! error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
+!!! related TS2728 lib.es2015.core.d.ts:--:--: 'fixed' is declared here.
+    

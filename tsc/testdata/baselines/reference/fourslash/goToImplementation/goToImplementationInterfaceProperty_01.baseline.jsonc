@@ -1,0 +1,11 @@
+// === goToImplementation ===
+// === /goToImplementationInterfaceProperty_01.ts ===
+// interface Foo { hello: number }
+// 
+// class Bar implements Foo {
+//     <|[|hello|] = 5 * 9;|>
+// }
+// 
+// function whatever(foo: Foo) {
+//     foo.he/*GOTO IMPL*/llo;
+// }

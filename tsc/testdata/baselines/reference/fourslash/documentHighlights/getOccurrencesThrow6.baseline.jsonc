@@ -1,0 +1,51 @@
+// === documentHighlights ===
+// === /getOccurrencesThrow6.ts ===
+// /*HIGHLIGHTS*/[|throw|] 100;
+// 
+// try {
+//     throw 0;
+//     var x = () => { throw 0; };
+// }
+// catch (y) {
+//     var x = () => { throw 0; };
+//     [|throw|] 200;
+// }
+// finally {
+//     [|throw|] 300;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow6.ts ===
+// [|throw|] 100;
+// 
+// try {
+//     throw 0;
+//     var x = () => { throw 0; };
+// }
+// catch (y) {
+//     var x = () => { throw 0; };
+//     /*HIGHLIGHTS*/[|throw|] 200;
+// }
+// finally {
+//     [|throw|] 300;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesThrow6.ts ===
+// [|throw|] 100;
+// 
+// try {
+//     throw 0;
+//     var x = () => { throw 0; };
+// }
+// catch (y) {
+//     var x = () => { throw 0; };
+//     [|throw|] 200;
+// }
+// finally {
+//     /*HIGHLIGHTS*/[|throw|] 300;
+// }

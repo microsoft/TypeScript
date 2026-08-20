@@ -1,0 +1,139 @@
+a.ts(2,3): error TS2339: Property 'func1' does not exist on type '{}'.
+a.ts(3,3): error TS2339: Property 'func2' does not exist on type '{}'.
+a.ts(4,3): error TS2339: Property 'func3' does not exist on type '{}'.
+a.ts(5,3): error TS2339: Property 'func4' does not exist on type '{}'.
+a.ts(6,3): error TS2339: Property 'func5' does not exist on type '{}'.
+a.ts(7,3): error TS2339: Property 'func6' does not exist on type '{}'.
+a.ts(8,3): error TS2339: Property 'func7' does not exist on type '{}'.
+a.ts(9,3): error TS2339: Property 'func8' does not exist on type '{}'.
+a.ts(10,3): error TS2339: Property 'func9' does not exist on type '{}'.
+a.ts(11,3): error TS2339: Property 'func10' does not exist on type '{}'.
+a.ts(12,3): error TS2339: Property 'func11' does not exist on type '{}'.
+a.ts(13,3): error TS2339: Property 'func12' does not exist on type '{}'.
+a.ts(14,3): error TS2339: Property 'func13' does not exist on type '{}'.
+a.ts(15,3): error TS2339: Property 'func14' does not exist on type '{}'.
+a.ts(16,3): error TS2339: Property 'func15' does not exist on type '{}'.
+a.ts(17,3): error TS2339: Property 'func16' does not exist on type '{}'.
+a.ts(18,3): error TS2339: Property 'func17' does not exist on type '{}'.
+a.ts(19,3): error TS2339: Property 'func18' does not exist on type '{}'.
+a.ts(20,3): error TS2339: Property 'func19' does not exist on type '{}'.
+a.ts(21,3): error TS2339: Property 'func20' does not exist on type '{}'.
+
+
+==== a.ts (20 errors) ====
+    import b = require("./b.js");
+    b.func1;
+      ~~~~~
+!!! error TS2339: Property 'func1' does not exist on type '{}'.
+    b.func2;
+      ~~~~~
+!!! error TS2339: Property 'func2' does not exist on type '{}'.
+    b.func3;
+      ~~~~~
+!!! error TS2339: Property 'func3' does not exist on type '{}'.
+    b.func4;
+      ~~~~~
+!!! error TS2339: Property 'func4' does not exist on type '{}'.
+    b.func5;
+      ~~~~~
+!!! error TS2339: Property 'func5' does not exist on type '{}'.
+    b.func6;
+      ~~~~~
+!!! error TS2339: Property 'func6' does not exist on type '{}'.
+    b.func7;
+      ~~~~~
+!!! error TS2339: Property 'func7' does not exist on type '{}'.
+    b.func8;
+      ~~~~~
+!!! error TS2339: Property 'func8' does not exist on type '{}'.
+    b.func9;
+      ~~~~~
+!!! error TS2339: Property 'func9' does not exist on type '{}'.
+    b.func10;
+      ~~~~~~
+!!! error TS2339: Property 'func10' does not exist on type '{}'.
+    b.func11;
+      ~~~~~~
+!!! error TS2339: Property 'func11' does not exist on type '{}'.
+    b.func12;
+      ~~~~~~
+!!! error TS2339: Property 'func12' does not exist on type '{}'.
+    b.func13;
+      ~~~~~~
+!!! error TS2339: Property 'func13' does not exist on type '{}'.
+    b.func14;
+      ~~~~~~
+!!! error TS2339: Property 'func14' does not exist on type '{}'.
+    b.func15;
+      ~~~~~~
+!!! error TS2339: Property 'func15' does not exist on type '{}'.
+    b.func16;
+      ~~~~~~
+!!! error TS2339: Property 'func16' does not exist on type '{}'.
+    b.func17;
+      ~~~~~~
+!!! error TS2339: Property 'func17' does not exist on type '{}'.
+    b.func18;
+      ~~~~~~
+!!! error TS2339: Property 'func18' does not exist on type '{}'.
+    b.func19;
+      ~~~~~~
+!!! error TS2339: Property 'func19' does not exist on type '{}'.
+    b.func20;
+      ~~~~~~
+!!! error TS2339: Property 'func20' does not exist on type '{}'.
+    
+    
+==== b.js (0 errors) ====
+    var exportsAlias = exports;
+    exportsAlias.func1 = function () { };
+    exports.func2 = function () { };
+    
+    var moduleExportsAlias = module.exports;
+    moduleExportsAlias.func3 = function () { };
+    module.exports.func4 = function () { };
+    
+    var multipleDeclarationAlias1 = exports = module.exports;
+    multipleDeclarationAlias1.func5 = function () { };
+    
+    var multipleDeclarationAlias2 = module.exports = exports;
+    multipleDeclarationAlias2.func6 = function () { };
+    
+    var someOtherVariable;
+    var multipleDeclarationAlias3 = someOtherVariable = exports;
+    multipleDeclarationAlias3.func7 = function () { };
+    
+    var multipleDeclarationAlias4 = someOtherVariable = module.exports;
+    multipleDeclarationAlias4.func8 = function () { };
+    
+    var multipleDeclarationAlias5 = module.exports = exports = {};
+    multipleDeclarationAlias5.func9 = function () { };
+    
+    var multipleDeclarationAlias6 = exports = module.exports = {};
+    multipleDeclarationAlias6.func10 = function () { };
+    
+    exports = module.exports = someOtherVariable = {};
+    exports.func11 = function () { };
+    module.exports.func12 = function () { };
+    
+    exports = module.exports = someOtherVariable = {};
+    exports.func11 = function () { };
+    module.exports.func12 = function () { };
+    
+    exports = module.exports = {};
+    exports.func13 = function () { };
+    module.exports.func14 = function () { };
+    
+    exports = module.exports = {};
+    exports.func15 = function () { };
+    module.exports.func16 = function () { };
+    
+    module.exports = exports = {};
+    exports.func17 = function () { };
+    module.exports.func18 = function () { };
+    
+    module.exports = {};
+    exports.func19 = function () { };
+    module.exports.func20 = function () { };
+    
+    

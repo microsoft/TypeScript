@@ -1,0 +1,42 @@
+// === QuickInfo ===
+=== /quickInfoLink10.ts ===
+// /**
+//  * start {@link https://vscode.dev/ | end}
+//  */
+// const a = () => 1;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const a: () => number
+// | ```
+// | start [end](https://vscode.dev/)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 57,
+      "LSPosition": {
+        "line": 3,
+        "character": 6
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst a: () => number\n```\nstart [end](https://vscode.dev/)"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 6
+        },
+        "end": {
+          "line": 3,
+          "character": 7
+        }
+      }
+    }
+  }
+]

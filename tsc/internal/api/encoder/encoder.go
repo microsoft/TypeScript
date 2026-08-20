@@ -1,0 +1,934 @@
+package encoder
+
+import (
+	"cmp"
+	"encoding/binary"
+	"fmt"
+	"slices"
+	"sync"
+
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	"github.com/zeebo/xxh3"
+)
+
+func init() {
+	if ast.KindLastUnaryOperator > 0x3f {
+		panic(fmt.Sprintf("KindLastUnaryOperator (%d) exceeds the 6-bit commonData capacity (max 63)", ast.KindLastUnaryOperator))
+	}
+}
+
+const (
+	NodeOffsetKind = iota * 4
+	NodeOffsetPos
+	NodeOffsetEnd
+	NodeOffsetNext
+	NodeOffsetParent
+	NodeOffsetData
+	NodeOffsetFlags
+	// NodeSize is the number of bytes that represents a single node in the encoded format.
+	NodeSize
+)
+
+const (
+	NodeDataTypeChildren uint32 = iota << 30
+	NodeDataTypeString
+	NodeDataTypeExtendedData
+)
+
+const (
+	NodeDataTypeMask        uint32 = 0xc0_00_00_00
+	NodeDataChildMask       uint32 = 0x00_00_00_ff
+	NodeDataStringIndexMask uint32 = 0x00_ff_ff_ff
+)
+
+const (
+	SyntaxKindNodeList uint32 = 1<<32 - 1
+)
+
+const (
+	HeaderOffsetMetadata = iota * 4
+	HeaderOffsetHashLo0
+	HeaderOffsetHashLo1
+	HeaderOffsetHashHi0
+	HeaderOffsetHashHi1
+	HeaderOffsetParseOptions
+	HeaderOffsetStringOffsets
+	HeaderOffsetStringData
+	HeaderOffsetExtendedData
+	HeaderOffsetStructuredData
+	HeaderOffsetNodes
+	HeaderSize
+)
+
+const (
+	ProtocolVersion uint8 = 7
+)
+
+// Source File Binary Format
+// =========================
+//
+// The following defines a protocol for serializing TypeScript SourceFile objects to a compact binary format. All integer
+// values are little-endian.
+//
+// Overview
+// --------
+//
+// The format comprises seven sections:
+//
+// | Section            | Length             | Description                                                                                     |
+// | ------------------ | ------------------ | ----------------------------------------------------------------------------------------------- |
+// | Header             | 44 bytes           | Contains the content hash, parse options, flags, and byte offsets to the start of each section. |
+// | String offsets     | 8 bytes per string | Pairs of starting byte offsets and ending byte offsets into the **string data** section.        |
+// | String data        | variable           | UTF-8 encoded string data.                                                                      |
+// | Extended node data | variable           | Extra data for some kinds of nodes.                                                             |
+// | Structured data    | variable           | Msgpack-encoded metadata blobs (e.g. file references).                                         |
+// | Nodes              | 28 bytes per node  | Defines the AST structure of the file, with references to strings and extended data.            |
+//
+// Header (44 bytes)
+// -----------------
+//
+// The header contains the following fields:
+//
+// | Byte offset | Type      | Field                                             |
+// | ----------- | --------- | ------------------------------------------------- |
+// | 0           | uint8     | Protocol version                                  |
+// | 1-3         |           | Reserved                                          |
+// | 4-19        | uint128   | Source file content hash (xxh3, LE)               |
+// | 20-23       | uint32    | Parse options (bitmask; bit 0: JSX, bit 1: Force) |
+// | 24-27       | uint32    | Byte offset to string offsets section             |
+// | 28-31       | uint32    | Byte offset to string data section                |
+// | 32-35       | uint32    | Byte offset to extended node data section         |
+// | 36-39       | uint32    | Byte offset to structured data section            |
+// | 40-43       | uint32    | Byte offset to nodes section                      |
+//
+// String offsets (8 bytes per string)
+// -----------------------------------
+//
+// Each string offset entry consists of two 4-byte unsigned integers, representing the start and end byte offsets into the
+// **string data** section.
+//
+// String data (variable)
+// ----------------------
+//
+// The string data section contains UTF-8 encoded string data, with WTF-8 used for JS strings containing lone UTF-16
+// surrogates. In typical cases, the entirety of the string data is the source file text, and individual nodes with
+// string properties reference their positional slice of the file text. In cases where a node's string property is not
+// equal to the slice of file text at its position, the unique string is appended to the string data section after the
+// file text.
+//
+// Extended node data (variable)
+// -----------------------------
+//
+// The extended node data section contains additional data for specific node types. The length and meaning of each entry
+// is defined by the node type.
+//
+// Currently, the only node types that use this section are `TemplateHead`, `TemplateMiddle`, `TemplateTail`, and
+// `SourceFile`. The extended data format for the first three is:
+//
+// | Byte offset | Type   | Field                                            |
+// | ----------- | ------ | ------------------------------------------------ |
+// | 0-4         | uint32 | Index of `text` in the string offsets section    |
+// | 4-8         | uint32 | Index of `rawText` in the string offsets section |
+// | 8-12        | uint32 | Value of `templateFlags`                         |
+//
+// and for `SourceFile` is:
+//
+// | Byte offset | Type   | Field                                                          |
+// | ----------- | ------ | -------------------------------------------------------------- |
+// | 0-4         | uint32 | Index of `text` in the string offsets section                  |
+// | 4-8         | uint32 | Index of `fileName` in the string offsets section              |
+// | 8-12        | uint32 | Index of `path` in the string offsets section                  |
+// | 12-16       | uint32 | Value of `languageVariant`                                    |
+// | 16-20       | uint32 | Value of `scriptKind`                                         |
+// | 20-24       | uint32 | Byte offset of `referencedFiles` in structured data section   |
+// | 24-28       | uint32 | Byte offset of `typeReferenceDirectives` in structured data   |
+// | 28-32       | uint32 | Byte offset of `libReferenceDirectives` in structured data    |
+// | 32-36       | uint32 | Byte offset of `imports` node index array in structured data  |
+// | 36-40       | uint32 | Byte offset of `moduleAugmentations` node index array         |
+// | 40-44       | uint32 | Byte offset of `ambientModuleNames` string array              |
+// | 44-48       | uint32 | Node index of `externalModuleIndicator` (0 = nil)             |
+// | 48-52       | uint32 | Index of `originalText` in the string offsets section         |
+// | 52-56       | uint32 | Byte offset of `spanMap` in structured data                    |
+// | 56-60       | uint32 | Byte offset of `supplementalSourceFileNames` in structured data |
+// | 60-64       | uint32 | Index of `canonicalSourceFileName`, or noStructuredData         |
+// | 64-68       | uint32 | Index of `contentMapper`, or noStructuredData                   |
+// | 68-72       | uint32 | Index of `virtualFileName`, or noStructuredData                 |
+// | 72-76       | uint32 | Byte offset of `diagnosticDirectives` in structured data       |
+//
+// Structured data (variable)
+// --------------------------
+//
+// The structured data section contains msgpack-encoded metadata blobs. Each blob is a self-contained
+// msgpack value. File reference arrays use the following tuple format:
+//
+//   [pos: uint, end: uint, fileName: string, resolutionMode: uint, preserve: bool]
+//
+// Node index arrays (imports, moduleAugmentations) are msgpack arrays of uint values, where each
+// value is a node index into the nodes section. String arrays (ambientModuleNames) are msgpack
+// arrays of string values.
+//
+// Span maps are msgpack arrays of tuples in UTF-16 coordinates:
+//
+//	[virtualStart: uint, virtualLength: uint, originalStart: uint, originalLength: uint, kind: uint, features?: uint]
+//
+// Diagnostic directives are msgpack arrays of normalized tuples in UTF-16 coordinates:
+//
+//	[originalStart: uint, originalLength: uint, virtualStart: uint, virtualLength: uint, policy: uint, unusedCode: uint]
+//
+// An offset of 0xFFFFFFFF indicates no data (empty array).
+//
+// Nodes (28 bytes per node)
+// -------------------------
+//
+// The nodes section contains the AST structure of the file. Nodes are represented in a flat array in source order,
+// heavily inspired by https://marvinh.dev/blog/speeding-up-javascript-ecosystem-part-11/. Each node has the following
+// structure:
+//
+// | Byte offset | Type   | Field                      |
+// | ----------- | ------ | -------------------------- |
+// | 0-4         | uint32 | Kind                       |
+// | 4-8         | uint32 | Pos                        |
+// | 8-12        | uint32 | End                        |
+// | 12-16       | uint32 | Node index of next sibling |
+// | 16-20       | uint32 | Node index of parent       |
+// | 20-24       |        | Node data                  |
+// | 24-28       | uint32 | Node flags                 |
+//
+// The first 28 bytes of the nodes section are zeros representing a nil node, such that nodes without a parent or next
+// sibling can unambiuously use `0` for those indices.
+//
+// NodeLists are represented as normal nodes with the special `kind` value `0xff_ff_ff_ff`. They are considered the parent
+// of their contents in the encoded format. A client reconstructing an AST similar to TypeScript's internal representation
+// should instead set the `parent` pointers of a NodeList's children to the NodeList's parent. A NodeList's `data` field
+// is the uint32 length of the list, and does not use one of the data types described below.
+//
+// For node types other than NodeList, the node data field encodes one of the following, determined by the first 2 bits of
+// the field:
+//
+// | Value | Data type | Description                                                                          |
+// | ----- | --------- | ------------------------------------------------------------------------------------ |
+// | 0b00  | Children  | Disambiguates which named properties of the node its children should be assigned to. |
+// | 0b01  | String    | The index of the node's string property in the **string offsets** section.           |
+// | 0b10  | Extended  | The byte offset of the node's extended data into the **extended node data** section. |
+// | 0b11  | Reserved  | Reserved for future use.                                                             |
+//
+// In all node data types, the remaining 6 bits of the first byte are used to encode small values specific to the node
+// type. For most node types, these are individual boolean flags. For unary expressions, all 6 bits encode the operator's
+// SyntaxKind value (e.g., PlusPlusToken=45, TildeToken=54), which fits because KindLastUnaryOperator (54) <= 0x3f (63).
+//
+// | Node type                    | Bits 0-5                              | Notes                          |
+// | ---------------------------- | ------------------------------------- | ------------------------------ |
+// | `ImportSpecifier`            | Bit 0: `isTypeOnly`                   |                                |
+// | `ImportClause`               | Bit 0: `isTypeOnly`, Bit 1: `isDefer` |                                |
+// | `ExportSpecifier`            | Bit 0: `isTypeOnly`                   |                                |
+// | `ImportEqualsDeclaration`    | Bit 0: `isTypeOnly`                   |                                |
+// | `ExportDeclaration`          | Bit 0: `isTypeOnly`                   |                                |
+// | `ImportTypeNode`             | Bit 0: `isTypeOf`                     |                                |
+// | `ExportAssignment`           | Bit 0: `isExportEquals`               |                                |
+// | `Block`                      | Bit 0: `multiline`                    |                                |
+// | `ArrayLiteralExpression`     | Bit 0: `multiline`                    |                                |
+// | `ObjectLiteralExpression`    | Bit 0: `multiline`                    |                                |
+// | `JsxText`                    | Bit 0: `containsOnlyTriviaWhiteSpaces`|                                |
+// | `JSDocTypeLiteral`           | Bit 0: `isArrayType`                  |                                |
+// | `JsDocPropertyTag`           | Bit 0: `isBracketed`, Bit 1: `isNameFirst` |                           |
+// | `JsDocParameterTag`          | Bit 0: `isBracketed`, Bit 1: `isNameFirst` |                           |
+// | `VariableDeclarationList`    | Bit 0: is `let`, Bit 1: is `const`    |                                |
+// | `ImportAttributes`           | Bit 0: `multiline`, Bit 1: is `assert`|                                |
+// | `PrefixUnaryExpression`      | Bits 0-5: operator SyntaxKind         | e.g., `!`, `~`, `++`, `--`    |
+// | `PostfixUnaryExpression`     | Bits 0-5: operator SyntaxKind         | e.g., `++`, `--`               |
+//
+// The remaining 3 bytes of the node data field vary by data type:
+//
+// ### Children (0b00)
+//
+// If a node has fewer children than its type allows, additional data is needed to determine which properties the children
+// correspond to. The last byte of the 4-byte data field is a bitmask representing the child properties of the node type,
+// in visitor order, where `1` indicates that the child at that property is present and `0` indicates that the property is
+// nil. For example, a `MethodDeclaration` has the following child properties:
+//
+// | Property name  | Bit position |
+// | -------------- | ------------ |
+// | modifiers      | 0            |
+// | asteriskToken  | 1            |
+// | name           | 2            |
+// | postfixToken   | 3            |
+// | typeParameters | 4            |
+// | parameters     | 5            |
+// | returnType     | 6            |
+// | body           | 7            |
+//
+// A bitmask with value `0b01100101` would indicate that the next four direct descendants (i.e., node records that have a
+// `parent` set to the node index of the `MethodDeclaration`) of the node are its `modifiers`, `name`, `parameters`, and
+// `body` properties, in that order. The remaining properties are nil. (To reconstruct the node with named properties, the
+// client must consult a static table of each node type's child property names.)
+//
+// The bitmask may be zero for node types that can only have a single child, since no disambiguation is needed.
+// Additionally, the children data type may be used for nodes that can never have children, but do not require other
+// data types.
+//
+// ### String (0b01)
+//
+// The string data type is used for nodes with a single string property. (Currently, the name of that property is always
+// `text`.) The last three bytes of the 4-byte data field form a single 24-bit unsigned integer (i.e.,
+// `uint32(0x00_ff_ff_ff & node.data)`) _N_ that is an index into the **string offsets** section. The *N*th 32-bit
+// unsigned integer in the **string offsets** section is the byte offset of the start of the string in the **string data**
+// section, and the *N+1*th 32-bit unsigned integer is the byte offset of the end of the string in the
+// **string data** section.
+//
+// ### Extended (0b10)
+//
+// The extended data type is used for nodes with properties that don't fit into either the children or string data types.
+// The last three bytes of the 4-byte data field form a single 24-bit unsigned integer (i.e.,
+// `uint32(0x00_ff_ff_ff & node.data)`) _N_ that is a byte offset into the **extended node data** section. The length and
+// meaning of the data at that offset is defined by the node type. See the **Extended node data** section for details on
+// the format of the extended data for specific node types.
+//
+// Encoding Arbitrary Nodes
+// ------------------------
+//
+// The same binary format can be used to encode an arbitrary subtree of a SourceFile, not just a whole SourceFile. When
+// encoding a non-SourceFile node, the format is identical with the following differences:
+//
+// - The content hash fields in the header (bytes 4-19) are zero.
+// - The parse options field in the header (bytes 20-23) is zero.
+// - The root node in the nodes section uses its actual node kind and data encoding (via getNodeData) rather than the
+//   SourceFile-specific extended data format.
+//
+// The string data section contains only the strings referenced by nodes in the subtree, rather than the full source
+// file text. The EncodeNode function provides this entrypoint.
+
+// SourceFileHash returns the 128-bit content hash for a source file as a hex string.
+func SourceFileHash(sourceFile *ast.SourceFile) string {
+	h := sourceFile.Hash
+	return fmt.Sprintf("%016x%016x", h.Hi, h.Lo)
+}
+
+// encodeParseOptions encodes the per-file ExternalModuleIndicatorOptions as a uint32 bitmask.
+func encodeParseOptions(opts ast.ExternalModuleIndicatorOptions) uint32 {
+	var bits uint32
+	if opts.JSX {
+		bits |= 1
+	}
+	if opts.Force {
+		bits |= 2
+	}
+	return bits
+}
+
+// NodeIndexTable maps between AST nodes and their encoder indices for O(1) node handle resolution.
+type NodeIndexTable struct {
+	Nodes      []*ast.Node // index → node (for resolution)
+	sortedOnce sync.Once
+	sortedIdx  []uint32 // indices into Nodes, sorted by node ID; built lazily
+}
+
+var nodeIndexTableKey = ast.NewSourceFileDataKey[*NodeIndexTable]()
+
+// GetIndex returns the encoder index for the given node.
+// On the first call the sortedIdx array is built (O(n log n) sort on a flat []uint32),
+// then subsequent calls use binary search (O(log n)). This turns out to be much faster than
+// building a map[*ast.Node]uint32 and not significantly slower for lookups.
+func (t *NodeIndexTable) GetIndex(node *ast.Node) uint32 {
+	t.sortedOnce.Do(func() {
+		idx := make([]uint32, 0, len(t.Nodes))
+		for i, n := range t.Nodes {
+			if n != nil {
+				idx = append(idx, uint32(i))
+			}
+		}
+		nodes := t.Nodes
+		slices.SortFunc(idx, func(a, b uint32) int {
+			return cmp.Compare(ast.GetNodeId(nodes[a]), ast.GetNodeId(nodes[b]))
+		})
+		t.sortedIdx = idx
+	})
+	target := ast.GetNodeId(node)
+	i, found := core.BinarySearchUniqueFunc(t.sortedIdx, func(_ int, el uint32) int {
+		return cmp.Compare(ast.GetNodeId(t.Nodes[el]), target)
+	})
+	if found {
+		return t.sortedIdx[i]
+	}
+	return 0
+}
+
+// BuildNodeIndexTable walks the AST in the same order as encodeTree and builds
+// a NodeIndexTable without performing the full binary encoding. This is used to
+// eagerly create index tables for files that need node handles before getSourceFile
+// is called. The indices produced are guaranteed to match those from EncodeSourceFile.
+func BuildNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
+	var nodeCount uint32
+	nodeTable := make([]*ast.Node, 1, sourceFile.NodeCount+1) // index 0 = nil sentinel
+
+	visitor := &ast.NodeVisitor{
+		Hooks: ast.NodeVisitorHooks{
+			VisitNodes: func(nodeList *ast.NodeList, visitor *ast.NodeVisitor) *ast.NodeList {
+				if nodeList == nil {
+					return nodeList
+				}
+				nodeCount++
+				nodeTable = append(nodeTable, nil) // NodeLists are not *ast.Node
+				visitor.VisitSlice(nodeList.Nodes)
+				return nodeList
+			},
+			VisitModifiers: func(modifiers *ast.ModifierList, visitor *ast.NodeVisitor) *ast.ModifierList {
+				if modifiers != nil && len(modifiers.Nodes) > 0 {
+					visitor.Hooks.VisitNodes(&modifiers.NodeList, visitor)
+				}
+				return modifiers
+			},
+		},
+	}
+	visitor.Visit = func(node *ast.Node) *ast.Node {
+		nodeCount++
+		nodeTable = append(nodeTable, node)
+		visitor.VisitEachChild(node)
+		for _, jsdoc := range node.JSDoc(sourceFile) {
+			visitor.Visit(jsdoc)
+		}
+		return node
+	}
+
+	rootNode := sourceFile.AsNode()
+	// Index 1 = root node (matches encodeTree)
+	nodeCount++
+	nodeTable = append(nodeTable, rootNode)
+
+	visitor.VisitEachChild(rootNode)
+	for _, jsdoc := range rootNode.JSDoc(sourceFile) {
+		visitor.Visit(jsdoc)
+	}
+
+	return &NodeIndexTable{Nodes: nodeTable}
+}
+
+func GetNodeIndexTable(sourceFile *ast.SourceFile) *NodeIndexTable {
+	return ast.GetOrComputeSourceFileData(sourceFile, nodeIndexTableKey, BuildNodeIndexTable)
+}
+
+// EncodeSourceFile encodes an entire source file AST into the binary format.
+// Returns the encoded bytes and a NodeIndexTable mapping encoder indices to AST nodes.
+func EncodeSourceFile(sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, error) {
+	data, nodeTable, err := encodeTree(sourceFile.AsNode(), sourceFile)
+	if err != nil {
+		return nil, nil, err
+	}
+	nodeTable = ast.GetOrComputeSourceFileData(sourceFile, nodeIndexTableKey, func(*ast.SourceFile) *NodeIndexTable {
+		return nodeTable
+	})
+	return data, nodeTable, nil
+}
+
+// EncodeNode encodes an arbitrary AST node and its descendants into the binary format.
+// The sourceFile is needed to provide the source text for efficient string encoding.
+// When encoding a non-SourceFile node, the header hash and parse options fields will be zero.
+// Returns the encoded bytes and a NodeIndexTable mapping encoder indices to AST nodes.
+func EncodeNode(node *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, error) {
+	return encodeTree(node, sourceFile)
+}
+
+func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, *NodeIndexTable, error) {
+	var parentIndex, nodeCount, prevIndex uint32
+	var extendedData []byte
+	var structuredData []byte
+	var strs *stringTable
+	var positionMap *ast.PositionMap
+	if rootNode.Kind == ast.KindSourceFile {
+		strs = newStringTable(sourceFile.Text(), sourceFile.TextCount)
+		positionMap = sourceFile.GetPositionMap()
+	} else {
+		strs = newStringTable("", 0)
+		if sourceFile != nil {
+			positionMap = sourceFile.GetPositionMap()
+		}
+	}
+	if positionMap == nil {
+		positionMap = ast.ComputePositionMap("")
+	}
+	utf16 := func(pos int) uint32 {
+		return uint32(positionMap.UTF8ToUTF16(pos))
+	}
+	var initialNodeCount int
+	if sourceFile != nil {
+		initialNodeCount = sourceFile.NodeCount
+	}
+	nodes := make([]byte, 0, (initialNodeCount+1)*NodeSize)
+
+	// Build node index table for O(1) handle resolution.
+	// Index 0 is a nil sentinel; real nodes start at index 1.
+	nodeTable := make([]*ast.Node, 1, initialNodeCount+1) // index 0 = nil sentinel
+
+	// Build a small map of nodes we need to track indices for (imports + moduleAugmentations).
+	// Values start at 0 and are filled in during the walk.
+	var nodeIndexMap map[*ast.Node]uint32
+	var sfExtendedDataOffset int // byte offset in extendedData where SourceFile fields start
+	if rootNode.Kind == ast.KindSourceFile {
+		sf := rootNode.AsSourceFile()
+		total := len(sf.Imports()) + len(sf.ModuleAugmentations)
+		if sf.ExternalModuleIndicator != nil && sf.ExternalModuleIndicator != rootNode {
+			total++
+		}
+		if total > 0 {
+			nodeIndexMap = make(map[*ast.Node]uint32, total)
+			for _, imp := range sf.Imports() {
+				nodeIndexMap[imp.AsNode()] = 0
+			}
+			for _, aug := range sf.ModuleAugmentations {
+				nodeIndexMap[aug.AsNode()] = 0
+			}
+			if sf.ExternalModuleIndicator != nil && sf.ExternalModuleIndicator != rootNode {
+				nodeIndexMap[sf.ExternalModuleIndicator] = 0
+			}
+		}
+	}
+
+	visitor := &ast.NodeVisitor{
+		Hooks: ast.NodeVisitorHooks{
+			VisitNodes: func(nodeList *ast.NodeList, visitor *ast.NodeVisitor) *ast.NodeList {
+				if nodeList == nil {
+					return nodeList
+				}
+
+				nodeCount++
+				nodeTable = append(nodeTable, nil) // NodeLists are not *ast.Node
+				if prevIndex != 0 {
+					// this is the next sibling of `prevNode`
+					b0, b1, b2, b3 := uint8(nodeCount), uint8(nodeCount>>8), uint8(nodeCount>>16), uint8(nodeCount>>24)
+					nodes[prevIndex*NodeSize+NodeOffsetNext+0] = b0
+					nodes[prevIndex*NodeSize+NodeOffsetNext+1] = b1
+					nodes[prevIndex*NodeSize+NodeOffsetNext+2] = b2
+					nodes[prevIndex*NodeSize+NodeOffsetNext+3] = b3
+				}
+
+				nodes = appendUint32s(nodes, SyntaxKindNodeList, utf16(nodeList.Pos()), utf16(nodeList.End()), 0, parentIndex, uint32(len(nodeList.Nodes)), 0)
+
+				saveParentIndex := parentIndex
+
+				currentIndex := nodeCount
+				prevIndex = 0
+				parentIndex = currentIndex
+				visitor.VisitSlice(nodeList.Nodes)
+				prevIndex = currentIndex
+				parentIndex = saveParentIndex
+
+				return nodeList
+			},
+			VisitModifiers: func(modifiers *ast.ModifierList, visitor *ast.NodeVisitor) *ast.ModifierList {
+				if modifiers != nil && len(modifiers.Nodes) > 0 {
+					visitor.Hooks.VisitNodes(&modifiers.NodeList, visitor)
+				}
+				return modifiers
+			},
+		},
+	}
+	visitor.Visit = func(node *ast.Node) *ast.Node {
+		nodeCount++
+		nodeTable = append(nodeTable, node)
+		if prevIndex != 0 {
+			// this is the next sibling of `prevNode`
+			b0, b1, b2, b3 := uint8(nodeCount), uint8(nodeCount>>8), uint8(nodeCount>>16), uint8(nodeCount>>24)
+			nodes[prevIndex*NodeSize+NodeOffsetNext+0] = b0
+			nodes[prevIndex*NodeSize+NodeOffsetNext+1] = b1
+			nodes[prevIndex*NodeSize+NodeOffsetNext+2] = b2
+			nodes[prevIndex*NodeSize+NodeOffsetNext+3] = b3
+		}
+
+		nodes = appendUint32s(nodes, uint32(node.Kind), utf16(node.Pos()), utf16(node.End()), 0, parentIndex, getNodeData(node, strs, positionMap, &extendedData, &structuredData), uint32(node.Flags))
+
+		if nodeIndexMap != nil {
+			if _, ok := nodeIndexMap[node]; ok {
+				nodeIndexMap[node] = nodeCount
+			}
+		}
+
+		saveParentIndex := parentIndex
+
+		currentIndex := nodeCount
+		prevIndex = 0
+		parentIndex = currentIndex
+		visitor.VisitEachChild(node)
+		if sourceFile != nil {
+			for _, jsdoc := range node.JSDoc(sourceFile) {
+				visitor.Visit(jsdoc)
+			}
+		}
+		prevIndex = currentIndex
+		parentIndex = saveParentIndex
+		return node
+	}
+
+	nodes = appendUint32s(nodes, 0, 0, 0, 0, 0, 0, 0)
+
+	nodeCount++
+	parentIndex++
+	nodeTable = append(nodeTable, rootNode) // index 1 = root node
+
+	sfExtendedDataOffset = len(extendedData)
+	nodes = appendUint32s(nodes, uint32(rootNode.Kind), utf16(rootNode.Pos()), utf16(rootNode.End()), 0, 0, getNodeData(rootNode, strs, positionMap, &extendedData, &structuredData), uint32(rootNode.Flags))
+
+	visitor.VisitEachChild(rootNode)
+	if sourceFile != nil {
+		for _, jsdoc := range rootNode.JSDoc(sourceFile) {
+			visitor.Visit(jsdoc)
+		}
+	}
+
+	var hash xxh3.Uint128
+	var parseOpts uint32
+	if rootNode.Kind == ast.KindSourceFile {
+		hash = sourceFile.Hash
+		parseOpts = encodeParseOptions(sourceFile.ParseOptions().ExternalModuleIndicatorOptions)
+
+		// Encode imports, moduleAugmentations, and ambientModuleNames into structured data,
+		// and patch the placeholder offsets in the SourceFile extended data.
+		sf := rootNode.AsSourceFile()
+		importsOffset := encodeNodeIndexArray(sf.Imports(), nodeIndexMap, &structuredData)
+		moduleAugmentationsOffset := encodeModuleAugmentations(sf.ModuleAugmentations, nodeIndexMap, &structuredData)
+		ambientModuleNamesOffset := encodeStringArray(sf.AmbientModuleNames, &structuredData)
+		// Patch the 3 placeholder uint32s at sfExtendedDataOffset + 32, 36, 40
+		binary.LittleEndian.PutUint32(extendedData[sfExtendedDataOffset+32:], importsOffset)
+		binary.LittleEndian.PutUint32(extendedData[sfExtendedDataOffset+36:], moduleAugmentationsOffset)
+		binary.LittleEndian.PutUint32(extendedData[sfExtendedDataOffset+40:], ambientModuleNamesOffset)
+		// Patch externalModuleIndicator node index at offset 44
+		var externalModuleIndicatorIndex uint32
+		if sf.ExternalModuleIndicator != nil {
+			if sf.ExternalModuleIndicator == rootNode {
+				externalModuleIndicatorIndex = 1 // root node index
+			} else {
+				externalModuleIndicatorIndex = nodeIndexMap[sf.ExternalModuleIndicator]
+			}
+		}
+		binary.LittleEndian.PutUint32(extendedData[sfExtendedDataOffset+44:], externalModuleIndicatorIndex)
+	}
+
+	metadata := uint32(ProtocolVersion) << 24
+	offsetStringTableOffsets := HeaderSize
+	offsetStringTableData := HeaderSize + len(strs.offsets)*4
+	offsetExtendedData := offsetStringTableData + strs.stringLength()
+	offsetStructuredData := offsetExtendedData + len(extendedData)
+	offsetNodes := offsetStructuredData + len(structuredData)
+
+	header := []uint32{
+		metadata,
+		uint32(hash.Lo), uint32(hash.Lo >> 32),
+		uint32(hash.Hi), uint32(hash.Hi >> 32),
+		parseOpts,
+		uint32(offsetStringTableOffsets),
+		uint32(offsetStringTableData),
+		uint32(offsetExtendedData),
+		uint32(offsetStructuredData),
+		uint32(offsetNodes),
+	}
+
+	var headerBytes, strsBytes []byte
+	headerBytes = appendUint32s(nil, header...)
+	strsBytes = strs.encode()
+
+	return slices.Concat(
+		headerBytes,
+		strsBytes,
+		extendedData,
+		structuredData,
+		nodes,
+	), &NodeIndexTable{Nodes: nodeTable}, nil
+}
+
+func appendUint32s(buf []byte, values ...uint32) []byte {
+	for _, value := range values {
+		buf = binary.LittleEndian.AppendUint32(buf, value)
+	}
+	return buf
+}
+
+func getNodeData(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) uint32 {
+	t := getNodeDataType(node)
+	switch t {
+	case NodeDataTypeChildren:
+		return t | getNodeCommonData(node) | uint32(getChildrenPropertyMask(node))
+	case NodeDataTypeString:
+		return t | getNodeCommonData(node) | recordNodeStrings(node, strs)
+	case NodeDataTypeExtendedData:
+		return t | getNodeCommonData(node) | recordExtendedData(node, strs, positionMap, extendedData, structuredData)
+	default:
+		panic("unreachable")
+	}
+}
+
+const noStructuredData = 0xFFFFFFFF
+
+func recordExtendedData_SourceFile(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) {
+	sf := node.AsSourceFile()
+	textIndex := strs.add(sf.Text(), sf.Kind, sf.Pos(), sf.End())
+	originalTextIndex := textIndex
+	if sf.OriginalText() != sf.Text() {
+		originalTextIndex = strs.add(sf.OriginalText(), 0, 0, 0)
+	}
+	fileNameIndex := strs.add(sf.FileName(), 0, 0, 0)
+	pathIndex := strs.add(string(sf.Path()), 0, 0, 0)
+	referencedFilesOffset := encodeFileReferences(sf.ReferencedFiles, positionMap, structuredData)
+	typeRefDirectivesOffset := encodeFileReferences(sf.TypeReferenceDirectives, positionMap, structuredData)
+	libRefDirectivesOffset := encodeFileReferences(sf.LibReferenceDirectives, positionMap, structuredData)
+	spanMapOffset := uint32(noStructuredData)
+	if spanMap := sf.SpanMap(); spanMap != nil {
+		spanMapOffset = encodeSpanMap(spanMap, positionMap, ast.ComputePositionMap(sf.OriginalText()), structuredData)
+	}
+	supplementalFileNames := core.Map(sf.SupplementalSourceFiles(), func(file *ast.SourceFile) string { return file.FileName() })
+	supplementalFileNamesOffset := encodeStringArray(supplementalFileNames, structuredData)
+	canonicalFileNameIndex := uint32(noStructuredData)
+	if canonical := sf.CanonicalSourceFile(); canonical != nil {
+		canonicalFileNameIndex = strs.add(canonical.FileName(), 0, 0, 0)
+	}
+	contentMapperIndex := uint32(noStructuredData)
+	if contentMapper := sf.ContentMapper(); contentMapper != "" {
+		contentMapperIndex = strs.add(contentMapper, 0, 0, 0)
+	}
+	virtualFileNameIndex := uint32(noStructuredData)
+	if virtualFileName := sf.VirtualFileName(); virtualFileName != "" {
+		virtualFileNameIndex = strs.add(virtualFileName, 0, 0, 0)
+	}
+	diagnosticDirectivesOffset := encodeDiagnosticDirectives(sf.DiagnosticDirectives(), positionMap, ast.ComputePositionMap(sf.OriginalText()), structuredData)
+	// imports, moduleAugmentations, ambientModuleNames offsets are placeholders;
+	// they will be patched after the tree walk when node indices are known.
+	*extendedData = appendUint32s(*extendedData, textIndex, fileNameIndex, pathIndex, uint32(sf.LanguageVariant), uint32(sf.ScriptKind), referencedFilesOffset, typeRefDirectivesOffset, libRefDirectivesOffset, noStructuredData, noStructuredData, noStructuredData, 0, originalTextIndex, spanMapOffset, supplementalFileNamesOffset, canonicalFileNameIndex, contentMapperIndex, virtualFileNameIndex, diagnosticDirectivesOffset)
+}
+
+func recordExtendedData_TemplateHead(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) {
+	n := node.AsTemplateHead()
+	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	rawTextIndex := strs.add(n.RawText, node.Kind, node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, uint32(n.TemplateFlags))
+}
+
+func recordExtendedData_TemplateMiddle(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) {
+	n := node.AsTemplateMiddle()
+	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	rawTextIndex := strs.add(n.RawText, node.Kind, node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, uint32(n.TemplateFlags))
+}
+
+func recordExtendedData_TemplateTail(node *ast.Node, strs *stringTable, positionMap *ast.PositionMap, extendedData *[]byte, structuredData *[]byte) {
+	n := node.AsTemplateTail()
+	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	rawTextIndex := strs.add(n.RawText, node.Kind, node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, uint32(n.TemplateFlags))
+}
+
+func boolToByte(b bool) byte {
+	if b {
+		return 1
+	}
+	return 0
+}
+
+// hasModifiers returns true if the modifier list is non-nil and has at least one modifier.
+func hasModifiers(modifiers *ast.ModifierList) bool {
+	return modifiers != nil && len(modifiers.Nodes) > 0
+}
+
+// encodeFileReferences encodes a slice of FileReferences as a msgpack array of tuples
+// into the structured data buffer. Returns the byte offset into the buffer, or
+// noStructuredData (0xFFFFFFFF) if the slice is empty.
+func encodeFileReferences(refs []*ast.FileReference, positionMap *ast.PositionMap, buf *[]byte) uint32 {
+	if len(refs) == 0 {
+		return noStructuredData
+	}
+	offset := uint32(len(*buf))
+	*buf = msgpackWriteArrayHeader(*buf, len(refs))
+	for _, ref := range refs {
+		// Each entry is a 5-element tuple: [pos, end, fileName, resolutionMode, preserve]
+		*buf = msgpackWriteArrayHeader(*buf, 5)
+		*buf = msgpackWriteUint(*buf, uint32(positionMap.UTF8ToUTF16(ref.Pos())))
+		*buf = msgpackWriteUint(*buf, uint32(positionMap.UTF8ToUTF16(ref.End())))
+		*buf = msgpackWriteString(*buf, ref.FileName)
+		*buf = msgpackWriteUint(*buf, uint32(ref.ResolutionMode))
+		*buf = msgpackWriteBool(*buf, ref.Preserve)
+	}
+	return offset
+}
+
+// encodeNodeIndexArray encodes a slice of LiteralLikeNodes as a msgpack array of
+// uint node indices. Returns the byte offset into the buffer, or noStructuredData
+// if the slice is empty.
+func encodeNodeIndexArray(nodes []*ast.LiteralLikeNode, indexMap map[*ast.Node]uint32, buf *[]byte) uint32 {
+	if len(nodes) == 0 {
+		return noStructuredData
+	}
+	offset := uint32(len(*buf))
+	*buf = msgpackWriteArrayHeader(*buf, len(nodes))
+	for _, node := range nodes {
+		*buf = msgpackWriteUint(*buf, indexMap[node.AsNode()])
+	}
+	return offset
+}
+
+// encodeModuleAugmentations encodes a slice of ModuleName nodes as a msgpack array
+// of uint node indices. Returns the byte offset into the buffer, or noStructuredData
+// if the slice is empty.
+func encodeModuleAugmentations(nodes []*ast.ModuleName, indexMap map[*ast.Node]uint32, buf *[]byte) uint32 {
+	if len(nodes) == 0 {
+		return noStructuredData
+	}
+	offset := uint32(len(*buf))
+	*buf = msgpackWriteArrayHeader(*buf, len(nodes))
+	for _, node := range nodes {
+		*buf = msgpackWriteUint(*buf, indexMap[node.AsNode()])
+	}
+	return offset
+}
+
+// encodeStringArray encodes a slice of strings as a msgpack array of strings.
+// Returns the byte offset into the buffer, or noStructuredData if the slice is empty.
+func encodeStringArray(strs []string, buf *[]byte) uint32 {
+	if len(strs) == 0 {
+		return noStructuredData
+	}
+	offset := uint32(len(*buf))
+	*buf = msgpackWriteArrayHeader(*buf, len(strs))
+	for _, s := range strs {
+		*buf = msgpackWriteString(*buf, s)
+	}
+	return offset
+}
+
+func encodeSpanMap(m *spanmap.SpanMap, virtualPositions *ast.PositionMap, originalPositions *ast.PositionMap, buf *[]byte) uint32 {
+	if m == nil {
+		return noStructuredData
+	}
+	segments := m.Segments()
+	offset := uint32(len(*buf))
+	*buf = msgpackWriteArrayHeader(*buf, len(segments))
+	for _, segment := range segments {
+		tupleLength := 5
+		if segment.Features != spanmap.FeatureAll {
+			tupleLength = 6
+		}
+		*buf = msgpackWriteArrayHeader(*buf, tupleLength)
+		virtualStart := virtualPositions.UTF8ToUTF16(int(segment.VirtualStart))
+		virtualEnd := virtualPositions.UTF8ToUTF16(int(segment.VirtualEnd))
+		originalStart := originalPositions.UTF8ToUTF16(int(segment.OriginalStart))
+		originalEnd := originalPositions.UTF8ToUTF16(int(segment.OriginalEnd))
+		*buf = msgpackWriteUint(*buf, uint32(virtualStart))
+		*buf = msgpackWriteUint(*buf, uint32(virtualEnd-virtualStart))
+		*buf = msgpackWriteUint(*buf, uint32(originalStart))
+		*buf = msgpackWriteUint(*buf, uint32(originalEnd-originalStart))
+		*buf = msgpackWriteUint(*buf, uint32(segment.Kind))
+		if tupleLength == 6 {
+			*buf = msgpackWriteUint(*buf, uint32(segment.Features))
+		}
+	}
+	return offset
+}
+
+func encodeDiagnosticDirectives(directives []ast.MappedDiagnosticDirective, virtualPositions *ast.PositionMap, originalPositions *ast.PositionMap, buf *[]byte) uint32 {
+	if len(directives) == 0 {
+		return noStructuredData
+	}
+	offset := uint32(len(*buf))
+	*buf = msgpackWriteArrayHeader(*buf, len(directives))
+	for _, directive := range directives {
+		*buf = msgpackWriteArrayHeader(*buf, 6)
+		originalStart := originalPositions.UTF8ToUTF16(directive.OriginalRange.Pos())
+		originalEnd := originalPositions.UTF8ToUTF16(directive.OriginalRange.End())
+		virtualStart := virtualPositions.UTF8ToUTF16(directive.VirtualRange.Pos())
+		virtualEnd := virtualPositions.UTF8ToUTF16(directive.VirtualRange.End())
+		*buf = msgpackWriteUint(*buf, uint32(originalStart))
+		*buf = msgpackWriteUint(*buf, uint32(originalEnd-originalStart))
+		*buf = msgpackWriteUint(*buf, uint32(virtualStart))
+		*buf = msgpackWriteUint(*buf, uint32(virtualEnd-virtualStart))
+		*buf = msgpackWriteUint(*buf, uint32(directive.Policy))
+		*buf = msgpackWriteUint(*buf, uint32(directive.UnusedCode))
+	}
+	return offset
+}
+
+// Minimal msgpack writers for the structured data section.
+
+func msgpackWriteArrayHeader(buf []byte, length int) []byte {
+	if length <= 0x0f {
+		return append(buf, byte(0x90|length))
+	}
+	if length <= 0xffff {
+		return append(buf, 0xdc, byte(length>>8), byte(length))
+	}
+	return append(buf, 0xdd, byte(length>>24), byte(length>>16), byte(length>>8), byte(length))
+}
+
+func msgpackWriteUint(buf []byte, value uint32) []byte {
+	if value <= 0x7f {
+		return append(buf, byte(value))
+	}
+	if value <= 0xff {
+		return append(buf, 0xcc, byte(value))
+	}
+	if value <= 0xffff {
+		return append(buf, 0xcd, byte(value>>8), byte(value))
+	}
+	return append(buf, 0xce, byte(value>>24), byte(value>>16), byte(value>>8), byte(value))
+}
+
+func msgpackWriteString(buf []byte, s string) []byte {
+	n := len(s)
+	if n <= 0x1f {
+		buf = append(buf, byte(0xa0|n))
+	} else if n <= 0xff {
+		buf = append(buf, 0xd9, byte(n))
+	} else if n <= 0xffff {
+		buf = append(buf, 0xda, byte(n>>8), byte(n))
+	} else {
+		buf = append(buf, 0xdb, byte(n>>24), byte(n>>16), byte(n>>8), byte(n))
+	}
+	return append(buf, s...)
+}
+
+func msgpackWriteBool(buf []byte, value bool) []byte {
+	if value {
+		return append(buf, 0xc3)
+	}
+	return append(buf, 0xc2)
+}
+
+// Hand-written commonData encoding functions for nodes whose non-bool data
+// members cannot be automatically encoded by the generator. Each function
+// packs relevant fields into the 6-bit commonData area (bits 24-29) of the
+// 32-bit node data word.
+
+func getNodeCommonData_SyntheticExpression(_ *ast.Node) uint32 {
+	// SyntheticExpression is an internal compiler node that is never part of a parsed AST.
+	// It should never be encoded.
+	panic("SyntheticExpression should never be encoded")
+}
+
+// Hand-written extended data encoding functions for literal nodes that were
+// previously string-type but whose TokenFlags/TemplateFlags cannot fit in 6 bits.
+
+func recordExtendedData_StringLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
+	n := node.AsStringLiteral()
+	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags))
+}
+
+func recordExtendedData_NumericLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
+	n := node.AsNumericLiteral()
+	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags))
+}
+
+func recordExtendedData_BigIntLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
+	n := node.AsBigIntLiteral()
+	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags))
+}
+
+func recordExtendedData_RegularExpressionLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
+	n := node.AsRegularExpressionLiteral()
+	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TokenFlags))
+}
+
+func recordExtendedData_NoSubstitutionTemplateLiteral(node *ast.Node, strs *stringTable, _ *ast.PositionMap, extendedData *[]byte, _ *[]byte) {
+	n := node.AsNoSubstitutionTemplateLiteral()
+	textIndex := strs.add(n.Text, node.Kind, node.Pos(), node.End())
+	*extendedData = appendUint32s(*extendedData, textIndex, uint32(n.TemplateFlags))
+}

@@ -1,0 +1,19 @@
+// === Document Symbols ===
+// === /navigationBarPrivateNameMethod.ts ===
+// <|class [|{| name: A, kind: Class |}A|] {
+//   <|[|{| name: #foo, kind: Method |}#foo|]() {
+//     <|class [|{| name: B, kind: Class |}B|] {
+//       <|[|{| name: #bar, kind: Method |}#bar|]() {
+//          <|function [|{| name: baz, kind: Function |}baz|] () {
+//          }|>
+//       }|>
+//     }|>
+//   }|>
+// }|>
+
+// === Details ===
+(Class) A
+  (Method) #foo
+    (Class) B
+      (Method) #bar
+        (Function) baz

@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/taggedTemplateNestedInvalidEscape.ts] ////
+
+=== taggedTemplateNestedInvalidEscape.ts ===
+declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>template : TemplateStringsArray
+>substitutions : any[]
+
+// The outer tagged template should NOT be rewritten with __makeTemplateObject
+// because only the inner tagged template contains an invalid escape.
+tag`ok ${tag`\u`}`;
+>tag`ok ${tag`\u`}` : string
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>`ok ${tag`\u`}` : string
+>tag`\u` : string
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>`\u` : "\\u"
+
+// The inner tagged template here has an invalid escape, but the outer one doesn't.
+tag`fine ${tag`\x`} also fine`;
+>tag`fine ${tag`\x`} also fine` : string
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>`fine ${tag`\x`} also fine` : string
+>tag`\x` : string
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>`\x` : "\\x"
+
+// This one should be rewritten because it has its own invalid escape.
+tag`\u`;
+>tag`\u` : string
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>`\u` : "\\u"
+
+// Nested with substitution, only inner is invalid.
+tag`hello ${tag`\u{}`} world`;
+>tag`hello ${tag`\u{}`} world` : string
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>`hello ${tag`\u{}`} world` : string
+>tag`\u{}` : string
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>`\u{}` : "\\u{}"
+

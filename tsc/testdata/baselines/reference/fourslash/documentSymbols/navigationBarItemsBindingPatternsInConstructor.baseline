@@ -1,0 +1,20 @@
+// === Document Symbols ===
+// === /navigationBarItemsBindingPatternsInConstructor.ts ===
+// <|class [|{| name: A, kind: Class |}A|] {
+//     <|[|{| name: x, kind: Property |}x|]: any|>
+//     <|[|{| name: constructor, kind: Constructor |}|]constructor([a]: any) {
+//     }|>
+// }|>
+// <|class [|{| name: B, kind: Class |}B|] {
+//     <|[|{| name: x, kind: Property |}x|]: any;|>
+//     <|[|{| name: constructor, kind: Constructor |}|]constructor( {a} = { a: 1 }) {
+//     }|>
+// }|>
+
+// === Details ===
+(Class) A
+  (Property) x
+  (Constructor) constructor
+(Class) B
+  (Property) x
+  (Constructor) constructor

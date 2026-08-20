@@ -1,0 +1,20 @@
+cls.js(7,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+cls.js(8,16): error TS2339: Property 'Strings' does not exist on type 'typeof Foo'.
+
+
+==== cls.js (2 errors) ====
+    const Bar = require("./bar");
+    const Strings = {
+        a: "A",
+        b: "B"
+    };
+    class Foo extends Bar {}
+    module.exports = Foo;
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    module.exports.Strings = Strings;
+                   ~~~~~~~
+!!! error TS2339: Property 'Strings' does not exist on type 'typeof Foo'.
+==== bar.js (0 errors) ====
+    class Bar {}
+    module.exports = Bar;

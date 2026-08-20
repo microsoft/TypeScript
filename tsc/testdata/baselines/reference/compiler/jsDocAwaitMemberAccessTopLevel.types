@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/jsDocAwaitMemberAccessTopLevel.ts] ////
+
+=== repro.js ===
+const M = /** @type {any} */ ({});
+>M : any
+>({}) : any
+>{} : {}
+
+/** @typedef {number} Foo */
+export const a = M.await(1);
+>a : any
+>M.await(1) : any
+>M.await : any
+>M : any
+>await : any
+>1 : 1
+

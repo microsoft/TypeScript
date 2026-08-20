@@ -1,0 +1,45 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment24.ts] ////
+
+=== usage.js ===
+// note that usage is first in the compilation
+Outer.Inner.Message = function() {
+>Outer.Inner : Symbol(Inner, Decl(def.js, 0, 14))
+>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+>Inner : Symbol(Inner, Decl(def.js, 0, 14))
+
+};
+
+var y = new Outer.Inner()
+>y : Symbol(y, Decl(usage.js, 4, 3))
+>Outer.Inner : Symbol(Inner, Decl(def.js, 0, 14))
+>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+>Inner : Symbol(Inner, Decl(def.js, 0, 14))
+
+y.name
+>y.name : Symbol(Inner.name, Decl(def.js, 1, 21))
+>y : Symbol(y, Decl(usage.js, 4, 3))
+>name : Symbol(Inner.name, Decl(def.js, 1, 21))
+
+/** @type {Outer.Inner} should be instance type, not static type */
+var x;
+>x : Symbol(x, Decl(usage.js, 7, 3))
+
+x.name
+>x : Symbol(x, Decl(usage.js, 7, 3))
+
+=== def.js ===
+var Outer = {}
+>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+
+Outer.Inner = class {
+>Outer.Inner : Symbol(Inner, Decl(def.js, 0, 14))
+>Outer : Symbol(Outer, Decl(def.js, 0, 3))
+>Inner : Symbol(Inner, Decl(def.js, 0, 14))
+
+  name() {
+>name : Symbol(Inner.name, Decl(def.js, 1, 21))
+
+    return 'hi'
+  }
+}
+

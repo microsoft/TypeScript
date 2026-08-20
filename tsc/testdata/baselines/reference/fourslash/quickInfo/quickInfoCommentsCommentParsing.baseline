@@ -1,0 +1,2135 @@
+// === QuickInfo ===
+=== /quickInfoCommentsCommentParsing.ts ===
+// /// This is simple /// comments
+// function simple() {
+// }
+// 
+// simple( );
+// ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function simple(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 
+// /// multiLine /// Comments
+// /// This is example of multiline /// comments
+// /// Another multiLine
+// function multiLine() {
+// }
+// multiLine( );
+// ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function multiLine(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 
+// /** this is eg of single line jsdoc style comment */
+// function jsDocSingleLine() {
+// }
+// jsDocSingleLine();
+// ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocSingleLine(): void
+// | ```
+// | this is eg of single line jsdoc style comment
+// | ----------------------------------------------------------------------
+// 
+// 
+// /** this is multiple line jsdoc stule comment
+// *New line1
+// *New Line2*/
+// function jsDocMultiLine() {
+// }
+// jsDocMultiLine();
+// ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocMultiLine(): void
+// | ```
+// | this is multiple line jsdoc stule comment
+// | New line1
+// | New Line2
+// | ----------------------------------------------------------------------
+// 
+// /** multiple line jsdoc comments no longer merge
+// *New line1
+// *New Line2*/
+// /** Shoul mege this line as well
+// * and this too*/ /** Another this one too*/
+// function jsDocMultiLineMerge() {
+// }
+// jsDocMultiLineMerge();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocMultiLineMerge(): void
+// | ```
+// | Another this one too
+// | ----------------------------------------------------------------------
+// 
+// 
+// /// Triple slash comment
+// /** jsdoc comment */
+// function jsDocMixedComments1() {
+// }
+// jsDocMixedComments1();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocMixedComments1(): void
+// | ```
+// | jsdoc comment
+// | ----------------------------------------------------------------------
+// 
+// /// Triple slash comment
+// /** jsdoc comment */ /** another jsDocComment*/
+// function jsDocMixedComments2() {
+// }
+// jsDocMixedComments2();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocMixedComments2(): void
+// | ```
+// | another jsDocComment
+// | ----------------------------------------------------------------------
+// 
+// /** jsdoc comment */ /*** triplestar jsDocComment*/
+// /// Triple slash comment
+// function jsDocMixedComments3() {
+// }
+// jsDocMixedComments3();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocMixedComments3(): void
+// | ```
+// | * triplestar jsDocComment
+// | ----------------------------------------------------------------------
+// 
+// /** jsdoc comment */ /** another jsDocComment*/
+// /// Triple slash comment
+// /// Triple slash comment 2
+// function jsDocMixedComments4() {
+// }
+// jsDocMixedComments4();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocMixedComments4(): void
+// | ```
+// | another jsDocComment
+// | ----------------------------------------------------------------------
+// 
+// /// Triple slash comment 1
+// /** jsdoc comment */ /** another jsDocComment*/
+// /// Triple slash comment
+// /// Triple slash comment 2
+// function jsDocMixedComments5() {
+// }
+// jsDocMixedComments5();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocMixedComments5(): void
+// | ```
+// | another jsDocComment
+// | ----------------------------------------------------------------------
+// 
+// /** another jsDocComment*/
+// /// Triple slash comment 1
+// /// Triple slash comment
+// /// Triple slash comment 2
+// /** jsdoc comment */
+// function jsDocMixedComments6() {
+// }
+// jsDocMixedComments6();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocMixedComments6(): void
+// | ```
+// | jsdoc comment
+// | ----------------------------------------------------------------------
+// 
+// // This shoulnot be help comment
+// function noHelpComment1() {
+// }
+// noHelpComment1();
+// ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function noHelpComment1(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 
+// /* This shoulnot be help comment */
+// function noHelpComment2() {
+// }
+// noHelpComment2();
+// ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function noHelpComment2(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// 
+// function noHelpComment3() {
+// }
+// noHelpComment3();
+// ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function noHelpComment3(): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// /** Adds two integers and returns the result
+//   * @param {number} a first number
+//   * @param b second number
+//   */
+// function sum(a: number, b: number) {
+//              ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: number
+// | ```
+// | first number
+// | ----------------------------------------------------------------------
+//                         ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: number
+// | ```
+// | second number
+// | ----------------------------------------------------------------------
+//     return a + b;
+// }
+// sum(10, 20);
+// ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function sum(a: number, b: number): number
+// | ```
+// | Adds two integers and returns the result
+// | 
+// | *@param* `a` — first number
+// | 
+// | *@param* `b` — second number
+// | ----------------------------------------------------------------------
+// /** This is multiplication function
+//  * @param 
+//  * @param a first number
+//  * @param b
+//  * @param c {
+//  @param d @anotherTag
+//  * @param e LastParam @anotherTag*/
+// function multiply(a: number, b: number, c?: number, d?, e?) {
+//                   ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: number
+// | ```
+// | first number
+// | ----------------------------------------------------------------------
+//                              ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                         ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) c: number | undefined
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                                     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) d: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                                         ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) e: any
+// | ```
+// | LastParam
+// | ----------------------------------------------------------------------
+// }
+// multiply(10, 20, 30, 40, 50);
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function multiply(a: number, b: number, c?: number, d?: any, e?: any): void
+// | ```
+// | This is multiplication function
+// | 
+// | *@param* ``
+// | 
+// | *@param* `a` — first number
+// | 
+// | *@param* `b`
+// | 
+// | *@param* `c`
+// | 
+// | *@param* `d`
+// | 
+// | *@anotherTag*
+// | 
+// | *@param* `e` — LastParam
+// | 
+// | *@anotherTag*
+// | ----------------------------------------------------------------------
+// /** fn f1 with number
+// * @param { string} b about b
+// */
+// function f1(a: number);
+//             ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// function f1(b: string);
+//             ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: string
+// | ```
+// | about b
+// | ----------------------------------------------------------------------
+// /**@param opt optional parameter*/
+// function f1(aOrb, opt?) {
+//     return aOrb;
+// }
+// f1(10);
+// ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function f1(a: number): any
+// | ```
+// | fn f1 with number
+// | 
+// | *@param* `b` — about b
+// | ----------------------------------------------------------------------
+// f1("hello");
+// ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function f1(b: string): any
+// | ```
+// | fn f1 with number
+// | 
+// | *@param* `b` — about b
+// | ----------------------------------------------------------------------
+// 
+// /** This is subtract function
+// @param { a
+// *@param { number | } b this is about b
+// @param { { () => string; } } c this is optional param c
+// @param { { () => string; } d this is optional param d
+// @param { { () => string; } } e this is optional param e
+// @param { { { () => string; } } f this is optional param f
+// */
+// function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string) {
+//                   ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                              ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: number
+// | ```
+// | this is about b
+// | ----------------------------------------------------------------------
+//                                         ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) c: (() => string) | undefined
+// | ```
+// | this is optional param c
+// | ----------------------------------------------------------------------
+//                                                           ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) d: (() => string) | undefined
+// | ```
+// | this is optional param d
+// | ----------------------------------------------------------------------
+//                                                                             ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) e: (() => string) | undefined
+// | ```
+// | this is optional param e
+// | ----------------------------------------------------------------------
+//                                                                                               ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) f: (() => string) | undefined
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// subtract(10,  20,  null,  null,  null, null);
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void
+// | ```
+// | This is subtract function
+// | 
+// | *@param* ``
+// | 
+// | *@param* `b` — this is about b
+// | 
+// | *@param* `c` — this is optional param c
+// | 
+// | *@param* `d` — this is optional param d
+// | 
+// | *@param* `e` — this is optional param e
+// | 
+// | *@param* `` — { () => string; } } f this is optional param f
+// | ----------------------------------------------------------------------
+// /** this is square function
+// @paramTag { number } a this is input number of paramTag
+// @param { number } a this is input number
+// @returnType { number } it is return type
+// */
+// function square(a: number) {
+//                 ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: number
+// | ```
+// | this is input number
+// | ----------------------------------------------------------------------
+//     return a * a;
+// }
+// square(10);
+// ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function square(a: number): number
+// | ```
+// | this is square function
+// | 
+// | *@paramTag* — { number } a this is input number of paramTag
+// | 
+// | *@param* `a` — this is input number
+// | 
+// | *@returnType* — { number } it is return type
+// | ----------------------------------------------------------------------
+// /** this is divide function
+// @param { number} a this is a
+// @paramTag { number } g this is optional param g
+// @param { number} b this is b
+// */
+// function divide(a: number, b: number) {
+//                 ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: number
+// | ```
+// | this is a
+// | ----------------------------------------------------------------------
+//                            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: number
+// | ```
+// | this is b
+// | ----------------------------------------------------------------------
+// }
+// divide(10, 20);
+// ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function divide(a: number, b: number): void
+// | ```
+// | this is divide function
+// | 
+// | *@param* `a` — this is a
+// | 
+// | *@paramTag* — { number } g this is optional param g
+// | 
+// | *@param* `b` — this is b
+// | ----------------------------------------------------------------------
+// /**
+// Function returns string concat of foo and bar
+// @param			{string}		foo		is string
+// @param		    {string}		bar		is second string
+// */
+// function fooBar(foo: string, bar: string) {
+//                 ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) foo: string
+// | ```
+// | is string
+// | ----------------------------------------------------------------------
+//                              ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) bar: string
+// | ```
+// | is second string
+// | ----------------------------------------------------------------------
+//     return foo + bar;
+// }
+// fooBar("foo","bar");
+// ^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function fooBar(foo: string, bar: string): string
+// | ```
+// | Function returns string concat of foo and bar
+// | 
+// | *@param* `foo` — is string
+// | 
+// | *@param* `bar` — is second string
+// | ----------------------------------------------------------------------
+// /** This is a comment */
+// var x;
+// /**
+//   * This is a comment
+//   */
+// var y;
+// /** this is jsdoc style function with param tag as well as inline parameter help
+// *@param a it is first parameter
+// *@param c it is third parameter
+// */
+// function jsDocParamTest(/** this is inline comment for a */a: number, /** this is inline comment for b*/ b: number, c: number, d: number) {
+//                                                            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: number
+// | ```
+// | this is inline comment for a
+// | ----------------------------------------------------------------------
+//                                                                                                          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: number
+// | ```
+// | this is inline comment for b
+// | ----------------------------------------------------------------------
+//                                                                                                                     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) c: number
+// | ```
+// | it is third parameter
+// | ----------------------------------------------------------------------
+//                                                                                                                                ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) d: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return a + b + c + d;
+// }
+// jsDocParamTest(30, 40, 50, 60);
+// ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocParamTest(a: number, b: number, c: number, d: number): number
+// | ```
+// | this is jsdoc style function with param tag as well as inline parameter help
+// | 
+// | *@param* `a` — it is first parameter
+// | 
+// | *@param* `c` — it is third parameter
+// | ----------------------------------------------------------------------
+// /** This is function comment
+//   * And properly aligned comment
+//   */
+// function jsDocCommentAlignmentTest1() {
+// }
+// jsDocCommentAlignmentTest1();
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocCommentAlignmentTest1(): void
+// | ```
+// | This is function comment
+// | And properly aligned comment
+// | ----------------------------------------------------------------------
+// /** This is function comment
+//   *     And aligned with 4 space char margin
+//   */
+// function jsDocCommentAlignmentTest2() {
+// }
+// jsDocCommentAlignmentTest2();
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocCommentAlignmentTest2(): void
+// | ```
+// | This is function comment
+// |     And aligned with 4 space char margin
+// | ----------------------------------------------------------------------
+// /** This is function comment
+//   *     And aligned with 4 space char margin
+//   * @param {string} a this is info about a
+//   *                   spanning on two lines and aligned perfectly
+//   * @param b          this is info about b
+//   *                   spanning on two lines and aligned perfectly
+//   *                   spanning one more line alined perfectly
+//   *                       spanning another line with more margin
+//   * @param c          this is info about b
+//   *  not aligned text about parameter will eat only one space
+//   */
+// function jsDocCommentAlignmentTest3(a: string, b, c) {
+//                                     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: string
+// | ```
+// | this is info about a
+// | spanning on two lines and aligned perfectly
+// | ----------------------------------------------------------------------
+//                                                ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: any
+// | ```
+// | this is info about b
+// | spanning on two lines and aligned perfectly
+// | spanning one more line alined perfectly
+// |     spanning another line with more margin
+// | ----------------------------------------------------------------------
+//                                                   ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) c: any
+// | ```
+// | this is info about b
+// | not aligned text about parameter will eat only one space
+// | ----------------------------------------------------------------------
+// }
+// jsDocCommentAlignmentTest3("hello",1, 2);
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function jsDocCommentAlignmentTest3(a: string, b: any, c: any): void
+// | ```
+// | This is function comment
+// |     And aligned with 4 space char margin
+// | 
+// | *@param* `a` — this is info about a
+// | spanning on two lines and aligned perfectly
+// | 
+// | *@param* `b` — this is info about b
+// | spanning on two lines and aligned perfectly
+// | spanning one more line alined perfectly
+// |     spanning another line with more margin
+// | 
+// | *@param* `c` — this is info about b
+// | not aligned text about parameter will eat only one space
+// | ----------------------------------------------------------------------
+// 
+// ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /**/.
+// | ----------------------------------------------------------------------
+// class NoQuickInfoClass {
+//       ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class NoQuickInfoClass
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 58,
+      "LSPosition": {
+        "line": 4,
+        "character": 3
+      },
+      "Name": "1q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction simple(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 0
+        },
+        "end": {
+          "line": 4,
+          "character": 6
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 190,
+      "LSPosition": {
+        "line": 11,
+        "character": 3
+      },
+      "Name": "2q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction multiLine(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 0
+        },
+        "end": {
+          "line": 11,
+          "character": 9
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 291,
+      "LSPosition": {
+        "line": 16,
+        "character": 5
+      },
+      "Name": "3q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocSingleLine(): void\n```\nthis is eg of single line jsdoc style comment"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 0
+        },
+        "end": {
+          "line": 16,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 413,
+      "LSPosition": {
+        "line": 24,
+        "character": 6
+      },
+      "Name": "4q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocMultiLine(): void\n```\nthis is multiple line jsdoc stule comment\nNew line1\nNew Line2"
+      },
+      "range": {
+        "start": {
+          "line": 24,
+          "character": 0
+        },
+        "end": {
+          "line": 24,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 618,
+      "LSPosition": {
+        "line": 33,
+        "character": 7
+      },
+      "Name": "5q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocMultiLineMerge(): void\n```\nAnother this one too"
+      },
+      "range": {
+        "start": {
+          "line": 33,
+          "character": 0
+        },
+        "end": {
+          "line": 33,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 725,
+      "LSPosition": {
+        "line": 40,
+        "character": 8
+      },
+      "Name": "6q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocMixedComments1(): void\n```\njsdoc comment"
+      },
+      "range": {
+        "start": {
+          "line": 40,
+          "character": 0
+        },
+        "end": {
+          "line": 40,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 856,
+      "LSPosition": {
+        "line": 46,
+        "character": 7
+      },
+      "Name": "7q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocMixedComments2(): void\n```\nanother jsDocComment"
+      },
+      "range": {
+        "start": {
+          "line": 46,
+          "character": 0
+        },
+        "end": {
+          "line": 46,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 994,
+      "LSPosition": {
+        "line": 52,
+        "character": 9
+      },
+      "Name": "8q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocMixedComments3(): void\n```\n* triplestar jsDocComment"
+      },
+      "range": {
+        "start": {
+          "line": 52,
+          "character": 0
+        },
+        "end": {
+          "line": 52,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1154,
+      "LSPosition": {
+        "line": 59,
+        "character": 10
+      },
+      "Name": "9q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocMixedComments4(): void\n```\nanother jsDocComment"
+      },
+      "range": {
+        "start": {
+          "line": 59,
+          "character": 0
+        },
+        "end": {
+          "line": 59,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1336,
+      "LSPosition": {
+        "line": 67,
+        "character": 6
+      },
+      "Name": "10q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocMixedComments5(): void\n```\nanother jsDocComment"
+      },
+      "range": {
+        "start": {
+          "line": 67,
+          "character": 0
+        },
+        "end": {
+          "line": 67,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1524,
+      "LSPosition": {
+        "line": 76,
+        "character": 8
+      },
+      "Name": "11q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocMixedComments6(): void\n```\njsdoc comment"
+      },
+      "range": {
+        "start": {
+          "line": 76,
+          "character": 0
+        },
+        "end": {
+          "line": 76,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1608,
+      "LSPosition": {
+        "line": 81,
+        "character": 5
+      },
+      "Name": "12q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction noHelpComment1(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 81,
+          "character": 0
+        },
+        "end": {
+          "line": 81,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1695,
+      "LSPosition": {
+        "line": 86,
+        "character": 7
+      },
+      "Name": "13q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction noHelpComment2(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 86,
+          "character": 0
+        },
+        "end": {
+          "line": 86,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1744,
+      "LSPosition": {
+        "line": 90,
+        "character": 7
+      },
+      "Name": "14q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction noHelpComment3(): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 90,
+          "character": 0
+        },
+        "end": {
+          "line": 90,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1880,
+      "LSPosition": {
+        "line": 95,
+        "character": 13
+      },
+      "Name": "16aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: number\n```\nfirst number"
+      },
+      "range": {
+        "start": {
+          "line": 95,
+          "character": 13
+        },
+        "end": {
+          "line": 95,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1891,
+      "LSPosition": {
+        "line": 95,
+        "character": 24
+      },
+      "Name": "17aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: number\n```\nsecond number"
+      },
+      "range": {
+        "start": {
+          "line": 95,
+          "character": 24
+        },
+        "end": {
+          "line": 95,
+          "character": 25
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 1925,
+      "LSPosition": {
+        "line": 98,
+        "character": 1
+      },
+      "Name": "16q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction sum(a: number, b: number): number\n```\nAdds two integers and returns the result\n\n*@param* `a` — first number\n\n*@param* `b` — second number"
+      },
+      "range": {
+        "start": {
+          "line": 98,
+          "character": 0
+        },
+        "end": {
+          "line": 98,
+          "character": 3
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2111,
+      "LSPosition": {
+        "line": 106,
+        "character": 18
+      },
+      "Name": "19aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: number\n```\nfirst number"
+      },
+      "range": {
+        "start": {
+          "line": 106,
+          "character": 18
+        },
+        "end": {
+          "line": 106,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2122,
+      "LSPosition": {
+        "line": 106,
+        "character": 29
+      },
+      "Name": "20aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 106,
+          "character": 29
+        },
+        "end": {
+          "line": 106,
+          "character": 30
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2133,
+      "LSPosition": {
+        "line": 106,
+        "character": 40
+      },
+      "Name": "21aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) c: number | undefined\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 106,
+          "character": 40
+        },
+        "end": {
+          "line": 106,
+          "character": 41
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2145,
+      "LSPosition": {
+        "line": 106,
+        "character": 52
+      },
+      "Name": "22aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) d: any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 106,
+          "character": 52
+        },
+        "end": {
+          "line": 106,
+          "character": 53
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2149,
+      "LSPosition": {
+        "line": 106,
+        "character": 56
+      },
+      "Name": "23aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) e: any\n```\nLastParam"
+      },
+      "range": {
+        "start": {
+          "line": 106,
+          "character": 56
+        },
+        "end": {
+          "line": 106,
+          "character": 57
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2161,
+      "LSPosition": {
+        "line": 108,
+        "character": 4
+      },
+      "Name": "19q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction multiply(a: number, b: number, c?: number, d?: any, e?: any): void\n```\nThis is multiplication function\n\n*@param* ``\n\n*@param* `a` — first number\n\n*@param* `b`\n\n*@param* `c`\n\n*@param* `d`\n\n*@anotherTag*\n\n*@param* `e` — LastParam\n\n*@anotherTag*"
+      },
+      "range": {
+        "start": {
+          "line": 108,
+          "character": 0
+        },
+        "end": {
+          "line": 108,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2253,
+      "LSPosition": {
+        "line": 112,
+        "character": 12
+      },
+      "Name": "25aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 112,
+          "character": 12
+        },
+        "end": {
+          "line": 112,
+          "character": 13
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2277,
+      "LSPosition": {
+        "line": 113,
+        "character": 12
+      },
+      "Name": "26aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: string\n```\nabout b"
+      },
+      "range": {
+        "start": {
+          "line": 113,
+          "character": 12
+        },
+        "end": {
+          "line": 113,
+          "character": 13
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2370,
+      "LSPosition": {
+        "line": 118,
+        "character": 1
+      },
+      "Name": "25q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction f1(a: number): any\n```\nfn f1 with number\n\n*@param* `b` — about b"
+      },
+      "range": {
+        "start": {
+          "line": 118,
+          "character": 0
+        },
+        "end": {
+          "line": 118,
+          "character": 2
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2378,
+      "LSPosition": {
+        "line": 119,
+        "character": 1
+      },
+      "Name": "26q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction f1(b: string): any\n```\nfn f1 with number\n\n*@param* `b` — about b"
+      },
+      "range": {
+        "start": {
+          "line": 119,
+          "character": 0
+        },
+        "end": {
+          "line": 119,
+          "character": 2
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2716,
+      "LSPosition": {
+        "line": 129,
+        "character": 18
+      },
+      "Name": "28aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 129,
+          "character": 18
+        },
+        "end": {
+          "line": 129,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2727,
+      "LSPosition": {
+        "line": 129,
+        "character": 29
+      },
+      "Name": "29aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: number\n```\nthis is about b"
+      },
+      "range": {
+        "start": {
+          "line": 129,
+          "character": 29
+        },
+        "end": {
+          "line": 129,
+          "character": 30
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2738,
+      "LSPosition": {
+        "line": 129,
+        "character": 40
+      },
+      "Name": "30aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) c: (() => string) | undefined\n```\nthis is optional param c"
+      },
+      "range": {
+        "start": {
+          "line": 129,
+          "character": 40
+        },
+        "end": {
+          "line": 129,
+          "character": 41
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2756,
+      "LSPosition": {
+        "line": 129,
+        "character": 58
+      },
+      "Name": "31aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) d: (() => string) | undefined\n```\nthis is optional param d"
+      },
+      "range": {
+        "start": {
+          "line": 129,
+          "character": 58
+        },
+        "end": {
+          "line": 129,
+          "character": 59
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2774,
+      "LSPosition": {
+        "line": 129,
+        "character": 76
+      },
+      "Name": "32aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) e: (() => string) | undefined\n```\nthis is optional param e"
+      },
+      "range": {
+        "start": {
+          "line": 129,
+          "character": 76
+        },
+        "end": {
+          "line": 129,
+          "character": 77
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2792,
+      "LSPosition": {
+        "line": 129,
+        "character": 94
+      },
+      "Name": "33aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) f: (() => string) | undefined\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 129,
+          "character": 94
+        },
+        "end": {
+          "line": 129,
+          "character": 95
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 2818,
+      "LSPosition": {
+        "line": 131,
+        "character": 4
+      },
+      "Name": "28q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void\n```\nThis is subtract function\n\n*@param* ``\n\n*@param* `b` — this is about b\n\n*@param* `c` — this is optional param c\n\n*@param* `d` — this is optional param d\n\n*@param* `e` — this is optional param e\n\n*@param* `` — { () => string; } } f this is optional param f"
+      },
+      "range": {
+        "start": {
+          "line": 131,
+          "character": 0
+        },
+        "end": {
+          "line": 131,
+          "character": 8
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3045,
+      "LSPosition": {
+        "line": 137,
+        "character": 16
+      },
+      "Name": "34aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: number\n```\nthis is input number"
+      },
+      "range": {
+        "start": {
+          "line": 137,
+          "character": 16
+        },
+        "end": {
+          "line": 137,
+          "character": 17
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3081,
+      "LSPosition": {
+        "line": 140,
+        "character": 3
+      },
+      "Name": "34q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction square(a: number): number\n```\nthis is square function\n\n*@paramTag* — { number } a this is input number of paramTag\n\n*@param* `a` — this is input number\n\n*@returnType* — { number } it is return type"
+      },
+      "range": {
+        "start": {
+          "line": 140,
+          "character": 0
+        },
+        "end": {
+          "line": 140,
+          "character": 6
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3243,
+      "LSPosition": {
+        "line": 146,
+        "character": 16
+      },
+      "Name": "35aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: number\n```\nthis is a"
+      },
+      "range": {
+        "start": {
+          "line": 146,
+          "character": 16
+        },
+        "end": {
+          "line": 146,
+          "character": 17
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3254,
+      "LSPosition": {
+        "line": 146,
+        "character": 27
+      },
+      "Name": "36aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: number\n```\nthis is b"
+      },
+      "range": {
+        "start": {
+          "line": 146,
+          "character": 27
+        },
+        "end": {
+          "line": 146,
+          "character": 28
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3272,
+      "LSPosition": {
+        "line": 148,
+        "character": 3
+      },
+      "Name": "35q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction divide(a: number, b: number): void\n```\nthis is divide function\n\n*@param* `a` — this is a\n\n*@paramTag* — { number } g this is optional param g\n\n*@param* `b` — this is b"
+      },
+      "range": {
+        "start": {
+          "line": 148,
+          "character": 0
+        },
+        "end": {
+          "line": 148,
+          "character": 6
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3432,
+      "LSPosition": {
+        "line": 154,
+        "character": 16
+      },
+      "Name": "37aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) foo: string\n```\nis string"
+      },
+      "range": {
+        "start": {
+          "line": 154,
+          "character": 16
+        },
+        "end": {
+          "line": 154,
+          "character": 19
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3445,
+      "LSPosition": {
+        "line": 154,
+        "character": 29
+      },
+      "Name": "38aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) bar: string\n```\nis second string"
+      },
+      "range": {
+        "start": {
+          "line": 154,
+          "character": 29
+        },
+        "end": {
+          "line": 154,
+          "character": 32
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3486,
+      "LSPosition": {
+        "line": 157,
+        "character": 2
+      },
+      "Name": "37q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction fooBar(foo: string, bar: string): string\n```\nFunction returns string concat of foo and bar\n\n*@param* `foo` — is string\n\n*@param* `bar` — is second string"
+      },
+      "range": {
+        "start": {
+          "line": 157,
+          "character": 0
+        },
+        "end": {
+          "line": 157,
+          "character": 6
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3782,
+      "LSPosition": {
+        "line": 168,
+        "character": 59
+      },
+      "Name": "40aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: number\n```\nthis is inline comment for a"
+      },
+      "range": {
+        "start": {
+          "line": 168,
+          "character": 59
+        },
+        "end": {
+          "line": 168,
+          "character": 60
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3828,
+      "LSPosition": {
+        "line": 168,
+        "character": 105
+      },
+      "Name": "41aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: number\n```\nthis is inline comment for b"
+      },
+      "range": {
+        "start": {
+          "line": 168,
+          "character": 105
+        },
+        "end": {
+          "line": 168,
+          "character": 106
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3839,
+      "LSPosition": {
+        "line": 168,
+        "character": 116
+      },
+      "Name": "42aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) c: number\n```\nit is third parameter"
+      },
+      "range": {
+        "start": {
+          "line": 168,
+          "character": 116
+        },
+        "end": {
+          "line": 168,
+          "character": 117
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3850,
+      "LSPosition": {
+        "line": 168,
+        "character": 127
+      },
+      "Name": "43aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) d: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 168,
+          "character": 127
+        },
+        "end": {
+          "line": 168,
+          "character": 128
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 3894,
+      "LSPosition": {
+        "line": 171,
+        "character": 3
+      },
+      "Name": "40q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocParamTest(a: number, b: number, c: number, d: number): number\n```\nthis is jsdoc style function with param tag as well as inline parameter help\n\n*@param* `a` — it is first parameter\n\n*@param* `c` — it is third parameter"
+      },
+      "range": {
+        "start": {
+          "line": 171,
+          "character": 0
+        },
+        "end": {
+          "line": 171,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 4040,
+      "LSPosition": {
+        "line": 177,
+        "character": 8
+      },
+      "Name": "45q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocCommentAlignmentTest1(): void\n```\nThis is function comment\nAnd properly aligned comment"
+      },
+      "range": {
+        "start": {
+          "line": 177,
+          "character": 0
+        },
+        "end": {
+          "line": 177,
+          "character": 26
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 4193,
+      "LSPosition": {
+        "line": 183,
+        "character": 10
+      },
+      "Name": "46q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocCommentAlignmentTest2(): void\n```\nThis is function comment\n    And aligned with 4 space char margin"
+      },
+      "range": {
+        "start": {
+          "line": 183,
+          "character": 0
+        },
+        "end": {
+          "line": 183,
+          "character": 26
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 4778,
+      "LSPosition": {
+        "line": 195,
+        "character": 36
+      },
+      "Name": "47aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: string\n```\nthis is info about a\nspanning on two lines and aligned perfectly"
+      },
+      "range": {
+        "start": {
+          "line": 195,
+          "character": 36
+        },
+        "end": {
+          "line": 195,
+          "character": 37
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 4789,
+      "LSPosition": {
+        "line": 195,
+        "character": 47
+      },
+      "Name": "48aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: any\n```\nthis is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin"
+      },
+      "range": {
+        "start": {
+          "line": 195,
+          "character": 47
+        },
+        "end": {
+          "line": 195,
+          "character": 48
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 4792,
+      "LSPosition": {
+        "line": 195,
+        "character": 50
+      },
+      "Name": "49aq",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) c: any\n```\nthis is info about b\nnot aligned text about parameter will eat only one space"
+      },
+      "range": {
+        "start": {
+          "line": 195,
+          "character": 50
+        },
+        "end": {
+          "line": 195,
+          "character": 51
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 4809,
+      "LSPosition": {
+        "line": 197,
+        "character": 10
+      },
+      "Name": "47q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction jsDocCommentAlignmentTest3(a: string, b: any, c: any): void\n```\nThis is function comment\n    And aligned with 4 space char margin\n\n*@param* `a` — this is info about a\nspanning on two lines and aligned perfectly\n\n*@param* `b` — this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin\n\n*@param* `c` — this is info about b\nnot aligned text about parameter will eat only one space"
+      },
+      "range": {
+        "start": {
+          "line": 197,
+          "character": 0
+        },
+        "end": {
+          "line": 197,
+          "character": 26
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 4841,
+      "LSPosition": {
+        "line": 198,
+        "character": 0
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": null
+  },
+  {
+    "marker": {
+      "Position": 4854,
+      "LSPosition": {
+        "line": 199,
+        "character": 12
+      },
+      "Name": "50q",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass NoQuickInfoClass\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 199,
+          "character": 6
+        },
+        "end": {
+          "line": 199,
+          "character": 22
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

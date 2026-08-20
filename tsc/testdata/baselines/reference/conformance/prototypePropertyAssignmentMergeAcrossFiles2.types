@@ -1,0 +1,69 @@
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles2.ts] ////
+
+=== prototypePropertyAssignmentMergeAcrossFiles2.js ===
+var Ns = {}
+>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
+>{} : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
+
+Ns.One = function() {};
+>Ns.One = function() {} : { (): void; prototype: { ok(): void; }; }
+>Ns.One : { (): void; prototype: { ok(): void; }; }
+>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
+>One : { (): void; prototype: { ok(): void; }; }
+>function() {} : { (): void; prototype: { ok(): void; }; }
+
+Ns.Two = function() {};
+>Ns.Two = function() {} : { (): void; prototype: {}; }
+>Ns.Two : { (): void; prototype: {}; }
+>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
+>Two : { (): void; prototype: {}; }
+>function() {} : { (): void; prototype: {}; }
+
+Ns.One.prototype = {
+>Ns.One.prototype = {  ok() {},} : { ok(): void; }
+>Ns.One.prototype : { ok(): void; }
+>Ns.One : { (): void; prototype: { ok(): void; }; }
+>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
+>One : { (): void; prototype: { ok(): void; }; }
+>prototype : { ok(): void; }
+>{  ok() {},} : { ok(): void; }
+
+  ok() {},
+>ok : () => void
+
+};
+Ns.Two.prototype = {
+>Ns.Two.prototype = {} : {}
+>Ns.Two.prototype : {}
+>Ns.Two : { (): void; prototype: {}; }
+>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
+>Two : { (): void; prototype: {}; }
+>prototype : {}
+>{} : {}
+}
+
+=== other.js ===
+/**
+ * @type {Ns.One}
+ */
+var one = undefined;
+>one : Ns.One
+>undefined : undefined
+
+one.wat;
+>one.wat : any
+>one : Ns.One
+>wat : any
+
+/**
+ * @type {Ns.Two}
+ */
+var two = undefined;
+>two : Ns.Two
+>undefined : undefined
+
+two.wat;
+>two.wat : any
+>two : Ns.Two
+>wat : any
+

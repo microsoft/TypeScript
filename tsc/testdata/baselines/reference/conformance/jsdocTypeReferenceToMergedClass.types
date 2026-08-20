@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToMergedClass.ts] ////
+
+=== jsdocTypeReferenceToMergedClass.js ===
+var Workspace = {}
+>Workspace : { Project: { (): void; prototype: { isServiceProject(): void; }; }; }
+>{} : { Project: { (): void; prototype: { isServiceProject(): void; }; }; }
+
+/** @type {Workspace.Project} */
+var p;
+>p : Workspace.Project
+
+p.isServiceProject()
+>p.isServiceProject() : any
+>p.isServiceProject : any
+>p : Workspace.Project
+>isServiceProject : any
+
+Workspace.Project = function wp() { }
+>Workspace.Project = function wp() { } : { (): void; prototype: { isServiceProject(): void; }; }
+>Workspace.Project : { (): void; prototype: { isServiceProject(): void; }; }
+>Workspace : { Project: { (): void; prototype: { isServiceProject(): void; }; }; }
+>Project : { (): void; prototype: { isServiceProject(): void; }; }
+>function wp() { } : { (): void; prototype: { isServiceProject(): void; }; }
+>wp : { (): void; prototype: { isServiceProject(): void; }; }
+
+Workspace.Project.prototype = {
+>Workspace.Project.prototype = {  isServiceProject() {}} : { isServiceProject(): void; }
+>Workspace.Project.prototype : { isServiceProject(): void; }
+>Workspace.Project : { (): void; prototype: { isServiceProject(): void; }; }
+>Workspace : { Project: { (): void; prototype: { isServiceProject(): void; }; }; }
+>Project : { (): void; prototype: { isServiceProject(): void; }; }
+>prototype : { isServiceProject(): void; }
+>{  isServiceProject() {}} : { isServiceProject(): void; }
+
+  isServiceProject() {}
+>isServiceProject : () => void
+}
+

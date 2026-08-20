@@ -1,0 +1,17 @@
+bug24754.js(4,11): error TS2309: An export assignment cannot be used in a module with other exported elements.
+bug24754.js(5,9): error TS2339: Property 'version' does not exist on type '{ (): void; WebpackOptionsDefaulter: number; }'.
+
+
+==== bug24754.js (2 errors) ====
+    // #24754
+    const webpack = function (){
+    }
+    exports = module.exports = webpack;
+              ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    exports.version = 1001;
+            ~~~~~~~
+!!! error TS2339: Property 'version' does not exist on type '{ (): void; WebpackOptionsDefaulter: number; }'.
+    
+    webpack.WebpackOptionsDefaulter = 1111;
+    

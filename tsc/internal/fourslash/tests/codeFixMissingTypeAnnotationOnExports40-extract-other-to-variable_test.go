@@ -1,0 +1,49 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports40_extract_other_to_variable(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+// @lib: es2019
+// @Filename: /code.ts
+let c: string[] = [];
+export let o = {
+    p: Math.random() ? []: [
+        ...c
+    ]
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Extract to variable and replace with 'newLocal as typeof newLocal'",
+		NewFileContent: `let c: string[] = [];
+const newLocal = Math.random() ? [] : [
+    ...c
+];
+export let o = {
+    p: newLocal as typeof newLocal
+}`,
+		Index:        2,
+		ApplyChanges: true,
+	})
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add annotation of type 'string[]'",
+		NewFileContent: `let c: string[] = [];
+const newLocal: string[] = Math.random() ? [] : [
+    ...c
+];
+export let o = {
+    p: newLocal as typeof newLocal
+}`,
+		Index:        0,
+		ApplyChanges: true,
+	})
+}

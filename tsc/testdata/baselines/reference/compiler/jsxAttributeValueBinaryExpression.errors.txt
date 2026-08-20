@@ -1,0 +1,17 @@
+jsxAttributeValueBinaryExpression.tsx(1,2): error TS2304: Cannot find name 'X'.
+jsxAttributeValueBinaryExpression.tsx(1,6): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxAttributeValueBinaryExpression.tsx(1,6): error TS2657: JSX expressions must have one parent element.
+jsxAttributeValueBinaryExpression.tsx(1,10): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== jsxAttributeValueBinaryExpression.tsx (4 errors) ====
+    <X a=<b/><c/> />
+     ~
+!!! error TS2304: Cannot find name 'X'.
+         ~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+         ~~~~~~~~
+!!! error TS2657: JSX expressions must have one parent element.
+             ~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    

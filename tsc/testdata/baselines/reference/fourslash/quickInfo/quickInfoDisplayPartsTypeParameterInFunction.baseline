@@ -1,0 +1,422 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsTypeParameterInFunction.ts ===
+// function foo<U>(a: U) {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo<U>(a: U): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//              ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in foo<U>(a: U): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                 ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                    ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U in foo<U>(a: U): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return a;
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// foo("Hello");
+// ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo<"Hello">(a: "Hello"): "Hello"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// function foo2<U extends string>(a: U) {
+//          ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo2<U extends string>(a: U): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends string in foo2<U extends string>(a: U): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                 ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                                    ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (type parameter) U extends string in foo2<U extends string>(a: U): U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return a;
+//            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) a: U
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// foo2("hello");
+// ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo2<"hello">(a: "hello"): "hello"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 9,
+      "LSPosition": {
+        "line": 0,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo<U>(a: U): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 9
+        },
+        "end": {
+          "line": 0,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 13,
+      "LSPosition": {
+        "line": 0,
+        "character": 13
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in foo<U>(a: U): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 13
+        },
+        "end": {
+          "line": 0,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 16,
+      "LSPosition": {
+        "line": 0,
+        "character": 16
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 16
+        },
+        "end": {
+          "line": 0,
+          "character": 17
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 19,
+      "LSPosition": {
+        "line": 0,
+        "character": 19
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U in foo<U>(a: U): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 19
+        },
+        "end": {
+          "line": 0,
+          "character": 20
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 35,
+      "LSPosition": {
+        "line": 1,
+        "character": 11
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 11
+        },
+        "end": {
+          "line": 1,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 40,
+      "LSPosition": {
+        "line": 3,
+        "character": 0
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo<\"Hello\">(a: \"Hello\"): \"Hello\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 0
+        },
+        "end": {
+          "line": 3,
+          "character": 3
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 63,
+      "LSPosition": {
+        "line": 4,
+        "character": 9
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo2<U extends string>(a: U): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 9
+        },
+        "end": {
+          "line": 4,
+          "character": 13
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 68,
+      "LSPosition": {
+        "line": 4,
+        "character": 14
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends string in foo2<U extends string>(a: U): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 14
+        },
+        "end": {
+          "line": 4,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 86,
+      "LSPosition": {
+        "line": 4,
+        "character": 32
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 32
+        },
+        "end": {
+          "line": 4,
+          "character": 33
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 89,
+      "LSPosition": {
+        "line": 4,
+        "character": 35
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(type parameter) U extends string in foo2<U extends string>(a: U): U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 35
+        },
+        "end": {
+          "line": 4,
+          "character": 36
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 105,
+      "LSPosition": {
+        "line": 5,
+        "character": 11
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) a: U\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 11
+        },
+        "end": {
+          "line": 5,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 110,
+      "LSPosition": {
+        "line": 7,
+        "character": 0
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo2<\"hello\">(a: \"hello\"): \"hello\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 0
+        },
+        "end": {
+          "line": 7,
+          "character": 4
+        }
+      }
+    }
+  }
+]

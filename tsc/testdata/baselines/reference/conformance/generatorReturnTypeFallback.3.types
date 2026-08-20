@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/generators/generatorReturnTypeFallback.3.ts] ////
+
+=== generatorReturnTypeFallback.3.ts ===
+function* f() {
+>f : () => IterableIterator<number, void, string>
+
+    const x: string = yield 1;
+>x : string
+>yield 1 : any
+>1 : 1
+}

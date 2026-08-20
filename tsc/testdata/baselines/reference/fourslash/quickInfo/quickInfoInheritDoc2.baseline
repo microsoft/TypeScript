@@ -1,0 +1,54 @@
+// === QuickInfo ===
+=== /quickInfoInheritDoc2.ts ===
+// class Base<T> {
+//     /**
+//      * Base.prop
+//      */
+//     prop: T | undefined;
+// }
+// 
+// class SubClass<T> extends Base<T> {
+//     /**
+//      * @inheritdoc
+//      * SubClass.prop
+//      */
+//     prop: T | undefined;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) SubClass<T>.prop: T | undefined
+// | ```
+// | 
+// | 
+// | *@inheritdoc* — SubClass.prop
+// | ----------------------------------------------------------------------
+// }
+[
+  {
+    "marker": {
+      "Position": 173,
+      "LSPosition": {
+        "line": 12,
+        "character": 4
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) SubClass<T>.prop: T | undefined\n```\n\n\n*@inheritdoc* — SubClass.prop"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 4
+        },
+        "end": {
+          "line": 12,
+          "character": 8
+        }
+      }
+    }
+  }
+]

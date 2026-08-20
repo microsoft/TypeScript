@@ -1,0 +1,12 @@
+//// [/component.astro] (ScriptKind: ScriptKindTS, ContentMapper: [.astro])
+--- Original ---
+const value = 1;
+--- Transformed ---
+
+=== Diagnostics ===
+
+/component.astro:1:1 - error TS100025: The content mapper 'mapper' failed to transform this file.
+  Content mapper supplemental output file '/component.astro.0.ts' conflicts with an existing file.
+
+1 
+  ~

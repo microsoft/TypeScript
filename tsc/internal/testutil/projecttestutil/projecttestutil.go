@@ -1,0 +1,323 @@
+package projecttestutil
+
+import (
+	"context"
+	"fmt"
+	"os"
+	"slices"
+	"strings"
+	"sync"
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/glob"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/project"
+	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+)
+
+//go:generate go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out clientmock_generated.go ../../project Client
+//go:generate npx dprint fmt clientmock_generated.go
+
+//go:generate go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out npmexecutormock_generated.go ../../project/ata NpmExecutor
+//go:generate npx dprint fmt npmexecutormock_generated.go
+
+const (
+	TestTypingsLocation = "/home/src/Library/Caches/typescript"
+)
+
+type TypingsInstallerOptions struct {
+	TypesRegistry []string
+	PackageToFile map[string]string
+}
+
+type SessionUtils struct {
+	currentDirectory string
+	fsFromFileMap    iovfs.FsWithSys
+	fs               vfs.FS
+	client           *ClientMock
+	npmExecutor      *NpmExecutorMock
+	tiOptions        *TypingsInstallerOptions
+	logger           logging.LogCollector
+}
+
+func (h *SessionUtils) FsFromFileMap() iovfs.FsWithSys {
+	return h.fsFromFileMap
+}
+
+func (h *SessionUtils) Client() *ClientMock {
+	return h.client
+}
+
+func (h *SessionUtils) NpmExecutor() *NpmExecutorMock {
+	return h.npmExecutor
+}
+
+func (h *SessionUtils) SetupNpmExecutorForTypingsInstaller() {
+	if h.tiOptions == nil {
+		return
+	}
+
+	h.npmExecutor.NpmInstallFunc = func(cwd string, packageNames []string) ([]byte, error) {
+		// packageNames is actually npmInstallArgs due to interface misnaming
+		npmInstallArgs := packageNames
+		lenNpmInstallArgs := len(npmInstallArgs)
+		if lenNpmInstallArgs < 3 {
+			return nil, fmt.Errorf("unexpected npm install: %s %v", cwd, npmInstallArgs)
+		}
+
+		if lenNpmInstallArgs == 3 && npmInstallArgs[2] == "types-registry@latest" {
+			// Write typings file
+			err := h.fs.WriteFile(cwd+"/node_modules/types-registry/index.json", h.createTypesRegistryFileContent())
+			return nil, err
+		}
+
+		// Find the packages: they start at index 2 and continue until we hit a flag starting with --
+		packageEnd := lenNpmInstallArgs
+		for i := 2; i < lenNpmInstallArgs; i++ {
+			if strings.HasPrefix(npmInstallArgs[i], "--") {
+				packageEnd = i
+				break
+			}
+		}
+
+		for _, atTypesPackageTs := range npmInstallArgs[2:packageEnd] {
+			// @types/packageName@TsVersionToUse
+			atTypesPackage := atTypesPackageTs
+			// Remove version suffix
+			if versionIndex := strings.LastIndex(atTypesPackage, "@"); versionIndex > 6 { // "@types/".length is 7, so version @ must be after
+				atTypesPackage = atTypesPackage[:versionIndex]
+			}
+			// Extract package name from @types/packageName
+			packageBaseName := atTypesPackage[7:] // Remove "@types/" prefix
+			content, ok := h.tiOptions.PackageToFile[packageBaseName]
+			if !ok {
+				return nil, fmt.Errorf("content not provided for %s", packageBaseName)
+			}
+			err := h.fs.WriteFile(cwd+"/node_modules/@types/"+packageBaseName+"/index.d.ts", content)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return nil, nil
+	}
+}
+
+func (h *SessionUtils) ToPath(fileName string) tspath.Path {
+	return tspath.ToPath(fileName, h.currentDirectory, h.fs.UseCaseSensitiveFileNames())
+}
+
+func (h *SessionUtils) FS() vfs.FS {
+	return h.fs
+}
+
+// WatchesFile reports whether any registered file watcher would match the given
+// file path. It handles both absolute glob patterns and relative patterns with
+// a base URI. On case-insensitive file systems the paths in glob patterns are
+// lowercased, so callers should pass the lowercased path.
+func (h *SessionUtils) WatchesFile(filePath string) bool {
+	for _, call := range h.client.WatchFilesCalls() {
+		for _, watcher := range call.Watchers {
+			if watcher.GlobPattern.Pattern != nil {
+				if g, err := glob.Parse(*watcher.GlobPattern.Pattern); err == nil && g.Match(filePath) {
+					return true
+				}
+			} else if watcher.GlobPattern.RelativePattern != nil {
+				rp := watcher.GlobPattern.RelativePattern
+				baseUri := string(*rp.BaseUri.URI)
+				// Convert base URI (e.g. "file:///home/projects") to a directory path
+				// with trailing separator for proper prefix matching on path boundaries.
+				baseDir := lsproto.DocumentUri(baseUri).FileName()
+				baseDir = tspath.EnsureTrailingDirectorySeparator(baseDir)
+				if strings.HasPrefix(filePath, baseDir) {
+					relativePath := filePath[len(baseDir):]
+					if g, err := glob.Parse(rp.Pattern); err == nil && g.Match(relativePath) {
+						return true
+					}
+				}
+			}
+		}
+	}
+	return false
+}
+
+func (h *SessionUtils) Logs() string {
+	return h.logger.String()
+}
+
+func (h *SessionUtils) BaselineLogs(t *testing.T) {
+	baseline.Run(t, t.Name()+".log", h.Logs(), baseline.Options{
+		Subfolder: "project",
+	})
+}
+
+var (
+	typesRegistryConfigTextOnce sync.Once
+	typesRegistryConfigText     string
+)
+
+func TypesRegistryConfigText() string {
+	typesRegistryConfigTextOnce.Do(func() {
+		var result strings.Builder
+		for key, value := range TypesRegistryConfig() {
+			if result.Len() != 0 {
+				result.WriteString(",")
+			}
+			result.WriteString(fmt.Sprintf("\n      \"%s\": \"%s\"", key, value))
+
+		}
+		typesRegistryConfigText = result.String()
+	})
+	return typesRegistryConfigText
+}
+
+var (
+	typesRegistryConfigOnce sync.Once
+	typesRegistryConfig     map[string]string
+)
+
+func TypesRegistryConfig() map[string]string {
+	typesRegistryConfigOnce.Do(func() {
+		typesRegistryConfig = map[string]string{
+			"latest": "1.3.0",
+			"ts2.0":  "1.0.0",
+			"ts2.1":  "1.0.0",
+			"ts2.2":  "1.2.0",
+			"ts2.3":  "1.3.0",
+			"ts2.4":  "1.3.0",
+			"ts2.5":  "1.3.0",
+			"ts2.6":  "1.3.0",
+			"ts2.7":  "1.3.0",
+		}
+	})
+	return typesRegistryConfig
+}
+
+func (h *SessionUtils) createTypesRegistryFileContent() string {
+	var builder strings.Builder
+	builder.WriteString("{\n  \"entries\": {")
+	for index, entry := range h.tiOptions.TypesRegistry {
+		h.appendTypesRegistryConfig(&builder, index, entry)
+	}
+	index := len(h.tiOptions.TypesRegistry)
+	for key := range h.tiOptions.PackageToFile {
+		if !slices.Contains(h.tiOptions.TypesRegistry, key) {
+			h.appendTypesRegistryConfig(&builder, index, key)
+			index++
+		}
+	}
+	builder.WriteString("\n  }\n}")
+	return builder.String()
+}
+
+func (h *SessionUtils) appendTypesRegistryConfig(builder *strings.Builder, index int, entry string) {
+	if index > 0 {
+		builder.WriteString(",")
+	}
+	builder.WriteString(fmt.Sprintf("\n    \"%s\": {%s\n    }", entry, TypesRegistryConfigText()))
+}
+
+func Setup(files map[string]any) (*project.Session, *SessionUtils) {
+	return SetupWithTypingsInstaller(files, &TypingsInstallerOptions{})
+}
+
+func SetupWithRealFS() (*project.Session, *SessionUtils) {
+	fs := bundled.WrapFS(osvfs.FS())
+	clientMock := &ClientMock{}
+	npmExecutorMock := &NpmExecutorMock{}
+	wd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+
+	sessionUtils := &SessionUtils{
+		currentDirectory: wd,
+		fs:               fs,
+		client:           clientMock,
+		npmExecutor:      npmExecutorMock,
+		logger:           logging.NewTestLogger(),
+	}
+
+	return project.NewSession(&project.SessionInit{
+		BackgroundCtx: context.Background(),
+		FS:            fs,
+		Client:        clientMock,
+		NpmExecutor:   npmExecutorMock,
+		Logger:        sessionUtils.logger,
+		Options: &project.SessionOptions{
+			CurrentDirectory:       wd,
+			DefaultLibraryPath:     bundled.LibPath(),
+			PositionEncoding:       lsproto.PositionEncodingKindUTF8,
+			WatchEnabled:           true,
+			LoggingEnabled:         true,
+			PushDiagnosticsEnabled: true,
+		},
+	}), sessionUtils
+}
+
+func SetupWithOptions(files map[string]any, options *project.SessionOptions) (*project.Session, *SessionUtils) {
+	return SetupWithOptionsAndTypingsInstaller(files, options, &TypingsInstallerOptions{})
+}
+
+func SetupWithTypingsInstaller(files map[string]any, tiOptions *TypingsInstallerOptions) (*project.Session, *SessionUtils) {
+	return SetupWithOptionsAndTypingsInstaller(files, nil, tiOptions)
+}
+
+func SetupWithOptionsAndTypingsInstaller(files map[string]any, options *project.SessionOptions, tiOptions *TypingsInstallerOptions) (*project.Session, *SessionUtils) {
+	init, sessionUtils := GetSessionInitOptions(files, options, tiOptions)
+	session := project.NewSession(init)
+
+	return session, sessionUtils
+}
+
+func WithRequestID(ctx context.Context) context.Context {
+	return core.WithRequestID(ctx, "0")
+}
+
+func GetSessionInitOptions(files map[string]any, options *project.SessionOptions, tiOptions *TypingsInstallerOptions) (*project.SessionInit, *SessionUtils) {
+	fsFromFileMap := vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/)
+	fs := bundled.WrapFS(fsFromFileMap)
+	clientMock := &ClientMock{}
+	npmExecutorMock := &NpmExecutorMock{}
+	sessionUtils := &SessionUtils{
+		currentDirectory: "/",
+		fsFromFileMap:    fsFromFileMap.(iovfs.FsWithSys),
+		fs:               fs,
+		client:           clientMock,
+		npmExecutor:      npmExecutorMock,
+		tiOptions:        tiOptions,
+		logger:           logging.NewTestLogger(),
+	}
+
+	// Configure the npm executor mock to handle typings installation
+	sessionUtils.SetupNpmExecutorForTypingsInstaller()
+
+	// Use provided options or create default ones
+	if options == nil {
+		options = &project.SessionOptions{
+			CurrentDirectory:       "/",
+			DefaultLibraryPath:     bundled.LibPath(),
+			TypingsLocation:        TestTypingsLocation,
+			PositionEncoding:       lsproto.PositionEncodingKindUTF8,
+			WatchEnabled:           true,
+			LoggingEnabled:         true,
+			PushDiagnosticsEnabled: true,
+		}
+	}
+
+	return &project.SessionInit{
+		BackgroundCtx: context.Background(),
+		Options:       options,
+		FS:            fs,
+		Client:        clientMock,
+		NpmExecutor:   npmExecutorMock,
+		Logger:        sessionUtils.logger,
+	}, sessionUtils
+}

@@ -1,0 +1,24 @@
+a.js(8,12): error TS2749: 'Outer' refers to a value, but is being used as a type here. Did you mean 'typeof Outer'?
+a.js(11,12): error TS2503: Cannot find namespace 'Outer'.
+
+
+==== a.js (2 errors) ====
+    var Outer = class O {
+        m(x, y) { }
+    }
+    Outer.Inner = class I {
+        n(a, b) { }
+    
+    }
+    /** @type {Outer} */
+               ~~~~~
+!!! error TS2749: 'Outer' refers to a value, but is being used as a type here. Did you mean 'typeof Outer'?
+    var si
+    si.m
+    /** @type {Outer.Inner} */
+               ~~~~~
+!!! error TS2503: Cannot find namespace 'Outer'.
+    var oi
+    oi.n
+    
+    

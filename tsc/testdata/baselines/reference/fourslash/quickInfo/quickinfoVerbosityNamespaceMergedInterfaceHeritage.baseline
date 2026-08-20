@@ -1,0 +1,111 @@
+// === QuickInfo ===
+=== /quickinfoVerbosityNamespaceMergedInterfaceHeritage.ts ===
+// 
+// declare namespace NS {
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace NS {
+// |     interface Config extends A, B {
+// |         a: string;
+// |         b: number;
+// |     }
+// |     interface A {
+// |         a: string;
+// |     }
+// |     interface B {
+// |         b: number;
+// |     }
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                   ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace NS
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     interface Config extends A {
+//         a: string;
+//     }
+// 
+//     interface Config extends B {
+//         b: number;
+//     }
+// 
+//     interface A {
+//         a: string;
+//     }
+// 
+//     interface B {
+//         b: number;
+//     }
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 20
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nnamespace NS\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 18
+          },
+          "end": {
+            "line": 1,
+            "character": 20
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 21,
+      "LSPosition": {
+        "line": 1,
+        "character": 20
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nnamespace NS {\n    interface Config extends A, B {\n        a: string;\n        b: number;\n    }\n    interface A {\n        a: string;\n    }\n    interface B {\n        b: number;\n    }\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 18
+          },
+          "end": {
+            "line": 1,
+            "character": 20
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

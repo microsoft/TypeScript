@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/jsdocNonIdentifierPropertiesAndParams.ts] ////
+
+=== index.js ===
+/**
+ * @typedef {Object} ButtonProps
+ * @property {string} label The button label
+ * @property {string | null | undefined} [data-test-name] Test automation attribute
+ * @property {string | null | undefined} [aria-label] Accessibility label
+ */
+
+/**
+ * @param {ButtonProps} props
+ * @returns {ButtonProps}
+ */
+export function Button(props) {
+>Button : Symbol(Button, Decl(index.js, 0, 0))
+>props : Symbol(props, Decl(index.js, 11, 23))
+
+    return { ...props }
+>props : Symbol(props, Decl(index.js, 11, 23))
+}
+
+/**
+ * @callback ButtonPropsCallback
+ * @param {ButtonProps} [props-like]
+ * @returns {ButtonProps}
+ */
+

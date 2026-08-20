@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/taggedTemplateNestedInvalidEscape.ts] ////
+
+=== taggedTemplateNestedInvalidEscape.ts ===
+declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
+>tag : Symbol(tag, Decl(taggedTemplateNestedInvalidEscape.ts, 0, 0))
+>template : Symbol(template, Decl(taggedTemplateNestedInvalidEscape.ts, 0, 21))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>substitutions : Symbol(substitutions, Decl(taggedTemplateNestedInvalidEscape.ts, 0, 52))
+
+// The outer tagged template should NOT be rewritten with __makeTemplateObject
+// because only the inner tagged template contains an invalid escape.
+tag`ok ${tag`\u`}`;
+>tag : Symbol(tag, Decl(taggedTemplateNestedInvalidEscape.ts, 0, 0))
+>tag : Symbol(tag, Decl(taggedTemplateNestedInvalidEscape.ts, 0, 0))
+
+// The inner tagged template here has an invalid escape, but the outer one doesn't.
+tag`fine ${tag`\x`} also fine`;
+>tag : Symbol(tag, Decl(taggedTemplateNestedInvalidEscape.ts, 0, 0))
+>tag : Symbol(tag, Decl(taggedTemplateNestedInvalidEscape.ts, 0, 0))
+
+// This one should be rewritten because it has its own invalid escape.
+tag`\u`;
+>tag : Symbol(tag, Decl(taggedTemplateNestedInvalidEscape.ts, 0, 0))
+
+// Nested with substitution, only inner is invalid.
+tag`hello ${tag`\u{}`} world`;
+>tag : Symbol(tag, Decl(taggedTemplateNestedInvalidEscape.ts, 0, 0))
+>tag : Symbol(tag, Decl(taggedTemplateNestedInvalidEscape.ts, 0, 0))
+

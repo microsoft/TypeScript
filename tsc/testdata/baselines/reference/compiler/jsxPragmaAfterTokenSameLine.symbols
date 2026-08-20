@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/jsxPragmaAfterTokenSameLine.tsx] ////
+
+=== jsxPragmaAfterTokenSameLine.tsx ===
+/** Authored by foo@example.com @jsx h */
+declare var h: any;
+>h : Symbol(h, Decl(jsxPragmaAfterTokenSameLine.tsx, 1, 11))
+
+declare var React: any;
+>React : Symbol(React, Decl(jsxPragmaAfterTokenSameLine.tsx, 2, 11))
+
+declare var Fragment: any;
+>Fragment : Symbol(Fragment, Decl(jsxPragmaAfterTokenSameLine.tsx, 3, 11))
+
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxPragmaAfterTokenSameLine.tsx, 3, 26))
+
+    interface Element {}
+>Element : Symbol(Element, Decl(jsxPragmaAfterTokenSameLine.tsx, 4, 23))
+}
+
+const x = <Fragment></Fragment>;
+>x : Symbol(x, Decl(jsxPragmaAfterTokenSameLine.tsx, 8, 5))
+>Fragment : Symbol(Fragment, Decl(jsxPragmaAfterTokenSameLine.tsx, 3, 11))
+>Fragment : Symbol(Fragment, Decl(jsxPragmaAfterTokenSameLine.tsx, 3, 11))
+

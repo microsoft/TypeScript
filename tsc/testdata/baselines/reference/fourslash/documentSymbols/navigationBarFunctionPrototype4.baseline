@@ -1,0 +1,27 @@
+// === Document Symbols ===
+// === /foo.js ===
+// var <|[|{| name: A, kind: Variable |}A|]|>; 
+// A.prototype = { };
+// A.prototype = { <|[|{| name: m, kind: Method |}m|]() {}|> };
+// <|A.prototype.[|{| name: a, kind: Variable |}a|]|> = <|[|{| name: a, kind: Function |}|]function() { }|>;
+// <|A.[|{| name: b, kind: Variable |}b|]|> = <|[|{| name: b, kind: Function |}|]function() { }|>;
+// 
+// var <|[|{| name: B, kind: Variable |}B|]|>; 
+// B["prototype"] = { };
+// B["prototype"] = { <|[|{| name: m, kind: Method |}m|]() {}|> };
+// <|B["prototype"][[|{| name: "a", kind: Variable |}"a"|]]|> = <|[|{| name: "a", kind: Function |}|]function() { }|>;
+// <|B[[|{| name: "b", kind: Variable |}"b"|]]|> = <|[|{| name: "b", kind: Function |}|]function() { }|>;
+
+// === Details ===
+(Variable) A
+  (Variable) a
+    (Function) a
+  (Variable) b
+    (Function) b
+(Method) m
+(Variable) B
+  (Variable) "a"
+    (Function) "a"
+  (Variable) "b"
+    (Function) "b"
+(Method) m

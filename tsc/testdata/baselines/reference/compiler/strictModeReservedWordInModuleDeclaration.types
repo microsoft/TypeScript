@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts] ////
+
+=== strictModeReservedWordInModuleDeclaration.ts ===
+"use strict"
+>"use strict" : "use strict"
+
+namespace public { }
+namespace private { }
+namespace public.whatever {
+}
+namespace private.public.foo { }

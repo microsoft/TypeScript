@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/declarationEmitDefaultExportWithStaticAssignment.ts] ////
+
+=== foo.ts ===
+export class Foo {}
+>Foo : Foo
+
+=== index1.ts ===
+import {Foo} from './foo';
+>Foo : typeof Foo
+
+export default function Example() {}
+>Example : { (): void; Foo: typeof Foo; }
+
+Example.Foo = Foo
+>Example.Foo = Foo : typeof Foo
+>Example.Foo : typeof Foo
+>Example : { (): void; Foo: typeof Foo; }
+>Foo : typeof Foo
+>Foo : typeof Foo
+
+=== index2.ts ===
+import {Foo} from './foo';
+>Foo : typeof Foo
+
+export {Foo};
+>Foo : typeof Foo
+
+export default function Example() {}
+>Example : { (): void; Foo: typeof Foo; }
+
+Example.Foo = Foo
+>Example.Foo = Foo : typeof Foo
+>Example.Foo : typeof Foo
+>Example : { (): void; Foo: typeof Foo; }
+>Foo : typeof Foo
+>Foo : typeof Foo
+
+=== index3.ts ===
+export class Bar {}
+>Bar : Bar
+
+export default function Example() {}
+>Example : { (): void; Bar: typeof Bar; }
+
+Example.Bar = Bar
+>Example.Bar = Bar : typeof Bar
+>Example.Bar : typeof Bar
+>Example : { (): void; Bar: typeof Bar; }
+>Bar : typeof Bar
+>Bar : typeof Bar
+
+=== index4.ts ===
+function A() {  }
+>A : () => void
+
+function B() { }
+>B : () => void
+
+export function C() {
+>C : { (): any; A: () => void; B: () => void; }
+
+  return null;
+}
+
+C.A = A;
+>C.A = A : () => void
+>C.A : () => void
+>C : { (): any; A: () => void; B: () => void; }
+>A : () => void
+>A : () => void
+
+C.B = B;
+>C.B = B : () => void
+>C.B : () => void
+>C : { (): any; A: () => void; B: () => void; }
+>B : () => void
+>B : () => void
+

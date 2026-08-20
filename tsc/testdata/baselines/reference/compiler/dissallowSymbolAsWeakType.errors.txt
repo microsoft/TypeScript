@@ -1,0 +1,69 @@
+dissallowSymbolAsWeakType.ts(3,25): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'symbol' is not assignable to type 'object'.
+dissallowSymbolAsWeakType.ts(4,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(5,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(6,11): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(8,26): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'symbol' is not assignable to type 'object'.
+dissallowSymbolAsWeakType.ts(9,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(10,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(11,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(12,11): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(14,24): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(18,12): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(19,14): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+
+
+==== dissallowSymbolAsWeakType.ts (12 errors) ====
+    const s: symbol = Symbol('s');
+    
+    const ws = new WeakSet([s]);
+                            ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'symbol' is not assignable to type 'object'.
+!!! related TS2771 lib.es2015.collection.d.ts:--:--: The last overload is declared here.
+    ws.add(s);
+           ~
+!!! error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+    ws.has(s);
+           ~
+!!! error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+    ws.delete(s);
+              ~
+!!! error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+    
+    const wm = new WeakMap([[s, false]]);
+                             ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'symbol' is not assignable to type 'object'.
+!!! related TS2771 lib.es2015.collection.d.ts:--:--: The last overload is declared here.
+    wm.set(s, true);
+           ~
+!!! error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+    wm.has(s);
+           ~
+!!! error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+    wm.get(s);
+           ~
+!!! error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+    wm.delete(s);
+              ~
+!!! error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+    
+    const wr = new WeakRef(s);
+                           ~
+!!! error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+    wr.deref();
+    
+    const f = new FinalizationRegistry(() => {});
+    f.register(s, null);
+               ~
+!!! error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+    f.unregister(s);
+                 ~
+!!! error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+    

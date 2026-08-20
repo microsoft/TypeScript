@@ -1,0 +1,7 @@
+// === findRenameLocations ===
+// === /a.ts ===
+// export { /*START PREFIX*/jsonSchema as /*RENAME*/[|jsonSchemaRENAME|] } from "@internal/ai-sdk-v4";
+
+// === /b.ts ===
+// import { [|jsonSchemaRENAME|] } from "./a";
+// 

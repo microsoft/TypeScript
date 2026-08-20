@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration2.ts] ////
+
+=== parserConstructorDeclaration2.ts ===
+class C {
+>C : C
+
+  static constructor() { }
+}

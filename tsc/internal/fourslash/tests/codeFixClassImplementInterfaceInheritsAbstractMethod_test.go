@@ -1,0 +1,35 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixClassImplementInterfaceInheritsAbstractMethod(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `abstract class C1 { }
+abstract class C2 {
+    abstract fＡ<T extends number>(): T;
+}
+interface I1 extends C1, C2 { }
+class C3 implements I1 {[| |]}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Implement interface 'I1'",
+		NewFileContent: `abstract class C1 { }
+abstract class C2 {
+    abstract fＡ<T extends number>(): T;
+}
+interface I1 extends C1, C2 { }
+class C3 implements I1 {
+    fＡ<T extends number>(): T {
+        throw new Error("Method not implemented.");
+    }
+}`,
+		Index: 0,
+	})
+}

@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/regularExpressionUnicodeSetsLoneAmpersand.ts] ////
+
+=== regularExpressionUnicodeSetsLoneAmpersand.ts ===
+const regexes: RegExp[] = [
+>regexes : RegExp[]
+>[	/[?&]/v,	/[a&]/v,	/[&a]/v,] : RegExp[]
+
+	/[?&]/v,
+>/[?&]/v : RegExp
+
+	/[a&]/v,
+>/[a&]/v : RegExp
+
+	/[&a]/v,
+>/[&a]/v : RegExp
+
+];
+

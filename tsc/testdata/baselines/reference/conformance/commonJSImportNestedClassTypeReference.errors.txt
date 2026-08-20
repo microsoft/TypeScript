@@ -1,0 +1,21 @@
+main.js(2,13): error TS2749: 'K' refers to a value, but is being used as a type here. Did you mean 'typeof K'?
+
+
+==== main.js (1 errors) ====
+    const { K } = require("./mod1");
+    /** @param {K} k */
+                ~
+!!! error TS2749: 'K' refers to a value, but is being used as a type here. Did you mean 'typeof K'?
+    function f(k) {
+        k.values()
+    }
+    
+==== mod1.js (0 errors) ====
+    var NS = {}
+    NS.K =class {
+        values() {
+            return new NS.K()
+        }
+    }
+    exports.K = NS.K;
+    

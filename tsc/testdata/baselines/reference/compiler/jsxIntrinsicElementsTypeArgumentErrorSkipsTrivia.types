@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/jsxIntrinsicElementsTypeArgumentErrorSkipsTrivia.tsx] ////
+
+=== jsxIntrinsicElementsTypeArgumentErrorSkipsTrivia.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : typeof React
+
+const a = <div<   number> />;
+>a : JSX.Element
+><div<   number> /> : JSX.Element
+>div : any
+
+const b = <div<
+>b : JSX.Element
+><div<    number> /> : JSX.Element
+>div : any
+
+    number> />;
+

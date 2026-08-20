@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/salsa/commonJSAliasedExport.ts] ////
+
+=== bug43713.js ===
+const { funky } = require('./commonJSAliasedExport');
+>funky : any
+>require('./commonJSAliasedExport') : (ast: any) => any
+>require : any
+>'./commonJSAliasedExport' : "./commonJSAliasedExport"
+
+/** @type {boolean} */
+var diddy
+>diddy : boolean
+
+var diddy = funky(1)
+>diddy : boolean
+>funky(1) : any
+>funky : any
+>1 : 1
+
+
+=== commonJSAliasedExport.js ===
+const donkey = (ast) =>  ast;
+>donkey : (ast: any) => any
+>(ast) =>  ast : (ast: any) => any
+>ast : any
+>ast : any
+
+function funky(declaration) {
+>funky : (declaration: any) => boolean
+>declaration : any
+
+    return false;
+>false : false
+}
+module.exports = donkey;
+>module.exports = donkey : (ast: any) => any
+>module.exports : (ast: any) => any
+>module : { exports: (ast: any) => any; }
+>exports : (ast: any) => any
+>donkey : (ast: any) => any
+
+module.exports.funky = funky;
+>module.exports.funky = funky : (declaration: any) => boolean
+>module.exports.funky : any
+>module.exports : (ast: any) => any
+>module : { exports: (ast: any) => any; }
+>exports : (ast: any) => any
+>funky : any
+>funky : (declaration: any) => boolean
+

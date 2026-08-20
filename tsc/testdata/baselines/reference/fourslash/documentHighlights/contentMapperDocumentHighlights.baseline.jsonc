@@ -1,0 +1,40 @@
+// === documentHighlights ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <h1>{{ [|title|] }}</h1>
+//   <p class="card">Profile</p>
+// </template>
+// <script lang="ts">
+// export const [|ti/*HIGHLIGHTS*/tle|] = "Profile";
+// export const heading = [|title|].toUpperCase();
+// </script>
+// 
+
+
+
+// === documentHighlights ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <h1>{{ [|ti/*HIGHLIGHTS*/tle|] }}</h1>
+//   <p class="card">Profile</p>
+// </template>
+// <script lang="ts">
+// export const [|title|] = "Profile";
+// export const heading = [|title|].toUpperCase();
+// </script>
+// 
+
+
+
+// === documentHighlights ===
+// === /ProfileCard.vue ===
+// <component name="ProfileCard">
+// <template>
+//   <h1>{{ title }}</h1>
+//   <p class="card/*HIGHLIGHTS*/">Profile</p>
+// </template>
+// <script lang="ts">
+// export const title = "Profile";
+// --- (line: 8) skipped ---

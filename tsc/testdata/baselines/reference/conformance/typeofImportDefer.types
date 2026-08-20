@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/importDefer/typeofImportDefer.ts] ////
+
+=== a.ts ===
+export interface Foo {
+  x: number;
+>x : number
+}
+
+=== b.ts ===
+export type X = typeof import.defer("./a").Foo;
+>X : any
+> : any
+>("./a").Foo : any
+>("./a") : "./a"
+>"./a" : "./a"
+>Foo : any
+

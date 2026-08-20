@@ -1,10 +1,12 @@
 name: CodeQL Configuration
 
 paths-ignore:
-  - src/lib
-  - tests
+  - built
+  - packages/*/dist
+  - tsc/internal/bundled/libs
+  - tsc/internal/bundled/source
+  - tsc/testdata
 
 query-filters:
-  # Falls over on our dynamic RegExp generation
   - exclude:
       id: js/regex-injection

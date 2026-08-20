@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/omittedExpressionForOfLoop.ts] ////
+
+=== omittedExpressionForOfLoop.ts ===
+for (const [,] of doesNotExist) {
+>doesNotExist : any
+}
+
+for (const [,] of undefined) {
+>undefined : undefined
+}
+
+for (const [,] of []) {
+>[] : never[]
+}
+
+for (const [] of []) {
+>[] : never[]
+}

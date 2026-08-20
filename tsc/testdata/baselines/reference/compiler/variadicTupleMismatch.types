@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/variadicTupleMismatch.ts] ////
+
+=== variadicTupleMismatch.ts ===
+// https://github.com/microsoft/TypeScript/tsc/issues/4727
+
+function f1<A extends unknown[]>(x: [...A, number], y: [...A, number, number, number, number]) {
+>f1 : <A extends unknown[]>(x: [...A, number], y: [...A, number, number, number, number]) => void
+>x : [...A, number]
+>y : [...A, number, number, number, number]
+
+    x = y  // Error
+>x = y : [...A, number, number, number, number]
+>x : [...A, number]
+>y : [...A, number, number, number, number]
+}
+
+function f2<A extends unknown[]>(x: [number, ...A], y: [...A, number, number, number, number]) {
+>f2 : <A extends unknown[]>(x: [number, ...A], y: [...A, number, number, number, number]) => void
+>x : [number, ...A]
+>y : [...A, number, number, number, number]
+
+    x = y  // Error
+>x = y : [...A, number, number, number, number]
+>x : [number, ...A]
+>y : [...A, number, number, number, number]
+}
+
+function f3<A extends unknown[]>(x: [...A, ...A], y: [...A, number, number, number, number]) {
+>f3 : <A extends unknown[]>(x: [...A, ...A], y: [...A, number, number, number, number]) => void
+>x : [...A, ...A]
+>y : [...A, number, number, number, number]
+
+    x = y  // Error
+>x = y : [...A, number, number, number, number]
+>x : [...A, ...A]
+>y : [...A, number, number, number, number]
+}
+

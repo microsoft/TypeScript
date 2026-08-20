@@ -1,0 +1,5 @@
+// === goToDefinition ===
+// === /asConstRefsNoErrors1.ts ===
+// class Tex {
+//     type = 'Text' as /*GOTO DEF*/const;
+// }

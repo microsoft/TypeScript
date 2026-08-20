@@ -1,0 +1,14 @@
+t.ts(2,14): error TS1379: An import alias cannot reference a declaration that was exported using 'export type'.
+
+
+==== t.ts (1 errors) ====
+    import a = require("./a");
+    import foo = a.Foo
+                 ~~~~~
+!!! error TS1379: An import alias cannot reference a declaration that was exported using 'export type'.
+!!! related TS1377 a.ts:2:15: 'Foo' was exported here.
+    
+==== a.ts (0 errors) ====
+    type Foo = { x: number }
+    export type { Foo };
+    

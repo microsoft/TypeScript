@@ -1,0 +1,30 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports27_non_exported_bidings(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+let p = { x: 1, y: 2}
+const a = 1, b = 10, { x, y } = p, c = 1;
+export { x, y }
+export const d = a + b + c;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFixAll(t, fourslash.VerifyCodeFixAllOptions{
+		FixID: "fixMissingTypeAnnotationOnExports",
+		NewFileContent: `let p = { x: 1, y: 2}
+const x: number = p.x;
+const y: number = p.y;
+const a = 1, b = 10, c = 1;
+export { x, y }
+export const d: number = a + b + c;`,
+	})
+}

@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/declarationEmitStripInternalExpandoFunction.ts] ////
+
+=== declarationEmitStripInternalExpandoFunction.ts ===
+/** @internal */
+export function internalFn(): string {
+>internalFn : { (): string; debugFlag: boolean; }
+
+    return "hello";
+>"hello" : "hello"
+}
+internalFn.debugFlag = true;
+>internalFn.debugFlag = true : true
+>internalFn.debugFlag : boolean
+>internalFn : { (): string; debugFlag: boolean; }
+>debugFlag : boolean
+>true : true
+
+export function publicFn(): void {}
+>publicFn : { (): void; metadata: string; }
+
+publicFn.metadata = "public";
+>publicFn.metadata = "public" : "public"
+>publicFn.metadata : string
+>publicFn : { (): void; metadata: string; }
+>metadata : string
+>"public" : "public"
+

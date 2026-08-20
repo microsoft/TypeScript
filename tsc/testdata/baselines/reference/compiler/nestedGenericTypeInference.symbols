@@ -1,0 +1,119 @@
+//// [tests/cases/compiler/nestedGenericTypeInference.ts] ////
+
+=== nestedGenericTypeInference.ts ===
+// https://github.com/microsoft/TypeScript/tsc/issues/1789
+
+declare function flat<T>(args: T[] | T[][]): void;
+>flat : Symbol(flat, Decl(nestedGenericTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 2, 22))
+>args : Symbol(args, Decl(nestedGenericTypeInference.ts, 2, 25))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 2, 22))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 2, 22))
+
+type Value = 1 | 2;
+>Value : Symbol(Value, Decl(nestedGenericTypeInference.ts, 2, 50))
+
+declare const n: Value[] | Value[][];
+>n : Symbol(n, Decl(nestedGenericTypeInference.ts, 4, 13))
+>Value : Symbol(Value, Decl(nestedGenericTypeInference.ts, 2, 50))
+>Value : Symbol(Value, Decl(nestedGenericTypeInference.ts, 2, 50))
+
+flat(n);
+>flat : Symbol(flat, Decl(nestedGenericTypeInference.ts, 0, 0))
+>n : Symbol(n, Decl(nestedGenericTypeInference.ts, 4, 13))
+
+type Box<T> = { value: T };
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 7, 9))
+>value : Symbol(value, Decl(nestedGenericTypeInference.ts, 7, 15))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 7, 9))
+
+declare function flat0<T>(args: Box<T> | Box<Box<T>>): void;
+>flat0 : Symbol(flat0, Decl(nestedGenericTypeInference.ts, 7, 27))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 9, 23))
+>args : Symbol(args, Decl(nestedGenericTypeInference.ts, 9, 26))
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 9, 23))
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 9, 23))
+
+declare const arg0: Box<string> | Box<Box<string>>;
+>arg0 : Symbol(arg0, Decl(nestedGenericTypeInference.ts, 10, 13))
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+
+flat0(arg0);
+>flat0 : Symbol(flat0, Decl(nestedGenericTypeInference.ts, 7, 27))
+>arg0 : Symbol(arg0, Decl(nestedGenericTypeInference.ts, 10, 13))
+
+declare function flat1<T>(args: Array<T> | Array<Box<T>>): void;
+>flat1 : Symbol(flat1, Decl(nestedGenericTypeInference.ts, 11, 12))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 13, 23))
+>args : Symbol(args, Decl(nestedGenericTypeInference.ts, 13, 26))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 13, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 13, 23))
+
+declare const arg1: Array<string> | Array<Box<string>>;
+>arg1 : Symbol(arg1, Decl(nestedGenericTypeInference.ts, 14, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+
+flat1(arg1);
+>flat1 : Symbol(flat1, Decl(nestedGenericTypeInference.ts, 11, 12))
+>arg1 : Symbol(arg1, Decl(nestedGenericTypeInference.ts, 14, 13))
+
+declare function flat2<T>(args: Box<T> | Box<Array<T>>): void;
+>flat2 : Symbol(flat2, Decl(nestedGenericTypeInference.ts, 15, 12))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 17, 23))
+>args : Symbol(args, Decl(nestedGenericTypeInference.ts, 17, 26))
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 17, 23))
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 17, 23))
+
+declare const arg2: Box<string> | Box<Array<string>>;
+>arg2 : Symbol(arg2, Decl(nestedGenericTypeInference.ts, 18, 13))
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+>Box : Symbol(Box, Decl(nestedGenericTypeInference.ts, 5, 8))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+
+flat2(arg2);
+>flat2 : Symbol(flat2, Decl(nestedGenericTypeInference.ts, 15, 12))
+>arg2 : Symbol(arg2, Decl(nestedGenericTypeInference.ts, 18, 13))
+
+// https://github.com/oxc-project/tsgolint/issues/1058
+
+interface Column<T> {
+>Column : Symbol(Column, Decl(nestedGenericTypeInference.ts, 19, 12))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 23, 17))
+
+  dataIndex?: (T | (string & {}))[]
+>dataIndex : Symbol(Column.dataIndex, Decl(nestedGenericTypeInference.ts, 23, 21))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 23, 17))
+}
+
+declare function table<T>(rows: readonly T[], columns: Column<T>[]): void
+>table : Symbol(table, Decl(nestedGenericTypeInference.ts, 25, 1))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 27, 23))
+>rows : Symbol(rows, Decl(nestedGenericTypeInference.ts, 27, 26))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 27, 23))
+>columns : Symbol(columns, Decl(nestedGenericTypeInference.ts, 27, 45))
+>Column : Symbol(Column, Decl(nestedGenericTypeInference.ts, 19, 12))
+>T : Symbol(T, Decl(nestedGenericTypeInference.ts, 27, 23))
+
+declare const rows: { id: number }[]
+>rows : Symbol(rows, Decl(nestedGenericTypeInference.ts, 29, 13))
+>id : Symbol(id, Decl(nestedGenericTypeInference.ts, 29, 21))
+
+table(rows, [{ dataIndex: ['id'] }])
+>table : Symbol(table, Decl(nestedGenericTypeInference.ts, 25, 1))
+>rows : Symbol(rows, Decl(nestedGenericTypeInference.ts, 29, 13))
+>dataIndex : Symbol(dataIndex, Decl(nestedGenericTypeInference.ts, 31, 14))
+

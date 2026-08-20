@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/declarationEmitTypeofIndexedAccessNoParens.ts] ////
+
+=== declarationEmitTypeofIndexedAccessNoParens.ts ===
+export const C = { A: 1 };
+>C : Symbol(C, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 12), Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 26))
+>A : Symbol(A, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 18))
+
+export type C = typeof C[keyof typeof C];
+>C : Symbol(C, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 12), Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 26))
+>C : Symbol(C, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 12), Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 26))
+>C : Symbol(C, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 12), Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 26))
+
+// Parenthesized form should also round-trip
+export type C2 = (typeof C)[keyof typeof C];
+>C2 : Symbol(C2, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 1, 41))
+>C : Symbol(C, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 12), Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 26))
+>C : Symbol(C, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 12), Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 26))
+
+// IndexedAccessType: index access of a parsed typeof should preserve source
+export const arr = [C];
+>arr : Symbol(arr, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 7, 12))
+>C : Symbol(C, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 12), Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 26))
+
+export type ArrAlias = typeof arr[number];
+>ArrAlias : Symbol(ArrAlias, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 7, 23))
+>arr : Symbol(arr, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 7, 12))
+
+// ArrayType: array of a parsed typeof should preserve source
+export type CArr = typeof C[];
+>CArr : Symbol(CArr, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 8, 42))
+>C : Symbol(C, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 12), Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 26))
+
+// Parenthesized array form should also round-trip
+export type CArr2 = (typeof C)[];
+>CArr2 : Symbol(CArr2, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 11, 30))
+>C : Symbol(C, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 12), Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 26))
+
+// OptionalType (tuple element): optional of a parsed typeof should preserve source
+export type CTuple = [typeof C?];
+>CTuple : Symbol(CTuple, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 13, 33))
+>C : Symbol(C, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 12), Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 26))
+
+// Parenthesized optional form should also round-trip
+export type CTuple2 = [(typeof C)?];
+>CTuple2 : Symbol(CTuple2, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 16, 33))
+>C : Symbol(C, Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 12), Decl(declarationEmitTypeofIndexedAccessNoParens.ts, 0, 26))
+
+

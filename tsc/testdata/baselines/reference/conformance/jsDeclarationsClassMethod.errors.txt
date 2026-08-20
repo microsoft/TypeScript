@@ -1,0 +1,74 @@
+jsDeclarationsClassMethod.js(8,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+jsDeclarationsClassMethod.js(51,14): error TS2551: Property 'method2' does not exist on type 'C2'. Did you mean 'method1'?
+
+
+==== jsDeclarationsClassMethod.js (2 errors) ====
+    function C1() {
+        /**
+         * A comment prop
+         * @param {number} x
+         * @param {number} y
+         * @returns {number}
+         */
+        this.prop = function (x, y) {
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+            return x + y;
+        }
+    }
+    
+    /**
+     * A comment method
+     * @param {number} x
+     * @param {number} y
+     * @returns {number}
+     */
+    C1.prototype.method = function (x, y) {
+        return x + y;
+    }
+    
+    /**
+     * A comment staticProp
+     * @param {number} x
+     * @param {number} y
+     * @returns {number}
+     */
+    C1.staticProp = function (x, y) {
+        return x + y;
+    }
+    
+    class C2 {
+        /**
+         * A comment method1
+         * @param {number} x
+         * @param {number} y
+         * @returns {number}
+         */
+        method1(x, y) {
+            return x + y;
+        }
+    }
+    
+    /**
+     * A comment method2
+     * @param {number} x
+     * @param {number} y
+     * @returns {number}
+     */
+    C2.prototype.method2 = function (x, y) {
+                 ~~~~~~~
+!!! error TS2551: Property 'method2' does not exist on type 'C2'. Did you mean 'method1'?
+!!! related TS2728 jsDeclarationsClassMethod.js:40:5: 'method1' is declared here.
+        return x + y;
+    }
+    
+    /**
+     * A comment staticProp
+     * @param {number} x
+     * @param {number} y
+     * @returns {number}
+     */
+    C2.staticProp = function (x, y) {
+        return x + y;
+    }
+    

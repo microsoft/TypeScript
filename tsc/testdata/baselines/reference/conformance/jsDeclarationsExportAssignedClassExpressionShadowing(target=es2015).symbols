@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedClassExpressionShadowing.ts] ////
+
+=== index.js ===
+class A {
+>A : Symbol(A, Decl(index.js, 0, 0))
+
+    member = new Q();
+>member : Symbol(A.member, Decl(index.js, 0, 9))
+>Q : Symbol(Q, Decl(index.js, 2, 1))
+}
+class Q {
+>Q : Symbol(Q, Decl(index.js, 2, 1))
+
+    x = 42;
+>x : Symbol(Q.x, Decl(index.js, 3, 9))
+}
+module.exports = class Q {
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
+>Q : Symbol(Q, Decl(index.js, 6, 16))
+
+    constructor() {
+        this.x = new A();
+>this.x : Symbol(Q.x, Decl(index.js, 7, 19))
+>this : Symbol(Q, Decl(index.js, 6, 16))
+>x : Symbol(Q.x, Decl(index.js, 7, 19))
+>A : Symbol(A, Decl(index.js, 0, 0))
+    }
+}
+module.exports.Another = Q;
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
+>Q : Symbol(Q, Decl(index.js, 2, 1))
+

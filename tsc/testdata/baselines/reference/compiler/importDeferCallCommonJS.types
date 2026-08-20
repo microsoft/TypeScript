@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/importDeferCallCommonJS.ts] ////
+
+=== a.ts ===
+
+export {};
+
+=== main.ts ===
+export {};
+import.defer("./a");
+>import.defer("./a") : Promise<typeof import("./a")>
+>defer : any
+>"./a" : "./a"
+

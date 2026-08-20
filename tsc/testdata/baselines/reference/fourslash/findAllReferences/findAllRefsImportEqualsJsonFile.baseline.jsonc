@@ -1,0 +1,59 @@
+// === findAllReferences ===
+// === /a.ts ===
+// import /*FIND ALL REFS*/[|j|] = require("./j.json");
+// [|j|];
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// import [|j|] = require("./j.json");
+// /*FIND ALL REFS*/[|j|];
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// import j = require("/*FIND ALL REFS*/[|./j.json|]");
+// j;
+
+// === /b.js ===
+// const j = require("[|./j.json|]");
+// j;
+
+// === /j.json ===
+// [|{ "x": 0 }|]
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// import j = require("[|./j.json|]");
+// j;
+
+// === /b.js ===
+// const j = require("/*FIND ALL REFS*/[|./j.json|]");
+// j;
+
+// === /j.json ===
+// [|{ "x": 0 }|]
+
+
+
+// === findAllReferences ===
+// === /b.js ===
+// const /*FIND ALL REFS*/[|j|] = require("./j.json");
+// [|j|];
+
+
+
+// === findAllReferences ===
+// === /b.js ===
+// const [|j|] = require("./j.json");
+// /*FIND ALL REFS*/[|j|];
+
+
+
+// === findAllReferences ===
+// === /j.json ===
+// /*FIND ALL REFS*/{ "x": 0 }

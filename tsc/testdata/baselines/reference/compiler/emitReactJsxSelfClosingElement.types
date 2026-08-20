@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/emitReactJsxSelfClosingElement.tsx] ////
+
+=== a.tsx ===
+const app = <App />;
+>app : any
+><App /> : any
+>App : any
+

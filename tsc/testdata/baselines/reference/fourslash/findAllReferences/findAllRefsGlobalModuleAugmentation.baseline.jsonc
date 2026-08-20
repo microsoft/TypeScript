@@ -1,0 +1,33 @@
+// === findAllReferences ===
+// === /a.ts ===
+// export {};
+// declare global {
+//     /*FIND ALL REFS*/function [|f|](): void;
+// }
+
+// === /b.ts ===
+// [|f|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export {};
+// declare global {
+//     function /*FIND ALL REFS*/[|f|](): void;
+// }
+
+// === /b.ts ===
+// [|f|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export {};
+// declare global {
+//     function [|f|](): void;
+// }
+
+// === /b.ts ===
+// /*FIND ALL REFS*/[|f|]();

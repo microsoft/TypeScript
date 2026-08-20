@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/declarationEmitMethodShadowsClassTypeParameter.ts] ////
+
+=== declarationEmitMethodShadowsClassTypeParameter.ts ===
+export class Outer<Table> {
+>Outer : Outer<Table>
+
+    method<Table, R>(r: R) {
+>method : <Table, R>(r: R) => Table | null
+>r : R
+
+        return null as Table | null;
+>null as Table | null : Table | null
+    }
+}
+

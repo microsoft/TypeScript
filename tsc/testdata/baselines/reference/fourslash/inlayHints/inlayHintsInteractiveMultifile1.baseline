@@ -1,0 +1,177 @@
+// === Inlay Hints ===
+async function foo () {
+                     ^
+{
+  "position": {
+    "line": 0,
+    "character": 21
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "Promise",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "Foo",
+      "location": {
+        "uri": "file:///a.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 17
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        }
+      }
+    },
+    {
+      "value": ">"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+function bar () { return import('./a') }
+               ^
+{
+  "position": {
+    "line": 3,
+    "character": 15
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "Promise",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "typeof "
+    },
+    {
+      "value": "import("
+    },
+    {
+      "value": "'/a'"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ">"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+async function main () {
+                      ^
+{
+  "position": {
+    "line": 4,
+    "character": 22
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "Promise",
+      "location": {
+        "uri": "bundled:///libs/lib.es5.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "void"
+    },
+    {
+      "value": ">"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+    const a = await foo()
+           ^
+{
+  "position": {
+    "line": 5,
+    "character": 11
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "Foo",
+      "location": {
+        "uri": "file:///a.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 17
+          },
+          "end": {
+            "line": 0,
+            "character": 20
+          }
+        }
+      }
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

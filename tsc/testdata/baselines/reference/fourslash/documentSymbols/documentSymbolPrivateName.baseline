@@ -1,0 +1,41 @@
+// === Document Symbols ===
+// === /first.ts ===
+// <|class [|{| name: A, kind: Class |}A|] {
+//   <|[|{| name: #foo, kind: Method |}#foo|]() {
+//     <|class [|{| name: B, kind: Class |}B|] {
+//       <|[|{| name: #bar, kind: Method |}#bar|]() {   
+//          <|function [|{| name: baz, kind: Function |}baz|] () {
+//          }|>
+//       }|>
+//     }|>
+//   }|>
+// }|>
+// 
+// <|class [|{| name: B, kind: Class |}B|] {
+// 	<|[|{| name: constructor, kind: Constructor |}|]constructor(<|private [|{| name: prop, kind: Property |}prop|]: string|>) {}|>
+// }|>
+// 
+
+// === Details ===
+(Class) A
+  (Method) #foo
+    (Class) B
+      (Method) #bar
+        (Function) baz
+(Class) B
+  (Constructor) constructor
+  (Property) prop
+
+
+
+
+// === Document Symbols ===
+// === /second.ts ===
+// <|class [|{| name: Foo, kind: Class |}Foo|] {
+// 	<|[|{| name: #privateProp, kind: Property |}#privateProp|]: string;|>
+// }|>
+// 
+
+// === Details ===
+(Class) Foo
+  (Property) #privateProp

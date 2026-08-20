@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/loneSurrogateStringLiteralTypes.ts] ////
+
+=== loneSurrogateStringLiteralTypes.ts ===
+const x: "\uD800" = "\uDC00";
+>x : "\uD800"
+>"\uDC00" : "\uDC00"
+

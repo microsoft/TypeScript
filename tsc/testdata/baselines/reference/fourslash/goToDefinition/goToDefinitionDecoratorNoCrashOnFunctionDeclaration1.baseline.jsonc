@@ -1,0 +1,6 @@
+// === goToDefinition ===
+// === /goToDefinitionDecoratorNoCrashOnFunctionDeclaration1.ts ===
+// <|function [|dec|](target: any) { return target; }|>
+// 
+// @/*GOTO DEF*/dec
+// function foo() {}

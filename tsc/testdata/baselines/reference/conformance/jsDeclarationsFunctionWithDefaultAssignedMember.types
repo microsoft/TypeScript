@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionWithDefaultAssignedMember.ts] ////
+
+=== index.js ===
+function foo() {}
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
+
+foo.foo = foo;
+>foo.foo = foo : { (): void; foo: typeof foo; default: typeof foo; }
+>foo.foo : { (): void; foo: typeof foo; default: typeof foo; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
+
+foo.default = foo;
+>foo.default = foo : { (): void; foo: typeof foo; default: typeof foo; }
+>foo.default : { (): void; foo: typeof foo; default: typeof foo; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
+>default : { (): void; foo: typeof foo; default: typeof foo; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
+
+module.exports = foo;
+>module.exports = foo : { (): void; foo: typeof foo; default: typeof foo; }
+>module.exports : { (): void; foo: typeof foo; default: typeof foo; }
+>module : { exports: { (): void; foo: typeof foo; default: typeof foo; }; }
+>exports : { (): void; foo: typeof foo; default: typeof foo; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
+

@@ -1,0 +1,25 @@
+// === findAllReferences ===
+// === /findAllRefsTypeParameterInMergedInterface.ts ===
+// interface I</*FIND ALL REFS*/[|T|]> { a: [|T|] }
+// interface I<[|T|]> { b: [|T|] }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsTypeParameterInMergedInterface.ts ===
+// interface I<[|T|]> { a: /*FIND ALL REFS*/[|T|] }
+// interface I<[|T|]> { b: [|T|] }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsTypeParameterInMergedInterface.ts ===
+// interface I<[|T|]> { a: [|T|] }
+// interface I</*FIND ALL REFS*/[|T|]> { b: [|T|] }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsTypeParameterInMergedInterface.ts ===
+// interface I<[|T|]> { a: [|T|] }
+// interface I<[|T|]> { b: /*FIND ALL REFS*/[|T|] }

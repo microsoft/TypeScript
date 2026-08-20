@@ -1,0 +1,6 @@
+go 1.26
+
+use (
+	./tools
+	./tsc
+)

@@ -1,0 +1,50 @@
+// === QuickInfo ===
+=== /quickInfoLink11.ts ===
+// /**
+//  * {@link https://vscode.dev}
+//  * [link text]{https://vscode.dev}
+//  * {@link https://vscode.dev|link text}
+//  * {@link https://vscode.dev link text}
+//  */
+// function f() {}
+// 
+// f();
+// ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function f(): void
+// | ```
+// | [https://vscode.dev](https://vscode.dev)
+// | [link text]{https://vscode.dev}
+// | [link text](https://vscode.dev)
+// | [link text](https://vscode.dev)
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 170,
+      "LSPosition": {
+        "line": 8,
+        "character": 0
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction f(): void\n```\n[https://vscode.dev](https://vscode.dev)\n[link text]{https://vscode.dev}\n[link text](https://vscode.dev)\n[link text](https://vscode.dev)"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 0
+        },
+        "end": {
+          "line": 8,
+          "character": 1
+        }
+      }
+    }
+  }
+]

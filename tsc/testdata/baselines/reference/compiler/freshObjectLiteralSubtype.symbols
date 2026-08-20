@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/freshObjectLiteralSubtype.ts] ////
+
+=== freshObjectLiteralSubtype.ts ===
+function f1() {
+>f1 : Symbol(f1, Decl(freshObjectLiteralSubtype.ts, 0, 0))
+
+    if (!!true) {
+        return { valid: true }
+>valid : Symbol(valid, Decl(freshObjectLiteralSubtype.ts, 2, 16))
+    }
+    return f2()
+>f2 : Symbol(f2, Decl(freshObjectLiteralSubtype.ts, 7, 13))
+}
+
+declare const f2: () => { valid: boolean, msg?: undefined }
+>f2 : Symbol(f2, Decl(freshObjectLiteralSubtype.ts, 7, 13))
+>valid : Symbol(valid, Decl(freshObjectLiteralSubtype.ts, 7, 25))
+>msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 7, 41))
+
+f1().msg
+>f1().msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 7, 41))
+>f1 : Symbol(f1, Decl(freshObjectLiteralSubtype.ts, 0, 0))
+>msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 7, 41))
+
+// Repro from https://github.com/microsoft/TypeScript/tsc/issues/1742
+
+function validate() {
+>validate : Symbol(validate, Decl(freshObjectLiteralSubtype.ts, 9, 8))
+
+    if(Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+        return utilValidate();
+>utilValidate : Symbol(utilValidate, Decl(freshObjectLiteralSubtype.ts, 18, 2))
+    }
+    return { valid: true };
+>valid : Symbol(valid, Decl(freshObjectLiteralSubtype.ts, 17, 12))
+
+};
+
+
+declare function utilValidate(): {
+>utilValidate : Symbol(utilValidate, Decl(freshObjectLiteralSubtype.ts, 18, 2))
+
+    valid: boolean;
+>valid : Symbol(valid, Decl(freshObjectLiteralSubtype.ts, 21, 34))
+
+    msg?: undefined;
+>msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 22, 19))
+
+} | {
+    valid: boolean;
+>valid : Symbol(valid, Decl(freshObjectLiteralSubtype.ts, 24, 5))
+
+    msg: string;
+>msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 25, 19))
+}
+
+validate().msg; // Error in TSGO
+>validate().msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 22, 19), Decl(freshObjectLiteralSubtype.ts, 25, 19))
+>validate : Symbol(validate, Decl(freshObjectLiteralSubtype.ts, 9, 8))
+>msg : Symbol(msg, Decl(freshObjectLiteralSubtype.ts, 22, 19), Decl(freshObjectLiteralSubtype.ts, 25, 19))
+
+// https://github.com/microsoft/TypeScript/tsc/issues/1761
+
+function normalise_trace_logs([log]: any[]) {
+>normalise_trace_logs : Symbol(normalise_trace_logs, Decl(freshObjectLiteralSubtype.ts, 29, 15))
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 33, 31))
+
+	let normalised = [];
+>normalised : Symbol(normalised, Decl(freshObjectLiteralSubtype.ts, 34, 4))
+
+    if (typeof log === "string" && log.includes("%c")) {
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 33, 31))
+>log.includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 33, 31))
+>includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+
+        normalised.push({ log, highlighted: log.includes("foo") });
+>normalised.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>normalised : Symbol(normalised, Decl(freshObjectLiteralSubtype.ts, 34, 4))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 36, 25))
+>highlighted : Symbol(highlighted, Decl(freshObjectLiteralSubtype.ts, 36, 30))
+>log.includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 33, 31))
+>includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
+
+    } else {
+        normalised.push({ log });
+>normalised.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>normalised : Symbol(normalised, Decl(freshObjectLiteralSubtype.ts, 34, 4))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 38, 25))
+    }
+	return normalised;
+>normalised : Symbol(normalised, Decl(freshObjectLiteralSubtype.ts, 34, 4))
+}
+
+function equal<T>(_actual: T, _expected: T): void {}
+>equal : Symbol(equal, Decl(freshObjectLiteralSubtype.ts, 41, 1))
+>T : Symbol(T, Decl(freshObjectLiteralSubtype.ts, 43, 15))
+>_actual : Symbol(_actual, Decl(freshObjectLiteralSubtype.ts, 43, 18))
+>T : Symbol(T, Decl(freshObjectLiteralSubtype.ts, 43, 15))
+>_expected : Symbol(_expected, Decl(freshObjectLiteralSubtype.ts, 43, 29))
+>T : Symbol(T, Decl(freshObjectLiteralSubtype.ts, 43, 15))
+
+equal(normalise_trace_logs([]), [
+>equal : Symbol(equal, Decl(freshObjectLiteralSubtype.ts, 41, 1))
+>normalise_trace_logs : Symbol(normalise_trace_logs, Decl(freshObjectLiteralSubtype.ts, 29, 15))
+
+    { log: 'effect' },
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 46, 5))
+
+    { log: '$derived', highlighted: true },
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 47, 5))
+>highlighted : Symbol(highlighted, Decl(freshObjectLiteralSubtype.ts, 47, 22))
+
+    { log: 'double', highlighted: false },
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 48, 5))
+>highlighted : Symbol(highlighted, Decl(freshObjectLiteralSubtype.ts, 48, 20))
+
+    { log: 4 },
+>log : Symbol(log, Decl(freshObjectLiteralSubtype.ts, 49, 5))
+
+]);
+

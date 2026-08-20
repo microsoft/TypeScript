@@ -1,0 +1,236 @@
+// === QuickInfo ===
+=== /quickInfoOnThis5.ts ===
+// const foo = {
+//     num: 0,
+//     f() {
+//         type Y = typeof this;
+//                         ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | this: {
+// |     num: number;
+// |     f(): void;
+// |     g(this: number): void;
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         type Z = typeof this.num;
+//                         ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | this: {
+// |     num: number;
+// |     f(): void;
+// |     g(this: number): void;
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     },
+//     g(this: number) {
+//         type X = typeof this;
+//                         ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | this: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+// class Foo {
+//     num = 0;
+//     f() {
+//         type Y = typeof this;
+//                         ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | this: this
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         type Z = typeof this.num;
+//                         ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | this: this
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+//     g(this: number) {
+//         type X = typeof this;
+//                         ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | this: number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+[
+  {
+    "marker": {
+      "Position": 62,
+      "LSPosition": {
+        "line": 3,
+        "character": 26
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nthis: {\n    num: number;\n    f(): void;\n    g(this: number): void;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 24
+        },
+        "end": {
+          "line": 3,
+          "character": 28
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 92,
+      "LSPosition": {
+        "line": 4,
+        "character": 26
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nthis: {\n    num: number;\n    f(): void;\n    g(this: number): void;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 24
+        },
+        "end": {
+          "line": 4,
+          "character": 28
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 155,
+      "LSPosition": {
+        "line": 7,
+        "character": 26
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nthis: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 24
+        },
+        "end": {
+          "line": 7,
+          "character": 28
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 228,
+      "LSPosition": {
+        "line": 13,
+        "character": 26
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nthis: this\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 24
+        },
+        "end": {
+          "line": 13,
+          "character": 28
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 258,
+      "LSPosition": {
+        "line": 14,
+        "character": 26
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nthis: this\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 24
+        },
+        "end": {
+          "line": 14,
+          "character": 28
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 320,
+      "LSPosition": {
+        "line": 17,
+        "character": 26
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nthis: number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 24
+        },
+        "end": {
+          "line": 17,
+          "character": 28
+        }
+      }
+    }
+  }
+]

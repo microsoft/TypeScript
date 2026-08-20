@@ -1,9 +1,0 @@
-{
-    "scenario": "outputdir_mixed_subfolder: no outdir",
-    "projectRoot": "tests/cases/projects/outputdir_mixed_subfolder",
-    "inputFiles": [
-        "test.ts"
-    ],
-    "declaration": true,
-    "baselineCheck": true
-}

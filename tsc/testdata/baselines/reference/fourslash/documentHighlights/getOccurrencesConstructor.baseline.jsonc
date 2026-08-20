@@ -1,0 +1,53 @@
+// === documentHighlights ===
+// === /getOccurrencesConstructor.ts ===
+// class C {
+//     /*HIGHLIGHTS*/[|constructor|]();
+//     [|constructor|](x: number);
+//     [|constructor|](y: string, x: number);
+//     [|constructor|](a?: any, ...r: any[]) {
+//         if (a === undefined && r.length === 0) {
+//             return;
+//         }
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesConstructor.ts ===
+// class C {
+//     [|constructor|]();
+//     /*HIGHLIGHTS*/[|constructor|](x: number);
+//     [|constructor|](y: string, x: number);
+//     [|constructor|](a?: any, ...r: any[]) {
+//         if (a === undefined && r.length === 0) {
+//             return;
+//         }
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesConstructor.ts ===
+// class C {
+//     [|constructor|]();
+//     [|constructor|](x: number);
+//     /*HIGHLIGHTS*/[|constructor|](y: string, x: number);
+//     [|constructor|](a?: any, ...r: any[]) {
+//         if (a === undefined && r.length === 0) {
+//             return;
+//         }
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesConstructor.ts ===
+// class C {
+//     [|constructor|]();
+//     [|constructor|](x: number);
+//     [|constructor|](y: string, x: number);
+//     /*HIGHLIGHTS*/[|constructor|](a?: any, ...r: any[]) {
+//         if (a === undefined && r.length === 0) {
+//             return;
+//         }
+// --- (line: 9) skipped ---

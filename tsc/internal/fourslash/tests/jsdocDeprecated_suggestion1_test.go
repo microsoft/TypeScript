@@ -1,0 +1,304 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestJsdocDeprecated_suggestion1(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @experimentalDecorators: true
+// @Filename: a.ts
+export namespace foo {
+    /** @deprecated */
+    export function faff () { }
+    [|faff|]()
+}
+const [|a|] = foo.[|faff|]()
+foo[[|"faff"|]]
+const { [|faff|] } = foo
+[|faff|]()
+/** @deprecated */
+export function bar () {
+    foo?.[|faff|]()
+}
+foo?.[[|"faff"|]]?.()
+[|bar|]();
+/** @deprecated */
+export interface Foo {
+    /** @deprecated */
+    zzz: number
+}
+/** @deprecated */
+export type QW = [|Foo|][[|"zzz"|]]
+export type WQ = [|QW|]
+class C {
+    /** @deprecated */
+    constructor() {
+    }
+    /** @deprecated */
+    m() { }
+}
+/** @deprecated */
+class D {
+    constructor() {
+    }
+}
+var c = new [|C|]()
+c.[|m|]()
+c.[|m|]
+new [|D|]()
+C
+[|D|]
+// @Filename: j.tsx
+type Props = { someProp?: any }
+declare var props: Props
+/** @deprecated */
+function Compi(_props: Props) {
+    return <div></div>
+}
+[|Compi|];
+<[|Compi|] />;
+<[|Compi|] {...props}><div></div></[|Compi|]>;
+/** @deprecated */
+function ttf(_x: unknown) {
+}
+[|ttf|]` + "`" + `` + "`" + `
+[|ttf|]
+/** @deprecated */
+function dec(_c: unknown) { }
+[|dec|]
+@[|dec|]
+class K { }
+// @Filename: b.ts
+// imports and aliases
+import * as f from './a';
+import { [|bar|], [|QW|] } from './a';
+f.[|bar|]();
+f.foo.[|faff|]();
+[|bar|]();
+type Z = [|QW|];
+type A = f.[|Foo|];
+type B = f.[|QW|];
+type C = f.WQ;
+type [|O|] = Z | A | B | C;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToFile(t, "a.ts")
+	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'faff' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[0].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6133))},
+			Message: lsproto.StringOrMarkupContent{String: new("'a' is declared but its value is never read.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagUnnecessary},
+			Range:   f.Ranges()[1].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'foo.faff' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[2].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'faff' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[3].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'faff' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[4].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'faff' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[5].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'foo.faff' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[6].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'foo.faff' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[7].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'bar' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[8].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'Foo' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[9].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'zzz' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[10].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'QW' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[11].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature 'new (): C' of 'C' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[12].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'c.m' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[13].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'m' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[14].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'D' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[15].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'D' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[16].LSRange,
+		},
+	})
+	f.GoToFile(t, "j.tsx")
+	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'Compi' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[17].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(_props: Props): any' of 'Compi' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[18].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(_props: Props): any' of 'Compi' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[19].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'Compi' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[20].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(_x: unknown): void' of 'ttf' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[21].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'ttf' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[22].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'dec' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[23].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(_c: unknown): void' of 'dec' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[24].LSRange,
+		},
+	})
+	f.GoToFile(t, "b.ts")
+	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'bar' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[25].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'QW' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[26].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'f.bar' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[27].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'f.foo.faff' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[28].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'bar' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[29].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'QW' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[30].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'Foo' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[31].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'QW' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[32].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6196))},
+			Message: lsproto.StringOrMarkupContent{String: new("'O' is declared but never used.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagUnnecessary},
+			Range:   f.Ranges()[33].LSRange,
+		},
+	})
+}

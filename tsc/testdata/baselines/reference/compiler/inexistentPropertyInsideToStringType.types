@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/inexistentPropertyInsideToStringType.ts] ////
+
+=== index.js ===
+function toString() {
+>toString : { (): string; (): void; }
+
+    this.yadda
+>this.yadda : any
+>this : any
+>yadda : any
+
+    this.someValue = "";
+>this.someValue = "" : ""
+>this.someValue : any
+>this : any
+>someValue : any
+>"" : ""
+}

@@ -1,0 +1,137 @@
+//// [tests/cases/compiler/legacyDecoratorsEnumAccessSameNameAsClass.ts] ////
+
+=== legacyDecoratorsEnumAccessSameNameAsClass.ts ===
+export enum MyEnum {
+>MyEnum : Symbol(MyEnum, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 0, 0))
+
+    Foo = "FooValue",
+>Foo : Symbol(MyEnum.Foo, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 0, 20))
+
+    Bar = "BarValue",
+>Bar : Symbol(MyEnum.Bar, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 1, 21))
+}
+
+function myDecorator(target: any) {
+>myDecorator : Symbol(myDecorator, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 3, 1))
+>target : Symbol(target, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 5, 21))
+
+    return target;
+>target : Symbol(target, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 5, 21))
+}
+
+// Enum member access should not be renamed
+@myDecorator
+>myDecorator : Symbol(myDecorator, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 3, 1))
+
+export class Foo {
+>Foo : Symbol(Foo, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 7, 1))
+
+    type: MyEnum = MyEnum.Foo;
+>type : Symbol(Foo.type, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 11, 18))
+>MyEnum : Symbol(MyEnum, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 0, 0))
+>MyEnum.Foo : Symbol(MyEnum.Foo, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 0, 20))
+>MyEnum : Symbol(MyEnum, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 0, 0))
+>Foo : Symbol(MyEnum.Foo, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 0, 20))
+
+    getType(): MyEnum {
+>getType : Symbol(Foo.getType, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 12, 30))
+>MyEnum : Symbol(MyEnum, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 0, 0))
+
+        return this.type || MyEnum.Foo;
+>this.type : Symbol(Foo.type, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 11, 18))
+>this : Symbol(Foo, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 7, 1))
+>type : Symbol(Foo.type, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 11, 18))
+>MyEnum.Foo : Symbol(MyEnum.Foo, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 0, 20))
+>MyEnum : Symbol(MyEnum, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 0, 0))
+>Foo : Symbol(MyEnum.Foo, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 0, 20))
+    }
+}
+
+// Property access on object should not rename the property name
+declare const obj: { Bar: string };
+>obj : Symbol(obj, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 20, 13))
+>Bar : Symbol(Bar, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 20, 20))
+
+@myDecorator
+>myDecorator : Symbol(myDecorator, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 3, 1))
+
+export class Bar {
+>Bar : Symbol(Bar, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 20, 35))
+
+    prop = obj.Bar;
+>prop : Symbol(Bar.prop, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 23, 18))
+>obj.Bar : Symbol(Bar, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 20, 20))
+>obj : Symbol(obj, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 20, 13))
+>Bar : Symbol(Bar, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 20, 20))
+
+    method() {
+>method : Symbol(Bar.method, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 24, 19))
+
+        return obj.Bar;
+>obj.Bar : Symbol(Bar, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 20, 20))
+>obj : Symbol(obj, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 20, 13))
+>Bar : Symbol(Bar, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 20, 20))
+    }
+}
+
+// Nested property access should not rename the innermost name
+declare const nested: { a: { Baz: number } };
+>nested : Symbol(nested, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 32, 13))
+>a : Symbol(a, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 32, 23))
+>Baz : Symbol(Baz, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 32, 28))
+
+@myDecorator
+>myDecorator : Symbol(myDecorator, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 3, 1))
+
+export class Baz {
+>Baz : Symbol(Baz, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 32, 45))
+
+    prop = nested.a.Baz;
+>prop : Symbol(Baz.prop, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 35, 18))
+>nested.a.Baz : Symbol(Baz, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 32, 28))
+>nested.a : Symbol(a, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 32, 23))
+>nested : Symbol(nested, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 32, 13))
+>a : Symbol(a, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 32, 23))
+>Baz : Symbol(Baz, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 32, 28))
+}
+
+// Static member of another class should not rename the property name
+class Other {
+>Other : Symbol(Other, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 37, 1))
+
+    static Qux = 42;
+>Qux : Symbol(Other.Qux, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 40, 13))
+}
+
+@myDecorator
+>myDecorator : Symbol(myDecorator, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 3, 1))
+
+export class Qux {
+>Qux : Symbol(Qux, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 42, 1))
+
+    prop = Other.Qux;
+>prop : Symbol(Qux.prop, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 45, 18))
+>Other.Qux : Symbol(Other.Qux, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 40, 13))
+>Other : Symbol(Other, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 37, 1))
+>Qux : Symbol(Other.Qux, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 40, 13))
+}
+
+// Standalone reference to the class SHOULD still be renamed (self-reference)
+@myDecorator
+>myDecorator : Symbol(myDecorator, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 3, 1))
+
+export class SelfRef {
+>SelfRef : Symbol(SelfRef, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 47, 1))
+
+    static instance = new SelfRef();
+>instance : Symbol(SelfRef.instance, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 51, 22))
+>SelfRef : Symbol(SelfRef, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 47, 1))
+
+    method() {
+>method : Symbol(SelfRef.method, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 52, 36))
+
+        return SelfRef;
+>SelfRef : Symbol(SelfRef, Decl(legacyDecoratorsEnumAccessSameNameAsClass.ts, 47, 1))
+    }
+}
+

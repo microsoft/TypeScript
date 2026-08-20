@@ -1,5 +1,0 @@
-// === goToDefinition ===
-// === /tests/cases/fourslash/goToDefinitionShorthandProperty02.ts ===
-// let x = {
-//     f/*GOTO DEF*/oo
-// }

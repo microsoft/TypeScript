@@ -1,0 +1,57 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestFormattingObjectLiteralOpenCurlyNewlineAssignment(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `
+var obj = {};
+obj =
+{
+    prop: 3
+};
+ 
+var obj2 = obj ||
+{
+    prop: 0
+}
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.FormatDocument(t, "")
+	f.VerifyCurrentFileContent(t, `
+var obj = {};
+obj =
+{
+    prop: 3
+};
+
+var obj2 = obj ||
+{
+    prop: 0
+}
+`)
+	opts400 := f.GetOptions()
+	opts400.FormatCodeSettings.IndentMultiLineObjectLiteralBeginningOnBlankLine = core.TSTrue
+	f.Configure(t, opts400)
+	f.FormatDocument(t, "")
+	f.VerifyCurrentFileContent(t, `
+var obj = {};
+obj =
+    {
+        prop: 3
+    };
+
+var obj2 = obj ||
+    {
+        prop: 0
+    }
+`)
+}

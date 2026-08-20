@@ -1,0 +1,25 @@
+mod1.js(7,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== mod1.js (1 errors) ====
+    /** @callback Con - some kind of continuation
+     * @param {object | undefined} error
+     * @return {any} I don't even know what this should return
+     */
+    module.exports = C
+    function C() {
+        this.p = 1
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    }
+    
+==== use.js (0 errors) ====
+    /** @param {import('./mod1').Con} k */
+    function f(k) {
+        if (1 === 2 - 1) {
+            // I guess basic math works!
+        }
+        return k({ ok: true})
+    }
+    
+    

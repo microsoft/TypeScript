@@ -1,0 +1,13 @@
+exactOptionalPropertyTypesArgumentError.ts(2,3): error TS2379: Argument of type '{ y: undefined; }' is not assignable to parameter of type '{ y?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'y' are incompatible.
+    Type 'undefined' is not assignable to type 'string'.
+
+
+==== exactOptionalPropertyTypesArgumentError.ts (1 errors) ====
+    declare function f(o: { y?: string }): void;
+    f({ y: undefined });
+      ~~~~~~~~~~~~~~~~
+!!! error TS2379: Argument of type '{ y: undefined; }' is not assignable to parameter of type '{ y?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2379:   Types of property 'y' are incompatible.
+!!! error TS2379:     Type 'undefined' is not assignable to type 'string'.
+    

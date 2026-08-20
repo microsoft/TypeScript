@@ -1,0 +1,533 @@
+package project
+
+import (
+	"context"
+	"fmt"
+	"slices"
+	"strings"
+	"sync"
+
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/compiler"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/ls"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
+	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
+	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+)
+
+const (
+	inferredProjectName = "/dev/null/inferred" // lowercase so toPath is a no-op regardless of settings
+	hr                  = "-----------------------------------------------"
+)
+
+//go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -trimprefix=Kind -output=project_stringer_generated.go
+//go:generate npx dprint fmt project_stringer_generated.go
+
+type Kind int
+
+const (
+	KindInferred Kind = iota
+	KindConfigured
+)
+
+type ProgramUpdateKind int
+
+const (
+	ProgramUpdateKindNone ProgramUpdateKind = iota
+	ProgramUpdateKindCloned
+	ProgramUpdateKindSameFileNames
+	ProgramUpdateKindNewFiles
+)
+
+type PendingReload int
+
+const (
+	PendingReloadNone PendingReload = iota
+	PendingReloadFileNames
+	PendingReloadFull
+)
+
+// Project represents a TypeScript project.
+// If changing struct fields, also update the Clone method.
+type Project struct {
+	Kind             Kind
+	currentDirectory string
+	configFileName   string
+	configFilePath   tspath.Path
+
+	dirty         bool
+	dirtyFilePath tspath.Path
+
+	host                            *compilerHost
+	CommandLine                     *tsoptions.ParsedCommandLine
+	commandLineWithTypingsFiles     *tsoptions.ParsedCommandLine
+	commandLineWithTypingsFilesOnce sync.Once
+	Program                         *compiler.Program
+	// The kind of update that was performed on the program last time it was updated.
+	ProgramUpdateKind ProgramUpdateKind
+	// The ID of the snapshot that created the program stored in this project.
+	ProgramLastUpdate uint64
+	// Set of projects that this project could be referencing.
+	// Only set before actually loading config file to get actual project references
+	potentialProjectReferences *collections.Set[tspath.Path]
+
+	programFilesWatch         *WatchedFiles[*collections.SyncSet[tspath.Path]]
+	typingsWatch              *WatchedFiles[PatternsAndIgnored]
+	contentMapperWatch        *WatchedFiles[[]string]
+	contentMapperWatchedFiles *collections.Set[tspath.Path]
+
+	checkerPool *checkerPool
+
+	// installedTypingsInfo is the value of `project.ComputeTypingsInfo()` that was
+	// used during the most recently completed typings installation.
+	installedTypingsInfo *ata.TypingsInfo
+	// typingsFiles are the root files added by the typings installer.
+	typingsFiles []string
+}
+
+var _ ls.Project = (*Project)(nil)
+
+func NewConfiguredProject(
+	configFileName string,
+	configFilePath tspath.Path,
+	builder *ProjectCollectionBuilder,
+	logger *logging.LogTree,
+) *Project {
+	return NewProject(configFileName, KindConfigured, tspath.GetDirectoryPath(configFileName), builder, logger)
+}
+
+func NewInferredProject(
+	currentDirectory string,
+	compilerOptions *core.CompilerOptions,
+	rootFileNames []string,
+	contentMappers []*contentmapper.Mapper,
+	builder *ProjectCollectionBuilder,
+	logger *logging.LogTree,
+) *Project {
+	p := NewProject(inferredProjectName, KindInferred, currentDirectory, builder, logger)
+	if compilerOptions == nil {
+		compilerOptions = &core.CompilerOptions{
+			AllowJs:                    core.TSTrue,
+			Module:                     core.ModuleKindESNext,
+			ModuleResolution:           core.ModuleResolutionKindBundler,
+			Target:                     core.ScriptTargetLatestStandard,
+			Jsx:                        core.JsxEmitReactJSX,
+			AllowImportingTsExtensions: core.TSTrue,
+			StrictNullChecks:           core.TSTrue,
+			StrictFunctionTypes:        core.TSTrue,
+			SourceMap:                  core.TSTrue,
+			AllowNonTsExtensions:       core.TSTrue,
+			ResolveJsonModule:          core.TSTrue,
+		}
+	}
+	p.CommandLine = newInferredProjectCommandLine(
+		compilerOptions,
+		rootFileNames,
+		contentMappers,
+		tspath.ComparePathsOptions{
+			UseCaseSensitiveFileNames: builder.fs.fs.UseCaseSensitiveFileNames(),
+			CurrentDirectory:          currentDirectory,
+		},
+	)
+	return p
+}
+
+func newInferredProjectCommandLine(
+	compilerOptions *core.CompilerOptions,
+	rootFileNames []string,
+	contentMappers []*contentmapper.Mapper,
+	comparePathsOptions tspath.ComparePathsOptions,
+) *tsoptions.ParsedCommandLine {
+	commandLine := tsoptions.NewParsedCommandLine(compilerOptions, rootFileNames, comparePathsOptions)
+	commandLine.ParsedConfig.ContentMappers = contentMappers
+	return commandLine
+}
+
+func NewProject(
+	configFileName string,
+	kind Kind,
+	currentDirectory string,
+	builder *ProjectCollectionBuilder,
+	logger *logging.LogTree,
+) *Project {
+	if logger != nil {
+		logger.Log(fmt.Sprintf("Creating %sProject: %s, currentDirectory: %s", kind.String(), configFileName, currentDirectory))
+	}
+	project := &Project{
+		configFileName:   configFileName,
+		Kind:             kind,
+		currentDirectory: currentDirectory,
+		dirty:            true,
+	}
+
+	project.configFilePath = tspath.ToPath(configFileName, currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames())
+	project.programFilesWatch = NewWatchedFiles(
+		"program files for "+configFileName,
+		lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
+		lsproto.GetClientCapabilities(builder.ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
+		createResolutionLookupGlobMapper(builder.sessionOptions.CurrentDirectory, builder.sessionOptions.DefaultLibraryPath, project.currentDirectory, builder.fs.fs.UseCaseSensitiveFileNames()),
+	)
+	if builder.sessionOptions.TypingsLocation != "" {
+		project.typingsWatch = NewWatchedFiles(
+			"typings installer files",
+			lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
+			lsproto.GetClientCapabilities(builder.ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
+			core.Identity,
+		)
+	}
+	project.contentMapperWatch = NewWatchedFilesForPaths(
+		"content mapper configuration files for "+configFileName,
+		lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
+		lsproto.GetClientCapabilities(builder.ctx).Workspace.DidChangeWatchedFiles.RelativePatternSupport,
+		builder.sessionOptions.CurrentDirectory,
+		builder.sessionOptions.CurrentDirectory,
+		builder.fs.fs.UseCaseSensitiveFileNames(),
+	)
+	return project
+}
+
+func (p *Project) Name() string {
+	return p.configFileName
+}
+
+// DisplayName returns a short, human-readable name for the project,
+// relative to the given workspace root directory.
+// For configured projects, this is the config file path made relative.
+// For inferred projects, this is the last component of the current directory.
+func (p *Project) DisplayName(cwd string) string {
+	if p.Kind == KindInferred {
+		return tspath.GetBaseFileName(p.currentDirectory)
+	}
+	return tspath.ConvertToRelativePath(p.configFileName, tspath.ComparePathsOptions{
+		CurrentDirectory: cwd,
+	})
+}
+
+func (p *Project) ID() tspath.Path {
+	return p.configFilePath
+}
+
+// ConfigFileName panics if Kind() is not KindConfigured.
+func (p *Project) ConfigFileName() string {
+	if p.Kind != KindConfigured {
+		panic("ConfigFileName called on non-configured project")
+	}
+	return p.configFileName
+}
+
+// ConfigFilePath panics if Kind() is not KindConfigured.
+func (p *Project) ConfigFilePath() tspath.Path {
+	if p.Kind != KindConfigured {
+		panic("ConfigFilePath called on non-configured project")
+	}
+	return p.configFilePath
+}
+
+func (p *Project) Id() tspath.Path {
+	return p.configFilePath
+}
+
+func (p *Project) GetProgram() *compiler.Program {
+	return p.Program
+}
+
+// GetProjectDiagnostics returns program diagnostics combined with any global
+// diagnostics discovered during checking. These are the diagnostics reported on
+// the tsconfig.json file.
+func (p *Project) GetProjectDiagnostics(ctx context.Context) []*ast.Diagnostic {
+	var globalDiags []*ast.Diagnostic
+	if p.checkerPool != nil {
+		globalDiags = p.checkerPool.GetGlobalDiagnostics()
+	}
+	return compiler.SortAndDeduplicateDiagnostics(slices.Concat(
+		p.Program.GetConfigFileParsingDiagnostics(),
+		p.Program.GetProgramDiagnostics(),
+		globalDiags,
+	))
+}
+
+func (p *Project) HasFile(fileName string) bool {
+	return p.containsFile(p.toPath(fileName))
+}
+
+func (p *Project) containsFile(path tspath.Path) bool {
+	return p.Program != nil && p.Program.GetSourceFileByPath(path) != nil
+}
+
+func (p *Project) IsSourceFromProjectReference(path tspath.Path) bool {
+	return p.Program != nil && p.Program.IsSourceFromProjectReference(path)
+}
+
+func (p *Project) Clone() *Project {
+	return &Project{
+		Kind:             p.Kind,
+		currentDirectory: p.currentDirectory,
+		configFileName:   p.configFileName,
+		configFilePath:   p.configFilePath,
+
+		dirty:         p.dirty,
+		dirtyFilePath: p.dirtyFilePath,
+
+		host:                        p.host,
+		CommandLine:                 p.CommandLine,
+		commandLineWithTypingsFiles: p.commandLineWithTypingsFiles,
+		Program:                     p.Program,
+		ProgramUpdateKind:           ProgramUpdateKindNone,
+		ProgramLastUpdate:           p.ProgramLastUpdate,
+		potentialProjectReferences:  p.potentialProjectReferences,
+
+		programFilesWatch:         p.programFilesWatch,
+		typingsWatch:              p.typingsWatch,
+		contentMapperWatch:        p.contentMapperWatch,
+		contentMapperWatchedFiles: p.contentMapperWatchedFiles,
+
+		checkerPool: p.checkerPool,
+
+		installedTypingsInfo: p.installedTypingsInfo,
+		typingsFiles:         p.typingsFiles,
+	}
+}
+
+// SetCommandLine reassigns the project's command line and resets all state derived
+// from it. Changing the command line always requires a full program rebuild, so the
+// project is marked fully dirty. It also resets:
+//   - the memoized command line augmented with typings files (and its sync.Once, so
+//     the augmented command line is rebuilt from the new command line on next access);
+//   - potentialProjectReferences, the pre-load placeholder derived from the old
+//     command line (always nil for inferred projects, which have no project references).
+func (p *Project) SetCommandLine(commandLine *tsoptions.ParsedCommandLine) {
+	p.CommandLine = commandLine
+	p.commandLineWithTypingsFiles = nil
+	p.commandLineWithTypingsFilesOnce = sync.Once{}
+	p.potentialProjectReferences = nil
+	p.dirty = true
+	p.dirtyFilePath = ""
+}
+
+// getCommandLineWithTypingsFiles returns the command line augmented with typing files if ATA is enabled.
+func (p *Project) getCommandLineWithTypingsFiles() *tsoptions.ParsedCommandLine {
+	if len(p.typingsFiles) == 0 {
+		return p.CommandLine
+	}
+
+	// Check if ATA is enabled for this project
+	typeAcquisition := p.GetTypeAcquisition()
+	if typeAcquisition == nil || !typeAcquisition.Enable.IsTrue() {
+		return p.CommandLine
+	}
+
+	p.commandLineWithTypingsFilesOnce.Do(func() {
+		if p.commandLineWithTypingsFiles == nil {
+			// Create an augmented command line that includes typing files
+			originalRootNames := p.CommandLine.FileNames()
+			newRootNames := make([]string, 0, len(originalRootNames)+len(p.typingsFiles))
+			newRootNames = append(newRootNames, originalRootNames...)
+			newRootNames = append(newRootNames, p.typingsFiles...)
+
+			p.commandLineWithTypingsFiles = p.CommandLine.WithFileNames(newRootNames)
+		}
+	})
+	return p.commandLineWithTypingsFiles
+}
+
+func (p *Project) setPotentialProjectReference(configFilePath tspath.Path) {
+	if p.potentialProjectReferences == nil {
+		p.potentialProjectReferences = &collections.Set[tspath.Path]{}
+	} else {
+		p.potentialProjectReferences = p.potentialProjectReferences.Clone()
+	}
+	p.potentialProjectReferences.Add(configFilePath)
+}
+
+func (p *Project) hasPotentialProjectReference(projectTreeRequest *ProjectTreeRequest) bool {
+	if p.CommandLine != nil {
+		for _, path := range p.CommandLine.ResolvedProjectReferencePaths() {
+			if projectTreeRequest.IsProjectReferenced(p.toPath(path)) {
+				return true
+			}
+		}
+	} else if p.potentialProjectReferences != nil {
+		for path := range p.potentialProjectReferences.Keys() {
+			if projectTreeRequest.IsProjectReferenced(path) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+type CreateProgramResult struct {
+	Program    *compiler.Program
+	UpdateKind ProgramUpdateKind
+}
+
+func (p *Project) CreateProgram() CreateProgramResult {
+	updateKind := ProgramUpdateKindNewFiles
+	var programCloned bool
+	var newProgram *compiler.Program
+
+	// Define a fresh CreateCheckerPool closure for this call. Each invocation of
+	// CreateProgram must use its own closure so that concurrent goroutines cloning
+	// the same project never share a captured variable through a stale closure
+	// stored in the old program's options.
+	createCheckerPool := func(program *compiler.Program) compiler.CheckerPool {
+		return newCheckerPool(p.host.sessionOptions.CheckerPoolOptions, program, p.log)
+	}
+
+	// Create the command line, potentially augmented with typing files
+	commandLine := p.getCommandLineWithTypingsFiles()
+	if p.dirtyFilePath != "" && p.Program != nil && p.Program.CommandLine() == commandLine {
+		var dirtyFile *ast.SourceFile
+		newProgram, dirtyFile, programCloned = p.Program.UpdateProgram(p.dirtyFilePath, p.host, createCheckerPool)
+		if programCloned {
+			updateKind = ProgramUpdateKindCloned
+			for _, file := range newProgram.SourceFiles() {
+				// Use pointer identity: dirtyFile is the exact instance UpdateProgram acquired,
+				// and it is the only file whose refcount is already accounted for.
+				if file != dirtyFile && !file.IsContentMapperFailureStub() && !file.IsContentMapperSupplemental() {
+					// UpdateProgram acquired the changed file only, so we need to ref everything else
+					if file.ContentMapper() != "" {
+						p.host.builder.contentMappedParseCache.Ref(contentMappedParseCacheKeyForFile(file))
+					} else {
+						p.host.builder.parseCache.Ref(parseCacheKeyForFile(file))
+					}
+				}
+			}
+			for _, file := range newProgram.DuplicateSourceFiles() {
+				if !file.IsContentMapperFailureStub {
+					if file.ContentMapper != "" {
+						p.host.builder.contentMappedParseCache.Ref(contentMappedParseCacheKeyForDuplicate(file))
+					} else {
+						p.host.builder.parseCache.Ref(parseCacheKeyForDuplicate(file))
+					}
+				}
+			}
+		} else if dirtyFile != nil {
+			// UpdateProgram always acquires the dirty file before deciding whether it can
+			// reuse the old program. If it falls back to a full rebuild, release that
+			// speculative acquire so the rebuilt program is the only remaining owner.
+			if dirtyFile.ContentMapper() != "" {
+				p.host.builder.contentMappedParseCache.Deref(contentMappedParseCacheKeyForFile(dirtyFile))
+			} else {
+				p.host.builder.parseCache.Deref(parseCacheKeyForFile(dirtyFile))
+			}
+		}
+	} else {
+		var typingsLocation string
+		if p.GetTypeAcquisition().Enable.IsTrue() {
+			typingsLocation = p.host.sessionOptions.TypingsLocation
+		}
+		newProgram = compiler.NewProgram(
+			compiler.ProgramOptions{
+				Host:                        p.host,
+				Config:                      commandLine,
+				UseSourceOfProjectReference: true,
+				TypingsLocation:             typingsLocation,
+				CreateCheckerPool:           createCheckerPool,
+			},
+		)
+	}
+
+	if !programCloned && p.Program != nil && p.Program.HasSameFileNames(newProgram) {
+		updateKind = ProgramUpdateKindSameFileNames
+	}
+
+	newProgram.BindSourceFiles()
+
+	return CreateProgramResult{
+		Program:    newProgram,
+		UpdateKind: updateKind,
+	}
+}
+
+func (p *Project) CloneWatchers() *WatchedFiles[*collections.SyncSet[tspath.Path]] {
+	return p.programFilesWatch.Clone(p.host.sourceFS.seenFiles)
+}
+
+func (p *Project) log(msg string) {
+	// !!!
+}
+
+func (p *Project) toPath(fileName string) tspath.Path {
+	return tspath.ToPath(fileName, p.currentDirectory, p.host.FS().UseCaseSensitiveFileNames())
+}
+
+func (p *Project) print(writeFileNames bool, writeFileExplanation bool, builder *strings.Builder) string {
+	builder.WriteString(fmt.Sprintf("\nProject '%s'\n", p.Name()))
+	if p.Program == nil {
+		builder.WriteString("\tFiles (0) NoProgram\n")
+	} else {
+		sourceFiles := p.Program.GetSourceFiles()
+		builder.WriteString(fmt.Sprintf("\tFiles (%d)\n", len(sourceFiles)))
+		if writeFileNames {
+			for _, sourceFile := range sourceFiles {
+				builder.WriteString("\t\t")
+				builder.WriteString(sourceFile.FileName())
+				builder.WriteString("\n")
+			}
+			// !!!
+			// if writeFileExplanation {}
+		}
+	}
+	builder.WriteString(hr)
+	return builder.String()
+}
+
+// GetTypeAcquisition returns the type acquisition settings for this project.
+func (p *Project) GetTypeAcquisition() *core.TypeAcquisition {
+	if p.Kind == KindInferred {
+		// For inferred projects, use default settings
+		return &core.TypeAcquisition{
+			Enable:                              core.TSTrue,
+			Include:                             nil,
+			Exclude:                             nil,
+			DisableFilenameBasedTypeAcquisition: core.TSFalse,
+		}
+	}
+
+	if p.CommandLine != nil {
+		return p.CommandLine.TypeAcquisition()
+	}
+
+	return nil
+}
+
+// GetUnresolvedImports extracts unresolved imports from this project's program.
+func (p *Project) GetUnresolvedImports() *collections.Set[string] {
+	if p.Program == nil {
+		return nil
+	}
+
+	return p.Program.GetUnresolvedImports()
+}
+
+// ShouldTriggerATA determines if ATA should be triggered for this project.
+func (p *Project) ShouldTriggerATA(snapshotID uint64) bool {
+	if p.Program == nil || p.CommandLine == nil {
+		return false
+	}
+
+	typeAcquisition := p.GetTypeAcquisition()
+	if typeAcquisition == nil || !typeAcquisition.Enable.IsTrue() {
+		return false
+	}
+
+	if p.installedTypingsInfo == nil || p.ProgramLastUpdate == snapshotID && p.ProgramUpdateKind == ProgramUpdateKindNewFiles {
+		return true
+	}
+
+	return !p.installedTypingsInfo.Equals(p.ComputeTypingsInfo())
+}
+
+func (p *Project) ComputeTypingsInfo() ata.TypingsInfo {
+	return ata.TypingsInfo{
+		CompilerOptions:   p.CommandLine.CompilerOptions(),
+		TypeAcquisition:   p.GetTypeAcquisition(),
+		UnresolvedImports: p.GetUnresolvedImports(),
+	}
+}

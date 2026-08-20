@@ -1,0 +1,9 @@
+// === documentHighlights ===
+// === /getOccurrencesOfUndefinedSymbol.ts ===
+// --- (line: 7) skipped ---
+// 
+// class cls3 {
+//     property zeFunc() {
+//     super.ceFun/*HIGHLIGHTS*/c();
+// }
+// }

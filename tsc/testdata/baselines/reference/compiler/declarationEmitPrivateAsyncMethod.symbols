@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/declarationEmitPrivateAsyncMethod.ts] ////
+
+=== a.ts ===
+export class C {
+>C : Symbol(C, Decl(a.ts, 0, 0))
+
+    /**
+     * Non Async function
+     */
+    private a(): void {
+>a : Symbol(C.a, Decl(a.ts, 0, 16))
+    }
+
+    /**
+     * Async function
+     */
+    private async b(): Promise<void> {
+>b : Symbol(C.b, Decl(a.ts, 5, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+    }
+}
+

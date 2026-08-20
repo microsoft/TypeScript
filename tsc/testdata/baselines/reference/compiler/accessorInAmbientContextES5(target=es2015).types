@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/accessorInAmbientContextES5.ts] ////
+
+=== accessorInAmbientContextES5.ts ===
+// Should allow accessor in ambient contexts even when targeting ES5
+
+declare class AmbientClass {
+>AmbientClass : AmbientClass
+
+    accessor prop1: string;
+>prop1 : string
+
+    static accessor prop2: number;
+>prop2 : number
+
+    private accessor prop3: boolean;
+>prop3 : boolean
+
+    private static accessor prop4: symbol;
+>prop4 : symbol
+}
+
+declare namespace AmbientNamespace {
+>AmbientNamespace : typeof AmbientNamespace
+
+    class C {
+>C : C
+
+        accessor prop: string;
+>prop : string
+    }
+}
+
+// Should also work in .d.ts files (simulated with declare)
+declare module "some-module" {
+>"some-module" : typeof import("some-module")
+
+    export class ExportedClass {
+>ExportedClass : ExportedClass
+
+        accessor value: any;
+>value : any
+    }
+}
+
+// Regular class should still error when targeting ES5
+class RegularClass {
+>RegularClass : RegularClass
+
+    accessor shouldError: string; // Should still error
+>shouldError : string
+}

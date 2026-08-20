@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/exportAssignmentMerging2.ts] ////
+
+=== b.ts ===
+import a = require("./a");
+>a : Symbol(a, Decl(b.ts, 0, 0))
+
+const c1 = a.a;
+>c1 : Symbol(c1, Decl(b.ts, 1, 5))
+>a.a : Symbol(mod.a, Decl(a.ts, 5, 16))
+>a : Symbol(a, Decl(b.ts, 0, 0))
+>a : Symbol(mod.a, Decl(a.ts, 5, 16))
+
+const c2 = a.b;
+>c2 : Symbol(c2, Decl(b.ts, 2, 5))
+>a.b : Symbol(mod.b, Decl(a.ts, 6, 16))
+>a : Symbol(a, Decl(b.ts, 0, 0))
+>b : Symbol(mod.b, Decl(a.ts, 6, 16))
+
+let v1: a.Foo = { x: "test" };
+>v1 : Symbol(v1, Decl(b.ts, 3, 3))
+>a : Symbol(a, Decl(b.ts, 0, 0))
+>Foo : Symbol(a.Foo, Decl(a.ts, 0, 0))
+>x : Symbol(x, Decl(b.ts, 3, 17))
+
+let v2: a.Bar.Baz = { y: 42 };
+>v2 : Symbol(v2, Decl(b.ts, 4, 3))
+>a : Symbol(a, Decl(b.ts, 0, 0))
+>Bar : Symbol(a.Bar, Decl(a.ts, 0, 32))
+>Baz : Symbol(a.Bar.Baz, Decl(a.ts, 1, 22))
+>y : Symbol(y, Decl(b.ts, 4, 21))
+
+=== a.ts ===
+export type Foo = { x: string };
+>Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+>x : Symbol(x, Decl(a.ts, 0, 19))
+
+export namespace Bar {
+>Bar : Symbol(Bar, Decl(a.ts, 0, 32))
+
+    export interface Baz { y: number }
+>Baz : Symbol(Baz, Decl(a.ts, 1, 22))
+>y : Symbol(Baz.y, Decl(a.ts, 2, 26))
+}
+namespace mod {
+>mod : Symbol(mod, Decl(a.ts, 3, 1))
+
+    export const a = 1;
+>a : Symbol(a, Decl(a.ts, 5, 16))
+
+    export const b = "hello";
+>b : Symbol(b, Decl(a.ts, 6, 16))
+}
+export = mod;
+>mod : Symbol(mod, Decl(a.ts, 3, 1))
+

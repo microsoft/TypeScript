@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/moduleResolutionWithExtensions_notSupported3.ts] ////
+
+=== /a.ts ===
+import jsx from "./jsx";
+>jsx : any
+

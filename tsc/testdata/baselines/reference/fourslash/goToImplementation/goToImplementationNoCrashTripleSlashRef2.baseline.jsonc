@@ -1,0 +1,8 @@
+// === goToImplementation ===
+// === /index.ts ===
+// import type {JSX} from '/*GOTO IMPL*/[|react|]';
+// 
+
+// === /node_modules/excalidraw/index.d.ts ===
+// /// <reference types="[|react|]" />
+// 

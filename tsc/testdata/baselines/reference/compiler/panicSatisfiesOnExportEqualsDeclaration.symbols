@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/panicSatisfiesOnExportEqualsDeclaration.ts] ////
+
+=== panicSatisfiesOnExportEqualsDeclaration.js ===
+/**
+ * @satisfies {Record<string, never>}
+ */
+module.exports = {};
+>module.exports : Symbol(exports, Decl(panicSatisfiesOnExportEqualsDeclaration.js, 0, 0))
+>module : Symbol(module, Decl(panicSatisfiesOnExportEqualsDeclaration.js, 0, 0))
+>exports : Symbol(exports, Decl(panicSatisfiesOnExportEqualsDeclaration.js, 0, 0))
+

@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsCrossfileMerge.ts] ////
+
+//// [index.js]
+const m = require("./exporter");
+
+module.exports = m.default;
+module.exports.memberName = "thing";
+
+//// [exporter.js]
+function validate() {}
+
+export default validate;
+
+
+//// [exporter.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+function validate() { }
+exports.default = validate;
+//// [index.js]
+"use strict";
+const m = require("./exporter");
+module.exports = m.default;
+module.exports.memberName = "thing";
+
+
+//// [exporter.d.ts]
+declare function validate(): void;
+export default validate;
+//// [index.d.ts]
+declare const _exports: typeof m.default;
+export = _exports;
+declare namespace _exports {
+    export var memberName: "thing";
+}
+import m = require("./exporter");

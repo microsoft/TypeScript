@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/contentMapperTransform.ts] ////
+
+=== /app.box ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export const label: string = "widget";
+>label : string
+>"widget" : "widget"
+
+export const version = 7;
+>version : 7
+>7 : 7
+
+export const flavor = undefined;
+>flavor : undefined
+>undefined : undefined
+
+=== /main.ts ===
+import { label, version, flavor } from "./app.box";
+>label : string
+>version : 7
+>flavor : undefined
+
+export const upper: string = label;
+>upper : string
+>label : string
+
+export const twice: number = version * 2;
+>twice : number
+>version * 2 : number
+>version : 7
+>2 : 2
+
+export const maybe: undefined = flavor;
+>maybe : undefined
+>flavor : undefined
+

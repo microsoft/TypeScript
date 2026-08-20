@@ -1,0 +1,10 @@
+// === Smart Selection ===
+<template>before</template>
+<script lang="ts">
+const message = "world";
+message/**/;
+</script>
+<template>after</template>
+
+
+message;↲

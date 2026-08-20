@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/isolatedDeclarationsThisParameterWithCapturedGeneric.ts] ////
+
+=== isolatedDeclarationsThisParameterWithCapturedGeneric.ts ===
+export function fromProviders<T>() {
+>fromProviders : <T>() => { tearDown(this: { state: T; }): void; }
+
+  return {
+>{    tearDown(this: {state: T}): void {}  } : { tearDown(this: { state: T; }): void; }
+
+    tearDown(this: {state: T}): void {}
+>tearDown : (this: { state: T; }) => void
+>this : { state: T; }
+>state : T
+
+  };
+}

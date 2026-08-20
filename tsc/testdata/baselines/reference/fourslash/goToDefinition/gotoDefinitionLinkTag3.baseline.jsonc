@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /a.ts ===
+// enum E {
+//     /** {@link /*GOTO DEF*/Foo} */
+//     [|Foo|]
+// }
+// interface Foo {
+//     foo: E.Foo;
+// }

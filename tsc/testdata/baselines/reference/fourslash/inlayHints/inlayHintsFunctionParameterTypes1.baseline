@@ -1,0 +1,307 @@
+// === Inlay Hints ===
+const f1: F1 = (a, b) => { }
+                 ^
+{
+  "position": {
+    "line": 1,
+    "character": 17
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+const f1: F1 = (a, b) => { }
+                    ^
+{
+  "position": {
+    "line": 1,
+    "character": 20
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+const f2: F1 = (a, b: number) => { }
+                 ^
+{
+  "position": {
+    "line": 2,
+    "character": 17
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+foo1((a) => { })
+       ^
+{
+  "position": {
+    "line": 4,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+foo2((a) => { })
+       ^
+{
+  "position": {
+    "line": 6,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "2"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "3"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+foo3(a => {
+      ^
+{
+  "position": {
+    "line": 8,
+    "character": 6
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "c",
+      "location": {
+        "uri": "file:///inlayHintsFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 23
+          },
+          "end": {
+            "line": 7,
+            "character": 24
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "d",
+      "location": {
+        "uri": "file:///inlayHintsFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 27
+          },
+          "end": {
+            "line": 7,
+            "character": 28
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "2"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "3"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "void"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "void"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+    a(d => {})
+       ^
+{
+  "position": {
+    "line": 9,
+    "character": 7
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "2"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "3"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+foo4(1, a => { })
+         ^
+{
+  "position": {
+    "line": 12,
+    "character": 9
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+const foo5: F2 = (a) => { }
+                   ^
+{
+  "position": {
+    "line": 17,
+    "character": 19
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 14,
+            "character": 4
+          },
+          "end": {
+            "line": 14,
+            "character": 5
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "b",
+      "location": {
+        "uri": "file:///inlayHintsFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 4
+          },
+          "end": {
+            "line": 15,
+            "character": 5
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

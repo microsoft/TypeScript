@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/es6/newTarget/newTargetNarrowing.ts] ////
+
+=== newTargetNarrowing.ts ===
+function foo(x: true) { }
+>foo : (x: true) => void
+>x : true
+>true : true
+
+function f() {
+>f : { (): void; marked: boolean; }
+
+  if (new.target.marked === true) {
+>new.target.marked === true : boolean
+>new.target.marked : boolean
+>new.target : { (): void; marked: boolean; }
+>target : { (): void; marked: boolean; }
+>marked : boolean
+>true : true
+
+    foo(new.target.marked);
+>foo(new.target.marked) : void
+>foo : (x: true) => void
+>new.target.marked : true
+>new.target : { (): void; marked: boolean; }
+>target : { (): void; marked: boolean; }
+>marked : true
+  }
+}
+
+f.marked = true;
+>f.marked = true : true
+>f.marked : boolean
+>f : { (): void; marked: boolean; }
+>marked : boolean
+>true : true
+

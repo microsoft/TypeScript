@@ -1,0 +1,11 @@
+// === goToDefinition ===
+// === /a.js ===
+// /**
+//  * Doc comment
+//  * <|@typedef [|Product|]
+//  * @property {string} title
+//  |>*/
+// /**
+//  * @type {/*GOTO DEF*/Product}
+//  */
+// const product = null;

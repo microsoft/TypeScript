@@ -1,0 +1,3 @@
+// === findAllReferences ===
+// === /referenceToEmptyObject.ts ===
+// const obj = {}/*FIND ALL REFS*/;

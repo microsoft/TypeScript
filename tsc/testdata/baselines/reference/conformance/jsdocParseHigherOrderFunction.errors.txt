@@ -1,0 +1,15 @@
+paren.js(1,20): error TS1005: '}' expected.
+paren.js(2,10): error TS7006: Parameter 's' implicitly has an 'any' type.
+paren.js(2,13): error TS7006: Parameter 'id' implicitly has an 'any' type.
+
+
+==== paren.js (3 errors) ====
+    /** @type {function((string), function((string)): string): string} */
+                       ~
+!!! error TS1005: '}' expected.
+    var x = (s, id) => id(s)
+             ~
+!!! error TS7006: Parameter 's' implicitly has an 'any' type.
+                ~~
+!!! error TS7006: Parameter 'id' implicitly has an 'any' type.
+    

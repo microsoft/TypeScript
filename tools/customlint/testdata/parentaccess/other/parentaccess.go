@@ -1,0 +1,11 @@
+package other
+
+type Node struct{}
+
+func (n *Node) Parent() *Node {
+	return nil
+}
+
+func allowed(n *Node) {
+	_ = n.Parent()
+}

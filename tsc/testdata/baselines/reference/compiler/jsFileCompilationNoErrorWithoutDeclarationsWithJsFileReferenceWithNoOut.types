@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/jsFileCompilationNoErrorWithoutDeclarationsWithJsFileReferenceWithNoOut.ts] ////
+
+=== a.ts ===
+class c {
+>c : c
+}
+
+=== b.ts ===
+/// <reference path="c.js"/>
+// no error on above reference path since not emitting declarations
+function foo() {
+>foo : () => void
+}
+
+=== c.js ===
+function bar() {
+>bar : () => void
+}

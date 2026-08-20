@@ -1,0 +1,6 @@
+// === findAllReferences ===
+// === /lib/classes/Error.js ===
+// module.exports.[|logWarning|] = message => { };
+
+// === /bin/serverless.js ===
+// require('../lib/classes/Error').log/*FIND ALL REFS*/Warning(`CLI triage crashed with: ${error.stack}`);

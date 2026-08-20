@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/exportAssignmentMerging7.ts] ////
+
+=== a.ts ===
+class Foo {}
+>Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+
+class Bar {}
+>Bar : Symbol(Bar, Decl(a.ts, 0, 12))
+
+export = Foo;
+>Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+
+export { Bar }; // Causes error
+>Bar : Symbol(Bar, Decl(a.ts, 3, 8))
+
+=== b.ts ===
+import { Bar } from "./a";
+>Bar : Symbol(Bar, Decl(b.ts, 0, 8))
+
+const b = new Bar();
+>b : Symbol(b, Decl(b.ts, 1, 5))
+>Bar : Symbol(Bar, Decl(b.ts, 0, 8))
+
+

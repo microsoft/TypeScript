@@ -1,0 +1,21 @@
+declarationEmitInferredObjectLiteralWithThis.ts(2,5): error TS2527: The inferred type of 'foo' references an inaccessible 'this' type. A type annotation is necessary.
+declarationEmitInferredObjectLiteralWithThis.ts(8,5): error TS2527: The inferred type of 'prop' references an inaccessible 'this' type. A type annotation is necessary.
+
+
+==== declarationEmitInferredObjectLiteralWithThis.ts (2 errors) ====
+    export class C {
+        foo() {
+        ~~~
+!!! error TS2527: The inferred type of 'foo' references an inaccessible 'this' type. A type annotation is necessary.
+            return {
+                self: this,
+            };
+        }
+    
+        prop = {
+        ~~~~
+!!! error TS2527: The inferred type of 'prop' references an inaccessible 'this' type. A type annotation is necessary.
+            self: this,
+        };
+    }
+    

@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/jsxHexEntityUppercaseMarker.tsx] ////
+
+=== jsxHexEntityUppercaseMarker.tsx ===
+declare const React: any;
+>React : any
+
+declare global {
+>global : any
+
+    namespace JSX {
+        interface IntrinsicElements {
+            div: any;
+>div : any
+        }
+    }
+}
+
+export const uppercaseMarkerText = <div>&#X41;</div>;
+>uppercaseMarkerText : error
+><div>&#X41;</div> : error
+>div : any
+>div : any
+
+export const uppercaseMarkerAttribute = <div title="&#X42;" />;
+>uppercaseMarkerAttribute : error
+><div title="&#X42;" /> : error
+>div : any
+>title : string
+
+export const lowercaseMarker = <div title="&#x42;">&#x41;</div>;
+>lowercaseMarker : error
+><div title="&#x42;">&#x41;</div> : error
+>div : any
+>title : string
+>div : any
+
+export const decimalEntity = <div title="&#66;">&#65;</div>;
+>decimalEntity : error
+><div title="&#66;">&#65;</div> : error
+>div : any
+>title : string
+>div : any
+

@@ -1,0 +1,8 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/foo/index.js ===
+// <|export function [|bar|]() { return "hello"; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// /// <reference types="foo/*GOTO SOURCE DEF*/" />
+// import { bar } from "foo";
+// bar();

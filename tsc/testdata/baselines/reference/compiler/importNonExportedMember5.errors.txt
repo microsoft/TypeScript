@@ -1,0 +1,11 @@
+b.ts(1,10): error TS2616: 'Foo' can only be imported by using 'import Foo = require("./a")' or a default import.
+
+
+==== a.ts (0 errors) ====
+    class Foo {}
+    export = Foo;
+    
+==== b.ts (1 errors) ====
+    import { Foo } from './a';
+             ~~~
+!!! error TS2616: 'Foo' can only be imported by using 'import Foo = require("./a")' or a default import.

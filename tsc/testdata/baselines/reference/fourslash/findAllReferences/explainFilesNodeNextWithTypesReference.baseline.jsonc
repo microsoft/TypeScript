@@ -1,0 +1,5 @@
+// === findAllReferences ===
+// === /node_modules/react-hook-form/dist/index.d.ts ===
+// /// <reference types="react/*FIND ALL REFS*/" />
+// export type Foo = React.Whatever;
+// export function useForm(): any;

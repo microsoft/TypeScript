@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/moduleDeclarationsInNonScopeBlock.ts] ////
+
+=== moduleDeclarationsInNonScopeBlock.ts ===
+{
+    export { a } from "exportNamed";
+>a : Symbol(a, Decl(moduleDeclarationsInNonScopeBlock.ts, 1, 12))
+
+    export * from "exportStar";
+    import { b } from "importNamed";
+>b : Symbol(b, Decl(moduleDeclarationsInNonScopeBlock.ts, 3, 12))
+
+    import c = require("importEquals");
+>c : Symbol(c, Decl(moduleDeclarationsInNonScopeBlock.ts, 3, 36))
+
+    import "sideEffect";
+}
+

@@ -1,0 +1,216 @@
+//// [tests/cases/compiler/varianceComputationNoCrash.ts] ////
+
+=== helpers.ts ===
+export type Whitespace = '\u{9}' | '\u{A}' | '\u{B}' | '\u{C}' | '\u{D}' | '\u{20}' | '\u{85}' | '\u{A0}' | '\u{1680}' | '\u{2000}' | '\u{2001}' | '\u{2002}' | '\u{2003}' | '\u{2004}' | '\u{2005}' | '\u{2006}' | '\u{2007}' | '\u{2008}' | '\u{2009}' | '\u{200A}' | '\u{2028}' | '\u{2029}' | '\u{202F}' | '\u{205F}' | '\u{3000}' | '\u{FEFF}';
+>Whitespace : Whitespace
+
+export type WordSeparators = '-' | '_' | Whitespace;
+>WordSeparators : WordSeparators
+
+export type Simplify<T> = {[KeyType in keyof T]: T[KeyType]} & {};
+>Simplify : { [KeyType in keyof T]: T[KeyType]; }
+
+export type IsAny<T> = 0 extends 1 & T ? true : false;
+>IsAny : IsAny<T>
+>true : true
+>false : false
+
+export type IsNever<T> = [T] extends [never] ? true : false;
+>IsNever : IsNever<T>
+>true : true
+>false : false
+
+export type IfAny<T, TypeIfAny = true, TypeIfNotAny = false> = IsAny<T> extends true ? TypeIfAny : TypeIfNotAny;
+>IfAny : IfAny<T, TypeIfAny, TypeIfNotAny>
+>true : true
+>false : false
+>true : true
+
+export type IfNever<T, TypeIfNever = true, TypeIfNotNever = false> = IsNever<T> extends true ? TypeIfNever : TypeIfNotNever;
+>IfNever : IfNever<T, TypeIfNever, TypeIfNotNever>
+>true : true
+>false : false
+>true : true
+
+export type RequiredKeysOf<BaseType extends object> = Exclude<{[Key in keyof BaseType]: BaseType extends Record<Key, BaseType[Key]> ? Key : never}[keyof BaseType], undefined>;
+>RequiredKeysOf : RequiredKeysOf<BaseType>
+
+export type OptionalKeysOf<BaseType extends object> = Exclude<{[Key in keyof BaseType]: BaseType extends Record<Key, BaseType[Key]> ? never : Key}[keyof BaseType], undefined>;
+>OptionalKeysOf : OptionalKeysOf<BaseType>
+
+export type OmitIndexSignature<ObjectType> = {[KeyType in keyof ObjectType as {} extends Record<KeyType, unknown> ? never : KeyType]: ObjectType[KeyType]};
+>OmitIndexSignature : OmitIndexSignature<ObjectType>
+
+export type PickIndexSignature<ObjectType> = {[KeyType in keyof ObjectType as {} extends Record<KeyType, unknown> ? KeyType : never]: ObjectType[KeyType]};
+>PickIndexSignature : PickIndexSignature<ObjectType>
+
+type SimpleMerge<Destination, Source> = {[Key in keyof Destination as Key extends keyof Source ? never : Key]: Destination[Key]} & Source;
+>SimpleMerge : SimpleMerge<Destination, Source>
+
+export type Merge<Destination, Source> = Simplify<SimpleMerge<PickIndexSignature<Destination>, PickIndexSignature<Source>> & SimpleMerge<OmitIndexSignature<Destination>, OmitIndexSignature<Source>>>;
+>Merge : (PickIndexSignature<Destination> extends infer T_1 ? { [Key in keyof T_1 as Key extends keyof PickIndexSignature<Source> ? never : Key]: T_1[Key]; } : never) & PickIndexSignature<Source> & (OmitIndexSignature<Destination> extends infer T_2 ? { [Key in keyof T_2 as Key extends keyof OmitIndexSignature<Source> ? never : Key]: T_2[Key]; } : never) & OmitIndexSignature<Source> extends infer T ? { [KeyType in keyof T]: T[KeyType]; } : never
+
+type TrimLeft<V extends string> = V extends `${Whitespace}${infer R}` ? TrimLeft<R> : V;
+>TrimLeft : TrimLeft<V>
+
+type TrimRight<V extends string> = V extends `${infer R}${Whitespace}` ? TrimRight<R> : V;
+>TrimRight : TrimRight<V>
+
+export type Trim<V extends string> = TrimLeft<TrimRight<V>>;
+>Trim : Trim<V>
+
+export type IsLowerCase<T extends string> = T extends Lowercase<T> ? true : false;
+>IsLowerCase : IsLowerCase<T>
+>true : true
+>false : false
+
+export type IsUpperCase<T extends string> = T extends Uppercase<T> ? true : false;
+>IsUpperCase : IsUpperCase<T>
+>true : true
+>false : false
+
+export type IsNumeric<T extends string> = T extends `${number}` ? Trim<T> extends T ? true : false : false;
+>IsNumeric : IsNumeric<T>
+>true : true
+>false : false
+>false : false
+
+export type ApplyDefaultOptions<
+>ApplyDefaultOptions : IfNever<SpecifiedOptions, Defaults, ((PickIndexSignature<Defaults> extends infer T_2 ? { [Key in keyof T_2 as Key extends keyof PickIndexSignature<{ [Key_1 in keyof SpecifiedOptions as Key_1 extends Exclude<{ [Key_2 in keyof Options]: Options extends Record<Key_2, Options[Key_2]> ? never : Key_2; }[keyof Options], undefined> ? undefined extends SpecifiedOptions[Key_1] ? never : Key_1 : Key_1]: SpecifiedOptions[Key_1]; }> ? never : Key]: T_2[Key]; } : never) & PickIndexSignature<{ [Key in keyof SpecifiedOptions as Key extends Exclude<{ [Key_1 in keyof Options]: Options extends Record<Key_1, Options[Key_1]> ? never : Key_1; }[keyof Options], undefined> ? undefined extends SpecifiedOptions[Key] ? never : Key : Key]: SpecifiedOptions[Key]; }> & (OmitIndexSignature<Defaults> extends infer T_3 ? { [Key in keyof T_3 as Key extends keyof OmitIndexSignature<{ [Key_1 in keyof SpecifiedOptions as Key_1 extends Exclude<{ [Key_2 in keyof Options]: Options extends Record<Key_2, Options[Key_2]> ? never : Key_2; }[keyof Options], undefined> ? undefined extends SpecifiedOptions[Key_1] ? never : Key_1 : Key_1]: SpecifiedOptions[Key_1]; }> ? never : Key]: T_3[Key]; } : never) & OmitIndexSignature<{ [Key in keyof SpecifiedOptions as Key extends Exclude<{ [Key_1 in keyof Options]: Options extends Record<Key_1, Options[Key_1]> ? never : Key_1; }[keyof Options], undefined> ? undefined extends SpecifiedOptions[Key] ? never : Key : Key]: SpecifiedOptions[Key]; }> extends infer T_1 ? { [KeyType in keyof T_1]: T_1[KeyType]; } : never) & Required<Options> extends infer T ? { [KeyType in keyof T]: T[KeyType]; } : never>
+
+    Options extends object,
+    Defaults extends Simplify<Omit<Required<Options>, RequiredKeysOf<Options>> & Partial<Record<RequiredKeysOf<Options>, never>>>,
+    SpecifiedOptions extends Options,
+> = IfAny<SpecifiedOptions, Defaults, IfNever<SpecifiedOptions, Defaults, Simplify<Merge<Defaults, {[Key in keyof SpecifiedOptions as Key extends OptionalKeysOf<Options> ? undefined extends SpecifiedOptions[Key] ? never : Key : Key]: SpecifiedOptions[Key]}> & Required<Options>>>>;
+
+=== camelcase.ts ===
+import type { ApplyDefaultOptions, WordSeparators, IsLowerCase, IsUpperCase, IsNumeric } from "./helpers";
+>ApplyDefaultOptions : import("./helpers").IfNever<SpecifiedOptions, Defaults, ((import("./helpers").PickIndexSignature<Defaults> extends infer T_2 ? { [Key in keyof T_2 as Key extends keyof import("./helpers").PickIndexSignature<{ [Key_1 in keyof SpecifiedOptions as Key_1 extends Exclude<{ [Key_2 in keyof Options]: Options extends Record<Key_2, Options[Key_2]> ? never : Key_2; }[keyof Options], undefined> ? undefined extends SpecifiedOptions[Key_1] ? never : Key_1 : Key_1]: SpecifiedOptions[Key_1]; }> ? never : Key]: T_2[Key]; } : never) & import("./helpers").PickIndexSignature<{ [Key in keyof SpecifiedOptions as Key extends Exclude<{ [Key_1 in keyof Options]: Options extends Record<Key_1, Options[Key_1]> ? never : Key_1; }[keyof Options], undefined> ? undefined extends SpecifiedOptions[Key] ? never : Key : Key]: SpecifiedOptions[Key]; }> & (import("./helpers").OmitIndexSignature<Defaults> extends infer T_3 ? { [Key in keyof T_3 as Key extends keyof import("./helpers").OmitIndexSignature<{ [Key_1 in keyof SpecifiedOptions as Key_1 extends Exclude<{ [Key_2 in keyof Options]: Options extends Record<Key_2, Options[Key_2]> ? never : Key_2; }[keyof Options], undefined> ? undefined extends SpecifiedOptions[Key_1] ? never : Key_1 : Key_1]: SpecifiedOptions[Key_1]; }> ? never : Key]: T_3[Key]; } : never) & import("./helpers").OmitIndexSignature<{ [Key in keyof SpecifiedOptions as Key extends Exclude<{ [Key_1 in keyof Options]: Options extends Record<Key_1, Options[Key_1]> ? never : Key_1; }[keyof Options], undefined> ? undefined extends SpecifiedOptions[Key] ? never : Key : Key]: SpecifiedOptions[Key]; }> extends infer T_1 ? { [KeyType in keyof T_1]: T_1[KeyType]; } : never) & Required<Options> extends infer T ? { [KeyType in keyof T]: T[KeyType]; } : never>
+>WordSeparators : WordSeparators
+>IsLowerCase : IsLowerCase<T>
+>IsUpperCase : IsUpperCase<T>
+>IsNumeric : IsNumeric<T>
+
+type SkipEmptyWord<Word extends string> = Word extends '' ? [] : [Word];
+>SkipEmptyWord : SkipEmptyWord<Word>
+
+type RemoveLastCharacter<Sentence extends string, Character extends string> = Sentence extends `${infer LeftSide}${Character}` ? SkipEmptyWord<LeftSide> : never;
+>RemoveLastCharacter : RemoveLastCharacter<Sentence, Character>
+
+type WordsOptions = { splitOnNumbers?: boolean };
+>WordsOptions : WordsOptions
+>splitOnNumbers : boolean | undefined
+
+type DefaultWordsOptions = { splitOnNumbers: true };
+>DefaultWordsOptions : DefaultWordsOptions
+>splitOnNumbers : true
+>true : true
+
+type WordsImplementation<
+>WordsImplementation : WordsImplementation<Sentence, Options, LastCharacter, CurrentWord>
+
+    Sentence extends string,
+    Options extends Required<WordsOptions>,
+    LastCharacter extends string = '',
+    CurrentWord extends string = '',
+> = Sentence extends `${infer FirstCharacter}${infer RemainingCharacters}`
+    ? FirstCharacter extends WordSeparators
+        ? [...SkipEmptyWord<CurrentWord>, ...WordsImplementation<RemainingCharacters, Options>]
+        : LastCharacter extends ''
+            ? WordsImplementation<RemainingCharacters, Options, FirstCharacter, FirstCharacter>
+            : [false, true] extends [IsNumeric<LastCharacter>, IsNumeric<FirstCharacter>]
+>false : false
+>true : true
+
+                ? Options['splitOnNumbers'] extends true
+>true : true
+
+                    ? [...SkipEmptyWord<CurrentWord>, ...WordsImplementation<RemainingCharacters, Options, FirstCharacter, FirstCharacter>]
+                    : WordsImplementation<RemainingCharacters, Options, FirstCharacter, `${CurrentWord}${FirstCharacter}`>
+                : [true, false] extends [IsNumeric<LastCharacter>, IsNumeric<FirstCharacter>]
+>true : true
+>false : false
+
+                    ? Options['splitOnNumbers'] extends true
+>true : true
+
+                        ? [...SkipEmptyWord<CurrentWord>, ...WordsImplementation<RemainingCharacters, Options, FirstCharacter, FirstCharacter>]
+                        : WordsImplementation<RemainingCharacters, Options, FirstCharacter, `${CurrentWord}${FirstCharacter}`>
+                    : [true, true] extends [IsNumeric<LastCharacter>, IsNumeric<FirstCharacter>]
+>true : true
+>true : true
+
+                        ? WordsImplementation<RemainingCharacters, Options, FirstCharacter, `${CurrentWord}${FirstCharacter}`>
+                        : [true, true] extends [IsLowerCase<LastCharacter>, IsUpperCase<FirstCharacter>]
+>true : true
+>true : true
+
+                            ? [...SkipEmptyWord<CurrentWord>, ...WordsImplementation<RemainingCharacters, Options, FirstCharacter, FirstCharacter>]
+                            : [true, true] extends [IsUpperCase<LastCharacter>, IsLowerCase<FirstCharacter>]
+>true : true
+>true : true
+
+                                ? [...RemoveLastCharacter<CurrentWord, LastCharacter>, ...WordsImplementation<RemainingCharacters, Options, FirstCharacter, `${LastCharacter}${FirstCharacter}`>]
+                                : WordsImplementation<RemainingCharacters, Options, FirstCharacter, `${CurrentWord}${FirstCharacter}`>
+    : [...SkipEmptyWord<CurrentWord>];
+
+type Words<Sentence extends string, Options extends WordsOptions = {}> =
+>Words : Words<Sentence, Options>
+
+    WordsImplementation<Sentence, ApplyDefaultOptions<WordsOptions, DefaultWordsOptions, Options>>;
+
+type CamelCaseOptions = { preserveConsecutiveUppercase?: boolean };
+>CamelCaseOptions : CamelCaseOptions
+>preserveConsecutiveUppercase : boolean | undefined
+
+type DefaultCamelCaseOptions = { preserveConsecutiveUppercase: true };
+>DefaultCamelCaseOptions : DefaultCamelCaseOptions
+>preserveConsecutiveUppercase : true
+>true : true
+
+type CamelCaseFromArray<
+>CamelCaseFromArray : CamelCaseFromArray<W, Options, OutputString>
+
+    W extends string[],
+    Options extends Required<CamelCaseOptions>,
+    OutputString extends string = '',
+> = W extends [infer FirstWord extends string, ...infer RemainingWords extends string[]]
+    ? Options['preserveConsecutiveUppercase'] extends true
+>true : true
+
+        ? `${Capitalize<FirstWord>}${CamelCaseFromArray<RemainingWords, Options>}`
+        : `${Capitalize<Lowercase<FirstWord>>}${CamelCaseFromArray<RemainingWords, Options>}`
+    : OutputString;
+
+export type CamelCase<Type, Options extends CamelCaseOptions = {}> = Type extends string
+>CamelCase : CamelCase<Type, Options>
+
+    ? string extends Type
+        ? Type
+        : Uncapitalize<CamelCaseFromArray<
+            Words<Type extends Uppercase<Type> ? Lowercase<Type> : Type>,
+            ApplyDefaultOptions<CamelCaseOptions, DefaultCamelCaseOptions, Options>
+        >>
+    : Type;
+
+=== main.ts ===
+import type { CamelCase } from "./camelcase";
+>CamelCase : CamelCase<Type, Options>
+
+// This would cause a stack overflow during variance computation
+function boom<T>(x: CamelCase<T>, y: CamelCase<T, {}>) {
+>boom : <T>(x: CamelCase<T>, y: CamelCase<T, {}>) => void
+>x : CamelCase<T>
+>y : CamelCase<T, {}>
+
+    x = y
+>x = y : CamelCase<T, {}>
+>x : CamelCase<T>
+>y : CamelCase<T, {}>
+
+    y = x
+>y = x : CamelCase<T>
+>y : CamelCase<T, {}>
+>x : CamelCase<T>
+}
+

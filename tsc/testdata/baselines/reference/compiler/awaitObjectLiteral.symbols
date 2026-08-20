@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/awaitObjectLiteral.ts] ////
+
+=== fileA.ts ===
+export {}
+const foo = await { bar: 42 }
+>foo : Symbol(foo, Decl(fileA.ts, 1, 5))
+>bar : Symbol(bar, Decl(fileA.ts, 1, 19))
+
+=== fileB.ts ===
+export const baz = await { x: 1, y: "hello" }
+>baz : Symbol(baz, Decl(fileB.ts, 0, 12))
+>x : Symbol(x, Decl(fileB.ts, 0, 26))
+>y : Symbol(y, Decl(fileB.ts, 0, 32))
+

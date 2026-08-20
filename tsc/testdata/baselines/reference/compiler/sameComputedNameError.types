@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/sameComputedNameError.ts] ////
+
+=== sameComputedNameError.ts ===
+declare const s: unique symbol;
+>s : unique symbol
+
+class A {
+>A : A
+
+  [s]: number = 1;
+>[s] : number
+>s : unique symbol
+>1 : 1
+}
+
+class B extends A {
+>B : B
+>A : A
+
+  [s]: string = "x";
+>[s] : string
+>s : unique symbol
+>"x" : "x"
+}
+

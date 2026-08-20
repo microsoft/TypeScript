@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/declFileOptionalInterfaceMethod.ts] ////
+
+=== declFileOptionalInterfaceMethod.ts ===
+interface X {
+    f? <T>();
+>f : <T>() => any
+}
+

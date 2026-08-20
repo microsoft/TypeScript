@@ -1,0 +1,67 @@
+// === Document Symbols ===
+// === /file1.ts ===
+// <|namespace [|{| name: a, kind: Namespace |}a|] {
+//     <|function [|{| name: foo, kind: Function |}foo|]() {}|>
+// }|>
+// <|namespace [|{| name: b, kind: Namespace |}b|] {
+//     <|function [|{| name: foo, kind: Function |}foo|]() {}|>
+// }|>
+// namespace a {
+//     <|function [|{| name: bar, kind: Function |}bar|]() {}|>
+// }
+
+// === Details ===
+(Namespace) a
+  (Function) foo
+  (Function) bar
+(Namespace) b
+  (Function) foo
+
+
+
+
+// === Document Symbols ===
+// === /file2.ts ===
+// <|namespace [|{| name: a, kind: Namespace |}a|] {}|>
+// <|function [|{| name: a, kind: Function |}a|]() {}|>
+
+// === Details ===
+(Namespace) a
+(Function) a
+
+
+
+
+// === Document Symbols ===
+// === /file3.ts ===
+// <|namespace [|{| name: a, kind: Namespace |}a|] {
+//     <|interface [|{| name: A, kind: Interface |}A|] {
+//         <|[|{| name: foo, kind: Property |}foo|]: number;|>
+//     }|>
+// }|>
+// namespace a {
+//     <|interface [|{| name: A, kind: Interface |}A|] {
+//         <|[|{| name: bar, kind: Property |}bar|]: number;|>
+//     }|>
+// }
+
+// === Details ===
+(Namespace) a
+  (Interface) A
+    (Property) foo
+  (Interface) A
+    (Property) bar
+
+
+
+
+// === Document Symbols ===
+// === /file4.ts ===
+// <|namespace [|{| name: A, kind: Namespace |}A|] { export var <|[|{| name: x, kind: Variable |}x|]|>; }|>
+// <|namespace [|{| name: A.B, kind: Namespace |}A.B|] { export var <|[|{| name: y, kind: Variable |}y|]|>; }|>
+
+// === Details ===
+(Namespace) A
+  (Variable) x
+(Namespace) A.B
+  (Variable) y

@@ -1,0 +1,48 @@
+// === QuickInfo ===
+=== /something.js ===
+// var C = function () { }
+// /**
+//  * The prototype method.
+//  * @param {string} a Parameter definition.
+//  */
+// function f(a) {}
+// C.prototype.m = f;
+// 
+// var x = new C();
+// x.m();
+// ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var x: any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 155,
+      "LSPosition": {
+        "line": 9,
+        "character": 1
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar x: any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 0
+        },
+        "end": {
+          "line": 9,
+          "character": 1
+        }
+      }
+    }
+  }
+]

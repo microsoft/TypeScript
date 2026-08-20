@@ -1,0 +1,43 @@
+// === QuickInfo ===
+=== /quickInfoLink6.ts ===
+// const A = 123;
+// /**
+//  *  See {@link A |constant A} instead
+//  */
+// const B = 456;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const B: 456
+// | ```
+// | See [constant A](file:///quickInfoLink6.ts#1,7-1,8) instead
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 67,
+      "LSPosition": {
+        "line": 4,
+        "character": 6
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst B: 456\n```\nSee [constant A](file:///quickInfoLink6.ts#1,7-1,8) instead"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 6
+        },
+        "end": {
+          "line": 4,
+          "character": 7
+        }
+      }
+    }
+  }
+]

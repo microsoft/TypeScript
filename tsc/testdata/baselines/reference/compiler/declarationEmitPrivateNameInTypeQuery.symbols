@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/declarationEmitPrivateNameInTypeQuery.ts] ////
+
+=== declarationEmitPrivateNameInTypeQuery.ts ===
+export class C1 {
+>C1 : Symbol(C1, Decl(declarationEmitPrivateNameInTypeQuery.ts, 0, 0))
+
+    #a = 1;
+>#a : Symbol(C1.#a, Decl(declarationEmitPrivateNameInTypeQuery.ts, 0, 17))
+
+    static #b = "";
+>#b : Symbol(C1.#b, Decl(declarationEmitPrivateNameInTypeQuery.ts, 1, 11))
+
+    #c() {
+>#c : Symbol(C1.#c, Decl(declarationEmitPrivateNameInTypeQuery.ts, 3, 19))
+
+        return 1 as const;
+>const : Symbol(const)
+    }
+
+    get #d() {
+>#d : Symbol(C1.#d, Decl(declarationEmitPrivateNameInTypeQuery.ts, 7, 5))
+
+        return new Date();
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+    }
+
+    ["#a"] = true;
+>["#a"] : Symbol(C1["#a"], Decl(declarationEmitPrivateNameInTypeQuery.ts, 11, 5))
+>"#a" : Symbol(C1["#a"], Decl(declarationEmitPrivateNameInTypeQuery.ts, 11, 5))
+
+    a: typeof this.#a = 1;
+>a : Symbol(C1.a, Decl(declarationEmitPrivateNameInTypeQuery.ts, 13, 18))
+>this.#a : Symbol(C1.#a, Decl(declarationEmitPrivateNameInTypeQuery.ts, 0, 17))
+>this : Symbol(C1, Decl(declarationEmitPrivateNameInTypeQuery.ts, 0, 0))
+
+    test1(a: C1) {
+>test1 : Symbol(C1.test1, Decl(declarationEmitPrivateNameInTypeQuery.ts, 15, 26))
+>a : Symbol(a, Decl(declarationEmitPrivateNameInTypeQuery.ts, 17, 10))
+>C1 : Symbol(C1, Decl(declarationEmitPrivateNameInTypeQuery.ts, 0, 0))
+
+        const b: typeof a.#a = 1;
+>b : Symbol(b, Decl(declarationEmitPrivateNameInTypeQuery.ts, 18, 13))
+>a.#a : Symbol(C1.#a, Decl(declarationEmitPrivateNameInTypeQuery.ts, 0, 17))
+>a : Symbol(a, Decl(declarationEmitPrivateNameInTypeQuery.ts, 17, 10))
+
+        const c: typeof C1.#b = "";
+>c : Symbol(c, Decl(declarationEmitPrivateNameInTypeQuery.ts, 19, 13))
+>C1.#b : Symbol(C1.#b, Decl(declarationEmitPrivateNameInTypeQuery.ts, 1, 11))
+>C1 : Symbol(C1, Decl(declarationEmitPrivateNameInTypeQuery.ts, 0, 0))
+
+        return [b, c] as const;
+>b : Symbol(b, Decl(declarationEmitPrivateNameInTypeQuery.ts, 18, 13))
+>c : Symbol(c, Decl(declarationEmitPrivateNameInTypeQuery.ts, 19, 13))
+>const : Symbol(const)
+    }
+
+}
+
+export class C2 {
+>C2 : Symbol(C2, Decl(declarationEmitPrivateNameInTypeQuery.ts, 24, 1))
+
+    #a = 1;
+>#a : Symbol(C2.#a, Decl(declarationEmitPrivateNameInTypeQuery.ts, 26, 17))
+
+    static #b = "";
+>#b : Symbol(C2.#b, Decl(declarationEmitPrivateNameInTypeQuery.ts, 27, 11))
+
+    public prop!: typeof C2.#b;
+>prop : Symbol(C2.prop, Decl(declarationEmitPrivateNameInTypeQuery.ts, 29, 19))
+>C2.#b : Symbol(C2.#b, Decl(declarationEmitPrivateNameInTypeQuery.ts, 27, 11))
+>C2 : Symbol(C2, Decl(declarationEmitPrivateNameInTypeQuery.ts, 24, 1))
+
+    test1() {
+>test1 : Symbol(C2.test1, Decl(declarationEmitPrivateNameInTypeQuery.ts, 30, 31))
+
+        class C {
+>C : Symbol(C, Decl(declarationEmitPrivateNameInTypeQuery.ts, 32, 13))
+
+            test1(a: C2): typeof a.#a {
+>test1 : Symbol(C.test1, Decl(declarationEmitPrivateNameInTypeQuery.ts, 33, 17))
+>a : Symbol(a, Decl(declarationEmitPrivateNameInTypeQuery.ts, 34, 18))
+>C2 : Symbol(C2, Decl(declarationEmitPrivateNameInTypeQuery.ts, 24, 1))
+>a.#a : Symbol(C2.#a, Decl(declarationEmitPrivateNameInTypeQuery.ts, 26, 17))
+>a : Symbol(a, Decl(declarationEmitPrivateNameInTypeQuery.ts, 34, 18))
+
+                return 1;
+            }
+        }
+        return new C().test1(this);
+>new C().test1 : Symbol(C.test1, Decl(declarationEmitPrivateNameInTypeQuery.ts, 33, 17))
+>C : Symbol(C, Decl(declarationEmitPrivateNameInTypeQuery.ts, 32, 13))
+>test1 : Symbol(C.test1, Decl(declarationEmitPrivateNameInTypeQuery.ts, 33, 17))
+>this : Symbol(C2, Decl(declarationEmitPrivateNameInTypeQuery.ts, 24, 1))
+    }
+}

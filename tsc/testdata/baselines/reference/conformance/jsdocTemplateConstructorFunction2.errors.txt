@@ -1,0 +1,53 @@
+templateTagWithNestedTypeLiteral.js(7,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+templateTagWithNestedTypeLiteral.js(8,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+templateTagWithNestedTypeLiteral.js(11,12): error TS2304: Cannot find name 'T'.
+templateTagWithNestedTypeLiteral.js(13,12): error TS2304: Cannot find name 'T'.
+templateTagWithNestedTypeLiteral.js(19,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+templateTagWithNestedTypeLiteral.js(28,15): error TS2304: Cannot find name 'T'.
+
+
+==== templateTagWithNestedTypeLiteral.js (6 errors) ====
+    /**
+     * @param {T} t
+     * @template T
+     */
+    function Zet(t) {
+        /** @type {T} */
+        this.u
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+        this.t = t
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    }
+    /**
+     * @param {T} v
+               ~
+!!! error TS2304: Cannot find name 'T'.
+     * @param {object} o
+     * @param {T} o.nested
+               ~
+!!! error TS2304: Cannot find name 'T'.
+     */
+    Zet.prototype.add = function(v, o) {
+        this.u = v || o.nested
+        return this.u
+    }
+    var z = new Zet(1)
+            ~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    z.t = 2
+    z.u = false
+    /** @type {number} */
+    let answer = z.add(3, { nested: 4 })
+    
+    // lookup in typedef should not crash the compiler, even when the type is unknown
+    /**
+     * @typedef {Object} A
+     * @property {T} value
+                  ~
+!!! error TS2304: Cannot find name 'T'.
+     */
+    /** @type {A} */
+    const options = { value: null };
+    

@@ -1,0 +1,7 @@
+// === goToType ===
+// === /a.ts ===
+// export class [|Foo|] {}
+
+// === /b.ts ===
+// import n = require('./a');
+// var x/*GOTO TYPE*/ = new n.Foo();

@@ -1,0 +1,39 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestAutoImportProvider5(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @lib: es5
+// @Filename: /home/src/workspaces/project/package.json
+{ "dependencies": { "react-hook-form": "*" } }
+// @Filename: /home/src/workspaces/project/node_modules/react-hook-form/package.json
+{ "types": "dist/index.d.ts" }
+// @Filename: /home/src/workspaces/project/node_modules/react-hook-form/dist/index.d.ts
+export * from "./useForm";
+// @Filename: /home/src/workspaces/project/node_modules/react-hook-form/dist/useForm.d.ts
+export declare function useForm(): void;
+// @Filename: /home/src/workspaces/project/index.ts
+useForm/**/`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.Configure(t, lsutil.UserPreferences{AutoImportEntrypointDirectorySearch: core.TSTrue})
+	f.MarkTestAsStradaServer()
+	f.GoToMarker(t, "")
+	f.VerifyImportFixAtPosition(t, []string{
+		`import { useForm } from "react-hook-form";
+
+useForm`,
+		`import { useForm } from "react-hook-form/dist/useForm";
+
+useForm`,
+	}, nil /*preferences*/)
+}

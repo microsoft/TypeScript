@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/salsa/moduleExportDuplicateAlias2.ts] ////
+
+=== test.js ===
+const { apply } = require('./moduleExportAliasDuplicateAlias')
+>apply : () => void
+>require('./moduleExportAliasDuplicateAlias') : typeof import("./moduleExportAliasDuplicateAlias")
+>require : any
+>'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
+
+apply()
+>apply() : void
+>apply : () => void
+
+=== moduleExportAliasDuplicateAlias.js ===
+module.exports.apply = undefined;
+>module.exports.apply = undefined : undefined
+>module.exports.apply : () => void
+>module.exports : typeof import("./moduleExportAliasDuplicateAlias")
+>module : { exports: typeof import("./moduleExportAliasDuplicateAlias"); }
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+>apply : () => void
+>undefined : undefined
+
+function a() { }
+>a : () => void
+
+module.exports.apply = a;
+>module.exports.apply = a : () => void
+>module.exports.apply : () => void
+>module.exports : typeof import("./moduleExportAliasDuplicateAlias")
+>module : { exports: typeof import("./moduleExportAliasDuplicateAlias"); }
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+>apply : () => void
+>a : () => void
+
+module.exports.apply = a;
+>module.exports.apply = a : () => void
+>module.exports.apply : () => void
+>module.exports : typeof import("./moduleExportAliasDuplicateAlias")
+>module : { exports: typeof import("./moduleExportAliasDuplicateAlias"); }
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+>apply : () => void
+>a : () => void
+
+module.exports.apply()
+>module.exports.apply() : void
+>module.exports.apply : () => void
+>module.exports : typeof import("./moduleExportAliasDuplicateAlias")
+>module : { exports: typeof import("./moduleExportAliasDuplicateAlias"); }
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+>apply : () => void
+

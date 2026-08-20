@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /src/index.ts ===
+// <|export function [|a|]() {}
+// export func|>tion b() {}
+
+// === /src/user.ts ===
+// import { a, b } from "./indexdef";
+// /*GOTO DEF*/[|a|]();
+// b();
+
+
+
+// === goToDefinition ===
+// === /src/index.ts ===
+// export function a() {}
+// <|export function [|b|]() {}|>
+
+// === /src/user.ts ===
+// import { a, b } from "./indexdef";
+// a();
+// /*GOTO DEF*/[|b|]();

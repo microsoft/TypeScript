@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/jsxHexEntityUppercaseMarker.tsx] ////
+
+=== jsxHexEntityUppercaseMarker.tsx ===
+declare const React: any;
+>React : Symbol(React, Decl(jsxHexEntityUppercaseMarker.tsx, 0, 13))
+
+declare global {
+>global : Symbol(global, Decl(jsxHexEntityUppercaseMarker.tsx, 0, 25))
+
+    namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxHexEntityUppercaseMarker.tsx, 1, 16))
+
+        interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxHexEntityUppercaseMarker.tsx, 2, 19))
+
+            div: any;
+>div : Symbol(IntrinsicElements.div, Decl(jsxHexEntityUppercaseMarker.tsx, 3, 37))
+        }
+    }
+}
+
+export const uppercaseMarkerText = <div>&#X41;</div>;
+>uppercaseMarkerText : Symbol(uppercaseMarkerText, Decl(jsxHexEntityUppercaseMarker.tsx, 9, 12))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsxHexEntityUppercaseMarker.tsx, 3, 37))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsxHexEntityUppercaseMarker.tsx, 3, 37))
+
+export const uppercaseMarkerAttribute = <div title="&#X42;" />;
+>uppercaseMarkerAttribute : Symbol(uppercaseMarkerAttribute, Decl(jsxHexEntityUppercaseMarker.tsx, 10, 12))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsxHexEntityUppercaseMarker.tsx, 3, 37))
+>title : Symbol(title, Decl(jsxHexEntityUppercaseMarker.tsx, 10, 44))
+
+export const lowercaseMarker = <div title="&#x42;">&#x41;</div>;
+>lowercaseMarker : Symbol(lowercaseMarker, Decl(jsxHexEntityUppercaseMarker.tsx, 11, 12))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsxHexEntityUppercaseMarker.tsx, 3, 37))
+>title : Symbol(title, Decl(jsxHexEntityUppercaseMarker.tsx, 11, 35))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsxHexEntityUppercaseMarker.tsx, 3, 37))
+
+export const decimalEntity = <div title="&#66;">&#65;</div>;
+>decimalEntity : Symbol(decimalEntity, Decl(jsxHexEntityUppercaseMarker.tsx, 12, 12))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsxHexEntityUppercaseMarker.tsx, 3, 37))
+>title : Symbol(title, Decl(jsxHexEntityUppercaseMarker.tsx, 12, 33))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsxHexEntityUppercaseMarker.tsx, 3, 37))
+

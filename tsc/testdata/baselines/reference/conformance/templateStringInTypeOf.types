@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/es6/templates/templateStringInTypeOf.ts] ////
+
+=== templateStringInTypeOf.ts ===
+var x = typeof `abc${ 123 }def`;
+>x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof `abc${ 123 }def` : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>`abc${ 123 }def` : "abc123def"
+>123 : 123
+

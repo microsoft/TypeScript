@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/decoratedClassWithStaticAccessor.ts] ////
+
+=== a.ts ===
+declare function d(target: any): any;
+>d : Symbol(d, Decl(a.ts, 0, 0))
+>target : Symbol(target, Decl(a.ts, 0, 19))
+
+@d
+>d : Symbol(d, Decl(a.ts, 0, 0))
+
+export class C {
+>C : Symbol(C, Decl(a.ts, 0, 37))
+
+  static get value() { return 1; }
+>value : Symbol(C.value, Decl(a.ts, 3, 16))
+}
+

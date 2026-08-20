@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/exportDestructuringIterator.ts] ////
+
+=== exportDestructuringIterator.ts ===
+declare function foo(): any;
+>foo : () => any
+
+export const [A, V] = foo();
+>A : any
+>V : any
+>foo() : any
+>foo : () => any
+
+export const { x, y } = foo();
+>x : any
+>y : any
+>foo() : any
+>foo : () => any
+
+export const [a = 1, b = 2] = foo();
+>a : any
+>1 : 1
+>b : any
+>2 : 2
+>foo() : any
+>foo : () => any
+
+export const [c, ...d] = foo();
+>c : any
+>d : any
+>foo() : any
+>foo : () => any
+
+export const [, e, , f] = foo();
+>e : any
+>f : any
+>foo() : any
+>foo : () => any
+
+export const [[g, h], { i, j: k }] = foo();
+>g : any
+>h : any
+>i : any
+>j : any
+>k : any
+>foo() : any
+>foo : () => any
+
+export const { m: [n, o], p: { q } } = foo();
+>m : any
+>n : any
+>o : any
+>p : any
+>q : any
+>foo() : any
+>foo : () => any
+

@@ -1,0 +1,14 @@
+bug24024.js(3,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+bug24024.js(4,16): error TS2339: Property 'D' does not exist on type 'typeof C'.
+
+
+==== bug24024.js (2 errors) ====
+    // #24024
+    var wat = require('./bug24024')
+    module.exports = class C {}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    module.exports.D = class D { }
+                   ~
+!!! error TS2339: Property 'D' does not exist on type 'typeof C'.
+    

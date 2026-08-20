@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/asyncDestructuringArgumentsProperty.ts] ////
+
+=== asyncDestructuringArgumentsProperty.ts ===
+async function f() {
+>f : Symbol(f, Decl(asyncDestructuringArgumentsProperty.ts, 0, 0))
+
+  const { arguments: args } = await { arguments: 42 };
+>arguments : Symbol(arguments, Decl(asyncDestructuringArgumentsProperty.ts, 1, 37))
+>args : Symbol(args, Decl(asyncDestructuringArgumentsProperty.ts, 1, 9))
+>arguments : Symbol(arguments, Decl(asyncDestructuringArgumentsProperty.ts, 1, 37))
+
+  return args;
+>args : Symbol(args, Decl(asyncDestructuringArgumentsProperty.ts, 1, 9))
+}
+

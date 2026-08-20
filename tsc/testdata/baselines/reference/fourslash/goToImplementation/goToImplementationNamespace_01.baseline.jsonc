@@ -1,0 +1,7 @@
+// === goToImplementation ===
+// === /goToImplementationNamespace_01.ts ===
+// namespace Foo {
+//     <|export function [|hello|]() {}|>
+// }
+// 
+// Foo.hell/*GOTO IMPL*/o();

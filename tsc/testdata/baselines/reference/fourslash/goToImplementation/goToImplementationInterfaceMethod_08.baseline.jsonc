@@ -1,0 +1,17 @@
+// === goToImplementation ===
+// === /goToImplementationInterfaceMethod_08.ts ===
+// interface Foo {
+//     hello (): void;
+// }
+// 
+// class SuperBar implements Foo {
+//    <|[|hello|]() {}|>
+// }
+// 
+// class Bar extends SuperBar {
+//    whatever() { this.he/*GOTO IMPL*/llo(); }
+// }
+// 
+// class SubBar extends Bar {
+//    <|[|hello|]() {}|>
+// }

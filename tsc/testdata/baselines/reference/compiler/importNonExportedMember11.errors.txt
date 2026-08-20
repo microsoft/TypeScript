@@ -1,0 +1,14 @@
+a.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+b.js(1,10): error TS2595: 'Foo' can only be imported by using a default import.
+
+
+==== a.ts (1 errors) ====
+    class Foo {}
+    export = Foo;
+    ~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    
+==== b.js (1 errors) ====
+    import { Foo } from './a';
+             ~~~
+!!! error TS2595: 'Foo' can only be imported by using a default import.

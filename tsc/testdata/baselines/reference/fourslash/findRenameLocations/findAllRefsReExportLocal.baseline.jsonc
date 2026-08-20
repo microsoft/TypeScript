@@ -1,0 +1,65 @@
+// === findRenameLocations ===
+// === /a.ts ===
+// var /*RENAME*/[|xRENAME|];
+// export { [|xRENAME|] as x/*END SUFFIX*/ };
+// export { [|xRENAME|] as y };
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// var [|xRENAME|];
+// export { [|xRENAME|] as x/*END SUFFIX*/ };
+// export { /*RENAME*/[|xRENAME|] as y };
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// var x;
+// export { /*START PREFIX*/x as /*RENAME*/[|xRENAME|] };
+// export { x as y };
+
+// === /b.ts ===
+// import { [|xRENAME|], y } from "./a";
+// [|xRENAME|]; y;
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import { /*START PREFIX*/x as /*RENAME*/[|xRENAME|], y } from "./a";
+// [|xRENAME|]; y;
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import { /*START PREFIX*/x as [|xRENAME|], y } from "./a";
+// /*RENAME*/[|xRENAME|]; y;
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// var x;
+// export { x };
+// export { x as /*RENAME*/[|yRENAME|] };
+
+// === /b.ts ===
+// import { x, [|yRENAME|] } from "./a";
+// x; [|yRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import { x, /*START PREFIX*/y as /*RENAME*/[|yRENAME|] } from "./a";
+// x; [|yRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import { x, /*START PREFIX*/y as [|yRENAME|] } from "./a";
+// x; /*RENAME*/[|yRENAME|];

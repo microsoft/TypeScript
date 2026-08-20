@@ -1,0 +1,9 @@
+error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
+
+
+!!! error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
+==== restParameterInDownlevelGenerator.ts (0 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/30653
+    function * mergeStringLists(...strings: string[]) {
+        for (var str of strings);
+    }

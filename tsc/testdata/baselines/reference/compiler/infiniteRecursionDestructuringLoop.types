@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/infiniteRecursionDestructuringLoop.ts] ////
+
+=== infiniteRecursionDestructuringLoop.ts ===
+// Repro from https://github.com/microsoft/TypeScript/issues/63192
+
+interface Node {
+    children?: readonly Node[];
+>children : readonly Node[] | undefined
+
+    index?: number;
+>index : number | undefined
+}
+
+function IterateNodes(data: { node: Node }) {
+>IterateNodes : (data: { node: Node; }) => void
+>data : { node: Node; }
+>node : Node
+
+    let node: Node | undefined = data.node;
+>node : Node | undefined
+>data.node : Node
+>data : { node: Node; }
+>node : Node
+
+    while (node) {
+>node : Node | undefined
+
+        const { children, index = -1 } = node;
+>children : any
+>index : any
+>-1 : -1
+>1 : 1
+>node : Node
+
+        const activeNode: Node | undefined = index != -1 && children ? children[index] : undefined;
+>activeNode : Node | undefined
+>index != -1 && children ? children[index] : undefined : any
+>index != -1 && children : any
+>index != -1 : boolean
+>index : any
+>-1 : -1
+>1 : 1
+>children : any
+>children[index] : any
+>children : any
+>index : any
+>undefined : undefined
+
+        node = activeNode;
+>node = activeNode : Node | undefined
+>node : Node | undefined
+>activeNode : Node | undefined
+    }
+}
+
+// Simplified repro
+interface MyNode {
+    children: MyNode[];
+>children : MyNode[]
+
+    index?: number;
+>index : number | undefined
+}
+
+function f(init: MyNode) {
+>f : (init: MyNode) => void
+>init : MyNode
+
+    let node: MyNode | undefined = init;
+>node : MyNode | undefined
+>init : MyNode
+
+    while (node) {
+>node : MyNode | undefined
+
+        const { children, index = 0 } = node;
+>children : any
+>index : any
+>0 : 0
+>node : MyNode
+
+        node = children[index];
+>node = children[index] : any
+>node : MyNode | undefined
+>children[index] : any
+>children : any
+>index : any
+    }
+}
+

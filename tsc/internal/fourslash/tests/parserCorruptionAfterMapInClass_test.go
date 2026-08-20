@@ -1,0 +1,35 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestParserCorruptionAfterMapInClass(t *testing.T) {
+	t.Parallel()
+
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @target: esnext
+// @lib: es2015
+// @strict: true
+class C {
+    map = new Set<[|string, number|]>/*$*/
+
+    foo() {
+
+    }
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToMarker(t, "$")
+	f.Insert(t, "()")
+	f.VerifyNonSuggestionDiagnostics(t, []*lsproto.Diagnostic{
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(2558))},
+			Message: lsproto.StringOrMarkupContent{String: new("Expected 1 type arguments, but got 2.")},
+		},
+	})
+}

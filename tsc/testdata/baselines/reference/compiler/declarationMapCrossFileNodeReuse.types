@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/declarationMapCrossFileNodeReuse.ts] ////
+
+=== types.ts ===
+export interface Widget {
+    id: string;
+>id : string
+
+    name: string;
+>name : string
+}
+
+=== helper.ts ===
+import { Widget } from "./types";
+>Widget : any
+
+// Here is a bunch of text in comments to pad the file length so positions in the return type annotation below
+// are past the length of the short index.ts file. This is needed to trigger the slice bounds
+// out of range crash when node positions from this file are used with the text of index.ts.
+
+export function getWidget(): (w: Widget) => keyof Widget {
+>getWidget : () => (w: Widget) => keyof Widget
+>w : Widget
+
+    return (w) => "id";
+>(w) => "id" : (w: Widget) => "id"
+>w : Widget
+>"id" : "id"
+}
+
+=== index.ts ===
+import { Widget } from "./types";
+>Widget : any
+
+import { getWidget } from "./helper";
+>getWidget : () => (w: Widget) => keyof Widget
+
+export type MyWidget = Widget;
+>MyWidget : Widget
+
+export const fn = getWidget();
+>fn : (w: Widget) => keyof Widget
+>getWidget() : (w: Widget) => keyof Widget
+>getWidget : () => (w: Widget) => keyof Widget
+

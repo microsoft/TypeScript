@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/jsdocBackslash.ts] ////
+
+=== test.js ===
+/**
+ * \
+ */
+function foo() {}
+>foo : Symbol(foo, Decl(test.js, 0, 0))
+

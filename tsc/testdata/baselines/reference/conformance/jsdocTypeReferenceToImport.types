@@ -1,0 +1,62 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToImport.ts] ////
+
+=== jsdocTypeReferenceToImport.js ===
+const C = require('./ex').C;
+>C : typeof import("./ex").C
+>require('./ex').C : typeof import("./ex").C
+>require('./ex') : typeof import("./ex")
+>require : any
+>'./ex' : "./ex"
+>C : typeof import("./ex").C
+
+const D = require('./ex')?.C;
+>D : typeof import("./ex").C
+>require('./ex')?.C : typeof import("./ex").C
+>require('./ex') : typeof import("./ex")
+>require : any
+>'./ex' : "./ex"
+>C : typeof import("./ex").C
+
+/** @type {C} c */
+var c = new C()
+>c : C
+>new C() : import("./ex").C
+>C : typeof import("./ex").C
+
+c.start
+>c.start : any
+>c : C
+>start : any
+
+c.end
+>c.end : any
+>c : C
+>end : any
+
+/** @type {D} c */
+var d = new D()
+>d : D
+>new D() : import("./ex").C
+>D : typeof import("./ex").C
+
+d.start
+>d.start : any
+>d : D
+>start : any
+
+d.end
+>d.end : any
+>d : D
+>end : any
+
+=== ex.d.ts ===
+export class C {
+>C : C
+
+    start: number
+>start : number
+
+    end: number
+>end : number
+}
+

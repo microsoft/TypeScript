@@ -1,0 +1,8 @@
+// === Syntax and Semantic Diagnostics ===
+/a.js(1,9): error TS8005: 'implements' clauses can only be used in TypeScript files.
+
+
+==== /a.js (1 errors) ====
+    class C implements D { }
+            ~~~~~~~~~~~~
+!!! error TS8005: 'implements' clauses can only be used in TypeScript files.

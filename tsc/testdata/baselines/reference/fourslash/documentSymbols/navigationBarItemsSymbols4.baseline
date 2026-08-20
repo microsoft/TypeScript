@@ -1,0 +1,23 @@
+// === Document Symbols ===
+// === /file.js ===
+// const <|[|{| name: _sym, kind: Variable |}_sym|] = Symbol("_sym")|>;
+// <|class [|{| name: MyClass, kind: Class |}MyClass|] {
+//     <|[|{| name: constructor, kind: Constructor |}|]constructor() {
+//         // Dynamic assignment properties can't show up in navigation,
+//         // as they're not syntactic members
+//         // Additonally, late bound members are always filtered out, besides
+//         this[_sym] = "ok";
+//     }|>
+// 
+//     <|[|{| name: method, kind: Method |}method|]() {
+//         this[_sym] = "yep";
+//         const <|[|{| name: x, kind: Variable |}x|] = this[_sym]|>;
+//     }|>
+// }|>
+
+// === Details ===
+(Variable) _sym
+(Class) MyClass
+  (Constructor) constructor
+  (Method) method
+    (Variable) x

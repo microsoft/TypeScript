@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/isolatedDeclarationsTypePredicate.ts] ////
+
+=== isolatedDeclarationsTypePredicate.ts ===
+export function isString(value: unknown) {
+>isString : (value: unknown) => value is string
+>value : unknown
+
+  return typeof value === "string";
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+}
+
+export function isExplicitString(value: unknown): value is string {
+>isExplicitString : (value: unknown) => value is string
+>value : unknown
+
+  return typeof value === "string";
+>typeof value === "string" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : unknown
+>"string" : "string"
+}
+

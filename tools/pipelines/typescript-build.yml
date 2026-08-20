@@ -1,0 +1,168 @@
+trigger: none
+
+schedules:
+  - cron: '0 7 * * *'
+    displayName: 'Nightly'
+    always: true
+    branches:
+      include:
+        - main
+
+name: $(date:yyyyMMdd)$(rev:.r)
+appendCommitMessageToRunName: false
+
+parameters:
+  - name: signType
+    displayName: Sign type
+    type: string
+    default: auto
+    values:
+      - auto
+      - real
+      - test
+
+variables:
+  # For MicroBuild telemetry
+  - name: TeamName
+    value: TypeScript
+
+resources:
+  repositories:
+    - repository: MicroBuildTemplate
+      type: git
+      name: 1ESPipelineTemplates/MicroBuildTemplate
+      ref: refs/tags/release
+
+extends:
+  template: azure-pipelines/MicroBuild.1ES.Official.yml@MicroBuildTemplate
+
+  parameters:
+    settings:
+      networkIsolationPolicy: Permissive,CFSClean
+    sdl:
+      git:
+        submodules: false
+        fetchDepth: 1
+        fetchTags: false
+        retryCount: 3
+      sourceAnalysisPool: VSEngSS-MicroBuild2022-1ES
+      sourceRepositoriesToScan:
+        include:
+    featureFlags:
+      golang:
+        internalModuleProxy:
+          enabled: true
+    pool:
+      name: AzurePipelines-EO
+      image: 1ESPT-Ubuntu22.04
+      os: linux
+
+    stages:
+      - stage: Build
+        displayName: Build and Sign
+        jobs:
+          - job: Build
+            displayName: Build and Sign
+            timeoutInMinutes: 180
+
+            templateContext:
+              outputs:
+                - output: pipelineArtifact
+                  targetPath: $(Build.ArtifactStagingDirectory)/npm
+                  artifactName: npm
+                - output: pipelineArtifact
+                  targetPath: $(Build.ArtifactStagingDirectory)/vsix
+                  artifactName: vsix
+
+            steps:
+              - bash: echo "##vso[build.addbuildtag]Build.Reason.Schedule"
+                displayName: 'Set build tag "Build.Reason.Schedule"'
+                condition: eq(variables['Build.Reason'], 'Schedule')
+
+              # This is copied from https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Jobs/Job.yml
+              # With the difference that we install .NET Core becuase DDSignFiles needs it.
+              - task: NuGetAuthenticate@1
+                displayName: '🔩 NuGet Authenticate'
+              - task: UsePythonVersion@0
+                displayName: 'Use Python 3.11'
+                inputs:
+                  versionSpec: 3.11
+              # This is old, but DDSignFiles is built with it.
+              # Copying https://github.com/microsoft/vscode-gradle/blob/2f60b4483ef15aa9b196e008939610cdeab60029/.azure-pipelines/vscode-gradle-nightly.yml#L50
+              - task: UseDotNet@2
+                displayName: 'Use .NET Core 3.1.x'
+                inputs:
+                  packageType: 'sdk'
+                  version: '3.1.x'
+              # Needed for ESRP. https://dev.azure.com/devdiv/DevDiv/_wiki/wikis/DevDiv.wiki/46279/Real-signing-with-PME-Enforcement
+              - task: UseDotNet@2
+                displayName: Use .NET Core sdk 8.0.x
+                inputs:
+                  version: 8.0.x
+              # https://dev.azure.com/devdiv/DevDiv/_wiki/wikis/DevDiv.wiki/12267/ESRP-Signing-in-Mac-or-Linux-Pipelines
+              # TODO: switch to the template's signing, now that DDSignFiles should work.
+              - task: MicroBuildSigningPlugin@4
+                displayName: '🔩 Install Signing Plugin'
+                inputs:
+                  ${{ if eq(parameters.signType, 'auto') }}:
+                    ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+                      signType: real
+                    ${{ else }}:
+                      signType: test
+                  ${{ else }}:
+                    signType: ${{ parameters.signType }}
+                  # azureSubscription AKA ConnectedServiceName
+                  azureSubscription: 'MicroBuild Signing Task (DevDiv)'
+                  ${{ if or(and(eq(parameters.signType, 'auto'), eq(variables['Build.Reason'], 'Schedule')), eq(parameters.signType, 'real')) }}:
+                    # From "nonwindowspmeservicename" in https://dev.azure.com/devdiv/1ESPipelineTemplates/_git/MicroBuildTemplate?path=/azure-pipelines/Stages/Stage.yml
+                    ConnectedPMEServiceName: beb8cb23-b303-4c95-ab26-9e44bc958d39
+                  # We do this ourselves.
+                  zipSources: false
+                env:
+                  MicroBuildOutputFolderOverride: '$(Agent.TempDirectory)'
+
+              - checkout: self
+                clean: true
+                submodules: false
+                fetchDepth: 1
+                fetchTags: false
+              - template: /tools/pipelines/steps/setup-node-npm-ci.yml@self
+              - template: /tools/pipelines/steps/setup-go.yml@self
+
+              - bash: npx hereby typescript:build --forRelease --setPrerelease dev.$(Build.BuildNumber)
+                displayName: 'Build packages'
+
+              - bash: npx hereby typescript:sign --forRelease --setPrerelease dev.$(Build.BuildNumber)
+                displayName: 'Sign packages'
+                env:
+                  # Needed for ESRP
+                  SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+              - bash: npx hereby typescript:pack --forRelease --setPrerelease dev.$(Build.BuildNumber)
+                displayName: 'Pack packages'
+
+              - bash: npx hereby vscode-typescript:pack --forRelease --setPrerelease dev.$(Build.BuildNumber)
+                displayName: 'Pack extensions'
+
+              - bash: npx hereby vscode-typescript:sign --forRelease --setPrerelease dev.$(Build.BuildNumber)
+                displayName: 'Sign extensions'
+                env:
+                  # Needed for ESRP
+                  SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+              - bash: |
+                  set -euo pipefail
+                  mkdir $(Build.ArtifactStagingDirectory)/npm
+                  cp -v built/npm/*.tgz $(Build.ArtifactStagingDirectory)/npm
+                  cp -v built/npm/publish-manifest.json $(Build.ArtifactStagingDirectory)/npm
+
+                  mkdir $(Build.ArtifactStagingDirectory)/vsix
+                  shopt -s nullglob
+                  vsixArtifacts=(built/vsix/*.{vsix,manifest,p7s})
+                  if (( ${#vsixArtifacts[@]} > 0 )); then
+                    cp -v "${vsixArtifacts[@]}" $(Build.ArtifactStagingDirectory)/vsix
+                  else
+                    echo "No VSIX artifacts were created."
+                    echo "No VSIX artifacts were created for this build." > $(Build.ArtifactStagingDirectory)/vsix/no-vsix-artifacts.txt
+                  fi
+                displayName: 'Copy artifacts to artifact staging directory'

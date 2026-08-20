@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/missingCloseBrace.ts] ////
+
+=== missingCloseBrace.ts ===
+function base_init() {
+>base_init : () => void
+    {
+
+    }
+
+    function me() {
+>me : () => void
+
+    }
+

@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/typePredicateParameterMismatch.ts] ////
+
+=== typePredicateParameterMismatch.ts ===
+// This test verifies that the checker doesn't panic when a type predicate
+// references a parameter name that doesn't match any actual function parameter.
+
+type TypeA = { kind: 'a' };
+>TypeA : Symbol(TypeA, Decl(typePredicateParameterMismatch.ts, 0, 0))
+>kind : Symbol(kind, Decl(typePredicateParameterMismatch.ts, 3, 14))
+
+type TypeB = { kind: 'b' };
+>TypeB : Symbol(TypeB, Decl(typePredicateParameterMismatch.ts, 3, 27))
+>kind : Symbol(kind, Decl(typePredicateParameterMismatch.ts, 4, 14))
+
+type UnionType = TypeA | TypeB;
+>UnionType : Symbol(UnionType, Decl(typePredicateParameterMismatch.ts, 4, 27))
+>TypeA : Symbol(TypeA, Decl(typePredicateParameterMismatch.ts, 0, 0))
+>TypeB : Symbol(TypeB, Decl(typePredicateParameterMismatch.ts, 3, 27))
+
+function isTypeA(
+>isTypeA : Symbol(isTypeA, Decl(typePredicateParameterMismatch.ts, 5, 31))
+
+  _value: UnionType
+>_value : Symbol(_value, Decl(typePredicateParameterMismatch.ts, 7, 17))
+>UnionType : Symbol(UnionType, Decl(typePredicateParameterMismatch.ts, 4, 27))
+
+): value is TypeA {  // "value" doesn't match parameter "_value"
+>TypeA : Symbol(TypeA, Decl(typePredicateParameterMismatch.ts, 0, 0))
+
+  return true;
+}
+
+function test(input: UnionType): void {
+>test : Symbol(test, Decl(typePredicateParameterMismatch.ts, 11, 1))
+>input : Symbol(input, Decl(typePredicateParameterMismatch.ts, 13, 14))
+>UnionType : Symbol(UnionType, Decl(typePredicateParameterMismatch.ts, 4, 27))
+
+  if (isTypeA(input)) {
+>isTypeA : Symbol(isTypeA, Decl(typePredicateParameterMismatch.ts, 5, 31))
+>input : Symbol(input, Decl(typePredicateParameterMismatch.ts, 13, 14))
+
+    console.log(input.kind);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>input.kind : Symbol(kind, Decl(typePredicateParameterMismatch.ts, 3, 14), Decl(typePredicateParameterMismatch.ts, 4, 14))
+>input : Symbol(input, Decl(typePredicateParameterMismatch.ts, 13, 14))
+>kind : Symbol(kind, Decl(typePredicateParameterMismatch.ts, 3, 14), Decl(typePredicateParameterMismatch.ts, 4, 14))
+  }
+}
+

@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/expandoContextualTypes.tsx] ////
+
+=== expandoContextualTypes.tsx ===
+// https://github.com/microsoft/TypeScript/tsc/issues/921
+
+/// <reference path="react16.d.ts" />
+
+import type { ComponentType } from "react";
+>ComponentType : Symbol(ComponentType, Decl(expandoContextualTypes.tsx, 4, 13))
+
+export type Page<P = NonNullable<unknown>> = ComponentType<P> & {
+>Page : Symbol(Page, Decl(expandoContextualTypes.tsx, 4, 43))
+>P : Symbol(P, Decl(expandoContextualTypes.tsx, 6, 17))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>ComponentType : Symbol(ComponentType, Decl(expandoContextualTypes.tsx, 4, 13))
+>P : Symbol(P, Decl(expandoContextualTypes.tsx, 6, 17))
+
+    getLayout?: (component: JSX.Element) => JSX.Element;
+>getLayout : Symbol(getLayout, Decl(expandoContextualTypes.tsx, 6, 65))
+>component : Symbol(component, Decl(expandoContextualTypes.tsx, 7, 17))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2495, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2496, 23))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2495, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2496, 23))
+}
+
+export const FooPage: Page = () => {
+>FooPage : Symbol(FooPage, Decl(expandoContextualTypes.tsx, 10, 12))
+>Page : Symbol(Page, Decl(expandoContextualTypes.tsx, 4, 43))
+
+    return (
+        <div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
+
+            <p>Foo</p>
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2595, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2595, 102))
+
+        </div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
+
+    )
+};
+
+FooPage.getLayout = () => {
+>FooPage.getLayout : Symbol(getLayout, Decl(expandoContextualTypes.tsx, 6, 65))
+>FooPage : Symbol(FooPage, Decl(expandoContextualTypes.tsx, 10, 12))
+>getLayout : Symbol(getLayout, Decl(expandoContextualTypes.tsx, 6, 65))
+
+    return <></>
+};
+

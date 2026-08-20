@@ -1,0 +1,69 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionLikeClasses.ts] ////
+
+=== source.js ===
+/**
+ * @param {number} x
+ * @param {number} y
+ */
+export function Point(x, y) {
+>Point : (x: number, y: number) => any
+>x : number
+>y : number
+
+    if (!(this instanceof Point)) {
+>!(this instanceof Point) : boolean
+>(this instanceof Point) : boolean
+>this instanceof Point : boolean
+>this : any
+>Point : (x: number, y: number) => any
+
+        return new Point(x, y);
+>new Point(x, y) : any
+>Point : (x: number, y: number) => any
+>x : number
+>y : number
+    }
+    this.x = x;
+>this.x = x : number
+>this.x : any
+>this : any
+>x : any
+>x : number
+
+    this.y = y;
+>this.y = y : number
+>this.y : any
+>this : any
+>y : any
+>y : number
+}
+
+=== referencer.js ===
+import {Point} from "./source";
+>Point : (x: number, y: number) => any
+
+/**
+ * @param {Point} p
+ */
+export function magnitude(p) {
+>magnitude : (p: Point) => number
+>p : Point
+
+    return Math.sqrt(p.x ** 2 + p.y ** 2);
+>Math.sqrt(p.x ** 2 + p.y ** 2) : number
+>Math.sqrt : (x: number) => number
+>Math : Math
+>sqrt : (x: number) => number
+>p.x ** 2 + p.y ** 2 : number
+>p.x ** 2 : number
+>p.x : any
+>p : Point
+>x : any
+>2 : 2
+>p.y ** 2 : number
+>p.y : any
+>p : Point
+>y : any
+>2 : 2
+}
+

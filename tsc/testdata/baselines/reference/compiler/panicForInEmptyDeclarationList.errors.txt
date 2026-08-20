@@ -1,0 +1,16 @@
+panicForInEmptyDeclarationList.ts(5,14): error TS1109: Expression expected.
+
+
+==== panicForInEmptyDeclarationList.ts (1 errors) ====
+    let x: string[] = [];
+    let i = 0;
+    
+    function f() {
+      for (let in) {
+                 ~
+!!! error TS1109: Expression expected.
+        let y = x[i];
+        return y;
+      }
+    }
+    

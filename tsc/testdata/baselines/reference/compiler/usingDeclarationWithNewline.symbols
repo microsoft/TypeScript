@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/usingDeclarationWithNewline.ts] ////
+
+=== usingDeclarationWithNewline.ts ===
+
+using
+identifier;
+

@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/classFieldsAssignmentNamedEvaluation.ts] ////
+
+=== classFieldsAssignmentNamedEvaluation.ts ===
+let x: any;
+>x : Symbol(x, Decl(classFieldsAssignmentNamedEvaluation.ts, 0, 3))
+
+x = class { static #foo = 1; };
+>x : Symbol(x, Decl(classFieldsAssignmentNamedEvaluation.ts, 0, 3))
+>#foo : Symbol(x.#foo, Decl(classFieldsAssignmentNamedEvaluation.ts, 1, 11))
+

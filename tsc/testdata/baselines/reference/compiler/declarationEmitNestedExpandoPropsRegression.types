@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/declarationEmitNestedExpandoPropsRegression.ts] ////
+
+=== declarationEmitNestedExpandoPropsRegression.ts ===
+function Foo(): void { }
+>Foo : { (): void; top: number; inInitializer: number; inBlock: number; }
+
+Foo.top = 1;
+>Foo.top = 1 : 1
+>Foo.top : number
+>Foo : { (): void; top: number; inInitializer: number; inBlock: number; }
+>top : number
+>1 : 1
+
+let d: number = (Foo.inInitializer = 2);
+>d : number
+>(Foo.inInitializer = 2) : 2
+>Foo.inInitializer = 2 : 2
+>Foo.inInitializer : number
+>Foo : { (): void; top: number; inInitializer: number; inBlock: number; }
+>inInitializer : number
+>2 : 2
+
+if (true) {
+>true : true
+
+    Foo.inBlock = 3;
+>Foo.inBlock = 3 : 3
+>Foo.inBlock : number
+>Foo : { (): void; top: number; inInitializer: number; inBlock: number; }
+>inBlock : number
+>3 : 3
+}

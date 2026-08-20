@@ -1,0 +1,322 @@
+// === QuickInfo ===
+=== /index.js ===
+// // Namespaced typedef
+// /** @typedef {string} NS.T */
+//                       ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace NS {
+// |     type T = string;
+// |     type U = string;
+// |     type V = string;
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                       ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | namespace NS
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//                          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type T = string
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                          ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type T = string
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// 
+// // Namespaced typedef aliased to qualified namespaced typedef.
+// /** @typedef {NS.T} NS.U */
+//                        ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type U = string
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                        ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type U = string
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// 
+// // Namespaced typedef aliased to implicitly-resolved typedef.
+// /** @typedef {U} NS.V */
+//                     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type V = string
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//                     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type V = string
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 44,
+      "LSPosition": {
+        "line": 1,
+        "character": 22
+      },
+      "Name": "ns",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nnamespace NS\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 22
+          },
+          "end": {
+            "line": 1,
+            "character": 24
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 44,
+      "LSPosition": {
+        "line": 1,
+        "character": 22
+      },
+      "Name": "ns",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\nnamespace NS {\n    type T = string;\n    type U = string;\n    type V = string;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 22
+          },
+          "end": {
+            "line": 1,
+            "character": 24
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 47,
+      "LSPosition": {
+        "line": 1,
+        "character": 25
+      },
+      "Name": "t",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype T = string\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 25
+          },
+          "end": {
+            "line": 1,
+            "character": 26
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 47,
+      "LSPosition": {
+        "line": 1,
+        "character": 25
+      },
+      "Name": "t",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype T = string\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 25
+          },
+          "end": {
+            "line": 1,
+            "character": 26
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 139,
+      "LSPosition": {
+        "line": 4,
+        "character": 23
+      },
+      "Name": "u",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype U = string\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 4,
+            "character": 23
+          },
+          "end": {
+            "line": 4,
+            "character": 24
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 139,
+      "LSPosition": {
+        "line": 4,
+        "character": 23
+      },
+      "Name": "u",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype U = string\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 4,
+            "character": 23
+          },
+          "end": {
+            "line": 4,
+            "character": 24
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "Position": 227,
+      "LSPosition": {
+        "line": 7,
+        "character": 20
+      },
+      "Name": "v",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype V = string\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 20
+          },
+          "end": {
+            "line": 7,
+            "character": 21
+          }
+        }
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 227,
+      "LSPosition": {
+        "line": 7,
+        "character": 20
+      },
+      "Name": "v",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype V = string\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 20
+          },
+          "end": {
+            "line": 7,
+            "character": 21
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

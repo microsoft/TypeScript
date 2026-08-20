@@ -1,0 +1,34 @@
+// === Document Symbols ===
+// === /navigationBarItemsInsideMethodsAndConstructors.ts ===
+// <|class [|{| name: Class, kind: Class |}Class|] {
+//     <|[|{| name: constructor, kind: Constructor |}|]constructor() {
+//         <|function [|{| name: LocalFunctionInConstructor, kind: Function |}LocalFunctionInConstructor|]() {}|>
+//         <|interface [|{| name: LocalInterfaceInConstrcutor, kind: Interface |}LocalInterfaceInConstrcutor|] {}|>
+//         <|enum [|{| name: LocalEnumInConstructor, kind: Enum |}LocalEnumInConstructor|] { <|[|{| name: LocalEnumMemberInConstructor, kind: EnumMember |}LocalEnumMemberInConstructor|]|> }|>
+//     }|>
+// 
+//     <|[|{| name: method, kind: Method |}method|]() {
+//         <|function [|{| name: LocalFunctionInMethod, kind: Function |}LocalFunctionInMethod|]() {
+//             <|function [|{| name: LocalFunctionInLocalFunctionInMethod, kind: Function |}LocalFunctionInLocalFunctionInMethod|]() {}|>
+//         }|>
+//         <|interface [|{| name: LocalInterfaceInMethod, kind: Interface |}LocalInterfaceInMethod|] {}|>
+//         <|enum [|{| name: LocalEnumInMethod, kind: Enum |}LocalEnumInMethod|] { <|[|{| name: LocalEnumMemberInMethod, kind: EnumMember |}LocalEnumMemberInMethod|]|> }|>
+//     }|>
+// 
+//     <|[|{| name: emptyMethod, kind: Method |}emptyMethod|]() { }|> // Non child functions method should not be duplicated
+// }|>
+
+// === Details ===
+(Class) Class
+  (Constructor) constructor
+    (Function) LocalFunctionInConstructor
+    (Interface) LocalInterfaceInConstrcutor
+    (Enum) LocalEnumInConstructor
+      (EnumMember) LocalEnumMemberInConstructor
+  (Method) method
+    (Function) LocalFunctionInMethod
+      (Function) LocalFunctionInLocalFunctionInMethod
+    (Interface) LocalInterfaceInMethod
+    (Enum) LocalEnumInMethod
+      (EnumMember) LocalEnumMemberInMethod
+  (Method) emptyMethod

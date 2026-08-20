@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/contentMapperSupplementalFileCollision.ts] ////
+
+=== /component.astro ===
+
+=== /component.astro.0.ts ===
+export const existing = true;
+>existing : Symbol(existing, Decl(component.astro.0.ts, 0, 12))
+

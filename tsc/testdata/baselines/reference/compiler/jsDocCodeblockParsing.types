@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/jsDocCodeblockParsing.ts] ////
+
+=== jsDocCodeblockParsing.ts ===
+/**
+ * text
+ * @example Foo
+ * ```
+ * @Embed[asfasdfasf]
+ * ```
+ * becomes
+ * ```html
+ * <div></div>
+ * ```
+ */
+const x = 1;
+>x : 1
+>1 : 1
+
+/**
+ * Some text
+ * ```
+ * @tag inside code
+ * ```
+ * @param y - a number
+ */
+function foo(y: number) {}
+>foo : (y: number) => void
+>y : number
+

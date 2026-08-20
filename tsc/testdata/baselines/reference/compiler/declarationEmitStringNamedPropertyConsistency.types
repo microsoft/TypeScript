@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/declarationEmitStringNamedPropertyConsistency.ts] ////
+
+=== declarationEmitStringNamedPropertyConsistency.ts ===
+function createSlice<T>(o: T) {
+>createSlice : <T>(o: T) => T
+>o : T
+
+    return o
+>o : T
+}
+export const platformSlice = createSlice({
+>platformSlice : { query: { search: string; user: string; }; }
+>createSlice({    "query": {        "search" : "",        "user": ""    },}) : { query: { search: string; user: string; }; }
+>createSlice : <T>(o: T) => T
+>{    "query": {        "search" : "",        "user": ""    },} : { query: { search: string; user: string; }; }
+
+    "query": {
+>"query" : { search: string; user: string; }
+>{        "search" : "",        "user": ""    } : { search: string; user: string; }
+
+        "search" : "",
+>"search" : string
+>"" : ""
+
+        "user": ""
+>"user" : string
+>"" : ""
+
+    },
+});
+

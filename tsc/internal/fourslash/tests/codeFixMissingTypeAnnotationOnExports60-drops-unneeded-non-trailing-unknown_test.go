@@ -1,0 +1,29 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports60_drops_unneeded_non_trailing_unknown(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+
+export interface Foo<S = string, T = unknown> {}
+export function f(x: Foo<string, unknown>) { return x; }
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add return type 'Foo'",
+		NewFileContent: `
+export interface Foo<S = string, T = unknown> {}
+export function f(x: Foo<string, unknown>): Foo { return x; }
+`,
+		Index: 0,
+	})
+}

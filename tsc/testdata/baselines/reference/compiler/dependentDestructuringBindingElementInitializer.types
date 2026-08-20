@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/dependentDestructuringBindingElementInitializer.ts] ////
+
+=== dependentDestructuringBindingElementInitializer.ts ===
+type U =
+>U : U
+
+    | { kind: "a"; payload: number; extra?: unknown }
+>kind : "a"
+>payload : number
+>extra : unknown
+
+    | { kind: "b"; payload: string; extra?: unknown };
+>kind : "b"
+>payload : string
+>extra : unknown
+
+declare const u: U;
+>u : U
+
+const {
+    kind,
+>kind : "a" | "b"
+
+    payload,
+>payload : string | number
+
+    extra = kind === "a" ? payload.toFixed() : payload.toUpperCase(),
+>extra : unknown
+>kind === "a" ? payload.toFixed() : payload.toUpperCase() : string
+>kind === "a" : boolean
+>kind : "a" | "b"
+>"a" : "a"
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number) => string
+>payload : number
+>toFixed : (fractionDigits?: number) => string
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+
+} = u;
+>u : U
+
+function f({
+>f : ({ kind, payload, extra, }: U) => void
+
+    kind,
+>kind : "a" | "b"
+
+    payload,
+>payload : string | number
+
+    extra = kind === "a" ? payload.toFixed() : payload.toUpperCase(),
+>extra : unknown
+>kind === "a" ? payload.toFixed() : payload.toUpperCase() : string
+>kind === "a" : boolean
+>kind : "a" | "b"
+>"a" : "a"
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number) => string
+>payload : number
+>toFixed : (fractionDigits?: number) => string
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+
+}: U) {}
+

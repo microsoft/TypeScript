@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/inferFromTupleRestAndVariadic.ts] ////
+
+=== inferFromTupleRestAndVariadic.ts ===
+// Crash when inferring from tuple types with rest and variadic elements
+// where the variadic element's constraint consumes all source tuple elements.
+// The pattern [...rest, ...T] where T is constrained by a fixed-size tuple
+// calls getElementTypeOfSliceOfTupleType which can return nil when the
+// source tuple is entirely consumed by T's implied arity.
+
+type SubTup<T> = T extends [
+>SubTup : SubTup<T>
+
+    ...(infer C)[],
+    ...infer B extends [any, any]
+] ? B : never;
+type Trigger = SubTup<[1, 2]>;
+>Trigger : [1, 2]
+
+// Also test the [...T, ...rest] pattern
+type SubTup2<T> = T extends [
+>SubTup2 : SubTup2<T>
+
+    ...infer A extends [any, any],
+    ...(infer D)[],
+] ? A : never;
+type Trigger2 = SubTup2<[1, 2]>;
+>Trigger2 : [1, 2]
+
+// Test with more elements than implied arity (should work fine)
+type Trigger3 = SubTup<[1, 2, 3, 4]>;
+>Trigger3 : [3, 4]
+
+type Trigger4 = SubTup2<[1, 2, 3, 4]>;
+>Trigger4 : [1, 2]
+

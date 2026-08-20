@@ -1,0 +1,11 @@
+// === Syntax and Semantic Diagnostics ===
+/ProfileCard.vue(1,1): error TS100036: Virtual code produced by the content mapper 'mapper@1.0.0' has problems with no corresponding location in this file.
+
+
+==== /ProfileCard.vue (1 errors) ====
+    <template><h1>Profile</h1></template>
+    
+!!! error TS100036: Virtual code produced by the content mapper 'mapper@1.0.0' has problems with no corresponding location in this file.
+!!! related TS100036 /ProfileCard.vue:1:1: Cannot find name 'jsxRuntime'.
+!!! related TS100036 /ProfileCard.vue:1:1: Cannot find name 'Widget'.
+    

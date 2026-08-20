@@ -1,0 +1,13 @@
+largeStringLiteralUnionSuggestion.ts(6,7): error TS2322: Type '"zzzz"' is not assignable to type '"a000" | "a001" | "a002" | "a003" | "a004" | "a005" | "a006" | "a007" | "a008" | "a009" | "a010" | "a011" | "a012" | "a013" | "a014" | "a015" | "a016" | "a017" | "a018" | "a019" | "a020" | ... 10978 more ... | "k999"'.
+
+
+==== largeStringLiteralUnionSuggestion.ts (1 errors) ====
+    type Prefix = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k";
+    type Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+    type LargeStringLiteralUnion = `${Prefix}${Digit}${Digit}${Digit}`;
+    
+    const ok: LargeStringLiteralUnion = "a000";
+    const bad: LargeStringLiteralUnion = "zzzz";
+          ~~~
+!!! error TS2322: Type '"zzzz"' is not assignable to type '"a000" | "a001" | "a002" | "a003" | "a004" | "a005" | "a006" | "a007" | "a008" | "a009" | "a010" | "a011" | "a012" | "a013" | "a014" | "a015" | "a016" | "a017" | "a018" | "a019" | "a020" | ... 10978 more ... | "k999"'.
+    

@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/jsSelfReferencingArgumentsFunction.ts] ////
+
+=== foo.js ===
+// Test #16139
+function Foo() {
+>Foo : () => any
+
+    arguments;
+>arguments : IArguments
+
+    return new Foo();
+>new Foo() : any
+>Foo : () => any
+}
+

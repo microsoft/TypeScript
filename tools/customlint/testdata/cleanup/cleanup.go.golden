@@ -1,0 +1,51 @@
+	package cleanup
+	
+	import "testing"
+	
+	func badT(t *testing.T) {
+		t.Cleanup(func() {
+			t.Log("done")
+			~
+!!! cleanup: cleanup closure captures t; the test will have ended when cleanup runs
+		})
+	}
+	
+	func badB(b *testing.B) {
+		b.Cleanup(func() {
+			b.Log("done")
+			~
+!!! cleanup: cleanup closure captures b; the test will have ended when cleanup runs
+		})
+	}
+	
+	func badTB(tb testing.TB) {
+		tb.Cleanup(func() {
+			tb.Log("done")
+			~~
+!!! cleanup: cleanup closure captures tb; the test will have ended when cleanup runs
+		})
+	}
+	
+	func badMultipleRefs(t *testing.T) {
+		t.Cleanup(func() {
+			t.Log("first")
+			~
+!!! cleanup: cleanup closure captures t; the test will have ended when cleanup runs
+			t.Log("second")
+			~
+!!! cleanup: cleanup closure captures t; the test will have ended when cleanup runs
+		})
+	}
+	
+	func good(t *testing.T) {
+		t.Cleanup(func() {
+			println("no capture")
+		})
+	}
+	
+	func goodNamedFunc(t *testing.T) {
+		t.Cleanup(namedFunc)
+	}
+	
+	func namedFunc() {}
+	

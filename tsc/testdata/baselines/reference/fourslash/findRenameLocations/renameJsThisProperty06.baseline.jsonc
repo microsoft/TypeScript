@@ -1,0 +1,20 @@
+// === findRenameLocations ===
+// === /a.js ===
+// var C = class {
+//   constructor(y) {
+//     this.x = y;
+//   }
+// }
+// C.prototype./*RENAME*/z = 1;
+// var t = new C(12);
+// t.z = 11;
+
+
+
+// === findRenameLocations ===
+// === /a.js ===
+// --- (line: 4) skipped ---
+// }
+// C.prototype.z = 1;
+// var t = new C(12);
+// t./*RENAME*/z = 11;

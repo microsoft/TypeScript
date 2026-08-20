@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/jsDocCallbackExport1.ts] ////
+
+=== x.js ===
+/**
+ * @callback Foo
+ * @param {string} x
+ * @returns {number}
+ */
+function f1() {}
+>f1 : () => void
+

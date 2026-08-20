@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/simpleTestMultiFile.ts] ////
+
+=== /src/foo.ts ===
+const x: number = "";
+>x : Symbol(x, Decl(foo.ts, 0, 5))
+
+=== /src/bar.ts ===
+const y: string = 1;
+>y : Symbol(y, Decl(bar.ts, 0, 5))
+

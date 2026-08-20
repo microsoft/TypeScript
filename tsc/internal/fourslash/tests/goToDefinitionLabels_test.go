@@ -1,0 +1,24 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestGoToDefinitionLabels(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `/*label1Definition*/label1: while (true) {
+    /*label2Definition*/label2: while (true) {
+        break [|/*1*/label1|];
+        continue [|/*2*/label2|];
+        () => { break [|/*3*/label1|]; }
+        continue /*4*/unknownLabel;
+    }
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineGoToDefinition(t, true, "1", "2", "3", "4")
+}

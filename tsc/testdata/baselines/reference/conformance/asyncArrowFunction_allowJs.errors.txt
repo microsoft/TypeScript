@@ -1,0 +1,48 @@
+file.js(2,20): error TS1005: '}' expected.
+file.js(6,20): error TS1005: '}' expected.
+file.js(10,20): error TS1005: '}' expected.
+file.js(16,20): error TS1005: '}' expected.
+file.js(21,20): error TS1005: '}' expected.
+file.js(22,12): error TS7006: Parameter 'p' implicitly has an 'any' type.
+
+
+==== file.js (6 errors) ====
+    // Error (good)
+    /** @type {function(): string} */
+                       ~
+!!! error TS1005: '}' expected.
+    const a = () => 0
+    
+    // Error (good)
+    /** @type {function(): string} */
+                       ~
+!!! error TS1005: '}' expected.
+    const b = async () => 0
+    
+    // No error (bad)
+    /** @type {function(): string} */
+                       ~
+!!! error TS1005: '}' expected.
+    const c = async () => {
+    	return 0
+    }
+    
+    // Error (good)
+    /** @type {function(): string} */
+                       ~
+!!! error TS1005: '}' expected.
+    const d = async () => {
+    	return ""
+    }
+    
+    /** @type {function(function(): string): void} */
+                       ~
+!!! error TS1005: '}' expected.
+    const f = (p) => {}
+               ~
+!!! error TS7006: Parameter 'p' implicitly has an 'any' type.
+    
+    // Error (good)
+    f(async () => {
+    	return 0
+    })

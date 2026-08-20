@@ -1,0 +1,124 @@
+// === Inlay Hints ===
+const lit1 = getTemplateLiteral1();
+          ^
+{
+  "position": {
+    "line": 1,
+    "character": 10
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "`${"
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "},${"
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "}`"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+const lit2 = getTemplateLiteral2();
+          ^
+{
+  "position": {
+    "line": 3,
+    "character": 10
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "`\\${${"
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "},${"
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "}`"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+const lit3 = getTemplateLiteral3();
+          ^
+{
+  "position": {
+    "line": 5,
+    "character": 10
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "`start${"
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "}\\${,$${"
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "}end`"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+const lit4 = getTemplateLiteral4();
+          ^
+{
+  "position": {
+    "line": 7,
+    "character": 10
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "`${"
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "}\\`,${"
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": "}`"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

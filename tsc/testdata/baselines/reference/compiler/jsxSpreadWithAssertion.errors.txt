@@ -1,0 +1,26 @@
+jsxSpreadWithAssertion.tsx(3,11): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+
+
+==== jsxSpreadWithAssertion.tsx (1 errors) ====
+    declare const EntryTextDialog: any;
+    
+    const c = <EntryTextDialog
+              ~~~~~~~~~~~~~~~~
+        {...{
+    ~~~~~~~~~
+            first: 0,
+    ~~~~~~~~~~~~~~~~~
+            foo: 1,
+    ~~~~~~~~~~~~~~~
+            bar: 2 as any,
+    ~~~~~~~~~~~~~~~~~~~~~~
+            baz: 3,
+    ~~~~~~~~~~~~~~~
+            last: 4
+    ~~~~~~~~~~~~~~~
+        }}
+    ~~~~~~
+    />
+    ~~
+!!! error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+    

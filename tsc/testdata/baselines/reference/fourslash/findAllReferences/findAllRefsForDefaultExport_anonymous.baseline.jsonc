@@ -1,0 +1,6 @@
+// === findAllReferences ===
+// === /a.ts ===
+// export /*FIND ALL REFS*/[|default|] 1;
+
+// === /b.ts ===
+// import [|a|] from "./a";

@@ -1,0 +1,33 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestJsDocFunctionSignatures12(t *testing.T) {
+	t.Parallel()
+
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @allowJs: true
+// @Filename: jsDocFunctionSignatures.js
+/**
+ * @param {{
+ *   stringProp: string,
+ *   numProp: number,
+ *   boolProp: boolean,
+ *   anyProp: any,
+ *   anotherAnyProp: any,
+ *   functionProp: (arg0: string, arg1: any) => any
+ * }} o
+ */
+function f1(o) {
+    o/**/;
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToMarker(t, "")
+	f.VerifyQuickInfoIs(t, "(parameter) o: {\n    stringProp: string;\n    numProp: number;\n    boolProp: boolean;\n    anyProp: any;\n    anotherAnyProp: any;\n    functionProp: (arg0: string, arg1: any) => any;\n}", "")
+}

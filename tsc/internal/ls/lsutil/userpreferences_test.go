@@ -1,0 +1,676 @@
+package lsutil
+
+import (
+	"reflect"
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"gotest.tools/v3/assert"
+)
+
+func fillNonZeroValues(v reflect.Value) {
+	t := v.Type()
+	for i := range t.NumField() {
+		field := v.Field(i)
+		if !field.CanSet() {
+			continue
+		}
+		switch field.Kind() {
+		case reflect.Bool:
+			field.SetBool(true)
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			field.SetInt(1)
+		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			field.SetUint(1)
+		case reflect.String:
+			val := getValidStringValue(field.Type())
+			field.SetString(val)
+		case reflect.Slice:
+			if field.Type().Elem().Kind() == reflect.String {
+				field.Set(reflect.ValueOf([]string{"test"}))
+			}
+		case reflect.Struct:
+			fillNonZeroValues(field)
+		}
+	}
+}
+
+func getValidStringValue(t reflect.Type) string {
+	typeName := t.String()
+	switch typeName {
+	case "lsutil.QuotePreference":
+		return string(QuotePreferenceSingle)
+	case "lsutil.JsxAttributeCompletionStyle":
+		return string(JsxAttributeCompletionStyleBraces)
+	case "lsutil.IncludeInlayParameterNameHints":
+		return string(IncludeInlayParameterNameHintsAll)
+	case "lsutil.SemicolonPreference":
+		return string(SemicolonPreferenceInsert)
+	case "modulespecifiers.ImportModuleSpecifierPreference":
+		return string(modulespecifiers.ImportModuleSpecifierPreferenceRelative)
+	case "modulespecifiers.ImportModuleSpecifierEndingPreference":
+		return string(modulespecifiers.ImportModuleSpecifierEndingPreferenceJs)
+	default:
+		return "test"
+	}
+}
+
+func TestUserPreferencesRoundtrip(t *testing.T) {
+	t.Parallel()
+
+	var original UserPreferences
+	fillNonZeroValues(reflect.ValueOf(&original).Elem())
+
+	jsonBytes, err := json.Marshal(&original)
+	assert.NilError(t, err)
+
+	t.Run("UnmarshalJSONFrom", func(t *testing.T) {
+		t.Parallel()
+		var parsed UserPreferences
+		err2 := json.Unmarshal(jsonBytes, &parsed)
+		assert.NilError(t, err2)
+		assert.DeepEqual(t, original, parsed)
+	})
+
+	t.Run("withConfig", func(t *testing.T) {
+		t.Parallel()
+		var config map[string]any
+		err2 := json.Unmarshal(jsonBytes, &config)
+		assert.NilError(t, err2)
+		parsed := UserPreferences{}.withConfig(config)
+		assert.DeepEqual(t, original, parsed)
+	})
+}
+
+func TestUserPreferencesSerialize(t *testing.T) {
+	t.Parallel()
+
+	t.Run("config path field serializes to nested path", func(t *testing.T) {
+		t.Parallel()
+		prefs := &UserPreferences{
+			QuotePreference: QuotePreferenceSingle,
+		}
+		jsonBytes, err := json.Marshal(prefs)
+		assert.NilError(t, err)
+
+		var actual map[string]any
+		err = json.Unmarshal(jsonBytes, &actual)
+		assert.NilError(t, err)
+
+		preferences := actual["preferences"].(map[string]any)
+		assert.Equal(t, "single", preferences["quoteStyle"])
+	})
+
+	t.Run("raw-only field serializes to unstable section", func(t *testing.T) {
+		t.Parallel()
+		prefs := &UserPreferences{
+			DisableSuggestions: core.TSTrue,
+		}
+		jsonBytes, err := json.Marshal(prefs)
+		assert.NilError(t, err)
+
+		var actual map[string]any
+		err = json.Unmarshal(jsonBytes, &actual)
+		assert.NilError(t, err)
+
+		unstable := actual["unstable"].(map[string]any)
+		assert.Equal(t, true, unstable["disableSuggestions"])
+	})
+
+	t.Run("inlay hint inversion on serialize", func(t *testing.T) {
+		t.Parallel()
+		prefs := &UserPreferences{
+			InlayHints: InlayHintsPreferences{
+				IncludeInlayParameterNameHints:                        IncludeInlayParameterNameHintsAll,
+				IncludeInlayParameterNameHintsWhenArgumentMatchesName: core.TSTrue,
+			},
+		}
+		jsonBytes, err := json.Marshal(prefs)
+		assert.NilError(t, err)
+
+		var actual map[string]any
+		err = json.Unmarshal(jsonBytes, &actual)
+		assert.NilError(t, err)
+
+		inlayHints := actual["inlayHints"].(map[string]any)
+		parameterNames := inlayHints["parameterNames"].(map[string]any)
+		assert.Equal(t, "all", parameterNames["enabled"])
+		assert.Equal(t, false, parameterNames["suppressWhenArgumentMatchesName"]) // inverted
+	})
+
+	t.Run("mixed config and unstable fields", func(t *testing.T) {
+		t.Parallel()
+		prefs := &UserPreferences{
+			QuotePreference:      QuotePreferenceSingle,
+			DisableSuggestions:   core.TSTrue,
+			DisplayPartsForJSDoc: core.TSTrue,
+		}
+		jsonBytes, err := json.Marshal(prefs)
+		assert.NilError(t, err)
+
+		var actual map[string]any
+		err = json.Unmarshal(jsonBytes, &actual)
+		assert.NilError(t, err)
+
+		preferences := actual["preferences"].(map[string]any)
+		assert.Equal(t, "single", preferences["quoteStyle"])
+
+		unstable := actual["unstable"].(map[string]any)
+		assert.Equal(t, true, unstable["disableSuggestions"])
+		assert.Equal(t, true, unstable["displayPartsForJSDoc"])
+	})
+}
+
+func TestUserPreferencesParseUnstable(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		json     string
+		expected UserPreferences
+	}{
+		{
+			name: "unstable fields with correct casing",
+			json: `{
+				"unstable": {
+					"disableSuggestions": true,
+					"maximumHoverLength": 100,
+					"allowRenameOfImportPath": true
+				}
+			}`,
+			expected: UserPreferences{
+				DisableSuggestions:      core.TSTrue,
+				MaximumHoverLength:      100,
+				AllowRenameOfImportPath: core.TSTrue,
+			},
+		},
+		{
+			name: "nested preferences path",
+			json: `{
+				"preferences": {
+					"quoteStyle": "single",
+					"useAliasesForRenames": true
+				}
+			}`,
+			expected: UserPreferences{
+				QuotePreference:     QuotePreferenceSingle,
+				UseAliasesForRename: core.TSTrue,
+			},
+		},
+		{
+			name: "suggest section",
+			json: `{
+				"suggest": {
+					"autoImports": false,
+					"includeCompletionsForImportStatements": true
+				}
+			}`,
+			expected: UserPreferences{
+				IncludeCompletionsForModuleExports:    core.TSFalse,
+				IncludeCompletionsForImportStatements: core.TSTrue,
+			},
+		},
+		{
+			name: "inlayHints with invert",
+			json: `{
+				"inlayHints": {
+					"parameterNames": {
+						"enabled": "all",
+						"suppressWhenArgumentMatchesName": true
+					}
+				}
+			}`,
+			expected: UserPreferences{
+				InlayHints: InlayHintsPreferences{
+					IncludeInlayParameterNameHints:                        IncludeInlayParameterNameHintsAll,
+					IncludeInlayParameterNameHintsWhenArgumentMatchesName: core.TSFalse, // inverted
+				},
+			},
+		},
+		{
+			name: "mixed config",
+			json: `{
+				"unstable": {
+					"displayPartsForJSDoc": true
+				},
+				"preferences": {
+					"importModuleSpecifier": "relative"
+				},
+				"workspaceSymbols": {
+					"excludeLibrarySymbols": true,
+					"scope": "currentProject"
+				}
+			}`,
+			expected: UserPreferences{
+				DisplayPartsForJSDoc:            core.TSTrue,
+				ImportModuleSpecifierPreference: modulespecifiers.ImportModuleSpecifierPreferenceRelative,
+				ExcludeLibrarySymbolsInNavTo:    core.TSTrue,
+				WorkspaceSymbolsScope:           WorkspaceSymbolsScopeCurrentProject,
+			},
+		},
+		{
+			name: "stable config overrides unstable",
+			json: `{
+				"unstable": {
+					"quotePreference": "double"
+				},
+				"preferences": {
+					"quoteStyle": "single"
+				}
+			}`,
+			expected: UserPreferences{
+				QuotePreference: QuotePreferenceSingle, // stable wins
+			},
+		},
+		{
+			name: "unstable sets value when no stable config",
+			json: `{
+				"unstable": {
+					"includeAutomaticOptionalChainCompletions": false
+				}
+			}`,
+			expected: UserPreferences{
+				IncludeAutomaticOptionalChainCompletions: core.TSFalse,
+			},
+		},
+		{
+			name: "any field can be passed via unstable by its raw name",
+			json: `{
+				"unstable": {
+					"quotePreference": "double",
+					"includeCompletionsForModuleExports": true,
+					"excludeLibrarySymbolsInNavTo": true
+				}
+			}`,
+			expected: UserPreferences{
+				QuotePreference:                    QuotePreferenceDouble,
+				IncludeCompletionsForModuleExports: core.TSTrue,
+				ExcludeLibrarySymbolsInNavTo:       core.TSTrue,
+			},
+		},
+		{
+			name: "TypeScript raw names work in unstable section",
+			json: `{
+				"unstable": {
+					"includeCompletionsForModuleExports": true,
+					"quotePreference": "single",
+					"providePrefixAndSuffixTextForRename": true,
+					"includeInlayParameterNameHints": "all",
+					"organizeImportsLocale": "en"
+				}
+			}`,
+			expected: UserPreferences{
+				IncludeCompletionsForModuleExports: core.TSTrue,
+				QuotePreference:                    QuotePreferenceSingle,
+				UseAliasesForRename:                core.TSTrue,
+				OrganizeImportsLocale:              "en",
+				InlayHints: InlayHintsPreferences{
+					IncludeInlayParameterNameHints: IncludeInlayParameterNameHintsAll,
+				},
+			},
+		},
+		{
+			name: "old raw organize imports unicode preferences load as raw state",
+			json: `{
+				"unstable": {
+					"organizeImportsCollation": "unicode",
+					"organizeImportsCaseFirst": "upper",
+					"organizeImportsIgnoreCase": false,
+					"organizeImportsNumericCollation": true
+				}
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsCollation:        OrganizeImportsCollationUnicode,
+				OrganizeImportsCaseFirst:        OrganizeImportsCaseFirstUpper,
+				OrganizeImportsIgnoreCase:       core.TSFalse,
+				OrganizeImportsNumericCollation: core.TSTrue,
+			},
+		},
+		{
+			name: "old top-level raw organize imports unicode preferences load as raw state",
+			json: `{
+				"organizeImportsCollation": "unicode",
+				"organizeImportsIgnoreCase": true
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsCollation:  OrganizeImportsCollationUnicode,
+				OrganizeImportsIgnoreCase: core.TSTrue,
+			},
+		},
+		{
+			name: "new top-level raw organize imports sort is accepted",
+			json: `{
+				"organizeImportsSort": "natural"
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsSort: OrganizeImportsSortNatural,
+			},
+		},
+		{
+			name: "old raw organize imports ignore case loads as raw state",
+			json: `{
+				"unstable": {
+					"organizeImportsIgnoreCase": true
+				}
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsIgnoreCase: core.TSTrue,
+			},
+		},
+		{
+			name: "new raw organize imports sort loads alongside old raw preferences",
+			json: `{
+				"unstable": {
+					"organizeImportsSort": "ordinal",
+					"organizeImportsCollation": "unicode",
+					"organizeImportsIgnoreCase": true
+				}
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsSort:       OrganizeImportsSortOrdinal,
+				OrganizeImportsCollation:  OrganizeImportsCollationUnicode,
+				OrganizeImportsIgnoreCase: core.TSTrue,
+			},
+		},
+		{
+			name: "old nested organize imports unicode preferences load as raw state",
+			json: `{
+				"preferences": {
+					"organizeImports": {
+						"unicodeCollation": "unicode",
+						"caseSensitivity": "caseSensitive",
+						"numericCollation": true,
+						"caseFirst": "upper"
+					}
+				}
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsCollation:        OrganizeImportsCollationUnicode,
+				OrganizeImportsIgnoreCase:       core.TSFalse,
+				OrganizeImportsNumericCollation: core.TSTrue,
+				OrganizeImportsCaseFirst:        OrganizeImportsCaseFirstUpper,
+			},
+		},
+		{
+			name: "new nested organize imports sort loads alongside old nested preferences",
+			json: `{
+				"preferences": {
+					"organizeImports": {
+						"sort": "ordinalIgnoreCase",
+						"unicodeCollation": "unicode",
+						"caseSensitivity": "caseSensitive"
+					}
+				}
+			}`,
+			expected: UserPreferences{
+				OrganizeImportsSort:       OrganizeImportsSortOrdinalIgnoreCase,
+				OrganizeImportsCollation:  OrganizeImportsCollationUnicode,
+				OrganizeImportsIgnoreCase: core.TSFalse,
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			var config map[string]any
+			err := json.Unmarshal([]byte(tt.json), &config)
+			assert.NilError(t, err)
+
+			parsed := UserPreferences{}.withConfig(config)
+
+			assert.DeepEqual(t, tt.expected, parsed)
+		})
+	}
+}
+
+func TestUserPreferencesLocale(t *testing.T) {
+	t.Parallel()
+
+	prefs := ParseUserPreferences(map[string]any{
+		"typescript": map[string]any{
+			"locale": "de",
+		},
+		"js/ts": map[string]any{
+			"locale": "fr",
+		},
+	})
+
+	assert.Equal(t, prefs.Locale, "fr")
+}
+
+func TestUserPreferencesReportStyleChecksAsWarnings(t *testing.T) {
+	t.Parallel()
+
+	t.Run("reportStyleChecksAsWarnings via config path", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"reportStyleChecksAsWarnings": false,
+			},
+		})
+		assert.Equal(t, prefs.ReportStyleChecksAsWarnings, core.TSFalse)
+	})
+
+	t.Run("reportStyleChecksAsWarnings defaults to true", func(t *testing.T) {
+		t.Parallel()
+		prefs := NewDefaultUserPreferences()
+		assert.Equal(t, prefs.ReportStyleChecksAsWarnings, core.TSTrue)
+	})
+
+	t.Run("reportStyleChecksAsWarnings via unstable section", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"unstable": map[string]any{
+					"reportStyleChecksAsWarnings": false,
+				},
+			},
+		})
+		assert.Equal(t, prefs.ReportStyleChecksAsWarnings, core.TSFalse)
+	})
+}
+
+func TestUserPreferencesParseServerFeaturePreferences(t *testing.T) {
+	t.Parallel()
+
+	t.Run("preferred server feature settings", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"validate": map[string]any{"enabled": false},
+				"format":   map[string]any{"enabled": false},
+				"autoClosingTags": map[string]any{
+					"enabled": false,
+				},
+			},
+		})
+		assert.Equal(t, prefs.EnableValidation, core.TSFalse)
+		assert.Equal(t, prefs.EnableFormatting, core.TSFalse)
+		assert.Equal(t, prefs.EnableAutoClosingTags, core.TSFalse)
+	})
+
+	t.Run("legacy server feature fallbacks", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"validate":        map[string]any{"enable": false},
+				"format":          map[string]any{"enable": false},
+				"autoClosingTags": false,
+			},
+		})
+		assert.Equal(t, prefs.EnableValidation, core.TSFalse)
+		assert.Equal(t, prefs.EnableFormatting, core.TSFalse)
+		assert.Equal(t, prefs.EnableAutoClosingTags, core.TSFalse)
+	})
+
+	t.Run("preferred settings take precedence over fallbacks", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"validate":        map[string]any{"enable": false},
+				"format":          map[string]any{"enable": false},
+				"autoClosingTags": false,
+			},
+			"js/ts": map[string]any{
+				"validate": map[string]any{"enabled": true},
+				"format":   map[string]any{"enabled": true},
+				"autoClosingTags": map[string]any{
+					"enabled": true,
+				},
+			},
+		})
+		assert.Equal(t, prefs.EnableValidation, core.TSTrue)
+		assert.Equal(t, prefs.EnableFormatting, core.TSTrue)
+		assert.Equal(t, prefs.EnableAutoClosingTags, core.TSTrue)
+	})
+}
+
+func TestParseUserPreferencesEditorFormatting(t *testing.T) {
+	t.Parallel()
+
+	prefs := ParseUserPreferences(map[string]any{
+		"editor": map[string]any{
+			"tabSize":      2,
+			"insertSpaces": false,
+		},
+	})
+
+	assert.Equal(t, prefs.FormatCodeSettings.TabSize, 2)
+	assert.Equal(t, prefs.FormatCodeSettings.IndentSize, 2)
+	assert.Equal(t, prefs.FormatCodeSettings.ConvertTabsToSpaces, core.TSFalse)
+}
+
+func TestUserPreferencesParseJSDocCompletionPreferences(t *testing.T) {
+	t.Parallel()
+
+	t.Run("unified jsdoc enabled setting", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"suggest": map[string]any{
+					"jsdoc": map[string]any{
+						"enabled": false,
+					},
+				},
+			},
+		})
+		assert.Equal(t, prefs.EnableJSDocCompletions, core.TSFalse)
+	})
+
+	t.Run("language fallback completeJSDocs setting", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"suggest": map[string]any{
+					"completeJSDocs": false,
+				},
+			},
+		})
+		assert.Equal(t, prefs.EnableJSDocCompletions, core.TSFalse)
+	})
+
+	t.Run("unified jsdoc enabled takes precedence over language fallback", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"suggest": map[string]any{
+					"completeJSDocs": false,
+				},
+			},
+			"js/ts": map[string]any{
+				"suggest": map[string]any{
+					"jsdoc": map[string]any{
+						"enabled": true,
+					},
+				},
+			},
+		})
+		assert.Equal(t, prefs.EnableJSDocCompletions, core.TSTrue)
+	})
+
+	t.Run("unified jsdoc generateReturns setting", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"suggest": map[string]any{
+					"jsdoc": map[string]any{
+						"generateReturns": false,
+					},
+				},
+			},
+		})
+		assert.Equal(t, prefs.GenerateReturnInDocTemplate, core.TSFalse)
+	})
+
+	t.Run("language jsdoc generateReturns setting", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"suggest": map[string]any{
+					"jsdoc": map[string]any{
+						"generateReturns": false,
+					},
+				},
+			},
+		})
+		assert.Equal(t, prefs.GenerateReturnInDocTemplate, core.TSFalse)
+	})
+}
+
+func TestUserPreferencesParseATA(t *testing.T) {
+	t.Parallel()
+
+	t.Run("ParseUserPreferences with unified ATA setting in js/ts section", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"js/ts": map[string]any{
+				"tsserver": map[string]any{
+					"automaticTypeAcquisition": map[string]any{
+						"enabled": false,
+					},
+				},
+			},
+		})
+		assert.Assert(t, prefs.IsATADisabled())
+		assert.Equal(t, prefs.AutomaticTypeAcquisitionEnabled, core.TSFalse)
+	})
+
+	t.Run("ParseUserPreferences with deprecated disableAutomaticTypeAcquisition in typescript section", func(t *testing.T) {
+		t.Parallel()
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"disableAutomaticTypeAcquisition": true,
+			},
+		})
+		assert.Assert(t, prefs.IsATADisabled())
+		assert.Equal(t, prefs.DisableAutomaticTypeAcquisition, core.TSTrue)
+	})
+
+	t.Run("unified setting takes precedence over deprecated setting", func(t *testing.T) {
+		t.Parallel()
+		// Both settings set: unified (js/ts) should take precedence
+		prefs := ParseUserPreferences(map[string]any{
+			"typescript": map[string]any{
+				"disableAutomaticTypeAcquisition": true,
+			},
+			"js/ts": map[string]any{
+				"tsserver": map[string]any{
+					"automaticTypeAcquisition": map[string]any{
+						"enabled": true,
+					},
+				},
+			},
+		})
+		assert.Assert(t, !prefs.IsATADisabled())
+		assert.Equal(t, prefs.AutomaticTypeAcquisitionEnabled, core.TSTrue)
+	})
+
+	t.Run("IsATADisabled returns false when neither setting is configured", func(t *testing.T) {
+		t.Parallel()
+		prefs := NewDefaultUserPreferences()
+		assert.Assert(t, !prefs.IsATADisabled())
+	})
+}

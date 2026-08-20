@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/removeComments.ts] ////
+
+=== removeComments.ts ===
+function t1() {
+>t1 : () => void
+
+    if (this.a < 2) { // comment after if
+>this.a < 2 : boolean
+>this.a : any
+>this : any
+>a : any
+>2 : 2
+
+        console.log('t1', this.a)
+>console.log('t1', this.a) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>'t1' : "t1"
+>this.a : any
+>this : any
+>a : any
+
+        // comment after empty line in if block
+    }
+}
+
+function t2() {
+>t2 : () => void
+
+    console.log("t2");
+>console.log("t2") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"t2" : "t2"
+
+    const obj = // comment here
+>obj : { a: number; b: number; c: number; }
+    {
+>{        a: 1,   // comment a        b: 2,   // comment b        c: 3,   // comment c (removed)    } : { a: number; b: number; c: number; }
+
+        a: 1,   // comment a
+>a : number
+>1 : 1
+
+        b: 2,   // comment b
+>b : number
+>2 : 2
+
+        c: 3,   // comment c (removed)
+>c : number
+>3 : 3
+    }
+
+    console.log(
+>console.log(        "test", // comment 1        {            a: this.a,  // comment a            b: this.b,  // comment b            c: this.c,  // comment c (removed)        }, obj) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+
+        "test", // comment 1
+>"test" : "test"
+        {
+>{            a: this.a,  // comment a            b: this.b,  // comment b            c: this.c,  // comment c (removed)        } : { a: any; b: any; c: any; }
+
+            a: this.a,  // comment a
+>a : any
+>this.a : any
+>this : any
+>a : any
+
+            b: this.b,  // comment b
+>b : any
+>this.b : any
+>this : any
+>b : any
+
+            c: this.c,  // comment c (removed)
+>c : any
+>this.c : any
+>this : any
+>c : any
+
+        }, obj)
+>obj : { a: number; b: number; c: number; }
+}
+

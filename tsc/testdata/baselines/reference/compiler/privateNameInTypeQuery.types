@@ -1,0 +1,120 @@
+//// [tests/cases/compiler/privateNameInTypeQuery.ts] ////
+
+=== privateNameInTypeQuery.ts ===
+export class C1 {
+>C1 : C1
+
+    #a = 1;
+>#a : number
+>1 : 1
+
+    static #b = "";
+>#b : string
+>"" : ""
+
+    #c() {
+>#c : () => 1
+
+        return 1 as const;
+>1 as const : 1
+>1 : 1
+    }
+
+    get #d() {
+>#d : Date
+
+        return new Date();
+>new Date() : Date
+>Date : DateConstructor
+    }
+
+    ["#a"] = true;
+>["#a"] : boolean
+>"#a" : "#a"
+>true : true
+
+    a: typeof this.#a = 1;
+>a : number
+>this.#a : number
+>this : this
+>1 : 1
+
+    test1(a: C1) {
+>test1 : (a: C1) => readonly [number, string, any]
+>a : C1
+
+        const b: typeof a.#a = 1;
+>b : number
+>a.#a : number
+>a : C1
+>1 : 1
+
+        const c: typeof C1.#b = "";
+>c : string
+>C1.#b : string
+>C1 : typeof C1
+>"" : ""
+
+        type D = typeof C1.#a;
+>D : any
+>C1.#a : any
+>C1 : typeof C1
+
+        var d: D = 1;
+>d : any
+>1 : 1
+
+        return [b, c, d] as const;
+>[b, c, d] as const : readonly [number, string, any]
+>[b, c, d] : readonly [number, string, any]
+>b : number
+>c : string
+>d : any
+    }
+
+    test2<T extends C1>(a: T): typeof a.#a {
+>test2 : <T extends C1>(a: T) => typeof a.#a
+>a : T
+>a.#a : number
+>a : T
+
+        const b: typeof a.#a = a.#a;
+>b : number
+>a.#a : number
+>a : T
+>a.#a : number
+>a : T
+
+        return b;
+>b : number
+    }
+
+    test3<T extends C1 | { a: string }>(): typeof this.#a {
+>test3 : <T extends C1 | { a: string; }>() => typeof this.#a
+>a : string
+>this.#a : number
+>this : this
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    test4(): any.#a {
+>test4 : () => any.
+>any : any
+
+        return "";
+>"" : ""
+    }
+
+    test5(): never.#a {
+>test5 : () => never.
+>never : any
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+}
+

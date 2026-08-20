@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/constEnumOnlyModuleImportAliasEmit.ts] ////
+
+=== mappa.ts ===
+namespace OnRtls.Mappa {
+>OnRtls : typeof OnRtls
+>Mappa : typeof Mappa
+
+    export const enum TipoCamera { Camera2D = 1, Camera3D = 2 }
+>TipoCamera : TipoCamera
+>Camera2D : TipoCamera.Camera2D
+>1 : 1
+>Camera3D : TipoCamera.Camera3D
+>2 : 2
+
+    export class MappaViewModel {
+>MappaViewModel : MappaViewModel
+
+        constructor(public canvas: any, public config: any, public tipo: TipoCamera) {}
+>canvas : any
+>config : any
+>tipo : TipoCamera
+    }
+}
+
+=== types.d.ts ===
+declare namespace OnRtls.Mappa.Server {
+    const enum SomeFlag { A = 0 }
+>SomeFlag : SomeFlag
+>A : SomeFlag.A
+>0 : 0
+}
+
+=== sensmap.ts ===
+namespace OnRtls.Carrello.Home {
+>OnRtls : typeof OnRtls
+>Carrello : typeof Carrello
+>Home : typeof Home
+
+    import mappa = OnRtls.Mappa;
+>mappa : typeof mappa
+>OnRtls : typeof OnRtls
+>Mappa : typeof mappa
+
+    export class SensmapViewModel {
+>SensmapViewModel : SensmapViewModel
+
+        constructor() {
+            var x = new mappa.MappaViewModel(null, null, mappa.TipoCamera.Camera3D);
+>x : mappa.MappaViewModel
+>new mappa.MappaViewModel(null, null, mappa.TipoCamera.Camera3D) : mappa.MappaViewModel
+>mappa.MappaViewModel : typeof mappa.MappaViewModel
+>mappa : typeof mappa
+>MappaViewModel : typeof mappa.MappaViewModel
+>mappa.TipoCamera.Camera3D : mappa.TipoCamera.Camera3D
+>mappa.TipoCamera : typeof mappa.TipoCamera
+>mappa : typeof mappa
+>TipoCamera : typeof mappa.TipoCamera
+>Camera3D : mappa.TipoCamera.Camera3D
+        }
+    }
+}
+

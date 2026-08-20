@@ -1,0 +1,10 @@
+// === documentHighlights ===
+// === /b.ts ===
+// @/*HIGHLIGHTS*/[|decorator|]
+// class C {
+//     @[|decorator|]
+//     method() {}
+// }
+// function [|decorator|](target) {
+//     return target;
+// }

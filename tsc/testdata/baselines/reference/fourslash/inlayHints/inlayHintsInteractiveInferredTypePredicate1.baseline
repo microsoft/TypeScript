@@ -1,0 +1,25 @@
+// === Inlay Hints ===
+function test(x: unknown) {
+                         ^
+{
+  "position": {
+    "line": 0,
+    "character": 25
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "x"
+    },
+    {
+      "value": " is "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

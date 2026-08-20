@@ -1,0 +1,4 @@
+// === goToImplementation ===
+// === /lib.d.ts ===
+// export as namespace Lib;
+// export interface /*GOTO IMPL*/IFoo {}

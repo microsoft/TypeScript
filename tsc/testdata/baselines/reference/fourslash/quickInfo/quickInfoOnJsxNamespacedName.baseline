@@ -1,0 +1,41 @@
+// === QuickInfo ===
+=== /a.tsx ===
+// <a:b a="accepted" b="rejected" />;
+//  ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) JSX.IntrinsicElements['a:b']: {
+// |     a: string;
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 1,
+      "LSPosition": {
+        "line": 0,
+        "character": 1
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) JSX.IntrinsicElements['a:b']: {\n    a: string;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 1
+        },
+        "end": {
+          "line": 0,
+          "character": 4
+        }
+      }
+    }
+  }
+]

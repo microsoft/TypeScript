@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariablesNoCrash3.ts] ////
+
+=== dependentDestructuredVariablesNoCrash3.ts ===
+// https://github.com/microsoft/TypeScript/issues/63093
+
+const [r0Def, r0, r1Def, as, string, r1, r2, r3Def, r3]: boolean = (test as number < string > ).ranges();
+>r0Def : Symbol(r0Def, Decl(dependentDestructuredVariablesNoCrash3.ts, 2, 7))
+>r0 : Symbol(r0, Decl(dependentDestructuredVariablesNoCrash3.ts, 2, 13))
+>r1Def : Symbol(r1Def, Decl(dependentDestructuredVariablesNoCrash3.ts, 2, 17))
+>as : Symbol(as, Decl(dependentDestructuredVariablesNoCrash3.ts, 2, 24))
+>string : Symbol(string, Decl(dependentDestructuredVariablesNoCrash3.ts, 2, 28))
+>r1 : Symbol(r1, Decl(dependentDestructuredVariablesNoCrash3.ts, 2, 36))
+>r2 : Symbol(r2, Decl(dependentDestructuredVariablesNoCrash3.ts, 2, 40))
+>r3Def : Symbol(r3Def, Decl(dependentDestructuredVariablesNoCrash3.ts, 2, 44))
+>r3 : Symbol(r3, Decl(dependentDestructuredVariablesNoCrash3.ts, 2, 51))
+>string : Symbol(string, Decl(dependentDestructuredVariablesNoCrash3.ts, 2, 28))
+

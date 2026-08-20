@@ -1,0 +1,24 @@
+// === Document Symbols ===
+// === /navigationBarVariables.ts ===
+// var <|[|{| name: x, kind: Variable |}x|] = 0|>;
+// let <|[|{| name: y, kind: Variable |}y|] = 1|>;
+// const <|[|{| name: z, kind: Variable |}z|] = 2|>;
+
+// === Details ===
+(Variable) x
+(Variable) y
+(Variable) z
+
+
+
+
+// === Document Symbols ===
+// === /file2.ts ===
+// var {<|[|{| name: a, kind: Variable |}a|]|>} = 0;
+// let {<|a: [|{| name: b, kind: Variable |}b|]|>} = 0;
+// const [<|[|{| name: c, kind: Variable |}c|]|>] = 0;
+
+// === Details ===
+(Variable) a
+(Variable) b
+(Variable) c

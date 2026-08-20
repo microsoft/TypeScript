@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/exportAssignmentWithExportModifier.ts] ////
+
+=== exportAssignmentWithExportModifier.ts ===
+var x;
+>x : any
+
+export export = x;
+>x : any
+

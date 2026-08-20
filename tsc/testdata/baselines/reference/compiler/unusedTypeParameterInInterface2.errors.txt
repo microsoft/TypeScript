@@ -1,0 +1,10 @@
+unusedTypeParameterInInterface2.ts(1,18): error TS6196: 'U' is declared but never used.
+
+
+==== unusedTypeParameterInInterface2.ts (1 errors) ====
+    interface int<T, U, V> {
+                     ~
+!!! error TS6196: 'U' is declared but never used.
+        f1(a: T): string;
+        c: V;
+    }

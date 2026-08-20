@@ -1,0 +1,25 @@
+error TS5055: Cannot write file 'x.js' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+error TS5055: Cannot write file 'y.js' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+
+
+!!! error TS5055: Cannot write file 'x.js' because it would overwrite input file.
+!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+!!! error TS5055: Cannot write file 'y.js' because it would overwrite input file.
+!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+==== x.js (0 errors) ====
+    class C {
+        /** @import {Bar} from "./y" */
+        /** @typedef {Bar[]} Bars */
+        /** @type {Bars} */
+        foo = ["abc", "def"]
+        bar(/** @type {Bar} */ x) {
+            return x
+        }
+    }
+    
+==== y.js (0 errors) ====
+    /** @typedef {string} Bar */
+    export {}
+    

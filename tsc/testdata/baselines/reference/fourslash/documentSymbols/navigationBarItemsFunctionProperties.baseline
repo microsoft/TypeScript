@@ -1,0 +1,12 @@
+// === Document Symbols ===
+// === /navigationBarItemsFunctionProperties.ts ===
+// (<|[|{| name: <function>, kind: Function |}|]function(){
+// var <|[|{| name: A, kind: Variable |}A|]|>;
+// A
+// .a = <|[|{| name: a, kind: Function |}|]function() { }|>;
+// }|>)();
+
+// === Details ===
+(Function) <function>
+  (Variable) A
+  (Function) a

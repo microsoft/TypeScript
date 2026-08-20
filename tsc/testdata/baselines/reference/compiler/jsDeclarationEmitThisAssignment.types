@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/jsDeclarationEmitThisAssignment.ts] ////
+
+=== main.js ===
+export class Foo {
+>Foo : Foo
+
+    static {
+        this.bar = 10;
+>this.bar = 10 : 10
+>this.bar : number | undefined
+>this : typeof Foo
+>bar : number | undefined
+>10 : 10
+    }
+
+    constructor() {
+        this.baz = "hello";
+>this.baz = "hello" : "hello"
+>this.baz : any
+>this : this
+>baz : any
+>"hello" : "hello"
+    }
+}
+
+export class Bar {
+>Bar : Bar
+
+    constructor() {
+        this.x = 42;
+>this.x = 42 : 42
+>this.x : any
+>this : this
+>x : any
+>42 : 42
+
+        this.y = true;
+>this.y = true : true
+>this.y : any
+>this : this
+>y : any
+>true : true
+    }
+}
+

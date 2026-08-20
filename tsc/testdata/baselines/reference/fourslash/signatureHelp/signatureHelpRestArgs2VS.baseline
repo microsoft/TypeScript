@@ -1,0 +1,148 @@
+// === SignatureHelp ===
+=== /index.js ===
+// const promisify = function (thisArg, fnName) {
+//     const fn = thisArg[fnName];
+//     return function () {
+//         return new Promise((resolve) => {
+//             fn.call(thisArg, ...arguments, );
+//                                            ^
+// | ----------------------------------------------------------------------
+// | Function.call(thisArg: any, **...argArray: any[]**): any
+// | - `...argArray: any[]`: A list of arguments to be passed to the method.
+// | Calls a method of an object, substituting another object for the current object.
+// | ----------------------------------------------------------------------
+//         });
+//     };
+// };
+[
+  {
+    "marker": {
+      "Position": 189,
+      "LSPosition": {
+        "line": 4,
+        "character": 43
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Function.call(thisArg: any, ...argArray: any[]): any",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Calls a method of an object, substituting another object for the current object."
+          },
+          "parameters": [
+            {
+              "label": "thisArg: any",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The object to be used as the current object."
+              }
+            },
+            {
+              "label": "...argArray: any[]",
+              "documentation": {
+                "kind": "markdown",
+                "value": "A list of arguments to be passed to the method."
+              }
+            }
+          ],
+          "activeParameter": 1,
+          "_vs_colorizedLabel": {
+            "Runs": [
+              {
+                "ClassificationTypeName": "method name",
+                "Text": "Function.call",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "(",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "thisArg",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ", ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "...",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "parameter name",
+                "Text": "argArray",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ":",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "whitespace",
+                "Text": " ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "[",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": "]",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ")",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "punctuation",
+                "Text": ": ",
+                "_vs_type": "ClassifiedTextRun"
+              },
+              {
+                "ClassificationTypeName": "keyword",
+                "Text": "any",
+                "_vs_type": "ClassifiedTextRun"
+              }
+            ],
+            "_vs_type": "ClassifiedTextElement"
+          }
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

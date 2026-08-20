@@ -1,0 +1,43 @@
+/foo/tsconfig.json(3,19): error TS6046: Argument for '--target' option must be: 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'es2023', 'es2024', 'es2025', 'esnext'.
+/foo/tsconfig.json(4,9): error TS5023: Unknown compiler option 'noImplicitUseStrict'.
+/foo/tsconfig.json(5,9): error TS5023: Unknown compiler option 'keyofStringsOnly'.
+/foo/tsconfig.json(6,9): error TS5023: Unknown compiler option 'suppressExcessPropertyErrors'.
+/foo/tsconfig.json(7,9): error TS5023: Unknown compiler option 'suppressImplicitAnyIndexErrors'.
+/foo/tsconfig.json(8,9): error TS5023: Unknown compiler option 'noStrictGenericChecks'.
+/foo/tsconfig.json(9,9): error TS5023: Unknown compiler option 'charset'.
+/foo/tsconfig.json(10,9): error TS5023: Unknown compiler option 'out'.
+
+
+==== /foo/tsconfig.json (8 errors) ====
+    {
+        "compilerOptions": {
+            "target": "ES3",
+                      ~~~~~
+!!! error TS6046: Argument for '--target' option must be: 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'es2023', 'es2024', 'es2025', 'esnext'.
+            "noImplicitUseStrict": true,
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5023: Unknown compiler option 'noImplicitUseStrict'.
+            "keyofStringsOnly": true,
+            ~~~~~~~~~~~~~~~~~~
+!!! error TS5023: Unknown compiler option 'keyofStringsOnly'.
+            "suppressExcessPropertyErrors": true,
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5023: Unknown compiler option 'suppressExcessPropertyErrors'.
+            "suppressImplicitAnyIndexErrors": true,
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5023: Unknown compiler option 'suppressImplicitAnyIndexErrors'.
+            "noStrictGenericChecks": true,
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5023: Unknown compiler option 'noStrictGenericChecks'.
+            "charset": "utf8",
+            ~~~~~~~~~
+!!! error TS5023: Unknown compiler option 'charset'.
+            "out": "dist.js"
+            ~~~~~
+!!! error TS5023: Unknown compiler option 'out'.
+        }
+    }
+    
+==== /foo/a.ts (0 errors) ====
+    const a = 1;
+    

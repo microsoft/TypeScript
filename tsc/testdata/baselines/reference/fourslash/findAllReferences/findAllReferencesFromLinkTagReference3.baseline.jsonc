@@ -1,0 +1,11 @@
+// === findAllReferences ===
+// === /a.ts ===
+// interface Foo {
+//     foo: E.[|Foo|];
+// }
+
+// === /b.ts ===
+// enum E {
+//     /** {@link /*FIND ALL REFS*/[|Foo|]} */
+//     [|Foo|]
+// }

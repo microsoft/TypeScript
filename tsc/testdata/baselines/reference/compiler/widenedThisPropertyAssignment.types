@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/widenedThisPropertyAssignment.ts] ////
+
+=== main.js ===
+export class CC {
+>CC : CC
+
+    constructor() {
+        this.stuffs = {}
+>this.stuffs = {} : {}
+>this.stuffs : any
+>this : this
+>stuffs : any
+>{} : {}
+    }
+    /**
+     * @param {Object} stuffs
+     */
+    addStuffs(stuffs) {
+>addStuffs : (stuffs: Object) => void
+>stuffs : Object
+
+        this.stuffs = { ...stuffs, ...this.stuffs }
+>this.stuffs = { ...stuffs, ...this.stuffs } : { constructor: Function; toString(): string; toLocaleString(): string; valueOf(): Object; hasOwnProperty(v: PropertyKey): boolean; isPrototypeOf(v: Object): boolean; propertyIsEnumerable(v: PropertyKey): boolean; }
+>this.stuffs : {}
+>this : this
+>stuffs : {}
+>{ ...stuffs, ...this.stuffs } : { constructor: Function; toString(): string; toLocaleString(): string; valueOf(): Object; hasOwnProperty(v: PropertyKey): boolean; isPrototypeOf(v: Object): boolean; propertyIsEnumerable(v: PropertyKey): boolean; }
+>stuffs : Object
+>this.stuffs : {}
+>this : this
+>stuffs : {}
+    }
+}
+

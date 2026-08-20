@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/jsdoc/jsdocParamTagNoName.ts] ////
+
+=== a.js ===
+/**
+ * @param {(x: string) => string}
+ */
+function foo(f) {
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+>f : Symbol(f, Decl(a.js, 3, 13))
+
+    return f(123);
+>f : Symbol(f, Decl(a.js, 3, 13))
+}
+

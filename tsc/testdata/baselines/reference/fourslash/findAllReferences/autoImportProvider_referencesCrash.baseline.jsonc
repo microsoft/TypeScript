@@ -1,0 +1,7 @@
+// === findAllReferences ===
+// === /home/src/workspaces/project/a/index.ts ===
+// class A {}[||]
+
+// === /home/src/workspaces/project/b/b.ts ===
+// /// <reference path="../a/index.d.ts" />
+// new [|A|]/*FIND ALL REFS*/();

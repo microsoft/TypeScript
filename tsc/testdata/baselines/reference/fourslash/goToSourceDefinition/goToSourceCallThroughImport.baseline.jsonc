@@ -1,0 +1,25 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// <|export class [|Widget|] {
+//     constructor(name) { this.name = name; }
+//     render() {}
+// }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { Widget } from "pkg";
+// const w = new /*GOTO SOURCE DEF*/Widget("test");
+// w.render();
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export class Widget {
+//     constructor(name) { this.name = name; }
+//     <|[|render|]() {}|>
+// }
+
+// === /home/src/workspaces/project/index.ts ===
+// import { Widget } from "pkg";
+// const w = new Widget("test");
+// w./*GOTO SOURCE DEF*/render();

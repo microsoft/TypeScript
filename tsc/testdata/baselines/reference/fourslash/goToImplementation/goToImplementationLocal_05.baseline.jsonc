@@ -1,0 +1,8 @@
+// === goToImplementation ===
+// === /goToImplementationLocal_05.ts ===
+// class Bar {
+//     public hello() {}
+// }
+// 
+// <|var [|someVar|] = new Bar();|>
+// someVa/*GOTO IMPL*/r.hello();

@@ -1,0 +1,49 @@
+// === QuickInfo ===
+=== /destructuredIntersectionJSDocVariable.ts ===
+// 
+// type X = {
+//     /** Description of a. */
+//     a: {}
+// }
+// 
+// type Y = X & { a: {} }
+// 
+// declare const y: Y;
+// const { a } = y;
+//         ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const a: {}
+// | ```
+// | Description of a.
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 106,
+      "LSPosition": {
+        "line": 9,
+        "character": 8
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst a: {}\n```\nDescription of a."
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 8
+        },
+        "end": {
+          "line": 9,
+          "character": 9
+        }
+      }
+    }
+  }
+]

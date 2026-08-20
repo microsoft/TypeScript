@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/declarationEmitSetAccessorNoParameter.ts] ////
+
+=== declarationEmitSetAccessorNoParameter.ts ===
+class C {
+>C : Symbol(C, Decl(declarationEmitSetAccessorNoParameter.ts, 0, 0))
+
+  set foo() { }
+>foo : Symbol(C.foo, Decl(declarationEmitSetAccessorNoParameter.ts, 0, 9))
+}
+

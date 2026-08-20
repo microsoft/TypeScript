@@ -1,0 +1,4 @@
+// === goToType ===
+// === /bar.ts ===
+// import { T } from "./foo";
+// let x: /*GOTO TYPE*/T;

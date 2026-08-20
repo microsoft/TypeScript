@@ -1,0 +1,25 @@
+// === documentHighlights ===
+// === /getOccurrencesOfAnonymousFunction2.ts ===
+// //global foo definition
+// function foo() {}
+// 
+// (function [|f/*HIGHLIGHTS*/oo|](): number {
+//     return [|foo|](); // local foo reference
+// })
+// //global foo references
+// foo();
+// var f = foo;
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesOfAnonymousFunction2.ts ===
+// //global foo definition
+// function [|foo|]() {}
+// 
+// (function foo(): number {
+//     return foo(); // local foo reference
+// })
+// //global foo references
+// [|fo/*HIGHLIGHTS*/o|]();
+// var f = [|foo|];

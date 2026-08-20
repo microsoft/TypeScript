@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/jsdocModifiersInObjectLiteral.ts] ////
+
+=== test.js ===
+// Object literal members aren't class-like members, so JSDoc modifiers like
+// @override or @readonly aren't real modifiers and must not produce grammar
+// errors, regardless of checkJs (#4437).
+
+const obj = {
+>obj : Symbol(obj, Decl(test.js, 4, 5))
+
+  /** @override */
+  created() {
+>created : Symbol(created, Decl(test.js, 4, 13))
+
+  },
+
+  /** @private */
+  onClose_() {
+>onClose_ : Symbol(onClose_, Decl(test.js, 7, 4))
+
+  },
+
+  /** @readonly */
+  get value() {
+>value : Symbol(value, Decl(test.js, 11, 4), Decl(test.js, 16, 4))
+
+    return 1;
+  },
+
+  /** @protected */
+  set value(v) {
+>value : Symbol(value, Decl(test.js, 11, 4), Decl(test.js, 16, 4))
+>v : Symbol(v, Decl(test.js, 19, 12))
+
+  },
+
+  /** @public */
+  async load() {
+>load : Symbol(load, Decl(test.js, 20, 4))
+
+  },
+};
+

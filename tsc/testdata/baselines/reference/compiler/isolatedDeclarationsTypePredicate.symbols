@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/isolatedDeclarationsTypePredicate.ts] ////
+
+=== isolatedDeclarationsTypePredicate.ts ===
+export function isString(value: unknown) {
+>isString : Symbol(isString, Decl(isolatedDeclarationsTypePredicate.ts, 0, 0))
+>value : Symbol(value, Decl(isolatedDeclarationsTypePredicate.ts, 0, 25))
+
+  return typeof value === "string";
+>value : Symbol(value, Decl(isolatedDeclarationsTypePredicate.ts, 0, 25))
+}
+
+export function isExplicitString(value: unknown): value is string {
+>isExplicitString : Symbol(isExplicitString, Decl(isolatedDeclarationsTypePredicate.ts, 2, 1))
+>value : Symbol(value, Decl(isolatedDeclarationsTypePredicate.ts, 4, 33))
+>value : Symbol(value, Decl(isolatedDeclarationsTypePredicate.ts, 4, 33))
+
+  return typeof value === "string";
+>value : Symbol(value, Decl(isolatedDeclarationsTypePredicate.ts, 4, 33))
+}
+

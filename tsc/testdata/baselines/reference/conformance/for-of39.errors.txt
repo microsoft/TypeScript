@@ -1,0 +1,16 @@
+for-of39.ts(1,25): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'boolean' is not assignable to type 'number'.
+
+
+==== for-of39.ts (1 errors) ====
+    var map = new Map([["", true], ["", 0]]);
+                            ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'number'.
+!!! related TS2771 lib.es2015.collection.d.ts:--:--: The last overload is declared here.
+    for (var [k, v] of map) {
+        k;
+        v;
+    }

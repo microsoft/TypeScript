@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/declarationEmit/classDoesNotDependOnPrivateMember.ts] ////
+
+=== classDoesNotDependOnPrivateMember.ts ===
+namespace M {
+>M : typeof M
+
+    interface I { }
+    export class C {
+>C : C
+
+        private x: I;
+>x : I
+    }
+}

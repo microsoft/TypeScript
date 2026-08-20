@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/exportAssignmentMerging10.ts] ////
+
+=== a.ts ===
+class Foo {}
+>Foo : Foo
+
+export class Base<T> {
+>Base : Base<T>
+
+    value!: T;
+>value : T
+}
+
+import _Base = Base;
+>_Base : any
+>Base : any
+
+namespace Foo {
+>Foo : typeof Foo
+
+    export import Base = _Base;
+>Base : any
+>_Base : any
+}
+
+export = Foo;
+>Foo : Foo
+
+=== b.ts ===
+import { Base } from "./a";
+>Base : typeof Base
+
+class Derived extends Base<string> {}
+>Derived : Derived
+>Base : Base<string>
+

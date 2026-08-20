@@ -1,0 +1,177 @@
+package fsbaselineutil
+
+import (
+	"fmt"
+	"io"
+	"io/fs"
+	"maps"
+	"regexp"
+	"slices"
+	"strings"
+	"time"
+
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+)
+
+type DiffEntry struct {
+	Content       string
+	MTime         time.Time
+	IsWritten     bool
+	SymlinkTarget string
+}
+
+type Snapshot struct {
+	Snap        map[string]*DiffEntry
+	DefaultLibs *collections.SyncSet[string]
+}
+
+type FSDiffer struct {
+	FS           iovfs.FsWithSys
+	DefaultLibs  func() *collections.SyncSet[string]
+	WrittenFiles *collections.SyncSet[string]
+
+	serializedDiff *Snapshot
+}
+
+func (d *FSDiffer) MapFs() *vfstest.MapFS {
+	return d.FS.FSys().(*vfstest.MapFS)
+}
+
+func (d *FSDiffer) SerializedDiff() *Snapshot {
+	return d.serializedDiff
+}
+
+func (d *FSDiffer) BaselineFSwithDiff(baseline io.Writer) {
+	// todo: baselines the entire fs, possibly doesn't correctly diff all cases of emitted files, since emit isn't fully implemented and doesn't always emit the same way as strada
+	snap := map[string]*DiffEntry{}
+
+	diffs := map[string]string{}
+
+	for path, file := range d.MapFs().Entries() {
+		if file.Mode&fs.ModeSymlink != 0 {
+			target, ok := d.MapFs().GetTargetOfSymlink(path)
+			if !ok {
+				panic("Failed to resolve symlink target: " + path)
+			}
+			newEntry := &DiffEntry{SymlinkTarget: target}
+			snap[path] = newEntry
+			d.addFsEntryDiff(diffs, newEntry, path)
+			continue
+		} else if file.Mode.IsRegular() {
+			content := SanitizeInternalSymbolName(string(file.Data))
+			newEntry := &DiffEntry{Content: content, MTime: file.ModTime, IsWritten: d.WrittenFiles.Has(path)}
+			snap[path] = newEntry
+			d.addFsEntryDiff(diffs, newEntry, path)
+		}
+	}
+	if d.serializedDiff != nil {
+		for path := range d.serializedDiff.Snap {
+			if fileInfo := d.MapFs().GetFileInfo(path); fileInfo == nil {
+				// report deleted
+				d.addFsEntryDiff(diffs, nil, path)
+			}
+		}
+	}
+	var defaultLibs collections.SyncSet[string]
+	if d.DefaultLibs != nil && d.DefaultLibs() != nil {
+		d.DefaultLibs().Range(func(libPath string) bool {
+			defaultLibs.Add(libPath)
+			return true
+		})
+	}
+	d.serializedDiff = &Snapshot{
+		Snap:        snap,
+		DefaultLibs: &defaultLibs,
+	}
+	diffKeys := slices.Collect(maps.Keys(diffs))
+	slices.Sort(diffKeys)
+	for _, path := range diffKeys {
+		fmt.Fprint(baseline, "//// ["+path+"] ", diffs[path], "\n")
+	}
+	fmt.Fprintln(baseline)
+	*d.WrittenFiles = collections.SyncSet[string]{} // Reset written files after baseline
+}
+
+var internalSymbolRegex = regexp.MustCompile(`\x{FFFD}@[^@]+@[0-9]+`)
+
+// Replaces internal symbol names of shape \uFFFD@symbolName@123 with \uFFFD@symbolName@<symbolId>
+// // to avoid baselining differences in symbol ids, which can change between runs.
+func SanitizeInternalSymbolName(s string) string {
+	if !strings.Contains(s, "\uFFFD@") {
+		return s
+	}
+	return internalSymbolRegex.ReplaceAllStringFunc(s, func(match string) string {
+		idStart := strings.LastIndex(match, "@")
+		return match[:idStart] + "@<symbolId>"
+	})
+}
+
+func (d *FSDiffer) addFsEntryDiff(diffs map[string]string, newDirContent *DiffEntry, path string) {
+	var oldDirContent *DiffEntry
+	var defaultLibs *collections.SyncSet[string]
+	if d.serializedDiff != nil {
+		oldDirContent = d.serializedDiff.Snap[path]
+		defaultLibs = d.serializedDiff.DefaultLibs
+	}
+	// todo handle more cases of fs changes
+	if oldDirContent == nil {
+		if d.DefaultLibs == nil || d.DefaultLibs() == nil || !d.DefaultLibs().Has(path) {
+			if newDirContent.SymlinkTarget != "" {
+				diffs[path] = "-> " + newDirContent.SymlinkTarget + " *new*"
+			} else {
+				diffs[path] = "*new* \n" + newDirContent.Content
+			}
+		}
+	} else if newDirContent == nil {
+		diffs[path] = "*deleted*"
+	} else if newDirContent.Content != oldDirContent.Content {
+		diffs[path] = "*modified* \n" + newDirContent.Content
+	} else if newDirContent.IsWritten {
+		diffs[path] = "*rewrite with same content*"
+	} else if newDirContent.MTime != oldDirContent.MTime {
+		diffs[path] = "*mTime changed*"
+	} else if defaultLibs != nil && defaultLibs.Has(path) && d.DefaultLibs != nil && d.DefaultLibs() != nil && !d.DefaultLibs().Has(path) {
+		// Lib file that was read
+		diffs[path] = "*Lib*\n" + newDirContent.Content
+	}
+}
+
+// FileChange represents a filesystem change detected between snapshots.
+type FileChange struct {
+	Path    string
+	Deleted bool
+}
+
+func (d *FSDiffer) ChangedPaths() []FileChange {
+	if d.serializedDiff == nil {
+		return nil
+	}
+
+	var changes []FileChange
+	oldSnap := d.serializedDiff
+
+	// Check current files against previous snapshot.
+	for path, file := range d.MapFs().Entries() {
+		if file.Mode&fs.ModeSymlink != 0 || !file.Mode.IsRegular() {
+			continue
+		}
+		if old, ok := oldSnap.Snap[path]; !ok {
+			// New file.
+			changes = append(changes, FileChange{Path: path})
+		} else if string(file.Data) != old.Content || file.ModTime != old.MTime {
+			// Modified or touched file.
+			changes = append(changes, FileChange{Path: path})
+		}
+	}
+
+	// Check for deleted files.
+	for path := range oldSnap.Snap {
+		if fileInfo := d.MapFs().GetFileInfo(path); fileInfo == nil {
+			changes = append(changes, FileChange{Path: path, Deleted: true})
+		}
+	}
+
+	return changes
+}

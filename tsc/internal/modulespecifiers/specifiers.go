@@ -1,0 +1,1397 @@
+package modulespecifiers
+
+import (
+	"maps"
+	"slices"
+	"strings"
+
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/debug"
+	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
+	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+)
+
+func GetModuleSpecifiers(
+	moduleSymbol *ast.Symbol,
+	checker CheckerShape,
+	compilerOptions *core.CompilerOptions,
+	importingSourceFile SourceFileForSpecifierGeneration,
+	host ModuleSpecifierGenerationHost,
+	userPreferences UserPreferences,
+	options ModuleSpecifierOptions,
+	forAutoImports bool,
+) []string {
+	result, _ := GetModuleSpecifiersWithInfo(
+		moduleSymbol,
+		checker,
+		compilerOptions,
+		importingSourceFile,
+		host,
+		userPreferences,
+		options,
+		forAutoImports,
+	)
+	return result
+}
+
+func GetModuleSpecifiersWithInfo(
+	moduleSymbol *ast.Symbol,
+	checker CheckerShape,
+	compilerOptions *core.CompilerOptions,
+	importingSourceFile SourceFileForSpecifierGeneration,
+	host ModuleSpecifierGenerationHost,
+	userPreferences UserPreferences,
+	options ModuleSpecifierOptions,
+	forAutoImports bool,
+) ([]string, ResultKind) {
+	ambient := tryGetModuleNameFromAmbientModule(moduleSymbol, checker)
+	if len(ambient) > 0 {
+		if forAutoImports && IsExcludedByRegex(ambient, userPreferences.AutoImportSpecifierExcludeRegexes) {
+			return nil, ResultKindAmbient
+		}
+		return []string{ambient}, ResultKindAmbient
+	}
+
+	moduleSourceFile := ast.GetSourceFileOfModule(moduleSymbol)
+	if moduleSourceFile == nil {
+		return nil, ResultKindNone
+	}
+
+	// Use original source file name when file is from project reference output
+	moduleFileName := host.GetSourceOfProjectReferenceIfOutputIncluded(moduleSourceFile)
+
+	return GetModuleSpecifiersForFileWithInfo(
+		importingSourceFile,
+		moduleFileName,
+		compilerOptions,
+		host,
+		userPreferences,
+		options,
+		forAutoImports,
+	)
+}
+
+func GetModuleSpecifiersForFileWithInfo(
+	importingSourceFile SourceFileForSpecifierGeneration,
+	moduleFileName string,
+	compilerOptions *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	userPreferences UserPreferences,
+	options ModuleSpecifierOptions,
+	forAutoImports bool,
+) ([]string, ResultKind) {
+	modulePaths := getAllModulePathsWorker(
+		getInfo(host.GetSourceOfProjectReferenceIfOutputIncluded(importingSourceFile), host),
+		moduleFileName,
+		host,
+		compilerOptions,
+		options,
+	)
+
+	return computeModuleSpecifiers(
+		modulePaths,
+		compilerOptions,
+		importingSourceFile,
+		host,
+		userPreferences,
+		options,
+		forAutoImports,
+	)
+}
+
+func tryGetModuleNameFromAmbientModule(moduleSymbol *ast.Symbol, checker CheckerShape) string {
+	for _, decl := range moduleSymbol.Declarations {
+		if ast.IsModuleWithStringLiteralName(decl) && (!ast.IsModuleAugmentationExternal(decl) || !tspath.IsExternalModuleNameRelative(decl.Name().Text())) {
+			return decl.Name().Text()
+		}
+	}
+
+	// the module could be a namespace, which is export through "export=" from an ambient module.
+	/**
+	 * declare module "m" {
+	 *     namespace ns {
+	 *         class c {}
+	 *     }
+	 *     export = ns;
+	 * }
+	 */
+	// `import {c} from "m";` is valid, in which case, `moduleSymbol` is "ns", but the module name should be "m"
+	for _, d := range moduleSymbol.Declarations {
+		if !ast.IsModuleDeclaration(d) {
+			continue
+		}
+
+		possibleContainer := ast.FindAncestor(d, ast.IsModuleWithStringLiteralName)
+		if possibleContainer == nil || possibleContainer.Parent == nil || !ast.IsSourceFile(possibleContainer.Parent) {
+			continue
+		}
+
+		sym, ok := possibleContainer.Symbol().Exports[ast.InternalSymbolNameExportEquals]
+		if !ok || sym == nil {
+			continue
+		}
+		exportAssignmentDecl := sym.ValueDeclaration
+		if exportAssignmentDecl == nil || exportAssignmentDecl.Kind != ast.KindExportAssignment {
+			continue
+		}
+		exportSymbol := checker.GetSymbolAtLocation(exportAssignmentDecl.Expression())
+		if exportSymbol == nil {
+			continue
+		}
+		if exportSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+			exportSymbol = checker.GetAliasedSymbol(exportSymbol)
+		}
+		// TODO: Possible strada bug - isn't this insufficient in the presence of merge symbols?
+		if exportSymbol == d.Symbol() {
+			return possibleContainer.Name().Text()
+		}
+	}
+	return ""
+}
+
+type Info struct {
+	UseCaseSensitiveFileNames bool
+	ImportingSourceFileName   string
+	SourceDirectory           string
+}
+
+func getInfo(
+	importingSourceFileName string,
+	host ModuleSpecifierGenerationHost,
+) Info {
+	sourceDirectory := tspath.GetDirectoryPath(importingSourceFileName)
+	return Info{
+		ImportingSourceFileName:   importingSourceFileName,
+		SourceDirectory:           sourceDirectory,
+		UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
+	}
+}
+
+func getAllModulePaths(
+	info Info,
+	importedFileName string,
+	host ModuleSpecifierGenerationHost,
+	compilerOptions *core.CompilerOptions,
+	preferences UserPreferences,
+	options ModuleSpecifierOptions,
+) []ModulePath {
+	// !!! use new cache model
+	// importingFilePath := tspath.ToPath(info.ImportingSourceFileName, host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames());
+	// importedFilePath := tspath.ToPath(importedFileName, host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames());
+	// cache := host.getModuleSpecifierCache();
+	// if (cache != nil) {
+	//     cached := cache.get(importingFilePath, importedFilePath, preferences, options);
+	//     if (cached.modulePaths) {return cached.modulePaths;}
+	// }
+	modulePaths := getAllModulePathsWorker(info, importedFileName, host, compilerOptions, options)
+	// if (cache != nil) {
+	//     cache.setModulePaths(importingFilePath, importedFilePath, preferences, options, modulePaths);
+	// }
+	return modulePaths
+}
+
+func getAllModulePathsWorker(
+	info Info,
+	importedFileName string,
+	host ModuleSpecifierGenerationHost,
+	compilerOptions *core.CompilerOptions,
+	options ModuleSpecifierOptions,
+) []ModulePath {
+	allFileNames := make(map[string]ModulePath)
+	paths := GetEachFileNameOfModule(info.ImportingSourceFileName, importedFileName, host, true)
+	for _, p := range paths {
+		allFileNames[p.FileName] = p
+	}
+
+	useCaseSensitiveFileNames := info.UseCaseSensitiveFileNames
+	comparePaths := func(a, b ModulePath) int {
+		return comparePathsByRedirect(a, b, useCaseSensitiveFileNames)
+	}
+
+	// Sort by paths closest to importing file Name directory
+	sortedPaths := make([]ModulePath, 0, len(paths))
+	for directory := info.SourceDirectory; len(allFileNames) != 0; {
+		directoryStart := tspath.EnsureTrailingDirectorySeparator(directory)
+		var pathsInDirectory []ModulePath
+		for fileName, p := range allFileNames {
+			if strings.HasPrefix(fileName, directoryStart) {
+				pathsInDirectory = append(pathsInDirectory, p)
+				delete(allFileNames, fileName)
+			}
+		}
+		if len(pathsInDirectory) > 0 {
+			slices.SortFunc(pathsInDirectory, comparePaths)
+			sortedPaths = append(sortedPaths, pathsInDirectory...)
+		}
+		newDirectory := tspath.GetDirectoryPath(directory)
+		if newDirectory == directory {
+			break
+		}
+		directory = newDirectory
+	}
+	if len(allFileNames) > 0 {
+		remainingPaths := slices.Collect(maps.Values(allFileNames))
+		slices.SortFunc(remainingPaths, comparePaths)
+		sortedPaths = append(sortedPaths, remainingPaths...)
+	}
+	return sortedPaths
+}
+
+// containsIgnoredPath checks if a path contains patterns that should be ignored.
+// This is a local helper that duplicates tspath.ContainsIgnoredPath for performance.
+func containsIgnoredPath(s string) bool {
+	return strings.Contains(s, "/node_modules/.") ||
+		strings.Contains(s, "/.git") ||
+		strings.Contains(s, ".#")
+}
+
+// ContainsNodeModules checks if a path contains the node_modules directory.
+func ContainsNodeModules(s string) bool {
+	return strings.Contains(s, "/node_modules/")
+}
+
+// GetEachFileNameOfModule returns all possible file paths for a module, including symlink alternatives.
+// This function handles symlink resolution and provides multiple path options for module resolution.
+func GetEachFileNameOfModule(
+	importingFileName string,
+	importedFileName string,
+	host ModuleSpecifierGenerationHost,
+	preferSymlinks bool,
+) []ModulePath {
+	cwd := host.GetCurrentDirectory()
+	importedPath := tspath.ToPath(importedFileName, cwd, host.UseCaseSensitiveFileNames())
+	var referenceRedirect string
+	outputAndReference := host.GetProjectReferenceFromSource(importedPath)
+	if outputAndReference != nil && outputAndReference.OutputDts != "" {
+		referenceRedirect = outputAndReference.OutputDts
+	}
+
+	redirects := host.GetRedirectTargets(importedPath)
+	importedFileNames := make([]string, 0, 2+len(redirects))
+	if len(referenceRedirect) > 0 {
+		importedFileNames = append(importedFileNames, referenceRedirect)
+	}
+	importedFileNames = append(importedFileNames, importedFileName)
+	importedFileNames = append(importedFileNames, redirects...)
+	targets := core.Map(importedFileNames, func(f string) string { return tspath.GetNormalizedAbsolutePath(f, cwd) })
+	shouldFilterIgnoredPaths := !core.Every(targets, containsIgnoredPath)
+
+	results := make([]ModulePath, 0, 2)
+	if !preferSymlinks {
+		for _, p := range targets {
+			if !(shouldFilterIgnoredPaths && containsIgnoredPath(p)) {
+				results = append(results, ModulePath{
+					FileName:        p,
+					IsInNodeModules: ContainsNodeModules(p),
+					IsRedirect:      referenceRedirect == p,
+				})
+			}
+		}
+	}
+
+	symlinkCache := host.GetSymlinkCache()
+	fullImportedFileName := tspath.GetNormalizedAbsolutePath(importedFileName, cwd)
+	if symlinkCache != nil {
+		tspath.ForEachAncestorDirectoryStoppingAtGlobalCache(
+			host.GetGlobalTypingsCacheLocation(),
+			tspath.GetDirectoryPath(fullImportedFileName),
+			func(realPathDirectory string) (bool, bool) {
+				symlinkSet, ok := symlinkCache.DirectoriesByRealpath().Load(tspath.ToPath(realPathDirectory, cwd, host.UseCaseSensitiveFileNames()).EnsureTrailingDirectorySeparator())
+				if !ok {
+					return false, false
+				} // Continue to ancestor directory
+
+				// Don't want to a package to globally import from itself (importNameCodeFix_symlink_own_package.ts)
+				if tspath.StartsWithDirectory(importingFileName, realPathDirectory, host.UseCaseSensitiveFileNames()) {
+					return false, true // Stop search, each ancestor directory will also hit this condition
+				}
+
+				for _, target := range targets {
+					if !tspath.StartsWithDirectory(target, realPathDirectory, host.UseCaseSensitiveFileNames()) {
+						continue
+					}
+
+					relative := tspath.GetRelativePathFromDirectory(
+						realPathDirectory,
+						target,
+						tspath.ComparePathsOptions{
+							UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
+							CurrentDirectory:          cwd,
+						},
+					)
+					symlinkSet.Range(func(symlinkDirectory string) bool {
+						option := tspath.ResolvePath(symlinkDirectory, relative)
+						results = append(results, ModulePath{
+							FileName:        option,
+							IsInNodeModules: ContainsNodeModules(option),
+							IsRedirect:      target == referenceRedirect,
+						})
+						shouldFilterIgnoredPaths = true // We found a non-ignored path in symlinks, so we can reject ignored-path realpaths
+						return true
+					})
+				}
+
+				return false, false
+			},
+		)
+	}
+
+	if preferSymlinks {
+		for _, p := range targets {
+			if !(shouldFilterIgnoredPaths && containsIgnoredPath(p)) {
+				results = append(results, ModulePath{
+					FileName:        p,
+					IsInNodeModules: ContainsNodeModules(p),
+					IsRedirect:      referenceRedirect == p,
+				})
+			}
+		}
+	}
+
+	return results
+}
+
+func computeModuleSpecifiers(
+	modulePaths []ModulePath,
+	compilerOptions *core.CompilerOptions,
+	importingSourceFile SourceFileForSpecifierGeneration,
+	host ModuleSpecifierGenerationHost,
+	userPreferences UserPreferences,
+	options ModuleSpecifierOptions,
+	forAutoImport bool,
+) ([]string, ResultKind) {
+	info := getInfo(importingSourceFile.FileName(), host)
+	preferences := getModuleSpecifierPreferences(userPreferences, host, compilerOptions, importingSourceFile, "")
+
+	var existingSpecifier string
+	for _, modulePath := range modulePaths {
+		targetPath := tspath.ToPath(modulePath.FileName, host.GetCurrentDirectory(), info.UseCaseSensitiveFileNames)
+		var existingImport *ast.StringLiteralLike
+		for _, importSpecifier := range importingSourceFile.Imports() {
+			resolvedModule := host.GetResolvedModuleFromModuleSpecifier(importingSourceFile, importSpecifier)
+			if resolvedModule.IsResolved() && tspath.ToPath(resolvedModule.ResolvedFileName, host.GetCurrentDirectory(), info.UseCaseSensitiveFileNames) == targetPath {
+				existingImport = importSpecifier
+				break
+			}
+		}
+		if existingImport != nil {
+			if preferences.relativePreference == RelativePreferenceNonRelative && tspath.PathIsRelative(existingImport.Text()) {
+				// If the preference is for non-relative and the module specifier is relative, ignore it
+				continue
+			}
+			existingMode := host.GetModeForUsageLocation(importingSourceFile, existingImport)
+			targetMode := options.OverrideImportMode
+			if targetMode == core.ResolutionModeNone {
+				targetMode = host.GetDefaultResolutionModeForFile(importingSourceFile)
+			}
+			if existingMode != targetMode && existingMode != core.ResolutionModeNone && targetMode != core.ResolutionModeNone {
+				// If the candidate import mode doesn't match the mode we're generating for, don't consider it
+				continue
+			}
+			existingSpecifier = existingImport.Text()
+			break
+		}
+	}
+
+	if existingSpecifier != "" {
+		return []string{existingSpecifier}, ResultKindNone
+	}
+
+	importedFileIsInNodeModules := core.Some(modulePaths, func(p ModulePath) bool { return p.IsInNodeModules })
+
+	// Module specifier priority:
+	//   1. "Bare package specifiers" (e.g. "@foo/bar") resulting from a path through node_modules to a package.json's "types" entry
+	//   2. Specifiers generated using "paths" from tsconfig
+	//   3. Non-relative specfiers resulting from a path through node_modules (e.g. "@foo/bar/path/to/file")
+	//   4. Relative paths
+	var pathsSpecifiers []string
+	var redirectPathsSpecifiers []string
+	var nodeModulesSpecifiers []string
+	var relativeSpecifiers []string
+
+	for _, modulePath := range modulePaths {
+		var specifier string
+		if modulePath.IsInNodeModules {
+			specifier = tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences /*packageNameOnly*/, false, options.OverrideImportMode)
+		}
+		if len(specifier) > 0 && !(forAutoImport && IsExcludedByRegex(specifier, preferences.excludeRegexes)) {
+			nodeModulesSpecifiers = append(nodeModulesSpecifiers, specifier)
+			if modulePath.IsRedirect {
+				// If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
+				// not "@foo/bar/path/to/file"). No other specifier will be this good, so stop looking.
+				return nodeModulesSpecifiers, ResultKindNodeModules
+			}
+		}
+
+		importMode := options.OverrideImportMode
+		if importMode == core.ResolutionModeNone {
+			importMode = host.GetDefaultResolutionModeForFile(importingSourceFile)
+		}
+		local := getLocalModuleSpecifier(
+			modulePath.FileName,
+			info,
+			compilerOptions,
+			host,
+			importMode,
+			preferences,
+			/*pathsOnly*/ modulePath.IsRedirect || len(specifier) > 0,
+		)
+		if len(local) == 0 || forAutoImport && IsExcludedByRegex(local, preferences.excludeRegexes) {
+			continue
+		}
+		if modulePath.IsRedirect {
+			redirectPathsSpecifiers = append(redirectPathsSpecifiers, local)
+		} else if PathIsBareSpecifier(local) {
+			if ContainsNodeModules(local) {
+				// We could be in this branch due to inappropriate use of `baseUrl`, not intentional `paths`
+				// usage. It's impossible to reason about where to prioritize baseUrl-generated module
+				// specifiers, but if they contain `/node_modules/`, they're going to trigger a portability
+				// error, so *at least* don't prioritize those.
+				relativeSpecifiers = append(relativeSpecifiers, local)
+			} else {
+				pathsSpecifiers = append(pathsSpecifiers, local)
+			}
+		} else if forAutoImport || !importedFileIsInNodeModules || modulePath.IsInNodeModules {
+			// Why this extra conditional, not just an `else`? If some path to the file contained
+			// 'node_modules', but we can't create a non-relative specifier (e.g. "@foo/bar/path/to/file"),
+			// that means we had to go through a *sibling's* node_modules, not one we can access directly.
+			// If some path to the file was in node_modules but another was not, this likely indicates that
+			// we have a monorepo structure with symlinks. In this case, the non-nodeModules path is
+			// probably the realpath, e.g. "../bar/path/to/file", but a relative path to another package
+			// in a monorepo is probably not portable. So, the module specifier we actually go with will be
+			// the relative path through node_modules, so that the declaration emitter can produce a
+			// portability error. (See declarationEmitReexportedSymlinkReference3)
+			relativeSpecifiers = append(relativeSpecifiers, local)
+		}
+	}
+
+	if len(pathsSpecifiers) > 0 {
+		return pathsSpecifiers, ResultKindPaths
+	}
+	if len(redirectPathsSpecifiers) > 0 {
+		return redirectPathsSpecifiers, ResultKindRedirect
+	}
+	if len(nodeModulesSpecifiers) > 0 {
+		return nodeModulesSpecifiers, ResultKindNodeModules
+	}
+	return relativeSpecifiers, ResultKindRelative
+}
+
+func getLocalModuleSpecifier(
+	moduleFileName string,
+	info Info,
+	compilerOptions *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	importMode core.ResolutionMode,
+	preferences ModuleSpecifierPreferences,
+	pathsOnly bool,
+) string {
+	paths := compilerOptions.Paths
+	rootDirs := compilerOptions.RootDirs
+
+	if pathsOnly && paths == nil {
+		return ""
+	}
+
+	sourceDirectory := info.SourceDirectory
+
+	allowedEndings := preferences.getAllowedEndingsInPreferredOrder(importMode)
+	var relativePath string
+	if len(rootDirs) > 0 {
+		relativePath = tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, allowedEndings, compilerOptions, host)
+	}
+	if len(relativePath) == 0 {
+		relativePath = processEnding(ensurePathIsNonModuleName(tspath.GetRelativePathFromDirectory(sourceDirectory, moduleFileName, tspath.ComparePathsOptions{
+			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
+			CurrentDirectory:          host.GetCurrentDirectory(),
+		})), allowedEndings, compilerOptions, host)
+	}
+
+	if (paths == nil && !compilerOptions.GetResolvePackageJsonImports()) || preferences.relativePreference == RelativePreferenceRelative {
+		if pathsOnly {
+			return ""
+		}
+		return relativePath
+	}
+
+	root := compilerOptions.GetPathsBasePath(host.GetCurrentDirectory())
+	baseDirectory := tspath.GetNormalizedAbsolutePath(root, host.GetCurrentDirectory())
+	relativeToBaseUrl := getRelativePathIfInSameVolume(moduleFileName, baseDirectory, host.UseCaseSensitiveFileNames())
+	if len(relativeToBaseUrl) == 0 {
+		if pathsOnly {
+			return ""
+		}
+		return relativePath
+	}
+
+	var fromPackageJsonImports string
+	if !pathsOnly {
+		fromPackageJsonImports = tryGetModuleNameFromPackageJsonImports(
+			moduleFileName,
+			sourceDirectory,
+			compilerOptions,
+			host,
+			importMode,
+			prefersTsExtension(allowedEndings),
+		)
+	}
+
+	var fromPaths string
+	if (pathsOnly || len(fromPackageJsonImports) == 0) && paths != nil {
+		fromPaths = tryGetModuleNameFromPaths(
+			relativeToBaseUrl,
+			paths,
+			allowedEndings,
+			baseDirectory,
+			host,
+			compilerOptions,
+		)
+	}
+
+	if pathsOnly {
+		return fromPaths
+	}
+
+	var maybeNonRelative string
+	if len(fromPackageJsonImports) > 0 {
+		maybeNonRelative = fromPackageJsonImports
+	} else {
+		maybeNonRelative = fromPaths
+	}
+	if len(maybeNonRelative) == 0 {
+		return relativePath
+	}
+
+	relativeIsExcluded := IsExcludedByRegex(relativePath, preferences.excludeRegexes)
+	nonRelativeIsExcluded := IsExcludedByRegex(maybeNonRelative, preferences.excludeRegexes)
+	if !relativeIsExcluded && nonRelativeIsExcluded {
+		return relativePath
+	}
+	if relativeIsExcluded && !nonRelativeIsExcluded {
+		return maybeNonRelative
+	}
+
+	if preferences.relativePreference == RelativePreferenceNonRelative && !tspath.PathIsRelative(maybeNonRelative) {
+		return maybeNonRelative
+	}
+
+	if preferences.relativePreference == RelativePreferenceExternalNonRelative && !tspath.PathIsRelative(maybeNonRelative) {
+		var projectDirectory tspath.Path
+		if len(compilerOptions.ConfigFilePath) > 0 {
+			projectDirectory = tspath.ToPath(tspath.GetDirectoryPath(compilerOptions.ConfigFilePath), host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames())
+		} else {
+			projectDirectory = tspath.ToPath(host.GetCurrentDirectory(), host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames())
+		}
+		canonicalSourceDirectory := tspath.ToPath(sourceDirectory, host.GetCurrentDirectory(), host.UseCaseSensitiveFileNames())
+		modulePath := tspath.ToPath(moduleFileName, string(projectDirectory), host.UseCaseSensitiveFileNames())
+
+		sourceIsInternal := projectDirectory.ContainsPath(canonicalSourceDirectory)
+		targetIsInternal := projectDirectory.ContainsPath(modulePath)
+		if sourceIsInternal && !targetIsInternal || !sourceIsInternal && targetIsInternal {
+			// 1. The import path crosses the boundary of the tsconfig.json-containing directory.
+			//
+			//      src/
+			//        tsconfig.json
+			//        index.ts -------
+			//      lib/              | (path crosses tsconfig.json)
+			//        imported.ts <---
+			//
+			return maybeNonRelative
+		}
+
+		nearestTargetPackageJson := host.GetNearestAncestorDirectoryWithPackageJson(tspath.GetDirectoryPath(string(modulePath)))
+		nearestSourcePackageJson := host.GetNearestAncestorDirectoryWithPackageJson(sourceDirectory)
+
+		if !packageJsonPathsAreEqual(nearestTargetPackageJson, nearestSourcePackageJson, tspath.ComparePathsOptions{
+			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
+			CurrentDirectory:          host.GetCurrentDirectory(),
+		}) {
+			// 2. The importing and imported files are part of different packages.
+			//
+			//      packages/a/
+			//        package.json
+			//        index.ts --------
+			//      packages/b/        | (path crosses package.json)
+			//        package.json     |
+			//        component.ts <---
+			//
+			return maybeNonRelative
+		}
+
+		return relativePath
+	}
+
+	// Prefer a relative import over a baseUrl import if it has fewer components.
+	if isPathRelativeToParent(maybeNonRelative) || CountPathComponents(relativePath) < CountPathComponents(maybeNonRelative) {
+		return relativePath
+	}
+	return maybeNonRelative
+}
+
+func processEnding(
+	fileName string,
+	allowedEndings []ModuleSpecifierEnding,
+	options *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+) string {
+	if tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionJson, tspath.ExtensionMjs, tspath.ExtensionCjs}) {
+		return fileName
+	}
+
+	noExtension := tspath.RemoveFileExtension(fileName)
+	if fileName == noExtension {
+		return fileName
+	}
+
+	jsPriority := slices.Index(allowedEndings, ModuleSpecifierEndingJsExtension)
+	tsPriority := slices.Index(allowedEndings, ModuleSpecifierEndingTsExtension)
+	if tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionMts, tspath.ExtensionCts}) && tsPriority != -1 && tsPriority < jsPriority {
+		return fileName
+	}
+	if tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionDmts, tspath.ExtensionDcts}) {
+		inputExt := tspath.GetDeclarationFileExtension(fileName)
+		ext := GetJSExtensionForDeclarationFileExtension(inputExt)
+		return tspath.RemoveExtension(fileName, inputExt) + ext
+	}
+	if tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionMts, tspath.ExtensionCts}) {
+		return noExtension + getJSExtensionForFile(fileName, options)
+	}
+	if !tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionDts}) && tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionTs}) && strings.Contains(fileName, ".d.") {
+		// `foo.d.json.ts` and the like - remap back to `foo.json`
+		if result := TryGetRealFileNameForNonJSDeclarationFileName(fileName); result != "" {
+			return result
+		}
+	}
+
+	switch allowedEndings[0] {
+	case ModuleSpecifierEndingMinimal:
+		withoutIndex := strings.TrimSuffix(noExtension, "/index")
+		if host != nil && withoutIndex != noExtension && tryGetAnyFileFromPath(host, withoutIndex) {
+			// Can't remove index if there's a file by the same name as the directory.
+			// Probably more callers should pass `host` so we can determine this?
+			return noExtension
+		}
+		return withoutIndex
+	case ModuleSpecifierEndingIndex:
+		return noExtension
+	case ModuleSpecifierEndingJsExtension:
+		return noExtension + getJSExtensionForFile(fileName, options)
+	case ModuleSpecifierEndingTsExtension:
+		// For now, we don't know if this import is going to be type-only, which means we don't
+		// know if a .d.ts extension is valid, so use no extension or a .js extension
+		if tspath.IsDeclarationFileName(fileName) {
+			extensionlessPriority := -1
+			for i, e := range allowedEndings {
+				if e == ModuleSpecifierEndingMinimal || e == ModuleSpecifierEndingIndex {
+					extensionlessPriority = i
+					break
+				}
+			}
+			if extensionlessPriority != -1 && extensionlessPriority < jsPriority {
+				return noExtension
+			}
+			return noExtension + getJSExtensionForFile(fileName, options)
+		}
+		return fileName
+	default:
+		debug.AssertNever(allowedEndings[0])
+		return ""
+	}
+}
+
+func tryGetModuleNameFromRootDirs(
+	rootDirs []string,
+	moduleFileName string,
+	sourceDirectory string,
+	allowedEndings []ModuleSpecifierEnding,
+	compilerOptions *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+) string {
+	normalizedTargetPaths := getPathsRelativeToRootDirs(moduleFileName, rootDirs, host.UseCaseSensitiveFileNames())
+	if len(normalizedTargetPaths) == 0 {
+		return ""
+	}
+
+	normalizedSourcePaths := getPathsRelativeToRootDirs(sourceDirectory, rootDirs, host.UseCaseSensitiveFileNames())
+	var shortest string
+	var shortestSepCount int
+	for _, sourcePath := range normalizedSourcePaths {
+		for _, targetPath := range normalizedTargetPaths {
+			candidate := ensurePathIsNonModuleName(tspath.GetRelativePathFromDirectory(sourcePath, targetPath, tspath.ComparePathsOptions{
+				UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
+				CurrentDirectory:          host.GetCurrentDirectory(),
+			}))
+			candidateSepCount := strings.Count(candidate, "/")
+			if len(shortest) == 0 || candidateSepCount < shortestSepCount {
+				shortest = candidate
+				shortestSepCount = candidateSepCount
+			}
+		}
+	}
+
+	if len(shortest) == 0 {
+		return ""
+	}
+	return processEnding(shortest, allowedEndings, compilerOptions, host)
+}
+
+func tryGetModuleNameAsNodeModule(
+	pathObj ModulePath,
+	info Info,
+	importingSourceFile SourceFileForSpecifierGeneration,
+	host ModuleSpecifierGenerationHost,
+	options *core.CompilerOptions,
+	userPreferences UserPreferences,
+	packageNameOnly bool,
+	overrideMode core.ResolutionMode,
+) string {
+	parts := GetNodeModulePathParts(pathObj.FileName)
+	if parts == nil {
+		return ""
+	}
+
+	// Simplify the full file path to something that can be resolved by Node.
+	preferences := getModuleSpecifierPreferences(userPreferences, host, options, importingSourceFile, "")
+	allowedEndings := preferences.getAllowedEndingsInPreferredOrder(core.ResolutionModeNone)
+
+	caseSensitive := host.UseCaseSensitiveFileNames()
+	moduleSpecifier := pathObj.FileName
+	isPackageRootPath := false
+	if !packageNameOnly {
+		packageRootIndex := parts.PackageRootIndex
+		var moduleFileName string
+		for true {
+			// If the module could be imported by a directory name, use that directory's name
+			pkgJsonResults := tryDirectoryWithPackageJson(
+				*parts,
+				pathObj,
+				importingSourceFile,
+				host,
+				overrideMode,
+				options,
+				allowedEndings,
+			)
+			moduleFileToTry := pkgJsonResults.moduleFileToTry
+			packageRootPath := pkgJsonResults.packageRootPath
+			blockedByExports := pkgJsonResults.blockedByExports
+			verbatimFromExports := pkgJsonResults.verbatimFromExports
+			if blockedByExports {
+				return "" // File is under this package.json, but is not publicly exported - there's no way to name it via `node_modules` resolution
+			}
+			if verbatimFromExports {
+				return moduleFileToTry
+			}
+			//}
+			if len(packageRootPath) > 0 {
+				moduleSpecifier = packageRootPath
+				isPackageRootPath = true
+				break
+			}
+			if len(moduleFileName) == 0 {
+				moduleFileName = moduleFileToTry
+			}
+			// try with next level of directory
+			packageRootIndex = core.IndexAfter(pathObj.FileName, "/", packageRootIndex+1)
+			if packageRootIndex == -1 {
+				moduleSpecifier = processEnding(moduleFileName, allowedEndings, options, host)
+				break
+			}
+		}
+	}
+
+	if pathObj.IsRedirect && !isPackageRootPath {
+		return ""
+	}
+
+	globalTypingsCacheLocation := host.GetGlobalTypingsCacheLocation()
+	// Get a path that's relative to node_modules or the importing file's path
+	// if node_modules folder is in this folder or any of its parent folders, no need to keep it.
+	pathToTopLevelNodeModules := moduleSpecifier[0:parts.TopLevelNodeModulesIndex]
+
+	if !stringutil.HasPrefix(info.SourceDirectory, pathToTopLevelNodeModules, caseSensitive) || len(globalTypingsCacheLocation) > 0 && stringutil.HasPrefix(globalTypingsCacheLocation, pathToTopLevelNodeModules, caseSensitive) {
+		return ""
+	}
+
+	// If the module was found in @types, get the actual Node package name
+	nodeModulesDirectoryName := moduleSpecifier[parts.TopLevelPackageNameIndex+1:]
+	return module.GetPackageNameFromTypesPackageName(nodeModulesDirectoryName)
+}
+
+type pkgJsonDirAttemptResult struct {
+	moduleFileToTry     string
+	packageRootPath     string
+	blockedByExports    bool
+	verbatimFromExports bool
+}
+
+func tryDirectoryWithPackageJson(
+	parts NodeModulePathParts,
+	pathObj ModulePath,
+	importingSourceFile SourceFileForSpecifierGeneration,
+	host ModuleSpecifierGenerationHost,
+	overrideMode core.ResolutionMode,
+	options *core.CompilerOptions,
+	allowedEndings []ModuleSpecifierEnding,
+) pkgJsonDirAttemptResult {
+	rootIdx := parts.PackageRootIndex
+	if rootIdx == -1 {
+		rootIdx = len(pathObj.FileName) // TODO: possible strada bug? -1 in js slice removes characters from the end, in go it panics - js behavior seems unwanted here?
+	}
+	packageRootPath := pathObj.FileName[0:rootIdx]
+	packageJsonPath := tspath.CombinePaths(packageRootPath, "package.json")
+	moduleFileToTry := pathObj.FileName
+	maybeBlockedByTypesVersions := false
+	packageJson := host.GetPackageJsonInfo(packageJsonPath)
+	if packageJson == nil {
+		// No package.json exists; an index.js will still resolve as the package name
+		fileName := moduleFileToTry[parts.PackageRootIndex+1:]
+		if fileName == "index.d.ts" || fileName == "index.js" || fileName == "index.ts" || fileName == "index.tsx" {
+			return pkgJsonDirAttemptResult{moduleFileToTry: moduleFileToTry, packageRootPath: packageRootPath}
+		} else {
+			return pkgJsonDirAttemptResult{moduleFileToTry: moduleFileToTry}
+		}
+	}
+
+	importMode := overrideMode
+	if importMode == core.ResolutionModeNone {
+		importMode = host.GetDefaultResolutionModeForFile(importingSourceFile)
+	}
+
+	packageJsonContent := packageJson.GetContents()
+	if options.GetResolvePackageJsonExports() {
+		// The package name that we found in node_modules could be different from the package
+		// name in the package.json content via url/filepath dependency specifiers. We need to
+		// use the actual directory name, so don't look at `packageJsonContent.name` here.
+		nodeModulesDirectoryName := packageRootPath[parts.TopLevelPackageNameIndex+1:]
+		packageName := module.GetPackageNameFromTypesPackageName(nodeModulesDirectoryName)
+
+		// Determine resolution mode for package.json exports condition matching.
+		// TypeScript's tryDirectoryWithPackageJson uses the importing file's mode (moduleSpecifiers.ts:1257),
+		// but this causes incorrect exports resolution. We fix this by checking the target file's extension
+		// using the logic from getImpliedNodeFormatForEmitWorker (program.ts:4827-4838).
+		// .cjs/.cts/.d.cts → CommonJS → "require" condition
+		// .mjs/.mts/.d.mts → ESM → "import" condition
+		if tspath.FileExtensionIsOneOf(pathObj.FileName, []string{tspath.ExtensionCjs, tspath.ExtensionCts, tspath.ExtensionDcts}) {
+			importMode = core.ResolutionModeCommonJS
+		} else if tspath.FileExtensionIsOneOf(pathObj.FileName, []string{tspath.ExtensionMjs, tspath.ExtensionMts, tspath.ExtensionDmts}) {
+			importMode = core.ResolutionModeESM
+		}
+
+		conditions := module.GetConditions(options, importMode)
+
+		var fromExports string
+		if packageJsonContent != nil && packageJsonContent.Fields.Exports.Type != packagejson.JSONValueTypeNotPresent {
+			fromExports = tryGetModuleNameFromExports(
+				options,
+				host,
+				pathObj.FileName,
+				packageRootPath,
+				packageName,
+				packageJsonContent.Fields.Exports,
+				conditions,
+			)
+		}
+		if len(fromExports) > 0 {
+			return pkgJsonDirAttemptResult{
+				moduleFileToTry:     fromExports,
+				verbatimFromExports: true,
+			}
+		}
+		if packageJsonContent != nil && packageJsonContent.Fields.Exports.Type != packagejson.JSONValueTypeNotPresent {
+			return pkgJsonDirAttemptResult{
+				moduleFileToTry:  pathObj.FileName,
+				blockedByExports: true,
+			}
+		}
+	}
+
+	var versionPaths packagejson.VersionPaths
+	if packageJsonContent != nil && packageJsonContent.TypesVersions.Type == packagejson.JSONValueTypeObject {
+		versionPaths = packageJsonContent.GetVersionPaths(nil)
+	}
+	if versionPaths.GetPaths() != nil {
+		subModuleName := pathObj.FileName[len(packageRootPath)+1:]
+		fromPaths := tryGetModuleNameFromPaths(
+			subModuleName,
+			versionPaths.GetPaths(),
+			allowedEndings,
+			packageRootPath,
+			host,
+			options,
+		)
+		if len(fromPaths) == 0 {
+			maybeBlockedByTypesVersions = true
+		} else {
+			moduleFileToTry = tspath.CombinePaths(packageRootPath, fromPaths)
+		}
+	}
+	// If the file is the main module, it can be imported by the package name
+	mainFileRelative := "index.js"
+	if packageJsonContent != nil {
+		if packageJsonContent.Typings.Valid {
+			mainFileRelative = packageJsonContent.Typings.Value
+		} else if packageJsonContent.Types.Valid {
+			mainFileRelative = packageJsonContent.Types.Value
+		} else if packageJsonContent.Main.Valid {
+			mainFileRelative = packageJsonContent.Main.Value
+		}
+	}
+
+	if len(mainFileRelative) > 0 && !(maybeBlockedByTypesVersions && module.MatchPatternOrExact(module.TryParsePatterns(versionPaths.GetPaths()), mainFileRelative) != core.Pattern{}) {
+		// The 'main' file is also subject to mapping through typesVersions, and we couldn't come up with a path
+		// explicitly through typesVersions, so if it matches a key in typesVersions now, it's not reachable.
+		// (The only way this can happen is if some file in a package that's not resolvable from outside the
+		// package got pulled into the program anyway, e.g. transitively through a file that *is* reachable. It
+		// happens very easily in fourslash tests though, since every test file listed gets included. See
+		// importNameCodeFix_typesVersions.ts for an example.)
+		mainExportFile := tspath.ToPath(mainFileRelative, packageRootPath, host.UseCaseSensitiveFileNames())
+		compareOpt := tspath.ComparePathsOptions{
+			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
+			CurrentDirectory:          host.GetCurrentDirectory(),
+		}
+		if tspath.ComparePaths(tspath.RemoveFileExtension(string(mainExportFile)), tspath.RemoveFileExtension(moduleFileToTry), compareOpt) == 0 {
+			// ^ An arbitrary removal of file extension for this comparison is almost certainly wrong
+			return pkgJsonDirAttemptResult{packageRootPath: packageRootPath, moduleFileToTry: moduleFileToTry}
+		} else if packageJsonContent == nil || packageJsonContent.Type.Value != "module" &&
+			!tspath.FileExtensionIsOneOf(moduleFileToTry, tspath.ExtensionsNotSupportingExtensionlessResolution) &&
+			stringutil.HasPrefix(moduleFileToTry, string(mainExportFile), host.UseCaseSensitiveFileNames()) &&
+			tspath.ComparePaths(tspath.GetDirectoryPath(moduleFileToTry), tspath.RemoveTrailingDirectorySeparator(string(mainExportFile)), compareOpt) == 0 &&
+			tspath.RemoveFileExtension(tspath.GetBaseFileName(moduleFileToTry)) == "index" {
+			// if mainExportFile is a directory, which contains moduleFileToTry, we just try index file
+			// example mainExportFile: `pkg/lib` and moduleFileToTry: `pkg/lib/index`, we can use packageRootPath
+			// but this behavior is deprecated for packages with "type": "module", so we only do this for packages without "type": "module"
+			// and make sure that the extension on index.{???} is something that supports omitting the extension
+			return pkgJsonDirAttemptResult{packageRootPath: packageRootPath, moduleFileToTry: moduleFileToTry}
+		}
+	}
+
+	return pkgJsonDirAttemptResult{moduleFileToTry: moduleFileToTry}
+}
+
+func tryGetModuleNameFromExports(
+	options *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	targetFilePath string,
+	packageDirectory string,
+	packageName string,
+	exports packagejson.ExportsOrImports,
+	conditions []string,
+) string {
+	if exports.IsSubpaths() {
+		// sub-mappings
+		// 3 cases:
+		// * directory mappings (legacyish, key ends with / (technically allows index/extension resolution under cjs mode))
+		// * pattern mappings (contains a *)
+		// * exact mappings (no *, does not end with /)
+		for k, subk := range exports.AsObject().Entries() {
+			subPackageName := tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(packageName, k), "")
+			mode := MatchingModeExact
+			if strings.HasSuffix(k, "/") {
+				mode = MatchingModeDirectory
+			} else if strings.Contains(k, "*") {
+				mode = MatchingModePattern
+			}
+			result := tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, subPackageName, subk, conditions, mode /*isImports*/, false /*preferTsExtension*/, false)
+			if len(result) > 0 {
+				return result
+			}
+		}
+	}
+	return tryGetModuleNameFromExportsOrImports(
+		options,
+		host,
+		targetFilePath,
+		packageDirectory,
+		packageName,
+		exports,
+		conditions,
+		MatchingModeExact,
+		/*isImports*/ false,
+		/*preferTsExtension*/ false,
+	)
+}
+
+func tryGetModuleNameFromPackageJsonImports(
+	moduleFileName string,
+	sourceDirectory string,
+	options *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	importMode core.ResolutionMode,
+	preferTsExtension bool,
+) string {
+	if !options.GetResolvePackageJsonImports() {
+		return ""
+	}
+
+	ancestorDirectoryWithPackageJson := host.GetNearestAncestorDirectoryWithPackageJson(sourceDirectory)
+	if len(ancestorDirectoryWithPackageJson) == 0 {
+		return ""
+	}
+	packageJsonPath := tspath.CombinePaths(ancestorDirectoryWithPackageJson, "package.json")
+
+	info := host.GetPackageJsonInfo(packageJsonPath)
+	if info == nil {
+		return ""
+	}
+
+	imports := info.GetContents().Fields.Imports
+	switch imports.Type {
+	case packagejson.JSONValueTypeNotPresent, packagejson.JSONValueTypeArray, packagejson.JSONValueTypeString:
+		return "" // not present or invalid for imports
+	case packagejson.JSONValueTypeObject:
+		conditions := module.GetConditions(options, importMode)
+		top := imports.AsObject()
+		entries := top.Entries()
+		for k, value := range entries {
+			if k == "#" || k == "#/" || !strings.HasPrefix(k, "#") {
+				continue // invalid imports entry
+			}
+			if strings.HasPrefix(k, "#/") && options.GetModuleResolutionKind() != core.ModuleResolutionKindNodeNext && options.GetModuleResolutionKind() != core.ModuleResolutionKindBundler {
+				continue // "#/" imports keys are only valid in nodenext/bundler
+			}
+			mode := MatchingModeExact
+			if strings.HasSuffix(k, "/") {
+				mode = MatchingModeDirectory
+			} else if strings.Contains(k, "*") {
+				mode = MatchingModePattern
+			}
+			result := tryGetModuleNameFromExportsOrImports(
+				options,
+				host,
+				moduleFileName,
+				ancestorDirectoryWithPackageJson,
+				k,
+				value,
+				conditions,
+				mode,
+				true,
+				preferTsExtension,
+			)
+			if len(result) > 0 {
+				return result
+			}
+		}
+	}
+
+	return ""
+}
+
+type specPair struct {
+	ending ModuleSpecifierEnding
+	value  string
+}
+
+func tryGetModuleNameFromPaths(
+	relativeToBaseUrl string,
+	paths *collections.OrderedMap[string, []string],
+	allowedEndings []ModuleSpecifierEnding,
+	baseDirectory string,
+	host ModuleSpecifierGenerationHost,
+	compilerOptions *core.CompilerOptions,
+) string {
+	caseSensitive := host.UseCaseSensitiveFileNames()
+	for key, values := range paths.Entries() {
+		for _, patternText := range values {
+			normalized := tspath.NormalizePath(patternText)
+			pattern := getRelativePathIfInSameVolume(normalized, baseDirectory, caseSensitive)
+			if len(pattern) == 0 {
+				pattern = normalized
+			}
+			prefix, suffix, ok := strings.Cut(pattern, "*")
+
+			// In module resolution, if `pattern` itself has an extension, a file with that extension is looked up directly,
+			// meaning a '.ts' or '.d.ts' extension is allowed to resolve. This is distinct from the case where a '*' substitution
+			// causes a module specifier to have an extension, i.e. the extension comes from the module specifier in a JS/TS file
+			// and matches the '*'. For example:
+			//
+			// Module Specifier      | Path Mapping (key: [pattern]) | Interpolation       | Resolution Action
+			// ---------------------->------------------------------->--------------------->---------------------------------------------------------------
+			// import "@app/foo"    -> "@app/*": ["./src/app/*.ts"] -> "./src/app/foo.ts" -> tryFile("./src/app/foo.ts") || [continue resolution algorithm]
+			// import "@app/foo.ts" -> "@app/*": ["./src/app/*"]    -> "./src/app/foo.ts" -> [continue resolution algorithm]
+			//
+			// (https://github.com/microsoft/TypeScript/blob/ad4ded80e1d58f0bf36ac16bea71bc10d9f09895/src/compiler/moduleNameResolver.ts#L2509-L2516)
+			//
+			// The interpolation produced by both scenarios is identical, but only in the former, where the extension is encoded in
+			// the path mapping rather than in the module specifier, will we prioritize a file lookup on the interpolation result.
+			// (In fact, currently, the latter scenario will necessarily fail since no resolution mode recognizes '.ts' as a valid
+			// extension for a module specifier.)
+			//
+			// Here, this means we need to be careful about whether we generate a match from the target filename (typically with a
+			// .ts extension) or the possible relative module specifiers representing that file:
+			//
+			// Filename            | Relative Module Specifier Candidates         | Path Mapping                 | Filename Result    | Module Specifier Results
+			// --------------------<----------------------------------------------<------------------------------<-------------------||----------------------------
+			// dist/haha.d.ts      <- dist/haha, dist/haha.js                     <- "@app/*": ["./dist/*.d.ts"] <- @app/haha        || (none)
+			// dist/haha.d.ts      <- dist/haha, dist/haha.js                     <- "@app/*": ["./dist/*"]      <- (none)           || @app/haha, @app/haha.js
+			// dist/foo/index.d.ts <- dist/foo, dist/foo/index, dist/foo/index.js <- "@app/*": ["./dist/*.d.ts"] <- @app/foo/index   || (none)
+			// dist/foo/index.d.ts <- dist/foo, dist/foo/index, dist/foo/index.js <- "@app/*": ["./dist/*"]      <- (none)           || @app/foo, @app/foo/index, @app/foo/index.js
+			// dist/wow.js.js      <- dist/wow.js, dist/wow.js.js                 <- "@app/*": ["./dist/*.js"]   <- @app/wow.js      || @app/wow, @app/wow.js
+			//
+			// The "Filename Result" can be generated only if `pattern` has an extension. Care must be taken that the list of
+			// relative module specifiers to run the interpolation (a) is actually valid for the module resolution mode, (b) takes
+			// into account the existence of other files (e.g. 'dist/wow.js' cannot refer to 'dist/wow.js.js' if 'dist/wow.js'
+			// exists) and (c) that they are ordered by preference. The last row shows that the filename result and module
+			// specifier results are not mutually exclusive. Note that the filename result is a higher priority in module
+			// resolution, but as long criteria (b) above is met, I don't think its result needs to be the highest priority result
+			// in module specifier generation. I have included it last, as it's difficult to tell exactly where it should be
+			// sorted among the others for a particular value of `importModuleSpecifierEnding`.
+
+			var candidates []specPair
+			for _, ending := range allowedEndings {
+				result := processEnding(
+					relativeToBaseUrl,
+					[]ModuleSpecifierEnding{ending},
+					compilerOptions,
+					host,
+				)
+				candidates = append(candidates, specPair{
+					ending: ending,
+					value:  result,
+				})
+			}
+			if len(tspath.TryGetExtensionFromPath(pattern)) > 0 {
+				candidates = append(candidates, specPair{
+					ending: ModuleSpecifierEndingJsExtension,
+					value:  relativeToBaseUrl,
+				})
+			}
+
+			if ok {
+				for _, c := range candidates {
+					value := c.value
+					if len(value) >= len(prefix)+len(suffix) &&
+						stringutil.HasPrefix(value, prefix, caseSensitive) && // TODO: possible strada bug: these are not case-switched in strada
+						stringutil.HasSuffix(value, suffix, caseSensitive) &&
+						validateEnding(c, relativeToBaseUrl, compilerOptions, host) {
+						matchedStar := value[len(prefix) : len(value)-len(suffix)]
+						if !tspath.PathIsRelative(matchedStar) {
+							return replaceFirstStar(key, matchedStar)
+						}
+					}
+				}
+			} else if core.Some(candidates, func(c specPair) bool { return c.ending != ModuleSpecifierEndingMinimal && pattern == c.value }) ||
+				core.Some(candidates, func(c specPair) bool {
+					return c.ending == ModuleSpecifierEndingMinimal && pattern == c.value && validateEnding(c, relativeToBaseUrl, compilerOptions, host)
+				}) {
+				return key
+			}
+		}
+	}
+	return ""
+}
+
+func validateEnding(c specPair, relativeToBaseUrl string, compilerOptions *core.CompilerOptions, host ModuleSpecifierGenerationHost) bool {
+	// Optimization: `removeExtensionAndIndexPostFix` can query the file system (a good bit) if `ending` is `Minimal`, the basename
+	// is 'index', and a `host` is provided. To avoid that until it's unavoidable, we ran the function with no `host` above. Only
+	// here, after we've checked that the minimal ending is indeed a match (via the length and prefix/suffix checks / `some` calls),
+	// do we check that the host-validated result is consistent with the answer we got before. If it's not, it falls back to the
+	// `ModuleSpecifierEnding.Index` result, which should already be in the list of candidates if `Minimal` was. (Note: the assumption here is
+	// that every module resolution mode that supports dropping extensions also supports dropping `/index`. Like literally
+	// everything else in this file, this logic needs to be updated if that's not true in some future module resolution mode.)
+	return c.ending != ModuleSpecifierEndingMinimal || c.value == processEnding(relativeToBaseUrl, []ModuleSpecifierEnding{c.ending}, compilerOptions, host)
+}
+
+func tryGetModuleNameFromExportsOrImports(
+	options *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	targetFilePath string,
+	packageDirectory string,
+	packageName string,
+	exports packagejson.ExportsOrImports,
+	conditions []string,
+	mode MatchingMode,
+	isImports bool,
+	preferTsExtension bool,
+) string {
+	switch exports.Type {
+	case packagejson.JSONValueTypeNotPresent:
+		return ""
+	case packagejson.JSONValueTypeString:
+		strValue := exports.Value.(string)
+
+		// possible strada bug? Always uses compilerOptions of the host project, not those applicable to the targeted package.json!
+		var outputFile string
+		var declarationFile string
+		if isImports {
+			outputFile = outputpaths.GetOutputJSFileNameWorker(targetFilePath, options, host)
+			declarationFile = outputpaths.GetOutputDeclarationFileNameWorker(targetFilePath, options, host)
+		}
+
+		pathOrPattern := tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(packageDirectory, strValue), "")
+		var extensionSwappedTarget string
+		if tspath.HasTSFileExtension(targetFilePath) {
+			extensionSwappedTarget = tspath.RemoveFileExtension(targetFilePath) + module.TryGetJSExtensionForFile(targetFilePath, options)
+		}
+		canTryTsExtension := preferTsExtension && tspath.HasImplementationTSFileExtension(targetFilePath)
+
+		compareOpts := tspath.ComparePathsOptions{
+			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
+			CurrentDirectory:          host.GetCurrentDirectory(),
+		}
+
+		switch mode {
+		case MatchingModeExact:
+			if len(extensionSwappedTarget) > 0 && tspath.ComparePaths(extensionSwappedTarget, pathOrPattern, compareOpts) == 0 ||
+				tspath.ComparePaths(targetFilePath, pathOrPattern, compareOpts) == 0 ||
+				len(outputFile) > 0 && tspath.ComparePaths(outputFile, pathOrPattern, compareOpts) == 0 ||
+				len(declarationFile) > 0 && tspath.ComparePaths(declarationFile, pathOrPattern, compareOpts) == 0 {
+				return packageName
+			}
+		case MatchingModeDirectory:
+			if canTryTsExtension && tspath.ContainsPath(targetFilePath, pathOrPattern, compareOpts) {
+				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, targetFilePath, compareOpts)
+				return tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(tspath.CombinePaths(packageName, strValue), fragment), "")
+			}
+			if len(extensionSwappedTarget) > 0 && tspath.ContainsPath(pathOrPattern, extensionSwappedTarget, compareOpts) {
+				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, extensionSwappedTarget, compareOpts)
+				return tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(tspath.CombinePaths(packageName, strValue), fragment), "")
+			}
+			if !canTryTsExtension && tspath.ContainsPath(pathOrPattern, targetFilePath, compareOpts) {
+				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, targetFilePath, compareOpts)
+				return tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(tspath.CombinePaths(packageName, strValue), fragment), "")
+			}
+			if len(outputFile) > 0 && tspath.ContainsPath(pathOrPattern, outputFile, compareOpts) {
+				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, outputFile, compareOpts)
+				return tspath.CombinePaths(packageName, fragment)
+			}
+			if len(declarationFile) > 0 && tspath.ContainsPath(pathOrPattern, declarationFile, compareOpts) {
+				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, declarationFile, compareOpts)
+				jsExtension := getJSExtensionForFile(declarationFile, options)
+				fragmentWithJsExtension := tspath.ChangeExtension(fragment, jsExtension)
+				return tspath.CombinePaths(packageName, fragmentWithJsExtension)
+			}
+		case MatchingModePattern:
+			leadingSlice, trailingSlice, _ := strings.Cut(pathOrPattern, "*")
+			caseSensitive := host.UseCaseSensitiveFileNames()
+			if canTryTsExtension && stringutil.HasPrefixAndSuffixWithoutOverlap(targetFilePath, leadingSlice, trailingSlice, caseSensitive) {
+				starReplacement := targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]
+				return replaceFirstStar(packageName, starReplacement)
+			}
+			if len(extensionSwappedTarget) > 0 && stringutil.HasPrefixAndSuffixWithoutOverlap(extensionSwappedTarget, leadingSlice, trailingSlice, caseSensitive) {
+				starReplacement := extensionSwappedTarget[len(leadingSlice) : len(extensionSwappedTarget)-len(trailingSlice)]
+				return replaceFirstStar(packageName, starReplacement)
+			}
+			if !canTryTsExtension && stringutil.HasPrefixAndSuffixWithoutOverlap(targetFilePath, leadingSlice, trailingSlice, caseSensitive) {
+				starReplacement := targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]
+				return replaceFirstStar(packageName, starReplacement)
+			}
+			if len(outputFile) > 0 && stringutil.HasPrefixAndSuffixWithoutOverlap(outputFile, leadingSlice, trailingSlice, caseSensitive) {
+				starReplacement := outputFile[len(leadingSlice) : len(outputFile)-len(trailingSlice)]
+				return replaceFirstStar(packageName, starReplacement)
+			}
+			if len(declarationFile) > 0 && stringutil.HasPrefixAndSuffixWithoutOverlap(declarationFile, leadingSlice, trailingSlice, caseSensitive) {
+				starReplacement := declarationFile[len(leadingSlice) : len(declarationFile)-len(trailingSlice)]
+				substituted := replaceFirstStar(packageName, starReplacement)
+				jsExtension := module.TryGetJSExtensionForFile(declarationFile, options)
+				if len(jsExtension) > 0 {
+					return tspath.ChangeFullExtension(substituted, jsExtension)
+				}
+			}
+		}
+		return ""
+	case packagejson.JSONValueTypeArray:
+		arr := exports.AsArray()
+		for _, e := range arr {
+			result := tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, e, conditions, mode, isImports, preferTsExtension)
+			if len(result) > 0 {
+				return result
+			}
+		}
+	case packagejson.JSONValueTypeObject:
+		// conditional mapping
+		obj := exports.AsObject()
+		for key, value := range obj.Entries() {
+			if key == "default" || slices.Contains(conditions, key) || slices.Contains(conditions, "types") && module.IsApplicableVersionedTypesKey(key) {
+				result := tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, value, conditions, mode, isImports, preferTsExtension)
+				if len(result) > 0 {
+					return result
+				}
+			}
+		}
+	case packagejson.JSONValueTypeNull:
+		return ""
+	}
+	return ""
+}
+
+// `importingSourceFile` and `importingSourceFileName`? Why not just use `importingSourceFile.path`?
+// Because when this is called by the declaration emitter, `importingSourceFile` is the implementation
+// file, but `importingSourceFileName` and `toFileName` refer to declaration files (the former to the
+// one currently being produced; the latter to the one being imported). We need an implementation file
+// just to get its `impliedNodeFormat` and to detect certain preferences from existing import module
+// specifiers.
+func GetModuleSpecifier(
+	compilerOptions *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	importingSourceFile *ast.SourceFile, // !!! | FutureSourceFile
+	importingSourceFileName string,
+	oldImportSpecifier string, // used only in updatingModuleSpecifier
+	toFileName string,
+	options ModuleSpecifierOptions,
+) string {
+	return getModuleSpecifierWithPreferences(
+		compilerOptions,
+		host,
+		importingSourceFile,
+		importingSourceFileName,
+		oldImportSpecifier,
+		toFileName,
+		UserPreferences{},
+		options,
+	)
+}
+
+func UpdateModuleSpecifier(
+	compilerOptions *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	importingSourceFile *ast.SourceFile,
+	importingSourceFileName string,
+	oldImportSpecifier string,
+	toFileName string,
+	userPreferences UserPreferences,
+	options ModuleSpecifierOptions,
+) string {
+	return getModuleSpecifierWithPreferences(
+		compilerOptions,
+		host,
+		importingSourceFile,
+		importingSourceFileName,
+		oldImportSpecifier,
+		toFileName,
+		userPreferences,
+		options,
+	)
+}
+
+func getModuleSpecifierWithPreferences(
+	compilerOptions *core.CompilerOptions,
+	host ModuleSpecifierGenerationHost,
+	importingSourceFile *ast.SourceFile, // !!! | FutureSourceFile
+	importingSourceFileName string,
+	oldImportSpecifier string, // used only in updatingModuleSpecifier
+	toFileName string,
+	userPreferences UserPreferences,
+	options ModuleSpecifierOptions,
+) string {
+	info := getInfo(importingSourceFileName, host)
+	modulePaths := getAllModulePaths(info, toFileName, host, compilerOptions, userPreferences, options)
+	preferences := getModuleSpecifierPreferences(userPreferences, host, compilerOptions, importingSourceFile, oldImportSpecifier)
+
+	resolutionMode := options.OverrideImportMode
+	if resolutionMode == core.ResolutionModeNone {
+		resolutionMode = host.GetDefaultResolutionModeForFile(importingSourceFile)
+	}
+
+	for _, modulePath := range modulePaths {
+		if firstDefined := tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, false /*packageNameOnly*/, options.OverrideImportMode); len(firstDefined) > 0 {
+			return firstDefined
+		}
+	}
+
+	return getLocalModuleSpecifier(toFileName, info, compilerOptions, host, resolutionMode, preferences, false)
+}

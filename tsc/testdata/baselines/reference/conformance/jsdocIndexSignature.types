@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/jsdoc/jsdocIndexSignature.ts] ////
+
+=== indices.js ===
+/** @type {Object.<string, number>} */
+var o1;
+>o1 : Record<string, number>
+
+/** @type {Object.<number, boolean>} */
+var o2;
+>o2 : Record<number, boolean>
+
+/** @type {Object.<boolean, string>} */
+var o3;
+>o3 : any
+
+/** @param {Object.<string, boolean>} o */
+function f(o) {
+>f : (o: Record<string, boolean>) => void
+>o : Record<string, boolean>
+
+    o.foo = 1; // error
+>o.foo = 1 : 1
+>o.foo : boolean
+>o : Record<string, boolean>
+>foo : boolean
+>1 : 1
+
+    o.bar = false; // ok
+>o.bar = false : false
+>o.bar : boolean
+>o : Record<string, boolean>
+>bar : boolean
+>false : false
+}
+

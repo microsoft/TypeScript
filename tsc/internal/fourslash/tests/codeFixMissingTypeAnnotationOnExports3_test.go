@@ -1,0 +1,33 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports3(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+const a = 42;
+const b = 42;
+export class C {
+  //making sure comments are not changed
+  property =a+b; // comment should stay here
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add annotation of type 'number'",
+		NewFileContent: `const a = 42;
+const b = 42;
+export class C {
+  //making sure comments are not changed
+  property: number =a+b; // comment should stay here
+}`,
+		Index: 0,
+	})
+}

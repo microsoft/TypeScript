@@ -1,0 +1,17 @@
+b.d.ts(1,17): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
+b.d.ts(3,17): error TS7010: 'bar', which lacks return-type annotation, implicitly has an 'any' return type.
+
+
+==== b.d.ts (2 errors) ====
+    export function foo();
+                    ~~~
+!!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
+    
+    export function bar();
+                    ~~~
+!!! error TS7010: 'bar', which lacks return-type annotation, implicitly has an 'any' return type.
+    
+==== a.ts (0 errors) ====
+    import { default as Foo } from "./b";
+    Foo.bar();
+    Foo.foo();

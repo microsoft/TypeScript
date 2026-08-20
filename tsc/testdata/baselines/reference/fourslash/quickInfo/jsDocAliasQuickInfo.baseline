@@ -1,0 +1,115 @@
+// === QuickInfo ===
+=== /jsDocAliasQuickInfo.ts ===
+// /**
+//  * Comment
+//  * @type {number}
+//  */
+// export default 10;
+//        ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) default: 10
+// | ```
+// | Comment
+// | ----------------------------------------------------------------------
+=== /test.ts ===
+// export { default as test } from "./jsDocAliasQuickInfo";
+//          ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (property) default: 10
+// | ```
+// | Comment
+// | ----------------------------------------------------------------------
+//                     ^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) (property) default: 10
+// | ```
+// | Comment
+// | ----------------------------------------------------------------------
+
+
+[
+  {
+    "marker": {
+      "Position": 44,
+      "LSPosition": {
+        "line": 4,
+        "character": 7
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) default: 10\n```\nComment"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 7
+        },
+        "end": {
+          "line": 4,
+          "character": 14
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 9,
+      "LSPosition": {
+        "line": 0,
+        "character": 9
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(property) default: 10\n```\nComment"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 9
+        },
+        "end": {
+          "line": 0,
+          "character": 16
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 20,
+      "LSPosition": {
+        "line": 0,
+        "character": 20
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) (property) default: 10\n```\nComment"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 20
+        },
+        "end": {
+          "line": 0,
+          "character": 24
+        }
+      }
+    }
+  }
+]

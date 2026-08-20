@@ -1,0 +1,97 @@
+// === QuickInfo ===
+=== /quickInfoObjectTypeMultiline.ts ===
+// 
+// type X = {
+//      ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type X = {
+// |     a: number;
+// |     b: string;
+// |     c: {};
+// | }
+// | ```
+// | 
+// | (verbosity level: 1)
+// | ----------------------------------------------------------------------
+//      ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type X = {
+// |     a: number;
+// |     b: string;
+// |     c: C;
+// | }
+// | ```
+// | 
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
+//     a: number
+//     b: string
+//     c: C
+// }
+// type C = {}
+// 
+[
+  {
+    "marker": {
+      "Position": 7,
+      "LSPosition": {
+        "line": 1,
+        "character": 6
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype X = {\n    a: number;\n    b: string;\n    c: C;\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 5
+          },
+          "end": {
+            "line": 1,
+            "character": 6
+          }
+        },
+        "canIncreaseVerbosity": true
+      },
+      "verbosityLevel": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 7,
+      "LSPosition": {
+        "line": 1,
+        "character": 6
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "hover": {
+        "contents": {
+          "kind": "markdown",
+          "value": "```typescript\ntype X = {\n    a: number;\n    b: string;\n    c: {};\n}\n```\n"
+        },
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 5
+          },
+          "end": {
+            "line": 1,
+            "character": 6
+          }
+        }
+      },
+      "verbosityLevel": 1
+    }
+  }
+]

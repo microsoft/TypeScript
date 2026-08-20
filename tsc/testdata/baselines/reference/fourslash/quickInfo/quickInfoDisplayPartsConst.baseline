@@ -1,0 +1,578 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsConst.ts ===
+// const a = 10;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const a: 10
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// function foo() {
+//     const b = a;
+//           ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const b: 10
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const a: 10
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     if (b) {
+//         const b1 = 10;
+//               ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const b1: 10
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+// namespace m {
+//     const c = 10;
+//           ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const c: 10
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     export const d = 10;
+//                  ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const d: 10
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     if (c) {
+//         const e = 10;
+//               ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const e: 10
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+// }
+// const f: () => number = () => 10;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const f: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// const g = f;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const g: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const f: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// f();
+// ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const f: () => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// const h: { (a: string): number; (a: number): string; } = a => a;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const h: {
+// |     (a: string): number;
+// |     (a: number): string;
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// const i = h;
+//       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const i: {
+// |     (a: string): number;
+// |     (a: number): string;
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//           ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const h: {
+// |     (a: string): number;
+// |     (a: number): string;
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// h(10);
+// ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const h: (a: number) => string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// h("hello");
+// ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const h: (a: string) => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 6,
+      "LSPosition": {
+        "line": 0,
+        "character": 6
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst a: 10\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 6
+        },
+        "end": {
+          "line": 0,
+          "character": 7
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 41,
+      "LSPosition": {
+        "line": 2,
+        "character": 10
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst b: 10\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 10
+        },
+        "end": {
+          "line": 2,
+          "character": 11
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 45,
+      "LSPosition": {
+        "line": 2,
+        "character": 14
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst a: 10\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 14
+        },
+        "end": {
+          "line": 2,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 75,
+      "LSPosition": {
+        "line": 4,
+        "character": 14
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst b1: 10\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 14
+        },
+        "end": {
+          "line": 4,
+          "character": 16
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 116,
+      "LSPosition": {
+        "line": 8,
+        "character": 10
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst c: 10\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 10
+        },
+        "end": {
+          "line": 8,
+          "character": 11
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 141,
+      "LSPosition": {
+        "line": 9,
+        "character": 17
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst d: 10\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 17
+        },
+        "end": {
+          "line": 9,
+          "character": 18
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 176,
+      "LSPosition": {
+        "line": 11,
+        "character": 14
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst e: 10\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 14
+        },
+        "end": {
+          "line": 11,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 198,
+      "LSPosition": {
+        "line": 14,
+        "character": 6
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst f: () => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 6
+        },
+        "end": {
+          "line": 14,
+          "character": 7
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 232,
+      "LSPosition": {
+        "line": 15,
+        "character": 6
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst g: () => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 6
+        },
+        "end": {
+          "line": 15,
+          "character": 7
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 236,
+      "LSPosition": {
+        "line": 15,
+        "character": 10
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst f: () => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 10
+        },
+        "end": {
+          "line": 15,
+          "character": 11
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 239,
+      "LSPosition": {
+        "line": 16,
+        "character": 0
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst f: () => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 0
+        },
+        "end": {
+          "line": 16,
+          "character": 1
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 250,
+      "LSPosition": {
+        "line": 17,
+        "character": 6
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst h: {\n    (a: string): number;\n    (a: number): string;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 6
+        },
+        "end": {
+          "line": 17,
+          "character": 7
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 315,
+      "LSPosition": {
+        "line": 18,
+        "character": 6
+      },
+      "Name": "13",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst i: {\n    (a: string): number;\n    (a: number): string;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 6
+        },
+        "end": {
+          "line": 18,
+          "character": 7
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 319,
+      "LSPosition": {
+        "line": 18,
+        "character": 10
+      },
+      "Name": "14",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst h: {\n    (a: string): number;\n    (a: number): string;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 10
+        },
+        "end": {
+          "line": 18,
+          "character": 11
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 322,
+      "LSPosition": {
+        "line": 19,
+        "character": 0
+      },
+      "Name": "15",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst h: (a: number) => string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 19,
+          "character": 0
+        },
+        "end": {
+          "line": 19,
+          "character": 1
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 329,
+      "LSPosition": {
+        "line": 20,
+        "character": 0
+      },
+      "Name": "16",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst h: (a: string) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 20,
+          "character": 0
+        },
+        "end": {
+          "line": 20,
+          "character": 1
+        }
+      }
+    }
+  }
+]

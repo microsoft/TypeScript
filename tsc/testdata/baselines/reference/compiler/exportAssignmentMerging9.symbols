@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/exportAssignmentMerging9.ts] ////
+
+=== a.d.ts ===
+declare namespace A {
+>A : Symbol(A, Decl(a.d.ts, 0, 0))
+
+    class Base<T> {
+>Base : Symbol(Base, Decl(a.d.ts, 0, 21))
+>T : Symbol(T, Decl(a.d.ts, 1, 15))
+
+        a: T;
+>a : Symbol(Base.a, Decl(a.d.ts, 1, 19))
+>T : Symbol(T, Decl(a.d.ts, 1, 15))
+    }
+}
+
+declare namespace B {
+>B : Symbol(B, Decl(a.d.ts, 4, 1))
+
+    class Base<T> {
+>Base : Symbol(Base, Decl(a.d.ts, 6, 21))
+>T : Symbol(T, Decl(a.d.ts, 7, 15))
+
+        b: T;
+>b : Symbol(Base.b, Decl(a.d.ts, 7, 19))
+>T : Symbol(T, Decl(a.d.ts, 7, 15))
+    }
+}
+
+declare module "m" {
+>"m" : Symbol("m", Decl(a.d.ts, 10, 1))
+
+    export class Base<T> {
+>Base : Symbol(Base, Decl(a.d.ts, 12, 20))
+>T : Symbol(T, Decl(a.d.ts, 13, 22))
+
+        top: T;
+>top : Symbol(Base.top, Decl(a.d.ts, 13, 26))
+>T : Symbol(T, Decl(a.d.ts, 13, 22))
+    }
+
+    const value: typeof A | typeof B;
+>value : Symbol(value, Decl(a.d.ts, 17, 9))
+>A : Symbol(A, Decl(a.d.ts, 0, 0))
+>B : Symbol(B, Decl(a.d.ts, 4, 1))
+
+    export = value;
+>value : Symbol(value, Decl(a.d.ts, 17, 9))
+}
+
+=== b.ts ===
+import { Base } from "m";
+>Base : Symbol(Base, Decl(b.ts, 0, 8))
+
+class Derived extends Base<string> {}
+>Derived : Symbol(Derived, Decl(b.ts, 0, 25))
+>Base : Symbol(Base, Decl(b.ts, 0, 8))
+

@@ -1,0 +1,95 @@
+// === Inlay Hints ===
+fn(function (this, a, b) { });
+                 ^
+{
+  "position": {
+    "line": 9,
+    "character": 17
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "any"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+fn(function (this, a, b) { });
+                    ^
+{
+  "position": {
+    "line": 9,
+    "character": 20
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+fn(function (this, a, b) { });
+                       ^
+{
+  "position": {
+    "line": 9,
+    "character": 23
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+fn(function (this: I, a, b) { });
+                       ^
+{
+  "position": {
+    "line": 10,
+    "character": 23
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+fn(function (this: I, a, b) { });
+                          ^
+{
+  "position": {
+    "line": 10,
+    "character": 26
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

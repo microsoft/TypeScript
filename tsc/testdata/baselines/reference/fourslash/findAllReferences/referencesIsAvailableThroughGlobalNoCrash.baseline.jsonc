@@ -1,0 +1,13 @@
+// === findAllReferences ===
+// === /packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts ===
+// declare var [|debug|]: [|debug|].Debug & { debug: [|debug|].Debug; default: [|debug|].Debug };
+// [|export|] = [|debug|];
+// export as namespace debug;
+// declare namespace [|debug|] {
+//     interface Debug {
+//        coerce: (val: any) => any;
+//     }
+// }
+
+// === /packages/playwright-core/src/index.ts ===
+// export const debug: typeof import('[|../bundles/utils/node_modules//*FIND ALL REFS*/@types/debug|]') = require('./utilsBundleImpl').debug;

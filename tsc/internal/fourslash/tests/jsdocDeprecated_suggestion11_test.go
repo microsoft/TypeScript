@@ -1,0 +1,37 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestJsdocDeprecated_suggestion11(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @filename: /foo.ts
+/** @deprecated */
+export function foo() {}
+// @filename: /test.ts
+import { [|foo|] } from "./foo";
+[|foo|];`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToFile(t, "/test.ts")
+	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'foo' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[0].LSRange,
+		},
+		{
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Message: lsproto.StringOrMarkupContent{String: new("'foo' is deprecated.")},
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+			Range:   f.Ranges()[1].LSRange,
+		},
+	})
+}

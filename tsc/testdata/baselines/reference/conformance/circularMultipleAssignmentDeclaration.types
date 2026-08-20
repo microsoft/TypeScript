@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/salsa/circularMultipleAssignmentDeclaration.ts] ////
+
+=== circularMultipleAssignmentDeclaration.js ===
+ns.next = ns.next || { shared: {} };
+>ns.next = ns.next || { shared: {} } : any
+>ns.next : any
+>ns : any
+>next : any
+>ns.next || { shared: {} } : any
+>ns.next : any
+>ns : any
+>next : any
+>{ shared: {} } : { shared: {}; }
+>shared : {}
+>{} : {}
+
+ns.next.shared.mymethod = {};
+>ns.next.shared.mymethod = {} : {}
+>ns.next.shared.mymethod : any
+>ns.next.shared : any
+>ns.next : any
+>ns : any
+>next : any
+>shared : any
+>mymethod : any
+>{} : {}
+

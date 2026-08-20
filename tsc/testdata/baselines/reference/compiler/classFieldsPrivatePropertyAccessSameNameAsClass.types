@@ -1,0 +1,107 @@
+//// [tests/cases/compiler/classFieldsPrivatePropertyAccessSameNameAsClass.ts] ////
+
+=== classFieldsPrivatePropertyAccessSameNameAsClass.ts ===
+export enum MyEnum {
+>MyEnum : MyEnum
+
+    Foo = "FooValue",
+>Foo : MyEnum.Foo
+>"FooValue" : "FooValue"
+
+    Bar = "BarValue",
+>Bar : MyEnum.Bar
+>"BarValue" : "BarValue"
+}
+
+// Private fields on a class trigger class alias creation at target < ES2022.
+// Enum member access with same name as class should not be renamed.
+export class Foo {
+>Foo : Foo
+
+    #private = 1;
+>#private : number
+>1 : 1
+
+    static instance = new Foo();
+>instance : Foo
+>new Foo() : Foo
+>Foo : typeof Foo
+
+    type: MyEnum = MyEnum.Foo;
+>type : MyEnum
+>MyEnum.Foo : MyEnum.Foo
+>MyEnum : typeof MyEnum
+>Foo : MyEnum.Foo
+
+    getType(): MyEnum {
+>getType : () => MyEnum
+
+        return this.type || MyEnum.Foo;
+>this.type || MyEnum.Foo : MyEnum
+>this.type : MyEnum
+>this : this
+>type : MyEnum
+>MyEnum.Foo : MyEnum.Foo
+>MyEnum : typeof MyEnum
+>Foo : MyEnum.Foo
+    }
+
+    getPrivate() {
+>getPrivate : () => number
+
+        return this.#private;
+>this.#private : number
+>this : this
+    }
+}
+
+// Property access with same name as class in static context
+declare const obj: { Bar: number };
+>obj : { Bar: number; }
+>Bar : number
+
+export class Bar {
+>Bar : Bar
+
+    #data = 0;
+>#data : number
+>0 : 0
+
+    static ref = new Bar();
+>ref : Bar
+>new Bar() : Bar
+>Bar : typeof Bar
+
+    static prop = obj.Bar;
+>prop : number
+>obj.Bar : number
+>obj : { Bar: number; }
+>Bar : number
+}
+
+// Class expression with private fields and self-reference
+declare const obj2: { Baz: string };
+>obj2 : { Baz: string; }
+>Baz : string
+
+const MyClass = class Baz {
+>MyClass : typeof Baz
+>class Baz {    #field = 1;    static instance = new Baz();    prop = obj2.Baz;} : typeof Baz
+>Baz : typeof Baz
+
+    #field = 1;
+>#field : number
+>1 : 1
+
+    static instance = new Baz();
+>instance : Baz
+>new Baz() : Baz
+>Baz : typeof Baz
+
+    prop = obj2.Baz;
+>prop : string
+>obj2.Baz : string
+>obj2 : { Baz: string; }
+>Baz : string
+}
+

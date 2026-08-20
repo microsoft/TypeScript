@@ -1,0 +1,43 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestImportNameCodeFix_require(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @allowJs: true
+// @checkJs: true
+// @Filename: foo.js
+module.exports = function foo() {}
+// @Filename: utils.js
+function util1() {}
+function util2() {}
+module.exports = { util1, util2 };
+// @Filename: blah.js
+export default class Blah {}
+// @Filename: index.js
+foo();
+util1();
+util2();
+new Blah;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToFile(t, "index.js")
+	f.VerifyCodeFixAll(t, fourslash.VerifyCodeFixAllOptions{
+		FixID: "fixMissingImport",
+		NewFileContent: `const { default: Blah } = require("./blah");
+const foo = require("./foo");
+const { util1, util2 } = require("./utils");
+
+foo();
+util1();
+util2();
+new Blah;`,
+	})
+}

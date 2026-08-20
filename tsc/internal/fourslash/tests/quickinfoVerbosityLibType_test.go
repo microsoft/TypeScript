@@ -1,0 +1,27 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestQuickinfoVerbosityLibType(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @lib: es5
+interface Apple {
+    color: string;
+    size: number;
+}
+function f(): Promise<Apple> {
+    return Promise.resolve({ color: "red", size: 5 });
+}
+const g/*g*/ = f;
+const u/*u*/: Map<string, Apple> = new Map;
+type Foo<T> = Promise/*p*/<T>;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineHoverWithVerbosity(t, map[string][]int{"g": {0, 1}, "u": {0, 1}, "p": {0}})
+}

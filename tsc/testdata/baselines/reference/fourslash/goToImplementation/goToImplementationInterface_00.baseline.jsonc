@@ -1,0 +1,21 @@
+// === goToImplementation ===
+// === /goToImplementationInterface_00.ts ===
+// interface Fo/*GOTO IMPL*/o {
+//     hello: () => void
+// }
+// 
+// <|interface [|Baz|] extends Foo {}|>
+// 
+// var bar: Foo = [|{ hello: helloImpl /**0*/ }|];
+// var baz: Foo[] = [|[{ hello: helloImpl /**4*/ }]|];
+// 
+// function helloImpl () {}
+// 
+// function whatever(x: Foo = [|{ hello() {/**1*/} }|] ) {
+// }
+// 
+// class Bar {
+//     x: Foo = [|{ hello() {} }|]
+// 
+//     constructor(public f: Foo = [|{ hello() {/**3*/} }|] ) {}
+// }

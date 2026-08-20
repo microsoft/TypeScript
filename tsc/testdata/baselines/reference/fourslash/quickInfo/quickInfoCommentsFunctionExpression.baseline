@@ -1,0 +1,416 @@
+// === QuickInfo ===
+=== /quickInfoCommentsFunctionExpression.ts ===
+// /** lambdaFoo var comment*/
+// var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => a + b;
+//     ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var lambdaFoo: (a: number, b: number) => number
+// | ```
+// | lambdaFoo var comment
+// | ----------------------------------------------------------------------
+// var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
+//     ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var lambddaNoVarComment: (a: number, b: number) => number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// lambdaFoo(10, 20);
+// function anotherFunc(a: number) {
+//          ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function anotherFunc(a: number): string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     /** documentation
+//         @param b {string} inner parameter */
+//     var lambdaVar = /** inner docs */(b: string) => {
+//         ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var lambdaVar: (b: string) => string
+// | ```
+// | documentation
+// | 
+// | *@param* `b` — inner parameter
+// | ----------------------------------------------------------------------
+//                                       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         var localVar = "Hello ";
+//             ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var localVar: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         return localVar + b;
+//                ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var localVar: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                           ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (parameter) b: string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     }
+//     return lambdaVar("World") + a;
+//            ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var lambdaVar: (b: string) => string
+// | ```
+// | documentation
+// | 
+// | *@param* `b` — inner parameter
+// | ----------------------------------------------------------------------
+// }
+// /**
+//  * On variable
+//  * @param s the first parameter!
+//  * @returns the parameter's length
+//  */
+// var assigned = /**
+//     ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var assigned: (s: string) => number
+// | ```
+// | On variable
+// | 
+// | *@param* `s` — the first parameter!
+// | 
+// | *@returns* — the parameter's length
+// | ----------------------------------------------------------------------
+//                 * Summary on expression
+//                 * @param s param on expression
+//                 * @returns return on expression
+//                 */function(/** On parameter */s: string) {
+//   return s.length;
+// }
+// assigned("hey");
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var assigned: (s: string) => number
+// | ```
+// | On variable
+// | 
+// | *@param* `s` — the first parameter!
+// | 
+// | *@returns* — the parameter's length
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 36,
+      "LSPosition": {
+        "line": 1,
+        "character": 8
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar lambdaFoo: (a: number, b: number) => number\n```\nlambdaFoo var comment"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 13
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 142,
+      "LSPosition": {
+        "line": 2,
+        "character": 12
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar lambddaNoVarComment: (a: number, b: number) => number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 4
+        },
+        "end": {
+          "line": 2,
+          "character": 23
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 277,
+      "LSPosition": {
+        "line": 4,
+        "character": 9
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction anotherFunc(a: number): string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 9
+        },
+        "end": {
+          "line": 4,
+          "character": 20
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 377,
+      "LSPosition": {
+        "line": 7,
+        "character": 8
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar lambdaVar: (b: string) => string\n```\ndocumentation\n\n*@param* `b` — inner parameter"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 8
+        },
+        "end": {
+          "line": 7,
+          "character": 17
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 407,
+      "LSPosition": {
+        "line": 7,
+        "character": 38
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 38
+        },
+        "end": {
+          "line": 7,
+          "character": 39
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 435,
+      "LSPosition": {
+        "line": 8,
+        "character": 12
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar localVar: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 12
+        },
+        "end": {
+          "line": 8,
+          "character": 20
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 471,
+      "LSPosition": {
+        "line": 9,
+        "character": 15
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar localVar: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 15
+        },
+        "end": {
+          "line": 9,
+          "character": 23
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 482,
+      "LSPosition": {
+        "line": 9,
+        "character": 26
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(parameter) b: string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 26
+        },
+        "end": {
+          "line": 9,
+          "character": 27
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 506,
+      "LSPosition": {
+        "line": 11,
+        "character": 15
+      },
+      "Name": "13",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar lambdaVar: (b: string) => string\n```\ndocumentation\n\n*@param* `b` — inner parameter"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 11
+        },
+        "end": {
+          "line": 11,
+          "character": 20
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 627,
+      "LSPosition": {
+        "line": 18,
+        "character": 8
+      },
+      "Name": "14",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar assigned: (s: string) => number\n```\nOn variable\n\n*@param* `s` — the first parameter!\n\n*@returns* — the parameter's length"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 4
+        },
+        "end": {
+          "line": 18,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 858,
+      "LSPosition": {
+        "line": 25,
+        "character": 5
+      },
+      "Name": "16",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar assigned: (s: string) => number\n```\nOn variable\n\n*@param* `s` — the first parameter!\n\n*@returns* — the parameter's length"
+      },
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 0
+        },
+        "end": {
+          "line": 25,
+          "character": 8
+        }
+      }
+    }
+  }
+]

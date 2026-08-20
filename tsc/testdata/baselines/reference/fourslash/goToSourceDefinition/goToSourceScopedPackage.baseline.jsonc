@@ -1,0 +1,17 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/@myscope/mylib/index.js ===
+// <|export function [|scopedHelper|]() { return "scoped"; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { /*GOTO SOURCE DEF*/scopedHelper } from "@myscope/mylib";
+// scopedHelper();
+
+
+
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/@myscope/mylib/index.js ===
+// <|export function [|scopedHelper|]() { return "scoped"; }|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import { scopedHelper } from "@myscope/mylib";
+// scopedHelper/*GOTO SOURCE DEF*/();

@@ -1,0 +1,15 @@
+jsDeclarationsExportAssignedConstructorFunction.js(3,10): error TS2339: Property 'x' does not exist on type 'typeof import("jsDeclarationsExportAssignedConstructorFunction")'.
+
+
+==== jsDeclarationsExportAssignedConstructorFunction.js (1 errors) ====
+    /** @constructor */
+    module.exports.MyClass = function() {
+        this.x = 1
+             ~
+!!! error TS2339: Property 'x' does not exist on type 'typeof import("jsDeclarationsExportAssignedConstructorFunction")'.
+    }
+    module.exports.MyClass.prototype = {
+        a: function() {
+        }
+    }
+    

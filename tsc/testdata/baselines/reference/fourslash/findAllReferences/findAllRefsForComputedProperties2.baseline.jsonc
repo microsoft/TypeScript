@@ -1,0 +1,45 @@
+// === findAllReferences ===
+// === /findAllRefsForComputedProperties2.ts ===
+// interface I {
+//     [/*FIND ALL REFS*/[|42|]](): void;
+// }
+// 
+// class C implements I {
+//     [[|42|]]: any;
+// }
+// 
+// var x: I = {
+//     ["[|42|]"]: function () { }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForComputedProperties2.ts ===
+// interface I {
+//     [[|42|]](): void;
+// }
+// 
+// class C implements I {
+//     [/*FIND ALL REFS*/[|42|]]: any;
+// }
+// 
+// var x: I = {
+//     ["[|42|]"]: function () { }
+// }
+
+
+
+// === findAllReferences ===
+// === /findAllRefsForComputedProperties2.ts ===
+// interface I {
+//     [[|42|]](): void;
+// }
+// 
+// class C implements I {
+//     [[|42|]]: any;
+// }
+// 
+// var x: I = {
+//     ["/*FIND ALL REFS*/[|42|]"]: function () { }
+// }

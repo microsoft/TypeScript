@@ -1,0 +1,9 @@
+/a.js(1,15): error TS6196: 'T' is declared but never used.
+
+
+==== /a.js (1 errors) ====
+    /** @template T */
+                  ~
+!!! error TS6196: 'T' is declared but never used.
+    function f() {}
+    

@@ -1,0 +1,218 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsExternalModuleAlias_file1.ts ===
+// import a1 = require("./quickInfoDisplayPartsExternalModuleAlias_file0");
+//        ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) module a1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | module a1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// new a1.m1.c();
+//     ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) module a1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// export import a2 = require("./quickInfoDisplayPartsExternalModuleAlias_file0");
+//               ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) module a1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | module a1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// new a2.m1.c();
+//     ^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (alias) module a1
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 7,
+      "LSPosition": {
+        "line": 0,
+        "character": 7
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) module a1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 7
+        },
+        "end": {
+          "line": 0,
+          "character": 9
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 20,
+      "LSPosition": {
+        "line": 0,
+        "character": 20
+      },
+      "Name": "mod1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nmodule a1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 21
+        },
+        "end": {
+          "line": 0,
+          "character": 69
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 77,
+      "LSPosition": {
+        "line": 1,
+        "character": 4
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) module a1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 4
+        },
+        "end": {
+          "line": 1,
+          "character": 6
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 102,
+      "LSPosition": {
+        "line": 2,
+        "character": 14
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) module a1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 14
+        },
+        "end": {
+          "line": 2,
+          "character": 16
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 115,
+      "LSPosition": {
+        "line": 2,
+        "character": 27
+      },
+      "Name": "mod2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nmodule a1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 28
+        },
+        "end": {
+          "line": 2,
+          "character": 76
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 172,
+      "LSPosition": {
+        "line": 3,
+        "character": 4
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(alias) module a1\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 4
+        },
+        "end": {
+          "line": 3,
+          "character": 6
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

@@ -1,0 +1,8 @@
+main.js(1,26): error TS2810: Expected 1 argument, but got 0. 'new Promise()' needs a JSDoc hint to produce a 'resolve' that can be called without arguments.
+
+
+==== main.js (1 errors) ====
+    new Promise((resolve) => resolve());
+                             ~~~~~~~
+!!! error TS2810: Expected 1 argument, but got 0. 'new Promise()' needs a JSDoc hint to produce a 'resolve' that can be called without arguments.
+    

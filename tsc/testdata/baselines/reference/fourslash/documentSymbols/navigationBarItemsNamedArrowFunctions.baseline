@@ -1,0 +1,12 @@
+// === Document Symbols ===
+// === /navigationBarItemsNamedArrowFunctions.ts ===
+// export const <|[|{| name: value, kind: Variable |}value|] = 2|>;
+// export const <|[|{| name: func, kind: Variable |}func|] = () => 2|>;
+// export const <|[|{| name: func2, kind: Variable |}func2|] = function() { }|>;
+// <|export function [|{| name: exportedFunction, kind: Function |}exportedFunction|]() { }|>
+
+// === Details ===
+(Variable) value
+(Variable) func
+(Variable) func2
+(Function) exportedFunction

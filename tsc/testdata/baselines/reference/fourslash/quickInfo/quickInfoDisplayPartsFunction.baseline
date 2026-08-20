@@ -1,0 +1,499 @@
+// === QuickInfo ===
+=== /quickInfoDisplayPartsFunction.ts ===
+// function foo(param: string, optionalParam?: string, paramWithInitializer = "hello", ...restParam: string[]) {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// function foowithoverload(a: string): string;
+//          ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foowithoverload(a: string): string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// function foowithoverload(a: number): number;
+//          ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foowithoverload(a: number): number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// function foowithoverload(a: any): any {
+//          ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foowithoverload(a: any): any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return a;
+// }
+// function foowith3overload(a: string): string;
+//          ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foowith3overload(a: string): string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// function foowith3overload(a: number): number;
+//          ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foowith3overload(a: number): number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// function foowith3overload(a: boolean): boolean;
+//          ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foowith3overload(a: boolean): boolean
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// function foowith3overload(a: any): any {
+//          ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foowith3overload(a: any): any
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return a;
+// }
+// foo("hello");
+// ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// foowithoverload("hello");
+// ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foowithoverload(a: string): string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// foowithoverload(10);
+// ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foowithoverload(a: number): number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// foowith3overload("hello");
+// ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foowith3overload(a: string): string
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// foowith3overload(10);
+// ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foowith3overload(a: number): number
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// foowith3overload(true);
+// ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foowith3overload(a: boolean): boolean
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 9,
+      "LSPosition": {
+        "line": 0,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 9
+        },
+        "end": {
+          "line": 0,
+          "character": 12
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 121,
+      "LSPosition": {
+        "line": 2,
+        "character": 9
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowithoverload(a: string): string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 9
+        },
+        "end": {
+          "line": 2,
+          "character": 24
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 166,
+      "LSPosition": {
+        "line": 3,
+        "character": 9
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowithoverload(a: number): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 3,
+          "character": 9
+        },
+        "end": {
+          "line": 3,
+          "character": 24
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 211,
+      "LSPosition": {
+        "line": 4,
+        "character": 9
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowithoverload(a: any): any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 9
+        },
+        "end": {
+          "line": 4,
+          "character": 24
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 267,
+      "LSPosition": {
+        "line": 7,
+        "character": 9
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: string): string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 9
+        },
+        "end": {
+          "line": 7,
+          "character": 25
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 313,
+      "LSPosition": {
+        "line": 8,
+        "character": 9
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: number): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 9
+        },
+        "end": {
+          "line": 8,
+          "character": 25
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 359,
+      "LSPosition": {
+        "line": 9,
+        "character": 9
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: boolean): boolean\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 9
+        },
+        "end": {
+          "line": 9,
+          "character": 25
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 407,
+      "LSPosition": {
+        "line": 10,
+        "character": 9
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: any): any\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 9
+        },
+        "end": {
+          "line": 10,
+          "character": 25
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 455,
+      "LSPosition": {
+        "line": 13,
+        "character": 0
+      },
+      "Name": "9",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 0
+        },
+        "end": {
+          "line": 13,
+          "character": 3
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 469,
+      "LSPosition": {
+        "line": 14,
+        "character": 0
+      },
+      "Name": "10",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowithoverload(a: string): string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 0
+        },
+        "end": {
+          "line": 14,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 495,
+      "LSPosition": {
+        "line": 15,
+        "character": 0
+      },
+      "Name": "11",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowithoverload(a: number): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 0
+        },
+        "end": {
+          "line": 15,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 516,
+      "LSPosition": {
+        "line": 16,
+        "character": 0
+      },
+      "Name": "12",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: string): string\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 0
+        },
+        "end": {
+          "line": 16,
+          "character": 16
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 543,
+      "LSPosition": {
+        "line": 17,
+        "character": 0
+      },
+      "Name": "13",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: number): number\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 17,
+          "character": 0
+        },
+        "end": {
+          "line": 17,
+          "character": 16
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 565,
+      "LSPosition": {
+        "line": 18,
+        "character": 0
+      },
+      "Name": "14",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foowith3overload(a: boolean): boolean\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 18,
+          "character": 0
+        },
+        "end": {
+          "line": 18,
+          "character": 16
+        }
+      }
+    }
+  }
+]

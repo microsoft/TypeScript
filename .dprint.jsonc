@@ -37,24 +37,35 @@
         // This would be good to do in known-JSONC files, but VS Code warns on trailing commas.
         "trailingCommas": "never"
     },
+    "gofumpt": {
+        "langVersion": "go1.26",
+        "modulePath": "github.com/microsoft/TypeScript/tsc"
+    },
     "excludes": [
         "**/.git",
         "**/node_modules",
         "**/*-lock.json",
-        "coverage/**",
-        "lib/**",
-        "built/**",
-        "tests/**",
-        "internal/**",
-        "**/*.generated.*",
-        "scripts/*.d.*",
-        "**/_namespaces/**"
+        "**/testdata",
+        "packages/vscode-typescript/l10n/**",
+        "tsc/internal/bundled/libs/**",
+        "tsc/internal/lsp/lsproto/_generate/*.json",
+        "tsc/internal/lsp/lsproto/_generate/metaModelSchema.mts",
+        // Needs to be LF to have a working shebang.
+        "packages/typescript/bin/tsc",
+        "tsc/internal/bundled/source/**",
+        "tsc/internal/locale/lcl/**",
+        "packages/typescript/dist/**",
+        "packages/typescript/tsconfig.tsbuildinfo",
+        "packages/vscode-typescript/dist/**",
+        "packages/vscode-typescript-nightly/dist/**",
+        "packages/typescript/vendor/**"
     ],
     // Note: if adding new languages, make sure settings.template.json is updated too.
     // Also, if updating typescript, update the one in package.json.
     "plugins": [
-        "https://plugins.dprint.dev/typescript-0.93.4.wasm",
-        "https://plugins.dprint.dev/json-0.19.4.wasm",
-        "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.0.wasm"
+        "npm:@dprint/typescript@0.96.1",
+        "npm:@dprint/json@0.22.0",
+        "npm:dprint-plugin-yaml@0.6.0",
+        "npm:@jakebailey/dprint-plugin-gofumpt@0.0.13"
     ]
 }

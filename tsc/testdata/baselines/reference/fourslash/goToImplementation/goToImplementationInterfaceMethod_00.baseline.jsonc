@@ -1,0 +1,43 @@
+// === goToImplementation ===
+// === /goToImplementationInterfaceMethod_00.ts ===
+// interface Foo {
+//     hello: () => void
+// }
+// 
+// var bar: Foo = { <|[|hello|]: helloImpl|> };
+// var baz: Foo = { <|"[|hello|]": helloImpl|> };
+// 
+// function helloImpl () {}
+// 
+// function whatever(x: Foo = { <|[|hello|]() {/**1*/}|> }) {
+//     x.he/*GOTO IMPL*/llo()
+// }
+// 
+// class Bar {
+//     x: Foo = { <|[|hello|]() {}|> }
+// 
+//     constructor(public f: Foo = { <|[|hello|]() {/**3*/}|> } ) {}
+// }
+
+
+
+// === goToImplementation ===
+// === /goToImplementationInterfaceMethod_00.ts ===
+// interface Foo {
+//     he/*GOTO IMPL*/llo: () => void
+// }
+// 
+// var bar: Foo = { <|[|hello|]: helloImpl|> };
+// var baz: Foo = { <|"[|hello|]": helloImpl|> };
+// 
+// function helloImpl () {}
+// 
+// function whatever(x: Foo = { <|[|hello|]() {/**1*/}|> }) {
+//     x.hello()
+// }
+// 
+// class Bar {
+//     x: Foo = { <|[|hello|]() {}|> }
+// 
+//     constructor(public f: Foo = { <|[|hello|]() {/**3*/}|> } ) {}
+// }

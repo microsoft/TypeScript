@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/parameterPropertyWithDefaultValueExtended.ts] ////
+
+=== parameterPropertyWithDefaultValueExtended.ts ===
+// Test with default value - should not have undefined
+export class WithDefault {
+>WithDefault : WithDefault
+
+  constructor(readonly timestamp = new Date()) {}
+>timestamp : Date
+>new Date() : Date
+>Date : DateConstructor
+}
+
+// Test without default value but optional - should have undefined
+export class WithoutDefault {
+>WithoutDefault : WithoutDefault
+
+  constructor(readonly timestamp?: Date) {}
+>timestamp : Date | undefined
+}
+
+// Test with explicit undefined type - should keep it
+export class ExplicitUndefined {
+>ExplicitUndefined : ExplicitUndefined
+
+  constructor(readonly timestamp: Date | undefined = new Date()) {}
+>timestamp : Date | undefined
+>new Date() : Date
+>Date : DateConstructor
+}
+
+// Test private parameter property with default value
+export class PrivateWithDefault {
+>PrivateWithDefault : PrivateWithDefault
+
+  constructor(private timestamp = new Date()) {}
+>timestamp : Date
+>new Date() : Date
+>Date : DateConstructor
+}
+
+// Test public parameter property with default value
+export class PublicWithDefault {
+>PublicWithDefault : PublicWithDefault
+
+  constructor(public timestamp = new Date()) {}
+>timestamp : Date
+>new Date() : Date
+>Date : DateConstructor
+}

@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/salsa/propertyAssignmentOnParenthesizedNumber.ts] ////
+
+=== bug38934.js ===
+var x = {};
+>x : { 0: number; }
+>{} : { 0: number; }
+
+// should not crash and also should not result in a property '0' on x.
+x[(0)] = 1;
+>x[(0)] = 1 : 1
+>x[(0)] : number
+>x : { 0: number; }
+>(0) : 0
+>0 : 0
+>1 : 1
+

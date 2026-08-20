@@ -1,0 +1,130 @@
+// === QuickInfo ===
+=== /b.js ===
+// import * as _a from "./a.js";
+// /**
+//  * @implements {_a.Foo}
+//                    ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Foo = {
+// |     getName: _a.Bar;
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//  */
+// class C1 { }
+// 
+// /**
+//  * @extends {_a.Foo}
+//                 ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Foo = {
+// |     getName: _a.Bar;
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//  */
+// class C2 { }
+// 
+// /**
+//  * @augments {_a.Foo}
+//                  ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Foo = {
+// |     getName: _a.Bar;
+// | }
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//  */
+// class C3 { }
+[
+  {
+    "marker": {
+      "Position": 56,
+      "LSPosition": {
+        "line": 2,
+        "character": 22
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ntype Foo = {\n    getName: _a.Bar;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 19
+        },
+        "end": {
+          "line": 2,
+          "character": 22
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 99,
+      "LSPosition": {
+        "line": 7,
+        "character": 19
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ntype Foo = {\n    getName: _a.Bar;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 16
+        },
+        "end": {
+          "line": 7,
+          "character": 19
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 143,
+      "LSPosition": {
+        "line": 12,
+        "character": 20
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ntype Foo = {\n    getName: _a.Bar;\n}\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 17
+        },
+        "end": {
+          "line": 12,
+          "character": 20
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

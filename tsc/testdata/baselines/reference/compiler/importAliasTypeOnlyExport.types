@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/importAliasTypeOnlyExport.ts] ////
+
+=== t.ts ===
+import a = require("./a");
+>a : typeof a
+
+import foo = a.Foo
+>foo : any
+>a : typeof a
+>Foo : foo
+
+=== a.ts ===
+type Foo = { x: number }
+>Foo : Foo
+>x : number
+
+export type { Foo };
+>Foo : Foo
+

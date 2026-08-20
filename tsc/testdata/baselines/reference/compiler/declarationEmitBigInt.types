@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/declarationEmitBigInt.ts] ////
+
+=== a.ts ===
+export const a = 0n;
+>a : 0n
+>0n : 0n
+
+export const b = 10n;
+>b : 10n
+>10n : 10n
+
+export const c = -0n;
+>c : 0n
+>-0n : 0n
+>0n : 0n
+
+export const d = -10n;
+>d : -10n
+>-10n : -10n
+>10n : 10n
+

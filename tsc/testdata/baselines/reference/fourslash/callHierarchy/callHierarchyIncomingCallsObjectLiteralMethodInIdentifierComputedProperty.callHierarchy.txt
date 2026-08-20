@@ -1,0 +1,101 @@
+// === Call Hierarchy ===
+╭ name: split
+├ kind: method
+├ file: bundled:///libs/lib.es2015.symbol.wellknown.d.ts
+├ span:
+│ ╭ bundled:///libs/lib.es2015.symbol.wellknown.d.ts:261:5-266:110
+│ │ 261:     /**
+│ │          ^^^
+│ │ 262:      * Split a string into substrings using the specified separator and return them as an array.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 263:      * @param splitter An object that can split a string.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 264:      * @param limit A value used to limit the number of elements returned in the array.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 265:      */
+│ │      ^^^^^^^
+│ │ 266:     split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[];
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ bundled:///libs/lib.es2015.symbol.wellknown.d.ts:266:5-266:10
+│ │ 266:     split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[];
+│ │          ^^^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: method
+│ │ ├ kind: method
+│ │ ├ containerName: [key]
+│ │ ├ file: /callHierarchyIncomingCallsObjectLiteralMethodInIdentifierComputedProperty.ts
+│ │ ├ span:
+│ │ │ ╭ /callHierarchyIncomingCallsObjectLiteralMethodInIdentifierComputedProperty.ts:4:5-6:6
+│ │ │ │ 4:     method() {
+│ │ │ │        ^^^^^^^^^^
+│ │ │ │ 5:       return "".split(",");
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     }
+│ │ │ │    ^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /callHierarchyIncomingCallsObjectLiteralMethodInIdentifierComputedProperty.ts:4:5-4:11
+│ │ │ │ 4:     method() {
+│ │ │ │        ^^^^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /callHierarchyIncomingCallsObjectLiteralMethodInIdentifierComputedProperty.ts:5:17-5:22
+│ │ │ 5:       return "".split(",");
+│ │ │                    ^^^^^
+│ ╰ ╰
+╰ outgoing: none
+╭ name: split
+├ kind: method
+├ file: bundled:///libs/lib.es5.d.ts
+├ span:
+│ ╭ bundled:///libs/lib.es5.d.ts:484:5-489:65
+│ │ 484:     /**
+│ │          ^^^
+│ │ 485:      * Split a string into substrings using the specified separator and return them as an array.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 486:      * @param separator A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 487:      * @param limit A value used to limit the number of elements returned in the array.
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 488:      */
+│ │      ^^^^^^^
+│ │ 489:     split(separator: string | RegExp, limit?: number): string[];
+│ │      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ bundled:///libs/lib.es5.d.ts:489:5-489:10
+│ │ 489:     split(separator: string | RegExp, limit?: number): string[];
+│ │          ^^^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: method
+│ │ ├ kind: method
+│ │ ├ containerName: [key]
+│ │ ├ file: /callHierarchyIncomingCallsObjectLiteralMethodInIdentifierComputedProperty.ts
+│ │ ├ span:
+│ │ │ ╭ /callHierarchyIncomingCallsObjectLiteralMethodInIdentifierComputedProperty.ts:4:5-6:6
+│ │ │ │ 4:     method() {
+│ │ │ │        ^^^^^^^^^^
+│ │ │ │ 5:       return "".split(",");
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 6:     }
+│ │ │ │    ^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /callHierarchyIncomingCallsObjectLiteralMethodInIdentifierComputedProperty.ts:4:5-4:11
+│ │ │ │ 4:     method() {
+│ │ │ │        ^^^^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /callHierarchyIncomingCallsObjectLiteralMethodInIdentifierComputedProperty.ts:5:17-5:22
+│ │ │ 5:       return "".split(",");
+│ │ │                    ^^^^^
+│ ╰ ╰
+╰ outgoing: none

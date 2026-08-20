@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/asyncFunctionReturnNonPromiseThenable.ts] ////
+
+=== asyncFunctionReturnNonPromiseThenable.ts ===
+export interface MyThenable {
+>MyThenable : Symbol(MyThenable, Decl(asyncFunctionReturnNonPromiseThenable.ts, 0, 0))
+
+    then(): void;
+>then : Symbol(MyThenable.then, Decl(asyncFunctionReturnNonPromiseThenable.ts, 0, 29))
+}
+
+export async function foo(): MyThenable {
+>foo : Symbol(foo, Decl(asyncFunctionReturnNonPromiseThenable.ts, 2, 1))
+>MyThenable : Symbol(MyThenable, Decl(asyncFunctionReturnNonPromiseThenable.ts, 0, 0))
+
+    return {
+        then() {
+>then : Symbol(then, Decl(asyncFunctionReturnNonPromiseThenable.ts, 5, 12))
+        }
+    };
+}
+

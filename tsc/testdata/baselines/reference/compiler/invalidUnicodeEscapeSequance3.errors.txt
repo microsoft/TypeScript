@@ -1,0 +1,13 @@
+invalidUnicodeEscapeSequance3.ts(1,1): error TS2304: Cannot find name 'a'.
+invalidUnicodeEscapeSequance3.ts(1,2): error TS1127: Invalid character.
+invalidUnicodeEscapeSequance3.ts(1,3): error TS2304: Cannot find name 'u'.
+
+
+==== invalidUnicodeEscapeSequance3.ts (3 errors) ====
+    a\u
+    ~
+!!! error TS2304: Cannot find name 'a'.
+     ~
+!!! error TS1127: Invalid character.
+      ~
+!!! error TS2304: Cannot find name 'u'.

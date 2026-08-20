@@ -1,0 +1,13 @@
+// === Document Symbols ===
+// === /navigationBarComputedPropertyName.ts ===
+// <|function [|{| name: F, kind: Function |}F|](key, value) {
+//     return {
+//         <|[|{| name: [key], kind: Property |}[key]|]: value|>,
+//         <|[|{| name: "prop", kind: Property |}"prop"|]: true|>
+//     }
+// }|>
+
+// === Details ===
+(Function) F
+  (Property) [key]
+  (Property) "prop"

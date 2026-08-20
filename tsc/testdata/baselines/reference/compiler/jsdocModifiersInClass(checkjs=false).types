@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/jsdocModifiersInClass.ts] ////
+
+=== test.js ===
+// Unlike object literal members, class members are real class-like members, so
+// JSDoc modifiers are still semantically validated under checkJs: @override
+// without a base class errors. With checkJs off, nothing is validated.
+
+class NoBase {
+>NoBase : NoBase
+
+  /** @override */
+  foo() {
+>foo : () => void
+  }
+}
+
+class Base {
+>Base : Base
+
+  foo() {
+>foo : () => void
+  }
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+  /** @override */
+  foo() {
+>foo : () => void
+  }
+}
+

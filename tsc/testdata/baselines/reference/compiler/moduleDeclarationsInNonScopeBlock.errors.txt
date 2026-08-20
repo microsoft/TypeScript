@@ -1,0 +1,38 @@
+moduleDeclarationsInNonScopeBlock.ts(2,5): error TS1233: An export declaration can only be used at the top level of a namespace or module.
+moduleDeclarationsInNonScopeBlock.ts(2,23): error TS2307: Cannot find module 'exportNamed' or its corresponding type declarations.
+moduleDeclarationsInNonScopeBlock.ts(3,5): error TS1233: An export declaration can only be used at the top level of a namespace or module.
+moduleDeclarationsInNonScopeBlock.ts(3,19): error TS2307: Cannot find module 'exportStar' or its corresponding type declarations.
+moduleDeclarationsInNonScopeBlock.ts(4,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
+moduleDeclarationsInNonScopeBlock.ts(4,23): error TS2307: Cannot find module 'importNamed' or its corresponding type declarations.
+moduleDeclarationsInNonScopeBlock.ts(5,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
+moduleDeclarationsInNonScopeBlock.ts(5,24): error TS2307: Cannot find module 'importEquals' or its corresponding type declarations.
+moduleDeclarationsInNonScopeBlock.ts(6,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
+
+
+==== moduleDeclarationsInNonScopeBlock.ts (9 errors) ====
+    {
+        export { a } from "exportNamed";
+        ~~~~~~
+!!! error TS1233: An export declaration can only be used at the top level of a namespace or module.
+                          ~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'exportNamed' or its corresponding type declarations.
+        export * from "exportStar";
+        ~~~~~~
+!!! error TS1233: An export declaration can only be used at the top level of a namespace or module.
+                      ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'exportStar' or its corresponding type declarations.
+        import { b } from "importNamed";
+        ~~~~~~
+!!! error TS1232: An import declaration can only be used at the top level of a namespace or module.
+                          ~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'importNamed' or its corresponding type declarations.
+        import c = require("importEquals");
+        ~~~~~~
+!!! error TS1232: An import declaration can only be used at the top level of a namespace or module.
+                           ~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'importEquals' or its corresponding type declarations.
+        import "sideEffect";
+        ~~~~~~
+!!! error TS1232: An import declaration can only be used at the top level of a namespace or module.
+    }
+    

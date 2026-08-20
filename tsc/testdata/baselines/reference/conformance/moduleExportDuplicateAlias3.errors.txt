@@ -1,0 +1,24 @@
+test.js(2,16): error TS18048: 'apply' is possibly 'undefined'.
+test.js(2,22): error TS2339: Property 'toFixed' does not exist on type '"ok" | 1 | (() => void)'.
+  Property 'toFixed' does not exist on type '"ok"'.
+
+
+==== test.js (2 errors) ====
+    const { apply } = require('./moduleExportAliasDuplicateAlias')
+    const result = apply.toFixed()
+                   ~~~~~
+!!! error TS18048: 'apply' is possibly 'undefined'.
+                         ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type '"ok" | 1 | (() => void)'.
+!!! error TS2339:   Property 'toFixed' does not exist on type '"ok"'.
+    
+==== moduleExportAliasDuplicateAlias.js (0 errors) ====
+    exports.apply = undefined;
+    exports.apply = undefined;
+    function a() { }
+    exports.apply = a;
+    exports.apply()
+    exports.apply = 'ok'
+    var OK = exports.apply.toUpperCase()
+    exports.apply = 1
+    

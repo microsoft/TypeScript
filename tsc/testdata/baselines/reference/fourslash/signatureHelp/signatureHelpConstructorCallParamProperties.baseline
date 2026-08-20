@@ -1,0 +1,52 @@
+// === SignatureHelp ===
+=== /signatureHelpConstructorCallParamProperties.ts ===
+// class Circle {
+//     /**
+//       * Initialize a circle.
+//       * @param  radius The radius of the circle.
+//       */
+//     constructor(private radius: number) {
+//     }
+// }
+// var a = new Circle(
+//                    ^
+// | ----------------------------------------------------------------------
+// | Circle(**radius: number**): Circle
+// | - `radius: number`: The radius of the circle.
+// | Initialize a circle.
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 179,
+      "LSPosition": {
+        "line": 8,
+        "character": 19
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "Circle(radius: number): Circle",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Initialize a circle."
+          },
+          "parameters": [
+            {
+              "label": "radius: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The radius of the circle."
+              }
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

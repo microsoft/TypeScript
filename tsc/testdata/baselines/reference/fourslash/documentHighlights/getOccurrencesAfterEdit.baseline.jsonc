@@ -1,0 +1,22 @@
+// === documentHighlights ===
+// === /getOccurrencesAfterEdit.ts ===
+// 
+// interface A {
+//     [|foo|]: string;
+// }
+// function foo(x: A) {
+//     x.[|f/*HIGHLIGHTS*/oo|]
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesAfterEdit.ts ===
+// 
+// 
+// interface A {
+//     [|foo|]: string;
+// }
+// function foo(x: A) {
+//     x.[|f/*HIGHLIGHTS*/oo|]
+// }

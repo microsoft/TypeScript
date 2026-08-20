@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/jsdocTypedefNoCrash.ts] ////
+
+=== export.js ===
+/**
+ * @typedef {{
+ * }}
+ */
+export const foo = 5;
+>foo : 5
+>5 : 5
+

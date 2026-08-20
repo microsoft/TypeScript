@@ -1,0 +1,36 @@
+// === Document Symbols ===
+// === /a.ts ===
+// <|[|{| name: default, kind: Class |}|]export default class { }|>
+
+// === Details ===
+(Class) default
+
+
+
+
+// === Document Symbols ===
+// === /b.ts ===
+// <|export default class [|{| name: C, kind: Class |}C|] { }|>
+
+// === Details ===
+(Class) C
+
+
+
+
+// === Document Symbols ===
+// === /c.ts ===
+// <|[|{| name: default, kind: Function |}|]export default function { }|>
+
+// === Details ===
+(Function) default
+
+
+
+
+// === Document Symbols ===
+// === /d.ts ===
+// <|export default function [|{| name: Func, kind: Function |}Func|] { }|>
+
+// === Details ===
+(Function) Func

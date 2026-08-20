@@ -1,0 +1,24 @@
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: 24.x
+    displayName: 'Install Node'
+
+  - bash: |
+      cat > .npmrc << 'EOF'
+      registry=https://pkgs.dev.azure.com/devdiv/devdiv/_packaging/devdiv_PublicPackages/npm/registry/
+      EOF
+    displayName: 'Set up .npmrc'
+
+  - task: npmAuthenticate@0
+    inputs:
+      workingFile: .npmrc
+    displayName: 'Authenticate npm'
+
+  - pwsh: |
+      npm install -g (Get-Content package.json | ConvertFrom-Json).packageManager
+      npm --version
+    displayName: 'Install packageManager from package.json'
+
+  - pwsh: npm ci
+    displayName: 'npm ci'

@@ -1,0 +1,21 @@
+// === findAllReferences ===
+// === /a.ts ===
+// /*FIND ALL REFS*/export const x = 0;
+// declare const a: typeof import("./a");
+// a.x;
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export const /*FIND ALL REFS*/[|x|] = 0;
+// declare const a: typeof import("./a");
+// a.[|x|];
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export const [|x|] = 0;
+// declare const a: typeof import("./a");
+// a./*FIND ALL REFS*/[|x|];

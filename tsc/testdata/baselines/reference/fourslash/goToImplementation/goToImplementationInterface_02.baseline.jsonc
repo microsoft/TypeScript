@@ -1,0 +1,22 @@
+// === goToImplementation ===
+// === /goToImplementationInterface_02.ts ===
+// interface Fo/*GOTO IMPL*/o { hello: () => void }
+// 
+// let x: number = 9;
+// 
+// function createFoo(): Foo {
+//     if (x === 2) {
+//         return [|{
+//             hello() {}
+//         }|];
+//     }
+//     return [|{
+//         hello() {}
+//     }|];
+// }
+// 
+// let createFoo2 = (): Foo => [|({hello() {}})|];
+// 
+// function createFooLike() {
+//     return {
+// --- (line: 20) skipped ---

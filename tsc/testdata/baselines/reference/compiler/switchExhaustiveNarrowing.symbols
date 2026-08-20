@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/switchExhaustiveNarrowing.ts] ////
+
+=== switchExhaustiveNarrowing.ts ===
+interface ClientSource {
+>ClientSource : Symbol(ClientSource, Decl(switchExhaustiveNarrowing.ts, 0, 0))
+
+  type: "client";
+>type : Symbol(ClientSource.type, Decl(switchExhaustiveNarrowing.ts, 0, 24))
+}
+
+interface ServiceSource {
+>ServiceSource : Symbol(ServiceSource, Decl(switchExhaustiveNarrowing.ts, 2, 1))
+
+  type: "service";
+>type : Symbol(ServiceSource.type, Decl(switchExhaustiveNarrowing.ts, 4, 25))
+}
+
+function isDisplaySource(source: ClientSource | ServiceSource | undefined): boolean {
+>isDisplaySource : Symbol(isDisplaySource, Decl(switchExhaustiveNarrowing.ts, 6, 1))
+>source : Symbol(source, Decl(switchExhaustiveNarrowing.ts, 8, 25))
+>ClientSource : Symbol(ClientSource, Decl(switchExhaustiveNarrowing.ts, 0, 0))
+>ServiceSource : Symbol(ServiceSource, Decl(switchExhaustiveNarrowing.ts, 2, 1))
+
+  switch (source?.type) {
+>source?.type : Symbol(type, Decl(switchExhaustiveNarrowing.ts, 0, 24), Decl(switchExhaustiveNarrowing.ts, 4, 25))
+>source : Symbol(source, Decl(switchExhaustiveNarrowing.ts, 8, 25))
+>type : Symbol(type, Decl(switchExhaustiveNarrowing.ts, 0, 24), Decl(switchExhaustiveNarrowing.ts, 4, 25))
+
+    case "client":
+      return true;
+    case "service":
+      return false;
+    case undefined:
+>undefined : Symbol(undefined)
+
+      return false;
+    default:
+      neverReached(source);
+>neverReached : Symbol(neverReached, Decl(switchExhaustiveNarrowing.ts, 20, 1))
+>source : Symbol(source, Decl(switchExhaustiveNarrowing.ts, 8, 25))
+
+      return false;
+  }
+}
+
+function neverReached(_v: never): void {}
+>neverReached : Symbol(neverReached, Decl(switchExhaustiveNarrowing.ts, 20, 1))
+>_v : Symbol(_v, Decl(switchExhaustiveNarrowing.ts, 22, 22))
+

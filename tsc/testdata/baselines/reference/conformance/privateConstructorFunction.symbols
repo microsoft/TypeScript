@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/salsa/privateConstructorFunction.ts] ////
+
+=== privateConstructorFunction.js ===
+{
+    // make sure not to crash when parent's a block rather than a source file or some other
+    // symbol-having node.
+
+    /** @private */
+    function C() {
+>C : Symbol(C, Decl(privateConstructorFunction.js, 0, 1))
+
+        this.x = 1
+    }
+    new C()
+>C : Symbol(C, Decl(privateConstructorFunction.js, 0, 1))
+}
+

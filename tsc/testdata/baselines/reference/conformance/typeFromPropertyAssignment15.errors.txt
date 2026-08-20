@@ -1,0 +1,23 @@
+a.js(10,12): error TS2503: Cannot find namespace 'Outer'.
+
+
+==== a.js (1 errors) ====
+    var Outer = {};
+    
+    Outer.Inner = class {
+        constructor() {
+            this.x = 1
+        }
+        m() { }
+    }
+    
+    /** @type {Outer.Inner} */
+               ~~~~~
+!!! error TS2503: Cannot find namespace 'Outer'.
+    var inner
+    inner.x
+    inner.m()
+    var inno = new Outer.Inner()
+    inno.x
+    inno.m()
+    

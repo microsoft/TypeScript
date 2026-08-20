@@ -1,0 +1,35 @@
+//// [/script.box] (ScriptKind: ScriptKindTS, ContentMapper: [.box])
+--- Original ---
+// @box-extension: .ts
+export const value: number = 1;
+--- Transformed ---
+const __VERSION = "1.0.0";
+// @box-extension: .ts
+export const value: number = 1;
+
+//// [/component.box] (ScriptKind: ScriptKindTSX, ContentMapper: [.box])
+--- Original ---
+// @box-extension: .tsx
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            div: {};
+        }
+    }
+}
+export const view = <div />;
+--- Transformed ---
+const __VERSION = "1.0.0";
+// @box-extension: .tsx
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            div: {};
+        }
+    }
+}
+export const view = <div />;
+
+=== Diagnostics ===
+
+<no content>

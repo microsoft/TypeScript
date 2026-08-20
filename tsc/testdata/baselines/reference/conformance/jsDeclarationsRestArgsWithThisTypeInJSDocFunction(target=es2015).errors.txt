@@ -1,0 +1,13 @@
+bug38550.js(3,22): error TS1005: '}' expected.
+
+
+==== bug38550.js (1 errors) ====
+    export class Clazz {
+      /**
+       * @param {function(this:Object, ...*):*} functionDeclaration
+                         ~
+!!! error TS1005: '}' expected.
+       */
+      method(functionDeclaration) {}
+    }
+    

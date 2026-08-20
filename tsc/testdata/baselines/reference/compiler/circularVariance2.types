@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/circularVariance2.ts] ////
+
+=== circularVariance2.ts ===
+// https://github.com/microsoft/TypeScript/tsc/pull/4820
+
+type Bar<U> = (x: Baz<U[]>) => void;
+>Bar : Bar<U>
+>x : Baz<U[]>
+
+type Baz<V> = {
+>Baz : Baz<V>
+
+    value: Foo<V[]>;
+>value : Foo<V[]>
+}
+
+type Foo<T> = {
+>Foo : Foo<T>
+
+    x: T;
+>x : T
+
+    f: Bar<T>;
+>f : Bar<T>
+}
+
+declare let bar1: Bar<unknown>;
+>bar1 : Bar<unknown>
+
+declare let bar2: Bar<string>;
+>bar2 : Bar<string>
+
+bar1 = bar2;  // Error
+>bar1 = bar2 : Bar<string>
+>bar1 : Bar<unknown>
+>bar2 : Bar<string>
+
+bar2 = bar1;
+>bar2 = bar1 : Bar<unknown>
+>bar2 : Bar<string>
+>bar1 : Bar<unknown>
+
+declare let foo1: Foo<unknown>;
+>foo1 : Foo<unknown>
+
+declare let foo2: Foo<string>;
+>foo2 : Foo<string>
+
+foo1 = foo2;
+>foo1 = foo2 : Foo<string>
+>foo1 : Foo<unknown>
+>foo2 : Foo<string>
+
+foo2 = foo1;  // Error
+>foo2 = foo1 : Foo<unknown>
+>foo2 : Foo<string>
+>foo1 : Foo<unknown>
+

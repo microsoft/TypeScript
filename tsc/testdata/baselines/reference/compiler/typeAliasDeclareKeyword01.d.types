@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/typeAliasDeclareKeyword01.d.ts] ////
+
+=== typeAliasDeclareKeyword01.d.ts ===
+type Foo = number;
+>Foo : number
+
+declare type Bar = string;
+>Bar : string
+

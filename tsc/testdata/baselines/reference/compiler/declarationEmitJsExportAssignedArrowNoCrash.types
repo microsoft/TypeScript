@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/declarationEmitJsExportAssignedArrowNoCrash.ts] ////
+
+=== node_modules/@jest/types/index.d.ts ===
+declare namespace Config {
+  export {
+    InitialOptions,
+>InitialOptions : any
+
+  };
+}
+export { Config };
+>Config : any
+
+declare interface ConfigGlobals {
+  x: unknown;
+>x : unknown
+}
+
+declare type InitialOptions = {
+>InitialOptions : InitialOptions
+
+  globals?: ConfigGlobals;
+>globals : ConfigGlobals | undefined
+
+};
+=== repro.js ===
+/** @type {(x: import("@jest/types").Config.InitialOptions) => void} */
+module.exports = (x) => {};
+>module.exports = (x) => {} : (x: { globals?: ConfigGlobals; }) => void
+>module.exports : (x: import("@jest/types").Config.InitialOptions) => void
+>module : { exports: (x: import("@jest/types").Config.InitialOptions) => void; }
+>exports : (x: import("@jest/types").Config.InitialOptions) => void
+>(x) => {} : (x: { globals?: ConfigGlobals; }) => void
+>x : { globals?: ConfigGlobals; }
+

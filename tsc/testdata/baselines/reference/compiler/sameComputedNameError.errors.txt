@@ -1,0 +1,18 @@
+sameComputedNameError.ts(8,3): error TS2416: Property '[s]' in type 'B' is not assignable to the same property in base type 'A'.
+  Type 'string' is not assignable to type 'number'.
+
+
+==== sameComputedNameError.ts (1 errors) ====
+    declare const s: unique symbol;
+    
+    class A {
+      [s]: number = 1;
+    }
+    
+    class B extends A {
+      [s]: string = "x";
+      ~~~
+!!! error TS2416: Property '[s]' in type 'B' is not assignable to the same property in base type 'A'.
+!!! error TS2416:   Type 'string' is not assignable to type 'number'.
+    }
+    

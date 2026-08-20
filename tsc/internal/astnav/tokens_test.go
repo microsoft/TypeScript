@@ -1,0 +1,622 @@
+package astnav_test
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+	"slices"
+	"strconv"
+	"strings"
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/astnav"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/repo"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/jstest"
+	"gotest.tools/v3/assert"
+)
+
+var testFiles = []string{
+	filepath.Join(repo.TestDataPath(), "fixtures/services/mapCode.ts"),
+}
+
+func TestGetTokenAtPosition(t *testing.T) {
+	t.Parallel()
+	jstest.SkipIfNoNodeJS(t)
+
+	t.Run("baseline", func(t *testing.T) {
+		t.Parallel()
+		baselineTokens(
+			t,
+			"GetTokenAtPosition",
+			false, /*includeEOF*/
+			func(fileText string, positions []int) []*tokenInfo {
+				return tsGetTokensAtPositions(t, fileText, positions)
+			},
+			func(file *ast.SourceFile, pos int) *tokenInfo {
+				return toTokenInfo(astnav.GetTokenAtPosition(file, pos))
+			},
+		)
+	})
+
+	t.Run("go baseline json", func(t *testing.T) {
+		t.Parallel()
+		baselineGoTokensJSON(t, "GetTokenAtPosition", func(file *ast.SourceFile, pos int) *tokenInfo {
+			return toTokenInfo(astnav.GetTokenAtPosition(file, pos))
+		})
+	})
+
+	t.Run("JSDoc type assertion", func(t *testing.T) {
+		t.Parallel()
+		fileText := `function foo(x) {
+    const s = /**@type {string}*/(x)
+}`
+		file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+			FileName: "/test.js",
+			Path:     "/test.js",
+		}, fileText, core.ScriptKindJS)
+
+		// Position of 'x' inside the parenthesized expression (position 52)
+		position := 52
+
+		// This should not panic - it previously panicked with:
+		// "did not expect KindParenthesizedExpression to have KindIdentifier in its trivia"
+		token := astnav.GetTouchingPropertyName(file, position)
+		if token == nil {
+			t.Fatal("Expected to get a token, got nil")
+		}
+
+		// The function may return either the identifier itself or the containing
+		// parenthesized expression, depending on how the AST is structured
+		if token.Kind != ast.KindIdentifier && token.Kind != ast.KindParenthesizedExpression {
+			t.Errorf("Expected identifier or parenthesized expression, got %s", token.Kind)
+		}
+	})
+
+	t.Run("JSDoc type assertion with comment", func(t *testing.T) {
+		t.Parallel()
+		// Exact code from the issue report
+		fileText := `function foo(x) {
+    const s = /**@type {string}*/(x)  // Go-to-definition on x causes panic
+}`
+		file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+			FileName: "/test.js",
+			Path:     "/test.js",
+		}, fileText, core.ScriptKindJS)
+
+		// Find position of 'x' in the type assertion
+		xPos := 52 // Position of 'x' in (x)
+
+		// This should not panic
+		token := astnav.GetTouchingPropertyName(file, xPos)
+		assert.Assert(t, token != nil, "Expected to get a token")
+	})
+
+	t.Run("pointer equality", func(t *testing.T) {
+		t.Parallel()
+		fileText := `
+			function foo() {
+				return 0;
+			}
+		`
+		file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+			FileName: "/file.ts",
+			Path:     "/file.ts",
+		}, fileText, core.ScriptKindTS)
+		assert.Equal(t, astnav.GetTokenAtPosition(file, 0), astnav.GetTokenAtPosition(file, 0))
+	})
+}
+
+func TestGetTouchingPropertyName(t *testing.T) {
+	t.Parallel()
+	jstest.SkipIfNoNodeJS(t)
+
+	baselineTokens(
+		t,
+		"GetTouchingPropertyName",
+		false, /*includeEOF*/
+		func(fileText string, positions []int) []*tokenInfo {
+			return tsGetTouchingPropertyName(t, fileText, positions)
+		},
+		func(file *ast.SourceFile, pos int) *tokenInfo {
+			return toTokenInfo(astnav.GetTouchingPropertyName(file, pos))
+		},
+	)
+
+	t.Run("go baseline json", func(t *testing.T) {
+		t.Parallel()
+		baselineGoTokensJSON(t, "GetTouchingPropertyName", func(file *ast.SourceFile, pos int) *tokenInfo {
+			return toTokenInfo(astnav.GetTouchingPropertyName(file, pos))
+		})
+	})
+}
+
+func baselineTokens(t *testing.T, testName string, includeEOF bool, getTSTokens func(fileText string, positions []int) []*tokenInfo, getGoToken func(file *ast.SourceFile, pos int) *tokenInfo) {
+	for _, fileName := range testFiles {
+		t.Run(filepath.Base(fileName), func(t *testing.T) {
+			t.Parallel()
+			fileText, err := os.ReadFile(fileName)
+			assert.NilError(t, err)
+
+			positions := make([]int, len(fileText)+core.IfElse(includeEOF, 1, 0))
+			for i := range positions {
+				positions[i] = i
+			}
+			tsTokens := getTSTokens(string(fileText), positions)
+			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: "/file.ts",
+				Path:     "/file.ts",
+			}, string(fileText), core.ScriptKindTS)
+
+			var output strings.Builder
+			currentRange := core.NewTextRange(0, 0)
+			currentDiff := tokenDiff{}
+
+			for pos, tsToken := range tsTokens {
+				goToken := getGoToken(file, pos)
+				diff := tokenDiff{goToken: goToken, tsToken: tsToken}
+
+				if !diffEqual(currentDiff, diff) {
+					if !tokensEqual(currentDiff.goToken, currentDiff.tsToken) {
+						writeRangeDiff(&output, file, currentDiff, currentRange, pos)
+					}
+					currentDiff = diff
+					currentRange = core.NewTextRange(pos, pos)
+				}
+				currentRange = currentRange.WithEnd(pos)
+			}
+
+			if !tokensEqual(currentDiff.goToken, currentDiff.tsToken) {
+				writeRangeDiff(&output, file, currentDiff, currentRange, len(tsTokens)-1)
+			}
+
+			baseline.Run(
+				t,
+				fmt.Sprintf("%s.%s.baseline.txt", testName, filepath.Base(fileName)),
+				core.IfElse(output.Len() > 0, output.String(), baseline.NoContent),
+				baseline.Options{
+					Subfolder: "astnav",
+				},
+			)
+		})
+	}
+}
+
+type tokenRun struct {
+	StartPos int    `json:"startPos"`
+	EndPos   int    `json:"endPos"`
+	Kind     string `json:"kind"`
+	NodePos  int    `json:"nodePos"`
+	NodeEnd  int    `json:"nodeEnd"`
+}
+
+func baselineGoTokensJSON(t *testing.T, testName string, getGoToken func(file *ast.SourceFile, pos int) *tokenInfo) {
+	for _, fileName := range testFiles {
+		t.Run(filepath.Base(fileName), func(t *testing.T) {
+			t.Parallel()
+			fileText, err := os.ReadFile(fileName)
+			assert.NilError(t, err)
+
+			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: "/file.ts",
+				Path:     "/file.ts",
+			}, string(fileText), core.ScriptKindTS)
+
+			maxPos := len(fileText)
+			var runs []tokenRun
+			var current *tokenRun
+
+			for pos := range maxPos {
+				token := getGoToken(file, pos)
+				if current != nil && token != nil && current.Kind == token.Kind && current.NodePos == token.Pos && current.NodeEnd == token.End {
+					current.EndPos = pos
+				} else {
+					if current != nil {
+						runs = append(runs, *current)
+					}
+					if token != nil {
+						current = &tokenRun{
+							StartPos: pos,
+							EndPos:   pos,
+							Kind:     token.Kind,
+							NodePos:  token.Pos,
+							NodeEnd:  token.End,
+						}
+					} else {
+						current = nil
+					}
+				}
+			}
+			if current != nil {
+				runs = append(runs, *current)
+			}
+
+			output := core.Must(core.StringifyJson(runs, "", "  "))
+
+			baseline.Run(
+				t,
+				fmt.Sprintf("%s.%s.baseline.json", testName, filepath.Base(fileName)),
+				output,
+				baseline.Options{
+					Subfolder: "astnav",
+				},
+			)
+		})
+	}
+}
+
+type tokenDiff struct {
+	goToken *tokenInfo
+	tsToken *tokenInfo
+}
+
+type tokenInfo struct {
+	Kind string `json:"kind"`
+	Pos  int    `json:"pos"`
+	End  int    `json:"end"`
+}
+
+func toTokenInfo(node *ast.Node) *tokenInfo {
+	if node == nil {
+		return nil
+	}
+	kind := strings.Replace(node.Kind.String(), "Kind", "", 1)
+	switch kind {
+	case "EndOfFile":
+		kind = "EndOfFileToken"
+	}
+	return &tokenInfo{
+		Kind: kind,
+		Pos:  node.Pos(),
+		End:  node.End(),
+	}
+}
+
+func diffEqual(a, b tokenDiff) bool {
+	return tokensEqual(a.goToken, b.goToken) && tokensEqual(a.tsToken, b.tsToken)
+}
+
+func tokensEqual(t1, t2 *tokenInfo) bool {
+	if t1 == nil || t2 == nil {
+		return t1 == t2
+	}
+	return *t1 == *t2
+}
+
+func tsGetTokensAtPositions(t testing.TB, fileText string, positions []int) []*tokenInfo {
+	dir := t.TempDir()
+	err := os.WriteFile(filepath.Join(dir, "file.ts"), []byte(fileText), 0o644)
+	assert.NilError(t, err)
+
+	err = os.WriteFile(filepath.Join(dir, "positions.json"), []byte(core.Must(core.StringifyJson(positions, "", ""))), 0o644)
+	assert.NilError(t, err)
+
+	script := `
+		import fs from "fs";
+		export default (ts) => {
+			const positions = JSON.parse(fs.readFileSync("positions.json", "utf8"));
+			const fileText = fs.readFileSync("file.ts", "utf8");
+			const file = ts.createSourceFile(
+				"file.ts",
+				fileText,
+				{ languageVersion: ts.ScriptTarget.Latest, jsDocParsingMode: ts.JSDocParsingMode.ParseAll },
+				/*setParentNodes*/ true
+			);
+			return positions.map(position => {
+				let token = ts.getTokenAtPosition(file, position);
+				if (token.kind === ts.SyntaxKind.SyntaxList) {
+					token = token.parent;
+				}
+				return {
+					kind: ts.Debug.formatSyntaxKind(token.kind),
+					pos: token.pos,
+					end: token.end,
+				};
+			});
+		};`
+
+	info, err := jstest.EvalNodeScriptWithTS[[]*tokenInfo](t, script, dir, "")
+	assert.NilError(t, err)
+	return info
+}
+
+func tsGetTouchingPropertyName(t testing.TB, fileText string, positions []int) []*tokenInfo {
+	dir := t.TempDir()
+	err := os.WriteFile(filepath.Join(dir, "file.ts"), []byte(fileText), 0o644)
+	assert.NilError(t, err)
+
+	err = os.WriteFile(filepath.Join(dir, "positions.json"), []byte(core.Must(core.StringifyJson(positions, "", ""))), 0o644)
+	assert.NilError(t, err)
+
+	script := `
+		import fs from "fs";
+		export default (ts) => {
+			const positions = JSON.parse(fs.readFileSync("positions.json", "utf8"));
+			const fileText = fs.readFileSync("file.ts", "utf8");
+			const file = ts.createSourceFile(
+				"file.ts",
+				fileText,
+				{ languageVersion: ts.ScriptTarget.Latest, jsDocParsingMode: ts.JSDocParsingMode.ParseAll },
+				/*setParentNodes*/ true
+			);
+			return positions.map(position => {
+				let token = ts.getTouchingPropertyName(file, position);
+				if (token.kind === ts.SyntaxKind.SyntaxList) {
+					token = token.parent;
+				}
+				return {
+					kind: ts.Debug.formatSyntaxKind(token.kind),
+					pos: token.pos,
+					end: token.end,
+				};
+			});
+		};`
+
+	info, err := jstest.EvalNodeScriptWithTS[[]*tokenInfo](t, script, dir, "")
+	assert.NilError(t, err)
+	return info
+}
+
+func writeRangeDiff(output *strings.Builder, file *ast.SourceFile, diff tokenDiff, rng core.TextRange, position int) {
+	lines := file.ECMALineMap()
+
+	tsTokenPos := position
+	goTokenPos := position
+	tsTokenEnd := position
+	goTokenEnd := position
+	if diff.tsToken != nil {
+		tsTokenPos = diff.tsToken.Pos
+		tsTokenEnd = diff.tsToken.End
+	}
+	if diff.goToken != nil {
+		goTokenPos = diff.goToken.Pos
+		goTokenEnd = diff.goToken.End
+	}
+	tsStartLine, _ := core.PositionToLineAndByteOffset(tsTokenPos, lines)
+	tsEndLine, _ := core.PositionToLineAndByteOffset(tsTokenEnd, lines)
+	goStartLine, _ := core.PositionToLineAndByteOffset(goTokenPos, lines)
+	goEndLine, _ := core.PositionToLineAndByteOffset(goTokenEnd, lines)
+
+	contextLines := 2
+	startLine := min(tsStartLine, goStartLine)
+	endLine := max(tsEndLine, goEndLine)
+	markerLines := []int{tsStartLine, tsEndLine, goStartLine, goEndLine}
+	slices.Sort(markerLines)
+	contextStart := max(0, startLine-contextLines)
+	contextEnd := min(len(lines)-1, endLine+contextLines)
+	digits := len(strconv.Itoa(contextEnd))
+
+	shouldTruncate := func(line int) (result bool, skipTo int) {
+		index, _ := slices.BinarySearch(markerLines, line)
+		if index == 0 || index == len(markerLines) {
+			return false, 0
+		}
+		low := markerLines[index-1]
+		high := markerLines[index]
+		if line-low > 5 && high-line > 5 {
+			return true, high - 5
+		}
+		return false, 0
+	}
+
+	if output.Len() > 0 {
+		output.WriteString("\n\n")
+	}
+
+	output.WriteString(fmt.Sprintf("〚Positions: [%d, %d]〛\n", rng.Pos(), rng.End()))
+	if diff.tsToken != nil {
+		output.WriteString(fmt.Sprintf("【TS: %s [%d, %d)】\n", diff.tsToken.Kind, tsTokenPos, tsTokenEnd))
+	} else {
+		output.WriteString("【TS: nil】\n")
+	}
+	if diff.goToken != nil {
+		output.WriteString(fmt.Sprintf("《Go: %s [%d, %d)》\n", diff.goToken.Kind, goTokenPos, goTokenEnd))
+	} else {
+		output.WriteString("《Go: nil》\n")
+	}
+	for line := contextStart; line <= contextEnd; line++ {
+		if truncate, skipTo := shouldTruncate(line); truncate {
+			output.WriteString(fmt.Sprintf("%s │........ %d lines omitted ........\n", strings.Repeat(" ", digits), skipTo-line+1))
+			line = skipTo
+		}
+		output.WriteString(fmt.Sprintf("%*d │", digits, line+1))
+		end := len(file.Text()) + 1
+		if line < len(lines)-1 {
+			end = int(lines[line+1])
+		}
+		for pos := int(lines[line]); pos < end; pos++ {
+			if pos == rng.End()+1 {
+				output.WriteString("〛")
+			}
+			if diff.tsToken != nil && pos == tsTokenEnd {
+				output.WriteString("】")
+			}
+			if diff.goToken != nil && pos == goTokenEnd {
+				output.WriteString("》")
+			}
+
+			if diff.goToken != nil && pos == goTokenPos {
+				output.WriteString("《")
+			}
+			if diff.tsToken != nil && pos == tsTokenPos {
+				output.WriteString("【")
+			}
+			if pos == rng.Pos() {
+				output.WriteString("〚")
+			}
+
+			if pos < len(file.Text()) {
+				output.WriteByte(file.Text()[pos])
+			}
+		}
+	}
+}
+
+func TestFindPrecedingToken(t *testing.T) {
+	t.Parallel()
+	jstest.SkipIfNoNodeJS(t)
+
+	t.Run("baseline", func(t *testing.T) {
+		t.Parallel()
+		baselineTokens(
+			t,
+			"FindPrecedingToken",
+			true, /*includeEOF*/
+			func(fileText string, positions []int) []*tokenInfo {
+				return tsFindPrecedingTokens(t, fileText, positions)
+			},
+			func(file *ast.SourceFile, pos int) *tokenInfo {
+				return toTokenInfo(astnav.FindPrecedingToken(file, pos))
+			},
+		)
+	})
+
+	t.Run("go baseline json", func(t *testing.T) {
+		t.Parallel()
+		baselineGoTokensJSON(t, "FindPrecedingToken", func(file *ast.SourceFile, pos int) *tokenInfo {
+			return toTokenInfo(astnav.FindPrecedingToken(file, pos))
+		})
+	})
+}
+
+func TestFindNextToken(t *testing.T) {
+	t.Parallel()
+
+	t.Run("go baseline json", func(t *testing.T) {
+		t.Parallel()
+		baselineGoTokensJSON(t, "FindNextToken", func(file *ast.SourceFile, pos int) (result *tokenInfo) {
+			// FindNextToken panics (like Go's assert) when the scanner finds trivia between
+			// previousToken.End() and the next syntactic token. Catch those to avoid crashing
+			// the baseline generator; those positions will be absent from the baseline.
+			defer func() {
+				if r := recover(); r != nil {
+					result = nil
+				}
+			}()
+			token := astnav.GetTokenAtPosition(file, pos)
+			next := astnav.FindNextToken(token, file.AsNode(), file)
+			return toTokenInfo(next)
+		})
+	})
+}
+
+func TestUnitFindPrecedingToken(t *testing.T) {
+	t.Parallel()
+	testCases := []struct {
+		name         string
+		fileContent  string
+		position     int
+		expectedKind ast.Kind
+	}{
+		{
+			name: "after dot in jsdoc",
+			fileContent: `import {
+    CharacterCodes,
+    compareStringsCaseInsensitive,
+    compareStringsCaseSensitive,
+    compareValues,
+    Comparison,
+    Debug,
+    endsWith,
+    equateStringsCaseInsensitive,
+    equateStringsCaseSensitive,
+    GetCanonicalFileName,
+    getDeclarationFileExtension,
+    getStringComparer,
+    identity,
+    lastOrUndefined,
+    Path,
+    some,
+    startsWith,
+} from "./_namespaces/ts.js";
+
+/**
+ * Internally, we represent paths as strings with '/' as the directory separator.
+ * When we make system calls (eg: LanguageServiceHost.getDirectory()),
+ * we expect the host to correctly handle paths in our specified format.
+ *
+ * @internal
+ */
+export const directorySeparator = "/";
+/** @internal */
+export const altDirectorySeparator = "\\";
+const urlSchemeSeparator = "://";
+const backslashRegExp = /\\/g;
+
+
+backslashRegExp.
+
+//Path Tests
+
+/**
+ * Determines whether a charCode corresponds to '/' or '\'.
+ *
+ * @internal
+ */
+export function isAnyDirectorySeparator(charCode: number): boolean {
+    return charCode === CharacterCodes.slash || charCode === CharacterCodes.backslash;
+}`,
+			position:     839,
+			expectedKind: ast.KindDotToken,
+		},
+		{
+			name:         "after comma in parameter list",
+			fileContent:  `takesCb((n, s, ))`,
+			position:     15,
+			expectedKind: ast.KindCommaToken,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			t.Parallel()
+			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: "/file.ts",
+				Path:     "/file.ts",
+			}, testCase.fileContent, core.ScriptKindTS)
+			token := astnav.FindPrecedingToken(file, testCase.position)
+			assert.Equal(t, token.Kind, testCase.expectedKind)
+		})
+	}
+}
+
+func tsFindPrecedingTokens(t *testing.T, fileText string, positions []int) []*tokenInfo {
+	dir := t.TempDir()
+	err := os.WriteFile(filepath.Join(dir, "file.ts"), []byte(fileText), 0o644)
+	assert.NilError(t, err)
+
+	err = os.WriteFile(filepath.Join(dir, "positions.json"), []byte(core.Must(core.StringifyJson(positions, "", ""))), 0o644)
+	assert.NilError(t, err)
+
+	script := `
+		import fs from "fs";
+		export default (ts) => {
+			const positions = JSON.parse(fs.readFileSync("positions.json", "utf8"));
+			const fileText = fs.readFileSync("file.ts", "utf8");
+			const file = ts.createSourceFile(
+				"file.ts",
+				fileText,
+				{ languageVersion: ts.ScriptTarget.Latest, jsDocParsingMode: ts.JSDocParsingMode.ParseAll },
+				/*setParentNodes*/ true
+			);
+			return positions.map(position => {
+				let token = ts.findPrecedingToken(position, file);
+				if (token === undefined) {
+					return undefined;
+				}
+				if (token.kind === ts.SyntaxKind.SyntaxList) {
+					token = token.parent;
+				}
+				return {
+					kind: ts.Debug.formatSyntaxKind(token.kind),
+					pos: token.pos,
+					end: token.end,
+				};
+			});
+		};`
+	info, err := jstest.EvalNodeScriptWithTS[[]*tokenInfo](t, script, dir, "")
+	assert.NilError(t, err)
+	return info
+}

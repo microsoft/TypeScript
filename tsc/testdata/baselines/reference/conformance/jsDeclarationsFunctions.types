@@ -1,0 +1,128 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctions.ts] ////
+
+=== index.js ===
+export function a() {}
+>a : () => void
+
+export function b() {}
+>b : { (): void; cat: string; }
+
+b.cat = "cat";
+>b.cat = "cat" : "cat"
+>b.cat : string
+>b : { (): void; cat: string; }
+>cat : string
+>"cat" : "cat"
+
+export function c() {}
+>c : { (): void; Cls: typeof Cls; }
+
+c.Cls = class {}
+>c.Cls = class {} : typeof Cls
+>c.Cls : typeof Cls
+>c : { (): void; Cls: typeof Cls; }
+>Cls : typeof Cls
+>class {} : typeof Cls
+
+/**
+ * @param {number} a
+ * @param {number} b
+ * @return {string} 
+ */
+export function d(a, b) { return /** @type {*} */(null); }
+>d : (a: number, b: number) => string
+>a : number
+>b : number
+>(null) : any
+
+/**
+ * @template T,U
+ * @param {T} a
+ * @param {U} b
+ * @return {T & U} 
+ */
+export function e(a, b) { return /** @type {*} */(null); }
+>e : <T, U>(a: T, b: U) => T & U
+>a : T
+>b : U
+>(null) : any
+
+/**
+ * @template T
+ * @param {T} a
+ */
+export function f(a) {
+>f : { <T>(a: T): T; self: typeof f; }
+>a : T
+
+    return a;
+>a : T
+}
+f.self = f;
+>f.self = f : { <T>(a: T): T; self: typeof f; }
+>f.self : { <T>(a: T): T; self: typeof f; }
+>f : { <T>(a: T): T; self: typeof f; }
+>self : { <T>(a: T): T; self: typeof f; }
+>f : { <T>(a: T): T; self: typeof f; }
+
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof b}} b
+ */
+function g(a, b) {
+>g : (a: { x: string; }, b: { y: typeof b; }) => any
+>a : { x: string; }
+>b : { y: typeof b; }
+
+    return a.x && b.y();
+>a.x && b.y() : any
+>a.x : string
+>a : { x: string; }
+>x : string
+>b.y() : any
+>b.y : { y: typeof b; }
+>b : { y: typeof b; }
+>y : { y: typeof b; }
+}
+
+export { g };
+>g : (a: { x: string; }, b: { y: typeof b; }) => any
+
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof b}} b
+ */
+function hh(a, b) {
+>hh : (a: { x: string; }, b: { y: typeof b; }) => any
+>a : { x: string; }
+>b : { y: typeof b; }
+
+    return a.x && b.y();
+>a.x && b.y() : any
+>a.x : string
+>a : { x: string; }
+>x : string
+>b.y() : any
+>b.y : { y: typeof b; }
+>b : { y: typeof b; }
+>y : { y: typeof b; }
+}
+
+export { hh as h };
+>hh : (a: { x: string; }, b: { y: typeof b; }) => any
+>h : (a: { x: string; }, b: { y: typeof b; }) => any
+
+export function i() {}
+>i : () => void
+
+export { i as ii };
+>i : () => void
+>ii : () => void
+
+export { j as jj };
+>j : () => void
+>jj : () => void
+
+export function j() {}
+>j : () => void
+

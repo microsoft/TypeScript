@@ -1,0 +1,93 @@
+// === QuickInfo ===
+=== /quickInfoJsDocTagsTypedef.js ===
+// /**
+//  * Bar comment
+//  * @typedef {Object} Bar
+//                      ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Bar = {
+// |     baz: string;
+// |     qux: string;
+// | }
+// | ```
+// | Bar comment
+// | ----------------------------------------------------------------------
+//  * @property {string} baz - baz comment
+//  * @property {string} qux - qux comment
+//  */
+// 
+// /**
+//  * foo comment
+//  * @param {Bar} x - x comment
+//            ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | type Bar = {
+// |     baz: string;
+// |     qux: string;
+// | }
+// | ```
+// | Bar comment
+// | ----------------------------------------------------------------------
+//  * @returns {Bar}
+//  */
+// function foo(x) {
+//     return x;
+// }
+[
+  {
+    "marker": {
+      "Position": 40,
+      "LSPosition": {
+        "line": 2,
+        "character": 21
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ntype Bar = {\n    baz: string;\n    qux: string;\n}\n```\nBar comment"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 21
+        },
+        "end": {
+          "line": 2,
+          "character": 24
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 159,
+      "LSPosition": {
+        "line": 9,
+        "character": 11
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\ntype Bar = {\n    baz: string;\n    qux: string;\n}\n```\nBar comment"
+      },
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 11
+        },
+        "end": {
+          "line": 9,
+          "character": 14
+        }
+      }
+    }
+  }
+]

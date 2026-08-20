@@ -1,6 +1,0 @@
-{
-  "scenario": "Verify project option",
-  "projectRoot": "tests/cases/projects/projectOption/Test",
-  "baselineCheck": true,
-  "declaration": true
-}

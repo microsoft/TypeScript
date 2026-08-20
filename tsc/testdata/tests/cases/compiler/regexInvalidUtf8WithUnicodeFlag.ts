@@ -1,0 +1,2 @@
+// @target: esnext
+/€/u

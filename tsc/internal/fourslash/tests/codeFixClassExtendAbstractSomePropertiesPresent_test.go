@@ -1,0 +1,31 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixClassExtendAbstractSomePropertiesPresent(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @strict: false
+// @noImplicitOverride: true
+abstract class A {
+   abstract x: number;
+   abstract y: number;
+   abstract z: number;
+}
+
+class C extends A {[|   
+   |]constructor(public x: number) { super(); }
+   y: number;
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyRangeAfterCodeFix(t, `
+override z: number;
+`, false, 0, 0)
+}

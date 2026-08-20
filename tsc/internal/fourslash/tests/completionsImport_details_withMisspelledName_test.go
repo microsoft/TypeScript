@@ -1,0 +1,44 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionsImport_details_withMisspelledName(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /a.ts
+export const abc = 0;
+// @Filename: /b.ts
+acb/*1*/;
+// @Filename: /c.ts
+acb/*2*/;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToMarker(t, "1")
+	f.VerifyApplyCodeActionFromCompletion(t, new("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
+		Name:        "abc",
+		Source:      "./a",
+		Description: "Add import from \"./a\"",
+		NewFileContent: new(`import { abc } from "./a";
+
+acb;`),
+	})
+	f.GoToMarker(t, "2")
+	f.VerifyApplyCodeActionFromCompletion(t, new("2"), &fourslash.ApplyCodeActionFromCompletionOptions{
+		Name:   "abc",
+		Source: "./a",
+		AutoImportFix: &lsproto.AutoImportFix{
+			ModuleSpecifier: "./a",
+		},
+		Description: "Add import from \"./a\"",
+		NewFileContent: new(`import { abc } from "./a";
+
+acb;`),
+	})
+}

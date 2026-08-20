@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/contentMapperSymlink.ts] ////
+
+=== /app.box ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(app.box, 0, 5))
+
+export const version = 7;
+>version : Symbol(version, Decl(app.box, 1, 12))
+
+=== /main.ts ===
+import { version } from "./app.box";
+>version : Symbol(version, Decl(main.ts, 0, 8))
+
+export const twice: number = version * 2;
+>twice : Symbol(twice, Decl(main.ts, 2, 12))
+>version : Symbol(version, Decl(main.ts, 0, 8))
+

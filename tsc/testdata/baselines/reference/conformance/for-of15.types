@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of15.ts] ////
+
+=== for-of15.ts ===
+class MyStringIterator {
+>MyStringIterator : MyStringIterator
+
+    next() {
+>next : () => string
+
+        return "";
+>"" : ""
+    }
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+        return this;
+>this : this
+    }
+}
+
+var v: string;
+>v : string
+
+for (v of new MyStringIterator) { } // Should fail
+>v : string
+>new MyStringIterator : MyStringIterator
+>MyStringIterator : typeof MyStringIterator
+

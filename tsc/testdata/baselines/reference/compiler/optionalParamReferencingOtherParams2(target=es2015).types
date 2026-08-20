@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/optionalParamReferencingOtherParams2.ts] ////
+
+=== optionalParamReferencingOtherParams2.ts ===
+var a = 1;
+>a : number
+>1 : 1
+
+function strange(x = a, y = b) { 
+>strange : (x?: number, y?: any) => any
+>x : number
+>a : number
+>y : any
+>b : any
+
+    var b = "";
+>b : string
+>"" : ""
+
+    return y;
+>y : any
+}

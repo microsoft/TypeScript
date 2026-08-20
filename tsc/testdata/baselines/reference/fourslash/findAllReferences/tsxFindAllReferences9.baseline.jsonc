@@ -1,0 +1,18 @@
+// === findAllReferences ===
+// === /file.tsx ===
+// --- (line: 11) skipped ---
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     /*FIND ALL REFS*/[|goTo|]: string;
+// }
+// declare function MainButton(buttonProps: ButtonProps): JSX.Element;
+// declare function MainButton(linkProps: LinkProps): JSX.Element;
+// declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <MainButton />;
+// let opt = <MainButton children="chidlren" />;
+// let opt = <MainButton onClick={()=>{}} />;
+// let opt = <MainButton onClick={()=>{}} ignore-prop />;
+// let opt = <MainButton [|goTo|]="goTo" />;
+// let opt = <MainButton [|goTo|] />;
+// let opt = <MainButton wrong />;

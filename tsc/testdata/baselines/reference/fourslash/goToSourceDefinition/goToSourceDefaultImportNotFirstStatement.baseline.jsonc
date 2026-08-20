@@ -1,0 +1,8 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/pkg/index.js ===
+// export const version = "1.0";
+// <|export default class [|Widget|] {}|>
+
+// === /home/src/workspaces/project/index.ts ===
+// import /*GOTO SOURCE DEF*/Widget from "pkg";
+// Widget;

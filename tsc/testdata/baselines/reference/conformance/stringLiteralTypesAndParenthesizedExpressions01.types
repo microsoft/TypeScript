@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndParenthesizedExpressions01.ts] ////
+
+=== stringLiteralTypesAndParenthesizedExpressions01.ts ===
+declare function myRandBool(): boolean;
+>myRandBool : () => boolean
+
+let a: "foo" = ("foo");
+>a : "foo"
+>("foo") : "foo"
+>"foo" : "foo"
+
+let b: "foo" | "bar" = ("foo");
+>b : "bar" | "foo"
+>("foo") : "foo"
+>"foo" : "foo"
+
+let c: "foo" = (myRandBool ? "foo" : ("foo"));
+>c : "foo"
+>(myRandBool ? "foo" : ("foo")) : "foo"
+>myRandBool ? "foo" : ("foo") : "foo"
+>myRandBool : () => boolean
+>"foo" : "foo"
+>("foo") : "foo"
+>"foo" : "foo"
+
+let d: "foo" | "bar" = (myRandBool ? "foo" : ("bar"));
+>d : "bar" | "foo"
+>(myRandBool ? "foo" : ("bar")) : "bar" | "foo"
+>myRandBool ? "foo" : ("bar") : "bar" | "foo"
+>myRandBool : () => boolean
+>"foo" : "foo"
+>("bar") : "bar"
+>"bar" : "bar"
+

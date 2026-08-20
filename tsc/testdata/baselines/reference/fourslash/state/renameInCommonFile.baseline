@@ -1,0 +1,197 @@
+UseCaseSensitiveFileNames: true
+//// [/projects/a/a.ts] *new* 
+import {C} from "./c/fc";
+console.log(C)
+//// [/projects/a/c] -> /projects/c *new*
+//// [/projects/a/tsconfig.json] *new* 
+{}
+//// [/projects/b/b.ts] *new* 
+import {C} from "../c/fc";
+console.log(C)
+//// [/projects/b/c] -> /projects/c *new*
+//// [/projects/b/tsconfig.json] *new* 
+{}
+//// [/projects/c/fc.ts] *new* 
+export const C = 42;
+
+
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/a/a.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import {C} from \"./c/fc\";\nconsole.log(C)"
+    }
+  }
+}
+
+Projects::
+  [/projects/a/tsconfig.json] *new*
+    /projects/a/c/fc.ts  
+    /projects/a/a.ts     
+Open Files::
+  [/projects/a/a.ts] *new*
+    /projects/a/tsconfig.json  (default) 
+Config::
+  [/projects/a/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/a/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/a/a.ts  
+Config File Names::
+  [/projects/a/a.ts] *new*
+    NearestConfigFileName: /projects/a/tsconfig.json
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/b/b.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "import {C} from \"../c/fc\";\nconsole.log(C)"
+    }
+  }
+}
+
+Projects::
+  [/projects/a/tsconfig.json] 
+    /projects/a/c/fc.ts  
+    /projects/a/a.ts     
+  [/projects/b/tsconfig.json] *new*
+    /projects/c/fc.ts    
+    /projects/b/b.ts     
+    /projects/b/c/fc.ts  
+Open Files::
+  [/projects/a/a.ts] 
+    /projects/a/tsconfig.json  (default) 
+  [/projects/b/b.ts] *new*
+    /projects/b/tsconfig.json  (default) 
+Config::
+  [/projects/a/tsconfig.json] 
+    RetainingProjects:
+      /projects/a/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/a/a.ts  
+  [/projects/b/tsconfig.json] *new*
+    RetainingProjects:
+      /projects/b/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/b/b.ts  
+Config File Names::
+  [/projects/a/a.ts] 
+    NearestConfigFileName: /projects/a/tsconfig.json
+  [/projects/b/b.ts] *new*
+    NearestConfigFileName: /projects/b/tsconfig.json
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/a/c/fc.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export const C = 42;\n"
+    }
+  }
+}
+
+Open Files::
+  [/projects/a/a.ts] 
+    /projects/a/tsconfig.json  (default) 
+  [/projects/a/c/fc.ts] *new*
+    /projects/a/tsconfig.json  (default) 
+  [/projects/b/b.ts] 
+    /projects/b/tsconfig.json  (default) 
+Config::
+  [/projects/a/tsconfig.json] *modified*
+    RetainingProjects:
+      /projects/a/tsconfig.json  
+    RetainingOpenFiles: *modified*
+      /projects/a/a.ts     
+      /projects/a/c/fc.ts  *new*
+  [/projects/b/tsconfig.json] 
+    RetainingProjects:
+      /projects/b/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/b/b.ts  
+Config File Names::
+  [/projects/a/a.ts] 
+    NearestConfigFileName: /projects/a/tsconfig.json
+  [/projects/a/c/fc.ts] *new*
+    NearestConfigFileName: /projects/a/tsconfig.json
+  [/projects/b/b.ts] 
+    NearestConfigFileName: /projects/b/tsconfig.json
+
+{
+  "method": "textDocument/didOpen",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/b/c/fc.ts",
+      "languageId": "typescript",
+      "version": 0,
+      "text": "export const C = 42;\n"
+    }
+  }
+}
+
+Open Files::
+  [/projects/a/a.ts] 
+    /projects/a/tsconfig.json  (default) 
+  [/projects/a/c/fc.ts] 
+    /projects/a/tsconfig.json  (default) 
+  [/projects/b/b.ts] 
+    /projects/b/tsconfig.json  (default) 
+  [/projects/b/c/fc.ts] *new*
+    /projects/b/tsconfig.json  (default) 
+Config::
+  [/projects/a/tsconfig.json] 
+    RetainingProjects:
+      /projects/a/tsconfig.json  
+    RetainingOpenFiles:
+      /projects/a/a.ts     
+      /projects/a/c/fc.ts  
+  [/projects/b/tsconfig.json] *modified*
+    RetainingProjects:
+      /projects/b/tsconfig.json  
+    RetainingOpenFiles: *modified*
+      /projects/b/b.ts     
+      /projects/b/c/fc.ts  *new*
+Config File Names::
+  [/projects/a/a.ts] 
+    NearestConfigFileName: /projects/a/tsconfig.json
+  [/projects/a/c/fc.ts] 
+    NearestConfigFileName: /projects/a/tsconfig.json
+  [/projects/b/b.ts] 
+    NearestConfigFileName: /projects/b/tsconfig.json
+  [/projects/b/c/fc.ts] *new*
+    NearestConfigFileName: /projects/b/tsconfig.json
+
+{
+  "method": "textDocument/rename",
+  "params": {
+    "textDocument": {
+      "uri": "file:///projects/a/c/fc.ts"
+    },
+    "position": {
+      "line": 0,
+      "character": 13
+    },
+    "newName": "?"
+  }
+}
+
+
+
+
+// === findRenameLocations ===
+// === /projects/a/a.ts ===
+// import {[|CRENAME|]} from "./c/fc";
+// console.log([|CRENAME|])
+
+// === /projects/a/c/fc.ts ===
+// export const /*RENAME*/C = 42;
+// 

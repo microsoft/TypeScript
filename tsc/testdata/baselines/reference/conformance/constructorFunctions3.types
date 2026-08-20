@@ -1,0 +1,131 @@
+//// [tests/cases/conformance/salsa/constructorFunctions3.ts] ////
+
+=== a.js ===
+function Instance() {
+>Instance : () => void
+
+    this.i = 'simple'
+>this.i = 'simple' : "simple"
+>this.i : any
+>this : any
+>i : any
+>'simple' : "simple"
+}
+var i = new Instance();
+>i : any
+>new Instance() : any
+>Instance : () => void
+
+Instance;
+>Instance : () => void
+
+i;
+>i : any
+
+function StaticToo() {
+>StaticToo : { (): void; property: string; }
+
+    this.i = 'more complex'
+>this.i = 'more complex' : "more complex"
+>this.i : any
+>this : any
+>i : any
+>'more complex' : "more complex"
+}
+StaticToo.property = 'yep'
+>StaticToo.property = 'yep' : "yep"
+>StaticToo.property : string
+>StaticToo : { (): void; property: string; }
+>property : string
+>'yep' : "yep"
+
+var s = new StaticToo();
+>s : any
+>new StaticToo() : any
+>StaticToo : { (): void; property: string; }
+
+s;
+>s : any
+
+StaticToo;
+>StaticToo : { (): void; property: string; }
+
+// Both!
+function A () {
+>A : { (): void; t: (m: number) => number; }
+
+    this.x = 1
+>this.x = 1 : 1
+>this.x : any
+>this : any
+>x : any
+>1 : 1
+
+    /** @type {1} */
+    this.second = 1
+>this.second = 1 : 1
+>this.second : any
+>this : any
+>second : any
+>1 : 1
+}
+/** @param {number} n */
+A.prototype.z = function f(n) {
+>A.prototype.z = function f(n) {    return n + this.x} : (n: number) => any
+>A.prototype.z : any
+>A.prototype : any
+>A : { (): void; t: (m: number) => number; }
+>prototype : any
+>z : any
+>function f(n) {    return n + this.x} : (n: number) => any
+>f : (n: number) => any
+>n : number
+
+    return n + this.x
+>n + this.x : any
+>n : number
+>this.x : any
+>this : any
+>x : any
+}
+/** @param {number} m */
+A.t = function g(m) {
+>A.t = function g(m) {    return m + 1} : (m: number) => number
+>A.t : (m: number) => number
+>A : { (): void; t: (m: number) => number; }
+>t : (m: number) => number
+>function g(m) {    return m + 1} : (m: number) => number
+>g : (m: number) => number
+>m : number
+
+    return m + 1
+>m + 1 : number
+>m : number
+>1 : 1
+}
+var a = new A()
+>a : any
+>new A() : any
+>A : { (): void; t: (m: number) => number; }
+
+a.z(3)
+>a.z(3) : any
+>a.z : any
+>a : any
+>z : any
+>3 : 3
+
+A.t(2)
+>A.t(2) : number
+>A.t : (m: number) => number
+>A : { (): void; t: (m: number) => number; }
+>t : (m: number) => number
+>2 : 2
+
+a.second = 1
+>a.second = 1 : 1
+>a.second : any
+>a : any
+>second : any
+>1 : 1
+

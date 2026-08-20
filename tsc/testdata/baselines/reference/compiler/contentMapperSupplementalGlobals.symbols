@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/contentMapperSupplementalGlobals.ts] ////
+
+=== /a.vue ===
+export default shared.value;
+>shared.value : Symbol(Shared.value, Decl(a.vue.0.ts, 1, 32))
+>shared : Symbol(shared, Decl(b.vue.0.ts, 0, 13))
+>value : Symbol(Shared.value, Decl(a.vue.0.ts, 1, 32))
+
+=== /b.vue ===
+export default shared.value;
+>shared.value : Symbol(Shared.value, Decl(a.vue.0.ts, 1, 32))
+>shared : Symbol(shared, Decl(b.vue.0.ts, 0, 13))
+>value : Symbol(Shared.value, Decl(a.vue.0.ts, 1, 32))
+
+=== /extra.d.ts ===
+interface Extra { extra: boolean }
+>Extra : Symbol(Extra, Decl(extra.d.ts, 0, 0))
+>extra : Symbol(Extra.extra, Decl(extra.d.ts, 0, 17))
+

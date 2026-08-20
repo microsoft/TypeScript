@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/unionElementErrorTruncation.ts] ////
+
+=== unionElementErrorTruncation.ts ===
+declare let s: string;
+>s : Symbol(s, Decl(unionElementErrorTruncation.ts, 0, 11))
+
+declare let o1:
+>o1 : Symbol(o1, Decl(unionElementErrorTruncation.ts, 1, 11))
+
+    | { id: "00" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 2, 7))
+
+    | { id: "01" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 3, 7))
+
+    | { id: "02" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 4, 7))
+
+    | { id: "03" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 5, 7))
+
+    | { id: "04" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 6, 7))
+
+    | { id: "05" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 7, 7))
+
+    | { id: "06" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 8, 7))
+
+    | { id: "07" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 9, 7))
+
+    | { id: "08" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 10, 7))
+
+    | { id: "09" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 11, 7))
+
+    | { id: "10" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 12, 7))
+
+    | { id: "11" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 13, 7))
+
+    | { id: "12" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 14, 7))
+
+    | { id: "13" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 15, 7))
+
+    | { id: "14" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 16, 7))
+
+    | { id: "15" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 17, 7))
+
+    | { id: "16" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 18, 7))
+
+    | { id: "17" }
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 19, 7))
+
+    | { id: "18" };
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 20, 7))
+
+declare let o2:
+>o2 : Symbol(o2, Decl(unionElementErrorTruncation.ts, 21, 11))
+
+    | typeof o1
+>o1 : Symbol(o1, Decl(unionElementErrorTruncation.ts, 1, 11))
+
+    | { id: "19" };
+>id : Symbol(id, Decl(unionElementErrorTruncation.ts, 23, 7))
+
+o1[s];
+>o1 : Symbol(o1, Decl(unionElementErrorTruncation.ts, 1, 11))
+>s : Symbol(s, Decl(unionElementErrorTruncation.ts, 0, 11))
+
+o2[s];
+>o2 : Symbol(o2, Decl(unionElementErrorTruncation.ts, 21, 11))
+>s : Symbol(s, Decl(unionElementErrorTruncation.ts, 0, 11))
+

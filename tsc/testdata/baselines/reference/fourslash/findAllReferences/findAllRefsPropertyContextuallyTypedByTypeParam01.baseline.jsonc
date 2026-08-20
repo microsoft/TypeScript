@@ -1,0 +1,18 @@
+// === findAllReferences ===
+// === /findAllRefsPropertyContextuallyTypedByTypeParam01.ts ===
+// interface IFoo {
+//     /*FIND ALL REFS*/[|a|]: string;
+// }
+// class C<T extends IFoo> {
+//     method() {
+//         var x: T = {
+//             [|a|]: ""
+//         };
+//         x.[|a|];
+//     }
+// }
+// 
+// 
+// var x: IFoo = {
+//     [|a|]: "ss"
+// };

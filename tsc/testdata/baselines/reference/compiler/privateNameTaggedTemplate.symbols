@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/privateNameTaggedTemplate.ts] ////
+
+=== privateNameTaggedTemplate.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(privateNameTaggedTemplate.ts, 0, 0))
+
+  #x = 3;
+>#x : Symbol(Foo.#x, Decl(privateNameTaggedTemplate.ts, 0, 11))
+
+  #y = null as any;
+>#y : Symbol(Foo.#y, Decl(privateNameTaggedTemplate.ts, 1, 9))
+
+  func() {
+>func : Symbol(Foo.func, Decl(privateNameTaggedTemplate.ts, 2, 19))
+
+    console.log(this.#y`->>${this.#x}<<-`);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#y : Symbol(Foo.#y, Decl(privateNameTaggedTemplate.ts, 1, 9))
+>this : Symbol(Foo, Decl(privateNameTaggedTemplate.ts, 0, 0))
+>this.#x : Symbol(Foo.#x, Decl(privateNameTaggedTemplate.ts, 0, 11))
+>this : Symbol(Foo, Decl(privateNameTaggedTemplate.ts, 0, 0))
+  }
+}
+
