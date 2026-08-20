@@ -4353,6 +4353,27 @@ function f() {
             await api.close();
         }
     });
+
+    // Regression test: `<<` binds tighter than `-` in Go but looser in JS, so SymbolFlagsAll's
+    // `(1<<30) - 1` needs those parens or the generated enum silently becomes `1 << 29`.
+    test("SymbolFlags.All includes both value and type meanings", async () => {
+        const api = spawnAPI(scopeFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const pos = scopeFiles["/src/main.ts"].indexOf("return innerValue");
+            const symbols = await project.checker.getSymbolsInScope(
+                { document: "/src/main.ts", position: pos },
+                SymbolFlags.All,
+            );
+            const names = symbols.map(s => s.name);
+            assert.ok(names.includes("innerValue"), "should include local value symbol");
+            assert.ok(names.includes("OuterType"), "should include type symbol declared in file");
+        }
+        finally {
+            await api.close();
+        }
+    });
 });
 
 describe("Symbol - getDocumentationComment and getJsDocTags", () => {

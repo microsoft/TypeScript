@@ -36,8 +36,8 @@ const (
 	SymbolFlagsModuleExports          SymbolFlags = 1 << 27 // Symbol for CommonJS `module` of `module.exports`
 	SymbolFlagsConstEnumOnlyModule    SymbolFlags = 1 << 28 // Module contains only const enums or other modules with only const enums
 	SymbolFlagsReplaceableByMethod    SymbolFlags = 1 << 29
-	SymbolFlagsGlobalLookup           SymbolFlags = 1 << 30   // Flag to signal this is a global lookup
-	SymbolFlagsAll                    SymbolFlags = 1<<30 - 1 // All flags except SymbolFlagsGlobalLookup
+	SymbolFlagsGlobalLookup           SymbolFlags = 1 << 30       // Flag to signal this is a global lookup
+	SymbolFlagsAll                    SymbolFlags = (1 << 30) - 1 // All flags except SymbolFlagsGlobalLookup. Do not remove () they are needed when the expression is copied to TS.
 
 	SymbolFlagsEnum      = SymbolFlagsRegularEnum | SymbolFlagsConstEnum
 	SymbolFlagsVariable  = SymbolFlagsFunctionScopedVariable | SymbolFlagsBlockScopedVariable
