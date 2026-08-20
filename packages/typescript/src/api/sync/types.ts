@@ -55,6 +55,9 @@ export interface Type {
     /** Get the apparent type of this type. */
     getApparentType(): Type;
 
+    /** Get the reduced type of this type. */
+    getReducedType(): Type;
+
     /** Get the call signatures of this type. */
     getCallSignatures(): readonly Signature[];
 

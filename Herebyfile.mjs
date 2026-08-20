@@ -315,6 +315,7 @@ const enumDefs = [
     { name: "SignatureKind", goPrefix: "SignatureKind", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "ElementFlags", goPrefix: "ElementFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "TypePredicateKind", goPrefix: "TypePredicateKind", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
+    { name: "TypeFormatFlags", goPrefix: "TypeFormatFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/src/enums" },
     { name: "DiagnosticCategory", goPrefix: "Category", goFile: "tsc/internal/diagnostics/diagnostics.go", outDir: "packages/typescript/src/enums" },
     { name: "SyntaxKind", goPrefix: "Kind", goFile: "tsc/internal/ast/kind_generated.go", outDir: "packages/typescript/src/enums" },
     { name: "NodeFlags", goPrefix: "NodeFlags", goFile: "tsc/internal/ast/nodeflags.go", outDir: "packages/typescript/src/enums" },
@@ -350,9 +351,17 @@ function parseGoConstBlock(block, def) {
     let iotaCounter = 0;
     let iotaExpression;
 
-    for (const rawLine of block.split("\n")) {
+    const lines = block.split("\n");
+    let i = 0;
+
+    while (i < lines.length) {
+        const rawLine = lines[i];
         const line = rawLine.replace(/\/\/.*$/, "").trim();
-        if (!line) continue;
+
+        if (!line) {
+            i++;
+            continue;
+        }
 
         // Match: PrefixName Type = value  or  PrefixName = value
         const fullMatch = line.match(new RegExp(`^(${prefix}\\w+)\\s+(?:\\S+\\s*)?=\\s*(.+)$`));
@@ -361,11 +370,27 @@ function parseGoConstBlock(block, def) {
             ? line.match(new RegExp(`^(${prefix}\\w+)$`))
             : null;
 
-        if (!fullMatch && !bareMatch) continue;
+        if (!fullMatch && !bareMatch) {
+            i++;
+            continue;
+        }
 
         const goName = fullMatch ? fullMatch[1] : /** @type {RegExpMatchArray} */ (bareMatch)[1];
-        const goValue = fullMatch ? fullMatch[2].trim() : "";
+        let goValue = fullMatch ? fullMatch[2].trim() : "";
         const memberName = goName.slice(prefix.length);
+
+        // Accumulate continuation lines ending with |
+        i++;
+        while (i < lines.length && goValue.endsWith("|")) {
+            const nextRaw = lines[i];
+            const nextLine = nextRaw.replace(/\/\/.*$/, "").trim();
+            if (!nextLine) {
+                i++;
+                continue;
+            }
+            goValue += " " + nextLine;
+            i++;
+        }
 
         let tsValue;
         if (def.stringEnum) {

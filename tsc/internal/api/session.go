@@ -777,6 +777,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetApparentPropertiesOfType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetApparentType):
 		return s.handleGetApparentType(ctx, parsed.(*GetTypePropertyParams))
+	case string(MethodGetReducedType):
+		return s.handleGetReducedType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetPropertyOfType):
 		return s.handleGetPropertyOfType(ctx, parsed.(*GetPropertyOfTypeParams))
 	case string(MethodGetIndexInfosOfType):
@@ -3064,6 +3066,22 @@ func (s *Session) handleGetApparentType(ctx context.Context, params *GetTypeProp
 	}
 
 	return setup.newTypeResponse(setup.checker.GetApparentType(t)), nil
+}
+
+// handleGetReducedType returns the reduced type of a type.
+func (s *Session) handleGetReducedType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	return setup.newTypeResponse(setup.checker.GetReducedType(t)), nil
 }
 
 // handleGetIndexInfosOfType returns the index infos of a type.

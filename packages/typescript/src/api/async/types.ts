@@ -47,6 +47,9 @@ export interface Type {
     /** Get the apparent type of this type. */
     getApparentType(): Promise<Type>;
 
+    /** Get the reduced type of this type. */
+    getReducedType(): Promise<Type>;
+
     /** Get the call signatures of this type. */
     getCallSignatures(): Promise<readonly Signature[]>;
 
