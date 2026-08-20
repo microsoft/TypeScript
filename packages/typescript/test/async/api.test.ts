@@ -818,6 +818,47 @@ describe("Checker - getApparentType", () => {
     });
 });
 
+describe("Checker - getReducedType", () => {
+    test("returns the reduced type", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+declare const TaggedError: <Tag extends string>(
+    tag: Tag,
+) => new <A extends Record<string, any> = {}>(
+    args: { readonly [P in keyof A]: A[P] },
+) => { readonly _tag: Tag } & Readonly<A>;
+
+class RateLimitError extends TaggedError("RateLimitError")<{
+    readonly retryAfter: number;
+}> {}
+
+class QuotaExceededError extends TaggedError("QuotaExceededError")<{
+    readonly limit: number;
+}> {}
+
+export type Result = RateLimitError | (RateLimitError & QuotaExceededError);`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const typeAlias = sourceFile.statements.find(isTypeAliasDeclaration);
+            assert.ok(typeAlias);
+            const type = await project.checker.getTypeAtLocation(typeAlias);
+            assert.equal(type.isUnionType(), true);
+            assert.equal(type.isObjectType(), false);
+            const reducedType = await project.checker.getReducedType(type);
+            assert.equal(reducedType.isUnionType(), false);
+            assert.equal(reducedType.isObjectType(), true);
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
 describe("Checker - getMemberInModuleExports", () => {
     test("returns a named export when present", async () => {
         const api = spawnAPI({

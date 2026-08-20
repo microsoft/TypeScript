@@ -1795,6 +1795,11 @@ export class Checker {
         return type.getApparentType();
     }
 
+    /** Get the reduced type of a type. Always returns a type. */
+    getReducedType(type: Type): Type {
+        return type.getReducedType();
+    }
+
     getPropertiesOfType(type: Type): readonly Symbol[] {
         return type.getProperties();
     }
@@ -2245,6 +2250,7 @@ class TypeObject implements Type {
     private default: number | false;
     private nonNullableType: number | false;
     private apparentType: number | false;
+    private reducedType: number | false;
     private properties: readonly Symbol[] | false;
     private apparentProperties: readonly Symbol[] | false;
     private callSignatures: readonly Signature[] | false;
@@ -2294,6 +2300,7 @@ class TypeObject implements Type {
         this.default = false;
         this.nonNullableType = false;
         this.apparentType = false;
+        this.reducedType = false;
         this.properties = false;
         this.apparentProperties = false;
         this.callSignatures = false;
@@ -2373,6 +2380,12 @@ class TypeObject implements Type {
     getApparentType(): Type {
         const result = this.objectRegistry.fetchType(this, "getApparentType", this.apparentType);
         this.apparentType = result.id;
+        return result;
+    }
+
+    getReducedType(): Type {
+        const result = this.objectRegistry.fetchType(this, "getReducedType", this.reducedType);
+        this.reducedType = result.id;
         return result;
     }
 
