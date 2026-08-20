@@ -1,0 +1,54 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestJsdocDeprecated_suggestion6(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: a.tsx
+/** @deprecated */
+type Props = {}
+/** @deprecated */
+const Component = (props: [|Props|]) => props && <div />;
+<[|Component|] old="old" new="new" />
+/** @deprecated */
+type Options = {}
+/** @deprecated */
+const deprecatedFunction = (options: [|Options|]) => { options }
+[|deprecatedFunction|]({});`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToFile(t, "a.tsx")
+	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("'Props' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Range:   f.Ranges()[0].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("'Component' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Range:   f.Ranges()[1].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("'Options' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Range:   f.Ranges()[2].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("'deprecatedFunction' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Range:   f.Ranges()[3].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+	})
+}

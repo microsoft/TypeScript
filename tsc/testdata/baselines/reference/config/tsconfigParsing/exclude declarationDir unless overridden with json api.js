@@ -14,15 +14,6 @@ Fs::
 
 
 configFileName:: tsconfig.json
-CompilerOptions::
-{
-  "declarationDir": "/declarations",
-  "configFilePath": "/tsconfig.json"
-}
-
-TypeAcquisition::
-{}
-
 FileNames::
 /a.ts
 Errors::
@@ -45,15 +36,6 @@ Fs::
 
 
 configFileName:: tsconfig.json
-CompilerOptions::
-{
-  "declarationDir": "/declarations",
-  "configFilePath": "/tsconfig.json"
-}
-
-TypeAcquisition::
-{}
-
 FileNames::
 /a.ts,/declarations/a.d.ts
 Errors::

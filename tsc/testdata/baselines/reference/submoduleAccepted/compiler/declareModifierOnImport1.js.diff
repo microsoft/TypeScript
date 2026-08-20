@@ -1,7 +1,0 @@
---- old.declareModifierOnImport1.js
-+++ new.declareModifierOnImport1.js
-@@= skipped -4, +4 lines =@@
-
- //// [declareModifierOnImport1.js]
- "use strict";
--var a = b;

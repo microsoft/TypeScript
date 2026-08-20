@@ -1,54 +1,75 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
-            // Kept for backwards compat for old launch.json files so it's
-            // less annoying if moving up to the new build or going back to
-            // the old build.
-            //
-            // This is first because the acutal "npm: build:tests" task
-            // below has the same script value, and VS Code ignores labels
-            // and deduplicates them.
-            // https://github.com/microsoft/vscode/issues/93001
-            "label": "gulp: tests",
+            "label": "Build compiler",
             "type": "npm",
-            "script": "build:tests:notypecheck",
-            "group": "build",
-            "hide": true,
-            "problemMatcher": [
-                "$tsc"
-            ]
+            "script": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$go"]
         },
         {
-            "label": "tsc: watch ./src",
-            "type": "shell",
-            "command": "node",
-            "args": ["${workspaceFolder}/node_modules/typescript/lib/tsc.js", "--build", "${workspaceFolder}/src", "--watch"],
+            "label": "Watch compiler",
+            "type": "npm",
+            "script": "build:watch:debug",
             "group": "build",
             "isBackground": true,
-            "problemMatcher": [
-                "$tsc-watch"
-            ]
+            "problemMatcher": {
+                "owner": "hereby",
+                "fileLocation": "autoDetect",
+                "source": "hereby",
+                "applyTo": "closedDocuments",
+                "pattern": { "regexp": "" },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "\\[build:watch\\] changed due to",
+                    "endsPattern": "\\[build:watch\\] run complete"
+                }
+            }
         },
         {
-            "label": "npm: build:compiler",
-            "type": "npm",
-            "script": "build:compiler",
-            "group": "build",
-            "problemMatcher": [
-                "$tsc"
-            ]
+            "label": "Test",
+            "type": "shell",
+            "command": "npx",
+            "args": ["hereby", "test"],
+            "group": "test",
+            "problemMatcher": ["$go"]
         },
         {
-            "label": "npm: build:tests",
+            "label": "Lint",
+            "type": "shell",
+            "command": "npx",
+            "args": ["hereby", "lint"],
+            "problemMatcher": ["$go"]
+        },
+        {
+            "label": "Generate",
+            "type": "shell",
+            "command": "npx",
+            "args": ["hereby", "generate"],
+            "problemMatcher": ["$go"]
+        },
+        {
+            "label": "Build extension",
             "type": "npm",
-            "script": "build:tests:notypecheck",
+            "script": "extension:build",
             "group": "build",
-            "problemMatcher": [
-                "$tsc"
-            ]
+            "problemMatcher": ["$tsc"]
+        },
+        {
+            "label": "Watch extension",
+            "type": "npm",
+            "script": "extension:watch",
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "Watch for extension run",
+            "dependsOn": ["Watch extension", "Watch compiler"]
         }
     ]
 }

@@ -1,1 +1,0 @@
-var test = 10; // Shouldnt get compiled so shouldnt error

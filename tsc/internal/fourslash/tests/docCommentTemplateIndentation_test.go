@@ -1,0 +1,25 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestDocCommentTemplateIndentation(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: indents.ts
+    a   /*2*/
+    /*1*/
+/*0*/        function foo() { }`
+	capabilities := fourslash.GetDefaultCapabilities()
+	capabilities.TextDocument.Completion.CompletionItem.SnippetSupport = new(false)
+	f, done := fourslash.NewFourslash(t, capabilities, content)
+	defer done()
+	f.VerifyJSDocCompletion(t, "0", 3, `/** */`, nil)
+	f.VerifyJSDocCompletion(t, "1", 3, `/** */`, nil)
+	f.VerifyJSDocCompletion(t, "2", 3, `/** */`, nil)
+}

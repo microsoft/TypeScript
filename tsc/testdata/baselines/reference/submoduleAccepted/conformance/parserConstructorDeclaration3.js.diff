@@ -1,9 +1,0 @@
---- old.parserConstructorDeclaration3.js
-+++ new.parserConstructorDeclaration3.js
-@@= skipped -7, +7 lines =@@
- //// [parserConstructorDeclaration3.js]
- "use strict";
- class C {
--    export constructor() { }
-+    constructor() { }
- }

@@ -1,8 +1,0 @@
-assignToModule.ts(2,1): error TS2708: Cannot use namespace 'A' as a value.
-
-
-==== assignToModule.ts (1 errors) ====
-    namespace A {}
-    A = undefined; // invalid LHS
-    ~
-!!! error TS2708: Cannot use namespace 'A' as a value.

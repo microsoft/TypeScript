@@ -5,13 +5,9 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
-	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
-	"github.com/microsoft/TypeScript/tsc/internal/tspath"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -58,27 +54,5 @@ foo.bar;`
 		if symbol == nil {
 			t.Fatalf("Expected symbol to be non-nil")
 		}
-	}
-}
-
-func BenchmarkNewChecker(b *testing.B) {
-	repo.SkipIfNoTypeScriptSubmodule(b)
-	fs := osvfs.FS()
-	fs = bundled.WrapFS(fs)
-
-	rootPath := tspath.CombinePaths(tspath.NormalizeSlashes(repo.TypeScriptSubmodulePath()), "src", "compiler")
-
-	host := compiler.NewCompilerHost(rootPath, fs, bundled.LibPath(), nil, nil)
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), &core.CompilerOptions{}, nil, host, nil)
-	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
-	p := compiler.NewProgram(compiler.ProgramOptions{
-		Config: parsed,
-		Host:   host,
-	})
-
-	b.ReportAllocs()
-
-	for b.Loop() {
-		checker.NewChecker(p, nil)
 	}
 }

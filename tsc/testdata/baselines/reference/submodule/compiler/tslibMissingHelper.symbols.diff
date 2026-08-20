@@ -1,8 +1,0 @@
---- old.tslibMissingHelper.symbols
-+++ new.tslibMissingHelper.symbols
-@@= skipped -17, +17 lines =@@
-
- === /node_modules/tslib/tslib.d.ts ===
- export const notAHelper: any;
-->notAHelper : Symbol(notAHelper, Decl(tslib.d.ts, --, --))
-+>notAHelper : Symbol(notAHelper, Decl(tslib.d.ts, 0, 12))

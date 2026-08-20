@@ -12,7 +12,7 @@ func TestCompletionsFromUntitledFile(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	// Test that completions work in untitled files without crashing.
-	// Regression test for https://github.com/microsoft/typescript-go/issues/2550
+	// Regression test for https://github.com/microsoft/TypeScript/tsc/issues/2550
 	const content = `// @filename: /home/src/project/utils.ts
 export function helper() {}
 

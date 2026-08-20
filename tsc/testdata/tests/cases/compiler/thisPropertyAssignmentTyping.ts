@@ -1,7 +1,7 @@
 // @checkJs: true
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/3667
+// https://github.com/microsoft/TypeScript/tsc/issues/3667
 
 // When this.xxx assignment declarations are present in constructor, the declared type of the
 // property is determined from CFA to the point of exit of the constructor.

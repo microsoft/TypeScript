@@ -1,0 +1,25 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestRegexDetection(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = ` /*1*/15 / /*2*/Math.min(61 / /*3*/42, 32 / 15) / /*4*/15;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToMarker(t, "1")
+	f.VerifyNotQuickInfoExists(t)
+	f.GoToMarker(t, "2")
+	f.VerifyQuickInfoIs(t, "var Math: Math", "An intrinsic object that provides basic mathematics functionality and constants.")
+	f.GoToMarker(t, "3")
+	f.VerifyNotQuickInfoExists(t)
+	f.GoToMarker(t, "4")
+	f.VerifyNotQuickInfoExists(t)
+}

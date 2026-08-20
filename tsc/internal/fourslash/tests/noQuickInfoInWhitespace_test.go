@@ -1,0 +1,31 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestNoQuickInfoInWhitespace(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `class C {
+/*1*/    private _mspointerupHandler(args) {
+        if (args.button === 3) {
+            return null; 
+/*2*/        } else if (args.button === 4) {
+/*3*/            return null;
+        }
+    }
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToMarker(t, "1")
+	f.VerifyNotQuickInfoExists(t)
+	f.GoToMarker(t, "2")
+	f.VerifyNotQuickInfoExists(t)
+	f.GoToMarker(t, "3")
+	f.VerifyNotQuickInfoExists(t)
+}

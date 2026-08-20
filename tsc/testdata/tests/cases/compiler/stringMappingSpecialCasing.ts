@@ -1,6 +1,6 @@
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/3489
+// https://github.com/microsoft/TypeScript/tsc/issues/3489
 
 type Lower = Lowercase<"İSPANYOL" | "ΟΣ">;
 

@@ -1,0 +1,25 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestImportNameCodeFixDefaultExport3(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /foo-bar/index.ts
+export default 0;
+// @Filename: /b.ts
+[|foo/**/Bar|]`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToFile(t, "/b.ts")
+	f.VerifyImportFixAtPosition(t, []string{
+		`import fooBar from "./foo-bar";
+
+fooBar`,
+	}, nil /*preferences*/)
+}

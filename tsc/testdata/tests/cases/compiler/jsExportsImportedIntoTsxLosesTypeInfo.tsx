@@ -7,7 +7,7 @@
 // @noEmit: true
 // @jsx: preserve
 
-// https://github.com/microsoft/typescript-go/issues/3519
+// https://github.com/microsoft/TypeScript/tsc/issues/3519
 
 // @filename: node_modules/react/index.d.ts
 export = React;

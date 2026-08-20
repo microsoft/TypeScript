@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/expandoContextualTypes.tsx] ////
 
 === expandoContextualTypes.tsx ===
-// https://github.com/microsoft/typescript-go/issues/921
+// https://github.com/microsoft/TypeScript/tsc/issues/921
 
 /// <reference path="react16.d.ts" />
 

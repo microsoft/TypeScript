@@ -1,6 +1,6 @@
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/4223
+// https://github.com/microsoft/TypeScript/tsc/issues/4223
 
 classAé {
 }

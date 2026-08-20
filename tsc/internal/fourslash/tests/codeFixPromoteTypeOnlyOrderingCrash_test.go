@@ -9,9 +9,8 @@ import (
 
 // Test case for crash when promoting type-only import to value import
 // when existing type imports precede the new value import
-// https://github.com/microsoft/typescript-go/issues/2559
+// https://github.com/microsoft/TypeScript/tsc/issues/2559
 func TestCodeFixPromoteTypeOnlyOrderingCrash(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: node18

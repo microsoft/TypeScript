@@ -1,9 +1,0 @@
---- old.moduleResolution_explicitNodeModulesImport.symbols
-+++ new.moduleResolution_explicitNodeModulesImport.symbols
-@@= skipped -6, +6 lines =@@
- === /node_modules/foo/index.js ===
- exports.x = 0;
- >exports.x : Symbol(x, Decl(index.js, 0, 0))
-->exports : Symbol(x, Decl(index.js, 0, 0))
-+>exports : Symbol(exports, Decl(index.js, 0, 0))
- >x : Symbol(x, Decl(index.js, 0, 0))

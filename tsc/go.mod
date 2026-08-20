@@ -19,6 +19,7 @@ require (
 require (
 	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
 	github.com/matryer/moq v0.7.1 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	golang.org/x/mod v0.37.0 // indirect
 	golang.org/x/tools v0.47.0 // indirect
 )
@@ -26,13 +27,4 @@ require (
 tool (
 	github.com/matryer/moq
 	golang.org/x/tools/cmd/stringer
-)
-
-ignore (
-	./_extension
-	./_packages
-	./_submodules
-	./built
-	./coverage
-	node_modules
 )

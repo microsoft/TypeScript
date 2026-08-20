@@ -1,0 +1,66 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/ls"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionsImportPathsConflict(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /tsconfig.json
+{
+    "compilerOptions": {
+        "module": "esnext",
+        "paths": {
+          "@reduxjs/toolkit": ["src/index.ts"],
+          "@internal/*": ["src/*"]
+        }
+    }
+}
+// @Filename: /src/index.ts
+export { configureStore } from "./configureStore";
+// @Filename: /src/configureStore.ts
+export function configureStore() {}
+// @Filename: /src/tests/createAsyncThunk.typetest.ts
+import {} from "@reduxjs/toolkit";
+/**/`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "configureStore",
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportFix{
+							ModuleSpecifier: "@reduxjs/toolkit",
+						},
+					},
+					AdditionalTextEdits: fourslash.AnyTextEdits,
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
+				},
+			},
+		},
+	})
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+		Name:   "configureStore",
+		Source: "@reduxjs/toolkit",
+		AutoImportFix: &lsproto.AutoImportFix{
+			ModuleSpecifier: "@reduxjs/toolkit",
+		},
+		Description: "Update import from \"@reduxjs/toolkit\"",
+		NewFileContent: new(`import { configureStore } from "@reduxjs/toolkit";
+`),
+	})
+}

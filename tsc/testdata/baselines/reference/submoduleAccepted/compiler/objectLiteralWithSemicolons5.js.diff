@@ -1,8 +1,0 @@
---- old.objectLiteralWithSemicolons5.js
-+++ new.objectLiteralWithSemicolons5.js
-@@= skipped -4, +4 lines =@@
-
- //// [objectLiteralWithSemicolons5.js]
- "use strict";
--var v = { foo() { }, a: b, get baz() { } };
-+var v = { foo() { }, a: b, get baz() { }, };

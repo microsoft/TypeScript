@@ -1,0 +1,28 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestRenameForDefaultExport02(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `[|export default function /*1*/[|{| "contextRangeIndex": 0 |}DefaultExportedFunction|]() {
+    return /*2*/[|DefaultExportedFunction|]
+}|]
+/**
+ *  Commenting [|{| "inComment": true |}DefaultExportedFunction|]
+ */
+
+var x: typeof /*3*/[|DefaultExportedFunction|];
+
+var y = /*4*/[|DefaultExportedFunction|]();`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineRename(t, nil /*preferences*/, ToAny(core.Filter(f.GetRangesByText().Get("DefaultExportedFunction"), func(r *fourslash.RangeMarker) bool { return r.Marker == nil || r.Marker.Data["inComment"] == nil }))...)
+}

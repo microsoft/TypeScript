@@ -1,0 +1,18 @@
+# Colliding promoted tests: identical cases are deduplicated; differing cases are renamed and retained.
+identical compiler/contextuallyTypedJsxChildren2.tsx
+identical compiler/unusedLocalsInForInOrOf1.ts
+renamed-promoted compiler/allowSyntheticDefaultImports9.ts -> compiler/allowSyntheticDefaultImports9_promoted.ts
+renamed-promoted compiler/checkInheritedProperty.ts -> compiler/checkInheritedProperty_promoted.ts
+renamed-promoted compiler/errorInUnnamedClassExpression.ts -> compiler/errorInUnnamedClassExpression_promoted.ts
+renamed-promoted compiler/jsxFunctionTypeChildren.tsx -> compiler/jsxFunctionTypeChildren_promoted.tsx
+renamed-promoted compiler/missingDiscriminants.ts -> compiler/missingDiscriminants_promoted.ts
+renamed-promoted compiler/missingDiscriminants2.ts -> compiler/missingDiscriminants2_promoted.ts
+renamed-promoted compiler/noCrashOnMixin2.ts -> compiler/noCrashOnMixin2_promoted.ts
+renamed-promoted compiler/reachabilityChecks10.ts -> compiler/reachabilityChecks10_promoted.ts
+renamed-promoted compiler/reachabilityChecks11.ts -> compiler/reachabilityChecks11_promoted.ts
+renamed-promoted compiler/reachabilityChecks9.ts -> compiler/reachabilityChecks9_promoted.ts
+renamed-promoted compiler/reachabilityChecksIgnored.ts -> compiler/reachabilityChecksIgnored_promoted.ts
+renamed-promoted compiler/subtypeReductionWithAnyFunctionType.ts -> compiler/subtypeReductionWithAnyFunctionType_promoted.ts
+renamed-promoted compiler/symbolLinkDeclarationEmitModuleNamesRootDir.ts -> compiler/symbolLinkDeclarationEmitModuleNamesRootDir_promoted.ts
+renamed-promoted-by-basename conformance/node/nodeModulesPackageImportsRootWildcard.ts -> conformance/node/nodeModulesPackageImportsRootWildcard_promoted.ts
+renamed-promoted-by-basename conformance/node/nodeModulesPackageImportsRootWildcardNode16.ts -> conformance/node/nodeModulesPackageImportsRootWildcardNode16_promoted.ts

@@ -17,17 +17,6 @@ Fs::
 
 
 configFileName:: tsconfig.json
-CompilerOptions::
-{
-  "lib": [
-    "lib.es5.d.ts"
-  ],
-  "configFilePath": "/apath/tsconfig.json"
-}
-
-TypeAcquisition::
-{}
-
 FileNames::
 /apath/foge.ts,/apath/test.ts
 Errors::

@@ -1,0 +1,30 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixClassSuperMustPrecedeThisAccess(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `class Base{
+}
+class C extends Base{
+    private a:number;
+    constructor() {[|
+        this.a = 12;
+        super();
+    |]}
+    m() { this.a; } // avoid unused 'a'
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyRangeAfterCodeFix(t, `
+        super();
+        this.a = 12;
+    `, true, 0, 0)
+}

@@ -1,6 +1,6 @@
 // @target: esnext
 
-// https://github.com/microsoft/typescript-go/issues/4123
+// https://github.com/microsoft/TypeScript/tsc/issues/4123
 
 class C {
   in x = 1;

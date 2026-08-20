@@ -1,0 +1,30 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestGoToDefinitionConstructorOverloads(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `class ConstructorOverload {
+    [|/*constructorOverload1*/constructor|]();
+    /*constructorOverload2*/constructor(foo: string);
+    /*constructorDefinition*/constructor(foo: any)  { }
+}
+
+var constructorOverload = new [|/*constructorOverloadReference1*/ConstructorOverload|]();
+var constructorOverload = new [|/*constructorOverloadReference2*/ConstructorOverload|]("foo");
+
+class Extended extends ConstructorOverload {
+    readonly name = "extended";
+}
+var extended1 = new [|/*extendedRef1*/Extended|]();
+var extended2 = new [|/*extendedRef2*/Extended|]("foo");`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineGoToDefinition(t, true, "constructorOverloadReference1", "constructorOverloadReference2", "constructorOverload1", "extendedRef1", "extendedRef2")
+}

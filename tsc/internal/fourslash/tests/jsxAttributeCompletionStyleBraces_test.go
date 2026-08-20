@@ -1,0 +1,106 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/ls"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestJsxAttributeCompletionStyleBraces(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: foo.tsx
+declare namespace JSX {
+    interface Element { }
+    interface IntrinsicElements {
+        foo: {
+            prop_a: boolean;
+            prop_b: string;
+            prop_c: any;
+            prop_d: { p1: string; }
+            prop_e: string | undefined;
+            prop_f: boolean | undefined | { p1: string; };
+            prop_g: { p1: string; } | undefined;
+            prop_h?: string;
+            prop_i?: boolean;
+            prop_j?: { p1: string; };
+        }
+    }
+}
+
+<foo [|prop_/**/|] />`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:            "prop_a",
+					InsertText:       new("prop_a={$1}"),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
+				},
+				&lsproto.CompletionItem{
+					Label:            "prop_b",
+					InsertText:       new("prop_b={$1}"),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
+				},
+				&lsproto.CompletionItem{
+					Label:            "prop_c",
+					InsertText:       new("prop_c={$1}"),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
+				},
+				&lsproto.CompletionItem{
+					Label:            "prop_d",
+					InsertText:       new("prop_d={$1}"),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
+				},
+				&lsproto.CompletionItem{
+					Label:            "prop_e",
+					InsertText:       new("prop_e={$1}"),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
+				},
+				&lsproto.CompletionItem{
+					Label:            "prop_f",
+					InsertText:       new("prop_f={$1}"),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
+				},
+				&lsproto.CompletionItem{
+					Label:            "prop_g",
+					InsertText:       new("prop_g={$1}"),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
+				},
+				&lsproto.CompletionItem{
+					Label:            "prop_h?",
+					InsertText:       new("prop_h={$1}"),
+					FilterText:       new("prop_h"),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
+					SortText:         new(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:            "prop_i?",
+					InsertText:       new("prop_i={$1}"),
+					FilterText:       new("prop_i"),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
+					SortText:         new(string(ls.SortTextOptionalMember)),
+				},
+				&lsproto.CompletionItem{
+					Label:            "prop_j?",
+					InsertText:       new("prop_j={$1}"),
+					FilterText:       new("prop_j"),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
+					SortText:         new(string(ls.SortTextOptionalMember)),
+				},
+			},
+		},
+	})
+}

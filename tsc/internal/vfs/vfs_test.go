@@ -36,23 +36,21 @@ func BenchmarkReadFile(b *testing.B) {
 		{"OS small", osFS, osSmallDataPath},
 	}
 
-	if repo.TypeScriptSubmoduleExists() {
-		checkerPath := tspath.CombinePaths(tspath.NormalizeSlashes(repo.TypeScriptSubmodulePath()), "src", "compiler", "checker.ts")
+	checkerPath := tspath.CombinePaths(tspath.NormalizeSlashes(repo.TestDataPath()), "fixtures", "compiler", "checker.ts")
 
-		checkerContents, ok := osFS.ReadFile(checkerPath)
-		assert.Assert(b, ok)
+	checkerContents, ok := osFS.ReadFile(checkerPath)
+	assert.Assert(b, ok)
 
-		tests = append(tests, bench{
-			"MapFS checker.ts",
-			vfstest.FromMap(fstest.MapFS{
-				"/checker.ts": &fstest.MapFile{
-					Data: []byte(checkerContents),
-				},
-			}, true),
-			"/checker.ts",
-		})
-		tests = append(tests, bench{"OS checker.ts", osFS, checkerPath})
-	}
+	tests = append(tests, bench{
+		"MapFS checker.ts",
+		vfstest.FromMap(fstest.MapFS{
+			"/checker.ts": &fstest.MapFile{
+				Data: []byte(checkerContents),
+			},
+		}, true),
+		"/checker.ts",
+	})
+	tests = append(tests, bench{"OS checker.ts", osFS, checkerPath})
 
 	for _, tt := range tests {
 		b.Run(tt.name, func(b *testing.B) {

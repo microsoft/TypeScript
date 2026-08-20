@@ -7,7 +7,7 @@ unicodeSpellingSuggestions.ts(9,1): error TS2304: Cannot find name 'classAééé
 
 
 ==== unicodeSpellingSuggestions.ts (6 errors) ====
-    // https://github.com/microsoft/typescript-go/issues/4223
+    // https://github.com/microsoft/TypeScript/tsc/issues/4223
     
     classAé {
     ~~~~~~~

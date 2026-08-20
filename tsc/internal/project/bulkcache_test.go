@@ -319,7 +319,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 		// This assertion will fail until we implement logic to ignore dist folder changes
 	})
 
-	// Regression test for https://github.com/microsoft/typescript-go/issues/4545
+	// Regression test for https://github.com/microsoft/TypeScript/tsc/issues/4545
 	//
 	// A config file entry can be retained (here, by an open file whose default
 	// project search fanned out to a referenced config) while its commandLine is

@@ -1,9 +1,0 @@
-generatorInAmbientContext2.ts(2,14): error TS1221: Generators are not allowed in an ambient context.
-
-
-==== generatorInAmbientContext2.ts (1 errors) ====
-    declare namespace M {
-        function *generator(): any;
-                 ~
-!!! error TS1221: Generators are not allowed in an ambient context.
-    }

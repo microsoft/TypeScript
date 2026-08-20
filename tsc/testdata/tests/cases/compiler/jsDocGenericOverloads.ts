@@ -1,7 +1,7 @@
 // @checkJs: true
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/4037
+// https://github.com/microsoft/TypeScript/tsc/issues/4037
 
 // TS7 doesn't support overloads with arrow functions and function expressions, so the
 // @overload tags are ignored in the const declaration below.

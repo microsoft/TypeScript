@@ -1,9 +1,0 @@
---- old.parserComputedPropertyName35.js
-+++ new.parserComputedPropertyName35.js
-@@= skipped -7, +7 lines =@@
- //// [parserComputedPropertyName35.js]
- "use strict";
- var x = {
--    [0, 1]: {}
-+    [(0, 1)]: {}
- };

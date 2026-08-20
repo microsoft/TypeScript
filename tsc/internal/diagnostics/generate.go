@@ -24,7 +24,6 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
-	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"golang.org/x/text/language"
 )
 
@@ -81,7 +80,7 @@ func main() {
 		return
 	}
 
-	rawDiagnosticMessages := readRawMessages(filepath.Join(repo.TypeScriptSubmodulePath(), "src", "compiler", "diagnosticMessages.json"))
+	rawDiagnosticMessages := readRawMessages("diagnosticMessages.json")
 
 	_, filename, _, ok := runtime.Caller(0)
 	if !ok {
@@ -198,12 +197,12 @@ func generateLocalizations(knownKeys map[string]bool, locDir string) *bytes.Buff
 	}
 
 	// Generate locale maps
-	localeFiles, err := filepath.Glob(filepath.Join(repo.TypeScriptSubmodulePath(), "src", "loc", "lcl", "*", "diagnosticMessages", "diagnosticMessages.generated.json.lcl"))
+	localeFiles, err := filepath.Glob(filepath.Join("..", "locale", "lcl", "*", "diagnosticMessages", "diagnosticMessages.generated.json.lcl"))
 	if err != nil {
 		log.Fatalf("failed to find locale files: %v", err)
 	}
 	if len(localeFiles) == 0 {
-		log.Fatalf("no locale files found in %s", filepath.Join(repo.TypeScriptSubmodulePath(), "src", "loc", "lcl"))
+		log.Fatalf("no locale files found in %s", filepath.Join("..", "locale", "lcl"))
 	}
 	slices.Sort(localeFiles)
 

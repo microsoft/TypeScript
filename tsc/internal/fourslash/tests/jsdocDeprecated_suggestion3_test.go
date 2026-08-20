@@ -1,0 +1,129 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestJsdocDeprecated_suggestion3(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// merges
+/** @deprecated */
+interface a { a: number }
+declare function a(): void
+declare const ta: [|a|]
+a;
+a();
+interface b { a: number; }
+/** @deprecated */
+declare function b(): void
+declare const tb: b;
+[|b|]
+[|b|]();
+interface c { }
+/** @deprecated */
+declare function c(): void
+declare function c(a: number): void
+declare const tc: c;
+c;
+[|c|]();
+c(1);
+/** @deprecated */
+interface d { }
+declare function d(): void
+declare function d(a: number): void
+declare const td: [|d|];
+d;
+d();
+d(1);
+/** @deprecated */
+declare function e(): void
+/** @deprecated */
+declare function e(a: number): void
+[|e|];
+[|e|]();
+[|e|](1);
+/** @deprecated */
+interface f { a: number }
+declare const tf: [|f|]
+/** @deprecated */
+type g = number
+declare const tg: [|g|]
+/** @deprecated */
+class H { }
+declare const th: [|H|]`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("'a' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Range:   f.Ranges()[0].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("'b' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Range:   f.Ranges()[1].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'b' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Range:   f.Ranges()[2].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'c' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Range:   f.Ranges()[3].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("'d' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Range:   f.Ranges()[4].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("'e' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Range:   f.Ranges()[5].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(): void' of 'e' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Range:   f.Ranges()[6].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("The signature '(a: number): void' of 'e' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
+			Range:   f.Ranges()[7].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("'f' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Range:   f.Ranges()[8].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("'g' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Range:   f.Ranges()[9].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+		{
+			Message: lsproto.StringOrMarkupContent{String: new("'H' is deprecated.")},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6385))},
+			Range:   f.Ranges()[10].LSRange,
+			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
+		},
+	})
+}

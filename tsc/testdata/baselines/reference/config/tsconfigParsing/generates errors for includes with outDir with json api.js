@@ -12,15 +12,6 @@ Fs::
 
 
 configFileName:: /apath/tsconfig.json
-CompilerOptions::
-{
-  "outDir": "/apath",
-  "configFilePath": "/apath/tsconfig.json"
-}
-
-TypeAcquisition::
-{}
-
 FileNames::
 
 Errors::

@@ -1,0 +1,30 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestRenameTemplateLiteralsDefinePropertyJs(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @allowJs: true
+// @Filename: a.js
+let obj = {};
+
+Object.defineProperty(obj, ` + "`" + `[|prop|]` + "`" + `, { value: 0 });
+
+obj = {
+    [|[` + "`" + `[|{| "contextRangeIndex": 1 |}prop|]` + "`" + `]: 1|]
+};
+
+obj.[|prop|];
+obj['[|prop|]'];
+obj["[|prop|]"];
+obj[` + "`" + `[|prop|]` + "`" + `];`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineRenameAtRangesWithText(t, nil /*preferences*/, "prop")
+}

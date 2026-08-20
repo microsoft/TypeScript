@@ -1,0 +1,27 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestAutoImportRootDirs(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /tsconfig.json
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "rootDirs": [".", "./some/other/root"]
+    }
+}
+// @Filename: /some/other/root/types.ts
+export type Something = {};
+// @Filename: /index.ts
+const s: Something/**/`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyImportFixModuleSpecifiers(t, "", []string{"./types"}, nil /*preferences*/)
+}

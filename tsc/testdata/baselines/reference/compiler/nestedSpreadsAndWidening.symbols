@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/nestedSpreadsAndWidening.ts] ////
 
 === nestedSpreadsAndWidening.ts ===
-// https://github.com/microsoft/typescript-go/issues/2551
+// https://github.com/microsoft/TypeScript/tsc/issues/2551
 
 type S1 = { input: { a: number } };
 >S1 : Symbol(S1, Decl(nestedSpreadsAndWidening.ts, 0, 0))

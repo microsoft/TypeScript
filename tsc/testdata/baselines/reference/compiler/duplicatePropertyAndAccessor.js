@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/duplicatePropertyAndAccessor.ts] ////
 
 //// [duplicatePropertyAndAccessor.ts]
-// https://github.com/microsoft/typescript-go/issues/4130
+// https://github.com/microsoft/TypeScript/tsc/issues/4130
 
 class C {
   y: number = 2;
@@ -11,7 +11,7 @@ class C {
 
 //// [duplicatePropertyAndAccessor.js]
 "use strict";
-// https://github.com/microsoft/typescript-go/issues/4130
+// https://github.com/microsoft/TypeScript/tsc/issues/4130
 class C {
     y = 2;
     accessor y = 3;

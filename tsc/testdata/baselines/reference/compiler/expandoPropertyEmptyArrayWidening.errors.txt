@@ -4,7 +4,7 @@ expandoPropertyEmptyArrayWidening.ts(16,1): error TS7008: Member 'a' implicitly 
 
 
 ==== expandoPropertyEmptyArrayWidening.ts (3 errors) ====
-    // https://github.com/microsoft/typescript-go/issues/3976
+    // https://github.com/microsoft/TypeScript/tsc/issues/3976
     
     const example: {
       (): void;

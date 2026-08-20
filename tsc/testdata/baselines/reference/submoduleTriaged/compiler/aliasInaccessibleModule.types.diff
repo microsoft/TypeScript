@@ -1,9 +1,0 @@
---- old.aliasInaccessibleModule.types
-+++ new.aliasInaccessibleModule.types
-@@= skipped -7, +7 lines =@@
-     }
-     export import X = N;
- >X : any
-->N : error
-+>N : any
- }

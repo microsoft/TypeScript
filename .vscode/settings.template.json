@@ -1,45 +1,47 @@
 // Rename this file 'settings.json' or merge its
 // contents into your existing settings.
 {
-    // To use the locally built compiler, after 'npm run build':
-    // "typescript.tsdk": "built/local"
-
-    // Enables dprint formatting on all supported files. We explicitly list
-    // languages here to ensure that these are more specific than those in a
-    // user's settings.json so take precedence.
     "[typescript][typescriptreact][javascript][javascriptreact][json][jsonc][yaml][github-actions-workflow]": {
         "editor.defaultFormatter": "dprint.dprint",
         "editor.formatOnSave": true
     },
-
-    // To ignore commits listed in .git-blame-ignore-revs in GitLens:
+    "[go][go.mod][go.sum][go.work]": {
+        "files.eol": "\n",
+        "files.insertFinalNewline": true,
+        "editor.defaultFormatter": "golang.go",
+        "editor.formatOnSave": true,
+        "editor.insertSpaces": false
+    },
+    "[go]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.fixAll": "explicit"
+        }
+    },
+    "gopls": {
+        "formatting.gofumpt": true,
+        "ui.diagnostic.analyses": {
+            "unusedparams": false
+        }
+    },
+    "go.lintTool": "golangci-lint",
+    "go.alternateTools": {
+        "golangci-lint": "${workspaceFolder}/tools/custom-gcl${env:GOEXE}"
+    },
+    "go.lintOnSave": "off",
     "gitlens.advanced.blame.customArguments": [
         "--ignore-revs-file",
         ".git-blame-ignore-revs"
     ],
-
-    "javascript.preferences.importModuleSpecifierEnding": "js",
-    "typescript.preferences.importModuleSpecifierEnding": "js",
-
-    // Match dprint in organize/auto-imports.
-    "typescript.unstable": {
+    "js/ts.preferences.importModuleSpecifierEnding": "js",
+    "js/ts.unstable": {
         "organizeImportsCollation": "unicode",
         "organizeImportsCaseFirst": "upper",
         "organizeImportsIgnoreCase": false,
         "organizeImportsNumericCollation": true,
         "organizeImportsTypeOrder": "inline"
     },
-    "javascript.unstable": {
-        "organizeImportsCollation": "unicode",
-        "organizeImportsCaseFirst": "upper",
-        "organizeImportsIgnoreCase": false,
-        "organizeImportsNumericCollation": true,
-        "organizeImportsTypeOrder": "inline"
-    },
-
-    // These options search the repo recursively and slow down
-    // the build task menu. We define our own in tasks.json.
-    "typescript.tsc.autoDetect": "off",
+    "js/ts.tsc.autoDetect": "off",
     "npm.autoDetect": "off",
     "grunt.autoDetect": "off",
     "jake.autoDetect": "off",

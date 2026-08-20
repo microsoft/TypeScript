@@ -1,44 +1,28 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node
 {
-    "name": "Node.js",
-    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-    "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
-
-    // Features to add to the dev container. More info: https://containers.dev/features.
+    "name": "TypeScript Compiler Development",
+    "image": "mcr.microsoft.com/devcontainers/go:dev-1.26-bookworm",
     "features": {
-        "ghcr.io/devcontainers/features/go:1": {}
+        "ghcr.io/devcontainers/features/node:2": {
+            "version": "24",
+            "pnpmVersion": "latest",
+            "nvmVersion": "latest"
+        },
+        "ghcr.io/devcontainers-extra/features/dprint-asdf:2": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {}
     },
-
-    // Use 'forwardPorts' to make a list of ports inside the container available locally.
-    // "forwardPorts": [],
-
-    // Use 'postCreateCommand' to run commands after the container is created.
     "postCreateCommand": {
-        "Configure Build Tools": "sudo npm install -g hereby; npm ci",
-        "Install pprof": "go install github.com/google/pprof@latest",
-        "Install Graphviz": "sudo apt install graphviz"
+        "Install dependencies": "npm ci; go -C ./tsc mod download; go -C ./tools mod download",
+        "Install repository tools": "npx hereby install-tools; go install github.com/google/pprof@latest",
+        "Install Graphviz": "sudo apt update -y; sudo apt install -y graphviz"
     },
-
-    // Configure tool-specific properties.
     "customizations": {
         "vscode": {
-            "settings": {
-                "terminal.integrated.defaultProfile.linux": "bash",
-                "terminal.integrated.profiles.linux": {
-                    "bash": {
-                        "path": "/bin/bash",
-                        "icon": "terminal-bash"
-                    }
-                }
-            },
             "extensions": [
-                "dbaeumer.vscode-eslint",
-                "dprint.dprint"
+                "dprint.dprint",
+                "golang.go"
             ]
         }
-    },
-
-    // More info: https://aka.ms/dev-containers-non-root.
-    "remoteUser": "node"
+    }
 }

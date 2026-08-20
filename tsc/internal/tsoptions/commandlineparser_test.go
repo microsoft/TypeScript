@@ -24,7 +24,6 @@ import (
 
 func TestCommandLineParseResult(t *testing.T) {
 	t.Parallel()
-	repo.SkipIfNoTypeScriptSubmodule(t)
 
 	parseCommandLineSubScenarios := []*subScenarioInput{
 		// --lib es6 0.ts
@@ -169,7 +168,6 @@ func TestCustomConditionsNullOverride(t *testing.T) {
 
 func TestParseCommandLineVerifyNull(t *testing.T) {
 	t.Parallel()
-	repo.SkipIfNoTypeScriptSubmodule(t)
 
 	// run test for boolean
 	subScenarioInput{"allows setting option type boolean to false", []string{"--composite", "false", "0.ts"}}.createSubScenario("parseCommandLine").assertParseResult(t)
@@ -356,7 +354,7 @@ func (f commandLineSubScenario) assertBuildParseResultWithTsBaseline(t *testing.
 		// f.workerDiagnostic is either defined or set to default pointer in `createSubScenario`
 		parsed := tsoptions.ParseBuildCommandLine(f.commandLine, &tsoptionstest.VfsParseConfigHost{
 			Vfs:              osvfs.FS(),
-			CurrentDirectory: tspath.NormalizeSlashes(repo.TypeScriptSubmodulePath()),
+			CurrentDirectory: tspath.NormalizeSlashes(repo.TestDataPath()),
 		})
 
 		newBaselineProjects := strings.Join(parsed.Projects, ",")
@@ -465,7 +463,7 @@ func createSubScenario(scenarioKind string, subScenarioName string, commandline 
 	baselineFileName := "tests/baselines/reference/config/commandLineParsing/" + subScenarioName + ".js"
 
 	result := &commandLineSubScenario{
-		filefixture.FromFile(subScenarioName, filepath.Join(repo.TypeScriptSubmodulePath(), baselineFileName)),
+		filefixture.FromFile(subScenarioName, filepath.Join(repo.TestDataPath(), "fixtures", "typescript", baselineFileName)),
 		subScenarioName,
 		commandline,
 		nil,
@@ -514,7 +512,6 @@ type TestCommandLineParserBuild struct {
 
 func TestParseBuildCommandLine(t *testing.T) {
 	t.Parallel()
-	repo.SkipIfNoTypeScriptSubmodule(t)
 
 	parseCommandLineSubScenarios := []*subScenarioInput{
 		{"parse build without any options ", []string{}},

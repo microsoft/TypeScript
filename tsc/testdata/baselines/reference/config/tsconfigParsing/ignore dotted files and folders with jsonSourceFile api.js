@@ -16,14 +16,6 @@ Fs::
 
 
 configFileName:: tsconfig.json
-CompilerOptions::
-{
-  "configFilePath": "/apath/tsconfig.json"
-}
-
-TypeAcquisition::
-{}
-
 FileNames::
 /apath/test.ts
 Errors::

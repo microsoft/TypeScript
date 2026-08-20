@@ -13,7 +13,7 @@ declare const f2: () => { valid: boolean, msg?: undefined }
 
 f1().msg
 
-// Repro from https://github.com/microsoft/typescript-go/issues/1742
+// Repro from https://github.com/microsoft/TypeScript/tsc/issues/1742
 
 function validate() {
     if(Math.random() > 0.5) {
@@ -33,7 +33,7 @@ declare function utilValidate(): {
 
 validate().msg; // Error in TSGO
 
-// https://github.com/microsoft/typescript-go/issues/1761
+// https://github.com/microsoft/TypeScript/tsc/issues/1761
 
 function normalise_trace_logs([log]: any[]) {
 	let normalised = [];

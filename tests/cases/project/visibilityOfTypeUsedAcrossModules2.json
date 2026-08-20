@@ -1,7 +1,0 @@
-{
-    "scenario": "Visibility of type used across modules - 2",
-    "projectRoot": "tests/cases/projects/InvalidReferences",
-    "inputFiles": [
-        "main.ts"
-    ]
-}

@@ -1,6 +1,6 @@
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/3613
+// https://github.com/microsoft/TypeScript/tsc/issues/3613
 
 interface EntityMetadata1 {
     get tableName(): string;

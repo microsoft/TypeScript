@@ -2,7 +2,7 @@
 // @noEmit: true
 // @filename: main.js
 
-// https://github.com/microsoft/typescript-go/issues/4219
+// https://github.com/microsoft/TypeScript/tsc/issues/4219
 
 class C {
   /** @private */

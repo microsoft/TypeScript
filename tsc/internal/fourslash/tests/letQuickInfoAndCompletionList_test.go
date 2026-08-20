@@ -1,0 +1,82 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestLetQuickInfoAndCompletionList(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `let /*1*/a = 10;
+/*2*/a = 30;
+function foo() {
+    let /*3*/b = 20;
+    /*4*/b = /*5*/a;
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "a",
+					Detail: new("let a: number"),
+				},
+			},
+		},
+	})
+	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "a",
+					Detail: new("let a: number"),
+				},
+				&lsproto.CompletionItem{
+					Label:  "b",
+					Detail: new("let b: number"),
+				},
+			},
+		},
+	})
+	f.VerifyCompletions(t, "5", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "a",
+					Detail: new("let a: number"),
+				},
+				&lsproto.CompletionItem{
+					Label:  "b",
+					Detail: new("let b: number"),
+				},
+			},
+		},
+	})
+	f.VerifyQuickInfoAt(t, "1", "let a: number", "")
+	f.VerifyQuickInfoAt(t, "2", "let a: number", "")
+	f.VerifyQuickInfoAt(t, "3", "let b: number", "")
+	f.VerifyQuickInfoAt(t, "4", "let b: number", "")
+	f.VerifyQuickInfoAt(t, "5", "let a: number", "")
+}

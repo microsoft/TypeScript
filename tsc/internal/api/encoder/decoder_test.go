@@ -419,8 +419,7 @@ func TestDecodeSourceFile_PostfixDecrement(t *testing.T) {
 }
 
 func BenchmarkDecodeSourceFile(b *testing.B) {
-	repo.SkipIfNoTypeScriptSubmodule(b)
-	filePath := filepath.Join(repo.TypeScriptSubmodulePath(), "src/compiler/checker.ts")
+	filePath := filepath.Join(repo.TestDataPath(), "fixtures/compiler/checker.ts")
 	fileContent, err := os.ReadFile(filePath)
 	assert.NilError(b, err)
 	code := string(fileContent)

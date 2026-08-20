@@ -13,13 +13,11 @@ import (
 	"regexp"
 	"slices"
 	"strings"
-
-	"github.com/microsoft/TypeScript/tsc/internal/repo"
 )
 
 var (
-	libInputDir     = filepath.Join(repo.TypeScriptSubmodulePath(), "src", "lib")
-	copyrightNotice = filepath.Join(repo.TypeScriptSubmodulePath(), "scripts", "CopyrightNotice.txt")
+	libInputDir     = "source"
+	copyrightNotice = filepath.Join("source", "CopyrightNotice.txt")
 )
 
 func main() {

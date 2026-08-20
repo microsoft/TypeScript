@@ -3,7 +3,7 @@ varianceModifiersOnClassMembers.ts(5,3): error TS1274: 'out' modifier can only a
 
 
 ==== varianceModifiersOnClassMembers.ts (2 errors) ====
-    // https://github.com/microsoft/typescript-go/issues/4123
+    // https://github.com/microsoft/TypeScript/tsc/issues/4123
     
     class C {
       in x = 1;

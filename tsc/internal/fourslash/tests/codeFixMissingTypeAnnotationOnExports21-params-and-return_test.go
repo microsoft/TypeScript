@@ -1,0 +1,58 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports21_params_and_return(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+// @lib: es2019
+/**
+ * Test
+ */
+export function foo(): number { return 0; }
+/**
+* Docs
+*/
+export const bar = (a = foo()) =>
+   a;
+// Trivia`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add return type 'number'",
+		NewFileContent: `/**
+ * Test
+ */
+export function foo(): number { return 0; }
+/**
+* Docs
+*/
+export const bar = (a = foo()): number =>
+   a;
+// Trivia`,
+		Index:        0,
+		ApplyChanges: true,
+	})
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add annotation of type 'number'",
+		NewFileContent: `/**
+ * Test
+ */
+export function foo(): number { return 0; }
+/**
+* Docs
+*/
+export const bar = (a: number = foo()): number =>
+   a;
+// Trivia`,
+		Index:        0,
+		ApplyChanges: true,
+	})
+}

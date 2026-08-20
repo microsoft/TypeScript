@@ -1,7 +1,7 @@
 // @strict: true
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/1222
+// https://github.com/microsoft/TypeScript/tsc/issues/1222
 
 class Store<T = object> {
     select<K>(mapFn: (state: T) => K) {};

@@ -1,9 +1,0 @@
---- old.mixinOverMappedTypeNoCrash.types
-+++ new.mixinOverMappedTypeNoCrash.types
-@@= skipped -38, +38 lines =@@
-         }
-     }
-     return AnotherOriginalClass
-->AnotherOriginalClass : { new (...args: any[]): AnotherOriginalClass; prototype: cloneClass<any>.AnotherOriginalClass; } & T
-+>AnotherOriginalClass : { new (...args: any[]): AnotherOriginalClass; prototype: cloneClass.AnotherOriginalClass; } & T
- }

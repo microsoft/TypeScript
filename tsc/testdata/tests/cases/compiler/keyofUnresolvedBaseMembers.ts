@@ -1,6 +1,6 @@
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/3494
+// https://github.com/microsoft/TypeScript/tsc/issues/3494
 
 declare class STModel<TAttrs extends {} = any, TCreate extends {} = TAttrs> {
   $add: (propertyKey: string) => void;

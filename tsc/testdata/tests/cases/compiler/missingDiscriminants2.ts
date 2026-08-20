@@ -1,7 +1,7 @@
 // @strict: true
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/1020
+// https://github.com/microsoft/TypeScript/tsc/issues/1020
 
 // This tests ensures the change also works for discriminated unions with more than 10 cases
 

@@ -2,7 +2,7 @@
 // @target: esnext
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/849
+// https://github.com/microsoft/TypeScript/tsc/issues/849
 
 declare function useMemo<T>(func: () => T): T;
 
@@ -16,7 +16,7 @@ function getPredicate(alwaysTrue: boolean) {
     return predicate;
 }
 
-// https://github.com/microsoft/typescript-go/issues/1016
+// https://github.com/microsoft/TypeScript/tsc/issues/1016
 
 declare function compact<T>(array: T[]): T[];
 declare function makeFooer(): Fooer;

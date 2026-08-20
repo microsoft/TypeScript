@@ -1,9 +1,0 @@
---- old.constructorTagOnNestedBinaryExpression.symbols
-+++ new.constructorTagOnNestedBinaryExpression.symbols
-@@= skipped -9, +9 lines =@@
- >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
- >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
- >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
-->this : Symbol(c, Decl(constructorTagOnNestedBinaryExpression.js, 2, 7))
-
- };

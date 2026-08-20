@@ -19,14 +19,6 @@ Fs::
 
 
 configFileName:: tsconfig.json
-CompilerOptions::
-{
-  "configFilePath": "/tsconfig.json"
-}
-
-TypeAcquisition::
-{}
-
 FileNames::
 /d.ts,/folder/e.ts
 Errors::

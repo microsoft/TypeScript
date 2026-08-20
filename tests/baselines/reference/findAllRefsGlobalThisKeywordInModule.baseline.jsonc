@@ -1,4 +1,0 @@
-// === findAllReferences ===
-// === /tests/cases/fourslash/findAllRefsGlobalThisKeywordInModule.ts ===
-// /*FIND ALL REFS*/this;
-// export const c = 1;

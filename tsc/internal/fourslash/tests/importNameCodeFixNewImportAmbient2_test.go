@@ -1,0 +1,33 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestImportNameCodeFixNewImportAmbient2(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `[|/*!
+ * I'm a license or something
+ */
+f1/*0*/();|]
+// @Filename: ambientModule.ts
+ declare module "ambient-module" {
+    export function f1();
+    export var v1;
+ }`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyImportFixAtPosition(t, []string{
+		`/*!
+ * I'm a license or something
+ */
+
+import { f1 } from "ambient-module";
+
+f1();`,
+	}, nil /*preferences*/)
+}

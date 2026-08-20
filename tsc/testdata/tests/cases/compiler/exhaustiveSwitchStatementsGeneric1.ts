@@ -1,7 +1,7 @@
 // @strict: true
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/986
+// https://github.com/microsoft/TypeScript/tsc/issues/986
 
 interface A {
   type: "a";
