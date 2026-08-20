@@ -1,0 +1,110 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingTypePredicate.ts] ////
+
+=== negatedNarrowingTypePredicate.ts ===
+// Control flow narrowing by a user-defined type guard `x is T`. In the false branch a fresh
+// `not T` is intersected in and survives where the base type overlaps T.
+
+interface Cat {
+    meow(): void;
+>meow : () => void
+}
+
+declare function isCat(x: unknown): x is Cat;
+>isCat : (x: unknown) => x is Cat
+>x : unknown
+
+declare function wantsNotCat(x: not Cat): void;
+>wantsNotCat : (x: not Cat) => void
+>x : not Cat
+
+// `{}` base overlaps Cat.
+declare const a: {};
+>a : {}
+
+if (isCat(a)) {
+>isCat(a) : boolean
+>isCat : (x: unknown) => x is Cat
+>a : {}
+
+    a; // {} & Cat
+>a : Cat
+
+} else {
+    a; // {} & not Cat
+>a : {} & not Cat
+
+    wantsNotCat(a);
+>wantsNotCat(a) : void
+>wantsNotCat : (x: not Cat) => void
+>a : {} & not Cat
+}
+
+// A bare type parameter.
+function generic<T>(x: T) {
+>generic : <T>(x: T) => void
+>x : T
+
+    if (isCat(x)) {
+>isCat(x) : boolean
+>isCat : (x: unknown) => x is Cat
+>x : T
+
+        x; // T & Cat
+>x : T & Cat
+
+    } else {
+        x; // T & not Cat
+>x : T & not Cat
+    }
+}
+
+// A disjoint union: `not Cat` reduces away against the non-Cat constituent.
+interface Dog {
+    bark(): void;
+>bark : () => void
+
+    meow?: undefined;
+>meow : undefined
+}
+declare const b: Cat | Dog;
+>b : Cat | Dog
+
+if (isCat(b)) {
+>isCat(b) : boolean
+>isCat : (x: unknown) => x is Cat
+>b : Cat | Dog
+
+    b; // Cat
+>b : Cat
+
+} else {
+    b; // Dog
+>b : Dog
+}
+
+// A negated type guard `x is not Cat` narrows the *true* branch to `not Cat`.
+declare function isNotCat(x: unknown): x is not Cat;
+>isNotCat : (x: unknown) => x is not Cat
+>x : unknown
+
+declare const c: {};
+>c : {}
+
+if (isNotCat(c)) {
+>isNotCat(c) : boolean
+>isNotCat : (x: unknown) => x is not Cat
+>c : {}
+
+    c; // {} & not Cat
+>c : {} & not Cat
+
+    wantsNotCat(c);
+>wantsNotCat(c) : void
+>wantsNotCat : (x: not Cat) => void
+>c : {} & not Cat
+
+} else {
+    c; // {} & Cat
+>c : Cat
+}
+

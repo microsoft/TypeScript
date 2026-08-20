@@ -95,12 +95,12 @@ function f2(x: A | B) {
         else if (isB(x)) {
 >isB(x) : boolean
 >isB : (x: any) => x is B
->x : B
+>x : B & not A
 
             x.prop.b;
 >x.prop.b : string
 >x.prop : { b: string; }
->x : B
+>x : B & not A
 >prop : { b: string; }
 >b : string
         }

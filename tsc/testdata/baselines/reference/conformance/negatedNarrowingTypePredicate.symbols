@@ -1,0 +1,117 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingTypePredicate.ts] ////
+
+=== negatedNarrowingTypePredicate.ts ===
+// Control flow narrowing by a user-defined type guard `x is T`. In the false branch a fresh
+// `not T` is intersected in and survives where the base type overlaps T.
+
+interface Cat {
+>Cat : Symbol(Cat, Decl(negatedNarrowingTypePredicate.ts, 0, 0))
+
+    meow(): void;
+>meow : Symbol(Cat.meow, Decl(negatedNarrowingTypePredicate.ts, 3, 15))
+}
+
+declare function isCat(x: unknown): x is Cat;
+>isCat : Symbol(isCat, Decl(negatedNarrowingTypePredicate.ts, 5, 1))
+>x : Symbol(x, Decl(negatedNarrowingTypePredicate.ts, 7, 23))
+>x : Symbol(x, Decl(negatedNarrowingTypePredicate.ts, 7, 23))
+>Cat : Symbol(Cat, Decl(negatedNarrowingTypePredicate.ts, 0, 0))
+
+declare function wantsNotCat(x: not Cat): void;
+>wantsNotCat : Symbol(wantsNotCat, Decl(negatedNarrowingTypePredicate.ts, 7, 45))
+>x : Symbol(x, Decl(negatedNarrowingTypePredicate.ts, 8, 29))
+>Cat : Symbol(Cat, Decl(negatedNarrowingTypePredicate.ts, 0, 0))
+
+// `{}` base overlaps Cat.
+declare const a: {};
+>a : Symbol(a, Decl(negatedNarrowingTypePredicate.ts, 11, 13))
+
+if (isCat(a)) {
+>isCat : Symbol(isCat, Decl(negatedNarrowingTypePredicate.ts, 5, 1))
+>a : Symbol(a, Decl(negatedNarrowingTypePredicate.ts, 11, 13))
+
+    a; // {} & Cat
+>a : Symbol(a, Decl(negatedNarrowingTypePredicate.ts, 11, 13))
+
+} else {
+    a; // {} & not Cat
+>a : Symbol(a, Decl(negatedNarrowingTypePredicate.ts, 11, 13))
+
+    wantsNotCat(a);
+>wantsNotCat : Symbol(wantsNotCat, Decl(negatedNarrowingTypePredicate.ts, 7, 45))
+>a : Symbol(a, Decl(negatedNarrowingTypePredicate.ts, 11, 13))
+}
+
+// A bare type parameter.
+function generic<T>(x: T) {
+>generic : Symbol(generic, Decl(negatedNarrowingTypePredicate.ts, 17, 1))
+>T : Symbol(T, Decl(negatedNarrowingTypePredicate.ts, 20, 17))
+>x : Symbol(x, Decl(negatedNarrowingTypePredicate.ts, 20, 20))
+>T : Symbol(T, Decl(negatedNarrowingTypePredicate.ts, 20, 17))
+
+    if (isCat(x)) {
+>isCat : Symbol(isCat, Decl(negatedNarrowingTypePredicate.ts, 5, 1))
+>x : Symbol(x, Decl(negatedNarrowingTypePredicate.ts, 20, 20))
+
+        x; // T & Cat
+>x : Symbol(x, Decl(negatedNarrowingTypePredicate.ts, 20, 20))
+
+    } else {
+        x; // T & not Cat
+>x : Symbol(x, Decl(negatedNarrowingTypePredicate.ts, 20, 20))
+    }
+}
+
+// A disjoint union: `not Cat` reduces away against the non-Cat constituent.
+interface Dog {
+>Dog : Symbol(Dog, Decl(negatedNarrowingTypePredicate.ts, 26, 1))
+
+    bark(): void;
+>bark : Symbol(Dog.bark, Decl(negatedNarrowingTypePredicate.ts, 29, 15))
+
+    meow?: undefined;
+>meow : Symbol(Dog.meow, Decl(negatedNarrowingTypePredicate.ts, 30, 17))
+}
+declare const b: Cat | Dog;
+>b : Symbol(b, Decl(negatedNarrowingTypePredicate.ts, 33, 13))
+>Cat : Symbol(Cat, Decl(negatedNarrowingTypePredicate.ts, 0, 0))
+>Dog : Symbol(Dog, Decl(negatedNarrowingTypePredicate.ts, 26, 1))
+
+if (isCat(b)) {
+>isCat : Symbol(isCat, Decl(negatedNarrowingTypePredicate.ts, 5, 1))
+>b : Symbol(b, Decl(negatedNarrowingTypePredicate.ts, 33, 13))
+
+    b; // Cat
+>b : Symbol(b, Decl(negatedNarrowingTypePredicate.ts, 33, 13))
+
+} else {
+    b; // Dog
+>b : Symbol(b, Decl(negatedNarrowingTypePredicate.ts, 33, 13))
+}
+
+// A negated type guard `x is not Cat` narrows the *true* branch to `not Cat`.
+declare function isNotCat(x: unknown): x is not Cat;
+>isNotCat : Symbol(isNotCat, Decl(negatedNarrowingTypePredicate.ts, 38, 1))
+>x : Symbol(x, Decl(negatedNarrowingTypePredicate.ts, 41, 26))
+>x : Symbol(x, Decl(negatedNarrowingTypePredicate.ts, 41, 26))
+>Cat : Symbol(Cat, Decl(negatedNarrowingTypePredicate.ts, 0, 0))
+
+declare const c: {};
+>c : Symbol(c, Decl(negatedNarrowingTypePredicate.ts, 42, 13))
+
+if (isNotCat(c)) {
+>isNotCat : Symbol(isNotCat, Decl(negatedNarrowingTypePredicate.ts, 38, 1))
+>c : Symbol(c, Decl(negatedNarrowingTypePredicate.ts, 42, 13))
+
+    c; // {} & not Cat
+>c : Symbol(c, Decl(negatedNarrowingTypePredicate.ts, 42, 13))
+
+    wantsNotCat(c);
+>wantsNotCat : Symbol(wantsNotCat, Decl(negatedNarrowingTypePredicate.ts, 7, 45))
+>c : Symbol(c, Decl(negatedNarrowingTypePredicate.ts, 42, 13))
+
+} else {
+    c; // {} & Cat
+>c : Symbol(c, Decl(negatedNarrowingTypePredicate.ts, 42, 13))
+}
+

@@ -1,0 +1,84 @@
+//// [tests/cases/conformance/types/negated/negatedTypesNormalizationIdentities.ts] ////
+
+=== negatedTypesNormalizationIdentities.ts ===
+// Normalization / identity rules for the `not` type operator.
+
+// not any => any
+type NotAny = not any;
+>NotAny : Symbol(NotAny, Decl(negatedTypesNormalizationIdentities.ts, 0, 0))
+
+// not unknown => never
+type NotUnknown = not unknown;
+>NotUnknown : Symbol(NotUnknown, Decl(negatedTypesNormalizationIdentities.ts, 3, 22))
+
+// not never => unknown
+type NotNever = not never;
+>NotNever : Symbol(NotNever, Decl(negatedTypesNormalizationIdentities.ts, 6, 30))
+
+// Negated nullish / void.
+type NotVoid = not void;
+>NotVoid : Symbol(NotVoid, Decl(negatedTypesNormalizationIdentities.ts, 9, 26))
+
+type NotNull = not null;
+>NotNull : Symbol(NotNull, Decl(negatedTypesNormalizationIdentities.ts, 12, 24))
+
+type NotUndefined = not undefined;
+>NotUndefined : Symbol(NotUndefined, Decl(negatedTypesNormalizationIdentities.ts, 13, 24))
+
+// Double negation collapses: not not T => T.
+type DoubleNegString = not not string;
+>DoubleNegString : Symbol(DoubleNegString, Decl(negatedTypesNormalizationIdentities.ts, 14, 34))
+
+type DoubleNegLiteral = not not "a";
+>DoubleNegLiteral : Symbol(DoubleNegLiteral, Decl(negatedTypesNormalizationIdentities.ts, 17, 38))
+
+type TripleNegString = not not not string; // => not string
+>TripleNegString : Symbol(TripleNegString, Decl(negatedTypesNormalizationIdentities.ts, 18, 36))
+
+// Double negation on a generic type parameter.
+type DoubleNeg<T> = not not T;
+>DoubleNeg : Symbol(DoubleNeg, Decl(negatedTypesNormalizationIdentities.ts, 19, 42))
+>T : Symbol(T, Decl(negatedTypesNormalizationIdentities.ts, 22, 15))
+>T : Symbol(T, Decl(negatedTypesNormalizationIdentities.ts, 22, 15))
+
+type DoubleNegApplied = DoubleNeg<number>;
+>DoubleNegApplied : Symbol(DoubleNegApplied, Decl(negatedTypesNormalizationIdentities.ts, 22, 30))
+>DoubleNeg : Symbol(DoubleNeg, Decl(negatedTypesNormalizationIdentities.ts, 19, 42))
+
+// Assignability probes confirming the identities.
+declare let notNever: NotNever;   // unknown
+>notNever : Symbol(notNever, Decl(negatedTypesNormalizationIdentities.ts, 26, 11))
+>NotNever : Symbol(NotNever, Decl(negatedTypesNormalizationIdentities.ts, 6, 30))
+
+declare let anyVal: any;
+>anyVal : Symbol(anyVal, Decl(negatedTypesNormalizationIdentities.ts, 27, 11))
+
+declare let str: string;
+>str : Symbol(str, Decl(negatedTypesNormalizationIdentities.ts, 28, 11))
+
+notNever = str;      // ok (unknown accepts anything)
+>notNever : Symbol(notNever, Decl(negatedTypesNormalizationIdentities.ts, 26, 11))
+>str : Symbol(str, Decl(negatedTypesNormalizationIdentities.ts, 28, 11))
+
+anyVal = notNever;   // ok
+>anyVal : Symbol(anyVal, Decl(negatedTypesNormalizationIdentities.ts, 27, 11))
+>notNever : Symbol(notNever, Decl(negatedTypesNormalizationIdentities.ts, 26, 11))
+
+declare let notUnknown: NotUnknown; // never
+>notUnknown : Symbol(notUnknown, Decl(negatedTypesNormalizationIdentities.ts, 33, 11))
+>NotUnknown : Symbol(NotUnknown, Decl(negatedTypesNormalizationIdentities.ts, 3, 22))
+
+notUnknown = str;    // error (nothing is assignable to never)
+>notUnknown : Symbol(notUnknown, Decl(negatedTypesNormalizationIdentities.ts, 33, 11))
+>str : Symbol(str, Decl(negatedTypesNormalizationIdentities.ts, 28, 11))
+
+declare let dnStr: DoubleNegString; // string
+>dnStr : Symbol(dnStr, Decl(negatedTypesNormalizationIdentities.ts, 36, 11))
+>DoubleNegString : Symbol(DoubleNegString, Decl(negatedTypesNormalizationIdentities.ts, 14, 34))
+
+dnStr = "hello";     // ok
+>dnStr : Symbol(dnStr, Decl(negatedTypesNormalizationIdentities.ts, 36, 11))
+
+dnStr = 0;           // error
+>dnStr : Symbol(dnStr, Decl(negatedTypesNormalizationIdentities.ts, 36, 11))
+

@@ -89,6 +89,6 @@ if (!isA(value6)) {
 >value6 : unknown
 
   value6;
->value6 : unknown
+>value6 : not A
 }
 

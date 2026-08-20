@@ -1083,7 +1083,8 @@ func (c *Checker) isDiscriminantProperty(t *Type, name string) bool {
 		if prop != nil && prop.CheckFlags&ast.CheckFlagsSyntheticProperty != 0 {
 			if prop.CheckFlags&ast.CheckFlagsIsDiscriminantComputed == 0 {
 				prop.CheckFlags |= ast.CheckFlagsIsDiscriminantComputed
-				if prop.CheckFlags&ast.CheckFlagsNonUniformAndLiteral == ast.CheckFlagsNonUniformAndLiteral && !c.isGenericType(c.getTypeOfSymbol(prop)) {
+				pt := c.getTypeOfSymbol(prop)
+				if prop.CheckFlags&ast.CheckFlagsNonUniformAndLiteral == ast.CheckFlagsNonUniformAndLiteral && !c.isGenericType(pt) {
 					prop.CheckFlags |= ast.CheckFlagsIsDiscriminant
 				}
 			}
@@ -2316,7 +2317,7 @@ func (c *Checker) getEffectiveConstraintOfIntersection(types []*Type, targetIsUn
 	var constraints []*Type
 	hasDisjointDomainType := false
 	for _, t := range types {
-		if t.flags&TypeFlagsInstantiable != 0 {
+		if t.flags&TypeFlagsInstantiable != 0 && t.flags&TypeFlagsNegated == 0 {
 			// We keep following constraints as long as we have an instantiable type that is known
 			// not to be circular or infinite (hence we stop on index access types).
 			constraint := c.getConstraintOfType(t)
@@ -2329,7 +2330,7 @@ func (c *Checker) getEffectiveConstraintOfIntersection(types []*Type, targetIsUn
 					constraints = append(constraints, t)
 				}
 			}
-		} else if t.flags&TypeFlagsDisjointDomains != 0 || c.IsEmptyAnonymousObjectType(t) {
+		} else if t.flags&(TypeFlagsDisjointDomains|TypeFlagsNegated) != 0 || c.IsEmptyAnonymousObjectType(t) {
 			hasDisjointDomainType = true
 		}
 	}
@@ -2340,7 +2341,7 @@ func (c *Checker) getEffectiveConstraintOfIntersection(types []*Type, targetIsUn
 			// We add any types belong to one of the disjoint domains because they might cause the final
 			// intersection operation to reduce the union constraints.
 			for _, t := range types {
-				if t.flags&TypeFlagsDisjointDomains != 0 || c.IsEmptyAnonymousObjectType(t) {
+				if t.flags&(TypeFlagsDisjointDomains|TypeFlagsNegated) != 0 || c.IsEmptyAnonymousObjectType(t) {
 					constraints = append(constraints, t)
 				}
 			}
@@ -2918,7 +2919,7 @@ func (r *Relater) unionOrIntersectionRelatedTo(source *Type, target *Type, repor
 	// appear to be comparable to '2'.
 	if r.relation == r.c.comparableRelation && target.flags&TypeFlagsPrimitive != 0 {
 		constraints := core.SameMap(source.Types(), func(t *Type) *Type {
-			if t.flags&TypeFlagsInstantiable != 0 {
+			if t.flags&(TypeFlagsInstantiable & ^TypeFlagsNegated) != 0 {
 				constraint := r.c.getBaseConstraintOfType(t)
 				if constraint != nil {
 					return constraint
@@ -2945,7 +2946,25 @@ func (r *Relater) unionOrIntersectionRelatedTo(source *Type, target *Type, repor
 	// Don't report errors though. Elaborating on whether a source constituent is related to the target is
 	// not actually useful and leads to some confusing error messages. Instead, we rely on the caller
 	// checking whether the full intersection viewed as an object is related to the target.
-	return r.someTypeRelatedToType(source, target, false /*reportErrors*/, IntersectionStateSource)
+	result := r.someTypeRelatedToType(source, target, false /*reportErrors*/, IntersectionStateSource)
+	if r.relation == r.c.comparableRelation {
+		// In the comparable relation we may have, e.g., 'string & not "a"' being related to '"a"' because
+		// 'string' and '"a"' are usually comparable - it's only the additional domain limiting provided by
+		// the negated intersection that narrows further. So we collect the negated domain bits and check
+		// that the target is comparable with each. If there's any negated domain bit for which it's not
+		// comparable, then the intersection as a whole shouldn't be comparable.
+		for _, negation := range source.Types() {
+			if negation.flags&TypeFlagsNegated == 0 {
+				continue
+			}
+			rel := r.isRelatedTo(target, negation, RecursionFlagsTarget, false /*reportErrors*/)
+			result &= rel
+			if result == TernaryFalse {
+				break
+			}
+		}
+	}
+	return result
 }
 
 func (r *Relater) someTypeRelatedToType(source *Type, target *Type, reportErrors bool, intersectionState IntersectionState) Ternary {
@@ -3397,6 +3416,9 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			if source.AsStringMappingType().Symbol() == target.AsStringMappingType().Symbol() {
 				return r.isRelatedTo(source.AsStringMappingType().target, target.AsStringMappingType().target, RecursionFlagsBoth, false /*reportErrors*/)
 			}
+		case source.flags&TypeFlagsNegated != 0:
+			// 'not S' is identical to 'not T' if S is identical to T.
+			return r.isRelatedTo(source.AsNegatedType().baseType, target.AsNegatedType().baseType, RecursionFlagsBoth, false /*reportErrors*/)
 		}
 		if source.flags&TypeFlagsObject == 0 {
 			return TernaryFalse
@@ -3452,6 +3474,41 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		}
 	}
 	switch {
+	case target.flags&TypeFlagsNegated != 0:
+		if source.flags&TypeFlagsNegated != 0 {
+			// 'not S' is related to 'not T' if T is related to S.
+			return r.isRelatedTo(target.AsNegatedType().baseType, source.AsNegatedType().baseType, RecursionFlagsBoth, reportErrors)
+		}
+		// A type S is related to 'not T' if S and T are disjoint, i.e. S & T is never.
+		if r.c.getIntersectionType([]*Type{source, target.AsNegatedType().baseType}).flags&TypeFlagsNever != 0 {
+			return TernaryTrue
+		}
+		// A fresh object literal type is treated as a closed set of values that have exactly the
+		// declared properties. Such a type is disjoint from T (and thus related to 'not T') precisely
+		// when it is not related to T, since excess property checking prevents its values from
+		// acquiring the extra properties that T might otherwise require. We compare the regular
+		// (non-fresh) form so that the excess property check itself doesn't interfere with the
+		// structural comparison.
+		if isObjectLiteralType(source) {
+			switch r.isRelatedTo(r.c.getRegularTypeOfObjectLiteral(source), target.AsNegatedType().baseType, RecursionFlagsBoth, false /*reportErrors*/) {
+			case TernaryFalse:
+				// The closed object literal is disjoint from T, so it is related to 'not T'.
+				return TernaryTrue
+			case TernaryMaybe:
+				// The comparison was assumed related under recursion; propagate the assumption.
+				return TernaryMaybe
+			default:
+				// The object literal is (possibly) a member of T, so it is not related to 'not T'.
+				return TernaryFalse
+			}
+		}
+		// Otherwise, if the source is a concrete (non-instantiable) type, it overlaps with T and is therefore
+		// not related to 'not T'. We must not fall through to the generic instantiable handling below, which
+		// would relate S to the (permissive) constraint of the negated type and incorrectly report relatedness.
+		// For instantiable sources we do fall through, so that constraint-based reasoning can still apply.
+		if source.flags&TypeFlagsInstantiable == 0 {
+			return TernaryFalse
+		}
 	case target.flags&TypeFlagsTypeParameter != 0:
 		// A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
 		if source.objectFlags&ObjectFlagsMapped != 0 && source.AsMappedType().declaration.NameType == nil && r.isRelatedTo(r.c.getIndexType(target), r.c.getConstraintTypeFromMappedType(source), RecursionFlagsBoth, false) != TernaryFalse {
@@ -3694,6 +3751,17 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		}
 	}
 	switch {
+	case source.flags&TypeFlagsNegated != 0:
+		// 'not S' is related to a non-negated type T only via its base constraint (unknown),
+		// i.e. essentially only when T is 'unknown' or 'any'.
+		constraint := r.c.getBaseConstraintOfType(source)
+		if constraint == nil {
+			constraint = r.c.unknownType
+		}
+		result = r.isRelatedTo(constraint, target, RecursionFlagsSource, reportErrors)
+		if result != TernaryFalse {
+			return result
+		}
 	case source.flags&TypeFlagsTypeVariable != 0:
 		// IndexedAccess comparisons are handled above in the `target.flags&TypeFlagsIndexedAccess` branch
 		if source.flags&TypeFlagsIndexedAccess == 0 || target.flags&TypeFlagsIndexedAccess == 0 {
@@ -4770,12 +4838,13 @@ func (r *Relater) reportErrorResults(originalSource *Type, originalTarget *Type,
 		}
 	}
 	r.reportRelationError(headMessage, source, target)
-	if source.flags&TypeFlagsTypeParameter != 0 && source.symbol != nil && len(source.symbol.Declarations) != 0 && r.c.getConstraintOfType(source) == nil {
-		syntheticParam := r.c.cloneTypeParameter(source)
-		syntheticParam.AsTypeParameter().constraint = r.c.instantiateType(target, newSimpleTypeMapper(source, syntheticParam))
+	filteredSource := r.c.removeFreshNegatedTypes(source) // strip fresh negated types from the source for the next related info span
+	if filteredSource.flags&TypeFlagsTypeParameter != 0 && filteredSource.symbol != nil && len(filteredSource.symbol.Declarations) != 0 && r.c.getConstraintOfType(filteredSource) == nil {
+		syntheticParam := r.c.cloneTypeParameter(filteredSource)
+		syntheticParam.AsTypeParameter().constraint = r.c.instantiateType(target, newSimpleTypeMapper(filteredSource, syntheticParam))
 		if r.c.hasNonCircularBaseConstraint(syntheticParam) {
 			targetConstraintString := r.c.TypeToString(target)
-			r.relatedInfo = append(r.relatedInfo, NewDiagnosticForNode(source.symbol.Declarations[0], diagnostics.This_type_parameter_might_need_an_extends_0_constraint, targetConstraintString))
+			r.relatedInfo = append(r.relatedInfo, NewDiagnosticForNode(filteredSource.symbol.Declarations[0], diagnostics.This_type_parameter_might_need_an_extends_0_constraint, targetConstraintString))
 		}
 	}
 }

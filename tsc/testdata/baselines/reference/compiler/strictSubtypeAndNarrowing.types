@@ -210,10 +210,10 @@ function checkA(f: FnTypes) {
     }
     else {
         f;  // C | D
->f : C | D
+>f : (C | D) & not A
     }
     f;  // FnTypes
->f : FnTypes
+>f : C
 }
 
 function checkB(f: FnTypes) {
@@ -230,10 +230,10 @@ function checkB(f: FnTypes) {
     }
     else {
         f;  // C | D
->f : C | D
+>f : (C | D) & not B
     }
     f;  // FnTypes
->f : FnTypes
+>f : C
 }
 
 function checkC(f: FnTypes) {
@@ -397,10 +397,10 @@ function ff3(value: string | string[] | { [index: number]: boolean, length: numb
 
     } else {
         value;
->value : number | { length: string; } | { a: string; } | null | undefined
+>value : (number | { length: string; } | { a: string; } | null | undefined) & not { length: number; }
     }
     value;
->value : string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined
+>value : string | string[] | { [index: number]: boolean; length: number; } | [number, boolean] | ((number | { length: string; } | { a: string; } | null | undefined) & not { length: number; })
 }
 
 // Repro from comment in #52984
@@ -512,7 +512,7 @@ function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
 >isB : (arg: unknown) => arg is 'B'
 
     return foo;
->foo : { value: { type: 'A'; }; a?: number; }
+>foo : { value: { type: 'A'; }; a?: number; } & not ({ value: { type: 'B'; }; b?: number; } & Readonly<Record<"value", { type: 'B'; } & Readonly<Record<"type", "B">>>>)
 }
 
 // Repro from #53063
@@ -553,7 +553,7 @@ const f = (value: Union) => {
 
         value.premium;
 >value.premium : false
->value : { premium: false; }
+>value : { premium: false; } & not never
 >premium : false
     }
 };

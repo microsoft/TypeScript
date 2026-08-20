@@ -756,7 +756,7 @@ namespace Harness {
 >"Expected array to match element only once (instead of " + foundCount + " times)" : string
 >"Expected array to match element only once (instead of " + foundCount : string
 >"Expected array to match element only once (instead of " : "Expected array to match element only once (instead of "
->foundCount : number
+>foundCount : number & not 1
 >" times)" : " times)"
             }
         }
@@ -2779,7 +2779,7 @@ namespace Harness {
 >'////[' + p + ']' : string
 >'////[' + p : string
 >'////[' : "////["
->p : string
+>p : string & not "0.js"
 >']' : "]"
 
                             result.push({ filename: p, file: this.fileCollection[p] });
@@ -4093,9 +4093,9 @@ namespace Harness {
                 }
                 else if (matchingIdentifiers.length > 1) {
 >matchingIdentifiers.length > 1 : boolean
->matchingIdentifiers.length : number
+>matchingIdentifiers.length : number & not 0
 >matchingIdentifiers : Type[]
->length : number
+>length : number & not 0
 >1 : 1
 
                     throw new Error("Found multiple matching identifiers for " + target);

@@ -548,7 +548,7 @@ if (isDate(maybeDate)) {
 } else {
   let t: object = maybeDate;  // should ok
 >t : object
->maybeDate : object
+>maybeDate : object & not Date
 }
 
 if (flakyIsDate(maybeDate)) {
@@ -875,7 +875,7 @@ function isNumOrStr(x: unknown) {
 >"number" : "number"
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : unknown
+>x : not number
 >"string" : "string"
 }
 declare let unk: unknown;

@@ -1102,14 +1102,14 @@ function test1<T extends any[] | Record<string, any>>(obj: T) {
 >obj : any[] | Record<string, any>
 >'length' in obj : boolean
 >'length' : "length"
->obj : T
+>obj : T & not any[]
 
       obj;  // T
 >obj : T
     }
     else {
       obj;  // T
->obj : T
+>obj : T & not any[]
     }
 }
 
@@ -1129,7 +1129,7 @@ function test2<T extends any[] | Record<string, any>>(obj: T) {
     }
     else {
       obj;  // T
->obj : T
+>obj : T & not any[]
     }
 }
 

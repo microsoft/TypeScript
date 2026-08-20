@@ -1,7 +1,7 @@
-narrowingMutualSubtypes.ts(117,17): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'any[] | Record<string, any>'.
-  No index signature with a parameter of type 'string' was found on type 'any[] | Record<string, any>'.
-narrowingMutualSubtypes.ts(118,29): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'any[] | Record<string, any>'.
-  No index signature with a parameter of type 'string' was found on type 'any[] | Record<string, any>'.
+narrowingMutualSubtypes.ts(117,17): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Record<string, any>[] | Record<string, any>'.
+  No index signature with a parameter of type 'string' was found on type 'Record<string, any>[] | Record<string, any>'.
+narrowingMutualSubtypes.ts(118,29): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Record<string, any>[] | Record<string, any>'.
+  No index signature with a parameter of type 'string' was found on type 'Record<string, any>[] | Record<string, any>'.
 
 
 ==== narrowingMutualSubtypes.ts (2 errors) ====
@@ -123,12 +123,12 @@ narrowingMutualSubtypes.ts(118,29): error TS7053: Element implicitly has an 'any
             for (let key in obj) {
                 if (obj[key] !== undefined) {
                     ~~~~~~~~
-!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'any[] | Record<string, any>'.
-!!! error TS7053:   No index signature with a parameter of type 'string' was found on type 'any[] | Record<string, any>'.
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Record<string, any>[] | Record<string, any>'.
+!!! error TS7053:   No index signature with a parameter of type 'string' was found on type 'Record<string, any>[] | Record<string, any>'.
                     console.log(obj[key])
                                 ~~~~~~~~
-!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'any[] | Record<string, any>'.
-!!! error TS7053:   No index signature with a parameter of type 'string' was found on type 'any[] | Record<string, any>'.
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Record<string, any>[] | Record<string, any>'.
+!!! error TS7053:   No index signature with a parameter of type 'string' was found on type 'Record<string, any>[] | Record<string, any>'.
                 }
             }
         }

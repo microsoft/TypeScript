@@ -1,0 +1,87 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingEquality.ts] ////
+
+=== negatedNarrowingEquality.ts ===
+// Direct equality comparisons (`===`, `!==`, `==`, `!=`) to `undefined`, `null`, and literal values
+// narrow via type facts and constituent filtering. They do NOT introduce fresh `not` negations, so
+// these baselines act as a guard that negations only come from typeof / instanceof / type guards.
+
+declare function wantsNotUndef(x: not undefined): void;
+>wantsNotUndef : Symbol(wantsNotUndef, Decl(negatedNarrowingEquality.ts, 0, 0))
+>x : Symbol(x, Decl(negatedNarrowingEquality.ts, 4, 31))
+
+// `=== undefined` removes undefined; the else branch is just `{}` (no `not undefined`).
+declare const a: {} | undefined;
+>a : Symbol(a, Decl(negatedNarrowingEquality.ts, 7, 13))
+
+if (a === undefined) {
+>a : Symbol(a, Decl(negatedNarrowingEquality.ts, 7, 13))
+>undefined : Symbol(undefined)
+
+    a; // undefined
+>a : Symbol(a, Decl(negatedNarrowingEquality.ts, 7, 13))
+
+} else {
+    a; // {}
+>a : Symbol(a, Decl(negatedNarrowingEquality.ts, 7, 13))
+}
+
+// `!== null` in strict mode.
+declare const b: {} | null;
+>b : Symbol(b, Decl(negatedNarrowingEquality.ts, 15, 13))
+
+if (b !== null) {
+>b : Symbol(b, Decl(negatedNarrowingEquality.ts, 15, 13))
+
+    b; // {}
+>b : Symbol(b, Decl(negatedNarrowingEquality.ts, 15, 13))
+
+} else {
+    b; // null
+>b : Symbol(b, Decl(negatedNarrowingEquality.ts, 15, 13))
+}
+
+// Literal comparison filters the matching constituent; the else branch keeps the rest unchanged.
+declare const c: "foo" | "bar" | {};
+>c : Symbol(c, Decl(negatedNarrowingEquality.ts, 23, 13))
+
+if (c === "foo") {
+>c : Symbol(c, Decl(negatedNarrowingEquality.ts, 23, 13))
+
+    c; // "foo"
+>c : Symbol(c, Decl(negatedNarrowingEquality.ts, 23, 13))
+
+} else {
+    c; // "bar" | {}
+>c : Symbol(c, Decl(negatedNarrowingEquality.ts, 23, 13))
+}
+
+// `== null` (double equals) removes both null and undefined.
+declare const d: {} | null | undefined;
+>d : Symbol(d, Decl(negatedNarrowingEquality.ts, 31, 13))
+
+if (d == null) {
+>d : Symbol(d, Decl(negatedNarrowingEquality.ts, 31, 13))
+
+    d; // null | undefined
+>d : Symbol(d, Decl(negatedNarrowingEquality.ts, 31, 13))
+
+} else {
+    d; // {}
+>d : Symbol(d, Decl(negatedNarrowingEquality.ts, 31, 13))
+}
+
+// Numeric literal comparison on a `{}` base leaves `{}` unrefined in the else branch.
+declare const e: {};
+>e : Symbol(e, Decl(negatedNarrowingEquality.ts, 39, 13))
+
+if (e === 0) {
+>e : Symbol(e, Decl(negatedNarrowingEquality.ts, 39, 13))
+
+    e; // {} (0 is comparable to {})
+>e : Symbol(e, Decl(negatedNarrowingEquality.ts, 39, 13))
+
+} else {
+    e; // {}
+>e : Symbol(e, Decl(negatedNarrowingEquality.ts, 39, 13))
+}
+

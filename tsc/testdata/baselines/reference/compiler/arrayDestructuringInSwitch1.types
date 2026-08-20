@@ -62,7 +62,7 @@ export function evaluate(expression: Expression): boolean {
   } else {
     return expression === 'true';
 >expression === 'true' : boolean
->expression : "false" | "true"
+>expression : ("false" | "true") & not any[]
 >'true' : "true"
   }
 }

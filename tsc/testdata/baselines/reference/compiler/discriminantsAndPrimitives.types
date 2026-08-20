@@ -31,7 +31,7 @@ function f1(x: Foo | Bar | string) {
 
         switch(x.kind) {
 >x.kind : "bar" | "foo"
->x : Bar | Foo
+>x : (Bar | Foo) & not string
 >kind : "bar" | "foo"
 
             case 'foo':
@@ -39,7 +39,7 @@ function f1(x: Foo | Bar | string) {
 
                 x.name;
 >x.name : string
->x : Foo
+>x : Foo & not string
 >name : string
         }
     }
@@ -85,7 +85,7 @@ function f3(x: Foo | Bar | string | null) {
 
         switch(x.kind) {
 >x.kind : "bar" | "foo"
->x : Bar | Foo
+>x : (Bar | Foo) & not string
 >kind : "bar" | "foo"
 
             case 'foo':
@@ -93,7 +93,7 @@ function f3(x: Foo | Bar | string | null) {
 
                 x.name;
 >x.name : string
->x : Foo
+>x : Foo & not string
 >name : string
         }
     }

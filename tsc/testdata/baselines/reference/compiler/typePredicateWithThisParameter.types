@@ -52,7 +52,7 @@ if (isFoo1(test)) {
 if (isFoo2(test)) {
 >isFoo2(test) : boolean
 >isFoo2 : (this: void, object: {}) => object is Foo
->test : Bar | Foo
+>test : Foo | (Bar & not Foo)
 
     test.foo = 'hi';
 >test.foo = 'hi' : "hi"

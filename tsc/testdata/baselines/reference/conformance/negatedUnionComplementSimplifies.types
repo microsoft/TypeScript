@@ -1,0 +1,72 @@
+//// [tests/cases/conformance/types/negated/negatedUnionComplementSimplifies.ts] ////
+
+=== negatedUnionComplementSimplifies.ts ===
+// The union converse of the intersection complement simplification: a type unioned with its
+// complement covers every value, so `T | not T` reduces to `unknown`.
+
+// Basic law of excluded middle.
+type A = string | not string;
+>A : unknown
+
+declare const a: A;
+>a : unknown
+
+a; // unknown
+>a : unknown
+
+// A literal unioned with the negation of its base is also unknown, because the base covers the literal.
+type B = string | not "w";
+>B : unknown
+
+declare const b: B;
+>b : unknown
+
+b; // unknown
+>b : unknown
+
+// An object type and its complement.
+interface Point {
+    x: number;
+>x : number
+
+    y: number;
+>y : number
+}
+type C = Point | not Point;
+>C : unknown
+
+declare const c: C;
+>c : unknown
+
+c; // unknown
+>c : unknown
+
+// Type parameter form.
+function f<T>(x: T | not T) {
+>f : <T>(x: T | not T) => void
+>x : unknown
+
+    x; // unknown
+>x : unknown
+}
+
+// Not saturated: `"w" | not string` is NOT unknown, because `string` is not a subtype of `"w"`.
+type D = "w" | not string;
+>D : D
+
+declare const d: D;
+>d : D
+
+d; // "w" | not string
+>d : D
+
+// Extra non-negated members still saturate when their union covers the negated base.
+type E = "w" | string | not string;
+>E : unknown
+
+declare const e: E;
+>e : unknown
+
+e; // unknown
+>e : unknown
+
