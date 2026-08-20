@@ -26,5 +26,5 @@ export var TypeFormatFlags: any;
     TypeFormatFlags[TypeFormatFlags["InElementType"] = 2097152] = "InElementType";
     TypeFormatFlags[TypeFormatFlags["InFirstTypeArgument"] = 4194304] = "InFirstTypeArgument";
     TypeFormatFlags[TypeFormatFlags["InTypeAlias"] = 8388608] = "InTypeAlias";
-    TypeFormatFlags[TypeFormatFlags["NodeBuilderFlagsMask"] = TypeFormatFlags.NoTruncation | TypeFormatFlags.WriteArrayAsGenericType | TypeFormatFlags.GenerateNamesForShadowedTypeParams | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteTypeArgumentsOfSignature | ] = "NodeBuilderFlagsMask";
+    TypeFormatFlags[TypeFormatFlags["NodeBuilderFlagsMask"] = 1922071919] = "NodeBuilderFlagsMask";
 })(TypeFormatFlags || (TypeFormatFlags = {}));
