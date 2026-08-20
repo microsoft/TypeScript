@@ -77,3 +77,84 @@ host markup
 	f.GoToFile(t, "/app.fold")
 	f.VerifyFoldingRangeLines(t, nil)
 }
+
+func TestContentMapperSupplementalFoldingRanges(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// The canonical output has no fold; the supplemental output prefixes a comment to the original code:
+	//
+	//   canonical:     export {};
+	//   supplemental:  /* generated */
+	//                  function outer() {
+	//                      const value = 1;
+	//                  }
+	//
+	//   original:      [------------- function -------------)
+	//   supplemental:  /* generated */[------------- function -------------)
+	//                                 `-- verbatim, FeatureFoldingRanges --'
+	//
+	// Folding must therefore visit the supplemental projection and map its function body to lines 0-2.
+	f, done := newContentMapperFourslash(t, `// @Filename: /app.astro
+function outer() {
+    const value = 1;
+}
+`, contentmappertest.PrefixedSupplementalMapper, ".astro")
+	defer done()
+
+	f.GoToFile(t, "/app.astro")
+	f.VerifyFoldingRangeLines(t, []fourslash.FoldingRangeLineExpected{{StartLine: 0, EndLine: 2}})
+}
+
+func TestContentMapperDisabledSupplementalFoldingRanges(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// The virtual outputs have the same shape as TestContentMapperSupplementalFoldingRanges:
+	//
+	//   canonical:     export {};
+	//   supplemental:  /* generated */
+	//                  function outer() {
+	//                      const value = 1;
+	//                  }
+	//
+	//   original:      [------------- function -------------)
+	//   supplemental:  /* generated */[------------- function -------------)
+	//                                 `---- verbatim, FeatureNone --------'
+	//
+	// The function is mapped but explicitly disabled for folding, so it must produce no range.
+	f, done := newContentMapperFourslash(t, `// @Filename: /folding-disabled.astro
+function outer() {
+    const value = 1;
+}
+`, contentmappertest.PrefixedSupplementalMapper, ".astro")
+	defer done()
+
+	f.GoToFile(t, "/folding-disabled.astro")
+	f.VerifyFoldingRangeLines(t, nil)
+}
+
+func TestContentMapperDeduplicatesProjectedFoldingRanges(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// Both virtual files contain the original function and map it verbatim with folding enabled:
+	//
+	//   canonical:     function outer() { ... }
+	//   supplemental:  /* generated */
+	//                  function outer() { ... }
+	//
+	//   original:      [------------- function -------------)
+	//   canonical:     [------------- function -------------)
+	//                  `-- verbatim, FeatureFoldingRanges --'
+	//   supplemental:  /* generated */[------------- function -------------)
+	//                                 `-- verbatim, FeatureFoldingRanges --'
+	//
+	// Both projections map to the same original fold, which must be returned only once.
+	f, done := newContentMapperFourslash(t, `// @Filename: /folding-duplicate.astro
+function outer() {
+    const value = 1;
+}
+`, contentmappertest.PrefixedSupplementalMapper, ".astro")
+	defer done()
+
+	f.GoToFile(t, "/folding-duplicate.astro")
+	f.VerifyFoldingRangeLines(t, []fourslash.FoldingRangeLineExpected{{StartLine: 0, EndLine: 2}})
+}

@@ -3,6 +3,7 @@ package contentmappertest
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -22,19 +23,38 @@ func (prefixedSupplementalHandler) HandleRequest(ctx context.Context, method str
 			return nil, err
 		}
 		const prefix = "/* generated */\n"
+		features := spanmap.FeatureAll
+		if strings.Contains(p.FileName, "folding-disabled") {
+			features = spanmap.FeatureNone
+		}
 		mappings, err := spanmap.New([]spanmap.Segment{{
 			VirtualStart:  core.TextPos(len(prefix)),
 			VirtualEnd:    core.TextPos(len(prefix) + len(p.Content)),
 			OriginalStart: 0,
 			OriginalEnd:   core.TextPos(len(p.Content)),
 			Kind:          spanmap.KindVerbatim,
-			Features:      spanmap.FeatureAll,
+			Features:      features,
 		}}).Marshal()
 		if err != nil {
 			return nil, err
 		}
+		canonical := contentmapper.MappedOutput{Text: "export {};", Extension: ".ts"}
+		if strings.Contains(p.FileName, "folding-duplicate") {
+			canonicalMappings, err := spanmap.New([]spanmap.Segment{{
+				VirtualStart:  0,
+				VirtualEnd:    core.TextPos(len(p.Content)),
+				OriginalStart: 0,
+				OriginalEnd:   core.TextPos(len(p.Content)),
+				Kind:          spanmap.KindVerbatim,
+				Features:      spanmap.FeatureAll,
+			}}).Marshal()
+			if err != nil {
+				return nil, err
+			}
+			canonical = contentmapper.MappedOutput{Text: p.Content, Extension: ".ts", Mappings: json.Value(canonicalMappings)}
+		}
 		return contentmapper.TransformResult{
-			MappedOutput: contentmapper.MappedOutput{Text: "export {};", Extension: ".ts"},
+			MappedOutput: canonical,
 			Supplemental: []contentmapper.SupplementalOutput{{MappedOutput: contentmapper.MappedOutput{
 				Text:      prefix + p.Content,
 				Extension: ".ts",

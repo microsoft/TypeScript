@@ -320,6 +320,12 @@ const x/*1*/ = 42;
 `
 ```
 
+#### Content mapper tests
+
+When writing a test for a content-mapped file, include a comment that shows the virtual
+TS output of the test content mapper implementation, and a description or diagram of the
+mapping spans.
+
 ### 2.3 Verification Methods (Common API)
 
 The `fourslash.FourslashTest` type (variable `f`) provides these verification methods:
