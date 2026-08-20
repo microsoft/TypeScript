@@ -79,6 +79,7 @@ import {
     type TemplateLiteralType,
     type TextEdit,
     TypeFlags,
+    TypeFormatFlags,
     type TypeParameter,
     TypePredicateKind,
     type TypeReference,
@@ -5094,6 +5095,27 @@ export const obj = { m: 1, s: "hi", b: true };
             assert.ok(type);
             const text = checker.typeToString(type);
             assert.strictEqual(text, "(name: string) => string");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("typeToString with TypeFormatFlags", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export function greet(name: string): string[] { return [name]; }`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const { checker } = snapshot.getProject("/tsconfig.json")!;
+            const greetPos = "export function greet".indexOf("greet");
+            const symbol = checker.getSymbolAtPosition("/src/main.ts", greetPos);
+            assert.ok(symbol);
+            const type = checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const text = checker.typeToString(type, undefined, TypeFormatFlags.WriteArrayAsGenericType);
+            assert.strictEqual(text, "(name: string) => Array<string>");
         }
         finally {
             api.close();
