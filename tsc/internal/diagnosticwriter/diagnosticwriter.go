@@ -59,11 +59,18 @@ func (d *ASTDiagnostic) File() FileLike {
 	if file == nil {
 		return nil
 	}
+	fileName := file.FileName()
+	if canonical := file.CanonicalSourceFile(); canonical != nil {
+		fileName = canonical.FileName()
+	}
 	if d.resolve().useOriginal {
 		// The mapper's own diagnostics (Source != "") already carry original ranges; compiler
 		// diagnostics have their transformed ranges mapped back. Both render against the original,
 		// untransformed text. Diagnostics in synthesized code (see resolve) keep the virtual text.
-		return newOriginalTextFile(file)
+		return newOriginalTextFile(file, fileName)
+	}
+	if fileName != file.FileName() {
+		return &renamedFile{file: file, fileName: fileName}
 	}
 	return file
 }
@@ -114,10 +121,10 @@ type originalTextFile struct {
 	lineMap  []core.TextPos
 }
 
-func newOriginalTextFile(file *ast.SourceFile) *originalTextFile {
+func newOriginalTextFile(file *ast.SourceFile, fileName string) *originalTextFile {
 	text := file.OriginalText()
 	return &originalTextFile{
-		fileName: file.FileName(),
+		fileName: fileName,
 		text:     text,
 		lineMap:  []core.TextPos(core.ComputeECMALineStarts(text)),
 	}
@@ -126,6 +133,15 @@ func newOriginalTextFile(file *ast.SourceFile) *originalTextFile {
 func (f *originalTextFile) FileName() string            { return f.fileName }
 func (f *originalTextFile) Text() string                { return f.text }
 func (f *originalTextFile) ECMALineMap() []core.TextPos { return f.lineMap }
+
+type renamedFile struct {
+	file     *ast.SourceFile
+	fileName string
+}
+
+func (f *renamedFile) FileName() string            { return f.fileName }
+func (f *renamedFile) Text() string                { return f.file.Text() }
+func (f *renamedFile) ECMALineMap() []core.TextPos { return f.file.ECMALineMap() }
 
 func (d *ASTDiagnostic) MessageChain() []Diagnostic {
 	chain := d.Diagnostic.MessageChain()

@@ -82,6 +82,30 @@ func TestContentMapperBuildLifecycle(t *testing.T) {
 	assert.Equal(t, spawner.closes.Load(), int32(1))
 }
 
+func TestContentMapperSupplementalDiagnosticUsesOriginalFileName(t *testing.T) {
+	t.Parallel()
+	input := &tscInput{files: FileMap{
+		"/home/src/workspaces/project/tsconfig.json": `{
+			"compilerOptions": { "noEmit": true },
+			"contentMappers": [{ "package": "mapper", "extensions": [".astro"] }]
+		}`,
+		"/home/src/workspaces/project/app.astro":                        `const value: string = 1;`,
+		"/home/src/workspaces/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.SupplementalDiagnosticsMapper),
+	}}
+	testSys := newTestSys(input, false)
+	sys := &recordingContentMapperSystem{
+		TestSys: testSys,
+		spawner: &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner()},
+	}
+
+	result := execute.CommandLine(t.Context(), sys, []string{"--pretty", "false", "--runExternalCode"}, testSys)
+	assert.Equal(t, result.Status, tsc.ExitStatusDiagnosticsPresent_OutputsGenerated)
+	output := testSys.currentWrite.String()
+	assert.Assert(t, strings.Contains(output, "app.astro(1,1): error TS2304"), output)
+	assert.Assert(t, strings.Contains(output, "app.astro(1,7): error TS2322"), output)
+	assert.Assert(t, !strings.Contains(output, "app.astro.0.ts"), output)
+}
+
 func TestContentMapperBuildDetectsNewPhysicalSupplementalFile(t *testing.T) {
 	t.Parallel()
 	const supplementalFileName = "/home/src/workspaces/project/app.vue.0.ts"
