@@ -4,7 +4,6 @@ go 1.27
 
 require (
 	github.com/Microsoft/go-winio v0.6.2
-	github.com/go-json-experiment/json v0.0.0-20260623181947-01eb4420fa68
 	github.com/google/go-cmp v0.7.0
 	github.com/klauspost/compress v1.19.0
 	github.com/mackerelio/go-osstat v0.2.7
