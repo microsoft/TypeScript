@@ -13,4 +13,3 @@ ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [91merror[0m[90m TS5042: [0mOption 'project' cannot be mixed with source files on a command line.
 
-

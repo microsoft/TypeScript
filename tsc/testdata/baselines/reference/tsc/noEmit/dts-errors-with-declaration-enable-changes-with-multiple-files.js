@@ -162,30 +162,27 @@ Output::
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96ma.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable a.
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable a.
 
 [96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const c = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mc.ts[0m:[93m1[0m:[93m14[0m
+  [96mc.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable c.
     [7m1[0m export const c = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable c.
 
 [96md.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const d = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96md.ts[0m:[93m1[0m:[93m14[0m
+  [96md.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable d.
     [7m1[0m export const d = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable d.
 
 
 Found 3 errors in 3 files.
@@ -397,30 +394,27 @@ Output::
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96ma.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable a.
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable a.
 
 [96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const c = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mc.ts[0m:[93m1[0m:[93m14[0m
+  [96mc.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable c.
     [7m1[0m export const c = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable c.
 
 [96md.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const d = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96md.ts[0m:[93m1[0m:[93m14[0m
+  [96md.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable d.
     [7m1[0m export const d = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable d.
 
 
 Found 3 errors in 3 files.
@@ -644,30 +638,27 @@ Output::
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96ma.ts[0m:[93m1[0m:[93m14[0m
+  [96ma.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable a.
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable a.
 
 [96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const c = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mc.ts[0m:[93m1[0m:[93m14[0m
+  [96mc.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable c.
     [7m1[0m export const c = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable c.
 
 [96md.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const d = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96md.ts[0m:[93m1[0m:[93m14[0m
+  [96md.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable d.
     [7m1[0m export const d = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable d.
 
 
 Found 3 errors in 3 files.
@@ -1026,20 +1017,18 @@ Output::
 [7m1[0m export const c = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mc.ts[0m:[93m1[0m:[93m14[0m
+  [96mc.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable c.
     [7m1[0m export const c = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable c.
 
 [96md.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const d = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96md.ts[0m:[93m1[0m:[93m14[0m
+  [96md.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable d.
     [7m1[0m export const d = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable d.
 
 
 Found 2 errors in 2 files.
@@ -1233,20 +1222,18 @@ Output::
 [7m1[0m export const c = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96mc.ts[0m:[93m1[0m:[93m14[0m
+  [96mc.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable c.
     [7m1[0m export const c = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable c.
 
 [96md.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const d = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96md.ts[0m:[93m1[0m:[93m14[0m
+  [96md.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable d.
     [7m1[0m export const d = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable d.
 
 
 Found 2 errors in 2 files.
@@ -1443,10 +1430,9 @@ Output::
 [7m1[0m export const d = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96md.ts[0m:[93m1[0m:[93m14[0m
+  [96md.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable d.
     [7m1[0m export const d = class { private p = 10; };
     [7m [0m [96m             ~[0m
-    Add a type annotation to the variable d.
 
 
 Found 1 error in d.ts[90m:1[0m

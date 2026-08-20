@@ -28,7 +28,6 @@ Output::
   The file is in the program because:
     Matched by default include pattern '**/*'
 
-
 Found 1 error.
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
@@ -165,7 +164,6 @@ Output::
   The file is in the program because:
     Matched by default include pattern '**/*'
 
-
 Found 1 error.
 
 
@@ -185,7 +183,6 @@ Output::
 [91merror[0m[90m TS6059: [0mFile '/home/src/workspaces/project/types/type.ts' is not under 'rootDir' '/home/src/workspaces/project/src'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
     Matched by default include pattern '**/*'
-
 
 Found 1 error.
 

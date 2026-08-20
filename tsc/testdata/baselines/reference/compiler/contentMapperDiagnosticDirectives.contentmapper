@@ -41,22 +41,27 @@ export const broken = undefined
 
 7 // @box-expect-error: Syntax errors do not satisfy expectations.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 /widget.box:10:1 - error box2578: Unused second expectation.
 
 10 // @box-expect-error: Unused second expectation.
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 /widget.box:8:21 - error TS1109: Expression expected.
 
 8 const syntaxError = ;
                       ~
+
 /widget.box:13:7 - error TS2322: Type 'string' is not assignable to type 'number'.
 
 13 const visible: number = "wrong";
          ~~~~~~~
+
 /widget.box:15:1 - error box2578: Mapper diagnostics do not satisfy expectations.
 
 15 // @box-expect-error: Mapper diagnostics do not satisfy expectations.
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 /widget.box:16:23 - error box1000: Unclosed interpolation.
 
 16 export const broken = #{unterminated;

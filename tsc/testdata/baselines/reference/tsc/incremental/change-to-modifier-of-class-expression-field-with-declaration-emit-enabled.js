@@ -269,10 +269,9 @@ Output::
 [7m6[0m const wrapper = () => Messageable();
 [7m [0m [91m      ~~~~~~~[0m
 
-  [96mMessageablePerson.ts[0m:[93m6[0m:[93m7[0m
+  [96mMessageablePerson.ts[0m:[93m6[0m:[93m7[0m - Add a type annotation to the variable wrapper.
     [7m6[0m const wrapper = () => Messageable();
     [7m [0m [96m      ~~~~~~~[0m
-    Add a type annotation to the variable wrapper.
 
 [96mMessageablePerson.ts[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'InstanceType'.
 
@@ -440,10 +439,9 @@ Output::
 [7m6[0m const wrapper = () => Messageable();
 [7m [0m [91m      ~~~~~~~[0m
 
-  [96mMessageablePerson.ts[0m:[93m6[0m:[93m7[0m
+  [96mMessageablePerson.ts[0m:[93m6[0m:[93m7[0m - Add a type annotation to the variable wrapper.
     [7m6[0m const wrapper = () => Messageable();
     [7m [0m [96m      ~~~~~~~[0m
-    Add a type annotation to the variable wrapper.
 
 [96mMessageablePerson.ts[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'InstanceType'.
 

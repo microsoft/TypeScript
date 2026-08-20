@@ -100,10 +100,9 @@ Output::
 [7m3[0m     length: files.length,
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~[0m
 
-  [96ma.ts[0m:[93m8[0m:[93m5[0m
+  [96ma.ts[0m:[93m8[0m:[93m5[0m - This spread always overwrites this property.
     [7m8[0m     ...files,
     [7m [0m [96m    ~~~~~~~~[0m
-    This spread always overwrites this property.
 
 [96ma.ts[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS2783: [0m'�@iterator@<symbolId>' is specified more than once, so this usage will be overwritten.
 
@@ -114,10 +113,9 @@ Output::
 [7m7[0m     },
 [7m [0m [91m~~~~~[0m
 
-  [96ma.ts[0m:[93m8[0m:[93m5[0m
+  [96ma.ts[0m:[93m8[0m:[93m5[0m - This spread always overwrites this property.
     [7m8[0m     ...files,
     [7m [0m [96m    ~~~~~~~~[0m
-    This spread always overwrites this property.
 
 
 Found 2 errors in the same file, starting at: a.ts[90m:3[0m
@@ -145,10 +143,9 @@ Output::
 [7m3[0m     length: files.length,
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~[0m
 
-  [96ma.ts[0m:[93m8[0m:[93m5[0m
+  [96ma.ts[0m:[93m8[0m:[93m5[0m - This spread always overwrites this property.
     [7m8[0m     ...files,
     [7m [0m [96m    ~~~~~~~~[0m
-    This spread always overwrites this property.
 
 [96ma.ts[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS2783: [0m'�@iterator@<symbolId>' is specified more than once, so this usage will be overwritten.
 
@@ -159,10 +156,9 @@ Output::
 [7m7[0m     },
 [7m [0m [91m~~~~~[0m
 
-  [96ma.ts[0m:[93m8[0m:[93m5[0m
+  [96ma.ts[0m:[93m8[0m:[93m5[0m - This spread always overwrites this property.
     [7m8[0m     ...files,
     [7m [0m [96m    ~~~~~~~~[0m
-    This spread always overwrites this property.
 
 
 Found 2 errors in the same file, starting at: a.ts[90m:3[0m
@@ -181,10 +177,9 @@ Output::
 [7m3[0m     length: files.length,
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~[0m
 
-  [96ma.ts[0m:[93m8[0m:[93m5[0m
+  [96ma.ts[0m:[93m8[0m:[93m5[0m - This spread always overwrites this property.
     [7m8[0m     ...files,
     [7m [0m [96m    ~~~~~~~~[0m
-    This spread always overwrites this property.
 
 [96ma.ts[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS2783: [0m'�@iterator@<symbolId>' is specified more than once, so this usage will be overwritten.
 
@@ -195,10 +190,9 @@ Output::
 [7m7[0m     },
 [7m [0m [91m~~~~~[0m
 
-  [96ma.ts[0m:[93m8[0m:[93m5[0m
+  [96ma.ts[0m:[93m8[0m:[93m5[0m - This spread always overwrites this property.
     [7m8[0m     ...files,
     [7m [0m [96m    ~~~~~~~~[0m
-    This spread always overwrites this property.
 
 
 Found 2 errors in the same file, starting at: a.ts[90m:3[0m
@@ -331,10 +325,9 @@ Output::
 [7m3[0m     length: files.length,
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~[0m
 
-  [96ma.ts[0m:[93m8[0m:[93m5[0m
+  [96ma.ts[0m:[93m8[0m:[93m5[0m - This spread always overwrites this property.
     [7m8[0m     ...files,
     [7m [0m [96m    ~~~~~~~~[0m
-    This spread always overwrites this property.
 
 [96ma.ts[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS2783: [0m'�@iterator@<symbolId>' is specified more than once, so this usage will be overwritten.
 
@@ -345,10 +338,9 @@ Output::
 [7m7[0m     },
 [7m [0m [91m~~~~~[0m
 
-  [96ma.ts[0m:[93m8[0m:[93m5[0m
+  [96ma.ts[0m:[93m8[0m:[93m5[0m - This spread always overwrites this property.
     [7m8[0m     ...files,
     [7m [0m [96m    ~~~~~~~~[0m
-    This spread always overwrites this property.
 
 
 Found 2 errors in the same file, starting at: a.ts[90m:3[0m

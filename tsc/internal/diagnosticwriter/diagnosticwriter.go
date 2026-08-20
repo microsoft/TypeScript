@@ -199,12 +199,59 @@ const (
 )
 
 func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []Diagnostic, formatOpts *FormattingOptions) {
-	for _, diagnostic := range diags {
+	if len(diags) == 0 {
+		return
+	}
+	for i, diagnostic := range diags {
+		if i > 0 {
+			fmt.Fprint(output, formatOpts.NewLine)
+		}
 		FormatDiagnosticWithColorAndContext(output, diagnostic, formatOpts)
 	}
 }
 
 func FormatDiagnosticWithColorAndContext(output io.Writer, diagnostic Diagnostic, formatOpts *FormattingOptions) {
+	if diagnostic.File() != nil {
+		file := diagnostic.File()
+		pos := diagnostic.Pos()
+		WriteLocation(output, file, pos, formatOpts, writeWithStyleAndReset)
+		fmt.Fprint(output, " - ")
+	}
+
+	writeWithStyleAndReset(output, diagnostic.Category().Name(), getCategoryFormat(diagnostic.Category()))
+	fmt.Fprintf(output, "%s %s%d: %s", foregroundColorEscapeGrey, diagnosticPrefix(diagnostic), diagnostic.Code(), resetEscapeSequence)
+	WriteFlattenedDiagnosticMessage(output, diagnostic, formatOpts.NewLine, formatOpts.Locale)
+
+	if diagnostic.File() != nil && diagnostic.Code() != diagnostics.File_appears_to_be_binary.Code() {
+		fmt.Fprint(output, formatOpts.NewLine)
+		writeCodeSnippet(output, diagnostic.File(), diagnostic.Pos(), diagnostic.Len(), getCategoryFormat(diagnostic.Category()), "", formatOpts)
+		fmt.Fprint(output, formatOpts.NewLine)
+	}
+
+	if (diagnostic.RelatedInformation() != nil) && (len(diagnostic.RelatedInformation()) > 0) {
+		for _, relatedInformation := range diagnostic.RelatedInformation() {
+			file := relatedInformation.File()
+			if file != nil {
+				fmt.Fprint(output, formatOpts.NewLine)
+				fmt.Fprint(output, "  ")
+				pos := relatedInformation.Pos()
+				WriteLocation(output, file, pos, formatOpts, writeWithStyleAndReset)
+				fmt.Fprint(output, " - ")
+				WriteFlattenedDiagnosticMessage(output, relatedInformation, formatOpts.NewLine, formatOpts.Locale)
+				writeCodeSnippet(output, file, pos, relatedInformation.Len(), foregroundColorEscapeCyan, "    ", formatOpts)
+			}
+			fmt.Fprint(output, formatOpts.NewLine)
+		}
+	}
+}
+
+func FormatDiagnosticsWithColorAndContextForAPI(output io.Writer, diags []Diagnostic, formatOpts *FormattingOptions) {
+	for _, diagnostic := range diags {
+		formatDiagnosticWithColorAndContextForAPI(output, diagnostic, formatOpts)
+	}
+}
+
+func formatDiagnosticWithColorAndContextForAPI(output io.Writer, diagnostic Diagnostic, formatOpts *FormattingOptions) {
 	if diagnostic.File() != nil {
 		file := diagnostic.File()
 		pos := diagnostic.Pos()

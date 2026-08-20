@@ -41,4 +41,3 @@ Errors::
 [91merror[0m[90m TS5025: [0mUnknown compiler option 'moduledetection'. Did you mean 'moduleDetection'?
 [91merror[0m[90m TS5025: [0mUnknown compiler option 'skiplibcheck'. Did you mean 'skipLibCheck'?
 [91merror[0m[90m TS5025: [0mUnknown compiler option 'checkjs'. Did you mean 'checkJs'?
-

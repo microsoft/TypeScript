@@ -611,7 +611,6 @@ Output::
 [[90mHH:MM:SS AM[0m] Project 'project3.tsconfig.json' is up to date because newest input 'other2.ts' is older than output 'project3.tsconfig.tsbuildinfo'
 
 [91merror[0m[90m TS5083: [0mCannot read file '/user/username/projects/project/extendsConfig2.tsconfig.json'.
-
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 

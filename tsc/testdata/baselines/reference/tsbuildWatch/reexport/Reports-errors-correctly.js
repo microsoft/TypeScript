@@ -249,10 +249,9 @@ Output::
 [7m3[0m export const session: Session = {
 [7m [0m [91m             ~~~~~~~[0m
 
-  [96mout/pure/session.d.ts[0m:[93m3[0m:[93m5[0m
+  [96mout/pure/session.d.ts[0m:[93m3[0m:[93m5[0m - 'bar' is declared here.
     [7m3[0m     bar: number;
     [7m [0m [96m    ~~~[0m
-    'bar' is declared here.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 

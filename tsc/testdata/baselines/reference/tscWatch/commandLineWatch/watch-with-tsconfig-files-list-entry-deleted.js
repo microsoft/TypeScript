@@ -70,11 +70,9 @@ Output::
 [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/project/b.ts' not found.
   The file is in the program because:
     Part of 'files' list in tsconfig.json
-
-  [96mtsconfig.json[0m:[93m3[0m:[93m20[0m
+  [96mtsconfig.json[0m:[93m3[0m:[93m20[0m - File is matched by 'files' list specified here.
     [7m3[0m  "files": ["a.ts", "b.ts"]
     [7m [0m [96m                   ~~~~~~[0m
-    File is matched by 'files' list specified here.
 
 
 Found 1 error.

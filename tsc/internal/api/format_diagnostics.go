@@ -46,7 +46,7 @@ func (s *Session) handleFormatDiagnostics(ctx context.Context, params *FormatDia
 
 	var sb strings.Builder
 	if colorAndContext {
-		diagnosticwriter.FormatDiagnosticsWithColorAndContext(&sb, diags, formatOpts)
+		diagnosticwriter.FormatDiagnosticsWithColorAndContextForAPI(&sb, diags, formatOpts)
 	} else {
 		diagnosticwriter.WriteFormatDiagnostics(&sb, diags, formatOpts)
 	}

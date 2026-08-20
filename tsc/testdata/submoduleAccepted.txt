@@ -671,7 +671,10 @@ conformance/circular1.errors.txt.diff
 conformance/circular3.errors.txt.diff
 
 ## Related spans in various errors changed (these baselines are all --pretty)
+compiler/deeplyNestedAssignabilityIssue.errors.txt.diff
+compiler/esModuleInteropPrettyErrorRelatedInformation.errors.txt.diff
 compiler/prettyContextNotDebugAssertion.errors.txt.diff
+compiler/prettyFileWithErrorsAndTabs.errors.txt.diff
 compiler/manyCompilerErrorsInTheTwoFiles.errors.txt.diff
 
 ## "Call signature return type" layer removed from error pyramid

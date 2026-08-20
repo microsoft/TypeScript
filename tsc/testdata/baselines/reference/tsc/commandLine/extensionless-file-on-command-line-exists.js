@@ -11,7 +11,6 @@ Output::
   The file is in the program because:
     Root file specified for compilation
 
-
 Found 1 error.
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*

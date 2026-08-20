@@ -77,9 +77,8 @@ Signatures::
 Diff:: incremental has prior state and does not report no-inputs error
 --- nonIncremental.output.txt
 +++ incremental.output.txt
-@@ -1,5 +0,0 @@
+@@ -1,4 +0,0 @@
 -[91merror[0m[90m TS18003: [0mNo inputs were found in config file '/home/src/workspaces/project/tsconfig.json'. Specified 'include' paths were '["src/**/*.ts"]' and 'exclude' paths were '[]'.
--
 -
 -Found 1 error.
 -

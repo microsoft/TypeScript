@@ -58,7 +58,6 @@ Edit [0]:: delete tsconfig
 
 Output::
 [91merror[0m[90m TS5083: [0mCannot read file '/home/src/workspaces/project/tsconfig.json'.
-
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -71,7 +70,7 @@ Directory watches::
 Diff:: incremental reports config read error while clean build without tsconfig prints usage help
 --- nonIncremental.output.txt
 +++ incremental.output.txt
-@@ -1,144 +1,2 @@
+@@ -1,144 +1,1 @@
 -Version FakeTSVersion
 -tsc: The TypeScript Compiler - Version FakeTSVersion
 -
@@ -215,4 +214,5 @@ Diff:: incremental reports config read error while clean build without tsconfig 
 -default: true
 -
 -You can learn about all of the compiler options at https://aka.ms/tsc
+-
 +[91merror[0m[90m TS5083: [0mCannot read file '/home/src/workspaces/project/tsconfig.json'.

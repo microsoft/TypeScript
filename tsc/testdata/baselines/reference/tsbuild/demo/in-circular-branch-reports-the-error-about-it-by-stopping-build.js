@@ -128,7 +128,6 @@ Output::
 /user/username/projects/demo/zoo/tsconfig.json
 /user/username/projects/demo/animals/tsconfig.json
 
-
 Found 1 error.
 
 

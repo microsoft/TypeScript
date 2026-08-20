@@ -476,20 +476,18 @@ Output::
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m - 'prop1' is declared here.
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
-    'prop1' is declared here.
 
 [96msrc/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
 [7m [0m [91m                           ~~~~[0m
 
-  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m
+  [96msrc/class.ts[0m:[93m2[0m:[93m5[0m - 'prop1' is declared here.
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
-    'prop1' is declared here.
 
 [96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS1100: [0mInvalid use of 'arguments' in strict mode.
 
