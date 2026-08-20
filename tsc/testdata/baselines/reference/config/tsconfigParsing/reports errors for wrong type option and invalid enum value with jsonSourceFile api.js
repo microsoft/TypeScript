@@ -20,14 +20,11 @@ Errors::
 
 [7m3[0m     "target": "invalid value",
 [7m [0m [91m              ~~~~~~~~~~~~~~~[0m
-
 [96mtsconfig.json[0m:[93m4[0m:[93m23[0m - [91merror[0m[90m TS5024: [0mCompiler option 'removeComments' requires a value of type boolean.
 
 [7m4[0m     "removeComments": "should be a boolean",
 [7m [0m [91m                      ~~~~~~~~~~~~~~~~~~~~~[0m
-
 [96mtsconfig.json[0m:[93m5[0m:[93m25[0m - [91merror[0m[90m TS6046: [0mArgument for '--moduleResolution' option must be: 'node16', 'nodenext', 'bundler'.
 
 [7m5[0m     "moduleResolution": "invalid value"
 [7m [0m [91m                        ~~~~~~~~~~~~~~~[0m
-

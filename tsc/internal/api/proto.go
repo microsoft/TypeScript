@@ -180,14 +180,16 @@ const (
 	MethodGetCompletionsAtPosition Method = "getCompletionsAtPosition"
 
 	// Diagnostic methods
-	MethodGetSyntacticDiagnostics         Method = "getSyntacticDiagnostics"
-	MethodGetBindDiagnostics              Method = "getBindDiagnostics"
-	MethodGetSemanticDiagnostics          Method = "getSemanticDiagnostics"
-	MethodGetSuggestionDiagnostics        Method = "getSuggestionDiagnostics"
-	MethodGetDeclarationDiagnostics       Method = "getDeclarationDiagnostics"
-	MethodGetProgramDiagnostics           Method = "getProgramDiagnostics"
-	MethodGetGlobalDiagnostics            Method = "getGlobalDiagnostics"
-	MethodGetConfigFileParsingDiagnostics Method = "getConfigFileParsingDiagnostics"
+	MethodGetSyntacticDiagnostics              Method = "getSyntacticDiagnostics"
+	MethodGetBindDiagnostics                   Method = "getBindDiagnostics"
+	MethodGetSemanticDiagnostics               Method = "getSemanticDiagnostics"
+	MethodGetSuggestionDiagnostics             Method = "getSuggestionDiagnostics"
+	MethodGetDeclarationDiagnostics            Method = "getDeclarationDiagnostics"
+	MethodGetProgramDiagnostics                Method = "getProgramDiagnostics"
+	MethodGetGlobalDiagnostics                 Method = "getGlobalDiagnostics"
+	MethodGetConfigFileParsingDiagnostics      Method = "getConfigFileParsingDiagnostics"
+	MethodFormatDiagnostics                    Method = "formatDiagnostics"
+	MethodFormatDiagnosticsWithColorAndContext Method = "formatDiagnosticsWithColorAndContext"
 
 	// Emitter methods
 	MethodPrintNode              Method = "printNode"
@@ -465,82 +467,84 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetThisParameterOfSignature:  unmarshallerFor[GetSignaturePropertyParams],
 	MethodGetTargetOfSignature:         unmarshallerFor[GetSignaturePropertyParams],
 
-	MethodGetContextualType:                 unmarshallerFor[GetContextualTypeParams],
-	MethodGetBaseTypeOfLiteralType:          unmarshallerFor[GetBaseTypeOfLiteralTypeParams],
-	MethodGetNonNullableType:                unmarshallerFor[GetTypePropertyParams],
-	MethodGetTypeFromTypeNode:               unmarshallerFor[GetTypeFromTypeNodeParams],
-	MethodGetWidenedType:                    unmarshallerFor[GetWidenedTypeParams],
-	MethodGetParameterType:                  unmarshallerFor[GetParameterTypeParams],
-	MethodGetTypeParameterAtPosition:        unmarshallerFor[GetParameterTypeParams],
-	MethodIsArrayLikeType:                   unmarshallerFor[IsArrayLikeTypeParams],
-	MethodIsTypeAssignableTo:                unmarshallerFor[IsTypeAssignableToParams],
-	MethodGetShorthandAssignmentValueSymbol: unmarshallerFor[GetTypeAtLocationParams],
-	MethodGetTypeOfSymbolAtLocation:         unmarshallerFor[GetTypeOfSymbolAtLocationParams],
-	MethodTypeToTypeNode:                    unmarshallerFor[TypeToTypeNodeParams],
-	MethodSignatureToSignatureDeclaration:   unmarshallerFor[SignatureToSignatureDeclarationParams],
-	MethodTypeToString:                      unmarshallerFor[TypeToTypeNodeParams],
-	MethodIsContextSensitive:                unmarshallerFor[GetContextualTypeParams],
-	MethodGetReturnTypeOfSignature:          unmarshallerFor[GetSignaturePropertyParams],
-	MethodGetRestTypeOfSignature:            unmarshallerFor[CheckerSignatureParams],
-	MethodGetTypePredicateOfSignature:       unmarshallerFor[CheckerSignatureParams],
-	MethodGetBaseTypes:                      unmarshallerFor[CheckerTypeParams],
-	MethodGetPropertiesOfType:               unmarshallerFor[CheckerTypeParams],
-	MethodGetApparentPropertiesOfType:       unmarshallerFor[GetTypePropertyParams],
-	MethodGetApparentType:                   unmarshallerFor[GetTypePropertyParams],
-	MethodGetPropertyOfType:                 unmarshallerFor[GetPropertyOfTypeParams],
-	MethodGetIndexInfosOfType:               unmarshallerFor[CheckerTypeParams],
-	MethodGetConstraintOfTypeParameter:      unmarshallerFor[GetTypePropertyParams],
-	MethodGetBaseConstraintOfType:           unmarshallerFor[CheckerTypeParams],
-	MethodGetDefaultFromTypeParameter:       unmarshallerFor[GetTypePropertyParams],
-	MethodGetTypeArguments:                  unmarshallerFor[CheckerTypeParams],
-	MethodGetImportAdderEdits:               unmarshallerFor[GetImportAdderEditsParams],
-	MethodGetConstantValue:                  unmarshallerFor[CheckerNodeParams],
-	MethodGetSignatureFromDeclaration:       unmarshallerFor[CheckerNodeParams],
-	MethodGetExportSpecifierLocalTarget:     unmarshallerFor[CheckerNodeParams],
-	MethodGetAliasedSymbol:                  unmarshallerFor[CheckerSymbolParams],
-	MethodGetImmediateAliasedSymbol:         unmarshallerFor[CheckerSymbolParams],
-	MethodGetFullyQualifiedName:             unmarshallerFor[CheckerSymbolParams],
-	MethodGetExportsOfModule:                unmarshallerFor[CheckerSymbolParams],
-	MethodGetMemberInModuleExports:          unmarshallerFor[GetMemberInModuleExportsParams],
-	MethodGetJSDocTags:                      unmarshallerFor[CheckerSymbolParams],
-	MethodGetDocumentationComment:           unmarshallerFor[CheckerSymbolParams],
-	MethodIsArrayType:                       unmarshallerFor[CheckerTypeParams],
-	MethodIsTupleType:                       unmarshallerFor[CheckerTypeParams],
-	MethodGetReferencesToSymbolInFile:       unmarshallerFor[GetReferencesToSymbolInFileParams],
-	MethodGetReferencedSymbolsForNode:       unmarshallerFor[GetReferencedSymbolsForNodeParams],
-	MethodGetSignatureUsages:                unmarshallerFor[GetSignatureUsagesParams],
-	MethodGetCompletionsAtPosition:          unmarshallerFor[GetCompletionsAtPositionParams],
-	MethodPrintNode:                         unmarshallerFor[PrintNodeParams],
-	MethodFormatNodeForInsertion:            unmarshallerFor[FormatNodeForInsertionParams],
-	MethodEmit:                              unmarshallerFor[EmitParams],
-	MethodEmitToString:                      unmarshallerFor[EmitParams],
-	MethodGetJavaScriptEmit:                 unmarshallerFor[SelectedFilesEmitParams],
-	MethodGetDeclarationEmit:                unmarshallerFor[SelectedFilesEmitParams],
-	MethodGetAnyType:                        unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetStringType:                     unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetNumberType:                     unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetBooleanType:                    unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetVoidType:                       unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetUndefinedType:                  unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetNullType:                       unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetNeverType:                      unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetUnknownType:                    unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetBigIntType:                     unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetESSymbolType:                   unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetNonPrimitiveType:               unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetWellKnownSymbols:               unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetWellKnownSignatures:            unmarshallerFor[GetIntrinsicTypeParams],
-	MethodGetSyntacticDiagnostics:           unmarshallerFor[GetDiagnosticsParams],
-	MethodGetBindDiagnostics:                unmarshallerFor[GetDiagnosticsParams],
-	MethodGetSemanticDiagnostics:            unmarshallerFor[GetDiagnosticsParams],
-	MethodGetSuggestionDiagnostics:          unmarshallerFor[GetDiagnosticsParams],
-	MethodGetDeclarationDiagnostics:         unmarshallerFor[GetDiagnosticsParams],
-	MethodGetProgramDiagnostics:             unmarshallerFor[GetProjectDiagnosticsParams],
-	MethodGetGlobalDiagnostics:              unmarshallerFor[GetProjectDiagnosticsParams],
-	MethodGetConfigFileParsingDiagnostics:   unmarshallerFor[GetProjectDiagnosticsParams],
-	MethodStartCPUProfile:                   unmarshallerFor[ProfileParams],
-	MethodStopCPUProfile:                    noParams,
-	MethodSaveHeapProfile:                   unmarshallerFor[ProfileParams],
+	MethodGetContextualType:                    unmarshallerFor[GetContextualTypeParams],
+	MethodGetBaseTypeOfLiteralType:             unmarshallerFor[GetBaseTypeOfLiteralTypeParams],
+	MethodGetNonNullableType:                   unmarshallerFor[GetTypePropertyParams],
+	MethodGetTypeFromTypeNode:                  unmarshallerFor[GetTypeFromTypeNodeParams],
+	MethodGetWidenedType:                       unmarshallerFor[GetWidenedTypeParams],
+	MethodGetParameterType:                     unmarshallerFor[GetParameterTypeParams],
+	MethodGetTypeParameterAtPosition:           unmarshallerFor[GetParameterTypeParams],
+	MethodIsArrayLikeType:                      unmarshallerFor[IsArrayLikeTypeParams],
+	MethodIsTypeAssignableTo:                   unmarshallerFor[IsTypeAssignableToParams],
+	MethodGetShorthandAssignmentValueSymbol:    unmarshallerFor[GetTypeAtLocationParams],
+	MethodGetTypeOfSymbolAtLocation:            unmarshallerFor[GetTypeOfSymbolAtLocationParams],
+	MethodTypeToTypeNode:                       unmarshallerFor[TypeToTypeNodeParams],
+	MethodSignatureToSignatureDeclaration:      unmarshallerFor[SignatureToSignatureDeclarationParams],
+	MethodTypeToString:                         unmarshallerFor[TypeToTypeNodeParams],
+	MethodIsContextSensitive:                   unmarshallerFor[GetContextualTypeParams],
+	MethodGetReturnTypeOfSignature:             unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetRestTypeOfSignature:               unmarshallerFor[CheckerSignatureParams],
+	MethodGetTypePredicateOfSignature:          unmarshallerFor[CheckerSignatureParams],
+	MethodGetBaseTypes:                         unmarshallerFor[CheckerTypeParams],
+	MethodGetPropertiesOfType:                  unmarshallerFor[CheckerTypeParams],
+	MethodGetApparentPropertiesOfType:          unmarshallerFor[GetTypePropertyParams],
+	MethodGetApparentType:                      unmarshallerFor[GetTypePropertyParams],
+	MethodGetPropertyOfType:                    unmarshallerFor[GetPropertyOfTypeParams],
+	MethodGetIndexInfosOfType:                  unmarshallerFor[CheckerTypeParams],
+	MethodGetConstraintOfTypeParameter:         unmarshallerFor[GetTypePropertyParams],
+	MethodGetBaseConstraintOfType:              unmarshallerFor[CheckerTypeParams],
+	MethodGetDefaultFromTypeParameter:          unmarshallerFor[GetTypePropertyParams],
+	MethodGetTypeArguments:                     unmarshallerFor[CheckerTypeParams],
+	MethodGetImportAdderEdits:                  unmarshallerFor[GetImportAdderEditsParams],
+	MethodGetConstantValue:                     unmarshallerFor[CheckerNodeParams],
+	MethodGetSignatureFromDeclaration:          unmarshallerFor[CheckerNodeParams],
+	MethodGetExportSpecifierLocalTarget:        unmarshallerFor[CheckerNodeParams],
+	MethodGetAliasedSymbol:                     unmarshallerFor[CheckerSymbolParams],
+	MethodGetImmediateAliasedSymbol:            unmarshallerFor[CheckerSymbolParams],
+	MethodGetFullyQualifiedName:                unmarshallerFor[CheckerSymbolParams],
+	MethodGetExportsOfModule:                   unmarshallerFor[CheckerSymbolParams],
+	MethodGetMemberInModuleExports:             unmarshallerFor[GetMemberInModuleExportsParams],
+	MethodGetJSDocTags:                         unmarshallerFor[CheckerSymbolParams],
+	MethodGetDocumentationComment:              unmarshallerFor[CheckerSymbolParams],
+	MethodIsArrayType:                          unmarshallerFor[CheckerTypeParams],
+	MethodIsTupleType:                          unmarshallerFor[CheckerTypeParams],
+	MethodGetReferencesToSymbolInFile:          unmarshallerFor[GetReferencesToSymbolInFileParams],
+	MethodGetReferencedSymbolsForNode:          unmarshallerFor[GetReferencedSymbolsForNodeParams],
+	MethodGetSignatureUsages:                   unmarshallerFor[GetSignatureUsagesParams],
+	MethodGetCompletionsAtPosition:             unmarshallerFor[GetCompletionsAtPositionParams],
+	MethodPrintNode:                            unmarshallerFor[PrintNodeParams],
+	MethodFormatNodeForInsertion:               unmarshallerFor[FormatNodeForInsertionParams],
+	MethodEmit:                                 unmarshallerFor[EmitParams],
+	MethodEmitToString:                         unmarshallerFor[EmitParams],
+	MethodGetJavaScriptEmit:                    unmarshallerFor[SelectedFilesEmitParams],
+	MethodGetDeclarationEmit:                   unmarshallerFor[SelectedFilesEmitParams],
+	MethodGetAnyType:                           unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetStringType:                        unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetNumberType:                        unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetBooleanType:                       unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetVoidType:                          unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetUndefinedType:                     unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetNullType:                          unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetNeverType:                         unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetUnknownType:                       unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetBigIntType:                        unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetESSymbolType:                      unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetNonPrimitiveType:                  unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetWellKnownSymbols:                  unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetWellKnownSignatures:               unmarshallerFor[GetIntrinsicTypeParams],
+	MethodGetSyntacticDiagnostics:              unmarshallerFor[GetDiagnosticsParams],
+	MethodGetBindDiagnostics:                   unmarshallerFor[GetDiagnosticsParams],
+	MethodGetSemanticDiagnostics:               unmarshallerFor[GetDiagnosticsParams],
+	MethodGetSuggestionDiagnostics:             unmarshallerFor[GetDiagnosticsParams],
+	MethodGetDeclarationDiagnostics:            unmarshallerFor[GetDiagnosticsParams],
+	MethodGetProgramDiagnostics:                unmarshallerFor[GetProjectDiagnosticsParams],
+	MethodGetGlobalDiagnostics:                 unmarshallerFor[GetProjectDiagnosticsParams],
+	MethodGetConfigFileParsingDiagnostics:      unmarshallerFor[GetProjectDiagnosticsParams],
+	MethodFormatDiagnostics:                    unmarshallerFor[FormatDiagnosticsParams],
+	MethodFormatDiagnosticsWithColorAndContext: unmarshallerFor[FormatDiagnosticsParams],
+	MethodStartCPUProfile:                      unmarshallerFor[ProfileParams],
+	MethodStopCPUProfile:                       noParams,
+	MethodSaveHeapProfile:                      unmarshallerFor[ProfileParams],
 }
 
 type ParseConfigFileParams struct {
@@ -1421,6 +1425,8 @@ type DiagnosticResponse struct {
 	Code int32 `json:"code"`
 	// Category is the diagnostic category (error, warning, suggestion, message).
 	Category diagnostics.Category `json:"category"`
+	// Source is a custom diagnostic-code prefix. An empty value uses the default "TS".
+	Source string `json:"source,omitempty"`
 	// Text is the localized diagnostic message text.
 	Text string `json:"text"`
 	// ReportsUnnecessary indicates this diagnostic highlights unnecessary code.
@@ -1431,6 +1437,11 @@ type DiagnosticResponse struct {
 	MessageChain []*DiagnosticResponse `json:"messageChain,omitempty"`
 	// RelatedInformation contains related diagnostic information, if any.
 	RelatedInformation []*DiagnosticResponse `json:"relatedInformation,omitempty"`
+	// OriginSnapshot and OriginProject identify the program that produced this diagnostic.
+	OriginSnapshot SnapshotID `json:"originSnapshot,omitzero"`
+	OriginProject  ProjectID  `json:"originProject,omitzero"`
+	// DisplayFileName is the host-formatted file name used only for diagnostic output.
+	DisplayFileName string `json:"displayFileName,omitempty"`
 }
 
 // NewDiagnosticResponse converts an ast.Diagnostic to a DiagnosticResponse.
@@ -1448,6 +1459,7 @@ func NewDiagnosticResponse(d *ast.Diagnostic) *DiagnosticResponse {
 		End:                end,
 		Code:               d.Code(),
 		Category:           d.Category(),
+		Source:             d.Source(),
 		Text:               d.Localize(locale.Default),
 		ReportsUnnecessary: d.ReportsUnnecessary(),
 		ReportsDeprecated:  d.ReportsDeprecated(),
@@ -1484,6 +1496,20 @@ func NewDiagnosticResponses(diags []*ast.Diagnostic) []*DiagnosticResponse {
 		result[i] = NewDiagnosticResponse(d)
 	}
 	return result
+}
+
+// FormatDiagnosticsParams are parameters for diagnostic formatting methods.
+type FormatDiagnosticsParams struct {
+	Snapshot    SnapshotID            `json:"snapshot"`
+	Project     ProjectID             `json:"project"`
+	Diagnostics []*DiagnosticResponse `json:"diagnostics"`
+	NewLine     string                `json:"newLine"`
+}
+
+// FormatDiagnosticsResponse is the response for diagnostic formatting methods.
+type FormatDiagnosticsResponse struct {
+	// Output is the fully formatted diagnostics text.
+	Output string `json:"output"`
 }
 
 func unmarshalPayload(method string, payload json.Value) (any, error) {

@@ -28,9 +28,10 @@ Output::
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96ma.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable a.
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
 
@@ -120,9 +121,10 @@ Output::
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96ma.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable a.
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
 
@@ -300,9 +302,10 @@ Output::
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96ma.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable a.
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
 
@@ -366,9 +369,10 @@ Output::
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96ma.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable a.
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
 
@@ -407,9 +411,10 @@ Output::
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96ma.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable a.
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
 
@@ -637,9 +642,10 @@ Output::
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
 
-  [96ma.ts[0m:[93m1[0m:[93m14[0m - Add a type annotation to the variable a.
+  [96ma.ts[0m:[93m1[0m:[93m14[0m
     [7m1[0m export const a = class { private p = 10; };
     [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project 'tsconfig.json'...
 

@@ -30,9 +30,13 @@ tsgo --b
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS5083: [0mCannot read file '/home/src/workspaces/project/foobar.json'.
+
 [91merror[0m[90m TS18003: [0mNo inputs were found in config file '/home/src/workspaces/project/tsconfig.first.json'. Specified 'include' paths were '["**/*"]' and 'exclude' paths were '[]'.
+
 [91merror[0m[90m TS5083: [0mCannot read file '/home/src/workspaces/project/foobar.json'.
+
 [91merror[0m[90m TS18003: [0mNo inputs were found in config file '/home/src/workspaces/project/tsconfig.second.json'. Specified 'include' paths were '["**/*"]' and 'exclude' paths were '[]'.
+
 
 Found 4 errors.
 

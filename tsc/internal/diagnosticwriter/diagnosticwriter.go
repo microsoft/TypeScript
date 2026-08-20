@@ -199,13 +199,7 @@ const (
 )
 
 func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []Diagnostic, formatOpts *FormattingOptions) {
-	if len(diags) == 0 {
-		return
-	}
-	for i, diagnostic := range diags {
-		if i > 0 {
-			fmt.Fprint(output, formatOpts.NewLine)
-		}
+	for _, diagnostic := range diags {
 		FormatDiagnosticWithColorAndContext(output, diagnostic, formatOpts)
 	}
 }
@@ -225,10 +219,10 @@ func FormatDiagnosticWithColorAndContext(output io.Writer, diagnostic Diagnostic
 	if diagnostic.File() != nil && diagnostic.Code() != diagnostics.File_appears_to_be_binary.Code() {
 		fmt.Fprint(output, formatOpts.NewLine)
 		writeCodeSnippet(output, diagnostic.File(), diagnostic.Pos(), diagnostic.Len(), getCategoryFormat(diagnostic.Category()), "", formatOpts)
-		fmt.Fprint(output, formatOpts.NewLine)
 	}
 
-	if (diagnostic.RelatedInformation() != nil) && (len(diagnostic.RelatedInformation()) > 0) {
+	if len(diagnostic.RelatedInformation()) > 0 {
+		fmt.Fprint(output, formatOpts.NewLine)
 		for _, relatedInformation := range diagnostic.RelatedInformation() {
 			file := relatedInformation.File()
 			if file != nil {
@@ -236,13 +230,14 @@ func FormatDiagnosticWithColorAndContext(output io.Writer, diagnostic Diagnostic
 				fmt.Fprint(output, "  ")
 				pos := relatedInformation.Pos()
 				WriteLocation(output, file, pos, formatOpts, writeWithStyleAndReset)
-				fmt.Fprint(output, " - ")
-				WriteFlattenedDiagnosticMessage(output, relatedInformation, formatOpts.NewLine, formatOpts.Locale)
 				writeCodeSnippet(output, file, pos, relatedInformation.Len(), foregroundColorEscapeCyan, "    ", formatOpts)
 			}
 			fmt.Fprint(output, formatOpts.NewLine)
+			fmt.Fprint(output, "    ")
+			WriteFlattenedDiagnosticMessage(output, relatedInformation, formatOpts.NewLine, formatOpts.Locale)
 		}
 	}
+	fmt.Fprint(output, formatOpts.NewLine)
 }
 
 func writeCodeSnippet(writer io.Writer, sourceFile FileLike, start int, length int, squiggleColor string, indent string, formatOpts *FormattingOptions) {
@@ -393,7 +388,7 @@ func writeWithStyleAndReset(output io.Writer, text string, formatStyle string) {
 func WriteLocation(output io.Writer, file FileLike, pos int, formatOpts *FormattingOptions, writeWithStyleAndReset FormattedWriter) {
 	firstLine, firstChar := scanner.GetECMALineAndUTF16CharacterOfPosition(file, pos)
 	var relativeFileName string
-	if formatOpts != nil {
+	if formatOpts != nil && !fileNameIsFormatted(file) {
 		relativeFileName = tspath.ConvertToRelativePath(file.FileName(), formatOpts.ComparePathsOptions)
 	} else {
 		relativeFileName = file.FileName()
@@ -556,13 +551,21 @@ func WriteFormatDiagnostic(output io.Writer, diagnostic Diagnostic, formatOpts *
 	if diagnostic.File() != nil {
 		line, character := scanner.GetECMALineAndUTF16CharacterOfPosition(diagnostic.File(), diagnostic.Pos())
 		fileName := diagnostic.File().FileName()
-		relativeFileName := tspath.ConvertToRelativePath(fileName, formatOpts.ComparePathsOptions)
+		relativeFileName := fileName
+		if !fileNameIsFormatted(diagnostic.File()) {
+			relativeFileName = tspath.ConvertToRelativePath(fileName, formatOpts.ComparePathsOptions)
+		}
 		fmt.Fprintf(output, "%s(%d,%d): ", relativeFileName, line+1, int(character)+1)
 	}
 
 	fmt.Fprintf(output, "%s %s%d: ", diagnostic.Category().Name(), diagnosticPrefix(diagnostic), diagnostic.Code())
 	WriteFlattenedDiagnosticMessage(output, diagnostic, formatOpts.NewLine, formatOpts.Locale)
 	fmt.Fprint(output, formatOpts.NewLine)
+}
+
+func fileNameIsFormatted(file FileLike) bool {
+	formatted, ok := file.(interface{ FileNameIsFormatted() bool })
+	return ok && formatted.FileNameIsFormatted()
 }
 
 func FormatDiagnosticsStatusWithColorAndTime(output io.Writer, time string, diag Diagnostic, formatOpts *FormattingOptions) {

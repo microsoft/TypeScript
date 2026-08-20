@@ -23,9 +23,10 @@ Output::
 [7m1[0m import {x} from "./D"
 [7m [0m [91m                ~~~~~[0m
 
-  [96mtsconfig.json[0m:[93m2[0m:[93m23[0m - File is matched by 'files' list specified here.
+  [96mtsconfig.json[0m:[93m2[0m:[93m23[0m
     [7m2[0m     "files": ["c.ts", "d.ts"]
     [7m [0m [96m                      ~~~~~~[0m
+    File is matched by 'files' list specified here.
 
 
 Found 1 error in c.ts[90m:1[0m

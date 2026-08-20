@@ -183,9 +183,10 @@ Output::
 [7m2[0m createSomeObject().message;
 [7m [0m [91m                   ~~~~~~~[0m
 
-  [96mLibrary/library.d.ts[0m:[93m2[0m:[93m5[0m - 'message2' is declared here.
+  [96mLibrary/library.d.ts[0m:[93m2[0m:[93m5[0m
     [7m2[0m     message2: string;
     [7m [0m [96m    ~~~~~~~~[0m
+    'message2' is declared here.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 

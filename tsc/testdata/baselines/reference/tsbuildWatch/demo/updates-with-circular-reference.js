@@ -129,6 +129,7 @@ Output::
 /user/username/projects/demo/core/tsconfig.json
 /user/username/projects/demo/zoo/tsconfig.json
 /user/username/projects/demo/animals/tsconfig.json
+
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 

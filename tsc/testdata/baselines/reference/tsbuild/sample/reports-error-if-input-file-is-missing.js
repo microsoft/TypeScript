@@ -69,9 +69,11 @@ Output::
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/sample1/core/anotherModule.ts' not found.
   The file is in the program because:
     Part of 'files' list in tsconfig.json
-  [96mcore/tsconfig.json[0m:[93m3[0m:[93m16[0m - File is matched by 'files' list specified here.
+
+  [96mcore/tsconfig.json[0m:[93m3[0m:[93m16[0m
     [7m3[0m      "files": ["anotherModule.ts", "index.ts", "some_decl.d.ts"],
     [7m [0m [96m               ~~~~~~~~~~~~~~~~~~[0m
+    File is matched by 'files' list specified here.
 
 [[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is out of date because output file 'logic/tsconfig.tsbuildinfo' does not exist
 

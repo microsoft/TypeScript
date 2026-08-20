@@ -5727,6 +5727,134 @@ describe("Program - diagnostics", () => {
         }
     });
 
+    test("formatDiagnostics and formatDiagnosticsWithColorAndContext", async () => {
+        const source = `const x: number = "oops";\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": `{ "compilerOptions": { "strict": true } }`,
+            "/src/index.ts": source,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = await project.program.getSemanticDiagnostics("/src/index.ts");
+            assert.equal(diags.length, 1);
+            const host = {
+                getCurrentDirectory: () => "/SRC",
+                getCanonicalFileName: (fileName: string) => fileName.toLowerCase(),
+                getNewLine: () => "\r\n",
+            };
+
+            const plain = await project.program.formatDiagnostics(diags, host);
+            assert.equal(
+                plain,
+                "index.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.\r\n",
+            );
+
+            const color = await project.program.formatDiagnosticsWithColorAndContext(diags, host);
+            assert.ok(color.includes("TS2322: "), color);
+            assert.ok(color.includes(`const x: number = "oops";`), color);
+            assert.ok(color.includes("~"), color);
+            assert.ok(color.includes("\x1b["), color);
+            assert.ok(color.endsWith("\r\n"), color);
+            const doubled = await project.program.formatDiagnosticsWithColorAndContext([diags[0], diags[0]], host);
+            assert.equal(doubled, color + color);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("formatDiagnostics resolves config-file context", async () => {
+        const config = `{ "compilerOptions": { "target": "invalid" } }`;
+        const api = spawnAPI({
+            "/tsconfig.json": config,
+            "/src/index.ts": `export const x = 1;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = await project.program.getConfigFileParsingDiagnostics();
+            const host = {
+                getCurrentDirectory: () => "/",
+                getCanonicalFileName: (fileName: string) => fileName,
+                getNewLine: () => "\n",
+            };
+
+            const plain = await project.program.formatDiagnostics(diags, host);
+            assert.ok(plain.includes("tsconfig.json(1,34): error TS6046: "), plain);
+
+            const color = await project.program.formatDiagnosticsWithColorAndContext(diags, host);
+            assert.ok(color.includes(`"target": "invalid"`), color);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("formatDiagnostics rejects diagnostics from another program", async () => {
+        const api = spawnAPI({
+            "/a/tsconfig.json": `{ "compilerOptions": { "strict": true } }`,
+            "/a/index.ts": `const x: number = "oops";`,
+            "/b/tsconfig.json": `{ "compilerOptions": { "strict": true } }`,
+            "/b/index.ts": `export const x = 1;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({
+                openProjects: ["/a/tsconfig.json", "/b/tsconfig.json"],
+            });
+            const a = snapshot.getProject("/a/tsconfig.json")!.program;
+            const b = snapshot.getProject("/b/tsconfig.json")!.program;
+            const diagnostics = await a.getSemanticDiagnostics("/a/index.ts");
+            const host = {
+                getCurrentDirectory: () => "/",
+                getCanonicalFileName: (fileName: string) => fileName,
+                getNewLine: () => "\n",
+            };
+
+            // @sync: assert.throws(() =>
+            await assert.rejects( // @sync-skip
+                b.formatDiagnostics(diagnostics, host),
+                /Diagnostic was not produced by this program/,
+            );
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("formatDiagnostics rejects diagnostics without origin metadata", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": `{ "compilerOptions": { "strict": true } }`,
+            "/src/index.ts": `const x: number = "oops";`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const program = snapshot.getProject("/tsconfig.json")!.program;
+            const diagnostics = await program.getSemanticDiagnostics("/src/index.ts");
+            const host = {
+                getCurrentDirectory: () => "/",
+                getCanonicalFileName: (fileName: string) => fileName,
+                getNewLine: () => "\n",
+            };
+            const diagnosticsWithoutOrigin = [
+                [{ ...diagnostics[0] }],
+                structuredClone(diagnostics),
+                JSON.parse(JSON.stringify(diagnostics)),
+            ];
+
+            for (const clonedDiagnostics of diagnosticsWithoutOrigin) {
+                // @sync: assert.throws(() =>
+                await assert.rejects( // @sync-skip
+                    program.formatDiagnostics(clonedDiagnostics, host),
+                    /Diagnostic was not produced by this program/,
+                );
+            }
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("getConfigFileNames and getConfigSourceFile", async () => {
         const baseConfigText = `{ "compilerOptions": { "strict": true } }`;
         const { api, fs } = spawnAPIWithFS({

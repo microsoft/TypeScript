@@ -54,6 +54,7 @@ Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/sample1/logic/tsconfig.json' not found.
+
 [96mtests/tsconfig.json[0m:[93m4[0m:[93m9[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/sample1/logic' not found.
 
 [7m4[0m         { "path": "../logic" },

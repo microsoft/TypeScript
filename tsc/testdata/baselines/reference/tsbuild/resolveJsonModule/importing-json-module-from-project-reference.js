@@ -55,6 +55,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'project/strings/tsconfig.json'...
 
 [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
 ../../tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 project/strings/foo.json
@@ -64,6 +65,7 @@ project/strings/foo.json
 [[90mHH:MM:SS AM[0m] Building project 'project/main/tsconfig.json'...
 
 [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
 ../../tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 project/strings/foo.json
@@ -270,6 +272,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'project/strings/tsconfig.json'...
 
 [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
 ../../tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 project/strings/foo.json
@@ -279,6 +282,7 @@ project/strings/foo.json
 [[90mHH:MM:SS AM[0m] Building project 'project/main/tsconfig.json'...
 
 [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
 ../../tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 project/strings/foo.json

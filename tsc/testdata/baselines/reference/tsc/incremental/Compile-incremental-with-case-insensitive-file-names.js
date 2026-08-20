@@ -52,9 +52,10 @@ Output::
 [7m1[0m import type { Foo } from 'somelib';
 [7m [0m [91m                         ~~~~~~~~~[0m
 
-  [96m../node_modules/lib1/index.d.ts[0m:[93m1[0m:[93m26[0m - File is included via import here.
+  [96m../node_modules/lib1/index.d.ts[0m:[93m1[0m:[93m26[0m
     [7m1[0m import type { Foo } from 'someLib';
     [7m [0m [96m                         ~~~~~~~~~[0m
+    File is included via import here.
 
 
 Found 1 error in ../node_modules/lib2/index.d.ts[90m:1[0m

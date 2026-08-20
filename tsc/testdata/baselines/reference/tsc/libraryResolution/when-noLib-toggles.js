@@ -129,15 +129,25 @@ tsgo --noLib
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
+
 [91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
+
 [91merror[0m[90m TS2318: [0mCannot find global type 'CallableFunction'.
+
 [91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
+
 [91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
+
 [91merror[0m[90m TS2318: [0mCannot find global type 'NewableFunction'.
+
 [91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
+
 [91merror[0m[90m TS2318: [0mCannot find global type 'Object'.
+
 [91merror[0m[90m TS2318: [0mCannot find global type 'RegExp'.
+
 [91merror[0m[90m TS2318: [0mCannot find global type 'String'.
+
 [96mtsconfig.json[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS5053: [0mOption 'lib' cannot be specified with option 'noLib'.
 
 [7m5[0m         "lib": ["es6"],

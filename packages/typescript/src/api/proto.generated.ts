@@ -124,6 +124,8 @@ export interface APIMethodInfo {
     getProgramDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
     getGlobalDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
     getConfigFileParsingDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
+    formatDiagnostics: APIMethod<FormatDiagnosticsParams, FormatDiagnosticsResponse>;
+    formatDiagnosticsWithColorAndContext: APIMethod<FormatDiagnosticsParams, FormatDiagnosticsResponse>;
     printNode: APIMethod<PrintNodeParams, string>;
     formatNodeForInsertion: APIMethod<FormatNodeForInsertionParams, string>;
     emit: APIMethod<EmitParams, EmitResponse>;
@@ -766,6 +768,8 @@ export interface DiagnosticResponse {
     code: number;
     /** Category is the diagnostic category (error, warning, suggestion, message). */
     category: number;
+    /** Source is a custom diagnostic-code prefix. An empty value uses the default "TS". */
+    source?: string;
     /** Text is the localized diagnostic message text. */
     text: string;
     /** ReportsUnnecessary indicates this diagnostic highlights unnecessary code. */
@@ -776,6 +780,25 @@ export interface DiagnosticResponse {
     messageChain?: DiagnosticResponse[];
     /** RelatedInformation contains related diagnostic information, if any. */
     relatedInformation?: DiagnosticResponse[];
+    /** OriginSnapshot and OriginProject identify the program that produced this diagnostic. */
+    originSnapshot?: number;
+    originProject?: string;
+    /** DisplayFileName is the host-formatted file name used only for diagnostic output. */
+    displayFileName?: string;
+}
+
+/** FormatDiagnosticsParams are parameters for diagnostic formatting methods. */
+export interface FormatDiagnosticsParams {
+    snapshot: number;
+    project: string;
+    diagnostics: readonly DiagnosticResponse[] | null;
+    newLine: string;
+}
+
+/** FormatDiagnosticsResponse is the response for diagnostic formatting methods. */
+export interface FormatDiagnosticsResponse {
+    /** Output is the fully formatted diagnostics text. */
+    output: string;
 }
 
 /** PrintNodeParams are the parameters for the printNode method. */

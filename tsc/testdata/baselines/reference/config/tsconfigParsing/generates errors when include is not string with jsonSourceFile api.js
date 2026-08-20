@@ -24,5 +24,4 @@ Errors::
 [7m [0m [91m~~~~~~~~~~~~~~~~~[0m
 [7m5[0m     ]
 [7m [0m [91m~~~~~[0m
-
 [91merror[0m[90m TS18003: [0mNo inputs were found in config file '/apath/tsconfig.json'. Specified 'include' paths were '[["./**/*.ts"]]' and 'exclude' paths were '[]'.

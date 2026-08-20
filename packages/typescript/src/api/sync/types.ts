@@ -375,6 +375,12 @@ export interface CompletionInfo {
     readonly entries: readonly CompletionEntry[];
 }
 
+export interface FormatDiagnosticsHost {
+    getCurrentDirectory(): string;
+    getCanonicalFileName(fileName: string): string;
+    getNewLine(): string;
+}
+
 export interface EmitOutputFile {
     readonly text: string;
     readonly sourceFileName?: string | undefined;

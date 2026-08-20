@@ -31,9 +31,10 @@ Output::
 [7m2[0m const c: Container<number> = { value: 42, map: (fn) => ({ value: fn(42), map: c.map }) };
 [7m [0m [91m                                                                         ~~~[0m
 
-  [96mtypes.ts[0m:[93m3[0m:[93m5[0m - The expected type comes from property 'map' which is declared here on type 'Container<U>'
+  [96mtypes.ts[0m:[93m3[0m:[93m5[0m
     [7m3[0m     map<U>(fn: (x: T) => U): Container<U>;
     [7m [0m [96m    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    The expected type comes from property 'map' which is declared here on type 'Container<U>'
 
 
 Found 1 error in main.ts[90m:2[0m

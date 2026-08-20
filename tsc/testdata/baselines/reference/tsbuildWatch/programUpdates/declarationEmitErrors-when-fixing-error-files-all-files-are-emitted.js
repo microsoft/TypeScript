@@ -25,9 +25,10 @@ Output::
 [7m1[0m export var myClassWithError = class {
 [7m [0m [91m           ~~~~~~~~~~~~~~~~[0m
 
-  [96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m - Add a type annotation to the variable myClassWithError.
+  [96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m
     [7m1[0m export var myClassWithError = class {
     [7m [0m [96m           ~~~~~~~~~~~~~~~~[0m
+    Add a type annotation to the variable myClassWithError.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 

@@ -19,6 +19,7 @@ Output::
   The file is in the program because:
     Part of 'files' list in tsconfig.json
 
+
 Found 1 error.
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*

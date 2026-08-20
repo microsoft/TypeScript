@@ -76,9 +76,10 @@ Output::
 [7m3[0m export function multiply(a: number, b: number) { return a * b; }multiply();
 [7m [0m [91m                                                                ~~~~~~~~[0m
 
-  [96mcore/index.ts[0m:[93m3[0m:[93m26[0m - An argument for 'a' was not provided.
+  [96mcore/index.ts[0m:[93m3[0m:[93m26[0m
     [7m3[0m export function multiply(a: number, b: number) { return a * b; }multiply();
     [7m [0m [96m                         ~~~~~~~~~[0m
+    An argument for 'a' was not provided.
 
 [[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' can't be built because its dependency 'core' has errors
 
@@ -277,9 +278,10 @@ Output::
 [7m3[0m export function multiply(a: number, b: number) { return a * b; }multiply();
 [7m [0m [91m                                                                ~~~~~~~~[0m
 
-  [96mcore/index.ts[0m:[93m3[0m:[93m26[0m - An argument for 'a' was not provided.
+  [96mcore/index.ts[0m:[93m3[0m:[93m26[0m
     [7m3[0m export function multiply(a: number, b: number) { return a * b; }multiply();
     [7m [0m [96m                         ~~~~~~~~~[0m
+    An argument for 'a' was not provided.
 
 [[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' can't be built because its dependency 'core' has errors
 

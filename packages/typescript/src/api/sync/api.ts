@@ -52,6 +52,7 @@ import type {
     LSPConnectionOptions,
 } from "../options.ts";
 import {
+    convertToRelativePath,
     createGetCanonicalFileName,
     toPath,
 } from "../path.ts";
@@ -109,6 +110,7 @@ import type {
     EmitOutput,
     EmitOutputFile,
     EmitResult,
+    FormatDiagnosticsHost,
     FreshableType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
@@ -161,6 +163,7 @@ export type {
     EmitOutput,
     EmitOutputFile,
     EmitResult,
+    FormatDiagnosticsHost,
     FreshableType,
     GetImportEditsForSymbolsOptions,
     IdentifierTypePredicate,
@@ -210,6 +213,72 @@ export interface TranspileOutput {
     outputText: string;
     diagnostics?: readonly Diagnostic[];
     sourceMapText?: string;
+}
+
+const diagnosticOrigin = globalThis.Symbol("diagnosticOrigin");
+
+interface DiagnosticOrigin {
+    readonly snapshot: number;
+    readonly project: Path;
+}
+
+interface DiagnosticWithOrigin extends Diagnostic {
+    readonly [diagnosticOrigin]?: DiagnosticOrigin;
+}
+
+interface FormatDiagnosticRequest extends Diagnostic {
+    readonly originSnapshot: number;
+    readonly originProject: Path;
+    readonly displayFileName?: string;
+}
+
+function associateDiagnostics(
+    diagnostics: readonly Diagnostic[],
+    origin: DiagnosticOrigin,
+): readonly Diagnostic[] {
+    for (const diagnostic of diagnostics) {
+        Object.defineProperty(diagnostic, diagnosticOrigin, { value: origin });
+        if (diagnostic.messageChain) {
+            associateDiagnostics(diagnostic.messageChain, origin);
+        }
+        if (diagnostic.relatedInformation) {
+            associateDiagnostics(diagnostic.relatedInformation, origin);
+        }
+    }
+    return diagnostics;
+}
+
+function toFormatDiagnosticRequest(
+    diagnostic: Diagnostic,
+    expectedOrigin: DiagnosticOrigin,
+    host: FormatDiagnosticsHost,
+): FormatDiagnosticRequest {
+    const origin = (diagnostic as DiagnosticWithOrigin)[diagnosticOrigin];
+    if (origin?.snapshot !== expectedOrigin.snapshot || origin.project !== expectedOrigin.project) {
+        throw new Error("Diagnostic was not produced by this program.");
+    }
+
+    const { messageChain, relatedInformation, ...diagnosticData } = diagnostic;
+    return {
+        ...diagnosticData,
+        originSnapshot: origin.snapshot,
+        originProject: origin.project,
+        ...(diagnostic.fileName
+            ? {
+                displayFileName: convertToRelativePath(
+                    diagnostic.fileName,
+                    host.getCurrentDirectory(),
+                    fileName => host.getCanonicalFileName(fileName),
+                ),
+            }
+            : {}),
+        ...(messageChain
+            ? { messageChain: messageChain.map(d => toFormatDiagnosticRequest(d, expectedOrigin, host)) }
+            : {}),
+        ...(relatedInformation
+            ? { relatedInformation: relatedInformation.map(d => toFormatDiagnosticRequest(d, expectedOrigin, host)) }
+            : {}),
+    };
 }
 
 export class API<FromLSP extends boolean = false> {
@@ -976,6 +1045,13 @@ export class Program {
         this.toPath = toPath;
     }
 
+    private associateDiagnostics(diagnostics: readonly Diagnostic[]): readonly Diagnostic[] {
+        return associateDiagnostics(diagnostics, {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+        });
+    }
+
     getCompilerOptions(): CompilerOptions {
         return this.project.compilerOptions;
     }
@@ -1112,7 +1188,7 @@ export class Program {
             project: this.project.id,
             ...(files !== undefined ? { files } : {}),
         });
-        return data ?? [];
+        return this.associateDiagnostics(data ?? []);
     }
 
     /**
@@ -1128,7 +1204,7 @@ export class Program {
             project: this.project.id,
             ...(files !== undefined ? { files } : {}),
         });
-        return data ?? [];
+        return this.associateDiagnostics(data ?? []);
     }
 
     /**
@@ -1144,7 +1220,7 @@ export class Program {
             project: this.project.id,
             ...(files !== undefined ? { files } : {}),
         });
-        return data ?? [];
+        return this.associateDiagnostics(data ?? []);
     }
 
     /**
@@ -1160,7 +1236,7 @@ export class Program {
             project: this.project.id,
             ...(files !== undefined ? { files } : {}),
         });
-        return data ?? [];
+        return this.associateDiagnostics(data ?? []);
     }
 
     /**
@@ -1176,7 +1252,7 @@ export class Program {
             project: this.project.id,
             ...(files !== undefined ? { files } : {}),
         });
-        return data ?? [];
+        return this.associateDiagnostics(data ?? []);
     }
 
     /**
@@ -1187,7 +1263,7 @@ export class Program {
             snapshot: this.snapshotId,
             project: this.project.id,
         });
-        return data ?? [];
+        return this.associateDiagnostics(data ?? []);
     }
 
     /**
@@ -1198,7 +1274,7 @@ export class Program {
             snapshot: this.snapshotId,
             project: this.project.id,
         });
-        return data ?? [];
+        return this.associateDiagnostics(data ?? []);
     }
 
     /**
@@ -1209,7 +1285,37 @@ export class Program {
             snapshot: this.snapshotId,
             project: this.project.id,
         });
-        return data ?? [];
+        return this.associateDiagnostics(data ?? []);
+    }
+
+    /** Formats diagnostics produced by this program. */
+    formatDiagnostics(
+        diagnostics: readonly Diagnostic[],
+        host: FormatDiagnosticsHost,
+    ): string {
+        const origin = { snapshot: this.snapshotId, project: this.project.id };
+        const data = this.client.apiRequest("formatDiagnostics", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            diagnostics: diagnostics.map(d => toFormatDiagnosticRequest(d, origin, host)),
+            newLine: host.getNewLine(),
+        });
+        return data.output;
+    }
+
+    /** Formats diagnostics produced by this program with color and context. */
+    formatDiagnosticsWithColorAndContext(
+        diagnostics: readonly Diagnostic[],
+        host: FormatDiagnosticsHost,
+    ): string {
+        const origin = { snapshot: this.snapshotId, project: this.project.id };
+        const data = this.client.apiRequest("formatDiagnosticsWithColorAndContext", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            diagnostics: diagnostics.map(d => toFormatDiagnosticRequest(d, origin, host)),
+            newLine: host.getNewLine(),
+        });
+        return data.output;
     }
 
     /**
@@ -1226,7 +1332,7 @@ export class Program {
         });
         return {
             emitSkipped: response.emitSkipped,
-            diagnostics: response.diagnostics,
+            diagnostics: this.associateDiagnostics(response.diagnostics),
             emittedFiles: response.emittedFiles,
         };
     }
@@ -1240,7 +1346,7 @@ export class Program {
             project: this.project.id,
             ...(emitOnly !== undefined ? { emitOnly } : {}),
         });
-        return toEmitOutput(response);
+        return toEmitOutput(response, this.associateDiagnostics(response.diagnostics));
     }
 
     /**
@@ -1252,7 +1358,7 @@ export class Program {
             project: this.project.id,
             files,
         });
-        return toEmitOutput(response);
+        return toEmitOutput(response, this.associateDiagnostics(response.diagnostics));
     }
 
     /**
@@ -1264,18 +1370,18 @@ export class Program {
             project: this.project.id,
             files,
         });
-        return toEmitOutput(response);
+        return toEmitOutput(response, this.associateDiagnostics(response.diagnostics));
     }
 }
 
-function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {
+function toEmitOutput(response: ProtocolEmitOutputResponse, diagnostics: readonly Diagnostic[]): EmitOutput {
     const outputFiles = new Map<string, EmitOutputFile>();
     for (const { fileName, ...outputFile } of response.outputFiles) {
         outputFiles.set(fileName, outputFile);
     }
     return {
         emitSkipped: response.emitSkipped,
-        diagnostics: response.diagnostics,
+        diagnostics,
         outputFiles,
     };
 }

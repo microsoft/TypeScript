@@ -32,6 +32,7 @@ ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'Promise'.
 
+
 Found 1 error.
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
