@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/legacyDecoratorClassAliasComputedNames.ts] ////
+
+=== legacyDecoratorClassAliasComputedNames.ts ===
+declare function dec(value: any): any;
+>dec : (value: any) => any
+>value : any
+
+@dec
+>dec : (value: any) => any
+
+class C {
+>C : C
+
+    [C.name]() {}
+>[C.name] : () => void
+>C.name : string
+>C : typeof C
+>name : string
+
+    get [C.name]() { return 1; }
+>[C.name] : number
+>C.name : string
+>C : typeof C
+>name : string
+>1 : 1
+
+    set [C.name](value: number) {}
+>[C.name] : number
+>C.name : string
+>C : typeof C
+>name : string
+>value : number
+}
+
+@dec
+>dec : (value: any) => any
+
+class D {
+>D : D
+
+    static [D.name] = 1;
+>[D.name] : number
+>D.name : string
+>D : typeof D
+>name : string
+>1 : 1
+
+    static getSelf() {
+>getSelf : () => typeof D
+
+        return D;
+>D : typeof D
+    }
+}
+
+@dec
+>dec : (value: any) => any
+
+class Outer {
+>Outer : Outer
+
+    method() {
+>method : () => typeof (Anonymous class)
+
+        return class {
+>class {            [Outer.name]() {}        } : typeof (Anonymous class)
+
+            [Outer.name]() {}
+>[Outer.name] : () => void
+>Outer.name : string
+>Outer : typeof Outer
+>name : string
+
+        };
+    }
+}
+
