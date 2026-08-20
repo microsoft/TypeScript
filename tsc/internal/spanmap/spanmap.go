@@ -325,6 +325,26 @@ func (m *SpanMap) VirtualToOriginalPosition(pos core.TextPos) (core.TextPos, Fid
 	return seg.OriginalStart, FidelityAtom
 }
 
+// VirtualToOriginalPositionExact maps a position only when it is unambiguously in verbatim content.
+// A boundary touching an atom is rejected because the same virtual position can describe either side.
+func (m *SpanMap) VirtualToOriginalPositionExact(pos core.TextPos) (core.TextPos, bool) {
+	mapped, fidelity := m.VirtualToOriginalPosition(pos)
+	if fidelity != FidelityExact || m == nil {
+		return mapped, fidelity == FidelityExact
+	}
+	index, inside := m.segmentIndexAt(pos)
+	if !inside || m.segments[index].Kind != KindVerbatim {
+		return mapped, false
+	}
+	if index > 0 {
+		previous := m.segments[index-1]
+		if previous.VirtualEnd == pos && previous.Kind != KindVerbatim {
+			return mapped, false
+		}
+	}
+	return mapped, true
+}
+
 // VirtualToOriginalPositionForFeature maps pos only when its virtual segment participates in feature.
 // Diagnostics and edit write-back intentionally use VirtualToOriginalPosition instead.
 func (m *SpanMap) VirtualToOriginalPositionForFeature(pos core.TextPos, feature Feature) (core.TextPos, Fidelity) {

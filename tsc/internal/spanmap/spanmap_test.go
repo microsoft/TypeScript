@@ -160,6 +160,32 @@ func TestVirtualToOriginalPosition(t *testing.T) {
 	}
 }
 
+func TestVirtualToOriginalPositionExact(t *testing.T) {
+	t.Parallel()
+
+	m := spanmap.New([]spanmap.Segment{
+		{VirtualStart: 0, VirtualEnd: 10, OriginalStart: 100, OriginalEnd: 110, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureAll},
+		{VirtualStart: 10, VirtualEnd: 20, OriginalStart: 110, OriginalEnd: 120, Kind: spanmap.KindAtom, Features: spanmap.FeatureAll},
+		{VirtualStart: 20, VirtualEnd: 30, OriginalStart: 120, OriginalEnd: 130, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureAll},
+	})
+
+	for _, test := range []struct {
+		pos  core.TextPos
+		want core.TextPos
+		ok   bool
+	}{
+		{pos: 5, want: 105, ok: true},
+		{pos: 10, want: 110, ok: false},
+		{pos: 15, want: 110, ok: false},
+		{pos: 20, want: 120, ok: false},
+		{pos: 25, want: 125, ok: true},
+	} {
+		got, ok := m.VirtualToOriginalPositionExact(test.pos)
+		assert.Equal(t, got, test.want)
+		assert.Equal(t, ok, test.ok)
+	}
+}
+
 func TestZeroLengthSpansAtSegmentEnds(t *testing.T) {
 	t.Parallel()
 

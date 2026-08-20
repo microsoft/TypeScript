@@ -36,7 +36,7 @@ func DoSourcemapBaseline(
 			expectedMapCount += result.GetNumberOfJSFiles( /*includeJSON*/ false)
 		}
 		if declMaps {
-			expectedMapCount += result.GetNumberOfJSFiles( /*includeJSON*/ true)
+			expectedMapCount += result.DTS.Size()
 		}
 		if result.Maps.Size() != expectedMapCount {
 			t.Fatal("Number of sourcemap files should be same as js files.")
@@ -92,9 +92,15 @@ func createSourceMapPreviewLink(sourceMap *harnessutil.TestFile, result *harness
 	////	sourceTDs = inputsAndOutputs.Inputs
 	////} else {
 	sourceTDs = core.Map(sourcemapJSON.Sources, func(s string) *harnessutil.TestFile {
-		return core.Find(result.Inputs(), func(td *harnessutil.TestFile) bool {
+		sourceFile := core.Find(result.Inputs(), func(td *harnessutil.TestFile) bool {
 			return strings.HasSuffix(td.UnitName, s)
 		})
+		if sourceFile != nil {
+			if programSource := result.Program.GetSourceFile(sourceFile.UnitName); programSource != nil {
+				return &harnessutil.TestFile{UnitName: sourceFile.UnitName, Content: programSource.OriginalText()}
+			}
+		}
+		return sourceFile
 	})
 	if slices.Contains(sourceTDs, nil) {
 		return ""
