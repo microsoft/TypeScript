@@ -98,7 +98,7 @@ declare const actual2: SharedUnionFieldsDeep2<
 
 >;
 
-// `& unknown` used here just to avoid printing type alias printing at actual3
+// `& unknown` used here just to avoid printing type alias at actual3
 type SharedUnionFieldsDeepMappedType3<T, K extends keyof T = keyof T> = {
 >SharedUnionFieldsDeepMappedType3 : Symbol(SharedUnionFieldsDeepMappedType3, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 36, 2))
 >T : Symbol(T, Decl(mappedTypeHomomorphismWithPriorKeyofTChecks1.ts, 39, 38))

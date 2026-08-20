@@ -39,7 +39,7 @@ declare const actual2: SharedUnionFieldsDeep2<
   { tuple: [number] } | { tuple: [number, string] }
 >;
 
-// `& unknown` used here just to avoid printing type alias printing at actual3
+// `& unknown` used here just to avoid printing type alias at actual3
 type SharedUnionFieldsDeepMappedType3<T, K extends keyof T = keyof T> = {
   [Key in K]: SharedUnionFieldsDeep3<T[Key]>;
 } & unknown;
