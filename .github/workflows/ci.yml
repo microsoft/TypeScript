@@ -60,6 +60,15 @@ jobs:
       - run: npm ci
       - run: npm run extension:build
 
+  package-feed-proxy:
+    runs-on: ubuntu-slim
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci --registry=https://packagefeedproxy.microsoft.io/npm/
+
   test:
     strategy:
       fail-fast: ${{ github.event_name == 'merge_group' }}
@@ -305,6 +314,7 @@ jobs:
       - generate
       - lint
       - misc
+      - package-feed-proxy
       - smoke
       - test
       - tidy
