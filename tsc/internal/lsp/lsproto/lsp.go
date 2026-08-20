@@ -7,11 +7,11 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/microsoft/typescript-go/internal/bundled"
-	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 
-	"github.com/microsoft/typescript-go/internal/jsonrpc"
-	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/jsonrpc"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type DocumentUri string // !!!

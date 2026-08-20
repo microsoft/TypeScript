@@ -3,13 +3,13 @@ package printer_test
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/printer"
-	"github.com/microsoft/typescript-go/internal/testutil/emittestutil"
-	"github.com/microsoft/typescript-go/internal/testutil/parsetestutil"
-	"github.com/microsoft/typescript-go/internal/transformers"
-	"github.com/microsoft/typescript-go/internal/transformers/tstransforms"
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/emittestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/parsetestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/transformers"
+	"github.com/microsoft/TypeScript/tsc/internal/transformers/tstransforms"
 )
 
 func TestEmit(t *testing.T) {

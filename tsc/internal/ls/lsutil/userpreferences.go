@@ -6,10 +6,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/json"
-	"github.com/microsoft/typescript-go/internal/modulespecifiers"
-	"github.com/microsoft/typescript-go/internal/vfs/vfsmatch"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
 func NewDefaultUserPreferences() UserPreferences {

@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/json"
-	"github.com/microsoft/typescript-go/internal/jsonrpc"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/jsonrpc"
 )
 
 // SyncConn manages bidirectional communication with synchronous request handling.

@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/execute/build"
-	"github.com/microsoft/typescript-go/internal/execute/tsctests"
-	"github.com/microsoft/typescript-go/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsctests"
+	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"gotest.tools/v3/assert"
 )
 

@@ -1,10 +1,10 @@
 package ls
 
 import (
-	"github.com/microsoft/typescript-go/internal/ls/autoimport"
-	"github.com/microsoft/typescript-go/internal/ls/lsconv"
-	"github.com/microsoft/typescript-go/internal/ls/lsutil"
-	"github.com/microsoft/typescript-go/internal/sourcemap"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 )
 
 type Host interface {

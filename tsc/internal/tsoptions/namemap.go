@@ -3,7 +3,7 @@ package tsoptions
 import (
 	"strings"
 
-	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 )
 
 var (

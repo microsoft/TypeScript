@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
-	"github.com/microsoft/typescript-go/internal/project/logging"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 )
 
 var _ logging.Logger = (*logger)(nil)

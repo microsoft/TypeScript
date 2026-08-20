@@ -3,7 +3,7 @@ package symlinks
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 func BenchmarkPopulateSymlinksFromResolutions(b *testing.B) {

@@ -1,8 +1,8 @@
 package estransforms
 
 import (
-	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 )
 
 // Gets whether a node is a `static {}` block containing only a single assignment of the static `this` to the `_classThis`

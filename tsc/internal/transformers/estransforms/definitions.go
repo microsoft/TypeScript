@@ -1,8 +1,8 @@
 package estransforms
 
 import (
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/transformers"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/transformers"
 )
 
 var (

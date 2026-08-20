@@ -3,8 +3,8 @@ package fixtures
 import (
 	"path/filepath"
 
-	"github.com/microsoft/typescript-go/internal/repo"
-	"github.com/microsoft/typescript-go/internal/testutil/filefixture"
+	"github.com/microsoft/TypeScript/tsc/internal/repo"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/filefixture"
 )
 
 var BenchFixtures = []filefixture.Fixture{

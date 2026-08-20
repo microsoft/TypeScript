@@ -3,8 +3,8 @@ package checker
 import (
 	"maps"
 
-	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/tracing"
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/tracing"
 )
 
 // Tracer records types and trace events during type checking. A nil *Tracer

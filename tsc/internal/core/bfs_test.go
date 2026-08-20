@@ -5,8 +5,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/collections"
-	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"gotest.tools/v3/assert"
 )
 

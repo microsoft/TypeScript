@@ -3,9 +3,9 @@ package module
 import (
 	"sync"
 
-	"github.com/microsoft/typescript-go/internal/collections"
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 )
 
 type ModeAwareCache[T any] map[ModeAwareCacheKey]T

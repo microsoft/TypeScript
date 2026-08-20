@@ -20,13 +20,13 @@ const unparsedFiles: { file: string; error: string; }[] = [];
 const unparsedReportPath = path.join(import.meta.dirname, "unparsedTests.txt");
 
 // Go import paths used in generated test files.
-const IMPORT_FOURSLASH = `"github.com/microsoft/typescript-go/internal/fourslash"`;
-const IMPORT_TESTUTIL = `"github.com/microsoft/typescript-go/internal/testutil"`;
-const IMPORT_CORE = `"github.com/microsoft/typescript-go/internal/core"`;
-const IMPORT_LS = `"github.com/microsoft/typescript-go/internal/ls"`;
-const IMPORT_LSUTIL = `"github.com/microsoft/typescript-go/internal/ls/lsutil"`;
-const IMPORT_LSPROTO = `"github.com/microsoft/typescript-go/internal/lsp/lsproto"`;
-const IMPORT_UTIL = `. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"`;
+const IMPORT_FOURSLASH = `"github.com/microsoft/TypeScript/tsc/internal/fourslash"`;
+const IMPORT_TESTUTIL = `"github.com/microsoft/TypeScript/tsc/internal/testutil"`;
+const IMPORT_CORE = `"github.com/microsoft/TypeScript/tsc/internal/core"`;
+const IMPORT_LS = `"github.com/microsoft/TypeScript/tsc/internal/ls"`;
+const IMPORT_LSUTIL = `"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"`;
+const IMPORT_LSPROTO = `"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"`;
+const IMPORT_UTIL = `. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"`;
 
 // Code fix IDs that have been implemented in the Go port.
 // Tests for code fixes not in this set will be skipped during conversion.
@@ -84,8 +84,8 @@ export async function main() {
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
 )
 
 func TestMain(m *testing.M) {

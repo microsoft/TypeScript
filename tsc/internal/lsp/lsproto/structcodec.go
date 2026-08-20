@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 )
 
 // This file provides a single reflection-driven object decoder that replaces

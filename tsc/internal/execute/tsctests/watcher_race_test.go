@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/execute"
-	"github.com/microsoft/typescript-go/internal/execute/tsc"
+	"github.com/microsoft/TypeScript/tsc/internal/execute"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"gotest.tools/v3/assert"
 )
 

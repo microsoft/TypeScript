@@ -3,7 +3,7 @@ package project
 import (
 	"sync"
 
-	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 )
 
 type programCounter struct {

@@ -349,7 +349,7 @@ function generateGoEncoder(): string {
     w.push();
     w.write('"fmt"');
     w.write("");
-    w.write('"github.com/microsoft/typescript-go/internal/ast"');
+    w.write('"github.com/microsoft/TypeScript/tsc/internal/ast"');
     w.pop();
     w.write(")");
     w.write("");
@@ -596,7 +596,7 @@ function generateGoDecoder(): string {
     w.push();
     w.write('"fmt"');
     w.write("");
-    w.write('"github.com/microsoft/typescript-go/internal/ast"');
+    w.write('"github.com/microsoft/TypeScript/tsc/internal/ast"');
     w.pop();
     w.write(")");
     w.write("");

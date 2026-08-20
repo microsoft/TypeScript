@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/microsoft/typescript-go/internal/json"
-	"github.com/microsoft/typescript-go/internal/jsonrpc"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/jsonrpc"
 )
 
 // MessageType represents the type of message in the msgpack protocol.

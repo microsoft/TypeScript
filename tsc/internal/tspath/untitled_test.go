@@ -3,7 +3,7 @@ package tspath_test
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 

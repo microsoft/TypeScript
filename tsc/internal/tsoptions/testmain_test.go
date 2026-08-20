@@ -3,8 +3,8 @@ package tsoptions_test
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
 )
 
 func TestMain(m *testing.M) {

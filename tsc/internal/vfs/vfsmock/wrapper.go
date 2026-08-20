@@ -1,6 +1,6 @@
 package vfsmock
 
-import "github.com/microsoft/typescript-go/internal/vfs"
+import "github.com/microsoft/TypeScript/tsc/internal/vfs"
 
 // Wrap wraps a vfs.FS and returns a FSMock which calls it.
 func Wrap(fs vfs.FS) *FSMock {

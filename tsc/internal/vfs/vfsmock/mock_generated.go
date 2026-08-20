@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
 // Ensure, that FSMock does implement vfs.FS.

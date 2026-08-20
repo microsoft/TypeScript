@@ -578,7 +578,7 @@ function sanitizeStderrLine(line: string): string {
     const leadingWhitespace = line.match(/^(\s*)/)?.[1] ?? "";
 
     // Stack frame file path lines look like: \t/full/path/to/file.go:123 +0x40
-    // Function lines look like: github.com/microsoft/typescript-go/internal/foo.Bar(...)
+    // Function lines look like: github.com/microsoft/TypeScript/tsc/internal/foo.Bar(...)
     const ourModuleMarker = "typescript-go/internal";
     const idx = line.indexOf(ourModuleMarker);
     if (idx >= 0) {

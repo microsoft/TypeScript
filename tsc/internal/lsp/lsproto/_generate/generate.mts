@@ -2267,7 +2267,7 @@ function generateCode() {
     writeLine(`\t"fmt"`);
     writeLine(`\t"strings"`);
     writeLine("");
-    writeLine(`\t"github.com/microsoft/typescript-go/internal/json"`);
+    writeLine(`\t"github.com/microsoft/TypeScript/tsc/internal/json"`);
     writeLine(`)`);
     writeLine("");
     writeLine("// Meta model version " + model.metaData.version);

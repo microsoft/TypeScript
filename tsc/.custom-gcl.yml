@@ -5,6 +5,6 @@ version: v2.12.2
 destination: ./_tools
 
 plugins:
-  - module: 'github.com/microsoft/typescript-go/_tools'
-    import: 'github.com/microsoft/typescript-go/_tools/customlint'
+  - module: 'github.com/microsoft/TypeScript/tsc/_tools'
+    import: 'github.com/microsoft/TypeScript/tsc/_tools/customlint'
     path: ./_tools

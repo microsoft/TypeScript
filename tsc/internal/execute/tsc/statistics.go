@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 )
 
 type tableRow struct {

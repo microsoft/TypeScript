@@ -128,7 +128,7 @@ function generateHeader(w: CodeWriter) {
     w.push();
     w.write('"sync/atomic"');
     w.write("");
-    w.write('"github.com/microsoft/typescript-go/internal/core"');
+    w.write('"github.com/microsoft/TypeScript/tsc/internal/core"');
     w.pop();
     w.write(")");
     w.write("");
