@@ -6,7 +6,10 @@ import type {
     NodeArray,
     SourceFile,
 } from "./ast.ts";
-import { createToken } from "./factory.generated.ts";
+import {
+    createSyntaxList,
+    createToken,
+} from "./factory.generated.ts";
 import {
     isJSDocNodeKind,
     isKeywordKind,
@@ -614,6 +617,142 @@ function getOrCreateToken(sourceFile: SourceFile, kind: SyntaxKind, pos: number,
     token.parent = parent;
     sourceFile.tokenCache.set(key, token);
     return token;
+}
+
+const emptyArray: readonly Node[] = [];
+
+function assertHasRealPosition(node: Node): void {
+    if (node.pos < 0 || node.end < 0) {
+        throw new Error("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
+    }
+}
+
+export function getChildren(node: Node, sourceFile: SourceFile = node.getSourceFile()): readonly Node[] {
+    // A SyntaxList already holds its (pre-materialized) children.
+    if (node.kind === SyntaxKind.SyntaxList) {
+        return (node as unknown as { children: readonly Node[]; }).children;
+    }
+
+    if (isTokenKind(node.kind)) {
+        // EndOfFile may carry leading JSDoc; every other token has no children.
+        return node.kind === SyntaxKind.EndOfFile ? node.jsDoc ?? emptyArray : emptyArray;
+    }
+
+    assertHasRealPosition(node);
+    const cache = (sourceFile.childrenCache ??= new WeakMap<Node, readonly Node[]>());
+    const cached = cache.get(node);
+
+    if (cached !== undefined) {
+        return cached;
+    }
+
+    const children = createChildren(node, sourceFile);
+    cache.set(node, children);
+    return children;
+}
+
+function createChildren(node: Node, sourceFile: SourceFile): readonly Node[] {
+    const children: Node[] = [];
+
+    // Inside a JSDoc comment there are no real tokens to synthesize.
+    if (shouldSkipChild(node)) {
+        node.forEachChild(child => void children.push(child));
+        return children;
+    }
+
+    let pos = node.pos;
+    const consumed = new Set<Node>();
+    const processNode = (child: Node): undefined => {
+        if (consumed.has(child)) {
+            return;
+        }
+        addSyntheticNodes(children, pos, child.pos, node, sourceFile);
+        children.push(child);
+        pos = child.end;
+    };
+    const processNodes = (nodes: NodeArray<Node>): undefined => {
+        addSyntheticNodes(children, pos, nodes.pos, node, sourceFile);
+        children.push(createSyntaxListNode(nodes, node, sourceFile));
+        pos = nodes.end;
+        for (const element of nodes) {
+            consumed.add(element);
+        }
+    };
+
+    // JSDoc attached to the node is leading content, processed first.
+    if (node.jsDoc) {
+        for (const jsDoc of node.jsDoc) {
+            processNode(jsDoc);
+        }
+    }
+    pos = node.pos;
+    node.forEachChild(processNode, processNodes);
+    addSyntheticNodes(children, pos, node.end, node, sourceFile);
+    return children;
+}
+
+function addSyntheticNodes(children: Node[], pos: number, end: number, parent: Node, sourceFile: SourceFile): void {
+    if (pos >= end) {
+        return;
+    }
+    const scanner = getScannerForSourceFile(sourceFile, pos);
+    while (pos < end) {
+        const token = scanner.getToken();
+        const tokenEnd = scanner.getTokenEnd();
+        if (tokenEnd <= end) {
+            // An identifier should never appear as trivia between AST children; skip defensively.
+            if (token !== SyntaxKind.Identifier) {
+                children.push(getOrCreateToken(sourceFile, token, pos, tokenEnd, parent, scanner.getTokenFlags()));
+            }
+        }
+        pos = tokenEnd;
+        if (token === SyntaxKind.EndOfFile) {
+            break;
+        }
+        scanner.scan();
+    }
+}
+
+function createSyntaxListNode(nodes: NodeArray<Node>, parent: Node, sourceFile: SourceFile): Node {
+    const listChildren: Node[] = [];
+    let pos = nodes.pos;
+    for (const child of nodes) {
+        addSyntheticNodes(listChildren, pos, child.pos, parent, sourceFile);
+        listChildren.push(child);
+        pos = child.end;
+    }
+    addSyntheticNodes(listChildren, pos, nodes.end, parent, sourceFile);
+    const list = createSyntaxList(listChildren) as Mutable<Node>;
+    list.pos = nodes.pos;
+    list.end = nodes.end;
+    list.parent = parent;
+    return list as Node;
+}
+
+export function getFirstToken(node: Node, sourceFile: SourceFile = node.getSourceFile()): Node | undefined {
+    if (isTokenKind(node.kind)) {
+        return undefined;
+    }
+    assertHasRealPosition(node);
+    const children = getChildren(node, sourceFile);
+    const child = children.find(kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode);
+    if (child === undefined) {
+        return undefined;
+    }
+    return child.kind < SyntaxKind.FirstNode ? child : getFirstToken(child, sourceFile);
+}
+
+export function getLastToken(node: Node, sourceFile: SourceFile = node.getSourceFile()): Node | undefined {
+    if (isTokenKind(node.kind)) {
+        return undefined;
+    }
+    assertHasRealPosition(node);
+    const children = getChildren(node, sourceFile);
+    const child = children.length ? children[children.length - 1] : undefined;
+    if (child === undefined) {
+        return undefined;
+    }
+    return child.kind < SyntaxKind.FirstNode ? child : getLastToken(child, sourceFile);
 }
 
 /** Binary search a node list for the node containing position. */

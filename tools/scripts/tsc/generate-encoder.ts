@@ -1474,6 +1474,9 @@ function generateTSNodeGenerated(): string {
 
 function emitNodeGeneratedImports(w: CodeWriter) {
     w.write(`import {`);
+    w.write(`    getChildren,`);
+    w.write(`    getFirstToken,`);
+    w.write(`    getLastToken,`);
     w.write(`    getTokenPosOfNode,`);
     w.write(`    ModifierFlags,`);
     w.write(`    type Node,`);
@@ -1754,6 +1757,26 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`    getText(sourceFile?: SourceFile): string {`);
     w.write(`        sourceFile ??= this.getSourceFile();`);
     w.write(`        return sourceFile.text.substring(this.getStart(sourceFile), this.end);`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getChildCount(sourceFile?: SourceFile): number {`);
+    w.write(`        return this.getChildren(sourceFile).length;`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getChildAt(index: number, sourceFile?: SourceFile): Node {`);
+    w.write(`        return this.getChildren(sourceFile)[index];`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getChildren(sourceFile?: SourceFile): readonly Node[] {`);
+    w.write(`        return getChildren(this as unknown as Node, sourceFile ?? this.getSourceFile());`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getFirstToken(sourceFile?: SourceFile): Node | undefined {`);
+    w.write(`        return getFirstToken(this as unknown as Node, sourceFile ?? this.getSourceFile());`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    getLastToken(sourceFile?: SourceFile): Node | undefined {`);
+    w.write(`        return getLastToken(this as unknown as Node, sourceFile ?? this.getSourceFile());`);
     w.write(`    }`);
     w.write(``);
     w.write(`    protected getString(index: number): string {`);

@@ -1008,3 +1008,250 @@ describe("RemoteNode + position/text getters", () => {
         }
     });
 });
+
+// ---------------------------------------------------------------------------
+// RemoteNode: child/token getters
+// ---------------------------------------------------------------------------
+
+describe("RemoteNode + child/token getters", () => {
+    function withFirstStatement(source: string, fn: (stmt: Node, sf: SourceFile) => void) {
+        const api = spawnAPI({ "/tsconfig.json": "{}", "/src/children.ts": source });
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/children.ts");
+            fn(sf.statements[0], sf);
+        }
+        finally {
+            api.close();
+        }
+    }
+
+    function findFirstOfKind(node: Node, kind: SyntaxKind): Node | undefined {
+        let found: Node | undefined;
+        const walk = (n: Node): undefined => {
+            if (found) return;
+            if (n.kind === kind) {
+                found = n;
+                return;
+            }
+            n.forEachChild(walk);
+        };
+        walk(node);
+        return found;
+    }
+
+    test("getChildren materializes the punctuation/keyword tokens the AST omits", () => {
+        withFirstStatement("if (x) {}", stmt => {
+            const texts = stmt.getChildren().map(c => c.getText());
+            assert.deepStrictEqual(texts, ["if", "(", "x", ")", "{}"]);
+        });
+    });
+
+    test("getChildCount and getChildAt agree with getChildren", () => {
+        withFirstStatement("if (x) {}", stmt => {
+            const children = stmt.getChildren();
+            assert.strictEqual(stmt.getChildCount(), children.length);
+            for (let i = 0; i < children.length; i++) {
+                assert.strictEqual(stmt.getChildAt(i), children[i]);
+            }
+        });
+    });
+
+    test("getFirstToken and getLastToken descend to the edge tokens", () => {
+        withFirstStatement("if (x) {}", stmt => {
+            assert.strictEqual(stmt.getFirstToken()?.getText(), "if");
+            assert.strictEqual(stmt.getLastToken()?.getText(), "}");
+        });
+    });
+
+    test("a token node has no children and no first/last token", () => {
+        withFirstStatement("if (x) {}", stmt => {
+            const ifToken = stmt.getFirstToken()!;
+            assert.strictEqual(ifToken.getChildCount(), 0);
+            assert.deepStrictEqual(ifToken.getChildren(), []);
+            assert.strictEqual(ifToken.getFirstToken(), undefined);
+            assert.strictEqual(ifToken.getLastToken(), undefined);
+        });
+    });
+
+    test("NodeArrays are wrapped in a SyntaxList that holds the elements and separators", () => {
+        withFirstStatement("[1, 2, 3];", stmt => {
+            const arr = findFirstOfKind(stmt, SyntaxKind.ArrayLiteralExpression)!;
+            assert.ok(arr, "expected an array literal");
+            const list = arr.getChildren().find(c => c.kind === SyntaxKind.SyntaxList);
+            assert.ok(list, "array literal children should include a SyntaxList");
+            assert.deepStrictEqual(list!.getChildren().map(c => c.getText()), ["1", ",", "2", ",", "3"]);
+        });
+    });
+
+    test("getChildren tiles [pos, end) contiguously, absorbing interior trivia into tokens", () => {
+        // The interior comment must be absorbed into a token's leading trivia, not dropped.
+        withFirstStatement("const a = /* c */ 1;", (stmt, sf) => {
+            const children = stmt.getChildren();
+            assert.ok(children.length > 0);
+            assert.strictEqual(children[0].pos, stmt.pos);
+            assert.strictEqual(children[children.length - 1].end, stmt.end);
+            for (let i = 1; i < children.length; i++) {
+                assert.strictEqual(children[i].pos, children[i - 1].end, "children must be contiguous");
+            }
+            assert.strictEqual(children.map(c => c.getFullText(sf)).join(""), stmt.getFullText(sf));
+        });
+    });
+
+    test("a JSDoc comment is exposed as the first child", () => {
+        // Per tsc, the JSDoc is both its own child node and the leading trivia of the first token.
+        withFirstStatement("/** doc */\nfunction f() {}", stmt => {
+            const first = stmt.getChildren()[0];
+            assert.strictEqual(first.kind, SyntaxKind.JSDoc);
+            assert.strictEqual(first.getText().trim(), "/** doc */");
+        });
+    });
+
+    test("getChildren throws on a synthesized node without a real position", () => {
+        const synthesized = createBlock([]); // a non-token node with pos/end === -1
+        assert.throws(() => synthesized.getChildren(), /real position/);
+    });
+
+    test("the else keyword is materialized as a synthetic token", () => {
+        withFirstStatement("if (a) {} else {}", stmt => {
+            const texts = stmt.getChildren().map(c => c.getText());
+            assert.ok(texts.includes("else"), `expected an 'else' token, got ${JSON.stringify(texts)}`);
+        });
+    });
+
+    test("getFirstToken skips leading JSDoc and returns the first real token", () => {
+        withFirstStatement("/** d */ export function f() {}", stmt => {
+            const first = stmt.getFirstToken()!;
+            assert.ok(
+                first.kind < SyntaxKind.FirstJSDocNode || first.kind > SyntaxKind.LastJSDocNode,
+                "getFirstToken should skip the JSDoc node",
+            );
+            assert.strictEqual(first.getText(), "export");
+        });
+    });
+
+    test("SourceFile children are the statements SyntaxList and the EndOfFile token", () => {
+        const api = spawnAPI({ "/tsconfig.json": "{}", "/src/eof.ts": "const x = 1;\n" });
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/eof.ts");
+            const children = sf.getChildren();
+            assert.ok(children.some(c => c.kind === SyntaxKind.SyntaxList), "should contain a statements SyntaxList");
+            assert.strictEqual(children[children.length - 1].kind, SyntaxKind.EndOfFile);
+            assert.strictEqual(sf.getLastToken()?.kind, SyntaxKind.EndOfFile);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getChildren is cached: repeat calls return the same array", () => {
+        withFirstStatement("const x = 1;", stmt => {
+            assert.strictEqual(stmt.getChildren(), stmt.getChildren());
+        });
+    });
+
+    const isJsDocKind = (n: Node) => n.kind >= SyntaxKind.FirstJSDocNode && n.kind <= SyntaxKind.LastJSDocNode;
+
+    // Recursively asserts getChildren's invariants at every node: count/at agreement, caching,
+    // first/last token correctness, and contiguous tiling of [pos, end).
+    function assertChildInvariants(root: Node, sf: SourceFile): void {
+        const visit = (node: Node): void => {
+            const children = node.getChildren(sf);
+
+            assert.strictEqual(node.getChildCount(sf), children.length);
+            for (let i = 0; i < children.length; i++) {
+                assert.strictEqual(node.getChildAt(i, sf), children[i]);
+            }
+            assert.strictEqual(node.getChildAt(children.length, sf), undefined);
+            assert.strictEqual(node.getChildren(sf), children, "getChildren should be cached");
+
+            // JSDoc nodes don't synthesize tokens, so the token/tiling invariants don't apply.
+            if (children.length > 0 && !isJsDocKind(node)) {
+                // first/last token can be undefined when an edge child is an empty list (e.g. an
+                // empty `case` clause) — same as tsc; when defined they must be aligned tokens.
+                const first = node.getFirstToken(sf);
+                const last = node.getLastToken(sf);
+                if (first) {
+                    assert.ok(first.kind < SyntaxKind.FirstNode, `getFirstToken must be a token (kind ${node.kind})`);
+                    assert.strictEqual(first.getStart(sf), node.getStart(sf), `firstToken start mismatch (kind ${node.kind})`);
+                }
+                if (last) {
+                    assert.ok(last.kind < SyntaxKind.FirstNode, `getLastToken must be a token (kind ${node.kind})`);
+                    assert.strictEqual(last.end, node.end, `lastToken end mismatch (kind ${node.kind})`);
+                }
+
+                assert.strictEqual(children[0].pos, node.pos, `first child pos mismatch (kind ${node.kind})`);
+                assert.strictEqual(children[children.length - 1].end, node.end, `last child end mismatch (kind ${node.kind})`);
+                for (let i = 1; i < children.length; i++) {
+                    if (isJsDocKind(children[i - 1])) continue;
+                    assert.strictEqual(children[i].pos, children[i - 1].end, `gap/overlap between children (kind ${node.kind})`);
+                }
+            }
+
+            for (const child of children) {
+                if (!isJsDocKind(child)) {
+                    visit(child);
+                }
+            }
+        };
+        visit(root);
+    }
+
+    function checkSource(source: string, opts?: { jsx?: boolean; }): void {
+        const ext = opts?.jsx ? "tsx" : "ts";
+        const tsconfig = opts?.jsx ? `{ "compilerOptions": { "jsx": "react-jsx" } }` : "{}";
+        const api = spawnAPI({ "/tsconfig.json": tsconfig, [`/src/c.${ext}`]: source });
+        try {
+            const sf = getRemoteSourceFile(api, "/tsconfig.json", `/src/c.${ext}`);
+            assertChildInvariants(sf, sf);
+        }
+        finally {
+            api.close();
+        }
+    }
+
+    test("structural invariants hold recursively across a rich tree", () => {
+        checkSource([
+            "/** docs */",
+            "export function greet(name: string, count = 1): string {",
+            "    const parts: string[] = [];",
+            "    for (let i = 0; i < count; i++) {",
+            "        parts.push(`hi ${name}`);",
+            "    }",
+            "    if (parts.length) {",
+            '        return parts.join(", ");',
+            "    }",
+            "    else {",
+            '        return "none";',
+            "    }",
+            "}",
+            "",
+        ].join("\n"));
+    });
+
+    // Representative constructs, each exercising a distinct structural path of getChildren
+    // (token synthesis, SyntaxList wrapping, empty lists, decorator lists, JSDoc, JSX, nesting).
+    const corpus: Array<{ name: string; source: string; jsx?: boolean; }> = [
+        { name: "variable declarations", source: "const a = 1; let b: number = 2; var c, d = 3;" },
+        { name: "function with optional, default and rest params", source: "function f(a: number, b?: string, c = 1, ...d: any[]): void {}" },
+        { name: "class with members", source: "class C { x = 1; #y = 2; static s = 3; readonly r: string; constructor(public p: number) {} m() {} get g() { return 1; } set v(x) {} static {} }" },
+        { name: "class with decorators", source: "@dec class C { @prop x = 1; @meth() m(@param p: number) {} accessor a = 1; }" },
+        { name: "interface with signature members", source: "interface I extends A, B { x: number; y?: string; readonly z: boolean; (a: number): void; new (): I; [k: string]: any; m(p: number): void; }" },
+        { name: "generics with constraints and defaults", source: "function f<T extends object, U = T, const V>(x: T): U { return x as any; }\nclass C<T extends keyof U, U> {}" },
+        { name: "enums", source: "enum E { A, B = 2, C = A | B } const enum CE { X = 'x', Y = 'y' }" },
+        { name: "import declarations", source: "import d from 'a';\nimport { x, y as z } from 'b';\nimport * as ns from 'c';\nimport type { T } from 'd';\nimport 'e';\nimport def, { named } from 'f';" },
+        { name: "if/else chains", source: "if (a) { x(); } else if (b) { y(); } else { z(); }" },
+        { name: "for variants", source: "for (let i = 0; i < n; i++) {} for (const k in o) {} for (const v of a) {} for (;;) { break; }" },
+        { name: "switch with an empty case clause", source: "switch (x) { case 1: y(); break; case 2: case 3: z(); default: w(); }" },
+        { name: "object literal with all member kinds", source: "const o = { a: 1, b, [c]: 2, ...d, m() {}, get g() { return 1; }, set s(v) {}, async am() {}, *gm() {} };" },
+        { name: "tagged and nested template literals", source: "const r = tag`a${b}c${`inner${d}`}e`;" },
+        { name: "comments and jsdoc with tags", source: "// line\n/* block */\n/**\n * @param a the a\n * @returns nothing\n */\nfunction f(a: number) {} // trailing" },
+        { name: "empty constructs", source: "function f() {} class C {} interface I {} enum E {} { } ; namespace N {}" },
+        { name: "JSX element with attributes and children", source: 'const e = <div id="a" className={cls} {...rest}>hello {name}<Child /></div>;', jsx: true },
+    ];
+
+    for (const entry of corpus) {
+        test(`invariants: ${entry.name}`, () => {
+            checkSource(entry.source, { jsx: entry.jsx });
+        });
+    }
+});
