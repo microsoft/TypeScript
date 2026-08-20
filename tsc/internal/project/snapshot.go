@@ -303,6 +303,10 @@ func (s *Snapshot) Clone(
 			logger.Logf("Reason: DidOpenFile - %s", change.fileChanges.Opened)
 		case UpdateReasonDidCloseFile:
 			logger.Logf("Reason: DidCloseFile - %v", change.fileChanges.Closed)
+		case UpdateReasonDidChangeFile:
+			logger.Logf("Reason: DidChangeFile - %v", change.fileChanges.Changed)
+		case UpdateReasonDiagnosticsRefresh:
+			logger.Logf("Reason: DiagnosticsRefresh")
 		case UpdateReasonDidChangeCompilerOptionsForInferredProjects:
 			logger.Logf("Reason: DidChangeCompilerOptionsForInferredProjects")
 		case UpdateReasonRequestedLanguageServicePendingChanges:

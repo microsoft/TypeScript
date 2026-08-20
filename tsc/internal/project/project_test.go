@@ -834,3 +834,124 @@ func TestProgressNotifications(t *testing.T) {
 		assert.Equal(t, starts, finishes, "ProgressStart and ProgressFinish calls for Project_0 should be balanced")
 	})
 }
+
+func TestPushFileDiagnostics(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	files := map[string]any{
+		"/src/tsconfig.json": `{}`,
+		"/src/index.ts":      `const x: number = "";`,
+	}
+	options := &project.SessionOptions{
+		CurrentDirectory:           "/",
+		DefaultLibraryPath:         bundled.LibPath(),
+		PositionEncoding:           lsproto.PositionEncodingKindUTF8,
+		WatchEnabled:               true,
+		LoggingEnabled:             true,
+		PushDiagnosticsEnabled:     true,
+		PushFileDiagnosticsEnabled: true,
+	}
+	setup := func() (*project.Session, *projecttestutil.SessionUtils) {
+		init, utils := projecttestutil.GetSessionInitOptions(files, options, &projecttestutil.TypingsInstallerOptions{})
+		versionSupport := true
+		caps := (&lsproto.ClientCapabilities{
+			TextDocument: &lsproto.TextDocumentClientCapabilities{
+				PublishDiagnostics: &lsproto.PublishDiagnosticsClientCapabilities{VersionSupport: &versionSupport},
+			},
+		}).Resolve()
+		init.BackgroundCtx = lsproto.WithClientCapabilities(context.Background(), &caps)
+		return project.NewSession(init), utils
+	}
+	uri := lsproto.DocumentUri("file:///src/index.ts")
+
+	t.Run("publishes file diagnostics on open", func(t *testing.T) {
+		t.Parallel()
+		session, utils := setup()
+		session.DidOpenFile(context.Background(), uri, 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.WaitForBackgroundTasks()
+
+		calls := filterDiagnosticsByURI(utils.Client().PublishDiagnosticsCalls(), uri, 0)
+		assert.Assert(t, len(calls) > 0, "expected PublishDiagnostics call for index.ts")
+		last := calls[len(calls)-1]
+		assert.Equal(t, len(last.Params.Diagnostics), 1)
+		assert.Equal(t, *last.Params.Version, int32(1))
+	})
+
+	t.Run("publishes updated file diagnostics on change", func(t *testing.T) {
+		t.Parallel()
+		session, utils := setup()
+		session.DidOpenFile(context.Background(), uri, 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.WaitForBackgroundTasks()
+
+		session.DidChangeFile(context.Background(), uri, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+			{WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: `const x: number = 1;`}},
+		})
+		session.WaitForBackgroundTasks()
+
+		calls := filterDiagnosticsByURI(utils.Client().PublishDiagnosticsCalls(), uri, 0)
+		assert.Assert(t, len(calls) > 1, "expected PublishDiagnostics call after change")
+		last := calls[len(calls)-1]
+		assert.Equal(t, len(last.Params.Diagnostics), 0)
+		assert.Equal(t, *last.Params.Version, int32(2))
+	})
+
+	t.Run("clears file diagnostics on close", func(t *testing.T) {
+		t.Parallel()
+		session, utils := setup()
+		session.DidOpenFile(context.Background(), uri, 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.WaitForBackgroundTasks()
+
+		session.DidCloseFile(context.Background(), uri)
+		session.WaitForBackgroundTasks()
+
+		calls := filterDiagnosticsByURI(utils.Client().PublishDiagnosticsCalls(), uri, 0)
+		assert.Assert(t, len(calls) > 1, "expected PublishDiagnostics call after close")
+		last := calls[len(calls)-1]
+		assert.Equal(t, len(last.Params.Diagnostics), 0)
+		assert.Assert(t, last.Params.Version == nil)
+	})
+
+	t.Run("omits version when client does not support it", func(t *testing.T) {
+		t.Parallel()
+		session, utils := projecttestutil.SetupWithOptions(files, options)
+		session.DidOpenFile(context.Background(), uri, 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.WaitForBackgroundTasks()
+
+		calls := filterDiagnosticsByURI(utils.Client().PublishDiagnosticsCalls(), uri, 0)
+		assert.Assert(t, len(calls) > 0, "expected PublishDiagnostics call for index.ts")
+		last := calls[len(calls)-1]
+		assert.Equal(t, len(last.Params.Diagnostics), 1)
+		assert.Assert(t, last.Params.Version == nil)
+	})
+
+	t.Run("does not publish empty diagnostics for files that never had any", func(t *testing.T) {
+		t.Parallel()
+		cleanFiles := map[string]any{
+			"/src/tsconfig.json": `{}`,
+			"/src/index.ts":      `const x: number = 1;`,
+		}
+		session, utils := projecttestutil.SetupWithOptions(cleanFiles, options)
+		session.DidOpenFile(context.Background(), uri, 1, cleanFiles["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.WaitForBackgroundTasks()
+		session.DidCloseFile(context.Background(), uri)
+		session.WaitForBackgroundTasks()
+
+		calls := filterDiagnosticsByURI(utils.Client().PublishDiagnosticsCalls(), uri, 0)
+		assert.Equal(t, len(calls), 0)
+	})
+
+	t.Run("does not publish file diagnostics when disabled", func(t *testing.T) {
+		t.Parallel()
+		session, utils := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), uri, 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+		session.WaitForBackgroundTasks()
+
+		calls := filterDiagnosticsByURI(utils.Client().PublishDiagnosticsCalls(), uri, 0)
+		assert.Equal(t, len(calls), 0)
+	})
+}
