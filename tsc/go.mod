@@ -1,6 +1,6 @@
 module github.com/microsoft/TypeScript/tsc
 
-go 1.26
+go 1.27
 
 require (
 	github.com/Microsoft/go-winio v0.6.2
