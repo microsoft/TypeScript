@@ -954,4 +954,60 @@ func TestPushFileDiagnostics(t *testing.T) {
 		calls := filterDiagnosticsByURI(utils.Client().PublishDiagnosticsCalls(), uri, 0)
 		assert.Equal(t, len(calls), 0)
 	})
+
+	t.Run("republishes when the validation preference changes", func(t *testing.T) {
+		t.Parallel()
+		session, utils := setup()
+		session.DidOpenFile(context.Background(), uri, 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.WaitForBackgroundTasks()
+
+		calls := filterDiagnosticsByURI(utils.Client().PublishDiagnosticsCalls(), uri, 0)
+		assert.Assert(t, len(calls) > 0, "expected PublishDiagnostics call for index.ts")
+		assert.Equal(t, len(calls[len(calls)-1].Params.Diagnostics), 1)
+
+		// Disabling validation does not update programs, so diagnostics must
+		// still be cleared.
+		prefs := lsutil.NewDefaultUserPreferences()
+		prefs.EnableValidation = core.TSFalse
+		session.Configure(prefs)
+		session.WaitForBackgroundTasks()
+
+		calls = filterDiagnosticsByURI(utils.Client().PublishDiagnosticsCalls(), uri, 0)
+		last := calls[len(calls)-1]
+		assert.Equal(t, len(last.Params.Diagnostics), 0)
+
+		// Re-enabling validation republishes the existing errors.
+		callsBefore := len(utils.Client().PublishDiagnosticsCalls())
+		prefs = lsutil.NewDefaultUserPreferences()
+		prefs.EnableValidation = core.TSTrue
+		session.Configure(prefs)
+		session.WaitForBackgroundTasks()
+
+		calls = filterDiagnosticsByURI(utils.Client().PublishDiagnosticsCalls(), uri, callsBefore)
+		assert.Assert(t, len(calls) > 0, "expected PublishDiagnostics call after re-enabling validation")
+		assert.Equal(t, len(calls[len(calls)-1].Params.Diagnostics), 1)
+	})
+
+	t.Run("does not publish stale diagnostics after rapid changes and close", func(t *testing.T) {
+		t.Parallel()
+		session, utils := setup()
+		session.DidOpenFile(context.Background(), uri, 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+		session.WaitForBackgroundTasks()
+
+		// Rapid changes followed by an immediate close, without waiting in
+		// between: no publish for a stale version may arrive after the clear.
+		for version := int32(2); version <= 6; version++ {
+			session.DidChangeFile(context.Background(), uri, version, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+				{WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: `const x: number = "";`}},
+			})
+		}
+		session.DidCloseFile(context.Background(), uri)
+		session.WaitForBackgroundTasks()
+
+		calls := filterDiagnosticsByURI(utils.Client().PublishDiagnosticsCalls(), uri, 0)
+		assert.Assert(t, len(calls) > 0, "expected PublishDiagnostics calls for index.ts")
+		last := calls[len(calls)-1]
+		assert.Equal(t, len(last.Params.Diagnostics), 0)
+		assert.Assert(t, last.Params.Version == nil)
+	})
 }

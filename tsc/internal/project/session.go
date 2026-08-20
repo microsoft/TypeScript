@@ -217,9 +217,21 @@ type Session struct {
 	// requests into a single background task.
 	globalDiagPublishPending atomic.Bool
 
-	// pushedDiagnosticsFiles tracks open files whose last published diagnostics
-	// were non-empty, so redundant empty publishes can be skipped.
-	pushedDiagnosticsFiles collections.SyncSet[tspath.Path]
+	// publishFileDiagnosticsMu serializes open-file diagnostics publishes, which
+	// otherwise run on unordered background tasks. It guards the two fields below.
+	publishFileDiagnosticsMu sync.Mutex
+	// publishedFileDiagnosticsSnapshot is the ID of the newest snapshot whose
+	// open-file diagnostics have been published; older snapshots are skipped.
+	publishedFileDiagnosticsSnapshot uint64
+	// publishedFileDiagnostics tracks the open files considered by the last
+	// publish pass and whether their last published diagnostics were non-empty,
+	// so closed files are cleared and redundant empty publishes are skipped.
+	publishedFileDiagnostics map[tspath.Path]publishedFileDiagnosticsState
+}
+
+type publishedFileDiagnosticsState struct {
+	uri      lsproto.DocumentUri
+	nonEmpty bool
 }
 
 func (s *Session) pushFileDiagnosticsEnabled() bool {
@@ -262,20 +274,21 @@ func NewSession(init *SessionInit) *Session {
 		sessionLogger = logging.NewNopLogger()
 	}
 	session := &Session{
-		backgroundCtx:           init.BackgroundCtx,
-		options:                 init.Options,
-		toPath:                  toPath,
-		client:                  init.Client,
-		logger:                  sessionLogger,
-		npmExecutor:             init.NpmExecutor,
-		contentMapperHost:       newContentMapperHost(init),
-		fs:                      overlayFS,
-		parseCache:              parseCache,
-		contentMappedParseCache: contentMappedParseCache,
-		extendedConfigCache:     extendedConfigCache,
-		programCounter:          &programCounter{},
-		backgroundQueue:         background.NewQueue(),
-		startTime:               time.Now(),
+		backgroundCtx:            init.BackgroundCtx,
+		options:                  init.Options,
+		toPath:                   toPath,
+		client:                   init.Client,
+		logger:                   sessionLogger,
+		npmExecutor:              init.NpmExecutor,
+		contentMapperHost:        newContentMapperHost(init),
+		fs:                       overlayFS,
+		parseCache:               parseCache,
+		contentMappedParseCache:  contentMappedParseCache,
+		extendedConfigCache:      extendedConfigCache,
+		programCounter:           &programCounter{},
+		backgroundQueue:          background.NewQueue(),
+		startTime:                time.Now(),
+		publishedFileDiagnostics: make(map[tspath.Path]publishedFileDiagnosticsState),
 		snapshot: NewSnapshot(
 			uint64(0),
 			&SnapshotFS{
@@ -1516,7 +1529,7 @@ func (s *Session) updateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 		}
 		_ = s.updateContentMapperRegistrations(ctx, newSnapshot)
 		s.publishProgramDiagnostics(oldSnapshot, newSnapshot)
-		s.publishOpenFileDiagnostics(oldSnapshot, newSnapshot)
+		s.publishOpenFileDiagnostics(change, oldSnapshot, newSnapshot)
 		s.sendProjectInfoTelemetryForNewProjects(oldSnapshot, newSnapshot)
 		s.warmAutoImportCache(ctx, change, oldSnapshot, newSnapshot)
 	})
@@ -2035,7 +2048,7 @@ func (s *Session) publishProjectDiagnostics(ctx context.Context, configFilePath 
 	ctx = s.withCurrentLocale(ctx)
 	lspDiagnostics := make([]*lsproto.Diagnostic, 0, len(diagnostics))
 	for _, diag := range diagnostics {
-		lspDiagnostics = append(lspDiagnostics, lsconv.DiagnosticToLSPPush(ctx, converters, diag))
+		lspDiagnostics = append(lspDiagnostics, lsconv.DiagnosticToLSPPush(ctx, converters, diag, false /*reportStyleChecksAsWarnings*/))
 	}
 
 	if err := s.client.PublishDiagnostics(ctx, &lsproto.PublishDiagnosticsParams{
@@ -2048,18 +2061,38 @@ func (s *Session) publishProjectDiagnostics(ctx context.Context, configFilePath 
 
 // publishOpenFileDiagnostics pushes diagnostics for open files after a
 // snapshot update, for clients that do not support pull diagnostics.
-func (s *Session) publishOpenFileDiagnostics(oldSnapshot *Snapshot, newSnapshot *Snapshot) {
+func (s *Session) publishOpenFileDiagnostics(change SnapshotChange, oldSnapshot *Snapshot, newSnapshot *Snapshot) {
 	if !s.pushFileDiagnosticsEnabled() {
 		return
 	}
 
-	ctx := s.backgroundContext()
-	for path, overlay := range oldSnapshot.fs.overlays {
-		if _, stillOpen := newSnapshot.fs.overlays[path]; !stillOpen && s.pushedDiagnosticsFiles.Has(path) {
-			s.pushedDiagnosticsFiles.Delete(path)
-			s.publishFileDiagnostics(ctx, lsconv.FileNameToDocumentURI(overlay.FileName()), nil, nil)
+	// Snapshot side effects run as unordered background tasks, so hold the mutex
+	// for the whole pass to keep publishes ordered, and skip snapshots older than
+	// one whose diagnostics were already published.
+	s.publishFileDiagnosticsMu.Lock()
+	defer s.publishFileDiagnosticsMu.Unlock()
+	if newSnapshot.ID() <= s.publishedFileDiagnosticsSnapshot {
+		return
+	}
+	prevPublished := s.publishedFileDiagnosticsSnapshot
+	s.publishedFileDiagnosticsSnapshot = newSnapshot.ID()
+
+	// Semantic and suggestion diagnostics are a diagnostics workload, matching
+	// the checker the pull handler uses instead of consuming query checkers.
+	ctx := core.WithCheckerLifetime(s.backgroundContext(), core.CheckerLifetimeDiagnostics)
+
+	for path, state := range s.publishedFileDiagnostics {
+		if _, stillOpen := newSnapshot.fs.overlays[path]; !stillOpen {
+			delete(s.publishedFileDiagnostics, path)
+			if state.nonEmpty {
+				s.publishFileDiagnostics(ctx, state.uri, nil, nil)
+			}
 		}
 	}
+
+	// Preference changes (e.g. enableValidation) and diagnostics refreshes affect
+	// diagnostics without updating programs, so they republish every open file.
+	force := change.newConfig != nil || change.reason == UpdateReasonDiagnosticsRefresh
 
 	for path, overlay := range newSnapshot.fs.overlays {
 		uri := lsconv.FileNameToDocumentURI(overlay.FileName())
@@ -2071,19 +2104,20 @@ func (s *Session) publishOpenFileDiagnostics(oldSnapshot *Snapshot, newSnapshot 
 		if program == nil {
 			continue
 		}
-		_, wasOpen := oldSnapshot.fs.overlays[path]
-		if wasOpen && project.ProgramLastUpdate != newSnapshot.ID() {
+		// Skip files already considered whose program has not updated since the
+		// last publish; prevPublished (not the parent snapshot) is the reference
+		// because intermediate snapshots may have been skipped.
+		state, seen := s.publishedFileDiagnostics[path]
+		if !force && seen && project.ProgramLastUpdate <= prevPublished {
 			continue
 		}
 		languageService := ls.NewLanguageService(project.configFilePath, program, newSnapshot, overlay.FileName())
 		diagnostics := languageService.ProvidePushDiagnostics(ctx, uri)
-		if len(diagnostics) == 0 {
-			if !s.pushedDiagnosticsFiles.Has(path) {
-				continue
-			}
-			s.pushedDiagnosticsFiles.Delete(path)
-		} else {
-			s.pushedDiagnosticsFiles.Add(path)
+		nonEmpty := len(diagnostics) > 0
+		s.publishedFileDiagnostics[path] = publishedFileDiagnosticsState{uri: uri, nonEmpty: nonEmpty}
+		if !nonEmpty && (!seen || !state.nonEmpty) {
+			// The file has no published diagnostics, so there is nothing to clear.
+			continue
 		}
 		version := overlay.Version()
 		s.publishFileDiagnostics(ctx, uri, &version, diagnostics)

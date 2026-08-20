@@ -62,16 +62,17 @@ func (l *LanguageService) ProvidePushDiagnostics(ctx context.Context, uri lsprot
 		return nil
 	}
 
-	diagnostics := getAllDiagnostics(ctx, program, file)
-
-	lspDiagnostics := make([]*lsproto.Diagnostic, 0, len(diagnostics))
-	for _, diag := range diagnostics {
-		lspDiagnostics = append(lspDiagnostics, lsconv.DiagnosticToLSPPush(ctx, l.converters, diag))
-	}
-	return lspDiagnostics
+	return l.toLSPDiagnosticsWith(ctx, lsconv.DiagnosticToLSPPush, getAllDiagnostics(ctx, program, file))
 }
 
 func (l *LanguageService) toLSPDiagnostics(ctx context.Context, diagnostics ...[]*ast.Diagnostic) []*lsproto.Diagnostic {
+	return l.toLSPDiagnosticsWith(ctx, lsconv.DiagnosticToLSPPull, diagnostics...)
+}
+
+// toLSPDiagnosticsWith normalizes file diagnostics (style checks as warnings,
+// synthesized content-mapper aggregation) and converts them with the given
+// pull or push converter, so both client kinds receive equivalent diagnostics.
+func (l *LanguageService) toLSPDiagnosticsWith(ctx context.Context, convert func(context.Context, *lsconv.Converters, *ast.Diagnostic, bool) *lsproto.Diagnostic, diagnostics ...[]*ast.Diagnostic) []*lsproto.Diagnostic {
 	reportStyleChecksAsWarnings := l.UserPreferences().ReportStyleChecksAsWarnings.IsTrue()
 	size := 0
 	for _, diagSlice := range diagnostics {
@@ -89,12 +90,12 @@ func (l *LanguageService) toLSPDiagnostics(ctx context.Context, diagnostics ...[
 				synthesizedByFile.Set(diag.File(), append(synthesizedByFile.GetOrZero(diag.File()), diag))
 				continue
 			}
-			lspDiagnostics = append(lspDiagnostics, lsconv.DiagnosticToLSPPull(ctx, l.converters, diag, reportStyleChecksAsWarnings))
+			lspDiagnostics = append(lspDiagnostics, convert(ctx, l.converters, diag, reportStyleChecksAsWarnings))
 		}
 	}
 	for file, diags := range synthesizedByFile.Entries() {
 		aggregate := aggregateSynthesizedDiagnostics(file, diags)
-		lspDiagnostics = append(lspDiagnostics, lsconv.DiagnosticToLSPPull(ctx, l.converters, aggregate, reportStyleChecksAsWarnings))
+		lspDiagnostics = append(lspDiagnostics, convert(ctx, l.converters, aggregate, reportStyleChecksAsWarnings))
 	}
 	return lspDiagnostics
 }
