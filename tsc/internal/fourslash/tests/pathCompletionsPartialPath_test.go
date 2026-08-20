@@ -44,18 +44,18 @@ func TestPathCompletionsPartialPathPackageNoExports(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 
 	const content = `// @moduleResolution: bundler
-// @Filename: /node_modules/@typescript/native-preview/package.json
-{ "name": "@typescript/native-preview", "version": "0.0.0" }
-// @Filename: /node_modules/@typescript/native-preview/unstable/async.ts
+// @Filename: /node_modules/@typescript/typescript/package.json
+{ "name": "@typescript/typescript", "version": "0.0.0" }
+// @Filename: /node_modules/@typescript/typescript/unstable/async.ts
 export const asyncApi = "async";
-// @Filename: /node_modules/@typescript/native-preview/unstable/fs.ts
+// @Filename: /node_modules/@typescript/typescript/unstable/fs.ts
 export const fsApi = "fs";
-// @Filename: /node_modules/@typescript/native-preview/unstable/sync.ts
+// @Filename: /node_modules/@typescript/typescript/unstable/sync.ts
 export const syncApi = "sync";
 // @Filename: /package.json
-{ "dependencies": { "@typescript/native-preview": "0.0.0" } }
+{ "dependencies": { "@typescript/typescript": "0.0.0" } }
 // @Filename: /src/main.ts
-import { } from "@typescript/native-preview/unstable//*$*/";`
+import { } from "@typescript/typescript/unstable//*$*/";`
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
@@ -80,9 +80,9 @@ func TestPathCompletionsPartialPathPackageExports(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 
 	const content = `// @moduleResolution: bundler
-// @Filename: /node_modules/@typescript/native-preview/package.json
+// @Filename: /node_modules/@typescript/typescript/package.json
 {
-	"name": "@typescript/native-preview",
+	"name": "@typescript/typescript",
 	"version": "0.0.0",
 	"exports": {
 		"./unstable/sync": "./dist/api/sync/api.js",
@@ -90,18 +90,18 @@ func TestPathCompletionsPartialPathPackageExports(t *testing.T) {
 		"./unstable/fs": "./dist/api/fs.js"
 	}
 }
-// @Filename: /node_modules/@typescript/native-preview/index.d.ts
+// @Filename: /node_modules/@typescript/typescript/index.d.ts
 export {};
-// @Filename: /node_modules/@typescript/native-preview/dist/api/async/api.js
+// @Filename: /node_modules/@typescript/typescript/dist/api/async/api.js
 export const asyncApi = "async";
-// @Filename: /node_modules/@typescript/native-preview/dist/api/fs.js
+// @Filename: /node_modules/@typescript/typescript/dist/api/fs.js
 export const fsApi = "fs";
-// @Filename: /node_modules/@typescript/native-preview/dist/api/sync/api.js
+// @Filename: /node_modules/@typescript/typescript/dist/api/sync/api.js
 export const syncApi = "sync";
 // @Filename: /package.json
-{ "dependencies": { "@typescript/native-preview": "0.0.0" } }
+{ "dependencies": { "@typescript/typescript": "0.0.0" } }
 // @Filename: /src/main.ts
-import { } from "@typescript/native-preview/unstable//*$*/";`
+import { } from "@typescript/typescript/unstable//*$*/";`
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
@@ -126,24 +126,24 @@ func TestPathCompletionsPartialPathPackageExportsEndingStar(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 
 	const content = `// @moduleResolution: bundler
-// @Filename: /node_modules/@typescript/native-preview/package.json
+// @Filename: /node_modules/@typescript/typescript/package.json
 {
-	"name": "@typescript/native-preview",
+	"name": "@typescript/typescript",
 	"version": "0.0.0",
 	"exports": {
 		"./unstable/*": "./dist/unstable/*.d.ts"
 	}
 }
-// @Filename: /node_modules/@typescript/native-preview/dist/unstable/async.d.ts
+// @Filename: /node_modules/@typescript/typescript/dist/unstable/async.d.ts
 export declare const asyncApi: string;
-// @Filename: /node_modules/@typescript/native-preview/dist/unstable/fs.d.ts
+// @Filename: /node_modules/@typescript/typescript/dist/unstable/fs.d.ts
 export declare const fsApi: string;
-// @Filename: /node_modules/@typescript/native-preview/dist/unstable/sync.d.ts
+// @Filename: /node_modules/@typescript/typescript/dist/unstable/sync.d.ts
 export declare const syncApi: string;
 // @Filename: /package.json
-{ "dependencies": { "@typescript/native-preview": "0.0.0" } }
+{ "dependencies": { "@typescript/typescript": "0.0.0" } }
 // @Filename: /src/main.ts
-import { } from "@typescript/native-preview/unstable//*$*/";`
+import { } from "@typescript/typescript/unstable//*$*/";`
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
@@ -168,24 +168,24 @@ func TestPathCompletionsPartialPathPackageExportsMiddleStar(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 
 	const content = `// @moduleResolution: bundler
-// @Filename: /node_modules/@typescript/native-preview/package.json
+// @Filename: /node_modules/@typescript/typescript/package.json
 {
-	"name": "@typescript/native-preview",
+	"name": "@typescript/typescript",
 	"version": "0.0.0",
 	"exports": {
 		"./unstable/_*/api": "./dist/api/*.d.ts"
 	}
 }
-// @Filename: /node_modules/@typescript/native-preview/dist/api/async.d.ts
+// @Filename: /node_modules/@typescript/typescript/dist/api/async.d.ts
 export declare const asyncApi: string;
-// @Filename: /node_modules/@typescript/native-preview/dist/api/fs.d.ts
+// @Filename: /node_modules/@typescript/typescript/dist/api/fs.d.ts
 export declare const fsApi: string;
-// @Filename: /node_modules/@typescript/native-preview/dist/api/sync.d.ts
+// @Filename: /node_modules/@typescript/typescript/dist/api/sync.d.ts
 export declare const syncApi: string;
 // @Filename: /package.json
-{ "dependencies": { "@typescript/native-preview": "0.0.0" } }
+{ "dependencies": { "@typescript/typescript": "0.0.0" } }
 // @Filename: /src/main.ts
-import { } from "@typescript/native-preview/unstable//*$*/";`
+import { } from "@typescript/typescript/unstable//*$*/";`
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

@@ -1,7 +1,7 @@
 // @strict: true
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/1968
+// https://github.com/microsoft/TypeScript/tsc/issues/1968
 
 type IndentationTree<L> = TopNode<L> | VirtualNode<L> | LineNode<L> | BlankNode<L>;
 type IndentationSubTree<L> = Exclude<IndentationTree<L>, TopNode<L>>;

@@ -3,7 +3,7 @@
 // @emitDeclarationOnly: true
 // @allowImportingTsExtensions: true
 
-// Regression test for https://github.com/microsoft/typescript-go/issues/4616
+// Regression test for https://github.com/microsoft/TypeScript/tsc/issues/4616
 // When a file uses `.ts` extension relative imports with allowImportingTsExtensions,
 // declaration emit should preserve `.js` extensions on non-relative (node_modules) imports.
 

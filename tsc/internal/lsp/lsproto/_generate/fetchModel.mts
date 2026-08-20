@@ -13,7 +13,7 @@ const metaModelPath = path.join(__dirname, "metaModel.json");
 const metaModelSchemaPath = path.join(__dirname, "metaModelSchema.mts");
 
 // Resolve the vscode-languageclient version from the root package-lock.json.
-const lockfilePath = path.resolve(__dirname, "../../../../package-lock.json");
+const lockfilePath = path.resolve(__dirname, "../../../../../package-lock.json");
 const lockfile = JSON.parse(fs.readFileSync(lockfilePath, "utf-8"));
 const clientVersion: string = lockfile.packages["node_modules/vscode-languageclient"].version;
 

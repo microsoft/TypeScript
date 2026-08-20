@@ -49,7 +49,7 @@ func sanitizeStackTrace(stack string) string {
 
 		line = line[i:]
 
-		ourModuleIndex := strings.Index(line, "typescript-go/internal")
+		ourModuleIndex := strings.Index(line, "TypeScript/tsc/")
 		if ourModuleIndex >= 0 {
 			line = line[ourModuleIndex:]
 			writeSanitizedModuleOrPath(line, result)

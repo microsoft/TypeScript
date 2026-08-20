@@ -1,9 +1,0 @@
---- old.typedefTagTypeResolution.types
-+++ new.typedefTagTypeResolution.types
-@@= skipped -36, +36 lines =@@
- /** @type {Cb} */
- const cb = x => {}
- >cb : Cb
-->x => {} : (x: V) => any
-+>x => {} : (x: V) => void
- >x : V

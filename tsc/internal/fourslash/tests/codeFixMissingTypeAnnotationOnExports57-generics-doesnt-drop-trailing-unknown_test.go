@@ -1,0 +1,30 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports57_generics_doesnt_drop_trailing_unknown(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+// @lib: es2015
+
+let x: unknown;
+export const s = new Set([x]);
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add annotation of type 'Set<unknown>'",
+		NewFileContent: `
+let x: unknown;
+export const s: Set<unknown> = new Set([x]);
+`,
+		Index: 0,
+	})
+}

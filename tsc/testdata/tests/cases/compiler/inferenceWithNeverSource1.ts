@@ -1,6 +1,6 @@
 // @strict: true
 
-// https://github.com/microsoft/typescript-go/issues/3688
+// https://github.com/microsoft/TypeScript/tsc/issues/3688
 type Paths<T> = unknown extends T ? string : string;
 
 declare function f<

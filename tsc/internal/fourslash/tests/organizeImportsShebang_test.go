@@ -9,7 +9,6 @@ import (
 )
 
 func TestOrganizeImports_Shebang_PreserveAndSort(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 

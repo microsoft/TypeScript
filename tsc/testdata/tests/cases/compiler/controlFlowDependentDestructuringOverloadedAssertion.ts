@@ -1,7 +1,7 @@
 // @strict: true
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/4572
+// https://github.com/microsoft/TypeScript/tsc/issues/4572
 
 type State =
   | { status: "ready"; payload: { value?: string } }

@@ -1,0 +1,28 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestAutoImportPackageJsonImportsPreference3(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @module: node18
+// @Filename: /package.json
+{
+  "imports": {
+    "#*": "./src/*.ts"
+  }
+}
+// @Filename: /src/a/b/c/something.ts
+export function something(name: string): any;
+// @Filename: /src/a/b/c/d.ts
+something/**/`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyImportFixModuleSpecifiers(t, "", []string{"#a/b/c/something"}, &lsutil.UserPreferences{ImportModuleSpecifierPreference: "non-relative"})
+}

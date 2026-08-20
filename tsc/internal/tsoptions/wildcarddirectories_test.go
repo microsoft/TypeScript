@@ -10,7 +10,7 @@ import (
 func TestGetWildcardDirectories_DotPrefixedIncludeWithDotDirExclude(t *testing.T) {
 	t.Parallel()
 
-	// https://github.com/microsoft/typescript-go/issues/3733
+	// https://github.com/microsoft/TypeScript/tsc/issues/3733
 	// "./"-prefixed include specs must be fully normalized before being tested
 	// against exclude patterns; otherwise the leftover literal "." path segment
 	// matches dot-directory excludes like "**/.*/", silently dropping every

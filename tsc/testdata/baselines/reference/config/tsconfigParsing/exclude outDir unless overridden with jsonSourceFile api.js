@@ -14,15 +14,6 @@ Fs::
 
 
 configFileName:: tsconfig.json
-CompilerOptions::
-{
-  "outDir": "/bin",
-  "configFilePath": "/tsconfig.json"
-}
-
-TypeAcquisition::
-{}
-
 FileNames::
 /b.ts
 Errors::
@@ -45,15 +36,6 @@ Fs::
 
 
 configFileName:: tsconfig.json
-CompilerOptions::
-{
-  "outDir": "/bin",
-  "configFilePath": "/tsconfig.json"
-}
-
-TypeAcquisition::
-{}
-
 FileNames::
 /b.ts,/bin/a.ts
 Errors::

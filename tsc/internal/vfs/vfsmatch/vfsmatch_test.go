@@ -10,7 +10,7 @@ import (
 )
 
 // Test cases modeled after TypeScript's matchFiles tests in
-// _submodules/TypeScript/src/testRunner/unittests/config/matchFiles.ts
+// tsc/testdata/fixtures/testRunner/unittests/config/matchFiles.ts
 
 // caseInsensitiveHost simulates a Windows-like file system
 func caseInsensitiveHost() vfs.FS {
@@ -922,7 +922,7 @@ func TestReadDirectorySymlinkCycle(t *testing.T) {
 }
 
 // TestReadDirectoryMatchesTypeScriptBaselines contains tests that verify the Go implementation
-// matches the TypeScript baseline outputs from _submodules/TypeScript/tests/baselines/reference/config/matchFiles/
+// matches the promoted TypeScript baseline outputs
 func TestReadDirectoryMatchesTypeScriptBaselines(t *testing.T) {
 	t.Parallel()
 

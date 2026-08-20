@@ -1,6 +1,6 @@
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/4673
+// https://github.com/microsoft/TypeScript/tsc/issues/4673
 
 export function repro(board: number[][], pos: number | undefined): void {
   if (!pos) return;

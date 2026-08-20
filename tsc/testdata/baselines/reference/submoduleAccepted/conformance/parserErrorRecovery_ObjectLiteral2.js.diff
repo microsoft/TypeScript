@@ -1,8 +1,0 @@
---- old.parserErrorRecovery_ObjectLiteral2.js
-+++ new.parserErrorRecovery_ObjectLiteral2.js
-@@= skipped -6, +6 lines =@@
- //// [parserErrorRecovery_ObjectLiteral2.js]
- "use strict";
- var v = { a,
--    return:  };
-+    return: , };

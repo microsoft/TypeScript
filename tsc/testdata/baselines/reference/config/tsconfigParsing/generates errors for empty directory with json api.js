@@ -8,15 +8,6 @@ Fs::
 
 
 configFileName:: /apath/tsconfig.json
-CompilerOptions::
-{
-  "allowJs": true,
-  "configFilePath": "/apath/tsconfig.json"
-}
-
-TypeAcquisition::
-{}
-
 FileNames::
 
 Errors::

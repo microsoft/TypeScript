@@ -1,0 +1,99 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/ls"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionsImport_46332(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @module: esnext
+// @moduleResolution: bundler
+// @Filename: /node_modules/vue/package.json
+{
+  "name": "vue",
+  "types": "dist/vue.d.ts"
+}
+// @Filename: /node_modules/vue/dist/vue.d.ts
+export * from "@vue/runtime-dom"
+// @Filename: /node_modules/@vue/runtime-dom/package.json
+{
+  "name": "@vue/runtime-dom",
+  "types": "dist/runtime-dom.d.ts"
+}
+// @Filename: /node_modules/@vue/runtime-dom/dist/runtime-dom.d.ts
+export * from "@vue/runtime-core";
+export {}
+declare module '@vue/reactivity' {
+  export interface RefUnwrapBailTypes {
+    runtimeDOMBailTypes: any
+  }
+}
+// @Filename: /node_modules/@vue/runtime-core/package.json
+{
+  "name": "@vue/runtime-core",
+  "types": "dist/runtime-core.d.ts"
+}
+// @Filename: /node_modules/@vue/runtime-core/dist/runtime-core.d.ts
+import { ref } from '@vue/reactivity';
+export { ref };
+declare module '@vue/reactivity' {
+  export interface RefUnwrapBailTypes {
+    runtimeCoreBailTypes: any
+  }
+}
+// @Filename: /node_modules/@vue/reactivity/package.json
+{
+  "name": "@vue/reactivity",
+  "types": "dist/reactivity.d.ts"
+}
+// @Filename: /node_modules/@vue/reactivity/dist/reactivity.d.ts
+export declare function ref<T = any>(): T;
+// @Filename: /package.json
+{
+  "dependencies": {
+    "vue": "*"
+  }
+}
+// @Filename: /index.ts
+import {} from "vue";
+ref/**/`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "ref",
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportFix{
+							ModuleSpecifier: "vue",
+						},
+					},
+					AdditionalTextEdits: fourslash.AnyTextEdits,
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
+				},
+			},
+		},
+	})
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+		Name:            "ref",
+		Source:          "vue",
+		Description:     "Update import from \"vue\"",
+		AutoImportFix:   &lsproto.AutoImportFix{},
+		UserPreferences: nil, /*preferences*/
+		NewFileContent: new(`import { ref } from "vue";
+ref`),
+	})
+}

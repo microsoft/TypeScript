@@ -6,7 +6,7 @@
 
 /// <reference path="/.lib/react16.d.ts" />
 
-// https://github.com/microsoft/typescript-go/issues/2802
+// https://github.com/microsoft/TypeScript/tsc/issues/2802
 
 import * as React from 'react';
 
@@ -38,7 +38,7 @@ const App = () => {
   );
 };
 
-// https://github.com/microsoft/typescript-go/issues/2797
+// https://github.com/microsoft/TypeScript/tsc/issues/2797
 
 interface State {
   value: boolean

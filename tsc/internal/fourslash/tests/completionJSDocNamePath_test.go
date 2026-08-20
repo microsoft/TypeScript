@@ -1,0 +1,36 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionJSDocNamePath(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @noLib: true
+/**
+ * @returns {modu/*1*/le:ControlFlow}
+ */
+export function cargo() {
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToMarker(t, "1")
+	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Excludes: []string{
+				"module",
+				"ControlFlow",
+			},
+		},
+	})
+}

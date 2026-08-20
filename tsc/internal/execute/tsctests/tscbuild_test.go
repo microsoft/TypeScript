@@ -1140,7 +1140,7 @@ func TestBuildDependencyUpdate(t *testing.T) {
 	}
 	testCases := []*tscInput{
 		{
-			// https://github.com/microsoft/typescript-go/issues/2666
+			// https://github.com/microsoft/TypeScript/tsc/issues/2666
 			subScenario: "rebuilds when dependency in node_modules is updated",
 			files: FileMap{
 				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
@@ -1714,7 +1714,7 @@ func TestBuildDeclarationEmitForReferencedProjectTypesSubpath(t *testing.T) {
 	t.Parallel()
 	testCases := []*tscInput{
 		{
-			// https://github.com/microsoft/typescript-go/issues/3617
+			// https://github.com/microsoft/TypeScript/tsc/issues/3617
 			// This package.json exposes the same files under two exports subpaths
 			// (`./src/*` and `./types/*`), so both `import("@scope/dep/src/...")` and
 			// `import("@scope/dep/types/...")` are technically valid module specifiers for

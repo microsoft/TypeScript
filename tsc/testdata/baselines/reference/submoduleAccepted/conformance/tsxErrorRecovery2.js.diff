@@ -1,8 +1,0 @@
---- old.tsxErrorRecovery2.js
-+++ new.tsxErrorRecovery2.js
-@@= skipped -16, +16 lines =@@
-         <div></div>;
- //// [file2.jsx]
- "use strict";
--var x = <div></div>, <div></div>;
-+var x = (<div></div>, <div></div>);

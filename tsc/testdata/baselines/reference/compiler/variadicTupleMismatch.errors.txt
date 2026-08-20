@@ -7,7 +7,7 @@ variadicTupleMismatch.ts(12,5): error TS2322: Type '[...A, number, number, numbe
 
 
 ==== variadicTupleMismatch.ts (3 errors) ====
-    // https://github.com/microsoft/typescript-go/issues/4727
+    // https://github.com/microsoft/TypeScript/tsc/issues/4727
     
     function f1<A extends unknown[]>(x: [...A, number], y: [...A, number, number, number, number]) {
         x = y  // Error

@@ -77,14 +77,6 @@ func allParsableFiles(tb testing.TB, root string) iter.Seq[parsableFile] {
 }
 
 func FuzzParser(f *testing.F) {
-	repo.SkipIfNoTypeScriptSubmodule(f)
-
-	tests := []string{
-		"src",
-		"scripts",
-		"Herebyfile.mjs",
-	}
-
 	var extensions collections.Set[string]
 	for _, es := range tspath.AllSupportedExtensionsWithJson {
 		for _, e := range es {
@@ -92,9 +84,10 @@ func FuzzParser(f *testing.F) {
 		}
 	}
 
-	for _, test := range tests {
-		root := filepath.Join(repo.TypeScriptSubmodulePath(), test)
-
+	roots := []string{
+		filepath.Join(repo.TestDataPath(), "fixtures"),
+	}
+	for _, root := range roots {
 		for file := range allParsableFiles(f, root) {
 			sourceText, err := os.ReadFile(file.path)
 			assert.NilError(f, err)
@@ -104,9 +97,8 @@ func FuzzParser(f *testing.F) {
 	}
 
 	testDirs := []string{
-		filepath.Join(repo.TypeScriptSubmodulePath(), "tests/cases/compiler"),
-		filepath.Join(repo.TypeScriptSubmodulePath(), "tests/cases/conformance"),
 		filepath.Join(repo.TestDataPath(), "tests/cases/compiler"),
+		filepath.Join(repo.TestDataPath(), "tests/cases/conformance"),
 	}
 
 	for _, testDir := range testDirs {

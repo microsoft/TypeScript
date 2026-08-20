@@ -64,7 +64,7 @@
 // @filename: file1.ts
 // need an out of date but present buildinfo, chained export aliases,
 // and enough files that the same checker is used for multiple files
-// to trigger the race from typescript-go/#1470
+// to trigger the race from microsoft/typescript-go#1470
 import {b} from "./file2.js"
 
 export type {b as c}

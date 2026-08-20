@@ -20,7 +20,7 @@ type resolutionHostStub struct {
 func (h *resolutionHostStub) FS() vfs.FS                  { return h.fs }
 func (h *resolutionHostStub) GetCurrentDirectory() string { return h.cwd }
 
-// Regression test for https://github.com/microsoft/typescript-go/issues/3526.
+// Regression test for https://github.com/microsoft/TypeScript/tsc/issues/3526.
 //
 // Resolving a node_modules import with a trailing slash (e.g. `pkg/`) must
 // produce the same result as without one.
@@ -53,7 +53,7 @@ func TestResolveModuleNameTrailingSlash(t *testing.T) {
 // block on `gate` until released. Each caller sends on `arrived` when it
 // reaches the gate. This is used to deterministically reproduce the
 // `package.json` info-cache insert race described in
-// https://github.com/microsoft/typescript-go/issues/3526.
+// https://github.com/microsoft/TypeScript/tsc/issues/3526.
 type blockingFS struct {
 	vfs.FS
 	targetPath string
@@ -124,7 +124,7 @@ func (f *flipFileExistsFS) ReadFile(path string) (string, bool) {
 	return f.FS.ReadFile(path)
 }
 
-// Regression test for https://github.com/microsoft/typescript-go/issues/3526.
+// Regression test for https://github.com/microsoft/TypeScript/tsc/issues/3526.
 //
 // Two goroutines resolve the same package via specifiers that differ only by
 // a trailing slash (`pkg` and `pkg/`). A blocking FS holds both at the
@@ -202,7 +202,7 @@ func TestResolveModuleNameTrailingSlashRace(t *testing.T) {
 	}
 }
 
-// Regression test for https://github.com/microsoft/typescript-go/issues/1290.
+// Regression test for https://github.com/microsoft/TypeScript/tsc/issues/1290.
 //
 // Two goroutines resolve `pkg/sub` concurrently. Both miss the package.json
 // info-cache for the root package directory. A `flipFileExistsFS` forces the
@@ -313,7 +313,7 @@ func TestParseNodeModuleFromPath(t *testing.T) {
 		{"folder subpath scoped", "/a/node_modules/@scope/b/lib/File", true, "/a/node_modules/@scope/b"},
 		{"package root folder", "/a/node_modules/b", true, "/a/node_modules/b"},
 		{"scoped package root folder", "/a/node_modules/@scope/b", true, "/a/node_modules/@scope/b"},
-		// A bare scope directory has no package name; must not panic (https://github.com/microsoft/typescript-go/issues/4373).
+		// A bare scope directory has no package name; must not panic (https://github.com/microsoft/TypeScript/tsc/issues/4373).
 		{"scope-only folder", "/a/node_modules/@scope", true, "/a/node_modules/@scope"},
 		{"types scope-only folder", "/a/node_modules/@types", true, "/a/node_modules/@types"},
 		{"not in node_modules", "/a/src/index.ts", false, ""},
@@ -329,7 +329,7 @@ func TestParseNodeModuleFromPath(t *testing.T) {
 	}
 }
 
-// Regression test for https://github.com/microsoft/typescript-go/issues/4478.
+// Regression test for https://github.com/microsoft/TypeScript/tsc/issues/4478.
 //
 // While resolving a package with peerDependencies, two goroutines look up the
 // peer package's package.json concurrently. A `flipFileExistsFS` forces the

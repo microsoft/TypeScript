@@ -10,7 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 )
 
-// Meta model version 3.17.0
+// Meta model version 3.18.0
 
 // Structures
 

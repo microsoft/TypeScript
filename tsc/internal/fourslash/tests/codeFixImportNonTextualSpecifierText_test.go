@@ -7,9 +7,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
-// https://github.com/microsoft/typescript-go/issues/3944
+// https://github.com/microsoft/TypeScript/tsc/issues/3944
 func TestCodeFixImportNonTextualSpecifierText(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = "// @Filename: /a.ts\n" +

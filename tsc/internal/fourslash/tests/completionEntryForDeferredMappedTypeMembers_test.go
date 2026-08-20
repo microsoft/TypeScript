@@ -1,0 +1,37 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionEntryForDeferredMappedTypeMembers(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: test.ts
+interface A { a: A }
+declare let a: A;
+type Deep<T> = { [K in keyof T]: Deep<T[K]> }
+declare function foo<T>(deep: Deep<T>): T;
+const out = foo(a);
+out./*1*/a
+out.a./*2*/a
+out.a.a./*3*/a`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, f.Markers(), &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{
+				"a",
+			},
+		},
+	})
+}

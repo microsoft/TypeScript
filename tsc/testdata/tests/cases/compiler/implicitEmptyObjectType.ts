@@ -1,7 +1,7 @@
 // @strict: true
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/1563
+// https://github.com/microsoft/TypeScript/tsc/issues/1563
 
 function f() {
   const v: unknown = "lol";

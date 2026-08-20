@@ -1,5 +1,0 @@
-// === documentHighlights ===
-// === /tests/cases/fourslash/documentHighlightsInvalidGlobalThis.ts ===
-// declare global {
-//     <|export { globalThis as /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}global|] }|>
-// }

@@ -275,7 +275,7 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json")) != nil)
 	})
 
-	// Regression test for https://github.com/microsoft/typescript-go/issues/3733
+	// Regression test for https://github.com/microsoft/TypeScript/tsc/issues/3733
 	//
 	// "./"-prefixed include specs combined with a dot-directory exclude ("**/.*/")
 	// used to drop all wildcard directories for the config, so a newly created file

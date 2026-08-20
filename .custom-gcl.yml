@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://golangci-lint.run/jsonschema/custom-gcl.jsonschema.json
+
+version: v2.12.2
+
+destination: ./tools
+
+plugins:
+  - module: 'github.com/microsoft/TypeScript/tools'
+    import: 'github.com/microsoft/TypeScript/tools/customlint'
+    path: ./tools

@@ -7,6 +7,8 @@ runtime error: invalid memory address or nil pointer dereference
 goroutine 2331 [running]:
 runtime/debug.Stack()
 	runtime/debug/stack.go:26 +0x5e
+github.com/microsoft/TypeScript/tsc/cmd/tsc.runMain()
+	github.com/microsoft/TypeScript/tsc/cmd/tsc/main.go:17 +0x20
 github.com/microsoft/TypeScript/tsc/internal/lsp.(*Server).recover(0xc0001c6e08, {0x441ae5?, 0xc000e976c0?}, 0xc00ab6c7b0)
 	github.com/microsoft/TypeScript/tsc/internal/lsp/server.go:777 +0x58
 panic({0xc323a0?, 0x1780b90?})
@@ -38,28 +40,30 @@ created by github.com/microsoft/TypeScript/tsc/internal/lsp.(*Server).dispatchLo
 ````
 (REDACTED FRAME)
 	(REDACTED FRAME)
-typescript-go|>internal|>lsp.(*Server).recover()
-	typescript-go|>internal|>lsp|>server.go:777
+TypeScript|>tsc|>cmd|>tsc.runMain()
+	TypeScript|>tsc|>cmd|>tsc|>main.go:17
+TypeScript|>tsc|>internal|>lsp.(*Server).recover()
+	TypeScript|>tsc|>internal|>lsp|>server.go:777
 (REDACTED FRAME)
 	(REDACTED FRAME)
-typescript-go|>internal|>ls.(*LanguageService).getCompletionData.func15()
-	typescript-go|>internal|>ls|>completions.go:1303
-typescript-go|>internal|>ls.(*LanguageService).getCompletionData.func18()
-	typescript-go|>internal|>ls|>completions.go:1548
-typescript-go|>internal|>ls.(*LanguageService).getCompletionData()
-	typescript-go|>internal|>ls|>completions.go:1581
-typescript-go|>internal|>ls.(*LanguageService).getCompletionsAtPosition()
-	typescript-go|>internal|>ls|>completions.go:347
-typescript-go|>internal|>ls.(*LanguageService).ProvideCompletion()
-	typescript-go|>internal|>ls|>completions.go:47
-typescript-go|>internal|>lsp.(*Server).handleCompletion()
-	typescript-go|>internal|>lsp|>server.go:1105
-typescript-go|>internal|>lsp.init.func1.registerLanguageServiceWithAutoImportsRequestHandler[...].28()
-	typescript-go|>internal|>lsp|>server.go:682
-typescript-go|>internal|>lsp.(*Server).handleRequestOrNotification()
-	typescript-go|>internal|>lsp|>server.go:531
-typescript-go|>internal|>lsp.(*Server).dispatchLoop.func1()
-	typescript-go|>internal|>lsp|>server.go:414
-typescript-go|>internal|>lsp.(*Server).dispatchLoop
-	typescript-go|>internal|>lsp|>server.go:438
+TypeScript|>tsc|>internal|>ls.(*LanguageService).getCompletionData.func15()
+	TypeScript|>tsc|>internal|>ls|>completions.go:1303
+TypeScript|>tsc|>internal|>ls.(*LanguageService).getCompletionData.func18()
+	TypeScript|>tsc|>internal|>ls|>completions.go:1548
+TypeScript|>tsc|>internal|>ls.(*LanguageService).getCompletionData()
+	TypeScript|>tsc|>internal|>ls|>completions.go:1581
+TypeScript|>tsc|>internal|>ls.(*LanguageService).getCompletionsAtPosition()
+	TypeScript|>tsc|>internal|>ls|>completions.go:347
+TypeScript|>tsc|>internal|>ls.(*LanguageService).ProvideCompletion()
+	TypeScript|>tsc|>internal|>ls|>completions.go:47
+TypeScript|>tsc|>internal|>lsp.(*Server).handleCompletion()
+	TypeScript|>tsc|>internal|>lsp|>server.go:1105
+TypeScript|>tsc|>internal|>lsp.init.func1.registerLanguageServiceWithAutoImportsRequestHandler[...].28()
+	TypeScript|>tsc|>internal|>lsp|>server.go:682
+TypeScript|>tsc|>internal|>lsp.(*Server).handleRequestOrNotification()
+	TypeScript|>tsc|>internal|>lsp|>server.go:531
+TypeScript|>tsc|>internal|>lsp.(*Server).dispatchLoop.func1()
+	TypeScript|>tsc|>internal|>lsp|>server.go:414
+TypeScript|>tsc|>internal|>lsp.(*Server).dispatchLoop
+	TypeScript|>tsc|>internal|>lsp|>server.go:438
 ````

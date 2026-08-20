@@ -1,7 +1,7 @@
 // @strict: true
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/3488
+// https://github.com/microsoft/TypeScript/tsc/issues/3488
 
 export function cast<T>(value: T): {
     as: <K extends T>() => null extends T ? K | null : undefined extends T ? K | undefined : K;

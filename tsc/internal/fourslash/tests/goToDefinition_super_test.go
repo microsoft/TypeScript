@@ -1,0 +1,34 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestGoToDefinition_super(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `class A {
+    /*ctr*/constructor() {}
+    x() {}
+}
+class /*B*/B extends A {}
+class C extends B {
+    constructor() {
+        [|/*super*/super|]();
+    }
+    method() {
+        [|/*superExpression*/super|].x();
+    }
+}
+class D {
+    constructor() {
+        /*superBroken*/super();
+    }
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineGoToDefinition(t, true, "super", "superExpression", "superBroken")
+}

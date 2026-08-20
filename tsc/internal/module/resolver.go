@@ -1066,7 +1066,7 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 	// inserts, an entry whose `PackageDirectory` doesn't match `candidate`,
 	// causing `loadNodeModuleFromDirectoryWorker`'s `ComparePaths(candidate, ...)`
 	// check to fail and skip loading the package's `main`/`types` entry.
-	// https://github.com/microsoft/typescript-go/issues/3526
+	// https://github.com/microsoft/TypeScript/tsc/issues/3526
 	candidate := tspath.RemoveTrailingDirectorySeparator(tspath.NormalizePath(tspath.CombinePaths(nodeModulesDirectory, moduleName)))
 	packageName, rest := ParsePackageName(moduleName)
 	packageDirectory := tspath.CombinePaths(nodeModulesDirectory, packageName)

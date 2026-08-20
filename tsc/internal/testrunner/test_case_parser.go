@@ -188,7 +188,7 @@ func ParseTestFilesAndSymlinksWithOptions[T any](
 				} else {
 					// Global option
 					if existingValue, ok := globalOptions[metaDataName]; ok && existingValue != metaDataValue {
-						// !!! This would break existing submodule tests
+						// !!! This would break existing baseline tests
 						// panic("Duplicate global option: " + metaDataName)
 					}
 					globalOptions[metaDataName] = metaDataValue

@@ -1,6 +1,6 @@
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/pull/4820
+// https://github.com/microsoft/TypeScript/tsc/pull/4820
 
 type Bar<U> = (x: Baz<U[]>) => void;
 

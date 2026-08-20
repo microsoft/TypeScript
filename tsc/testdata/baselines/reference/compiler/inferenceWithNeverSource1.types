@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/inferenceWithNeverSource1.ts] ////
 
 === inferenceWithNeverSource1.ts ===
-// https://github.com/microsoft/typescript-go/issues/3688
+// https://github.com/microsoft/TypeScript/tsc/issues/3688
 type Paths<T> = unknown extends T ? string : string;
 >Paths : Paths<T>
 

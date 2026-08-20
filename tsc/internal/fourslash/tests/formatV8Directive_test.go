@@ -1,0 +1,20 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestFormatV8Directive(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: foo.js
+function foo() {}
+/*1*/%PrepareFunctionForOptimization(foo)/*2*/;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.FormatSelection(t, "1", "2")
+}

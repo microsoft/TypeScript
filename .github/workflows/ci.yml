@@ -2,418 +2,315 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-      - release-*
+    branches: [main, main-ts7, ts7-release, 'release-*']
   pull_request:
-    branches:
-      - main
-      - release-*
+    branches: [main, main-ts7, ts7-release, 'release-*']
   merge_group:
-    branches:
-      - main
-      # - release-*
+    branches: [main, main-ts7, ts7-release, 'release-*']
 
 permissions:
   contents: read
 
-# Ensure scripts are run with pipefail. See:
-# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
 defaults:
   run:
     shell: bash
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+          dotnet: false
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 'lts/*'
+      - uses: ./.github/actions/setup-go
+      - run: npm ci
+      - run: npx hereby build
+      - run: npx hereby build:api
+
+  release-build:
+    if: ${{ github.repository == 'microsoft/TypeScript' && github.event_name != 'merge_group' }}
+    runs-on:
+      - self-hosted
+      - 1ES.Pool=TypeScript-1ES-GitHub-Large
+      - 1ES.ImageOverride=azure-linux-3
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 'lts/*'
+      - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
+      - uses: ./.github/actions/setup-go
+      - run: npm ci
+      - run: npx hereby typescript:release --forRelease --setPrerelease dev.0.0
+
+  extension:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+      - run: npm run extension:build
+
   test:
     strategy:
       fail-fast: ${{ github.event_name == 'merge_group' }}
       matrix:
         config:
-          # PRs only check the newest and oldest Node versions.
-          # macOS only ever checks the neest and oldest Node versions, but never in PR runs.
-          - os: ubuntu-latest
-            node-version: '24'
-            bundle: true
-          - os: windows-latest
-            node-version: '24'
-            bundle: true
+          - runner: ubuntu-latest
+            os: linux
+            coverage: true
+            main: true
+          - runner: windows-latest
+            os: windows
+            coverage: true
             skip: ${{ github.event_name == 'merge_group' }}
-          - os: macos-latest
-            node-version: '24'
-            bundle: true
-            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
-
-          - os: ubuntu-latest
-            node-version: '22'
-            bundle: true
-            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
-          - os: windows-latest
-            node-version: '22'
-            bundle: true
-            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
-
-          - os: ubuntu-latest
-            node-version: '20'
-            bundle: true
-            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
-          - os: windows-latest
-            node-version: '20'
-            bundle: true
-            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
-
-          - os: ubuntu-latest
-            node-version: '18'
-            bundle: true
-            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
-          - os: windows-latest
-            node-version: '18'
-            bundle: true
-            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
-
-          - os: ubuntu-latest
-            node-version: '16'
-            bundle: true
-            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
-          - os: windows-latest
-            node-version: '16'
-            bundle: true
-            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
-          - os: macos-latest
-            node-version: '16'
-            bundle: true
-            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
-
-          - os: ubuntu-latest
-            node-version: '14'
-            bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
-          - os: windows-latest
-            node-version: '14'
-            bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
-            # Node 14 does not support macOS ARM.
-
-          # --no-bundle build
-          - os: ubuntu-latest
-            node-version: 'lts/*'
-            bundle: false
-            skip: ${{ github.event_name == 'merge_group' }}
-
+          - runner: macos-latest
+            os: macos
+            coverage: true
+            skip: ${{ github.event_name == 'merge_group' || github.event_name == 'pull_request' }}
+          - runner:
+              - self-hosted
+              - 1ES.Pool=TypeScript-1ES-GitHub-Large
+              - 1ES.ImageOverride=azure-linux-3
+            os: linux
+            name: 'race mode'
+            race: true
+            skip: ${{ github.event_name == 'merge_group' || github.repository != 'microsoft/TypeScript' }}
+          - runner: ubuntu-latest
+            os: linux
+            name: 'noembed'
+            noembed: true
+          - runner: ubuntu-latest
+            os: linux
+            name: 'concurrent test programs'
+            concurrent-test-programs: true
+            coverage: true
         exclude:
           - config:
               skip: true
 
-    runs-on: ${{ matrix.config.os }}
-    name: Test Node ${{ matrix.config.node-version }} on ${{ matrix.config.os }}${{ (!matrix.config.bundle && ' with --no-bundle') || '' }}
-
+    name: test (${{ matrix.config.name || matrix.config.runner }})
+    runs-on: ${{ matrix.config.runner }}
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      TSGO_HEREBY_RACE: ${{ (matrix.config.race && 'true') || 'false' }}
+      TSGO_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
+      TSGO_HEREBY_CONCURRENT_TEST_PROGRAMS: ${{ (matrix.config.concurrent-test-programs && 'true') || 'false' }}
+      TSGO_HEREBY_COVERAGE: ${{ (matrix.config.coverage && 'true') || 'false' }}
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - name: Use node version ${{ matrix.config.node-version }}
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
         with:
-          node-version: ${{ matrix.config.node-version }}
-          check-latest: true
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+          dotnet: false
+      - run: git config --system core.longpaths true
+        if: ${{ matrix.config.os == 'windows' }}
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 'lts/*'
+      - uses: ./.github/actions/setup-go
+      - if: ${{ !matrix.config.main }}
+        name: Disable PR annotations
+        run: |
+          echo "::remove-matcher owner=eslint-compact::"
+          echo "::remove-matcher owner=eslint-stylish::"
+          echo "::remove-matcher owner=tsc::"
+          echo "::remove-matcher owner=go::"
       - run: npm ci
-
+      - run: go install gotest.tools/gotestsum@latest
+        if: ${{ matrix.config.os != 'windows' && !matrix.config.race }}
       - name: Tests
         id: test
-        # run tests, but lint separately
-        env:
-          BUNDLE: ${{ matrix.config.bundle }}
-        run: npm run test -- --no-lint --bundle="$BUNDLE"
-
+        run: npx hereby test
+      - name: Benchmarks
+        run: npx hereby test:benchmarks
+      - name: Tools Tests
+        run: npx hereby test:tools
+      - name: API Tests
+        run: npx hereby test:api
+      - run: git add .
+      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        if: ${{ always() && matrix.config.coverage && github.event_name != 'merge_group' }}
+        with:
+          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
+          name: ${{ matrix.config.name || matrix.config.runner }}
+          directory: ./coverage
+      - run: git diff --staged --exit-code --stat
       - name: Print baseline diff on failure
         if: ${{ failure() && steps.test.conclusion == 'failure' }}
         run: |
           npx hereby baseline-accept
-          git add tests/baselines/reference
+          git add tsc/testdata/baselines/reference
           git diff --staged --exit-code
-
-  coverage:
-    if: ${{ github.event_name != 'merge_group' }}
-
-    runs-on:
-      - 'self-hosted'
-      - '1ES.Pool=TypeScript-1ES-GitHub-Large'
-      - '1ES.ImageOverride=azure-linux-3'
-
-    permissions:
-      id-token: write
-      contents: read
-
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: ${{ failure() && steps.test.conclusion == 'failure' }}
         with:
-          node-version: 'lts/*'
-      - run: npm ci
-
-      - name: Run tests with coverage
-        run: npm test -- --no-lint --coverage
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: coverage
-          path: coverage
-
-      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
-        with:
-          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
-          disable_search: true
-          files: ./coverage/codecov.json
+          name: ${{ matrix.config.name || matrix.config.os }}-new-baselines
+          path: tsc/testdata/baselines/local
 
   lint:
-    runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: ${{ github.event_name == 'merge_group' }}
+      matrix:
+        config:
+          - runner: ubuntu-latest
+            os: linux
+            main: true
+          - runner: windows-latest
+            os: windows
+            skip: ${{ github.event_name == 'merge_group' }}
+          - runner: ubuntu-latest
+            os: linux
+            name: 'noembed'
+            noembed: true
+            skip: ${{ github.event_name == 'merge_group' }}
+        exclude:
+          - config:
+              skip: true
+    name: lint (${{ matrix.config.name || matrix.config.runner }})
+    runs-on: ${{ matrix.config.runner }}
+    env:
+      TSGO_HEREBY_NOEMBED: ${{ (matrix.config.noembed && 'true') || 'false' }}
     steps:
+      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+          dotnet: false
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 'lts/*'
+      - uses: ./.github/actions/setup-go
+      - if: ${{ !matrix.config.main }}
+        name: Disable PR annotations
+        run: |
+          echo "::remove-matcher owner=eslint-compact::"
+          echo "::remove-matcher owner=eslint-stylish::"
+          echo "::remove-matcher owner=tsc::"
+          echo "::remove-matcher owner=go::"
       - run: npm ci
-
-      - name: Linter
-        run: npm run lint
-
-  knip:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
-        with:
-          node-version: 'lts/*'
-      - run: npm ci
-
-      - name: Unused exports
-        run: npm run knip
+      - run: npx hereby lint
 
   format:
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-slim
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 'lts/*'
+      - uses: ./.github/actions/setup-go
       - run: npm ci
+      - run: npx hereby check:format
 
-      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: ~/.cache/dprint
-          key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
-          restore-keys: |
-            ${{ runner.os }}-dprint-
-
-      - name: Check formatting
-        run: npx dprint check
-
-  typecheck:
+  generate:
     runs-on: ubuntu-latest
-
     steps:
+      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+          dotnet: false
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
-          node-version: 'lts/*'
+          node-version: '>=22.16.0'
+      - uses: ./.github/actions/setup-go
       - run: npm ci
+      - run: npx hereby generate
+      - run: npx hereby generate:enums
+      - run: npx hereby generate:ast
+      - run: npx hereby generate:vendor
+      - run: node --experimental-strip-types ./tsc/internal/lsp/lsproto/_generate/fetchModel.mts
+      - run: node --experimental-strip-types ./tsc/internal/lsp/lsproto/_generate/generate.mts
+      - run: npx hereby generate:extension
+      - run: npx hereby check:scripts
+      - run: git add .
+      - run: git diff --staged --exit-code --stat
 
-      - name: Build src
-        run: npx hereby build-src
+  tidy:
+    runs-on: ubuntu-slim
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: ./.github/actions/setup-go
+      - run: go -C ./tsc mod tidy -diff
+      - run: go -C ./tools mod tidy -diff
+      - run: go work sync
+      - run: git diff --exit-code
 
   smoke:
     runs-on: ubuntu-latest
-
     steps:
+      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+          dotnet: false
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          repository: microsoft/TypeScript
+          ref: v6.0.3
+          path: smoke/typescript-6.0
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 'lts/*'
-      - run: |
-          npm --version
-          # corepack enable npm
-          npm install -g $(jq -r '.packageManager' < package.json)
-          npm --version
-
+      - uses: ./.github/actions/setup-go
       - run: npm ci
-
-      - run: npx hereby lkg
-      - run: |
-          node ./scripts/addPackageJsonGitHead.mjs package.json
-          npm pack
-          mv typescript*.tgz typescript.tgz
-          echo "package=$PWD/typescript.tgz" >> "$GITHUB_OUTPUT"
-        id: pack
-
-      - name: Smoke test
-        env:
-          PACKAGE: ${{ steps.pack.outputs.package }}
-        run: |
-          cd "$(mktemp -d)"
-          npm init --yes
-          npm install "$PACKAGE"
-
-          echo "Testing tsc..."
-          npx tsc --version
-
-          echo "Testing tsserver..."
-          echo '{"seq": 1, "command": "status"}' | npx tsserver
-
-          node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript
-          node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript/lib/tsserverlibrary
-
-  package-size:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          path: pr
-
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          path: base
-          ref: ${{ github.base_ref }}
-
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
-        with:
-          node-version: 'lts/*'
-      - run: |
-          npm --version
-          # corepack enable npm
-
-      - run: |
-          npm install -g $(jq -r '.packageManager' < package.json)
-          npm --version
-        working-directory: ./pr
-
+      - run: npx hereby build --race
       - run: npm ci
-        working-directory: ./pr
-
-      - run: npm ci
-        id: base-npm-ci
-        continue-on-error: true
-        working-directory: ./base
-
-      - run: npx hereby lkg
-        working-directory: ./pr
-
-      - run: npx hereby lkg
-        id: base-lkg
-        continue-on-error: true
-        if: ${{ steps.base-npm-ci.outcome == 'success' }}
-        working-directory: ./base
-
-      - run: |
-          echo "See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID for more info."
-          node ./pr/scripts/checkPackageSize.mjs ./base ./pr >> $GITHUB_STEP_SUMMARY
-        if: ${{ steps.base-lkg.outcome == 'success' }}
+        working-directory: smoke/typescript-6.0
+      - run: npx hereby generate-diagnostics
+        working-directory: smoke/typescript-6.0
+      - run: ./built/local/tsc -p ./smoke/typescript-6.0/src/compiler --singleThreaded
+      - run: ./built/local/tsc -p ./smoke/typescript-6.0/src/compiler
 
   misc:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 'lts/*'
+      - uses: ./.github/actions/setup-go
       - run: npm ci
-
-      - name: Build scripts
-        run: npx hereby scripts
-
-      - name: ESLint tests
-        run: npx hereby run-eslint-rules-tests
-
-  self-check:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
-        with:
-          node-version: 'lts/*'
-      - run: npm ci
-
-      - name: Build tsc
-        run: npx hereby tsc
-
-      - name: Clean
-        run: npx hereby clean-src
-
-      - name: Self build
-        run: npx hereby build-src --built
-
-  baselines:
-    if: ${{ github.event_name != 'merge_group' }}
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
-        with:
-          node-version: 'lts/*'
-      - run: npm ci
-
-      - name: Remove all baselines
-        run: rm -rf tests/baselines/reference
-
-      - name: Run tests
-        run: npm test &> /dev/null || exit 0
-
-      - name: Accept baselines
-        run: |
-          npx hereby baseline-accept
-          git add tests/baselines/reference
-
-      - name: Check baselines
-        id: check-baselines
-        run: |
-          function print_diff() {
-            if ! git diff --staged --exit-code --quiet --diff-filter=$1; then
-              echo "$2:"
-              git diff --staged --name-only --diff-filter=$1
-            fi
-          }
-
-          if ! git diff --staged --exit-code --quiet; then
-            print_diff ACR "Missing baselines"
-            print_diff MTUXB "Modified baselines"
-            print_diff D "Unused baselines"
-            git diff --staged > fix_baselines.patch
-            exit 1
-          fi
-
-      - name: Upload baseline diff artifact
-        if: ${{ failure() && steps.check-baselines.conclusion == 'failure' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: fix_baselines.patch
-          path: fix_baselines.patch
+      - run: go -C ./tools run ./cmd/checkmodpaths "$PWD"
+      - run: npx hereby check:scripts
+      - run: npx hereby typescript:check-platforms
 
   required:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: ${{ always() }}
     needs:
-      - test
-      - coverage
-      - lint
-      - knip
+      - build
+      - release-build
+      - extension
       - format
-      - typecheck
-      - smoke
-      - package-size
+      - generate
+      - lint
       - misc
-      - self-check
-      - baselines
-
+      - smoke
+      - test
+      - tidy
     steps:
       - name: Check required jobs
         env:
           NEEDS: ${{ toJson(needs) }}
         run: |
-          ! echo $NEEDS | jq -e 'to_entries[] | { job: .key, result: .value.result } | select((.result == "success" or .result == "skipped") | not)'
+          ! echo "$NEEDS" | jq -e 'to_entries[] | { job: .key, result: .value.result } | select((.result == "success" or .result == "skipped") | not)'

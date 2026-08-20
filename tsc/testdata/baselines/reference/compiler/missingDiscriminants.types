@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/missingDiscriminants.ts] ////
 
 === missingDiscriminants.ts ===
-// https://github.com/microsoft/typescript-go/issues/1020
+// https://github.com/microsoft/TypeScript/tsc/issues/1020
 
 type Thing =
 >Thing : Thing

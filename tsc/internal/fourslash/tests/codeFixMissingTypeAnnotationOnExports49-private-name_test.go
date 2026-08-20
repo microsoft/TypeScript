@@ -1,0 +1,55 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports49_private_name(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+// @moduleResolution: bundler
+// @target: es2018
+// @jsx: react-jsx
+export function two() {
+    const y = "";
+    return {} as typeof y;
+}
+
+export function three() {
+    type Z = string;
+    return {} as Z;
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add return type '\"\"'",
+		NewFileContent: `export function two(): "" {
+    const y = "";
+    return {} as typeof y;
+}
+
+export function three() {
+    type Z = string;
+    return {} as Z;
+}`,
+		Index: 0,
+	})
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add return type 'string'",
+		NewFileContent: `export function two() {
+    const y = "";
+    return {} as typeof y;
+}
+
+export function three(): string {
+    type Z = string;
+    return {} as Z;
+}`,
+		Index: 1,
+	})
+}

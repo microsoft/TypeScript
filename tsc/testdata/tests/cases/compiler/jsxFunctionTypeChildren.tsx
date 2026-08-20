@@ -3,7 +3,7 @@
 // @noEmit: true
 // @jsx: preserve
 
-// https://github.com/microsoft/typescript-go/issues/2703
+// https://github.com/microsoft/TypeScript/tsc/issues/2703
 
 /// <reference path="/.lib/react.d.ts" />
 

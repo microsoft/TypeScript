@@ -1,8 +1,0 @@
-//// [tests/cases/compiler/genericInference1.ts] ////
-
-//// [genericInference1.ts]
-['a', 'b', 'c'].map(x => x.length);
-
-//// [genericInference1.js]
-"use strict";
-['a', 'b', 'c'].map(x => x.length);

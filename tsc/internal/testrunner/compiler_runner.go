@@ -48,7 +48,6 @@ func (t *CompilerTestType) String() string {
 }
 
 type CompilerBaselineRunner struct {
-	isSubmodule  bool
 	testFiles    []string
 	basePath     string
 	testSuitName string
@@ -56,18 +55,11 @@ type CompilerBaselineRunner struct {
 
 var _ Runner = (*CompilerBaselineRunner)(nil)
 
-func NewCompilerBaselineRunner(testType CompilerTestType, isSubmodule bool) *CompilerBaselineRunner {
+func NewCompilerBaselineRunner(testType CompilerTestType) *CompilerBaselineRunner {
 	testSuitName := testType.String()
-	var basePath string
-	if isSubmodule {
-		basePath = "../_submodules/TypeScript/tests/cases/" + testSuitName
-	} else {
-		basePath = "tests/cases/" + testSuitName
-	}
 	return &CompilerBaselineRunner{
-		basePath:     basePath,
+		basePath:     "tests/cases/" + testSuitName,
 		testSuitName: testSuitName,
-		isSubmodule:  isSubmodule,
 	}
 }
 
@@ -149,7 +141,7 @@ func (r *CompilerBaselineRunner) RunTests(t *testing.T) {
 var localBasePath = filepath.Join(repo.TestDataPath(), "baselines", "local")
 
 func (r *CompilerBaselineRunner) cleanUpLocal(t *testing.T) {
-	localPath := filepath.Join(localBasePath, core.IfElse(r.isSubmodule, "diff", ""), r.testSuitName)
+	localPath := filepath.Join(localBasePath, r.testSuitName)
 	err := os.RemoveAll(localPath)
 	if err != nil {
 		panic("Could not clean up local compiler tests: " + err.Error())
@@ -212,13 +204,13 @@ func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName stri
 
 	harnessutil.SkipUnsupportedCompilerOptions(t, compilerTest.options)
 
-	compilerTest.verifyDiagnostics(t, r.testSuitName, r.isSubmodule)
-	compilerTest.verifyContentMapper(t, r.testSuitName, r.isSubmodule)
-	compilerTest.verifyJavaScriptOutput(t, r.testSuitName, r.isSubmodule)
-	compilerTest.verifySourceMapOutput(t, r.testSuitName, r.isSubmodule)
-	compilerTest.verifySourceMapRecord(t, r.testSuitName, r.isSubmodule)
-	compilerTest.verifyTypesAndSymbols(t, r.testSuitName, r.isSubmodule)
-	compilerTest.verifyModuleResolution(t, r.testSuitName, r.isSubmodule)
+	compilerTest.verifyDiagnostics(t, r.testSuitName)
+	compilerTest.verifyContentMapper(t, r.testSuitName)
+	compilerTest.verifyJavaScriptOutput(t, r.testSuitName)
+	compilerTest.verifySourceMapOutput(t, r.testSuitName)
+	compilerTest.verifySourceMapRecord(t, r.testSuitName)
+	compilerTest.verifyTypesAndSymbols(t, r.testSuitName)
+	compilerTest.verifyModuleResolution(t, r.testSuitName)
 	compilerTest.verifyUnionOrdering(t)
 	compilerTest.verifyParentPointers(t)
 }
@@ -372,7 +364,7 @@ func newCompilerTest(
 	}
 }
 
-func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmodule bool) {
+func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string) {
 	t.Run("error", func(t *testing.T) {
 		defer testutil.RecoverAndFail(t, "Panic on creating error baseline for test "+c.filename)
 		files := core.Concatenate(c.tsConfigFiles, core.Concatenate(c.toBeCompiled, c.otherFiles))
@@ -388,8 +380,8 @@ func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmo
 			})
 		}
 		tsbaseline.DoErrorBaseline(t, c.configuredName, files, diagnostics, c.result.Options.Pretty.IsTrue(), baseline.Options{
-			Subfolder:   suiteName,
-			IsSubmodule: isSubmodule,
+			Subfolder: suiteName,
+
 			DiffFixupOld: func(old string) string {
 				var sb strings.Builder
 				sb.Grow(len(old))
@@ -413,12 +405,11 @@ func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmo
 	})
 }
 
-func (c *compilerTest) verifyContentMapper(t *testing.T, suiteName string, isSubmodule bool) {
+func (c *compilerTest) verifyContentMapper(t *testing.T, suiteName string) {
 	t.Run("content mapper", func(t *testing.T) {
 		defer testutil.RecoverAndFail(t, "Panic on creating content mapper baseline for test "+c.filename)
 		tsbaseline.DoContentMapperBaseline(t, c.configuredName, c.result.Program, c.result.Diagnostics, baseline.Options{
-			Subfolder:   suiteName,
-			IsSubmodule: isSubmodule,
+			Subfolder: suiteName,
 		})
 	})
 }
@@ -449,7 +440,7 @@ var skippedEmitTests = map[string]string{
 	"typeOnlyMerge3.ts":                               "Nondeterministic contents when run concurrently.",
 }
 
-func (c *compilerTest) verifyJavaScriptOutput(t *testing.T, suiteName string, isSubmodule bool) {
+func (c *compilerTest) verifyJavaScriptOutput(t *testing.T, suiteName string) {
 	if !c.hasNonDtsFiles {
 		return
 	}
@@ -461,9 +452,6 @@ func (c *compilerTest) verifyJavaScriptOutput(t *testing.T, suiteName string, is
 
 		defer testutil.RecoverAndFail(t, "Panic on creating js output for test "+c.filename)
 		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.ComparePathsOptions{})
-		if isSubmodule {
-			headerComponents = headerComponents[4:] // Strip "./../_submodules/TypeScript" prefix
-		}
 		header := tspath.GetPathFromPathComponents(headerComponents)
 		tsbaseline.DoJSEmitBaseline(
 			t,
@@ -475,18 +463,15 @@ func (c *compilerTest) verifyJavaScriptOutput(t *testing.T, suiteName string, is
 			c.toBeCompiled,
 			c.otherFiles,
 			c.harnessOptions,
-			baseline.Options{Subfolder: suiteName, IsSubmodule: isSubmodule},
+			baseline.Options{Subfolder: suiteName},
 		)
 	})
 }
 
-func (c *compilerTest) verifySourceMapOutput(t *testing.T, suiteName string, isSubmodule bool) {
+func (c *compilerTest) verifySourceMapOutput(t *testing.T, suiteName string) {
 	t.Run("sourcemap", func(t *testing.T) {
 		defer testutil.RecoverAndFail(t, "Panic on creating source map output for test "+c.filename)
 		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.ComparePathsOptions{})
-		if isSubmodule {
-			headerComponents = headerComponents[4:] // Strip "./../_submodules/TypeScript" prefix
-		}
 		header := tspath.GetPathFromPathComponents(headerComponents)
 		tsbaseline.DoSourcemapBaseline(
 			t,
@@ -495,18 +480,15 @@ func (c *compilerTest) verifySourceMapOutput(t *testing.T, suiteName string, isS
 			c.options,
 			c.result,
 			c.harnessOptions,
-			baseline.Options{Subfolder: suiteName, IsSubmodule: isSubmodule},
+			baseline.Options{Subfolder: suiteName},
 		)
 	})
 }
 
-func (c *compilerTest) verifySourceMapRecord(t *testing.T, suiteName string, isSubmodule bool) {
+func (c *compilerTest) verifySourceMapRecord(t *testing.T, suiteName string) {
 	t.Run("sourcemap record", func(t *testing.T) {
 		defer testutil.RecoverAndFail(t, "Panic on creating source map record for test "+c.filename)
 		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.ComparePathsOptions{})
-		if isSubmodule {
-			headerComponents = headerComponents[4:] // Strip "./../_submodules/TypeScript" prefix
-		}
 		header := tspath.GetPathFromPathComponents(headerComponents)
 		tsbaseline.DoSourcemapRecordBaseline(
 			t,
@@ -515,12 +497,12 @@ func (c *compilerTest) verifySourceMapRecord(t *testing.T, suiteName string, isS
 			c.options,
 			c.result,
 			c.harnessOptions,
-			baseline.Options{Subfolder: suiteName, IsSubmodule: isSubmodule},
+			baseline.Options{Subfolder: suiteName},
 		)
 	})
 }
 
-func (c *compilerTest) verifyTypesAndSymbols(t *testing.T, suiteName string, isSubmodule bool) {
+func (c *compilerTest) verifyTypesAndSymbols(t *testing.T, suiteName string) {
 	noTypesAndSymbols := c.harnessOptions.NoTypesAndSymbols
 	if noTypesAndSymbols {
 		return
@@ -534,9 +516,6 @@ func (c *compilerTest) verifyTypesAndSymbols(t *testing.T, suiteName string, isS
 	)
 
 	headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath(), c.filename, tspath.ComparePathsOptions{})
-	if isSubmodule {
-		headerComponents = headerComponents[4:] // Strip "./../_submodules/TypeScript" prefix
-	}
 	header := tspath.GetPathFromPathComponents(headerComponents)
 	tsbaseline.DoTypeAndSymbolBaseline(
 		t,
@@ -544,14 +523,14 @@ func (c *compilerTest) verifyTypesAndSymbols(t *testing.T, suiteName string, isS
 		header,
 		program,
 		allFiles,
-		baseline.Options{Subfolder: suiteName, IsSubmodule: isSubmodule},
+		baseline.Options{Subfolder: suiteName},
 		false,
 		false,
 		len(c.result.Diagnostics) > 0,
 	)
 }
 
-func (c *compilerTest) verifyModuleResolution(t *testing.T, suiteName string, isSubmodule bool) {
+func (c *compilerTest) verifyModuleResolution(t *testing.T, suiteName string) {
 	if !c.options.TraceResolution.IsTrue() {
 		return
 	}
@@ -559,8 +538,8 @@ func (c *compilerTest) verifyModuleResolution(t *testing.T, suiteName string, is
 	t.Run("module resolution", func(t *testing.T) {
 		defer testutil.RecoverAndFail(t, "Panic on creating module resolution baseline for test "+c.filename)
 		tsbaseline.DoModuleResolutionBaseline(t, c.configuredName, c.result.Trace, baseline.Options{
-			Subfolder:       suiteName,
-			IsSubmodule:     isSubmodule,
+			Subfolder: suiteName,
+
 			SkipDiffWithOld: true,
 		})
 	})

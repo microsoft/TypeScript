@@ -1016,7 +1016,7 @@ func TestHiddenDirectoriesInNodeModules(t *testing.T) {
 		//    a name/version, so PackageId is empty
 		// 6. collectPackageNames falls through to GetPackageNameFromDirectory, which
 		//    extracts ".yarn-store" from the realpath after /node_modules/
-		// See https://github.com/microsoft/typescript-go/issues/2780
+		// See https://github.com/microsoft/TypeScript/tsc/issues/2780
 		t.Parallel()
 		projectRoot := "/home/src/fuse-project"
 		storeDir := projectRoot + "/node_modules/.yarn-store"

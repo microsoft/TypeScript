@@ -1,0 +1,42 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestMemberListOfModuleBeforeKeyword(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `namespace TypeModule1 {
+    export class C1 { }
+    export class C2 { }
+}
+var x: TypeModule1./*namedType*/
+namespace TypeModule2 {
+    export class Test3 {}
+}
+
+TypeModule1./*dottedExpression*/
+namespace TypeModule3 {
+    export class Test3 {}
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, f.Markers(), &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{
+				"C1",
+				"C2",
+			},
+		},
+	})
+}

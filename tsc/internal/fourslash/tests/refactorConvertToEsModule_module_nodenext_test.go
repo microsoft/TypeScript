@@ -1,0 +1,34 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestRefactorConvertToEsModule_module_nodenext(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @allowJs: true
+// @target: esnext
+// @module: node18
+// @Filename: /a.js
+module.exports = 0;
+// @Filename: /b.ts
+module.exports = 0;
+// @Filename: /c.cjs
+module.exports = 0;
+// @Filename: /d.cts
+module.exports = 0;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToFile(t, "/a.js")
+	f.VerifyCodeFixNotAvailable(t)
+	f.GoToFile(t, "/b.ts")
+	f.VerifyCodeFixNotAvailable(t)
+	f.GoToFile(t, "/c.cjs")
+	f.VerifyCodeFixNotAvailable(t)
+	f.GoToFile(t, "/d.cts")
+	f.VerifyCodeFixNotAvailable(t)
+}

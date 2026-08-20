@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/subtypeReductionWithAnyFunctionType.ts] ////
 
 === subtypeReductionWithAnyFunctionType.ts ===
-// https://github.com/microsoft/typescript-go/issues/849
+// https://github.com/microsoft/TypeScript/tsc/issues/849
 
 declare function useMemo<T>(func: () => T): T;
 >useMemo : <T>(func: () => T) => T
@@ -39,7 +39,7 @@ function getPredicate(alwaysTrue: boolean) {
 >predicate : (input: string) => boolean
 }
 
-// https://github.com/microsoft/typescript-go/issues/1016
+// https://github.com/microsoft/TypeScript/tsc/issues/1016
 
 declare function compact<T>(array: T[]): T[];
 >compact : <T>(array: T[]) => T[]

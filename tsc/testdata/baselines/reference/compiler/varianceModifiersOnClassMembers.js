@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/varianceModifiersOnClassMembers.ts] ////
 
 //// [varianceModifiersOnClassMembers.ts]
-// https://github.com/microsoft/typescript-go/issues/4123
+// https://github.com/microsoft/TypeScript/tsc/issues/4123
 
 class C {
   in x = 1;
@@ -16,7 +16,7 @@ for (const k in { x: 1 }) {
 
 //// [varianceModifiersOnClassMembers.js]
 "use strict";
-// https://github.com/microsoft/typescript-go/issues/4123
+// https://github.com/microsoft/TypeScript/tsc/issues/4123
 class C {
     x = 1;
     y = 2;

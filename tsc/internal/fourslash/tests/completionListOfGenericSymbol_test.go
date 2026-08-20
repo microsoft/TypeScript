@@ -1,0 +1,52 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCompletionListOfGenericSymbol(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `var a = [1,2,3];
+a./**/`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "length",
+					Detail: new("(property) Array<number>.length: number"),
+					Documentation: &lsproto.StringOrMarkupContent{
+						MarkupContent: &lsproto.MarkupContent{
+							Kind:  lsproto.MarkupKindMarkdown,
+							Value: "Gets or sets the length of the array. This is a number one higher than the highest index in the array.",
+						},
+					},
+					Kind: new(lsproto.CompletionItemKindField),
+				},
+				&lsproto.CompletionItem{
+					Label:  "toString",
+					Detail: new("(method) Array<number>.toString(): string"),
+					Documentation: &lsproto.StringOrMarkupContent{
+						MarkupContent: &lsproto.MarkupContent{
+							Kind:  lsproto.MarkupKindMarkdown,
+							Value: "Returns a string representation of an array.",
+						},
+					},
+					Kind: new(lsproto.CompletionItemKindMethod),
+				},
+			},
+		},
+	})
+}

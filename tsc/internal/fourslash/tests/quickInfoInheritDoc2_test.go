@@ -1,0 +1,33 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestQuickInfoInheritDoc2(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @noEmit: true
+// @allowJs: true
+// @Filename: quickInfoInheritDoc2.ts
+class Base<T> {
+    /**
+     * Base.prop
+     */
+    prop: T | undefined;
+}
+
+class SubClass<T> extends Base<T> {
+    /**
+     * @inheritdoc
+     * SubClass.prop
+     */
+    /*1*/prop: T | undefined;
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyBaselineHover(t)
+}

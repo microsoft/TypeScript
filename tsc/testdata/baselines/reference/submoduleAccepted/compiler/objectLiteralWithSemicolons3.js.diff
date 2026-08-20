@@ -1,9 +1,0 @@
---- old.objectLiteralWithSemicolons3.js
-+++ new.objectLiteralWithSemicolons3.js
-@@= skipped -11, +11 lines =@@
- var v = {
-     a,
-     b,
--    c
-+    c,
- };

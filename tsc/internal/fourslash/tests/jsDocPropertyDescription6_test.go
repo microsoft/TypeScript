@@ -1,0 +1,29 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestJsDocPropertyDescription6(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `interface Literal1Example {
+    [key: ` + "`" + `prefix${string}` + "`" + `]: number | string;
+    /** Something else */
+    [key: ` + "`" + `prefix${number}` + "`" + `]: number;
+}
+function literal1Example(e: Literal1Example) {
+    console.log(e./*literal1*/prefixMember);
+    console.log(e./*literal2*/anything);
+    console.log(e./*literal3*/prefix0);
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyQuickInfoAt(t, "literal1", "(index) Literal1Example[`prefix${string}`]: string | number", "")
+	f.VerifyQuickInfoAt(t, "literal2", "any", "")
+	f.VerifyQuickInfoAt(t, "literal3", "(index) Literal1Example[`prefix${string}` | `prefix${number}`]: number", "Something else")
+}

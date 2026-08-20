@@ -1,7 +1,7 @@
 // @strict: true
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/2551
+// https://github.com/microsoft/TypeScript/tsc/issues/2551
 
 type S1 = { input: { a: number } };
 type S2 = { input: { b: number } };

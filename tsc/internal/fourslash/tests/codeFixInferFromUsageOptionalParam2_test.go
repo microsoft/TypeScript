@@ -1,0 +1,21 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixInferFromUsageOptionalParam2(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @noImplicitAny: true
+function f([|a? |]){
+    if (a < 9) return;
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyRangeAfterCodeFix(t, `a?: number`, false, 0, 0)
+}

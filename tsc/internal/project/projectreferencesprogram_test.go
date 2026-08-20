@@ -314,7 +314,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 
 	t.Run("dropped project reference does not crash on later change to the dropped config", func(t *testing.T) {
 		t.Parallel()
-		// Regression test for https://github.com/microsoft/typescript-go/issues/3942.
+		// Regression test for https://github.com/microsoft/TypeScript/tsc/issues/3942.
 		// A project reference dropped from a tsconfig used to leave a stale entry in
 		// the referenced config's retainingProjects. When the referencing project was
 		// later deleted and the referenced config subsequently changed, the stale entry

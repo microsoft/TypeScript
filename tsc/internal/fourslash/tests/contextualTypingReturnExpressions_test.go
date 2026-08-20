@@ -1,0 +1,20 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestContextualTypingReturnExpressions(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `interface A { }
+var f44: (x: A) => (y: A) => A = /*1*/x => /*2*/y => /*3*/x;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyQuickInfoAt(t, "1", "(parameter) x: A", "")
+	f.VerifyQuickInfoAt(t, "2", "(parameter) y: A", "")
+	f.VerifyQuickInfoAt(t, "3", "(parameter) x: A", "")
+}

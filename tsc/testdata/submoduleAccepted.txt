@@ -943,7 +943,7 @@ conformance/nodeModulesAllowJsTopLevelAwait(module=node20).js.diff
 conformance/nodeModulesAllowJsTopLevelAwait(module=nodenext).js.diff
 
 ## JS declaration emit adds `export import` modifier for require-style import assignments
-## https://github.com/microsoft/typescript-go/issues/3542
+## https://github.com/microsoft/TypeScript/tsc/issues/3542
 conformance/nodeModulesAllowJsImportAssignment(module=node16).js.diff
 conformance/nodeModulesAllowJsImportAssignment(module=node18).js.diff
 conformance/nodeModulesAllowJsImportAssignment(module=node20).js.diff
@@ -1306,7 +1306,7 @@ conformance/jsdocDisallowedInTypescript.js.diff
 compiler/letDeclarations.js.diff
 
 ## Fix checks for disallowed property/accessor duplicate declarations
-## https://github.com/microsoft/typescript-go/pull/3672
+## https://github.com/microsoft/TypeScript/tsc/pull/3672
 compiler/allowJscheckJsTypeParameterNoCrash.types.diff
 compiler/fieldAndGetterWithSameName.symbols.diff
 conformance/autoAccessor11.symbols.diff
@@ -1317,7 +1317,7 @@ conformance/propertyAndAccessorWithSameName.symbols.diff
 conformance/propertyAndAccessorWithSameName.types.diff
 
 ## Preserve native destructuring for CommonJS exports to keep iterator semantics
-## https://github.com/microsoft/typescript-go/issues/3701
+## https://github.com/microsoft/TypeScript/tsc/issues/3701
 compiler/bindingPatternOmittedExpressionNesting.js.diff
 compiler/declarationEmitRetainsJsdocyComments.js.diff
 compiler/destructuringInVariableDeclarations1.js.diff
@@ -1330,7 +1330,7 @@ compiler/exportObjectRest(module=commonjs,target=esnext).js.diff
 ## imports in the presence of TS2209 "ambiguous project root" errors.
 ## After merging repos, consider adding a `rootDir` option to these tests
 ## so the core functionality remains tested.
-## https://github.com/microsoft/typescript-go/issues/3775
+## https://github.com/microsoft/TypeScript/tsc/issues/3775
 compiler/nodeNextPackageSelfNameWithOutDir.errors.txt.diff
 compiler/nodeNextPackageSelfNameWithOutDirDeclDir.errors.txt.diff
 conformance/nodeAllowJsPackageSelfName(module=node16).errors.txt.diff
@@ -1347,7 +1347,7 @@ conformance/nodeModulesDeclarationEmitWithPackageExports(module=node20).errors.t
 conformance/nodeModulesDeclarationEmitWithPackageExports(module=nodenext).errors.txt.diff
 
 ## JSDoc module namepath module:A emits as unresolved module instead of any
-## https://github.com/microsoft/typescript-go/issues/3562
+## https://github.com/microsoft/TypeScript/tsc/issues/3562
 conformance/jsDeclarationsModuleReferenceHasEmit(target=es2015).js.diff
 compiler/lateBoundAssignmentCandidateJS2.js.diff
 compiler/lateBoundMethodNameAssigmentJS.js.diff
@@ -1360,14 +1360,14 @@ compiler/tslibMultipleMissingHelper.errors.txt.diff
 compiler/esModuleInteropTslibHelpers.errors.txt.diff
 
 # CJS exports pattern changes in declaration emit
-## https://github.com/microsoft/typescript-go/issues/3559
+## https://github.com/microsoft/TypeScript/tsc/issues/3559
 compiler/jsExportAssignmentNonMutableLocation.js.diff
 conformance/commonJSImportClassTypeReference.js.diff
 conformance/commonJSImportNestedClassTypeReference.js.diff
 conformance/jsDeclarationsExportDoubleAssignmentInClosure.js.diff
 
 # CJS export alias and element access patterns changed, for the better
-## https://github.com/microsoft/typescript-go/issues/3545
+## https://github.com/microsoft/TypeScript/tsc/issues/3545
 conformance/moduleExportAliasElementAccessExpression.js.diff
 conformance/moduleExportDuplicateAlias.js.diff
 conformance/moduleExportDuplicateAlias2.js.diff
@@ -1375,7 +1375,7 @@ conformance/moduleExportDuplicateAlias3.js.diff
 conformance/moduleExportsElementAccessAssignment.js.diff
 
 # CJS `module.exports = {}` now emits `export = _default` with inlined object type instead of named exports
-## https://github.com/microsoft/typescript-go/issues/3543
+## https://github.com/microsoft/TypeScript/tsc/issues/3543
 compiler/jsDeclarationEmitExportAssignedFunctionWithExtraTypedefsMembers.js.diff
 conformance/jsDeclarationsCommonjsRelativePath.js.diff
 conformance/jsDeclarationsDocCommentsOnConsts(target=es2015).js.diff
@@ -1392,7 +1392,7 @@ conformance/jsDeclarationsTypedefAndImportTypes.js.diff
 conformance/jsDeclarationsTypedefPropertyAndExportAssignment.js.diff
 
 # @overload handling changes in JS declaration emit (we no longer support @overload on declarations that can't have TS overloads)
-## https://github.com/microsoft/typescript-go/issues/3555
+## https://github.com/microsoft/TypeScript/tsc/issues/3555
 compiler/jsFileAlternativeUseOfOverloadTag.js.diff
 compiler/jsFileFunctionOverloads.js.diff
 compiler/jsFileFunctionOverloads2.js.diff
@@ -1403,14 +1403,14 @@ conformance/overloadTag1.js.diff
 conformance/overloadTag2.js.diff
 
 # Output file ordering changed + declaration types resolve to any instead of typeof references due to respecting `out` in package self-name resolution
-## https://github.com/microsoft/typescript-go/issues/3551
+## https://github.com/microsoft/TypeScript/tsc/issues/3551
 conformance/nodeModulesDeclarationEmitWithPackageExports(module=node16).js.diff
 conformance/nodeModulesDeclarationEmitWithPackageExports(module=node18).js.diff
 conformance/nodeModulesDeclarationEmitWithPackageExports(module=node20).js.diff
 conformance/nodeModulesDeclarationEmitWithPackageExports(module=nodenext).js.diff
 
 # CJS class expressions emit named class declarations instead of anonymous constructor types
-## https://github.com/microsoft/typescript-go/issues/3544
+## https://github.com/microsoft/TypeScript/tsc/issues/3544
 conformance/commonJSImportExportedClassExpression.js.diff
 conformance/jsDeclarationsExportAssignedClassExpression(target=es2015).js.diff
 conformance/jsDeclarationsExportAssignedClassExpressionAnonymous(target=es2015).js.diff
@@ -1419,12 +1419,12 @@ conformance/jsDeclarationsExportAssignedClassExpressionShadowing(target=es2015).
 conformance/jsDeclarationsExportAssignedVisibility(target=es2015).js.diff
 
 # @callback/@overload variadic intepreted differently than strada
-## https://github.com/microsoft/typescript-go/issues/3556
+## https://github.com/microsoft/TypeScript/tsc/issues/3556
 conformance/callbackTagNestedParameter.js.diff
 conformance/callbackTagVariadicType.js.diff
 
 # definiteAssignment shorthand in object literal loses optional modifier
-## https://github.com/microsoft/typescript-go/issues/3563
+## https://github.com/microsoft/TypeScript/tsc/issues/3563
 conformance/definiteAssignmentAssertionsWithObjectShortHand.js.diff
 
 # Const arrow functions are now emitted as such, not function declarations
@@ -1438,7 +1438,7 @@ conformance/jsDeclarationsOptionalTypeLiteralProps2.js.diff
 conformance/typeFromPropertyAssignment39.js.diff
 
 # Better `typeof` usage for function expressions
-## https://github.com/microsoft/typescript-go/pull/4507
+## https://github.com/microsoft/TypeScript/tsc/pull/4507
 compiler/declarationEmitPartialNodeReuseTypeOf.js.diff
 compiler/declarationEmitPartialNodeReuseTypeReferences.js.diff
 compiler/declarationEmitPartialReuseComputedProperty.js.diff

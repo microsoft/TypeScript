@@ -14,7 +14,7 @@ import (
 
 // Test that global keywords like `function`, `class`, and `const` shadow
 // auto-import completions with the same name, rather than being
-// shadowed by them. See: https://github.com/microsoft/typescript-go/issues/1379
+// shadowed by them. See: https://github.com/microsoft/TypeScript/tsc/issues/1379
 func TestKeywordShadowsAutoImport(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")

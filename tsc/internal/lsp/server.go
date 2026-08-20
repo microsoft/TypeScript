@@ -1547,7 +1547,7 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 
 	response := &lsproto.InitializeResult{
 		ServerInfo: &lsproto.ServerInfo{
-			Name:    "typescript-go",
+			Name:    "typescript",
 			Version: new(core.Version()),
 		},
 		Capabilities: &lsproto.ServerCapabilities{

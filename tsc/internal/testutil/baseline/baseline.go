@@ -4,131 +4,28 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"regexp"
-	"strings"
-	"sync"
 	"testing"
 
-	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"github.com/peter-evans/patience"
 )
 
 type Options struct {
-	Subfolder           string
-	IsSubmodule         bool
-	IsSubmoduleAccepted bool
-	IsSubmoduleTriaged  bool
-	DiffFixupOld        func(string) string
-	DiffFixupNew        func(string) string
-	SkipDiffWithOld     bool
+	Subfolder       string
+	DiffFixupOld    func(string) string
+	DiffFixupNew    func(string) string
+	SkipDiffWithOld bool
 }
 
 const NoContent = "<no content>"
 
 func Run(t *testing.T, fileName string, actual string, opts Options) {
-	origSubfolder := opts.Subfolder
-
-	{
-		subfolder := opts.Subfolder
-		if opts.IsSubmodule {
-			subfolder = filepath.Join("submodule", subfolder)
-		}
-
-		localPath := filepath.Join(localRoot, subfolder, fileName)
-		referencePath := filepath.Join(referenceRoot, subfolder, fileName)
-
-		// Record this baseline for tracking unused baselines
-		recordBaseline(t, filepath.Join(subfolder, fileName))
-
-		writeComparison(t, actual, localPath, referencePath, false)
-	}
-
-	if !opts.IsSubmodule || opts.SkipDiffWithOld {
-		// Not a submodule, no diffs.
-		return
-	}
-
-	submoduleReference := filepath.Join(submoduleReferenceRoot, fileName)
-	submoduleExpected := readFileOrNoContent(submoduleReference)
-
-	const (
-		submoduleFolder         = "submodule"
-		submoduleAcceptedFolder = "submoduleAccepted"
-		submoduleTriagedFolder  = "submoduleTriaged"
-	)
-
-	diffFileName := fileName + ".diff"
-	diffKey := origSubfolder + "/" + diffFileName
-	isSubmoduleAccepted := opts.IsSubmoduleAccepted || submoduleAcceptedFileNames().Has(diffKey)
-	isSubmoduleTriaged := opts.IsSubmoduleTriaged || submoduleTriagedFileNames().Has(diffKey)
-
-	if isSubmoduleAccepted && isSubmoduleTriaged {
-		t.Fatalf("diff file %s/%s is in both submoduleAccepted and submoduleTriaged; it should only be in one", origSubfolder, diffFileName)
-	}
-
-	var outRoot string
-	switch {
-	case isSubmoduleAccepted:
-		outRoot = submoduleAcceptedFolder
-	case isSubmoduleTriaged:
-		outRoot = submoduleTriagedFolder
-	default:
-		outRoot = submoduleFolder
-	}
-
-	allRoots := [3]string{submoduleFolder, submoduleAcceptedFolder, submoduleTriagedFolder}
-
-	diff := getBaselineDiff(t, actual, submoduleExpected, fileName, opts.DiffFixupOld, opts.DiffFixupNew)
-
-	for _, root := range allRoots {
-		localPath := filepath.Join(localRoot, root, origSubfolder, diffFileName)
-		referencePath := filepath.Join(referenceRoot, root, origSubfolder, diffFileName)
-
-		// Record this baseline for tracking unused baselines
-		recordBaseline(t, filepath.Join(root, origSubfolder, diffFileName))
-
-		if root == outRoot {
-			writeComparison(t, diff, localPath, referencePath, false)
-		} else {
-			writeComparison(t, NoContent, localPath, referencePath, false)
-		}
-	}
-}
-
-var submoduleAcceptedFileNames = sync.OnceValue(func() *collections.Set[string] {
-	return readFileNameSet(filepath.Join(repo.TestDataPath(), "submoduleAccepted.txt"))
-})
-
-var submoduleTriagedFileNames = sync.OnceValue(func() *collections.Set[string] {
-	return readFileNameSet(filepath.Join(repo.TestDataPath(), "submoduleTriaged.txt"))
-})
-
-func readFileNameSet(path string) *collections.Set[string] {
-	var set collections.Set[string]
-
-	if content, err := os.ReadFile(path); err == nil {
-		for line := range strings.SplitSeq(string(content), "\n") {
-			line = strings.TrimSpace(line)
-			if line == "" || line[0] == '#' {
-				continue
-			}
-			set.Add(line)
-		}
-	} else {
-		panic(fmt.Sprintf("failed to read file %s: %v", path, err))
-	}
-
-	return &set
-}
-
-func readFileOrNoContent(fileName string) string {
-	content, err := os.ReadFile(fileName)
-	if err != nil {
-		return NoContent
-	}
-	return string(content)
+	subfolder := opts.Subfolder
+	localPath := filepath.Join(localRoot, subfolder, fileName)
+	referencePath := filepath.Join(referenceRoot, subfolder, fileName)
+	recordBaseline(t, filepath.Join(subfolder, fileName))
+	writeComparison(t, actual, localPath, referencePath)
 }
 
 func DiffText(oldName string, newName string, expected string, actual string) string {
@@ -141,67 +38,14 @@ func DiffText(oldName string, newName string, expected string, actual string) st
 	})
 }
 
-func getBaselineDiff(t *testing.T, actual string, expected string, fileName string, fixupOld func(string) string, fixupNew func(string) string) string {
-	if fixupOld != nil {
-		expected = fixupOld(expected)
-	}
-	if fixupNew != nil {
-		actual = fixupNew(actual)
-	}
-	if actual == expected {
-		return NoContent
-	}
-	s := DiffText("old."+fileName, "new."+fileName, expected, actual)
-
-	// If the diff is empty (just headers, no hunks), return NoContent
-	if !strings.Contains(s, "@@") {
-		return NoContent
-	}
-
-	// Remove line numbers from unified diff headers; this avoids adding/deleting
-	// lines in our baselines from causing knock-on header changes later in the diff.
-
-	aCurLine := 1
-	bCurLine := 1
-	s = fixUnifiedDiff.ReplaceAllStringFunc(s, func(match string) string {
-		var aLine, aLineCount, bLine, bLineCount int
-		if _, err := fmt.Sscanf(match, "@@ -%d,%d +%d,%d @@", &aLine, &aLineCount, &bLine, &bLineCount); err != nil {
-			panic(fmt.Sprintf("failed to parse unified diff header: %v", err))
-		}
-		aDiff := aLine - aCurLine
-		bDiff := bLine - bCurLine
-		aCurLine = aLine
-		bCurLine = bLine
-
-		// Keep surrounded by @@, to make GitHub's grammar happy.
-		// https://github.com/textmate/diff.tmbundle/blob/0593bb775eab1824af97ef2172fd38822abd97d7/Syntaxes/Diff.plist#L68
-		return fmt.Sprintf("@@= skipped -%d, +%d lines =@@", aDiff, bDiff)
-	})
-
-	return s
-}
-
-var fixUnifiedDiff = regexp.MustCompile(`@@ -\d+,\d+ \+\d+,\d+ @@`)
-
-func RunAgainstSubmodule(t *testing.T, fileName string, actual string, opts Options) {
-	// Record this baseline for tracking unused baselines
-	recordBaseline(t, filepath.Join(opts.Subfolder, fileName))
-
-	local := filepath.Join(localRoot, opts.Subfolder, fileName)
-	reference := filepath.Join(submoduleReferenceRoot, opts.Subfolder, fileName)
-	writeComparison(t, actual, local, reference, true)
-}
-
-func writeComparison(t *testing.T, actualContent string, local, reference string, comparingAgainstSubmodule bool) {
+func writeComparison(t *testing.T, actualContent string, local, reference string) {
 	if actualContent == "" {
 		panic("the generated content was \"\". Return 'baseline.NoContent' if no baselining is required.")
 	}
-
 	if err := os.MkdirAll(filepath.Dir(local), 0o755); err != nil {
 		t.Error(fmt.Errorf("failed to create directories for the local baseline file %s: %w", local, err))
 		return
 	}
-
 	if _, err := os.Stat(local); err == nil {
 		if err := os.Remove(local); err != nil {
 			t.Error(fmt.Errorf("failed to remove the local baseline file %s: %w", local, err))
@@ -215,36 +59,27 @@ func writeComparison(t *testing.T, actualContent string, local, reference string
 		expected = string(content)
 		foundExpected = true
 	}
-
-	if expected != actualContent || actualContent == NoContent && foundExpected {
-		if actualContent == NoContent {
-			if err := os.WriteFile(local+".delete", []byte{}, 0o644); err != nil {
-				t.Error(fmt.Errorf("failed to write the local baseline file %s: %w", local+".delete", err))
-				return
-			}
-		} else {
-			if err := os.WriteFile(local, []byte(actualContent), 0o644); err != nil {
-				t.Error(fmt.Errorf("failed to write the local baseline file %s: %w", local, err))
-				return
-			}
-		}
-
-		if _, err := os.Stat(reference); err != nil {
-			if comparingAgainstSubmodule {
-				t.Errorf("the baseline file %s does not exist in the TypeScript submodule", reference)
-			} else {
-				t.Errorf("new baseline created at %s.", local)
-			}
-		} else if comparingAgainstSubmodule {
-			t.Errorf("the baseline file %s does not match the reference in the TypeScript submodule", reference)
-		} else {
-			t.Errorf("the baseline file %s has changed. (Run `hereby baseline-accept` if the new baseline is correct.)", reference)
-		}
+	if expected == actualContent && !(actualContent == NoContent && foundExpected) {
+		return
 	}
+	if actualContent == NoContent {
+		if err := os.WriteFile(local+".delete", []byte{}, 0o644); err != nil {
+			t.Error(fmt.Errorf("failed to write the local baseline file %s: %w", local+".delete", err))
+		}
+		return
+	}
+	if err := os.WriteFile(local, []byte(actualContent), 0o644); err != nil {
+		t.Error(fmt.Errorf("failed to write the local baseline file %s: %w", local, err))
+		return
+	}
+	if !foundExpected {
+		t.Errorf("new baseline created at %s.", local)
+		return
+	}
+	t.Errorf("the baseline file %s has changed. (Run `hereby baseline-accept` if the new baseline is correct.)", reference)
 }
 
 var (
-	localRoot              = filepath.Join(repo.TestDataPath(), "baselines", "local")
-	referenceRoot          = filepath.Join(repo.TestDataPath(), "baselines", "reference")
-	submoduleReferenceRoot = filepath.Join(repo.TypeScriptSubmodulePath(), "tests", "baselines", "reference")
+	localRoot     = filepath.Join(repo.TestDataPath(), "baselines", "local")
+	referenceRoot = filepath.Join(repo.TestDataPath(), "baselines", "reference")
 )

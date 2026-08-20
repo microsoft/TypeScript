@@ -1,64 +1,85 @@
-/*
-
-  Copy this file into '.vscode/launch.json' or merge its
-  contents into your existing configurations.
-
-  If you want to remove the errors in comments for all JSON
-  files, add this to your settings in ~/.vscode/User/settings.json
-
-  "files.associations": {
-      "*.json": "jsonc"
-  },
-
-*/
-
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "type": "extensionHost",
             "request": "launch",
-            "name": "Mocha Tests (currently opened test)",
-            "runtimeArgs": ["--nolazy"],
-            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "name": "Launch VS Code extension",
+            "runtimeExecutable": "${execPath}",
             "args": [
-                "-u",
-                "bdd",
-                "--no-timeouts",
-                "--colors",
-                "built/local/run.js",
-                "-f",
-                // You can change this to be the name of a specific test file (without the file extension)
-                // to consistently launch the same test
-                "${fileBasenameNoExtension}",
-                "--skip-percent",
-                "0"
+                "--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-typescript"
             ],
-            "env": {
-                "NODE_ENV": "development"
-            },
             "outFiles": [
-                "${workspaceFolder}/built/**/*.js",
-                "${workspaceFolder}/built/**/*.mjs",
-                "${workspaceFolder}/built/**/*.cjs",
-                "!**/node_modules/**"
+                "${workspaceFolder}/packages/vscode-typescript/dist/**/*.js"
             ],
-            "sourceMaps": true,
-            "smartStep": true,
-            "preLaunchTask": "npm: build:tests",
-            "console": "integratedTerminal",
-            "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
+            "autoAttachChildProcesses": true,
+            "preLaunchTask": "Watch for extension run"
         },
         {
-            // See: https://github.com/microsoft/TypeScript/wiki/Debugging-Language-Service-in-VS-Code
-            "type": "node",
+            "name": "Launch compiler test",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${workspaceFolder}/tsc/internal/testrunner",
+            "args": ["-test.run", "TestLocal/${fileBasename}"]
+        },
+        {
+            "name": "Launch compiler test with CPU profile",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${workspaceFolder}/tsc/internal/testrunner",
+            "args": [
+                "-test.cpuprofile",
+                "${workspaceFolder}/test.prof",
+                "-test.run",
+                "TestLocal/${fileBasename}"
+            ]
+        },
+        {
+            "name": "Launch fourslash test",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${workspaceFolder}/tsc/internal/fourslash/gen/${fileBasename}"
+        },
+        {
+            "name": "Launch replay test",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${workspaceFolder}/tsc/internal/lsp",
+            "args": [
+                "-test.run",
+                "^TestReplay$",
+                "-replay",
+                "path_to_replay_log.txt",
+                "-testDir",
+                "path_to_project_dir"
+            ]
+        },
+        {
+            "name": "Launch tsc CLI",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/tsc/cmd/tsc",
+            "cwd": "${workspaceFolder}/tsc",
+            "args": "${input:tscArgs}"
+        },
+        {
+            "name": "Attach to Go process",
+            "type": "go",
             "request": "attach",
-            "name": "Attach to VS Code TS Server via Port",
-            "processId": "${command:PickProcess}",
-            "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
+            "mode": "local",
+            "processId": "${command:pickGoProcess}"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "tscArgs",
+            "type": "promptString",
+            "description": "Enter arguments for tsc"
         }
     ]
 }

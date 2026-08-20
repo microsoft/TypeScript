@@ -43,45 +43,10 @@ func RootPath() string {
 	return rootPath()
 }
 
-var typeScriptSubmodulePath = sync.OnceValue(func() string {
-	return filepath.Join(rootPath(), "_submodules", "TypeScript")
-})
-
-func TypeScriptSubmodulePath() string {
-	return typeScriptSubmodulePath()
-}
-
 var testDataPath = sync.OnceValue(func() string {
 	return filepath.Join(rootPath(), "testdata")
 })
 
 func TestDataPath() string {
 	return testDataPath()
-}
-
-var typeScriptSubmoduleExists = sync.OnceValue(func() bool {
-	p := filepath.Join(typeScriptSubmodulePath(), "package.json")
-	if _, err := os.Stat(p); err != nil {
-		if os.IsNotExist(err) {
-			return false
-		}
-		panic(err)
-	}
-	return true
-})
-
-func TypeScriptSubmoduleExists() bool {
-	return typeScriptSubmoduleExists()
-}
-
-type SkippableTest interface {
-	Helper()
-	Skipf(format string, args ...any)
-}
-
-func SkipIfNoTypeScriptSubmodule(t SkippableTest) {
-	t.Helper()
-	if !typeScriptSubmoduleExists() {
-		t.Skipf("TypeScript submodule does not exist")
-	}
 }

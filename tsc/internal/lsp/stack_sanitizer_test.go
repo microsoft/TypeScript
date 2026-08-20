@@ -17,29 +17,29 @@ func TestSanitizedDebugStackTraceCompletionsRequest(t *testing.T) {
 runtime/debug.Stack()
         /usr/local/go/src/runtime/debug/stack.go:26 +0x8e
 github.com/microsoft/TypeScript/tsc/internal/lsp.(*Server).recover(0xc0001dae08, {0x14bc418, 0xc00bc60960}, 0xc00baf16e0)
-        /workspaces/typescript-go/internal/lsp/server.go:777 +0x65
+        /workspaces/TypeScript/tsc/internal/lsp/server.go:777 +0x65
 panic({0x1077b40?, 0x1abcb70?})
         /usr/local/go/src/runtime/panic.go:783 +0x136
 github.com/microsoft/TypeScript/tsc/internal/ls.(*LanguageService).getCompletionData.func15()
-        /workspaces/typescript-go/internal/ls/completions.go:1303 +0xfa
+        /workspaces/TypeScript/tsc/internal/ls/completions.go:1303 +0xfa
 github.com/microsoft/TypeScript/tsc/internal/ls.(*LanguageService).getCompletionData.func18()
-        /workspaces/typescript-go/internal/ls/completions.go:1548 +0x2df
+        /workspaces/TypeScript/tsc/internal/ls/completions.go:1548 +0x2df
 github.com/microsoft/TypeScript/tsc/internal/ls.(*LanguageService).getCompletionData(0xc004b08240, {0x14bc418, 0xc00bc60a20}, 0xc0069ef908, 0xc000272008, 0x1b, 0xc002b28e00)
-        /workspaces/typescript-go/internal/ls/completions.go:1581 +0x2b92
+        /workspaces/TypeScript/tsc/internal/ls/completions.go:1581 +0x2b92
 github.com/microsoft/TypeScript/tsc/internal/ls.(*LanguageService).getCompletionsAtPosition(0xc004b08240, {0x14bc418, 0xc00bc60a20}, 0xc000272008, 0x1b, 0x0)
-        /workspaces/typescript-go/internal/ls/completions.go:347 +0x690
+        /workspaces/TypeScript/tsc/internal/ls/completions.go:347 +0x690
 github.com/microsoft/TypeScript/tsc/internal/ls.(*LanguageService).ProvideCompletion(0xc004b08240, {0x14bc418, 0xc00bc60a20}, {0xc0092e02a0, 0x28}, {0x2, 0x4}, 0xc004580c30)
-        /workspaces/typescript-go/internal/ls/completions.go:47 +0x207
+        /workspaces/TypeScript/tsc/internal/ls/completions.go:47 +0x207
 github.com/microsoft/TypeScript/tsc/internal/lsp.(*Server).handleCompletion(0xc0001dae08, {0x14bc418, 0xc00bc60960}, 0xc004b08240, 0xc00baf14d0)
-        /workspaces/typescript-go/internal/lsp/server.go:1102 +0xe5
+        /workspaces/TypeScript/tsc/internal/lsp/server.go:1102 +0xe5
 github.com/microsoft/TypeScript/tsc/internal/lsp.registerLanguageServiceWithAutoImportsRequestHandler[...].func1({0x14bc418, 0xc00bc60960}, 0xc00baf16e0)
-        /workspaces/typescript-go/internal/lsp/server.go:682 +0x32a
+        /workspaces/TypeScript/tsc/internal/lsp/server.go:682 +0x32a
 github.com/microsoft/TypeScript/tsc/internal/lsp.(*Server).handleRequestOrNotification(0xc0001dae08, {0x14bc418, 0xc00bc60960}, 0xc00baf16e0)
-        /workspaces/typescript-go/internal/lsp/server.go:531 +0x11e
+        /workspaces/TypeScript/tsc/internal/lsp/server.go:531 +0x11e
 github.com/microsoft/TypeScript/tsc/internal/lsp.(*Server).dispatchLoop.func1()
-        /workspaces/typescript-go/internal/lsp/server.go:414 +0x65
+        /workspaces/TypeScript/tsc/internal/lsp/server.go:414 +0x65
 created by github.com/microsoft/TypeScript/tsc/internal/lsp.(*Server).dispatchLoop in goroutine 19
-        /workspaces/typescript-go/internal/lsp/server.go:438 +0x60`
+        /workspaces/TypeScript/tsc/internal/lsp/server.go:438 +0x60`
 
 	baseline.Run(t, "completionsDebugStackTrace.md", sanitizedStackTraceBaselineContents(t, input, sanitizeStackTrace(input)), baseline.Options{
 		Subfolder: "lsp/stackSanitizer/",
@@ -53,6 +53,8 @@ func TestSanitizedReleaseStackTraceCompletionsRequest(t *testing.T) {
 goroutine 2331 [running]:
 runtime/debug.Stack()
 	runtime/debug/stack.go:26 +0x5e
+github.com/microsoft/TypeScript/tsc/cmd/tsc.runMain()
+	github.com/microsoft/TypeScript/tsc/cmd/tsc/main.go:17 +0x20
 github.com/microsoft/TypeScript/tsc/internal/lsp.(*Server).recover(0xc0001c6e08, {0x441ae5?, 0xc000e976c0?}, 0xc00ab6c7b0)
 	github.com/microsoft/TypeScript/tsc/internal/lsp/server.go:777 +0x58
 panic({0xc323a0?, 0x1780b90?})
@@ -110,6 +112,8 @@ func TestSanitizedStackTraceDefeatsVSCodeGenericSecretRegex(t *testing.T) {
 	input := `goroutine 7 [running]:
 runtime/debug.Stack()
 	runtime/debug/stack.go:26 +0x5e
+github.com/microsoft/TypeScript/tsc/cmd/tsc.runMain()
+	github.com/microsoft/TypeScript/tsc/cmd/tsc/main.go:17 +0x20
 github.com/microsoft/TypeScript/tsc/internal/ls.(*LanguageService).getSignatureHelp(0x1)
 	github.com/microsoft/TypeScript/tsc/internal/ls/signature.go:42 +0x10
 github.com/microsoft/TypeScript/tsc/internal/ls.LookupKey(0x2)

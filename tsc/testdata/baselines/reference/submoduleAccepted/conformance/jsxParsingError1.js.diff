@@ -1,8 +1,0 @@
---- old.jsxParsingError1.js
-+++ new.jsxParsingError1.js
-@@= skipped -18, +18 lines =@@
- // This should be a parse error
- const class1 = "foo";
- const class2 = "bar";
--const elem = <div className={class1, class2}/>;
-+const elem = <div className={(class1, class2)}/>;

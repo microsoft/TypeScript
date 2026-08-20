@@ -10,7 +10,7 @@
 // module specifier generation in declaration emit. When resolvePackageJsonExports is false,
 // a file that is NOT in the package's exports should still be referenceable via the package name
 // (using the main/index fallback), not be "blocked by exports".
-// See: https://github.com/microsoft/typescript-go/issues/2445
+// See: https://github.com/microsoft/TypeScript/tsc/issues/2445
 
 // @Filename: /node_modules/pkg/package.json
 {

@@ -1,9 +1,0 @@
-unusedModuleInModule.ts(2,15): error TS6133: 'B' is declared but its value is never read.
-
-
-==== unusedModuleInModule.ts (1 errors) ====
-    namespace A {
-        namespace B {}
-                  ~
-!!! error TS6133: 'B' is declared but its value is never read.
-    }

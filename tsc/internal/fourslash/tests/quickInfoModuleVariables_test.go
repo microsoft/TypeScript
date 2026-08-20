@@ -1,0 +1,31 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestQuickInfoModuleVariables(t *testing.T) {
+	t.Skip("Known failing fourslash test")
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `var x = 1;
+namespace M {
+    export var x = 2;
+    console.log(/*1*/x); // 2
+}
+namespace M {
+    console.log(/*2*/x); // 2
+}
+namespace M {
+    var x = 3;
+    console.log(/*3*/x); // 3
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyQuickInfoAt(t, "1", "var M.x: number", "")
+	f.VerifyQuickInfoAt(t, "2", "var M.x: number", "")
+	f.VerifyQuickInfoAt(t, "3", "var x: number", "")
+}

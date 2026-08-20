@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
-// Regression test for https://github.com/microsoft/typescript-go/issues/3638
+// Regression test for https://github.com/microsoft/TypeScript/tsc/issues/3638
 //
 // A `textDocument/hover` on a JSX intrinsic element used to cause the
 // subsequent `textDocument/diagnostic` pull to spuriously report

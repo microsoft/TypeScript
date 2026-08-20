@@ -11,7 +11,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
-	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/tsbaseline"
@@ -37,7 +36,7 @@ var _ Runner = (*TranspileBaselineRunner)(nil)
 
 func NewTranspileBaselineRunner() *TranspileBaselineRunner {
 	return &TranspileBaselineRunner{
-		basePath: "../_submodules/TypeScript/tests/cases/transpile",
+		basePath: "../testdata/tests/cases/transpile",
 	}
 }
 
@@ -165,7 +164,7 @@ func (r *TranspileBaselineRunner) runKind(
 		baselineExtension = tspath.GetDeclarationEmitExtensionForPath(configuredName + extension)
 	}
 	baselineName := configuredName + baselineExtension
-	baseline.Run(t, "transpile/"+baselineName, result.String(), baseline.Options{IsSubmodule: true})
+	baseline.Run(t, "transpile/"+baselineName, result.String(), baseline.Options{})
 }
 
 func appendTranspileSection(result *strings.Builder, fileName string, content string) {
@@ -177,15 +176,12 @@ func appendTranspileSection(result *strings.Builder, fileName string, content st
 }
 
 func cleanTranspileBaselines() {
-	for _, folder := range []string{"submodule", "submoduleAccepted", "submoduleTriaged"} {
-		if err := os.RemoveAll(filepath.Join(localBasePath, folder, "transpile")); err != nil {
-			panic("Could not clean up transpile baselines: " + err.Error())
-		}
+	if err := os.RemoveAll(filepath.Join(localBasePath, "transpile")); err != nil {
+		panic("Could not clean up transpile baselines: " + err.Error())
 	}
 }
 
 func RunTranspileTests(t *testing.T) {
-	repo.SkipIfNoTypeScriptSubmodule(t)
 	cleanTranspileBaselines()
 	NewTranspileBaselineRunner().RunTests(t)
 }

@@ -1,0 +1,26 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports50_generics_with_default(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+// @lib: es2015
+let x: Iterator<number>;
+export const y = x;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add annotation of type 'Iterator<number>'",
+		NewFileContent: `let x: Iterator<number>;
+export const y: Iterator<number> = x;`,
+		Index: 0,
+	})
+}

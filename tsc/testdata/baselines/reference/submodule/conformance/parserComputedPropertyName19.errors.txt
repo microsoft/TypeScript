@@ -1,7 +1,0 @@
-parserComputedPropertyName19.ts(1,11): error TS2304: Cannot find name 'e'.
-
-
-==== parserComputedPropertyName19.ts (1 errors) ====
-    var v: { [e]? };
-              ~
-!!! error TS2304: Cannot find name 'e'.

@@ -13,7 +13,7 @@ type FromObject<Context extends Record<string, Type>, Props extends Context, Sha
 type FromSchema<Context extends Record<string, Type>, S> =
   S extends Type ? FromSchema<Context, Context[keyof Context]> : never;
 
-// https://github.com/microsoft/typescript-go/issues/4463
+// https://github.com/microsoft/TypeScript/tsc/issues/4463
 
 type JSONSchema =
   | boolean

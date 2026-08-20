@@ -1,7 +1,0 @@
-//// [tests/cases/compiler/typeReferenceDirectiveWithFailedFromTypeRoot.ts] ////
-
-=== /a.ts ===
-a;
->a : any
->  : ^^^
-

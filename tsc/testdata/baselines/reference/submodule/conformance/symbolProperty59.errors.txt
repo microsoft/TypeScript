@@ -1,9 +1,0 @@
-symbolProperty59.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-
-
-==== symbolProperty59.ts (1 errors) ====
-    interface I {
-        [Symbol.keyFor]: string;
-        ~~~~~~~~~~~~~~~
-!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-    }

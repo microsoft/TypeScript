@@ -1,8 +1,0 @@
---- old.expandoFunctionSymbolPropertyJs.js
-+++ new.expandoFunctionSymbolPropertyJs.js
-@@= skipped -49, +49 lines =@@
- /**
-  * @returns {import("./types").TestSymb}
-  */
--export function test(): import("./types").TestSymb;
-+export declare function test(): import("./types").TestSymb;

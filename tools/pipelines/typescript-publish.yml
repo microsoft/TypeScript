@@ -1,0 +1,242 @@
+trigger: none
+
+# TODO
+# schedules:
+
+name: $(date:yyyyMMdd)$(rev:.r)
+appendCommitMessageToRunName: false
+
+parameters:
+  - name: dryRun
+    displayName: Dry run
+    type: boolean
+    default: false
+
+variables:
+  # For MicroBuild telemetry
+  - name: TeamName
+    value: TypeScript
+
+resources:
+  repositories:
+    - repository: MicroBuildTemplate
+      type: git
+      name: 1ESPipelineTemplates/MicroBuildTemplate
+      ref: refs/tags/release
+  pipelines:
+    - pipeline: 'TypeScript_7_Signed_Build'
+      project: 'DevDiv'
+      source: 'TypeScript 7 Signed Build'
+      trigger:
+        tags:
+          - Build.Reason.Schedule
+        branches:
+          include:
+            - main
+
+extends:
+  template: azure-pipelines/MicroBuild.1ES.Official.Publish.yml@MicroBuildTemplate
+
+  parameters:
+    sdl:
+      sourceAnalysisPool: VSEngSS-MicroBuild2022-1ES
+    pool:
+      name: AzurePipelines-EO
+      image: 1ESPT-Ubuntu22.04
+      os: linux
+    settings:
+      networkIsolationPolicy: Permissive,CFSClean
+
+    stages:
+      - stage: Prepare
+        displayName: Prepare package artifacts
+
+        jobs:
+          - job: Stage_npm
+            displayName: Stage npm packages for publishing
+
+            templateContext:
+              mb:
+                publish:
+                  enabled: false
+              inputs:
+                - input: pipelineArtifact
+                  pipeline: 'TypeScript_7_Signed_Build'
+                  artifactName: 'npm'
+                  targetPath: '$(Pipeline.Workspace)/npm'
+              outputs:
+                - output: pipelineArtifact
+                  targetPath: '$(Build.ArtifactStagingDirectory)/npm-platform'
+                  artifactName: 'npm-platform'
+                  displayName: 'Publish npm-platform artifact'
+                - output: pipelineArtifact
+                  targetPath: '$(Build.ArtifactStagingDirectory)/npm-main'
+                  artifactName: 'npm-main'
+                  displayName: 'Publish npm-main artifact'
+
+            steps:
+              - checkout: none
+
+              - bash: |
+                  set -euo pipefail
+
+                  src="$(Pipeline.Workspace)/npm"
+                  platformDst="$(Build.ArtifactStagingDirectory)/npm-platform"
+                  mainDst="$(Build.ArtifactStagingDirectory)/npm-main"
+                  mkdir -p "$platformDst" "$mainDst"
+
+                  manifest="$src/publish-manifest.json"
+                  stageCount="$(jq '.stages | length' "$manifest")"
+                  if [ "$stageCount" -ne 2 ]; then
+                    echo "Expected exactly 2 npm publish stages, found $stageCount." >&2
+                    exit 1
+                  fi
+                  jq -r '.stages[0][].filename' "$manifest" | xargs -I {} cp -v "$src/{}" "$platformDst/"
+                  jq -r '.stages[1][].filename' "$manifest" | xargs -I {} cp -v "$src/{}" "$mainDst/"
+
+                  platformCount="$(find "$platformDst" -maxdepth 1 -name '*.tgz' -type f | wc -l)"
+                  mainCount="$(find "$mainDst" -maxdepth 1 -name '*.tgz' -type f | wc -l)"
+                  echo "##[section]Staged $platformCount platform package(s) and $mainCount main package(s)."
+                  if [ "$mainCount" -ne 1 ]; then
+                    echo "Expected 1 main package, found $mainCount." >&2
+                    exit 1
+                  fi
+                displayName: 'Stage npm artifacts'
+
+      - stage: Publish_npm
+        displayName: Publish npm packages
+        dependsOn: Prepare
+        condition: and(succeeded(), eq(${{ parameters.dryRun }}, False))
+
+        jobs:
+          - job: Publish_npm
+            displayName: Publish npm packages
+
+            templateContext:
+              type: releaseJob
+              isProduction: true
+              inputs:
+                - input: pipelineArtifact
+                  artifactName: 'npm-platform'
+                  targetPath: '$(Pipeline.Workspace)/npm-platform'
+                - input: pipelineArtifact
+                  artifactName: 'npm-main'
+                  targetPath: '$(Pipeline.Workspace)/npm-main'
+
+            steps:
+              - checkout: none
+
+              - template: MicroBuild.Publish.yml@MicroBuildTemplate
+                parameters:
+                  intent: 'PackageDistribution'
+                  contentType: 'npm'
+                  contentSource: 'Folder'
+                  folderLocation: '$(Pipeline.Workspace)/npm-platform'
+                  waitForReleaseCompletion: true
+                  owners: 'jabaile@microsoft.com'
+                  approvers: 'alexchi@microsoft.com'
+
+              - template: MicroBuild.Publish.yml@MicroBuildTemplate
+                parameters:
+                  intent: 'PackageDistribution'
+                  contentType: 'npm'
+                  contentSource: 'Folder'
+                  folderLocation: '$(Pipeline.Workspace)/npm-main'
+                  waitForReleaseCompletion: true
+                  owners: 'jabaile@microsoft.com'
+                  approvers: 'alexchi@microsoft.com'
+
+      - stage: Publish_vsix
+        displayName: Publish VSIX
+        dependsOn: Prepare
+        condition: succeeded()
+
+        jobs:
+          - job: Publish_vsix
+            displayName: Publish VSIX
+
+            templateContext:
+              type: releaseJob
+              isProduction: true
+              inputs:
+                - input: pipelineArtifact
+                  pipeline: 'TypeScript_7_Signed_Build'
+                  artifactName: 'vsix'
+                  targetPath: '$(Pipeline.Workspace)/vsix'
+
+            steps:
+              - checkout: none
+
+              - bash: |
+                  set -euo pipefail
+                  mkdir -p "$(Pipeline.Workspace)/vsix"
+                  ls -R "$(Pipeline.Workspace)/vsix"
+                  shopt -s nullglob
+                  vsixFiles=("$(Pipeline.Workspace)"/vsix/*.vsix)
+                  if (( ${#vsixFiles[@]} > 0 )); then
+                    echo "##vso[task.setvariable variable=HasVsix]true"
+                  else
+                    echo "No VSIX artifacts found; skipping Marketplace publishing."
+                    echo "##vso[task.setvariable variable=HasVsix]false"
+                  fi
+                displayName: 'Check VSIX artifacts'
+
+              - task: NodeTool@0
+                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
+                inputs:
+                  versionSpec: 24.x
+                displayName: 'Install Node'
+
+              - bash: |
+                  cat > .npmrc << 'EOF'
+                  registry=https://pkgs.dev.azure.com/devdiv/devdiv/_packaging/devdiv_PublicPackages/npm/registry/
+                  EOF
+                  npm init -y
+                displayName: 'Set up .npmrc'
+                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
+
+              - task: npmAuthenticate@0
+                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
+                inputs:
+                  workingFile: .npmrc
+                displayName: 'Authenticate npm'
+
+              - bash: npm install @vscode/vsce@latest
+                displayName: 'Install vsce'
+                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
+
+              - task: AzureCLI@2
+                displayName: 'Check Marketplace Auth'
+                condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
+                inputs:
+                  azureSubscription: TypeScript-VSMarketplacePublishAuth
+                  scriptType: 'bash'
+                  scriptLocation: 'inlineScript'
+                  inlineScript: |
+                    set -euo pipefail
+                    az rest -u https://app.vssps.visualstudio.com/_apis/profile/profiles/me --resource 499b84ac-1321-427f-aa17-267ca6975798
+                    npx vsce verify-pat TypeScriptTeam --azure-credential
+
+              - ${{ if eq(parameters.dryRun, false) }}:
+                  - task: AzureCLI@2
+                    displayName: 'Publish VSIXs to Marketplace'
+                    condition: and(succeeded(), eq(variables['HasVsix'], 'true'))
+                    retryCountOnTaskFailure: 3
+                    inputs:
+                      azureSubscription: TypeScript-VSMarketplacePublishAuth
+                      scriptType: 'bash'
+                      scriptLocation: 'inlineScript'
+                      inlineScript: |
+                        set -euo pipefail
+                        shopt -s nullglob
+                        vsixFiles=("$(Pipeline.Workspace)"/vsix/*.vsix)
+                        if (( ${#vsixFiles[@]} == 0 )); then
+                          echo "No VSIX artifacts found; skipping Marketplace publishing."
+                          exit 0
+                        fi
+                        for vsixFilePath in "${vsixFiles[@]}"; do
+                          manifestFilePath=${vsixFilePath%.vsix}.manifest
+                          signatureFilePath=${vsixFilePath%.vsix}.signature.p7s
+                          echo "Publishing $vsixFilePath with $manifestFilePath and $signatureFilePath"
+                          npx vsce publish --packagePath "$vsixFilePath" --manifestPath "$manifestFilePath" --signaturePath "$signatureFilePath" --azure-credential --skip-duplicate --allow-all-proposed-apis
+                        done

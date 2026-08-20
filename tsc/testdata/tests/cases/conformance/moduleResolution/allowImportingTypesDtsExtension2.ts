@@ -4,7 +4,7 @@
 // @noEmit: true
 // @noTypesAndSymbols: true
 
-// https://github.com/microsoft/typescript-go/issues/1190
+// https://github.com/microsoft/TypeScript/tsc/issues/1190
 
 // @filename: /types.d.ts
 export type MyType = { foo: string; };

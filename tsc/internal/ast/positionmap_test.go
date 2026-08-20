@@ -213,7 +213,7 @@ func BenchmarkUTF16ToUTF8_NonASCII(b *testing.B) {
 }
 
 func BenchmarkComputePositionMap_CheckerTS(b *testing.B) {
-	data, err := os.ReadFile("../../_submodules/TypeScript/src/compiler/checker.ts")
+	data, err := os.ReadFile("../../tsc/testdata/fixtures/compiler/checker.ts")
 	if err != nil {
 		b.Skip("checker.ts not available:", err)
 	}

@@ -1,7 +1,7 @@
 // @checkJs: true
 // @noEmit: true
 
-// https://github.com/microsoft/typescript-go/issues/3691
+// https://github.com/microsoft/TypeScript/tsc/issues/3691
 
 // @filename: main.js
 export class C {

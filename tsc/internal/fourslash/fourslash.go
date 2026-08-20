@@ -30,7 +30,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
-	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
@@ -178,7 +177,6 @@ func newFourslash(t *testing.T, content string, options *FourslashOptions, testP
 	if options == nil {
 		options = &FourslashOptions{}
 	}
-	repo.SkipIfNoTypeScriptSubmodule(t)
 	if !bundled.Embedded {
 		// Without embedding, we'd need to read all of the lib files out from disk into the MapFS.
 		// Just skip this for now.

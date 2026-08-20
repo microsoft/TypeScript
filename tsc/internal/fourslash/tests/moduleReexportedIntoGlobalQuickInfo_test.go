@@ -1,0 +1,27 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestModuleReexportedIntoGlobalQuickInfo(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /node_modules/@types/three/index.d.ts
+export class Vector3 {}
+export as namespace THREE;
+// @Filename: /global.d.ts
+import * as _THREE from 'three';
+
+declare global {
+  const THREE: typeof _THREE;
+}
+// @Filename: /index.ts
+let v = new /*1*/THREE.Vector3();`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyQuickInfoAt(t, "1", "const THREE: typeof import(\"three\")", "")
+}

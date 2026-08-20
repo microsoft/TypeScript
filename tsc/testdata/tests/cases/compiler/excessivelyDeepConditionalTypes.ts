@@ -1,7 +1,7 @@
 // @noEmit: true
 // @noErrorTruncation: false
 
-// https://github.com/microsoft/typescript-go/issues/2917
+// https://github.com/microsoft/TypeScript/tsc/issues/2917
 
 export type FlattenKeys<O> = {
 	[K in keyof O & (string | number)]: O[K] extends Record<any, any>

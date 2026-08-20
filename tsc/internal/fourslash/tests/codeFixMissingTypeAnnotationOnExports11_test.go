@@ -1,0 +1,32 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
+)
+
+func TestCodeFixMissingTypeAnnotationOnExports11(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+function mixin<T extends new (...a: any) => any>(ctor: T): T {
+    return ctor;
+}
+class Point2D { x = 0; y = 0; }
+export class Point3D extends mixin(Point2D) {  z = 0; }`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Extract base class to variable",
+		NewFileContent: `function mixin<T extends new (...a: any) => any>(ctor: T): T {
+    return ctor;
+}
+class Point2D { x = 0; y = 0; }
+const Point3DBase: typeof Point2D = mixin(Point2D);
+export class Point3D extends Point3DBase {  z = 0; }`,
+		Index: 0,
+	})
+}

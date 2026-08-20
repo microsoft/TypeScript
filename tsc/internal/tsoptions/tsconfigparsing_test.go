@@ -5,12 +5,10 @@ import (
 	"io"
 	"io/fs"
 	"maps"
-	"path/filepath"
 	"slices"
 	"strings"
 	"testing"
 
-	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
@@ -18,16 +16,13 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
-	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
-	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions/tsoptionstest"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
-	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 	"gotest.tools/v3/assert"
 )
 
@@ -131,7 +126,6 @@ var parseConfigFileTextToJsonTests = []struct {
 
 func TestParseConfigFileTextToJson(t *testing.T) {
 	t.Parallel()
-	repo.SkipIfNoTypeScriptSubmodule(t)
 	for _, rec := range parseConfigFileTextToJsonTests {
 		t.Run(rec.title, func(t *testing.T) {
 			t.Parallel()
@@ -157,15 +151,15 @@ func TestParseConfigFileTextToJson(t *testing.T) {
 					baselineContent.WriteString("\n")
 				}
 			}
-			baseline.RunAgainstSubmodule(t, rec.title+" jsonParse.js", baselineContent.String(), baseline.Options{Subfolder: "config/tsconfigParsing"})
+			baseline.Run(t, rec.title+" jsonParse.js", baselineContent.String(), baseline.Options{Subfolder: "config/tsconfigParsing"})
 		})
 	}
 }
 
 type parseJsonConfigTestCase struct {
-	title               string
-	noSubmoduleBaseline bool
-	input               []testConfig
+	title                  string
+	includeCompilerOptions bool
+	input                  []testConfig
 }
 
 var parseJsonConfigFileTests = []parseJsonConfigTestCase{
@@ -254,8 +248,8 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 		}},
 	},
 	{
-		title:               "parses tsconfig with compilerOptions, files, include, and exclude",
-		noSubmoduleBaseline: true,
+		title:                  "parses tsconfig with compilerOptions, files, include, and exclude",
+		includeCompilerOptions: true,
 		input: []testConfig{{
 			jsonText: `{
   "compilerOptions": {
@@ -458,8 +452,8 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 		}},
 	},
 	{
-		title:               "parses tsconfig with extends, files, include and other options",
-		noSubmoduleBaseline: true,
+		title:                  "parses tsconfig with extends, files, include and other options",
+		includeCompilerOptions: true,
 		input: []testConfig{{
 			jsonText: `{
 				"extends": "./tsconfigWithExtends.json",
@@ -476,8 +470,8 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 		}},
 	},
 	{
-		title:               "parses tsconfig with extends and configDir",
-		noSubmoduleBaseline: true,
+		title:                  "parses tsconfig with extends and configDir",
+		includeCompilerOptions: true,
 		input: []testConfig{{
 			jsonText: `{
 				"extends": "./tsconfig.base.json"
@@ -529,8 +523,8 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 		}},
 	},
 	{
-		title:               "reports errors for incorrectly cased option names",
-		noSubmoduleBaseline: true,
+		title:                  "reports errors for incorrectly cased option names",
+		includeCompilerOptions: true,
 		input: []testConfig{{
 			jsonText: `{
 			    "compilerOptions": {
@@ -552,8 +546,8 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 		}},
 	},
 	{
-		title:               "handles empty types array",
-		noSubmoduleBaseline: true,
+		title:                  "handles empty types array",
+		includeCompilerOptions: true,
 		input: []testConfig{{
 			jsonText: `{
 			    "compilerOptions": {
@@ -566,8 +560,8 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 		}},
 	},
 	{
-		title:               "issue 1267 scenario - extended files not picked up",
-		noSubmoduleBaseline: true,
+		title:                  "issue 1267 scenario - extended files not picked up",
+		includeCompilerOptions: true,
 		input: []testConfig{{
 			jsonText: `{
   "extends": "./tsconfig-base/backend.json",
@@ -636,8 +630,8 @@ export {}`,
 		}},
 	},
 	{
-		title:               "null overrides in extended tsconfig - array fields",
-		noSubmoduleBaseline: true,
+		title:                  "null overrides in extended tsconfig - array fields",
+		includeCompilerOptions: true,
 		input: []testConfig{{
 			jsonText: `{
   "extends": "./tsconfig-base.json",
@@ -662,8 +656,8 @@ export {}`,
 		}},
 	},
 	{
-		title:               "null overrides in extended tsconfig - string fields",
-		noSubmoduleBaseline: true,
+		title:                  "null overrides in extended tsconfig - string fields",
+		includeCompilerOptions: true,
 		input: []testConfig{{
 			jsonText: `{
   "extends": "./tsconfig-base.json",
@@ -688,8 +682,8 @@ export {}`,
 		}},
 	},
 	{
-		title:               "null overrides in extended tsconfig - mixed field types",
-		noSubmoduleBaseline: true,
+		title:                  "null overrides in extended tsconfig - mixed field types",
+		includeCompilerOptions: true,
 		input: []testConfig{{
 			jsonText: `{
   "extends": "./tsconfig-base.json",
@@ -719,8 +713,8 @@ export {}`,
 		}},
 	},
 	{
-		title:               "null overrides with multiple extends levels",
-		noSubmoduleBaseline: true,
+		title:                  "null overrides with multiple extends levels",
+		includeCompilerOptions: true,
 		input: []testConfig{{
 			jsonText: `{
   "extends": "./tsconfig-middle.json",
@@ -752,8 +746,8 @@ export {}`,
 		}},
 	},
 	{
-		title:               "null overrides in middle level of extends chain",
-		noSubmoduleBaseline: true,
+		title:                  "null overrides in middle level of extends chain",
+		includeCompilerOptions: true,
 		input: []testConfig{{
 			jsonText: `{
   "extends": "./tsconfig-middle.json",
@@ -823,11 +817,10 @@ var tsconfigWithExtendsAndConfigDir = `{
 
 func TestParseJsonConfigFileContent(t *testing.T) {
 	t.Parallel()
-	repo.SkipIfNoTypeScriptSubmodule(t)
 	for _, rec := range parseJsonConfigFileTests {
 		t.Run(rec.title+" with json api", func(t *testing.T) {
 			t.Parallel()
-			baselineParseConfigWith(t, rec.title+" with json api.js", rec.noSubmoduleBaseline, rec.input, getParsedWithJsonApi)
+			baselineParseConfigWith(t, rec.title+" with json api.js", rec.includeCompilerOptions, rec.input, getParsedWithJsonApi)
 		})
 	}
 }
@@ -970,11 +963,10 @@ func getParsedWithJsonApi(config testConfig, host tsoptions.ParseConfigHost, bas
 
 func TestParseJsonSourceFileConfigFileContent(t *testing.T) {
 	t.Parallel()
-	repo.SkipIfNoTypeScriptSubmodule(t)
 	for _, rec := range parseJsonConfigFileTests {
 		t.Run(rec.title+" with jsonSourceFile api", func(t *testing.T) {
 			t.Parallel()
-			baselineParseConfigWith(t, rec.title+" with jsonSourceFile api.js", rec.noSubmoduleBaseline, rec.input, getParsedWithJsonSourceFileApi)
+			baselineParseConfigWith(t, rec.title+" with jsonSourceFile api.js", rec.includeCompilerOptions, rec.input, getParsedWithJsonSourceFileApi)
 		})
 	}
 }
@@ -1440,8 +1432,7 @@ func getParsedWithJsonSourceFileApi(config testConfig, host tsoptions.ParseConfi
 	)
 }
 
-func baselineParseConfigWith(t *testing.T, baselineFileName string, noSubmoduleBaseline bool, input []testConfig, getParsed func(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine) {
-	noSubmoduleBaseline = true
+func baselineParseConfigWith(t *testing.T, baselineFileName string, includeCompilerOptions bool, input []testConfig, getParsed func(config testConfig, host tsoptions.ParseConfigHost, basePath string) *tsoptions.ParsedCommandLine) {
 	var baselineContent strings.Builder
 	for i, config := range input {
 		basePath := config.basePath
@@ -1463,7 +1454,7 @@ func baselineParseConfigWith(t *testing.T, baselineFileName string, noSubmoduleB
 		baselineContent.WriteString("configFileName:: ")
 		baselineContent.WriteString(config.configFileName)
 		baselineContent.WriteString("\n")
-		if noSubmoduleBaseline {
+		if includeCompilerOptions {
 			baselineContent.WriteString("CompilerOptions::\n")
 			assert.NilError(t, json.MarshalIndentWrite(&baselineContent, parsedConfigFileContent.ParsedConfig.CompilerOptions, "", "  "))
 			baselineContent.WriteString("\n")
@@ -1492,11 +1483,7 @@ func baselineParseConfigWith(t *testing.T, baselineFileName string, noSubmoduleB
 			baselineContent.WriteString("\n")
 		}
 	}
-	if noSubmoduleBaseline {
-		baseline.Run(t, baselineFileName, baselineContent.String(), baseline.Options{Subfolder: "config/tsconfigParsing"})
-	} else {
-		baseline.RunAgainstSubmodule(t, baselineFileName, baselineContent.String(), baseline.Options{Subfolder: "config/tsconfigParsing"})
-	}
+	baseline.Run(t, baselineFileName, baselineContent.String(), baseline.Options{Subfolder: "config/tsconfigParsing"})
 }
 
 func writeJsonReadableText(output io.Writer, input any) error {
@@ -1505,7 +1492,6 @@ func writeJsonReadableText(output io.Writer, input any) error {
 
 func TestParseTypeAcquisition(t *testing.T) {
 	t.Parallel()
-	// repo.SkipIfNoTypeScriptSubmodule(t)
 	cases := []struct {
 		title      string
 		configName string
@@ -1616,216 +1602,6 @@ func printFS(output io.Writer, files vfs.FS, root string) error {
 		}
 		return nil
 	})
-}
-
-func TestParseSrcCompiler(t *testing.T) {
-	t.Parallel()
-
-	repo.SkipIfNoTypeScriptSubmodule(t)
-
-	compilerDir := tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath(), "src", "compiler"))
-	tsconfigFileName := tspath.CombinePaths(compilerDir, "tsconfig.json")
-
-	fs := osvfs.FS()
-	host := &tsoptionstest.VfsParseConfigHost{
-		Vfs:              fs,
-		CurrentDirectory: compilerDir,
-	}
-
-	jsonText, ok := fs.ReadFile(tsconfigFileName)
-	assert.Assert(t, ok)
-	tsconfigPath := tspath.ToPath(tsconfigFileName, compilerDir, fs.UseCaseSensitiveFileNames())
-	parsed := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: tsconfigFileName,
-		Path:     tsconfigPath,
-	}, jsonText, core.ScriptKindJSON)
-
-	if len(parsed.Diagnostics()) > 0 {
-		for _, error := range parsed.Diagnostics() {
-			t.Log(error.Localize(locale.Default))
-		}
-		t.FailNow()
-	}
-
-	tsConfigSourceFile := &tsoptions.TsConfigSourceFile{
-		SourceFile: parsed,
-	}
-
-	parseConfigFileContent := tsoptions.ParseJsonSourceFileConfigFileContent(
-		tsConfigSourceFile,
-		host,
-		host.GetCurrentDirectory(),
-		nil,
-		nil,
-		tsconfigFileName,
-		/*resolutionStack*/ nil,
-		/*extendedConfigCache*/ nil,
-	)
-
-	if len(parseConfigFileContent.Errors) > 0 {
-		for _, error := range parseConfigFileContent.Errors {
-			t.Log(error.Localize(locale.Default))
-		}
-		t.FailNow()
-	}
-
-	opts := parseConfigFileContent.CompilerOptions()
-	assert.DeepEqual(t, opts, &core.CompilerOptions{
-		Lib:                        []string{"lib.es2020.d.ts"},
-		Module:                     core.ModuleKindNodeNext,
-		ModuleResolution:           core.ModuleResolutionKindNodeNext,
-		NewLine:                    core.NewLineKindLF,
-		OutDir:                     tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath(), "built", "local")),
-		Target:                     core.ScriptTargetES2020,
-		Types:                      []string{"node"},
-		ConfigFilePath:             tsconfigFileName,
-		Declaration:                core.TSTrue,
-		DeclarationMap:             core.TSTrue,
-		EmitDeclarationOnly:        core.TSTrue,
-		AlwaysStrict:               core.TSTrue,
-		Composite:                  core.TSTrue,
-		IsolatedDeclarations:       core.TSTrue,
-		NoImplicitOverride:         core.TSTrue,
-		PreserveConstEnums:         core.TSTrue,
-		RootDir:                    tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath(), "src")),
-		SkipLibCheck:               core.TSTrue,
-		Strict:                     core.TSTrue,
-		StrictBindCallApply:        core.TSFalse,
-		SourceMap:                  core.TSTrue,
-		UseUnknownInCatchVariables: core.TSFalse,
-		Pretty:                     core.TSTrue,
-	}, cmpopts.IgnoreUnexported(core.CompilerOptions{}))
-
-	fileNames := parseConfigFileContent.ParsedConfig.FileNames
-	relativePaths := make([]string, 0, len(fileNames))
-	for _, fileName := range fileNames {
-		if strings.Contains(fileName, ".generated.") {
-			continue
-		}
-
-		relativePaths = append(relativePaths, tspath.ConvertToRelativePath(fileName, tspath.ComparePathsOptions{
-			CurrentDirectory:          compilerDir,
-			UseCaseSensitiveFileNames: fs.UseCaseSensitiveFileNames(),
-		}))
-	}
-
-	assert.DeepEqual(t, relativePaths, []string{
-		"binder.ts",
-		"builder.ts",
-		"builderPublic.ts",
-		"builderState.ts",
-		"builderStatePublic.ts",
-		"checker.ts",
-		"commandLineParser.ts",
-		"core.ts",
-		"corePublic.ts",
-		"debug.ts",
-		"emitter.ts",
-		"executeCommandLine.ts",
-		"expressionToTypeNode.ts",
-		"moduleNameResolver.ts",
-		"moduleSpecifiers.ts",
-		"parser.ts",
-		"path.ts",
-		"performance.ts",
-		"performanceCore.ts",
-		"program.ts",
-		"programDiagnostics.ts",
-		"resolutionCache.ts",
-		"scanner.ts",
-		"semver.ts",
-		"sourcemap.ts",
-		"symbolWalker.ts",
-		"sys.ts",
-		"tracing.ts",
-		"transformer.ts",
-		"tsbuild.ts",
-		"tsbuildPublic.ts",
-		"types.ts",
-		"utilities.ts",
-		"utilitiesPublic.ts",
-		"visitorPublic.ts",
-		"watch.ts",
-		"watchPublic.ts",
-		"watchUtilities.ts",
-		"_namespaces/ts.moduleSpecifiers.ts",
-		"_namespaces/ts.performance.ts",
-		"_namespaces/ts.ts",
-		"factory/baseNodeFactory.ts",
-		"factory/emitHelpers.ts",
-		"factory/emitNode.ts",
-		"factory/nodeChildren.ts",
-		"factory/nodeConverters.ts",
-		"factory/nodeFactory.ts",
-		"factory/nodeTests.ts",
-		"factory/parenthesizerRules.ts",
-		"factory/utilities.ts",
-		"factory/utilitiesPublic.ts",
-		"transformers/classFields.ts",
-		"transformers/classThis.ts",
-		"transformers/declarations.ts",
-		"transformers/destructuring.ts",
-		"transformers/es2015.ts",
-		"transformers/es2016.ts",
-		"transformers/es2017.ts",
-		"transformers/es2018.ts",
-		"transformers/es2019.ts",
-		"transformers/es2020.ts",
-		"transformers/es2021.ts",
-		"transformers/esDecorators.ts",
-		"transformers/esnext.ts",
-		"transformers/generators.ts",
-		"transformers/jsx.ts",
-		"transformers/legacyDecorators.ts",
-		"transformers/namedEvaluation.ts",
-		"transformers/taggedTemplate.ts",
-		"transformers/ts.ts",
-		"transformers/typeSerializer.ts",
-		"transformers/utilities.ts",
-		"transformers/declarations/diagnostics.ts",
-		"transformers/module/esnextAnd2015.ts",
-		"transformers/module/impliedNodeFormatDependent.ts",
-		"transformers/module/module.ts",
-		"transformers/module/system.ts",
-	})
-}
-
-func BenchmarkParseSrcCompiler(b *testing.B) {
-	repo.SkipIfNoTypeScriptSubmodule(b)
-
-	compilerDir := tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath(), "src", "compiler"))
-	tsconfigFileName := tspath.CombinePaths(compilerDir, "tsconfig.json")
-
-	fs := osvfs.FS()
-	host := &tsoptionstest.VfsParseConfigHost{
-		Vfs:              fs,
-		CurrentDirectory: compilerDir,
-	}
-
-	jsonText, ok := fs.ReadFile(tsconfigFileName)
-	assert.Assert(b, ok)
-	tsconfigPath := tspath.ToPath(tsconfigFileName, compilerDir, fs.UseCaseSensitiveFileNames())
-	parsed := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: tsconfigFileName,
-		Path:     tsconfigPath,
-	}, jsonText, core.ScriptKindJSON)
-
-	b.ReportAllocs()
-
-	for b.Loop() {
-		tsoptions.ParseJsonSourceFileConfigFileContent(
-			&tsoptions.TsConfigSourceFile{
-				SourceFile: parsed,
-			},
-			host,
-			host.GetCurrentDirectory(),
-			nil,
-			nil,
-			tsconfigFileName,
-			/*resolutionStack*/ nil,
-			/*extendedConfigCache*/ nil,
-		)
-	}
 }
 
 // memoCache is a minimal memoizing ExtendedConfigCache used by tests to simulate
