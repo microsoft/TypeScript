@@ -38,6 +38,7 @@ web_modules/
 *.tsbuildinfo
 *.tgz
 dist
+.eslintcache
 .cache
 .parcel-cache
 .rpt2_cache/
@@ -80,6 +81,48 @@ __debug_bin*
 # Local compiler baselines and test output
 tsc/testdata/baselines/local
 tsc/testdata/baselines/tmp
+
+# Legacy Strada build and test output
+/.node_modules/
+/test-args.txt
+/rwc-report.html
+/build.json
+*.actual
+/.parallelperf.*
+/.failed-tests
+/TEST-results.xml
+/*v8.log
+/lib/
+/internal/
+/scripts/eslint/built/
+/scripts/debug.bat
+/scripts/run.bat
+/scripts/**/*.js
+/scripts/**/*.js.map
+/src/harness/*.js
+/src/compiler/diagnosticInformationMap.generated.ts
+/src/compiler/diagnosticMessages.generated.json
+/src/parser/diagnosticInformationMap.generated.ts
+/src/parser/diagnosticMessages.generated.json
+/tests/cases/rwc/
+/tests/cases/perf/
+/tests/cases/**/*.js
+/tests/cases/**/*.js.map
+/tests/baselines/local/
+/tests/baselines/local.old/
+/tests/baselines/prototyping/local/
+/tests/baselines/rwc/
+/tests/baselines/symlinks/
+/tests/baselines/reference/projectOutput/
+/tests/baselines/reference/testresults.tap
+/tests/baselines/reference/dt
+/tests/services/baselines/local/
+/tests/services/baselines/prototyping/local/
+/tests/services/browser/typescriptServices.js
+/tests/webTestServer.js
+/tests/webTestServer.js.map
+/tests/webhost/*.d.ts
+/tests/webhost/webtsc.js
 
 # Generated development tools
 tools/custom-gcl
