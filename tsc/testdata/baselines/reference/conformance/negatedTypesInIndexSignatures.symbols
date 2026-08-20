@@ -1,0 +1,108 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInIndexSignatures.ts] ////
+
+=== negatedTypesInIndexSignatures.ts ===
+// Negated types used to build index signature key types.
+
+// The canonical example: a string index that excludes a specific key.
+type NoMethod = {
+>NoMethod : Symbol(NoMethod, Decl(negatedTypesInIndexSignatures.ts, 0, 0))
+
+    [idx: string & not "method"]: number;
+>idx : Symbol(idx, Decl(negatedTypesInIndexSignatures.ts, 4, 5))
+
+};
+
+declare let noMethod: NoMethod;
+>noMethod : Symbol(noMethod, Decl(negatedTypesInIndexSignatures.ts, 7, 11))
+>NoMethod : Symbol(NoMethod, Decl(negatedTypesInIndexSignatures.ts, 0, 0))
+
+noMethod.foo = 1;      // ok
+>noMethod.foo : Symbol(__index, Decl(negatedTypesInIndexSignatures.ts, 3, 17))
+>noMethod : Symbol(noMethod, Decl(negatedTypesInIndexSignatures.ts, 7, 11))
+>foo : Symbol(__index, Decl(negatedTypesInIndexSignatures.ts, 3, 17))
+
+noMethod.method = 1;   // excluded key
+>noMethod : Symbol(noMethod, Decl(negatedTypesInIndexSignatures.ts, 7, 11))
+
+noMethod["bar"] = 2;   // ok
+>noMethod : Symbol(noMethod, Decl(negatedTypesInIndexSignatures.ts, 7, 11))
+
+// Excluding a union of keys.
+type NoAB = {
+>NoAB : Symbol(NoAB, Decl(negatedTypesInIndexSignatures.ts, 10, 20))
+
+    [idx: string & not ("a" | "b")]: number;
+>idx : Symbol(idx, Decl(negatedTypesInIndexSignatures.ts, 14, 5))
+
+};
+
+declare let noAB: NoAB;
+>noAB : Symbol(noAB, Decl(negatedTypesInIndexSignatures.ts, 17, 11))
+>NoAB : Symbol(NoAB, Decl(negatedTypesInIndexSignatures.ts, 10, 20))
+
+noAB.c = 1;   // ok
+>noAB.c : Symbol(__index, Decl(negatedTypesInIndexSignatures.ts, 13, 13))
+>noAB : Symbol(noAB, Decl(negatedTypesInIndexSignatures.ts, 17, 11))
+>c : Symbol(__index, Decl(negatedTypesInIndexSignatures.ts, 13, 13))
+
+noAB.a = 1;   // excluded key
+>noAB : Symbol(noAB, Decl(negatedTypesInIndexSignatures.ts, 17, 11))
+
+noAB.b = 1;   // excluded key
+>noAB : Symbol(noAB, Decl(negatedTypesInIndexSignatures.ts, 17, 11))
+
+// Mapped-type form that produces the same key type.
+type Config = {
+>Config : Symbol(Config, Decl(negatedTypesInIndexSignatures.ts, 20, 11))
+
+    foo: number;
+>foo : Symbol(foo, Decl(negatedTypesInIndexSignatures.ts, 23, 15))
+
+    bar: number;
+>bar : Symbol(bar, Decl(negatedTypesInIndexSignatures.ts, 24, 16))
+
+} & {
+    [k in (string & not ("foo" | "bar"))]: string;
+>k : Symbol(k, Decl(negatedTypesInIndexSignatures.ts, 27, 5))
+
+};
+
+const conf: Config = {
+>conf : Symbol(conf, Decl(negatedTypesInIndexSignatures.ts, 30, 5))
+>Config : Symbol(Config, Decl(negatedTypesInIndexSignatures.ts, 20, 11))
+
+    foo: 12,
+>foo : Symbol(foo, Decl(negatedTypesInIndexSignatures.ts, 30, 22))
+
+    bar: 12,
+>bar : Symbol(bar, Decl(negatedTypesInIndexSignatures.ts, 31, 12))
+
+    other: "string",
+>other : Symbol(other, Decl(negatedTypesInIndexSignatures.ts, 32, 12))
+
+}; // ok
+
+const conf2: Config = {
+>conf2 : Symbol(conf2, Decl(negatedTypesInIndexSignatures.ts, 36, 5))
+>Config : Symbol(Config, Decl(negatedTypesInIndexSignatures.ts, 20, 11))
+
+    foo: 12,
+>foo : Symbol(foo, Decl(negatedTypesInIndexSignatures.ts, 36, 23))
+
+    bar: 12,
+>bar : Symbol(bar, Decl(negatedTypesInIndexSignatures.ts, 37, 12))
+
+    other: 0,
+>other : Symbol(other, Decl(negatedTypesInIndexSignatures.ts, 38, 12))
+
+}; // other should be a string
+
+// A bare negated type as an index key (not intersected with string).
+type BareNegated = {
+>BareNegated : Symbol(BareNegated, Decl(negatedTypesInIndexSignatures.ts, 40, 2))
+
+    [idx: not "method"]: number;
+>idx : Symbol(idx, Decl(negatedTypesInIndexSignatures.ts, 44, 5))
+
+};
+

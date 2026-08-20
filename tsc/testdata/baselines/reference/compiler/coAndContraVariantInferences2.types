@@ -106,7 +106,7 @@ function f3(arr: readonly B[] | readonly C[]) {
     }
     else {
         arr; // readonly B[]
->arr : readonly B[]
+>arr : readonly B[] & not readonly C[]
     }
 }
 

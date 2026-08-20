@@ -93,12 +93,12 @@ function foo2(x: C1 | C2 | C3): string {
     else if (isC2(x)) {
 >isC2(x) : boolean
 >isC2 : (c: C1 | C2 | C3) => c is C2
->x : C2
+>x : C2 & not C1
 
         return x.item[0];
 >x.item[0] : string
 >x.item : string[]
->x : C2
+>x : C2 & not C1
 >item : string[]
 >0 : 0
     }

@@ -46,7 +46,7 @@ class TestClass<T> {
 >this.f : (v: number) => void
 >this : this
 >f : (v: number) => void
->val : number
+>val : number & not T
   }
 }
 
@@ -89,14 +89,14 @@ class TestClass2<T extends Date> {
       return;
     }
     val;
->val : number
+>val : number & not T
 
     this.f(val);
 >this.f(val) : void
 >this.f : (v: number) => void
 >this : this
 >f : (v: number) => void
->val : number
+>val : number & not T
   }
 }
 

@@ -65,7 +65,7 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
     if (typeof arg == "object") {
 >typeof arg == "object" : boolean
 >typeof arg : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->arg : ClassNameArg<S>
+>arg : ClassNameArg<S> & not string
 >"object" : "object"
 
       return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {
@@ -95,7 +95,7 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >(arg as ClassNameMap<S>)[key] : boolean | undefined
 >(arg as ClassNameMap<S>) : ClassNameMap<S>
 >arg as ClassNameMap<S> : ClassNameMap<S>
->arg : ClassNameObjectMap<S>
+>arg : object & ClassNameMap<S>
 >key : keyof S
 
         return obj;

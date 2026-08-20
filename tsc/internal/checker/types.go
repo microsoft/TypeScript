@@ -423,7 +423,7 @@ type SignatureLinks struct {
 	decoratorSignature *Signature // Signature for decorator as if invoked by the runtime
 }
 
-type TypeFlags uint32
+type TypeFlags uint64
 
 // Note that for types of different kinds, the numeric values of TypeFlags determine the order
 // computed by the CompareTypes function and therefore the order of constituent types in union types.
@@ -458,13 +458,14 @@ const (
 	TypeFlagsTemplateLiteral TypeFlags = 1 << 22 // Template literal type
 	TypeFlagsStringMapping   TypeFlags = 1 << 23 // Uppercase/Lowercase type
 	TypeFlagsSubstitution    TypeFlags = 1 << 24 // Type parameter substitution
-	TypeFlagsIndexedAccess   TypeFlags = 1 << 25 // T[K]
-	TypeFlagsConditional     TypeFlags = 1 << 26 // T extends U ? X : Y
-	TypeFlagsUnion           TypeFlags = 1 << 27 // Union (T | U)
-	TypeFlagsIntersection    TypeFlags = 1 << 28 // Intersection (T & U)
-	TypeFlagsReserved1       TypeFlags = 1 << 29 // Used by union/intersection type construction
-	TypeFlagsReserved2       TypeFlags = 1 << 30 // Used by union/intersection type construction
-	TypeFlagsReserved3       TypeFlags = 1 << 31
+	TypeFlagsNegated         TypeFlags = 1 << 25 // not T
+	TypeFlagsIndexedAccess   TypeFlags = 1 << 26 // T[K]
+	TypeFlagsConditional     TypeFlags = 1 << 27 // T extends U ? X : Y
+	TypeFlagsUnion           TypeFlags = 1 << 28 // Union (T | U)
+	TypeFlagsIntersection    TypeFlags = 1 << 29 // Intersection (T & U)
+	TypeFlagsReserved1       TypeFlags = 1 << 30 // Used by union/intersection type construction
+	TypeFlagsReserved2       TypeFlags = 1 << 31 // Used by union/intersection type construction
+	TypeFlagsReserved3       TypeFlags = 1 << 32
 
 	TypeFlagsAnyOrUnknown                  = TypeFlagsAny | TypeFlagsUnknown
 	TypeFlagsNullable                      = TypeFlagsUndefined | TypeFlagsNull
@@ -489,7 +490,7 @@ const (
 	TypeFlagsUnionOrIntersection           = TypeFlagsUnion | TypeFlagsIntersection
 	TypeFlagsStructuredType                = TypeFlagsObject | TypeFlagsUnion | TypeFlagsIntersection
 	TypeFlagsTypeVariable                  = TypeFlagsTypeParameter | TypeFlagsIndexedAccess
-	TypeFlagsInstantiableNonPrimitive      = TypeFlagsTypeVariable | TypeFlagsConditional | TypeFlagsSubstitution
+	TypeFlagsInstantiableNonPrimitive      = TypeFlagsTypeVariable | TypeFlagsConditional | TypeFlagsSubstitution | TypeFlagsNegated
 	TypeFlagsInstantiablePrimitive         = TypeFlagsIndex | TypeFlagsTemplateLiteral | TypeFlagsStringMapping
 	TypeFlagsInstantiable                  = TypeFlagsInstantiableNonPrimitive | TypeFlagsInstantiablePrimitive
 	TypeFlagsStructuredOrInstantiable      = TypeFlagsStructuredType | TypeFlagsInstantiable
@@ -509,6 +510,7 @@ const (
 	TypeFlagsIncludesInstantiable            = TypeFlagsSubstitution
 	TypeFlagsIncludesConstrainedTypeVariable = TypeFlagsReserved1
 	TypeFlagsIncludesError                   = TypeFlagsReserved2
+	TypeFlagsIncludesNegated                 = TypeFlagsReserved3
 	TypeFlagsNotPrimitiveUnion               = TypeFlagsAny | TypeFlagsUnknown | TypeFlagsVoid | TypeFlagsNever | TypeFlagsObject | TypeFlagsIntersection | TypeFlagsIncludesInstantiable
 )
 
@@ -545,11 +547,12 @@ var typeFlagNames = [...]struct {
 	{TypeFlagsConditional, "Conditional"},
 	{TypeFlagsUnion, "Union"},
 	{TypeFlagsIntersection, "Intersection"},
+	{TypeFlagsNegated, "Negated"},
 }
 
 // FormatTypeFlags returns the individual flag names as a slice of strings.
 func FormatTypeFlags(flags TypeFlags) []string {
-	result := make([]string, 0, bits.OnesCount32(uint32(flags)))
+	result := make([]string, 0, bits.OnesCount64(uint64(flags)))
 	for _, fn := range typeFlagNames {
 		if flags&fn.flag != 0 {
 			result = append(result, fn.name)
@@ -653,6 +656,8 @@ const (
 	ObjectFlagsIsNeverIntersectionComputed = 1 << 25 // IsNeverLike flag has been computed
 	ObjectFlagsIsNeverIntersection         = 1 << 26 // Intersection reduces to never
 	ObjectFlagsIsConstrainedTypeVariable   = 1 << 27 // T & C, where T's constraint and C are primitives, object, or {}
+	// Flags that require TypeFlags.Negated
+	ObjectFlagsFreshNegated ObjectFlags = 1 << 25 // Negated type introduced by control flow narrowing; widened away when it escapes into an inferred declaration
 )
 
 // TypeAlias
@@ -721,6 +726,7 @@ func (t *Type) AsTemplateLiteralType() *TemplateLiteralType { return t.data.(*Te
 func (t *Type) AsStringMappingType() *StringMappingType     { return t.data.(*StringMappingType) }
 func (t *Type) AsSubstitutionType() *SubstitutionType       { return t.data.(*SubstitutionType) }
 func (t *Type) AsConditionalType() *ConditionalType         { return t.data.(*ConditionalType) }
+func (t *Type) AsNegatedType() *NegatedType                 { return t.data.(*NegatedType) }
 
 // Casts for embedded struct types
 
@@ -1233,6 +1239,17 @@ type SubstitutionType struct {
 
 func (t *SubstitutionType) BaseType() *Type        { return t.baseType }
 func (t *SubstitutionType) SubstConstraint() *Type { return t.constraint }
+
+// NegatedType (the type 'not T')
+
+type NegatedType struct {
+	ConstrainedType
+	baseType    *Type // The negated type T in 'not T'
+	freshType   *Type // Fresh version of type
+	regularType *Type // Regular version of type
+}
+
+func (t *NegatedType) BaseType() *Type { return t.baseType }
 
 type ConditionalRoot struct {
 	node                *ast.ConditionalTypeNode

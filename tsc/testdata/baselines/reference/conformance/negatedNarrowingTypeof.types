@@ -1,0 +1,134 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingTypeof.ts] ////
+
+=== negatedNarrowingTypeof.ts ===
+// Control flow narrowing by `typeof x === "..."`. In the false branch a fresh `not <primitive>`
+// is intersected in, but only survives where the base type overlaps the removed primitive.
+
+declare function wantsNotStr(x: not string): void;
+>wantsNotStr : (x: not string) => void
+>x : not string
+
+declare function wantsNotNum(x: not number): void;
+>wantsNotNum : (x: not number) => void
+>x : not number
+
+// `{}` overlaps every primitive, so the negation is retained.
+declare const a: {};
+>a : {}
+
+if (typeof a === "string") {
+>typeof a === "string" : boolean
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>a : {}
+>"string" : "string"
+
+    a; // string
+>a : string
+
+} else {
+    a; // {} & not string
+>a : {} & not string
+
+    wantsNotStr(a);
+>wantsNotStr(a) : void
+>wantsNotStr : (x: not string) => void
+>a : {} & not string
+}
+
+// `!==` flips the branches.
+declare const b: {};
+>b : {}
+
+if (typeof b !== "number") {
+>typeof b !== "number" : boolean
+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>b : {}
+>"number" : "number"
+
+    b; // {} & not number
+>b : {} & not number
+
+    wantsNotNum(b);
+>wantsNotNum(b) : void
+>wantsNotNum : (x: not number) => void
+>b : {} & not number
+
+} else {
+    b; // number
+>b : number
+}
+
+// A disjoint union: `not number` is redundant and reduces away.
+declare const c: string | number;
+>c : string | number
+
+if (typeof c === "number") {
+>typeof c === "number" : boolean
+>typeof c : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>c : string | number
+>"number" : "number"
+
+    c; // number
+>c : number
+
+} else {
+    c; // string
+>c : string
+}
+
+// A bare type parameter retains the negation on each branch.
+function generic<T>(x: T) {
+>generic : <T>(x: T) => void
+>x : T
+
+    if (typeof x === "boolean") {
+>typeof x === "boolean" : boolean
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>x : T
+>"boolean" : "boolean"
+
+        x; // T & boolean
+>x : T & boolean
+
+    } else {
+        x; // T & not boolean
+>x : T & not false & not true
+    }
+}
+
+// `unknown` narrows to the primitive on the true branch and keeps a negation on the false branch.
+declare const u: unknown;
+>u : unknown
+
+if (typeof u === "string") {
+>typeof u === "string" : boolean
+>typeof u : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>u : unknown
+>"string" : "string"
+
+    u; // string
+>u : string
+
+} else {
+    u; // (unknown narrowed) & not string
+>u : not string
+}
+
+// `==` / `!=` behave like their strict counterparts here.
+declare const d: {};
+>d : {}
+
+if (typeof d == "bigint") {
+>typeof d == "bigint" : boolean
+>typeof d : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>d : {}
+>"bigint" : "bigint"
+
+    d; // bigint
+>d : bigint
+
+} else {
+    d; // {} & not bigint
+>d : {} & not bigint
+}
+

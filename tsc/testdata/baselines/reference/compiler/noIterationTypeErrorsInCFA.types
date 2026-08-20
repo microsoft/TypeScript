@@ -21,7 +21,7 @@ export function doRemove(dds: F | F[]) {
 >dds = [dds] : F[]
 >dds : F[] | F
 >[dds] : F[]
->dds : F
+>dds : F & not any[]
     }
     for (let n of dds) {
 >n : F

@@ -1,0 +1,119 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingSwitchTrue.ts] ////
+
+=== negatedNarrowingSwitchTrue.ts ===
+// `switch (true)` narrowing evaluates each case's condition against the reference. Each subsequent
+// case sees the negation of the preceding conditions. This exercises the interaction between the
+// fresh CFA negations introduced by instanceof/typeof and the switch-on-true clause narrowing.
+
+class A {
+>A : A
+
+    a = 1;
+>a : number
+>1 : 1
+}
+class B {
+>B : B
+
+    b = 2;
+>b : number
+>2 : 2
+}
+class C {
+>C : C
+
+    c = 3;
+>c : number
+>3 : 3
+}
+
+declare const x: A | B | C;
+>x : A | B | C
+
+switch (true) {
+>true : true
+
+    case x instanceof A:
+>x instanceof A : boolean
+>x : A | B | C
+>A : typeof A
+
+        x; // A
+>x : A
+
+        break;
+    case x instanceof B:
+>x instanceof B : boolean
+>x : A | B | C
+>B : typeof B
+
+        x; // B
+>x : B
+
+        break;
+    default:
+        x; // C
+>x : C
+}
+
+// typeof-based switch(true).
+declare const y: {};
+>y : {}
+
+switch (true) {
+>true : true
+
+    case typeof y === "string":
+>typeof y === "string" : boolean
+>typeof y : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>y : {}
+>"string" : "string"
+
+        y; // string
+>y : string
+
+        break;
+    case typeof y === "number":
+>typeof y === "number" : boolean
+>typeof y : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>y : {}
+>"number" : "number"
+
+        y; // number
+>y : number
+
+        break;
+    default:
+        y; // {} & not string & not number
+>y : {} & not string & not number
+}
+
+// A guard-based switch(true).
+interface Cat {
+    meow(): void;
+>meow : () => void
+}
+declare function isCat(v: unknown): v is Cat;
+>isCat : (v: unknown) => v is Cat
+>v : unknown
+
+declare const z: {};
+>z : {}
+
+switch (true) {
+>true : true
+
+    case isCat(z):
+>isCat(z) : boolean
+>isCat : (v: unknown) => v is Cat
+>z : {}
+
+        z; // {} & Cat
+>z : Cat
+
+        break;
+    default:
+        z; // {} & not Cat
+>z : {} & not Cat
+}
+

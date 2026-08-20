@@ -229,7 +229,7 @@ const TEST_CASES = [
         }
         else {
             value;  // string
->value : string
+>value : string & not ""
         }
         if (isMaybeEmptyString(value)) {
 >isMaybeEmptyString(value) : boolean
@@ -241,7 +241,7 @@ const TEST_CASES = [
         }
         else {
             value;  // string
->value : string
+>value : string & not ""
         }
     },
     (value?: string) => {
@@ -258,7 +258,7 @@ const TEST_CASES = [
         }
         else {
             value;  // string
->value : string
+>value : string & not ""
         }
     },
     (value: number) => {
@@ -275,7 +275,7 @@ const TEST_CASES = [
         }
         else {
             value;  // number
->value : number
+>value : number & not 0
         }
         if (isMaybeZero(value)) {
 >isMaybeZero(value) : boolean
@@ -287,7 +287,7 @@ const TEST_CASES = [
         }
         else {
             value;  // number
->value : number
+>value : number & not 0
         }
     },
     (value?: number) => {
@@ -304,7 +304,7 @@ const TEST_CASES = [
         }
         else {
             value;  // number
->value : number
+>value : number & not 0
         }
     },
     (value: string[]) => {
@@ -321,7 +321,7 @@ const TEST_CASES = [
         }
         else {
             value;  // string[]
->value : string[]
+>value : string[] & not []
         }
         if (isMaybeEmptyArray(value)) {
 >isMaybeEmptyArray(value) : boolean
@@ -333,7 +333,7 @@ const TEST_CASES = [
         }
         else {
             value;  // string[]
->value : string[]
+>value : string[] & not []
         }
     },
     (value?: string[]) => {
@@ -350,7 +350,7 @@ const TEST_CASES = [
         }
         else {
             value;  // string[]
->value : string[]
+>value : string[] & not []
         }
     },
 ];
@@ -371,9 +371,9 @@ function isEmpty(value: string | EmptyString): value is EmptyString {
 >value : string | null | undefined
 >'' : ""
 >value === null : boolean
->value : string | null | undefined
+>value : (string & not "") | null | undefined
 >value === undefined : boolean
->value : string | undefined
+>value : (string & not "") | undefined
 >undefined : undefined
 }
 
@@ -421,7 +421,7 @@ function check1(x: unknown): x is (string | 0) {
 >x : unknown
 >"string" : "string"
 >x === 0 : boolean
->x : unknown
+>x : not string
 >0 : 0
 }
 
@@ -435,7 +435,7 @@ function check2(x: unknown): x is ("hello" | 0) {
 >x : unknown
 >"hello" : "hello"
 >x === 0 : boolean
->x : unknown
+>x : not "hello"
 >0 : 0
 }
 
@@ -450,7 +450,7 @@ function test3(x: unknown) {
 >x : unknown
 >"string" : "string"
 >x === 0 : boolean
->x : unknown
+>x : not string
 >0 : 0
 
 		x;  // string | 0
@@ -462,11 +462,11 @@ function test3(x: unknown) {
 >x : string | 0
 >"hello" : "hello"
 >x === 0 : boolean
->x : string | 0
+>x : 0 | (string & not "hello")
 >0 : 0
 
 			x;  // 0 | "hello"
->x : "hello" | 0
+>x : string | 0
 		}
 	}
 	if (check1(x)) {

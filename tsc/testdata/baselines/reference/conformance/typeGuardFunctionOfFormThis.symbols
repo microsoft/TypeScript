@@ -251,9 +251,9 @@ else if (crate.isSupplies()) {
 
     crate.contents.spoiled = true;
 >crate.contents.spoiled : Symbol(Supplies.spoiled, Decl(typeGuardFunctionOfFormThis.ts, 83, 20))
->crate.contents : Symbol(Crate.contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
+>crate.contents : Symbol(Crate.contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20), Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
 >crate : Symbol(crate, Decl(typeGuardFunctionOfFormThis.ts, 98, 3))
->contents : Symbol(Crate.contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
+>contents : Symbol(Crate.contents, Decl(typeGuardFunctionOfFormThis.ts, 91, 20), Decl(typeGuardFunctionOfFormThis.ts, 91, 20))
 >spoiled : Symbol(Supplies.spoiled, Decl(typeGuardFunctionOfFormThis.ts, 83, 20))
 }
 

@@ -2721,7 +2721,7 @@ func (p *Parser) createUnionOrIntersectionTypeNode(operator ast.Kind, types *ast
 func (p *Parser) parseTypeOperatorOrHigher() *ast.TypeNode {
 	operator := p.token
 	switch operator {
-	case ast.KindKeyOfKeyword, ast.KindUniqueKeyword, ast.KindReadonlyKeyword:
+	case ast.KindKeyOfKeyword, ast.KindUniqueKeyword, ast.KindReadonlyKeyword, ast.KindNotKeyword:
 		return p.parseTypeOperator(operator)
 	case ast.KindInferKeyword:
 		return p.parseInferType()

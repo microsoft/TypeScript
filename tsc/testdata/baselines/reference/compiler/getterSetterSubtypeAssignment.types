@@ -253,9 +253,9 @@ class NumberOrObject {
 >this : this
 >_x : number
 >this._x.bar : number
->this._x : Foo
+>this._x : Foo & not number
 >this : this
->_x : Foo
+>_x : Foo & not number
 >bar : number
 
     set x(value: number | Foo) { this._x = value; }

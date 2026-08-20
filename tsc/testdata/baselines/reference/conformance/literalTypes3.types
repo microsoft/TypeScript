@@ -19,11 +19,11 @@ function f1(s: string) {
 >s : string
 >"foo" : "foo"
 >s === "bar" : boolean
->s : string
+>s : string & not "foo"
 >"bar" : "bar"
 
         s;  // "foo" | "bar"
->s : "bar" | "foo"
+>s : string
     }
 }
 
@@ -57,24 +57,24 @@ function f2(s: string) {
 }
 
 function f3(s: string) {
->f3 : (s: string) => "bar" | "foo" | undefined
+>f3 : (s: string) => string | undefined
 >s : string
 
     return s === "foo" || s === "bar" ? s : undefined;  // "foo" | "bar" | undefined
->s === "foo" || s === "bar" ? s : undefined : "bar" | "foo" | undefined
+>s === "foo" || s === "bar" ? s : undefined : string | undefined
 >s === "foo" || s === "bar" : boolean
 >s === "foo" : boolean
 >s : string
 >"foo" : "foo"
 >s === "bar" : boolean
->s : string
+>s : string & not "foo"
 >"bar" : "bar"
->s : "bar" | "foo"
+>s : string
 >undefined : undefined
 }
 
 function f4(x: number) {
->f4 : (x: number) => 1 | 2
+>f4 : (x: number) => number
 >x : number
 
     if (x === 1 || x === 2) {
@@ -83,11 +83,11 @@ function f4(x: number) {
 >x : number
 >1 : 1
 >x === 2 : boolean
->x : number
+>x : number & not 1
 >2 : 2
 
         return x;  // 1 | 2
->x : 1 | 2
+>x : number
     }
     throw new Error();
 >new Error() : Error
@@ -105,11 +105,11 @@ function f5(x: number, y: 1 | 2) {
 >x : number
 >0 : 0
 >x === y : boolean
->x : number
+>x : number & not 0
 >y : 1 | 2
 
         x;  // 0 | 1 | 2
->x : 0 | 1 | 2
+>x : number
     }
 }
 

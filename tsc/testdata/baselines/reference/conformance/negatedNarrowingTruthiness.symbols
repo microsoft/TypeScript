@@ -1,0 +1,65 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingTruthiness.ts] ////
+
+=== negatedNarrowingTruthiness.ts ===
+// Truthiness narrowing removes falsy constituents (0, "", null, undefined, false, NaN) via type
+// facts. It does not introduce fresh `not` negations.
+
+declare const a: {} | undefined | null;
+>a : Symbol(a, Decl(negatedNarrowingTruthiness.ts, 3, 13))
+
+if (a) {
+>a : Symbol(a, Decl(negatedNarrowingTruthiness.ts, 3, 13))
+
+    a; // {}
+>a : Symbol(a, Decl(negatedNarrowingTruthiness.ts, 3, 13))
+
+} else {
+    a; // undefined | null
+>a : Symbol(a, Decl(negatedNarrowingTruthiness.ts, 3, 13))
+}
+
+declare const b: string | 0 | undefined;
+>b : Symbol(b, Decl(negatedNarrowingTruthiness.ts, 10, 13))
+
+if (b) {
+>b : Symbol(b, Decl(negatedNarrowingTruthiness.ts, 10, 13))
+
+    b; // string (definitely-falsy 0 and undefined removed; no negation introduced)
+>b : Symbol(b, Decl(negatedNarrowingTruthiness.ts, 10, 13))
+
+} else {
+    b; // string | 0 | undefined (no `not` synthesized)
+>b : Symbol(b, Decl(negatedNarrowingTruthiness.ts, 10, 13))
+}
+
+// Truthiness on a bare `{}` leaves it unchanged on both branches: the empty object type includes
+// falsy primitives (0, "", false, ...), so it is not reduced to `never` in the else branch.
+declare const c: {};
+>c : Symbol(c, Decl(negatedNarrowingTruthiness.ts, 19, 13))
+
+if (c) {
+>c : Symbol(c, Decl(negatedNarrowingTruthiness.ts, 19, 13))
+
+    c; // {}
+>c : Symbol(c, Decl(negatedNarrowingTruthiness.ts, 19, 13))
+
+} else {
+    c; // {}
+>c : Symbol(c, Decl(negatedNarrowingTruthiness.ts, 19, 13))
+}
+
+// Negation via `!` flips the branches.
+declare const d: number | undefined;
+>d : Symbol(d, Decl(negatedNarrowingTruthiness.ts, 27, 13))
+
+if (!d) {
+>d : Symbol(d, Decl(negatedNarrowingTruthiness.ts, 27, 13))
+
+    d; // 0 | undefined
+>d : Symbol(d, Decl(negatedNarrowingTruthiness.ts, 27, 13))
+
+} else {
+    d; // number
+>d : Symbol(d, Decl(negatedNarrowingTruthiness.ts, 27, 13))
+}
+

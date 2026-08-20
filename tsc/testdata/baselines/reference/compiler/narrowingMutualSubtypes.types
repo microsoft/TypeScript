@@ -105,10 +105,10 @@ function gg1(x: {}) {
     }
     else {
         x;  // {}
->x : {}
+>x : never
     }
     x;  // {}
->x : {}
+>x : Record<string, unknown>
 }
 
 declare function isObject2(value: unknown): value is {};
@@ -155,10 +155,10 @@ function gg3(x: {}) {
     }
     else {
         x;  // {}
->x : {}
+>x : never
     }
     x;  // {}
->x : {}
+>x : Record<string, any>
 }
 
 declare function isObject4(value: unknown): value is {};
@@ -297,12 +297,12 @@ function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) 
         // 'obj' should probably not include an array type here.
         for (let key in obj) {
 >key : string
->obj : any[] | Record<string, any>
+>obj : Record<string, any>[] | Record<string, any>
 
             if (obj[key] !== undefined) {
 >obj[key] !== undefined : boolean
 >obj[key] : any
->obj : any[] | Record<string, any>
+>obj : Record<string, any>[] | Record<string, any>
 >key : string
 >undefined : undefined
 
@@ -312,7 +312,7 @@ function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) 
 >console : Console
 >log : (...data: any[]) => void
 >obj[key] : any
->obj : any[] | Record<string, any>
+>obj : Record<string, any>[] | Record<string, any>
 >key : string
             }
         }
@@ -357,12 +357,12 @@ function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) 
         // 'obj' should probably not include an array type here.
         for (let key in obj) {
 >key : string
->obj : Record<string, any>
+>obj : Record<string, any> & not any[]
 
             if (obj[key] !== undefined) {
 >obj[key] !== undefined : boolean
 >obj[key] : any
->obj : Record<string, any>
+>obj : Record<string, any> & not any[]
 >key : string
 >undefined : undefined
 
@@ -372,7 +372,7 @@ function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) 
 >console : Console
 >log : (...data: any[]) => void
 >obj[key] : any
->obj : Record<string, any>
+>obj : Record<string, any> & not any[]
 >key : string
             }
         }

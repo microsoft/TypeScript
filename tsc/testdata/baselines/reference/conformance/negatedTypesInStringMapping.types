@@ -1,0 +1,74 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInStringMapping.ts] ////
+
+=== negatedTypesInStringMapping.ts ===
+// Negated types used with intrinsic string mapping types.
+
+// Uppercase applied to a negated type: `Uppercase<not T>`.
+type U1 = Uppercase<not "bar">;
+>U1 : Uppercase<`${not "bar"}`>
+
+type U2 = Uppercase<not string>;
+>U2 : Uppercase<`${not string}`>
+
+type U3 = Uppercase<not ("a" | "b")>;
+>U3 : Uppercase<`${not "a" & not "b"}`>
+
+type U4 = Uppercase<string & not "bar">;
+>U4 : Uppercase<`${string & not "bar"}`>
+
+// Negation applied to a string mapping type: `not Uppercase<T>`.
+type N1 = not Uppercase<"bar">;
+>N1 : not "BAR"
+
+type N2 = not Uppercase<string>;
+>N2 : not Uppercase<string>
+
+type N3 = not Lowercase<"ABC">;
+>N3 : not "abc"
+
+// Generic forms.
+type MapUpper<T extends string> = Uppercase<T & not "bar">;
+>MapUpper : Uppercase<T & not "bar">
+
+type MapUpperString = MapUpper<string>;
+>MapUpperString : Uppercase<`${string & not "bar"}`>
+
+type MapUpperLiteral = MapUpper<"baz">;
+>MapUpperLiteral : "BAZ"
+
+type NegUpper<T extends string> = not Uppercase<T>;
+>NegUpper : not Uppercase<T>
+
+type NegUpperString = NegUpper<string>;
+>NegUpperString : not Uppercase<string>
+
+type NegUpperLiteral = NegUpper<"baz">;
+>NegUpperLiteral : not "BAZ"
+
+// Assignability probes.
+declare let u1: U1;
+>u1 : Uppercase<`${not "bar"}`>
+
+declare let n1: N1;
+>n1 : not "BAR"
+
+u1 = "BAZ"; // depends on representation
+>u1 = "BAZ" : "BAZ"
+>u1 : Uppercase<`${not "bar"}`>
+>"BAZ" : "BAZ"
+
+u1 = "baz"; // depends on representation
+>u1 = "baz" : "baz"
+>u1 : Uppercase<`${not "bar"}`>
+>"baz" : "baz"
+
+n1 = "baz"; // depends on representation
+>n1 = "baz" : "baz"
+>n1 : not "BAR"
+>"baz" : "baz"
+
+n1 = "BAR"; // depends on representation
+>n1 = "BAR" : "BAR"
+>n1 : not "BAR"
+>"BAR" : "BAR"
+

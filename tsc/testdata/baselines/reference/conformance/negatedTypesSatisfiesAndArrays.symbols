@@ -1,0 +1,79 @@
+//// [tests/cases/conformance/types/negated/negatedTypesSatisfiesAndArrays.ts] ////
+
+=== negatedTypesSatisfiesAndArrays.ts ===
+// Negated types with the `satisfies` operator and with array/tuple element types.
+
+// satisfies against a negated type.
+declare const n: number;
+>n : Symbol(n, Decl(negatedTypesSatisfiesAndArrays.ts, 3, 13))
+
+const s1 = n satisfies not string; // should be ok (number is not a string)
+>s1 : Symbol(s1, Decl(negatedTypesSatisfiesAndArrays.ts, 4, 5))
+>n : Symbol(n, Decl(negatedTypesSatisfiesAndArrays.ts, 3, 13))
+
+declare const str: string;
+>str : Symbol(str, Decl(negatedTypesSatisfiesAndArrays.ts, 6, 13))
+
+const s2 = str satisfies not string; // should error (string is a string)
+>s2 : Symbol(s2, Decl(negatedTypesSatisfiesAndArrays.ts, 7, 5))
+>str : Symbol(str, Decl(negatedTypesSatisfiesAndArrays.ts, 6, 13))
+
+const s3 = 42 satisfies not "reserved"; // ok
+>s3 : Symbol(s3, Decl(negatedTypesSatisfiesAndArrays.ts, 9, 5))
+
+const s4 = "reserved" satisfies not "reserved"; // should error
+>s4 : Symbol(s4, Decl(negatedTypesSatisfiesAndArrays.ts, 10, 5))
+
+// Array of a negated element type.
+type NotStringArray = (not string)[];
+>NotStringArray : Symbol(NotStringArray, Decl(negatedTypesSatisfiesAndArrays.ts, 10, 47))
+
+declare let arr: NotStringArray;
+>arr : Symbol(arr, Decl(negatedTypesSatisfiesAndArrays.ts, 14, 11))
+>NotStringArray : Symbol(NotStringArray, Decl(negatedTypesSatisfiesAndArrays.ts, 10, 47))
+
+arr = [1, 2, 3];       // ok
+>arr : Symbol(arr, Decl(negatedTypesSatisfiesAndArrays.ts, 14, 11))
+
+arr = [{}, true, 0];   // ok: a fresh `{}` literal is treated as a closed empty object, disjoint from `string`
+>arr : Symbol(arr, Decl(negatedTypesSatisfiesAndArrays.ts, 14, 11))
+
+arr = ["a"];           // should error (element is a string)
+>arr : Symbol(arr, Decl(negatedTypesSatisfiesAndArrays.ts, 14, 11))
+
+arr = [1, "a"];        // should error (one element is a string)
+>arr : Symbol(arr, Decl(negatedTypesSatisfiesAndArrays.ts, 14, 11))
+
+// Tuple with a negated element type.
+type Pair = [not string, string];
+>Pair : Symbol(Pair, Decl(negatedTypesSatisfiesAndArrays.ts, 18, 15))
+
+declare let pair: Pair;
+>pair : Symbol(pair, Decl(negatedTypesSatisfiesAndArrays.ts, 22, 11))
+>Pair : Symbol(Pair, Decl(negatedTypesSatisfiesAndArrays.ts, 18, 15))
+
+pair = [1, "ok"];      // ok
+>pair : Symbol(pair, Decl(negatedTypesSatisfiesAndArrays.ts, 22, 11))
+
+pair = ["no", "ok"];   // should error (first element is a string)
+>pair : Symbol(pair, Decl(negatedTypesSatisfiesAndArrays.ts, 22, 11))
+
+// Readonly array of negated element type, element access.
+declare const ra: readonly (not number)[];
+>ra : Symbol(ra, Decl(negatedTypesSatisfiesAndArrays.ts, 27, 13))
+
+const elem = ra[0]; // element type probe
+>elem : Symbol(elem, Decl(negatedTypesSatisfiesAndArrays.ts, 28, 5))
+>ra : Symbol(ra, Decl(negatedTypesSatisfiesAndArrays.ts, 27, 13))
+
+// Spread / iteration of a negated element array.
+function sum(...args: (not string)[]) {}
+>sum : Symbol(sum, Decl(negatedTypesSatisfiesAndArrays.ts, 28, 19))
+>args : Symbol(args, Decl(negatedTypesSatisfiesAndArrays.ts, 31, 13))
+
+sum(1, 2, {}); // ok: a fresh `{}` literal is treated as a closed empty object, disjoint from `string`
+>sum : Symbol(sum, Decl(negatedTypesSatisfiesAndArrays.ts, 28, 19))
+
+sum(1, "x");   // should error
+>sum : Symbol(sum, Decl(negatedTypesSatisfiesAndArrays.ts, 28, 19))
+

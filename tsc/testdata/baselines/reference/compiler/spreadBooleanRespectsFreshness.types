@@ -18,17 +18,17 @@ declare let foo2: Foo;
 >foo2 : Foo
 
 foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]];
->foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]] : FooBase[]
+>foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]] : (string | false)[]
 >foo1 : Foo
->[...Array.isArray(foo2) ? foo2 : [foo2]] : FooBase[]
->...Array.isArray(foo2) ? foo2 : [foo2] : FooBase
->Array.isArray(foo2) ? foo2 : [foo2] : FooBase[]
+>[...Array.isArray(foo2) ? foo2 : [foo2]] : (string | false)[]
+>...Array.isArray(foo2) ? foo2 : [foo2] : string | false
+>Array.isArray(foo2) ? foo2 : [foo2] : (string | false)[]
 >Array.isArray(foo2) : boolean
 >Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
 >isArray : (arg: any) => arg is any[]
 >foo2 : Foo
 >foo2 : FooArray
->[foo2] : FooBase[]
->foo2 : FooBase
+>[foo2] : (string | false)[]
+>foo2 : FooBase & not any[]
 
