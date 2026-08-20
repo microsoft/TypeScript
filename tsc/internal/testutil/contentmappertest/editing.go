@@ -2,6 +2,7 @@ package contentmappertest
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -24,17 +25,45 @@ func (prefixedSupplementalHandler) HandleRequest(ctx context.Context, method str
 		}
 		const prefix = "/* generated */\n"
 		features := spanmap.FeatureAll
-		if strings.Contains(p.FileName, "folding-disabled") || strings.Contains(p.FileName, "codelens-disabled") {
+		if strings.Contains(p.FileName, "folding-disabled") || strings.Contains(p.FileName, "codelens-disabled") || strings.Contains(p.FileName, "formatting-disabled") {
 			features = spanmap.FeatureNone
 		}
-		mappings, err := spanmap.New([]spanmap.Segment{{
+		supplementalText := prefix + p.Content
+		segments := []spanmap.Segment{{
 			VirtualStart:  core.TextPos(len(prefix)),
 			VirtualEnd:    core.TextPos(len(prefix) + len(p.Content)),
 			OriginalStart: 0,
 			OriginalEnd:   core.TextPos(len(p.Content)),
 			Kind:          spanmap.KindVerbatim,
 			Features:      features,
-		}}).Marshal()
+		}}
+		if strings.Contains(p.FileName, "formatting-split") {
+			secondStart := strings.Index(p.Content, "function second")
+			if secondStart < 0 {
+				return nil, errors.New("contentmappertest: formatting-split input is missing function second")
+			}
+			const generated = "const generated={x:1};\n"
+			supplementalText = prefix + p.Content[:secondStart] + generated + p.Content[secondStart:]
+			segments = []spanmap.Segment{
+				{
+					VirtualStart:  core.TextPos(len(prefix)),
+					VirtualEnd:    core.TextPos(len(prefix) + secondStart),
+					OriginalStart: 0,
+					OriginalEnd:   core.TextPos(secondStart),
+					Kind:          spanmap.KindVerbatim,
+					Features:      spanmap.FeatureAll,
+				},
+				{
+					VirtualStart:  core.TextPos(len(prefix) + secondStart + len(generated)),
+					VirtualEnd:    core.TextPos(len(supplementalText)),
+					OriginalStart: core.TextPos(secondStart),
+					OriginalEnd:   core.TextPos(len(p.Content)),
+					Kind:          spanmap.KindVerbatim,
+					Features:      spanmap.FeatureAll,
+				},
+			}
+		}
+		mappings, err := spanmap.New(segments).Marshal()
 		if err != nil {
 			return nil, err
 		}
@@ -56,7 +85,7 @@ func (prefixedSupplementalHandler) HandleRequest(ctx context.Context, method str
 		return contentmapper.TransformResult{
 			MappedOutput: canonical,
 			Supplemental: []contentmapper.SupplementalOutput{{MappedOutput: contentmapper.MappedOutput{
-				Text:      prefix + p.Content,
+				Text:      supplementalText,
 				Extension: ".ts",
 				Mappings:  json.Value(mappings),
 			}}},

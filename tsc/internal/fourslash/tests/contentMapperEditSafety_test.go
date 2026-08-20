@@ -259,3 +259,111 @@ class Impl implements Service { run() {} }
 		ImplementationsCodeLensEnabled: core.TSTrue,
 	}})
 }
+
+func TestContentMapperFormatsSupplementalVerbatimRange(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// Full-document formatting intersects the original file with the supplemental verbatim mapping:
+	//
+	//   canonical:     export {};
+	//   supplemental:  /* generated */
+	//                  function outer(){
+	//                  const value={a:1};
+	//                  }
+	//
+	//   original:      [------------- function -------------)
+	//   supplemental:  /* generated */[------------- function -------------)
+	//                                 `-- verbatim, FeatureAll (includes Formatting) --'
+	//
+	// Only the mapped function range is formatted; the generated prefix is outside the request range.
+	f, done := newContentMapperFourslash(t, `// @Filename: /formatting.astro
+function outer(){
+const value={a:1};
+}
+`, contentmappertest.PrefixedSupplementalMapper, ".astro")
+	defer done()
+
+	f.GoToFile(t, "/formatting.astro")
+	f.FormatDocument(t, "/formatting.astro")
+	f.VerifyCurrentFileContent(t, `function outer() {
+    const value = { a: 1 };
+}
+`)
+}
+
+func TestContentMapperSkipsFormattingDisabledVerbatimRange(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// The virtual output has the same shape, but its only mapping is disabled for formatting:
+	//
+	//   canonical:     export {};
+	//   supplemental:  /* generated */
+	//                  function outer(){
+	//                  const value={a:1};
+	//                  }
+	//
+	//   original:      [------------- function -------------)
+	//   supplemental:  /* generated */[------------- function -------------)
+	//                                 `---- verbatim, FeatureNone --------'
+	//
+	// Full-document formatting therefore returns no edits.
+	const content = `function outer(){
+const value={a:1};
+}
+`
+	f, done := newContentMapperFourslash(t, `// @Filename: /formatting-disabled.astro
+`+content, contentmappertest.PrefixedSupplementalMapper, ".astro")
+	defer done()
+
+	f.GoToFile(t, "/formatting-disabled.astro")
+	f.FormatDocument(t, "/formatting-disabled.astro")
+	f.VerifyCurrentFileContent(t, content)
+}
+
+func TestContentMapperFormatsEachSupplementalVerbatimRange(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// The supplemental projection splits the original around synthesized generated code:
+	//
+	//   original:      [--- first ---)[--- second ---)
+	//   supplemental:  /* generated */[--- first ---)const generated={x:1};[--- second ---)
+	//                                 `- verbatim, Formatting -'             `- verbatim, Formatting -'
+	//
+	// Each verbatim intersection is formatted independently. Edits outside either virtual intersection,
+	// including edits to the synthesized generated declaration, are discarded.
+	f, done := newContentMapperFourslash(t, `// @Filename: /formatting-split.astro
+function first(){return 1;}
+function second(){return 2;}
+`, contentmappertest.PrefixedSupplementalMapper, ".astro")
+	defer done()
+
+	f.GoToFile(t, "/formatting-split.astro")
+	f.FormatDocument(t, "/formatting-split.astro")
+	f.VerifyCurrentFileContent(t, `function first() { return 1; }
+function second() { return 2; }
+`)
+}
+
+func TestContentMapperFormatsSupplementalOriginalSelection(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// The entire original file maps verbatim after a synthesized prefix:
+	//
+	//   original:      [--- first ---)[--- second ---)
+	//   supplemental:  /* generated */[--- first ---)[--- second ---)
+	//                                 `---- verbatim, Formatting ----'
+	//
+	// The original request selects only `second`; formatter edits expanded outside that virtual
+	// intersection are rejected, leaving `first` unchanged.
+	f, done := newContentMapperFourslash(t, `// @Filename: /formatting-selection.astro
+function first(){return 1;}
+/*start*/function second(){return 2;}/*end*/
+`, contentmappertest.PrefixedSupplementalMapper, ".astro")
+	defer done()
+
+	f.GoToFile(t, "/formatting-selection.astro")
+	f.FormatSelection(t, "start", "end")
+	f.VerifyCurrentFileContent(t, `function first(){return 1;}
+function second() { return 2; }
+`)
+}

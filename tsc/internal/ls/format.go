@@ -1,8 +1,10 @@
 package ls
 
 import (
+	"cmp"
 	"context"
 	"iter"
+	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -40,12 +42,57 @@ func (l *LanguageService) ProvideFormatDocument(
 	}
 	_, file := l.getProgramAndFile(documentURI)
 	formatOpts := lsutil.FromLSFormatOptions(l.FormatOptions(), options)
-	edits := l.toLSProtoTextEdits(file, l.getFormattingEditsForDocument(
-		ctx,
-		file,
-		formatOpts,
-	))
+	var edits []*lsproto.TextEdit
+	if file.ContentMapper() == "" {
+		edits = l.toLSProtoTextEdits(file, l.getFormattingEditsForDocument(ctx, file, formatOpts))
+	} else {
+		edits = l.getFormattingEditsForMappedRange(ctx, file, formatOpts, core.NewTextRange(0, len(file.OriginalText())))
+	}
 	return lsproto.TextEditsOrNull{TextEdits: &edits}, nil
+}
+
+// getFormattingEditsForMappedRange formats each formatting-enabled verbatim intersection with originalRange.
+// A mapper should provide at most one such mapping for any original text; duplicate formatting projections are unsupported.
+func (l *LanguageService) getFormattingEditsForMappedRange(ctx context.Context, file *ast.SourceFile, options lsutil.FormatCodeSettings, originalRange core.TextRange) []*lsproto.TextEdit {
+	projections := append([]*ast.SourceFile{file}, file.SupplementalSourceFiles()...)
+	var edits []*lsproto.TextEdit
+	for _, projection := range projections {
+		spanMap := projection.SpanMap()
+		if spanMap == nil {
+			continue
+		}
+		for _, segment := range spanMap.Segments() {
+			if segment.Kind != spanmap.KindVerbatim || segment.Features&spanmap.FeatureFormatting == 0 {
+				continue
+			}
+			originalStart := max(originalRange.Pos(), int(segment.OriginalStart))
+			originalEnd := min(originalRange.End(), int(segment.OriginalEnd))
+			if originalStart >= originalEnd {
+				continue
+			}
+			virtualRange := core.NewTextRange(
+				int(segment.VirtualStart)+originalStart-int(segment.OriginalStart),
+				int(segment.VirtualStart)+originalEnd-int(segment.OriginalStart),
+			)
+			for _, change := range l.getFormattingEditsForRange(ctx, projection, options, virtualRange) {
+				if change.Pos() < virtualRange.Pos() || change.End() > virtualRange.End() {
+					continue
+				}
+				lspRange, fidelity := l.converters.ToLSPRangeForFeature(projection, core.NewTextRange(change.Pos(), change.End()), spanmap.FeatureFormatting)
+				if !fidelity.IsExact() {
+					continue
+				}
+				edits = append(edits, &lsproto.TextEdit{Range: lspRange, NewText: change.NewText})
+			}
+		}
+	}
+	slices.SortStableFunc(edits, func(a, b *lsproto.TextEdit) int {
+		if c := lsproto.CompareRanges(a.Range, b.Range); c != 0 {
+			return c
+		}
+		return cmp.Compare(a.NewText, b.NewText)
+	})
+	return edits
 }
 
 func (l *LanguageService) ProvideFormatDocumentRange(
@@ -59,6 +106,10 @@ func (l *LanguageService) ProvideFormatDocumentRange(
 	}
 	_, file := l.getProgramAndFile(documentURI)
 	formatOpts := lsutil.FromLSFormatOptions(l.FormatOptions(), options)
+	if file.ContentMapper() != "" {
+		edits := l.getFormattingEditsForMappedRange(ctx, file, formatOpts, lsconv.FromLSPRangeToOriginal(l.converters, file, r))
+		return lsproto.TextEditsOrNull{TextEdits: &edits}, nil
+	}
 	ranges := lsconv.FromLSPRangeForSourceFile(l.converters, file, r, spanmap.FeatureFormatting)
 	if len(ranges) != 1 || !ranges[0].Fidelity.IsExact() {
 		return lsproto.TextEditsOrNull{}, nil
