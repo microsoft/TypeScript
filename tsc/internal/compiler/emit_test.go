@@ -51,7 +51,7 @@ func BenchmarkEmitLongLines(b *testing.B) {
 				OutDir:    "/dev/out",
 			}
 
-			host := compiler.NewCompilerHost("/dev/src", fs, bundled.LibPath(), nil, nil, nil)
+			host := compiler.NewCompilerHost("/dev/src", fs, bundled.LibPath(), nil, nil, nil, nil)
 
 			p := compiler.NewProgram(compiler.ProgramOptions{
 				Config: &tsoptions.ParsedCommandLine{
@@ -106,7 +106,7 @@ func BenchmarkEmitManyFiles(b *testing.B) {
 		OutDir:    "/dev/out",
 	}
 
-	host := compiler.NewCompilerHost("/dev/src", fs, bundled.LibPath(), nil, nil, nil)
+	host := compiler.NewCompilerHost("/dev/src", fs, bundled.LibPath(), nil, nil, nil, nil)
 
 	p := compiler.NewProgram(compiler.ProgramOptions{
 		Config: &tsoptions.ParsedCommandLine{
@@ -164,7 +164,7 @@ func BenchmarkEmitLongLinesWithLineBreaks(b *testing.B) {
 		OutDir:    "/dev/out",
 	}
 
-	host := compiler.NewCompilerHost("/dev/src", fs, bundled.LibPath(), nil, nil, nil)
+	host := compiler.NewCompilerHost("/dev/src", fs, bundled.LibPath(), nil, nil, nil, nil)
 
 	p := compiler.NewProgram(compiler.ProgramOptions{
 		Config: &tsoptions.ParsedCommandLine{

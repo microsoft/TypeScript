@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/pnpTransitiveDependencies.ts] ////
+
+=== /packages/package-a/index.ts ===
+import type { ConfigOptions } from 'package-b';
+>ConfigOptions : Symbol(ConfigOptions, Decl(index.ts, 0, 13))
+
+export interface HelperResult {
+>HelperResult : Symbol(HelperResult, Decl(index.ts, 0, 47))
+
+  message: string;
+>message : Symbol(HelperResult.message, Decl(index.ts, 2, 31))
+
+  config: ConfigOptions;
+>config : Symbol(HelperResult.config, Decl(index.ts, 3, 18))
+>ConfigOptions : Symbol(ConfigOptions, Decl(index.ts, 0, 13))
+}
+
+export function helperA(value: string, config: ConfigOptions): HelperResult {
+>helperA : Symbol(helperA, Decl(index.ts, 5, 1))
+>value : Symbol(value, Decl(index.ts, 7, 24))
+>config : Symbol(config, Decl(index.ts, 7, 38))
+>ConfigOptions : Symbol(ConfigOptions, Decl(index.ts, 0, 13))
+>HelperResult : Symbol(HelperResult, Decl(index.ts, 0, 47))
+
+  return {
+    message: "Helper A: " + value,
+>message : Symbol(message, Decl(index.ts, 8, 10))
+>value : Symbol(value, Decl(index.ts, 7, 24))
+
+    config: config
+>config : Symbol(config, Decl(index.ts, 9, 34))
+>config : Symbol(config, Decl(index.ts, 7, 38))
+
+  };
+}
+
+=== /packages/package-b/index.ts ===
+export interface ConfigOptions {
+>ConfigOptions : Symbol(ConfigOptions, Decl(index.ts, 0, 0))
+
+  enabled: boolean;
+>enabled : Symbol(ConfigOptions.enabled, Decl(index.ts, 0, 32))
+
+  timeout: number;
+>timeout : Symbol(ConfigOptions.timeout, Decl(index.ts, 1, 19))
+}
+
+export function helperB(value: number): string {
+>helperB : Symbol(helperB, Decl(index.ts, 3, 1))
+>value : Symbol(value, Decl(index.ts, 5, 24))
+
+  return "Helper B: " + value;
+>value : Symbol(value, Decl(index.ts, 5, 24))
+}
+
+=== /src/index.ts ===
+// Test that the project can import package-a directly
+// package-a's types depend on package-b's types (ConfigOptions)
+import { helperA } from 'package-a';
+>helperA : Symbol(helperA, Decl(index.ts, 2, 8))
+
+import type { HelperResult } from 'package-a';
+>HelperResult : Symbol(HelperResult, Decl(index.ts, 3, 13))
+
+import type { ConfigOptions } from 'package-b'; // This should error - package-b is not a direct dependency
+>ConfigOptions : Symbol(ConfigOptions, Decl(index.ts, 4, 13))
+
+export function useDirectDependency(text: string): HelperResult {
+>useDirectDependency : Symbol(useDirectDependency, Decl(index.ts, 4, 47))
+>text : Symbol(text, Decl(index.ts, 6, 36))
+>HelperResult : Symbol(HelperResult, Decl(index.ts, 3, 13))
+
+  const config: ConfigOptions = { enabled: true, timeout: 5000 };
+>config : Symbol(config, Decl(index.ts, 7, 7))
+>ConfigOptions : Symbol(ConfigOptions, Decl(index.ts, 4, 13))
+>enabled : Symbol(enabled, Decl(index.ts, 7, 33))
+>timeout : Symbol(timeout, Decl(index.ts, 7, 48))
+
+  return helperA(text, config);
+>helperA : Symbol(helperA, Decl(index.ts, 2, 8))
+>text : Symbol(text, Decl(index.ts, 6, 36))
+>config : Symbol(config, Decl(index.ts, 7, 7))
+}
+
+// Test that the project CANNOT import package-b directly even though package-a uses it
+// This should cause an error since package-b is not in project's dependencies
+export function attemptDirectImport(): ConfigOptions {
+>attemptDirectImport : Symbol(attemptDirectImport, Decl(index.ts, 9, 1))
+>ConfigOptions : Symbol(ConfigOptions, Decl(index.ts, 4, 13))
+
+  return { enabled: false, timeout: 1000 };
+>enabled : Symbol(enabled, Decl(index.ts, 14, 10))
+>timeout : Symbol(timeout, Decl(index.ts, 14, 26))
+}
+

@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -21,6 +22,7 @@ import (
 
 type contentMapperLoggingTestSystem struct {
 	*timingTestSystem
+	pnpApi  *pnp.PnpApi
 	enabled bool
 	stderr  bytes.Buffer
 }
@@ -35,6 +37,8 @@ func (s *contentMapperLoggingTestSystem) GetEnvironmentVariable(name string) str
 func (s *contentMapperLoggingTestSystem) ErrorWriter() io.Writer {
 	return &s.stderr
 }
+
+func (s *contentMapperLoggingTestSystem) PnpApi() *pnp.PnpApi { return s.pnpApi }
 
 func TestContentMapperLoggerEnvironmentVariable(t *testing.T) {
 	t.Parallel()
@@ -102,8 +106,9 @@ func (c *controlledClock) SinceStart() time.Duration {
 }
 
 type timingTestSystem struct {
-	fs    vfs.FS
-	clock *controlledClock
+	fs     vfs.FS
+	pnpApi *pnp.PnpApi
+	clock  *controlledClock
 }
 
 func (s *timingTestSystem) Writer() io.Writer                         { return io.Discard }
@@ -116,7 +121,7 @@ func (s *timingTestSystem) GetWidthOfTerminal() int                   { return 0
 func (s *timingTestSystem) GetEnvironmentVariable(name string) string { return "" }
 func (s *timingTestSystem) Now() time.Time                            { return s.clock.Now() }
 func (s *timingTestSystem) SinceStart() time.Duration                 { return s.clock.SinceStart() }
-
+func (s *timingTestSystem) PnpApi() *pnp.PnpApi                       { return s.pnpApi }
 func (s *timingTestSystem) Spawn([]string, string, io.Writer) (io.ReadWriteCloser, error) {
 	return nil, errors.New("spawn not implemented in timingTestSystem")
 }
@@ -147,8 +152,9 @@ export const make = (): Box => ({ value: "ok" });
 	}
 	clock := &controlledClock{now: time.Unix(0, 0)}
 	sys := &timingTestSystem{
-		fs:    vfstest.FromMapWithClock(files, true, &fileClock{}),
-		clock: clock,
+		fs:     vfstest.FromMapWithClock(files, true, &fileClock{}),
+		pnpApi: nil,
+		clock:  clock,
 	}
 	options := &core.CompilerOptions{
 		Declaration:     core.TSTrue,
@@ -163,7 +169,7 @@ export const make = (): Box => ({ value: "ok" });
 	})
 
 	compile := func(oldProgram *incremental.Program) (*incremental.Program, *CompileTimes) {
-		host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), nil, nil, nil)
+		host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), nil, sys.PnpApi(), nil, nil)
 		program := compiler.NewProgram(compiler.ProgramOptions{
 			Config: config,
 			Host:   host,

@@ -37,12 +37,21 @@ func (fsys *FS) Enable() {
 	fsys.enabled.Store(true)
 }
 
+// Some filesystems maintain their own caches that need to be cleared (e.g. pnpvfs's zip reader cache).
+type clearableFS interface {
+	ClearCache() error
+}
+
 func (fsys *FS) ClearCache() {
 	fsys.directoryExistsCache.Clear()
 	fsys.fileExistsCache.Clear()
 	fsys.getAccessibleEntriesCache.Clear()
 	fsys.realpathCache.Clear()
 	fsys.statCache.Clear()
+
+	if c, ok := fsys.fs.(clearableFS); ok {
+		_ = c.ClearCache()
+	}
 }
 
 func (fsys *FS) DirectoryExists(path string) bool {

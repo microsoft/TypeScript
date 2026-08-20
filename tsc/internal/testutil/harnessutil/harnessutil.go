@@ -27,6 +27,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
@@ -34,6 +35,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/pnpvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
 
@@ -216,6 +218,12 @@ func CompileFilesEx(
 
 	fs := vfstest.FromMap(testfs, harnessOptions.UseCaseSensitiveFileNames)
 	fs = bundled.WrapFS(fs)
+
+	pnpApi := pnp.InitPnpApi(fs, currentDirectory)
+	if pnpApi != nil {
+		fs = pnpvfs.From(fs)
+	}
+
 	fs = NewOutputRecorderFS(fs)
 
 	// Content mappers, when trusted, are served in-process by the test mapper (see contentmappertest).
@@ -250,7 +258,7 @@ func CompileFilesEx(
 		})
 		defer contentMapperProject.Close()
 	}
-	host := createCompilerHost(fs, bundled.LibPath(), currentDirectory, contentMapperProject)
+	host := createCompilerHost(fs, bundled.LibPath(), currentDirectory, pnpApi, contentMapperProject)
 	result := compileFilesWithHost(host, config, harnessOptions)
 	result.Symlinks = symlinks
 	result.Trace = host.tracer.String()
@@ -612,13 +620,13 @@ func (t *TracerForBaselining) Reset() {
 	t.packageJsonCache = make(map[tspath.Path]bool)
 }
 
-func createCompilerHost(fs vfs.FS, defaultLibraryPath string, currentDirectory string, contentMapperProject contentmapper.Project) *cachedCompilerHost {
+func createCompilerHost(fs vfs.FS, defaultLibraryPath string, currentDirectory string, pnpApi *pnp.PnpApi, contentMapperProject contentmapper.Project) *cachedCompilerHost {
 	tracer := NewTracerForBaselining(tspath.ComparePathsOptions{
 		UseCaseSensitiveFileNames: fs.UseCaseSensitiveFileNames(),
 		CurrentDirectory:          currentDirectory,
 	}, &strings.Builder{})
 	return &cachedCompilerHost{
-		CompilerHost: compiler.NewCompilerHost(currentDirectory, fs, defaultLibraryPath, nil, tracer.Trace, contentMapperProject),
+		CompilerHost: compiler.NewCompilerHost(currentDirectory, fs, defaultLibraryPath, nil, pnpApi, tracer.Trace, contentMapperProject),
 		tracer:       tracer,
 	}
 }

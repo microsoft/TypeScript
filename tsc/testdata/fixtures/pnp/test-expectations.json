@@ -1,0 +1,378 @@
+[{
+  "manifest": {
+    "__info": [],
+    "dependencyTreeRoots": [{
+      "name": "root",
+      "reference": "workspace:."
+    }],
+    "ignorePatternData": null,
+    "enableTopLevelFallback": false,
+    "fallbackPool": [],
+    "fallbackExclusionList": [],
+    "packageRegistryData": [
+      [null, [
+        [null, {
+          "packageLocation": "./",
+          "packageDependencies": [["test", "npm:1.0.0"]],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["root", [
+        ["workspace:.", {
+          "packageLocation": "./",
+          "packageDependencies": [["test", "npm:1.0.0"]],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["workspace-alias-dependency", [
+        ["workspace:workspace-alias-dependency", {
+          "packageLocation": "./workspace-alias-dependency/",
+          "packageDependencies": [["alias", ["test", "npm:1.0.0"]]],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["workspace-self-dependency", [
+        ["workspace:workspace-self-dependency", {
+          "packageLocation": "./workspace-self-dependency/",
+          "packageDependencies": [["workspace-self-dependency", "workspace:workspace-self-dependency"]],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["workspace-unfulfilled-peer-dependency", [
+        ["workspace:workspace-unfulfilled-peer-dependency", {
+          "packageLocation": "./workspace-unfulfilled-peer-dependency/",
+          "packageDependencies": [["test", null]],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["longer", [
+        ["workspace:longer", {
+          "packageLocation": "./longer/",
+          "packageDependencies": [["test", "npm:2.0.0"]],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["long", [
+        ["workspace:long", {
+          "packageLocation": "./long/",
+          "packageDependencies": [["test", "npm:1.0.0"]],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["longerer", [
+        ["workspace:longerer", {
+          "packageLocation": "./longerer/",
+          "packageDependencies": [["test", "npm:3.0.0"]],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["test", [
+        ["npm:1.0.0", {
+          "packageLocation": "./test-1.0.0/",
+          "packageDependencies": [],
+          "linkType": "HARD"
+        }],
+        ["npm:2.0.0", {
+          "packageLocation": "./test-2.0.0/",
+          "packageDependencies": [],
+          "linkType": "HARD"
+        }],
+        ["npm:3.0.0", {
+          "packageLocation": "./test-3.0.0/",
+          "packageDependencies": [],
+          "linkType": "HARD"
+        }]
+      ]]
+    ]
+  },
+  "tests": [{
+    "it": "should allow a package to import one of its dependencies",
+    "imported": "test",
+    "importer": "/path/to/project/",
+    "expected": "/path/to/project/test-1.0.0"
+  }, {
+    "it": "should allow a package to import itself, if specified in its own dependencies",
+    "imported": "workspace-self-dependency",
+    "importer": "/path/to/project/workspace-self-dependency/",
+    "expected": "/path/to/project/workspace-self-dependency"
+  }, {
+    "it": "should allow a package to import an aliased dependency",
+    "imported": "alias",
+    "importer": "/path/to/project/workspace-alias-dependency/",
+    "expected": "/path/to/project/test-1.0.0"
+  }, {
+    "it": "shouldn't allow a package to import something that isn't one of its dependencies",
+    "imported": "missing-dependency",
+    "importer": "/path/to/project/",
+    "expected": "error!"
+  }, {
+    "it": "should normalize the trailing slash from package locations",
+    "imported": "test",
+    "importer": "/path/to/project/long/",
+    "expected": "/path/to/project/test-1.0.0"
+  }, {
+    "it": "should throw an exception when trying to access an unfulfilled peer dependency",
+    "imported": "test",
+    "importer": "/path/to/project/workspace-unfulfilled-peer-dependency/",
+    "expected": "error!"
+  }]
+}, {
+  "manifest": {
+    "__info": [],
+    "dependencyTreeRoots": [{
+      "name": "root",
+      "reference": "workspace:."
+    }],
+    "ignorePatternData": null,
+    "enableTopLevelFallback": true,
+    "fallbackPool": [
+      ["test-2", "npm:1.0.0"],
+      ["alias", ["test-1", "npm:1.0.0"]]
+    ],
+    "fallbackExclusionList": [[
+      "workspace-no-fallbacks",
+      ["workspace:workspace-no-fallbacks"]
+    ]],
+    "packageRegistryData": [
+      [null, [
+        [null, {
+          "packageLocation": "./",
+          "packageDependencies": [["test-1", "npm:1.0.0"]],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["root", [
+        ["workspace:.", {
+          "packageLocation": "./",
+          "packageDependencies": [["test-1", "npm:1.0.0"]],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["workspace-no-fallbacks", [
+        ["workspace:workspace-no-fallbacks", {
+          "packageLocation": "./workspace-no-fallbacks/",
+          "packageDependencies": [],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["workspace-with-fallbacks", [
+        ["workspace:workspace-with-fallbacks", {
+          "packageLocation": "./workspace-with-fallbacks/",
+          "packageDependencies": [],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["workspace-unfulfilled-peer-dependency", [
+        ["workspace:workspace-unfulfilled-peer-dependency", {
+          "packageLocation": "./workspace-unfulfilled-peer-dependency/",
+          "packageDependencies": [
+            ["test-1", null],
+            ["test-2", null]
+          ],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["test-1", [
+        ["npm:1.0.0", {
+          "packageLocation": "./test-1/",
+          "packageDependencies": [],
+          "linkType": "HARD"
+        }]
+      ]],
+      ["test-2", [
+        ["npm:1.0.0", {
+          "packageLocation": "./test-2/",
+          "packageDependencies": [],
+          "linkType": "HARD"
+        }]
+      ]]
+    ]
+  },
+  "tests": [{
+    "it": "should allow resolution coming from the fallback pool if enableTopLevelFallback is set to true",
+    "imported": "test-1",
+    "importer": "/path/to/project/",
+    "expected": "/path/to/project/test-1"
+  }, {
+    "it": "should allow the fallback pool to contain aliases",
+    "imported": "alias",
+    "importer": "/path/to/project/",
+    "expected": "/path/to/project/test-1"
+  }, {
+    "it": "shouldn't use the fallback pool when the importer package is listed in fallbackExclusionList",
+    "imported": "test-1",
+    "importer": "/path/to/project/workspace-no-fallbacks/",
+    "expected": "error!"
+  }, {
+    "it": "should implicitly use the top-level package dependencies as part of the fallback pool",
+    "imported": "test-2",
+    "importer": "/path/to/project/workspace-with-fallbacks/",
+    "expected": "/path/to/project/test-2"
+  }, {
+    "it": "should throw an error if a resolution isn't in in the package dependencies, nor inside the fallback pool",
+    "imported": "test-3",
+    "importer": "/path/to/project/workspace-with-fallbacks/",
+    "expected": "error!"
+  }, {
+    "it": "should use the top-level fallback if a dependency is missing because of an unfulfilled peer dependency",
+    "imported": "test-1",
+    "importer": "/path/to/project/workspace-unfulfilled-peer-dependency/",
+    "expected": "/path/to/project/test-1"
+  }, {
+    "it": "should use the fallback pool if a dependency is missing because of an unfulfilled peer dependency",
+    "imported": "test-2",
+    "importer": "/path/to/project/workspace-unfulfilled-peer-dependency/",
+    "expected": "/path/to/project/test-2"
+  }]
+}, {
+  "manifest": {
+    "__info": [],
+    "dependencyTreeRoots": [{
+      "name": "root",
+      "reference": "workspace:."
+    }],
+    "ignorePatternData": null,
+    "enableTopLevelFallback": false,
+    "fallbackPool": [
+      ["test", "npm:1.0.0"]
+    ],
+    "fallbackExclusionList": [],
+    "packageRegistryData": [
+      [null, [
+        [null, {
+          "packageLocation": "./",
+          "packageDependencies": [],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["root", [
+        ["workspace:.", {
+          "packageLocation": "./",
+          "packageDependencies": [],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["test", [
+        ["npm:1.0.0", {
+          "packageLocation": "./test-1/",
+          "packageDependencies": [],
+          "linkType": "HARD"
+        }]
+      ]]
+    ]
+  },
+  "tests": [{
+    "it": "should ignore the fallback pool if enableTopLevelFallback is set to false",
+    "imported": "test",
+    "importer": "/path/to/project/",
+    "expected": "error!"
+  }]
+}, {
+  "manifest": {
+    "__info": [],
+    "dependencyTreeRoots": [{
+      "name": "root",
+      "reference": "workspace:."
+    }],
+    "ignorePatternData": "^not-a-workspace(/|$)",
+    "enableTopLevelFallback": false,
+    "fallbackPool": [],
+    "fallbackExclusionList": [],
+    "packageRegistryData": [
+      [null, [
+        [null, {
+          "packageLocation": "./",
+          "packageDependencies": [],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["root", [
+        ["workspace:.", {
+          "packageLocation": "./",
+          "packageDependencies": [["test", "npm:1.0.0"]],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["test", [
+        ["npm:1.0.0", {
+          "packageLocation": "./test/",
+          "packageDependencies": [],
+          "linkType": "HARD"
+        }]
+      ]]
+    ]
+  },
+  "tests": [{
+    "it": "shouldn't go through PnP when trying to resolve dependencies from packages covered by ignorePatternData",
+    "imported": "test",
+    "importer": "/path/to/project/not-a-workspace/",
+    "expected": ""
+  }]
+}, {
+  "manifest": {
+    "__info": [
+      "This file is automatically generated. Do not touch it, or risk",
+      "your modifications being lost."
+    ],
+    "dependencyTreeRoots": [{
+      "name": "root",
+      "reference": "workspace:."
+    }],
+    "enableTopLevelFallback": true,
+    "ignorePatternData": null,
+    "fallbackExclusionList": [],
+    "fallbackPool": [],
+    "packageRegistryData": [
+      [null, [
+        [null, {
+          "packageLocation": "./",
+          "packageDependencies": [
+            ["root", "workspace:."],
+            ["pad-left", "npm:2.1.0"]
+          ],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["my-project", [
+        ["workspace:.", {
+          "packageLocation": "./",
+          "packageDependencies": [
+            ["root", "workspace:."],
+            ["pad-left", "npm:2.1.0"]
+          ],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["pad-left", [
+        ["npm:2.1.0", {
+          "packageLocation": "../yarn/global/cache/pad-left-npm-2.1.0-ffe13d2d40-10c0.zip/node_modules/pad-left/",
+          "packageDependencies": [
+            ["pad-left", "npm:2.1.0"],
+            ["repeat-string", "npm:1.6.1"]
+          ],
+          "linkType": "HARD"
+        }]
+      ]],
+      ["repeat-string", [
+        ["npm:1.6.1", {
+          "packageLocation": "../yarn/global/cache/repeat-string-npm-1.6.1-bc8e388655-10c0.zip/node_modules/repeat-string/",
+          "packageDependencies": [
+            ["repeat-string", "npm:1.6.1"]
+          ],
+          "linkType": "HARD"
+        }]
+      ]]
+    ]
+  },
+  "tests": [{
+    "it": "should resolve global packages",
+    "imported": "pad-left",
+    "importer": "/path/to/project/",
+    "expected": "/path/to/yarn/global/cache/pad-left-npm-2.1.0-ffe13d2d40-10c0.zip/node_modules/pad-left"
+  }, {
+    "it": "should resolve global packages from third-party dependencies",
+    "imported": "repeat-string",
+    "importer": "/path/to/yarn/global/cache/pad-left-npm-2.1.0-ffe13d2d40-10c0.zip/node_modules/pad-left/",
+    "expected": "/path/to/yarn/global/cache/repeat-string-npm-1.6.1-bc8e388655-10c0.zip/node_modules/repeat-string"
+  }]
+}]

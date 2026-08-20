@@ -353,7 +353,14 @@ func FileNameToDocumentURI(fileName string) lsproto.DocumentUri {
 		parts[i] = extraEscapeReplacer.Replace(url.PathEscape(part))
 	}
 
-	return lsproto.DocumentUri("file://" + volume + strings.Join(parts, "/"))
+	var prefix string
+	if tspath.IsZipPath(fileName) {
+		prefix = "zip:"
+	} else {
+		prefix = "file:"
+	}
+
+	return lsproto.DocumentUri(prefix + "//" + volume + strings.Join(parts, "/"))
 }
 
 func (c *Converters) lineAndCharacterToPosition(script Script, lineAndCharacter lsproto.Position) core.TextPos {

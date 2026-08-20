@@ -299,7 +299,7 @@ func performIncrementalCompilation(
 	if contentMapperProject != nil {
 		defer contentMapperProject.Close()
 	}
-	host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), extendedConfigCache, getTraceFromSys(sys, config.Locale(), testing), contentMapperProject)
+	host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), extendedConfigCache, sys.PnpApi(), getTraceFromSys(sys, config.Locale(), testing), contentMapperProject)
 	buildInfoReadStart := sys.Now()
 	oldProgram := incremental.ReadBuildInfoProgram(config, incremental.NewBuildInfoReader(host), host)
 	compileTimes.BuildInfoReadTime = sys.Now().Sub(buildInfoReadStart)
@@ -357,7 +357,7 @@ func performCompilation(
 	if contentMapperProject != nil {
 		defer contentMapperProject.Close()
 	}
-	host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), extendedConfigCache, getTraceFromSys(sys, config.Locale(), testing), contentMapperProject)
+	host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), extendedConfigCache, sys.PnpApi(), getTraceFromSys(sys, config.Locale(), testing), contentMapperProject)
 
 	tr := startTracingIfNeeded(sys, config, testing)
 

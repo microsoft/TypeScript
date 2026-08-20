@@ -10,9 +10,11 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/pnpvfs"
 	"golang.org/x/term"
 )
 
@@ -22,6 +24,7 @@ type osSys struct {
 	defaultLibraryPath string
 	cwd                string
 	start              time.Time
+	pnpApi             *pnp.PnpApi
 }
 
 func (s *osSys) SinceStart() time.Duration {
@@ -63,6 +66,10 @@ func (s *osSys) GetWidthOfTerminal() int {
 
 func (s *osSys) GetEnvironmentVariable(name string) string {
 	return os.Getenv(name)
+}
+
+func (s *osSys) PnpApi() *pnp.PnpApi {
+	return s.pnpApi
 }
 
 func (s *osSys) Spawn(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
@@ -128,11 +135,19 @@ func newSystem() *osSys {
 		os.Exit(int(tsc.ExitStatusInvalidProject_OutputsSkipped))
 	}
 
+	var fs vfs.FS = osvfs.FS()
+
+	pnpApi := pnp.InitPnpApi(fs, tspath.NormalizePath(cwd))
+	if pnpApi != nil {
+		fs = pnpvfs.From(fs)
+	}
+
 	return &osSys{
 		cwd:                tspath.NormalizePath(cwd),
-		fs:                 bundled.WrapFS(osvfs.FS()),
+		fs:                 bundled.WrapFS(fs),
 		defaultLibraryPath: bundled.LibPath(),
 		writer:             os.Stdout,
 		start:              time.Now(),
+		pnpApi:             pnpApi,
 	}
 }

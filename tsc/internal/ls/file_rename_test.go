@@ -6,6 +6,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 	"gotest.tools/v3/assert"
 )
@@ -33,6 +34,7 @@ func (caseInsensitiveHost) ReadDirectory(currentDir string, path string, extensi
 func (caseInsensitiveHost) GetDirectories(path string) []string { panic("not implemented") }
 func (caseInsensitiveHost) DirectoryExists(path string) bool    { panic("not implemented") }
 func (caseInsensitiveHost) FileExists(path string) bool         { panic("not implemented") }
+func (caseInsensitiveHost) PnpApi() *pnp.PnpApi                 { panic("not implemented") }
 
 // TestCreatePathUpdaterCaseFoldingShrinksOldPath reproduces a panic that used to occur when
 // createPathUpdater confirmed a case-insensitive directory match via tspath.StartsWithDirectory,
