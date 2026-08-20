@@ -25,24 +25,24 @@ func configWithMappers(mappers ...*contentmapper.Mapper) *tsoptions.ParsedComman
 func TestStaticContentMapperTransformIdentity(t *testing.T) {
 	t.Parallel()
 
-	assert.Equal(t, (&contentmapper.Mapper{Manifest: contentmapper.Manifest{Name: "vue", Version: "2.0.0"}}).Identity(), "vue@2.0.0")
-	assert.Equal(t, (&contentmapper.Mapper{Definition: contentmapper.Definition{Package: "anon"}}).Identity(), "")
+	assert.Equal(t, (&contentmapper.Mapper{Name: "vue", Version: "2.0.0"}).Identity(), "vue@2.0.0")
+	assert.Equal(t, (&contentmapper.Mapper{Package: "anon"}).Identity(), "")
 
 	jsxMapper := &contentmapper.Mapper{
-		Definition: contentmapper.Definition{Package: "jsx"},
-		Manifest:   contentmapper.Manifest{Name: "jsx", Version: "1.0.0", CompilerOptions: []string{"jsx"}},
+		Package: "jsx",
+		Name:    "jsx", Version: "1.0.0", CompilerOptions: []string{"jsx"},
 	}
 	jsxPreserveIdentity := jsxMapper.TransformIdentity(&core.CompilerOptions{Jsx: core.JsxEmitPreserve})
 	jsxReactIdentity := jsxMapper.TransformIdentity(&core.CompilerOptions{Jsx: core.JsxEmitReact})
 	assert.Assert(t, jsxPreserveIdentity != jsxReactIdentity)
 
 	optionsA := &contentmapper.Mapper{
-		Definition: contentmapper.Definition{Package: "vue", Options: []byte(`{"mode":"a"}`)},
-		Manifest:   contentmapper.Manifest{Name: "vue", Version: "1.0.0"},
+		Package: "vue", Options: []byte(`{"mode":"a"}`),
+		Name: "vue", Version: "1.0.0",
 	}
 	optionsB := &contentmapper.Mapper{
-		Definition: contentmapper.Definition{Package: "vue", Options: []byte(`{"mode":"b"}`)},
-		Manifest:   contentmapper.Manifest{Name: "vue", Version: "1.0.0"},
+		Package: "vue", Options: []byte(`{"mode":"b"}`),
+		Name: "vue", Version: "1.0.0",
 	}
 	assert.Assert(t, optionsA.TransformIdentity(&core.CompilerOptions{}) != optionsB.TransformIdentity(&core.CompilerOptions{}))
 }
@@ -78,8 +78,8 @@ func (p fakeContentMapperProject) Close() error { return nil }
 func TestDynamicContentMapperIdentities(t *testing.T) {
 	t.Parallel()
 	config := configWithMappers(&contentmapper.Mapper{
-		Definition: contentmapper.Definition{Package: "dynamic"},
-		Manifest:   contentmapper.Manifest{Name: "dynamic", Version: "1.0.0", DynamicConfig: true},
+		Package: "dynamic",
+		Name:    "dynamic", Version: "1.0.0", DynamicConfig: true,
 	})
 	project := fakeContentMapperProject{identities: []string{"dynamic@1.0.0:opaque"}}
 	identities, err := incremental.ContentMapperIdentities(project)
@@ -114,7 +114,7 @@ func TestReadBuildInfoProgramContentMapperIdentityMismatch(t *testing.T) {
 		FileNames:               []string{"/src/a.ts"},
 		ContentMapperIdentities: []string{"vue@1.0.0"},
 	}
-	config := configWithMappers(&contentmapper.Mapper{Definition: contentmapper.Definition{Package: "vue", Extensions: []string{".vue"}}, Manifest: contentmapper.Manifest{Name: "vue", Version: "2.0.0"}})
+	config := configWithMappers(&contentmapper.Mapper{Package: "vue", Extensions: []string{".vue"}, Name: "vue", Version: "2.0.0"})
 	project := fakeContentMapperProject{identities: []string{"vue@2.0.0:current"}}
 	host := compiler.NewCompilerHost("/", vfstest.FromMap[any](nil, true), "", nil, nil, project)
 

@@ -96,12 +96,12 @@ func (prefixedSupplementalHandler) HandleRequest(ctx context.Context, method str
 				return nil, err
 			}
 			return contentmapper.TransformResult{
-				MappedOutput: contentmapper.MappedOutput{Text: p.Content[:thirdStart], Extension: ".ts", Mappings: json.Value(canonicalMappings)},
-				Supplemental: []contentmapper.SupplementalOutput{{MappedOutput: contentmapper.MappedOutput{
+				Text: p.Content[:thirdStart], Extension: ".ts", Mappings: json.Value(canonicalMappings),
+				Supplemental: []contentmapper.SupplementalOutput{{
 					Text:      supplementalText,
 					Extension: ".ts",
 					Mappings:  json.Value(mappings),
-				}}},
+				}},
 			}, nil
 		}
 		mappings, err := spanmap.New(segments).Marshal()
@@ -125,11 +125,11 @@ func (prefixedSupplementalHandler) HandleRequest(ctx context.Context, method str
 		}
 		return contentmapper.TransformResult{
 			MappedOutput: canonical,
-			Supplemental: []contentmapper.SupplementalOutput{{MappedOutput: contentmapper.MappedOutput{
+			Supplemental: []contentmapper.SupplementalOutput{{
 				Text:      supplementalText,
 				Extension: ".ts",
 				Mappings:  json.Value(mappings),
-			}}},
+			}},
 		}, nil
 	default:
 		return nil, fmt.Errorf("contentmappertest: unexpected method %q", method)
@@ -147,7 +147,7 @@ func (unmappedFoldingHandler) HandleRequest(ctx context.Context, method string, 
 		if err != nil {
 			return nil, err
 		}
-		return contentmapper.TransformResult{MappedOutput: contentmapper.MappedOutput{
+		return contentmapper.TransformResult{
 			Text: `import "a";
 import "b";
 /*
@@ -156,7 +156,7 @@ import "b";
 export {};`,
 			Extension: ".ts",
 			Mappings:  json.Value(mappings),
-		}}, nil
+		}, nil
 	default:
 		return nil, fmt.Errorf("contentmappertest: unexpected method %q", method)
 	}

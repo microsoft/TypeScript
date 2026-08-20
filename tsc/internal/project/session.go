@@ -394,9 +394,7 @@ func (s *Session) DidOpenFile(ctx context.Context, uri lsproto.DocumentUri, vers
 	s.UpdateSnapshot(ctx, overlays, SnapshotChange{
 		reason:      UpdateReasonDidOpenFile,
 		fileChanges: changes,
-		ResourceRequest: ResourceRequest{
-			Documents: []lsproto.DocumentUri{uri},
-		},
+		Documents:   []lsproto.DocumentUri{uri},
 	})
 }
 
@@ -416,9 +414,7 @@ func (s *Session) SetContentMapperContributions(ctx context.Context, contributio
 		reason:                     UpdateReasonDidChangeContentMapperContributions,
 		fileChanges:                changes,
 		contentMapperContributions: &contributions,
-		ResourceRequest: ResourceRequest{
-			ConfiguredProjectDocuments: documentURIs,
-		},
+		ConfiguredProjectDocuments: documentURIs,
 	})
 	_ = s.updateContentMapperRegistrations(ctx, s.Snapshot())
 }
@@ -1368,11 +1364,9 @@ func (s *Session) GetSnapshotWithAutoImports(ctx context.Context, baseSnapshot *
 
 func (s *Session) cloneWithAutoImports(ctx context.Context, baseSnapshot *Snapshot, uri lsproto.DocumentUri, callerRef bool) *Snapshot {
 	change := SnapshotChange{
-		reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
-		ResourceRequest: ResourceRequest{
-			Documents:   []lsproto.DocumentUri{uri},
-			AutoImports: uri,
-		},
+		reason:      UpdateReasonRequestedLanguageServiceWithAutoImports,
+		Documents:   []lsproto.DocumentUri{uri},
+		AutoImports: uri,
 	}
 	newSnapshot := baseSnapshot.Clone(ctx, change, baseSnapshot.fs.overlays, s)
 	if callerRef {
@@ -2150,11 +2144,9 @@ func (s *Session) warmAutoImportCache(ctx context.Context, change SnapshotChange
 		defer newSnapshot.Deref(s)
 
 		warmChange := SnapshotChange{
-			reason: UpdateReasonRequestedLanguageServiceWithAutoImports,
-			ResourceRequest: ResourceRequest{
-				Documents:   []lsproto.DocumentUri{changedFile},
-				AutoImports: changedFile,
-			},
+			reason:      UpdateReasonRequestedLanguageServiceWithAutoImports,
+			Documents:   []lsproto.DocumentUri{changedFile},
+			AutoImports: changedFile,
 		}
 		clonedSnapshot := newSnapshot.Clone(warmCtx, warmChange, newSnapshot.fs.overlays, s)
 

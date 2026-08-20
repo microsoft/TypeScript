@@ -2504,15 +2504,13 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			}
 		}
 		mapper := &contentmapper.Mapper{
-			Definition: contentmapper.Definition{Package: identity, Extensions: validExtensions, Options: options},
-			Manifest: contentmapper.Manifest{
-				Name:            manifest.Name,
-				Version:         valueOrZero(manifest.Version),
-				Exec:            slices.Clone(manifest.Exec),
-				CompilerOptions: slices.Clone(valueOrZero(manifest.CompilerOptions)),
-				DynamicConfig:   valueOrZero(manifest.DynamicConfig),
-			},
-			ContributionID: identity,
+			Package: identity, Extensions: validExtensions, Options: options,
+			Name:            manifest.Name,
+			Version:         valueOrZero(manifest.Version),
+			Exec:            slices.Clone(manifest.Exec),
+			CompilerOptions: slices.Clone(valueOrZero(manifest.CompilerOptions)),
+			DynamicConfig:   valueOrZero(manifest.DynamicConfig),
+			ContributionID:  identity,
 		}
 		if manifest.Cwd != nil {
 			if !tspath.PathIsAbsolute(*manifest.Cwd) {

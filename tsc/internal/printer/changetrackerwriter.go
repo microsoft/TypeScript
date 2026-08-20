@@ -27,7 +27,7 @@ func NewChangeTrackerWriter(newline string, indentSize int) *ChangeTrackerWriter
 		indentSize = defaultIndentSize
 	}
 	ctw := &ChangeTrackerWriter{
-		textWriter:            textWriter{newLine: newline, indentSize: indentSize},
+		newLine: newline, indentSize: indentSize,
 		lastNonTriviaPosition: 0,
 		pos:                   map[triviaPositionKey]int{},
 		end:                   map[triviaPositionKey]int{},

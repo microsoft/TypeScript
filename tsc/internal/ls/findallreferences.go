@@ -520,10 +520,8 @@ func (l *LanguageService) getNonLocalDefinition(ctx context.Context, entry *Symb
 				continue
 			}
 			return &nonLocalDefinition{
-				position: position{
-					uri: lsconv.FileNameToDocumentURI(fileName),
-					pos: lspPosition,
-				},
+				uri: lsconv.FileNameToDocumentURI(fileName),
+				pos: lspPosition,
 				GetSourcePosition: sync.OnceValue(func() lsproto.HasTextDocumentPosition {
 					mapped := l.tryGetSourcePosition(fileName, startPos)
 					if mapped != nil {

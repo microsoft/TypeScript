@@ -154,13 +154,11 @@ func FromLSPRangeIntersectingForSourceFile(c *Converters, file *ast.SourceFile, 
 		if spans == nil {
 			result = append(result, MappedSpan[*ast.SourceFile]{
 				Script: script,
-				MappedSpan: spanmap.MappedSpan{
-					Span: core.NewTextRange(
-						int(c.lineAndCharacterToPosition(script, textRange.Start)),
-						int(c.lineAndCharacterToPosition(script, textRange.End)),
-					),
-					Fidelity: spanmap.FidelityExact,
-				},
+				Span: core.NewTextRange(
+					int(c.lineAndCharacterToPosition(script, textRange.Start)),
+					int(c.lineAndCharacterToPosition(script, textRange.End)),
+				),
+				Fidelity: spanmap.FidelityExact,
 			})
 			continue
 		}

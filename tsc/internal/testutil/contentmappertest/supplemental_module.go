@@ -20,8 +20,8 @@ func (supplementalModuleHandler) HandleRequest(ctx context.Context, method strin
 			return nil, err
 		}
 		return contentmapper.TransformResult{
-			MappedOutput: contentmapper.MappedOutput{Text: "export default 1;", Extension: ".ts"},
-			Supplemental: []contentmapper.SupplementalOutput{{MappedOutput: contentmapper.MappedOutput{Text: `export const privateValue: number = "wrong";`, Extension: ".ts"}}},
+			Text: "export default 1;", Extension: ".ts",
+			Supplemental: []contentmapper.SupplementalOutput{{Text: `export const privateValue: number = "wrong";`, Extension: ".ts"}},
 		}, nil
 	default:
 		return nil, fmt.Errorf("contentmappertest: unexpected method %q", method)

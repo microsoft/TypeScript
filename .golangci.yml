@@ -67,8 +67,6 @@ linters:
 
     modernize:
       disable:
-        - embedlit
-        - slicesclip
         - slicesbackward # https://github.com/golang/go/issues/78829
 
     depguard:

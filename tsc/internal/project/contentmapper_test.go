@@ -662,8 +662,8 @@ func TestContentMapperOpenFileExcludedByConfigChange(t *testing.T) {
 	boxURI := lsproto.DocumentUri("file:///home/project/src/app.box")
 	session.SetContentMapperContributions(ctx, project.ContentMapperContributions{
 		Mappers: []*contentmapper.Mapper{{
-			Definition:       contentmapper.Definition{Package: "test.extension", Extensions: []string{".box"}},
-			Manifest:         contentmapper.Manifest{Name: "mapper", Version: "1.0.0", Exec: []string{contentmappertest.TransformingMapper}, CompilerOptions: contentmappertest.DeclaredOptions},
+			Package: "test.extension", Extensions: []string{".box"},
+			Name: "mapper", Version: "1.0.0", Exec: []string{contentmappertest.TransformingMapper}, CompilerOptions: contentmappertest.DeclaredOptions,
 			PackageDirectory: "/home/project",
 			ContributionID:   "test.extension[0]",
 		}},
@@ -851,8 +851,8 @@ func TestContentMapperInferredProjectUsesExtensionContributions(t *testing.T) {
 	assert.ErrorContains(t, err, "no project found", "configured mapper must not leak into inferred projects")
 	session.SetContentMapperContributions(ctx, project.ContentMapperContributions{
 		Mappers: []*contentmapper.Mapper{{
-			Definition:       contentmapper.Definition{Package: "test.extension", Extensions: []string{".box"}},
-			Manifest:         contentmapper.Manifest{Name: "mapper", Version: "1.0.0", Exec: []string{contentmappertest.TransformingMapper}, CompilerOptions: contentmappertest.DeclaredOptions},
+			Package: "test.extension", Extensions: []string{".box"},
+			Name: "mapper", Version: "1.0.0", Exec: []string{contentmappertest.TransformingMapper}, CompilerOptions: contentmappertest.DeclaredOptions,
 			PackageDirectory: "/home",
 			ContributionID:   "test.extension[0]",
 		}},
@@ -905,8 +905,8 @@ func TestContentMapperInferredProjectSurvivesTypingsInstall(t *testing.T) {
 	ctx := context.Background()
 	session.SetContentMapperContributions(ctx, project.ContentMapperContributions{
 		Mappers: []*contentmapper.Mapper{{
-			Definition:       contentmapper.Definition{Package: "test.extension", Extensions: []string{".box"}},
-			Manifest:         contentmapper.Manifest{Name: "mapper", Version: "1.0.0", Exec: []string{contentmappertest.TransformingMapper}, CompilerOptions: contentmappertest.DeclaredOptions},
+			Package: "test.extension", Extensions: []string{".box"},
+			Name: "mapper", Version: "1.0.0", Exec: []string{contentmappertest.TransformingMapper}, CompilerOptions: contentmappertest.DeclaredOptions,
 			PackageDirectory: "/home",
 			ContributionID:   "test.extension[0]",
 		}},
