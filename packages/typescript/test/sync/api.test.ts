@@ -18,6 +18,7 @@ import {
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
+    isInterfaceDeclaration,
     isJSDocParameterTag,
     isNamedImports,
     isReturnStatement,
@@ -3190,20 +3191,101 @@ describe("Checker - isArrayType / isTupleType", () => {
 });
 
 describe("Checker - isReadonlySymbol", () => {
-    test("returns whether a symbol is a readonly symbol", () => {
+    test("properties with a 'readonly' modifier", () => {
         const api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
-            "/src/main.ts": `export const foo = 1; export let bar = 2;`,
+            "/src/main.ts": `
+export interface User {
+    readonly name: string;
+    age: number;
+}
+
+export type ReadonlyUser = Readonly<User>;
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const user = sourceFile.statements.find(isInterfaceDeclaration);
+            assert.ok(user);
+            const userProperties = project.checker.getPropertiesOfType(
+                project.checker.getTypeAtLocation(user),
+            );
+            assert.equal(project.checker.isReadonlySymbol(userProperties[0]), true);
+            assert.equal(project.checker.isReadonlySymbol(userProperties[1]), false);
+            const readonlyUser = sourceFile.statements.find(isTypeAliasDeclaration);
+            assert.ok(readonlyUser);
+            const readonlyUserProperties = project.checker.getPropertiesOfType(
+                project.checker.getTypeAtLocation(readonlyUser),
+            );
+            assert.equal(project.checker.isReadonlySymbol(readonlyUserProperties[0]), true);
+            assert.equal(project.checker.isReadonlySymbol(readonlyUserProperties[1]), true);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("variables declared with 'const'", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const a = 1; export let b = 2;`,
         });
         try {
             const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
             const { checker } = snapshot.getProject("/tsconfig.json")!;
-            const foo = checker.getSymbolAtPosition("/src/main.ts", "export const ".length);
-            const bar = checker.getSymbolAtPosition("/src/main.ts", "export const foo = 1; export let ".length);
-            assert.ok(foo);
-            assert.ok(bar);
-            assert.equal(checker.isReadonlySymbol(foo), true);
-            assert.equal(checker.isReadonlySymbol(bar), false);
+            const a = checker.getSymbolAtPosition("/src/main.ts", "export const ".length);
+            const b = checker.getSymbolAtPosition("/src/main.ts", "export const a = 1; export let ".length);
+            assert.ok(a);
+            assert.ok(b);
+            assert.equal(checker.isReadonlySymbol(a), true);
+            assert.equal(checker.isReadonlySymbol(b), false);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("get accessors without matching set accessors", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+class Alpha {
+    private _value!: number;
+    get value(): number {
+        return this._value;
+    }
+}
+class Bravo {
+    private _value!: number;
+    get value(): number {
+        return this._value;
+    }
+    set value(newValue: number) {
+        this._value = newValue;
+    }
+}
+export type A = InstanceType<typeof Alpha>;
+export type B = InstanceType<typeof Bravo>;
+`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const typeAliases = sourceFile.statements.filter(isTypeAliasDeclaration);
+            assert.equal(typeAliases.length, 2);
+            const aProperties = project.checker.getPropertiesOfType(
+                project.checker.getTypeAtLocation(typeAliases[0]),
+            );
+            assert.equal(project.checker.isReadonlySymbol(aProperties[1]), true);
+            const bProperties = project.checker.getPropertiesOfType(
+                project.checker.getTypeAtLocation(typeAliases[1]),
+            );
+            assert.equal(project.checker.isReadonlySymbol(bProperties[1]), false);
         }
         finally {
             api.close();
