@@ -931,13 +931,14 @@ func (c *CompilationResult) GetSourceMapRecord() string {
 		sourceMapSpanWriter := newSourceMapSpanWriter(&sourceMapRecorder, sourceMapData.SourceMap, currentFile)
 		mapper := sourcemap.DecodeMappings(sourceMapData.SourceMap.Mappings)
 		for decodedSourceMapping := range mapper.Values() {
-			var currentSourceFile *ast.SourceFile
-			if decodedSourceMapping.IsSourceMapping() {
-				currentSourceFile = c.Program.GetSourceFile(sourceMapData.InputSourceFileNames[decodedSourceMapping.SourceIndex])
+			if !decodedSourceMapping.IsSourceMapping() {
+				sourceMapSpanWriter.recordSourceMapSpan(decodedSourceMapping)
+				continue
 			}
+			currentSourceFile := c.Program.GetSourceFile(sourceMapData.InputSourceFileNames[decodedSourceMapping.SourceIndex])
 			if currentSourceFile != prevSourceFile {
 				if currentSourceFile != nil {
-					sourceMapSpanWriter.recordNewSourceFileSpan(decodedSourceMapping, currentSourceFile.Text())
+					sourceMapSpanWriter.recordNewSourceFileSpan(decodedSourceMapping, currentSourceFile.OriginalText())
 				}
 				prevSourceFile = currentSourceFile
 			} else {

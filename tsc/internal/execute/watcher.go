@@ -623,7 +623,7 @@ func (w *Watcher) contentMapperManifestChanged(changedPaths map[string]fswatch.E
 		if mapper.PackageDirectory == "" || mapper.ContributionID != "" {
 			continue
 		}
-		if _, changed := changedPaths[w.sys.FS().Realpath(tspath.CombinePaths(mapper.PackageDirectory, "package.json"))]; changed {
+		if _, changed := changedPaths[tspath.CombinePaths(mapper.PackageDirectory, "package.json")]; changed {
 			return true
 		}
 	}

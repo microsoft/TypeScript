@@ -252,20 +252,15 @@ func iterateErrorBaseline[T diagnosticwriter.Diagnostic](t *testing.T, inputFile
 			return d.File() != nil && isTsConfigFile(d.File().FileName())
 		},
 	)
-	contentMapperSupplementalFileNames := map[string]struct{}{}
-	for _, diagnostic := range diagnostics {
-		if file, ok := diagnostic.File().(*ast.SourceFile); ok && file.IsContentMapperSupplemental() {
-			contentMapperSupplementalFileNames[file.FileName()] = struct{}{}
-		}
-	}
 	numContentMapperSupplementalDiagnostics := core.CountWhere(
 		diagnostics,
 		func(d T) bool {
-			if d.File() == nil {
-				return false
+			if diagnostic, ok := any(d).(*diagnosticwriter.ASTDiagnostic); ok {
+				file := diagnostic.Diagnostic.File()
+				return file != nil && file.IsContentMapperSupplemental()
 			}
-			_, ok := contentMapperSupplementalFileNames[d.File().FileName()]
-			return ok
+			file, ok := d.File().(*ast.SourceFile)
+			return ok && file.IsContentMapperSupplemental()
 		},
 	)
 	// Verify we didn't miss any errors in total

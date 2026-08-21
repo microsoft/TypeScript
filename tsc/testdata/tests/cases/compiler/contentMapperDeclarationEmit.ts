@@ -22,10 +22,9 @@
 }
 
 // @Filename: /component.y.z
-export interface ComponentProps {
-    label: string;
-}
+export interface ComponentProps { emoji: "😀"; label: string; }
 export declare const component: ComponentProps;
+export const emittedTarget = #{target};
 
 // @Filename: /main.ts
 export { component } from "./component.y.z";

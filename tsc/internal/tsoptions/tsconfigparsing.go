@@ -1400,20 +1400,26 @@ func parseJsonConfigFileContentWorker(
 	seenContentMapperExtensions := make(map[string]struct{}, totalContentMapperExtensions)
 	contentMapperExtensions := make([]string, 0, totalContentMapperExtensions)
 	nativeExtensions := core.Flatten(tspath.AllSupportedExtensionsWithJson)
+	canonicalExtension := func(extension string) string {
+		return tspath.GetCanonicalFileName(extension, host.FS().UseCaseSensitiveFileNames())
+	}
 	for j, mapper := range contentMappers {
 		validExtensions := make([]string, 0, len(mapper.Definition.Extensions))
 		for _, ext := range mapper.Definition.Extensions {
 			extNode := getContentMapperExtensionSyntax(contentMapperSourceFile, contentMapperIndices[j], ext)
+			canonicalExt := canonicalExtension(ext)
 			switch {
 			case !strings.HasPrefix(ext, "."):
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_file_extension_0_must_begin_with_a, ext), contentMapperSourceFile, extNode))
-			case slices.Contains(nativeExtensions, ext):
+			case slices.ContainsFunc(nativeExtensions, func(nativeExtension string) bool {
+				return strings.EqualFold(nativeExtension, ext)
+			}):
 				errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper, ext), contentMapperSourceFile, extNode))
 			default:
-				if _, seen := seenContentMapperExtensions[ext]; seen {
+				if _, seen := seenContentMapperExtensions[canonicalExt]; seen {
 					errors = append(errors, setContentMapperDiagnosticLocation(ast.NewCompilerDiagnostic(diagnostics.Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper, ext), contentMapperSourceFile, extNode))
 				} else {
-					seenContentMapperExtensions[ext] = struct{}{}
+					seenContentMapperExtensions[canonicalExt] = struct{}{}
 					contentMapperExtensions = append(contentMapperExtensions, ext)
 					validExtensions = append(validExtensions, ext)
 				}

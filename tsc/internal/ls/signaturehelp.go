@@ -55,19 +55,22 @@ func (l *LanguageService) ProvideSignatureHelp(
 ) (lsproto.SignatureHelpResponse, error) {
 	program, sourceFile := l.getProgramAndFile(documentURI)
 	positions := lsconv.FromLSPPositionForSourceFile(l.converters, sourceFile, position, spanmap.FeatureSignatureHelp)
-	if len(positions) == 0 || !positions[0].Fidelity.IsSingleSegment() {
-		return lsproto.SignatureHelpOrNull{}, nil
+	for _, projection := range positions {
+		if !projection.Fidelity.IsSingleSegment() {
+			continue
+		}
+		items := l.GetSignatureHelpItems(
+			ctx,
+			int(projection.Position),
+			program,
+			projection.Script,
+			context,
+		)
+		if items != nil {
+			return lsproto.SignatureHelpOrNull{SignatureHelp: items}, nil
+		}
 	}
-	sourceFile = positions[0].Script
-	pos := int(positions[0].Position)
-	items := l.GetSignatureHelpItems(
-		ctx,
-		pos,
-		program,
-		sourceFile,
-		context,
-	)
-	return lsproto.SignatureHelpOrNull{SignatureHelp: items}, nil
+	return lsproto.SignatureHelpOrNull{}, nil
 }
 
 func (l *LanguageService) GetSignatureHelpItems(

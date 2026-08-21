@@ -1,0 +1,45 @@
+// === QuickInfo ===
+=== /hover-concat.dup ===
+// value
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | const value: 1
+// | ```
+// | 
+// | ---
+// | 
+// | ```typescript
+// | const value: "text"
+// | ```
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 3,
+      "LSPosition": {
+        "line": 0,
+        "character": 3
+      },
+      "Name": "hover",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconst value: 1\n```\n\n---\n\n```typescript\nconst value: \"text\"\n```"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 0
+        },
+        "end": {
+          "line": 0,
+          "character": 5
+        }
+      }
+    }
+  }
+]

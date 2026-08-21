@@ -113,7 +113,6 @@ const (
 	InitializeErrorKindNoResponse
 	InitializeErrorKindInvalidResponse
 	InitializeErrorKindRequest
-	InitializeErrorKindProtocolVersion
 	InitializeErrorKindPositionEncoding
 	InitializeErrorKindEmptyDiagnosticSource
 	InitializeErrorKindReservedDiagnosticSource
@@ -127,7 +126,6 @@ type InitializeError struct {
 	Detail           string
 	ExitCode         int
 	TimeoutSeconds   int
-	ProtocolVersion  int
 	PositionEncoding PositionEncoding
 	DiagnosticSource string
 }
@@ -153,8 +151,6 @@ func (e *InitializeError) Error() string {
 		return "content mapper returned an invalid initialize response: " + e.Detail
 	case InitializeErrorKindRequest:
 		return "content mapper initialize request failed: " + e.Detail
-	case InitializeErrorKindProtocolVersion:
-		return fmt.Sprintf("unsupported protocol version %d (expected %d)", e.ProtocolVersion, ProtocolVersion)
 	case InitializeErrorKindPositionEncoding:
 		return fmt.Sprintf("unsupported position encoding %q", e.PositionEncoding)
 	case InitializeErrorKindEmptyDiagnosticSource:

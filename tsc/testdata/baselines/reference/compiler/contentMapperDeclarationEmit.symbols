@@ -4,15 +4,17 @@
 const __VERSION = "1.0.0";
 >__VERSION : Symbol(__VERSION, Decl(component.y.z, 0, 5))
 
-export interface ComponentProps {
+export interface ComponentProps { emoji: "😀"; label: string; }
+>ComponentProps : Symbol(ComponentProps, Decl(component.y.z, 0, 26))
+>emoji : Symbol(ComponentProps.emoji, Decl(component.y.z, 1, 33))
+>label : Symbol(ComponentProps.label, Decl(component.y.z, 1, 46))
+
+export declare const component: ComponentProps;
+>component : Symbol(component, Decl(component.y.z, 2, 20))
 >ComponentProps : Symbol(ComponentProps, Decl(component.y.z, 0, 26))
 
-    label: string;
->label : Symbol(ComponentProps.label, Decl(component.y.z, 1, 33))
-}
-export declare const component: ComponentProps;
->component : Symbol(component, Decl(component.y.z, 4, 20))
->ComponentProps : Symbol(ComponentProps, Decl(component.y.z, 0, 26))
+export const emittedTarget = 7;
+>emittedTarget : Symbol(emittedTarget, Decl(component.y.z, 3, 12))
 
 === /main.ts ===
 export { component } from "./component.y.z";

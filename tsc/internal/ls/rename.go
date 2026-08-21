@@ -73,6 +73,7 @@ func (l *LanguageService) ProvideRename(ctx context.Context, params *lsproto.Ren
 		true,  /*isRename*/
 		false, /*implementations*/
 		symbolEntryTransformOptions{},
+		nil, /*defaultProjectData*/
 	)
 }
 
