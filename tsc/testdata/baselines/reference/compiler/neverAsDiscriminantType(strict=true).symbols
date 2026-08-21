@@ -185,9 +185,9 @@ export async function adaptSession(input: GatewayPayload) {
 >GatewayPayload : Symbol(GatewayPayload, Decl(neverAsDiscriminantType.ts, 23, 1))
 
     if (input.t === 'MESSAGE_CREATE') {
->input.t : Symbol(GatewayPayloadStructure.t, Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8) ... and 8 more)
+>input.t : Symbol(GatewayPayloadStructure.t, Decl(neverAsDiscriminantType.ts, 20, 8))
 >input : Symbol(input, Decl(neverAsDiscriminantType.ts, 59, 35))
->t : Symbol(GatewayPayloadStructure.t, Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8), Decl(neverAsDiscriminantType.ts, 20, 8) ... and 8 more)
+>t : Symbol(GatewayPayloadStructure.t, Decl(neverAsDiscriminantType.ts, 20, 8))
 
         assertMessage(input.d)
 >assertMessage : Symbol(assertMessage, Decl(neverAsDiscriminantType.ts, 55, 1))
