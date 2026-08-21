@@ -3198,19 +3198,19 @@ export type ReadonlyUser = Readonly<User>;
         try {
             const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile( "/src/main.ts");
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
             assert.ok(sourceFile);
             const user = sourceFile.statements.find(isInterfaceDeclaration);
             assert.ok(user);
             const userProperties = await project.checker.getPropertiesOfType(
-                await project.checker.getTypeAtLocation(user)
+                await project.checker.getTypeAtLocation(user),
             );
             assert.equal(await project.checker.isReadonlySymbol(userProperties[0]), true);
             assert.equal(await project.checker.isReadonlySymbol(userProperties[1]), false);
             const readonlyUser = sourceFile.statements.find(isTypeAliasDeclaration);
             assert.ok(readonlyUser);
             const readonlyUserProperties = await project.checker.getPropertiesOfType(
-                await project.checker.getTypeAtLocation(readonlyUser)
+                await project.checker.getTypeAtLocation(readonlyUser),
             );
             assert.equal(await project.checker.isReadonlySymbol(readonlyUserProperties[0]), true);
             assert.equal(await project.checker.isReadonlySymbol(readonlyUserProperties[1]), true);
@@ -3266,16 +3266,16 @@ export type B = InstanceType<typeof Bravo>;
         try {
             const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
-            const sourceFile = await project.program.getSourceFile( "/src/main.ts");
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
             assert.ok(sourceFile);
             const typeAliases = sourceFile.statements.filter(isTypeAliasDeclaration);
             assert.equal(typeAliases.length, 2);
             const aProperties = await project.checker.getPropertiesOfType(
-                await project.checker.getTypeAtLocation(typeAliases[0])
+                await project.checker.getTypeAtLocation(typeAliases[0]),
             );
             assert.equal(await project.checker.isReadonlySymbol(aProperties[1]), true);
             const bProperties = await project.checker.getPropertiesOfType(
-                await project.checker.getTypeAtLocation(typeAliases[1])
+                await project.checker.getTypeAtLocation(typeAliases[1]),
             );
             assert.equal(await project.checker.isReadonlySymbol(bProperties[1]), false);
         }
