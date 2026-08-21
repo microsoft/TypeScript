@@ -7,7 +7,14 @@ const x: string = 1;
 tsgo index.ts --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-index.ts(1,7): error TS2322: Type 'number' is not assignable to type 'string'.
+[96mindex.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
+
+[7m1[0m const x: string = 1;
+[7m [0m [91m      ~[0m
+
+
+Found 1 error in index.ts[90m:1[0m
+
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}

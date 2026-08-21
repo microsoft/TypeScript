@@ -148,7 +148,7 @@ func (w *Watcher) start(ctx context.Context) {
 		w.configFilePaths = append([]string{w.configFileName}, w.config.ExtendedSourceFiles()...)
 	}
 
-	if w.sys.GetEnvironmentVariable("TS_WATCH_DEBUG") != "" {
+	if value, _ := w.sys.GetEnvironmentVariable("TS_WATCH_DEBUG"); value != "" {
 		w.wm.DebugLog = w.sys.Writer()
 	}
 
