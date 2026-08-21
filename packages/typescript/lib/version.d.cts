@@ -1,2 +1,2 @@
 export declare const version: string;
-export declare const versionMajorMinor = "7.0";
+export declare const versionMajorMinor = "7.1";
