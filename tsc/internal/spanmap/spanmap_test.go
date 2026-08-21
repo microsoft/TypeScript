@@ -186,6 +186,19 @@ func TestVirtualToOriginalPositionExact(t *testing.T) {
 	}
 }
 
+func TestVirtualToOriginalPositionExactRejectsDiscontinuousBoundary(t *testing.T) {
+	t.Parallel()
+
+	m := spanmap.New([]spanmap.Segment{
+		{VirtualStart: 0, VirtualEnd: 10, OriginalStart: 0, OriginalEnd: 10, Kind: spanmap.KindVerbatim},
+		{VirtualStart: 10, VirtualEnd: 20, OriginalStart: 100, OriginalEnd: 110, Kind: spanmap.KindVerbatim},
+	})
+
+	mapped, ok := m.VirtualToOriginalPositionExact(10)
+	assert.Equal(t, mapped, core.TextPos(100))
+	assert.Assert(t, !ok)
+}
+
 func TestZeroLengthSpansAtSegmentEnds(t *testing.T) {
 	t.Parallel()
 

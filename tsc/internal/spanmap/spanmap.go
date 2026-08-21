@@ -338,7 +338,7 @@ func (m *SpanMap) VirtualToOriginalPositionExact(pos core.TextPos) (core.TextPos
 	}
 	if index > 0 {
 		previous := m.segments[index-1]
-		if previous.VirtualEnd == pos && previous.Kind != KindVerbatim {
+		if previous.VirtualEnd == pos && (previous.Kind != KindVerbatim || previous.OriginalEnd != m.segments[index].OriginalStart) {
 			return mapped, false
 		}
 	}
