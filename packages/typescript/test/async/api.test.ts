@@ -5684,8 +5684,10 @@ describe("Program - diagnostics", () => {
             const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
             const diags = await project.program.getSyntacticDiagnostics("/src/index.ts");
-            assert.match(diags[0].sourceFileHash!, /^[0-9a-f]{32}$/);
-            assert.deepEqual(withoutSourceFileHashes(diags), [{
+            assert.deepEqual(diags[0].startPosition, { line: 0, character: 9 });
+            assert.deepEqual(diags[0].endPosition, { line: 0, character: 10 });
+            assert.deepEqual(diags[0].sourceLines, [{ line: 0, text: source }]);
+            assert.deepEqual(withoutFormattingContext(diags), [{
                 fileName: "/src/index.ts",
                 ...rangeOf(source, "="),
                 code: 1110,
@@ -5710,7 +5712,7 @@ describe("Program - diagnostics", () => {
             const diags = await project.program.getSemanticDiagnostics("/src/index.ts");
             const declRange = rangeOf(source, "callback", 0);
             const assignRange = rangeOf(source, "callback", 1);
-            assert.deepEqual(withoutSourceFileHashes(diags), [{
+            assert.deepEqual(withoutFormattingContext(diags), [{
                 fileName: "/src/index.ts",
                 ...assignRange,
                 code: 2322,
@@ -5754,7 +5756,7 @@ describe("Program - diagnostics", () => {
             const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
             const diags = await project.program.getSuggestionDiagnostics("/src/index.ts");
-            assert.deepEqual(withoutSourceFileHashes(diags), [{
+            assert.deepEqual(withoutFormattingContext(diags), [{
                 fileName: "/src/index.ts",
                 ...rangeOf(source, "_unused"),
                 code: 6133,
@@ -5778,7 +5780,7 @@ describe("Program - diagnostics", () => {
             const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
             const diags = await project.program.getConfigFileParsingDiagnostics();
-            assert.deepEqual(withoutSourceFileHashes(diags), [{
+            assert.deepEqual(withoutFormattingContext(diags), [{
                 fileName: "/tsconfig.json",
                 ...rangeOf(config, `"invalid"`),
                 code: 6046,
@@ -5822,6 +5824,21 @@ describe("Program - diagnostics", () => {
             assert.ok(color.endsWith("\r\n"), color);
             const doubled = await project.program.formatDiagnosticsWithColorAndContext([diags[0], diags[0]], host);
             assert.equal(doubled, color + color);
+
+            const multiline = {
+                ...diags[0],
+                startPosition: { line: 0, character: 0 },
+                endPosition: { line: 6, character: 5 },
+                sourceLines: [
+                    { line: 0, text: "one\n" },
+                    { line: 1, text: "two\n" },
+                    { line: 5, text: "six\n" },
+                    { line: 6, text: "seven" },
+                ],
+            };
+            const multilineColor = await project.program.formatDiagnosticsWithColorAndContext([multiline], host);
+            assert.ok(multilineColor.includes("..."), multilineColor);
+            assert.ok(multilineColor.includes("seven"), multilineColor);
         }
         finally {
             await api.close();
@@ -5849,36 +5866,6 @@ describe("Program - diagnostics", () => {
 
             const color = await project.program.formatDiagnosticsWithColorAndContext(diags, host);
             assert.ok(color.includes(`"target": "invalid"`), color);
-        }
-        finally {
-            await api.close();
-        }
-    });
-
-    test("formatDiagnostics rejects diagnostics for stale source text", async () => {
-        const api = spawnAPI({
-            "/tsconfig.json": `{ "compilerOptions": { "strict": true } }`,
-            "/index.ts": `const x: number = "oops";`,
-        });
-        try {
-            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
-            const program = snapshot.getProject("/tsconfig.json")!.program;
-            const diagnostics = await program.getSemanticDiagnostics("/index.ts");
-            const host = {
-                getCurrentDirectory: () => "/",
-                getCanonicalFileName: (fileName: string) => fileName,
-                getNewLine: () => "\n",
-            };
-            const staleDiagnostics = diagnostics.map(diagnostic => ({
-                ...diagnostic,
-                sourceFileHash: "00000000000000000000000000000000",
-            }));
-
-            // @sync: assert.throws(() =>
-            await assert.rejects( // @sync-skip
-                program.formatDiagnostics(staleDiagnostics, host),
-                /source file content has changed/,
-            );
         }
         finally {
             await api.close();
@@ -5975,7 +5962,7 @@ describe("Program - diagnostics", () => {
             const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
             const diags = await project.program.getBindDiagnostics("/src/index.ts");
-            assert.deepEqual(withoutSourceFileHashes(diags), [
+            assert.deepEqual(withoutFormattingContext(diags), [
                 {
                     fileName: "/src/index.ts",
                     ...rangeOf(source, "x", 0),
@@ -6007,7 +5994,7 @@ describe("Program - diagnostics", () => {
             const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
             const diags = await project.program.getProgramDiagnostics();
-            assert.deepEqual(withoutSourceFileHashes(diags), [
+            assert.deepEqual(withoutFormattingContext(diags), [
                 {
                     fileName: "/tsconfig.json",
                     ...rangeOf(config, `"bundler"`),
@@ -6085,7 +6072,7 @@ describe("Program - diagnostics", () => {
             const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
             const project = snapshot.getProject("/tsconfig.json")!;
             const diags = await project.program.getSyntacticDiagnostics(["/src/a.ts", "/src/b.ts"]);
-            assert.deepEqual(withoutSourceFileHashes(diags), [
+            assert.deepEqual(withoutFormattingContext(diags), [
                 {
                     fileName: "/src/a.ts",
                     ...rangeOf(sourceA, "="),
@@ -6865,8 +6852,9 @@ function rangeOf(source: string, searchString: string, occurrence: number = 0): 
     return { pos: index, end: index + searchString.length };
 }
 
-function withoutSourceFileHashes<T>(value: T): T {
-    return JSON.parse(JSON.stringify(value, (key, item) => key === "sourceFileHash" ? undefined : item)) as T;
+function withoutFormattingContext<T>(value: T): T {
+    const formattingKeys = new Set(["startPosition", "endPosition", "sourceLines"]);
+    return JSON.parse(JSON.stringify(value, (key, item) => formattingKeys.has(key) ? undefined : item)) as T;
 }
 
 function applyTextEdits(source: string, edits: readonly TextEdit[]): string {

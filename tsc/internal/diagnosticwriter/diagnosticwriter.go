@@ -245,48 +245,6 @@ func FormatDiagnosticWithColorAndContext(output io.Writer, diagnostic Diagnostic
 	}
 }
 
-func FormatDiagnosticsWithColorAndContextForAPI(output io.Writer, diags []Diagnostic, formatOpts *FormattingOptions) {
-	for _, diagnostic := range diags {
-		formatDiagnosticWithColorAndContextForAPI(output, diagnostic, formatOpts)
-	}
-}
-
-func formatDiagnosticWithColorAndContextForAPI(output io.Writer, diagnostic Diagnostic, formatOpts *FormattingOptions) {
-	if diagnostic.File() != nil {
-		file := diagnostic.File()
-		pos := diagnostic.Pos()
-		WriteLocation(output, file, pos, formatOpts, writeWithStyleAndReset)
-		fmt.Fprint(output, " - ")
-	}
-
-	writeWithStyleAndReset(output, diagnostic.Category().Name(), getCategoryFormat(diagnostic.Category()))
-	fmt.Fprintf(output, "%s %s%d: %s", foregroundColorEscapeGrey, diagnosticPrefix(diagnostic), diagnostic.Code(), resetEscapeSequence)
-	WriteFlattenedDiagnosticMessage(output, diagnostic, formatOpts.NewLine, formatOpts.Locale)
-
-	if diagnostic.File() != nil && diagnostic.Code() != diagnostics.File_appears_to_be_binary.Code() {
-		fmt.Fprint(output, formatOpts.NewLine)
-		writeCodeSnippet(output, diagnostic.File(), diagnostic.Pos(), diagnostic.Len(), getCategoryFormat(diagnostic.Category()), "", formatOpts)
-	}
-
-	if len(diagnostic.RelatedInformation()) > 0 {
-		fmt.Fprint(output, formatOpts.NewLine)
-		for _, relatedInformation := range diagnostic.RelatedInformation() {
-			file := relatedInformation.File()
-			if file != nil {
-				fmt.Fprint(output, formatOpts.NewLine)
-				fmt.Fprint(output, "  ")
-				pos := relatedInformation.Pos()
-				WriteLocation(output, file, pos, formatOpts, writeWithStyleAndReset)
-				writeCodeSnippet(output, file, pos, relatedInformation.Len(), foregroundColorEscapeCyan, "    ", formatOpts)
-			}
-			fmt.Fprint(output, formatOpts.NewLine)
-			fmt.Fprint(output, "    ")
-			WriteFlattenedDiagnosticMessage(output, relatedInformation, formatOpts.NewLine, formatOpts.Locale)
-		}
-	}
-	fmt.Fprint(output, formatOpts.NewLine)
-}
-
 func writeCodeSnippet(writer io.Writer, sourceFile FileLike, start int, length int, squiggleColor string, indent string, formatOpts *FormattingOptions) {
 	firstLine, firstLineChar := scanner.GetECMALineAndUTF16CharacterOfPosition(sourceFile, start)
 	lastLine, lastLineChar := scanner.GetECMALineAndUTF16CharacterOfPosition(sourceFile, start+length)

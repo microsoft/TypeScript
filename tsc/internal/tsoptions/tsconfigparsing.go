@@ -21,7 +21,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
-	"github.com/zeebo/xxh3"
 )
 
 type extendsResult struct {
@@ -299,7 +298,6 @@ func NewTsconfigSourceFileFromFilePath(configFileName string, configPath tspath.
 		FileName: configFileName,
 		Path:     configPath,
 	}, configSourceText, core.ScriptKindJSON)
-	sourceFile.Hash = xxh3.Hash128([]byte(configSourceText))
 	return &TsConfigSourceFile{
 		SourceFile: sourceFile,
 	}

@@ -125,8 +125,6 @@ export interface APIMethodInfo {
     getProgramDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
     getGlobalDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
     getConfigFileParsingDiagnostics: APIMethod<GetProjectDiagnosticsParams, DiagnosticResponse[] | null>;
-    formatDiagnostics: APIMethod<FormatDiagnosticsParams, FormatDiagnosticsResponse>;
-    formatDiagnosticsWithColorAndContext: APIMethod<FormatDiagnosticsParams, FormatDiagnosticsResponse>;
     printNode: APIMethod<PrintNodeParams, string>;
     formatNodeForInsertion: APIMethod<FormatNodeForInsertionParams, string>;
     emit: APIMethod<EmitParams, EmitResponse>;
@@ -761,12 +759,16 @@ export interface GetDiagnosticsParams {
 export interface DiagnosticResponse {
     /** FileName is the path of the file this diagnostic belongs to, if any. */
     fileName?: string;
-    /** SourceFileHash identifies the source text used to produce this diagnostic. */
-    sourceFileHash?: string;
     /** Pos is the start position of the diagnostic in the source file. */
     pos: number;
     /** End is the end position of the diagnostic in the source file. */
     end: number;
+    /** StartPosition is the zero-based line and UTF-16 character position of Pos. */
+    startPosition?: DiagnosticPositionResponse;
+    /** EndPosition is the zero-based line and UTF-16 character position of End. */
+    endPosition?: DiagnosticPositionResponse;
+    /** SourceLines contains the source lines needed to render this diagnostic with context. */
+    sourceLines?: DiagnosticSourceLineResponse[];
     /** Code is the diagnostic error code. */
     code: number;
     /** Category is the diagnostic category (error, warning, suggestion, message). */
@@ -783,22 +785,6 @@ export interface DiagnosticResponse {
     messageChain?: DiagnosticResponse[];
     /** RelatedInformation contains related diagnostic information, if any. */
     relatedInformation?: DiagnosticResponse[];
-    /** DisplayFileName is the host-formatted file name used only for diagnostic output. */
-    displayFileName?: string;
-}
-
-/** FormatDiagnosticsParams are parameters for diagnostic formatting methods. */
-export interface FormatDiagnosticsParams {
-    snapshot: number;
-    project: string;
-    diagnostics: readonly DiagnosticResponse[] | null;
-    newLine: string;
-}
-
-/** FormatDiagnosticsResponse is the response for diagnostic formatting methods. */
-export interface FormatDiagnosticsResponse {
-    /** Output is the fully formatted diagnostics text. */
-    output: string;
 }
 
 /** PrintNodeParams are the parameters for the printNode method. */
@@ -1054,6 +1040,16 @@ export interface CompletionEntryResponse {
     detail?: string;
     labelDetails?: CompletionEntryLabelDetailsResponse;
     symbol?: SymbolResponse;
+}
+
+export interface DiagnosticPositionResponse {
+    line: number;
+    character: number;
+}
+
+export interface DiagnosticSourceLineResponse {
+    line: number;
+    text: string;
 }
 
 export interface EmitOutputFile {

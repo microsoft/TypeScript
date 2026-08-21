@@ -64,7 +64,7 @@ func TestDocumentIdentifierUnmarshalJSON(t *testing.T) {
 	}
 }
 
-func TestNewDiagnosticResponseUsesUTF16Offsets(t *testing.T) {
+func TestNewDiagnosticResponseIncludesFormattingContext(t *testing.T) {
 	t.Parallel()
 
 	text := "const 💩 = 1;"
@@ -76,9 +76,29 @@ func TestNewDiagnosticResponseUsesUTF16Offsets(t *testing.T) {
 	diag := ast.NewDiagnostic(file, core.NewTextRange(pos, end), diagnostics.Expression_expected)
 	resp := api.NewDiagnosticResponse(diag)
 
-	assert.Equal(t, len(resp.SourceFileHash), 32)
 	assert.Equal(t, resp.Pos, 9)
 	assert.Equal(t, resp.End, 10)
+	assert.DeepEqual(t, resp.StartPosition, &api.DiagnosticPositionResponse{Line: 0, Character: 9})
+	assert.DeepEqual(t, resp.EndPosition, &api.DiagnosticPositionResponse{Line: 0, Character: 10})
+	assert.DeepEqual(t, resp.SourceLines, []*api.DiagnosticSourceLineResponse{{Line: 0, Text: text}})
 	assert.Equal(t, resp.Pos, file.GetPositionMap().UTF8ToUTF16(pos))
 	assert.Equal(t, resp.End, file.GetPositionMap().UTF8ToUTF16(end))
+}
+
+func TestNewDiagnosticResponseTruncatesLongFormattingContext(t *testing.T) {
+	t.Parallel()
+
+	text := "one\ntwo\nthree\nfour\nfive\nsix\nseven"
+	file := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/multiline.ts"}, text, core.ScriptKindTS)
+	diag := ast.NewDiagnostic(file, core.NewTextRange(0, len(text)), diagnostics.Expression_expected)
+	resp := api.NewDiagnosticResponse(diag)
+
+	assert.DeepEqual(t, resp.StartPosition, &api.DiagnosticPositionResponse{Line: 0, Character: 0})
+	assert.DeepEqual(t, resp.EndPosition, &api.DiagnosticPositionResponse{Line: 6, Character: 5})
+	assert.DeepEqual(t, resp.SourceLines, []*api.DiagnosticSourceLineResponse{
+		{Line: 0, Text: "one\n"},
+		{Line: 1, Text: "two\n"},
+		{Line: 5, Text: "six\n"},
+		{Line: 6, Text: "seven"},
+	})
 }

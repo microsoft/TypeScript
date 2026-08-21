@@ -861,10 +861,6 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetGlobalDiagnostics(ctx, parsed.(*GetProjectDiagnosticsParams))
 	case string(MethodGetConfigFileParsingDiagnostics):
 		return s.handleGetConfigFileParsingDiagnostics(ctx, parsed.(*GetProjectDiagnosticsParams))
-	case string(MethodFormatDiagnostics):
-		return s.handleFormatDiagnostics(ctx, parsed.(*FormatDiagnosticsParams), false /*colorAndContext*/)
-	case string(MethodFormatDiagnosticsWithColorAndContext):
-		return s.handleFormatDiagnostics(ctx, parsed.(*FormatDiagnosticsParams), true /*colorAndContext*/)
 	case string(MethodStartCPUProfile):
 		return s.handleStartCPUProfile(ctx, parsed.(*ProfileParams))
 	case string(MethodStopCPUProfile):

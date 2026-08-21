@@ -36,6 +36,10 @@ import {
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
 import {
+    formatDiagnostics,
+    formatDiagnosticsWithColorAndContext,
+} from "../diagnosticFormatter.ts";
+import {
     encodeNode,
     uint8ArrayToBase64,
 } from "../node/encoder.ts";
@@ -53,7 +57,6 @@ import type {
     LSPConnectionOptions,
 } from "../options.ts";
 import {
-    convertToRelativePath,
     createGetCanonicalFileName,
     toPath,
 } from "../path.ts";
@@ -214,35 +217,6 @@ export interface TranspileOutput {
     outputText: string;
     diagnostics?: readonly Diagnostic[];
     sourceMapText?: string;
-}
-
-interface FormatDiagnosticRequest extends Diagnostic {
-    readonly displayFileName?: string;
-}
-
-function toFormatDiagnosticRequest(
-    diagnostic: Diagnostic,
-    host: FormatDiagnosticsHost,
-): FormatDiagnosticRequest {
-    const { messageChain, relatedInformation, ...diagnosticData } = diagnostic;
-    return {
-        ...diagnosticData,
-        ...(diagnostic.fileName
-            ? {
-                displayFileName: convertToRelativePath(
-                    diagnostic.fileName,
-                    host.getCurrentDirectory(),
-                    fileName => host.getCanonicalFileName(fileName),
-                ),
-            }
-            : {}),
-        ...(messageChain
-            ? { messageChain: messageChain.map(d => toFormatDiagnosticRequest(d, host)) }
-            : {}),
-        ...(relatedInformation
-            ? { relatedInformation: relatedInformation.map(d => toFormatDiagnosticRequest(d, host)) }
-            : {}),
-    };
 }
 
 export class API<FromLSP extends boolean = false> {
@@ -1252,13 +1226,7 @@ export class Program {
         diagnostics: readonly Diagnostic[],
         host: FormatDiagnosticsHost,
     ): string {
-        const data = this.client.apiRequest("formatDiagnostics", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            diagnostics: diagnostics.map(d => toFormatDiagnosticRequest(d, host)),
-            newLine: host.getNewLine(),
-        });
-        return data.output;
+        return formatDiagnostics(diagnostics, host);
     }
 
     /**
@@ -1268,13 +1236,7 @@ export class Program {
         diagnostics: readonly Diagnostic[],
         host: FormatDiagnosticsHost,
     ): string {
-        const data = this.client.apiRequest("formatDiagnosticsWithColorAndContext", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            diagnostics: diagnostics.map(d => toFormatDiagnosticRequest(d, host)),
-            newLine: host.getNewLine(),
-        });
-        return data.output;
+        return formatDiagnosticsWithColorAndContext(diagnostics, host);
     }
 
     /**
@@ -1305,7 +1267,7 @@ export class Program {
             project: this.project.id,
             ...(emitOnly !== undefined ? { emitOnly } : {}),
         });
-        return toEmitOutput(response, response.diagnostics);
+        return toEmitOutput(response);
     }
 
     /**
@@ -1317,7 +1279,7 @@ export class Program {
             project: this.project.id,
             files,
         });
-        return toEmitOutput(response, response.diagnostics);
+        return toEmitOutput(response);
     }
 
     /**
@@ -1329,18 +1291,18 @@ export class Program {
             project: this.project.id,
             files,
         });
-        return toEmitOutput(response, response.diagnostics);
+        return toEmitOutput(response);
     }
 }
 
-function toEmitOutput(response: ProtocolEmitOutputResponse, diagnostics: readonly Diagnostic[]): EmitOutput {
+function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {
     const outputFiles = new Map<string, EmitOutputFile>();
     for (const { fileName, ...outputFile } of response.outputFiles) {
         outputFiles.set(fileName, outputFile);
     }
     return {
         emitSkipped: response.emitSkipped,
-        diagnostics,
+        diagnostics: response.diagnostics,
         outputFiles,
     };
 }
