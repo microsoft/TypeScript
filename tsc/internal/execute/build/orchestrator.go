@@ -344,7 +344,7 @@ func (o *Orchestrator) checkTasksForEventChanges(changedPaths map[string]fswatch
 			if mapper.PackageDirectory == "" || mapper.ContributionID != "" {
 				continue
 			}
-			manifestPath := o.toPath(o.host.FS().Realpath(tspath.CombinePaths(mapper.PackageDirectory, "package.json")))
+			manifestPath := o.toPath(tspath.CombinePaths(mapper.PackageDirectory, "package.json"))
 			if _, changed := normalizedPaths[manifestPath]; changed {
 				task.resetConfig(o, path)
 				needsConfigUpdate.Store(true)
@@ -515,7 +515,7 @@ func (o *Orchestrator) computeDesiredWatches() map[string]bool {
 				if mapper.PackageDirectory == "" || mapper.ContributionID != "" {
 					continue
 				}
-				manifestPath := o.host.FS().Realpath(tspath.CombinePaths(mapper.PackageDirectory, "package.json"))
+				manifestPath := tspath.CombinePaths(mapper.PackageDirectory, "package.json")
 				dir := tspath.GetDirectoryPath(manifestPath)
 				if !desiredDirs.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
 					desiredDirs.Set(dir, false)
