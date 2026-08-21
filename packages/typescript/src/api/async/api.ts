@@ -1899,12 +1899,15 @@ export class Checker {
      * Get the target symbol if instantiated, or the provided symbol otherwise.
      */
     async getTargetSymbol(symbol: Symbol): Promise<Symbol> {
-        const data = await this.client.apiRequest("getTargetSymbol", {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-            symbol: symbol.id,
-        });
-        return this.objectRegistry.getOrCreateSymbol(data);
+        if (symbol.checkFlags & CheckFlags.Instantiated) {
+            const data = await this.client.apiRequest("getTargetSymbol", {
+                snapshot: this.snapshotId,
+                project: this.project.id,
+                symbol: symbol.id,
+            });
+            return this.objectRegistry.getOrCreateSymbol(data);
+        }
+        return symbol;
     }
 
     /**
