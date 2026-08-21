@@ -79,6 +79,7 @@ import {
     type TemplateLiteralType,
     type TextEdit,
     TypeFlags,
+    TypeFormatFlags,
     type TypeParameter,
     TypePredicateKind,
     type TypeReference,
@@ -819,6 +820,47 @@ describe("Checker - getApparentType", () => {
             const apparent = project.checker.getApparentType(type);
             assert.ok(apparent);
             assert.ok(apparent.id > 0);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
+describe("Checker - getReducedType", () => {
+    test("returns the reduced type", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+declare const TaggedError: <Tag extends string>(
+    tag: Tag,
+) => new <A extends Record<string, any> = {}>(
+    args: { readonly [P in keyof A]: A[P] },
+) => { readonly _tag: Tag } & Readonly<A>;
+
+class RateLimitError extends TaggedError("RateLimitError")<{
+    readonly retryAfter: number;
+}> {}
+
+class QuotaExceededError extends TaggedError("QuotaExceededError")<{
+    readonly limit: number;
+}> {}
+
+export type Result = RateLimitError | (RateLimitError & QuotaExceededError);`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const typeAlias = sourceFile.statements.find(isTypeAliasDeclaration);
+            assert.ok(typeAlias);
+            const type = project.checker.getTypeAtLocation(typeAlias);
+            assert.equal(type.isUnionType(), true);
+            assert.equal(type.isObjectType(), false);
+            const reducedType = project.checker.getReducedType(type);
+            assert.equal(reducedType.isUnionType(), false);
+            assert.equal(reducedType.isObjectType(), true);
         }
         finally {
             api.close();
@@ -5094,6 +5136,27 @@ export const obj = { m: 1, s: "hi", b: true };
             assert.ok(type);
             const text = checker.typeToString(type);
             assert.strictEqual(text, "(name: string) => string");
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("typeToString with TypeFormatFlags", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export function greet(name: string): string[] { return [name]; }`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const { checker } = snapshot.getProject("/tsconfig.json")!;
+            const greetPos = "export function greet".indexOf("greet");
+            const symbol = checker.getSymbolAtPosition("/src/main.ts", greetPos);
+            assert.ok(symbol);
+            const type = checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const text = checker.typeToString(type, undefined, TypeFormatFlags.WriteArrayAsGenericType);
+            assert.strictEqual(text, "(name: string) => Array<string>");
         }
         finally {
             api.close();
