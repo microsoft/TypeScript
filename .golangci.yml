@@ -73,6 +73,8 @@ linters:
               desc: 'Use "github.com/microsoft/TypeScript/tsc/internal/json" instead.'
             - pkg: 'encoding/json/v2'
               desc: 'Use "github.com/microsoft/TypeScript/tsc/internal/json" instead.'
+            - pkg: 'encoding/json/jsontext'
+              desc: 'Use "github.com/microsoft/TypeScript/tsc/internal/json" instead.'
 
     forbidigo:
       analyze-types: true
