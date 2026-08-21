@@ -16,6 +16,14 @@ declare module "*.asset" {
 >fromB : "b"
 }
 
+=== /c.d.ts ===
+declare module "*.asset" with {} {
+>"*.asset" : typeof import("*.asset")
+
+    export const fromAttributed: "attributed";
+>fromAttributed : "attributed"
+}
+
 === /augmentation.ts ===
 export {};
 
@@ -40,6 +48,11 @@ augmented.fromB;
 >augmented : typeof augmented
 >fromB : "b"
 
+augmented.fromAttributed;
+>augmented.fromAttributed : "attributed"
+>augmented : typeof augmented
+>fromAttributed : "attributed"
+
 augmented.augmented;
 >augmented.augmented : "augmented"
 >augmented : typeof augmented
@@ -58,8 +71,31 @@ other.fromB;
 >other : typeof other
 >fromB : "b"
 
+other.fromAttributed;
+>other.fromAttributed : "attributed"
+>other : typeof other
+>fromAttributed : "attributed"
+
 other.augmented;
 >other.augmented : any
 >other : typeof other
 >augmented : any
+
+import * as explicitlyEmpty from "other.asset" with {};
+>explicitlyEmpty : typeof other
+
+explicitlyEmpty.fromA;
+>explicitlyEmpty.fromA : "a"
+>explicitlyEmpty : typeof other
+>fromA : "a"
+
+explicitlyEmpty.fromB;
+>explicitlyEmpty.fromB : "b"
+>explicitlyEmpty : typeof other
+>fromB : "b"
+
+explicitlyEmpty.fromAttributed;
+>explicitlyEmpty.fromAttributed : "attributed"
+>explicitlyEmpty : typeof other
+>fromAttributed : "attributed"
 

@@ -2,7 +2,7 @@
 
 === /a.d.ts ===
 declare module "*.asset" {
->"*.asset" : Symbol("*.asset", Decl(a.d.ts, 0, 0), Decl(b.d.ts, 0, 0))
+>"*.asset" : Symbol("*.asset", Decl(a.d.ts, 0, 0), Decl(b.d.ts, 0, 0), Decl(c.d.ts, 0, 0))
 
     export const fromA: "a";
 >fromA : Symbol(fromA, Decl(a.d.ts, 1, 16))
@@ -10,17 +10,25 @@ declare module "*.asset" {
 
 === /b.d.ts ===
 declare module "*.asset" {
->"*.asset" : Symbol("*.asset", Decl(a.d.ts, 0, 0), Decl(b.d.ts, 0, 0))
+>"*.asset" : Symbol("*.asset", Decl(a.d.ts, 0, 0), Decl(b.d.ts, 0, 0), Decl(c.d.ts, 0, 0))
 
     export const fromB: "b";
 >fromB : Symbol(fromB, Decl(b.d.ts, 1, 16))
+}
+
+=== /c.d.ts ===
+declare module "*.asset" with {} {
+>"*.asset" : Symbol("*.asset", Decl(a.d.ts, 0, 0), Decl(b.d.ts, 0, 0), Decl(c.d.ts, 0, 0))
+
+    export const fromAttributed: "attributed";
+>fromAttributed : Symbol(fromAttributed, Decl(c.d.ts, 1, 16))
 }
 
 === /augmentation.ts ===
 export {};
 
 declare module "augmented.asset" {
->"augmented.asset" : Symbol("augmented.asset", Decl(augmentation.ts, 0, 10), Decl(a.d.ts, 0, 0), Decl(b.d.ts, 0, 0))
+>"augmented.asset" : Symbol("augmented.asset", Decl(augmentation.ts, 0, 10), Decl(a.d.ts, 0, 0), Decl(b.d.ts, 0, 0), Decl(c.d.ts, 0, 0))
 
     export const augmented: "augmented";
 >augmented : Symbol(augmented, Decl(augmentation.ts, 3, 16))
@@ -40,24 +48,52 @@ augmented.fromB;
 >augmented : Symbol(augmented, Decl(index.ts, 0, 6))
 >fromB : Symbol(augmented.fromB, Decl(b.d.ts, 1, 16))
 
+augmented.fromAttributed;
+>augmented.fromAttributed : Symbol(augmented.fromAttributed, Decl(c.d.ts, 1, 16))
+>augmented : Symbol(augmented, Decl(index.ts, 0, 6))
+>fromAttributed : Symbol(augmented.fromAttributed, Decl(c.d.ts, 1, 16))
+
 augmented.augmented;
 >augmented.augmented : Symbol(augmented.augmented, Decl(augmentation.ts, 3, 16))
 >augmented : Symbol(augmented, Decl(index.ts, 0, 6))
 >augmented : Symbol(augmented.augmented, Decl(augmentation.ts, 3, 16))
 
 import * as other from "other.asset";
->other : Symbol(other, Decl(index.ts, 5, 6))
+>other : Symbol(other, Decl(index.ts, 6, 6))
 
 other.fromA;
 >other.fromA : Symbol(augmented.fromA, Decl(a.d.ts, 1, 16))
->other : Symbol(other, Decl(index.ts, 5, 6))
+>other : Symbol(other, Decl(index.ts, 6, 6))
 >fromA : Symbol(augmented.fromA, Decl(a.d.ts, 1, 16))
 
 other.fromB;
 >other.fromB : Symbol(augmented.fromB, Decl(b.d.ts, 1, 16))
->other : Symbol(other, Decl(index.ts, 5, 6))
+>other : Symbol(other, Decl(index.ts, 6, 6))
 >fromB : Symbol(augmented.fromB, Decl(b.d.ts, 1, 16))
 
+other.fromAttributed;
+>other.fromAttributed : Symbol(augmented.fromAttributed, Decl(c.d.ts, 1, 16))
+>other : Symbol(other, Decl(index.ts, 6, 6))
+>fromAttributed : Symbol(augmented.fromAttributed, Decl(c.d.ts, 1, 16))
+
 other.augmented;
->other : Symbol(other, Decl(index.ts, 5, 6))
+>other : Symbol(other, Decl(index.ts, 6, 6))
+
+import * as explicitlyEmpty from "other.asset" with {};
+>explicitlyEmpty : Symbol(explicitlyEmpty, Decl(index.ts, 12, 6))
+
+explicitlyEmpty.fromA;
+>explicitlyEmpty.fromA : Symbol(augmented.fromA, Decl(a.d.ts, 1, 16))
+>explicitlyEmpty : Symbol(explicitlyEmpty, Decl(index.ts, 12, 6))
+>fromA : Symbol(augmented.fromA, Decl(a.d.ts, 1, 16))
+
+explicitlyEmpty.fromB;
+>explicitlyEmpty.fromB : Symbol(augmented.fromB, Decl(b.d.ts, 1, 16))
+>explicitlyEmpty : Symbol(explicitlyEmpty, Decl(index.ts, 12, 6))
+>fromB : Symbol(augmented.fromB, Decl(b.d.ts, 1, 16))
+
+explicitlyEmpty.fromAttributed;
+>explicitlyEmpty.fromAttributed : Symbol(augmented.fromAttributed, Decl(c.d.ts, 1, 16))
+>explicitlyEmpty : Symbol(explicitlyEmpty, Decl(index.ts, 12, 6))
+>fromAttributed : Symbol(augmented.fromAttributed, Decl(c.d.ts, 1, 16))
 

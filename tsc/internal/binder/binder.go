@@ -310,7 +310,9 @@ func (b *Binder) getDeclarationName(node *ast.Node) string {
 				return ast.InternalSymbolNameGlobal
 			}
 			if pattern := core.TryParsePattern(moduleName); pattern.IsValid() && pattern.StarIndex >= 0 {
-				return "\"" + moduleName + "\"" + ast.InternalSymbolNamePrefix + "pattern@" + strconv.FormatUint(uint64(ast.GetNodeId(node)), 10)
+				if attributes := node.AsModuleDeclaration().Attributes; attributes != nil {
+					return "\"" + moduleName + "\"" + ast.InternalSymbolNamePrefix + "pattern@" + strconv.FormatUint(uint64(ast.GetNodeId(attributes)), 10)
+				}
 			}
 			return "\"" + moduleName + "\""
 		}

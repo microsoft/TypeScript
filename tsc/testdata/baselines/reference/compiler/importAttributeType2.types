@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/importAttributeType2.ts] ////
+
+=== /bun-sqlite.d.ts ===
+declare module "databases/*.sqlite" with { type: "sqlite", embed: "false" } {
+>"databases/*.sqlite" : typeof import("databases/*.sqlite")
+>type : "sqlite"
+>embed : "false"
+
+    const database: {
+>database : { storage: "external"; filename: string; }
+
+        storage: "external";
+>storage : "external"
+
+        filename: string;
+>filename : string
+
+    };
+    export default database;
+>database : { storage: "external"; filename: string; }
+}
+
+declare module "*.sqlite" with { type: "sqlite", embed: "true" } {
+>"*.sqlite" : typeof import("*.sqlite")
+>type : "sqlite"
+>embed : "true"
+
+    const database: {
+>database : { storage: "embedded"; contents: Uint8Array; }
+
+        storage: "embedded";
+>storage : "embedded"
+
+        contents: Uint8Array;
+>contents : Uint8Array<ArrayBufferLike>
+
+    };
+    export default database;
+>database : { storage: "embedded"; contents: Uint8Array; }
+}
+
+=== /index.ts ===
+import badDatabase from "databases/app.sqlite" with { type: "sqlite" };
+>badDatabase : any
+>type : any
+
+import embeddedDatabase from "databases/app.sqlite" with { type: "sqlite", embed: "true" };
+>embeddedDatabase : { storage: "embedded"; contents: Uint8Array; }
+>type : any
+>embed : any
+
+const expectedExternalStorage: "external" = badDatabase.storage;
+>expectedExternalStorage : "external"
+>badDatabase.storage : any
+>badDatabase : any
+>storage : any
+
+const expectedEmbeddedStorage: "embedded" = embeddedDatabase.storage;
+>expectedEmbeddedStorage : "embedded"
+>embeddedDatabase.storage : "embedded"
+>embeddedDatabase : { storage: "embedded"; contents: Uint8Array; }
+>storage : "embedded"
+
+badDatabase.filename;
+>badDatabase.filename : any
+>badDatabase : any
+>filename : any
+
+embeddedDatabase.contents;
+>embeddedDatabase.contents : Uint8Array<ArrayBufferLike>
+>embeddedDatabase : { storage: "embedded"; contents: Uint8Array; }
+>contents : Uint8Array<ArrayBufferLike>
+
