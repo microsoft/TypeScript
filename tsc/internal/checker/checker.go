@@ -18533,6 +18533,12 @@ func (c *Checker) getWidenedTypeOfObjectLiteral(t *Type, context *WideningContex
 	}))
 	// Retain js literal flag through widening
 	result.objectFlags |= t.objectFlags & (ObjectFlagsJSLiteral | ObjectFlagsNonInferrableType)
+	// Remember that this type originates in an object literal so that later subtype checks (e.g. when
+	// computing a common supertype) don't treat it as though it were a "regular" (non-literal) type that
+	// requires target's optional properties to be present (see 'requireOptionalProperties' in relater.go).
+	if isObjectLiteralType(t) {
+		result.objectFlags |= ObjectFlagsWidenedObjectLiteral
+	}
 	// Only cache in child contexts since the root context never widens a particular object literal type more than once
 	if context != nil && context.parent != nil {
 		if context.widenedTypes == nil {
