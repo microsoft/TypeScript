@@ -36,10 +36,7 @@ jobs:
 
   release-build:
     if: ${{ github.repository == 'microsoft/TypeScript' && github.event_name != 'merge_group' }}
-    runs-on:
-      - self-hosted
-      - 1ES.Pool=TypeScript-1ES-GitHub-Large
-      - 1ES.ImageOverride=azure-linux-3
+    runs-on: TypeScript-1ES-GitHub-1
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
@@ -77,10 +74,7 @@ jobs:
             os: macos
             coverage: true
             skip: ${{ github.event_name == 'merge_group' || github.event_name == 'pull_request' }}
-          - runner:
-              - self-hosted
-              - 1ES.Pool=TypeScript-1ES-GitHub-Large
-              - 1ES.ImageOverride=azure-linux-3
+          - runner: TypeScript-1ES-GitHub-1
             os: linux
             name: 'race mode'
             race: true
