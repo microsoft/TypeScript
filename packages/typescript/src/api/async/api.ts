@@ -1742,6 +1742,14 @@ export class Checker {
         });
     }
 
+    async isReadonlySymbol(symbol: Symbol): Promise<boolean> {
+        return this.client.apiRequest("isReadonlySymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.id,
+        });
+    }
+
     /** Get the return type of a signature. Always returns a type. */
     async getReturnTypeOfSignature(signature: Signature): Promise<Type> {
         return signature.getReturnType();

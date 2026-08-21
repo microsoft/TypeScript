@@ -113,6 +113,7 @@ export interface APIMethodInfo {
     getDocumentationComment: APIMethod<CheckerSymbolParams, string>;
     isArrayType: APIMethod<CheckerTypeParams, boolean>;
     isTupleType: APIMethod<CheckerTypeParams, boolean>;
+    isReadonlySymbol: APIMethod<CheckerSymbolParams, boolean>;
     getReferencesToSymbolInFile: APIMethod<GetReferencesToSymbolInFileParams, string[]>;
     getReferencedSymbolsForNode: APIMethod<GetReferencedSymbolsForNodeParams, ReferencedSymbolEntry[] | null>;
     getSignatureUsages: APIMethod<GetSignatureUsagesParams, SignatureUsageResponse[] | null>;

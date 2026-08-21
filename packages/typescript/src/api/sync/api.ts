@@ -1750,6 +1750,14 @@ export class Checker {
         });
     }
 
+    isReadonlySymbol(symbol: Symbol): boolean {
+        return this.client.apiRequest("isReadonlySymbol", {
+            snapshot: this.snapshotId,
+            project: this.project.id,
+            symbol: symbol.id,
+        });
+    }
+
     /** Get the return type of a signature. Always returns a type. */
     getReturnTypeOfSignature(signature: Signature): Type {
         return signature.getReturnType();

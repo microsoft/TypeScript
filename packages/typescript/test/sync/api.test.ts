@@ -3189,6 +3189,28 @@ describe("Checker - isArrayType / isTupleType", () => {
     });
 });
 
+describe("Checker - isReadonlySymbol", () => {
+    test("returns whether a symbol is a readonly symbol", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `export const foo = 1; export let bar = 2;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const { checker } = snapshot.getProject("/tsconfig.json")!;
+            const foo = checker.getSymbolAtPosition("/src/main.ts", "export const ".length);
+            const bar = checker.getSymbolAtPosition("/src/main.ts", "export const foo = 1; export let ".length);
+            assert.ok(foo);
+            assert.ok(bar);
+            assert.equal(checker.isReadonlySymbol(foo), true);
+            assert.equal(checker.isReadonlySymbol(bar), false);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 describe("Checker - getReturnTypeOfSignature", () => {
     test("returns the return type of a function signature", () => {
         const api = spawnAPI({
