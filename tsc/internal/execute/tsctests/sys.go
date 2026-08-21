@@ -96,8 +96,9 @@ func NewTscSystem(files FileMap, useCaseSensitiveFileNames bool, cwd string) *Te
 		fs: &testFs{
 			FS: vfstest.FromMapWithClock(files, useCaseSensitiveFileNames, clock),
 		},
-		cwd:   cwd,
-		clock: clock,
+		cwd:         cwd,
+		outputIsTTY: true,
+		clock:       clock,
 	}
 }
 
@@ -128,6 +129,9 @@ func newTestSys(tscInput *tscInput, forIncrementalCorrectness bool) *TestSys {
 	sys := NewTscSystem(tscInput.files, !tscInput.ignoreCase, cwd)
 	sys.defaultLibraryPath = libPath
 	sys.currentWrite = currentWrite
+	if tscInput.outputIsTTY != nil {
+		sys.outputIsTTY = *tscInput.outputIsTTY
+	}
 	sys.tracer = harnessutil.NewTracerForBaselining(tspath.ComparePathsOptions{
 		UseCaseSensitiveFileNames: !tscInput.ignoreCase,
 		CurrentDirectory:          cwd,
@@ -167,6 +171,7 @@ type TestSys struct {
 	defaultLibraryPath string
 	cwd                string
 	env                map[string]string
+	outputIsTTY        bool
 	clock              *TestClock
 }
 
@@ -226,7 +231,7 @@ func (s *TestSys) ErrorWriter() io.Writer {
 }
 
 func (s *TestSys) WriteOutputIsTTY() bool {
-	return true
+	return s.outputIsTTY
 }
 
 func (s *TestSys) GetWidthOfTerminal() int {
