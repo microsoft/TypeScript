@@ -306,7 +306,19 @@ func PreferredMarkupKind(formats []MarkupKind) MarkupKind {
 	return MarkupKindPlainText
 }
 
+// Contains reports whether other is this code action kind or one of its children.
+func (kind CodeActionKind) Contains(other CodeActionKind) bool {
+	return kind == other ||
+		kind == CodeActionKindEmpty ||
+		strings.HasPrefix(string(other), string(kind)+".")
+}
+
 const (
 	CodeActionKindSourceRemoveUnusedImports CodeActionKind = "source.removeUnusedImports"
 	CodeActionKindSourceSortImports         CodeActionKind = "source.sortImports"
+
+	CodeActionKindSourceFixAllTs              CodeActionKind = CodeActionKindSourceFixAll + ".ts"
+	CodeActionKindSourceOrganizeImportsTs     CodeActionKind = CodeActionKindSourceOrganizeImports + ".ts"
+	CodeActionKindSourceRemoveUnusedImportsTs CodeActionKind = CodeActionKindSourceRemoveUnusedImports + ".ts"
+	CodeActionKindSourceSortImportsTs         CodeActionKind = CodeActionKindSourceSortImports + ".ts"
 )

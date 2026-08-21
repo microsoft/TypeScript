@@ -1990,7 +1990,7 @@ func (f *FourslashTest) VerifySourceFixAll(t *testing.T, expectedContent string)
 
 	var selected *lsproto.CodeAction
 	for _, item := range *result.CommandOrCodeActionArray {
-		if item.CodeAction == nil || item.CodeAction.Kind == nil || *item.CodeAction.Kind != lsproto.CodeActionKindSourceFixAll {
+		if item.CodeAction == nil || item.CodeAction.Kind == nil || *item.CodeAction.Kind != lsproto.CodeActionKindSourceFixAllTs {
 			continue
 		}
 		selected = item.CodeAction
@@ -2155,8 +2155,17 @@ func (f *FourslashTest) VerifyOrganizeImports(t *testing.T, expectedContent stri
 	}
 
 	var organizeAction *lsproto.CodeAction
+	expectedKind := codeActionKind
+	switch codeActionKind {
+	case lsproto.CodeActionKindSourceOrganizeImports:
+		expectedKind = lsproto.CodeActionKindSourceOrganizeImportsTs
+	case lsproto.CodeActionKindSourceRemoveUnusedImports:
+		expectedKind = lsproto.CodeActionKindSourceRemoveUnusedImportsTs
+	case lsproto.CodeActionKindSourceSortImports:
+		expectedKind = lsproto.CodeActionKindSourceSortImportsTs
+	}
 	for _, item := range *result.CommandOrCodeActionArray {
-		if item.CodeAction != nil && item.CodeAction.Kind != nil && *item.CodeAction.Kind == codeActionKind {
+		if item.CodeAction != nil && item.CodeAction.Kind != nil && *item.CodeAction.Kind == expectedKind {
 			organizeAction = item.CodeAction
 			break
 		}

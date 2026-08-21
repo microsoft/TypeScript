@@ -349,6 +349,16 @@ const (
 	contentMapperWillRenameFilesRegistrationID   = "content-mapper-will-rename-files"
 )
 
+func supportedCodeActionKinds() []lsproto.CodeActionKind {
+	return []lsproto.CodeActionKind{
+		lsproto.CodeActionKindQuickFix,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
+		lsproto.CodeActionKindSourceRemoveUnusedImportsTs,
+		lsproto.CodeActionKindSourceSortImportsTs,
+		lsproto.CodeActionKindSourceFixAllTs,
+	}
+}
+
 func (s *Server) supportsContentMapperRegistration(id string) bool {
 	switch id {
 	case contentMapperDidOpenRegistrationID, contentMapperDidChangeRegistrationID, contentMapperDidCloseRegistrationID:
@@ -633,13 +643,7 @@ func (s *Server) RegisterContentMapperExtensions(ctx context.Context, extensions
 			RegisterOptions: &lsproto.RegisterOptions{
 				TextDocumentCodeAction: &lsproto.CodeActionRegistrationOptions{
 					DocumentSelector: selector,
-					CodeActionKinds: &[]lsproto.CodeActionKind{
-						lsproto.CodeActionKindQuickFix,
-						lsproto.CodeActionKindSourceOrganizeImports,
-						lsproto.CodeActionKindSourceRemoveUnusedImports,
-						lsproto.CodeActionKindSourceSortImports,
-						lsproto.CodeActionKindSourceFixAll,
-					},
+					CodeActionKinds:  new(supportedCodeActionKinds()),
 				},
 			},
 		},
@@ -1634,13 +1638,7 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 			},
 			CodeActionProvider: &lsproto.BooleanOrCodeActionOptions{
 				CodeActionOptions: &lsproto.CodeActionOptions{
-					CodeActionKinds: &[]lsproto.CodeActionKind{
-						lsproto.CodeActionKindQuickFix,
-						lsproto.CodeActionKindSourceOrganizeImports,
-						lsproto.CodeActionKindSourceRemoveUnusedImports,
-						lsproto.CodeActionKindSourceSortImports,
-						lsproto.CodeActionKindSourceFixAll,
-					},
+					CodeActionKinds: new(supportedCodeActionKinds()),
 				},
 			},
 			CallHierarchyProvider: &lsproto.BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions{
