@@ -114,7 +114,8 @@ func (d *structDecoder) finish() error {
 // enforcing object-kind, required-field, and non-nullable-field strictness as
 // declared by lsp struct tags. Up to 64 required fields are supported.
 func unmarshalStruct(v any, dec *json.Decoder) error {
-	d := newStructDecoder(v)
+	rv := reflect.ValueOf(v).Elem()
+	spec := specFor(rv.Type())
 
 	if k := dec.PeekKind(); k != '{' {
 		return errNotObject(k)
@@ -123,18 +124,27 @@ func unmarshalStruct(v any, dec *json.Decoder) error {
 		return err
 	}
 
+	var seen uint64
 	for dec.PeekKind() != '}' {
 		name, err := dec.ReadValue()
 		if err != nil {
 			return err
 		}
 		// name includes surrounding quotes; m[string(b)] is a no-alloc lookup.
-		if err := d.field(string(name[1:len(name)-1]), dec.PeekKind(), func(out any) error {
-			if out == nil {
-				return dec.SkipValue()
+		fs, ok := spec.byName[string(name[1:len(name)-1])]
+		if !ok {
+			if err := dec.SkipValue(); err != nil {
+				return err
 			}
-			return json.UnmarshalDecode(dec, out)
-		}); err != nil {
+			continue
+		}
+		if fs.requiredID >= 0 {
+			seen |= 1 << fs.requiredID
+		}
+		if fs.rejectNull && dec.PeekKind() == 'n' {
+			return errNull(string(name[1 : len(name)-1]))
+		}
+		if err := json.UnmarshalDecode(dec, rv.Field(fs.index).Addr().Interface()); err != nil {
 			return err
 		}
 	}
@@ -142,7 +152,16 @@ func unmarshalStruct(v any, dec *json.Decoder) error {
 		return err
 	}
 
-	return d.finish()
+	if missing := spec.requiredMask &^ seen; missing != 0 {
+		var missingProps []string
+		for id, n := range spec.requiredNames {
+			if missing&(1<<id) != 0 {
+				missingProps = append(missingProps, n)
+			}
+		}
+		return errMissing(missingProps)
+	}
+	return nil
 }
 
 type deferredStructField struct {
@@ -150,100 +169,117 @@ type deferredStructField struct {
 	value json.Value
 }
 
-// unmarshalDiscriminatedStruct selects a concrete struct using one of its
-// fields. Fields after the discriminator decode directly from dec; only fields
-// that precede it are retained and replayed.
-func unmarshalDiscriminatedStruct(
-	dec *json.Decoder,
-	typeName string,
-	discriminator string,
-	newTarget func(json.Value) any,
-) (any, error) {
+type discriminatedStructDecoder struct {
+	dec                *json.Decoder
+	typeName           string
+	discriminator      string
+	discriminatorValue json.Value
+	hasDiscriminator   bool
+	deferred           []deferredStructField
+	closed             bool
+}
+
+// scanDiscriminatedStruct advances through an object until it finds the
+// discriminator. Only fields preceding the discriminator are retained.
+func scanDiscriminatedStruct(dec *json.Decoder, typeName string, discriminator string) (discriminatedStructDecoder, error) {
 	if k := dec.PeekKind(); k != '{' {
-		return nil, errNotObject(k)
+		return discriminatedStructDecoder{}, errNotObject(k)
 	}
 	if _, err := dec.ReadToken(); err != nil {
-		return nil, err
+		return discriminatedStructDecoder{}, err
 	}
 
-	var deferred []deferredStructField
-	var target any
-	var targetDecoder *structDecoder
+	state := discriminatedStructDecoder{
+		dec:           dec,
+		typeName:      typeName,
+		discriminator: discriminator,
+	}
 	for dec.PeekKind() != '}' {
 		rawName, err := dec.ReadValue()
 		if err != nil {
-			return nil, err
+			return discriminatedStructDecoder{}, err
 		}
 		name := string(rawName[1 : len(rawName)-1])
-
-		if targetDecoder == nil {
+		if name == discriminator {
 			value, err := dec.ReadValue()
 			if err != nil {
-				return nil, err
+				return discriminatedStructDecoder{}, err
 			}
-			if name != discriminator {
-				deferred = append(deferred, deferredStructField{name: name, value: value.Clone()})
-				continue
+			if value.Kind() != '"' {
+				return discriminatedStructDecoder{}, fmt.Errorf("invalid %s discriminator %q: got %v", typeName, discriminator, value.Kind())
 			}
-
-			target = newTarget(value)
-			if target == nil {
-				return nil, fmt.Errorf("invalid %s discriminator %q: %s", typeName, discriminator, value)
-			}
-			targetDecoder = newStructDecoder(target)
-			// newTarget validates the string literal discriminator. Mark it as
-			// seen without reparsing it into the generated zero-sized literal type.
-			if err := targetDecoder.field(name, value.Kind(), func(any) error { return nil }); err != nil {
-				return nil, err
-			}
-			for _, field := range deferred {
-				if err := targetDecoder.field(field.name, field.value.Kind(), func(out any) error {
-					if out == nil {
-						return nil
-					}
-					return json.Unmarshal(field.value, out)
-				}); err != nil {
-					return nil, err
-				}
-			}
-			deferred = nil
-			continue
+			state.discriminatorValue = value
+			state.hasDiscriminator = true
+			return state, nil
 		}
 
-		if err := targetDecoder.field(name, dec.PeekKind(), func(out any) error {
-			if out == nil {
-				return dec.SkipValue()
-			}
-			return json.UnmarshalDecode(dec, out)
-		}); err != nil {
-			return nil, err
+		value, err := dec.ReadValue()
+		if err != nil {
+			return discriminatedStructDecoder{}, err
 		}
+		state.deferred = append(state.deferred, deferredStructField{name: name, value: value.Clone()})
 	}
 	if _, err := dec.ReadToken(); err != nil {
-		return nil, err
+		return discriminatedStructDecoder{}, err
+	}
+	state.closed = true
+	return state, nil
+}
+
+func (d discriminatedStructDecoder) invalidDiscriminator() error {
+	if !d.hasDiscriminator {
+		return fmt.Errorf("invalid %s: missing discriminator %q", d.typeName, d.discriminator)
+	}
+	return fmt.Errorf("invalid %s discriminator %q: %s", d.typeName, d.discriminator, d.discriminatorValue)
+}
+
+// unmarshalDiscriminatedArm decodes the retained and remaining object fields
+// into a concrete union arm, assigning it only after the full object succeeds.
+func unmarshalDiscriminatedArm[T any](state discriminatedStructDecoder, out **T) error {
+	target := new(T)
+	targetDecoder := newStructDecoder(target)
+	if state.hasDiscriminator {
+		// The generated switch validated the literal discriminator.
+		if err := targetDecoder.field(state.discriminator, '"', func(any) error { return nil }); err != nil {
+			return err
+		}
+	}
+	for _, field := range state.deferred {
+		if err := targetDecoder.field(field.name, field.value.Kind(), func(out any) error {
+			if out == nil {
+				return nil
+			}
+			return json.Unmarshal(field.value, out)
+		}); err != nil {
+			return err
+		}
 	}
 
-	if targetDecoder == nil {
-		target = newTarget(nil)
-		if target == nil {
-			return nil, fmt.Errorf("invalid %s: missing discriminator %q", typeName, discriminator)
-		}
-		targetDecoder = newStructDecoder(target)
-		for _, field := range deferred {
-			if err := targetDecoder.field(field.name, field.value.Kind(), func(out any) error {
-				if out == nil {
-					return nil
-				}
-				return json.Unmarshal(field.value, out)
-			}); err != nil {
-				return nil, err
+	if !state.closed {
+		for state.dec.PeekKind() != '}' {
+			rawName, err := state.dec.ReadValue()
+			if err != nil {
+				return err
 			}
+			name := string(rawName[1 : len(rawName)-1])
+			if err := targetDecoder.field(name, state.dec.PeekKind(), func(out any) error {
+				if out == nil {
+					return state.dec.SkipValue()
+				}
+				return json.UnmarshalDecode(state.dec, out)
+			}); err != nil {
+				return err
+			}
+		}
+		if _, err := state.dec.ReadToken(); err != nil {
+			return err
 		}
 	}
 	if err := targetDecoder.finish(); err != nil {
-		return nil, err
+		return err
 	}
-	return target, nil
+	*out = target
+	return nil
 }
 
 // marshalUnion encodes a union struct whose fields are all pointers, exactly

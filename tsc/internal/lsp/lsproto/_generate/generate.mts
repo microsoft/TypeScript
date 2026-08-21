@@ -2206,35 +2206,23 @@ function generateCode() {
         disc: NonNullable<ReturnType<typeof findDiscriminatorField>>,
         indent: string,
     ) {
-        writeLine(`${indent}target, err := unmarshalDiscriminatedStruct(dec, "${name}", ${JSON.stringify(disc.fieldName)}, func(value json.Value) any {`);
-        writeLine(`${indent}\tswitch string(value) {`);
-        for (const [value, entry] of disc.mapping) {
-            writeLine(`${indent}\tcase \`"${value}"\`:`);
-            writeLine(`${indent}\t\treturn new(${entry.typeName})`);
-        }
-        writeLine(`${indent}\tdefault:`);
-        if (disc.unmapped.length === 1) {
-            writeLine(`${indent}\t\treturn new(${disc.unmapped[0].typeName})`);
-        }
-        else {
-            writeLine(`${indent}\t\treturn nil`);
-        }
-        writeLine(`${indent}\t}`);
-        writeLine(`${indent}})`);
+        writeLine(`${indent}state, err := scanDiscriminatedStruct(dec, "${name}", ${JSON.stringify(disc.fieldName)})`);
         writeLine(`${indent}if err != nil {`);
         writeLine(`${indent}\treturn err`);
         writeLine(`${indent}}`);
-        writeLine(`${indent}switch target := target.(type) {`);
-        for (const entry of disc.mapping.values()) {
-            writeLine(`${indent}case *${entry.typeName}:`);
-            writeLine(`${indent}\to.${entry.fieldName} = target`);
+        writeLine(`${indent}switch string(state.discriminatorValue) {`);
+        for (const [value, entry] of disc.mapping) {
+            writeLine(`${indent}case \`"${value}"\`:`);
+            writeLine(`${indent}\treturn unmarshalDiscriminatedArm(state, &o.${entry.fieldName})`);
         }
-        for (const entry of disc.unmapped) {
-            writeLine(`${indent}case *${entry.typeName}:`);
-            writeLine(`${indent}\to.${entry.fieldName} = target`);
+        writeLine(`${indent}default:`);
+        if (disc.unmapped.length === 1) {
+            writeLine(`${indent}\treturn unmarshalDiscriminatedArm(state, &o.${disc.unmapped[0].fieldName})`);
+        }
+        else {
+            writeLine(`${indent}\treturn state.invalidDiscriminator()`);
         }
         writeLine(`${indent}}`);
-        writeLine(`${indent}return nil`);
     }
 
     /**
