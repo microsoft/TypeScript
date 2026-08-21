@@ -129,7 +129,7 @@ func newWireDiagnostic(
 	if resp.FileName != "" && sourceFile == nil {
 		return nil, fmt.Errorf("%w: diagnostic source file not found: %s", ErrClientError, resp.FileName)
 	}
-	if sourceFile != nil && sourceFileHash(sourceFile) != resp.SourceFileHash {
+	if sourceFile != nil && resp.SourceFileHash != "" && sourceFileHash(sourceFile) != resp.SourceFileHash {
 		return nil, fmt.Errorf("%w: diagnostic source file content has changed: %s", ErrClientError, resp.FileName)
 	}
 

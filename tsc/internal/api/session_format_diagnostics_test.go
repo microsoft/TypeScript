@@ -184,7 +184,7 @@ func TestFormatDiagnosticsWithoutFile(t *testing.T) {
 		"\x1b[91merror\x1b[0m\x1b[90m TS1234: \x1b[0mSome global problem.\n\n    Additional context.\n")
 }
 
-func TestFormatDiagnosticsClampsOutOfRangePositions(t *testing.T) {
+func TestFormatDiagnosticsAllowsUnhashedDiagnosticsAndClampsOutOfRangePositions(t *testing.T) {
 	t.Parallel()
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
@@ -198,24 +198,23 @@ func TestFormatDiagnosticsClampsOutOfRangePositions(t *testing.T) {
 	ctx := context.Background()
 
 	stale := []*DiagnosticResponse{{
-		FileName:       fileName,
-		SourceFileHash: sourceFileHashForText("export const x = 1;\n"),
-		Pos:            100_000,
-		End:            200_000,
-		Code:           1234,
-		Category:       diagnostics.CategoryError,
-		Text:           "Stale diagnostic.",
+		FileName: fileName,
+		Pos:      100_000,
+		End:      200_000,
+		Code:     1234,
+		Category: diagnostics.CategoryError,
+		Text:     "Manually constructed diagnostic.",
 	}}
 
 	plain, err := session.handleFormatDiagnostics(ctx, formatDiagnosticsParams(snapshot, project, stale), false)
 	assert.NilError(t, err)
 	assert.Equal(t, plain.Output,
-		"home/projects/p/src/index.ts(2,1): error TS1234: Stale diagnostic.\n")
+		"home/projects/p/src/index.ts(2,1): error TS1234: Manually constructed diagnostic.\n")
 
 	color, err := session.handleFormatDiagnostics(ctx, formatDiagnosticsParams(snapshot, project, stale), true)
 	assert.NilError(t, err)
 	assert.Assert(t, strings.Contains(color.Output, "TS1234: "))
-	assert.Assert(t, strings.Contains(color.Output, "Stale diagnostic."))
+	assert.Assert(t, strings.Contains(color.Output, "Manually constructed diagnostic."))
 }
 
 func TestFormatDiagnosticsRejectsStaleOrMissingSources(t *testing.T) {
