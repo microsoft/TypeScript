@@ -294,17 +294,6 @@ func (s *Snapshot) processFileChanges(
 	logger *logging.LogTree,
 	contentMapperContributions *ContentMapperContributions,
 ) FileChangeSummary {
-	var contentMapperExtensions []string
-	if contentMapperContributions == nil {
-		contentMapperExtensions, _ = s.contentMapperWatchState()
-	} else {
-		if configuredContentMappers := s.ConfigFileRegistry.contentMappers(); configuredContentMappers != nil {
-			contentMapperExtensions = slices.Clone(configuredContentMappers.extensions)
-		}
-		contentMapperExtensions = append(contentMapperExtensions, contentMapperContributions.Extensions...)
-	}
-	_, contentMapperWatchedFiles := s.contentMapperWatchState()
-
 	if fileChanges.HasExcessiveWatchEvents() {
 		invalidateStart := time.Now()
 		if fileChanges.InvalidateAll {
@@ -313,6 +302,7 @@ func (s *Snapshot) processFileChanges(
 				logger.Logf("InvalidateAll: invalidated file cache in %v", time.Since(invalidateStart))
 			}
 		} else if !fs.watchChangesOverlapCache(fileChanges) {
+			// All watch changes/deletes are files we haven't seen; should be irrelevant to us (probably an external tool's build or something)
 			fileChanges.Changed = collections.Set[lsproto.DocumentUri]{}
 			fileChanges.Deleted = collections.Set[lsproto.DocumentUri]{}
 		} else if fileChanges.IncludesWatchChangeOutsideNodeModules {
@@ -327,6 +317,16 @@ func (s *Snapshot) processFileChanges(
 			}
 		}
 	} else {
+		var contentMapperExtensions []string
+		if contentMapperContributions == nil {
+			contentMapperExtensions, _ = s.contentMapperWatchState()
+		} else {
+			if configuredContentMappers := s.ConfigFileRegistry.contentMappers(); configuredContentMappers != nil {
+				contentMapperExtensions = slices.Clone(configuredContentMappers.extensions)
+			}
+			contentMapperExtensions = append(contentMapperExtensions, contentMapperContributions.Extensions...)
+		}
+		_, contentMapperWatchedFiles := s.contentMapperWatchState()
 		fileChanges = fs.expandAndFilterWatchEvents(fileChanges, contentMapperExtensions, contentMapperWatchedFiles)
 		fileChanges = s.fs.expandRealpathAliases(fileChanges)
 		fileChanges = fs.markDirtyFiles(fileChanges)
