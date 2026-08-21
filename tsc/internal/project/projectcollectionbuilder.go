@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"maps"
+	"reflect"
 	"slices"
 	"time"
 
@@ -1105,6 +1106,32 @@ func (b *ProjectCollectionBuilder) findOrCreateProject(
 
 func (b *ProjectCollectionBuilder) updateInferredProjectRoots(rootFileNames []string, logger *logging.LogTree) bool {
 	rootFileNames = core.Filter(rootFileNames, b.isSupportedInInferredProject)
+	var projectReferences []*core.ProjectReference
+	var configFileParsingDiagnostics []*ast.Diagnostic
+	if project := b.inferredProject.Value(); project != nil {
+		projectReferences = project.CommandLine.ProjectReferences()
+		configFileParsingDiagnostics = project.CommandLine.Errors
+	}
+	return b.updateInferredProject(rootFileNames, b.compilerOptionsForInferredProjects, projectReferences, configFileParsingDiagnostics, b.inferredContentMappers, logger)
+}
+
+// seedInferredProjectForProgram adapts one selected project into the isolated synthetic-project slot used by createProgram.
+func (b *ProjectCollectionBuilder) seedInferredProjectForProgram(project *Project, logger *logging.LogTree) {
+	if project == nil || project.Program == nil {
+		return
+	}
+	b.inferredProject.Set(newInferredProjectFromProject(project, b, logger))
+}
+
+// updateInferredProject preserves the current command line when roots/options are unchanged.
+func (b *ProjectCollectionBuilder) updateInferredProject(
+	rootFileNames []string,
+	compilerOptions *core.CompilerOptions,
+	projectReferences []*core.ProjectReference,
+	configFileParsingDiagnostics []*ast.Diagnostic,
+	contentMappers []*contentmapper.Mapper,
+	logger *logging.LogTree,
+) bool {
 	if len(rootFileNames) == 0 {
 		if b.inferredProject.Value() != nil {
 			if logger != nil {
@@ -1115,37 +1142,65 @@ func (b *ProjectCollectionBuilder) updateInferredProjectRoots(rootFileNames []st
 		}
 		return false
 	}
-
+	rootFileNames = slices.Clone(rootFileNames)
 	slices.Sort(rootFileNames)
-	contentMappers := b.inferredContentMappers
-	if b.inferredProject.Value() == nil {
-		b.inferredProject.Set(NewInferredProject(b.sessionOptions.CurrentDirectory, b.compilerOptionsForInferredProjects, rootFileNames, contentMappers, b, logger))
-	} else {
-		newCompilerOptions := b.inferredProject.Value().CommandLine.CompilerOptions()
-		if b.compilerOptionsForInferredProjects != nil {
-			newCompilerOptions = b.compilerOptionsForInferredProjects
-		}
-		newCommandLine := newInferredProjectCommandLine(newCompilerOptions, rootFileNames, contentMappers, tspath.ComparePathsOptions{
-			UseCaseSensitiveFileNames: b.fs.fs.UseCaseSensitiveFileNames(),
-			CurrentDirectory:          b.sessionOptions.CurrentDirectory,
-		})
-		changed := b.inferredProject.ChangeIf(
-			func(p *Project) bool {
-				return !maps.Equal(p.CommandLine.FileNamesByPath(), newCommandLine.FileNamesByPath()) ||
-					!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers())
-			},
-			func(p *Project) {
-				if logger != nil {
-					logger.Log(fmt.Sprintf("Updating inferred project config with %d root files", len(rootFileNames)))
-				}
-				p.SetCommandLine(newCommandLine)
-			},
-		)
-		if !changed {
-			return false
-		}
+	return b.updateOrCreateInferredProject(rootFileNames, compilerOptions, projectReferences, configFileParsingDiagnostics, contentMappers, logger)
+}
+
+// updateOrCreateInferredProject always retains an inferred project, including when rootFileNames is empty.
+// The caller transfers ownership of rootFileNames.
+func (b *ProjectCollectionBuilder) updateOrCreateInferredProject(
+	rootFileNames []string,
+	compilerOptions *core.CompilerOptions,
+	projectReferences []*core.ProjectReference,
+	configFileParsingDiagnostics []*ast.Diagnostic,
+	contentMappers []*contentmapper.Mapper,
+	logger *logging.LogTree,
+) bool {
+	project := b.inferredProject.Value()
+	if project == nil {
+		project = NewInferredProject(b.sessionOptions.CurrentDirectory, compilerOptions, rootFileNames, projectReferences, contentMappers, b, logger)
+		project.CommandLine.Errors = configFileParsingDiagnostics
+		b.inferredProject.Set(project)
+		return true
+	}
+
+	if compilerOptions == nil {
+		compilerOptions = project.CommandLine.CompilerOptions()
+	}
+	newCommandLine := newInferredProjectCommandLine(compilerOptions, rootFileNames, projectReferences, contentMappers, tspath.ComparePathsOptions{
+		UseCaseSensitiveFileNames: b.fs.fs.UseCaseSensitiveFileNames(),
+		CurrentDirectory:          project.currentDirectory,
+	})
+	newCommandLine.Errors = configFileParsingDiagnostics
+	changed := b.inferredProject.ChangeIf(
+		func(p *Project) bool {
+			return !slices.Equal(p.CommandLine.FileNames(), newCommandLine.FileNames()) ||
+				!reflect.DeepEqual(p.CommandLine.CompilerOptions(), compilerOptions) ||
+				!projectReferencesEqual(p.CommandLine.ProjectReferences(), projectReferences) ||
+				!reflect.DeepEqual(p.CommandLine.Errors, configFileParsingDiagnostics) ||
+				!slices.Equal(p.CommandLine.ContentMappers(), newCommandLine.ContentMappers())
+		},
+		func(p *Project) {
+			if logger != nil {
+				logger.Log(fmt.Sprintf("Updating inferred project config with %d root files", len(rootFileNames)))
+			}
+			p.SetCommandLine(newCommandLine)
+		},
+	)
+	if !changed {
+		return false
 	}
 	return true
+}
+
+func projectReferencesEqual(a []*core.ProjectReference, b []*core.ProjectReference) bool {
+	return slices.EqualFunc(a, b, func(a *core.ProjectReference, b *core.ProjectReference) bool {
+		if a == nil || b == nil {
+			return a == b
+		}
+		return a.Path == b.Path && a.Circular == b.Circular
+	})
 }
 
 func (b *ProjectCollectionBuilder) isSupportedInInferredProject(fileName string) bool {

@@ -297,6 +297,236 @@ describe("API", () => {
         }
     });
 
+    test("createProgram", async () => {
+        const api = spawnAPI({
+            "/src/index.ts": `export const value: string = 1;`,
+        });
+        try {
+            const program = await api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true, strict: true } });
+
+            assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
+            assert.deepEqual(await program.getSourceFileNames(), ["/src/index.ts"]);
+            assert.equal((await program.getSemanticDiagnostics("/src/index.ts")).length, 1);
+
+            await program.dispose();
+            await assert.rejects(program.getSourceFileNames(), /snapshot .* not found/); // @sync: assert.throws(() => program.getSourceFileNames(), /snapshot .* not found/);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram ignores an on-disk tsconfig", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({
+                compilerOptions: { noLib: false, strict: false },
+                files: ["src/from-config.ts"],
+            }),
+            "/src/index.ts": `export const explicitRoot = 1;`,
+            "/src/from-config.ts": `export const configRoot = 1;`,
+        });
+        try {
+            const program = await api.createProgram(
+                ["/src/index.ts"],
+                { compilerOptions: { noLib: true, strict: true } },
+            );
+
+            assert.deepEqual(program.getCompilerOptions(), { noLib: true, strict: true });
+            assert.deepEqual(await program.getSourceFileNames(), ["/src/index.ts"]);
+            assert.deepEqual(await program.getConfigFileNames(), []);
+            assert.equal(await program.getSourceFile("/src/from-config.ts"), undefined);
+            await program.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram includes project references", async () => {
+        const reference = { path: "/lib/tsconfig.json", originalPath: "/lib/tsconfig.json", circular: false };
+        const api = spawnAPI({
+            "/src/index.ts": `export const value = 1;`,
+            "/lib/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true, noLib: true }, files: ["index.ts"] }),
+            "/lib/index.ts": `export const lib = 1;`,
+        });
+        try {
+            const program = await api.createProgram(
+                ["/src/index.ts"],
+                { compilerOptions: { noLib: true }, projectReferences: [reference] },
+            );
+            assert.deepEqual(program.getProject().parsedCommandLine.projectReferences, [reference]);
+            await program.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram includes config file parsing diagnostics", async () => {
+        const diagnostic = {
+            pos: 0,
+            end: 0,
+            code: 9001,
+            category: DiagnosticCategory.Error,
+            text: "Synthetic config parsing error.",
+        };
+        const api = spawnAPI({ "/src/index.ts": `export const value = 1;` });
+        try {
+            const program = await api.createProgram(
+                ["/src/index.ts"],
+                {
+                    compilerOptions: { noLib: true },
+                    configFileParsingDiagnostics: [diagnostic],
+                },
+            );
+
+            assert.deepEqual(await program.getConfigFileParsingDiagnostics(), [diagnostic]);
+            await program.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram updates roots when given an old program", async () => {
+        const options = { compilerOptions: { noLib: true } };
+        const api = spawnAPI({
+            "/src/a.ts": `export const a = 1;`,
+            "/src/b.ts": `export const b = 1;`,
+            "/src/c.ts": `export const c = 1;`,
+        });
+        try {
+            const oldProgram = await api.createProgram(["/src/a.ts", "/src/b.ts"], options);
+            const newProgram = await api.createProgram(["/src/a.ts", "/src/c.ts"], options, oldProgram);
+            assert.deepEqual(await newProgram.getSourceFileNames(), ["/src/a.ts", "/src/c.ts"]);
+            assert.deepEqual(await oldProgram.getSourceFileNames(), ["/src/a.ts", "/src/b.ts"]);
+
+            await newProgram.dispose();
+            await oldProgram.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram discovers imported non-root dependencies", async () => {
+        const api = spawnAPI({
+            "/src/main.ts": `import { dependency } from "./dependency"; export const value = dependency;`,
+            "/src/dependency.ts": `export const dependency = 1;`,
+        });
+        try {
+            const program = await api.createProgram(["/src/main.ts"], { compilerOptions: { noLib: true } });
+            assert.deepEqual([...await program.getSourceFileNames()].sort(), ["/src/dependency.ts", "/src/main.ts"]);
+
+            await program.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram updates an old program with file changes", async () => {
+        const fileName = "/src/index.ts";
+        const options = { compilerOptions: { noLib: true, strict: true } };
+        const { api, fs } = spawnAPIWithFS({
+            [fileName]: `export const value: string = 1;`,
+        });
+        try {
+            const oldProgram = await api.createProgram([fileName], options);
+            assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+            fs.writeFile!(fileName, `export const value: string = "valid";`);
+            const newProgram = await api.createProgram(
+                [fileName],
+                options,
+                oldProgram,
+                { changed: [fileName] },
+            );
+
+            assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
+            assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+            await newProgram.dispose();
+            await oldProgram.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram updates an old program with invalidateAll", async () => {
+        const fileName = "/src/index.ts";
+        const options = { compilerOptions: { noLib: true, strict: true } };
+        const { api, fs } = spawnAPIWithFS({
+            [fileName]: `export const value: string = 1;`,
+        });
+        try {
+            const oldProgram = await api.createProgram([fileName], options);
+            assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+            fs.writeFile!(fileName, `export const value: string = "valid";`);
+            const newProgram = await api.createProgram(
+                [fileName],
+                options,
+                oldProgram,
+                { invalidateAll: true },
+            );
+
+            assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
+            assert.equal((await oldProgram.getSemanticDiagnostics(fileName)).length, 1);
+
+            await newProgram.dispose();
+            await oldProgram.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram accepts a regular project program as the old program", async () => {
+        const fileName = "/src/index.ts";
+        const { api, fs } = spawnAPIWithFS({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true, strict: true } }),
+            [fileName]: `export const value: string = 1;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            assert.equal((await project.program.getSemanticDiagnostics(fileName)).length, 1);
+
+            fs.writeFile!(fileName, `export const value: string = "valid";`);
+            const newProgram = await api.createProgram(
+                project.parsedCommandLine.fileNames,
+                {
+                    compilerOptions: project.parsedCommandLine.options,
+                    ...(project.parsedCommandLine.projectReferences
+                        ? { projectReferences: project.parsedCommandLine.projectReferences }
+                        : {}),
+                },
+                project.program,
+                { changed: [fileName] },
+            );
+
+            assert.equal((await newProgram.getSemanticDiagnostics(fileName)).length, 0);
+            assert.equal((await project.program.getSemanticDiagnostics(fileName)).length, 1);
+            await newProgram.dispose();
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("createProgram rejects file changes without an old program", async () => {
+        const api = spawnAPI({ "/src/index.ts": `export const value = 1;` });
+        try {
+            const createWithChanges = () => api.createProgram(["/src/index.ts"], { compilerOptions: { noLib: true } }, undefined, { changed: ["/src/index.ts"] });
+            await assert.rejects(createWithChanges, /fileChanges requires an oldProgram/); // @sync: assert.throws(createWithChanges, /fileChanges requires an oldProgram/);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
     test("parseConfigFile", async () => {
         const api = spawnAPI();
         try {

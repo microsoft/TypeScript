@@ -14,6 +14,7 @@ export interface APIMethodInfo {
     initialize: APIMethod<null, InitializeResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, UpdateSnapshotResponse>;
     updateTemporarySnapshot: APIMethod<UpdateTemporarySnapshotParams, UpdateSnapshotResponse>;
+    createProgram: APIMethod<CreateProgramParams, CreateProgramResponse>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
@@ -217,11 +218,23 @@ export interface UpdateSnapshotResponse {
  */
 export interface UpdateTemporarySnapshotParams {
     /** Snapshot is the current client snapshot on which to layer the temporary update. */
-    snapshot: number;
+    snapshot?: number;
     /** File identifies the file whose content is temporarily overridden. */
     file: DocumentIdentifier;
     /** NewText is the temporary content for the file. */
-    newText: string;
+    newText?: string;
+}
+
+export interface CreateProgramParams {
+    rootFiles: readonly DocumentIdentifier[] | null;
+    createProgramOptions: CreateProgramOptions;
+    oldProgram?: CreateProgramOldProgramParams;
+    fileChanges?: APIFileChanges;
+}
+
+export interface CreateProgramResponse {
+    snapshot: number;
+    project: ProjectResponse | null;
 }
 
 export interface ParseCommandLineParams {
@@ -886,6 +899,17 @@ export interface SnapshotChanges {
      * snapshot but absent from the new one.
      */
     removedProjects?: string[];
+}
+
+export interface CreateProgramOptions {
+    compilerOptions: CompilerOptions;
+    projectReferences?: ProjectReference[];
+    configFileParsingDiagnostics?: DiagnosticResponse[];
+}
+
+export interface CreateProgramOldProgramParams {
+    snapshot?: number;
+    project?: string;
 }
 
 /** CompilerOptions contains the compiler options exposed by the API. */
