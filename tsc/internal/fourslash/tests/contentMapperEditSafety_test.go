@@ -344,6 +344,43 @@ function second() { return 2; }
 `)
 }
 
+func TestContentMapperFormatsOnlyFirstOverlappingProjection(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// The canonical and supplemental projections overlap on `second`, but place it in different
+	// syntactic contexts. Formatting both copies would produce conflicting edits for the overlap:
+	//
+	//   original:      [---- first ----)[---- second ----)[---- third ----)
+	//
+	//   canonical:     [---- first ----)[---- second ----)
+	//                  `----- verbatim, Formatting ------'
+	//
+	//   supplemental:  if (true) {
+	//                              [---- second ----)[---- third ----)
+	//                              `----- verbatim, Formatting ------'
+	//                  }
+	//
+	// Sorting by original start assigns each character to the earliest applicable mapping:
+	//
+	//   owner:         [------------ canonical ------------)[ supplemental )
+	//
+	// Thus `second` uses the top-level canonical formatting, while the uncovered `third` suffix uses
+	// the supplemental formatting and gains indentation from its surrounding `if` block.
+	f, done := newContentMapperFourslash(t, `// @Filename: /formatting-overlap.astro
+function first(){return 1;}
+function second(){return 2;}
+function third(){return 3;}
+`, contentmappertest.PrefixedSupplementalMapper, ".astro")
+	defer done()
+
+	f.GoToFile(t, "/formatting-overlap.astro")
+	f.FormatDocument(t, "/formatting-overlap.astro")
+	f.VerifyCurrentFileContent(t, `function first() { return 1; }
+function second() { return 2; }
+    function third() { return 3; }
+`)
+}
+
 func TestContentMapperFormatsSupplementalOriginalSelection(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")

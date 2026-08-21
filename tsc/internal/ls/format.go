@@ -52,10 +52,11 @@ func (l *LanguageService) ProvideFormatDocument(
 }
 
 // getFormattingEditsForMappedRange formats each formatting-enabled verbatim intersection with originalRange.
-// A mapper should provide at most one such mapping for any original text; duplicate formatting projections are unsupported.
+// Duplicate formatting projections are unsupported. If mappings overlap anyway, each original-text position
+// is formatted only once, preferring the earliest and then longest applicable mapping.
 func (l *LanguageService) getFormattingEditsForMappedRange(ctx context.Context, file *ast.SourceFile, options lsutil.FormatCodeSettings, originalRange core.TextRange) []*lsproto.TextEdit {
 	projections := append([]*ast.SourceFile{file}, file.SupplementalSourceFiles()...)
-	var edits []*lsproto.TextEdit
+	var candidates []mappedFormattingRange
 	for _, projection := range projections {
 		spanMap := projection.SpanMap()
 		if spanMap == nil {
@@ -70,20 +71,29 @@ func (l *LanguageService) getFormattingEditsForMappedRange(ctx context.Context, 
 			if originalStart >= originalEnd {
 				continue
 			}
-			virtualRange := core.NewTextRange(
-				int(segment.VirtualStart)+originalStart-int(segment.OriginalStart),
-				int(segment.VirtualStart)+originalEnd-int(segment.OriginalStart),
-			)
-			for _, change := range l.getFormattingEditsForRange(ctx, projection, options, virtualRange) {
-				if change.Pos() < virtualRange.Pos() || change.End() > virtualRange.End() {
-					continue
-				}
-				lspRange, fidelity := l.converters.ToLSPRangeForFeature(projection, core.NewTextRange(change.Pos(), change.End()), spanmap.FeatureFormatting)
-				if !fidelity.IsExact() {
-					continue
-				}
-				edits = append(edits, &lsproto.TextEdit{Range: lspRange, NewText: change.NewText})
+			candidates = append(candidates, mappedFormattingRange{
+				projection:    projection,
+				segment:       segment,
+				originalRange: core.NewTextRange(originalStart, originalEnd),
+			})
+		}
+	}
+
+	var edits []*lsproto.TextEdit
+	for _, candidate := range nonOverlappingFormattingRanges(candidates) {
+		virtualRange := core.NewTextRange(
+			int(candidate.segment.VirtualStart)+candidate.originalRange.Pos()-int(candidate.segment.OriginalStart),
+			int(candidate.segment.VirtualStart)+candidate.originalRange.End()-int(candidate.segment.OriginalStart),
+		)
+		for _, change := range l.getFormattingEditsForRange(ctx, candidate.projection, options, virtualRange) {
+			if change.Pos() < virtualRange.Pos() || change.End() > virtualRange.End() {
+				continue
 			}
+			lspRange, fidelity := l.converters.ToLSPRangeForFeature(candidate.projection, core.NewTextRange(change.Pos(), change.End()), spanmap.FeatureFormatting)
+			if !fidelity.IsExact() {
+				continue
+			}
+			edits = append(edits, &lsproto.TextEdit{Range: lspRange, NewText: change.NewText})
 		}
 	}
 	slices.SortStableFunc(edits, func(a, b *lsproto.TextEdit) int {
@@ -93,6 +103,50 @@ func (l *LanguageService) getFormattingEditsForMappedRange(ctx context.Context, 
 		return cmp.Compare(a.NewText, b.NewText)
 	})
 	return edits
+}
+
+type mappedFormattingRange struct {
+	projection    *ast.SourceFile
+	segment       spanmap.Segment
+	originalRange core.TextRange
+}
+
+// nonOverlappingFormattingRanges chooses at most one formatting projection for each original-text position.
+// Candidates are ordered by original start and then descending end, so a longer mapping wins when several
+// mappings start together:
+//
+//	candidates:  [---------- A ----------)
+//	             [---- B ----)
+//	result:      [---------- A ----------)
+//
+// Since starts are ordered, a candidate can only overlap the end of the last accepted range. Its start is
+// trimmed to that end, preserving any uncovered suffix:
+//
+//	candidates:  [------- A -------)
+//	                    [------- B ----------)
+//	result:      [------- A -------)[-- B' --)
+//
+// Fully covered candidates have no suffix and are discarded. The segment itself is retained so callers can
+// translate a trimmed original range to the corresponding offset in its virtual projection.
+func nonOverlappingFormattingRanges(candidates []mappedFormattingRange) []mappedFormattingRange {
+	candidates = slices.Clone(candidates)
+	slices.SortStableFunc(candidates, func(a, b mappedFormattingRange) int {
+		if c := cmp.Compare(a.originalRange.Pos(), b.originalRange.Pos()); c != 0 {
+			return c
+		}
+		return cmp.Compare(b.originalRange.End(), a.originalRange.End())
+	})
+
+	result := candidates[:0]
+	for _, candidate := range candidates {
+		if len(result) > 0 {
+			candidate.originalRange = candidate.originalRange.WithPos(max(candidate.originalRange.Pos(), result[len(result)-1].originalRange.End()))
+		}
+		if candidate.originalRange.Len() > 0 {
+			result = append(result, candidate)
+		}
+	}
+	return result
 }
 
 func (l *LanguageService) ProvideFormatDocumentRange(

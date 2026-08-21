@@ -408,6 +408,38 @@ func TestContentMapperBuildWatchSymlinkedManifestChange(t *testing.T) {
 	assert.Equal(t, spawner.closes.Load(), int32(1))
 }
 
+func TestContentMapperBuildWatchSymlinkedManifestDelete(t *testing.T) {
+	t.Parallel()
+	const manifestTarget = "/home/src/workspaces/mapper/package.json"
+	input := &tscInput{files: FileMap{
+		"/home/src/workspaces/project/tsconfig.json": `{
+			"compilerOptions": { "composite": true },
+			"contentMappers": [{ "package": "mapper", "extensions": [".vue"] }]
+		}`,
+		"/home/src/workspaces/project/app.vue":             `export const app = 1;`,
+		"/home/src/workspaces/project/node_modules/mapper": vfstest.Symlink("/home/src/workspaces/mapper"),
+		manifestTarget: contentmappertest.PackageJSON(contentmappertest.VerbatimMapper),
+	}}
+	testSys := newTestSys(input, false)
+	spawner := &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner()}
+	sys := &recordingContentMapperSystem{TestSys: testSys, spawner: spawner}
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+
+	result := execute.CommandLine(ctx, sys, []string{"--build", "--watch", "--runExternalCode"}, testSys)
+	assert.Equal(t, spawner.spawns.Load(), int32(1))
+	assert.Equal(t, spawner.closes.Load(), int32(0))
+
+	testSys.clearOutput()
+	assert.NilError(t, testSys.fsFromFileMap().Remove(manifestTarget))
+	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventDelete, Path: manifestTarget}})
+	result.Watcher.DoCycle()
+
+	assert.Equal(t, spawner.spawns.Load(), int32(1))
+	assert.Equal(t, spawner.closes.Load(), int32(1))
+	assert.Assert(t, strings.Contains(testSys.currentWrite.String(), "The content mapper package 'mapper' could not be resolved."), testSys.currentWrite.String())
+}
+
 func TestContentMapperBuildWatchSharedLifecycle(t *testing.T) {
 	t.Parallel()
 	const mapperConfig = `{

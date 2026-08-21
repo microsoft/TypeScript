@@ -63,6 +63,47 @@ func (prefixedSupplementalHandler) HandleRequest(ctx context.Context, method str
 				},
 			}
 		}
+		if strings.Contains(p.FileName, "formatting-overlap") {
+			secondStart := strings.Index(p.Content, "function second")
+			thirdStart := strings.Index(p.Content, "function third")
+			if secondStart < 0 || thirdStart < 0 {
+				return nil, errors.New("contentmappertest: formatting-overlap input is missing function second or third")
+			}
+			const wrapperStart = "if (true) {\n"
+			const wrapperEnd = "}\n"
+			supplementalText = wrapperStart + p.Content[secondStart:] + wrapperEnd
+			segments = []spanmap.Segment{{
+				VirtualStart:  core.TextPos(len(wrapperStart)),
+				VirtualEnd:    core.TextPos(len(wrapperStart) + len(p.Content) - secondStart),
+				OriginalStart: core.TextPos(secondStart),
+				OriginalEnd:   core.TextPos(len(p.Content)),
+				Kind:          spanmap.KindVerbatim,
+				Features:      spanmap.FeatureAll,
+			}}
+			canonicalMappings, err := spanmap.New([]spanmap.Segment{{
+				VirtualStart:  0,
+				VirtualEnd:    core.TextPos(thirdStart),
+				OriginalStart: 0,
+				OriginalEnd:   core.TextPos(thirdStart),
+				Kind:          spanmap.KindVerbatim,
+				Features:      spanmap.FeatureAll,
+			}}).Marshal()
+			if err != nil {
+				return nil, err
+			}
+			mappings, err := spanmap.New(segments).Marshal()
+			if err != nil {
+				return nil, err
+			}
+			return contentmapper.TransformResult{
+				MappedOutput: contentmapper.MappedOutput{Text: p.Content[:thirdStart], Extension: ".ts", Mappings: json.Value(canonicalMappings)},
+				Supplemental: []contentmapper.SupplementalOutput{{MappedOutput: contentmapper.MappedOutput{
+					Text:      supplementalText,
+					Extension: ".ts",
+					Mappings:  json.Value(mappings),
+				}}},
+			}, nil
+		}
 		mappings, err := spanmap.New(segments).Marshal()
 		if err != nil {
 			return nil, err
