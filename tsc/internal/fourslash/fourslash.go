@@ -2129,6 +2129,28 @@ func (f *FourslashTest) applyEditsToContent(content string, edits []*lsproto.Tex
 
 func (f *FourslashTest) VerifyOrganizeImports(t *testing.T, expectedContent string, codeActionKind lsproto.CodeActionKind, preferences *lsutil.UserPreferences) {
 	t.Helper()
+	f.verifyOrganizeImports(t, expectedContent, codeActionKind, codeActionKind, preferences)
+}
+
+func (f *FourslashTest) VerifyOrganizeImportsWithRequestKind(
+	t *testing.T,
+	expectedContent string,
+	requestedKind lsproto.CodeActionKind,
+	expectedKind lsproto.CodeActionKind,
+	preferences *lsutil.UserPreferences,
+) {
+	t.Helper()
+	f.verifyOrganizeImports(t, expectedContent, requestedKind, expectedKind, preferences)
+}
+
+func (f *FourslashTest) verifyOrganizeImports(
+	t *testing.T,
+	expectedContent string,
+	requestedKind lsproto.CodeActionKind,
+	expectedKind lsproto.CodeActionKind,
+	preferences *lsutil.UserPreferences,
+) {
+	t.Helper()
 
 	if preferences != nil {
 		reset := f.ConfigureWithReset(t, *preferences)
@@ -2144,7 +2166,7 @@ func (f *FourslashTest) VerifyOrganizeImports(t *testing.T, expectedContent stri
 			End:   f.converters.PositionToLineAndCharacter(f.getScriptInfo(f.activeFilename), core.TextPos(len(f.getScriptInfo(f.activeFilename).content))),
 		},
 		Context: &lsproto.CodeActionContext{
-			Only: &[]lsproto.CodeActionKind{codeActionKind},
+			Only: &[]lsproto.CodeActionKind{requestedKind},
 		},
 	}
 
@@ -2155,15 +2177,6 @@ func (f *FourslashTest) VerifyOrganizeImports(t *testing.T, expectedContent stri
 	}
 
 	var organizeAction *lsproto.CodeAction
-	expectedKind := codeActionKind
-	switch codeActionKind {
-	case lsproto.CodeActionKindSourceOrganizeImports:
-		expectedKind = lsproto.CodeActionKindSourceOrganizeImportsTs
-	case lsproto.CodeActionKindSourceRemoveUnusedImports:
-		expectedKind = lsproto.CodeActionKindSourceRemoveUnusedImportsTs
-	case lsproto.CodeActionKindSourceSortImports:
-		expectedKind = lsproto.CodeActionKindSourceSortImportsTs
-	}
 	for _, item := range *result.CommandOrCodeActionArray {
 		if item.CodeAction != nil && item.CodeAction.Kind != nil && *item.CodeAction.Kind == expectedKind {
 			organizeAction = item.CodeAction

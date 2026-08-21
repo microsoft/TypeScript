@@ -32,7 +32,7 @@ import Foo from "foo";
 import Foobar from "foobar";
 
 console.log(Foo, Bar, Foobar);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

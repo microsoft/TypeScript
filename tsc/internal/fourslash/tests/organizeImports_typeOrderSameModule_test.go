@@ -38,7 +38,7 @@ import Default, { foo } from './package';
 
 const x: Foo = foo;
 console.log(x, Default, ns);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }
@@ -78,7 +78,7 @@ import { b } from './b';
 const x: TypeA = a;
 const y: TypeB = b;
 console.log(x, y);`,
-		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
 		nil,
 	)
 }

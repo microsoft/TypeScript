@@ -314,11 +314,8 @@ func (kind CodeActionKind) Contains(other CodeActionKind) bool {
 }
 
 const (
-	CodeActionKindSourceRemoveUnusedImports CodeActionKind = "source.removeUnusedImports"
-	CodeActionKindSourceSortImports         CodeActionKind = "source.sortImports"
-
 	CodeActionKindSourceFixAllTs              CodeActionKind = CodeActionKindSourceFixAll + ".ts"
 	CodeActionKindSourceOrganizeImportsTs     CodeActionKind = CodeActionKindSourceOrganizeImports + ".ts"
-	CodeActionKindSourceRemoveUnusedImportsTs CodeActionKind = CodeActionKindSourceRemoveUnusedImports + ".ts"
-	CodeActionKindSourceSortImportsTs         CodeActionKind = CodeActionKindSourceSortImports + ".ts"
+	CodeActionKindSourceRemoveUnusedImportsTs CodeActionKind = CodeActionKindSource + ".removeUnusedImports.ts"
+	CodeActionKindSourceSortImportsTs         CodeActionKind = CodeActionKindSource + ".sortImports.ts"
 )
