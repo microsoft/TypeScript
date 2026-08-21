@@ -44,7 +44,7 @@ func CreateDiagnosticReporter(sys System, w io.Writer, locale locale.Locale, opt
 }
 
 func defaultIsPretty(sys System) bool {
-	if forceColor, ok := sys.LookupEnvironmentVariable("FORCE_COLOR"); ok {
+	if forceColor, ok := sys.GetEnvironmentVariable("FORCE_COLOR"); ok {
 		switch forceColor {
 		case "", "1", "2", "3", "true":
 			return true
@@ -52,10 +52,10 @@ func defaultIsPretty(sys System) bool {
 			return false
 		}
 	}
-	if sys.GetEnvironmentVariable("NO_COLOR") != "" {
+	if noColor, _ := sys.GetEnvironmentVariable("NO_COLOR"); noColor != "" {
 		return false
 	}
-	if sys.GetEnvironmentVariable("TERM") == "dumb" {
+	if term, _ := sys.GetEnvironmentVariable("TERM"); term == "dumb" {
 		return false
 	}
 	return sys.WriteOutputIsTTY()
@@ -82,18 +82,19 @@ func createColors(sys System) *colors {
 		return &colors{showColors: false}
 	}
 
-	os := sys.GetEnvironmentVariable("OS")
+	os, _ := sys.GetEnvironmentVariable("OS")
 	isWindows := strings.Contains(strings.ToLower(os), "windows")
-	isWindowsTerminal := sys.GetEnvironmentVariable("WT_SESSION") != ""
-	isVSCode := sys.GetEnvironmentVariable("TERM_PROGRAM") == "vscode"
-	supportsRicherColors := sys.GetEnvironmentVariable("COLORTERM") == "truecolor" || sys.GetEnvironmentVariable("TERM") == "xterm-256color"
+	wtSession, _ := sys.GetEnvironmentVariable("WT_SESSION")
+	termProgram, _ := sys.GetEnvironmentVariable("TERM_PROGRAM")
+	colorTerm, _ := sys.GetEnvironmentVariable("COLORTERM")
+	term, _ := sys.GetEnvironmentVariable("TERM")
 
 	return &colors{
 		showColors:           true,
 		isWindows:            isWindows,
-		isWindowsTerminal:    isWindowsTerminal,
-		isVSCode:             isVSCode,
-		supportsRicherColors: supportsRicherColors,
+		isWindowsTerminal:    wtSession != "",
+		isVSCode:             termProgram == "vscode",
+		supportsRicherColors: colorTerm == "truecolor" || term == "xterm-256color",
 	}
 }
 

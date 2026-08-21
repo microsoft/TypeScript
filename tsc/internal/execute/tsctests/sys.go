@@ -235,17 +235,13 @@ func (s *TestSys) WriteOutputIsTTY() bool {
 }
 
 func (s *TestSys) GetWidthOfTerminal() int {
-	if widthStr := s.GetEnvironmentVariable("TS_TEST_TERMINAL_WIDTH"); widthStr != "" {
+	if widthStr, _ := s.GetEnvironmentVariable("TS_TEST_TERMINAL_WIDTH"); widthStr != "" {
 		return core.Must(strconv.Atoi(widthStr))
 	}
 	return 0
 }
 
-func (s *TestSys) GetEnvironmentVariable(name string) string {
-	return s.env[name]
-}
-
-func (s *TestSys) LookupEnvironmentVariable(name string) (string, bool) {
+func (s *TestSys) GetEnvironmentVariable(name string) (string, bool) {
 	value, ok := s.env[name]
 	return value, ok
 }

@@ -265,7 +265,7 @@ func (o *Orchestrator) Watch(ctx context.Context) {
 	o.wm.Lock()
 
 	if o.opts.Testing == nil {
-		if o.opts.Sys.GetEnvironmentVariable("TS_WATCH_DEBUG") != "" {
+		if value, _ := o.opts.Sys.GetEnvironmentVariable("TS_WATCH_DEBUG"); value != "" {
 			o.wm.DebugLog = o.opts.Sys.Writer()
 		}
 		o.wm.EnsureDefaultBackend()

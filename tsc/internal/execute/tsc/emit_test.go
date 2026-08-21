@@ -25,16 +25,11 @@ type contentMapperLoggingTestSystem struct {
 	stderr  bytes.Buffer
 }
 
-func (s *contentMapperLoggingTestSystem) GetEnvironmentVariable(name string) string {
+func (s *contentMapperLoggingTestSystem) GetEnvironmentVariable(name string) (string, bool) {
 	if name == "TS_CONTENT_MAPPER_DEBUG" && s.enabled {
-		return "1"
+		return "1", true
 	}
-	return ""
-}
-
-func (s *contentMapperLoggingTestSystem) LookupEnvironmentVariable(name string) (string, bool) {
-	value := s.GetEnvironmentVariable(name)
-	return value, value != ""
+	return "", false
 }
 
 func (s *contentMapperLoggingTestSystem) ErrorWriter() io.Writer {
@@ -111,15 +106,14 @@ type timingTestSystem struct {
 	clock *controlledClock
 }
 
-func (s *timingTestSystem) Writer() io.Writer                         { return io.Discard }
-func (s *timingTestSystem) ErrorWriter() io.Writer                    { return io.Discard }
-func (s *timingTestSystem) FS() vfs.FS                                { return s.fs }
-func (s *timingTestSystem) DefaultLibraryPath() string                { return "/lib" }
-func (s *timingTestSystem) GetCurrentDirectory() string               { return "/project" }
-func (s *timingTestSystem) WriteOutputIsTTY() bool                    { return false }
-func (s *timingTestSystem) GetWidthOfTerminal() int                   { return 0 }
-func (s *timingTestSystem) GetEnvironmentVariable(name string) string { return "" }
-func (s *timingTestSystem) LookupEnvironmentVariable(name string) (string, bool) {
+func (s *timingTestSystem) Writer() io.Writer           { return io.Discard }
+func (s *timingTestSystem) ErrorWriter() io.Writer      { return io.Discard }
+func (s *timingTestSystem) FS() vfs.FS                  { return s.fs }
+func (s *timingTestSystem) DefaultLibraryPath() string  { return "/lib" }
+func (s *timingTestSystem) GetCurrentDirectory() string { return "/project" }
+func (s *timingTestSystem) WriteOutputIsTTY() bool      { return false }
+func (s *timingTestSystem) GetWidthOfTerminal() int     { return 0 }
+func (s *timingTestSystem) GetEnvironmentVariable(name string) (string, bool) {
 	return "", false
 }
 func (s *timingTestSystem) Now() time.Time            { return s.clock.Now() }

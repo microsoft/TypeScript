@@ -61,11 +61,7 @@ func (s *osSys) GetWidthOfTerminal() int {
 	return width
 }
 
-func (s *osSys) GetEnvironmentVariable(name string) string {
-	return os.Getenv(name)
-}
-
-func (s *osSys) LookupEnvironmentVariable(name string) (string, bool) {
+func (s *osSys) GetEnvironmentVariable(name string) (string, bool) {
 	return os.LookupEnv(name)
 }
 
