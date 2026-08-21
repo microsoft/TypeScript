@@ -12,6 +12,7 @@ const (
 	ExtensionJs          = ".js"
 	ExtensionJsx         = ".jsx"
 	ExtensionJson        = ".json"
+	ExtensionWasm        = ".wasm"
 	ExtensionTsBuildInfo = ".tsbuildinfo"
 	ExtensionMjs         = ".mjs"
 	ExtensionMts         = ".mts"

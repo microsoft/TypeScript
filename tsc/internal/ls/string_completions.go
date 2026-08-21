@@ -675,7 +675,17 @@ func (l *LanguageService) getStringLiteralCompletionsFromModuleNamesWorker(
 	scriptPath := file.Path()
 	scriptDirectory := scriptPath.GetDirectoryPath()
 	options := program.Options()
+	importPhase := module.GetImportPhaseForUsage(node)
 	extensionOptions := l.getExtensionOptions(options, referenceKindModuleSpecifier, file, mode, checker)
+	if importPhase == module.ImportPhaseSource {
+		for _, extension := range tspath.SupportedJSExtensionsFlat {
+			if extension != tspath.ExtensionJsx || options.Jsx != core.JsxEmitNone {
+				extensionOptions.extensionsToSearch = core.AppendIfUnique(extensionOptions.extensionsToSearch, extension)
+			}
+		}
+		extensionOptions.extensionsToSearch = core.AppendIfUnique(extensionOptions.extensionsToSearch, tspath.ExtensionWasm)
+	}
+	extensionOptions.importPhase = importPhase
 
 	if isPathRelativeToScript(literalValue) ||
 		(options.Paths.Size() == 0 && (tspath.IsRootedDiskPath(literalValue) || tspath.IsUrl(literalValue))) {
@@ -694,6 +704,7 @@ func (l *LanguageService) getStringLiteralCompletionsFromModuleNamesWorker(
 			program,
 			checker,
 			extensionOptions,
+			importPhase,
 		)
 	}
 }
@@ -711,6 +722,7 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 	program *compiler.Program,
 	typeChecker *checker.Checker,
 	extensionOptions *extensionOptions,
+	importPhase module.ImportPhase,
 ) []moduleCompletionNameAndKind {
 	compilerOptions := program.Options()
 	paths := compilerOptions.Paths
@@ -731,7 +743,9 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 		})
 	}
 
-	l.getCompletionEntriesFromTypings(program, scriptPath, fragmentDirectory, extensionOptions, result)
+	if importPhase == module.ImportPhaseEvaluation {
+		l.getCompletionEntriesFromTypings(program, scriptPath, fragmentDirectory, extensionOptions, result)
+	}
 
 	if moduleResolutionUsesNodeModules(moduleResolution) {
 		// If looking for a global package name, don't just include everything in `node_modules` because that includes dependencies' own dependencies.
@@ -753,7 +767,7 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 			resolvePackageJsonExports := compilerOptions.GetResolvePackageJsonExports()
 			resolvePackageJsonImports := compilerOptions.GetResolvePackageJsonImports()
 			seenPackageScope := false
-			conditions := module.GetConditions(compilerOptions, mode)
+			conditions := module.GetConditionsForImportPhase(compilerOptions, mode, importPhase)
 
 			// Returns true if the search should stop.
 			exportsOrImportsLookup := func(lookupTable *packagejson.ExportsOrImports, fragment string, baseDirectory string, isExports bool, isImports bool) bool {
@@ -1251,6 +1265,7 @@ type extensionOptions struct {
 	importingSourceFile *ast.SourceFile
 	endingPreference    modulespecifiers.ImportModuleSpecifierEndingPreference
 	resolutionMode      core.ResolutionMode
+	importPhase         module.ImportPhase
 }
 
 type referenceKind int
@@ -1285,7 +1300,7 @@ func (l *LanguageService) getCompletionEntriesForDirectoryFragment(
 	fragment = tspath.EnsureTrailingDirectorySeparator(fragment)
 
 	baseDirectory := tspath.ResolvePath(scriptDirectory, fragment)
-	if !moduleSpecifierIsRelative {
+	if !moduleSpecifierIsRelative && extensionOptions.importPhase == module.ImportPhaseEvaluation {
 		// Check for a version redirect.
 		packageJsonDirectory := program.GetNearestAncestorDirectoryWithPackageJson(baseDirectory)
 		if packageJsonDirectory != "" {

@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/importSource/importSource20.ts] ////
+
+=== b.ts ===
+import a from "a";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+import source b from "a";
+>b : Symbol(b, Decl(b.ts, 1, 6))
+
+const c: string = a;
+>c : Symbol(c, Decl(b.ts, 2, 5))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+const d: WebAssembly.Module = b;
+>d : Symbol(d, Decl(b.ts, 3, 5))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(b.ts, 1, 6))
+
+const e = import.source("a");
+>e : Symbol(e, Decl(b.ts, 5, 5))
+
+const f: Promise<WebAssembly.Module> = e;
+>f : Symbol(f, Decl(b.ts, 6, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>e : Symbol(e, Decl(b.ts, 5, 5))
+
+=== node_modules/a/index.d.ts ===
+declare const a: string;
+>a : Symbol(a, Decl(index.d.ts, 0, 13))
+
+export default a;
+>a : Symbol(a, Decl(index.d.ts, 0, 13))
+

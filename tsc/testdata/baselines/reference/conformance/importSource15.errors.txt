@@ -1,0 +1,107 @@
+b.js(1,8): error TS100070: Named and namespace imports are not allowed in a source phase import.
+c.js(1,8): error TS100070: Named and namespace imports are not allowed in a source phase import.
+d.js(1,8): error TS100070: Named and namespace imports are not allowed in a source phase import.
+e.js(1,8): error TS100069: A source phase import must specify a local binding.
+f.js(1,14): error TS1005: '(' expected.
+f.js(2,15): error TS1005: '(' expected.
+f.js(3,23): error TS1005: '(' expected.
+f.js(4,14): error TS1005: '(' expected.
+f.js(6,1): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+f.js(7,1): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+f.js(8,14): error TS100072: Optional chaining cannot be used with 'import.source'.
+f.js(9,14): error TS1005: '(' expected.
+f.js(10,15): error TS1325: Argument of dynamic import cannot be spread element.
+g.js(1,5): error TS1109: Expression expected.
+h.js(1,21): error TS1005: '(' expected.
+i.js(1,8): error TS100073: 'a' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?
+m.js(1,8): error TS1260: Keywords cannot contain escape characters.
+
+
+==== a.js (0 errors) ====
+    export default 1;
+    export const a = 2;
+    
+==== b.js (1 errors) ====
+    import source * as a from "./a.js";
+           ~~~~~~~~~~~~~
+!!! error TS100070: Named and namespace imports are not allowed in a source phase import.
+    
+==== c.js (1 errors) ====
+    import source { a } from "./a.js";
+           ~~~~~~~~~~~~
+!!! error TS100070: Named and namespace imports are not allowed in a source phase import.
+    
+==== d.js (1 errors) ====
+    import source a, { a as b } from "./a.js";
+           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS100070: Named and namespace imports are not allowed in a source phase import.
+    
+==== e.js (1 errors) ====
+    import source "./a.js";
+           ~~~~~~
+!!! error TS100069: A source phase import must specify a local binding.
+    
+==== f.js (9 errors) ====
+    import.source;
+                 
+!!! error TS1005: '(' expected.
+    (import.source)("./a.js");
+                  
+!!! error TS1005: '(' expected.
+    Function(import.source);
+                          
+!!! error TS1005: '(' expected.
+    import.source.unknown;
+                 
+!!! error TS1005: '(' expected.
+    
+    import.source();
+    ~~~~~~~~~~~~~~~
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+    import.source("./a.js", {}, {});
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+    import.source?.("./a.js");
+                 ~~
+!!! error TS100072: Optional chaining cannot be used with 'import.source'.
+    import.source<string>("./a.js");
+                 
+!!! error TS1005: '(' expected.
+    import.source(...["./a.js"]);
+                  ~~~~~~~~~~~~~
+!!! error TS1325: Argument of dynamic import cannot be spread element.
+    
+==== g.js (1 errors) ====
+    new import.source("./a.js");
+        ~~~~~~
+!!! error TS1109: Expression expected.
+    
+==== h.js (1 errors) ====
+    typeof import.source;
+                        
+!!! error TS1005: '(' expected.
+    
+==== i.js (1 errors) ====
+    import.a("./a.js");
+           ~
+!!! error TS100073: 'a' is not a valid meta-property for keyword 'import'. Did you mean 'meta', 'defer', or 'source'?
+    
+==== j.js (0 errors) ====
+    import source a from "./a.js" with { type: "javascript" };
+    const b = import.source("./a.js", { with: { type: "javascript" } });
+    a;
+    b;
+    
+==== k.js (0 errors) ====
+    const a = import.source("./a.js", { with: { type: "javascript" } });
+    a;
+    
+==== l.js (0 errors) ====
+    import s\u006furce from "./a.js";
+    source;
+    
+==== m.js (1 errors) ====
+    import.s\u006furce("./a.js");
+           ~~~~~~~~~~~
+!!! error TS1260: Keywords cannot contain escape characters.
+    

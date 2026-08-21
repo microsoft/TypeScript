@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/importSource/importSource4.ts] ////
+
+=== a.ts ===
+export default 1;
+export const a = 2;
+>a : 2
+>2 : 2
+
+=== b.ts ===
+import source * as a from "./a.js";
+>a : typeof a
+
+=== c.ts ===
+import source { a } from "./a.js";
+>a : 2
+
+=== d.ts ===
+import source a, { a as b } from "./a.js";
+>a : any
+>a : 2
+>b : 2
+
+=== e.ts ===
+
+import source "./a.js";
+
+=== f.ts ===
+import source type a from "./a.js";
+>type : any
+>a : any
+>from : any
+>"./a.js" : "./a.js"
+

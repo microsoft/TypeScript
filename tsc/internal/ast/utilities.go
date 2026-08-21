@@ -1976,7 +1976,7 @@ func IsExpressionNode(node *Node) bool {
 		KindJsxFragment, KindYieldExpression, KindAwaitExpression:
 		return true
 	case KindMetaProperty:
-		// `import.defer` in `import.defer(...)` is not an expression
+		// `import.<phase>` in `import.<phase>(...)` is not an expression
 		return !IsImportCall(node.Parent) || node.Parent.Expression() != node
 	case KindExpressionWithTypeArguments:
 		return !IsHeritageClause(node.Parent)
@@ -2114,7 +2114,27 @@ func IsImportCall(node *Node) bool {
 		return false
 	}
 	e := node.Expression()
-	return e.Kind == KindImportKeyword || IsMetaProperty(e) && e.AsMetaProperty().KeywordToken == KindImportKeyword && e.Text() == "defer"
+	return e.Kind == KindImportKeyword || IsImportPhaseMetaProperty(e)
+}
+
+func IsImportPhaseMetaProperty(node *Node) bool {
+	return IsImportDeferMetaProperty(node) || IsImportSourceMetaProperty(node)
+}
+
+func IsImportDeferMetaProperty(node *Node) bool {
+	return isImportMetaProperty(node, "defer")
+}
+
+func IsImportSourceMetaProperty(node *Node) bool {
+	return isImportMetaProperty(node, "source")
+}
+
+func isImportMetaProperty(node *Node, name string) bool {
+	return IsMetaProperty(node) && node.AsMetaProperty().KeywordToken == KindImportKeyword && node.AsMetaProperty().Name().Text() == name
+}
+
+func IsSourcePhaseImportCall(node *Node) bool {
+	return IsCallExpression(node) && IsImportSourceMetaProperty(node.Expression())
 }
 
 func IsComputedNonLiteralName(name *Node) bool {

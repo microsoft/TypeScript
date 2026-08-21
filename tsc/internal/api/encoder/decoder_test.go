@@ -147,6 +147,20 @@ func TestDecodeSourceFile_ImportDeclaration(t *testing.T) {
 	assert.Equal(t, spec.Name().AsIdentifier().Text, "bar")
 }
 
+func TestDecodeSourceFile_SourcePhaseImport(t *testing.T) {
+	t.Parallel()
+	sf := parseSourceFile(`import source a from "./a.wasm";`)
+	buf, _, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	decoded, err := encoder.DecodeSourceFile(buf)
+	assert.NilError(t, err)
+
+	clause := decoded.Statements.Nodes[0].AsImportDeclaration().ImportClause.AsImportClause()
+	assert.Equal(t, clause.PhaseModifier, ast.KindSourceKeyword)
+	assert.Equal(t, clause.Name().Text(), "a")
+}
+
 func TestDecodeSourceFile_IfStatement(t *testing.T) {
 	t.Parallel()
 	sf := parseSourceFile("if (true) { } else { }")

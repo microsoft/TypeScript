@@ -1,0 +1,18 @@
+c.cts(1,8): error TS100074: Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.
+
+
+==== a.d.wasm.ts (0 errors) ====
+    export {};
+    
+==== b.mts (0 errors) ====
+    import source a from "./a.wasm";
+    const b: WebAssembly.Module = a;
+    const c: Promise<WebAssembly.Module> = import.source("./a.wasm");
+    
+==== c.cts (1 errors) ====
+    import source a from "./a.wasm";
+           ~~~~~~~~
+!!! error TS100074: Source phase imports are not allowed on statements that compile to CommonJS 'require' calls.
+    const b: WebAssembly.Module = a;
+    const c: Promise<WebAssembly.Module> = import.source("./a.wasm");
+    

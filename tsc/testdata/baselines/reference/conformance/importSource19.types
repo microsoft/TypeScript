@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/importSource/importSource19.ts] ////
+
+=== a.ts ===
+import source a from "./missing.wasm";
+>a : any
+
+const b = import.source("./missing.wasm");
+>b : Promise<any>
+>import.source("./missing.wasm") : Promise<any>
+>source : any
+>"./missing.wasm" : "./missing.wasm"
+
+a;
+>a : any
+
+b;
+>b : Promise<any>
+

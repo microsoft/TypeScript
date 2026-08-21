@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/importSource/importSource17.ts] ////
+
+=== b.js ===
+import source a from "./a.wasm";
+>a : WebAssembly.Module
+
+const b = import.source("./a.wasm");
+>b : Promise<WebAssembly.Module>
+>import.source("./a.wasm") : Promise<WebAssembly.Module>
+>source : any
+>"./a.wasm" : "./a.wasm"
+
+/** @type {WebAssembly.Module} */
+const c = a;
+>c : WebAssembly.Module
+>a : WebAssembly.Module
+
+/** @type {Promise<WebAssembly.Module>} */
+const d = b;
+>d : Promise<WebAssembly.Module>
+>b : Promise<WebAssembly.Module>
+

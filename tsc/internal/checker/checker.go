@@ -562,6 +562,7 @@ type Program interface {
 	GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, usageLocation *ast.StringLiteralLike) core.ResolutionMode
 	GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.ModuleKind
 	GetResolvedModule(currentSourceFile ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule
+	GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule
 	GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]
 	GetPackagesMap() map[string]bool
 	GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData
@@ -654,6 +655,8 @@ type Checker struct {
 	unresolvedSymbols                           map[string]*ast.Symbol
 	errorTypes                                  map[CacheHashKey]*Type
 	moduleSymbols                               map[*ast.Node]*ast.Symbol
+	patternAmbientModuleSourceSymbols           map[string]*ast.Symbol
+	resolvedModuleSourceSymbols                 map[tspath.Path]*ast.Symbol
 	globalThisSymbol                            *ast.Symbol
 	symbolTableAliasCache                       map[symbolTableID][]*ast.Symbol
 	classExpressionNameTables                   map[ast.NodeId]ast.SymbolTable
@@ -876,6 +879,7 @@ type Checker struct {
 	getGlobalClassAccessorDecoratorTargetType   func() *Type
 	getGlobalClassAccessorDecoratorResultType   func() *Type
 	getGlobalClassFieldDecoratorContextType     func() *Type
+	getGlobalWebAssemblyModuleType              func() *Type
 	syncIterationTypesResolver                  *IterationTypesResolver
 	asyncIterationTypesResolver                 *IterationTypesResolver
 	isPrimitiveOrObjectOrEmptyType              func(*Type) bool
@@ -1115,6 +1119,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.getGlobalClassAccessorDecoratorTargetType = c.getGlobalTypeResolver("ClassAccessorDecoratorTarget", 2 /*arity*/, true /*reportErrors*/)
 	c.getGlobalClassAccessorDecoratorResultType = c.getGlobalTypeResolver("ClassAccessorDecoratorResult", 2 /*arity*/, true /*reportErrors*/)
 	c.getGlobalClassFieldDecoratorContextType = c.getGlobalTypeResolver("ClassFieldDecoratorContext", 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalWebAssemblyModuleType = core.Memoize(c.getGlobalWebAssemblyModuleTypeWorker)
 	c.initializeClosures()
 	c.initializeIterationResolvers()
 	c.initializeChecker()
@@ -8390,8 +8395,18 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
 		}
 	}
 	// resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
+	isSourcePhaseImport := ast.IsSourcePhaseImportCall(node)
+	if isSourcePhaseImport {
+		resolvedModule, sourceType := c.getResolvedSourcePhaseImport(specifier)
+		if resolvedModule != nil {
+			return c.createPromiseReturnType(node, sourceType)
+		}
+	}
 	moduleSymbol := c.resolveExternalModuleName(node, specifier, false /*ignoreErrors*/)
 	if moduleSymbol != nil {
+		if isSourcePhaseImport {
+			return c.createPromiseReturnType(node, c.getSourcePhaseImportType(moduleSymbol))
+		}
 		esModuleSymbol := c.resolveExternalModuleSymbol(moduleSymbol, true /*dontResolveAlias*/)
 		if esModuleSymbol != nil {
 			syntheticType := c.getTypeWithSyntheticDefaultOnly(c.getTypeOfSymbol(esModuleSymbol), esModuleSymbol, moduleSymbol, specifier)
@@ -10846,8 +10861,10 @@ func (c *Checker) checkMetaProperty(node *ast.Node) *Type {
 	case ast.KindNewKeyword:
 		return c.checkNewTargetMetaProperty(node)
 	case ast.KindImportKeyword:
-		if node.Name().Text() == "defer" {
-			debug.Assert(!ast.IsCallExpression(node.Parent) || node.Parent.Expression() != node, "Trying to get the type of `import.defer` in `import.defer(...)`")
+		if ast.IsImportPhaseMetaProperty(node.AsNode()) {
+			if ast.IsCallExpression(node.Parent) {
+				debug.Assert(node.Parent.Expression() != node, "Trying to get the type of a phase import meta-property in its call")
+			}
 			return c.errorType
 		}
 		return c.checkImportMetaProperty(node)
@@ -14620,11 +14637,126 @@ func (c *Checker) getTypeOnlyDeclarationOfEntityName(name *ast.Node) *ast.Node {
 }
 
 func (c *Checker) getTargetOfImportClause(node *ast.Node) *ast.Symbol {
-	moduleSymbol := c.resolveExternalModuleName(node, getModuleSpecifierFromNode(node.Parent), false /*ignoreErrors*/)
+	specifier := getModuleSpecifierFromNode(node.Parent)
+	if node.AsImportClause().PhaseModifier == ast.KindSourceKeyword {
+		resolvedModule, sourceType := c.getResolvedSourcePhaseImport(specifier)
+		if resolvedModule != nil {
+			return c.getSourcePhaseImportTarget(specifier, nil /*moduleSymbol*/, resolvedModule.ResolvedFileName, sourceType)
+		}
+	}
+	moduleSymbol := c.resolveExternalModuleName(node, specifier, false /*ignoreErrors*/)
 	if moduleSymbol != nil {
+		if node.AsImportClause().PhaseModifier == ast.KindSourceKeyword {
+			return c.getSourcePhaseImportTarget(specifier, moduleSymbol, "" /*resolvedFileName*/, c.getSourcePhaseImportType(moduleSymbol))
+		}
 		return c.getTargetOfModuleDefault(moduleSymbol, node, true /*dontResolveAlias*/)
 	}
 	return nil
+}
+
+func (c *Checker) getSourcePhaseImportTarget(moduleSpecifier *ast.Node, moduleSymbol *ast.Symbol, resolvedFileName string, sourceType *Type) *ast.Symbol {
+	if moduleSymbol == nil {
+		path := tspath.ToPath(resolvedFileName, c.program.GetCurrentDirectory(), c.program.UseCaseSensitiveFileNames())
+		sourceSymbol := c.resolvedModuleSourceSymbols[path]
+		if sourceSymbol != nil {
+			return sourceSymbol
+		}
+		sourceSymbol = c.createSourcePhaseImportTarget(nil /*moduleSymbol*/, sourceType)
+		if c.resolvedModuleSourceSymbols == nil {
+			c.resolvedModuleSourceSymbols = make(map[tspath.Path]*ast.Symbol)
+		}
+		c.resolvedModuleSourceSymbols[path] = sourceSymbol
+		return sourceSymbol
+	}
+	if c.isPatternAmbientModuleSymbol(moduleSymbol) {
+		key := c.getPatternAmbientModuleSourceKey(moduleSpecifier)
+		sourceSymbol := c.patternAmbientModuleSourceSymbols[key]
+		if sourceSymbol != nil {
+			return sourceSymbol
+		}
+		sourceSymbol = c.createSourcePhaseImportTarget(moduleSymbol, sourceType)
+		if c.patternAmbientModuleSourceSymbols == nil {
+			c.patternAmbientModuleSourceSymbols = make(map[string]*ast.Symbol)
+		}
+		c.patternAmbientModuleSourceSymbols[key] = sourceSymbol
+		return sourceSymbol
+	}
+	moduleLinks := c.moduleSymbolLinks.Get(moduleSymbol)
+	sourceSymbol := moduleLinks.sourcePhaseTarget
+	if sourceSymbol == nil {
+		sourceSymbol = c.createSourcePhaseImportTarget(moduleSymbol, sourceType)
+		moduleLinks.sourcePhaseTarget = sourceSymbol
+	}
+	return sourceSymbol
+}
+
+func (c *Checker) isPatternAmbientModuleSymbol(moduleSymbol *ast.Symbol) bool {
+	for _, pattern := range c.patternAmbientModules {
+		if c.getMergedSymbol(pattern.Symbol) == moduleSymbol {
+			return true
+		}
+	}
+	return false
+}
+
+func (c *Checker) getPatternAmbientModuleSourceKey(moduleSpecifier *ast.Node) string {
+	moduleReference := moduleSpecifier.Text()
+	if tspath.IsExternalModuleNameRelative(moduleReference) {
+		sourceFile := ast.GetSourceFileOfNode(moduleSpecifier)
+		path := tspath.GetNormalizedAbsolutePath(moduleReference, tspath.GetDirectoryPath(sourceFile.FileName()))
+		return tspath.GetCanonicalFileName(path, c.program.UseCaseSensitiveFileNames())
+	}
+	return moduleReference
+}
+
+func (c *Checker) createSourcePhaseImportTarget(moduleSymbol *ast.Symbol, sourceType *Type) *ast.Symbol {
+	sourceSymbol := c.newSymbol(ast.SymbolFlagsFunctionScopedVariable, "source")
+	sourceSymbol.Parent = moduleSymbol
+	c.valueSymbolLinks.Get(sourceSymbol).resolvedType = sourceType
+	return sourceSymbol
+}
+
+func (c *Checker) getResolvedSourcePhaseImport(moduleSpecifier *ast.Node) (*module.ResolvedModule, *Type) {
+	if ast.IsStringLiteralLike(moduleSpecifier) {
+		sourceFile := ast.GetSourceFileOfNode(moduleSpecifier)
+		resolvedModule := c.program.GetResolvedModuleFromModuleSpecifier(sourceFile, moduleSpecifier)
+		if resolvedModule.IsResolved() {
+			if module.IsResolvedModuleForArbitraryExtension(resolvedModule, tspath.ExtensionWasm) {
+				if resolvedModule.ResolvedUsingTsExtension && tspath.IsDeclarationFileName(moduleSpecifier.Text()) {
+					return nil, nil
+				}
+				return resolvedModule, c.getGlobalWebAssemblyModuleType()
+			}
+			switch resolvedModule.Extension {
+			case tspath.ExtensionJs, tspath.ExtensionMjs, tspath.ExtensionCjs:
+				return resolvedModule, c.anyType
+			case tspath.ExtensionJsx:
+				if c.compilerOptions.Jsx != core.JsxEmitNone {
+					return resolvedModule, c.anyType
+				}
+			}
+		}
+	}
+	return nil, nil
+}
+
+func (c *Checker) getSourcePhaseImportType(moduleSymbol *ast.Symbol) *Type {
+	if module.IsModuleForArbitraryExtension(moduleSymbol, tspath.ExtensionWasm) {
+		return c.getGlobalWebAssemblyModuleType()
+	}
+	return c.anyType
+}
+
+func (c *Checker) getGlobalWebAssemblyModuleTypeWorker() *Type {
+	webAssemblySymbol := c.getGlobalSymbol("WebAssembly", ast.SymbolFlagsNamespace, nil /*diagnostic*/)
+	if webAssemblySymbol == nil {
+		return c.anyType
+	}
+	moduleTypeSymbol := c.getSymbol(c.getExportsOfSymbol(webAssemblySymbol), "Module", ast.SymbolFlagsType)
+	if moduleTypeSymbol == nil {
+		return c.anyType
+	}
+	return c.getDeclaredTypeOfSymbol(moduleTypeSymbol)
 }
 
 func (c *Checker) getTargetOfModuleDefault(moduleSymbol *ast.Symbol, node *ast.Node, dontResolveAlias bool) *ast.Symbol {
@@ -15298,7 +15430,13 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 		mode = c.program.GetDefaultResolutionModeForFile(importingSourceFile)
 	}
 
-	resolvedModule := c.program.GetResolvedModule(importingSourceFile, moduleReference, mode)
+	isSourcePhaseImport := contextSpecifier != nil && ast.IsStringLiteralLike(contextSpecifier) && module.GetImportPhaseForUsage(contextSpecifier) == module.ImportPhaseSource
+	var resolvedModule *module.ResolvedModule
+	if isSourcePhaseImport {
+		resolvedModule = c.program.GetResolvedModuleFromModuleSpecifier(importingSourceFile, contextSpecifier)
+	} else {
+		resolvedModule = c.program.GetResolvedModule(importingSourceFile, moduleReference, mode)
+	}
 
 	var resolutionDiagnostic *diagnostics.Message
 	if errorNode != nil && resolvedModule.IsResolved() {
@@ -15319,15 +15457,15 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 		if errorNode != nil {
 			if resolvedModule.ResolvedUsingTsExtension && tspath.IsDeclarationFileName(moduleReference) {
 				if ast.FindAncestor(location, ast.IsEmittableImport) != nil {
-					tsExtension := tspath.TryExtractTSExtension(moduleReference)
-					if tsExtension == "" {
-						panic("should be able to extract TS extension from string that passes IsDeclarationFileName")
+					if isSourcePhaseImport {
+						c.error(errorNode, diagnostics.A_declaration_file_cannot_be_imported_with_a_source_phase_import)
+					} else {
+						tsExtension := tspath.TryExtractTSExtension(moduleReference)
+						if tsExtension == "" {
+							panic("should be able to extract TS extension from string that passes IsDeclarationFileName")
+						}
+						c.error(errorNode, diagnostics.A_declaration_file_cannot_be_imported_without_import_type_Did_you_mean_to_import_an_implementation_file_0_instead, c.getSuggestedImportSource(moduleReference, tsExtension, mode))
 					}
-					c.error(
-						errorNode,
-						diagnostics.A_declaration_file_cannot_be_imported_without_import_type_Did_you_mean_to_import_an_implementation_file_0_instead,
-						c.getSuggestedImportSource(moduleReference, tsExtension, mode),
-					)
 				}
 			} else if resolvedModule.ResolvedUsingTsExtension && !c.compilerOptions.AllowImportingTsExtensionsFrom(importingSourceFile.FileName()) {
 				if ast.FindAncestor(location, ast.IsEmittableImport) != nil {
@@ -31849,7 +31987,7 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 		}
 		return nil
 	case ast.KindImportKeyword:
-		if ast.IsMetaProperty(node.Parent) && node.Parent.Text() == "defer" {
+		if ast.IsImportPhaseMetaProperty(node.Parent) {
 			return nil
 		}
 		fallthrough

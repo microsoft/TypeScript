@@ -91,6 +91,47 @@ func TestContentMapperVirtualExtensionSetsImpliedNodeFormat(t *testing.T) {
 	assert.Equal(t, program.GetSourceFileMetaData(file.Path()).ImpliedNodeFormat, core.ResolutionModeESM)
 }
 
+func TestEvaluationPhaseWasmUsesContentMapper(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	fs := vfstest.FromMap(map[string]string{
+		"/src/a.wasm": "\x00asm\x01\x00\x00\x00",
+		"/src/b.ts":   `import { value } from "./a.wasm"; value;`,
+	}, false /*useCaseSensitiveFileNames*/)
+	fs = bundled.WrapFS(fs)
+	mapper := &contentmapper.Mapper{
+		Definition: contentmapper.Definition{Package: "wasm", Extensions: []string{".wasm"}},
+		Manifest:   contentmapper.Manifest{Name: "wasm-mapper", Version: "1.0.0"},
+	}
+	program := compiler.NewProgram(compiler.ProgramOptions{
+		Config: &tsoptions.ParsedCommandLine{
+			ParsedConfig: &tsoptions.ParsedOptions{
+				FileNames: []string{"/src/b.ts"},
+				CompilerOptions: &core.CompilerOptions{
+					SkipLibCheck:     core.TSTrue,
+					Module:           core.ModuleKindESNext,
+					ModuleResolution: core.ModuleResolutionKindBundler,
+				},
+				ContentMappers: []*contentmapper.Mapper{mapper},
+			},
+		},
+		Host: compiler.NewCompilerHost("/src", fs, bundled.LibPath(), nil, nil, fakeContentMapperHost{
+			transform: func(fileName string, content string) (contentmapper.Result, error) {
+				return contentmapper.Result{Text: "export const value = 1;", VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
+			},
+		}),
+		SingleThreaded: core.TSTrue,
+	})
+
+	file := program.GetSourceFile("/src/a.wasm")
+	assert.Assert(t, file != nil)
+	assert.Equal(t, file.ContentMapper(), "wasm-mapper@1.0.0")
+	assert.Equal(t, len(collectContentMapperDiagnostics(program)), 0)
+}
+
 func collectContentMapperDiagnostics(program *compiler.Program) []*ast.Diagnostic {
 	ctx := context.Background()
 	return slices.Concat(

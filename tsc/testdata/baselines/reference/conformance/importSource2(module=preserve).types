@@ -1,0 +1,79 @@
+//// [tests/cases/conformance/importSource/importSource2.ts] ////
+
+=== a.d.wasm.ts ===
+
+export {};
+
+=== b.ts ===
+export {};
+const a = import.source("./a.wasm");
+>a : Promise<WebAssembly.Module>
+>import.source("./a.wasm") : Promise<WebAssembly.Module>
+>source : any
+>"./a.wasm" : "./a.wasm"
+
+const b: Promise<WebAssembly.Module> = a;
+>b : Promise<WebAssembly.Module>
+>WebAssembly : any
+>a : Promise<WebAssembly.Module>
+
+=== c.ts ===
+export {};
+const a = import.source("./a.wasm", { with: { type: "webassembly" } });
+>a : Promise<WebAssembly.Module>
+>import.source("./a.wasm", { with: { type: "webassembly" } }) : Promise<WebAssembly.Module>
+>source : any
+>"./a.wasm" : "./a.wasm"
+>{ with: { type: "webassembly" } } : { with: { type: string; }; }
+>with : { type: string; }
+>{ type: "webassembly" } : { type: string; }
+>type : string
+>"webassembly" : "webassembly"
+
+const b: Promise<WebAssembly.Module> = a;
+>b : Promise<WebAssembly.Module>
+>WebAssembly : any
+>a : Promise<WebAssembly.Module>
+
+=== d.ts ===
+export {};
+const a = import.source("./a.wasm",);
+>a : Promise<WebAssembly.Module>
+>import.source("./a.wasm",) : Promise<WebAssembly.Module>
+>source : any
+>"./a.wasm" : "./a.wasm"
+
+const b: Promise<WebAssembly.Module> = a;
+>b : Promise<WebAssembly.Module>
+>WebAssembly : any
+>a : Promise<WebAssembly.Module>
+
+const c = import.source("./a.wasm", { with: { type: "webassembly" } },);
+>c : Promise<WebAssembly.Module>
+>import.source("./a.wasm", { with: { type: "webassembly" } },) : Promise<WebAssembly.Module>
+>source : any
+>"./a.wasm" : "./a.wasm"
+>{ with: { type: "webassembly" } } : { with: { type: string; }; }
+>with : { type: string; }
+>{ type: "webassembly" } : { type: string; }
+>type : string
+>"webassembly" : "webassembly"
+
+const d: Promise<WebAssembly.Module> = c;
+>d : Promise<WebAssembly.Module>
+>WebAssembly : any
+>c : Promise<WebAssembly.Module>
+
+=== e.ts ===
+export {};
+const a = import.source(`./a.wasm`);
+>a : Promise<WebAssembly.Module>
+>import.source(`./a.wasm`) : Promise<WebAssembly.Module>
+>source : any
+>`./a.wasm` : "./a.wasm"
+
+const b: Promise<WebAssembly.Module> = a;
+>b : Promise<WebAssembly.Module>
+>WebAssembly : any
+>a : Promise<WebAssembly.Module>
+

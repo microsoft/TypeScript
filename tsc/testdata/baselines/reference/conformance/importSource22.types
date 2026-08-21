@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/importSource/importSource22.ts] ////
+
+=== a.d.wasm.ts ===
+
+export {};
+
+=== b.mts ===
+import source a from "./a.wasm";
+>a : WebAssembly.Module
+
+const b: WebAssembly.Module = a;
+>b : WebAssembly.Module
+>WebAssembly : any
+>a : WebAssembly.Module
+
+const c: Promise<WebAssembly.Module> = import.source("./a.wasm");
+>c : Promise<WebAssembly.Module>
+>WebAssembly : any
+>import.source("./a.wasm") : Promise<WebAssembly.Module>
+>source : any
+>"./a.wasm" : "./a.wasm"
+
+=== c.cts ===
+import source a from "./a.wasm";
+>a : WebAssembly.Module
+
+const b: WebAssembly.Module = a;
+>b : WebAssembly.Module
+>WebAssembly : any
+>a : WebAssembly.Module
+
+const c: Promise<WebAssembly.Module> = import.source("./a.wasm");
+>c : Promise<WebAssembly.Module>
+>WebAssembly : any
+>import.source("./a.wasm") : Promise<WebAssembly.Module>
+>source : any
+>"./a.wasm" : "./a.wasm"
+

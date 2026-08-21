@@ -1,0 +1,54 @@
+//// [tests/cases/conformance/importSource/importSource25.ts] ////
+
+=== a.d.ts ===
+declare module "*.txt";
+>"*.txt" : Symbol("*.txt", Decl(a.d.ts, 0, 0))
+
+=== b.ts ===
+import source a from "./a.txt";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+export { a as value };
+>a : Symbol(a, Decl(b.ts, 0, 6))
+>value : Symbol(value, Decl(b.ts, 1, 8))
+
+=== c.ts ===
+import source a from "././a.txt";
+>a : Symbol(a, Decl(c.ts, 0, 6))
+
+export { a as value };
+>a : Symbol(a, Decl(c.ts, 0, 6))
+>value : Symbol(value, Decl(c.ts, 1, 8))
+
+=== d.ts ===
+
+export * from "./b.js";
+export * from "./c.js";
+
+=== e.ts ===
+import { value } from "./d.js";
+>value : Symbol(value, Decl(e.ts, 0, 8))
+
+value;
+>value : Symbol(value, Decl(e.ts, 0, 8))
+
+=== f.ts ===
+import source a from "./b.txt";
+>a : Symbol(a, Decl(f.ts, 0, 6))
+
+export { a as value };
+>a : Symbol(a, Decl(f.ts, 0, 6))
+>value : Symbol(value, Decl(f.ts, 1, 8))
+
+=== g.ts ===
+
+export * from "./b.js";
+export * from "./f.js";
+
+=== h.ts ===
+import { value } from "./g.js";
+>value : Symbol(value, Decl(h.ts, 0, 8))
+
+value;
+>value : Symbol(value, Decl(h.ts, 0, 8))
+

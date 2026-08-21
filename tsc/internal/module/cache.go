@@ -14,6 +14,7 @@ type moduleResolutionCacheKey struct {
 	containingDirectory string
 	moduleName          string
 	resolutionMode      core.ResolutionMode
+	importPhase         ImportPhase
 	redirectConfigName  string
 }
 

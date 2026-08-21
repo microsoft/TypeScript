@@ -1,0 +1,36 @@
+g.ts(2,1): error TS2308: Module "./b.js" has already exported a member named 'value'. Consider explicitly re-exporting to resolve the ambiguity.
+
+
+==== a.d.ts (0 errors) ====
+    declare module "*.txt";
+    
+==== b.ts (0 errors) ====
+    import source a from "./a.txt";
+    export { a as value };
+    
+==== c.ts (0 errors) ====
+    import source a from "././a.txt";
+    export { a as value };
+    
+==== d.ts (0 errors) ====
+    export * from "./b.js";
+    export * from "./c.js";
+    
+==== e.ts (0 errors) ====
+    import { value } from "./d.js";
+    value;
+    
+==== f.ts (0 errors) ====
+    import source a from "./b.txt";
+    export { a as value };
+    
+==== g.ts (1 errors) ====
+    export * from "./b.js";
+    export * from "./f.js";
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./b.js" has already exported a member named 'value'. Consider explicitly re-exporting to resolve the ambiguity.
+    
+==== h.ts (0 errors) ====
+    import { value } from "./g.js";
+    value;
+    

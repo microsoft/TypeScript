@@ -1,0 +1,89 @@
+//// [tests/cases/conformance/importSource/importSource5.ts] ////
+
+=== a.ts ===
+
+export default 1;
+
+=== b.ts ===
+import.source;
+>import.source : any
+>source : any
+
+(import.source)("./a.js");
+>(import.source)("./a.js") : any
+>(import.source) : any
+>import.source : any
+>source : any
+>"./a.js" : "./a.js"
+
+Function(import.source);
+>Function(import.source) : Function
+>Function : FunctionConstructor
+>import.source : any
+>source : any
+
+import.source.unknown;
+>import.source.unknown : any
+>import.source : any
+>source : any
+>unknown : any
+
+import.source();
+>import.source() : Promise<any>
+>source : any
+
+import.source("./a.js", {}, {});
+>import.source("./a.js", {}, {}) : Promise<any>
+>source : any
+>"./a.js" : "./a.js"
+>{} : {}
+>{} : {}
+
+import.source?.("./a.js");
+>import.source?.("./a.js") : Promise<any>
+>source : any
+>"./a.js" : "./a.js"
+
+import.source<string>("./a.js");
+>import.source<string>("./a.js") : Promise<any>
+>source : any
+>"./a.js" : "./a.js"
+
+import.source(...["./a.js"]);
+>import.source(...["./a.js"]) : Promise<any>
+>source : any
+>...["./a.js"] : string
+>["./a.js"] : [string]
+>"./a.js" : "./a.js"
+
+=== c.ts ===
+new import.source("./a.js");
+>new : any
+> : any
+>import.source("./a.js") : Promise<any>
+>source : any
+>"./a.js" : "./a.js"
+
+=== d.ts ===
+new import.source("./a.js").a;
+>new : any
+> : any
+>import.source("./a.js").a : any
+>import.source("./a.js") : Promise<any>
+>source : any
+>"./a.js" : "./a.js"
+>a : any
+
+=== e.ts ===
+typeof import.source;
+>typeof import.source : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>import.source : any
+>source : any
+
+=== f.ts ===
+import.a("./a.js");
+>import.a("./a.js") : any
+>import.a : any
+>a : any
+>"./a.js" : "./a.js"
+

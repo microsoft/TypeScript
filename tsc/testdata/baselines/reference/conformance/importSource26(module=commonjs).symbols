@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/importSource/importSource26.ts] ////
+
+=== a.js ===
+
+export default 1;
+
+=== b.js ===
+import source a from "./a.js";
+>a : Symbol(a, Decl(b.js, 0, 6))
+
+const b = import.source("./a.js");
+>b : Symbol(b, Decl(b.js, 1, 5))
+>"./a.js" : Symbol("./a.js", Decl(a.js, 0, 0))
+

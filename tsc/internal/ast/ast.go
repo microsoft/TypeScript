@@ -2130,7 +2130,7 @@ func (node *CallExpression) computeSubtreeFacts() SubtreeFacts {
 		propagateSubtreeFacts(node.QuestionDotToken) |
 		propagateEraseableSyntaxListSubtreeFacts(node.TypeArguments) |
 		propagateNodeListSubtreeFacts(node.Arguments, propagateSubtreeFacts) |
-		core.IfElse(node.Expression.Kind == KindImportKeyword, SubtreeContainsDynamicImport, SubtreeFactsNone)
+		core.IfElse(IsImportCall(node.AsNode()), SubtreeContainsDynamicImport, SubtreeFactsNone)
 }
 
 func (node *CallExpression) propagateSubtreeFacts() SubtreeFacts {

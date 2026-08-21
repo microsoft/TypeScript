@@ -1,0 +1,89 @@
+//// [tests/cases/conformance/importSource/importSource3.ts] ////
+
+=== a.ts ===
+export default 1;
+export const a = 2;
+>a : Symbol(a, Decl(a.ts, 1, 12))
+
+=== b.ts ===
+import source from "./a.js";
+>source : Symbol(source, Decl(b.ts, 0, 6))
+
+const a: number = source;
+>a : Symbol(a, Decl(b.ts, 1, 5))
+>source : Symbol(source, Decl(b.ts, 0, 6))
+
+=== c.ts ===
+import source, { a } from "./a.js";
+>source : Symbol(source, Decl(c.ts, 0, 6))
+>a : Symbol(a, Decl(c.ts, 0, 16))
+
+const b: number = source + a;
+>b : Symbol(b, Decl(c.ts, 1, 5))
+>source : Symbol(source, Decl(c.ts, 0, 6))
+>a : Symbol(a, Decl(c.ts, 0, 16))
+
+=== d.ts ===
+import source = require("./a");
+>source : Symbol(source, Decl(d.ts, 0, 0))
+
+const a: typeof source = source;
+>a : Symbol(a, Decl(d.ts, 1, 5))
+>source : Symbol(source, Decl(d.ts, 0, 0))
+>source : Symbol(source, Decl(d.ts, 0, 0))
+
+=== e.ts ===
+const source = 1;
+>source : Symbol(source, Decl(e.ts, 0, 5))
+
+const a: number = source;
+>a : Symbol(a, Decl(e.ts, 1, 5))
+>source : Symbol(source, Decl(e.ts, 0, 5))
+
+=== f.d.wasm.ts ===
+
+export {};
+
+=== g.ts ===
+import source from from "./f.wasm";
+>from : Symbol(from, Decl(g.ts, 0, 6))
+
+const a: WebAssembly.Module = from;
+>a : Symbol(a, Decl(g.ts, 1, 5))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>from : Symbol(from, Decl(g.ts, 0, 6))
+
+=== h.ts ===
+import source type from "./f.wasm";
+>type : Symbol(type, Decl(h.ts, 0, 6))
+
+const a: WebAssembly.Module = type;
+>a : Symbol(a, Decl(h.ts, 1, 5))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>type : Symbol(type, Decl(h.ts, 0, 6))
+
+=== i.ts ===
+import source source from "./f.wasm";
+>source : Symbol(source, Decl(i.ts, 0, 6))
+
+const a: WebAssembly.Module = source;
+>a : Symbol(a, Decl(i.ts, 1, 5))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>source : Symbol(source, Decl(i.ts, 0, 6))
+
+=== j.ts ===
+import
+source
+a
+>a : Symbol(a, Decl(j.ts, 0, 6))
+
+from "./f.wasm";
+const b: WebAssembly.Module = a;
+>b : Symbol(b, Decl(j.ts, 4, 5))
+>WebAssembly : Symbol(WebAssembly, Decl(lib.dom.d.ts, --, --))
+>Module : Symbol(WebAssembly.Module, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(j.ts, 0, 6))
+
