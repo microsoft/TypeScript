@@ -20,6 +20,13 @@ export interface SpanMapSegment {
 /** Internal segment representation after omitted features have been normalized to `All`. */
 type NormalizedSpanMapSegment = SpanMapSegment & { readonly features: SpanMapFeature; };
 
+/** Lazily built interval index for original-to-virtual lookups. */
+interface OriginalIndex {
+    readonly segments: readonly NormalizedSpanMapSegment[];
+    readonly leafCount: number;
+    readonly maxEnds: readonly number[];
+}
+
 /** One virtual projection of an original position and its mapping fidelity. */
 export interface MappedPosition {
     readonly position: number;
@@ -35,7 +42,7 @@ export interface MappedRange {
 /** Provides bidirectional span-aware mapping between virtual and original text. */
 export class SpanMap {
     readonly segments: readonly NormalizedSpanMapSegment[];
-    private originalSegments: readonly NormalizedSpanMapSegment[] | undefined;
+    private originalIndex: OriginalIndex | undefined;
 
     /** Copies and sorts segments by virtual start, normalizing omitted features to `All`. */
     constructor(segments: readonly SpanMapSegment[]) {
@@ -90,7 +97,7 @@ export class SpanMap {
      * Results are ordered by virtual position; uncovered or disabled positions produce no results.
      */
     originalToVirtualPositions(position: number, feature: SpanMapFeature): readonly MappedPosition[] {
-        const groups = segmentGroupsAtOriginalPosition(this.getOriginalSegments(), position);
+        const groups = segmentGroupsAtOriginalPosition(this.getOriginalIndex(), position);
         const results: MappedPosition[] = [];
         for (const group of groups) {
             for (const segment of group.segments) {
@@ -138,9 +145,9 @@ export class SpanMap {
             }));
         }
         const lastCharacter = end - 1;
-        const originalSegments = this.getOriginalSegments();
-        const startSegments = segmentsAtOriginalPosition(originalSegments, start);
-        const endSegments = segmentsAtOriginalPosition(originalSegments, lastCharacter);
+        const originalIndex = this.getOriginalIndex();
+        const startSegments = segmentsAtOriginalPosition(originalIndex, start);
+        const endSegments = segmentsAtOriginalPosition(originalIndex, lastCharacter);
         if (!startSegments || !endSegments) return [];
         const containing = startSegments.filter(segment => end <= segment.originalEnd);
         if (containing.length > 0) {
@@ -205,13 +212,20 @@ export class SpanMap {
         };
     }
 
-    /** Returns the lazily built segment index ordered by original start. */
-    private getOriginalSegments(): readonly NormalizedSpanMapSegment[] {
-        return this.originalSegments ??= [...this.segments].sort((left, right) =>
+    /** Returns the lazily built original-text interval index. */
+    private getOriginalIndex(): OriginalIndex {
+        if (this.originalIndex) return this.originalIndex;
+        const segments = [...this.segments].sort((left, right) =>
             left.originalStart - right.originalStart
             || left.originalEnd - right.originalEnd
             || left.virtualStart - right.virtualStart
         );
+        let leafCount = 1;
+        while (leafCount < segments.length) leafCount *= 2;
+        const maxEnds = new Array<number>(2 * leafCount).fill(0);
+        for (let i = 0; i < segments.length; i++) maxEnds[leafCount + i] = segments[i].originalEnd;
+        for (let i = leafCount - 1; i > 0; i--) maxEnds[i] = Math.max(maxEnds[2 * i], maxEnds[2 * i + 1]);
+        return this.originalIndex = { segments, leafCount, maxEnds };
     }
 
     private virtualRangeSupportsFeature(range: ReadonlyTextRange, feature: SpanMapFeature): boolean {
@@ -304,13 +318,67 @@ function sameOriginalRange(left: SpanMapSegment, right: SpanMapSegment): boolean
  * Returns every mapping segment containing the original-text `position`.
  * Segment ends are exclusive; starts, including zero-length segment starts, are included.
  */
-function segmentsAtOriginalPosition(segments: readonly NormalizedSpanMapSegment[], position: number): readonly NormalizedSpanMapSegment[] | undefined {
-    const results: NormalizedSpanMapSegment[] = [];
-    for (const segment of segments) {
-        if (segment.originalStart > position) break;
-        if (position < segment.originalEnd || position === segment.originalStart) results.push(segment);
-    }
+function segmentsAtOriginalPosition(index: OriginalIndex, position: number): readonly NormalizedSpanMapSegment[] | undefined {
+    // Query intervals that contain position strictly before their exclusive end. Segments starting exactly at
+    // position are appended separately so zero-length segments are included while maxEnd <= position is pruned.
+    const start = firstOriginalSegmentAtOrAfter(index.segments, position);
+    const results = segmentsEndingAtOrAfter(index, start, position, false);
+    const end = firstOriginalSegmentAfter(index.segments, position);
+    results.push(...index.segments.slice(start, end));
     return results.length > 0 ? results : undefined;
+}
+
+/** Returns segments among `[0, limit)` whose original end reaches `position`. */
+function segmentsEndingAtOrAfter(index: OriginalIndex, limit: number, position: number, includeEnd: boolean): NormalizedSpanMapSegment[] {
+    const results: NormalizedSpanMapSegment[] = [];
+    collectSegmentsEndingAtOrAfter(index, 1, 0, index.leafCount, limit, position, includeEnd, results);
+    return results;
+}
+
+/** Walks the flat max-end tree left-to-right, preserving original-text order. */
+function collectSegmentsEndingAtOrAfter(
+    index: OriginalIndex,
+    node: number,
+    start: number,
+    end: number,
+    limit: number,
+    position: number,
+    includeEnd: boolean,
+    results: NormalizedSpanMapSegment[],
+): void {
+    const maxEnd = index.maxEnds[node];
+    if (start >= limit || maxEnd < position || !includeEnd && maxEnd === position) return;
+    if (end - start === 1) {
+        results.push(index.segments[start]);
+        return;
+    }
+    const middle = start + ((end - start) >>> 1);
+    collectSegmentsEndingAtOrAfter(index, 2 * node, start, middle, limit, position, includeEnd, results);
+    collectSegmentsEndingAtOrAfter(index, 2 * node + 1, middle, end, limit, position, includeEnd, results);
+}
+
+/** Returns the first original-ordered segment whose start is greater than or equal to `position`. */
+function firstOriginalSegmentAtOrAfter(segments: readonly NormalizedSpanMapSegment[], position: number): number {
+    let low = 0;
+    let high = segments.length;
+    while (low < high) {
+        const middle = (low + high) >>> 1;
+        if (segments[middle].originalStart < position) low = middle + 1;
+        else high = middle;
+    }
+    return low;
+}
+
+/** Returns the first original-ordered segment whose start is greater than `position`. */
+function firstOriginalSegmentAfter(segments: readonly NormalizedSpanMapSegment[], position: number): number {
+    let low = 0;
+    let high = segments.length;
+    while (low < high) {
+        const middle = (low + high) >>> 1;
+        if (segments[middle].originalStart <= position) low = middle + 1;
+        else high = middle;
+    }
+    return low;
 }
 
 interface SegmentGroupAtOriginalPosition {
@@ -331,10 +399,11 @@ interface SegmentGroupAtOriginalPosition {
  *              atEnd: true      atEnd: false
  * ```
  */
-function segmentGroupsAtOriginalPosition(segments: readonly NormalizedSpanMapSegment[], position: number): readonly SegmentGroupAtOriginalPosition[] {
+function segmentGroupsAtOriginalPosition(index: OriginalIndex, position: number): readonly SegmentGroupAtOriginalPosition[] {
+    const limit = firstOriginalSegmentAfter(index.segments, position);
+    const segments = segmentsEndingAtOrAfter(index, limit, position, true);
     const groups: SegmentGroupAtOriginalPosition[] = [];
     for (let start = 0; start < segments.length;) {
-        if (segments[start].originalStart > position) break;
         let end = start + 1;
         while (end < segments.length && sameOriginalRange(segments[start], segments[end])) end++;
         const segment = segments[start];

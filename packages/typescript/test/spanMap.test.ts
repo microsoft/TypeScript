@@ -144,6 +144,34 @@ describe("SpanMap", () => {
         ]);
     });
 
+    test("finds an early covering segment through the original index", () => {
+        // Binary search lands near [90,95), which does not contain 97. The interval index must still find the
+        // earlier [0,100) segment without scanning every segment whose start precedes the query.
+        const overlapping = new SpanMap([
+            { virtualStart: 0, virtualEnd: 100, originalStart: 0, originalEnd: 100, kind: SpanMapKind.Verbatim, features: SpanMapFeature.Hover },
+            { virtualStart: 100, virtualEnd: 105, originalStart: 80, originalEnd: 85, kind: SpanMapKind.Verbatim, features: SpanMapFeature.Hover },
+            { virtualStart: 105, virtualEnd: 110, originalStart: 90, originalEnd: 95, kind: SpanMapKind.Verbatim, features: SpanMapFeature.Hover },
+            { virtualStart: 110, virtualEnd: 113, originalStart: 100, originalEnd: 103, kind: SpanMapKind.Verbatim, features: SpanMapFeature.Hover },
+        ]);
+
+        assert.deepEqual(overlapping.originalToVirtualPositions(97, SpanMapFeature.Hover), [
+            { position: 97, fidelity: SpanMapFidelity.Exact },
+        ]);
+        assert.deepEqual(overlapping.originalToVirtualSpans({ pos: 97, end: 98 }, SpanMapFeature.Hover), [
+            { range: { pos: 97, end: 98 }, fidelity: SpanMapFidelity.Exact },
+        ]);
+
+        // Point lookup includes both sides of a shared endpoint. Nonempty span lookup treats segment ends as
+        // exclusive and uses only the segment beginning at the endpoint.
+        assert.deepEqual(overlapping.originalToVirtualPositions(100, SpanMapFeature.Hover), [
+            { position: 100, fidelity: SpanMapFidelity.Exact },
+            { position: 110, fidelity: SpanMapFidelity.Exact },
+        ]);
+        assert.deepEqual(overlapping.originalToVirtualSpans({ pos: 100, end: 101 }, SpanMapFeature.Hover), [
+            { range: { pos: 110, end: 111 }, fidelity: SpanMapFidelity.Exact },
+        ]);
+    });
+
     test("falls back from a disabled containing span", () => {
         const overlapping = new SpanMap([
             { virtualStart: 0, virtualEnd: 6, originalStart: 0, originalEnd: 6, kind: SpanMapKind.Verbatim, features: SpanMapFeature.Definition },

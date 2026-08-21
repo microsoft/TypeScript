@@ -420,6 +420,56 @@ func TestOriginalToVirtualOverlappingSpans(t *testing.T) {
 	}
 }
 
+func TestOriginalToVirtualPositionFindsEarlyCoveringSegment(t *testing.T) {
+	t.Parallel()
+
+	// Binary search lands near [90,95), which does not contain 97. The interval index must still find the
+	// earlier [0,100) segment without scanning every segment whose start precedes the query.
+	m := spanmap.New([]spanmap.Segment{
+		{VirtualStart: 0, VirtualEnd: 100, OriginalStart: 0, OriginalEnd: 100, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+		{VirtualStart: 100, VirtualEnd: 105, OriginalStart: 80, OriginalEnd: 85, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+		{VirtualStart: 105, VirtualEnd: 110, OriginalStart: 90, OriginalEnd: 95, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+		{VirtualStart: 110, VirtualEnd: 113, OriginalStart: 100, OriginalEnd: 103, Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover},
+	})
+
+	assert.DeepEqual(t, m.OriginalToVirtualPositions(97, spanmap.FeatureHover), []spanmap.MappedPosition{
+		{Position: 97, Fidelity: spanmap.FidelityExact},
+	})
+	spans := m.OriginalToVirtualSpans(core.NewTextRange(97, 98), spanmap.FeatureHover)
+	assert.Equal(t, len(spans), 1)
+	assert.Equal(t, spans[0], spanmap.MappedSpan{Span: core.NewTextRange(97, 98), Fidelity: spanmap.FidelityExact})
+
+	// Point lookup includes both sides of a shared endpoint, including an early interval found through the
+	// max-end tree. Nonempty span lookup treats segment ends as exclusive and uses only the right segment.
+	assert.DeepEqual(t, m.OriginalToVirtualPositions(100, spanmap.FeatureHover), []spanmap.MappedPosition{
+		{Position: 100, Fidelity: spanmap.FidelityExact},
+		{Position: 110, Fidelity: spanmap.FidelityExact},
+	})
+	spans = m.OriginalToVirtualSpans(core.NewTextRange(100, 101), spanmap.FeatureHover)
+	assert.Equal(t, len(spans), 1)
+	assert.Equal(t, spans[0], spanmap.MappedSpan{Span: core.NewTextRange(110, 111), Fidelity: spanmap.FidelityExact})
+}
+
+func BenchmarkOriginalToVirtualPositionNearEnd(b *testing.B) {
+	const segmentCount = 10_000
+	segments := make([]spanmap.Segment, segmentCount)
+	for i := range segments {
+		start := core.TextPos(2 * i)
+		segments[i] = spanmap.Segment{
+			VirtualStart: start, VirtualEnd: start + 1,
+			OriginalStart: start, OriginalEnd: start + 1,
+			Kind: spanmap.KindVerbatim, Features: spanmap.FeatureHover,
+		}
+	}
+	m := spanmap.New(segments)
+	position := core.TextPos(2 * (segmentCount - 1))
+	m.OriginalToVirtualPositions(position, spanmap.FeatureHover) // Build the lazy index outside the benchmark.
+	b.ResetTimer()
+	for b.Loop() {
+		m.OriginalToVirtualPositions(position, spanmap.FeatureHover)
+	}
+}
+
 func TestOriginalToVirtualOverlapFallsBackFromDisabledContainer(t *testing.T) {
 	t.Parallel()
 

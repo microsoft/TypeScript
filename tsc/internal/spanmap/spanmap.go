@@ -11,6 +11,7 @@ package spanmap
 import (
 	"fmt"
 	"slices"
+	"sort"
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -128,10 +129,9 @@ type MappedSpan struct {
 type SpanMap struct {
 	segments []Segment
 
-	// origOnce guards lazy construction of origSorted, the segments ordered by OriginalStart, used for
-	// original-to-virtual lookups.
-	origOnce   sync.Once
-	origSorted []Segment
+	// origOnce guards lazy construction of the interval index used for original-to-virtual lookups.
+	origOnce      sync.Once
+	originalIndex *originalIndex
 }
 
 // Validation failures. A content mapper is required to provide a valid span map; these describe the
@@ -432,7 +432,7 @@ func (m *SpanMap) OriginalToVirtualPositions(pos core.TextPos, feature Feature) 
 	if m == nil {
 		return []MappedPosition{{Position: pos, Fidelity: FidelityExact}}
 	}
-	groups := segmentGroupsAtOriginalPosition(m.origIndex(), pos)
+	groups := m.origIndex().segmentGroupsAtOriginalPosition(pos)
 	if len(groups) == 0 {
 		return nil
 	}
@@ -494,9 +494,9 @@ func (m *SpanMap) OriginalToVirtualSpans(r core.TextRange, feature Feature) []Ma
 		})
 	}
 	lastCharacter := end - 1
-	originalSegments := m.origIndex()
-	startSegments, startInside := segmentsAtOriginalPosition(originalSegments, start)
-	endSegments, endInside := segmentsAtOriginalPosition(originalSegments, lastCharacter)
+	originalIndex := m.origIndex()
+	startSegments, startInside := originalIndex.segmentsAtOriginalPosition(start)
+	endSegments, endInside := originalIndex.segmentsAtOriginalPosition(lastCharacter)
 	if !startInside || !endInside {
 		return nil
 	}
@@ -648,11 +648,22 @@ func sameOriginalRange(left Segment, right Segment) bool {
 	return left.OriginalStart == right.OriginalStart && left.OriginalEnd == right.OriginalEnd
 }
 
-// origIndex returns the segments ordered by OriginalStart, building it once on first use.
-func (m *SpanMap) origIndex() []Segment {
+// originalIndex stores segments in original-text order and a complete binary tree whose leaves correspond
+// to those segments. Each internal node stores the maximum OriginalEnd below it, allowing point lookups to
+// discard a whole subtree when none of its segments can reach the queried position.
+type originalIndex struct {
+	segments  []Segment
+	leafCount int
+	maxEnds   []core.TextPos
+}
+
+// origIndex builds the immutable original-text interval index on first use. Sorting dominates the O(n) tree
+// construction, so the first lookup remains O(n log n); later point lookups visit only tree branches that can
+// contain a match.
+func (m *SpanMap) origIndex() *originalIndex {
 	m.origOnce.Do(func() {
-		m.origSorted = slices.Clone(m.segments)
-		slices.SortFunc(m.origSorted, func(a, b Segment) int {
+		segments := slices.Clone(m.segments)
+		slices.SortFunc(segments, func(a, b Segment) int {
 			if c := int(a.OriginalStart - b.OriginalStart); c != 0 {
 				return c
 			}
@@ -661,23 +672,54 @@ func (m *SpanMap) origIndex() []Segment {
 			}
 			return int(a.VirtualStart - b.VirtualStart)
 		})
+		leafCount := 1
+		for leafCount < len(segments) {
+			leafCount *= 2
+		}
+		maxEnds := make([]core.TextPos, 2*leafCount)
+		for i, segment := range segments {
+			maxEnds[leafCount+i] = segment.OriginalEnd
+		}
+		for i := leafCount - 1; i > 0; i-- {
+			maxEnds[i] = max(maxEnds[2*i], maxEnds[2*i+1])
+		}
+		m.originalIndex = &originalIndex{segments: segments, leafCount: leafCount, maxEnds: maxEnds}
 	})
-	return m.origSorted
+	return m.originalIndex
 }
 
 // segmentsAtOriginalPosition returns every mapping segment containing the original-text position pos.
 // Segment ends are exclusive; a segment start, including a zero-length segment, is considered contained.
-func segmentsAtOriginalPosition(segments []Segment, pos core.TextPos) ([]Segment, bool) {
-	var results []Segment
-	for _, segment := range segments {
-		if segment.OriginalStart > pos {
-			break
-		}
-		if pos < segment.OriginalEnd || pos == segment.OriginalStart {
-			results = append(results, segment)
-		}
-	}
+func (i *originalIndex) segmentsAtOriginalPosition(pos core.TextPos) ([]Segment, bool) {
+	// Query intervals that contain pos strictly before their exclusive end. Segments starting exactly at pos
+	// are appended separately so zero-length segments are included without preventing maxEnd <= pos pruning.
+	start := sort.Search(len(i.segments), func(index int) bool { return i.segments[index].OriginalStart >= pos })
+	results := i.segmentsEndingAfterPosition(start, pos)
+	end := sort.Search(len(i.segments), func(index int) bool { return i.segments[index].OriginalStart > pos })
+	results = append(results, i.segments[start:end]...)
 	return results, len(results) > 0
+}
+
+// segmentsEndingAfterPosition returns segments among [0, limit) whose OriginalEnd is greater than pos.
+func (i *originalIndex) segmentsEndingAfterPosition(limit int, pos core.TextPos) []Segment {
+	var results []Segment
+	i.collectSegmentsEndingAtOrAfter(1, 0, i.leafCount, limit, pos, false, &results)
+	return results
+}
+
+// collectSegmentsEndingAtOrAfter walks the flat max-end tree left-to-right, preserving original-text order.
+// Nodes beyond limit or whose maximum end cannot reach pos are discarded without visiting their leaves.
+func (i *originalIndex) collectSegmentsEndingAtOrAfter(node int, start int, end int, limit int, pos core.TextPos, includeEnd bool, results *[]Segment) {
+	if start >= limit || i.maxEnds[node] < pos || !includeEnd && i.maxEnds[node] == pos {
+		return
+	}
+	if end-start == 1 {
+		*results = append(*results, i.segments[start])
+		return
+	}
+	middle := start + (end-start)/2
+	i.collectSegmentsEndingAtOrAfter(2*node, start, middle, limit, pos, includeEnd, results)
+	i.collectSegmentsEndingAtOrAfter(2*node+1, middle, end, limit, pos, includeEnd, results)
 }
 
 type segmentGroupAtOriginalPosition struct {
@@ -696,12 +738,12 @@ type segmentGroupAtOriginalPosition struct {
 //	virtual:   [ A1 ) [ A2 )    [ B1 ) [ B2 )
 //	             left group       right group
 //	             atEnd: true      atEnd: false
-func segmentGroupsAtOriginalPosition(segments []Segment, pos core.TextPos) []segmentGroupAtOriginalPosition {
+func (i *originalIndex) segmentGroupsAtOriginalPosition(pos core.TextPos) []segmentGroupAtOriginalPosition {
+	limit := sort.Search(len(i.segments), func(index int) bool { return i.segments[index].OriginalStart > pos })
+	var segments []Segment
+	i.collectSegmentsEndingAtOrAfter(1, 0, i.leafCount, limit, pos, true, &segments)
 	var groups []segmentGroupAtOriginalPosition
 	for start := 0; start < len(segments); {
-		if segments[start].OriginalStart > pos {
-			break
-		}
 		end := start + 1
 		for end < len(segments) && sameOriginalRange(segments[start], segments[end]) {
 			end++
