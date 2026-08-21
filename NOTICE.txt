@@ -221,7 +221,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-github.com/go-json-experiment/json v0.0.0-20260623181947-01eb4420fa68 - BSD-3-Clause
+github.com/go-json-experiment/json v0.0.0-20260820222146-c27c302e5fc3 - BSD-3-Clause
 
 
 Copyright 2010 The Go Authors
@@ -251,7 +251,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---------------------------------------------------------
 
-golang.org/x/sync v0.21.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/sync v0.22.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 Copyright 2009 The Go Authors
@@ -266,7 +266,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/sys v0.46.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/sys v0.47.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 Copyright 2009 The Go Authors
@@ -294,7 +294,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/term v0.44.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/term v0.45.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 Copyright 2009 The Go Authors
@@ -309,7 +309,7 @@ BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 ---------------------------------------------------------
 
-golang.org/x/text v0.38.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
+golang.org/x/text v0.41.0 - BSD-3-Clause AND LicenseRef-scancode-google-patent-license-golang
 
 
 (c) AeHa (c)
@@ -381,7 +381,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---------------------------------------------------------
 
-github.com/mackerelio/go-osstat v0.2.7 - Apache-2.0
+github.com/mackerelio/go-osstat v0.2.8 - Apache-2.0
 
 
 Copyright 2017-2019 Hatena Co., Ltd.
@@ -433,4 +433,3 @@ SOFTWARE.
 
 
 ---------------------------------------------------------
-
