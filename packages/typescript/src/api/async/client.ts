@@ -163,6 +163,34 @@ export class Client {
         }
     }
 
+    private async sendRequestWithTiming<TResponse>(requestType: RequestType<unknown, TResponse, void>, params: unknown): Promise<TResponse> {
+        if (!this.connection) {
+            throw new Error("Connection not established");
+        }
+
+        if (!this.timing) {
+            return this.connection.sendRequest(requestType, params);
+        }
+
+        // Round-trip latency is measured here; byte counts approximate the wire
+        // payload via the serialized JSON. Server-side processing time is not
+        // carried on the response; it is retrieved separately (via a
+        // getServerTiming request) and folded in by getTimingInfo().
+        const bytesSent = params === undefined ? 0 : Buffer.byteLength(JSON.stringify(params), "utf-8");
+        const start = performance.now();
+        const result = await this.connection.sendRequest(requestType, params);
+        const roundTripMs = performance.now() - start;
+        this.timing.record({
+            method: requestType.method,
+            roundTripMs,
+            bytesSent,
+            bytesReceived: result === undefined || result === null
+                ? 0
+                : Buffer.byteLength(JSON.stringify(result), "utf-8"),
+        });
+        return result;
+    }
+
     private async doBatch(): Promise<void> {
         this.nextBatch = undefined;
         if (!this.batchedRequests.length) return;
@@ -176,42 +204,20 @@ export class Client {
                 throw new Error("Connection not established");
             }
 
-            const requestType = new RequestType<unknown, BatchRequestsResponse, void>("batchRequests");
-            const params: BatchRequestsParams = { requests: requests.map(request => ({ method: request.method, params: request.params })) };
-            if (!this.timing) {
-                const response = await this.connection.sendRequest(requestType, params);
-                for (let i = 0; i < requests.length; i++) {
-                    const { resolve, reject } = requests[i];
-                    const item = response.responses[i];
-                    if (item.error !== undefined) {
-                        reject(new Error(item.error));
-                    }
-                    else {
-                        resolve(item.result);
-                    }
-                }
+            if (requests.length === 1) {
+                // send single queued requests directly instead of as a batched request
+                const requestType = new RequestType<unknown, unknown, void>(requests[0].method);
+                const response = await this.sendRequestWithTiming(requestType, requests[0].params);
+                requests[0].resolve(response);
                 return;
             }
 
-            // Round-trip latency is measured here; byte counts approximate the wire
-            // payload via the serialized JSON. Server-side processing time is not
-            // carried on the response; it is retrieved separately (via a
-            // getServerTiming request) and folded in by getTimingInfo().
-            const bytesSent = params === undefined ? 0 : Buffer.byteLength(JSON.stringify(params), "utf-8");
-            const start = performance.now();
-            const result = await this.connection.sendRequest(requestType, params);
-            const roundTripMs = performance.now() - start;
-            this.timing.record({
-                method: "batchRequests",
-                roundTripMs,
-                bytesSent,
-                bytesReceived: result === undefined || result === null
-                    ? 0
-                    : Buffer.byteLength(JSON.stringify(result), "utf-8"),
-            });
+            const requestType = new RequestType<unknown, BatchRequestsResponse, void>("batchRequests");
+            const params: BatchRequestsParams = { requests: requests.map(request => ({ method: request.method, params: request.params })) };
+            const response = await this.sendRequestWithTiming(requestType, params);
             for (let i = 0; i < requests.length; i++) {
                 const { resolve, reject } = requests[i];
-                const item = result.responses[i];
+                const item = response.responses[i];
                 if (item.error !== undefined) {
                     reject(new Error(item.error));
                 }
