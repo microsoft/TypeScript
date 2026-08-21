@@ -287,7 +287,7 @@ func (c *Checker) isEnumTypeRelatedTo(source *ast.Symbol, target *ast.Symbol, er
 	if sourceSymbol.Name() != targetSymbol.Name() || sourceSymbol.Flags()&ast.SymbolFlagsRegularEnum == 0 || targetSymbol.Flags()&ast.SymbolFlagsRegularEnum == 0 {
 		return false
 	}
-	key := EnumRelationKey{sourceId: ast.GetSymbolId(sourceSymbol), targetId: ast.GetSymbolId(targetSymbol)}
+	key := EnumRelationKey{source: sourceSymbol, target: targetSymbol}
 	if entry := c.enumRelation[key]; entry != RelationComparisonResultNone && !(entry&RelationComparisonResultFailed != 0 && errorReporter != nil) {
 		return entry&RelationComparisonResultSucceeded != 0
 	}

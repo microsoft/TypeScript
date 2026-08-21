@@ -2452,7 +2452,7 @@ func GetModuleInstanceState(node *Node) ModuleInstanceState {
 	return getModuleInstanceState(node, nil, nil)
 }
 
-func getModuleInstanceState(node *Node, ancestors []*Node, visited map[NodeId]ModuleInstanceState) ModuleInstanceState {
+func getModuleInstanceState(node *Node, ancestors []*Node, visited map[*Node]ModuleInstanceState) ModuleInstanceState {
 	module := node.AsModuleDeclaration()
 	if module.Body != nil {
 		return getModuleInstanceStateCached(module.Body, pushAncestor(ancestors, node), visited)
@@ -2461,24 +2461,23 @@ func getModuleInstanceState(node *Node, ancestors []*Node, visited map[NodeId]Mo
 	}
 }
 
-func getModuleInstanceStateCached(node *Node, ancestors []*Node, visited map[NodeId]ModuleInstanceState) ModuleInstanceState {
+func getModuleInstanceStateCached(node *Node, ancestors []*Node, visited map[*Node]ModuleInstanceState) ModuleInstanceState {
 	if visited == nil {
-		visited = make(map[NodeId]ModuleInstanceState)
+		visited = make(map[*Node]ModuleInstanceState)
 	}
-	nodeId := GetNodeId(node)
-	if cached, ok := visited[nodeId]; ok {
+	if cached, ok := visited[node]; ok {
 		if cached != ModuleInstanceStateUnknown {
 			return cached
 		}
 		return ModuleInstanceStateNonInstantiated
 	}
-	visited[nodeId] = ModuleInstanceStateUnknown
+	visited[node] = ModuleInstanceStateUnknown
 	result := getModuleInstanceStateWorker(node, ancestors, visited)
-	visited[nodeId] = result
+	visited[node] = result
 	return result
 }
 
-func getModuleInstanceStateWorker(node *Node, ancestors []*Node, visited map[NodeId]ModuleInstanceState) ModuleInstanceState {
+func getModuleInstanceStateWorker(node *Node, ancestors []*Node, visited map[*Node]ModuleInstanceState) ModuleInstanceState {
 	// A module is uninstantiated if it contains only
 	switch node.Kind {
 	case KindInterfaceDeclaration, KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
@@ -2532,7 +2531,7 @@ func getModuleInstanceStateWorker(node *Node, ancestors []*Node, visited map[Nod
 	return ModuleInstanceStateInstantiated
 }
 
-func getModuleInstanceStateForAliasTarget(node *Node, ancestors []*Node, visited map[NodeId]ModuleInstanceState) ModuleInstanceState {
+func getModuleInstanceStateForAliasTarget(node *Node, ancestors []*Node, visited map[*Node]ModuleInstanceState) ModuleInstanceState {
 	name := node.PropertyNameOrName()
 	if name.Kind != KindIdentifier {
 		// Skip for invalid syntax like this: export { "x" }

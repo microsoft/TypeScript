@@ -38,14 +38,13 @@ type localsRecord struct {
 }
 
 func (b *NodeBuilderImpl) addSymbolTypeToContext(symbol *ast.Symbol, t *Type) func() {
-	id := ast.GetSymbolId(symbol)
-	oldType, oldTypeExists := b.ctx.enclosingSymbolTypes[id]
-	b.ctx.enclosingSymbolTypes[id] = t
+	oldType, oldTypeExists := b.ctx.enclosingSymbolTypes[symbol]
+	b.ctx.enclosingSymbolTypes[symbol] = t
 	return func() {
 		if oldTypeExists {
-			b.ctx.enclosingSymbolTypes[id] = oldType
+			b.ctx.enclosingSymbolTypes[symbol] = oldType
 		} else {
-			delete(b.ctx.enclosingSymbolTypes, id)
+			delete(b.ctx.enclosingSymbolTypes, symbol)
 		}
 	}
 }

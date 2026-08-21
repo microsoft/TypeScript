@@ -200,16 +200,16 @@ func (c *Checker) isEntityNameVisible(entityName *ast.Node, enclosingDeclaration
 func noopAddVisibleAlias(declaration *ast.Node, aliasingStatement *ast.Node) {}
 
 func (c *Checker) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasToMakeVisible bool) *printer.SymbolAccessibilityResult {
-	var aliasesToMakeVisibleSet map[ast.NodeId]*ast.Node
+	var aliasesToMakeVisibleSet map[*ast.Node]*ast.Node
 
 	var addVisibleAlias func(declaration *ast.Node, aliasingStatement *ast.Node)
 	if shouldComputeAliasToMakeVisible {
 		addVisibleAlias = func(declaration *ast.Node, aliasingStatement *ast.Node) {
 			c.emitResolverLinks.declarationLinks.Get(declaration).isVisible = core.TSTrue
 			if aliasesToMakeVisibleSet == nil {
-				aliasesToMakeVisibleSet = make(map[ast.NodeId]*ast.Node)
+				aliasesToMakeVisibleSet = make(map[*ast.Node]*ast.Node)
 			}
-			aliasesToMakeVisibleSet[ast.GetNodeId(declaration)] = aliasingStatement
+			aliasesToMakeVisibleSet[declaration] = aliasingStatement
 		}
 	} else {
 		addVisibleAlias = noopAddVisibleAlias

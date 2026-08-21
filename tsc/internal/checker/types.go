@@ -333,8 +333,8 @@ type accessibleChainCacheKey struct {
 }
 
 type ContainingSymbolLinks struct {
-	extendedContainersByFile map[ast.NodeId][]*ast.Symbol // Symbols of nodes which which logically contain this one, cached by file the request is made within
-	extendedContainers       *[]*ast.Symbol               // Containers (other than the parent) which this symbol is aliased in
+	extendedContainersByFile map[*ast.Node][]*ast.Symbol // Symbols of nodes which which logically contain this one, cached by file the request is made within
+	extendedContainers       *[]*ast.Symbol              // Containers (other than the parent) which this symbol is aliased in
 	accessibleChainCache     map[accessibleChainCacheKey][]*ast.Symbol
 }
 

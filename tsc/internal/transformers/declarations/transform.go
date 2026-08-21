@@ -73,10 +73,10 @@ type DeclarationTransformer struct {
 	resultHasExternalModuleIndicator bool
 	suppressNewDiagnosticContexts    bool
 	witnessedCjsExports              collections.Set[string]
-	lateStatementReplacementMap      map[ast.NodeId]*ast.Node
-	expandoHosts                     map[ast.NodeId]*ast.Node               // store the result of transforming expando hosts so they can be inserted later if the host is actually referenced
-	expandoMembers                   map[ast.NodeId][]*ast.Node             // store any found expando _members_ after transforming them so *if* the host is referenced, they can be emitted alongside it
-	deferredExpandoAssignments       map[ast.NodeId][]*ast.BinaryExpression // expando assignments whose host wasn't visible when collected, processed if the host is late-marked visible
+	lateStatementReplacementMap      map[*ast.Node]*ast.Node
+	expandoHosts                     map[*ast.Node]*ast.Node               // store the result of transforming expando hosts so they can be inserted later if the host is actually referenced
+	expandoMembers                   map[*ast.Node][]*ast.Node             // store any found expando _members_ after transforming them so *if* the host is referenced, they can be emitted alongside it
+	deferredExpandoAssignments       map[*ast.Node][]*ast.BinaryExpression // expando assignments whose host wasn't visible when collected, processed if the host is late-marked visible
 	seenProperties                   collections.Set[thisPropertyAssignmentKey]
 	thisPropertyAssignmentsCollected []*ast.Node
 	rawReferencedFiles               []ReferencedFilePair
@@ -289,10 +289,10 @@ func (tx *DeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 	tx.resultHasExternalModuleIndicator = false
 	tx.suppressNewDiagnosticContexts = false
 	tx.state.lateMarkedStatements = make([]*ast.Node, 0)
-	tx.lateStatementReplacementMap = make(map[ast.NodeId]*ast.Node)
-	tx.expandoHosts = make(map[ast.NodeId]*ast.Node)
-	tx.expandoMembers = make(map[ast.NodeId][]*ast.Node)
-	tx.deferredExpandoAssignments = make(map[ast.NodeId][]*ast.BinaryExpression)
+	tx.lateStatementReplacementMap = make(map[*ast.Node]*ast.Node)
+	tx.expandoHosts = make(map[*ast.Node]*ast.Node)
+	tx.expandoMembers = make(map[*ast.Node][]*ast.Node)
+	tx.deferredExpandoAssignments = make(map[*ast.Node][]*ast.BinaryExpression)
 	tx.rawReferencedFiles = make([]ReferencedFilePair, 0)
 	tx.rawTypeReferenceDirectives = make([]*ast.FileReference, 0)
 	tx.rawLibReferenceDirectives = make([]*ast.FileReference, 0)
@@ -410,8 +410,7 @@ func (tx *DeclarationTransformer) transformAndReplaceLatePaintedStatements(state
 
 		tx.needsDeclare = saveNeedsDeclare
 		original := tx.EmitContext().MostOriginal(next)
-		id := ast.GetNodeId(original)
-		tx.lateStatementReplacementMap[id] = result
+		tx.lateStatementReplacementMap[original] = result
 	}
 
 	// And lastly, we need to get the final form of all those indetermine import declarations from before and add them to the output list
@@ -423,8 +422,7 @@ func (tx *DeclarationTransformer) transformAndReplaceLatePaintedStatements(state
 			continue
 		}
 		original := tx.EmitContext().MostOriginal(statement)
-		id := ast.GetNodeId(original)
-		replacement, ok := tx.lateStatementReplacementMap[id]
+		replacement, ok := tx.lateStatementReplacementMap[original]
 		if !ok {
 			results = append(results, statement)
 			continue // not replaced
@@ -1174,7 +1172,7 @@ func (tx *DeclarationTransformer) visitDeclarationStatements(input *ast.Node) *a
 	case ast.KindExportAssignment:
 		return tx.transformExportAssignment(input, input, input.Expression(), input.AsExportAssignment().IsExportEquals)
 	default:
-		id := ast.GetNodeId(tx.EmitContext().MostOriginal(input))
+		id := tx.EmitContext().MostOriginal(input)
 		if tx.lateStatementReplacementMap[id] == nil {
 			// Don't actually transform yet; just leave as original node - will be elided/swapped by late pass
 			tx.lateStatementReplacementMap[id] = tx.transformTopLevelDeclaration(input)
@@ -1741,11 +1739,10 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 		return nil
 	}
 	original := tx.EmitContext().MostOriginal(input)
-	id := ast.GetNodeId(original)
-	_, isExpandoHost := tx.expandoHosts[id]
-	_, hasDeferredExpandoAssignments := tx.deferredExpandoAssignments[id]
+	_, isExpandoHost := tx.expandoHosts[original]
+	_, hasDeferredExpandoAssignments := tx.deferredExpandoAssignments[original]
 	if isExpandoHost || hasDeferredExpandoAssignments {
-		return tx.createFullExpandoBlock(id)
+		return tx.createFullExpandoBlock(original)
 	}
 
 	previousEnclosingDeclaration := tx.enclosingDeclaration
@@ -1883,9 +1880,8 @@ func (tx *DeclarationTransformer) transformModuleDeclaration(input *ast.ModuleDe
 		tx.Visitor().Visit(inner)
 		// eagerly transform nested namespaces (the nesting doesn't need any elision or painting done)
 		original := tx.EmitContext().MostOriginal(inner)
-		id := ast.GetNodeId(original)
-		body, _ := tx.lateStatementReplacementMap[id]
-		delete(tx.lateStatementReplacementMap, id)
+		body, _ := tx.lateStatementReplacementMap[original]
+		delete(tx.lateStatementReplacementMap, original)
 		return tx.Factory().UpdateModuleDeclaration(
 			input,
 			mods,
@@ -2773,13 +2769,13 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		return
 	}
 
-	hostId := tx.getExpandoHostId(declaration)
+	hostKey := tx.getExpandoHost(declaration)
 
 	if ast.IsDeclaration(declaration) && isDeclarationAndNotVisible(tx.EmitContext(), tx.resolver, declaration) {
 		// The host isn't visible (yet) - printing the type of a visible declaration may still
 		// late-mark it as visible (e.g. an exported variable whose type prints as `typeof host`),
 		// so defer the assignment to be processed if and when that happens.
-		tx.deferredExpandoAssignments[hostId] = append(tx.deferredExpandoAssignments[hostId], node)
+		tx.deferredExpandoAssignments[hostKey] = append(tx.deferredExpandoAssignments[hostKey], node)
 		return
 	}
 
@@ -2803,15 +2799,15 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 	_, cleanupDiagnosticContext := tx.setupDiagnosticContext(node.AsNode())
 	defer cleanupDiagnosticContext()
 
-	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
+	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostKey], ast.IsExportDeclaration)
 
 	if ast.IsIdentifier(node.Right) {
 		if !preexistingExpandoHasExport {
-			tx.addExportModifierToExpandoMembers(hostId)
+			tx.addExportModifierToExpandoMembers(hostKey)
 		}
 		// alias-like, emit an `export {name}` or `export {name as alias}`
 		result := tx.transformBinaryExpressionToExportDeclaration(node.AsNode(), exportName)
-		tx.expandoMembers[hostId] = append(tx.expandoMembers[hostId], result)
+		tx.expandoMembers[hostKey] = append(tx.expandoMembers[hostKey], result)
 		return
 	}
 
@@ -2856,33 +2852,32 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		statements = append(statements, tx.Factory().NewExportDeclaration(nil /*modifiers*/, false /*isTypeOnly*/, namedExports, nil /*moduleSpecifier*/, nil /*attributes*/))
 		if !preexistingExpandoHasExport {
 			// Done before adding statements to expando members to keep the initial variable statement, before we rename anything, private
-			tx.addExportModifierToExpandoMembers(hostId)
+			tx.addExportModifierToExpandoMembers(hostKey)
 		}
 	}
 
-	tx.expandoMembers[hostId] = append(tx.expandoMembers[hostId], statements...)
+	tx.expandoMembers[hostKey] = append(tx.expandoMembers[hostKey], statements...)
 }
 
-func (tx *DeclarationTransformer) addExportModifierToExpandoMembers(hostId ast.NodeId) {
+func (tx *DeclarationTransformer) addExportModifierToExpandoMembers(host *ast.Node) {
 	// Add an `export` modifier to all existing expando members so they remain exported after the `export {}` is added
-	for _, decl := range tx.expandoMembers[hostId] {
+	for _, decl := range tx.expandoMembers[host] {
 		// only invoked when `tx.expandoMembers` does not *yet* contain an `export` declaration, so no need to skip one here to prevent `export export {}`
 		modifierFlags := ast.ModifierFlagsExport | ast.GetCombinedModifierFlags(decl)
 		decl.AsMutable().SetModifiers(tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier)))
 	}
 }
 
-func (tx *DeclarationTransformer) getExpandoHostId(declaration *ast.Declaration) ast.NodeId {
+func (tx *DeclarationTransformer) getExpandoHost(declaration *ast.Declaration) *ast.Node {
 	root := core.IfElse(ast.IsVariableDeclaration(declaration), declaration.Parent.Parent, declaration)
-	id := ast.GetNodeId(tx.EmitContext().MostOriginal(root))
-	return id
+	return tx.EmitContext().MostOriginal(root)
 }
 
 func (tx *DeclarationTransformer) transformExpandoHost(name *ast.Node, declaration *ast.Declaration) {
 	root := core.IfElse(ast.IsVariableDeclaration(declaration), declaration.Parent.Parent, declaration)
-	id := tx.getExpandoHostId(declaration)
+	host := tx.getExpandoHost(declaration)
 
-	if _, ok := tx.expandoHosts[id]; ok {
+	if _, ok := tx.expandoHosts[host]; ok {
 		return
 	}
 
@@ -2914,7 +2909,7 @@ func (tx *DeclarationTransformer) transformExpandoHost(name *ast.Node, declarati
 		typeParameters, parameters, asteriskToken := extractExpandoHostParams(fn)
 		replacement = append(replacement, tx.Factory().NewFunctionDeclaration(modifiers, asteriskToken, tx.Factory().NewIdentifier(name.Text()), tx.ensureTypeParams(fn, typeParameters), tx.updateParamList(fn, parameters), tx.ensureType(fn, false), nil /*fullSignature*/, nil /*body*/))
 	} else {
-		tx.expandoHosts[id] = tx.transformTopLevelDeclaration(declaration)
+		tx.expandoHosts[host] = tx.transformTopLevelDeclaration(declaration)
 		return
 	}
 
@@ -2929,24 +2924,24 @@ func (tx *DeclarationTransformer) transformExpandoHost(name *ast.Node, declarati
 	}
 
 	// store host result to be added to the output when it's actually visited
-	tx.expandoHosts[id] = tx.Factory().NewSyntaxList(replacement)
-	if _, ok := tx.lateStatementReplacementMap[id]; ok {
-		tx.lateStatementReplacementMap[id] = tx.createFullExpandoBlock(id)
+	tx.expandoHosts[host] = tx.Factory().NewSyntaxList(replacement)
+	if _, ok := tx.lateStatementReplacementMap[host]; ok {
+		tx.lateStatementReplacementMap[host] = tx.createFullExpandoBlock(host)
 	}
 }
 
-func (tx *DeclarationTransformer) createFullExpandoBlock(id ast.NodeId) *ast.Node {
+func (tx *DeclarationTransformer) createFullExpandoBlock(hostKey *ast.Node) *ast.Node {
 	// Process any expando assignments on this host that were skipped because it wasn't
 	// visible when they were collected - if it's still not visible, they simply get
 	// re-deferred, and are dropped if the host is never late-marked visible.
-	if deferred, ok := tx.deferredExpandoAssignments[id]; ok {
-		delete(tx.deferredExpandoAssignments, id)
+	if deferred, ok := tx.deferredExpandoAssignments[hostKey]; ok {
+		delete(tx.deferredExpandoAssignments, hostKey)
 		for _, assignment := range deferred {
 			tx.transformExpandoAssignment(assignment)
 		}
 	}
-	n := tx.expandoHosts[id]
-	if addOns, ok := tx.expandoMembers[id]; ok {
+	n := tx.expandoHosts[hostKey]
+	if addOns, ok := tx.expandoMembers[hostKey]; ok {
 		var modifiers *ast.ModifierList
 		var name *ast.Node
 		var host []*ast.Node
