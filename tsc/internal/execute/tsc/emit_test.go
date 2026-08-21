@@ -32,6 +32,11 @@ func (s *contentMapperLoggingTestSystem) GetEnvironmentVariable(name string) str
 	return ""
 }
 
+func (s *contentMapperLoggingTestSystem) LookupEnvironmentVariable(name string) (string, bool) {
+	value := s.GetEnvironmentVariable(name)
+	return value, value != ""
+}
+
 func (s *contentMapperLoggingTestSystem) ErrorWriter() io.Writer {
 	return &s.stderr
 }
@@ -114,8 +119,11 @@ func (s *timingTestSystem) GetCurrentDirectory() string               { return "
 func (s *timingTestSystem) WriteOutputIsTTY() bool                    { return false }
 func (s *timingTestSystem) GetWidthOfTerminal() int                   { return 0 }
 func (s *timingTestSystem) GetEnvironmentVariable(name string) string { return "" }
-func (s *timingTestSystem) Now() time.Time                            { return s.clock.Now() }
-func (s *timingTestSystem) SinceStart() time.Duration                 { return s.clock.SinceStart() }
+func (s *timingTestSystem) LookupEnvironmentVariable(name string) (string, bool) {
+	return "", false
+}
+func (s *timingTestSystem) Now() time.Time            { return s.clock.Now() }
+func (s *timingTestSystem) SinceStart() time.Duration { return s.clock.SinceStart() }
 
 func (s *timingTestSystem) Spawn([]string, string, io.Writer) (io.ReadWriteCloser, error) {
 	return nil, errors.New("spawn not implemented in timingTestSystem")

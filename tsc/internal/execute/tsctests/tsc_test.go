@@ -41,7 +41,7 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: nil,
 		},
 		{
-			subScenario: "does not add color when NO_COLOR is set even if FORCE_COLOR is set",
+			subScenario: "FORCE_COLOR overrides NO_COLOR",
 			env: map[string]string{
 				"NO_COLOR":    "true",
 				"FORCE_COLOR": "true",

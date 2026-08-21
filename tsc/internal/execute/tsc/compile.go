@@ -28,6 +28,7 @@ type System interface {
 	WriteOutputIsTTY() bool
 	GetWidthOfTerminal() int
 	GetEnvironmentVariable(name string) string
+	LookupEnvironmentVariable(name string) (string, bool)
 	Spawn(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error)
 
 	Now() time.Time

@@ -65,6 +65,10 @@ func (s *osSys) GetEnvironmentVariable(name string) string {
 	return os.Getenv(name)
 }
 
+func (s *osSys) LookupEnvironmentVariable(name string) (string, bool) {
+	return os.LookupEnv(name)
+}
+
 func (s *osSys) Spawn(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
 	return spawnProcess(command, dir, stderr)
 }

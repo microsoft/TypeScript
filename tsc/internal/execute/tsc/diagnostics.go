@@ -44,11 +44,19 @@ func CreateDiagnosticReporter(sys System, w io.Writer, locale locale.Locale, opt
 }
 
 func defaultIsPretty(sys System) bool {
+	if forceColor, ok := sys.LookupEnvironmentVariable("FORCE_COLOR"); ok {
+		switch forceColor {
+		case "", "1", "2", "3", "true":
+			return true
+		default:
+			return false
+		}
+	}
 	if sys.GetEnvironmentVariable("NO_COLOR") != "" {
 		return false
 	}
-	if sys.GetEnvironmentVariable("FORCE_COLOR") != "" {
-		return true
+	if sys.GetEnvironmentVariable("TERM") == "dumb" {
+		return false
 	}
 	return sys.WriteOutputIsTTY()
 }

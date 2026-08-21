@@ -240,6 +240,11 @@ func (s *TestSys) GetEnvironmentVariable(name string) string {
 	return s.env[name]
 }
 
+func (s *TestSys) LookupEnvironmentVariable(name string) (string, bool) {
+	value, ok := s.env[name]
+	return value, ok
+}
+
 // Spawn serves the fake content mappers in-process, selecting the implementation by the exec command the
 // mapper package declares (see internal/testutil/contentmappertest), so tests exercise the full IPC stack
 // without spawning a subprocess.
