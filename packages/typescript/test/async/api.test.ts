@@ -7,6 +7,7 @@ import {
     getSynthesizedDeepClone,
     InternalSymbolName,
     isCallExpression,
+    isExpressionStatement,
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
@@ -396,6 +397,48 @@ describe("Checker - getImmediateAliasedSymbol", () => {
             const aliased = await project.checker.getImmediateAliasedSymbol(aliasSymbol);
             assert.ok(aliased, "Should resolve the immediate aliased symbol");
             assert.equal(aliased.name, "foo");
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("Checker - getTargetSymbol", () => {
+    test("gets the target symbol of instantiated symbol", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `
+class Base<T> {
+    private value!: T;
+}
+class Alpha extends Base<string> {}
+class Bravo extends Base<string> {}
+
+declare function test<T>(): void;
+test<Alpha>();
+test<Bravo>();
+`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const nodes: Array<Node> = [];
+            sourceFile.forEachChild(node => {
+                if (isExpressionStatement(node) && isCallExpression(node.expression) && node.expression.typeArguments) {
+                    nodes.push(node.expression.typeArguments[0]);
+                }
+            });
+            const aType = await project.checker.getTypeAtLocation(nodes[0]);
+            const bType = await project.checker.getTypeAtLocation(nodes[1]);
+            const aProperty = (await project.checker.getPropertiesOfType(aType))[0];
+            const bProperty = (await project.checker.getPropertiesOfType(bType))[0];
+            assert.ok(aProperty);
+            assert.ok(bProperty);
+            assert.equal(aProperty === bProperty, false);
+            assert.equal(await project.checker.getTargetSymbol(aProperty) === await project.checker.getTargetSymbol(bProperty), true);
         }
         finally {
             await api.close();
