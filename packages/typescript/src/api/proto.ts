@@ -26,11 +26,17 @@ export type TypesPropertyMethod = APIMethodsReturning<TypeResponse[]>;
 export type IntrinsicTypeMethod = "getAnyType" | "getBigIntType" | "getBooleanType" | "getESSymbolType" | "getNeverType" | "getNonPrimitiveType" | "getNullType" | "getNumberType" | "getStringType" | "getUndefinedType" | "getUnknownType" | "getVoidType";
 
 export type APIRequest = { [K in keyof APIMethodInfo]: { method: K; params: APIMethodInfo[K]["params"]; }; }[keyof APIMethodInfo];
-export type APIResponse<Request extends APIRequest = APIRequest> = Request extends APIRequest ? {
-        method: Request["method"];
-        result: APIMethodInfo[Request["method"]]["result"];
-        error?: string;
-    } :
+export type APIResponse<Request extends APIRequest = APIRequest> = Request extends APIRequest ?
+        & {
+            method: Request["method"];
+        }
+        & ({
+            result: APIMethodInfo[Request["method"]]["result"];
+            error?: undefined;
+        } | {
+            result: null;
+            error: string;
+        }) :
     never;
 export type APIResponseTuple<Requests extends readonly APIRequest[]> = {
     [Index in keyof Requests]: APIResponse<Requests[Index]>;

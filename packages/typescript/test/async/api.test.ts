@@ -390,16 +390,16 @@ describe("API - batchRequests", () => {
                 { method: "readConfigFile", params: { file: "/tsconfig.json" } },
             ]);
 
-            assert.equal(responses.length, 2);
+            assert.strictEqual(responses.length, 2);
             const commandLine = responses[0];
-            assert.equal(commandLine.method, "parseCommandLine");
-            assert.equal(commandLine.error, undefined);
+            assert.strictEqual(commandLine.method, "parseCommandLine");
+            assert.strictEqual(commandLine.error, undefined);
             assert.equal(commandLine.result.options.strict, true);
 
             const config = responses[1];
-            assert.equal(config.method, "readConfigFile");
-            assert.equal(config.error, undefined);
-            assert.deepEqual(config.result.config, {});
+            assert.strictEqual(config.method, "readConfigFile");
+            assert.strictEqual(config.error, undefined);
+            assert.deepStrictEqual(config.result.config, {});
         }
         finally {
             await api.close();
@@ -420,9 +420,9 @@ describe("API - batchRequests", () => {
             assert.equal(responses[0].result, null);
 
             const commandLine = responses[1];
-            assert.equal(commandLine.method, "parseCommandLine");
-            assert.equal(commandLine.error, undefined);
-            assert.equal(commandLine.result.options.strict, true);
+            assert.strictEqual(commandLine.method, "parseCommandLine");
+            assert.strictEqual(commandLine.error, undefined);
+            assert.strictEqual(commandLine.result.options.strict, true);
         }
         finally {
             await api.close();
@@ -431,6 +431,34 @@ describe("API - batchRequests", () => {
 });
 
 // @sync-skip-block-start
+describe("API - automatic batching", () => {
+    test("batches multiple concurrent requests into one automatically", async () => {
+        const api = new API({
+            cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
+            fs: createVirtualFileSystem(defaultFiles),
+            collectTiming: true,
+        });
+        try {
+            await api.parseCommandLine([]); // initialize API
+            await api.resetTimingInfo();
+            let { totals: { requestCount } } = await api.getTimingInfo();
+            assert.equal(requestCount, 0);
+            const [parseCommandLine, readConfigFile] = await Promise.all([
+                api.parseCommandLine(["--strict"]),
+                api.readConfigFile("/tsconfig.json"),
+            ]);
+            ({ totals: { requestCount } } = await api.getTimingInfo());
+            assert.equal(requestCount, 1);
+
+            assert.equal(parseCommandLine.options.strict, true);
+            assert.deepStrictEqual(readConfigFile.config, {});
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 describe("API - batchContext", () => {
     test("holds requests until disposal", async () => {
         const api = spawnAPI();

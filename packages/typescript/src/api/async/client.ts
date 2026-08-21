@@ -231,6 +231,13 @@ export class Client {
     }
 
     batchContext(): { [Symbol.dispose](): void; } {
+        if (this.nextBatch === "manual") {
+            throw new Error("Already in a manual batch context");
+        }
+        if (this.nextBatch) {
+            clearImmediate(this.nextBatch);
+            this.doBatch(); // empty the queue before entering a manual batch context
+        }
         this.nextBatch = "manual";
         return {
             [Symbol.dispose]: () => {

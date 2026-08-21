@@ -398,16 +398,16 @@ describe("API - batchRequests", () => {
                 { method: "readConfigFile", params: { file: "/tsconfig.json" } },
             ]);
 
-            assert.equal(responses.length, 2);
+            assert.strictEqual(responses.length, 2);
             const commandLine = responses[0];
-            assert.equal(commandLine.method, "parseCommandLine");
-            assert.equal(commandLine.error, undefined);
+            assert.strictEqual(commandLine.method, "parseCommandLine");
+            assert.strictEqual(commandLine.error, undefined);
             assert.equal(commandLine.result.options.strict, true);
 
             const config = responses[1];
-            assert.equal(config.method, "readConfigFile");
-            assert.equal(config.error, undefined);
-            assert.deepEqual(config.result.config, {});
+            assert.strictEqual(config.method, "readConfigFile");
+            assert.strictEqual(config.error, undefined);
+            assert.deepStrictEqual(config.result.config, {});
         }
         finally {
             api.close();
@@ -428,9 +428,9 @@ describe("API - batchRequests", () => {
             assert.equal(responses[0].result, null);
 
             const commandLine = responses[1];
-            assert.equal(commandLine.method, "parseCommandLine");
-            assert.equal(commandLine.error, undefined);
-            assert.equal(commandLine.result.options.strict, true);
+            assert.strictEqual(commandLine.method, "parseCommandLine");
+            assert.strictEqual(commandLine.error, undefined);
+            assert.strictEqual(commandLine.result.options.strict, true);
         }
         finally {
             api.close();
