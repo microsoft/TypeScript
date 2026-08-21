@@ -2217,12 +2217,21 @@ function generateCode() {
         }
         writeLine(`${indent}default:`);
         if (disc.unmapped.length === 1) {
-            writeLine(`${indent}\treturn unmarshalDiscriminatedArm(state, &o.${disc.unmapped[0].fieldName})`);
+            writeLine(`${indent}\treturn unmarshalDiscriminatedFallbackArm(state, &o.${disc.unmapped[0].fieldName})`);
         }
         else {
             writeLine(`${indent}\treturn state.invalidDiscriminator()`);
         }
         writeLine(`${indent}}`);
+    }
+
+    function canStreamDiscriminator(
+        disc: NonNullable<ReturnType<typeof findDiscriminatorField>>,
+    ): boolean {
+        return disc.unmapped.length <= 1 && disc.unmapped.every(entry =>
+            entry.originalType.kind === "reference"
+            && model.structures.some(structure => structure.name === entry.originalType.name)
+        );
     }
 
     /**
@@ -3412,7 +3421,7 @@ function generateCode() {
                 else {
                     let exhaustive = false;
                     const disc = findDiscriminatorField(entries);
-                    if (disc && disc.unmapped.length <= 1) {
+                    if (disc && canStreamDiscriminator(disc)) {
                         generateStreamingDiscriminatorDispatch(name, disc, "\t\t");
                         exhaustive = true;
                     }
@@ -3424,7 +3433,7 @@ function generateCode() {
                         writeLine(`\t\t\treturn err`);
                         writeLine(`\t\t}`);
                     }
-                    if (disc && disc.unmapped.length > 1) {
+                    if (disc && !canStreamDiscriminator(disc)) {
                         exhaustive = generateDiscriminatorDispatch(disc, "\t\t");
                     }
                     else if (!disc) {
@@ -3457,7 +3466,7 @@ function generateCode() {
             // unions can still stream; other unions use ReadValue + try-each.
             let exhaustive = false;
             const disc = findDiscriminatorField(fieldEntries);
-            if (disc && disc.unmapped.length <= 1) {
+            if (disc && canStreamDiscriminator(disc)) {
                 generateStreamingDiscriminatorDispatch(name, disc, "\t");
                 exhaustive = true;
             }
@@ -3473,7 +3482,7 @@ function generateCode() {
                     writeLine("");
                 }
             }
-            if (disc && disc.unmapped.length > 1) {
+            if (disc && !canStreamDiscriminator(disc)) {
                 exhaustive = generateDiscriminatorDispatch(disc, "\t");
             }
             else if (!disc) {

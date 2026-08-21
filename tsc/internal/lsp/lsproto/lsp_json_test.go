@@ -648,6 +648,13 @@ func TestUnmarshalDiscriminatorUnion(t *testing.T) {
 		assert.Assert(t, err != nil)
 	})
 
+	t.Run("non-string discriminator", func(t *testing.T) {
+		t.Parallel()
+		var v WorkDoneProgressBeginOrReportOrEnd
+		err := json.Unmarshal([]byte(`{"kind": null}`), &v)
+		assert.Assert(t, err != nil)
+	})
+
 	t.Run("missing discriminator", func(t *testing.T) {
 		t.Parallel()
 		var v WorkDoneProgressBeginOrReportOrEnd
@@ -721,6 +728,21 @@ func TestUnmarshalDocumentEditUnion(t *testing.T) {
 		err := json.Unmarshal([]byte(`{
 			"textDocument": {"uri": "file:///a.ts", "version": 1},
 			"edits": [{"range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}, "newText": "x"}]
+		}`), &v)
+		assert.NilError(t, err)
+		assert.Assert(t, v.TextDocumentEdit != nil)
+		assert.Assert(t, v.CreateFile == nil)
+		assert.Assert(t, v.RenameFile == nil)
+		assert.Assert(t, v.DeleteFile == nil)
+	})
+
+	t.Run("TextDocumentEdit with non-string kind", func(t *testing.T) {
+		t.Parallel()
+		var v TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile
+		err := json.Unmarshal([]byte(`{
+			"kind": null,
+			"textDocument": {"uri": "file:///a.ts", "version": 1},
+			"edits": []
 		}`), &v)
 		assert.NilError(t, err)
 		assert.Assert(t, v.TextDocumentEdit != nil)

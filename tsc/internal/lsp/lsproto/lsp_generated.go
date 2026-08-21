@@ -11903,7 +11903,7 @@ func (o *TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile) UnmarshalJSONFrom
 	case `"delete"`:
 		return unmarshalDiscriminatedArm(state, &o.DeleteFile)
 	default:
-		return unmarshalDiscriminatedArm(state, &o.TextDocumentEdit)
+		return unmarshalDiscriminatedFallbackArm(state, &o.TextDocumentEdit)
 	}
 }
 

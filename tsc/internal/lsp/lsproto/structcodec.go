@@ -205,9 +205,6 @@ func scanDiscriminatedStruct(dec *json.Decoder, typeName string, discriminator s
 			if err != nil {
 				return discriminatedStructDecoder{}, err
 			}
-			if value.Kind() != '"' {
-				return discriminatedStructDecoder{}, fmt.Errorf("invalid %s discriminator %q: got %v", typeName, discriminator, value.Kind())
-			}
 			state.discriminatorValue = value
 			state.hasDiscriminator = true
 			return state, nil
@@ -236,11 +233,25 @@ func (d discriminatedStructDecoder) invalidDiscriminator() error {
 // unmarshalDiscriminatedArm decodes the retained and remaining object fields
 // into a concrete union arm, assigning it only after the full object succeeds.
 func unmarshalDiscriminatedArm[T any](state discriminatedStructDecoder, out **T) error {
+	return unmarshalDiscriminatedArmWithOptions(state, out, false)
+}
+
+// unmarshalDiscriminatedFallbackArm decodes a fallback arm, including its raw
+// discriminator in case the fallback structure declares that field.
+func unmarshalDiscriminatedFallbackArm[T any](state discriminatedStructDecoder, out **T) error {
+	return unmarshalDiscriminatedArmWithOptions(state, out, true)
+}
+
+func unmarshalDiscriminatedArmWithOptions[T any](state discriminatedStructDecoder, out **T, decodeDiscriminator bool) error {
 	target := new(T)
 	targetDecoder := newStructDecoder(target)
 	if state.hasDiscriminator {
-		// The generated switch validated the literal discriminator.
-		if err := targetDecoder.field(state.discriminator, '"', func(any) error { return nil }); err != nil {
+		if err := targetDecoder.field(state.discriminator, state.discriminatorValue.Kind(), func(out any) error {
+			if out == nil || !decodeDiscriminator {
+				return nil
+			}
+			return json.Unmarshal(state.discriminatorValue, out)
+		}); err != nil {
 			return err
 		}
 	}
