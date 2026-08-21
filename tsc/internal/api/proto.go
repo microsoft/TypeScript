@@ -20,6 +20,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/zeebo/xxh3"
 )
 
 var (
@@ -1419,6 +1420,8 @@ type GetProjectDiagnosticsParams struct {
 type DiagnosticResponse struct {
 	// FileName is the path of the file this diagnostic belongs to, if any.
 	FileName string `json:"fileName,omitempty"`
+	// SourceFileHash identifies the source text used to produce this diagnostic.
+	SourceFileHash string `json:"sourceFileHash,omitempty"`
 	// Pos is the start position of the diagnostic in the source file.
 	Pos int `json:"pos"`
 	// End is the end position of the diagnostic in the source file.
@@ -1439,11 +1442,16 @@ type DiagnosticResponse struct {
 	MessageChain []*DiagnosticResponse `json:"messageChain,omitempty"`
 	// RelatedInformation contains related diagnostic information, if any.
 	RelatedInformation []*DiagnosticResponse `json:"relatedInformation,omitempty"`
-	// OriginSnapshot and OriginProject identify the program that produced this diagnostic.
-	OriginSnapshot SnapshotID `json:"originSnapshot,omitzero"`
-	OriginProject  ProjectID  `json:"originProject,omitzero"`
 	// DisplayFileName is the host-formatted file name used only for diagnostic output.
 	DisplayFileName string `json:"displayFileName,omitempty"`
+}
+
+func sourceFileHash(file *ast.SourceFile) string {
+	hash := file.Hash
+	if hash == (xxh3.Uint128{}) {
+		hash = xxh3.Hash128([]byte(file.Text()))
+	}
+	return fmt.Sprintf("%016x%016x", hash.Hi, hash.Lo)
 }
 
 // NewDiagnosticResponse converts an ast.Diagnostic to a DiagnosticResponse.
@@ -1469,6 +1477,7 @@ func NewDiagnosticResponse(d *ast.Diagnostic) *DiagnosticResponse {
 
 	if file != nil {
 		resp.FileName = file.FileName()
+		resp.SourceFileHash = sourceFileHash(file)
 	}
 
 	if chain := d.MessageChain(); len(chain) > 0 {

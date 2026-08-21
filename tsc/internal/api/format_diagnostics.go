@@ -29,7 +29,7 @@ func (s *Session) handleFormatDiagnostics(ctx context.Context, params *FormatDia
 	resolver := newFormatFileResolver(sd, program)
 	diags := make([]diagnosticwriter.Diagnostic, len(params.Diagnostics))
 	for i, d := range params.Diagnostics {
-		diag, err := newWireDiagnostic(d, resolver, params.Snapshot, params.Project)
+		diag, err := newWireDiagnostic(d, resolver)
 		if err != nil {
 			return nil, err
 		}
@@ -124,16 +124,13 @@ type wireDiagnostic struct {
 func newWireDiagnostic(
 	resp *DiagnosticResponse,
 	resolver *formatFileResolver,
-	snapshot SnapshotID,
-	project ProjectID,
 ) (*wireDiagnostic, error) {
-	if resp.OriginSnapshot != snapshot || resp.OriginProject != project {
-		return nil, fmt.Errorf("%w: diagnostic was not produced by this program", ErrClientError)
-	}
-
 	sourceFile := resolver.resolve(resp.FileName)
 	if resp.FileName != "" && sourceFile == nil {
 		return nil, fmt.Errorf("%w: diagnostic source file not found: %s", ErrClientError, resp.FileName)
+	}
+	if sourceFile != nil && sourceFileHash(sourceFile) != resp.SourceFileHash {
+		return nil, fmt.Errorf("%w: diagnostic source file content has changed: %s", ErrClientError, resp.FileName)
 	}
 
 	pos, end := resp.Pos, resp.End
@@ -159,7 +156,7 @@ func newWireDiagnostic(
 	if len(resp.MessageChain) > 0 {
 		wd.chain = make([]diagnosticwriter.Diagnostic, len(resp.MessageChain))
 		for i, c := range resp.MessageChain {
-			diag, err := newWireDiagnostic(c, resolver, snapshot, project)
+			diag, err := newWireDiagnostic(c, resolver)
 			if err != nil {
 				return nil, err
 			}
@@ -169,7 +166,7 @@ func newWireDiagnostic(
 	if len(resp.RelatedInformation) > 0 {
 		wd.related = make([]diagnosticwriter.Diagnostic, len(resp.RelatedInformation))
 		for i, ri := range resp.RelatedInformation {
-			diag, err := newWireDiagnostic(ri, resolver, snapshot, project)
+			diag, err := newWireDiagnostic(ri, resolver)
 			if err != nil {
 				return nil, err
 			}

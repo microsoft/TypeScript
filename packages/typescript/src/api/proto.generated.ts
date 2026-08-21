@@ -761,6 +761,8 @@ export interface GetDiagnosticsParams {
 export interface DiagnosticResponse {
     /** FileName is the path of the file this diagnostic belongs to, if any. */
     fileName?: string;
+    /** SourceFileHash identifies the source text used to produce this diagnostic. */
+    sourceFileHash?: string;
     /** Pos is the start position of the diagnostic in the source file. */
     pos: number;
     /** End is the end position of the diagnostic in the source file. */
@@ -781,9 +783,6 @@ export interface DiagnosticResponse {
     messageChain?: DiagnosticResponse[];
     /** RelatedInformation contains related diagnostic information, if any. */
     relatedInformation?: DiagnosticResponse[];
-    /** OriginSnapshot and OriginProject identify the program that produced this diagnostic. */
-    originSnapshot?: number;
-    originProject?: string;
     /** DisplayFileName is the host-formatted file name used only for diagnostic output. */
     displayFileName?: string;
 }

@@ -208,54 +208,17 @@ export interface TranspileOutput {
     sourceMapText?: string;
 }
 
-const diagnosticOrigin = globalThis.Symbol("diagnosticOrigin");
-
-interface DiagnosticOrigin {
-    readonly snapshot: number;
-    readonly project: Path;
-}
-
-interface DiagnosticWithOrigin extends Diagnostic {
-    readonly [diagnosticOrigin]?: DiagnosticOrigin;
-}
-
 interface FormatDiagnosticRequest extends Diagnostic {
-    readonly originSnapshot: number;
-    readonly originProject: Path;
     readonly displayFileName?: string;
-}
-
-function associateDiagnostics(
-    diagnostics: readonly Diagnostic[],
-    origin: DiagnosticOrigin,
-): readonly Diagnostic[] {
-    for (const diagnostic of diagnostics) {
-        Object.defineProperty(diagnostic, diagnosticOrigin, { value: origin });
-        if (diagnostic.messageChain) {
-            associateDiagnostics(diagnostic.messageChain, origin);
-        }
-        if (diagnostic.relatedInformation) {
-            associateDiagnostics(diagnostic.relatedInformation, origin);
-        }
-    }
-    return diagnostics;
 }
 
 function toFormatDiagnosticRequest(
     diagnostic: Diagnostic,
-    expectedOrigin: DiagnosticOrigin,
     host: FormatDiagnosticsHost,
 ): FormatDiagnosticRequest {
-    const origin = (diagnostic as DiagnosticWithOrigin)[diagnosticOrigin];
-    if (origin?.snapshot !== expectedOrigin.snapshot || origin.project !== expectedOrigin.project) {
-        throw new Error("Diagnostic was not produced by this program.");
-    }
-
     const { messageChain, relatedInformation, ...diagnosticData } = diagnostic;
     return {
         ...diagnosticData,
-        originSnapshot: origin.snapshot,
-        originProject: origin.project,
         ...(diagnostic.fileName
             ? {
                 displayFileName: convertToRelativePath(
@@ -266,10 +229,10 @@ function toFormatDiagnosticRequest(
             }
             : {}),
         ...(messageChain
-            ? { messageChain: messageChain.map(d => toFormatDiagnosticRequest(d, expectedOrigin, host)) }
+            ? { messageChain: messageChain.map(d => toFormatDiagnosticRequest(d, host)) }
             : {}),
         ...(relatedInformation
-            ? { relatedInformation: relatedInformation.map(d => toFormatDiagnosticRequest(d, expectedOrigin, host)) }
+            ? { relatedInformation: relatedInformation.map(d => toFormatDiagnosticRequest(d, host)) }
             : {}),
     };
 }
@@ -1038,13 +1001,6 @@ export class Program {
         this.toPath = toPath;
     }
 
-    private associateDiagnostics(diagnostics: readonly Diagnostic[]): readonly Diagnostic[] {
-        return associateDiagnostics(diagnostics, {
-            snapshot: this.snapshotId,
-            project: this.project.id,
-        });
-    }
-
     getCompilerOptions(): CompilerOptions {
         return this.project.compilerOptions;
     }
@@ -1181,7 +1137,7 @@ export class Program {
             project: this.project.id,
             ...(files !== undefined ? { files } : {}),
         });
-        return this.associateDiagnostics(data ?? []);
+        return data ?? [];
     }
 
     /**
@@ -1197,7 +1153,7 @@ export class Program {
             project: this.project.id,
             ...(files !== undefined ? { files } : {}),
         });
-        return this.associateDiagnostics(data ?? []);
+        return data ?? [];
     }
 
     /**
@@ -1213,7 +1169,7 @@ export class Program {
             project: this.project.id,
             ...(files !== undefined ? { files } : {}),
         });
-        return this.associateDiagnostics(data ?? []);
+        return data ?? [];
     }
 
     /**
@@ -1229,7 +1185,7 @@ export class Program {
             project: this.project.id,
             ...(files !== undefined ? { files } : {}),
         });
-        return this.associateDiagnostics(data ?? []);
+        return data ?? [];
     }
 
     /**
@@ -1245,7 +1201,7 @@ export class Program {
             project: this.project.id,
             ...(files !== undefined ? { files } : {}),
         });
-        return this.associateDiagnostics(data ?? []);
+        return data ?? [];
     }
 
     /**
@@ -1256,7 +1212,7 @@ export class Program {
             snapshot: this.snapshotId,
             project: this.project.id,
         });
-        return this.associateDiagnostics(data ?? []);
+        return data ?? [];
     }
 
     /**
@@ -1267,7 +1223,7 @@ export class Program {
             snapshot: this.snapshotId,
             project: this.project.id,
         });
-        return this.associateDiagnostics(data ?? []);
+        return data ?? [];
     }
 
     /**
@@ -1278,7 +1234,7 @@ export class Program {
             snapshot: this.snapshotId,
             project: this.project.id,
         });
-        return this.associateDiagnostics(data ?? []);
+        return data ?? [];
     }
 
     /**
@@ -1288,11 +1244,10 @@ export class Program {
         diagnostics: readonly Diagnostic[],
         host: FormatDiagnosticsHost,
     ): Promise<string> {
-        const origin = { snapshot: this.snapshotId, project: this.project.id };
         const data = await this.client.apiRequest("formatDiagnostics", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            diagnostics: diagnostics.map(d => toFormatDiagnosticRequest(d, origin, host)),
+            diagnostics: diagnostics.map(d => toFormatDiagnosticRequest(d, host)),
             newLine: host.getNewLine(),
         });
         return data.output;
@@ -1305,11 +1260,10 @@ export class Program {
         diagnostics: readonly Diagnostic[],
         host: FormatDiagnosticsHost,
     ): Promise<string> {
-        const origin = { snapshot: this.snapshotId, project: this.project.id };
         const data = await this.client.apiRequest("formatDiagnosticsWithColorAndContext", {
             snapshot: this.snapshotId,
             project: this.project.id,
-            diagnostics: diagnostics.map(d => toFormatDiagnosticRequest(d, origin, host)),
+            diagnostics: diagnostics.map(d => toFormatDiagnosticRequest(d, host)),
             newLine: host.getNewLine(),
         });
         return data.output;
@@ -1329,7 +1283,7 @@ export class Program {
         });
         return {
             emitSkipped: response.emitSkipped,
-            diagnostics: this.associateDiagnostics(response.diagnostics),
+            diagnostics: response.diagnostics,
             emittedFiles: response.emittedFiles,
         };
     }
@@ -1343,7 +1297,7 @@ export class Program {
             project: this.project.id,
             ...(emitOnly !== undefined ? { emitOnly } : {}),
         });
-        return toEmitOutput(response, this.associateDiagnostics(response.diagnostics));
+        return toEmitOutput(response, response.diagnostics);
     }
 
     /**
@@ -1355,7 +1309,7 @@ export class Program {
             project: this.project.id,
             files,
         });
-        return toEmitOutput(response, this.associateDiagnostics(response.diagnostics));
+        return toEmitOutput(response, response.diagnostics);
     }
 
     /**
@@ -1367,7 +1321,7 @@ export class Program {
             project: this.project.id,
             files,
         });
-        return toEmitOutput(response, this.associateDiagnostics(response.diagnostics));
+        return toEmitOutput(response, response.diagnostics);
     }
 }
 

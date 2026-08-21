@@ -76,6 +76,7 @@ func TestNewDiagnosticResponseUsesUTF16Offsets(t *testing.T) {
 	diag := ast.NewDiagnostic(file, core.NewTextRange(pos, end), diagnostics.Expression_expected)
 	resp := api.NewDiagnosticResponse(diag)
 
+	assert.Equal(t, len(resp.SourceFileHash), 32)
 	assert.Equal(t, resp.Pos, 9)
 	assert.Equal(t, resp.End, 10)
 	assert.Equal(t, resp.Pos, file.GetPositionMap().UTF8ToUTF16(pos))

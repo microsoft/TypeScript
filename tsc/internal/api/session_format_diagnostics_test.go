@@ -2,14 +2,21 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/zeebo/xxh3"
 	"gotest.tools/v3/assert"
 )
+
+func sourceFileHashForText(text string) string {
+	hash := xxh3.Hash128([]byte(text))
+	return fmt.Sprintf("%016x%016x", hash.Hi, hash.Lo)
+}
 
 func setupFormatSession(t *testing.T, files map[string]any, mainFile string) (*Session, SnapshotID, ProjectID) {
 	t.Helper()
@@ -33,16 +40,6 @@ func setupFormatSession(t *testing.T, files map[string]any, mainFile string) (*S
 }
 
 func formatDiagnosticsParams(snapshot SnapshotID, project ProjectID, diagnostics []*DiagnosticResponse) *FormatDiagnosticsParams {
-	var setOrigin func([]*DiagnosticResponse)
-	setOrigin = func(diags []*DiagnosticResponse) {
-		for _, diag := range diags {
-			diag.OriginSnapshot = snapshot
-			diag.OriginProject = project
-			setOrigin(diag.MessageChain)
-			setOrigin(diag.RelatedInformation)
-		}
-	}
-	setOrigin(diagnostics)
 	return &FormatDiagnosticsParams{
 		Snapshot:    snapshot,
 		Project:     project,
@@ -201,12 +198,13 @@ func TestFormatDiagnosticsClampsOutOfRangePositions(t *testing.T) {
 	ctx := context.Background()
 
 	stale := []*DiagnosticResponse{{
-		FileName: fileName,
-		Pos:      100_000,
-		End:      200_000,
-		Code:     1234,
-		Category: diagnostics.CategoryError,
-		Text:     "Stale diagnostic.",
+		FileName:       fileName,
+		SourceFileHash: sourceFileHashForText("export const x = 1;\n"),
+		Pos:            100_000,
+		End:            200_000,
+		Code:           1234,
+		Category:       diagnostics.CategoryError,
+		Text:           "Stale diagnostic.",
 	}}
 
 	plain, err := session.handleFormatDiagnostics(ctx, formatDiagnosticsParams(snapshot, project, stale), false)
@@ -220,7 +218,7 @@ func TestFormatDiagnosticsClampsOutOfRangePositions(t *testing.T) {
 	assert.Assert(t, strings.Contains(color.Output, "Stale diagnostic."))
 }
 
-func TestFormatDiagnosticsRejectsMismatchedOrMissingSources(t *testing.T) {
+func TestFormatDiagnosticsRejectsStaleOrMissingSources(t *testing.T) {
 	t.Parallel()
 	if !bundled.Embedded {
 		t.Skip("bundled files are not embedded")
@@ -233,14 +231,15 @@ func TestFormatDiagnosticsRejectsMismatchedOrMissingSources(t *testing.T) {
 	}, fileName)
 	ctx := context.Background()
 
-	mismatched := formatDiagnosticsParams(snapshot, project, []*DiagnosticResponse{{
-		Code:     1234,
-		Category: diagnostics.CategoryError,
-		Text:     "Wrong program.",
+	stale := formatDiagnosticsParams(snapshot, project, []*DiagnosticResponse{{
+		FileName:       fileName,
+		SourceFileHash: sourceFileHashForText("different content"),
+		Code:           1234,
+		Category:       diagnostics.CategoryError,
+		Text:           "Stale diagnostic.",
 	}})
-	mismatched.Diagnostics[0].OriginSnapshot++
-	_, err := session.handleFormatDiagnostics(ctx, mismatched, false)
-	assert.ErrorContains(t, err, "diagnostic was not produced by this program")
+	_, err := session.handleFormatDiagnostics(ctx, stale, false)
+	assert.ErrorContains(t, err, "diagnostic source file content has changed")
 
 	missing := formatDiagnosticsParams(snapshot, project, []*DiagnosticResponse{{
 		FileName: "/home/projects/p/src/missing.ts",
