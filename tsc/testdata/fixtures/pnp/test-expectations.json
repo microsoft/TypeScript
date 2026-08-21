@@ -209,7 +209,7 @@
     "importer": "/path/to/project/workspace-with-fallbacks/",
     "expected": "/path/to/project/test-2"
   }, {
-    "it": "should throw an error if a resolution isn't in in the package dependencies, nor inside the fallback pool",
+    "it": "should throw an error if a resolution isn't in the package dependencies, nor inside the fallback pool",
     "imported": "test-3",
     "importer": "/path/to/project/workspace-with-fallbacks/",
     "expected": "error!"

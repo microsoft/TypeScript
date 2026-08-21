@@ -1020,7 +1020,6 @@ func (r *resolutionState) loadModuleFromNearestNodeModulesDirectory(typesScopeOn
 
 func (r *resolutionState) loadModuleFromNearestNodeModulesDirectoryWorker(ext extensions, mode core.ResolutionMode, typesScopeOnly bool) *resolved {
 	if pnpApi := r.resolver.host.PnpApi(); pnpApi != nil && !pnpApi.IsPathIgnored(r.containingDirectory) {
-		// !!! stop at global cache
 		return r.loadModuleFromImmediateNodeModulesDirectoryPnP(ext, r.containingDirectory, typesScopeOnly)
 	}
 
