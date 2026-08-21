@@ -578,7 +578,10 @@ export const generateAST = task({
 export const generateAPI = task({
     name: "generate:api",
     description: "Generates API files from internal/api/proto.go and internal/api/session.go.",
-    run: () => $`go -C ./tools run ./gen-proto ../tsc/internal/api/proto.go ../packages/typescript/src/api/proto.generated.ts`,
+    run: async () => {
+        await $`go -C ./tools run ./gen-proto ../tsc/internal/api/proto.go ../packages/typescript/src/api/proto.generated.ts`
+        await $`npx dprint fmt packages/typescript/src/api/proto.generated.ts`;
+    },
 });
 
 // ── Vendored npm dependencies ───────────────────────────────────
