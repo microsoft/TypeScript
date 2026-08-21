@@ -137,8 +137,7 @@ func (s *Snapshot) cloneForProgram(
 
 	start := time.Now()
 	fs := newSnapshotFSBuilder(session.fs.fs, s.fs.overlays, s.fs.overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, session.options.PositionEncoding, s.toPath)
-	contentMapperExtensions, contentMapperWatchedFiles := s.contentMapperWatchState()
-	fileChanges = processFileChanges(fs, s.fs, fileChanges, logger, contentMapperExtensions, contentMapperWatchedFiles)
+	fileChanges = s.processFileChanges(fs, fileChanges, logger, nil)
 
 	configFileRegistry := &ConfigFileRegistry{}
 	if oldProject != nil && oldProject.Program != nil {
@@ -289,14 +288,23 @@ func configFileRegistryForProgram(program *compiler.Program) *ConfigFileRegistry
 	return registry
 }
 
-func processFileChanges(
+func (s *Snapshot) processFileChanges(
 	fs *snapshotFSBuilder,
-	previousFS *SnapshotFS,
 	fileChanges FileChangeSummary,
 	logger *logging.LogTree,
-	contentMapperExtensions []string,
-	contentMapperWatchedFiles *collections.Set[tspath.Path],
+	contentMapperContributions *ContentMapperContributions,
 ) FileChangeSummary {
+	var contentMapperExtensions []string
+	if contentMapperContributions == nil {
+		contentMapperExtensions, _ = s.contentMapperWatchState()
+	} else {
+		if configuredContentMappers := s.ConfigFileRegistry.contentMappers(); configuredContentMappers != nil {
+			contentMapperExtensions = slices.Clone(configuredContentMappers.extensions)
+		}
+		contentMapperExtensions = append(contentMapperExtensions, contentMapperContributions.Extensions...)
+	}
+	_, contentMapperWatchedFiles := s.contentMapperWatchState()
+
 	if fileChanges.HasExcessiveWatchEvents() {
 		invalidateStart := time.Now()
 		if fileChanges.InvalidateAll {
@@ -320,7 +328,7 @@ func processFileChanges(
 		}
 	} else {
 		fileChanges = fs.expandAndFilterWatchEvents(fileChanges, contentMapperExtensions, contentMapperWatchedFiles)
-		fileChanges = previousFS.expandRealpathAliases(fileChanges)
+		fileChanges = s.fs.expandRealpathAliases(fileChanges)
 		fileChanges = fs.markDirtyFiles(fileChanges)
 		fileChanges = fs.convertOpenAndCloseToChanges(fileChanges)
 	}
@@ -544,7 +552,6 @@ func (s *Snapshot) Clone(
 	}
 
 	start := time.Now()
-	configuredContentMappers := s.ConfigFileRegistry.contentMappers()
 	inferredContentMappers := s.inferredProjectContentMappers
 	inferredContentMapperExtensions := s.inferredProjectContentMapperExtensions
 	if change.contentMapperContributions != nil {
@@ -552,17 +559,7 @@ func (s *Snapshot) Clone(
 		inferredContentMapperExtensions = change.contentMapperContributions.Extensions
 	}
 	fs := newSnapshotFSBuilder(session.fs.fs, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, s.fs.nodeModulesRealpathAliases, session.options.PositionEncoding, s.toPath)
-	var contentMapperExtensions []string
-	if change.contentMapperContributions == nil {
-		contentMapperExtensions, _ = s.contentMapperWatchState()
-	} else {
-		if configuredContentMappers != nil {
-			contentMapperExtensions = slices.Clone(configuredContentMappers.extensions)
-		}
-		contentMapperExtensions = append(contentMapperExtensions, inferredContentMapperExtensions...)
-	}
-	_, contentMapperWatchedFiles := s.contentMapperWatchState()
-	change.fileChanges = processFileChanges(fs, s.fs, change.fileChanges, logger, contentMapperExtensions, contentMapperWatchedFiles)
+	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions)
 
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
 	if change.compilerOptionsForInferredProjects != nil {

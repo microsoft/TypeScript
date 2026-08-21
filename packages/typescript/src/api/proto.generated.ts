@@ -218,11 +218,11 @@ export interface UpdateSnapshotResponse {
  */
 export interface UpdateTemporarySnapshotParams {
     /** Snapshot is the current client snapshot on which to layer the temporary update. */
-    snapshot?: number;
+    snapshot: number;
     /** File identifies the file whose content is temporarily overridden. */
     file: DocumentIdentifier;
     /** NewText is the temporary content for the file. */
-    newText?: string;
+    newText: string;
 }
 
 export interface CreateProgramParams {

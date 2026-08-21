@@ -363,11 +363,11 @@ type UpdateSnapshotParams struct {
 // snapshot that overrides a single file's content.
 type UpdateTemporarySnapshotParams struct {
 	// Snapshot is the current client snapshot on which to layer the temporary update.
-	Snapshot SnapshotID `json:"snapshot,omitempty"`
+	Snapshot SnapshotID `json:"snapshot"`
 	// File identifies the file whose content is temporarily overridden.
 	File DocumentIdentifier `json:"file"`
 	// NewText is the temporary content for the file.
-	NewText string `json:"newText,omitempty"`
+	NewText string `json:"newText"`
 }
 
 type CreateProgramParams struct {
