@@ -5,10 +5,7 @@ import "testing"
 func TestVerifyEntitlements(t *testing.T) {
 	t.Parallel()
 
-	expected := `<plist><dict>
-		<key>first</key><true/>
-		<key>second</key><false/>
-	</dict></plist>`
+	required := []string{"first", "second"}
 
 	for _, test := range []struct {
 		name    string
@@ -20,7 +17,7 @@ func TestVerifyEntitlements(t *testing.T) {
 			actual: `<plist>
 				<dict>
 					<key>second</key>
-					<false></false>
+					<true></true>
 					<key>extra</key><true/>
 					<key>first</key>
 					<true />
@@ -33,14 +30,14 @@ func TestVerifyEntitlements(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name:    "wrong value",
-			actual:  `<plist><dict><key>first</key><true/><key>second</key><true/></dict></plist>`,
+			name:    "disabled",
+			actual:  `<plist><dict><key>first</key><true/><key>second</key><false/></dict></plist>`,
 			wantErr: true,
 		},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
-			err := verifyEntitlements(test.actual, expected)
+			err := verifyEntitlements(test.actual, required)
 			if (err != nil) != test.wantErr {
 				t.Fatalf("verifyEntitlements() error = %v, wantErr %v", err, test.wantErr)
 			}
