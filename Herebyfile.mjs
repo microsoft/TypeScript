@@ -1506,23 +1506,6 @@ const mainNativePreviewPackage = {
     npmTarball: path.join(builtNpm, publishAsTypescript ? "typescript.tgz" : "native-preview.tgz"),
 };
 
-const typescriptMacEntitlements = [
-    "com.apple.security.cs.allow-dyld-environment-variables",
-    "com.apple.security.cs.disable-library-validation",
-];
-
-function createTypeScriptMacEntitlementsPlist() {
-    const entries = typescriptMacEntitlements.map(entitlement => `    <key>${entitlement}</key>\n    <true/>`).join("\n");
-    return `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-${entries}
-</dict>
-</plist>
-`;
-}
-
 /**
  * @typedef {"win32" | "linux" | "darwin" | "aix" | "android" | "freebsd" | "netbsd" | "openbsd" | "sunos"} OS
  * @typedef {"x64" | "arm" | "arm64" | "ia32" | "ppc64" | "loong64" | "mips64el" | "riscv64" | "s390x"} Arch
@@ -2044,9 +2027,6 @@ async function runSignNativePreviewPackages() {
     }
 
     const tmp = await getSignTempDir();
-    const typescriptMacEntitlementsPath = path.join(tmp, "typescript-macos-entitlements.plist");
-    await fs.promises.writeFile(typescriptMacEntitlementsPath, createTypeScriptMacEntitlementsPlist());
-
     /** @type {DDSignFileList} */
     const filelist = {
         SignFileRecordList: [],
@@ -2078,7 +2058,7 @@ async function runSignNativePreviewPackages() {
                 // along with a notarization step.
                 for (const p of filelistPaths) {
                     // ESRP preserves entitlements from an existing ad-hoc signature.
-                    await $pipe`go -C ./tools run ./cmd/machotool sign ${typescriptMacEntitlementsPath} ${p.path}`;
+                    await $pipe`go -C ./tools run ./cmd/machotool sign ${p.path}`;
 
                     const unsignedZipPath = path.join(tmp, `${p.tmpName}.unsigned.zip`);
                     const signedZipPath = path.join(tmp, `${p.tmpName}.signed.zip`);
@@ -2139,7 +2119,7 @@ async function runSignNativePreviewPackages() {
 
         for (const p of macZips) {
             await fs.promises.chmod(p.path, 0o755);
-            await $pipe`go -C ./tools run ./cmd/machotool verify ${typescriptMacEntitlementsPath} ${p.path}`;
+            await $pipe`go -C ./tools run ./cmd/machotool verify ${p.path}`;
         }
     }
 }

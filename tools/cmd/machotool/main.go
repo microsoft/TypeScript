@@ -18,6 +18,18 @@ import (
 	blacktopmacho "github.com/blacktop/go-macho"
 )
 
+const typescriptMacEntitlements = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>com.apple.security.cs.allow-dyld-environment-variables</key>
+    <true/>
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+</dict>
+</plist>
+`
+
 func main() {
 	if err := run(os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -26,19 +38,14 @@ func main() {
 }
 
 func run(args []string) error {
-	if len(args) != 3 {
-		return errors.New("usage: machotool <sign|verify> <entitlements> <binary>")
-	}
-
-	entitlements, err := os.ReadFile(args[1])
-	if err != nil {
-		return fmt.Errorf("read entitlements: %w", err)
+	if len(args) != 2 {
+		return errors.New("usage: machotool <sign|verify> <binary>")
 	}
 	switch args[0] {
 	case "sign":
-		return signBinary(args[2], string(entitlements))
+		return signBinary(args[1], typescriptMacEntitlements)
 	case "verify":
-		return verifyBinary(args[2], string(entitlements))
+		return verifyBinary(args[1], typescriptMacEntitlements)
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
 	}
