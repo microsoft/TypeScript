@@ -21585,6 +21585,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 			var modifiers ast.ModifierFlags
 			if prop != nil {
 				modifiers = getDeclarationModifierFlagsFromSymbol(prop)
+				writeModifiers := getDeclarationModifierFlagsFromSymbolEx(prop, true /*isWrite*/)
 				if prop.Flags&ast.SymbolFlagsClassMember != 0 {
 					if isUnion {
 						optionalFlag |= prop.Flags & ast.SymbolFlagsOptional
@@ -21624,14 +21625,19 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 				} else if !isUnion && !c.isReadonlySymbol(prop) {
 					checkFlags &^= ast.CheckFlagsReadonly
 				}
-				if modifiers&ast.ModifierFlagsNonPublicAccessibilityModifier == 0 {
+				if modifiers&ast.ModifierFlagsProtected != 0 && modifiers&ast.ModifierFlagsPublic == 0 {
+					checkFlags |= ast.CheckFlagsContainsProtected
+				} else if modifiers&ast.ModifierFlagsPrivate != 0 && modifiers&ast.ModifierFlagsPublic == 0 {
+					checkFlags |= ast.CheckFlagsContainsPrivate
+				} else {
 					checkFlags |= ast.CheckFlagsContainsPublic
 				}
-				if modifiers&ast.ModifierFlagsProtected != 0 {
-					checkFlags |= ast.CheckFlagsContainsProtected
-				}
-				if modifiers&ast.ModifierFlagsPrivate != 0 {
-					checkFlags |= ast.CheckFlagsContainsPrivate
+				if writeModifiers&ast.ModifierFlagsProtected != 0 && writeModifiers&ast.ModifierFlagsPublic == 0 {
+					checkFlags |= ast.CheckFlagsContainsWriteProtected
+				} else if writeModifiers&ast.ModifierFlagsPrivate != 0 && writeModifiers&ast.ModifierFlagsPublic == 0 {
+					checkFlags |= ast.CheckFlagsContainsWritePrivate
+				} else {
+					checkFlags |= ast.CheckFlagsContainsWritePublic
 				}
 				if modifiers&ast.ModifierFlagsStatic != 0 {
 					checkFlags |= ast.CheckFlagsContainsStatic

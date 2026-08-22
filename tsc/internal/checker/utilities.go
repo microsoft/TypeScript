@@ -718,18 +718,17 @@ func getDeclarationModifierFlagsFromSymbolEx(s *ast.Symbol, isWrite bool) ast.Mo
 	if s.CheckFlags&ast.CheckFlagsSynthetic != 0 {
 		var accessModifier ast.ModifierFlags
 		switch {
-		case s.CheckFlags&ast.CheckFlagsContainsPrivate != 0:
-			accessModifier = ast.ModifierFlagsPrivate
-		case s.CheckFlags&ast.CheckFlagsContainsPublic != 0:
+		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsPublic != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWritePublic != 0:
 			accessModifier = ast.ModifierFlagsPublic
-		default:
+		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsProtected != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWriteProtected != 0:
 			accessModifier = ast.ModifierFlagsProtected
+		case !isWrite && s.CheckFlags&ast.CheckFlagsContainsPrivate != 0 || isWrite && s.CheckFlags&ast.CheckFlagsContainsWritePrivate != 0:
+			accessModifier = ast.ModifierFlagsPrivate
 		}
-		var staticModifier ast.ModifierFlags
 		if s.CheckFlags&ast.CheckFlagsContainsStatic != 0 {
-			staticModifier = ast.ModifierFlagsStatic
+			return accessModifier | ast.ModifierFlagsStatic
 		}
-		return accessModifier | staticModifier
+		return accessModifier
 	}
 	if s.ValueDeclaration != nil {
 		var declaration *ast.Node
