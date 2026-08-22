@@ -5,10 +5,13 @@
 package main
 
 import (
+	"encoding/xml"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/anchore/quill/quill/macho"
 	"github.com/anchore/quill/quill/pki"
@@ -53,10 +56,85 @@ func verifyBinary(path, expectedEntitlements string) error {
 	if codeSignature == nil || codeSignature.Entitlements == "" {
 		return fmt.Errorf("signed file has no macOS entitlements: %s", path)
 	}
-	if codeSignature.Entitlements != expectedEntitlements {
-		return fmt.Errorf("signed file has unexpected macOS entitlements: %s", path)
+	if err := verifyEntitlements(codeSignature.Entitlements, expectedEntitlements); err != nil {
+		return fmt.Errorf("verify entitlements in %s: %w", path, err)
 	}
 	return nil
+}
+
+func verifyEntitlements(actual, expected string) error {
+	expectedValues, err := parseBooleanEntitlements(expected)
+	if err != nil {
+		return fmt.Errorf("parse expected entitlements: %w", err)
+	}
+	if len(expectedValues) == 0 {
+		return errors.New("expected plist contains no boolean entitlements")
+	}
+
+	actualValues, err := parseBooleanEntitlements(actual)
+	if err != nil {
+		return fmt.Errorf("parse signed entitlements: %w", err)
+	}
+	for key, expectedValue := range expectedValues {
+		if actualValue, ok := actualValues[key]; !ok || actualValue != expectedValue {
+			return fmt.Errorf("entitlement %q does not have expected value %t", key, expectedValue)
+		}
+	}
+	return nil
+}
+
+func parseBooleanEntitlements(contents string) (map[string]bool, error) {
+	decoder := xml.NewDecoder(strings.NewReader(contents))
+	values := map[string]bool{}
+	dictDepth := 0
+	foundDict := false
+	pendingKey := ""
+
+	for {
+		token, err := decoder.Token()
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+
+		switch token := token.(type) {
+		case xml.StartElement:
+			switch token.Name.Local {
+			case "dict":
+				if dictDepth == 0 {
+					foundDict = true
+				} else if dictDepth == 1 {
+					pendingKey = ""
+				}
+				dictDepth++
+			case "key":
+				if dictDepth == 1 {
+					if err := decoder.DecodeElement(&pendingKey, &token); err != nil {
+						return nil, err
+					}
+				}
+			case "true", "false":
+				if dictDepth == 1 && pendingKey != "" {
+					values[pendingKey] = token.Name.Local == "true"
+					pendingKey = ""
+				}
+			default:
+				if dictDepth == 1 {
+					pendingKey = ""
+				}
+			}
+		case xml.EndElement:
+			if token.Name.Local == "dict" {
+				dictDepth--
+			}
+		}
+	}
+	if !foundDict {
+		return nil, errors.New("plist contains no dictionary")
+	}
+	return values, nil
 }
 
 func signBinary(path, entitlements string) error {
