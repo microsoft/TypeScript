@@ -20,6 +20,13 @@ export interface SpanMapSegment {
 /** Internal segment representation after omitted features have been normalized to `All`. */
 type NormalizedSpanMapSegment = SpanMapSegment & { readonly features: SpanMapFeature; };
 
+/** Lazily built interval index for original-to-virtual lookups. */
+interface OriginalIndex {
+    readonly segments: readonly NormalizedSpanMapSegment[];
+    readonly leafCount: number;
+    readonly maxEnds: readonly number[];
+}
+
 /** One virtual projection of an original position and its mapping fidelity. */
 export interface MappedPosition {
     readonly position: number;
@@ -35,7 +42,7 @@ export interface MappedRange {
 /** Provides bidirectional span-aware mapping between virtual and original text. */
 export class SpanMap {
     readonly segments: readonly NormalizedSpanMapSegment[];
-    private originalSegments: readonly NormalizedSpanMapSegment[] | undefined;
+    private originalIndex: OriginalIndex | undefined;
 
     /** Copies and sorts segments by virtual start, normalizing omitted features to `All`. */
     constructor(segments: readonly SpanMapSegment[]) {
@@ -90,7 +97,7 @@ export class SpanMap {
      * Results are ordered by virtual position; uncovered or disabled positions produce no results.
      */
     originalToVirtualPositions(position: number, feature: SpanMapFeature): readonly MappedPosition[] {
-        const groups = segmentGroupsAtOriginalPosition(this.getOriginalSegments(), position);
+        const groups = segmentGroupsAtOriginalPosition(this.getOriginalIndex(), position);
         const results: MappedPosition[] = [];
         for (const group of groups) {
             for (const segment of group.segments) {
@@ -108,7 +115,7 @@ export class SpanMap {
 
     /**
      * Returns every feature-compatible virtual projection of an original range.
-     * A range contained by one duplicate group produces one exact or atom result per matching group member.
+     * A range contained by one or more segments produces one exact or atom result per matching segment.
      *
      * A range that starts in one group and ends in another can have several possible virtual ranges. For
      * example, suppose two original segments are each copied twice into the virtual text:
@@ -131,16 +138,24 @@ export class SpanMap {
     originalToVirtualSpans(range: ReadonlyTextRange, feature: SpanMapFeature): readonly MappedRange[] {
         const start = range.pos;
         const end = Math.max(range.end, start);
-        const lastCharacter = end > start ? end - 1 : end;
-        const originalSegments = this.getOriginalSegments();
-        const startSegments = segmentsAtOriginalPosition(originalSegments, start);
-        const endSegments = segmentsAtOriginalPosition(originalSegments, lastCharacter);
-        if (!startSegments || !endSegments) return [];
-        if (sameOriginalRange(startSegments[0], endSegments[0])) {
-            return originalToVirtualSpansInGroup(startSegments, start, end, feature);
+        if (start === end) {
+            return this.originalToVirtualPositions(start, feature).map(({ position, fidelity }) => ({
+                range: { pos: position, end: position },
+                fidelity,
+            }));
         }
-        const starts = originalStartProjections(startSegments, start, feature);
-        const ends = originalEndProjections(endSegments, end, feature);
+        const lastCharacter = end - 1;
+        const originalIndex = this.getOriginalIndex();
+        const startSegments = segmentsAtOriginalPosition(originalIndex, start);
+        const endSegments = segmentsAtOriginalPosition(originalIndex, lastCharacter);
+        if (!startSegments || !endSegments) return [];
+        const containing = startSegments.filter(segment => end <= segment.originalEnd);
+        if (containing.length > 0) {
+            const results = [...originalToVirtualSpansInSegments(containing, start, end, feature)];
+            if (results.length > 0) return results.sort((left, right) => left.range.pos - right.range.pos);
+        }
+        const starts = [...originalStartProjections(startSegments, start, feature)].sort((left, right) => left - right);
+        const ends = [...originalEndProjections(endSegments, end, feature)].sort((left, right) => left - right);
         if (starts.length === 0 || ends.length === 0) return [];
         return starts.flatMap((virtualStart, index) => {
             const virtualEnd = ends.find(end => end >= virtualStart);
@@ -154,8 +169,12 @@ export class SpanMap {
     private mapRange(range: ReadonlyTextRange, segments: readonly SpanMapSegment[], reverse: boolean): MappedRange {
         const start = range.pos;
         const end = Math.max(range.end, start);
+        if (start === end) {
+            const { position, fidelity } = this.mapPoint(start, segments, reverse);
+            return { range: { pos: position, end: position }, fidelity };
+        }
         const [startIndex, startInside] = segmentIndexAt(segments, start, reverse);
-        const endProbe = end > start ? end - 1 : end;
+        const endProbe = end - 1;
         const [endIndex, endInside] = segmentIndexAt(segments, endProbe, reverse);
 
         if (startIndex === endIndex && startInside === endInside) {
@@ -193,13 +212,20 @@ export class SpanMap {
         };
     }
 
-    /** Returns the lazily built segment index ordered by original start. */
-    private getOriginalSegments(): readonly NormalizedSpanMapSegment[] {
-        return this.originalSegments ??= [...this.segments].sort((left, right) =>
+    /** Returns the lazily built original-text interval index. */
+    private getOriginalIndex(): OriginalIndex {
+        if (this.originalIndex) return this.originalIndex;
+        const segments = [...this.segments].sort((left, right) =>
             left.originalStart - right.originalStart
             || left.originalEnd - right.originalEnd
             || left.virtualStart - right.virtualStart
         );
+        let leafCount = 1;
+        while (leafCount < segments.length) leafCount *= 2;
+        const maxEnds = new Array<number>(2 * leafCount).fill(0);
+        for (let i = 0; i < segments.length; i++) maxEnds[leafCount + i] = segments[i].originalEnd;
+        for (let i = leafCount - 1; i > 0; i--) maxEnds[i] = Math.max(maxEnds[2 * i], maxEnds[2 * i + 1]);
+        return this.originalIndex = { segments, leafCount, maxEnds };
     }
 
     private virtualRangeSupportsFeature(range: ReadonlyTextRange, feature: SpanMapFeature): boolean {
@@ -269,8 +295,8 @@ function originalEndProjections(segments: readonly NormalizedSpanMapSegment[], e
         );
 }
 
-/** Maps a range whose boundaries are known to lie in one duplicate group. */
-function originalToVirtualSpansInGroup(segments: readonly NormalizedSpanMapSegment[], start: number, end: number, feature: SpanMapFeature): readonly MappedRange[] {
+/** Maps a range fully contained by each segment. */
+function originalToVirtualSpansInSegments(segments: readonly NormalizedSpanMapSegment[], start: number, end: number, feature: SpanMapFeature): readonly MappedRange[] {
     return segments
         .filter(segment => supportsFeature(segment, feature))
         .map(segment => {
@@ -289,12 +315,50 @@ function sameOriginalRange(left: SpanMapSegment, right: SpanMapSegment): boolean
 }
 
 /**
- * Returns the complete duplicate group of mapping segments containing the original-text `position`.
- * Segment ends are exclusive; starts, including zero-length segment starts, are included. It finds a candidate
- * in O(log n), then scans only the duplicate group. `segments` must be ordered by original start, original end,
- * and virtual start.
+ * Returns every mapping segment containing the original-text `position`.
+ * Segment ends are exclusive; starts, including zero-length segment starts, are included.
  */
-function segmentsAtOriginalPosition(segments: readonly NormalizedSpanMapSegment[], position: number): readonly NormalizedSpanMapSegment[] | undefined {
+function segmentsAtOriginalPosition(index: OriginalIndex, position: number): readonly NormalizedSpanMapSegment[] | undefined {
+    // Query intervals that contain position strictly before their exclusive end. Segments starting exactly at
+    // position are appended separately so zero-length segments are included while maxEnd <= position is pruned.
+    const start = firstOriginalSegmentAtOrAfter(index.segments, position);
+    const results = segmentsEndingAtOrAfter(index, start, position, false);
+    const end = firstOriginalSegmentAfter(index.segments, position);
+    results.push(...index.segments.slice(start, end));
+    return results.length > 0 ? results : undefined;
+}
+
+/** Returns segments among `[0, limit)` whose original end reaches `position`. */
+function segmentsEndingAtOrAfter(index: OriginalIndex, limit: number, position: number, includeEnd: boolean): NormalizedSpanMapSegment[] {
+    const results: NormalizedSpanMapSegment[] = [];
+    collectSegmentsEndingAtOrAfter(index, 1, 0, index.leafCount, limit, position, includeEnd, results);
+    return results;
+}
+
+/** Walks the flat max-end tree left-to-right, preserving original-text order. */
+function collectSegmentsEndingAtOrAfter(
+    index: OriginalIndex,
+    node: number,
+    start: number,
+    end: number,
+    limit: number,
+    position: number,
+    includeEnd: boolean,
+    results: NormalizedSpanMapSegment[],
+): void {
+    const maxEnd = index.maxEnds[node];
+    if (start >= limit || maxEnd < position || !includeEnd && maxEnd === position) return;
+    if (end - start === 1) {
+        results.push(index.segments[start]);
+        return;
+    }
+    const middle = start + ((end - start) >>> 1);
+    collectSegmentsEndingAtOrAfter(index, 2 * node, start, middle, limit, position, includeEnd, results);
+    collectSegmentsEndingAtOrAfter(index, 2 * node + 1, middle, end, limit, position, includeEnd, results);
+}
+
+/** Returns the first original-ordered segment whose start is greater than or equal to `position`. */
+function firstOriginalSegmentAtOrAfter(segments: readonly NormalizedSpanMapSegment[], position: number): number {
     let low = 0;
     let high = segments.length;
     while (low < high) {
@@ -302,17 +366,19 @@ function segmentsAtOriginalPosition(segments: readonly NormalizedSpanMapSegment[
         if (segments[middle].originalStart < position) low = middle + 1;
         else high = middle;
     }
-    let index = low < segments.length && segments[low].originalStart === position ? low : low - 1;
-    if (
-        index < 0 || !(
-            segments[index].originalStart === position
-            || position < segments[index].originalEnd
-        )
-    ) return undefined;
-    while (index > 0 && sameOriginalRange(segments[index - 1], segments[index])) index--;
-    let end = index + 1;
-    while (end < segments.length && sameOriginalRange(segments[end], segments[index])) end++;
-    return segments.slice(index, end);
+    return low;
+}
+
+/** Returns the first original-ordered segment whose start is greater than `position`. */
+function firstOriginalSegmentAfter(segments: readonly NormalizedSpanMapSegment[], position: number): number {
+    let low = 0;
+    let high = segments.length;
+    while (low < high) {
+        const middle = (low + high) >>> 1;
+        if (segments[middle].originalStart <= position) low = middle + 1;
+        else high = middle;
+    }
+    return low;
 }
 
 interface SegmentGroupAtOriginalPosition {
@@ -321,8 +387,8 @@ interface SegmentGroupAtOriginalPosition {
 }
 
 /**
- * Returns groups of mapping segments containing or touching the original-text `position`.
- * At a shared boundary, segments ending at the point and segments starting there form separate groups:
+ * Returns every group of equal-range mapping segments containing or touching the original-text `position`.
+ * Segment ends are included for point mapping:
  *
  * ```text
  * original:  [--- A ---)[--- B ---)
@@ -333,31 +399,23 @@ interface SegmentGroupAtOriginalPosition {
  *              atEnd: true      atEnd: false
  * ```
  */
-function segmentGroupsAtOriginalPosition(segments: readonly NormalizedSpanMapSegment[], position: number): readonly SegmentGroupAtOriginalPosition[] {
-    let low = 0;
-    let high = segments.length;
-    while (low < high) {
-        const middle = (low + high) >>> 1;
-        if (segments[middle].originalStart < position) low = middle + 1;
-        else high = middle;
-    }
-    if (low < segments.length && segments[low].originalStart === position) {
-        const right = segmentsAtOriginalPosition(segments, position)!;
-        const groups: SegmentGroupAtOriginalPosition[] = [];
-        if (low > 0 && segments[low - 1].originalEnd === position) {
-            let leftStart = low - 1;
-            while (leftStart > 0 && sameOriginalRange(segments[leftStart - 1], segments[low - 1])) leftStart--;
-            groups.push({ segments: segments.slice(leftStart, low), atEnd: true });
+function segmentGroupsAtOriginalPosition(index: OriginalIndex, position: number): readonly SegmentGroupAtOriginalPosition[] {
+    const limit = firstOriginalSegmentAfter(index.segments, position);
+    const segments = segmentsEndingAtOrAfter(index, limit, position, true);
+    const groups: SegmentGroupAtOriginalPosition[] = [];
+    for (let start = 0; start < segments.length;) {
+        let end = start + 1;
+        while (end < segments.length && sameOriginalRange(segments[start], segments[end])) end++;
+        const segment = segments[start];
+        if (position <= segment.originalEnd) {
+            groups.push({
+                segments: segments.slice(start, end),
+                atEnd: position === segment.originalEnd && position !== segment.originalStart,
+            });
         }
-        groups.push({ segments: right, atEnd: false });
-        return groups;
+        start = end;
     }
-    if (low === 0) return [];
-    const left = segments[low - 1];
-    if (position > left.originalEnd) return [];
-    let start = low - 1;
-    while (start > 0 && sameOriginalRange(segments[start - 1], left)) start--;
-    return [{ segments: segments.slice(start, low), atEnd: position === left.originalEnd }];
+    return groups;
 }
 
 /** Reports whether a segment participates in an original-to-virtual query for `features`. */

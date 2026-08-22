@@ -74,3 +74,19 @@ use(/*call*/target);
 		ParameterSpan: "value: number",
 	})
 }
+
+func TestContentMapperSignatureHelpTriesLaterProjection(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	f, done := newContentMapperFourslash(t, `// @Filename: /signature-fallback.dup
+use(/*call*/)
+`, contentmappertest.DuplicateMapper, ".dup")
+	defer done()
+
+	f.GoToMarker(t, "call")
+	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{
+		Text:          "use(value: number): void",
+		ParameterName: "value",
+		ParameterSpan: "value: number",
+	})
+}
