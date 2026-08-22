@@ -56,7 +56,6 @@ w2.content;
 >w2 : Mock & Public
 >content : string
 
-
 declare const w3: Public & Mock
 >w3 : Public & Mock
 
@@ -64,4 +63,133 @@ w3.content;
 >w3.content : string
 >w3 : Public & Mock
 >content : string
+
+// private/protected set accessors are tracked in unions and intersections
+
+declare class C1 {
+>C1 : C1
+
+    get foo(): number;
+>foo : number
+
+    set foo(value: number);
+>foo : number
+>value : number
+}
+
+declare class C2 {
+>C2 : C2
+
+    get foo(): number;
+>foo : number
+
+    protected set foo(value: number);
+>foo : number
+>value : number
+}
+
+declare class C3 {
+>C3 : C3
+
+    protected get foo(): number;
+>foo : number
+
+    protected set foo(value: number);
+>foo : number
+>value : number
+}
+
+// Unions properties have most restricted accessibility
+
+declare const cu12: C1 | C2;
+>cu12 : C1 | C2
+
+cu12.foo;
+>cu12.foo : number
+>cu12 : C1 | C2
+>foo : number
+
+cu12.foo = 123;  // Error
+>cu12.foo = 123 : 123
+>cu12.foo : number
+>cu12 : C1 | C2
+>foo : number
+>123 : 123
+
+declare const cu13: C1 | C3;
+>cu13 : C1 | C3
+
+cu13.foo;  // Error
+>cu13.foo : any
+>cu13 : C1 | C3
+>foo : any
+
+cu13.foo = 123;  // Error
+>cu13.foo = 123 : 123
+>cu13.foo : any
+>cu13 : C1 | C3
+>foo : any
+>123 : 123
+
+declare const cu22: C2 | C3;
+>cu22 : C2 | C3
+
+cu13.foo;  // Error
+>cu13.foo : any
+>cu13 : C1 | C3
+>foo : any
+
+cu13.foo = 123;  // Error
+>cu13.foo = 123 : 123
+>cu13.foo : any
+>cu13 : C1 | C3
+>foo : any
+>123 : 123
+
+// Intersection properties have most permissive accessibility
+
+declare const ci12: C1 & C2;
+>ci12 : C1 & C2
+
+ci12.foo;
+>ci12.foo : number
+>ci12 : C1 & C2
+>foo : number
+
+ci12.foo = 123;
+>ci12.foo = 123 : 123
+>ci12.foo : number
+>ci12 : C1 & C2
+>foo : number
+>123 : 123
+
+declare const ci13: C1 & C3;
+>ci13 : C1 & C3
+
+ci12.foo;
+>ci12.foo : number
+>ci12 : C1 & C2
+>foo : number
+
+ci12.foo = 123;
+>ci12.foo = 123 : 123
+>ci12.foo : number
+>ci12 : C1 & C2
+>foo : number
+>123 : 123
+
+declare const ci23: C2 & C3;
+>ci23 : C2 & C3
+
+ci23.foo;
+>ci23.foo : number
+>ci23 : C2 & C3
+>foo : number
+
+ci23.foo = 123;  // Error
+>ci23.foo = 123 : 123
+>ci23.foo : number
+>ci23 : C2 & C3
+>foo : number
+>123 : 123
 
