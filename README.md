@@ -32,7 +32,7 @@ There are many ways to [contribute](https://github.com/microsoft/TypeScript/blob
 * Review the [source code changes](https://github.com/microsoft/TypeScript/pulls).
 * Engage with other TypeScript users and developers on [StackOverflow](https://stackoverflow.com/questions/tagged/typescript).
 * Help each other in the [TypeScript Community Discord](https://discord.gg/typescript).
-* Join the [#typescript](https://x.com/search?q=%23TypeScript) discussion on X.
+* Join the [#typescript](https://x.com/typescript) discussion on X.
 * [Contribute bug fixes](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md).
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see
