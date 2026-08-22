@@ -32,6 +32,7 @@ export interface APIMethodInfo {
     getTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
     getTypesOfSymbols: APIMethod<GetTypesOfSymbolsParams, TypeResponse[]>;
     getDeclaredTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
+    getNonMissingTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, string[]>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
