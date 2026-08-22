@@ -207,11 +207,11 @@ export function encodeNode(node: Node): Uint8Array {
     const extendedDataValues: number[] = [];
     const structuredWriter = new MsgpackWriter();
 
-    // We'll build an array of uint32 values for the nodes section, 7 per node
+    // We'll build an array of uint32 values for the nodes section, NODE_FIELDS per node
     const nodeValues: number[] = [];
 
     // Nil node (index 0)
-    nodeValues.push(0, 0, 0, 0, 0, 0, 0);
+    nodeValues.push(0, 0, 0, 0, 0, 0, 0, 0);
 
     let nodeCount = 0;
     let parentIndex = 0;
@@ -235,6 +235,7 @@ export function encodeNode(node: Node): Uint8Array {
             parentIndex,
             data,
             node.flags,
+            0, // hasTrailingComma — not applicable to ordinary nodes
         );
 
         const saveParentIndex = parentIndex;
@@ -267,7 +268,8 @@ export function encodeNode(node: Node): Uint8Array {
             0, // next
             parentIndex,
             list.length, // data for NodeList is its length
-            0, // flags
+            0, // flags — not applicable to NodeLists
+            list.hasTrailingComma ? 1 : 0,
         );
 
         const saveParentIndex = parentIndex;
@@ -313,6 +315,7 @@ export function encodeNode(node: Node): Uint8Array {
         0,
         rootData,
         node.flags,
+        0, // hasTrailingComma — not applicable to ordinary nodes
     );
 
     const saveParent = parentIndex;
