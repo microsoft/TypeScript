@@ -5,11 +5,12 @@
 package main
 
 import (
+	"encoding/xml"
 	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
-	"regexp"
+	"strings"
 
 	"github.com/anchore/quill/quill/macho"
 	"github.com/anchore/quill/quill/pki"
@@ -25,31 +26,25 @@ func main() {
 }
 
 func run(args []string) error {
-	if len(args) == 0 {
-		return errors.New("usage: machotool sign <entitlements> <binary> | machotool verify <binary> <entitlement>...")
+	if len(args) != 3 {
+		return errors.New("usage: machotool <sign|verify> <entitlements> <binary>")
 	}
 
+	entitlements, err := os.ReadFile(args[1])
+	if err != nil {
+		return fmt.Errorf("read entitlements: %w", err)
+	}
 	switch args[0] {
 	case "sign":
-		if len(args) != 3 {
-			return errors.New("usage: machotool sign <entitlements> <binary>")
-		}
-		entitlements, err := os.ReadFile(args[1])
-		if err != nil {
-			return fmt.Errorf("read entitlements: %w", err)
-		}
 		return signBinary(args[2], string(entitlements))
 	case "verify":
-		if len(args) < 3 {
-			return errors.New("usage: machotool verify <binary> <entitlement>...")
-		}
-		return verifyBinary(args[1], args[2:])
+		return verifyBinary(args[2], string(entitlements))
 	default:
 		return fmt.Errorf("unknown command %q", args[0])
 	}
 }
 
-func verifyBinary(path string, requiredEntitlements []string) error {
+func verifyBinary(path, expectedEntitlements string) error {
 	file, err := blacktopmacho.Open(path)
 	if err != nil {
 		return err
@@ -60,17 +55,64 @@ func verifyBinary(path string, requiredEntitlements []string) error {
 	if codeSignature == nil || codeSignature.Entitlements == "" {
 		return fmt.Errorf("signed file has no macOS entitlements: %s", path)
 	}
-	if err := verifyEntitlements(codeSignature.Entitlements, requiredEntitlements); err != nil {
+	if err := verifyEntitlements(codeSignature.Entitlements, expectedEntitlements); err != nil {
 		return fmt.Errorf("verify entitlements in %s: %w", path, err)
 	}
 	return nil
 }
 
-func verifyEntitlements(actual string, required []string) error {
-	for _, entitlement := range required {
-		pattern := `<key>\s*` + regexp.QuoteMeta(entitlement) + `\s*</key>\s*(<true\s*/>|<true\s*>\s*</true\s*>)`
-		if !regexp.MustCompile(pattern).MatchString(actual) {
-			return fmt.Errorf("required entitlement %q is not enabled", entitlement)
+type plistElement struct {
+	XMLName xml.Name `xml:""`
+	Value   string   `xml:",chardata"`
+}
+
+type entitlementsPlist struct {
+	XMLName xml.Name `xml:"plist"`
+	Dict    struct {
+		Elements []plistElement `xml:",any"`
+	} `xml:"dict"`
+}
+
+func parseBooleanEntitlements(contents string) (map[string]bool, error) {
+	var plist entitlementsPlist
+	if err := xml.Unmarshal([]byte(contents), &plist); err != nil {
+		return nil, err
+	}
+
+	entitlements := map[string]bool{}
+	key := ""
+	for _, element := range plist.Dict.Elements {
+		switch element.XMLName.Local {
+		case "key":
+			key = strings.TrimSpace(element.Value)
+		case "true", "false":
+			if key != "" {
+				entitlements[key] = element.XMLName.Local == "true"
+			}
+			key = ""
+		default:
+			key = ""
+		}
+	}
+	return entitlements, nil
+}
+
+func verifyEntitlements(actual, expected string) error {
+	expectedValues, err := parseBooleanEntitlements(expected)
+	if err != nil {
+		return fmt.Errorf("parse expected entitlements: %w", err)
+	}
+	if len(expectedValues) == 0 {
+		return errors.New("expected plist contains no boolean entitlements")
+	}
+
+	actualValues, err := parseBooleanEntitlements(actual)
+	if err != nil {
+		return fmt.Errorf("parse signed entitlements: %w", err)
+	}
+	for key, expectedValue := range expectedValues {
+		if actualValue, ok := actualValues[key]; !ok || actualValue != expectedValue {
+			return fmt.Errorf("entitlement %q does not have expected value %t", key, expectedValue)
 		}
 	}
 	return nil

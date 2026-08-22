@@ -2139,7 +2139,7 @@ async function runSignNativePreviewPackages() {
 
         for (const p of macZips) {
             await fs.promises.chmod(p.path, 0o755);
-            await $pipe`go -C ./tools run ./cmd/machotool verify ${p.path} ${typescriptMacEntitlements}`;
+            await $pipe`go -C ./tools run ./cmd/machotool verify ${typescriptMacEntitlementsPath} ${p.path}`;
         }
     }
 }
