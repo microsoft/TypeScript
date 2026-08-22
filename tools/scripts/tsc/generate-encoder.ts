@@ -1491,6 +1491,7 @@ function emitNodeGeneratedImports(w: CodeWriter) {
     w.write(`    NODE_OFFSET_DATA,`);
     w.write(`    NODE_OFFSET_END,`);
     w.write(`    NODE_OFFSET_FLAGS,`);
+    w.write(`    NODE_OFFSET_HAS_TRAILING_COMMA,`);
     w.write(`    NODE_OFFSET_KIND,`);
     w.write(`    NODE_OFFSET_NEXT,`);
     w.write(`    NODE_OFFSET_PARENT,`);
@@ -1518,7 +1519,6 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(`    }`);
     w.write(``);
     w.write(`    parent: RemoteNode;`);
-    w.write(`    hasTrailingComma?: boolean;`);
     w.write(`    transformFlags: number = 0;`);
     w.write(`    protected view: DataView;`);
     w.write(`    protected index: number;`);
@@ -1544,6 +1544,10 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(``);
     w.write(`    private get data(): number {`);
     w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_DATA, true);`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    get hasTrailingComma(): boolean {`);
+    w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_HAS_TRAILING_COMMA, true) !== 0;`);
     w.write(`    }`);
     w.write(``);
     w.write(`    private sourceFile: SourceFileInfo;`);

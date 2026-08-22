@@ -29,6 +29,7 @@ import {
     NODE_OFFSET_DATA,
     NODE_OFFSET_END,
     NODE_OFFSET_FLAGS,
+    NODE_OFFSET_HAS_TRAILING_COMMA,
     NODE_OFFSET_KIND,
     NODE_OFFSET_NEXT,
     NODE_OFFSET_PARENT,
@@ -43,7 +44,6 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
     }
 
     parent: RemoteNode;
-    hasTrailingComma?: boolean;
     transformFlags: number = 0;
     protected view: DataView;
     protected index: number;
@@ -69,6 +69,10 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
 
     private get data(): number {
         return this.view.getUint32(this._byteIndex + NODE_OFFSET_DATA, true);
+    }
+
+    get hasTrailingComma(): boolean {
+        return this.view.getUint32(this._byteIndex + NODE_OFFSET_HAS_TRAILING_COMMA, true) !== 0;
     }
 
     private sourceFile: SourceFileInfo;
