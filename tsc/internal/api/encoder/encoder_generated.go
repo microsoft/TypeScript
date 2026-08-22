@@ -667,13 +667,13 @@ func recordNodeStrings(node *ast.Node, strs *stringTable) uint32 {
 	case ast.KindJsxText:
 		return strs.add(node.AsJsxText().Text, node.Kind, node.Pos(), node.End())
 	case ast.KindJSDocText:
-		return strs.add(node.AsJSDocText().Text(), node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsJSDocText().AsNode().Text(), node.Kind, node.Pos(), node.End())
 	case ast.KindJSDocLink:
-		return strs.add(node.AsJSDocLink().Text(), node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsJSDocLink().AsNode().Text(), node.Kind, node.Pos(), node.End())
 	case ast.KindJSDocLinkPlain:
-		return strs.add(node.AsJSDocLinkPlain().Text(), node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsJSDocLinkPlain().AsNode().Text(), node.Kind, node.Pos(), node.End())
 	case ast.KindJSDocLinkCode:
-		return strs.add(node.AsJSDocLinkCode().Text(), node.Kind, node.Pos(), node.End())
+		return strs.add(node.AsJSDocLinkCode().AsNode().Text(), node.Kind, node.Pos(), node.End())
 	default:
 		panic(fmt.Sprintf("Unexpected node kind %v", node.Kind))
 	}

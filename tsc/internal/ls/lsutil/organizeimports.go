@@ -347,7 +347,7 @@ func getImportKindOrder(s1 *ast.Statement) int {
 			return importKindOrderSideEffect
 		}
 		importClause := importDecl.ImportClause.AsImportClause()
-		if importClause.IsTypeOnly() {
+		if importClause.AsNode().IsTypeOnly() {
 			return importKindOrderTypeOnly
 		}
 		if importClause.NamedBindings != nil && importClause.NamedBindings.Kind == ast.KindNamespaceImport {

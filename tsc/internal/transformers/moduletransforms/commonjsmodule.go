@@ -1811,7 +1811,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 		return tx.visitImportCallExpression(node, needsRewrite)
 	}
 	if needsRewrite {
-		return tx.shimOrRewriteImportOrRequireCall(node.AsCallExpression())
+		return tx.shimOrRewriteImportOrRequireCall(node.AsNode().AsCallExpression())
 	}
 	if ast.IsIdentifier(node.Expression) {
 		// given:
@@ -2093,7 +2093,7 @@ func (tx *CommonJSModuleTransformer) visitExpressionIdentifier(node *ast.Identif
 				return reference
 			}
 			if ast.IsImportSpecifier(importDeclaration) {
-				name := importDeclaration.AsImportSpecifier().PropertyNameOrName()
+				name := importDeclaration.AsImportSpecifier().AsNode().PropertyNameOrName()
 				decl := ast.FindAncestor(importDeclaration, ast.IsImportDeclaration)
 				target := tx.Factory().NewGeneratedNameForNode(core.Coalesce(decl, importDeclaration))
 				var reference *ast.Node

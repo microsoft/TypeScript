@@ -91,7 +91,7 @@ func (ch *optionalChainTransformer) visitPropertyOrElementAccessExpression(node 
 		expression = ch.Factory().UpdatePropertyAccessExpression(p, expression, nil /*questionDotToken*/, ch.Visitor().VisitNode(p.Name()), p.Flags)
 	} else {
 		p := node.AsElementAccessExpression()
-		expression = ch.Factory().UpdateElementAccessExpression(p, expression, nil, ch.Visitor().VisitNode(p.AsElementAccessExpression().ArgumentExpression), p.Flags)
+		expression = ch.Factory().UpdateElementAccessExpression(p, expression, nil, ch.Visitor().VisitNode(p.AsNode().AsElementAccessExpression().ArgumentExpression), p.Flags)
 	}
 
 	if thisArg != nil {

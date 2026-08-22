@@ -1246,13 +1246,13 @@ func getChildListThatStartsWithOpenerToken(parent *ast.Node, openerToken *ast.No
 	if ast.IsCallExpression(parent) {
 		parentCallExpression := parent.AsCallExpression()
 		if openerToken.Kind == ast.KindLessThanToken {
-			return parentCallExpression.TypeArgumentList()
+			return parentCallExpression.AsNode().TypeArgumentList()
 		}
 		return parentCallExpression.Arguments
 	} else if ast.IsNewExpression(parent) {
 		parentNewExpression := parent.AsNewExpression()
 		if openerToken.Kind == ast.KindLessThanToken {
-			return parentNewExpression.TypeArgumentList()
+			return parentNewExpression.AsNode().TypeArgumentList()
 		}
 		return parentNewExpression.Arguments
 	}

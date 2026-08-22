@@ -218,10 +218,10 @@ func typeElementsToClassElements(f *ast.NodeFactory, members []*ast.Node) []*ast
 		switch m.Kind {
 		case ast.KindPropertySignature:
 			ps := m.AsPropertySignatureDeclaration()
-			members[i] = f.NewPropertyDeclaration(m.Modifiers(), ps.Name(), ps.QuestionToken(), ps.Type, nil)
+			members[i] = f.NewPropertyDeclaration(m.Modifiers(), ps.Name(), ps.AsNode().QuestionToken(), ps.Type, nil)
 		case ast.KindMethodSignature:
 			ms := m.AsMethodSignatureDeclaration()
-			members[i] = f.NewMethodDeclaration(m.Modifiers(), nil, ms.Name(), ms.QuestionToken(), ms.TypeParameters, ms.Parameters, ms.Type, nil, nil)
+			members[i] = f.NewMethodDeclaration(m.Modifiers(), nil, ms.Name(), ms.AsNode().QuestionToken(), ms.TypeParameters, ms.Parameters, ms.Type, nil, nil)
 		}
 	}
 	return members

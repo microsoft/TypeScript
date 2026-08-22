@@ -370,7 +370,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			if parent.Expression().Kind == ast.KindBinaryExpression {
 				bin := parent.Expression().AsBinaryExpression()
 				if kind := ast.GetAssignmentDeclarationKind(bin.AsNode()); kind != ast.JSDeclarationKindNone && tag.TypeExpression() != nil {
-					bin.AsMutable().SetType(p.addDeepCloneReparse(tag.TypeExpression().Type()))
+					bin.AsNode().AsMutable().SetType(p.addDeepCloneReparse(tag.TypeExpression().Type()))
 					p.finishMutatedNode(bin.AsNode())
 					return
 				}
@@ -474,7 +474,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			parameterTag := tag.AsJSDocParameterOrPropertyTag()
 			if param, ok := findMatchingParameter(fun, parameterTag, jsDoc); ok {
 				if param.Type == nil && parameterTag.TypeExpression != nil {
-					param.AsParameterDeclaration().Type = p.reparseJSDocTypeLiteral(parameterTag.TypeExpression.Type())
+					param.AsNode().AsParameterDeclaration().Type = p.reparseJSDocTypeLiteral(parameterTag.TypeExpression.Type())
 				}
 				if param.QuestionToken == nil {
 					if question := p.makeQuestionIfOptional(parameterTag); question != nil {

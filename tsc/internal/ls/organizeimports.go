@@ -662,7 +662,7 @@ func getCategorizedImports(importDecls []*ast.Statement) categorizedImports {
 
 		clause := importDecl.AsImportDeclaration().ImportClause.AsImportClause()
 		group := &regularImports
-		if clause.IsTypeOnly() {
+		if clause.AsNode().IsTypeOnly() {
 			group = &typeOnlyImports
 		}
 

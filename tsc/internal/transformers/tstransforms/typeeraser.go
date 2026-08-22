@@ -310,7 +310,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindImportClause:
 		n := node.AsImportClause()
-		if n.IsTypeOnly() {
+		if n.AsNode().IsTypeOnly() {
 			// Always elide type-only imports
 			return nil
 		}

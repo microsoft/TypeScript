@@ -749,7 +749,7 @@ func (tx *RuntimeSyntaxTransformer) visitClassExpression(node *ast.ClassExpressi
 
 func (tx *RuntimeSyntaxTransformer) visitConstructorDeclaration(node *ast.ConstructorDeclaration) *ast.Node {
 	modifiers := tx.Visitor().VisitModifiers(node.Modifiers())
-	parameters := tx.EmitContext().VisitParameters(node.ParameterList(), tx.Visitor())
+	parameters := tx.EmitContext().VisitParameters(node.AsNode().ParameterList(), tx.Visitor())
 	body := tx.visitConstructorBody(node.Body.AsBlock(), node.AsNode())
 	return tx.Factory().UpdateConstructorDeclaration(node, modifiers, nil /*typeParameters*/, parameters, nil /*returnType*/, nil /*fullSignature*/, body)
 }

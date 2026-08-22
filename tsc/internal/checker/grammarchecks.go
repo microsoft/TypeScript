@@ -1519,7 +1519,7 @@ func (c *Checker) checkGrammarBindingElement(node *ast.BindingElement) bool {
 	if node.DotDotDotToken != nil {
 		elements := node.Parent.ElementList()
 		if node.AsNode() != core.LastOrNil(elements.Nodes) {
-			return c.grammarErrorOnNode(&node.Node, diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern)
+			return c.grammarErrorOnNode(node.AsNode(), diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern)
 		}
 		c.checkGrammarForDisallowedTrailingComma(elements, diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma)
 
@@ -2101,20 +2101,20 @@ func (c *Checker) checkGrammarImportClause(node *ast.ImportClause) bool {
 	switch node.PhaseModifier {
 	case ast.KindTypeKeyword:
 		if node.Flags&ast.NodeFlagsJSDoc == 0 && node.Name() != nil && node.NamedBindings != nil {
-			return c.grammarErrorOnNode(&node.Node, diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both)
+			return c.grammarErrorOnNode(node.AsNode(), diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both)
 		}
 		if node.NamedBindings != nil && node.NamedBindings.Kind == ast.KindNamedImports {
 			return c.checkGrammarTypeOnlyNamedImportsOrExports(node.NamedBindings)
 		}
 	case ast.KindDeferKeyword:
 		if node.Name() != nil {
-			return c.grammarErrorOnNode(&node.Node, diagnostics.Default_imports_are_not_allowed_in_a_deferred_import)
+			return c.grammarErrorOnNode(node.AsNode(), diagnostics.Default_imports_are_not_allowed_in_a_deferred_import)
 		}
 		if node.NamedBindings != nil && node.NamedBindings.Kind == ast.KindNamedImports {
-			return c.grammarErrorOnNode(&node.Node, diagnostics.Named_imports_are_not_allowed_in_a_deferred_import)
+			return c.grammarErrorOnNode(node.AsNode(), diagnostics.Named_imports_are_not_allowed_in_a_deferred_import)
 		}
 		if c.moduleKind != core.ModuleKindESNext && c.moduleKind != core.ModuleKindPreserve {
-			return c.grammarErrorOnNode(&node.Node, diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve)
+			return c.grammarErrorOnNode(node.AsNode(), diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve)
 		}
 	}
 	return false

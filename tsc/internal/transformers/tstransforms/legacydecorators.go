@@ -663,7 +663,7 @@ type allDecorators struct {
  * @internal
  */
 func getAllDecoratorsOfClass(node *ast.ClassDeclaration, useLegacyDecorators bool) *allDecorators {
-	decorators := node.Decorators()
+	decorators := node.AsNode().Decorators()
 	var parameters [][]*ast.Node
 	if useLegacyDecorators {
 		parameters = getDecoratorsOfParameters(ast.GetFirstConstructorWithBody(node.AsNode()))

@@ -3124,7 +3124,7 @@ func shouldIncludeSymbol(
 	symbolOrigin := checker.SkipAlias(symbol, typeChecker)
 	// We only want to filter out the global keywords.
 	// Auto Imports are not available for scripts so this conditional is always false.
-	if file.AsSourceFile().ExternalModuleIndicator != nil &&
+	if file.AsNode().AsSourceFile().ExternalModuleIndicator != nil &&
 		compilerOptions.AllowUmdGlobalAccess != core.TSTrue &&
 		symbol != symbolOrigin &&
 		data.symbolToSortTextMap[ast.GetSymbolId(symbol)] == SortTextGlobalsOrKeywords &&
