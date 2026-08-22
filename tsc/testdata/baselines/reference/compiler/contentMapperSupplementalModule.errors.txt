@@ -1,4 +1,4 @@
-/component.vue.0.ts(1,14): error TS2322: Type 'string' is not assignable to type 'number'.
+/component.vue(1,14): error TS2322: Type 'string' is not assignable to type 'number'.
   This location is in virtual code produced by the content mapper 'mapper@1.0.0' and has no corresponding location in the original file.
 
 

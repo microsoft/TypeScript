@@ -224,10 +224,8 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 	if sourceFile == nil || e.emitOnly == EmitOnlyJs || len(declarationFilePath) == 0 {
 		return
 	}
-	// Declaration files for content-mapped files don't get source maps because the mapped positions would point into
-	// transformed TS content that exists only in-memory during the build. As a future improvement, it may be possible
-	// to double-map the positions using the content-mapped file's spanmap.
-	emitDeclarationMap := e.emitOnly != EmitOnlyBuilderSignature && options.DeclarationMap.IsTrue() && sourceFile.ContentMapper() == ""
+	emitDeclarationMap := e.emitOnly != EmitOnlyBuilderSignature && options.DeclarationMap.IsTrue()
+	contentMappedSource := sourceFile
 
 	if e.tr != nil {
 		defer e.tr.Push(tracing.PhaseEmit, "emitDeclarationFileOrBundle", map[string]any{"declarationFilePath": declarationFilePath}, true)()
@@ -269,9 +267,21 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 	}
 
 	// create a printer to print the nodes
-	printer := printer.NewPrinter(printerOptions, printer.PrintHandlers{
-		// !!!
-	}, emitContext)
+	printHandlers := printer.PrintHandlers{}
+	if spanMap := contentMappedSource.SpanMap(); emitDeclarationMap && spanMap != nil {
+		originalSource := newDeclarationMapSource(contentMappedSource)
+		printHandlers.MapSourcePosition = func(source sourcemap.Source, pos int) (sourcemap.Source, int, bool) {
+			if source.FileName() != contentMappedSource.FileName() {
+				return source, pos, true
+			}
+			mapped, ok := spanMap.VirtualToOriginalPositionExact(core.TextPos(pos))
+			if !ok {
+				return nil, 0, false
+			}
+			return originalSource, int(mapped), true
+		}
+	}
+	printer := printer.NewPrinter(printerOptions, printHandlers, emitContext)
 
 	declarationMapOptions := &core.CompilerOptions{
 		SourceMap:  core.IfElse(emitDeclarationMap, core.TSTrue, core.TSFalse),
@@ -281,6 +291,25 @@ func (e *emitter) emitDeclarationFile(sourceFile *ast.SourceFile, declarationFil
 	}
 	e.printSourceFile(declarationFilePath, declarationMapPath, sourceFile, printer, declarationMapOptions, shouldEmitSourceMaps(declarationMapOptions, sourceFile))
 }
+
+type declarationMapSource struct {
+	fileName string
+	text     string
+	lineMap  []core.TextPos
+}
+
+func newDeclarationMapSource(sourceFile *ast.SourceFile) *declarationMapSource {
+	text := sourceFile.OriginalText()
+	return &declarationMapSource{
+		fileName: sourceFile.OriginalFileName(),
+		text:     text,
+		lineMap:  []core.TextPos(core.ComputeECMALineStarts(text)),
+	}
+}
+
+func (s *declarationMapSource) FileName() string            { return s.fileName }
+func (s *declarationMapSource) Text() string                { return s.text }
+func (s *declarationMapSource) ECMALineMap() []core.TextPos { return s.lineMap }
 
 func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, sourceFile *ast.SourceFile, printer_ *printer.Printer, mapOptions *core.CompilerOptions, shouldEmitSourceMaps bool) {
 	// !!! sourceMapGenerator

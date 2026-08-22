@@ -27,9 +27,6 @@ import (
 	"github.com/zeebo/xxh3"
 )
 
-// ProtocolVersion is the content mapper protocol version this host speaks.
-const ProtocolVersion = 1
-
 const initializeTimeoutSeconds = 5
 
 const initializeTimeout = initializeTimeoutSeconds * time.Second
@@ -44,7 +41,6 @@ const (
 
 // InitializeParams is the parameter object for the initialize request.
 type InitializeParams struct {
-	ProtocolVersion int `json:"protocolVersion"`
 	// Locale is the BCP 47 locale to use for mapper-authored diagnostic messages, when configured.
 	Locale string `json:"locale,omitempty"`
 	// PositionEncodings lists the coordinate spaces the host accepts.
@@ -53,7 +49,6 @@ type InitializeParams struct {
 
 // InitializeResult is the mapper's response to the initialize request.
 type InitializeResult struct {
-	ProtocolVersion int `json:"protocolVersion"`
 	// PositionEncoding selects the coordinate space for all mappings and diagnostics.
 	PositionEncoding PositionEncoding `json:"positionEncoding"`
 	// DiagnosticSource is the prefix used for every mapper-authored diagnostic code.
@@ -86,7 +81,7 @@ type OpenProjectResult struct {
 type OptionDiagnosticResult struct {
 	Path        []json.Value `json:"path"`
 	MessageText string       `json:"messageText"`
-	Code        int32        `json:"code,omitempty"`
+	Code        int32        `json:"code"`
 }
 
 // CloseProjectParams is the parameter object for the closeProject request.
@@ -215,7 +210,7 @@ type Diagnostic struct {
 	// Start and Length locate the diagnostic in the original content using the selected position encoding.
 	Start  int   `json:"start"`
 	Length int   `json:"length"`
-	Code   int32 `json:"code,omitempty"`
+	Code   int32 `json:"code"`
 }
 
 // dialFunc establishes a running connection to a mapper. In production it spawns the mapper's process;
@@ -1095,7 +1090,6 @@ func (h *host) release(identities []string) {
 
 func handshake(ctx context.Context, conn ipc.Conn, diagnosticLocale locale.Locale) (PositionEncoding, string, error) {
 	raw, err := conn.Call(ctx, MethodInitialize, InitializeParams{
-		ProtocolVersion:   ProtocolVersion,
 		Locale:            diagnosticLocale.String(),
 		PositionEncodings: []PositionEncoding{PositionEncodingUTF8, PositionEncodingUTF16},
 	})
@@ -1105,9 +1099,6 @@ func handshake(ctx context.Context, conn ipc.Conn, diagnosticLocale locale.Local
 	var res InitializeResult
 	if err := json.Unmarshal(raw, &res); err != nil {
 		return "", "", &InitializeError{Kind: InitializeErrorKindInvalidResponse, Detail: err.Error()}
-	}
-	if res.ProtocolVersion != ProtocolVersion {
-		return "", "", &InitializeError{Kind: InitializeErrorKindProtocolVersion, ProtocolVersion: res.ProtocolVersion}
 	}
 	if res.PositionEncoding != PositionEncodingUTF8 && res.PositionEncoding != PositionEncodingUTF16 {
 		return "", "", &InitializeError{Kind: InitializeErrorKindPositionEncoding, PositionEncoding: res.PositionEncoding}

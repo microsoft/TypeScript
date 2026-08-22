@@ -1,4 +1,126 @@
 ===================================================================
+JsFile: component.d.y.z.ts
+mapUrl: component.d.y.z.ts.map
+sourceRoot: 
+sources: component.y.z
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/component.d.y.z.ts
+sourceFile:component.y.z
+-------------------------------------------------------------------
+>>>export interface ComponentProps {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^^^^^
+4 >                 ^^^^^^^^^^^^^^
+1 >
+2 >export
+3 >       interface 
+4 >                 ComponentProps
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+4 >Emitted(1, 32) Source(1, 32) + SourceIndex(0)
+---
+>>>    emoji: "😀";
+1 >^^^^
+2 >    ^^^^^
+3 >         ^^
+4 >           ^^^^
+5 >               ^
+6 >                ^^^->
+1 > { 
+2 >    emoji
+3 >         : 
+4 >           "😀"
+5 >               ;
+1 >Emitted(2, 5) Source(1, 35) + SourceIndex(0)
+2 >Emitted(2, 10) Source(1, 40) + SourceIndex(0)
+3 >Emitted(2, 12) Source(1, 42) + SourceIndex(0)
+4 >Emitted(2, 16) Source(1, 46) + SourceIndex(0)
+5 >Emitted(2, 17) Source(1, 47) + SourceIndex(0)
+---
+>>>    label: string;
+1->^^^^
+2 >    ^^^^^
+3 >         ^^
+4 >           ^^^^^^
+5 >                 ^
+1-> 
+2 >    label
+3 >         : 
+4 >           string
+5 >                 ;
+1->Emitted(3, 5) Source(1, 48) + SourceIndex(0)
+2 >Emitted(3, 10) Source(1, 53) + SourceIndex(0)
+3 >Emitted(3, 12) Source(1, 55) + SourceIndex(0)
+4 >Emitted(3, 18) Source(1, 61) + SourceIndex(0)
+5 >Emitted(3, 19) Source(1, 62) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 > }
+1 >Emitted(4, 2) Source(1, 64) + SourceIndex(0)
+---
+>>>export declare const component: ComponentProps;
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^
+5 >              ^
+6 >               ^^^^^^
+7 >                     ^^^^^^^^^
+8 >                              ^^
+9 >                                ^^^^^^^^^^^^^^
+10>                                              ^
+1->
+  >
+2 >export
+3 >       
+4 >       declare
+5 >               
+6 >               const 
+7 >                     component
+8 >                              : 
+9 >                                ComponentProps
+10>                                              ;
+1->Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(5, 7) Source(2, 7) + SourceIndex(0)
+3 >Emitted(5, 8) Source(2, 8) + SourceIndex(0)
+4 >Emitted(5, 15) Source(2, 15) + SourceIndex(0)
+5 >Emitted(5, 16) Source(2, 16) + SourceIndex(0)
+6 >Emitted(5, 22) Source(2, 22) + SourceIndex(0)
+7 >Emitted(5, 31) Source(2, 31) + SourceIndex(0)
+8 >Emitted(5, 33) Source(2, 33) + SourceIndex(0)
+9 >Emitted(5, 47) Source(2, 47) + SourceIndex(0)
+10>Emitted(5, 48) Source(2, 48) + SourceIndex(0)
+---
+>>>export declare const emittedTarget = 7;
+1 >
+2 >^^^^^^^^^^^^^^^
+3 >               ^^^^^^
+4 >                     ^^^^^^^^^^^^^
+5 >                                  ^^^^
+6 >                                      ^
+7 >                                       ^^^->
+1 >
+  >
+2 >export 
+3 >               const 
+4 >                     emittedTarget
+5 >                                  
+6 >                                      export interface ComponentProps { emoji: "😀"; label: string; }
+  >                                      export declare const component: ComponentProps;
+  >                                      export const emittedTarget = #{target};
+1 >Emitted(6, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(6, 16) Source(3, 8) + SourceIndex(0)
+3 >Emitted(6, 22) Source(3, 14) + SourceIndex(0)
+4 >Emitted(6, 35) Source(3, 27) + SourceIndex(0)
+5 >Emitted(6, 39)
+6 >Emitted(6, 40) Source(3, 40) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=component.d.y.z.ts.map===================================================================
 JsFile: main.d.ts
 mapUrl: main.d.ts.map
 sourceRoot: 

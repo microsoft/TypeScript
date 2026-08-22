@@ -265,7 +265,7 @@ func (o *Orchestrator) Watch(ctx context.Context) {
 	o.wm.Lock()
 
 	if o.opts.Testing == nil {
-		if o.opts.Sys.GetEnvironmentVariable("TS_WATCH_DEBUG") != "" {
+		if value, _ := o.opts.Sys.GetEnvironmentVariable("TS_WATCH_DEBUG"); value != "" {
 			o.wm.DebugLog = o.opts.Sys.Writer()
 		}
 		o.wm.EnsureDefaultBackend()
@@ -515,7 +515,7 @@ func (o *Orchestrator) computeDesiredWatches() map[string]bool {
 				if mapper.PackageDirectory == "" || mapper.ContributionID != "" {
 					continue
 				}
-				manifestPath := o.host.FS().Realpath(tspath.CombinePaths(mapper.PackageDirectory, "package.json"))
+				manifestPath := tspath.CombinePaths(mapper.PackageDirectory, "package.json")
 				dir := tspath.GetDirectoryPath(manifestPath)
 				if !desiredDirs.Covered(dir) && watchmanager.CanWatchDirectory(dir) {
 					desiredDirs.Set(dir, false)
