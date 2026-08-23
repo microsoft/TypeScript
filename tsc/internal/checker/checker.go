@@ -8520,14 +8520,6 @@ func (c *Checker) getResolvedSignature(node *ast.Node, candidatesOutArray *[]*Si
 	// When CheckMode.SkipGenericFunctions is set we use resolvingSignature to indicate that call
 	// resolution should be deferred.
 	if result != c.resolvingSignature {
-		// if the signature resolution originated on a node that itself depends on the contextual type
-		// then it's possible that the resolved signature might not be the same as the one that would be computed in source order
-		// since resolving such signature leads to resolving the potential outer signature, its arguments and thus the very same signature
-		// it's possible that this inner resolution sets the resolvedSignature first.
-		// In such a case we ignore the local result and reuse the correct one that was cached.
-		if links.resolvedSignature != c.resolvingSignature {
-			result = links.resolvedSignature
-		}
 		// If signature resolution originated in control flow type analysis (for example to compute the
 		// assigned type in a flow assignment) we don't cache the result as it may be based on temporary
 		// types from the control flow analysis.
@@ -9016,6 +9008,25 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	if result == nil {
 		result = c.chooseOverload(&s, c.assignableRelation)
 	}
+	links := c.signatureLinks.Get(node)
+	if links.resolvedSignature != c.resolvingSignature && candidatesOutArray == nil {
+		// There are 2 situations in which it's good to preemptively return the cached result here:
+		//
+		// 1. if the signature resolution originated on a node that itself depends on the contextual type
+		// then it's possible that the resolved signature might not be the same as the one that would be computed in source order
+		// since resolving such signature leads to resolving the potential outer signature, its arguments and thus the very same signature
+		// it's possible that this inner resolution sets the resolvedSignature first.
+		// In such a case we ignore the local result and reuse the correct one that was cached.
+		//
+		// 2. In certain circular-like situations it's possible that the compiler reentries this function for the same node.
+		// It's possible to resolve the inner call against preemptively set empty members (for example in `resolveAnonymousTypeMembers`) of some type.
+		// When that happens the compiler might report an error for that inner call but at the same time it might end up resolving the actual members of the other type.
+		// This in turn creates a situation in which the outer call fails in `getSignatureApplicabilityError` due to a cached `RelationComparisonResult.Failed`
+		// but when the compiler tries to report that error (in the code below) it also tries to elaborate it and that can succeed as types would be related against the *resolved* members of the other type.
+		// This can hit `No error for last overload signature` assert but since that error was already reported when the inner call failed we can skip this step altogether here by returning the cached signature early.
+		debug.Assert(links.resolvedSignature != nil)
+		return links.resolvedSignature
+	}
 	if result != nil {
 		return result
 	}
@@ -9027,7 +9038,7 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 	// don't hit this issue because they only observe this result after it's had a chance to
 	// be cached, but the error reporting code below executes before getResolvedSignature sets
 	// resolvedSignature.
-	c.signatureLinks.Get(node).resolvedSignature = result
+	links.resolvedSignature = result
 	// No signatures were applicable. Now report errors based on the last applicable signature with
 	// no arguments excluded from assignability checks.
 	// If candidate is undefined, it means that no candidates had a suitable arity. In that case,

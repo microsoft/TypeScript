@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/genericDefaultInReentrantCallResolution.ts] ////
+
+=== genericDefaultInReentrantCallResolution.ts ===
+// https://github.com/microsoft/TypeScript/issues/63949
+
+declare function fetcher<D>(cfg: unknown): Promise<D>;
+>fetcher : Symbol(fetcher, Decl(genericDefaultInReentrantCallResolution.ts, 0, 0))
+>D : Symbol(D, Decl(genericDefaultInReentrantCallResolution.ts, 2, 25))
+>cfg : Symbol(cfg, Decl(genericDefaultInReentrantCallResolution.ts, 2, 28))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>D : Symbol(D, Decl(genericDefaultInReentrantCallResolution.ts, 2, 25))
+
+type Routes<R> = R extends "x" ? { IN: { v: number }; OUT: string } : never;
+>Routes : Symbol(Routes, Decl(genericDefaultInReentrantCallResolution.ts, 2, 54))
+>R : Symbol(R, Decl(genericDefaultInReentrantCallResolution.ts, 4, 12))
+>R : Symbol(R, Decl(genericDefaultInReentrantCallResolution.ts, 4, 12))
+>IN : Symbol(IN, Decl(genericDefaultInReentrantCallResolution.ts, 4, 34))
+>v : Symbol(v, Decl(genericDefaultInReentrantCallResolution.ts, 4, 40))
+>OUT : Symbol(OUT, Decl(genericDefaultInReentrantCallResolution.ts, 4, 53))
+
+function executeFetch<R extends string, T = Routes<R>>(
+>executeFetch : Symbol(executeFetch, Decl(genericDefaultInReentrantCallResolution.ts, 4, 76))
+>R : Symbol(R, Decl(genericDefaultInReentrantCallResolution.ts, 6, 22))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 6, 39))
+>Routes : Symbol(Routes, Decl(genericDefaultInReentrantCallResolution.ts, 2, 54))
+>R : Symbol(R, Decl(genericDefaultInReentrantCallResolution.ts, 6, 22))
+
+    route: R,
+>route : Symbol(route, Decl(genericDefaultInReentrantCallResolution.ts, 6, 55))
+>R : Symbol(R, Decl(genericDefaultInReentrantCallResolution.ts, 6, 22))
+
+    body?: T extends Record<"IN", any> ? T["IN"] : never,
+>body : Symbol(body, Decl(genericDefaultInReentrantCallResolution.ts, 7, 13))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 6, 39))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 6, 39))
+
+) {
+    return fetcher<T extends Record<"OUT", any> ? T["OUT"] : T>({ route, body });
+>fetcher : Symbol(fetcher, Decl(genericDefaultInReentrantCallResolution.ts, 0, 0))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 6, 39))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 6, 39))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 6, 39))
+>route : Symbol(route, Decl(genericDefaultInReentrantCallResolution.ts, 10, 65))
+>body : Symbol(body, Decl(genericDefaultInReentrantCallResolution.ts, 10, 72))
+}
+
+declare function useCallback<T extends Function>(cb: T, deps: unknown[]): T;
+>useCallback : Symbol(useCallback, Decl(genericDefaultInReentrantCallResolution.ts, 11, 1))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 13, 29))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>cb : Symbol(cb, Decl(genericDefaultInReentrantCallResolution.ts, 13, 49))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 13, 29))
+>deps : Symbol(deps, Decl(genericDefaultInReentrantCallResolution.ts, 13, 55))
+>T : Symbol(T, Decl(genericDefaultInReentrantCallResolution.ts, 13, 29))
+
+export const cb = useCallback((data: { v: number }) => {
+>cb : Symbol(cb, Decl(genericDefaultInReentrantCallResolution.ts, 15, 12))
+>useCallback : Symbol(useCallback, Decl(genericDefaultInReentrantCallResolution.ts, 11, 1))
+>data : Symbol(data, Decl(genericDefaultInReentrantCallResolution.ts, 15, 31))
+>v : Symbol(v, Decl(genericDefaultInReentrantCallResolution.ts, 15, 38))
+
+    return executeFetch("x", data);
+>executeFetch : Symbol(executeFetch, Decl(genericDefaultInReentrantCallResolution.ts, 4, 76))
+>data : Symbol(data, Decl(genericDefaultInReentrantCallResolution.ts, 15, 31))
+
+}, []);
+
+export const check: Promise<string> = cb({ v: 1 });
+>check : Symbol(check, Decl(genericDefaultInReentrantCallResolution.ts, 19, 12))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>cb : Symbol(cb, Decl(genericDefaultInReentrantCallResolution.ts, 15, 12))
+>v : Symbol(v, Decl(genericDefaultInReentrantCallResolution.ts, 19, 42))
+

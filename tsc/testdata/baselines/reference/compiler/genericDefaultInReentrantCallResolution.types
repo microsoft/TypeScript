@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/genericDefaultInReentrantCallResolution.ts] ////
+
+=== genericDefaultInReentrantCallResolution.ts ===
+// https://github.com/microsoft/TypeScript/issues/63949
+
+declare function fetcher<D>(cfg: unknown): Promise<D>;
+>fetcher : <D>(cfg: unknown) => Promise<D>
+>cfg : unknown
+
+type Routes<R> = R extends "x" ? { IN: { v: number }; OUT: string } : never;
+>Routes : Routes<R>
+>IN : { v: number; }
+>v : number
+>OUT : string
+
+function executeFetch<R extends string, T = Routes<R>>(
+>executeFetch : <R extends string, T = Routes<R>>(route: R, body?: T extends Record<"IN", any> ? T["IN"] : never) => Promise<T extends Record<"OUT", any> ? T["OUT"] : T>
+
+    route: R,
+>route : R
+
+    body?: T extends Record<"IN", any> ? T["IN"] : never,
+>body : (T extends Record<"IN", any> ? T["IN"] : never) | undefined
+
+) {
+    return fetcher<T extends Record<"OUT", any> ? T["OUT"] : T>({ route, body });
+>fetcher<T extends Record<"OUT", any> ? T["OUT"] : T>({ route, body }) : Promise<T extends Record<"OUT", any> ? T["OUT"] : T>
+>fetcher : <D>(cfg: unknown) => Promise<D>
+>{ route, body } : { route: R; body: (T extends Record<"IN", any> ? T["IN"] : never) | undefined; }
+>route : R
+>body : (T extends Record<"IN", any> ? T["IN"] : never) | undefined
+}
+
+declare function useCallback<T extends Function>(cb: T, deps: unknown[]): T;
+>useCallback : <T extends Function>(cb: T, deps: unknown[]) => T
+>cb : T
+>deps : unknown[]
+
+export const cb = useCallback((data: { v: number }) => {
+>cb : (data: { v: number; }) => Promise<string>
+>useCallback((data: { v: number }) => {    return executeFetch("x", data);}, []) : (data: { v: number; }) => Promise<string>
+>useCallback : <T extends Function>(cb: T, deps: unknown[]) => T
+>(data: { v: number }) => {    return executeFetch("x", data);} : (data: { v: number; }) => Promise<string>
+>data : { v: number; }
+>v : number
+
+    return executeFetch("x", data);
+>executeFetch("x", data) : Promise<string>
+>executeFetch : <R extends string, T = Routes<R>>(route: R, body?: T extends Record<"IN", any> ? T["IN"] : never) => Promise<T extends Record<"OUT", any> ? T["OUT"] : T>
+>"x" : "x"
+>data : { v: number; }
+
+}, []);
+>[] : never[]
+
+export const check: Promise<string> = cb({ v: 1 });
+>check : Promise<string>
+>cb({ v: 1 }) : Promise<string>
+>cb : (data: { v: number; }) => Promise<string>
+>{ v: 1 } : { v: number; }
+>v : number
+>1 : 1
+
