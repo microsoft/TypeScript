@@ -221,7 +221,8 @@ const declarationEmitNodeBuilderFlags = nodebuilder.FlagsMultilineObjectLiterals
 	nodebuilder.FlagsGenerateNamesForShadowedTypeParams |
 	nodebuilder.FlagsNoTruncation
 
-const declarationEmitInternalNodeBuilderFlags = nodebuilder.InternalFlagsAllowUnresolvedNames
+const declarationEmitInternalNodeBuilderFlags = nodebuilder.InternalFlagsAllowUnresolvedNames |
+	nodebuilder.InternalFlagsStopBuildingAfterTruncation
 
 // functions as both `visitDeclarationStatements` and `transformRoot`, utilitzing SyntaxList nodes
 func (tx *DeclarationTransformer) visit(node *ast.Node) *ast.Node {
