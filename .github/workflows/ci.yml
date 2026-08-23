@@ -76,9 +76,6 @@ jobs:
         run: |
           mkdir "$RUNNER_TEMP/go-test-bin"
           ln -s "$(go env GOROOT)/bin/go" "$RUNNER_TEMP/go-test-bin/go"
-          ln -s "$(command -v sh)" "$RUNNER_TEMP/go-test-bin/sh"
-          ln -s "$(command -v nohup)" "$RUNNER_TEMP/go-test-bin/nohup"
-          ln -s "$(command -v sleep)" "$RUNNER_TEMP/go-test-bin/sleep"
       - name: Tests without Node.js
         run: |
           export PATH="$RUNNER_TEMP/go-test-bin"
