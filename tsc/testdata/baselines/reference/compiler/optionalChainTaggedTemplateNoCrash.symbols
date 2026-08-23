@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/optionalChainTaggedTemplateNoCrash.ts] ////
+
+=== repro.ts ===
+
+e?.``(
+=== siblings.ts ===
+declare var a: any;
+>a : Symbol(a, Decl(siblings.ts, 0, 11))
+
+a?.b`c`;
+>a : Symbol(a, Decl(siblings.ts, 0, 11))
+
+a?.b`c`();
+>a : Symbol(a, Decl(siblings.ts, 0, 11))
+
+a?.``.x;
+>a : Symbol(a, Decl(siblings.ts, 0, 11))
+
