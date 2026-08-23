@@ -11922,10 +11922,14 @@ func (c *Checker) checkPropertyAccessibilityAtLocation(location *ast.Node, isSup
 	// Property is known to be private or protected at this point
 	// Private property is accessible if the property is within the declaring class
 	if flags&ast.ModifierFlagsPrivate != 0 {
-		declaringClassDeclaration := ast.GetClassLikeDeclarationOfSymbol(c.getParentOfSymbol(prop))
-		if !c.isNodeWithinClass(location, declaringClassDeclaration) {
+		var declaringClassDeclaration *ast.Node
+		if parent := c.getParentOfSymbol(prop); parent != nil {
+			declaringClassDeclaration = ast.GetClassLikeDeclarationOfSymbol(parent)
+		}
+		if declaringClassDeclaration == nil || !c.isNodeWithinClass(location, declaringClassDeclaration) {
 			if errorNode != nil {
-				c.error(errorNode, diagnostics.Property_0_is_private_and_only_accessible_within_class_1, c.symbolToString(prop), c.TypeToString(c.getDeclaringClass(prop)))
+				class := core.OrElse(c.getDeclaringClass(prop), containingType)
+				c.error(errorNode, diagnostics.Property_0_is_private_and_only_accessible_within_class_1, c.symbolToString(prop), c.TypeToString(class))
 			}
 			return false
 		}
@@ -11958,10 +11962,7 @@ func (c *Checker) checkPropertyAccessibilityAtLocation(location *ast.Node, isSup
 		}
 		if flags&ast.ModifierFlagsStatic != 0 || enclosingClass == nil {
 			if errorNode != nil {
-				class := c.getDeclaringClass(prop)
-				if class == nil {
-					class = containingType
-				}
+				class := core.OrElse(c.getDeclaringClass(prop), containingType)
 				c.error(errorNode, diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, c.symbolToString(prop), c.TypeToString(class))
 			}
 			return false
@@ -21685,8 +21686,8 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 		if checkFlags&(ast.CheckFlagsContainsPrivate|ast.CheckFlagsContainsProtected) != 0 {
 			return nil
 		}
-		// If the private or protected declaration is for writing, we give the write-side of the property
-		// the most restrictive accessbility of the constituents.
+		// Otherwise, if the private or protected declaration is for writing, reduce accessibility to that of
+		// the most restricted constituent.
 		if checkFlags&ast.CheckFlagsContainsWritePrivate != 0 {
 			checkFlags &^= ast.CheckFlagsContainsWritePublic | ast.CheckFlagsContainsWriteProtected
 		} else if checkFlags&ast.CheckFlagsContainsWriteProtected != 0 {
