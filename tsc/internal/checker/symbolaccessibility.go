@@ -9,21 +9,25 @@ import (
 )
 
 func (c *Checker) IsTypeSymbolAccessible(typeSymbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
-	access := c.isSymbolAccessibleWorker(typeSymbol, enclosingDeclaration, ast.SymbolFlagsType /*shouldComputeAliasesToMakeVisible*/, false /*allowModules*/, true)
+	access := c.isSymbolAccessibleWorkerWithResolver(typeSymbol, enclosingDeclaration, ast.SymbolFlagsType /*shouldComputeAliasesToMakeVisible*/, false /*allowModules*/, true, c.GetEmitResolver())
 	return access.Accessibility == printer.SymbolAccessibilityAccessible
 }
 
 func (c *Checker) IsValueSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
-	access := c.isSymbolAccessibleWorker(symbol, enclosingDeclaration, ast.SymbolFlagsValue /*shouldComputeAliasesToMakeVisible*/, false /*allowModules*/, true)
+	access := c.isSymbolAccessibleWorkerWithResolver(symbol, enclosingDeclaration, ast.SymbolFlagsValue /*shouldComputeAliasesToMakeVisible*/, false /*allowModules*/, true, c.GetEmitResolver())
 	return access.Accessibility == printer.SymbolAccessibilityAccessible
 }
 
 func (c *Checker) IsSymbolAccessibleByFlags(symbol *ast.Symbol, enclosingDeclaration *ast.Node, flags ast.SymbolFlags) bool {
-	access := c.isSymbolAccessibleWorker(symbol, enclosingDeclaration, flags /*shouldComputeAliasesToMakeVisible*/, false /*allowModules*/, false) // TODO: Strada bug? Why is this allowModules: false?
+	access := c.isSymbolAccessibleWorkerWithResolver(symbol, enclosingDeclaration, flags /*shouldComputeAliasesToMakeVisible*/, false /*allowModules*/, false, c.GetEmitResolver()) // TODO: Strada bug? Why is this allowModules: false?
 	return access.Accessibility == printer.SymbolAccessibilityAccessible
 }
 
 func (c *Checker) IsAnySymbolAccessible(symbols []*ast.Symbol, enclosingDeclaration *ast.Node, initialSymbol *ast.Symbol, meaning ast.SymbolFlags, shouldComputeAliasesToMakeVisible bool, allowModules bool) *printer.SymbolAccessibilityResult {
+	return c.isAnySymbolAccessible(symbols, enclosingDeclaration, initialSymbol, meaning, shouldComputeAliasesToMakeVisible, allowModules, c.GetEmitResolver())
+}
+
+func (c *Checker) isAnySymbolAccessible(symbols []*ast.Symbol, enclosingDeclaration *ast.Node, initialSymbol *ast.Symbol, meaning ast.SymbolFlags, shouldComputeAliasesToMakeVisible bool, allowModules bool, emitResolver *EmitResolver) *printer.SymbolAccessibilityResult {
 	if len(symbols) == 0 {
 		return nil
 	}
@@ -35,8 +39,7 @@ func (c *Checker) IsAnySymbolAccessible(symbols []*ast.Symbol, enclosingDeclarat
 		accessibleSymbolChain := c.getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning /*useOnlyExternalAliasing*/, false)
 		if len(accessibleSymbolChain) > 0 {
 			hadAccessibleChain = symbol
-			// TODO: going through emit resolver here is weird. Relayer these APIs.
-			hasAccessibleDeclarations := c.GetEmitResolver().hasVisibleDeclarations(accessibleSymbolChain[0], shouldComputeAliasesToMakeVisible)
+			hasAccessibleDeclarations := emitResolver.hasVisibleDeclarations(accessibleSymbolChain[0], shouldComputeAliasesToMakeVisible)
 			if hasAccessibleDeclarations != nil {
 				return hasAccessibleDeclarations
 			}
@@ -76,7 +79,7 @@ func (c *Checker) IsAnySymbolAccessible(symbols []*ast.Symbol, enclosingDeclarat
 		if initialSymbol == symbol {
 			nextMeaning = getQualifiedLeftMeaning(meaning)
 		}
-		parentResult := c.IsAnySymbolAccessible(containers, enclosingDeclaration, initialSymbol, nextMeaning, shouldComputeAliasesToMakeVisible, allowModules)
+		parentResult := c.isAnySymbolAccessible(containers, enclosingDeclaration, initialSymbol, nextMeaning, shouldComputeAliasesToMakeVisible, allowModules, emitResolver)
 		if parentResult != nil {
 			return parentResult
 		}
@@ -837,12 +840,16 @@ func (c *Checker) getClassExpressionNameTable(location *ast.Node) ast.SymbolTabl
  */
 
 func (c *Checker) IsSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasesToMakeVisible bool) printer.SymbolAccessibilityResult {
-	return c.isSymbolAccessibleWorker(symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible, true /*allowModules*/)
+	return c.isSymbolAccessibleWorkerWithResolver(symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible, true /*allowModules*/, c.GetEmitResolver())
 }
 
 func (c *Checker) isSymbolAccessibleWorker(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasesToMakeVisible bool, allowModules bool) printer.SymbolAccessibilityResult {
+	return c.isSymbolAccessibleWorkerWithResolver(symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible, allowModules, c.GetEmitResolver())
+}
+
+func (c *Checker) isSymbolAccessibleWorkerWithResolver(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasesToMakeVisible bool, allowModules bool, emitResolver *EmitResolver) printer.SymbolAccessibilityResult {
 	if symbol != nil && enclosingDeclaration != nil {
-		result := c.IsAnySymbolAccessible([]*ast.Symbol{symbol}, enclosingDeclaration, symbol, meaning, shouldComputeAliasesToMakeVisible, allowModules)
+		result := c.isAnySymbolAccessible([]*ast.Symbol{symbol}, enclosingDeclaration, symbol, meaning, shouldComputeAliasesToMakeVisible, allowModules, emitResolver)
 		if result != nil {
 			return *result
 		}
