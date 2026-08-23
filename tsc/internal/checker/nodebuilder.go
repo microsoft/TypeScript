@@ -281,7 +281,7 @@ func NewNodeBuilder(ch *Checker, e *printer.EmitContext) *NodeBuilder {
 }
 
 func NewNodeBuilderEx(ch *Checker, e *printer.EmitContext, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *NodeBuilder {
-	return newNodeBuilderEx(ch, e, idToSymbol, ch.GetEmitResolver())
+	return newNodeBuilderEx(ch, e, idToSymbol, ch.NewEmitResolver())
 }
 
 func newNodeBuilder(ch *Checker, e *printer.EmitContext, emitResolver *EmitResolver) *NodeBuilder {

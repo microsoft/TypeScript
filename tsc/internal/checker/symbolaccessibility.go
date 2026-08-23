@@ -8,25 +8,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 )
 
-func (c *Checker) IsTypeSymbolAccessible(typeSymbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
-	access := c.isSymbolAccessibleWorkerWithResolver(typeSymbol, enclosingDeclaration, ast.SymbolFlagsType /*shouldComputeAliasesToMakeVisible*/, false /*allowModules*/, true, c.GetEmitResolver())
-	return access.Accessibility == printer.SymbolAccessibilityAccessible
-}
-
-func (c *Checker) IsValueSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
-	access := c.isSymbolAccessibleWorkerWithResolver(symbol, enclosingDeclaration, ast.SymbolFlagsValue /*shouldComputeAliasesToMakeVisible*/, false /*allowModules*/, true, c.GetEmitResolver())
-	return access.Accessibility == printer.SymbolAccessibilityAccessible
-}
-
-func (c *Checker) IsSymbolAccessibleByFlags(symbol *ast.Symbol, enclosingDeclaration *ast.Node, flags ast.SymbolFlags) bool {
-	access := c.isSymbolAccessibleWorkerWithResolver(symbol, enclosingDeclaration, flags /*shouldComputeAliasesToMakeVisible*/, false /*allowModules*/, false, c.GetEmitResolver()) // TODO: Strada bug? Why is this allowModules: false?
-	return access.Accessibility == printer.SymbolAccessibilityAccessible
-}
-
-func (c *Checker) IsAnySymbolAccessible(symbols []*ast.Symbol, enclosingDeclaration *ast.Node, initialSymbol *ast.Symbol, meaning ast.SymbolFlags, shouldComputeAliasesToMakeVisible bool, allowModules bool) *printer.SymbolAccessibilityResult {
-	return c.isAnySymbolAccessible(symbols, enclosingDeclaration, initialSymbol, meaning, shouldComputeAliasesToMakeVisible, allowModules, c.GetEmitResolver())
-}
-
 func (c *Checker) isAnySymbolAccessible(symbols []*ast.Symbol, enclosingDeclaration *ast.Node, initialSymbol *ast.Symbol, meaning ast.SymbolFlags, shouldComputeAliasesToMakeVisible bool, allowModules bool, emitResolver *EmitResolver) *printer.SymbolAccessibilityResult {
 	if len(symbols) == 0 {
 		return nil
@@ -838,14 +819,6 @@ func (c *Checker) getClassExpressionNameTable(location *ast.Node) ast.SymbolTabl
  * @param meaning a SymbolFlags to check if such meaning of the symbol is accessible
  * @param shouldComputeAliasToMakeVisible a boolean value to indicate whether to return aliases to be mark visible in case the symbol is accessible
  */
-
-func (c *Checker) IsSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasesToMakeVisible bool) printer.SymbolAccessibilityResult {
-	return c.isSymbolAccessibleWorkerWithResolver(symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible, true /*allowModules*/, c.GetEmitResolver())
-}
-
-func (c *Checker) isSymbolAccessibleWorker(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasesToMakeVisible bool, allowModules bool) printer.SymbolAccessibilityResult {
-	return c.isSymbolAccessibleWorkerWithResolver(symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible, allowModules, c.GetEmitResolver())
-}
 
 func (c *Checker) isSymbolAccessibleWorkerWithResolver(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasesToMakeVisible bool, allowModules bool, emitResolver *EmitResolver) printer.SymbolAccessibilityResult {
 	if symbol != nil && enclosingDeclaration != nil {
