@@ -656,7 +656,7 @@ export interface InterfaceDeclaration extends StatementBase, DeclarationBase, Mo
     readonly members: NodeArray<TypeElement>;
 }
 export interface TypeAliasDeclaration extends StatementBase, DeclarationBase, ModifiersBase {
-    readonly kind: SyntaxKind.TypeAliasDeclaration;
+    readonly kind: SyntaxKind.TypeAliasDeclaration | SyntaxKind.JSTypeAliasDeclaration;
     readonly name: Identifier;
     readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
     readonly type: TypeNode;
@@ -681,7 +681,7 @@ export interface NotEmittedTypeElement extends NodeBase, TypeElementBase {
     readonly kind: SyntaxKind.NotEmittedTypeElement;
 }
 export interface ImportDeclaration extends StatementBase, ModifiersBase, DeclarationBase {
-    readonly kind: SyntaxKind.ImportDeclaration;
+    readonly kind: SyntaxKind.ImportDeclaration | SyntaxKind.JSImportDeclaration;
     readonly importClause?: ImportClause;
     readonly moduleSpecifier: Expression;
     readonly attributes?: ImportAttributes;

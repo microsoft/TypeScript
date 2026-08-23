@@ -339,8 +339,11 @@ function generateAstGenerated(): string {
             typeParamStr = `<${tps.join(", ")}>`;
         }
 
-        // Kind line: use type param name if available, otherwise SyntaxKind constant
-        const kindLine = `\n    readonly kind: ${node.kindType.formatTypeScript()};`;
+        const kindType = [
+            node.kindType.formatTypeScript(),
+            ...node.kindAliases.map(kind => `SyntaxKind.${kind}`),
+        ].join(" | ");
+        const kindLine = `\n    readonly kind: ${kindType};`;
 
         let memberLines = "";
         for (const m of tsInterfaceMembers(node)) {
