@@ -1,0 +1,12 @@
+anonymousClassDeclarationWithClassDecorator.ts(3,1): error TS1211: A class declaration without the 'default' modifier must have a name.
+
+
+==== anonymousClassDeclarationWithClassDecorator.ts (1 errors) ====
+    declare var dec: any;
+    
+    @dec
+    ~
+!!! error TS1211: A class declaration without the 'default' modifier must have a name.
+    class {
+    }
+    
