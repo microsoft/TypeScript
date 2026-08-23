@@ -8,6 +8,7 @@ import type {
     JsxTagNamePropertyAccess,
     Node,
     NodeArray,
+    SourceFile,
 } from "./ast.ts";
 export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ConflictMarkerTrivia;
 export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -1335,9 +1336,59 @@ export interface JSDocTypeLiteral extends JSDocTypeBase, DeclarationBase {
     readonly isArrayType: boolean;
 }
 
-export type Expression = ExpressionBase;
-export type Statement = StatementBase;
-export type TypeNode = TypeNodeBase;
+export type Expression =
+    | Identifier
+    | PrivateIdentifier
+    | ClassExpression
+    | OmittedExpression
+    | KeywordExpression
+    | StringLiteral
+    | NumericLiteral
+    | BigIntLiteral
+    | RegularExpressionLiteral
+    | NoSubstitutionTemplateLiteral
+    | BinaryExpression
+    | PrefixUnaryExpression
+    | PostfixUnaryExpression
+    | YieldExpression
+    | ArrowFunction
+    | FunctionExpression
+    | AsExpression
+    | SatisfiesExpression
+    | ConditionalExpression
+    | PropertyAccessExpression
+    | ElementAccessExpression
+    | CallExpression
+    | NewExpression
+    | MetaProperty
+    | NonNullExpression
+    | SpreadElement
+    | TemplateExpression
+    | TaggedTemplateExpression
+    | ParenthesizedExpression
+    | ArrayLiteralExpression
+    | ObjectLiteralExpression
+    | DeleteExpression
+    | TypeOfExpression
+    | VoidExpression
+    | AwaitExpression
+    | TypeAssertion
+    | ExpressionWithTypeArguments
+    | SyntheticExpression
+    | PartiallyEmittedExpression
+    | JsxElement
+    | JsxAttributes
+    | JsxNamespacedName
+    | JsxOpeningElement
+    | JsxSelfClosingElement
+    | JsxFragment
+    | JsxOpeningFragment
+    | JsxClosingFragment
+    | JsxExpression
+    | JsxText
+    | SyntheticReferenceExpression;
+export type Statement = EmptyStatement | IfStatement | DoStatement | WhileStatement | ForStatement | ForInOrOfStatement | BreakStatement | ContinueStatement | ReturnStatement | WithStatement | SwitchStatement | ThrowStatement | TryStatement | DebuggerStatement | LabeledStatement | ExpressionStatement | Block | VariableStatement | MissingDeclaration | FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration | ModuleBlock | NotEmittedStatement | ImportDeclaration | ExportAssignment | NamespaceExportDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ExportDeclaration;
+export type TypeNode = KeywordTypeNode | UnionTypeNode | IntersectionTypeNode | ConditionalTypeNode | TypeOperatorNode | InferTypeNode | ArrayTypeNode | IndexedAccessTypeNode | TypeReferenceNode | LiteralTypeNode | ThisTypeNode | TypePredicateNode | TypeQueryNode | MappedTypeNode | TypeLiteralNode | TupleTypeNode | NamedTupleMember | OptionalTypeNode | RestTypeNode | ParenthesizedTypeNode | FunctionTypeNode | ConstructorTypeNode | TemplateLiteralTypeNode | TemplateLiteralTypeSpan | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocAllType | JSDocVariadicType | JSDocOptionalType | JSDocSignature | JSDocNameReference | ImportTypeNode | JSDocTypeLiteral;
 export type HeritageClauseElement = ExpressionWithTypeArguments | TypeReferenceNode;
 export type BlockOrExpression = Block | Expression;
 export type NodeBody = Block | Expression | ModuleBlock | ModuleDeclaration;
@@ -1371,7 +1422,7 @@ export type TemplateMiddleOrTail = TemplateMiddle | TemplateTail;
 export type TemplateLiteral = TemplateExpression | NoSubstitutionTemplateLiteral;
 export type TypePredicateParameterName = Identifier | ThisTypeNode;
 export type ImportAttributeName = Identifier | StringLiteral;
-export type LeftHandSideExpression = LeftHandSideExpressionBase;
+export type LeftHandSideExpression = Identifier | PrivateIdentifier | ClassExpression | StringLiteral | NumericLiteral | BigIntLiteral | RegularExpressionLiteral | FunctionExpression | PropertyAccessExpression | ElementAccessExpression | CallExpression | NewExpression | MetaProperty | NonNullExpression | TemplateExpression | TaggedTemplateExpression | ParenthesizedExpression | ArrayLiteralExpression | ObjectLiteralExpression | ExpressionWithTypeArguments | PartiallyEmittedExpression | JsxElement | JsxAttributes | JsxSelfClosingElement | JsxFragment;
 export type JSDocComment = JSDocText | JSDocLink | JSDocLinkCode | JSDocLinkPlain;
 export type SignatureDeclaration = CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignatureDeclaration | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | AccessorDeclaration | FunctionExpression | ArrowFunction;
 export type StringLiteralLikeNode = StringLiteral | NoSubstitutionTemplateLiteral;
@@ -1388,11 +1439,65 @@ export type VariableOrPropertyDeclaration = VariableDeclaration | PropertyDeclar
 export type CallOrNewExpression = CallExpression | NewExpression;
 export type ImportClauseOrBindingPattern = ImportClause | BindingPattern;
 export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
-export type Declaration = DeclarationBase;
-export type ClassElement = ClassElementBase;
-export type TypeElement = TypeElementBase;
-export type ObjectLiteralElement = ObjectLiteralElementBase;
-export type JSDocTag = JSDocTagBase;
+export type Declaration =
+    | VariableDeclaration
+    | ParameterDeclaration
+    | BindingElement
+    | MissingDeclaration
+    | FunctionDeclaration
+    | ClassDeclaration
+    | ClassExpression
+    | InterfaceDeclaration
+    | TypeAliasDeclaration
+    | EnumMember
+    | EnumDeclaration
+    | ImportDeclaration
+    | NamespaceImport
+    | ExportAssignment
+    | NamespaceExportDeclaration
+    | NamespaceExport
+    | ExportSpecifier
+    | CallSignatureDeclaration
+    | ConstructSignatureDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | IndexSignatureDeclaration
+    | MethodSignatureDeclaration
+    | MethodDeclaration
+    | PropertySignatureDeclaration
+    | PropertyDeclaration
+    | SemicolonClassElement
+    | ClassStaticBlockDeclaration
+    | NoSubstitutionTemplateLiteral
+    | BinaryExpression
+    | ArrowFunction
+    | FunctionExpression
+    | CallExpression
+    | ObjectLiteralExpression
+    | SpreadAssignment
+    | PropertyAssignment
+    | ShorthandPropertyAssignment
+    | MappedTypeNode
+    | TypeLiteralNode
+    | NamedTupleMember
+    | FunctionTypeNode
+    | ConstructorTypeNode
+    | JsxAttributes
+    | JsxAttribute
+    | JSDocSignature
+    | SourceFile
+    | ModuleDeclaration
+    | ImportEqualsDeclaration
+    | ExportDeclaration
+    | ImportClause
+    | ImportSpecifier
+    | TypeParameterDeclaration
+    | JSDocTypeLiteral;
+export type ClassElement = ConstructorDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | IndexSignatureDeclaration | MethodDeclaration | PropertyDeclaration | SemicolonClassElement | ClassStaticBlockDeclaration;
+export type TypeElement = NotEmittedTypeElement | CallSignatureDeclaration | ConstructSignatureDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | IndexSignatureDeclaration | MethodSignatureDeclaration | PropertySignatureDeclaration;
+export type ObjectLiteralElement = GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | SpreadAssignment | PropertyAssignment | ShorthandPropertyAssignment | JsxSpreadAttribute;
+export type JSDocTag = JSDocTypeTag | JSDocUnknownTag | JSDocTemplateTag | JSDocReturnTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocOverrideTag | JSDocDeprecatedTag | JSDocSeeTag | JSDocImplementsTag | JSDocAugmentsTag | JSDocSatisfiesTag | JSDocThrowsTag | JSDocThisTag | JSDocImportTag | JSDocCallbackTag | JSDocOverloadTag | JSDocTypedefTag | JSDocParameterOrPropertyTag;
 export type ArrayBindingElement = BindingElement | OmittedExpression;
 export type AssertionExpression = TypeAssertion | AsExpression;
 export type BooleanLiteral = TrueLiteral | FalseLiteral;

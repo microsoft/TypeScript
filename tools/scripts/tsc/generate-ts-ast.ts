@@ -289,6 +289,14 @@ function visitorEntries(): VisitorEntry[] {
     return entries;
 }
 
+function nodeExtends(node: NodeType, base: NodeType): boolean {
+    return node.extends.some(parent => parent === base || nodeExtends(parent, base));
+}
+
+function concreteNodesForBase(base: NodeType): NodeType[] {
+    return api.nodes().filter(node => nodeExtends(node, base));
+}
+
 // ────────────────────────────────────────────────────────────────────────────
 // Code generation: ast.generated.ts
 // ────────────────────────────────────────────────────────────────────────────
@@ -372,7 +380,7 @@ function generateAstGenerated(): string {
             parts.push(`export type ${alias.name} = ${members};`);
         }
         else if (alias.base) {
-            parts.push(`export type ${alias.name} = ${baseTsName(alias.base)};`);
+            parts.push(`export type ${alias.name} = ${concreteNodesForBase(alias.base).map(a => a.name).join(" | ")};`);
         }
     }
 
@@ -532,7 +540,9 @@ function unresolvedAstImports(): string[] {
             for (const member of alias.unionMemberTypes) collectTypeReferences(member, referenced);
         }
         else if (alias.base) {
-            collectTypeReferences(alias.base, referenced);
+            for (const node of concreteNodesForBase(alias.base)) {
+                collectTypeReferences(node, referenced);
+            }
         }
     }
     for (const variant of tsVariants) {
