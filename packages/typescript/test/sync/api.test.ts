@@ -5831,7 +5831,25 @@ describe("Program - diagnostics", () => {
             assert.ok(color.includes("\x1b["), color);
             assert.ok(color.endsWith("\r\n"), color);
             const doubled = project.program.formatDiagnosticsWithColorAndContext([diags[0], diags[0]], host);
-            assert.equal(doubled, color + color);
+            assert.equal(doubled, color + "\r\n" + color);
+
+            const zeroWidth = {
+                ...diags[0],
+                end: diags[0].pos,
+                endPosition: diags[0].startPosition!,
+            };
+            const zeroWidthColor = project.program.formatDiagnosticsWithColorAndContext([zeroWidth], host);
+            assert.match(zeroWidthColor, /\x1b\[91m +~\x1b\[0m/);
+
+            const relatedText = "Related information";
+            const withRelated = {
+                ...diags[0],
+                relatedInformation: [{ ...diags[0], text: relatedText }],
+            };
+            const relatedColor = project.program.formatDiagnosticsWithColorAndContext([withRelated], host);
+            const relatedMessage = relatedColor.indexOf(` - ${relatedText}`);
+            assert.notEqual(relatedMessage, -1, relatedColor);
+            assert.ok(relatedColor.indexOf(`const x: number = "oops";`, relatedMessage) > relatedMessage, relatedColor);
 
             const multiline = {
                 ...diags[0],

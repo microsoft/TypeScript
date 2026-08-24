@@ -98,6 +98,10 @@ function formatCodeSpan(
     const { startPosition, endPosition, sourceLines } = diagnostic;
     if (!startPosition || !endPosition || !sourceLines?.length) return "";
 
+    const endCharacter = startPosition.line === endPosition.line &&
+            startPosition.character === endPosition.character
+        ? endPosition.character + 1
+        : endPosition.character;
     const hasMoreThanFiveLines = endPosition.line - startPosition.line >= 4;
     const gutterWidth = hasMoreThanFiveLines
         ? Math.max(ellipsis.length, `${endPosition.line + 1}`.length)
@@ -127,13 +131,13 @@ function formatCodeSpan(
 
         if (sourceLine.line === startPosition.line) {
             const lastCharacter = sourceLine.line === endPosition.line
-                ? endPosition.character
+                ? endCharacter
                 : lineContent.length;
             context += " ".repeat(startPosition.character);
             context += "~".repeat(Math.max(0, lastCharacter - startPosition.character));
         }
         else if (sourceLine.line === endPosition.line) {
-            context += "~".repeat(endPosition.character);
+            context += "~".repeat(endCharacter);
         }
         else {
             context += "~".repeat(lineContent.length);
@@ -165,7 +169,11 @@ export function formatDiagnosticsWithColorAndContext(
     host: FormatDiagnosticsHost,
 ): string {
     let output = "";
-    for (const diagnostic of diagnostics) {
+    for (let i = 0; i < diagnostics.length; i++) {
+        if (i > 0) {
+            output += host.getNewLine();
+        }
+        const diagnostic = diagnostics[i];
         if (diagnostic.fileName && diagnostic.startPosition) {
             output += formatLocation(diagnostic, host) + " - ";
         }
@@ -176,21 +184,20 @@ export function formatDiagnosticsWithColorAndContext(
         if (diagnostic.fileName && diagnostic.code !== fileAppearsToBeBinaryCode) {
             output += host.getNewLine();
             output += formatCodeSpan(diagnostic, "", getCategoryFormat(diagnostic.category), host);
+            output += host.getNewLine();
         }
 
         if (diagnostic.relatedInformation?.length) {
-            output += host.getNewLine();
             for (const related of diagnostic.relatedInformation) {
                 if (related.fileName && related.startPosition) {
                     output += host.getNewLine();
                     output += halfIndent + formatLocation(related, host);
+                    output += " - " + flattenDiagnosticMessage(related, host.getNewLine());
                     output += formatCodeSpan(related, indent, foregroundColorEscapeCyan, host);
                 }
                 output += host.getNewLine();
-                output += indent + flattenDiagnosticMessage(related, host.getNewLine());
             }
         }
-        output += host.getNewLine();
     }
     return output;
 }

@@ -1507,8 +1507,14 @@ func newDiagnosticResponse(d *diagnosticwriter.ASTDiagnostic) *DiagnosticRespons
 
 	if file != nil {
 		resp.FileName = file.FileName()
-		resp.Pos = int(core.UTF16Len(file.Text()[:pos]))
-		resp.End = int(core.UTF16Len(file.Text()[:end]))
+		if sourceFile, ok := file.(*ast.SourceFile); ok {
+			positionMap := sourceFile.GetPositionMap()
+			resp.Pos = positionMap.UTF8ToUTF16(pos)
+			resp.End = positionMap.UTF8ToUTF16(end)
+		} else {
+			resp.Pos = int(core.UTF16Len(file.Text()[:pos]))
+			resp.End = int(core.UTF16Len(file.Text()[:end]))
+		}
 		startLine, startCharacter := scanner.GetECMALineAndUTF16CharacterOfPosition(file, pos)
 		endLine, endCharacter := scanner.GetECMALineAndUTF16CharacterOfPosition(file, end)
 		resp.StartPosition = &DiagnosticPositionResponse{Line: startLine, Character: startCharacter}
