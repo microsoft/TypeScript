@@ -3,6 +3,7 @@
 package diagnostics
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -18,9 +19,9 @@ var localeDir = sync.OnceValues(func() (string, error) {
 	if testing.Testing() {
 		_, filename, _, ok := runtime.Caller(0)
 		if !ok {
-			return "", fmt.Errorf("could not get current filename")
+			return "", errors.New("could not get current filename")
 		}
-		return filepath.Join(filepath.Dir(filepath.FromSlash(filename)), "loc"), nil
+		return filepath.Join(filepath.Dir(filepath.FromSlash(filename)), "loc"), nil //nolint:forbidigo // This is an OS path, not a TypeScript path.
 	}
 	executable, err := osutil.Executable()
 	if err != nil {
@@ -30,7 +31,7 @@ var localeDir = sync.OnceValues(func() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to resolve executable path: %w", err)
 	}
-	return filepath.Join(filepath.Dir(executable), "loc"), nil
+	return filepath.Join(filepath.Dir(executable), "loc"), nil //nolint:forbidigo // This is an OS path, not a TypeScript path.
 })
 
 func readLocaleFile(localeName string) (string, error) {
@@ -38,8 +39,8 @@ func readLocaleFile(localeName string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	filename := filepath.Join(dir, localeName+".generated.json")
-	data, err := os.ReadFile(filename)
+	filename := filepath.Join(dir, localeName+".generated.json") //nolint:forbidigo // This is an OS path, not a TypeScript path.
+	data, err := os.ReadFile(filename)                           //nolint:forbidigo // Locale files are loaded directly from the installation.
 	if err != nil {
 		return "", err
 	}
