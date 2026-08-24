@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/binder"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -135,8 +136,10 @@ func (c *compilerHost) GetContentMappedSourceFiles(parseOptions ast.SourceFilePa
 			return contentmapper.SourceFiles{}, transformErr
 		}
 		files.Canonical.Hash = key.Hash
+		binder.BindSourceFile(files.Canonical)
 		for _, supplemental := range files.Supplemental {
 			supplemental.Hash = key.Hash
+			binder.BindSourceFile(supplemental)
 		}
 		return files, nil
 	})
